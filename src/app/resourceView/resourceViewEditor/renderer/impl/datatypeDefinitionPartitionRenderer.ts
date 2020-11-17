@@ -20,7 +20,7 @@ export class DatatypeDefinitionPartitionRenderer extends PartitionRenderSingleRo
 
     partition = ResViewPartition.datatypeDefinitions;
     addBtnImgTitle = "Set restrictions";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/property_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

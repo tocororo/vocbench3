@@ -21,7 +21,7 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
 
     partition = ResViewPartition.formRepresentations;
     addBtnImgTitle = "Add a representation";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/datatypeProperty_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/datatypeProperty_create.png";
 
     private lexiconLang: string; //cache the language of the lexicon
 

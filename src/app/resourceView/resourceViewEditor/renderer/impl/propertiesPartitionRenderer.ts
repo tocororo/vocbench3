@@ -28,7 +28,7 @@ import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from
 export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.properties;
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/property_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
     addBtnImgTitle = "Add a property value";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 

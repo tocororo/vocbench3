@@ -28,7 +28,7 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.denotations;
     addBtnImgTitle = "Add denotation";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/objectProperty_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

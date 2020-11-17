@@ -24,7 +24,7 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.broaders;
     addBtnImgTitle = "Add broader";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/concept_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/concept_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

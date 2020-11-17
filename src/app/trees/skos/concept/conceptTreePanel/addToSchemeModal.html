@@ -19,7 +19,7 @@
     <div *ngIf="schemeList.length > 0" class="groupPanel vbox">
         <div class="groupPanel-heading">
             <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
-                <img src="../../../../../assets/images/icons/arrow.png" (click)="collapsed = !collapsed" [ngClass]="{'arrow-right': collapsed}">
+                <img src="./assets/images/icons/arrow.png" (click)="collapsed = !collapsed" [ngClass]="{'arrow-right': collapsed}">
             </div>
             <span style="flex: 1">
                 <label class="groupPanel-heading-content">Schemes filter:</label>
@@ -47,7 +47,7 @@
     <div #blockingDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">
             <div>
-                <p>Loading...</p><img src="../../../../../assets/images/loading.gif" />
+                <p>Loading...</p><img src="./assets/images/loading.gif" />
             </div>
         </div>
     </div>

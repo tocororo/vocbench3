@@ -24,7 +24,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
 
     partition = ResViewPartition.classaxioms;
     addBtnImgTitle = "Add a class axiom";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/cls_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/cls_create.png";
 
     constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, resViewModals: ResViewModalServices,

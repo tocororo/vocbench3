@@ -22,7 +22,7 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
 
     partition = ResViewPartition.superproperties;
     addBtnImgTitle = "Add a superproperty";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/property_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

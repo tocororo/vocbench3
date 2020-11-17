@@ -49,19 +49,19 @@
                 </ng-container>
                 <ng-container *ngIf="isOpenGraphEnabled()">
                     <a *ngIf="isOpenGraphEnabled(GraphModeEnum.modelOriented)" class="dropdown-item" (click)="openModelGraph()">
-                        <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
+                        <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
                         Show model-oriented graph
                     </a>
                     <a *ngIf="isOpenIncrementalModelGraphEnabled()" class="dropdown-item" (click)="openIncrementalGraph()">
-                        <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
+                        <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
                         Show model-oriented graph rooted on the selected node
                     </a>
                     <a *ngIf="isOpenGraphEnabled(GraphModeEnum.dataOriented)" class="dropdown-item" (click)="openDataGraph()">
-                        <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
+                        <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
                         Show data-oriented graph
                     </a>
                     <a *ngIf="isOpenGraphEnabled(GraphModeEnum.umlOriented)" class="dropdown-item" (click)="openUmlGraph()">
-                        <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
+                        <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
                         Show class-diagram
                     </a>
                 </ng-container>

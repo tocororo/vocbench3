@@ -78,7 +78,7 @@
 							<goal>war</goal>
 						</goals>
 						<configuration>
-							<warSourceDirectory>dist/</warSourceDirectory>
+							<warSourceDirectory>dist/${project.artifactId}/</warSourceDirectory>
 							<webXml>web.xml</webXml>
 						</configuration>
 					</execution>

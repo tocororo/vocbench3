@@ -18,7 +18,7 @@ export class UserMenuComponent {
     private currentUser: User;
     userShow: string;
 
-    private imgSrcFallback: string = "../../assets/images/logos/user.svg";
+    private imgSrcFallback: string = "./assets/images/logos/user.svg";
     userAvatarUrl: SafeUrl;
 
     isProjectOpen: boolean;

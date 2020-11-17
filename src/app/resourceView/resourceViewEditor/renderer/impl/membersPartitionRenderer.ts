@@ -23,7 +23,7 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.members;
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/skosCollection_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/skosCollection_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

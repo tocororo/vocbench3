@@ -28,11 +28,9 @@ This distribution can be deployed on any http server. Alternatively, the war fil
 
 Note: during this build procedure, the console could show some error prints like the following:
 ```
-[ERROR] 74355ms building modules
-[ERROR] 81ms sealing
-[ERROR] 0ms optimizing
-[ERROR] 0ms basic module optimization
-[ERROR] 39ms module optimization
+[ERROR] Compiling @angular/core : es2015 as esm2015
+[ERROR] Compiling @angular/common : es2015 as esm2015
+[ERROR] Compiling @angular/forms : es2015 as esm2015
 …
 ```
 Please, just ignore them, this is due to the fact that the npm Maven plugin prints erroneously on ERROR level.

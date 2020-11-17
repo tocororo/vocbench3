@@ -14,7 +14,7 @@ export class SchemeSelectionComponent {
     @Input() schemes: ARTURIResource[]; //to force the initialization of schemes
     @Output() update = new EventEmitter<ARTURIResource[]>();
 
-    addBtnImgSrc = "../../../../../../assets/images/icons/actions/conceptScheme_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/conceptScheme_create.png";
 
     collapsed: boolean = false;
 

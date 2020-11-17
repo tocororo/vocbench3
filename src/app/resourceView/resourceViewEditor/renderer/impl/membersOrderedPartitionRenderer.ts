@@ -23,7 +23,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.membersOrdered;
     membersProperty = SKOS.member;
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/skosCollection_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/skosCollection_create.png";
 
     selectedMember: ARTResource;
 

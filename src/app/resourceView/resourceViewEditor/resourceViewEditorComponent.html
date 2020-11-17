@@ -197,12 +197,12 @@
                     <span [ngSwitch]="resource.getAdditionalProperty('accessMethod')">
                         Status:
                         <ng-container *ngSwitchCase="'local'">
-                            <img *ngIf="resourcePositionLocalProj" src="../../../assets/images/icons/local_current_project.png" style="width: 11px; margin-bottom: 3px;">
-                            <img *ngIf="!resourcePositionLocalProj" src="../../../assets/images/icons/local_other_project.png" style="width: 11px; margin-bottom: 3px;">
+                            <img *ngIf="resourcePositionLocalProj" src="./assets/images/icons/local_current_project.png" style="width: 11px; margin-bottom: 3px;">
+                            <img *ngIf="!resourcePositionLocalProj" src="./assets/images/icons/local_other_project.png" style="width: 11px; margin-bottom: 3px;">
                         </ng-container>
                         <span *ngSwitchCase="'dereferenciation'" class="fas fa-download"></span>
-                        <img *ngSwitchCase="'sparql'" src="../../../assets/images/icons/res/ontology.png" style="width: 11px; margin-bottom: 3px;">
-                        <img *ngSwitchCase="'sparql-degraded'" src="../../../assets/images/icons/res/ontology.png" style="width: 11px; margin-bottom: 3px; opacity: .5;">
+                        <img *ngSwitchCase="'sparql'" src="./assets/images/icons/res/ontology.png" style="width: 11px; margin-bottom: 3px;">
+                        <img *ngSwitchCase="'sparql-degraded'" src="./assets/images/icons/res/ontology.png" style="width: 11px; margin-bottom: 3px; opacity: .5;">
                     </span>
                     <span *ngIf="resourcePosition.isUnknown()" style="font-weight: 900; color: red;" title="Unknown position">!</span>
                 </button>
@@ -233,7 +233,7 @@
     <div #blockDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">
             <div>
-                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+                <p>Loading...</p><img src="./assets/images/loading.gif" />
             </div>
         </div>
     </div>

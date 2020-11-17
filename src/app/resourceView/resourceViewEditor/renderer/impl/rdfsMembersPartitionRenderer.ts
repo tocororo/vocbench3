@@ -23,7 +23,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.rdfsMembers;
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/property_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

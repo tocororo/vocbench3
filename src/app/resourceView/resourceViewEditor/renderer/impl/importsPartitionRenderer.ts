@@ -23,7 +23,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.imports;
     addBtnImgTitle = "Add import";
-    addBtnImgSrc = "../../../../../assets/images/icons/actions/ontologyProperty_create.png";
+    addBtnImgSrc = "./assets/images/icons/actions/ontologyProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
