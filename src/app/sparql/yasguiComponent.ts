@@ -17,7 +17,6 @@ export class YasguiComponent {
     @Input() query: string;
     @Input() readonly: boolean = false;
     @Input() hideButtons: boolean = false;
-    //emit event containing {query: string, valid: boolean, mode: string} when it changes
     @Output() querychange = new EventEmitter<QueryChangedEvent>();
 
     @ViewChild('txtarea') textareaElement: ElementRef;
@@ -26,7 +25,7 @@ export class YasguiComponent {
     private PREFIX_COMPLETER_NAME = "customPrefixCompleter";
     private PROPERTY_COMPLETER_NAME = "customPropertyCompleter";
 
-    private fetchFromPrefixCheck: boolean = false;
+    fetchFromPrefixCheck: boolean = false;
 
     private yasqe: any;
 
@@ -42,8 +41,6 @@ export class YasguiComponent {
             {
                 persistent: null, //avoid same query for all the tabs
                 createShareLink: null, //disable share button
-                // autocompleters: ["variables", this.CLASS_COMPLETER_NAME, this.PREFIX_COMPLETER_NAME, this.PROPERTY_COMPLETER_NAME],
-                // autocompleters: ["prefixes", "properties", "classes", "variables"],
                 extraKeys: { "Ctrl-7": YASQE.commentLines },
                 readOnly: this.readonly
             }
@@ -82,30 +79,6 @@ export class YasguiComponent {
             YASQE.Autocompleters.prefixes.appendPrefixIfNeeded(yasqe, this.PREFIX_COMPLETER_NAME);
         });
 
-        /*------------------------------------------------------------------------------
-        In this way I use the default yasqe prefixes autocompletion:
-        - the prefixes are completed fetching them from prefix.cc
-        - the sparql query is initialized with a sample SELECT query and with the
-          declaration of the  prefixes known in the project (not suggested otherwise by autocompletion)
-        - when the user types a prefix not yet imported, it is added to the prefix
-          declaration (if it is declarated in prefix.cc as well)
-        --------------------------------------------------------------------------------*/
-        // this.yasqe = YASQE.fromTextArea(
-        //     this.textareaElement.nativeElement,
-        //     {
-        //         persistent: null, //avoid same query for all the tabs
-        //         createShareLink: null, //disable share button
-        //         autocompleters: ["prefixes", "properties", "classes", "variables"],
-        //         extraKeys: { "Ctrl-7": YASQE.commentLines }
-        //     }
-        // );
-        // //called on changes in yasqe editor
-        // this.yasqe.on('change', (yasqe) => {
-        //     //update query mode in parent component
-        //     this.modechange.emit(yasqe.getQueryMode());
-        //     //update query in parent component
-        //     this.querychange.emit(yasqe.getValue());
-        // });
     }
 
     /**
@@ -125,6 +98,25 @@ export class YasguiComponent {
             this.yasqe.collapsePrefixes(true);
         }
     }
+
+    /**
+     * Listener on change event of checkbox to enable the prefix.cc prefix fetching.
+     */
+    onCheckboxChange() {
+        //disable the completer, register it with fetchFromPrefixCC changed, then enable it again
+        this.yasqe.disableCompleter(this.PREFIX_COMPLETER_NAME);
+        YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
+            (yasqe: any) => {
+                return this.customPrefixCompleter(yasqe, VBContext.getPrefixMappings(), this.fetchFromPrefixCheck);
+            }
+        );
+        this.yasqe.enableCompleter(this.PREFIX_COMPLETER_NAME);
+    }
+
+
+    /**
+     * Custom completers
+     */
 
     /**
      * Override the default "prefixes" autocompleter. This autocompleter looks for prefixes in the local triple store
@@ -174,21 +166,6 @@ export class YasguiComponent {
             }
         }
     };
-
-    /**
-     * Listener on change event of checkbox to enable the prefix.cc prefix fetching.
-     */
-    private onCheckboxChange(checked: boolean) {
-        //disable the completer, register it with fetchFromPrefixCC changed, then enable it again
-        this.yasqe.disableCompleter(this.PREFIX_COMPLETER_NAME);
-        YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
-            (yasqe: any) => {
-                return this.customPrefixCompleter(yasqe, VBContext.getPrefixMappings(), checked);
-            }
-        );
-        // YASQE.defaults.autocompleters = ["customPrefixCompleter", "properties", "classes", "variables"];
-        this.yasqe.enableCompleter(this.PREFIX_COMPLETER_NAME);
-    }
 
     /**
      * Override the default "properties" autocompleter. This autocompleter looks for properties in the local triple store

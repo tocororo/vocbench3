@@ -41,10 +41,10 @@
             </div>
         </div>
         <div class="card-body hbox">
-            <div *ngFor="let cs of crudvStruct"  style="flex: 1">
+            <div *ngFor="let cs of crudvStruct; let i=index"  style="flex: 1">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="cs.checked" (ngModelChange)="updateExtendedCapability()">
-                    <label class="form-check-label">{{cs.label}}</label>
+                    <input class="form-check-input" [id]="'check'+i" type="checkbox" [(ngModel)]="cs.checked" (ngModelChange)="updateExtendedCapability()">
+                    <label class="form-check-label" [for]="'check'+i">{{cs.label}}</label>
                 </div>
             </div>
         </div>

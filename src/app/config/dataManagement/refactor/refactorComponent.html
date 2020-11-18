@@ -18,8 +18,8 @@
                 </div>
                 <div class="card-footer hbox" style="align-items: center; justify-content: flex-end">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" [(ngModel)]="reifyNotes">
-                        <label class="form-check-label">Reify SKOS notes</label>
+                        <input class="form-check-input" id="reifyNoteCheck" type="checkbox" [(ngModel)]="reifyNotes">
+                        <label class="form-check-label" for="reifyNoteCheck">Reify SKOS notes</label>
                     </div>
                     <button class="btn btn-sm btn-light ml-4" (click)="skosToSkosxl()" [disabled]="!isSkosToSkosxlAuthorized()">Refactor</button>
                     <span class="clearfix"></span>
@@ -38,8 +38,8 @@
                 </div>
                 <div class="card-footer hbox" style="align-items: center; justify-content: flex-end">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" [(ngModel)]="flattenNotes">
-                        <label class="form-check-label">Flatten reified SKOS notes</label>
+                        <input class="form-check-input" id="flatNoteCheck" type="checkbox" [(ngModel)]="flattenNotes">
+                        <label class="form-check-label" for="flatNoteCheck">Flatten reified SKOS notes</label>
                     </div>
                     <button class="btn btn-sm btn-light ml-4" (click)="skosxlToSkos()" [disabled]="!isSkoxlToSkosAuthorized()">Refactor</button>
                 </div>

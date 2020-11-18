@@ -67,13 +67,13 @@
                 <label>Pairings</label>
             </div>
             <div class="card-body">
-                <div *ngFor="let p of refinablePairings" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
+                <div *ngFor="let p of refinablePairings; let i=index" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
 
                     <div class="groupPanel-heading">
                         <div class="groupPanel-heading-content">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [(ngModel)]="p.checked" (ngModelChange)="onPairingSelectionChange()">
-                                <label class="form-check-label">Use</label>
+                                <input class="form-check-input" [id]="'pairingCheck'+i" type="checkbox" [(ngModel)]="p.checked" (ngModelChange)="onPairingSelectionChange()">
+                                <label class="form-check-label" [for]="'pairingCheck'+i">Use</label>
                             </div>
                         </div>
                     </div>
@@ -143,12 +143,12 @@
                         The pairings selection has changed, the list of available matchers could be outdated.
                         Click <a href="javascript:void(0)" (click)="searchMatchers()"><b>here</b></a> to refresh the list.
                     </div>
-                    <div *ngFor="let m of matchers" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
+                    <div *ngFor="let m of matchers; let i=index" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
                         <div class="groupPanel-heading">
                             <div class="groupPanel-heading-content">
                                 <div class="form-check" title="If selected use this matcher">
-                                    <input class="form-check-input" type="radio" (click)="selectMatcher(m)" [checked]="selectedMatcher == m">
-                                    <label class="form-check-label">Use</label>
+                                    <input class="form-check-input" [id]="'matcherRadio'+i" type="radio" (click)="selectMatcher(m)" [checked]="selectedMatcher == m">
+                                    <label class="form-check-label" [for]="'matcherRadio'+i">Use</label>
                                 </div>
                             </div>
                         </div>

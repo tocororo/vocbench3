@@ -5,8 +5,8 @@
     <div class="card card-default">
         <div class="card-body">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="showDeprecated" (ngModelChange)="onShowDeprecatedChange()">
-                <label class="form-check-label">Show deprecated resources in tree/list</label>
+                <input class="form-check-input" id="deprecatedCheck" type="checkbox" [(ngModel)]="showDeprecated" (ngModelChange)="onShowDeprecatedChange()">
+                <label class="form-check-label" for="deprecatedCheck">Show deprecated resources in tree/list</label>
             </div>
         </div>
     </div>

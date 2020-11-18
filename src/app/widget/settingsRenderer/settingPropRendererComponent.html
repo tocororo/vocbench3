@@ -1,6 +1,6 @@
 <ng-container *ngIf="prop">
 
-    <ng-container  *ngIf="prop.enumeration; else notEnumerationBlock">
+    <ng-container *ngIf="prop.enumeration; else notEnumerationBlock">
         <select *ngIf="!prop.enumeration.open" class="form-control" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
             <option *ngFor="let enum of prop.enumeration.values" [value]="enum">{{enum}}</option>
         </select>
@@ -17,11 +17,11 @@
         <div [ngSwitch]="prop.type.name">
             <div *ngSwitchCase="'boolean'" class="form-control text-center">
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" (click)="updateBoolean(prop, true)" [name]="'radio_'+prop.name" [checked]="prop.value==true" [disabled]="disabled">
+                    <input class="form-check-input" type="radio" (click)="updateBoolean(prop, true)" [name]="'radio_'+prop.name" [checked]="prop.value==true" [disabled]="disabled">
                     <label class="form-check-label">true</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" (click)="updateBoolean(prop, false)" [name]="'radio_'+prop.name" [checked]="prop.value==false" [disabled]="disabled">
+                    <input class="form-check-input" type="radio" (click)="updateBoolean(prop, false)" [name]="'radio_'+prop.name" [checked]="prop.value==false" [disabled]="disabled">
                     <label class="form-check-label">false</label>
                 </div>
             </div>

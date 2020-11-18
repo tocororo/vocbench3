@@ -37,16 +37,16 @@
             </div>
             <div class="mt-2">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="useURI">
-                    <label class="form-check-label">Search in URI</label>
+                    <input class="form-check-input" id="uriCheck" type="checkbox" [(ngModel)]="useURI">
+                    <label class="form-check-label" for="uriCheck">Search in URI</label>
                 </div>
                 <div class="form-check form-check-inline ml-2">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="useLocalName">
-                    <label class="form-check-label">Search in local name</label>
+                    <input class="form-check-input" id="localNameCheck" type="checkbox" [(ngModel)]="useLocalName">
+                    <label class="form-check-label" for="localNameCheck">Search in local name</label>
                 </div>
                 <div class="form-check form-check-inline ml-2">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="useNotes">
-                    <label class="form-check-label">Search in notes</label>
+                    <input class="form-check-input" id="notesCheck" type="checkbox" [(ngModel)]="useNotes">
+                    <label class="form-check-label" for="notesCheck">Search in notes</label>
                 </div>
             </div>
         </div>
@@ -59,8 +59,8 @@
         <div class="card-body">
             <div class="d-flex align-items-center">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="restrictLang">
-                    <label class="form-check-label">Restrict search to languages</label>
+                    <input class="form-check-input" id="langCheck" type="checkbox" [(ngModel)]="restrictLang">
+                    <label class="form-check-label" for="langCheck">Restrict search to languages</label>
                 </div>
                 <div class="hbox" style="align-items: center; margin-left: 8px;">
                     <div class="input-group">
@@ -74,8 +74,8 @@
                 </div>
             </div>
             <div class="form-check mt-2">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="includeLocales" [disabled]="!restrictLang">
-                <label class="form-check-label">Include locales in search (e.g. en-GB, en-US)</label>
+                <input class="form-check-input" id="localeCheck" type="checkbox" [(ngModel)]="includeLocales" [disabled]="!restrictLang">
+                <label class="form-check-label" for="localeCheck">Include locales in search (e.g. en-GB, en-US)</label>
             </div>
         </div>
     </div>

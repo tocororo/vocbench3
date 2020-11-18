@@ -38,10 +38,10 @@
             </div>
         </div>
         <div class="card-body scrollableContainer">
-            <ng-container *ngFor="let op of operations">
+            <ng-container *ngFor="let op of operations; let i=index">
                 <div *ngIf="!op.filtered" class="form-check ml-2 mb-2">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="op.checked">
-                    <label class="form-check-label">{{getOperationShow(op.service)}}</label>
+                    <input class="form-check-input" [id]="'opCheck'+i" type="checkbox" [(ngModel)]="op.checked">
+                    <label class="form-check-label" [for]="'opCheck'+i">{{getOperationShow(op.service)}}</label>
                 </div>
             </ng-container>
         </div>

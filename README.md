@@ -74,7 +74,7 @@ In order to run VocBench 3, it is possible to:
 ## FURTHER CONFIGURATION ##
 
 In *vbconfis.js* (under *src/* of the source package, or under the root folder of the built distribution) it is possible to configure the *SemanticTurkey* host resolution.
-By default *VocBench3* dynamically resolves the IP address of the *SemanticTurkey* server (by using the same IP address of the *VocBench* host machine) and the port number (by using the same port of the *VocBench* container).
+By default *VocBench3* dynamically resolves the protocol, the IP address and the port number by using the same of its container.
 In case you have installed VocBench in a different container or in a dedicated server you might have to change the following configuration.
 ```
 /**

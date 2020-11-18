@@ -137,22 +137,22 @@
                 </ng-template>
                 <div class="col-sm-3 d-flex align-items-center justify-items-center">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" [(ngModel)]="history">
-                        <label class="form-check-label">
+                        <input class="form-check-input" id="historyCheck" type="checkbox" [(ngModel)]="history">
+                        <label class="form-check-label" for="historyCheck">
                             History
                             <span class="fas fa-info-circle ml-1" title="Enable this to keep track of the changes made on the working graph"></span>
                         </label>
                     </div>
                     <div class="form-check form-check-inline ml-3">
-                        <input class="form-check-input" type="checkbox" [(ngModel)]="validation" (input)="blacklisting=false">
-                        <label class="form-check-label">
+                        <input class="form-check-input" id="validationCheck" type="checkbox" [(ngModel)]="validation" (input)="blacklisting=false">
+                        <label class="form-check-label" for="validationCheck">
                             Validation
                             <span class="fas fa-info-circle ml-1" title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)"></span>
                         </label>
                     </div>
                     <div class="form-check form-check-inline ml-3">
-                        <input class="form-check-input" type="checkbox" [(ngModel)]="blacklisting" [disabled]="!validation">
-                        <label class="form-check-label">
+                        <input class="form-check-input" id="blacklistCheck" type="checkbox" [(ngModel)]="blacklisting" [disabled]="!validation">
+                        <label class="form-check-label" for="blacklistCheck">
                             Blacklisting
                             <span class="fas fa-info-circle ml-1" title="Enable this to blacklist terms that have been rejected through validation"></span>
                         </label>
@@ -286,8 +286,8 @@
                         <div class="card-header">
                             <label style="flex: 1;">URI Generator</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [(ngModel)]="uriGenUseDefaultSetting">
-                                <label class="form-check-label">Use default settings</label>
+                                <input class="form-check-input" id="defaultUriGenCheck" type="checkbox" [(ngModel)]="uriGenUseDefaultSetting">
+                                <label class="form-check-label" for="defaultUriGenCheck">Use default settings</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -325,8 +325,8 @@
                         <div class="card-header">
                             <label style="flex: 1;">Rendering Engine</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [(ngModel)]="rendEngUseDefaultSetting">
-                                <label class="form-check-label">Use default settings</label>
+                                <input class="form-check-input" id="defaultRenderingCheck" type="checkbox" [(ngModel)]="rendEngUseDefaultSetting">
+                                <label class="form-check-label" for="defaultRenderingCheck">Use default settings</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -365,8 +365,8 @@
                         <div class="card-header">
                             <label style="flex: 1;">Resource Metadata</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [(ngModel)]="useResourceMetadata">
-                                <label class="form-check-label">
+                                <input class="form-check-input" id="resMetadataCheck" type="checkbox" [(ngModel)]="useResourceMetadata">
+                                <label class="form-check-label" for="resMetadataCheck">
                                     Use Resource Metadata
                                     <span class="fas fa-info-circle ml-1" title="Usage of Resource Metadata can be enabled also after the project creation"></span>
                                 </label>
@@ -427,8 +427,8 @@
                         <div class="card-header">
                             <label style="flex: 1;">SHACL Shape Validation</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [(ngModel)]="enableSHACL" (ngModelChange)="onShacleEnableChange()">
-                                <label class="form-check-label">Enable shape validation</label>
+                                <input class="form-check-input" id="shapeCheck" type="checkbox" [(ngModel)]="enableSHACL" (ngModelChange)="onShacleEnableChange()">
+                                <label class="form-check-label" for="shapeCheck">Enable shape validation</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -447,8 +447,8 @@
                         <div class="card-header">
                             <label style="flex: 1;">Trivial Inference Engine</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" [(ngModel)]="enableTrivialInference">
-                                <label class="form-check-label">Enable trivial inference</label>
+                                <input class="form-check-input" id="trivialInferCheck" type="checkbox" [(ngModel)]="enableTrivialInference">
+                                <label class="form-check-label" for="trivialInferCheck">Enable trivial inference</label>
                             </div>
                         </div>
                     </div>

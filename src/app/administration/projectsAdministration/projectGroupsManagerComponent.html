@@ -89,24 +89,18 @@ If any of the two is selected (with one or more properties), then only the selec
                                     </div>
                                 </div>
                             </div>
-        
                             <div class="mt-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" [(ngModel)]="syncInverse" (ngModelChange)="onSyncChange()">
-                                    <label class="form-check-label">
-                                        Sync inverse properties
-                                    </label>
+                                    <input class="form-check-input" id="syncInvCheck" type="checkbox" [(ngModel)]="syncInverse" (ngModelChange)="onSyncChange()">
+                                    <label class="form-check-label" for="syncInvCheck">Sync inverse properties</label>
                                     <span class="fas fa-info-circle ml-2" title="Keep synced the broader/narrower properties with their inverse properties"></span>
                                 </div>
                                 <div class="form-check mt-1">
-                                    <input class="form-check-input" type="checkbox" [(ngModel)]="includeSubProps" (ngModelChange)="onIncludeSubPropsChange()">
-                                    <label class="form-check-label">
-                                        Include subProperties
-                                    </label>
+                                    <input class="form-check-input" id="includeSubCheck" type="checkbox" [(ngModel)]="includeSubProps" (ngModelChange)="onIncludeSubPropsChange()">
+                                    <label class="form-check-label" for="includeSubCheck">Include subProperties</label>
                                     <span class="fas fa-info-circle ml-2" title="Includes the subProperties of the selected broader/narrower properties"></span>
                                 </div>
                             </div>
-        
                         </div>
                     </div>
 

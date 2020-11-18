@@ -33,8 +33,8 @@
                 <div class="card card-default" style="padding: 4px; margin-bottom: 2px">
                     <div class="card-body">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()">
-                            <label class="form-check-label">
+                            <input class="form-check-input" id="flagCheck" type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()">
+                            <label class="form-check-label" for="flagCheck">
                                 Show flags
                                 <span class="fas fa-info-circle" title="Determines if the flags icon are shown in place of the language ISO code"></span>
                             </label>
@@ -47,9 +47,9 @@
                         <label>Project theme
                             <span class="fas fa-info-circle" title="Changes the color of the header/navigationBar for the current project"></span>
                         </label>
-                        <div *ngFor="let t of themes" class="form-check form-check-inline ml-3">
-                            <input class="form-check-input" type="checkbox" [checked]="t == selectedTheme" (click)="changeTheme(t)">
-                            <label class="form-check-label">
+                        <div *ngFor="let t of themes; let i=index" class="form-check form-check-inline ml-3">
+                            <input class="form-check-input" [id]="'themeCheck'+i" type="checkbox" [checked]="t == selectedTheme" (click)="changeTheme(t)">
+                            <label class="form-check-label" [for]="'themeCheck'+i">
                                 <div class="d-flex" style="border: 1px solid black;">
                                     <div style="width: 12px; height: 12px;" [class]="'bg-theme-' + t"></div>
                                     <div style="width: 12px; height: 12px;" [class]="'bg-theme-alt-' + t"></div>

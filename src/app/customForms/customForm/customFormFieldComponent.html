@@ -26,12 +26,12 @@
                         (ngModelChange)="onModelChanged()" disabled>
                     <span class="hbox" style="align-items: center; margin-left: 10px; justify-content: center;">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" (click)="field.value='true'" [checked]="field.value=='true'">
-                            <label class="form-check-label">true</label>
+                            <input class="form-check-input" id="boolTrueCheck" type="radio" (click)="field.value='true'" [checked]="field.value=='true'">
+                            <label class="form-check-label" for="boolTrueCheck">true</label>
                         </div>
                         <div class="form-check form-check-inline ml-3">
-                            <input class="form-check-input" type="radio" (click)="field.value='false'" [checked]="field.value=='false'">
-                            <label class="form-check-label">false</label>
+                            <input class="form-check-input" id="boolFalseCheck" type="radio" (click)="field.value='false'" [checked]="field.value=='false'">
+                            <label class="form-check-label" for="boolFalseCheck">false</label>
                         </div>
                     </span>
                 </div>

@@ -22,8 +22,8 @@
     <div class="card card-default mt-2">
         <div class="card-body">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="hideLiteralNodes" (ngModelChange)="onHideLiteralChange()">
-                <label class="form-check-label">
+                <input class="form-check-input" id="literalCheck" type="checkbox" [(ngModel)]="hideLiteralNodes" (ngModelChange)="onHideLiteralChange()">
+                <label class="form-check-label" for="literalCheck">
                     Hide literal nodes
                     <span class="fas fa-info-circle ml-2" title="If checked, all the literal nodes will be hidden in the graph"></span>
                 </label>

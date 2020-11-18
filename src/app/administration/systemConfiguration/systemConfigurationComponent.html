@@ -126,12 +126,12 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="true">
-                                        <label class="form-check-label">true</label>
+                                        <input class="form-check-input" id="authRadioTrue" type="radio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="true">
+                                        <label class="form-check-label" for="authRadioTrue">true</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="false">
-                                        <label class="form-check-label">false</label>
+                                        <input class="form-check-input" id="authRadioFalse" type="radio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="false">
+                                        <label class="form-check-label" for="authRadioFalse">false</label>
                                     </div>
                                 </td>
                             </tr>
@@ -337,10 +337,8 @@
             <div class="card card-default" style="margin-top: 8px;">
                 <div class="card-body">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" [(ngModel)]="expFeatEnabled" (ngModelChange)="onExpFeatEnabledChanged()">
-                        <label class="form-check-label">
-                            Enable experimental features
-                        </label>
+                        <input class="form-check-input" id="expFeatureCheck" type="checkbox" [(ngModel)]="expFeatEnabled" (ngModelChange)="onExpFeatEnabledChanged()">
+                        <label class="form-check-label" for="expFeatureCheck">Enable experimental features</label>
                         <span class="fas fa-info-circle ml-2" title="Check this option in order to enable experimental (very unstable) features"></span>
                     </div>
                 </div>

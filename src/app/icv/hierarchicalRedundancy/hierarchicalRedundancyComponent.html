@@ -2,8 +2,8 @@
     <div class="card-header">
         <label style="flex: 1;">Hierarchical redundancies</label>
         <div class="form-check" title="If active, the check is performed only to the relations between Concepts belonging to the same ConceptScheme">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="sameScheme">
-            <label class="form-check-label">Same scheme</label>
+            <input class="form-check-input" id="schemeCheck" type="checkbox" [(ngModel)]="sameScheme">
+            <label class="form-check-label" for="schemeCheck">Same scheme</label>
         </div>
         <button class="btn btn-xs btn-light ml-3" (click)="runIcv()">Run</button>
     </div>

@@ -21,8 +21,8 @@
     <div *ngIf="selectedAspectSelector == treeListAspectSelector" class="vbox">
         <div  *ngIf="viewType == 'classTree'" class="vbox">
             <div *ngIf="rootsForClsTree" class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="showAllClass">
-                <label class="form-check-label">Show all classes</label>
+                <input class="form-check-input" id="classesCheck" type="checkbox" [(ngModel)]="showAllClass">
+                <label class="form-check-label" for="classesCheck">Show all classes</label>
             </div>
             <class-tree-panel [context]="treeListCtx" [roots]="showAllClass? defaultRootClass : rootsForClsIndList" [deletable]="false" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
@@ -39,8 +39,8 @@
                 (nodeSelected)="onPropertySelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </property-tree-panel>
             <div *ngIf="showInversePropertyCheckbox" class="form-check mt-2">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="inverseProp" [disabled]="!isInversePropertyCheckboxEnabled()">
-                <label class="form-check-label">
+                <input class="form-check-input" id="inverseCheck" type="checkbox" [(ngModel)]="inverseProp" [disabled]="!isInversePropertyCheckboxEnabled()">
+                <label class="form-check-label" for="inverseCheck">
                     Inverse Property
                     <span *ngIf="multiselection" class="fas fa-exclamation-circle ml-1"
                         title="In case of multiple properties selected, the 'Inverse Property' flag is applied to all of them (available only if all for ObjectProperties)">
@@ -59,8 +59,8 @@
         
         <div *ngIf="viewType == 'classAndIndividual'" class="vbox">
             <div *ngIf="rootsForClsIndList" class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="showAllClass">
-                <label class="form-check-label">Show all classes</label>
+                <input class="form-check-input" id="allClsIndCheck" type="checkbox" [(ngModel)]="showAllClass">
+                <label class="form-check-label" for="allClsIndCheck">Show all classes</label>
             </div>
             <class-individual-tree [context]="treeListCtx" [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">

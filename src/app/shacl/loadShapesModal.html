@@ -17,8 +17,8 @@
 </div>
 <div class="modal-footer">
     <div class="form-check float-left">
-        <input class="form-check-input" type="checkbox" [(ngModel)]="clearExisting">
-        <label class="form-check-label">Clear existing</label>
+        <input class="form-check-input" id="clearCheck" type="checkbox" [(ngModel)]="clearExisting">
+        <label class="form-check-label" for="clearCheck">Clear existing</label>
     </div>
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!file || !selectedInputFormat">Ok</button>
     <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>

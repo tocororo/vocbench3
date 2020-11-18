@@ -34,8 +34,8 @@
                         <div style="display: flex; align-items: center">
                             <input type="text" class="form-control" [ngModel]="dataDump" readonly>
                             <div class="form-check ml-2">
-                                <input class="form-check-input" type="checkbox" [(ngModel)]="useDataDump">
-                                <label class="form-check-label text-nowrap">
+                                <input class="form-check-input" id="useDumpCheck" type="checkbox" [(ngModel)]="useDataDump">
+                                <label class="form-check-label text-nowrap" for="useDumpCheck">
                                     Use data dump
                                     <span class="fas fa-info-circle ml-1" title="If checked, import is added from the provided data dump instead of the ontology IRI">
                                     </span>

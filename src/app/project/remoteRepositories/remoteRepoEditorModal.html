@@ -39,8 +39,8 @@
         <div class="card-footer d-flex align-items-center">
             <ng-container *ngIf="allowBatchModify">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="repo.batch">
-                    <label class="form-check-label">
+                    <input class="form-check-input" id="batchCheck" type="checkbox" [(ngModel)]="repo.batch">
+                    <label class="form-check-label" for="batchCheck">
                         Batch modify
                         <span class="fas fa-info-circle ml-1"
                             title="Modifies, all at once, the access credentials of (possibly) many repositories with the same serverURL.">
@@ -48,8 +48,8 @@
                     </label>
                 </div>
                 <div *ngIf="repo.batch" class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="repo.matchUsername">
-                    <label class="form-check-label">
+                    <input class="form-check-input" id="matchCheck" type="checkbox" [(ngModel)]="repo.matchUsername">
+                    <label class="form-check-label" for="matchCheck">
                         Match username
                         <span class="fas fa-info-circle ml-1"
                             title="If checked, modifies credentials of repositories with same serverURL and username (empty 'old' username indicates repositories with no associated username)">

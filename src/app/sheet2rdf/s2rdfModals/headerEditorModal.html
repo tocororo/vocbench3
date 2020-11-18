@@ -2,8 +2,8 @@
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">Header editor</h3>
         <div *ngIf="header" class="form-check ml-1 text-nowrap">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="header.ignore" (ngModelChange)="onIgnoreChange()">
-            <label class="form-check-label">
+            <input class="form-check-input" id="ignoreCheck" type="checkbox" [(ngModel)]="header.ignore" (ngModelChange)="onIgnoreChange()">
+            <label class="form-check-label" for="ignoreCheck">
                 Ignore header
                 <span class="fas fa-info-circle ml-1" title="If checked, the current header will be ignored in the generated PEARL code and thus in the conversion process">
                 </span>

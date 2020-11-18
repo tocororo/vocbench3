@@ -26,8 +26,8 @@
                         </span>
                     </div>
                     <div *ngIf="resViewMode == 'tabbed'" class="form-check mt-2">
-                        <input class="form-check-input" type="checkbox" [(ngModel)]="resViewTabSync" (ngModelChange)="onTabSyncChange()">
-                        <label class="form-check-label">
+                        <input class="form-check-input" id="syncCheck" type="checkbox" [(ngModel)]="resViewTabSync" (ngModelChange)="onTabSyncChange()">
+                        <label class="form-check-label" for="syncCheck">
                             Keep selected tab synchronized with tree/list
                             <span class="fas fa-exclamation-circle"
                                 title="It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.">
@@ -62,8 +62,8 @@
         <div class="card card-default mt-2">
             <div class="card-body">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="displayImg" (ngModelChange)="onDisplayImgChange()">
-                    <label class="form-check-label">
+                    <input class="form-check-input" id="imageCheck" type="checkbox" [(ngModel)]="displayImg" (ngModelChange)="onDisplayImgChange()">
+                    <label class="form-check-label" for="imageCheck">
                         Display images
                         <span class="fas fa-info-circle ml-1"
                             title="If enabled, URL values resolvable to images on the web will be displayed as images (preview) in the ResourceView">
@@ -76,8 +76,8 @@
         <div class="card card-default mt-2">
             <div class="card-body">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="showDeprecated" (ngModelChange)="onShowDeprecatedChange()">
-                    <label class="form-check-label">
+                    <input class="form-check-input" id="deprecatedCheck" type="checkbox" [(ngModel)]="showDeprecated" (ngModelChange)="onShowDeprecatedChange()">
+                    <label class="form-check-label" for="deprecatedCheck">
                         Show deprecated values
                         <span class="fas fa-info-circle ml-1"
                             title="If enabled, linked resources marked as deprecated will be shown in the ResourceView">
@@ -90,8 +90,8 @@
         <div class="card card-default mt-2">
             <div class="card-body">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="showDatatypeBadge" (ngModelChange)="onShowDatatypeBadge()">
-                    <label class="form-check-label">
+                    <input class="form-check-input" id="badgeCheck" type="checkbox" [(ngModel)]="showDatatypeBadge" (ngModelChange)="onShowDatatypeBadge()">
+                    <label class="form-check-label" for="badgeCheck">
                         Always show datatype badge
                         <span class="fas fa-info-circle ml-1"
                             title="If enabled, a datatype badge will be always shown beside the value. If not, the badge is only shown in case of an unknown datype (the icon on the left of the value will classify the known datatype)">

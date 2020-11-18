@@ -25,12 +25,12 @@
                                 <input type="radio" (click)="stringValue='false'; onValueChanged()" [checked]="stringValue=='false'">false
                             </label> -->
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" (click)="stringValue='true'; onValueChanged()" [checked]="stringValue=='true'">
-                                <label class="form-check-label">true</label>
+                                <input class="form-check-input" id="boolTrueCheck" type="radio" (click)="stringValue='true'; onValueChanged()" [checked]="stringValue=='true'">
+                                <label class="form-check-label" for="boolTrueCheck">true</label>
                             </div>
                             <div class="form-check form-check-inline ml-2">
-                                <input class="form-check-input" type="radio" (click)="stringValue='false'; onValueChanged()" [checked]="stringValue=='false'">
-                                <label class="form-check-label">false</label>
+                                <input class="form-check-input" id="boolFalseCheck" type="radio" (click)="stringValue='false'; onValueChanged()" [checked]="stringValue=='false'">
+                                <label class="form-check-label" for="boolFalseCheck">false</label>
                             </div>
                         </div>
                         <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/2001/XMLSchema#date'">

@@ -125,8 +125,8 @@
     </div>
     <div *ngIf="isConverterRandom()" class="card-footer">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="memoize" (ngModelChange)="onMemoizeChange()">
-            <label class="form-check-label">
+            <input class="form-check-input" id="memoizeCheck" type="checkbox" [(ngModel)]="memoize" (ngModelChange)="onMemoizeChange()">
+            <label class="form-check-label" for="memoizeCheck">
                 Memoize
                 <span class="fas fa-info-circle ml-1" title="Apply the memoization: given the same input, the converter will generate the same output">
                 </span>

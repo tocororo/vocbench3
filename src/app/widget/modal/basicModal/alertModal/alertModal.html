@@ -24,10 +24,8 @@
 </div>
 <div class="modal-footer">
     <div *ngIf="checkboxLabel" class="form-check float-left">
-        <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="checkbox">
-            {{checkboxLabel}}
-        </label>
+        <input class="form-check-input" id="checkCheck" type="checkbox" [(ngModel)]="checkbox">
+        <label class="form-check-label" for="checkCheck">{{checkboxLabel}}</label>
     </div>
 	<button class="btn btn-sm btn-primary" (click)="ok()">Ok</button>
 </div>
