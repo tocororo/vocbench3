@@ -214,12 +214,11 @@ export abstract class AbstractTreeNode extends AbstractNode {
         for (var i = 0; i < this.children.length; i++) {
             if (this.children[i].getNominalValue() == deletedNode.getNominalValue()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
-                    //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
-                    let stagedRes: ARTURIResource = this.children[i].clone();
-                    stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
-                    stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
-                    stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
-                    this.children[i] = stagedRes;
+                    /**
+                     * In case of validation don't do nothing, the removal of a triple like
+                     * :child skos:broader :parent 
+                     * doesn't imply the removal of the child, but simply that the above triple is replicated in the staging-remove graph
+                     */
                 } else {
                     this.children.splice(i, 1);
                     //if node has no more children change info of node so the UI will update

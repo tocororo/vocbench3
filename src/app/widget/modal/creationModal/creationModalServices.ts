@@ -8,6 +8,7 @@ import { NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal'
 import { NewOntoLexicalizationCfModal } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
 import { NewResourceCfModal } from "./newResourceModal/shared/newResourceCfModal";
 import { NewResourceWithLiteralCfModal } from './newResourceModal/shared/newResourceWithLiteralCfModal';
+import { NewConceptCfModal } from './newResourceModal/skos/newConceptCfModal';
 import { NewConceptFromLabelModal } from "./newResourceModal/skos/newConceptFromLabelModal";
 import { NewXLabelModal } from './newResourceModal/skos/newXLabelModal';
 import { NewTypedLiteralModal } from "./newTypedLiteralModal/newTypedLiteralModal";
@@ -69,7 +70,7 @@ export class CreationModalServices {
      */
     newConceptCf(title: string, broader?: ARTURIResource, schemes?: ARTURIResource[], cls?: ARTURIResource, clsChangeable?: boolean, lang?: string) {
         let _options: ModalOptions = new ModalOptions();
-        const modalRef: NgbModalRef = this.modalService.open(NewResourceWithLiteralCfModal, _options);
+        const modalRef: NgbModalRef = this.modalService.open(NewConceptCfModal, _options);
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.broader = broader;
         modalRef.componentInstance.schemes = schemes;

@@ -18,8 +18,10 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
 
     @Input() title: string = "Modal title";
     @Input() broader: ARTURIResource;
+    @Input() schemes: ARTURIResource[]; //in standard form
     @Input() cls: ARTURIResource;
     @Input() clsChangeable: boolean = true;
+    @Input() lang: string;  //in standard form
 
     viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
@@ -27,9 +29,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
 
     //standard form
     label: string;
-    @Input() lang: string;
     uri: string;
-    @Input() schemes: ARTURIResource[];
 
     constructor(public activeModal: NgbActiveModal, private resourceService: ResourcesServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
