@@ -87,7 +87,7 @@
 
     <!-- Search -->
     <div *ngIf="!hideSearch" class="card-footer">
-        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [role]="panelRole"
+        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [role]="panelRole" [schemes]="workingSchemes"
             [context]="context" [projectCtx]="projectCtx"></search-bar>
     </div>
 

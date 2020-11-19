@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-// import { Ng2CompleterModule } from "ng2-completer";
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { MultiSubjectEnrichmentHelper } from '../trees/multiSubjectEnrichmentHelper';
 import { LexicalEntryListComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListComponent';
 import { LexicalEntryListNodeComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListNodeComponent';
@@ -51,12 +51,12 @@ import { SharedModule } from './sharedModule';
 
 @NgModule({
     imports: [
+        AutocompleteLibModule,
         CommonModule, 
         FormsModule, 
         NgbDropdownModule,
         RouterModule, 
         SharedModule, 
-        // Ng2CompleterModule
     ],
     declarations: [
         AddToSchemeModal,

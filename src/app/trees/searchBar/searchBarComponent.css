@@ -1,0 +1,53 @@
+.ng-autocomplete {
+    width: 100%;
+}
+
+/* ng-autocomplete uses a material style, I override its style in order to look like a bootstrap form-control-sm */
+.ng-autocomplete ::ng-deep .autocomplete-container {
+    box-shadow: initial;
+    height: initial;
+}
+.ng-autocomplete ::ng-deep .autocomplete-container input {
+    height: calc(1.5em + .5rem + 2px);
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+    display: block;
+    width: 100%;
+    font-weight: 400;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.ng-autocomplete ::ng-deep .autocomplete-container input:disabled {
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+/* Hide the "X" button that clear the search bar */
+.ng-autocomplete ::ng-deep .autocomplete-container .input-container .x {
+    display: none;
+}
+/* Hide the not-found container shown when entered string does not produces any suggestions */
+.ng-autocomplete ::ng-deep .autocomplete-container .not-found {
+    display: none;
+}
+
+/* Make the suggestion dropdown container open upward  */
+.ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 140px !important;
+    bottom: 24px;
+}
+/* Style of the suggestion items */
+.ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container .item a {
+    padding: .25rem .5rem;
+    font-size: inherit;
+}
+.ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container .item a b {
+    color: teal;
+}

@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { AutocompleteComponent } from 'angular-ng-autocomplete';
+import { VBRequestOptions } from 'src/app/utils/HttpManager';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { Project } from "../../models/Project";
 import { SearchMode, SearchSettings } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
 import { TreeListContext } from "../../utils/UIUtils";
@@ -12,20 +12,21 @@ import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AdvancedSearchModal } from "./advancedSearchModal";
-import { CustomCompleterData } from "./customCompleterData";
 import { CustomSearchModal } from "./customSearchModal";
 import { LoadCustomSearchModal } from "./loadCustomSearchModal";
 import { SearchSettingsModal } from './searchSettingsModal';
 
 @Component({
     selector: "search-bar",
-    templateUrl: "./searchBarComponent.html"
+    templateUrl: "./searchBarComponent.html",
+    styleUrls: ["./searchBarComponent.css"]
 })
 export class SearchBarComponent {
 
     @Input() role: RDFResourceRolesEnum; //tells the role of the panel where the search bar is placed (usefull for customizing the settings)
     @Input() disabled: boolean = false;
     @Input() cls: ARTURIResource; //useful where search-bar is in the instance list panel
+    @Input() schemes: ARTURIResource[]; //useful where search-bar is in the concept tree panel
     @Input() context: TreeListContext;
     @Input() projectCtx: ProjectContext;
     @Output() search: EventEmitter<string> = new EventEmitter();
@@ -41,40 +42,14 @@ export class SearchBarComponent {
     ];
 
     searchSettings: SearchSettings;
-
     searchStr: string;
-    // private completerDatasource: CustomCompleterData;
-
-    private eventSubscriptions: Subscription[] = [];
 
     constructor(private searchService: SearchServices, private modalService: NgbModal, private vbProperties: VBProperties,
         private eventHandler: VBEventHandler, private basicModals: BasicModalServices) {
-
-        this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
-            (data: { schemes: ARTURIResource[], project: Project }) => {
-                if (VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName() == data.project.getName()) {
-                    this.setSchemeInCompleter(data.schemes);
-                }
-            })
-        );
-        this.eventSubscriptions.push(eventHandler.searchPrefsUpdatedEvent.subscribe(
-            (project: Project) => {
-                if (VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName() == project.getName()) {
-                    this.updateSearchSettings();
-                }
-            })
-        );
     }
 
     ngOnInit() {
         this.searchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
-        // this.completerDatasource = new CustomCompleterData(this.searchService, this.role, this.searchSettings);
-        this.setSchemeInCompleter(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes);
-        this.setProjectCtxInCompleter(this.projectCtx);
-    }
-
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -85,6 +60,7 @@ export class SearchBarComponent {
     }
 
     doSearch() {
+        this.autocompleter.close();
         if (this.searchStr != undefined && this.searchStr.trim() != "") {
             this.search.emit(this.searchStr);
         } else {
@@ -141,22 +117,51 @@ export class SearchBarComponent {
         this.vbProperties.setSearchSettings(VBContext.getWorkingProjectCtx(this.projectCtx), this.searchSettings);
     }
 
-    private setSchemeInCompleter(schemes: ARTURIResource[]) {
-        if (this.role == RDFResourceRolesEnum.concept) {
-            // this.completerDatasource.setConceptSchemes(schemes);
-        }
-    }
-
-    private setProjectCtxInCompleter(projectCtx: ProjectContext) {
-        // this.completerDatasource.setProjectCtx(projectCtx);
-    }
-
     /**
-     * When the search settings is updated, updates the setting of the bar and the settings for the autocompleter
+     * AUTOCOMPLETER STUFF
      */
-    private updateSearchSettings() {
-        this.searchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
-        // this.completerDatasource.updateSearchSettings(this.searchSettings);
+    @ViewChild('autocompleter') autocompleter: AutocompleteComponent;
+
+    completerData: string[];
+    isCompleterLoading: boolean;
+
+    private lastCompleterKey: string;
+
+    onChangeSearch() {
+        if (this.searchStr.trim() == "" ) { 
+            this.completerData = [];
+            return;
+        }
+        /* ng-autocomplete component emit a inputChanged event even when user press any other key (e.g. move the caret) and the string doesn't change.
+        I need to perform this check in order to prevent search repetition */
+        if (this.lastCompleterKey == this.searchStr) {
+            return;
+        }
+        this.lastCompleterKey = this.searchStr;
+
+        this.isCompleterLoading = true;
+        let langsParam: string[];
+        let includeLocales: boolean;
+        if (this.searchSettings.restrictLang) {
+            langsParam = this.searchSettings.languages;
+            includeLocales = this.searchSettings.includeLocales;
+        }
+        let schemesParam: ARTURIResource[];
+        if (this.searchSettings.restrictActiveScheme) {
+            schemesParam = this.schemes;
+        }
+        let clsParam: ARTURIResource;
+        if (this.role == RDFResourceRolesEnum.individual && !this.searchSettings.extendToAllIndividuals) {
+            clsParam = this.cls;
+        }
+        let concTreePref = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
+        this.searchService.searchStringList(this.searchStr, [this.role], this.searchSettings.useLocalName, this.searchSettings.stringMatchMode, 
+            langsParam, includeLocales, schemesParam, concTreePref.multischemeMode, clsParam, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+            (results: string[]) => {
+                this.completerData = results.slice(0, 100);
+                this.isCompleterLoading = false;
+            }
+        );
     }
 
 }

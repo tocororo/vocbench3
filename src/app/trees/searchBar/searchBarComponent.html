@@ -1,13 +1,17 @@
 <div class="hbox">
-    <!-- <ng2-completer *ngIf="searchSettings.useAutocompletion" style="flex: 1;" [inputClass]="'form-control form-control-sm'" 
-        [(ngModel)]="searchStr" [datasource]="completerDatasource" (keydown.enter)="doSearch()" (selected)="doSearch()" [minSearchLength]="3"
-        placeholder="Search..." matchClass="matchClass" pause="500" [disableInput]="disabled">
-    </ng2-completer>
 
+    <ng-container *ngIf="searchSettings.useAutocompletion">
+        <div style="flex: 1;" (keydown.enter)="doSearch()">
+            <ng-autocomplete #autocompleter [(ngModel)]="searchStr" (inputChanged)='onChangeSearch()'
+                placeHolder="Search..." minQueryLength="2" debounceTime="500"
+                [data]="completerData" [isLoading]="isCompleterLoading" [itemTemplate]="itemTemplate" [disabled]="disabled">
+            </ng-autocomplete>
+            <ng-template #itemTemplate let-item>
+                <a [innerHTML]="item"></a>
+            </ng-template>
+        </div>
+    </ng-container>
     <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control form-control-sm" style="flex: 1;" 
-        [(ngModel)]="searchStr" (keydown.enter)="doSearch()" placeholder="Search..." [disabled]="disabled"> -->
-
-    <input type="text" class="form-control form-control-sm" style="flex: 1;" 
         [(ngModel)]="searchStr" (keydown.enter)="doSearch()" placeholder="Search..." [disabled]="disabled">
 
     <div class="btn-group btn-group-xs dropup ml-2" ngbDropdown placement="top-right">
