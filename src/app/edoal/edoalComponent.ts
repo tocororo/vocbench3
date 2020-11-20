@@ -10,7 +10,7 @@ import { AlignmentServices } from "../services/alignmentServices";
 import { EdoalServices } from "../services/edoalServices";
 import { ProjectServices } from "../services/projectServices";
 import { ResourcesServices } from "../services/resourcesServices";
-import { TabsetPanelComponent } from "../trees/tabset/tabsetPanelComponent";
+import { TabsetPanelComponent } from "../structures/tabset/tabsetPanelComponent";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { ProjectContext, VBContext } from "../utils/VBContext";

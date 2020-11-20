@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { ResourceViewModeDispatcher } from "../resourceView/resourceViewModes/resourceViewModeDispatcher";
-import { TabsetPanelComponent } from "../trees/tabset/tabsetPanelComponent";
+import { TabsetPanelComponent } from "../structures/tabset/tabsetPanelComponent";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
