@@ -1,6 +1,6 @@
 <ng-container *ngIf="prop">
 
-    <ng-container *ngIf="prop.enumeration; else notEnumerationBlock">
+    <ng-container  *ngIf="prop.enumeration; else notEnumerationBlock">
         <select *ngIf="!prop.enumeration.open" class="form-control" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
             <option *ngFor="let enum of prop.enumeration.values" [value]="enum">{{enum}}</option>
         </select>
@@ -39,13 +39,16 @@
 
             <ng-container *ngSwitchCase="'Literal'">
                 <ng-container *ngIf="isLanguageTaggedString(prop) else notLanguageTaggedString">
-                    <lang-string-editor [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()"></lang-string-editor>
+                    <lang-string-editor [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled"></lang-string-editor>
                 </ng-container>
                 <ng-template #notLanguageTaggedString>
                     <literal-picker [literal]="prop.value" (literalChanged)="updateValue(prop, $event)" [disabled]="disabled">
                     </literal-picker>
                 </ng-template>
             </ng-container>
+
+            <setting-set *ngSwitchCase="'List'" [collapsable]="!prop.required" [value]="prop.value" [types]="prop.type.typeArguments" 
+                (valueChanged)="updateSetValue(prop, $event)" [disabled]="disabled"></setting-set>
 
             <setting-set *ngSwitchCase="'Set'" [collapsable]="!prop.required" [value]="prop.value" [types]="prop.type.typeArguments" 
                 (valueChanged)="updateSetValue(prop, $event)" [disabled]="disabled"></setting-set>
@@ -56,7 +59,7 @@
             <ng-container *ngSwitchCase="'Properties'">
                 <ng-container *ngIf="prop.required || prop.value; else collapsedNestedSettings">
                     <div style="display: flex;">
-                        <nested-settings-renderer style="flex:auto" [(ngModel)]="prop.value" [schema]="prop.type.schema" (ngModelChange)="updatePropertiesValue($event)"></nested-settings-renderer>
+                        <nested-settings-renderer style="flex:auto" [(ngModel)]="prop.value" [schema]="prop.type.schema" [disabled]="disabled" (ngModelChange)="updatePropertiesValue($event)"></nested-settings-renderer>
                         <ng-container *ngIf="!prop.required">
                             <div style="width: 1%"></div>
                             <button class="btn btn-sm btn-light" title="Delete optional value" style="align-self: center; margin-left: 3px" (click)="deleteOptionalSettingsValue(prop)">
@@ -71,7 +74,6 @@
                     </button>
                 </ng-template>    
             </ng-container>
-    
 
             <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control" style="resize: vertical" 
                 [(ngModel)]="prop.value" [disabled]="disabled">

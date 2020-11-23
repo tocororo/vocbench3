@@ -65,6 +65,7 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         this.propagateChange(this.prop);
     }
 
+
     private getIRIRoleConstraints(prop: SettingsProp): RDFResourceRolesEnum[] {
         /**
          * use a cache mechanism to avoid to recreate a roles array each time getIRIRoleConstraints is called
@@ -106,6 +107,7 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         prop.type['languageTaggedString'] = isLanguageTaggedString;
         return isLanguageTaggedString;
     }
+
 
     //---- method of ControlValueAccessor and Validator interfaces ----
     /**

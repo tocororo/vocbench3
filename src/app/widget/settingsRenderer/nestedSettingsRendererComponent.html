@@ -1,6 +1,6 @@
 <div class="card card-default">
     <div class="card-body">
         <settings-renderer [(ngModel)]="displayedSettings" [preventHoverInheritance]="true"
-            (ngModelChange)="updatePropertiesValue($event)"></settings-renderer>
+            (ngModelChange)="updatePropertiesValue($event)" [disabled]="disabled"></settings-renderer>
     </div>
 </div>

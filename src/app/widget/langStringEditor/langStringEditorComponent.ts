@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, forwardRef, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTLiteral } from "../../models/ARTResources";
 import { Languages } from "../../models/LanguagesCountries";
@@ -14,23 +14,33 @@ import { SharedModalServices } from "../modal/sharedModal/sharedModalServices";
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => LangStringEditorComponent), multi: true,
     }]
 })
-export class LangStringEditorComponent implements ControlValueAccessor, OnInit { // based on RdfResourceComponent
+export class LangStringEditorComponent implements ControlValueAccessor, OnInit, AfterViewInit { // based on RdfResourceComponent
 
-    private unknownFlagImgSrc: string = UIUtils.getFlagImgSrc(null); // image associated with unknown (or null) language
+    @Input() disabled: boolean = false;
+    @ViewChild('flagIcon') private flagIconRef: ElementRef; 
 
-    private imgSrc: string; // image associated with the current language
+    unknownFlagImgSrc: string = UIUtils.getFlagImgSrc(null); // image associated with unknown (or null) language
+
+    imgSrc: string; // image associated with the current language
     langFlagAvailable: boolean = false; //true if the language (if any) has a flag icon available
 
     stringValue: string; // string value of the literal
-    private langTag: string; // language tag of the literal
+    langTag: string; // language tag of the literal
     language: string; // human-friendly rendering of the language (name plus tag)
     
     private literalValue: ARTLiteral; // the rdf:langString being edited (the model) 
 
-    constructor(private sharedModals: SharedModalServices, private preferences: VBProperties) { }
+    public constructor(private renderer: Renderer2, private sharedModals: SharedModalServices, private preferences: VBProperties) {
+    }
 
     ngOnInit(): void {
         this.initLangInfo();
+    }
+
+    ngAfterViewInit(): void { // to use the value injected into the @ViewChild annotated field
+        if (!this.disabled) {
+            this.renderer.listen(this.flagIconRef.nativeElement, "click", _ => this.editLanguage());
+        }
     }
 
     /**
@@ -60,7 +70,7 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
     }
 
     editLanguage() {
-        this.sharedModals.selectLanguages("Value language", (this.langTag ? [this.langTag] : []), true).then(
+        this.sharedModals.selectLanguages("Value language", (this.langTag ? [this.langTag] : []), true, false).then(
             langs => {
                 this.langTag = langs[0];
                 this.onModelChanged();
@@ -70,7 +80,7 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
     }
 
     private onModelChanged() {
-        let text = this.stringValue.trim();
+        let text = this.stringValue ? this.stringValue.trim() : "";
         if (text == "") {
             this.literalValue = null;
         } else {

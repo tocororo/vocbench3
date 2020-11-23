@@ -12,6 +12,8 @@ import { Settings } from '../../models/Plugins';
 export class NestedSettingSetRendererComponent implements ControlValueAccessor {
 
     @Input() schema: Settings;
+    @Input() disabled: boolean = false;
+    
     settings: Settings;
 
     displayedSettings: Settings;
@@ -27,7 +29,7 @@ export class NestedSettingSetRendererComponent implements ControlValueAccessor {
             this.init();
         }
     }
-
+   
     init() {
         if (this.settings) {
             this.displayedSettings = this.settings;
