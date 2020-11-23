@@ -145,9 +145,15 @@ export class SharedModalServices {
         const modalRef: NgbModalRef = this.modalService.open(LoadConfigurationModal, new ModalOptions());
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.configurationComponent = configurationComponent;
-        modalRef.componentInstance.allowLoad = allowLoad;
-        modalRef.componentInstance.allowDelete = allowDelete;
-        modalRef.componentInstance.additionalReferences = additionalReferences;
+        if (allowLoad !== undefined) {
+            modalRef.componentInstance.allowLoad = allowLoad;
+        }
+        if (allowDelete !== undefined) {
+            modalRef.componentInstance.allowDelete = allowDelete;
+        }
+        if (additionalReferences !== undefined) {
+            modalRef.componentInstance.additionalReferences = additionalReferences;
+        }
         return modalRef.result;
     }
 
