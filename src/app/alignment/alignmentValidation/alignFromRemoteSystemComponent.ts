@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable, of } from 'rxjs';
 import { finalize, flatMap, map } from 'rxjs/operators';
+import { ServiceMetadataDTO } from 'src/app/models/Maple';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { AlignmentOverview } from '../../models/Alignment';
 import { Project } from "../../models/Project";
@@ -32,6 +33,8 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
     serverDown: boolean = false;
     serviceNotConfigured: boolean = false;
 
+    serviceMetadata: ServiceMetadataDTO = null;
+
     isSettingsAuthorized: boolean;
 
     private tasks: RemoteAlignmentTask[];
@@ -55,13 +58,47 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
                     this.ensureDatasetProfiled(this.rightProject, "right").subscribe(
                         profiledRight => {
                             if (profiledRight) {
-                                this.listTask();
+                                this.initService();
                             }
                         }
                     )
                 }
             }
         )
+    }
+
+    /**
+     * Initializes the service
+     */
+    private initService() {
+        this.remoteAlignmentService.getServiceMetadata().subscribe(
+            serviceMetadata => {
+                this.serviceMetadata = serviceMetadata;
+                this.listTask();
+            },
+            this.errorHandler()
+        );
+    }
+
+    private errorHandler() {
+        return (err: Error) => {
+            //handle the only exception let through by the default handler
+            if (err.name == "it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException") {
+                if (err.message.includes("HttpHostConnectException")) {
+                    this.serverDown = true;
+                    this.basicModals.alert("Alignment Service server error", "The Alignment Service server didn't respond, "
+                        + "make sure it is up and running or the configuration is correct", ModalType.warning);
+                } else {
+                    this.basicModals.alert("Alignment Service server error", err.message, ModalType.error, err.stack);
+                }
+            } else if (err.name == "java.lang.IllegalStateException") {
+                if (err.message.includes("No alignment service configured")) {
+                    this.serviceNotConfigured = true;
+                } else {
+                    this.basicModals.alert("Alignment Service error", err.message, ModalType.error, err.stack);
+                }
+            }
+        }
     }
 
     /**
@@ -143,24 +180,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
             tasks => {
                 this.tasks = tasks;
             },
-            (err: Error) => {
-                //handle the only exception let through by the default handler
-                if (err.name == "it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException") {
-                    if (err.message.includes("HttpHostConnectException")) {
-                        this.serverDown = true;
-                        this.basicModals.alert("Alignment Service server error", "The Alignment Service server didn't respond, "
-                            + "make sure it is up and running or the configuration is correct", ModalType.warning);
-                    } else {
-                        this.basicModals.alert("Alignment Service server error", err.message, ModalType.error, err.stack);
-                    }
-                } else if (err.name == "java.lang.IllegalStateException") {
-                    if (err.message.includes("No alignement service configured")) {
-                        this.serviceNotConfigured = true;
-                    } else {
-                        this.basicModals.alert("Alignment Service error", err.message, ModalType.error, err.stack);
-                    }
-                }
-            }
+            this.errorHandler()
         );
     }
 
@@ -206,7 +226,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
         this.modalService.open(RemoteSystemSettingsModal, new ModalOptions()).result.then(
             (configChanged: boolean) => {
                 if (configChanged) { 
-                    this.listTask();
+                    this.initService();
                 }
             }
         );
