@@ -19,8 +19,8 @@ import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { AbstractListPanel } from "../abstractListPanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
+import { AbstractListPanel } from "../abstractListPanel";
 import { InstanceListComponent } from "./instanceListComponent";
 import { InstanceListSettingsModal } from "./instanceListSettingsModal";
 
@@ -140,13 +140,14 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                     this.getClassOfIndividual(resource, types).subscribe(
                         cls => {
                             if (cls != null) {
-                                if (cls.equals(this.cls)) { //searched individual belongs to the current class
-                                    this.viewChildList.openListAt(resource);
-                                } else { //searched individual belongs to another class
-                                    //require to parent to switch class
-                                    this.classChange.emit(types[0]);
-                                    //and invoke to open list in order to store the search as pending
-                                    this.viewChildList.openListAt(resource);
+                                if (this.cls == null) { //input class not present (instance search extended to all classes and none selected)
+                                    this.selectInstanceOfAnotherClass(resource, cls);
+                                } else { //input class provided
+                                    if (cls.equals(this.cls)) { //searched individual belongs to the current class
+                                        this.viewChildList.openListAt(resource);
+                                    } else { //searched individual belongs to a class different to the current one
+                                        this.selectInstanceOfAnotherClass(resource, cls);
+                                    }
                                 }
                             } //cls == null means that user has canceled the operation
                         }
@@ -158,16 +159,23 @@ export class InstanceListPanelComponent extends AbstractListPanel {
         }
     }
 
+    private selectInstanceOfAnotherClass(instance: ARTURIResource, cls: ARTURIResource) {
+        //require to parent to switch class
+        this.classChange.emit(cls);
+        //and invoke to open list in order to store the search as pending
+        this.viewChildList.openListAt(instance);
+    }
+
     /**
      * After a search of an individual that belongs to a different class, returns the class to switch to
      */
     private getClassOfIndividual(individual: ARTURIResource, types: ARTURIResource[]): Observable<ARTURIResource> {
-        if (types.some(t => t.equals(this.cls))) { //simplest case: searched individual belongs to the current selected class
+        if (this.cls != null && types.some(t => t.equals(this.cls))) { //simplest case: searched individual belongs to the current selected class
             return of(this.cls);
         } else {
             if (types.length == 1) {
                 return from(
-                    this.basicModals.confirm("Search", "Searched instance " + individual.getShow() + " belong to a different class " + 
+                    this.basicModals.confirm("Search", "Searched instance " + individual.getShow() + " belong to a class currently not selected " + 
                         types[0].getShow() + ". Do you want to switch class?").then(
                         () => { //confirmed => switch class
                             return types[0];
@@ -226,6 +234,10 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     //this is public so it can be invoked from classIndividualTreePanelComponent
     openAt(instance: ARTURIResource) {
         this.viewChildList.openListAt(instance);
+    }
+
+    isSearchEnabled() {
+        return this.cls != null || VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings.extendToAllIndividuals;
     }
 
 }
