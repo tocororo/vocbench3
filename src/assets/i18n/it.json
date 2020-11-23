@@ -1,0 +1,49 @@
+{
+    "HOME": {
+        "WELCOME": "Benvenuto in VocBench",
+        "DESCRIPTION": "VocBench è una piattaforma web collaborativa e multilinguale per la gestione di ontologie <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a>, tesauri <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>), lessici <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> e generici dataset RDF.",
+        "POWERED_BY": "VocBench è realizzato col supporto del framework per la gestione e acquisizione della conoscenza <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a>",
+        "PRIVACY_STATEMENT": {
+            "PREFIX": "Per favore, leggi la nostra",
+            "LINK_TEXT": "informativa sulla privacy"
+        },
+        "DEVELOPED_BY": {
+            "TITLE": "VocBench 3 è sviluppato da",
+            "TOR_VERGATA_NAME": "Università degli studi di Roma \"Tor Vergata\"",
+            "TOR_VERGATA_SUBTITLE": "Oggi, l´Ateneo del domani"
+        },
+        "MANAGED_BY": {
+            "TITLE": "Contratto gestito da",
+            "INFEUROPE_NAME": "Infeurope",
+            "INFEUROPE_SUBTITLE": "Architecture begins where engineering ends"
+        },
+        "FUNDED_BY": {
+            "TITLE": "VocBench 3 è finanziato da",
+            "ISA2_NAME": "ISA<sup>2</sup>",
+            "ISA2_SUBTITLE": "Interoperability solutions for public administrations, business and citizens",
+            "OP_NAME": "Ufficio Pubblicazioni dell'Unione Europea",
+            "OP_SUBTITLE": "EU law and publications"
+        }
+    },
+    "TOP_BAR": {
+        "ABOUT_MENU": {
+            "ABOUT_VB": "About VocBench",
+            "VB_SITE": "VocBench website",
+            "CONTACT_US": "Contattaci",
+            "SUPPORT": "Supporto",
+            "PRIVACY_STATEMENT": "Informativa sulla privacy"
+        },
+        "CURRENT_PROJECT": "Progetto corrente",
+        "GLOBAL_DATA_MENU": {
+            "GLOBAL_DATA_MANAGEMENT": "Gestione globale dei dati",
+            "LOAD_DATA": "Carica dati",
+            "EXPORT_DATA": "Esporta dati",
+            "CLEAR_DATA": "Elimina dati",
+            "VERSIONING": "Versioning",
+            "REFACTOR": "Refactor",
+            "LOAD_SHAPES": "Carica shapes",
+            "EXPORT_SHAPES": "Esporta shapes",
+            "CLEAR_SHAPES": "Elimina shapes"
+        }
+    }
+}

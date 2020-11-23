@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
+import { TranslateService } from '@ngx-translate/core';
 import { Project } from "./models/Project";
 import { EDOAL, OntoLex, OWL, RDFS, SKOS } from "./models/Vocabulary";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
+import { Cookie } from './utils/Cookie';
 import { VBActionsEnum } from "./utils/VBActions";
 import { VBContext } from "./utils/VBContext";
 import { VBEventHandler } from './utils/VBEventHandler';
@@ -19,14 +21,26 @@ export class AppComponent {
 
     navbarTheme: number = 0;
 
-    constructor(private vbProp: VBProperties, private eventHandler: VBEventHandler) {
+    constructor(private vbProp: VBProperties, private eventHandler: VBEventHandler, translate: TranslateService) {
         this.eventHandler.themeChangedEvent.subscribe((theme: number) => {
             if (theme != null) {
                 this.navbarTheme = theme;
             } else {
                 this.navbarTheme = 0;
             }
-        })
+        });
+
+        //set the available languages
+        translate.addLangs(['en', 'it']);
+        //fallback when a translation isn't found in the current language
+        translate.setDefaultLang('en');
+        //restore the lang to use, check first the cookies, if not found, set english by default
+        let langCookie: string = Cookie.getCookie(Cookie.TRANSLATE_LANG);
+        if (langCookie != null && translate.getLangs().includes(langCookie)) {
+            translate.use(langCookie);
+        } else {
+            translate.use('en');
+        }
     }
 
     ngOnInit() {

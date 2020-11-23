@@ -1,9 +1,12 @@
 import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { CustomReuseStrategy } from '../a2Customization/CustomReuseStrategy';
 import { AppComponent } from '../appComponent';
 import { AppRoutingModule } from '../appRoutes';
@@ -44,12 +47,24 @@ import { TreeAndListModule } from './treeAndListModule';
 import { UserModule } from './userModule';
 import { VBModalModule } from './vbModalModule';
 
+export function HttpLoaderFactory(http: HttpClient) {
+	return new TranslateHttpLoader(http, "./assets/i18n/");
+}
+
 @NgModule({
 	imports: [
 		BrowserModule,
 		CommonModule,
 		FormsModule,
 		NgbModule,
+		TranslateModule.forRoot({
+			defaultLanguage: 'en',
+            loader: {
+                provide: TranslateLoader,
+				useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
 
 		AppRoutingModule,
 

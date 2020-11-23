@@ -3,6 +3,8 @@
 
 export class Cookie {
 
+	public static TRANSLATE_LANG = "translate.lang";
+
 	public static RES_VIEW_INCLUDE_INFERENCE = "resource_view.include_inference";
 	public static RES_VIEW_RENDERING = "resource_view.rendering";
 	public static RES_VIEW_MODE = "resource_view.mode";

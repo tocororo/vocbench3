@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { ConfigBarComponent } from '../config/configBar/configBarComponent';
 import { ExportDataComponent } from '../config/dataManagement/exportData/exportDataComponent';
 import { FilterGraphsModal } from '../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal';
@@ -19,6 +20,7 @@ import { SharedModule } from './sharedModule';
         FormsModule,
         NgbDropdownModule,
         RouterModule,
+        TranslateModule,
         SharedModule
     ],
     declarations: [

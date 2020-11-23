@@ -917,6 +917,13 @@ label {
     line-height: 1.5;
     border-radius: .3rem;
 }
+.form-control-xs {
+    height: calc(1.5em + .25rem + 2px);
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+}
 
 /*if a element has (click) instead of href doesn't show pointer cursor. This css rule fixes it*/
 .dropdown-menu a:hover {

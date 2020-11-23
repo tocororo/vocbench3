@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { Cookie } from 'src/app/utils/Cookie';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
@@ -29,6 +30,9 @@ export class ConfigBarComponent {
     privacyStatementAvailable: boolean = false;
     private shaclEnabled: boolean = false;
 
+    translateLangs: string[];
+    translateLang: string;
+
     private loadDataAuthorized: boolean;
     private exportDataAuthorized: boolean;
     private clearDataAuthorized: boolean;
@@ -39,7 +43,13 @@ export class ConfigBarComponent {
 
     constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, private prefService: PreferencesSettingsServices,
         private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private router: Router, private modalService: NgbModal) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
+        private translate: TranslateService) {
+    }
+
+    ngOnInit() {
+        this.translateLangs = this.translate.getLangs();
+        this.translateLang = this.translate.currentLang;
     }
 
     /**
@@ -149,6 +159,11 @@ export class ConfigBarComponent {
             },
             () => { }
         );
+    }
+
+    onTranslateLangChanged() {
+        this.translate.use(this.translateLang);
+        Cookie.setCookie(Cookie.TRANSLATE_LANG, this.translateLang);
     }
 
     /* ===============================

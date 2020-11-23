@@ -1,0 +1,49 @@
+{
+    "HOME": {
+        "WELCOME": "Welcome to VocBench",
+        "DESCRIPTION": "VocBench is a web-based, multilingual, collaborative development platform for managing <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a> ontologies, <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>) thesauri, <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> lexicons and generic RDF datasets.",
+        "POWERED_BY": "VocBench is powered by the <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a> Knowledge Acquisition and Management framework",
+        "PRIVACY_STATEMENT": {
+            "PREFIX": "Please read our",
+            "LINK_TEXT": "privacy statement"
+        },
+        "DEVELOPED_BY": {
+            "TITLE": "VocBench 3 has been developed by",
+            "TOR_VERGATA_NAME": "University of Rome Tor Vergata",
+            "TOR_VERGATA_SUBTITLE": "Today, the University of tomorrow"
+        },
+        "MANAGED_BY": {
+            "TITLE": "Contract managed by",
+            "INFEUROPE_NAME": "Infeurope",
+            "INFEUROPE_SUBTITLE": "Architecture begins where engineering ends"
+        },
+        "FUNDED_BY": {
+            "TITLE": "VocBench 3 is funded by",
+            "ISA2_NAME": "ISA<sup>2</sup>",
+            "ISA2_SUBTITLE": "Interoperability solutions for public administrations, business and citizens",
+            "OP_NAME": "Publications Office of the European Union",
+            "OP_SUBTITLE": "EU law and publications"
+        }
+    },
+    "TOP_BAR": {
+        "ABOUT_MENU": {
+            "ABOUT_VB": "About VocBench",
+            "VB_SITE": "VocBench website",
+            "CONTACT_US": "Contact us",
+            "SUPPORT": "Support",
+            "PRIVACY_STATEMENT": "Privacy statement"
+        },
+        "CURRENT_PROJECT": "Current project",
+        "GLOBAL_DATA_MENU": {
+            "GLOBAL_DATA_MANAGEMENT": "Global Data Management",
+            "LOAD_DATA": "Load data",
+            "EXPORT_DATA": "Export data",
+            "CLEAR_DATA": "Clear data",
+            "VERSIONING": "Versioning",
+            "REFACTOR": "Refactor",
+            "LOAD_SHAPES": "Load shapes",
+            "EXPORT_SHAPES": "Export shapes",
+            "CLEAR_SHAPES": "Clear shapes"
+        }
+    }
+}

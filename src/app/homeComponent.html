@@ -7,17 +7,9 @@
                     <img src="./assets/images/logos/vb_logo.png" style="max-height: 130px;">
                 </div>
                 <div style="font-size: 13px;">
-                    <h1 style="margin-top: 0;">Welcome to VocBench</h1>
-                    <p>
-                        VocBench is a web-based, multilingual, collaborative development platform for managing
-                        <a href="https://www.w3.org/TR/owl2-overview/">OWL</a> ontologies,
-                        <a href="https://www.w3.org/TR/skos-reference/">SKOS</a>(/<a href="https://www.w3.org/TR/skos-reference/skos-xl.html">XL</a>)
-                        thesauri, <a href="https://www.w3.org/2016/05/ontolex/">Ontolex-lemon</a> lexicons and generic RDF datasets.
-                    </p>
-                    <p>
-                        VocBench is powered by the <a href="http://semanticturkey.uniroma2.it/" target="_blank">Semantic Turkey</a> Knowledge
-                        Acquisition and Management framework
-                    </p>
+                    <h1 style="margin-top: 0;">{{'HOME.WELCOME'|translate}}</h1>
+                    <p [innerHTML]="'HOME.DESCRIPTION'|translate"></p>
+                    <p [innerHTML]="'HOME.POWERED_BY'|translate"></p>
                 </div>
             </div>
 
@@ -27,7 +19,7 @@
             </div>
 
             <p *ngIf="privacyStatementAvailable" style="align-self: flex-end;">
-                Please read our <a [routerLink]="" (click)="downloadPrivacyStatement()">privacy statement</a>
+                {{'HOME.PRIVACY_STATEMENT.PREFIX'|translate}} <a [routerLink]="" (click)="downloadPrivacyStatement()">{{'HOME.PRIVACY_STATEMENT.LINK_TEXT'|translate}}</a>
             </p>
         </div>
         <div *ngIf="!isUserLogged()" style="flex: 1; padding-left: 10px; margin-bottom: 5px; border-left: 1px solid #ddd">
@@ -38,8 +30,8 @@
     <table class="table" style="background-color: #E7F0FF">
         <tbody>
             <tr>
-                <td colspan="2"><label>VocBench 3 has been developed by:</label></td>
-                <td colspan="2"><label>Contract managed by:</label></td>
+                <td colspan="2"><label>{{'HOME.DEVELOPED_BY.TITLE'|translate}}:</label></td>
+                <td colspan="2"><label>{{'HOME.MANAGED_BY.TITLE'|translate}}:</label></td>
             </tr>
             <tr>
                 <td style="border: none; width: 5%; text-align: center;">
@@ -50,10 +42,8 @@
                 <td style="border: none; width: 45%;">
                     <a href="http://web.uniroma2.it/home/newlang/english" target="_blank">
                         <div>
-                            <div style="color: #002244; font-weight:bold;">University of Rome Tor Vergata</div>
-                            <div style="color: #aa4400; font-size: 10px; font-weight: bold; font-style: italic;">
-                                Today, the University of tomorrow
-                            </div>
+                            <div class="organizzationName">{{'HOME.DEVELOPED_BY.TOR_VERGATA_NAME'|translate}}</div>
+                            <div class="organizzationSubtitle">{{'HOME.DEVELOPED_BY.TOR_VERGATA_SUBTITLE'|translate}}</div>
                         </div>
                     </a>
                 </td>
@@ -66,16 +56,14 @@
                 <td style="border: none; width: 45%;">
                     <a href="http://web.uniroma2.it/home/newlang/english" target="_blank">
                         <div>
-                            <div style="color: #002244; font-weight:bold;">Infeurope</div>
-                            <div style="color: #aa4400; font-size: 10px; font-weight: bold; font-style: italic;">
-                                Architecture begins where engineering ends
-                            </div>
+                            <div class="organizzationName">{{'HOME.MANAGED_BY.INFEUROPE_NAME'|translate}}</div>
+                            <div class="organizzationSubtitle">{{'HOME.MANAGED_BY.INFEUROPE_SUBTITLE'|translate}}</div>
                         </div>
                     </a>
                 </td>
             </tr>
             <tr>
-                <td colspan="4"><label>VocBench 3 is funded by:</label></td>
+                <td colspan="4"><label>{{'HOME.FUNDED_BY.TITLE'|translate}}:</label></td>
             </tr>
             <tr>
                 <td style="border: none; text-align: center;">
@@ -87,10 +75,8 @@
                     <a href="http://ec.europa.eu/isa/isa2/index_en.htm" target="_blank">
                         <div>
                             <div>
-                                <div style="color: #002244; font-weight:bold;">ISA<sup>2</sup></div>
-                                <div style="color: #aa4400; font-size: 10px; font-weight: bold; font-style: italic;">
-                                    Interoperability solutions for public administrations, business and citizens
-                                </div>
+                                <div class="organizzationName" [innerHTML]="'HOME.FUNDED_BY.ISA2_NAME'|translate"></div>
+                                <div class="organizzationSubtitle">{{'HOME.FUNDED_BY.ISA2_SUBTITLE'|translate}}</div>
                             </div>
                         </div>
                     </a>
@@ -104,10 +90,8 @@
                     <a href="https://publications.europa.eu/en/home" target="_blank">
                         <div>
                             <div>
-                                <div style="color: #002244; font-weight:bold;">Publications Office of the European Union</div>
-                                <div style="color: #aa4400; font-size: 10px; font-weight: bold; font-style: italic;">
-                                    EU law and publications
-                                </div>
+                                <div class="organizzationName">{{'HOME.FUNDED_BY.OP_NAME'|translate}}</div>
+                                <div class="organizzationSubtitle">{{'HOME.FUNDED_BY.OP_SUBTITLE'|translate}}</div>
                             </div>
                         </div>
                     </a>

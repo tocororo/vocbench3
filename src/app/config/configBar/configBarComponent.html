@@ -2,30 +2,30 @@
 
     <div class="dropdown float-left" ngbDropdown>
         <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onAboutMenuOpen()" ngbDropdownToggle>
-            About VocBench
+            {{'TOP_BAR.ABOUT_MENU.ABOUT_VB'|translate}}
             <span class="fas fa-caret-down"></span>
         </button>
         <div class="dropdown-menu" ngbDropdownMenu>
             <a class="dropdown-item" href="http://vocbench.uniroma2.it/" target="_blank">
-                <span class="fas fa-globe-europe" style="margin-right: 5px"></span>VocBench website
+                <span class="fas fa-globe-europe" style="margin-right: 5px"></span>{{'TOP_BAR.ABOUT_MENU.VB_SITE'|translate}}
             </a>
             <a class="dropdown-item" href="http://vocbench.uniroma2.it/aboutus/" target="_blank">
-                <span class="fas fa-comment-alt" style="margin-right: 5px"></span>Contact us
+                <span class="fas fa-comment-alt" style="margin-right: 5px"></span>{{'TOP_BAR.ABOUT_MENU.CONTACT_US'|translate}}
             </a>
             <a class="dropdown-item" href="http://vocbench.uniroma2.it/support/" target="_blank">
-                <span class="fas fa-question-circle" style="margin-right: 5px"></span>Support
+                <span class="fas fa-question-circle" style="margin-right: 5px"></span>{{'TOP_BAR.ABOUT_MENU.SUPPORT'|translate}}
             </a>
             <a *ngIf="privacyStatementAvailable" class="dropdown-item" (click)="downloadPrivacyStatement()">
-                <span class="fas fa-download" style="margin-right: 5px"></span>Privacy statement
+                <span class="fas fa-download" style="margin-right: 5px"></span>{{'TOP_BAR.ABOUT_MENU.PRIVACY_STATEMENT'|translate}}
             </a>
         </div>
     </div>
 
     <div class="hbox float-right">
 
-        <div *ngIf="isUserLogged()" class="hbox ml-2" style="align-items: center;">
+        <div *ngIf="isUserLogged()" class="d-flex align-items-center ml-2">
             <div style="display:flex; align-items: center">
-                <label style="margin-right: 2px;">Current project:</label>
+                <label style="margin-right: 2px;">{{'TOP_BAR.CURRENT_PROJECT'|translate}}:</label>
                 <div class="btn-group btn-group-xs" role="group">
                     <a href="#" class="btn btn-light disabled" style="pointer-events: none; opacity: initial" role="button">
                         <ng-container *ngIf="isProjectAccessed()">
@@ -51,49 +51,57 @@
         <div *ngIf="isUserLogged() && isProjectAccessed()" class="ml-4">
             <div class="dropdown float-right" ngbDropdown>
                 <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onGlobalDataManagementMenuOpen()" ngbDropdownToggle>
-                    Global Data Management
+                    {{'TOP_BAR.GLOBAL_DATA_MENU.GLOBAL_DATA_MANAGEMENT'|translate}}
                     <span class="fas fa-caret-down ml-1"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
                     <a routerLink="/Config/LoadData" class="dropdown-item"
                         [ngClass]="{ disabled : !loadDataAuthorized }">
-                        <span class="fas fa-upload" style="margin-right: 5px"></span>Load data
+                        <span class="fas fa-upload" style="margin-right: 5px"></span>{{'TOP_BAR.GLOBAL_DATA_MENU.LOAD_DATA'|translate}}
                     </a>
                     <a routerLink="/Config/ExportData" class="dropdown-item"
                         [ngClass]="{ disabled : !exportDataAuthorized }">
-                        <span class="fas fa-download" style="margin-right: 5px"></span>Export data
+                        <span class="fas fa-download" style="margin-right: 5px"></span>{{'TOP_BAR.GLOBAL_DATA_MENU.EXPORT_DATA'|translate}}
                     </a>
                     <a (click)="clearData()" class="dropdown-item" [ngClass]="{ disabled : !clearDataAuthorized }">
-                        <span class="fas fa-eraser" style="margin-right: 5px"></span>Clear data
+                        <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'TOP_BAR.GLOBAL_DATA_MENU.CLEAR_DATA'|translate}}
                     </a>
                     <div class="dropdown-divider"></div>
                     <a routerLink="/Config/Versioning" class="dropdown-item"
                         [ngClass]="{ disabled : !versioningAuthorized }">
-                        <span class="far fa-clock" style="margin-right: 5px"></span>Versioning
+                        <span class="far fa-clock" style="margin-right: 5px"></span>{{'TOP_BAR.GLOBAL_DATA_MENU.VERSIONING'|translate}}
                     </a>
                     <div class="dropdown-divider"></div>
                     <a routerLink="/Config/Refactor" class="dropdown-item">
-                        <span class="fas fa-retweet" style="margin-right: 5px"></span>Refactor
+                        <span class="fas fa-retweet" style="margin-right: 5px"></span>{{'TOP_BAR.GLOBAL_DATA_MENU.REFACTOR'|translate}}
                     </a>
                     <ng-container *ngIf="shaclEnabled">
                         <div class="dropdown-divider"></div>
                         <a (click)="loadShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !loadShapesAuthorized }">
-                            <span class="fas fa-upload" style="margin-right: 5px"></span>Load shapes
+                            <span class="fas fa-upload" style="margin-right: 5px"></span>{{'TOP_BAR.GLOBAL_DATA_MENU.LOAD_SHAPES'|translate}}
                         </a>
                         <a (click)="exportShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !exportShapesAuthorized }">
-                            <span class="fas fa-download" style="margin-right: 5px"></span>Export shapes
+                            <span class="fas fa-download" style="margin-right: 5px"></span>{{'TOP_BAR.GLOBAL_DATA_MENU.EXPORT_SHAPES'|translate}}
                         </a>
                         <a (click)="clearShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !clearShapesAuthorized }">
-                            <span class="fas fa-eraser" style="margin-right: 5px"></span>Clear shapes
+                            <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'TOP_BAR.GLOBAL_DATA_MENU.CLEAR_SHAPES'|translate}}
                         </a>
                     </ng-container>
                 </div>
             </div>
         </div>
 
+        <div class="ml-4">
+            <select class="form-control form-control-xs" [(ngModel)]="translateLang" (ngModelChange)="onTranslateLangChanged()">
+                <option *ngFor="let lang of translateLangs">{{ lang }}</option>
+            </select>
+        </div>
+
     </div>
+
+   
 
 </div>
