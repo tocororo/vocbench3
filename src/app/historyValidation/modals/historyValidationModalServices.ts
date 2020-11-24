@@ -12,13 +12,13 @@ export class HistoryValidationModalServices {
 
     inspectParams(item: CommitInfo) {
         const modalRef: NgbModalRef = this.modalService.open(OperationParamsModal, new ModalOptions());
-        modalRef.componentInstance.commit = item;
+        modalRef.componentInstance.commit = item.commit;
         return modalRef;
     }
 
     getCommitDelta(item: CommitInfo) {
         const modalRef: NgbModalRef = this.modalService.open(CommitDeltaModal, new ModalOptions('lg'));
-        modalRef.componentInstance.commit = item;
+        modalRef.componentInstance.commit = item.commit;
         return modalRef;
     }
 
