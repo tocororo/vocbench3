@@ -45,5 +45,35 @@
             "EXPORT_SHAPES": "Export shapes",
             "CLEAR_SHAPES": "Clear shapes"
         }
+    },
+    "NAVBAR": {
+        "PROJECTS": "Projects",
+        "DATA": "Data",
+        "METADATA": {
+            "TITLE": "Metadata",
+            "NAMESPACES_AND_IMPORTS": "Namespaces and Imports",
+            "METADATA_VOCABULARIES": "Metadata Vocabularies",
+            "METADATA_REGISTRY": "Metadata Registry"
+        },
+        "SPARQL": "SPARQL",
+        "HISTORY": "History",
+        "VALIDATION": "Validation",
+        "TOOLS": {
+            "TITLE": "Tools",
+            "ALIGNMENT_VALIDATION": "Alignment Validation",
+            "COLLABORATION_SYSTEM": "Collaboration System",
+            "CUSTOM_FORMS": "Custom Forms",
+            "CUSTOM_SERVICES_AND_REPORTS": "Custom Services and Reports",
+            "ICV": "Integrity Constraint Validation (ICV)",
+            "RESOURCE_METADATA": "ResourceMetadata",
+            "SHEET2RDF": "Sheet2RDF",
+            "SKOS_DIFFING": "SKOS Diffing"
+        },
+        "USER_MENU": {
+            "VIEW_PROFILE": "View profile",
+            "NOTIFICATIONS": "Notifications",
+            "PREFERENCES": "Preferences",
+            "ADMINISTRATION": "Administration"
+        }
     }
 }

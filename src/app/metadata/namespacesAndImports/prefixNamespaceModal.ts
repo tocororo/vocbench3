@@ -17,7 +17,9 @@ export class PrefixNamespaceModal {
     prefix: string;
     namespace: string;
 
-    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private httpClient: HttpClient) {
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private httpClient: HttpClient) {}
+
+    ngOnInit() {
         this.prefix = this.prefixInput;
         this.namespace = this.namespaceInput;
     }

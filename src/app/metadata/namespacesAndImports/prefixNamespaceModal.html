@@ -13,8 +13,8 @@
                 <td><label>Prefix:</label></td>
                 <td>
                     <div class="hbox">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="prefix">
-                        <button *ngIf="namespaceReadonly" class="btn btn-sm btn-light" style="margin-left: 5px;" (click)="resolveWithPrefixCC()" title="Try to resolve prefix using prefix.cc">
+                        <input type="text" class="form-control" [(ngModel)]="prefix">
+                        <button class="btn btn-light ml-2" (click)="resolveWithPrefixCC()" title="Try to resolve prefix using prefix.cc">
                             <span class="far fa-closed-captioning"></span>
                         </button>
                     </div>
@@ -23,7 +23,7 @@
             <tr>
                 <td><label>Namespace:</label></td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="namespace" [disabled]="namespaceReadonly">
+                    <input type="text" class="form-control" [(ngModel)]="namespace" [disabled]="namespaceReadonly">
                 </td>
             </tr>
         </tbody>

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from "@angular/router";
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { ChangePasswordModal } from '../user/changePasswordModal';
 import { LoginComponent } from '../user/loginComponent';
 import { RegistrationComponent } from '../user/registrationComponent';
@@ -20,6 +21,7 @@ import { SharedModule } from './sharedModule';
         NgbDropdownModule,
         RouterModule,
         SharedModule,
+        TranslateModule
     ],
     declarations: [
         ChangePasswordModal,

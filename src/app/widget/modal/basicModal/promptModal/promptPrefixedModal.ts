@@ -21,7 +21,9 @@ export class PromptPrefixedModal {
     namespaceLocked: boolean = true;
     submitted: boolean = false;
 
-    constructor(public activeModal: NgbActiveModal) {
+    constructor(public activeModal: NgbActiveModal) {}
+
+    ngOnInit() {
         this.prefixedTxt = this.value;
     }
 
