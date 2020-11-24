@@ -104,7 +104,16 @@ export class RemoteAlignmentServices {
 
     getServiceMetadata(): Observable<ServiceMetadataDTO> {
         let params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getServiceMetadata", params).pipe(
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: [
+                    'it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException',
+                    'java.lang.IllegalStateException'
+                ]
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "getServiceMetadata", params, options).pipe(
             map(stResp => {
                 let settings: SettingsDTO;
                 if (stResp.settings) {

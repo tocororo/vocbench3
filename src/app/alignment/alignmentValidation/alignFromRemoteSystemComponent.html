@@ -3,9 +3,10 @@
     <div class="card card-alt vbox">
         <div class="card-header">
             <label>Remote Alignment System</label>
-            <div *ngIf="serviceMetadata" style="font-size: 80%; padding-left: 4px;">
+            <div *ngIf="serviceMetadata" class="ml-3 text-muted">
                 {{serviceMetadata.service}} <b>[</b>{{serviceMetadata.version}}<b>]</b>
             </div>
+            <span *ngIf="serverDown" class="fas fa-exclamation-triangle ml-3" title="Service down"></span>
             <div style="flex: 1"></div> <!-- a spacer -->
             <div class="btn-toolbar">
                 <button *ngIf="isSettingsAuthorized" class="btn btn-xs btn-light" (click)="settings()" title="Settings">

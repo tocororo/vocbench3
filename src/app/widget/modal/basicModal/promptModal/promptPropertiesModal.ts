@@ -13,11 +13,10 @@ export class PromptPropertiesModal {
     private props: { [key: string]: string };
     mapKeys: string[] = [];
 
-    constructor(public activeModal: NgbActiveModal) {
-        this.props = JSON.parse(JSON.stringify(this.properties));
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {
+        this.props = JSON.parse(JSON.stringify(this.properties));
         for (let key in this.props) {
             this.mapKeys.push(key);
         }

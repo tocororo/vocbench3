@@ -71,6 +71,8 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
      * Initializes the service
      */
     private initService() {
+        this.serverDown = false;
+        this.serviceNotConfigured = false;
         this.remoteAlignmentService.getServiceMetadata().subscribe(
             serviceMetadata => {
                 this.serviceMetadata = serviceMetadata;
