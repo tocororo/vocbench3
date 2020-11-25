@@ -1,5 +1,4 @@
 import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CustomReuseStrategy } from '../a2Customization/CustomReuseStrategy';
 import { AppComponent } from '../appComponent';
 import { AppRoutingModule } from '../appRoutes';
@@ -18,6 +18,7 @@ import { DatatypeValidator } from '../utils/DatatypeValidator';
 import { HttpManager } from '../utils/HttpManager';
 import { RoleActionResolver } from '../utils/RoleActionResolver';
 import { StMetadataRegistry } from '../utils/STMetadataRegistry';
+import { TranslationPipe } from '../utils/TranslationPipe';
 import { UserResolver } from '../utils/UserResolver';
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBEventHandler } from '../utils/VBEventHandler';
@@ -114,6 +115,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AppComponent,
 		HomeComponent,
 		DataComponent,
+		TranslationPipe,
   ],
 	bootstrap: [AppComponent]
 })

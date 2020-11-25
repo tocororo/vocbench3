@@ -7,7 +7,7 @@
                     <img src="./assets/images/logos/vb_logo.png" style="max-height: 130px;">
                 </div>
                 <div style="font-size: 13px;">
-                    <h1 style="margin-top: 0;">{{'HOME.WELCOME'|translate}}</h1>
+                    <h1 style="margin-top: 0;">{{'Welcome to VocBench' | vbTranslate:'HOME.WELCOME' | async}}</h1>
                     <p [innerHTML]="'HOME.DESCRIPTION'|translate"></p>
                     <p [innerHTML]="'HOME.POWERED_BY'|translate"></p>
                 </div>
@@ -19,7 +19,10 @@
             </div>
 
             <p *ngIf="privacyStatementAvailable" style="align-self: flex-end;">
-                {{'HOME.PRIVACY_STATEMENT.PREFIX'|translate}} <a [routerLink]="" (click)="downloadPrivacyStatement()">{{'HOME.PRIVACY_STATEMENT.LINK_TEXT'|translate}}</a>
+                {{'Please read our' | vbTranslate: 'HOME.PRIVACY_STATEMENT.READ_OUR' | async}} 
+                <a [routerLink]="" (click)="downloadPrivacyStatement()">
+                    {{'Privacy statement' | vbTranslate:'HOME.PRIVACY_STATEMENT.LINK_TEXT' | async}}
+                </a>
             </p>
         </div>
         <div *ngIf="!isUserLogged()" style="flex: 1; padding-left: 10px; margin-bottom: 5px; border-left: 1px solid #ddd">
@@ -30,8 +33,8 @@
     <table class="table" style="background-color: #E7F0FF">
         <tbody>
             <tr>
-                <td colspan="2"><label>{{'HOME.DEVELOPED_BY.TITLE'|translate}}:</label></td>
-                <td colspan="2"><label>{{'HOME.MANAGED_BY.TITLE'|translate}}:</label></td>
+                <td colspan="2"><label>{{'VocBench 3 has been developed by' | vbTranslate:'HOME.DEVELOPED_BY.TITLE' | async}}:</label></td>
+                <td colspan="2"><label>{{'Contract managed by' | vbTranslate:'HOME.MANAGED_BY.TITLE' | async}}:</label></td>
             </tr>
             <tr>
                 <td style="border: none; width: 5%; text-align: center;">
@@ -42,8 +45,8 @@
                 <td style="border: none; width: 45%;">
                     <a href="http://web.uniroma2.it/home/newlang/english" target="_blank">
                         <div>
-                            <div class="organizzationName">{{'HOME.DEVELOPED_BY.TOR_VERGATA_NAME'|translate}}</div>
-                            <div class="organizzationSubtitle">{{'HOME.DEVELOPED_BY.TOR_VERGATA_SUBTITLE'|translate}}</div>
+                            <div class="organizzationName">{{'University of Rome Tor Vergata' | vbTranslate:'HOME.DEVELOPED_BY.TOR_VERGATA_NAME' | async}}</div>
+                            <div class="organizzationSubtitle">{{'Today, the University of tomorrow' | vbTranslate:'HOME.DEVELOPED_BY.TOR_VERGATA_SUBTITLE' | async}}</div>
                         </div>
                     </a>
                 </td>
@@ -56,14 +59,14 @@
                 <td style="border: none; width: 45%;">
                     <a href="http://web.uniroma2.it/home/newlang/english" target="_blank">
                         <div>
-                            <div class="organizzationName">{{'HOME.MANAGED_BY.INFEUROPE_NAME'|translate}}</div>
-                            <div class="organizzationSubtitle">{{'HOME.MANAGED_BY.INFEUROPE_SUBTITLE'|translate}}</div>
+                            <div class="organizzationName">{{'Infeurope' | vbTranslate:'HOME.MANAGED_BY.INFEUROPE_NAME' | async}}</div>
+                            <div class="organizzationSubtitle">{{'Architecture begins where engineering ends' | vbTranslate:'HOME.MANAGED_BY.INFEUROPE_SUBTITLE' | async}}</div>
                         </div>
                     </a>
                 </td>
             </tr>
             <tr>
-                <td colspan="4"><label>{{'HOME.FUNDED_BY.TITLE'|translate}}:</label></td>
+                <td colspan="4"><label>{{'VocBench 3 is funded by' | vbTranslate:'HOME.FUNDED_BY.TITLE' | async}}:</label></td>
             </tr>
             <tr>
                 <td style="border: none; text-align: center;">
@@ -76,7 +79,9 @@
                         <div>
                             <div>
                                 <div class="organizzationName" [innerHTML]="'HOME.FUNDED_BY.ISA2_NAME'|translate"></div>
-                                <div class="organizzationSubtitle">{{'HOME.FUNDED_BY.ISA2_SUBTITLE'|translate}}</div>
+                                <div class="organizzationSubtitle">
+                                    {{'Interoperability solutions for public administrations, business and citizens' | vbTranslate:'HOME.FUNDED_BY.ISA2_SUBTITLE' | async}}
+                                </div>
                             </div>
                         </div>
                     </a>
@@ -90,8 +95,8 @@
                     <a href="https://publications.europa.eu/en/home" target="_blank">
                         <div>
                             <div>
-                                <div class="organizzationName">{{'HOME.FUNDED_BY.OP_NAME'|translate}}</div>
-                                <div class="organizzationSubtitle">{{'HOME.FUNDED_BY.OP_SUBTITLE'|translate}}</div>
+                                <div class="organizzationName">{{'Publications Office of the European Union' | vbTranslate:'HOME.FUNDED_BY.OP_NAME' | async}}</div>
+                                <div class="organizzationSubtitle">{{'EU law and publications' | vbTranslate:'HOME.FUNDED_BY.OP_SUBTITLE' | async }</div>
                             </div>
                         </div>
                     </a>

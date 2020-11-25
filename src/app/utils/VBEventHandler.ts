@@ -91,8 +91,6 @@ export class VBEventHandler {
 
     public notificationStatusChangedEvent: EventEmitter<void> = new VBEventEmitter("notificationStatusChangedEvent");
 
-    public themeChangedEvent: EventEmitter<number> = new VBEventEmitter("themeChangedEvent");
-
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
     public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);
@@ -104,6 +102,8 @@ export class VBEventHandler {
     public resourceUpdatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTResource>("resourceUpdatedEvent");
 
     public collaborationSystemStatusChanged: EventEmitter<any> = new VBEventEmitter("collaborationSystemStatusChanged");
+
+    public themeChangedEvent: EventEmitter<number> = new VBEventEmitter("themeChangedEvent");
 
     constructor() { }
 

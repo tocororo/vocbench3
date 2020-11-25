@@ -2,13 +2,13 @@ import { Component } from "@angular/core";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Cookie } from 'src/app/utils/Cookie';
+import { VBEventHandler } from 'src/app/utils/VBEventHandler';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
 import { AdministrationServices } from "../../services/administrationServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
-import { ProjectServices } from "../../services/projectServices";
 import { ShaclServices } from "../../services/shaclServices";
 import { LoadShapesModal } from "../../shacl/loadShapesModal";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -41,7 +41,7 @@ export class ConfigBarComponent {
     private exportShapesAuthorized: boolean;
     private clearShapesAuthorized: boolean;
 
-    constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, private prefService: PreferencesSettingsServices,
+    constructor(private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
         private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
         private translate: TranslateService) {

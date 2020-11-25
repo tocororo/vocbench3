@@ -4,7 +4,7 @@
         "DESCRIPTION": "VocBench è una piattaforma web collaborativa e multilinguale per la gestione di ontologie <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a>, tesauri <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>), lessici <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> e generici dataset RDF.",
         "POWERED_BY": "VocBench è realizzato col supporto del framework per la gestione e acquisizione della conoscenza <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a>",
         "PRIVACY_STATEMENT": {
-            "PREFIX": "Per favore, leggi la nostra",
+            "READ_OUR": "Per favore, leggi la nostra",
             "LINK_TEXT": "informativa sulla privacy"
         },
         "DEVELOPED_BY": {
@@ -60,7 +60,7 @@
         "VALIDATION": "Validazione",
         "TOOLS": {
             "TITLE": "Strumenti",
-            "ALIGNMENT_VALIDATION": "Validatione Allineamenti",
+            "ALIGNMENT_VALIDATION": "Validazione Allineamenti",
             "COLLABORATION_SYSTEM": "Sistema Collaborativo",
             "CUSTOM_FORMS": "Custom Form",
             "CUSTOM_SERVICES_AND_REPORTS": "Custom Service e Report",
@@ -74,6 +74,67 @@
             "NOTIFICATIONS": "Notifiche",
             "PREFERENCES": "Preferenze",
             "ADMINISTRATION": "Amministrazione"
+        }
+    },
+    "PROJECTS": {
+        "TABLE": {
+            "HEADERS": {
+                "NAME": "Nome",
+                "OPEN_CLOSE": "Aperto/Chiuso",
+                "ACCESSED": "Acceduto",
+                "MODEL": "Modello",
+                "LEXICALIZATION": "Lessicalizzazione",
+                "HISTORY": "Storico",
+                "VALIDATION": "Validazione",
+                "REPO_LOCATION": "Posizione Repository",
+                "ACTIONS": "Azioni"
+            },
+            "CONFIG_MODAL": {
+                "TITLE": "Impostazioni della vista progetti",
+                "TOP_LEVEL_ELEMENT_OPT": {
+                    "LABEL": "Raggruppa per",
+                    "OPTIONS": {
+                        "PROJECTS": "Progetti",
+                        "DIRECTORIES": "Cartelle"
+                    }
+                },
+                "PROJECT_INFO_PANEL": {
+                    "TITLE": "Info progetto",
+                    "DESCRIPTION": "Da qui è possibile mostrare o nascondere le informazioni riguardanti i progetti e modificarne l'ordine",
+                    "HEADERS": {
+                        "COL_NAME": "Nome colonna",
+                        "SHOW": "Mostra"
+                    }
+                }
+            },
+            "CREATE": "Crea"
+        },
+        "CREATE_FORM": {
+            "PROJECT_NAME": "Nome progetto",
+            "DATA_PRELOADING": "Pre-caricamento dati opzionali",
+            "BASE_URI": "Base URI",
+            "MODEL": "Modello",
+            "LEXICALIZATION": "Lessicalizzazione",
+            "HISTORY": "Storico",
+            "VALIDATION": "Validazione",
+            "BLACKLIST": "Lista nera",
+            "DATA_STORE": "Data Store",
+            "REPO_ACCESS": "Accesso al Repository",
+            "DATA_REPO_ID": "ID Repository dati",
+            "SUPPORT_REPO_ID": "ID Repository Storico/Validazione",
+            "CONFIGURATION": "Configurazione",
+            "CONFIGURE": "Configura",
+            "OPTIONAL_SETTINGS": "Impostazioni opzionali",
+            "USE_DEFAULT": "Usa impostazioni predefinite",
+            "URI_GENERATOR": "URI Generator",
+            "RENDERING_ENGINE": "Rendering Engine",
+            "RESOURCE_METADATA": "Resource Metadata",
+            "USE_RESOURCE_METADATA": "Usa Resource Metadata",
+            "SHACLE_SHAPE_VALIDATION": "Validazione SHACL Shape",
+            "ENABLE_SHAPE_VALIDATION": "Abilita validazione shape",
+            "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
+            "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference"
+            
         }
     }
 }

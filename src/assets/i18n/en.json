@@ -4,7 +4,7 @@
         "DESCRIPTION": "VocBench is a web-based, multilingual, collaborative development platform for managing <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a> ontologies, <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>) thesauri, <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> lexicons and generic RDF datasets.",
         "POWERED_BY": "VocBench is powered by the <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a> Knowledge Acquisition and Management framework",
         "PRIVACY_STATEMENT": {
-            "PREFIX": "Please read our",
+            "READ_OUR": "Please read our",
             "LINK_TEXT": "privacy statement"
         },
         "DEVELOPED_BY": {
@@ -74,6 +74,66 @@
             "NOTIFICATIONS": "Notifications",
             "PREFERENCES": "Preferences",
             "ADMINISTRATION": "Administration"
+        }
+    },
+    "PROJECTS": {
+        "TABLE": {
+            "HEADERS": {
+                "NAME": "Name",
+                "OPEN_CLOSE": "Open/Close",
+                "ACCESSED": "Accessed",
+                "MODEL": "Model",
+                "LEXICALIZATION": "Lexicalization",
+                "HISTORY": "History",
+                "VALIDATION": "Validation",
+                "REPO_LOCATION": "Repository Location",
+                "ACTIONS": "Actions"
+            },
+            "CONFIG_MODAL": {
+                "TITLE": "Project view settings",
+                "TOP_LEVEL_ELEMENT_OPT": {
+                    "LABEL": "Top level elements",
+                    "OPTIONS": {
+                        "PROJECTS": "Projects",
+                        "DIRECTORIES": "Directories"
+                    }
+                },
+                "PROJECT_INFO_PANEL": {
+                    "TITLE": "Project info",
+                    "DESCRIPTION": "Here you can show or hide info about the projects and customize their order.",
+                    "HEADERS": {
+                        "COL_NAME": "Column name",
+                        "SHOW": "Show"
+                    }
+                }
+            },
+            "CREATE": "Create"
+        },
+        "CREATE_FORM": {
+            "PROJECT_NAME": "Project name",
+            "DATA_PRELOADING": "Optional data preloading",
+            "BASE_URI": "Base URI",
+            "MODEL": "Model",
+            "LEXICALIZATION": "Lexicalization",
+            "HISTORY": "History",
+            "VALIDATION": "Validation",
+            "BLACKLIST": "Blacklisting",
+            "DATA_STORE": "Data Store",
+            "REPO_ACCESS": "Repository Access",
+            "DATA_REPO_ID": "Data Repository ID",
+            "SUPPORT_REPO_ID": "History/Validation Repository ID",
+            "CONFIGURATION": "Configuration",
+            "CONFIGURE": "Configure",
+            "OPTIONAL_SETTINGS": "Optional settings",
+            "USE_DEFAULT": "Use default settings",
+            "URI_GENERATOR": "URI Generator",
+            "RENDERING_ENGINE": "Rendering Engine",
+            "RESOURCE_METADATA": "Resource Metadata",
+            "USE_RESOURCE_METADATA": "Use Resource Metadata",
+            "SHACLE_SHAPE_VALIDATION": "SHACL Shape Validation",
+            "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
+            "ENABLE_SHAPE_VALIDATION": "Enable shape validation",
+            "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference"
         }
     }
 }
