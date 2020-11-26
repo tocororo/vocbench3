@@ -17,7 +17,7 @@ export class InvokableReporterModalServices {
         const modalRef: NgbModalRef = this.modalService.open(InvokableReporterEditorModal, new ModalOptions());
         modalRef.componentInstance.title = title;
 		modalRef.componentInstance.existingReporters = existingReporters;
-		modalRef.componentInstance.reporterRef = reporterRef;
+		if (reporterRef != null) modalRef.componentInstance.reporterRef = reporterRef;
         return modalRef.result;
     }
 
@@ -25,7 +25,7 @@ export class InvokableReporterModalServices {
         const modalRef: NgbModalRef = this.modalService.open(ServiceInvocationEditorModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = title;
 		modalRef.componentInstance.invokableReporterRef = invokableReporterRef;
-		modalRef.componentInstance.serviceInvocation = serviceInvocation;
+		if (serviceInvocation != null) modalRef.componentInstance.serviceInvocation = serviceInvocation;
         return modalRef.result;
     }
 

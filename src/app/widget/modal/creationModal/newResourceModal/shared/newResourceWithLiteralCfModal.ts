@@ -13,7 +13,7 @@ import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModa
     templateUrl: "./newResourceWithLiteralCfModal.html",
 })
 export class NewResourceWithLiteralCfModal extends AbstractCustomConstructorModal {
-    @Input() title: string = "Modal title";
+    @Input() title: string;
     @Input() cls: ARTURIResource; //class that this modal is creating an instance
     @Input() clsChangeable: boolean = true;
     @Input() literalLabel: string = "Label";

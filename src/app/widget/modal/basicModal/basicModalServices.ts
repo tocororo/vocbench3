@@ -34,11 +34,11 @@ export class BasicModalServices {
     prompt(title: string, label?: { value: string, tooltip?: string }, message?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(PromptModal, new ModalOptions());
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.label = label;
-        modalRef.componentInstance.message = message;
-        modalRef.componentInstance.value = value;
-        modalRef.componentInstance.inputOptional = inputOptional;
-        modalRef.componentInstance.inputSanitized = inputSanitized;
+        if (label != null) modalRef.componentInstance.label = label;
+        if (message != null) modalRef.componentInstance.message = message;
+        if (value != null) modalRef.componentInstance.value = value;
+        if (inputOptional != null) modalRef.componentInstance.inputOptional = inputOptional;
+        if (inputSanitized != null) modalRef.componentInstance.inputSanitized = inputSanitized;
         return modalRef.result;
     }
 
@@ -58,11 +58,11 @@ export class BasicModalServices {
         const modalRef: NgbModalRef = this.modalService.open(PromptPrefixedModal, new ModalOptions());
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.prefix = prefix;
-        modalRef.componentInstance.label = label;
-        modalRef.componentInstance.value = value;
-        modalRef.componentInstance.inputOptional = inputOptional;
-        modalRef.componentInstance.inputSanitized = inputSanitized;
-        modalRef.componentInstance.prefixEditable = prefixEditable;
+        if (label != null) modalRef.componentInstance.label = label;
+        if (value != null) modalRef.componentInstance.value = value;
+        if (inputOptional != null) modalRef.componentInstance.inputOptional = inputOptional;
+        if (inputSanitized != null) modalRef.componentInstance.inputSanitized = inputSanitized;
+        if (prefixEditable != null) modalRef.componentInstance.prefixEditable = prefixEditable;
         return modalRef.result;
     }
 
@@ -94,7 +94,7 @@ export class BasicModalServices {
         const modalRef: NgbModalRef = this.modalService.open(ConfirmModal, _options);
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = message;
-        modalRef.componentInstance.type = type;
+        if (type != null) modalRef.componentInstance.type = type;
         return modalRef.result;
     }
 
@@ -112,7 +112,7 @@ export class BasicModalServices {
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = message;
         modalRef.componentInstance.checkOpts = checkOpts;
-        modalRef.componentInstance.type = type;
+        if (type != null) modalRef.componentInstance.type = type;
         return modalRef.result;
     }
 
@@ -129,9 +129,9 @@ export class BasicModalServices {
         const modalRef: NgbModalRef = this.modalService.open(AlertModal, new ModalOptions());
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = message;
-        modalRef.componentInstance.type = type;
-        modalRef.componentInstance.details = details;
-        modalRef.componentInstance.checkboxLabel = checkboxLabel;
+        if (type != null) modalRef.componentInstance.type = type;
+        if (details != null) modalRef.componentInstance.details = details;
+        if (checkboxLabel != null) modalRef.componentInstance.checkboxLabel = checkboxLabel;
         return modalRef.result;
     }
 
@@ -164,7 +164,7 @@ export class BasicModalServices {
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = message;
         modalRef.componentInstance.options = options;
-        modalRef.componentInstance.type = type;
+        if (type != null) modalRef.componentInstance.type = type;
         return modalRef.result;
     }
 
@@ -195,10 +195,10 @@ export class BasicModalServices {
     selectFile(title: string, message?: string, label?: string, placeholder?: string, accept?: string) {
         const modalRef: NgbModalRef = this.modalService.open(FilePickerModal, new ModalOptions());
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.message = message;
-        modalRef.componentInstance.label = label;
-        modalRef.componentInstance.placeholder = placeholder;
-        modalRef.componentInstance.accept = accept;
+        if (message != null) modalRef.componentInstance.message = message;
+        if (label != null) modalRef.componentInstance.label = label;
+        if (placeholder != null) modalRef.componentInstance.placeholder = placeholder;
+        if (accept != null) modalRef.componentInstance.accept = accept;
         return modalRef.result;
     }
 
@@ -213,7 +213,7 @@ export class BasicModalServices {
         const modalRef: NgbModalRef = this.modalService.open(CustomFormSelectionModal, new ModalOptions());
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.cfList = cfList;
-        modalRef.componentInstance.hideNo = hideNo;
+        if (hideNo != null) modalRef.componentInstance.hideNo = hideNo;
         return modalRef.result;
     }
 

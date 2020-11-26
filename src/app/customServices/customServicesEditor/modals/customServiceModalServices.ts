@@ -15,7 +15,7 @@ export class CustomServiceModalServices {
     public openCustomServiceEditor(title: string, serviceConf?: CustomService): Promise<void> {
         const modalRef: NgbModalRef = this.modalService.open(CustomServiceEditorModal, new ModalOptions());
         modalRef.componentInstance.title = title;
-		modalRef.componentInstance.service = serviceConf;
+		if (serviceConf != null) modalRef.componentInstance.service = serviceConf;
         return modalRef.result;
     }
     
@@ -23,7 +23,7 @@ export class CustomServiceModalServices {
         const modalRef: NgbModalRef = this.modalService.open(CustomOperationEditorModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = title;
 		modalRef.componentInstance.customServiceId = customServiceId;
-		modalRef.componentInstance.operation = operation;
+		if (operation != null) modalRef.componentInstance.operation = operation;
         return modalRef.result;
     }
 

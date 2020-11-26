@@ -73,7 +73,7 @@ export class SharedModalServices {
         const modalRef: NgbModalRef = this.modalService.open(ResourceViewModal, new ModalOptions('lg'));
         modalRef.componentInstance.resource = resource;
         modalRef.componentInstance.readonly = readonly;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 
@@ -89,9 +89,9 @@ export class SharedModalServices {
         const modalRef: NgbModalRef = this.modalService.open(LanguageSelectorModal, new ModalOptions());
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.languages = languages;
-        modalRef.componentInstance.radio = radio;
-        modalRef.componentInstance.projectAware = projectAware;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (radio != null) modalRef.componentInstance.radio = radio;
+        if (projectAware != null) modalRef.componentInstance.projectAware = projectAware;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 
@@ -103,8 +103,8 @@ export class SharedModalServices {
     selectConverter(title: string, message?: string, capabilities?: RDFCapabilityType[]) {
         const modalRef: NgbModalRef = this.modalService.open(ConverterPickerModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.message = message;
-        modalRef.componentInstance.capabilities = capabilities;
+        if (message != null) modalRef.componentInstance.message = message;
+        if (capabilities != null) modalRef.componentInstance.capabilities = capabilities;
         return modalRef.result;
     }
 
@@ -122,7 +122,7 @@ export class SharedModalServices {
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.configurationComponent = configurationComponent;
         modalRef.componentInstance.configurationObject = configurationObject;
-        modalRef.componentInstance.relativeRef = relativeRef;
+        if (relativeRef != null) modalRef.componentInstance.relativeRef = relativeRef;
         return modalRef.result;
     }
 
@@ -145,15 +145,9 @@ export class SharedModalServices {
         const modalRef: NgbModalRef = this.modalService.open(LoadConfigurationModal, new ModalOptions());
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.configurationComponent = configurationComponent;
-        if (allowLoad !== undefined) {
-            modalRef.componentInstance.allowLoad = allowLoad;
-        }
-        if (allowDelete !== undefined) {
-            modalRef.componentInstance.allowDelete = allowDelete;
-        }
-        if (additionalReferences !== undefined) {
-            modalRef.componentInstance.additionalReferences = additionalReferences;
-        }
+        if (allowLoad !== undefined) modalRef.componentInstance.allowLoad = allowLoad;
+        if (allowDelete !== undefined) modalRef.componentInstance.allowDelete = allowDelete;
+        if (additionalReferences !== undefined) modalRef.componentInstance.additionalReferences = additionalReferences;
         return modalRef.result;
     }
 
@@ -166,8 +160,8 @@ export class SharedModalServices {
     pickResource(title: string, roles?: RDFResourceRolesEnum[], editable?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(ResourcePickerModal, new ModalOptions());
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.roles = roles;
-        modalRef.componentInstance.editable = editable;
+        if (roles != null) modalRef.componentInstance.roles = roles;
+        if (editable != null) modalRef.componentInstance.editable = editable;
         return modalRef.result;
     }
 
@@ -203,8 +197,8 @@ export class SharedModalServices {
     selectUser(title: string, projectDependent?: boolean, unselectableUsers?: User[]) {
         const modalRef: NgbModalRef = this.modalService.open(UserSelectionModal, new ModalOptions());
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.projectDepending = projectDependent;
-        modalRef.componentInstance.unselectableUsers = unselectableUsers;
+        if (projectDependent != null) modalRef.componentInstance.projectDepending = projectDependent;
+        if (unselectableUsers != null) modalRef.componentInstance.unselectableUsers = unselectableUsers;
         return modalRef.result;
     }
 
@@ -227,9 +221,9 @@ export class SharedModalServices {
     prefixNamespace(title: string, prefix?: string, namespace?: string, namespaceReadonly?: boolean): Promise<{ prefix: string, namespace: string }> {
         const modalRef: NgbModalRef = this.modalService.open(PrefixNamespaceModal, new ModalOptions());
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.prefixInput = prefix;
-        modalRef.componentInstance.namespaceInput = namespace;
-        modalRef.componentInstance.namespaceReadonly = namespaceReadonly;
+        if (prefix != null) modalRef.componentInstance.prefixInput = prefix;
+        if (namespace != null) modalRef.componentInstance.namespaceInput = namespace;
+        if (namespaceReadonly != null) modalRef.componentInstance.namespaceReadonly = namespaceReadonly;
         return modalRef.result;
     }
 
@@ -242,7 +236,7 @@ export class SharedModalServices {
     manchesterExpression(title: string, expression?: string): Promise<string> {
         const modalRef: NgbModalRef = this.modalService.open(ManchesterExprModal, new ModalOptions());
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.expression = expression;
+        if (expression != null) modalRef.componentInstance.expression = expression;
         return modalRef.result;
     }
 
@@ -268,7 +262,7 @@ export class SharedModalServices {
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = message;
         modalRef.componentInstance.resourceList = resourceList;
-        modalRef.componentInstance.rendering = rendering;
+        if (rendering != null) modalRef.componentInstance.rendering = rendering;
         return modalRef.result;
     }
 

@@ -30,8 +30,8 @@ export class BrowsingModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(ClassTreeModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.roots = roots;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (roots != null) modalRef.componentInstance.roots = roots;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 
@@ -45,8 +45,8 @@ export class BrowsingModalServices {
         let _options: ModalOptions = new ModalOptions('lg');
         const modalRef: NgbModalRef = this.modalService.open(ClassIndividualTreeModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.classes = classes;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (classes != null) modalRef.componentInstance.classes = classes;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 
@@ -75,9 +75,9 @@ export class BrowsingModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(ConceptTreeModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.schemes = schemes;
-        modalRef.componentInstance.schemeChangeable = schemeChangeable;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (schemes != null) modalRef.componentInstance.schemes = schemes;
+        if (schemeChangeable != null) modalRef.componentInstance.schemeChangeable = schemeChangeable;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 
@@ -90,7 +90,7 @@ export class BrowsingModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(CollectionTreeModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 
@@ -103,7 +103,7 @@ export class BrowsingModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(SchemeListModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 
@@ -120,10 +120,10 @@ export class BrowsingModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(PropertyTreeModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.rootProperties = rootProperties;
-        modalRef.componentInstance.resource = resource;
-        modalRef.componentInstance.type = type;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (rootProperties != null) modalRef.componentInstance.rootProperties = rootProperties;
+        if (resource != null) modalRef.componentInstance.resource = resource;
+        if (type != null) modalRef.componentInstance.type = type;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 
@@ -139,12 +139,12 @@ export class BrowsingModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(ClassTreeModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.lexicon = lexicon;
-        modalRef.componentInstance.lexiconChangeable = lexiconChangeable;
-        modalRef.componentInstance.editable = editable;
-        modalRef.componentInstance.deletable = deletable;
-        modalRef.componentInstance.allowMultiselection = allowMultiselection;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (lexicon != null) modalRef.componentInstance.lexicon = lexicon;
+        if (lexiconChangeable != null) modalRef.componentInstance.lexiconChangeable = lexiconChangeable;
+        if (editable != null) modalRef.componentInstance.editable = editable;
+        if (deletable != null) modalRef.componentInstance.deletable = deletable;
+        if (allowMultiselection != null) modalRef.componentInstance.allowMultiselection = allowMultiselection;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 
@@ -156,7 +156,7 @@ export class BrowsingModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(LexiconListModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.projectCtx = projectCtx;
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
 

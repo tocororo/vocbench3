@@ -31,7 +31,7 @@ export class CreationModalServices {
         const modalRef: NgbModalRef = this.modalService.open(NewResourceCfModal, _options);
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.cls = cls;
-        modalRef.componentInstance.clsChangeable = clsChangeable;
+        if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
     }
 
@@ -51,10 +51,10 @@ export class CreationModalServices {
         const modalRef: NgbModalRef = this.modalService.open(NewResourceWithLiteralCfModal, _options);
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.cls = cls;
-        modalRef.componentInstance.clsChangeable = clsChangeable;
-        modalRef.componentInstance.literalLabel = literalLabel;
-        modalRef.componentInstance.lang = lang;
-        modalRef.componentInstance.langConstraints = langConstraints;
+        if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
+        if (literalLabel != null) modalRef.componentInstance.literalLabel = literalLabel;
+        if (lang != null) modalRef.componentInstance.lang = lang;
+        if (langConstraints != null) modalRef.componentInstance.langConstraints = langConstraints;
         return modalRef.result;
     }
 
@@ -72,11 +72,11 @@ export class CreationModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewConceptCfModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.broader = broader;
-        modalRef.componentInstance.schemes = schemes;
-        modalRef.componentInstance.cls = cls;
-        modalRef.componentInstance.clsChangeable = clsChangeable;
-        modalRef.componentInstance.lang = lang;
+        if (broader != null) modalRef.componentInstance.broader = broader;
+        if (schemes != null) modalRef.componentInstance.schemes = schemes;
+        if (cls != null) modalRef.componentInstance.cls = cls;
+        if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
+        if (lang != null) modalRef.componentInstance.lang = lang;
         return modalRef.result;
     }
 
@@ -89,7 +89,7 @@ export class CreationModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewLexiconCfModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.clsChangeable = clsChangeable;
+        if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
     }
 
@@ -105,7 +105,7 @@ export class CreationModalServices {
         const modalRef: NgbModalRef = this.modalService.open(NewOntoLexicalizationCfModal, _options);
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.lexicalizationProp = lexicalizationProp;
-        modalRef.componentInstance.clsChangeable = clsChangeable;
+        if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
     }
 
@@ -125,12 +125,12 @@ export class CreationModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewXLabelModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.value = value;
-        modalRef.componentInstance.valueReadonly = valueReadonly;
-        modalRef.componentInstance.lang = lang;
-        modalRef.componentInstance.langReadonly = langReadonly;
-        modalRef.componentInstance.clsChangeable = clsChangeable;
-        modalRef.componentInstance.multivalueOpt = multivalueOpt;
+        if (value != null) modalRef.componentInstance.value = value;
+        if (valueReadonly != null) modalRef.componentInstance.valueReadonly = valueReadonly;
+        if (lang != null) modalRef.componentInstance.lang = lang;
+        if (langReadonly != null) modalRef.componentInstance.langReadonly = langReadonly;
+        if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
+        if (multivalueOpt != null) modalRef.componentInstance.multivalueOpt = multivalueOpt;
         return modalRef.result;
     }
 
@@ -150,12 +150,12 @@ export class CreationModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewPlainLiteralModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.value = value;
-        modalRef.componentInstance.valueReadonly = valueReadonly;
-        modalRef.componentInstance.lang = lang;
-        modalRef.componentInstance.langReadonly = langReadonly;
-        modalRef.componentInstance.langConstraints = langConstraints;
-        modalRef.componentInstance.multivalueOpt = multivalueOpt;
+        if (value != null) modalRef.componentInstance.value = value;
+        if (valueReadonly != null) modalRef.componentInstance.valueReadonly = valueReadonly;
+        if (lang != null) modalRef.componentInstance.lang = lang;
+        if (langReadonly != null) modalRef.componentInstance.langReadonly = langReadonly;
+        if (langConstraints != null) modalRef.componentInstance.langConstraints = langConstraints;
+        if (multivalueOpt != null) modalRef.componentInstance.multivalueOpt = multivalueOpt;
         return modalRef.result;
     }
 
@@ -173,11 +173,11 @@ export class CreationModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewTypedLiteralModal, _options);
         modalRef.componentInstance.title = title;
-        modalRef.componentInstance.predicate = predicate;
-        modalRef.componentInstance.allowedDatatypes = allowedDatatypes;
-        modalRef.componentInstance.dataRanges = dataRanges;
-        modalRef.componentInstance.multivalue = multivalue;
-        modalRef.componentInstance.validate = validation;
+        if (predicate != null) modalRef.componentInstance.predicate = predicate;
+        if (allowedDatatypes != null) modalRef.componentInstance.allowedDatatypes = allowedDatatypes;
+        if (dataRanges != null) modalRef.componentInstance.dataRanges = dataRanges;
+        if (multivalue != null) modalRef.componentInstance.multivalue = multivalue;
+        if (validation != null) modalRef.componentInstance.validate = validation;
         return modalRef.result;
     }
 
@@ -195,8 +195,8 @@ export class CreationModalServices {
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.xLabel = xLabel;
         modalRef.componentInstance.cls = cls;
-        modalRef.componentInstance.clsChangeable = clsChangeable;
-        modalRef.componentInstance.sibling = sibling;
+        if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
+        if (sibling != null) modalRef.componentInstance.sibling = sibling;
         return modalRef.result;
     }
 

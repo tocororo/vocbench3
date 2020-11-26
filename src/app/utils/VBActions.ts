@@ -14,10 +14,6 @@ import { NewLexiconCfModalReturnData } from '../widget/modal/creationModal/newRe
 import { NewResourceWithLiteralCfModalReturnData } from '../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal';
 import { NewConceptCfModalReturnData } from '../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal';
 import { ModalType } from '../widget/modal/Modals';
-// import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
-// import { NewLexiconCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal";
-// import { NewResourceWithLiteralCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
-// import { NewConceptCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
 import { HttpServiceContext } from "./HttpManager";
 import { UIUtils } from "./UIUtils";
 

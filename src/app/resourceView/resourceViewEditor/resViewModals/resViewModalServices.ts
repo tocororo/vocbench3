@@ -51,8 +51,8 @@ export class ResViewModalServices {
         const modalRef: NgbModalRef = this.modalService.open(PropertyChainCreatorModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = title;
 		modalRef.componentInstance.property = property;
-        modalRef.componentInstance.propChangeable = propChangeable;
-        modalRef.componentInstance.chain = chain;
+        if (propChangeable != null) modalRef.componentInstance.propChangeable = propChangeable;
+        if (chain != null) modalRef.componentInstance.chain = chain;
         return modalRef.result;
     }
 
@@ -66,7 +66,7 @@ export class ResViewModalServices {
         const modalRef: NgbModalRef = this.modalService.open(CustomFormModal, new ModalOptions());
         modalRef.componentInstance.title = title;
 		modalRef.componentInstance.cfId = cfId;
-		modalRef.componentInstance.language = language;
+		if (language != null) modalRef.componentInstance.language = language;
         return modalRef.result;
     }
 
@@ -87,9 +87,9 @@ export class ResViewModalServices {
         modalRef.componentInstance.title = title;
 		modalRef.componentInstance.resource = resource;
         modalRef.componentInstance.property = property;
-        modalRef.componentInstance.propChangeable = propChangeable;
-		modalRef.componentInstance.rootPropertyInput = rootProperty;
-		modalRef.componentInstance.allowMultiselection = allowMultiselection;
+        if (propChangeable != null) modalRef.componentInstance.propChangeable = propChangeable;
+		if (rootProperty != null) modalRef.componentInstance.rootPropertyInput = rootProperty;
+		if (allowMultiselection != null) modalRef.componentInstance.allowMultiselection = allowMultiselection;
         return modalRef.result;
     }
 
@@ -101,7 +101,7 @@ export class ResViewModalServices {
     addManualValue(property: ARTURIResource, propChangeable?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(AddManuallyValueModal, new ModalOptions());
         modalRef.componentInstance.property = property;
-		modalRef.componentInstance.propChangeable = propChangeable;
+		if (propChangeable != null) modalRef.componentInstance.propChangeable = propChangeable;
         return modalRef.result;
     }
 
@@ -113,7 +113,7 @@ export class ResViewModalServices {
     addRdfsMembers(property: ARTURIResource, propChangeable?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(RdfsMembersModal, new ModalOptions());
         modalRef.componentInstance.property = property;
-		modalRef.componentInstance.propChangeable = propChangeable;
+		if (propChangeable != null) modalRef.componentInstance.propChangeable = propChangeable;
         return modalRef.result;
     }
 
@@ -146,8 +146,8 @@ export class ResViewModalServices {
     browseExternalResource(title: string, property?: ARTURIResource, propChangeable?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(BrowseExternalResourceModal, new ModalOptions());
         modalRef.componentInstance.title = title;
-		modalRef.componentInstance.property = property;
-		modalRef.componentInstance.propChangeable = propChangeable;
+		if (property != null) modalRef.componentInstance.property = property;
+		if (propChangeable != null) modalRef.componentInstance.propChangeable = propChangeable;
         return modalRef.result;
     }
 
@@ -172,7 +172,7 @@ export class ResViewModalServices {
         const modalRef: NgbModalRef = this.modalService.open(DataTypeRestrictionsModal, new ModalOptions());
         modalRef.componentInstance.title = title;
 		modalRef.componentInstance.datatype = datatype;
-		modalRef.componentInstance.restriction = restriction;
+		if (restriction != null) modalRef.componentInstance.restriction = restriction;
         return modalRef.result;
     }
 
