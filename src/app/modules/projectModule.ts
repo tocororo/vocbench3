@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
 import { ProjectACLModal } from '../project/projectACL/projectACLModal';
@@ -20,7 +21,8 @@ import { SharedModule } from './sharedModule';
         CommonModule,
         FormsModule,
         NgbDropdownModule,
-        SharedModule
+        SharedModule,
+        TranslateModule
     ],
     declarations: [
         CreateProjectComponent,

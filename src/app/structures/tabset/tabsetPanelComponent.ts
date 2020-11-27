@@ -51,15 +51,15 @@ export class TabsetPanelComponent {
 
     private ONTO_TYPE: string;
     
-    tabs: { role: RDFResourceRolesEnum, label: string }[] = [
-        { role: RDFResourceRolesEnum.cls, label: "Class" },
-        { role: RDFResourceRolesEnum.concept, label: "Concept" },
-        { role: RDFResourceRolesEnum.conceptScheme, label: "Scheme" },
-        { role: RDFResourceRolesEnum.skosCollection, label: "Collection" },
-        { role: RDFResourceRolesEnum.property, label: "Property" },
-        { role: RDFResourceRolesEnum.limeLexicon, label: "Lexicon" },
-        { role: RDFResourceRolesEnum.ontolexLexicalEntry, label: "Lex.Entry" },
-        { role: RDFResourceRolesEnum.dataRange, label: "Datatype" }
+    tabs: { role: RDFResourceRolesEnum, label: string, translationKey: string }[] = [
+        { role: RDFResourceRolesEnum.cls, label: "Class", translationKey: 'DATA.TABS.CLASS' },
+        { role: RDFResourceRolesEnum.concept, label: "Concept", translationKey: 'DATA.TABS.CONCEPT' },
+        { role: RDFResourceRolesEnum.conceptScheme, label: "Scheme", translationKey: 'DATA.TABS.SCHEME' },
+        { role: RDFResourceRolesEnum.skosCollection, label: "Collection", translationKey: 'DATA.TABS.COLLECTION' },
+        { role: RDFResourceRolesEnum.property, label: "Property", translationKey: 'DATA.TABS.PROPERTY' },
+        { role: RDFResourceRolesEnum.limeLexicon, label: "Lexicon", translationKey: 'DATA.TABS.LEXICON' },
+        { role: RDFResourceRolesEnum.ontolexLexicalEntry, label: "Lex.Entry", translationKey: 'DATA.TABS.LEX_ENTRY' },
+        { role: RDFResourceRolesEnum.dataRange, label: "Datatype", translationKey: 'DATA.TABS.DATATYPE' }
     ];
     private activeTab: RDFResourceRolesEnum;
     private allowMultiselection: boolean = true;

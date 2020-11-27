@@ -3,7 +3,7 @@
     <div class="card card-default vbox">
         <div class="card-header">
             <button class="btn btn-xs btn-light" (click)="createProject()">
-                Create
+                {{'COMMONS.CREATE'|translate}}
             </button>
             <span style="flex: 1;"></span>
             <div class="btn-toolbar">
@@ -22,14 +22,7 @@
             <ng-container *ngIf="visualizationMode == ProjectViewMode.dir">
                 <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
                 <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
-                    <ng-container *ngFor="let colId of columnIDs">
-                        <label *ngIf="columnOrder[colId]" class="text-center" [ngStyle]="{ order: columnOrder[colId].order, flex: columnOrder[colId].flex }">
-                            {{columnOrder[colId].show}}
-                        </label>
-                    </ng-container>
-                    <label class="text-center" style="width: 100px; order: 99;">
-                        Actions
-                    </label>
+                    <ng-container *ngTemplateOutlet="headersTemplate"></ng-container>
                 </div>
                 <ng-container *ngFor="let pd of projectDirs">
                     <div class="groupPanel">
@@ -113,14 +106,7 @@
             <ng-container *ngIf="visualizationMode == ProjectViewMode.list">
                 <!-- 3px is the same padding applied to the rows (of the listItem class) -->
                 <div class="hbox" style="padding: 7px 3px; flex: none;">
-                    <ng-container *ngFor="let colId of columnIDs">
-                        <label *ngIf="columnOrder[colId]" class="text-center" [ngStyle]="{ order: columnOrder[colId].order, flex: columnOrder[colId].flex }">
-                            {{columnOrder[colId].show}}
-                        </label>
-                    </ng-container>
-                    <label class="text-center" style="width: 100px; order: 99;">
-                        Actions
-                    </label>
+                    <ng-container *ngTemplateOutlet="headersTemplate"></ng-container>
                 </div>
                 <div>
                     <div *ngFor="let p of projectList" class="listItem project-row">
@@ -180,3 +166,15 @@
     </div>
 
 </div>
+
+
+<ng-template #headersTemplate>
+    <ng-container *ngFor="let colId of columnIDs">
+        <label *ngIf="columnOrder[colId]" class="text-center" [ngStyle]="{ order: columnOrder[colId].order, flex: columnOrder[colId].flex }">
+            {{columnOrder[colId].show|translate}}
+        </label>
+    </ng-container>
+    <label class="text-center" style="width: 100px; order: 99;">
+        {{'PROJECTS.TABLE.HEADERS.ACTIONS'|translate}}
+    </label>
+</ng-template>

@@ -2,21 +2,21 @@
 
     <div class="card card-default vbox">
         <div class="card-header">
-            <label>Create project:</label>
+            <label>{{'PROJECTS.CREATE_FORM.CREATE_PROJECT'|translate}}:</label>
         </div>
 
         <div class="card-body scrollableContainer">
 
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">Project Name:</label>
+                <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.PROJECT_NAME'|translate}}:</label>
                 <div class="col-sm-11">
                     <input type="text" class="form-control" [(ngModel)]="projectName"
-                        placeholder="Project name" (ngModelChange)="onProjectNameChange()" sanitized>
+                        [placeholder]="'PROJECTS.CREATE_FORM.PROJECT_NAME'|translate" (ngModelChange)="onProjectNameChange()" sanitized>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">Optional data preloading:</label>
+                <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.DATA_PRELOADING'|translate}}:</label>
                 <div class="col-sm-3">
                     <select class="form-control" [(ngModel)]="selectedPreloadOpt" (ngModelChange)="onPreloadChange()">
                         <option *ngFor="let p of preloadOptList">{{p}}</option>
@@ -26,17 +26,17 @@
                     <div class="hbox" style="align-items: center">
                         <div *ngIf="selectedPreloadOpt == preloadOptFromLocalFile" class="hbox" style="align-items: center">
                             <file-picker (fileChanged)="preloadFromFileChanged($event)" [file]="preloadFile" [accept]="filePickerAccept"></file-picker>
-                            <label style="margin-left: 8px;">Format:</label>
+                            <label style="margin-left: 8px;">{{'COMMONS.FORMAT'|translate}}:</label>
                             <select class="form-control" style="margin-left: 5px; width: initial" [(ngModel)]="selectedInputFormat">
                                 <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
                             </select>
-                            <button class="btn btn-light" (click)="preloadFromFile()" [disabled]="!preloadFile" style="margin-left: 10px;">Preload</button>
+                            <button class="btn btn-light" (click)="preloadFromFile()" [disabled]="!preloadFile" style="margin-left: 10px;">{{'PROJECTS.CREATE_FORM.PRELOAD'|translate}}</button>
                         </div>
 
                         <div *ngIf="selectedPreloadOpt == preloadOptFromURI" class="input-group" style="flex: 1;">
                             <input type="text" class="form-control" [(ngModel)]="preloadUri">
                             <div class="input-group-append">
-                                <button class="btn btn-light" (click)="preloadFromUri()" [disabled]="!preloadUri || preloadUri.trim() == ''">Preload</button>
+                                <button class="btn btn-light" (click)="preloadFromUri()" [disabled]="!preloadUri || preloadUri.trim() == ''">{{'PROJECTS.CREATE_FORM.PRELOAD'|translate}}</button>
                             </div>
                         </div>
 
@@ -61,7 +61,7 @@
                 </div>
                 <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-3">
                     <div class="hbox" style="align-items: center;">
-                        <label>Transitive imports:</label>
+                        <label>{{'PROJECTS.CREATE_FORM.TRANSITIVE_IMPORTS'|translate}}:</label>
                         <select class="form-control" style="margin-left: 5px;" [(ngModel)]="selectedImportAllowance">
                             <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
                         </select>                    
@@ -70,7 +70,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">Base URI:</label>
+                <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.BASE_URI'|translate}}:</label>
                 <div class="col-sm-11">
 
                     <div class="hbox" style="align-items: center">
@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">Model:</label>
+                <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.MODEL'|translate}}:</label>
                 <div class="col-sm-3">
                     <div class="hbox" style="align-items: center">
                         <select class="form-control" [(ngModel)]="ontoModelType" (ngModelChange)="onOntoModelChanged()" [disabled]="ontoModelLocked">
@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <ng-container *ngIf="!isEdoalProject(); else edoalBlock">
-                    <label class="col-form-label col-sm-1">Lexicalization:</label>
+                    <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.LEXICALIZATION'|translate}}:</label>
                     <div class="col-sm-4">
                         <div class="hbox" style="align-items: center">
                             <select class="form-control" [(ngModel)]="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
@@ -139,21 +139,21 @@
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" id="historyCheck" type="checkbox" [(ngModel)]="history">
                         <label class="form-check-label" for="historyCheck">
-                            History
+                            {{'PROJECTS.CREATE_FORM.HISTORY'|translate}}
                             <span class="fas fa-info-circle ml-1" title="Enable this to keep track of the changes made on the working graph"></span>
                         </label>
                     </div>
                     <div class="form-check form-check-inline ml-3">
                         <input class="form-check-input" id="validationCheck" type="checkbox" [(ngModel)]="validation" (input)="blacklisting=false">
                         <label class="form-check-label" for="validationCheck">
-                            Validation
+                            {{'PROJECTS.CREATE_FORM.VALIDATION'|translate}}
                             <span class="fas fa-info-circle ml-1" title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)"></span>
                         </label>
                     </div>
                     <div class="form-check form-check-inline ml-3">
                         <input class="form-check-input" id="blacklistCheck" type="checkbox" [(ngModel)]="blacklisting" [disabled]="!validation">
                         <label class="form-check-label" for="blacklistCheck">
-                            Blacklisting
+                            {{'PROJECTS.CREATE_FORM.BLACKLIST'|translate}}
                             <span class="fas fa-info-circle ml-1" title="Enable this to blacklist terms that have been rejected through validation"></span>
                         </label>
                     </div>
@@ -163,12 +163,12 @@
             <!--Triple store configuration-->
             <div class="card card-alt mb-2">
                 <div class="card-header">
-                    <label>Data Store</label>
+                    <label>{{'PROJECTS.CREATE_FORM.DATA_STORE'|translate}}</label>
                 </div>
                 <div class="card-body">
 
                     <div class="form-group row">
-                        <label class="col-form-label col-sm-2">Repository Access:</label>
+                        <label class="col-form-label col-sm-2">{{'PROJECTS.CREATE_FORM.REPO_ACCESS'|translate}}:</label>
                         <div class="col-sm-10">
                             <div class="hbox">
                                 <select class="form-control" style="flex: 4" [(ngModel)]="selectedRepositoryAccess" (ngModelChange)="onRepoAccessChange()">
@@ -190,7 +190,7 @@
 
                     <!-- Data repo -->
                     <div class="form-group row">
-                        <label class="col-form-label col-sm-2">Data Repository ID</label>
+                        <label class="col-form-label col-sm-2">{{'PROJECTS.CREATE_FORM.DATA_REPO_ID'|translate}}</label>
                         <div class="col-sm-4">
                             <div class="input-group">
                                 <input type="text" class="form-control" [(ngModel)]="dataRepoId"
@@ -205,7 +205,7 @@
                         </div>
                         <ng-container *ngIf="isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
-                                <label>Configuration</label>
+                                <label>{{'PROJECTS.CREATE_FORM.CONFIGURATION'|translate}}</label>
                             </div>
                             <div class="col-sm-5">
                                 <extension-configurator #dataRepoConfigurator *ngIf="dataRepoExtensions"
@@ -217,7 +217,7 @@
                         </ng-container>
                         <ng-container *ngIf="!isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
-                                <label>Backend type</label>
+                                <label>{{'PROJECTS.CREATE_FORM.BACKEND_TYPE'|translate}}</label>
                             </div>
                             <div class="col-sm-5">
                                 <select class="form-control" [(ngModel)]="selectedCoreRepoBackendType">
@@ -230,7 +230,7 @@
                     <!-- Support repo -->
 
                     <div class="form-group row">
-                        <label class="col-form-label col-sm-2">History/Validation Repository ID</label>
+                        <label class="col-form-label col-sm-2">{{'PROJECTS.CREATE_FORM.SUPPORT_REPO_ID'|translate}}</label>
                         <div class="col-sm-4">
                             <div class="input-group">
                                 <input type="text" class="form-control" [(ngModel)]="supportRepoId"
@@ -245,7 +245,7 @@
                         </div>
                         <ng-container *ngIf="isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1" style="white-space: nowrap">
-                                <label>Configuration</label>
+                                <label>{{'PROJECTS.CREATE_FORM.CONFIGURATION'|translate}}</label>
                                 <span class="fas fa-info-circle ml-2" title="It is highly recommended not to use inference"></span>
                             </div>
                             <div class="col-sm-5">
@@ -258,7 +258,7 @@
                         </ng-container>
                         <ng-container *ngIf="!isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
-                                <label>Backend type</label>
+                                <label>{{'PROJECTS.CREATE_FORM.BACKEND_TYPE'|translate}}</label>
                             </div>
                             <div class="col-sm-5">
                                 <select class="form-control" [(ngModel)]="selectedSupportRepoBackendType" [disabled]="!(history || validation)">
@@ -278,7 +278,7 @@
                         <img src="./assets/images/icons/arrow.png" (click)="extPointPanelOpen = !extPointPanelOpen"
                             [ngClass]="{'arrow-right' : !extPointPanelOpen}">
                     </div>
-                    <label style="flex: 1">Optional settings:</label>
+                    <label style="flex: 1">{{'PROJECTS.CREATE_FORM.OPTIONAL_SETTINGS'|translate}}:</label>
                 </div>
                 <div class="card-body" *ngIf="extPointPanelOpen">
 
@@ -287,7 +287,7 @@
                             <label style="flex: 1;">URI Generator</label>
                             <div class="form-check">
                                 <input class="form-check-input" id="defaultUriGenCheck" type="checkbox" [(ngModel)]="uriGenUseDefaultSetting">
-                                <label class="form-check-label" for="defaultUriGenCheck">Use default settings</label>
+                                <label class="form-check-label" for="defaultUriGenCheck">{{'PROJECTS.CREATE_FORM.USE_DEFAULT'|translate}}</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -303,7 +303,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">Configuration:</label>
+                                    <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.CONFIGURATION'|translate}}:</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
                                             <select class="form-control" [(ngModel)]="selectedUriGenPluginConf">
@@ -323,10 +323,10 @@
 
                     <div class="card card-alt mb-2">
                         <div class="card-header">
-                            <label style="flex: 1;">Rendering Engine</label>
+                            <label style="flex: 1;">{{'PROJECTS.CREATE_FORM.RENDERING_ENGINE'|translate}}</label>
                             <div class="form-check">
                                 <input class="form-check-input" id="defaultRenderingCheck" type="checkbox" [(ngModel)]="rendEngUseDefaultSetting">
-                                <label class="form-check-label" for="defaultRenderingCheck">Use default settings</label>
+                                <label class="form-check-label" for="defaultRenderingCheck">{{'PROJECTS.CREATE_FORM.USE_DEFAULT'|translate}}</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -343,7 +343,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">Configuration:</label>
+                                    <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.CONFIGURATION'|translate}}:</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
                                             <select class="form-control" [(ngModel)]="selectedRendEngPluginConf" [disabled]="rendEngUseDefaultSetting">
@@ -363,11 +363,11 @@
 
                     <div class="card card-alt mb-2">
                         <div class="card-header">
-                            <label style="flex: 1;">Resource Metadata</label>
+                            <label style="flex: 1;">{{'PROJECTS.CREATE_FORM.RESOURCE_METADATA'|translate}}</label>
                             <div class="form-check">
                                 <input class="form-check-input" id="resMetadataCheck" type="checkbox" [(ngModel)]="useResourceMetadata">
                                 <label class="form-check-label" for="resMetadataCheck">
-                                    Use Resource Metadata
+                                    {{'PROJECTS.CREATE_FORM.USE_RESOURCE_METADATA'|translate}}
                                     <span class="fas fa-info-circle ml-1" title="Usage of Resource Metadata can be enabled also after the project creation"></span>
                                 </label>
                             </div>
@@ -425,10 +425,10 @@
 
                     <div class="card card-alt mb-2">
                         <div class="card-header">
-                            <label style="flex: 1;">SHACL Shape Validation</label>
+                            <label style="flex: 1;">{{'PROJECTS.CREATE_FORM.SHACLE_SHAPE_VALIDATION'|translate}}</label>
                             <div class="form-check">
                                 <input class="form-check-input" id="shapeCheck" type="checkbox" [(ngModel)]="enableSHACL" (ngModelChange)="onShacleEnableChange()">
-                                <label class="form-check-label" for="shapeCheck">Enable shape validation</label>
+                                <label class="form-check-label" for="shapeCheck">{{'PROJECTS.CREATE_FORM.ENABLE_SHAPE_VALIDATION'|translate}}</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -445,10 +445,10 @@
 
                     <div class="card card-alt">
                         <div class="card-header">
-                            <label style="flex: 1;">Trivial Inference Engine</label>
+                            <label style="flex: 1;">{{'PROJECTS.CREATE_FORM.TRIVIAL_INFERENCE_ENGINE'|translate}}</label>
                             <div class="form-check">
                                 <input class="form-check-input" id="trivialInferCheck" type="checkbox" [(ngModel)]="enableTrivialInference">
-                                <label class="form-check-label" for="trivialInferCheck">Enable trivial inference</label>
+                                <label class="form-check-label" for="trivialInferCheck">{{'PROJECTS.CREATE_FORM.ENABLE_TRIVIAL_INFERENCE'|translate}}</label>
                             </div>
                         </div>
                     </div>
@@ -458,7 +458,7 @@
         </div>
 
         <div class="card-footer">
-            <button type="submit" class="btn btn-light float-right" (click)="create()">Create</button>
+            <button type="submit" class="btn btn-light float-right" (click)="create()">{{'COMMONS.CREATE'|translate}}</button>
             <span class="clearfix"></span>
         </div>
     </div>

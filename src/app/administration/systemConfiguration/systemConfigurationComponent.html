@@ -260,7 +260,7 @@
                                     <span *ngIf="f.visible" class="fas fa-eye"></span>
                                     <span *ngIf="!f.visible" class="fas fa-eye-slash"></span>
                                 </button>
-                                <input class="form-control" [ngModel]="getOptionalFieldLabel(f)" readonly>
+                                <input class="form-control" [value]="getOptionalFieldLabel(f)|translate" readonly>
                             </div>
                         </div>
                     </div>

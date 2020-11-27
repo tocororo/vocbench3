@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { AdministrationComponent } from "../administration/administrationComponent";
 import { adminRouting } from "../administration/administrationRoutes";
 import { GroupEditorModal } from "../administration/groupsAdministration/groupEditorModal";
@@ -30,7 +31,9 @@ import { UserModule } from './userModule';
         FormsModule,
         NgbDropdownModule,
         SharedModule,
-        UserModule],
+        TranslateModule,
+        UserModule
+    ],
     declarations: [
         AdministrationComponent,
         GroupsAdministrationComponent,

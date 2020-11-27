@@ -54,7 +54,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         let customOrder: ProjectColumnId[] = this.getCustomColumnsSetting(); //this setting contains the (ordered) IDs of the columns to show
         customOrder.forEach((colId: ProjectColumnId, idx: number) => {
             let colStruct: ProjectTableColumnStruct = columns.find(c => c.id == colId); //retrieve the column struct
-            this.columnOrder[colId] = { show: colStruct.name, order: idx, flex: colStruct.flex }
+            this.columnOrder[colId] = { show: colStruct.translationKey, order: idx, flex: colStruct.flex }
         })
 
         //init project list

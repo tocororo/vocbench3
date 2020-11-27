@@ -325,7 +325,7 @@ export enum ProjectColumnId {
 
 export class ProjectTableColumnStruct {
     public id: ProjectColumnId;
-    public name: string;
+    public translationKey: string; //key of the translation entry
     public show: boolean;
     public flex: number; //useful for the view: tells how much the column should grow
     public mandatory?: boolean;
@@ -335,14 +335,14 @@ export class ProjectUtils {
 
     public static getDefaultProjectTableColumns(): ProjectTableColumnStruct[] {
         return [
-            { id: ProjectColumnId.name, name: "Project Name", show: true, flex: 3, mandatory: true },
-            { id: ProjectColumnId.open, name: "Open/Close", show: true, flex: 1, mandatory: true },
-            { id: ProjectColumnId.accessed, name: "Accessed", show: true, flex: 1, mandatory: true },
-            { id: ProjectColumnId.model, name: "Model", show: true, flex: 1 },
-            { id: ProjectColumnId.lexicalization, name: "Lexicalization", show: true, flex: 1 },
-            { id: ProjectColumnId.history, name: "History", show: true, flex: 1 },
-            { id: ProjectColumnId.validation, name: "Validation", show: true, flex: 1 },
-            { id: ProjectColumnId.location, name: "Repository Location", show: true, flex: 2 }
+            { id: ProjectColumnId.name, translationKey: "PROJECTS.TABLE.HEADERS.NAME", show: true, flex: 3, mandatory: true },
+            { id: ProjectColumnId.open, translationKey: "PROJECTS.TABLE.HEADERS.OPEN_CLOSE", show: true, flex: 1, mandatory: true },
+            { id: ProjectColumnId.accessed, translationKey: "PROJECTS.TABLE.HEADERS.ACCESSED", show: true, flex: 1, mandatory: true },
+            { id: ProjectColumnId.model, translationKey: "PROJECTS.TABLE.HEADERS.MODEL", show: true, flex: 1 },
+            { id: ProjectColumnId.lexicalization, translationKey: "PROJECTS.TABLE.HEADERS.LEXICALIZATION", show: true, flex: 1 },
+            { id: ProjectColumnId.history, translationKey: "PROJECTS.TABLE.HEADERS.HISTORY", show: true, flex: 1 },
+            { id: ProjectColumnId.validation, translationKey: "PROJECTS.TABLE.HEADERS.VALIDATION", show: true, flex: 1 },
+            { id: ProjectColumnId.location, translationKey: "PROJECTS.TABLE.HEADERS.REPO_LOCATION", show: true, flex: 2 }
         ];
     }
 

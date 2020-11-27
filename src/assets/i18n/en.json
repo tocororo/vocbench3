@@ -106,34 +106,79 @@
                         "SHOW": "Show"
                     }
                 }
-            },
-            "CREATE": "Create"
+            }
         },
         "CREATE_FORM": {
-            "PROJECT_NAME": "Project name",
-            "DATA_PRELOADING": "Optional data preloading",
+            "BACKEND_TYPE": "Backend type",
             "BASE_URI": "Base URI",
-            "MODEL": "Model",
-            "LEXICALIZATION": "Lexicalization",
-            "HISTORY": "History",
-            "VALIDATION": "Validation",
             "BLACKLIST": "Blacklisting",
-            "DATA_STORE": "Data Store",
-            "REPO_ACCESS": "Repository Access",
-            "DATA_REPO_ID": "Data Repository ID",
-            "SUPPORT_REPO_ID": "History/Validation Repository ID",
             "CONFIGURATION": "Configuration",
-            "CONFIGURE": "Configure",
-            "OPTIONAL_SETTINGS": "Optional settings",
-            "USE_DEFAULT": "Use default settings",
-            "URI_GENERATOR": "URI Generator",
-            "RENDERING_ENGINE": "Rendering Engine",
-            "RESOURCE_METADATA": "Resource Metadata",
-            "USE_RESOURCE_METADATA": "Use Resource Metadata",
-            "SHACLE_SHAPE_VALIDATION": "SHACL Shape Validation",
-            "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
+            "CREATE_PROJECT": "Create project",
+            "DATA_PRELOADING": "Optional data preloading",
+            "DATA_REPO_ID": "Data Repository ID",
+            "DATA_STORE": "Data Store",
             "ENABLE_SHAPE_VALIDATION": "Enable shape validation",
-            "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference"
+            "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference",
+            "HISTORY": "History",
+            "LEXICALIZATION": "Lexicalization",
+            "MODEL": "Model",
+            "OPTIONAL_SETTINGS": "Optional settings",
+            "PRELOAD": "Preload",
+            "PROJECT_NAME": "Project name",
+            "RENDERING_ENGINE": "Rendering Engine",
+            "REPO_ACCESS": "Repository Access",
+            "RESOURCE_METADATA": "Resource Metadata",
+            "SHACLE_SHAPE_VALIDATION": "SHACL Shape Validation",
+            "SUPPORT_REPO_ID": "History/Validation Repository ID",
+            "TRANSITIVE_IMPORTS": "Transitive imports",
+            "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
+            "URI_GENERATOR": "URI Generator",
+            "USE_DEFAULT": "Use default settings",
+            "USE_RESOURCE_METADATA": "Use Resource Metadata",
+            "VALIDATION": "Validation"
         }
+    },
+    "DATA": {
+        "TABS": {
+            "CLASS": "Class",
+            "COLLECTION": "Collection",
+            "CONCEPT": "Concept",
+            "DATATYPE": "Datatype",
+            "LEXICON": "Lexicon",
+            "LEX_ENTRY": "Lex.Entry",
+            "PROPERTY": "Property",
+            "SCHEME": "Scheme"
+        }
+    },
+    "USER": {
+        "FORM": {
+            "GIVEN_NAME": "Given name",
+            "FAMILY_NAME": "Family name",
+            "EMAIL": "E-mail",
+            "PASSWORD": "Password",
+            "CONFIRM_PASSWORD": "Confirm password",
+            "OFFICE_ADDRESS": "Office address",
+            "PHONE": "Phone",
+            "AFFILIATION": "Affiliation",
+            "PERSONAL_URL": "Personal URL",
+            "AVATAR_URL": "Avatar URL",
+            "LANGUAGE_PROFICIENCIES": "Language proficiencies",
+            "USER_IRI": "User IRI",
+            "OPTIONAL_RECOMMENDED_FIELD": "Optional but highly recommended field",
+            "REGISTERED": "Registered"
+        },
+        "USER_DETAILS": "User details",
+        "USER_LOGIN": "User login",
+        "LOGIN": "Log in",
+        "FORGOT_PASSWORD": "Forgot password?",
+        "SIGNUP": "Sign up"
+    },
+    "COMMONS": {
+        "CREATE": "Create",
+        "FORMAT": "Format",
+        "MANDATORY_FIELD": "Mandatory field",
+        "OPTIONAL_FIELD": "Optional field",
+        "SUBMIT": "Submit",
+        "CANCEL": "Cancel"
     }
 }

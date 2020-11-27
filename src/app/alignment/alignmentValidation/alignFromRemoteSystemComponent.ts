@@ -91,10 +91,10 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
                     this.basicModals.alert("Alignment Service server error", "The Alignment Service server didn't respond, "
                         + "make sure it is up and running or the configuration is correct", ModalType.warning);
                 } else {
-                    this.basicModals.alert("Alignment Service server error", err.message, ModalType.error, err.stack);
+                    this.basicModals.alert("Alignment Service server error", err.message, ModalType.warning, err.stack);
                 }
             } else if (err.name == "java.lang.IllegalStateException") {
-                if (err.message.includes("No alignment service configured")) {
+                if (err.message.includes("No alignement service configured")) {
                     this.serviceNotConfigured = true;
                 } else {
                     this.basicModals.alert("Alignment Service error", err.message, ModalType.error, err.stack);
