@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { AlignFromFileComponent } from '../alignment/alignmentValidation/alignFromFileComponent';
 import { AlignFromRemoteSystemComponent } from '../alignment/alignmentValidation/alignFromRemoteSystemComponent';
 import { AlignmentManagementComponent } from '../alignment/alignmentValidation/alignmentManagementComponent';
@@ -19,7 +20,8 @@ import { SharedModule } from './sharedModule';
         CommonModule,
         FormsModule,
         NgbDropdownModule,
-        SharedModule
+        SharedModule,
+        TranslateModule,
     ],
     declarations: [
         AlignmentValidationComponent,

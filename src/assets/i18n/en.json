@@ -121,6 +121,7 @@
             "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference",
             "HISTORY": "History",
             "LEXICALIZATION": "Lexicalization",
+            "LEFT_RIGHT": "Left/Right",
             "MODEL": "Model",
             "OPTIONAL_SETTINGS": "Optional settings",
             "PRELOAD": "Preload",

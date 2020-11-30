@@ -446,13 +446,11 @@ export class CreateProjectComponent {
     private initProjectList() {
         this.projectService.listProjects().subscribe(
             projects => {
-                this.projectList = projects;
+                this.projectList = projects.filter(p => p.getRepositoryLocation().location == "remote");
                 //init left project list
                 this.leftProjectList = [];
-                this.projectList.forEach(p => { //consider as left datasets only the remote projects
-                    if (p.getRepositoryLocation().location == "remote") {
-                        this.leftProjectList.push(p);
-                    }
+                this.projectList.forEach(p => {
+                    this.leftProjectList.push(p);
                 });
             }
         );

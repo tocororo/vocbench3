@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { CustomFormComponent } from '../customForms/customForm/customFormComponent';
 import { CustomFormField } from '../customForms/customForm/customFormFieldComponent';
 import { CustomFormFieldList } from '../customForms/customForm/customFormFieldListComponent';
@@ -23,7 +24,8 @@ import { SharedModule } from './sharedModule';
         CommonModule,
         FormsModule,
         NgbDropdownModule,
-        SharedModule
+        SharedModule,
+        TranslateModule
     ],
     providers: [BasicModalServices, BrowsingModalServices],
     declarations: [

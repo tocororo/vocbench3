@@ -18,5 +18,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-sm btn-primary" (click)="ok()" [disabled]="!inputOptional && !isInputValid()">Ok</button>
-    <button *ngIf="!hideNo" class="btn btn-sm btn-secondary" (click)="close()">Cancel</button>
+    <button *ngIf="!hideNo" class="btn btn-sm btn-secondary" (click)="close()">{{'COMMONS.CANCEL'|translate}}</button>
 </div>

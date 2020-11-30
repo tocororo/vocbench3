@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { HistoryComponent } from '../historyValidation/historyComponent';
 import { HistoryFilterComponent } from '../historyValidation/historyFilterComponent';
 import { CommitDeltaModal } from '../historyValidation/modals/commitDeltaModal';
@@ -17,7 +18,8 @@ import { SharedModule } from './sharedModule';
         CommonModule,
         FormsModule,
         NgbDropdownModule,
-        SharedModule
+        SharedModule,
+        TranslateModule
     ],
     declarations: [
         HistoryComponent, ValidationComponent, HistoryFilterComponent,

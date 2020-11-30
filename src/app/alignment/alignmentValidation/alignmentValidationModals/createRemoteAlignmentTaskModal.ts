@@ -58,7 +58,7 @@ export class CreateRemoteAlignmentTaskModal {
         //TODO in production, 2nd parameter should be true? the target dataset should be user dependent?
         this.projectService.listProjects(VBContext.getWorkingProject(), false, true).subscribe(
             projects => {
-                this.projectList = projects;
+                this.projectList = projects.filter(p => p.getRepositoryLocation().location == "remote");
                 if (this.rightProject != null) {
                     this.selectedRightProject = this.projectList.find(p => p.getName() == this.rightProject.getName());
                     if (this.selectedRightProject != null) {

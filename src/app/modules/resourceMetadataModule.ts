@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { ImportPatternModal } from '../resourceMetadata/modals/importPatternModal';
 import { MetadataAssociationEditorModal } from '../resourceMetadata/modals/metadataAssociationEditorModal';
 import { MetadataFactoryPatternSelectionModal } from '../resourceMetadata/modals/metadataFactoryPatternSelectionModal';
@@ -15,7 +16,8 @@ import { SharedModule } from './sharedModule';
         CommonModule,
         FormsModule,
         NgbDropdownModule,
-        SharedModule
+        SharedModule,
+        TranslateModule,
     ],
     providers: [],
     declarations: [

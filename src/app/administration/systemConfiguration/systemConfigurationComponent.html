@@ -181,7 +181,7 @@
                 </div>
                 <div class="card-footer" style="text-align: right;">
                     <button class="btn btn-info btn-sm" (click)="testEmailConfig()">Test</button>
-                    <button type="submit" class="btn btn-light btn-sm" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">Submit</button>
+                    <button type="submit" class="btn btn-light btn-sm" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">{{'COMMONS.SUBMIT'|translate}}</button>
                 </div>
             </div>
 
@@ -232,7 +232,7 @@
                 </div>
                 <div class="card-footer" style="text-align: right;">
                     <button type="submit" class="btn btn-light btn-sm" (click)="updateNotificationSchedule()" 
-                        [disabled]="!cronHourOfDay || !timezone">Submit</button>
+                        [disabled]="!cronHourOfDay || !timezone">{{'COMMONS.SUBMIT'|translate}}</button>
                     <button class="btn btn-warning btn-sm" (click)="disableNotificationSchedule()" title="Disable the notifications daily digest"
                         [disabled]="!cronHourOfDay && !timezone">Disable</button>
                 </div>
@@ -327,7 +327,7 @@
                 </div>
                 <div class="card-footer" style="text-align: right;">
                     <button class="btn btn-info btn-sm" (click)="previewHomeContent()" [disabled]="!homeContent">Preview</button>
-                    <button type="submit" class="btn btn-light btn-sm" (click)="updateHomeContent()" [disabled]="!isHomeContentChanged()">Submit</button>
+                    <button type="submit" class="btn btn-light btn-sm" (click)="updateHomeContent()" [disabled]="!isHomeContentChanged()">{{'COMMONS.SUBMIT'|translate}}</button>
                 </div>
             </div>
 

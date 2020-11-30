@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { CustomServiceRouterComponent } from '../customServices/customServiceRouterComponent';
 import { CustomOperationComponent } from '../customServices/customServicesEditor/customOperationComponent';
 import { CustomServiceComponent } from '../customServices/customServicesEditor/customServiceComponent';
@@ -28,7 +29,8 @@ import { SharedModule } from './sharedModule';
         FormsModule,
         NgbDropdownModule,
         NgbPopoverModule,
-        SharedModule
+        SharedModule,
+        TranslateModule,
     ],
     declarations: [
         AuthorizationHelperModal,

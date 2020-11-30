@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { AdvancedGraphApplicationModal } from '../sheet2rdf/s2rdfModals/advancedGraphApplicationModal';
 import { ConverterConfigurationComponent } from '../sheet2rdf/s2rdfModals/converterConfig/converterConfigurationComponent';
 import { ListParamEditor } from '../sheet2rdf/s2rdfModals/converterConfig/listParamEditor';
@@ -21,7 +22,8 @@ import { SharedModule } from './sharedModule';
         FormsModule,
         NgbDropdownModule,
         RouterModule,
-        SharedModule
+        SharedModule,
+        TranslateModule,
     ],
     declarations: [
         Sheet2RdfComponent, ConverterConfigurationComponent, MapParamEditor, ListParamEditor,

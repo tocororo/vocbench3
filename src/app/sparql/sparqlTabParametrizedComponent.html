@@ -28,7 +28,7 @@
 <!--Commands (submit, clear, inferred, ...)-->
 <div style="margin: 5px 0;">
     <button class="btn btn-xs btn-primary" type="button" (click)="doQuery()" [disabled]="queryInProgress || !queryValid">
-        Submit
+        {{'COMMONS.SUBMIT'|translate}}
     </button>
     <button class="btn btn-xs btn-info ml-2" type="button" (click)="clear()" [disabled]="queryResult == null">Clear</button>
     <div class="hbox" style="align-items: center; display: inline-flex; margin-left: 6px;">
