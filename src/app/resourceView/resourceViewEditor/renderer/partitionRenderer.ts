@@ -58,7 +58,7 @@ export abstract class PartitionRenderer {
     /**
      * Label of the partition
      */
-    label: string;
+    labelTranslationKey: string;
     /**
      * Src of the "add" icon placed on the groupPanel outline.
      * This is specific of a partition.
@@ -82,7 +82,7 @@ export abstract class PartitionRenderer {
      */
 
     ngOnInit() {
-        this.label = ResViewUtils.getResourceViewPartitionLabel(this.partition);
+        this.labelTranslationKey = ResViewUtils.getResourceViewPartitionLabelTranslationKey(this.partition);
     }
 
     ngOnChanges(changes: SimpleChanges) {

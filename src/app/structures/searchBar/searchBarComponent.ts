@@ -33,12 +33,12 @@ export class SearchBarComponent {
     @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();
 
     //search mode startsWith/contains/endsWith
-    stringMatchModes: { show: string, value: SearchMode, symbol: string }[] = [
-        { show: "Starts with", value: SearchMode.startsWith, symbol: "α.." },
-        { show: "Contains", value: SearchMode.contains, symbol: ".α." },
-        { show: "Ends with", value: SearchMode.endsWith, symbol: "..α" },
-        { show: "Exact", value: SearchMode.exact, symbol: "α" },
-        { show: "Fuzzy", value: SearchMode.fuzzy, symbol: "~α" }
+    stringMatchModes: { labelTranslationKey: string, value: SearchMode, symbol: string }[] = [
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.STARTS_WITH", value: SearchMode.startsWith, symbol: "α.." },
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.CONTAINS", value: SearchMode.contains, symbol: ".α." },
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.ENDS_WITH", value: SearchMode.endsWith, symbol: "..α" },
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.EXACT", value: SearchMode.exact, symbol: "α" },
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.FUZZY", value: SearchMode.fuzzy, symbol: "~α" }
     ];
 
     searchSettings: SearchSettings;

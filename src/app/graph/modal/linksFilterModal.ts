@@ -26,7 +26,7 @@ export class LinksFilterModal {
             });
             if (predicates.length > 0) {
                 this.filters.push({
-                    partition: { id: <ResViewPartition>p, show: ResViewUtils.getResourceViewPartitionLabel(<ResViewPartition>p) },
+                    partition: { id: <ResViewPartition>p, labelTranslationKey: ResViewUtils.getResourceViewPartitionLabelTranslationKey(<ResViewPartition>p) },
                     predicates: predicates }
                 );
             }
@@ -74,6 +74,6 @@ export class LinksFilterModal {
 }
 
 class LinkFilter {
-    partition: { id: ResViewPartition, show: string };
+    partition: { id: ResViewPartition, labelTranslationKey: string };
     predicates: { res: ARTURIResource, checked: boolean, count: number }[];
 }

@@ -6,7 +6,7 @@
                 [ngClass]="{'arrow-right': partitionCollapsed}">
         </div>
         <span style="flex: 1">
-            <label class="groupPanel-heading-content">{{label}}:</label>
+            <label class="groupPanel-heading-content">{{labelTranslationKey|translate}}:</label>
         </span>
         <span class="groupPanel-heading-content groupPanel-add-btn dropdown float-right">
             <button class="dropdown-toggle resViewPartitionAddBtn" data-toggle="dropdown" ngbDropdownToggle [title]="addBtnImgTitle" [disabled]="addDisabled">

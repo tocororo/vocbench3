@@ -117,47 +117,109 @@ export class ResViewUtils {
         ResViewPartition.properties
     ]
 
-    public static getResourceViewPartitionLabel(partition: ResViewPartition): string {
-        if (partition == ResViewPartition.classaxioms) {
-            return "Class axioms";
-        } else if (partition == ResViewPartition.datatypeDefinitions) {
-            return "Datatype definitions";
-        } else if (partition == ResViewPartition.disjointProperties) {
-            return "Disjoint properties";
-        } else if (partition == ResViewPartition.equivalentProperties) {
-            return "Equivalent properties";
-        } else if (partition == ResViewPartition.evokedLexicalConcepts) {
-            return "Evoked Lexical Concepts";
-        } else if (partition == ResViewPartition.facets) {
-            return "Property facets";
-        } else if (partition == ResViewPartition.formBasedPreview) {
-            return "Custom Form Preview";
-        } else if (partition == ResViewPartition.formRepresentations) {
-            return "Form Representations";
-        } else if (partition == ResViewPartition.labelRelations) {
-            return "Label relations";
-        } else if (partition == ResViewPartition.lexicalForms) {
-            return "Lexical forms";
-        } else if (partition == ResViewPartition.lexicalSenses) {
-            return "Lexical senses";
-        } else if (partition == ResViewPartition.membersOrdered) {
-            return "Members (ordered)";
-        } else if (partition == ResViewPartition.properties) {
-            return "Other properties";
-        } else if (partition == ResViewPartition.rdfsMembers) {
-            return "RDFS members";
-        } else if (partition == ResViewPartition.subPropertyChains) {
-            return "Property chain axioms";
-        } else if (partition == ResViewPartition.topconceptof) {
-            return "Top Concept of";
-        } else {
-            //partition == ResViewPartition.broaders || partition == ResViewPartition.constituents || partition == ResViewPartition.denotations ||
-            //partition == ResViewPartition.domains || partition == ResViewPartition.imports || partition == ResViewPartition.lexicalizations || 
-            //partition == ResViewPartition.members || partition == ResViewPartition.notes || partition == ResViewPartition.ranges || 
-            //partition == ResViewPartition.schemes || partition == ResViewPartition.subterms || partition == ResViewPartition.superproperties || 
-            //partition == ResViewPartition.types
-            return partition.charAt(0).toUpperCase() + partition.slice(1);
+    public static getResourceViewPartitionLabelTranslationKey(partition: ResViewPartition): string {
+        switch (partition) {
+            case ResViewPartition.broaders:
+                return "RESOURCE_VIEW.PARTITIONS.BROADERS";
+            case ResViewPartition.classaxioms:
+                return "RESOURCE_VIEW.PARTITIONS.CLASS_AXIOMS";
+            case ResViewPartition.constituents:
+                return "RESOURCE_VIEW.PARTITIONS.CONSTRITUENST";
+            case ResViewPartition.datatypeDefinitions:
+                return "RESOURCE_VIEW.PARTITIONS.DATATYPE_DEFINITIONS";
+            case ResViewPartition.denotations:
+                return "RESOURCE_VIEW.PARTITIONS.DENOTATIONS";
+            case ResViewPartition.disjointProperties:
+                return "RESOURCE_VIEW.PARTITIONS.DISJOINT_PROPERTIES";
+            case ResViewPartition.domains:
+                return "RESOURCE_VIEW.PARTITIONS.DOMAINS";
+            case ResViewPartition.equivalentProperties:
+                return "RESOURCE_VIEW.PARTITIONS.EQUIVALENT_PROPERTIES";
+            case ResViewPartition.evokedLexicalConcepts:
+                return "RESOURCE_VIEW.PARTITIONS.EVOKED_LEXICAL_CONCEPTS";
+            case ResViewPartition.facets:
+                return "RESOURCE_VIEW.PARTITIONS.FACETS";
+            case ResViewPartition.formBasedPreview:
+                return "RESOURCE_VIEW.PARTITIONS.FORM_BASED_PREVIEW";
+            case ResViewPartition.formRepresentations:
+                return "RESOURCE_VIEW.PARTITIONS.FORM_PRESENTATIONS";
+            case ResViewPartition.imports:
+                return "RESOURCE_VIEW.PARTITIONS.IMPORTS";
+            case ResViewPartition.labelRelations:
+                return "RESOURCE_VIEW.PARTITIONS.LABEL_RELATIONS";
+            case ResViewPartition.lexicalForms:
+                return "RESOURCE_VIEW.PARTITIONS.LEXICAL_FORMS";
+            case ResViewPartition.lexicalSenses:
+                return "RESOURCE_VIEW.PARTITIONS.LEXICAL_SENSES";
+            case ResViewPartition.lexicalizations:
+                return "RESOURCE_VIEW.PARTITIONS.LEXICALIZATIONS";
+            case ResViewPartition.members:
+                return "RESOURCE_VIEW.PARTITIONS.MEMBERS";
+            case ResViewPartition.membersOrdered:
+                return "RESOURCE_VIEW.PARTITIONS.MEMBERS_ORDERED";
+            case ResViewPartition.notes:
+                return "RESOURCE_VIEW.PARTITIONS.NOTES";
+            case ResViewPartition.properties:
+                return "RESOURCE_VIEW.PARTITIONS.PROPERTIES";
+            case ResViewPartition.ranges:
+                return "RESOURCE_VIEW.PARTITIONS.RANGES";
+            case ResViewPartition.rdfsMembers:
+                return "RESOURCE_VIEW.PARTITIONS.RDFS_MEMBERS";
+            case ResViewPartition.schemes:
+                return "RESOURCE_VIEW.PARTITIONS.SCHEMES";
+            case ResViewPartition.subPropertyChains:
+                return "RESOURCE_VIEW.PARTITIONS.SUBPROPERTY_CHAINS";
+            case ResViewPartition.subterms:
+                return "RESOURCE_VIEW.PARTITIONS.SUBTERMS";
+            case ResViewPartition.superproperties:
+                return "RESOURCE_VIEW.PARTITIONS.SUPERPROPERTIES";
+            case ResViewPartition.topconceptof:
+                return "RESOURCE_VIEW.PARTITIONS.TOP_CONCEPT_OF";
+            case ResViewPartition.types:
+                return "RESOURCE_VIEW.PARTITIONS.TYPES";
+
         }
+        
+        // if (partition == ResViewPartition.classaxioms) {
+        //     return "Class axioms";
+        // } else if (partition == ResViewPartition.datatypeDefinitions) {
+        //     return "Datatype definitions";
+        // } else if (partition == ResViewPartition.disjointProperties) {
+        //     return "Disjoint properties";
+        // } else if (partition == ResViewPartition.equivalentProperties) {
+        //     return "Equivalent properties";
+        // } else if (partition == ResViewPartition.evokedLexicalConcepts) {
+        //     return "Evoked Lexical Concepts";
+        // } else if (partition == ResViewPartition.facets) {
+        //     return "Property facets";
+        // } else if (partition == ResViewPartition.formBasedPreview) {
+        //     return "Custom Form Preview";
+        // } else if (partition == ResViewPartition.formRepresentations) {
+        //     return "Form Representations";
+        // } else if (partition == ResViewPartition.labelRelations) {
+        //     return "Label relations";
+        // } else if (partition == ResViewPartition.lexicalForms) {
+        //     return "Lexical forms";
+        // } else if (partition == ResViewPartition.lexicalSenses) {
+        //     return "Lexical senses";
+        // } else if (partition == ResViewPartition.membersOrdered) {
+        //     return "Members (ordered)";
+        // } else if (partition == ResViewPartition.properties) {
+        //     return "Other properties";
+        // } else if (partition == ResViewPartition.rdfsMembers) {
+        //     return "RDFS members";
+        // } else if (partition == ResViewPartition.subPropertyChains) {
+        //     return "Property chain axioms";
+        // } else if (partition == ResViewPartition.topconceptof) {
+        //     return "Top Concept of";
+        // } else {
+        //     //partition == ResViewPartition.broaders || partition == ResViewPartition.constituents || partition == ResViewPartition.denotations ||
+        //     //partition == ResViewPartition.domains || partition == ResViewPartition.imports || partition == ResViewPartition.lexicalizations || 
+        //     //partition == ResViewPartition.members || partition == ResViewPartition.notes || partition == ResViewPartition.ranges || 
+        //     //partition == ResViewPartition.schemes || partition == ResViewPartition.subterms || partition == ResViewPartition.superproperties || 
+        //     //partition == ResViewPartition.types
+        //     return partition.charAt(0).toUpperCase() + partition.slice(1);
+        // }
     }
 
     /**

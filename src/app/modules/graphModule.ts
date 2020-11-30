@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { D3Service } from '../graph/d3/d3Services';
 import { DraggableDirective } from '../graph/d3/draggableDirective';
 import { ZoomableDirective } from '../graph/d3/zoomableDirective';
@@ -31,7 +32,8 @@ import { SharedModule } from './sharedModule';
         FormsModule, 
         NgbDropdownModule,
         SharedModule, 
-        PreferencesModule
+        PreferencesModule,
+        TranslateModule
     ],
     declarations: [
         LinkComponent, NodeModelComponent, DataNodeComponent, DraggableDirective, ZoomableDirective,

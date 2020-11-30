@@ -114,7 +114,7 @@ export class PartitionFilterEditor {
                 let showPartition: boolean = pref[role] == null || pref[role].indexOf(p) == -1;
                 partitionsStructs.push({ 
                     id: p,
-                    show: ResViewUtils.getResourceViewPartitionLabel(p),
+                    labelTranslationKey: ResViewUtils.getResourceViewPartitionLabelTranslationKey(p),
                     checked: showPartition
                 });
             });
@@ -232,6 +232,6 @@ class RoleStruct {
 }
 class PartitionStruct {
     id: ResViewPartition;
-    show: string;
+    labelTranslationKey: string;
     checked: boolean;
 }

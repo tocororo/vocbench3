@@ -14,7 +14,7 @@
         <div class="card-body scrollableContainer">
             <div *ngFor="let filter of filters" class="card card-default" style="margin-bottom: 4px;">
                 <div class="card-header hbox">
-                    <label style="flex: 1;">{{filter.partition.show}} ({{getPartitionCount(filter)}})</label>
+                    <label style="flex: 1;">{{filter.partition.labelTranslationKey|translate}} ({{getPartitionCount(filter)}})</label>
 
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs" role="group">

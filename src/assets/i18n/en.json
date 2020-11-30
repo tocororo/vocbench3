@@ -140,14 +140,145 @@
     },
     "DATA": {
         "TABS": {
-            "CLASS": "Class",
-            "COLLECTION": "Collection",
-            "CONCEPT": "Concept",
-            "DATATYPE": "Datatype",
-            "LEXICON": "Lexicon",
-            "LEX_ENTRY": "Lex.Entry",
-            "PROPERTY": "Property",
-            "SCHEME": "Scheme"
+            "CLASS": {
+                "TITLE": "Class",
+                "ACTIONS": {
+                    "CREATE": "Create class",
+                    "CREATE_CHILD": "Create subClass",
+                    "DELETE": "Delete class"
+                }
+            },
+            "COLLECTION": {
+                "TITLE": "Collection",
+                "ACTIONS": {
+                    "CREATE": "Create collection",
+                    "CREATE_CHILD": "Create nested collection",
+                    "DELETE": "Delete collection"
+                }
+            },
+            "CONCEPT": {
+                "TITLE": "Concept",
+                "ACTIONS": {
+                    "CREATE": "Create concept",
+                    "CREATE_CHILD": "Create narrower concept",
+                    "DELETE": "Delete concept"
+                }
+            },
+            "DATATYPE": {
+                "TITLE": "Datatype",
+                "ACTIONS": {
+                    "CREATE": "Create datatype",
+                    "DELETE": "Delete datatype"
+                }
+            },
+            "LEXICON": {
+                "TITLE": "Lexicon",
+                "ACTIONS": {
+                    "CREATE": "Create lexicon",
+                    "DELETE": "Delete lexicon"
+                }
+            },
+            "LEX_ENTRY": {
+                "TITLE": "Lex.Entry",
+                "ACTIONS": {
+                    "CREATE": "Create lexical entry",
+                    "DELETE": "Delete lexical entry"
+                }
+            },
+            "PROPERTY": {
+                "TITLE": "Property",
+                "ACTIONS": {
+                    "CREATE": "Create property",
+                    "CREATE_CHILD": "Create subProperty",
+                    "DELETE": "Delete property"
+                }
+            },
+            "SCHEME": {
+                "TITLE": "Scheme",
+                "ACTIONS": {
+                    "CREATE": "Create scheme ",
+                    "DELETE": "Delete scheme"
+                }
+            },
+            "COMMONS": {
+                "ACTIONS": {
+                    "DEPRECATE": "Deprecate"
+                }
+            }
+        },
+        "SEARCH": {
+            "ADVANCED_SEARCH": "Advanced Search",
+            "CUSTOM_SEARCH": "Custom Search",
+            "SETTINGS": {
+                "TITLE": "Search settings",
+                "STRING_MATCH_MODE": {
+                    "TITLE": "String match mode",
+                    "STARTS_WITH": "Starts with",
+                    "CONTAINS": "Contains",
+                    "ENDS_WITH": "Ends with",
+                    "EXACT": "Exact",
+                    "FUZZY": "Fuzzy"
+                },
+                "SEARCH_MODE": {
+                    "TITLE": "Search mode",
+                    "TOOLTIP": "Search always looks for the input string among the lexicalizations",
+                    "SEARCH_IN_URI": "Search in URI",
+                    "SEARCH_IN_LOCAL_NAME": "Search in local name",
+                    "SEARCH_IN_NOTES": "Search in notes"
+                },
+                "LEXICALIZATIONS_SEARCH": {
+                    "TITLE": "Lexicalizations search",
+                    "RESTRICT_TO_LANGUAGES": "Restrict search to languages",
+                    "INCLUDE_LOCALES": "Include locales in search (e.g. en-GB, en-US)"
+                },
+                "AUTOCOMPLETION": {
+                    "TITLE": "Autocompletion",
+                    "TOOLTIP": "It is highly recommended to disable this feature in big project not hosted by a GraphDB server",
+                    "ENABLE_AUTOCOMPLETION": "Enable autocompletion support during typing"
+                },
+                "CONCEPTS_SEARCH": {
+                    "TITLE": "Concept search",
+                    "RESTRICT_TO_SCHEME": "Restrict the search to the active skos:ConceptScheme(s)"
+                },
+                "INSTANCES_SEARCH": {
+                    "LABEL": "Instances search",
+                    "EXTEND_TO_ALL": "Extend the search to all the individuals (also belonging to other classes)"
+                }
+            }
+        }
+        
+    },
+    "RESOURCE_VIEW": {
+        "PARTITIONS": {
+            "BROADERS": "Broaders",
+            "CLASS_AXIOMS": "Class axioms",
+            "CONSTRITUENST": "Constituents",
+            "DATATYPE_DEFINITIONS": "Datatype definitions",
+            "DENOTATIONS": "Denotations",
+            "DISJOINT_PROPERTIES": "Disjoint properties",
+            "DOMAINS": "Domains",
+            "EQUIVALENT_PROPERTIES": "Equivalent properties",
+            "EVOKED_LEXICAL_CONCEPTS": "Evoked lexical concepts",
+            "FACETS": "Facets",
+            "FORM_BASED_PREVIEW": "Custom Form preview",
+            "FORM_PRESENTATIONS": "Form representations",
+            "IMPORTS": "Imports",
+            "LABEL_RELATIONS": "Label relations",
+            "LEXICALIZATIONS": "Lexicalizations",
+            "LEXICAL_FORMS": "Lexical forms",
+            "LEXICAL_SENSES": "Lexical senses",
+            "MEMBERS": "Members",
+            "MEMBERS_ORDERED": "Members (ordered)",
+            "NOTES": "Notes",
+            "PROPERTIES": "Other properties",
+            "RANGES": "Ranges",
+            "RDFS_MEMBERS": "RDFS members",
+            "SCHEMES": "Schemes",
+            "SUBPROPERTY_CHAINS": "Subproperty chain axioms",
+            "SUBTERMS": "Subterms",
+            "SUPERPROPERTIES": "Superproperties",
+            "TOP_CONCEPT_OF": "Top concept of",
+            "TYPES": "Types"
         }
     },
     "USER": {
@@ -178,6 +309,7 @@
         "FORMAT": "Format",
         "MANDATORY_FIELD": "Mandatory field",
         "OPTIONAL_FIELD": "Optional field",
+        "SEARCH": "Search",
         "SUBMIT": "Submit",
         "CANCEL": "Cancel"
     }

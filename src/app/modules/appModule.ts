@@ -18,7 +18,6 @@ import { DatatypeValidator } from '../utils/DatatypeValidator';
 import { HttpManager } from '../utils/HttpManager';
 import { RoleActionResolver } from '../utils/RoleActionResolver';
 import { StMetadataRegistry } from '../utils/STMetadataRegistry';
-import { TranslationPipe } from '../utils/TranslationPipe';
 import { UserResolver } from '../utils/UserResolver';
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBEventHandler } from '../utils/VBEventHandler';
@@ -115,7 +114,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AppComponent,
 		HomeComponent,
 		DataComponent,
-		TranslationPipe,
   ],
 	bootstrap: [AppComponent]
 })

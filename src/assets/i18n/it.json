@@ -113,7 +113,7 @@
             "BASE_URI": "Base URI",
             "BLACKLIST": "Lista nera",
             "CONFIGURATION": "Configurazione",
-            "CREATE_PROJECT": "Create project",
+            "CREATE_PROJECT": "Crea progetto",
             "DATA_PRELOADING": "Pre-caricamento opzionale di dati",
             "DATA_REPO_ID": "ID Repository dati",
             "DATA_STORE": "Data Store",
@@ -140,14 +140,144 @@
     },
     "DATA": {
         "TABS": {
-            "CLASS": "Classi",
-            "COLLECTION": "Collezioni",
-            "CONCEPT": "Concetti",
-            "DATATYPE": "Datatype",
-            "LEXICON": "Lessici",
-            "LEX_ENTRY": "Lex.Entry",
-            "PROPERTY": "Proprietà",
-            "SCHEME": "Schemi"
+            "CLASS": {
+                "TITLE": "Classi",
+                "ACTIONS": {
+                    "CREATE": "Crea classe",
+                    "CREATE_CHILD": "Crea sotto classe",
+                    "DELETE": "Cancella classe"
+                }
+            },
+            "COLLECTION": {
+                "TITLE": "Collezioni",
+                "ACTIONS": {
+                    "CREATE": "Crea collezione",
+                    "CREATE_CHILD": "Crea collezione annidata",
+                    "DELETE": "Cancella collezione"
+                }
+            },
+            "CONCEPT": {
+                "TITLE": "Concetti",
+                "ACTIONS": {
+                    "CREATE": "Crea concetto",
+                    "CREATE_CHILD": "Crea concetto narrower",
+                    "DELETE": "Cancella concetto"
+                }
+            },
+            "DATATYPE": {
+                "TITLE": "Datatype",
+                "ACTIONS": {
+                    "CREATE": "Crea datatype",
+                    "DELETE": "Cancella datatype"
+                }
+            },
+            "LEXICON": {
+                "TITLE": "Lessici",
+                "ACTIONS": {
+                    "CREATE": "Crea lessico",
+                    "DELETE": "Cancella lessico"
+                }
+            },
+            "LEX_ENTRY": {
+                "TITLE": "Lex.Entry",
+                "ACTIONS": {
+                    "CREATE": "Crea lexical entry",
+                    "DELETE": "Cancella lexical entry"
+                }
+            },
+            "PROPERTY": {
+                "TITLE": "Proprietà",
+                "ACTIONS": {
+                    "CREATE": "Crea proprietà",
+                    "CREATE_CHILD": "Crea sotto proprietà",
+                    "DELETE": "Cancella proprietà"
+                }
+            },
+            "SCHEME": {
+                "TITLE": "Schemi",
+                "ACTIONS": {
+                    "CREATE": "Crea schema",
+                    "DELETE": "Cancella schema"
+                }
+            },
+            "COMMONS": {
+                "ACTIONS": {
+                    "DEPRECATE": "Depreca"
+                }
+            }
+        },
+        "SEARCH": {
+            "ADVANCED_SEARCH": "Ricerca avanzata",
+            "CUSTOM_SEARCH": "Ricerca personalizzata",
+            "SETTINGS": {
+                "TITLE": "Impostazioni della ricerca",
+                "STRING_MATCH_MODE": {
+                    "TITLE": "Modalità di match delle stringhe",
+                    "STARTS_WITH": "Inizia con",
+                    "CONTAINS": "Contiene",
+                    "ENDS_WITH": "Finisce con",
+                    "EXACT": "Esatta",
+                    "FUZZY": "Fuzzy"
+                },
+                "SEARCH_MODE": {
+                    "TITLE": "Modalità di ricerca",
+                    "TOOLTIP": "La ricerca cerca sempre la stringa di input tra le lessicalizzazioni",
+                    "SEARCH_IN_URI": "Cerca nell'URI",
+                    "SEARCH_IN_LOCAL_NAME": "Cerca nel local name",
+                    "SEARCH_IN_NOTES": "Cerca nelle note"
+                },
+                "LEXICALIZATIONS_SEARCH": {
+                    "TITLE": "Ricerca nelle lessicalizzazioni",
+                    "RESTRICT_TO_LANGUAGES": "Restringi la ricerca alle lingue",
+                    "INCLUDE_LOCALES": "Includi le locali nella ricerca (e.g. en-GB, en-US)"
+                },
+                "AUTOCOMPLETION": {
+                    "TITLE": "Autocompletamento",
+                    "TOOLTIP": "E' altamente raccomandato disabilitare questa funzionalità in grandi progetti non hostati su un server GraphDB",
+                    "ENABLE_AUTOCOMPLETION": "Abilita l'autocompletamento durante la digitazione"
+                },
+                "CONCEPTS_SEARCH": {
+                    "TITLE": "Ricerca dei concetti",
+                    "RESTRICT_TO_SCHEME": "Restringi la ricerca agli skos:ConceptScheme attivi"
+                },
+                "INSTANCES_SEARCH": {
+                    "TITLE": "Ricerca delle istanze",
+                    "EXTEND_TO_ALL": "Estendi la ricerca a tutte le istanze (anche appartenenti ad altre classi)"
+                }
+            }
+        }
+    },
+    "RESOURCE_VIEW": {
+        "PARTITIONS": {
+            "BROADERS": "Broader",
+            "CLASS_AXIOMS": "Assiomi tra classi",
+            "CONSTRITUENST": "Costituenti",
+            "DATATYPE_DEFINITIONS": "Definizioni Datatype",
+            "DENOTATIONS": "Denotazioni",
+            "DISJOINT_PROPERTIES": "Proprietà disgiunte",
+            "DOMAINS": "Domini",
+            "EQUIVALENT_PROPERTIES": "Proprietà equivalenti",
+            "EVOKED_LEXICAL_CONCEPTS": "Concetti lessicali evocati",
+            "FACETS": "Facets",
+            "FORM_BASED_PREVIEW": "Anteprima Custom Form",
+            "FORM_PRESENTATIONS": "Form representations",
+            "IMPORTS": "Imports",
+            "LABEL_RELATIONS": "Relazioni tra Label",
+            "LEXICALIZATIONS": "Lessicalizzazioni",
+            "LEXICAL_FORMS": "Forme lessicali",
+            "LEXICAL_SENSES": "Sensi lessicali",
+            "MEMBERS": "Membri",
+            "MEMBERS_ORDERED": "Membri (ordered)",
+            "NOTES": "Note",
+            "PROPERTIES": "Altre proprietà",
+            "RANGES": "Codomini",
+            "RDFS_MEMBERS": "Membri RDFS",
+            "SCHEMES": "Schemi",
+            "SUBPROPERTY_CHAINS": "Subproperty chain axioms",
+            "SUBTERMS": "Sottotermini",
+            "SUPERPROPERTIES": "Super proprietà",
+            "TOP_CONCEPT_OF": "Top concept di",
+            "TYPES": "Tipi"
         }
     },
     "USER": {
@@ -178,6 +308,7 @@
         "FORMAT": "Formato",
         "MANDATORY_FIELD": "Campo obbligatorio",
         "OPTIONAL_FIELD": "Campo opzionale",
+        "SEARCH": "Cerca",
         "SUBMIT": "Invia",
         "CANCEL": "Annulla"
     }

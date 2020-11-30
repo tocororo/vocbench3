@@ -26,12 +26,12 @@ export class SearchSettingsModal {
     settingsForConceptPanel: boolean = false;
 
     //search mode startsWith/contains/endsWith
-    stringMatchModes: { show: string, value: SearchMode }[] = [
-        { show: "Starts with", value: SearchMode.startsWith },
-        { show: "Contains", value: SearchMode.contains },
-        { show: "Ends with", value: SearchMode.endsWith },
-        { show: "Exact", value: SearchMode.exact },
-        { show: "Fuzzy", value: SearchMode.fuzzy }
+    stringMatchModes: { labelTranslationKey: string, value: SearchMode }[] = [
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.STARTS_WITH", value: SearchMode.startsWith },
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.CONTAINS", value: SearchMode.contains },
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.ENDS_WITH", value: SearchMode.endsWith },
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.EXACT", value: SearchMode.exact },
+        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.FUZZY", value: SearchMode.fuzzy }
     ];
     private activeStringMatchMode: SearchMode;
 
