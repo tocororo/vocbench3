@@ -107,7 +107,7 @@
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <div class="btn-group btn-group-xs" style="width: 100%">
+                                    <div class="btn-group btn-group-xs" style="width: 100%" ngbDropdown>
                                         <button class="btn btn-light dropdown-toggle btn-xs" style="width: 100%" (click)="initSuggestedMappingProperties(c)" data-toggle="dropdown" ngbDropdownToggle>
                                             <span *ngIf="c.mappingProperty[0]" [title]="c.mappingProperty[0].toNT()">{{c.mappingProperty[0].getShow()}}</span>
                                             <span *ngIf="!c.mappingProperty[0]">----</span>

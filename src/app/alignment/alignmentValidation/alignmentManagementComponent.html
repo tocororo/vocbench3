@@ -51,10 +51,10 @@
                                     <span class="fas fa-caret-down fa-sm"></span>
                                 </button>
                                 <div class="dropdown-menu float-right" ngbDropdownMenu>
-                                    <a *ngFor="let rel of relationSymbols" class="dropdown-item" (click)="changeRelation(a, rel.relation)">
+                                    <a *ngFor="let rel of relationSymbols" class="dropdown-item text-nowrap" (click)="changeRelation(a, rel.relation)">
                                         <div class="hbox">
                                             <span style="flex:1">{{rel.relation}}</span>
-                                            <span *ngIf="a.getRelation() == rel.relation" style="margin-left: 3px;" class="fas fa-check float-right"></span>
+                                            <span *ngIf="a.getRelation() == rel.relation" style="margin-left: 3px;" class="fas fa-check"></span>
                                         </div>
                                     </a>
                                 </div>
@@ -68,9 +68,9 @@
                                         <span class="fas fa-caret-down fa-sm"></span>
                                     </button>
                                     <div class="dropdown-menu" ngbDropdownMenu>
-                                        <a *ngFor="let sp of a.getSuggestedMappingProperties()" class="dropdown-item" (click)="changeMappingProperty(a, sp)">
+                                        <a *ngFor="let sp of a.getSuggestedMappingProperties()" class="dropdown-item text-nowrap" (click)="changeMappingProperty(a, sp)">
                                             {{sp.getShow()}}
-                                            <span *ngIf="sp.getShow() == a.getMappingProperty().getShow()" class="fas fa-check float-right"></span>
+                                            <span *ngIf="sp.getShow() == a.getMappingProperty().getShow()" class="fas fa-check"></span>
                                         </a>
                                     </div>
                                 </div>
@@ -131,7 +131,7 @@
         <span class="float-right">
             <button class="btn btn-light btn-sm" (click)="applyValidation()" [disabled]="alignmentCellList.length == 0">
                 <span *ngIf="!isEdoal">Apply to Dataset</span>
-                <span *ngIf="isEdoal">Apply EDOAL linkset</span>
+                <span *ngIf="isEdoal">Apply to EDOAL linkset</span>
             </button>
             <button class="btn btn-light btn-sm ml-2" (click)="export()" [disabled]="alignmentCellList.length == 0">
                 Save
