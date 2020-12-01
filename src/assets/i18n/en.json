@@ -110,7 +110,6 @@
         },
         "CREATE_FORM": {
             "BACKEND_TYPE": "Backend type",
-            "BASE_URI": "Base URI",
             "BLACKLIST": "Blacklisting",
             "CONFIGURATION": "Configuration",
             "CREATE_PROJECT": "Create project",
@@ -248,6 +247,49 @@
             }
         }
     },
+    "METADATA": {
+        "NAMESPACES_AND_IMPORTS": {
+            "NAMESPACE_MANAGEMENT": "Namespace management",
+            "ADD_MAPPING": "Add mapping",
+            "REMOVE_MAPPING": "Remove mapping",
+            "CHANGE_PREFIX": "Change prefix",
+            "BIND_NS_AND_BASEURI": "Bind/unbind namespace and baseURI",
+            "APPLY_CHANGES": "Apply changes",
+            "PREFIX": "Prefix",
+            "NAMESPACE": "Namespace",
+            "RESOLVE_WITH_PREFIXCC": "Try to resolve prefix using prefix.cc",
+            "IMPORTS": "Imports",
+            "ADD_IMPORT_FROM": "Add import from",
+            "WEB": "Web",
+            "WEB_TO_MIRROR": "Web to mirror",
+            "DATASET_CATALOG": "Dataset Catalog",
+            "LOCAL_FILE": "Local file",
+            "ONTOLOGY_MIRROR": "Ontology mirror",
+            "ONTOLOGY_MIRROR_MANAGER": {
+                "ONTOLOGY_MIRROR_MANAGEMENT": "Ontology Mirror Management",
+                "UPDATE_FROM_WEB_BASEURI": "Update from web using baseURI",
+                "UPDATE_FROM_WEB_ALT_URL": "Update from web from alternative URL",
+                "UPDATE_FROM_LOCAL_FILE": "Update from local file",
+                "DELETE_MIRROR": "Delete mirror"
+            },
+            "ONTOLOGY_IMPORT": {
+                "NO_ONTOLOGIES_MIRRORED": "No ontologies mirrored",
+                "ALTERNATIVE_URL": "Alternative URL",
+                "MIRROR_FILE_NAME": "Mirror file name",
+                "TRANSITIVE_IMPORTS": "Transitive imports",
+                "ONTOLOGY_IRI": "Ontology IRI",
+                "DATA_DUMP": "Data dump",
+                "USE_DATA_DUMP": "Use data dump",
+                "DATA_DUMP_CHECK": "If checked, import is added from the provided data dump instead of the ontology IRI"
+            }
+        },
+        "METADATA_REGISTRY": {
+
+        },
+        "METADATA_VOCABULARIES": {
+            "METADATA_VOCABULARY": "Metadata Vocabulary"
+        }
+    },
     "RESOURCE_VIEW": {
         "PARTITIONS": {
             "BROADERS": "Broaders",
@@ -279,6 +321,31 @@
             "SUPERPROPERTIES": "Superproperties",
             "TOP_CONCEPT_OF": "Top concept of",
             "TYPES": "Types"
+        },
+        "ACTIONS": {
+            "RENAME": "Rename",
+            "BLOCK_NAMESPACE": "Block namespace",
+            "COPY_TO_CLIPBOARD": "Copy to clipboard",
+            "SHOW_HIDE_INFERRED": "Show/hide inferred information",
+            "TOGGLE_VALUE_FILTER_LANG": "Enable/disable value-filter on languages",
+            "TOGGLE_NOTIFICATIONS": "Enable/disable notifications on this resource",
+            "CHANGE_VERSION": "Change version",
+            "CREATE_ISSUE": "Create issue for this resource",
+            "ASSIGN_TO_ISSUE": "Assign this resource to existing issue",
+            "ALIGN_WITH_EXTERNAL_RESOURCE": "Align with external resource",
+            "SET_AS_DEPRECATED": "Set as deprecated",
+            "ASSERT_INFERRED_STATEMENTS": "Assert all the inferred statements",
+            "SPAWN_CONCEPT_FROM_XLABEL": "Spawn new concept from this xLabel",
+            "SHOW_IN_DATA_GRAPH": "Show in data-oriented graph"
+        },
+        "STATUS": {
+            "RESOURCE_NOT_EXISTING": "This resource is not available in the current project",
+            "RESOURCE_UNKNOWN_HOST": "This resource is not available on accessible local projects nor can be reached on the Web",
+            "STATUS": "Status",
+            "ACCESS_METHOD": "Access method",
+            "LOCAL_PROJECT": "Local Project",
+            "OTHER_LOCAL_PROJECT": "Other local Project",
+            "REMOTE_DATASET": "Remote Dataset"
         }
     },
     "SPARQL": {
@@ -332,12 +399,19 @@
         "SIGNUP": "Sign up"
     },
     "COMMONS": {
+        "BASE_URI": "Base URI",
         "CREATE": "Create",
+        "DATASET": "Dataset",
+        "EXPORT": "Export",
+        "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
         "DESCRIPTION": "Description",
         "MANDATORY_FIELD": "Mandatory field",
         "OPTIONAL_FIELD": "Optional field",
+        "REFRESH": "Refresh",
+        "SAVE": "Save",
         "SEARCH": "Search",
+        "SETTINGS": "Settings",
         "SUBMIT": "Submit",
         "CANCEL": "Cancel",
         "PAGE_OF_TOT": "of"

@@ -11,7 +11,7 @@
         
         <div class="input-group-append">
             <button *ngIf="renameLocked" class="btn btn-light" style="width:72px" (click)="startRename()" [disabled]="renameDisabled">
-                Rename
+                {{'RESOURCE_VIEW.ACTIONS.RENAME'|translate}}
             </button>
                 
             <button *ngIf="!renameLocked" class="btn btn-light" style="width:24px; padding: 1px 3px;"
@@ -23,13 +23,13 @@
                 <span class="fas fa-times" style="color: red"></span>
             </button>
             <button *ngIf="!renameLocked" class="btn btn-light" [ngClass]="{active: namespaceLocked}"
-                style="width:24px; padding: 1px 3px;" (click)="blockNamespace()" title="Block namespace">
+                style="width:24px; padding: 1px 3px;" (click)="blockNamespace()" [title]="'RESOURCE_VIEW.ACTIONS.BLOCK_NAMESPACE'|translate">
                 <span class="fas fa-lock"></span>
             </button>
         </div>
     </div>
     <div style="position: absolute; top: 0px; right: 75px; z-index: 3;">
-        <button type="button" class="close" (click)="copyToClipboard()" title="Copy URI to clipboard">
+        <button type="button" class="close" (click)="copyToClipboard()" [title]="'RESOURCE_VIEW.ACTIONS.COPY_TO_CLIPBOARD'|translate">
             <span class="far fa-copy" style="font-size: 12px"></span>
         </button>
     </div>

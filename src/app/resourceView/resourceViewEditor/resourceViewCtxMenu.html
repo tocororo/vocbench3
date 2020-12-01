@@ -4,18 +4,19 @@
     </button>
     <div class="dropdown-menu" ngbDropdownMenu>
         <a *ngIf="resource.isURIResource()" class="dropdown-item" [ngClass]="{ disabled : isAlignDisabled }" (click)="alignResource()">
-            Align with external resource
+            {{'RESOURCE_VIEW.ACTIONS.ALIGN_WITH_EXTERNAL_RESOURCE'|translate}}
         </a>
         <a *ngIf="isURIResource()" class="dropdown-item" [ngClass]="{ disabled : isSetDeprecatedDisabled }" (click)="setAsDeprecated()">
-            Set as deprecated
+            {{'RESOURCE_VIEW.ACTIONS.SET_AS_DEPRECATED'|translate}}
         </a>
         <a *ngIf="showInferred" class="dropdown-item" [ngClass]="{ disabled : isAssertInferredDisabled }" (click)="assertInferredStmts()">
-            Assert all the inferred statements</a>
+            {{'RESOURCE_VIEW.ACTIONS.ASSERT_INFERRED_STATEMENTS'|translate}}
+        </a>
         <a *ngIf="resource.getRole() == 'xLabel'" class="dropdown-item" [ngClass]="{ disabled : isSpawnFromLabelDisabled }" (click)="spawnNewConceptWithLabel()">
-            Spawn new concept from this xLabel
+            {{'RESOURCE_VIEW.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL'|translate}}
         </a>
         <a *ngIf="isOpenDataGraphEnabled()" class="dropdown-item" (click)="openDataGraph()">
-            Show in data-oriented graph
+            {{'RESOURCE_VIEW.ACTIONS.SHOW_IN_DATA_GRAPH'|translate}}
         </a>
     </div>
 </div>

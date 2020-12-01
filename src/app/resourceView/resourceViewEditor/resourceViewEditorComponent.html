@@ -8,21 +8,21 @@
             <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: rendering}" title="Rendering" (click)="switchRendering()">
                 <span class="fas fa-font"></span>
             </button>
-            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: showInferred}" title="Show/hide inferred information" (click)="switchInferred()">
+            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: showInferred}" [title]="'RESOURCE_VIEW.ACTIONS.SHOW_HIDE_INFERRED'|translate" (click)="switchInferred()">
                 <span *ngIf="showInferred" class="fas fa-eye"></span>
                 <span *ngIf="!showInferred" class="fas fa-eye-slash"></span>
             </button>
-            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: valueFilterLangEnabled}" title="Enable/disable value-filter on languages" (click)="switchValueFilterLang()">
+            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: valueFilterLangEnabled}" [title]="'RESOURCE_VIEW.ACTIONS.TOGGLE_VALUE_FILTER_LANG'|translate" (click)="switchValueFilterLang()">
                 <span class="fas fa-filter"></span>
             </button>
             
             <button *ngIf="notificationsAvailable" class="btn btn-light btn-xs ml-2" [ngClass]="{active: isWatching}" 
-                (click)="changeNotificationStatus()" title="Enable/Disable notifications on this resource">
+                (click)="changeNotificationStatus()" [title]="'RESOURCE_VIEW.ACTIONS.TOGGLE_NOTIFICATIONS'|translate">
                 <span class="fas fa-bell"></span>
             </button>
 
             <div *ngIf="versioningAvailable" class="dropdown ml-2" ngbDropdown>
-                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle (click)="listVersions()" title="Change version">
+                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle (click)="listVersions()" [title]="'RESOURCE_VIEW.ACTIONS.CHANGE_VERSION'|translate">
                     <span class="far fa-clock"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
@@ -47,16 +47,16 @@
                         <div [class]="'badge float-right ' + i.getStatusClass()" style="font-size: 100%">{{i.getStatus()}}</div>
                     </a>
                     <div *ngIf="issuesStruct.issues" class="dropdown-divider"></div>
-                    <a class="dropdown-item" (click)="createIssue()">Create issue for this resource</a>
-                    <a class="dropdown-item" (click)="assignToIssue()">Assign this resource to existing issue</a>
+                    <a class="dropdown-item" (click)="createIssue()">{{'RESOURCE_VIEW.ACTIONS.CREATE_ISSUE'|translate}}</a>
+                    <a class="dropdown-item" (click)="assignToIssue()">{{'RESOURCE_VIEW.ACTIONS.ASSIGN_TO_ISSUE'|translate}}</a>
                 </div>
             </div>
 
-            <button class="btn btn-light btn-xs ml-2" title="Refresh" (click)="buildResourceView(resource)">
+            <button class="btn btn-light btn-xs ml-2" [title]="'COMMONS.REFRESH'|translate" (click)="buildResourceView(resource)">
                 <span class="fas fa-redo"></span>
             </button>
 
-            <button *ngIf="settingsAvailable" class="btn btn-light btn-xs ml-2" title="ResourceView settings" (click)="openSettings()">
+            <button *ngIf="settingsAvailable" class="btn btn-light btn-xs ml-2" [title]="'COMMONS.SETTINGS'|translate" (click)="openSettings()">
                 <span class="fas fa-cog"></span>
             </button>
             
@@ -66,10 +66,10 @@
     </div>
     <div class="card-body scrollableContainer">
         <div *ngIf="unexistingResource" class="alert alert-danger">
-            This resource is not available in the current project
+            {{'RESOURCE_VIEW.STATUS.RESOURCE_NOT_EXISTING'|translate}}
         </div>
         <div *ngIf="unknownHost" class="alert alert-danger">
-            This resource is not available on accessible local projects nor can be reached on the Web
+            {{'RESOURCE_VIEW.STATUS.RESOURCE_UNKNOWN_HOST'|translate}}
         </div>
         <ng-container *ngIf="!unexistingResource && !unknownHost">
             <types-renderer *ngIf="resViewSections['types']" [pred-obj-list]="resViewSections['types']" 
@@ -195,7 +195,7 @@
             <div class="dropup float-right" ngbDropdown placement="top-right">
                 <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle style="padding: 0px; border: none; background-color: transparent;">
                     <span [ngSwitch]="resource.getAdditionalProperty('accessMethod')">
-                        Status:
+                        {{'RESOURCE_VIEW.STATUS.STATUS'|translate}}:
                         <ng-container *ngSwitchCase="'local'">
                             <img *ngIf="resourcePositionLocalProj" src="./assets/images/icons/local_current_project.png" style="width: 11px; margin-bottom: 3px;">
                             <img *ngIf="!resourcePositionLocalProj" src="./assets/images/icons/local_other_project.png" style="width: 11px; margin-bottom: 3px;">
@@ -208,20 +208,20 @@
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
                     <a class="dropdown-item" style="cursor: initial; background-color: initial;">
-                        <label>Access method:</label>
+                        <label>{{'RESOURCE_VIEW.STATUS.ACCESS_METHOD'|translate}}:</label>
                         {{resource.getAdditionalProperty('accessMethod')}}
                     </a>
                     <a *ngIf="resourcePosition.isLocal()" class="dropdown-item" style="cursor: initial; background-color: initial;">
-                        <label *ngIf="resourcePositionLocalProj">Local Project: </label>
-                        <label *ngIf="!resourcePositionLocalProj">Other local Project: </label>
+                        <label *ngIf="resourcePositionLocalProj">{{'RESOURCE_VIEW.STATUS.LOCAL_PROJECT'|translate}}: </label>
+                        <label *ngIf="!resourcePositionLocalProj">{{'RESOURCE_VIEW.STATUS.OTHER_LOCAL_PROJECT'|translate}}: </label>
                         {{resourcePositionDetails}}
                     </a>
                     <a *ngIf="resourcePosition.isRemote()" class="dropdown-item" style="cursor: initial; background-color: initial;">
-                        <label>Remote Dataset: </label>
+                        <label>{{'RESOURCE_VIEW.STATUS.REMOTE_DATASET'|translate}}: </label>
                         {{resourcePositionDetails}}
                     </a>
                     <a *ngIf="resourcePosition.isUnknown()" class="dropdown-item" style="cursor: initial; background-color: initial;">
-                        <label>Remote Dataset: </label>
+                        <label>{{'RESOURCE_VIEW.STATUS.REMOTE_DATASET'|translate}}: </label>
                         Unknown, <a (click)="discoverDataset()">discover</a>
                     </a>
                 </div>

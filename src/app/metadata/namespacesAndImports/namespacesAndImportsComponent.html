@@ -5,16 +5,16 @@
         <!-- Namespace management -->
         <div class="card card-default vbox">
             <div class="card-header">
-                <label style="flex: 1">Namespace management:</label>
-                <div class="btn-group btn-group-xs" role="group">
-                    <button class="btn btn-light" title="Add mapping" (click)="addMapping()" [disabled]="!isAddNsPrefixMappingAuthorized()">
+                <label style="flex: 1">{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE_MANAGEMENT'|translate}}:</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-light" [title]="'METADATA.NAMESPACES_AND_IMPORTS.ADD_MAPPING'|translate" (click)="addMapping()" [disabled]="!isAddNsPrefixMappingAuthorized()">
                         <span class="fas fa-plus"></span>
                     </button>
-                    <button class="btn btn-light" title="Remove mapping" (click)="removeMapping()"
+                    <button class="btn btn-light" [title]="'METADATA.NAMESPACES_AND_IMPORTS.REMOVE_MAPPING'|translate" (click)="removeMapping()"
                         [disabled]="!selectedMapping || !selectedMapping.explicit || !isRemoveNsPrefixMappingAuthorized()">
                         <span class="fas fa-minus"></span>
                     </button>
-                    <button class="btn btn-light" title="Change prefix" (click)="changeMapping()"
+                    <button class="btn btn-light" [title]="'METADATA.NAMESPACES_AND_IMPORTS.CHANGE_PREFIX'|translate" (click)="changeMapping()"
                         [disabled]="!selectedMapping || !isChangeNsPrefixMappingAuthorized()">
                         <span class="fas fa-pencil-alt"></span>
                     </button>
@@ -32,7 +32,7 @@
                             </colgroup>
                             <tbody>
                                 <tr>
-                                    <td><label>BaseURI:</label></td>
+                                    <td><label>{{'COMMONS.BASE_URI'|translate}}:</label></td>
                                     <td>
                                         <input type="text" class="form-control form-control-sm"
                                             [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isBaseURIValid() }" [ngModel]="baseURI"
@@ -40,11 +40,11 @@
                                     </td>
                                     <td rowspan="2">
                                         <div class="btn-group-vertical">
-                                            <button class="btn btn-light" [ngClass]="{active: bind}" title="Bind/unbind namespace and baseURI"
+                                            <button class="btn btn-light" [ngClass]="{active: bind}" [title]="'METADATA.NAMESPACES_AND_IMPORTS.BIND_NS_AND_BASEURI'|translate"
                                                 (click)="bindNamespaceBaseURI()">
                                                 <span class="fas fa-link"></span>
                                             </button>
-                                            <button class="btn btn-light" title="Apply namespace baseURI changes"
+                                            <button class="btn btn-light" [title]="'METADATA.NAMESPACES_AND_IMPORTS.APPLY_CHANGES'|translate"
                                                 [ngClass]="{'btn-primary': areNamespaceBaseURIChanged(), 'btn-light': !areNamespaceBaseURIChanged()}"
                                                 (click)="applyNamespaceBaseURI()" [disabled]="!areNamespaceBaseURIChanged() || !isBaseuriNsEditAuthorized()">
                                                 <span class="fas fa-check"></span>
@@ -53,7 +53,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label>Namespace:</label></td>
+                                    <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}:</label></td>
                                     <td>
                                         <input type="text" class="form-control form-control-sm"
                                             [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isNamespaceValid() }" [ngModel]="namespace"
@@ -69,8 +69,8 @@
                     <table class="table table-sm table-striped table-hoverable">
                         <thead>
                             <tr>
-                                <th class="text-center">Prefix</th>
-                                <th class="text-center">Namespace</th>
+                                <th class="text-center">{{'METADATA.NAMESPACES_AND_IMPORTS.PREFIX'|translate}}</th>
+                                <th class="text-center">{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,21 +88,21 @@
         <!--Imports-->
         <div class="card card-default vbox" style="margin-top: 5px;">
             <div class="card-header">
-                <label style="flex: 1">Imports:</label>
+                <label style="flex: 1">{{'METADATA.NAMESPACES_AND_IMPORTS.IMPORTS'|translate}}:</label>
                 <div class="dropdown" ngbDropdown>
-                    <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle [disabled]="!isAddImportAuthorized()">
-                        Add import from <span class="fas fa-caret-down fa-sm"></span>
+                    <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle [disabled]="!isAddImportAuthorized()">
+                        {{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} <span class="fas fa-caret-down fa-sm"></span>
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="importFromWeb()">Web</a>
-                        <a class="dropdown-item" (click)="importFromWebToMirror()">Web to mirror</a>
-                        <a class="dropdown-item" (click)="importFromLocalFile()">Local file</a>
-                        <a class="dropdown-item" (click)="importFromOntologyMirror()">Ontology mirror</a>
-                        <a class="dropdown-item" (click)="importFromDatasetCatalog()">Dataset Catalog</a>
+                        <a class="dropdown-item" (click)="importFromWeb()">{{'METADATA.NAMESPACES_AND_IMPORTS.WEB'|translate}}</a>
+                        <a class="dropdown-item" (click)="importFromWebToMirror()">{{'METADATA.NAMESPACES_AND_IMPORTS.WEB_TO_MIRROR'|translate}}</a>
+                        <a class="dropdown-item" (click)="importFromLocalFile()">{{'METADATA.NAMESPACES_AND_IMPORTS.LOCAL_FILE'|translate}}</a>
+                        <a class="dropdown-item" (click)="importFromOntologyMirror()">{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_MIRROR'|translate}}</a>
+                        <a class="dropdown-item" (click)="importFromDatasetCatalog()">{{'METADATA.NAMESPACES_AND_IMPORTS.DATASET_CATALOG'|translate}}</a>
                     </div>
                 </div>
                 <button class="btn btn-light btn-xs" (click)="openOntologyMirror()" style="margin-left: 4px;">
-                    Ontology mirror
+                    {{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_MIRROR'|translate}}
                 </button>
             </div>
             <div class="card-body vbox">

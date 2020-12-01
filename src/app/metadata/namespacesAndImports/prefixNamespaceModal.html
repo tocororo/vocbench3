@@ -10,18 +10,18 @@
         </colgroup>
         <tbody>
             <tr>
-                <td><label>Prefix:</label></td>
+                <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.PREFIX'|translate}}:</label></td>
                 <td>
                     <div class="hbox">
                         <input type="text" class="form-control" [(ngModel)]="prefix">
-                        <button class="btn btn-light ml-2" (click)="resolveWithPrefixCC()" title="Try to resolve prefix using prefix.cc">
+                        <button class="btn btn-light ml-2" (click)="resolveWithPrefixCC()" [title]="'METADATA.NAMESPACES_AND_IMPORTS.RESOLVE_WITH_PREFIXCC'|translate">
                             <span class="far fa-closed-captioning"></span>
                         </button>
                     </div>
                 </td>
             </tr>
             <tr>
-                <td><label>Namespace:</label></td>
+                <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}:</label></td>
                 <td>
                     <input type="text" class="form-control" [(ngModel)]="namespace" [disabled]="namespaceReadonly">
                 </td>

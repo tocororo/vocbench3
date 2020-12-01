@@ -19,7 +19,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <td><label>BaseURI:</label></td>
+                <td><label>{{'COMMONS.BASE_URI'|translate}}:</label></td>
                 <td *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror' || importType == 'fromLocalFile'">
                     <div *ngIf="baseURIOptional" class="hbox" style="align-items: center">
                         <input class="form-control form-control-sm" [(ngModel)]="baseURI" [disabled]="!baseURICheck">
@@ -32,13 +32,13 @@
                         <option *ngFor="let m of mirrorList" [ngValue]="m">{{m.baseURI}}</option>
                     </select>
                     <select *ngIf="!mirrorList" class="form-control form-control-sm" disabled>
-                        <option>No ontologies mirrored</option>
+                        <option>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.NO_ONTOLOGIES_MIRRORED'|translate}}</option>
                     </select>
                 </td>
             </tr>
             <tr *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror'">
                 <td nowrap>
-                    <label>Alternative URL:</label>
+                    <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.ALTERNATIVE_URL'|translate}}:</label>
                 </td>
                 <td>
                     <div class="hbox" style="align-items: center">
@@ -48,14 +48,14 @@
                 </td>
             </tr>
             <tr *ngIf="importType == 'fromLocalFile'">
-                <td><label>Local file:</label></td>
+                <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.LOCAL_FILE'|translate}}:</label></td>
                 <td>
                     <file-picker (fileChanged)="fileChangeEvent($event)"></file-picker>
                 </td>
             </tr>
             <tr *ngIf="importType == 'fromWebToMirror' || importType == 'fromLocalFile'">
                 <td nowrap>
-                    <label>Mirror file name:</label>
+                    <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.MIRROR_FILE_NAME'|translate}}:</label>
                 </td>
                 <td>
                     <input *ngIf="importType == 'fromWebToMirror'" type="text" class="form-control form-control-sm" [(ngModel)]="mirrorFile">
@@ -67,7 +67,7 @@
             </tr>
             <tr *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror'">
                 <td nowrap>
-                    <label>Force format:</label>
+                    <label>{{'COMMONS.FORCE_FORMAT'|translate}}:</label>
                 </td>
                 <td>
                     <div class="hbox" style="align-items: center">
@@ -79,7 +79,7 @@
                 </td>
             </tr>
             <tr>
-                <td nowrap><label>Transitive imports:</label></td>
+                <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.TRANSITIVE_IMPORTS'|translate}}:</label></td>
                 <td>
                     <select class="form-control form-control-sm" [(ngModel)]="selectedImportAllowance">
                         <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>

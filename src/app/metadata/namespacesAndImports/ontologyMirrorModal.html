@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h3 class="modal-title">Ontology Mirror</h3>
+    <h3 class="modal-title">{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_MIRROR'|translate}}</h3>
 </div>
 <div class="modal-body vbox blockingDivHost">
     
     <div class="card card-default vbox">
         <div class="card-header">
-            <label>Ontology Mirror Management:</label>
+            <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_MIRROR_MANAGER.ONTOLOGY_MIRROR_MANAGEMENT'|translate}}:</label>
         </div>
         <div class="card-body vbox">
             <div class="scrollableContainer">
@@ -27,14 +27,14 @@
                                         <span class="fas fa-pencil-alt"></span>
                                     </button>
                                     <div class="dropdown-menu" ngbDropdownMenu>
-                                        <a class="dropdown-item" (click)="updateMirrorFromWebWithUri(m)">Update from web using baseURI</a>
-                                        <a class="dropdown-item" (click)="updateMirrorFromWebFromAltUrl(m)">Update from web from alternative URL</a>
-                                        <a class="dropdown-item" (click)="updateMirrorFromLocalFile(m)">Update from local file</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromWebWithUri(m)">{{'METADATA.ONTOLOGY_MIRROR_MANAGER.UPDATE_FROM_WEB_BASEURI'|translate}}</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromWebFromAltUrl(m)">{{'METADATA.ONTOLOGY_MIRROR_MANAGER.UPDATE_FROM_WEB_ALT_URL'|translate}}</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromLocalFile(m)">{{'METADATA.ONTOLOGY_MIRROR_MANAGER.UPDATE_FROM_LOCAL_FILE'|translate}}</a>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <button class="btn btn-light btn-xs" (click)="deleteOntoMirror(m)" title="Delete mirror"
+                                <button class="btn btn-light btn-xs" (click)="deleteOntoMirror(m)" [title]="'METADATA.ONTOLOGY_MIRROR_MANAGER.DELETE_MIRROR'|translate"
                                     [disabled]="!isDeleteMirrorAuthorized()">
                                     <span class="far fa-trash-alt"></span>
                                 </button>

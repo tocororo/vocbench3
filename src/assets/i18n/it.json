@@ -110,7 +110,6 @@
         },
         "CREATE_FORM": {
             "BACKEND_TYPE": "Tipo backend",
-            "BASE_URI": "Base URI",
             "BLACKLIST": "Lista nera",
             "CONFIGURATION": "Configurazione",
             "CREATE_PROJECT": "Crea progetto",
@@ -248,6 +247,49 @@
             }
         }
     },
+    "METADATA": {
+        "NAMESPACES_AND_IMPORTS": {
+            "NAMESPACE_MANAGEMENT": "Gestione Namespace",
+            "ADD_MAPPING": "Aggiungi mapping",
+            "REMOVE_MAPPING": "Rimuovi mapping",
+            "CHANGE_PREFIX": "Cambia prefisso",
+            "BIND_NS_AND_BASEURI": "Vincola/svincola namespace e baseURI",
+            "APPLY_CHANGES": "Applica modifiche",
+            "PREFIX": "Prefisso",
+            "NAMESPACE": "Namespace",
+            "RESOLVE_WITH_PREFIXCC": "Tenta la risoluzione tramite prefix.cc",
+            "IMPORTS": "Import",
+            "ADD_IMPORT_FROM": "Aggiungi import da",
+            "WEB": "Web",
+            "WEB_TO_MIRROR": "Web a mirror",
+            "DATASET_CATALOG": "Dataset Catalog",
+            "LOCAL_FILE": "File locale",
+            "ONTOLOGY_MIRROR": "Ontology mirror",
+            "ONTOLOGY_MIRROR_MANAGER": {
+                "ONTOLOGY_MIRROR_MANAGEMENT": "Gestione Ontology Mirror",
+                "UPDATE_FROM_WEB_BASEURI": "Aggiorna dal web usando il baseURI",
+                "UPDATE_FROM_WEB_ALT_URL": "Aggiorna dal web usando un URL alternativo",
+                "UPDATE_FROM_LOCAL_FILE": "Aggiorna da un file locale",
+                "DELETE_MIRROR": "Cancella mirror"
+            },
+            "ONTOLOGY_IMPORT": {
+                "NO_ONTOLOGIES_MIRRORED": "Nessun mirror di ontologie",
+                "ALTERNATIVE_URL": "URL alternativo",
+                "MIRROR_FILE_NAME": "Nome del file mirror",
+                "TRANSITIVE_IMPORTS": "Import transitivi",
+                "ONTOLOGY_IRI": "IRI ontologia",
+                "DATA_DUMP": "Data dump",
+                "USE_DATA_DUMP": "Usa data dump",
+                "DATA_DUMP_CHECK": "Se spuntato, l'import è aggiunto dal data dump indicato anzichè dall'IRI dell'ontologia"
+            }
+        },
+        "METADATA_REGISTRY": {
+
+        },
+        "METADATA_VOCABULARIES": {
+            "METADATA_VOCABULARY": "Vocabolario dei metadati"
+        }
+    },
     "RESOURCE_VIEW": {
         "PARTITIONS": {
             "BROADERS": "Broader",
@@ -279,6 +321,31 @@
             "SUPERPROPERTIES": "Super proprietà",
             "TOP_CONCEPT_OF": "Top concept di",
             "TYPES": "Tipi"
+        },
+        "ACTIONS": {
+            "RENAME": "Rinomina",
+            "BLOCK_NAMESPACE": "Blocca namespace",
+            "COPY_TO_CLIPBOARD": "Copia negli appunti",
+            "SHOW_HIDE_INFERRED": "Mostra/nascondi informazioni inferite",
+            "TOGGLE_VALUE_FILTER_LANG": "Abilita/disabilita il filtro-valori sulle lingue",
+            "TOGGLE_NOTIFICATIONS": "Abilita/disabilita notifiche su questa risorsa",
+            "CHANGE_VERSION": "Cambia versione",
+            "CREATE_ISSUE": "Crea issue per questa risorsa",
+            "ASSIGN_TO_ISSUE": "Assegna questa risorsa ad un issue esistente",
+            "ALIGN_WITH_EXTERNAL_RESOURCE": "Allinea con una risorsa esterna",
+            "SET_AS_DEPRECATED": "Segna come deprecato",
+            "ASSERT_INFERRED_STATEMENTS": "Asserisci le informazioni inferite",
+            "SPAWN_CONCEPT_FROM_XLABEL": "Crea un nuovo concetto da questa xLabel",
+            "SHOW_IN_DATA_GRAPH": "Mostra in un grafo orientato ai dati"
+        },
+        "STATUS": {
+            "RESOURCE_NOT_EXISTING": "Questa risorsa non è disponibile nel progetto corrente",
+            "RESOURCE_UNKNOWN_HOST": "Questa risorsa non è disponibile o accessibile in progetti locali nè può essere raggiungibile sul Web",
+            "STATUS": "Stato",
+            "ACCESS_METHOD": "Metodo di accesso",
+            "LOCAL_PROJECT": "Progetto locale",
+            "OTHER_LOCAL_PROJECT": "Altro progetto locale",
+            "REMOTE_DATASET": "Dataset remoto"
         }
     },
     "SPARQL": {
@@ -332,12 +399,19 @@
         "SIGNUP": "Registrati"
     },
     "COMMONS": {
+        "BASE_URI": "Base URI",
         "CREATE": "Crea",
+        "DATASET": "Dataset",
+        "EXPORT": "Esporta",
+        "FORCE_FORMAT": "Forza il formato",
         "FORMAT": "Formato",
         "DESCRIPTION": "Descrizione",
         "MANDATORY_FIELD": "Campo obbligatorio",
         "OPTIONAL_FIELD": "Campo opzionale",
+        "REFRESH": "Aggiorna",
+        "SAVE": "Salva",
         "SEARCH": "Cerca",
+        "SETTINGS": "Impostazioni",
         "SUBMIT": "Invia",
         "CANCEL": "Annulla",
         "PAGE_OF_TOT": "di"

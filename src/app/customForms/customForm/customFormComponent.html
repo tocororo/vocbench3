@@ -22,7 +22,7 @@
                     </td>
                     <!--Mandatory/Optional-->
                     <td>
-                        <span *ngIf="field.isMandatory()" title="Mandatory field">*</span>
+                        <span *ngIf="field.isMandatory()" [title]="'COMMONS.MANDATORY_FIELD'|translate">*</span>
                     </td>
                 </tr>
             </ng-container>

@@ -16,7 +16,7 @@
                 <td>
                     <input class="form-control form-control-sm" [(ngModel)]="name" [disabled]="ref || readOnly">
                 </td>
-                <td title="Mandatory field">*</td>
+                <td [title]="'COMMONS.MANDATORY_FIELD'|translate">*</td>
             </tr>
             <tr>
                 <td class="text-right">
