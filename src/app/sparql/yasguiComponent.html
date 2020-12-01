@@ -1,6 +1,6 @@
 <div *ngIf="!readonly" class="form-check mb-2">
     <input class="form-check-input" id="fetchCheck" type="checkbox" [(ngModel)]="fetchFromPrefixCheck" (change)="onCheckboxChange()">
-    <label class="form-check-label" for="fetchCheck">Fetch prefix from prefix.cc</label>
+    <label class="form-check-label" for="fetchCheck">{{'SPARQL.QUERY.FETCH_FROM_PREFIXCC'|translate}}</label>
 </div>
 <div style="position: relative" class="vbox" [ngClass]="{ 'yasqe-hide-btns' : hideButtons }">
     <textarea #txtarea [ngClass]="{disabled: readonly}">{{query}}</textarea>

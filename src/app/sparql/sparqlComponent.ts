@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: "sparql-component",
@@ -21,7 +22,7 @@ export class SparqlComponent {
     tabs: Array<Tab> = [];
     tabLimit: number = 10;
 
-    constructor() { }
+    constructor(private translateService: TranslateService) { }
 
     ngOnInit() {
         this.addQueryTab();
@@ -34,7 +35,10 @@ export class SparqlComponent {
         if (currentActiveTab != null) {
             currentActiveTab.active = false;
         }
-        this.tabs.push({ active: true, name: "Unnamed Query", type: TabType.query, saved: false });
+        let tab = { active: true, name: null, type: TabType.query, saved: false };
+        this.translateService.get("SPARQL.QUERY.UNNAMED_QUERY").subscribe(translation => tab.name = translation);
+        this.tabs.push(tab);
+        
     }
 
     addParameterizationTab() {
@@ -42,7 +46,9 @@ export class SparqlComponent {
         if (currentActiveTab != null) {
             currentActiveTab.active = false;
         }
-        this.tabs.push({ active: true, name: "Unnamed Parameterized Query", type: TabType.parameterization, saved: false });
+        let tab = { active: true, name: null, type: TabType.parameterization, saved: false };
+        this.translateService.get("SPARQL.QUERY.UNNAMED_PARAMETERIZED_QUERY").subscribe(translation => tab.name = translation);
+        this.tabs.push(tab);
     }
 
     private selectTab(t: Tab) {

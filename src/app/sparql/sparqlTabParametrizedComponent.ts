@@ -1,16 +1,11 @@
 import { Component } from "@angular/core";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
-import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ARTNode } from "../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../models/Configuration";
 import { SettingsProp } from "../models/Plugins";
 import { VariableBindings } from "../models/Sparql";
 import { ConfigurationsServices } from "../services/configurationsServices";
-import { ExportServices } from "../services/exportServices";
-import { SearchServices } from "../services/searchServices";
 import { SparqlServices } from "../services/sparqlServices";
-import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
@@ -32,9 +27,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
 
     description: string;
 
-    constructor(sparqlService: SparqlServices, exportService: ExportServices, configurationsService: ConfigurationsServices,
-        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices, modalService: NgbModal, vbProp: VBProperties) {
-        super(sparqlService, exportService, configurationsService, searchService, basicModals, sharedModals, graphModals, modalService, vbProp);
+    constructor(sparqlService: SparqlServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, private configurationsService: ConfigurationsServices) {
+        super(sparqlService, basicModals, sharedModals);
     }
 
     evaluateQueryImpl(): Observable<any> {

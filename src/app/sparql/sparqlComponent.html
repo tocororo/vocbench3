@@ -11,8 +11,7 @@
                     <span *ngIf="!t.saved">*</span>
                 </span>
                 <span *ngIf="tabs.length > 1" class="far fa-times-circle ml-1" (click)="closeTab(t)" style="cursor: pointer"
-                    onmouseover="this.className='fas fa-times-circle';"
-                    onmouseout="this.className='far fa-times-circle';">
+                    onmouseover="this.className='fas fa-times-circle';" onmouseout="this.className='far fa-times-circle';">
                 </span>
             </a>
         </li>
@@ -24,8 +23,8 @@
                     <span class="fas fa-caret-down fa-sm"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
-                    <a class="dropdown-item" (click)="addQueryTab()">Add query tab</a>
-                    <a class="dropdown-item" (click)="addParameterizationTab()">Add parameterized query tab</a>
+                    <a class="dropdown-item" (click)="addQueryTab()">{{'SPARQL.QUERY.ADD_QUERY_TAB'|translate}}</a>
+                    <a class="dropdown-item" (click)="addParameterizationTab()">{{'SPARQL.QUERY.ADD_PARAMETERIZED_QUERY_TAB'|translate}}</a>
                 </div>
               </div>
         </li>

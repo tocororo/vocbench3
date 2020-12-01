@@ -247,7 +247,6 @@
                 }
             }
         }
-        
     },
     "RESOURCE_VIEW": {
         "PARTITIONS": {
@@ -282,6 +281,33 @@
             "TYPES": "Types"
         }
     },
+    "SPARQL": {
+        "QUERY": {
+            "ADD_PARAMETERIZED_QUERY_TAB": "Add parameterized query tab",
+            "ADD_QUERY_TAB": "Add query tab",
+            "CHANGE_STORED_QUERY": "Change stored query",
+            "FETCH_FROM_PREFIXCC": "Fetch prefix from prefix.cc",
+            "LOAD_PARAMETERIZED_QUERY": "Load parameterized query",
+            "LOAD_QUERY": "Load query",
+            "SAVE_PARAMETERIZED_QUERY": "Save parameterized query",
+            "SAVE_QUERY": "Save query",
+            "STORED_QUERY": "Stored query",
+            "UNNAMED_PARAMETERIZED_QUERY": "Unnamed parameterized query",
+            "UNNAMED_QUERY": "Unnamed query"
+        },
+        "RESULTS": {
+            "CLEAR": "Clear",
+            "DONE_IN": "Done in",
+            "INCLUDE_INFERRED": "Include inferred",
+            "RESULTS_COUNT": "Results count",
+            "SAVE_RESULTS_AS": "Save results as"
+        },
+        "PARAMETERIZATION": {
+            "SHOW_VARIABLE_BINDINGS_DISPLAY_NAME": "Show variable bindings display name",
+            "USE_VARIABLE_BINDINGS": "Use variable bindings",
+            "VARIABLE_BINDINGS": "Variable bindings"
+        }
+    },
     "USER": {
         "FORM": {
             "GIVEN_NAME": "Given name",
@@ -308,10 +334,12 @@
     "COMMONS": {
         "CREATE": "Create",
         "FORMAT": "Format",
+        "DESCRIPTION": "Description",
         "MANDATORY_FIELD": "Mandatory field",
         "OPTIONAL_FIELD": "Optional field",
         "SEARCH": "Search",
         "SUBMIT": "Submit",
-        "CANCEL": "Cancel"
+        "CANCEL": "Cancel",
+        "PAGE_OF_TOT": "of"
     }
 }

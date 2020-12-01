@@ -5,6 +5,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { ExportResultAsRdfModal } from '../sparql/exportResultAsRdfModal';
 import { QueryParameterizerModal } from '../sparql/queryParameterization/queryParameterizerModal';
+import { QueryResultsComponent } from '../sparql/queryResultsComponent';
 import { SparqlComponent } from '../sparql/sparqlComponent';
 import { SparqlTabComponent } from '../sparql/sparqlTabComponent';
 import { SparqlTabParametrizedComponent } from '../sparql/sparqlTabParametrizedComponent';
@@ -19,9 +20,13 @@ import { SharedModule } from './sharedModule';
         TranslateModule,
     ],
     declarations: [
-        SparqlComponent, SparqlTabComponent, SparqlTabParametrizedComponent,
+        SparqlComponent,
+        SparqlTabComponent,
+        SparqlTabParametrizedComponent,
+        QueryResultsComponent,
         //modals
-        ExportResultAsRdfModal, QueryParameterizerModal
+        ExportResultAsRdfModal,
+        QueryParameterizerModal
     ],
     exports: [SparqlComponent],
     providers: [],

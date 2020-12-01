@@ -1,9 +1,9 @@
 <div class="card card-alt vbox">
     <div *ngIf="mode=='sparql'" class="card-header">
-        <label style="flex: 1">Variable bindings</label>
+        <label style="flex: 1">{{'SPARQL.PARAMETERIZATION.VARIABLE_BINDINGS'|translate}}</label>
         <div class="btn-toolbar" role="toolbar">
             <button class="btn btn-xs btn-light" [ngClass]="{ active: showDisplayName }" (click)="showDisplayName = !showDisplayName" 
-                title="Show variable bindings display name">
+                [title]="'SPARQL.VARIABLE_BINDINGS_DISPLAY_NAME'|translate">
                 <span class="fas fa-eye"></span>
             </button>
             <button *ngIf="configurable" class="btn btn-xs btn-light" (click)="editParameterization()" title="Edit parameterization">
@@ -61,7 +61,7 @@
     <div *ngIf="configurable" class="card-footer">
         <div class="form-check">
             <input class="form-check-input" id="bindingCheck" type="checkbox" [(ngModel)]="useBindings" (ngModelChange)="emitUpdate()">
-            <label class="form-check-label" for="bindingCheck">Use variable bindings</label>
+            <label class="form-check-label" for="bindingCheck">{{'SPARQL.PARAMETERIZATION.USE_VARIABLE_BINDINGS'|translate}}</label>
         </div>
     </div>
 </div>

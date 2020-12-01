@@ -281,6 +281,33 @@
             "TYPES": "Tipi"
         }
     },
+    "SPARQL": {
+        "QUERY": {
+            "ADD_PARAMETERIZED_QUERY_TAB": "Aggiungi tab per query parametrizzata",
+            "ADD_QUERY_TAB": "Aggiungi tab per query",
+            "CHANGE_STORED_QUERY": "Modifica query memorizzata",
+            "FETCH_FROM_PREFIXCC": "Recupera prefissi da prefix.cc",
+            "LOAD_PARAMETERIZED_QUERY": "Carica query parametrizzata",
+            "LOAD_QUERY": "Carica query",
+            "SAVE_PARAMETERIZED_QUERY": "Salva query parametrizzata",
+            "SAVE_QUERY": "Salva query",
+            "STORED_QUERY": "Query memorizzata",
+            "UNNAMED_PARAMETERIZED_QUERY": "Query parametrizzata senza nome",
+            "UNNAMED_QUERY": "Query senza nome"
+        },
+        "RESULTS": {
+            "CLEAR": "Pulisci",
+            "DONE_IN": "Completato in",
+            "INCLUDE_INFERRED": "Includi inferite",
+            "RESULTS_COUNT": "Conteggio risultati",
+            "SAVE_RESULTS_AS": "Salva risultati come"
+        },
+        "PARAMETERIZATION": {
+            "SHOW_VARIABLE_BINDINGS_DISPLAY_NAME": "Mostra il diplay name del binding delle variabili",
+            "USE_VARIABLE_BINDINGS": "Usa binding delle variabili",
+            "VARIABLE_BINDINGS": "Binding delle variabili"
+        }
+    },
     "USER": {
         "FORM": {
             "GIVEN_NAME": "Nome",
@@ -307,10 +334,12 @@
     "COMMONS": {
         "CREATE": "Crea",
         "FORMAT": "Formato",
+        "DESCRIPTION": "Descrizione",
         "MANDATORY_FIELD": "Campo obbligatorio",
         "OPTIONAL_FIELD": "Campo opzionale",
         "SEARCH": "Cerca",
         "SUBMIT": "Invia",
-        "CANCEL": "Annulla"
+        "CANCEL": "Annulla",
+        "PAGE_OF_TOT": "di"
     }
 }
