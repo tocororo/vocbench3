@@ -7,7 +7,7 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td><label>Title:</label></td>
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.TITLE'|translate}}:</label></td>
                     <td>
                         <input-editable [value]="dataset?.title" (valueEdited)="updateTitle($event)" 
                             [disabled]="!dataset" allowEmpty="true">
@@ -15,13 +15,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label>Identity:</label></td>
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.IDENTITY'|translate}}:</label></td>
                     <td>
                         <input class="form-control form-control-sm" [ngModel]="dataset?.identity" disabled>
                     </td>
                 </tr>
                 <tr>
-                    <td><label>Dereferenciation System:</label></td>
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.DEREFERENCIATION_SYSTEM'|translate}}:</label></td>
                     <td>
                         <input-editable type="select" [options]="dereferenciationValues" [value]="dereferenciationNormalized"
                             (valueEdited)="updateDerefSystem($event)" [disabled]="!dataset">
@@ -29,7 +29,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label>SPARQL Endpoint:</label></td>
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.SPARQL_ENDPOINT'|translate}}:</label></td>
                     <td>
                         <div class="hbox" style="align-items: center;">
                             <input-editable style="flex: 1; margin-right: 4px;" [value]="dataset?.sparqlEndpointMetadata.id"
@@ -39,9 +39,9 @@
                                 <input class="form-check-input" id="aggregationCheck" type="checkbox" [(ngModel)]="sparqlLimitations" (ngModelChange)="updateSparqlLimitations()"
                                     [disabled]="!dataset?.sparqlEndpointMetadata.id">
                                 <label class="form-check-label" for="aggregationCheck">
-                                    No aggregation
+                                    {{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION'|translate}}
                                     <span class="fas fa-info-circle ml-2" 
-                                        title="If checked it means that the aggregation may be supported, but its support is insufficient for the purposes of Vocbench">
+                                        [title]="'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION_TOOLTIP'|translate">
                                     </span>
                                 </label>
                             </div>
@@ -49,13 +49,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label>URI space:</label></td>
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.URI_SPACE'|translate}}:</label></td>
                     <td>
                         <input class="form-control form-control-sm" [ngModel]="dataset?.uriSpace" disabled>
                     </td>
                 </tr>
                 <tr *ngIf="version">
-                    <td><label>Version Info:</label></td>
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_INFO'|translate}}:</label></td>
                     <td>
                         <input class="form-control form-control-sm" [ngModel]="dataset?.versionInfo" disabled>
                     </td>

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { LanguagePreferencesComponent } from "../preferences/languagePreferencesComponent";
 import { LanguageEditingComponent } from "../preferences/languages/languageEditingComponent";
 import { LanguageRenderingComponent } from "../preferences/languages/languageRenderingComponent";
@@ -11,7 +12,12 @@ import { VocbenchPreferencesComponent } from "../preferences/vocbenchPreferences
 import { SharedModule } from './sharedModule';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        SharedModule,
+        TranslateModule
+    ],
     declarations: [
         LanguageEditingComponent,
         LanguagePreferencesComponent,

@@ -284,7 +284,27 @@
             }
         },
         "METADATA_REGISTRY": {
-
+            "DATASET_METADATA": {
+                "TITLE": "Title",
+                "IDENTITY": "Identity",
+                "DEREFERENCEABLE": "Dereferenceable",
+                "DEREFERENCIATION_SYSTEM": "Dereferenciation System",
+                "SPARQL_ENDPOINT": "SPARQL Endpoint",
+                "NO_AGGREGATION": "No aggregation",
+                "NO_AGGREGATION_TOOLTIP": "If checked it means that the aggregation may be supported, but its support is insufficient for the purposes of Vocbench",
+                "URI_SPACE": "URI space",
+                "VERSION_INFO": "Version Info"
+            },
+            "LEXICALIZATION_SET": {
+                "LEXICALIZATION_SET": "Lexicalization Set",
+                "LEXICON_DATASET": "Lexicon Dataset",
+                "LEXICALIZATION_MODEL": "Lexicalization Model",
+                "REFERENCES": "References",
+                "LEXICAL_ENTRIES": "Lexical Entries",
+                "LEXICALIZATIONS": "Lexicalizations",
+                "PERCENTAGE": "Percentage",
+                "AVG_OF_LEXICALIZATIONS": "Avg number of Lexicalizations"
+            }
         },
         "METADATA_VOCABULARIES": {
             "METADATA_VOCABULARY": "Metadata Vocabulary"
@@ -402,11 +422,13 @@
         "BASE_URI": "Base URI",
         "CREATE": "Create",
         "DATASET": "Dataset",
+        "DESCRIPTION": "Description",
+        "EDIT": "Edit",
         "EXPORT": "Export",
         "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
-        "DESCRIPTION": "Description",
         "MANDATORY_FIELD": "Mandatory field",
+        "LANGUAGE": "Language",
         "OPTIONAL_FIELD": "Optional field",
         "REFRESH": "Refresh",
         "SAVE": "Save",

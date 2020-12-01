@@ -5,7 +5,7 @@
         <img [src]="resource.getURI()" (error)="isImage=false" style="max-height: 100px; max-width: 300px;" [title]="resource.getURI()">
     </a>
     
-    <div class="dropdown float-right" style="align-self: flex-start;" title="Edit" ngbDropdown>
+    <div class="dropdown float-right" style="align-self: flex-start;" [title]="'COMMONS.EDIT'|translate" ngbDropdown>
         <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="editMenuDisabled">
             <span class="fas fa-caret-down fa-sm"></span>
         </button>
@@ -16,7 +16,7 @@
             </a>
 
             <a *ngIf="editActionScenario != 'xLabel'" class="dropdown-item" [ngClass]="{ disabled: !editAuthorized || isInferred }" (click)="edit()">
-                Edit
+                {{'COMMONS.EDIT'|translate}}
             </a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkEditAuthorized }"
                 (click)="bulkEdit()" title="Update the value for every resource that has this predicate-value relation">

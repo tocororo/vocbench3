@@ -11,26 +11,26 @@
         </colgroup>
         <tbody>
             <tr>
-                <td nowrap><label>Title:</label></td>
+                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.TITLE'|translate}}:</label></td>
                 <td>
                     <input type="text" class="form-control form-control-sm" [(ngModel)]="recordTitle">
                 </td>
             </tr>
             <tr>
-                <td nowrap><label>Dataset:</label></td>
+                <td nowrap><label>{{'COMMONS.DATASET'|translate}}:</label></td>
                 <td>
                     <input type="text" class="form-control form-control-sm" [(ngModel)]="dataset">
                 </td>
             </tr>
             <tr>
-                <td nowrap><label>URI Space:</label></td>
+                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.URI_SPACE'|translate}}:</label></td>
                 <td>
                     <input type="text" class="form-control form-control-sm" [(ngModel)]="uriSpace">
                 </td>
                 <td>*</td>
             </tr>
             <tr>
-                <td nowrap><label>Dereferenceable:</label></td>
+                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.DEREFERENCEABLE'|translate}}:</label></td>
                 <td>
                     <select class="form-control form-control-sm" [(ngModel)]="dereferenceable">
                         <option *ngFor="let der of dereferenceableValues" [ngValue]="der">{{der.label}}</option>
@@ -38,7 +38,7 @@
                 </td>
             </tr>
             <tr>
-                <td nowrap><label>SPARQL Endpoint:</label></td>
+                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.SPARQL_ENDPOINT'|translate}}:</label></td>
                 <td>
                     <input type="text" class="form-control form-control-sm" [(ngModel)]="sparqlEndpoint">
                 </td>

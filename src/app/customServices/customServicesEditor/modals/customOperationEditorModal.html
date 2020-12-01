@@ -96,7 +96,7 @@
                     </label>
                     <div class="hbox" style="align-items: center;">
                         <input class="form-control" [(ngModel)]="form.authorization.value">
-                        <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  title="Edit">
+                        <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  [title]="'COMMONS.EDIT'|translate">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                     </div>

@@ -27,7 +27,7 @@
                 <div class="input-group input-group-sm">
                     <input type="password" class="form-control" [ngModel]="'xxxxxxxx'" readonly>
                     <span class="input-group-append">
-                        <button class="btn btn-light" type="button" style="width:36px;" (click)="changePwd()" placeholder="Edit">
+                        <button class="btn btn-light" type="button" style="width:36px;" (click)="changePwd()">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                     </span>
@@ -66,7 +66,7 @@
                 <div *ngIf="!readonly" class="input-group">
                     <input class="form-control" [ngModel]="user.getLanguageProficiencies()" readonly>
                     <span class="input-group-append">
-                        <button class="btn btn-light" style="width:36px;" (click)="editLanguages()" placeholder="Edit">
+                        <button class="btn btn-light" style="width:36px;" (click)="editLanguages()">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                     </span>

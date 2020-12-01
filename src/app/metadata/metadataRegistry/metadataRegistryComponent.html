@@ -23,7 +23,7 @@
             <table class="table table-hoverable">
                 <thead>
                     <tr>
-                        <th class="text-center">Dataset</th>
+                        <th class="text-center">{{'COMMONS.DATASET'|translate}}</th>
                         <th class="text-center">Issued</th>
                         <th class="text-center">Modified</th>
                     </tr>
@@ -44,7 +44,7 @@
 
     <div class="card card-default vbox" style="flex: 3; margin-left: 4px;">
         <div class="card-header">
-            <label>Dataset:</label>
+            <label>{{'COMMONS.DATASET'|translate}}:</label>
         </div>
         <div class="card-body vbox">
             <dataset-metadata [dataset]="activeDatasetMetadata" (update)="onDatasetUpdate()"></dataset-metadata>
@@ -82,8 +82,10 @@
                                     <span class="fas fa-plus"></span>
                                 </button>
                                 <div class="dropdown-menu float-right" ngbDropdownMenu>
-                                    <li><a (click)="addEmbeddedLexicalizationSet()">Add Embedded Lexicalization Set</a></li>
-                                    <li [ngClass]="{disabled : lexicalizationSets.length != 0}"><a (click)="assessLexicalizationModel()">Assess Lexicalization Model</a></li>
+                                    <li><a (click)="addEmbeddedLexicalizationSet()" class="text-nowrap">Add Embedded Lexicalization Set</a></li>
+                                    <li [ngClass]="{disabled : lexicalizationSets.length != 0}">
+                                        <a (click)="assessLexicalizationModel()" class="text-nowrap">Assess Lexicalization Model</a>
+                                    </li>
                                 </div>
                             </div>
                             <button class="btn btn-light" title="Delete Embedded Lexicalization Set" (click)="deleteEmbeddedLexicalizationSet()"
