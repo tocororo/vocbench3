@@ -285,6 +285,16 @@
         },
         "METADATA_REGISTRY": {
             "DATASET_METADATA": {
+                "CATALOG_RECORDS": "Catalog Records",
+                "ADD_DATASET": "Aggiungi Dataset",
+                "ADD_CATALOG_RECORD": "Aggiungi Catalog record",
+                "DISCOVER_DATASET": "Trova dataset",
+                "DELETE_DATASET": "Cancella Dataset",
+                "ISSUED": "Pubblicato",
+                "MODIFIED": "Modificato",
+                "OTHER_VERSIONS": "Altre versioni",
+                "ADD_DATASET_VERSION": "Aggiungi versione dataset",
+                "DELETE_DATASET_VERSION": "Cancella versione dataset",
                 "TITLE": "Titolo",
                 "IDENTITY": "Identità",
                 "DEREFERENCEABLE": "Dereferenziabile",
@@ -296,6 +306,11 @@
                 "VERSION_INFO": "Info versione"
             },
             "LEXICALIZATION_SET": {
+                "EMBEDDED_LEXICALIZATION_SETS": "Embedded Lexicalization Sets",
+                "ADD_EMBEDDED_LEXICALIZATION_SET": "Aggiungi Embedded Lexicalization Set",
+                "ASSESS_LEXICALIZATION_MODEL": "Assess modello di lessicalizzazione",
+                "DELETE_EMBEDDED_LEXICALIZATION_SET": "Cancella Embedded Lexicalization Set",
+                "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Cancella tutti gli Embedded Lexicalization Set",
                 "LEXICALIZATION_SET": "Lexicalization Set",
                 "LEXICON_DATASET": "Lexicon Dataset",
                 "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
