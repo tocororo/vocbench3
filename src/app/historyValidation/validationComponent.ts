@@ -91,10 +91,10 @@ export class ValidationComponent extends AbstractHistValidComponent {
         let getCommitsFn: Observable<CommitInfo[]>;
         if (this.isValidator) { //validator can see the commits of all the users
             getCommitsFn = this.validationService.getCommits(this.operations, this.getPerformersIRI(), 
-                timeUpperBound, this.getFormattedFromTime(), this.operationSorting, this.timeSorting, this.page, this.limit);
+                timeUpperBound, this.getFormattedFromTime(), this.operationSorting.id, this.timeSorting.id, this.page, this.limit);
         } else { //not validator can see only its commits
             getCommitsFn = this.validationService.getCurrentUserCommits(this.operations, 
-                timeUpperBound, this.getFormattedFromTime(), this.operationSorting, this.timeSorting, this.page, this.limit);
+                timeUpperBound, this.getFormattedFromTime(), this.operationSorting.id, this.timeSorting.id, this.page, this.limit);
         }
 
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);

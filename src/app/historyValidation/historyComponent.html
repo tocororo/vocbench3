@@ -1,38 +1,38 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1">Commits</label>
+        <label style="flex: 1">{{'HISTORY_VALIDATION.COMMITS'|translate}}</label>
 
-        <label style="white-space: pre">Operation sort: </label>
+        <label style="white-space: pre">{{'HISTORY_VALIDATION.OPERATION_SORT'|translate}}: </label>
         <div class="btn-group btn-group-xs mr-3" ngbDropdown>
             <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-                <span>{{operationSorting}}</span>
+                <span>{{operationSorting.translationKey|translate}}</span>
                 <span class="fas fa-sort-alpha-down ml-2"></span>
             </button>
             <div class="dropdown-menu float-right" ngbDropdownMenu>
                 <a *ngFor="let sd of sortingDirectionList" class="dropdown-item" (click)="sortOperation(sd)">
-                    {{sd}}
+                    {{sd.translationKey|translate}}
                     <span *ngIf="sd == operationSorting" class="fas fa-check float-right"></span>
                 </a>
             </div>
         </div>
 
-        <label style="white-space: pre">Time sort: </label>
+        <label style="white-space: pre">{{'HISTORY_VALIDATION.TIME_SORT'|translate}}: </label>
         <div class="btn-group btn-group-xs mr-3" ngbDropdown>
             <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-                <span>{{timeSorting}}</span>
+                <span>{{timeSorting.translationKey|translate}}</span>
                 <span class="fas fa-sort-numeric-down ml-2"></span>
             </button>
             <div class="dropdown-menu float-right" ngbDropdownMenu>
                 <a *ngFor="let sd of sortingDirectionList" class="dropdown-item" (click)="sortTime(sd)">
-                    {{sd}}
+                    {{sd.translationKey|translate}}
                     <span *ngIf="sd == timeSorting" class="fas fa-check float-right"></span>
                 </a>
             </div>
         </div>
 
         <button class="btn btn-xs btn-light" [ngClass]="{active: showFilterBox}" (click)="showFilterBox = !showFilterBox">
-            <span *ngIf="!showFilterBox">Show filters</span>
-            <span *ngIf="showFilterBox">Hide filters</span>
+            <span *ngIf="!showFilterBox">{{'HISTORY_VALIDATION.FILTERS.SHOW_FILTERS'|translate}}</span>
+            <span *ngIf="showFilterBox">{{'HISTORY_VALIDATION.FILTERS.HIDE_FILTERS'|translate}}</span>
             <span class="fas fa-filter ml-2"></span>
         </button>
     </div>
@@ -50,13 +50,13 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th class="text-center">Commit ID</th>
-                        <th class="text-center">Action</th>
-                        <th class="text-center">1st Param</th>
-                        <th class="text-center" *ngIf="isLargeWidth()">2nd Param</th>
-                        <th class="text-center">Other param(s)</th>
-                        <th class="text-center">User</th>
-                        <th class="text-center">Date</th>
+                        <th class="text-center">{{'HISTORY_VALIDATION.COMMIT_ID'|translate}}</th>
+                        <th class="text-center">{{'HISTORY_VALIDATION.OPERATION'|translate}}</th>
+                        <th class="text-center">{{'HISTORY_VALIDATION.1ST_PARAM'|translate}}</th>
+                        <th class="text-center" *ngIf="isLargeWidth()">{{'HISTORY_VALIDATION.2ND_PARAM'|translate}}</th>
+                        <th class="text-center">{{'HISTORY_VALIDATION.OTHER_PARAMS'|translate}}</th>
+                        <th class="text-center">{{'HISTORY_VALIDATION.USER'|translate}}</th>
+                        <th class="text-center">{{'HISTORY_VALIDATION.DATE'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,12 +120,12 @@
     </div>
 
     <div class="card-footer">
-        <div class="btn-group btn-group-xs float-right" role="group">
+        <div class="btn-group btn-group-xs float-right">
             <button class="btn btn-light" title="Previous" (click)="getPreviousCommits()" [disabled]="page <= 0">
                 <span class="fas fa-caret-left"></span>
             </button>
             <button class="btn btn-light" style="cursor: auto" disabled>
-                <span>{{page+1}} of {{pageCount}}</span>
+                <span>{{page+1}} {{'COMMONS.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
             </button>
             <button class="btn btn-light" title="Next" (click)="getNextCommits()" [disabled]="page+1 >= pageCount">
                 <span class="fas fa-caret-right"></span>

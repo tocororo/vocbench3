@@ -13,9 +13,13 @@ import { HistoryValidationModalServices } from "./modals/historyValidationModalS
 export abstract class AbstractHistValidComponent {
 
     //Sorting
-    sortingDirectionList: SortingDirection[] = [SortingDirection.Unordered, SortingDirection.Ascending, SortingDirection.Descending];
-    operationSorting: SortingDirection = this.sortingDirectionList[0]; //unordered default
-    timeSorting: SortingDirection = this.sortingDirectionList[2]; //descending default
+    sortingDirectionList: SortingDirectionStruct[] = [
+        { id: SortingDirection.Unordered, translationKey: "HISTORY_VALIDATION.SORT_UNORDERED" },
+        { id: SortingDirection.Ascending, translationKey: "HISTORY_VALIDATION.SORT_ASCENDING" },
+        { id: SortingDirection.Descending, translationKey: "HISTORY_VALIDATION.SORT_DESCENDING" }
+    ];
+    operationSorting: SortingDirectionStruct = this.sortingDirectionList[0]; //unordered default
+    timeSorting: SortingDirectionStruct = this.sortingDirectionList[2]; //descending default
 
     //Filters
     showFilterBox: boolean = false;
@@ -65,12 +69,12 @@ export abstract class AbstractHistValidComponent {
     }
 
     //SORT HANDLER
-    sortOperation(direction: SortingDirection) {
+    sortOperation(direction: SortingDirectionStruct) {
         this.operationSorting = direction;
         this.init();
     }
 
-    sortTime(direction: SortingDirection) {
+    sortTime(direction: SortingDirectionStruct) {
         this.timeSorting = direction;
         this.init();
     }
@@ -145,4 +149,9 @@ export abstract class AbstractHistValidComponent {
         } 
     }
 
+}
+
+interface SortingDirectionStruct {
+    id: SortingDirection;
+    translationKey: string;
 }

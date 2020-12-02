@@ -3,7 +3,7 @@
 
         <div class="card card-alt vbox" style="margin-right: 4px">
             <div class="card-header">
-                <label style="flex: 1;">Operations</label>
+                <label style="flex: 1;">{{'HISTORY_VALIDATION.FILTERS.OPERATIONS'|translate}}</label>
                 <button class="btn btn-xs btn-light" (click)="selectOperationFilter()">
                     <span class="fas fa-plus"></span>
                 </button>
@@ -20,7 +20,7 @@
 
         <div *ngIf="!hidePerformers" class="card card-alt vbox" style="margin-right: 4px">
             <div class="card-header">
-                <label style="flex: 1;">Performers</label>
+                <label style="flex: 1;">{{'HISTORY_VALIDATION.FILTERS.PERFORMERS'|translate}}</label>
                 <button class="btn btn-xs btn-light" (click)="selectOperationPerformer()">
                     <span class="fas fa-plus"></span>
                 </button>
@@ -38,8 +38,8 @@
         <div class="card card-alt vbox" style="margin-right: 4px">
             <div class="card-header">
                 <label>
-                    Time
-                    <span class="fas fa-info-circle" title="Datetime format: yyyy-MM-ddThh:mm"></span>
+                    {{'HISTORY_VALIDATION.FILTERS.TIME'|translate}}
+                    <span class="fas fa-info-circle" [title]="'HISTORY_VALIDATION.FILTERS.DATETIME_FORMAT'|translate"></span>
                 </label>
             </div>
             <div class="card-body scrollableContainer">
@@ -52,7 +52,7 @@
                     </colgroup>
                     <tbody>
                         <tr>
-                            <td><label>From:</label></td>
+                            <td><label>{{'HISTORY_VALIDATION.FILTERS.TIME_FROM'|translate}}:</label></td>
                             <td><input type="datetime-local" class="form-control" [(ngModel)]="fromTime"></td>
                             <td><input class="form-control" [ngModel]="fromTime" readonly></td>
                             <td>
@@ -62,7 +62,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><label>To:</label></td>
+                            <td><label>{{'HISTORY_VALIDATION.FILTERS.TIME_TO'|translate}}:</label></td>
                             <td><input type="datetime-local" class="form-control" [(ngModel)]="toTime"></td>
                             <td><input class="form-control" [ngModel]="toTime" readonly></td>
                             <td>
@@ -76,7 +76,7 @@
             </div>
         </div>
         
-        <button class="btn btn-sm btn-primary" style="align-self: center" (click)="applyFilter()">Apply</button>
+        <button class="btn btn-sm btn-primary" style="align-self: center" (click)="applyFilter()">{{'HISTORY_VALIDATION.FILTERS.APPLY'|translate}}</button>
 
     </div>
 </div>

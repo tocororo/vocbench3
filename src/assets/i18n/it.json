@@ -410,6 +410,38 @@
             "VARIABLE_BINDINGS": "Binding delle variabili"
         }
     },
+    "HISTORY_VALIDATION": {
+        "COMMITS": "Commits",
+        "STAGED_COMMITS": "Staged Commits",
+        "OPERATION_SORT": "Ordine operazioni",
+        "TIME_SORT": "Ordine temporale",
+        "SORT_UNORDERED": "Non ordinare",
+        "SORT_ASCENDING": "Ascendente",
+        "SORT_DESCENDING": "Discentente",
+        "COMMIT_ID": "ID Commit",
+        "OPERATION": "Operazione",
+        "1ST_PARAM": "1o param",
+        "2ND_PARAM": "2o param",
+        "OTHER_PARAMS": "Altri param",
+        "USER": "Utente",
+        "DATE": "Data",
+        "ACTION": "Azione",
+        "ACCEPT_ALL": "Accetta tutto",
+        "REJECT_ALL": "Rifiuta tutto",
+        "VALIDATE": "Valida",
+        "PROVIDE_COMMENT": "Fornisci un commento per l'azione di validazione",
+        "FILTERS": {
+            "SHOW_FILTERS": "Mostra filtri",
+            "HIDE_FILTERS": "Nascondi filtri",
+            "OPERATIONS": "Operazioni",
+            "PERFORMERS": "Autori",
+            "TIME": "Tempo",
+            "TIME_FROM": "Da",
+            "TIME_TO": "a",
+            "DATETIME_FORMAT": "Formato: yyyy-MM-ddThh:mm",
+            "APPLY": "Applica"
+        }
+    },
     "USER": {
         "FORM": {
             "GIVEN_NAME": "Nome",
@@ -435,6 +467,7 @@
     },
     "COMMONS": {
         "BASE_URI": "Base URI",
+        "CANCEL": "Annulla",
         "CREATE": "Crea",
         "DATASET": "Dataset",
         "DESCRIPTION": "Descrizione",
@@ -445,12 +478,11 @@
         "MANDATORY_FIELD": "Campo obbligatorio",
         "LANGUAGE": "Lingua",
         "OPTIONAL_FIELD": "Campo opzionale",
+        "PAGE_OF_TOT": "di",
         "REFRESH": "Aggiorna",
         "SAVE": "Salva",
         "SEARCH": "Cerca",
         "SETTINGS": "Impostazioni",
-        "SUBMIT": "Invia",
-        "CANCEL": "Annulla",
-        "PAGE_OF_TOT": "di"
+        "SUBMIT": "Invia"
     }
 }
