@@ -2,7 +2,7 @@
 
     <div class="card card-alt vbox">
         <div class="card-header">
-            <label style="flex: 1;">Groups:</label>
+            <label style="flex: 1;">{{'COMMONS.GROUPS'|translate}}:</label>
         </div>
         <div class="card-body vbox scrollableContainer">
             <div *ngFor="let g of groups" class="listItem" [ngClass]="{active: g == selectedGroup}" (click)="selectGroup(g)">

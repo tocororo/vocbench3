@@ -6,7 +6,7 @@
             <button class="btn btn-light" (click)="createTask()" title="Create task" [disabled]="serverDown">
                 <span class="fas fa-plus"></span>
             </button>
-            <button class="btn btn-sm btn-light" (click)="deleteTask()" title="Delete task" [disabled]="!selectedTask || serverDown">
+            <button class="btn btn-sm btn-light" (click)="deleteTask()" [title]="'COMMONS.DELETE'|translate" [disabled]="!selectedTask || serverDown">
                 <span class="fas fa-minus"></span>
             </button>
         </div>

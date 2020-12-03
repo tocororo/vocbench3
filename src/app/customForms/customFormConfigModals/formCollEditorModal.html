@@ -51,7 +51,7 @@
                 <span class="fas fa-chevron-left"></span>Add
             </button>
             <button class="btn btn-light btn-sm btn-block" (click)="removeForm()" [disabled]="!selectedForm || readOnly">
-                Remove<span class="fas fa-chevron-right"></span>
+                {{'COMMONS.REMOVE'|translate}}<span class="fas fa-chevron-right"></span>
             </button>
         </div>
         
@@ -94,7 +94,7 @@
                         </a>
                     </div>
                 </div>
-                <button class="btn btn-light" title="Remove suggestion" (click)="removeSuggestion()"
+                <button class="btn btn-light" [title]="'COMMONS.REMOVE'|translate" (click)="removeSuggestion()"
                     [disabled]="!selectedSuggestion || readOnly">
                     <span class="fas fa-minus"></span>
                 </button>

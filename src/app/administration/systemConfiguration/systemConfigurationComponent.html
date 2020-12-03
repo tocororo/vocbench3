@@ -1,8 +1,6 @@
 <div class="vbox">
 
-    <div *ngIf="isInitialConfiguration" class="alert alert-info" style="margin-bottom: 6px;">
-        In this section you can setup some core aspects of the system.
-        This panel can be accessed also later from <i>Administration</i> > <i>Configuration</i> (located in the user menu)
+    <div *ngIf="isInitialConfiguration" class="alert alert-info mb-2" [innerHTML]="'ADMINISTRATION.SYSTEM.INTRO'|translate">
     </div>
 
     <div class="card card-default vbox">
@@ -20,18 +18,16 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <span class="fas fa-info-circle"
-                                        title="Provide the SemanticTurkey data folder path. This can be absolute or relative to the SemanticTurkey installation folder.">
-                                    </span>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.ST_DATA_FOLDER_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
-                                    <label>SemanticTurkey data folder:</label>
+                                    <label>{{'ADMINISTRATION.SYSTEM.ST_DATA_FOLDER'|translate}}:</label>
                                 </td>
                                 <td>
                                     <div class="hbox" style="align-items: center;">
                                         <input class="form-control" style="margin-right: 4px;" [(ngModel)]="stDataFolder">
                                         <button class="btn btn-light btn-sm" (click)="updateDataFolder()" [disabled]="stDataFolder == stDataFolderPristine">
-                                            Update
+                                            {{'COMMONS.UPDATE'|translate}}
                                         </button>
                                     </div>
                                 </td>
@@ -39,12 +35,10 @@
 
                             <tr>
                                 <td>
-                                    <span class="fas fa-info-circle"
-                                        title="Tells the threshold file size (in bytes) admitted by the preload profiler during the project creation. If unspecified, or 0, the default size is 1048576 bytes (1 megabyte).">
-                                    </span>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.PRELOAD_THRESHOLD_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
-                                    <label>Preload profiler threshold:</label>
+                                    <label>{{'ADMINISTRATION.SYSTEM.PRELOAD_THRESHOLD'|translate}}:</label>
                                 </td>
                                 <td>
                                     <div class="hbox" style="align-items: center;">
@@ -55,7 +49,7 @@
                                             </span>
                                         </div>
                                         <button class="btn btn-light btn-sm" (click)="updateProfilerThreshold()" [disabled]="profilerThreshold == profilerThresholdPristine">
-                                            Update
+                                            {{'COMMONS.UPDATE'|translate}}
                                         </button>
                                     </div>
                                 </td>
@@ -66,15 +60,13 @@
             </div>
 
             <!-- E-mail configuration -->
-            <div class="card card-default" style="margin-top: 6px;">
+            <div class="card card-default mt-2">
                 <div class="card-header">
-                    <label>Vocbench Email Configuration:</label>
+                    <label>{{'ADMINISTRATION.SYSTEM.EMAIL.VB_EMAIL_CONFIG'|translate}}:</label>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
-                        Configuration of the VocBench e-mail service. This service will be used to send notifications to the
-                        system administrator and to the users
-                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                    <div class="alert alert-info mb-2">
+                        {{'ADMINISTRATION.SYSTEM.EMAIL.VB_EMAIL_CONFIG_INFO'|translate}}
                     </div>
                     <table class="table table-sm table-borderless">
                         <colgroup>
@@ -85,7 +77,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <span class="fas fa-info-circle" title="SMTP Mail Server IP/URL"></span>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_SERVER_URL_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail SMTP host:</label>
@@ -94,7 +86,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="fas fa-info-circle" title="Mail Server Port"></span>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_SERVER_PORT_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail SMTP port:</label>
@@ -104,10 +96,10 @@
 
                             <tr>
                                 <td>
-                                    <span class="fas fa-info-circle" title="Cryptographic protocol"></span>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.CRYPTOGRAPHIC_PROTOCOL'|translate"></span>
                                 </td>
                                 <td nowrap>
-                                    <label>Cryptographic protocol:</label>
+                                    <label>{{'ADMINISTRATION.SYSTEM.EMAIL.CRYPTOGRAPHIC_PROTOCOL'|translate}}:</label>
                                 </td>
                                 <td>
                                     <select class="form-control" [(ngModel)]="cryptoProtocol" (ngModelChange)="updateProtocol()">
@@ -119,7 +111,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="fas fa-info-circle" title="True if SMTP server requires authentication"></span>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.AUTHENTICATION_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Authentication:</label>
@@ -137,7 +129,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="fas fa-info-circle" title="Email address used to send administration emails"></span>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_FROM_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail from address:</label>
@@ -146,7 +138,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="fas fa-info-circle" title="Password of the above email address"></span>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_PASSWORD_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail from password:</label>
@@ -169,7 +161,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="fas fa-info-circle" title="Alias name shown in the administration emails"></span>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_ALIAS_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail from alias:</label>
@@ -186,17 +178,12 @@
             </div>
 
             <!-- Notifications -->
-            <div class="card card-default" style="margin-top: 6px;">
+            <div class="card card-default mt-2">
                 <div class="card-header">
-                    <label>Notification scheduler:</label>
+                    <label>{{'ADMINISTRATION.SYSTEM.NOTIFICATIONS.NOTIFICATION_SCHEDULER'|translate}}:</label>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
-                        Configuration of the VocBench e-mail notification service. 
-                        The system will send a notifications daily digest to the users who have chosen the 
-                        <i>Email daily digest</i> as notification mode.
-                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                    </div>
+                    <div class="alert alert-info mb-2" [innerHTML]="'ADMINISTRATION.SYSTEM.NOTIFICATIONS.NOTIFICATION_SCHEDULER_INFO'|translate"></div>
                     <table class="table table-sm table-borderless">
                         <colgroup>
                             <col style="width: 1%;">
@@ -205,8 +192,8 @@
                         </colgroup>
                         <tbody>
                             <tr>
-                                <td><span class="fas fa-info-circle" title="The hour of the day when the report will be sent every day"></span></td>
-                                <td nowrap><label>Hour of the day:</label></td>
+                                <td><span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.NOTIFICATIONS.HOURS_OF_DAY_INFO'|translate"></span></td>
+                                <td nowrap><label>{{'ADMINISTRATION.SYSTEM.NOTIFICATIONS.HOURS_OF_DAY'|translate}}:</label></td>
                                 <td>
                                     <select class="form-control" [(ngModel)]="cronHourOfDay">
                                         <option *ngFor="let h of hoursOfDay">{{h}}</option>
@@ -214,15 +201,15 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><span class="fas fa-info-circle" title="A timezone id"></span></td>
+                                <td><span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.NOTIFICATIONS.TIMEZONE_ID_INFO'|translate"></span></td>
                                 <td nowrap><label>Time zone:</label></td>
                                 <td>
                                     <div class="hbox">
                                         <select class="form-control" [(ngModel)]="timezone">
                                             <option *ngFor="let t of timezones">{{t}}</option>
                                         </select>
-                                        <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="detectTimezone()" title="Detect the browser timezone">
-                                            Detect
+                                        <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="detectTimezone()" [title]="'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DETECT_INFO'|translate">
+                                            {{'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DETECT'|translate}}
                                         </button>
                                     </div>
                                 </td>
@@ -233,27 +220,25 @@
                 <div class="card-footer" style="text-align: right;">
                     <button type="submit" class="btn btn-light btn-sm" (click)="updateNotificationSchedule()" 
                         [disabled]="!cronHourOfDay || !timezone">{{'COMMONS.SUBMIT'|translate}}</button>
-                    <button class="btn btn-warning btn-sm" (click)="disableNotificationSchedule()" title="Disable the notifications daily digest"
-                        [disabled]="!cronHourOfDay && !timezone">Disable</button>
+                    <button class="btn btn-warning btn-sm" (click)="disableNotificationSchedule()" [title]="'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DISABLE_INFO'|translate"
+                        [disabled]="!cronHourOfDay && !timezone">{{'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DISABLE'|translate}}</button>
                 </div>
             </div>
 
             <!-- Registration form -->
-            <div class="card card-default" style="margin-top: 6px;">
+            <div class="card card-default mt-2">
                 <div class="card-header">
-                    <label>Registration form fields:</label>
+                    <label>{{'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.FORM_FIELDS'|translate}}:</label>
                 </div>
                 <div class="card-body">
 
                     <div class="card card-alt">
                         <div class="card-header">
-                            <label style="flex: 1;">Optional fields:</label>
+                            <label style="flex: 1;">{{'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.OPTIONAL_FIELDS'|translate}}:</label>
                         </div>
                         <div class="card-body">
-                            <div class="alert alert-info alert-dismissible alert-multiline" role="alert" style="margin-bottom: 4px;">
-                                Show or hide optional information about the user. These information will be shown or hidden in the user overview 
-                                and will be also prompted as non-mandatory fields during the user creation/registration.<br>
-                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                            <div class="alert alert-info mb-2">
+                                {{'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.OPTIONAL_FIELDS_INFO'|translate}}
                             </div>
                             <div *ngFor="let f of optionalFields" class="listItem">
                                 <button class="btn btn-sm btn-light" (click)="updateOptionalFieldVisibility(f)" [ngClass]="{ active: f.visible }" style="margin-right: 4px;">
@@ -267,7 +252,7 @@
 
                     <div class="card card-alt" style="margin-top: 4px;">
                         <div class="card-header">
-                            <label style="flex: 1;">Custom fields:</label>
+                            <label style="flex: 1;">{{'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.CUSTOM_FIELDS'|translate}}:</label>
                             <div class="btn-toolbar">
                                 <div class="btn-group btn-group-xs">
                                     <button class="btn btn-light" (click)="moveCustomField('DOWN')" [title]="'COMMONS.MOVE_DOWN'|translate" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField)+1 >= customFormFields.length">
@@ -276,20 +261,14 @@
                                     <button class="btn btn-light" (click)="moveCustomField('UP')" [title]="'COMMONS.MOVE_UP'|translate" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField) == 0">
                                         <span class="fas fa-chevron-up"></span>
                                     </button>
-                                    <button class="btn btn-light" (click)="removeCustomField()" title="Remove" [disabled]="!selectedCustomField">
+                                    <button class="btn btn-light" (click)="removeCustomField()" [title]="'COMMONS.REMOVE'|translate" [disabled]="!selectedCustomField">
                                         <span class="far fa-trash-alt"></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="alert alert-info alert-dismissible alert-multiline" role="alert" style="margin-bottom: 4px;">
-                                Add (and reorder) up to {{fieldsIdx.length}} custom information about the user.
-                                These information will be shown in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br>
-                                If a field is removed, any values previously stored for that field will be lost for any user.<br>
-                                If a field is renamed, any values previously stored for that field will be preserved.
-                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                            </div>
+                            <div class="alert alert-info mb-2" [innerHTML]="'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.CUSTOM_FIELDS_INFO'|translate:customFieldInfoTranslationParam"></div>
                             <table *ngIf="customFormFields" class="table table-sm table-borderless">
                                 <colgroup>
                                     <col style="width: 1%;">
@@ -311,14 +290,13 @@
             </div>
 
             <!-- Home content -->
-            <div class="card card-default" style="margin-top: 6px;">
+            <div class="card card-default mt-2">
                 <div class="card-header">
-                    <label>Home page content:</label>
+                    <label>{{'ADMINISTRATION.SYSTEM.HOME_PAGE.HOME_CONTENT'|translate}}:</label>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
-                        Here you can write HTML-formatted text content that will be shown in the home page
-                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                    <div class="alert alert-info mb-2">
+                        {{'ADMINISTRATION.SYSTEM.HOME_PAGE.HOME_CONTENT_INFO'|translate}}
                     </div>
                     <div class="hbox">
                         <html-editor [(ngModel)]="homeContent"></html-editor>
@@ -326,7 +304,7 @@
                     </div>
                 </div>
                 <div class="card-footer" style="text-align: right;">
-                    <button class="btn btn-info btn-sm" (click)="previewHomeContent()" [disabled]="!homeContent">Preview</button>
+                    <button class="btn btn-info btn-sm" (click)="previewHomeContent()" [disabled]="!homeContent">{{'ADMINISTRATION.SYSTEM.HOME_PAGE.PREVIEW'|translate}}</button>
                     <button type="submit" class="btn btn-light btn-sm" (click)="updateHomeContent()" [disabled]="!isHomeContentChanged()">{{'COMMONS.SUBMIT'|translate}}</button>
                 </div>
             </div>
@@ -338,8 +316,8 @@
                 <div class="card-body">
                     <div class="form-check">
                         <input class="form-check-input" id="expFeatureCheck" type="checkbox" [(ngModel)]="expFeatEnabled" (ngModelChange)="onExpFeatEnabledChanged()">
-                        <label class="form-check-label" for="expFeatureCheck">Enable experimental features</label>
-                        <span class="fas fa-info-circle ml-2" title="Check this option in order to enable experimental (very unstable) features"></span>
+                        <label class="form-check-label" for="expFeatureCheck">{{'ADMINISTRATION.SYSTEM.ENABLE_EXPERIMENTAL_FEATURES'|translate}}</label>
+                        <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.SYSTEM.ENABLE_EXPERIMENTAL_FEATURES_INFO'|translate"></span>
                     </div>
                 </div>
             </div>

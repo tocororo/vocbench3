@@ -57,7 +57,7 @@
                             <button class="btn btn-light" (click)="createOperation()" title="Create operation" [disabled]="!createOperationAuthorized">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" (click)="deleteOperation()" title="Delete operation" [disabled]="!selectedOperation || !deleteOperationAuthorized">
+                            <button class="btn btn-light" (click)="deleteOperation()" [title]="'COMMONS.DELETE'|translate" [disabled]="!selectedOperation || !deleteOperationAuthorized">
                                 <span class="fas fa-minus"></span>
                             </button>
                         </div>

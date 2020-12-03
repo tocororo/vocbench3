@@ -64,6 +64,7 @@ export class SystemConfigurationComponent {
     private customFormFieldsPristine: UserFormCustomField[];
     selectedCustomField: UserFormCustomField;
     fieldsIdx: number[] = [0, 1, 2, 3];
+    customFieldInfoTranslationParam: any = { maxFields: this.fieldsIdx.length };
 
     /* Home content */
     homeContent: string;

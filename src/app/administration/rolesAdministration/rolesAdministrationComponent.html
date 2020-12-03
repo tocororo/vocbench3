@@ -6,12 +6,12 @@
 
             <div class="card card-default vbox">
                 <div class="card-header">
-                    <label style="flex: 1;">Roles:</label>
+                    <label style="flex: 1;">{{'COMMONS.ROLES'|translate}}:</label>
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-light" (click)="createRole()" [title]="getCreateRoleTitle()" [disabled]="!isProjectOpen()">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" (click)="deleteRole()" title="Delete role"
+                        <button class="btn btn-light" (click)="deleteRole()" [title]="'COMMONS.DELETE'|translate"
                              [disabled]="!selectedRole || selectedRole.getLevel() == 'system'">
                             <span class="fas fa-minus"></span>
                         </button>
@@ -44,7 +44,7 @@
                             [disabled]="!selectedRole || selectedRole.getLevel() == 'system'">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" (click)="removeCapability()" title="Remove capability"
+                        <button class="btn btn-light" (click)="removeCapability()" [title]="'COMMONS.REMOVE'|translate"
                             [disabled]="!selectedCapability || (selectedRole && selectedRole.getLevel() == 'system')">
                             <span class="fas fa-minus"></span>
                         </button>

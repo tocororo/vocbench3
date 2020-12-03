@@ -6,7 +6,7 @@
 
             <div class="card card-default vbox" style="flex: 2;">
                 <div class="card-header">
-                    <label style="flex: 1;">Users:</label>
+                    <label style="flex: 1;">{{'COMMONS.USERS'|translate}}:</label>
                     <div class="float-right">
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group btn-group-xs">
@@ -14,7 +14,7 @@
                                     title="Show/Hide active users" (mouseup)="actBtn.blur()">{{'COMMONS.ACTIVE'|translate}}
                                 </button>
                                 <button #inactBtn class="btn btn-light" [ngClass]="{active: showInactive}" (click)="showInactive = !showInactive"
-                                    title="Show/Hide inactive users" (mouseup)="inactBtn.blur()">Inactive
+                                    title="Show/Hide inactive users" (mouseup)="inactBtn.blur()">{{'COMMONS.INACTIVE'|translate}}
                                 </button>
                                 <button #newBtn class="btn btn-light" [ngClass]="{active: showNew}" (click)="showNew = !showNew"
                                     title="Show/Hide new users" (mouseup)="newBtn.blur()">{{'COMMONS.NEW'|translate}}
@@ -33,9 +33,9 @@
                         <ng-container *ngFor="let u of users">
                             <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
                                 <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
-                                <span *ngIf="u.isAdmin()" class="fas fa-wrench" style="color: gray; margin-right: 2px;" title="Administrator"></span>
-                                <span *ngIf="u.getStatus() == 'NEW'" class="fas fa-exclamation-circle inactive" title="New"></span>
-                                <span *ngIf="u.getStatus() == 'INACTIVE'" class="fas fa-ban inactive" title="Inactive"></span>
+                                <span *ngIf="u.isAdmin()" class="fas fa-wrench" style="color: gray; margin-right: 2px;" [title]="'ADMINISTRATION.USERS.ADMINISTRATOR'|translate"></span>
+                                <span *ngIf="u.getStatus() == 'NEW'" class="fas fa-exclamation-circle inactive" [title]="'COMMONS.NEW'|translate"></span>
+                                <span *ngIf="u.getStatus() == 'INACTIVE'" class="fas fa-ban inactive" [title]="'COMMONS.INACTIVE'|translate"></span>
                                 <span *ngIf="u.getStatus() == 'ACTIVE'" class="fas fa-user" 
                                     [ngClass]="{ online: u.isOnline(), offline: !u.isOnline()}" [title]="u.isOnline() ? 'Online' : 'Offline'">
                                 </span>
@@ -57,10 +57,10 @@
                         </user-details-panel>
                         <div class="card card-default" style="margin-top: 8px">
                             <div class="card-body hbox" style="align-items: center;">
-                                <label>Assigned to projects:</label>
+                                <label>{{'ADMINISTRATION.USERS.ASSIGNED_TO_PROJECTS'|translate}}:</label>
                                 <div class="hbox tile-group" style="align-items: center; margin-left: 6px; flex-wrap: nowrap; overflow: auto;">
                                     <span *ngIf="selectedUser.isAdmin(); else notAdminBlock" style="margin-left: 4px;">
-                                        Administrator has autmoatically access to all projects
+                                        {{'ADMINISTRATION.USERS.ADMIN_ASSIGNED_PROJECTS_INFO'|translate}}
                                     </span>
                                     <ng-template #notAdminBlock>
                                         <span *ngFor="let p of userProjects" class="tile">{{p}}</span>
@@ -88,10 +88,7 @@
                         </div>
                     </div>
                     <div class="card-body vbox">
-                        <div class="alert alert-info" style="margin-bottom: 4px;">
-                            Here you can assign a ResourceView template to the user. This template describes which ResourceView partitions are visible by default.<br>
-                            You can also load an already existing template, or decide to save the template you defined, through the toolbar in panel header.
-                        </div>
+                        <div class="alert alert-info mb-2" [innerHTML]="'ADMINISTRATION.USERS.TEMPLATE_INFO'|translate"></div>
                         <partition-filter-editor [(ngModel)]="userTemplate" (ngModelChange)="updateTemplate()"></partition-filter-editor>
                     </div>
                 </div>

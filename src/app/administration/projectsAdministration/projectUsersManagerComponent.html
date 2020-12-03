@@ -1,7 +1,7 @@
 <div class="hbox">
     <div class="card card-alt vbox">
         <div class="card-header">
-            <label style="flex: 1;">Users:</label>
+            <label style="flex: 1;">{{'COMMONS.USERS'|translate}}:</label>
             <div class="btn-group btn-group-xs">
                 <button class="btn btn-light" (click)="addUserToProject()" [disabled]="!project" title="Add user to project">
                     <span class="fas fa-plus"></span>
@@ -50,7 +50,7 @@
                                 <span class="fas fa-chevron-left"></span> Add
                             </button>
                             <button class="btn btn-light btn-sm btn-block"  (click)="removeRole()" [disabled]="!selectedUserRole">
-                                Remove <span class="fas fa-chevron-right"></span>
+                                {{'COMMONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                             </button>
                         </div>
                         <div class="card card-alt vbox">
@@ -97,7 +97,7 @@
                                 <span class="fas fa-chevron-left"></span> Assign
                             </button>
                             <button class="btn btn-light btn-sm btn-block"  (click)="removeGroup()" [disabled]="!selectedUserGroup">
-                                Remove <span class="fas fa-chevron-right"></span>
+                                {{'COMMONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                             </button>
                         </div>
                         <div class="card card-alt vbox" style="margin: 0px">
@@ -159,7 +159,7 @@
                             </div>
                             <div class="btn-group">
                                 <button class="btn btn-sm btn-light" (click)="removeLanguage()" [disabled]="!selectedUserLang">
-                                    Remove <span class="fas fa-chevron-right"></span>
+                                    {{'COMMONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                                 </button>
                                 <div class="btn-group" ngbDropdown>
                                     <button class="btn btn-sm btn-light dropdown-toggle" style="padding: 5px 3px;" data-toggle="dropdown" ngbDropdownToggle>

@@ -61,10 +61,10 @@
                     <button class="btn btn-xs btn-light" style="transform: rotate(90deg);" title="Sync entities" (click)="syncCorrespondece()" [disabled]="!selectedCorrespondence">
                         <span class="fas fa-sort"></span>
                     </button>
-                    <button class="btn btn-xs btn-light" (click)="deleteCorrespondece()" title="Delete alignment" [disabled]="!selectedCorrespondence">
+                    <button class="btn btn-xs btn-light" (click)="deleteCorrespondece()" [title]="'COMMONS.DELETE'|translate" [disabled]="!selectedCorrespondence">
                         <span class="fas fa-minus"></span>
                     </button>
-                    <button class="btn btn-xs btn-light" (click)="listCorrespondences()" title="Refresh">
+                    <button class="btn btn-xs btn-light" (click)="listCorrespondences()" [title]="'COMMONS.REFRESH'|translate">
                         <span class="fas fa-redo"></span>
                     </button>
                 </div>

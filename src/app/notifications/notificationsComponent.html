@@ -1,14 +1,14 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1;">Notifications:</label>
+        <label style="flex: 1;">{{'COMMONS.NOTIFICATIONS'|translate}}:</label>
         <div class="btn-toolbar">
-            <button class="btn btn-xs btn-light" (click)="clear()" title="Clear notifications">
+            <button class="btn btn-xs btn-light" (click)="clear()" [title]="'NOTIFICATIONS.CLEAR_NOTIFICATIONS'|translate">
                 <span class="fas fa-eraser"></span>
             </button>
-            <button class="btn btn-xs btn-light" (click)="init()" title="Refresh">
+            <button class="btn btn-xs btn-light" (click)="init()" [title]="'COMMONS.REFRESH'|translate">
                 <span class="fas fa-redo"></span>
             </button>
-            <button class="btn btn-xs btn-light" (click)="settings()" title="Settings">
+            <button class="btn btn-xs btn-light" (click)="settings()" [title]="'COMMONS.SETTINGS'|translate">
                 <span class="fas fa-cog"></span>
             </button>
         </div>
@@ -19,7 +19,7 @@
                 <thead>
                     <tr>
                         <th class="text-center" style="padding: 2px;">
-                            Time
+                            {{'COMMONS.TIME'|translate}}
                             <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeTimeOrder()">
                                 <span *ngSwitchCase="'time_ascending'" class="fas fa-sort-numeric-down"></span>
                                 <span *ngSwitchCase="'time_descending'" class="fas fa-sort-numeric-down-alt"></span>
@@ -27,7 +27,7 @@
                             </button>
                         </th>
                         <th class="text-center" style="padding: 2px;">
-                            Resource
+                            {{'COMMONS.RESOURCE'|translate}}
                             <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeResourceOrder()">
                                 <span *ngSwitchCase="'resource_ascending'" class="fas fa-sort-alpha-down"></span>
                                 <span *ngSwitchCase="'resource_descending'" class="fas fa-sort-alpha-down-alt"></span>
@@ -35,7 +35,7 @@
                             </button>
                         </th>
                         <th class="text-center" style="padding: 2px;">
-                            Resource Type
+                            {{'COMMONS.RESOURCE_TYPE'|translate}}
                             <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeRoleOrder()">
                                 <span *ngSwitchCase="'role_ascending'" class="fas fa-sort-alpha-down"></span>
                                 <span *ngSwitchCase="'role_descending'" class="fas fa-sort-alpha-down-alt"></span>
@@ -43,7 +43,7 @@
                             </button>
                         </th>
                         <th class="text-center" style="padding: 2px;">
-                            Event
+                            {{'COMMONS.ACTION'|translate}}
                             <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeActionOrder()">
                                 <span *ngSwitchCase="'action_ascending'" class="fas fa-sort-alpha-down"></span>
                                 <span *ngSwitchCase="'action_descending'" class="fas fa-sort-alpha-down-alt"></span>

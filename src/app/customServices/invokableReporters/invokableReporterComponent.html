@@ -84,7 +84,7 @@
                                 [disabled]="!createInvocationAuthorized">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" (click)="deleteServiceInvocation()" title="Delete service invocation" 
+                            <button class="btn btn-light" (click)="deleteServiceInvocation()" [title]="'COMMONS.DELETE'|translate" 
                                 [disabled]="!selectedServiceInvocation || !deleteInvocationAuthorized">
                                 <span class="fas fa-minus"></span>
                             </button>

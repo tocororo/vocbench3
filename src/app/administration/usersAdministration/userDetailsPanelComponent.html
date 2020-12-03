@@ -1,20 +1,20 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1;">User Details:</label>
+        <label style="flex: 1;">{{'ADMINISTRATION.USERS.USER_DETAILS'|translate}}:</label>
         <div *ngIf="user" class="btn-toolbar">
             <button type="button" class="btn btn-xs btn-light" (click)="changeAdministratorStatus()"
                 [ngClass]="{'active online': user.isAdmin()}" [disabled]="isChangeAdminButtonDisabled()"
                 [title]="user.isAdmin() ? 'Revoke administrator authority' : 'Grant administrator authority'">
-                Administrator
+                {{'ADMINISTRATION.USERS.ADMINISTRATOR'|translate}}
             </button>
             <div class="btn-group btn-group-xs" role="group">
                 <button type="button" class="btn btn-light" (click)="changeUserStatus()"
                     [ngClass]="{'active': isUserActive()}" style="color: green" [disabled]="isChangeStatusButtonDisabled()">
-                    Active
+                    {{'COMMONS.ACTIVE'|translate}}
                 </button>
                 <button type="button" class="btn btn-light" (click)="changeUserStatus()"
                     [ngClass]="{'active': !isUserActive()}" style="color: red" [disabled]="isChangeStatusButtonDisabled()">
-                    Inactive
+                    {{'COMMONS.INACTIVE'|translate}}
                 </button>
             </div>
         </div>
@@ -24,10 +24,10 @@
     </div>
     <div class="card-footer" *ngIf="user">
         <button class="btn btn-light btn-xs" (click)="changePassword()" [disabled]="isChangePwdButtonDisabled()">
-            Change password
+            {{'ADMINISTRATION.USERS.CHANGE_PASSWORD'|translate}}
         </button>
         <button class="btn btn-light btn-xs float-right" (click)="deleteUser()" [disabled]="isDeleteButtonDisabled()">
-            Delete
+            {{'COMMONS.DELETE'|translate}}
         </button>
     </div>
 </div>

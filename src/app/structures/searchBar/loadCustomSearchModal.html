@@ -13,7 +13,7 @@
     <div class="card card-default vbox">
         <div class="card-header">
             <label style="flex: 1;">Stored Custom Search</label>
-            <button class="btn btn-xs btn-light" (click)="add()" title="Delete">
+            <button class="btn btn-xs btn-light" (click)="add()" [title]="'COMMONS.DELETE'|translate">
                 <span class="fas fa-plus"></span>
             </button>
         </div>
@@ -28,7 +28,7 @@
                     <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{ 'table-primary': selectedRef == ref }">
                         <td>{{ref.identifier}}</td>
                         <td>
-                            <button class="btn btn-xs btn-light" (click)="deleteReference(ref)" title="Delete">
+                            <button class="btn btn-xs btn-light" (click)="deleteReference(ref)" [title]="'COMMONS.DELETE'|translate">
                                 <span class="far fa-trash-alt"></span>
                             </button>
                         </td>

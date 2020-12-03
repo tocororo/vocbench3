@@ -19,7 +19,7 @@
                 <button class="btn btn-light" title="Add filter" (click)="appendFilter()">
                     <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-light" title="Remove filter" (click)="removeFilter()"
+                <button class="btn btn-light" [title]="'COMMONS.REMOVE'|translate" (click)="removeFilter()"
                     [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
                     <span class="fas fa-minus"></span>
                 </button>

@@ -1,4 +1,70 @@
 {
+    "ADMINISTRATION": {
+        "GROUPS": {
+            "GROUP_DESCRIPTION": "Group description",
+            "SHORT_NAME": "Short name",
+            "FULL_NAME": "Full name",
+            "WEB_PAGE": "Web page"
+        },
+        "PROJECTS": {
+        },
+        "ROLES": {
+        },
+        "SYSTEM": {
+            "INTRO": "In this section you can setup some core aspects of the system. This panel can be accessed also later from <i>Administration</i> > <i>Configuration</i> (located in the user menu)",
+            "ST_DATA_FOLDER": "SemanticTurkey data folder",
+            "ST_DATA_FOLDER_INFO": "Provide the SemanticTurkey data folder path. This can be absolute or relative to the SemanticTurkey installation folder.",
+            "PRELOAD_THRESHOLD": "Preload profiler threshold",
+            "PRELOAD_THRESHOLD_INFO": "Tells the threshold file size (in bytes) admitted by the preload profiler during the project creation. If unspecified, or 0, the default size is 1048576 bytes (1 megabyte).",
+            "ENABLE_EXPERIMENTAL_FEATURES": "Enable experimental features",
+            "ENABLE_EXPERIMENTAL_FEATURES_INFO": "Check this option in order to enable experimental (very unstable) features",
+            "EMAIL": {
+                "VB_EMAIL_CONFIG": "Vocbench Email Configuration",
+                "VB_EMAIL_CONFIG_INFO": "Configuration of the VocBench e-mail service. This service will be used to send notifications to the system administrator and to the users",
+                "MAIL_SERVER_URL_INFO": "SMTP Mail Server IP/URL",
+                "MAIL_SERVER_PORT_INFO": "Mail Server Port",
+                "CRYPTOGRAPHIC_PROTOCOL": "Cryptographic protocol",
+                "AUTHENTICATION_INFO": "True if SMTP server requires authentication",
+                "MAIL_FROM": "Email address used to send administration emails",
+                "MAIL_PASSWORD": "Password of the above email address",
+                "MAIL_ALIAS": "Alias name shown in the administration emails"
+            },
+            "NOTIFICATIONS": {
+                "NOTIFICATION_SCHEDULER": "Notification scheduler",
+                "NOTIFICATION_SCHEDULER_INFO": "Configuration of the VocBench e-mail notification service. The system will send a notifications daily digest to the users who have chosen the <i>Email daily digest</i> as notification mode.",
+                "HOURS_OF_DAY": "Hour of the day",
+                "HOURS_OF_DAY_INFO": "The hour of the day when the report will be sent every day",
+                "TIMEZONE_ID_INFO": "A timezone id",
+                "DETECT": "Detect",
+                "DETECT_INFO": "Detect the browser timezone",
+                "DISABLE": "Disable",
+                "DISABLE_INFO": "Disable the notifications daily digest"
+            },
+            "REGISTRATION_FORM": {
+                "FORM_FIELDS": "Registration form fields",
+                "OPTIONAL_FIELDS": "Optional fields",
+                "OPTIONAL_FIELDS_INFO": "Show or hide optional information about the user. These information will be shown or hidden in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.",
+                "CUSTOM_FIELDS": "Custom fields",
+                "CUSTOM_FIELDS_INFO": "Add (and reorder) up to {{maxFields}} custom information about the user. These information will be shown in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br> If a field is removed, any values previously stored for that field will be lost for any user.<br> If a field is renamed, any values previously stored for that field will be preserved."
+            },
+            "HOME_PAGE": {
+                "HOME_CONTENT": "Home page content",
+                "HOME_CONTENT_INFO": "Here you can write HTML-formatted text content that will be shown in the home page",
+                "PREVIEW": "Preview"
+            }
+        },
+        "USERS": {
+            "CREATE_USER": "Create user",
+            "USER_DETAILS": "User Details",
+            "ADMINISTRATOR": "Administrator",
+            "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has autmoatically access to all projects",
+            "ASSIGNED_TO_PROJECTS": "Assigned to projects",
+            "CHANGE_PASSWORD": "Change password",
+            "FORCE_PASSWORD_WARNING": "This procedure will force the change of {{userShow}}'s password.<br>Note: A <i>forgot password</i> procedure already exists (available in the login form). It is recommended to let the user update its own password through that procedure. Use this procedure only if strictly necessary.",
+            "NEW_PASSWORD": "New password",
+            "TEMPLATE_INFO": "Here you can assign a ResourceView template to the user. This template describes which ResourceView partitions are visible by default.<br>You can also load an already existing template, or decide to save the template you defined, through the toolbar in panel header."
+        }
+    },
     "HOME": {
         "WELCOME": "Welcome to VocBench",
         "DESCRIPTION": "VocBench is a web-based, multilingual, collaborative development platform for managing <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a> ontologies, <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>) thesauri, <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> lexicons and generic RDF datasets.",
@@ -47,7 +113,6 @@
         }
     },
     "NAVBAR": {
-        "PROJECTS": "Projects",
         "DATA": "Data",
         "METADATA": {
             "TITLE": "Metadata",
@@ -71,7 +136,7 @@
         },
         "USER_MENU": {
             "VIEW_PROFILE": "View profile",
-            "NOTIFICATIONS": "Notifications",
+            
             "PREFERENCES": "Preferences",
             "ADMINISTRATION": "Administration"
         }
@@ -91,7 +156,6 @@
                 "TOP_LEVEL_ELEMENT_OPT": {
                     "LABEL": "Top level elements",
                     "OPTIONS": {
-                        "PROJECTS": "Projects",
                         "DIRECTORIES": "Directories"
                     }
                 },
@@ -371,6 +435,10 @@
             "METADATA_VOCABULARY": "Metadata Vocabulary"
         }
     },
+    "NOTIFICATIONS": {
+        "NOTIFICATION_SETTINGS": "Notification Settings",
+        "CLEAR_NOTIFICATIONS": "Clear notifications"
+    },
     "RESOURCE_VIEW": {
         "PARTITIONS": {
             "BROADERS": "Broaders",
@@ -470,7 +538,6 @@
         "OTHER_PARAMS": "Other param(s)",
         "USER": "User",
         "DATE": "Date",
-        "ACTION": "Action",
         "ACCEPT_ALL": "Accept all",
         "REJECT_ALL": "Reject all",
         "VALIDATE": "Validate",
@@ -480,7 +547,6 @@
             "HIDE_FILTERS": "Hide filters",
             "OPERATIONS": "Operations",
             "PERFORMERS": "Performers",
-            "TIME": "Time",
             "TIME_FROM": "From",
             "TIME_TO": "To",
             "DATETIME_FORMAT": "Datetime format: yyyy-MM-ddThh:mm",
@@ -517,6 +583,7 @@
         }
     },
     "COMMONS": {
+        "ACTION": "Action",
         "ACTIVE": "Active",
         "BASE_URI": "Base URI",
         "CANCEL": "Cancel",
@@ -526,11 +593,14 @@
         "CONFIGURATION_REQUIRED": "Configuration required",
         "CREATE": "Create",
         "DATASET": "Dataset",
+        "DELETE": "Delete",
         "DESCRIPTION": "Description",
         "EDIT": "Edit",
         "EXPORT": "Export",
         "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
+        "GROUPS": "Groups",
+        "INACTIVE": "Inactive",
         "LANGUAGE": "Language",
         "LEXICALIZATION": "Lexicalization",
         "LEXICALIZATION_MODEL": "Lexicalization Model",
@@ -541,11 +611,17 @@
         "MOVE_UP": "Move up",
         "NAME": "Name",
         "NEW": "New",
+        "NOTIFICATIONS": "Notifications",
         "ONTOLOGY_IRI": "Ontology IRI",
         "OPTIONAL_FIELD": "Optional field",
         "PAGE_OF_TOT": "of",
+        "PROJECTS": "Projects",
         "REFRESH": "Refresh",
+        "REMOVE": "Remove",
         "REPOSITORY_ID": "Repository ID",
+        "RESOURCE": "Resource",
+        "RESOURCE_TYPE": "Resource type",
+        "ROLES": "Roles",
         "SAVE": "Save",
         "SAVE_CONFIGURATION": "Save configuration",
         "SEARCH": "Search",
@@ -554,7 +630,10 @@
         "START": "Start",
         "STATUS": "Status",
         "SUBMIT": "Submit",
+        "TIME": "Time",
         "TITLE": "Title",
+        "UPDATE": "Update",
+        "USERS": "Users",
         "VALUE": "Value"
     }
 }

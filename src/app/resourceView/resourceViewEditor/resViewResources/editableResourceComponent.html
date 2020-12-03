@@ -39,7 +39,7 @@
             <a *ngIf="isInferred && partition != 'lexicalizations'" class="dropdown-item" [ngClass]="{ disabled: !assertAuthorized }" (click)="assertInferred()">
                 Assert inferred statement
             </a>
-            <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized || isInferred }" (click)="delete()">Delete</a>
+            <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized || isInferred }" (click)="delete()">{{'COMMONS.DELETE'|translate}}</a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkDeleteAuthorized }" 
                 (click)="bulkDelete()" title="Delete the value for every resource that has this predicate-value relation">
                 Bulk delete

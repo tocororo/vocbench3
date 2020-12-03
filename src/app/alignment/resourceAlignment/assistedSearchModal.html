@@ -12,7 +12,7 @@
     <ng-container *ngIf="targetPosition == ResourcePositionEnum.local">
         <div class="card card-default">
             <div class="card-header">
-                <label>Projects</label>
+                <label>{{'COMMONS.PROJECTS'|translate}}</label>
             </div>
             <div class="card-body vbox scrollableContainer" style="max-height: 150px;">
                 <div *ngFor="let p of projectList">

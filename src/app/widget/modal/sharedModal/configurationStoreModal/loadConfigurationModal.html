@@ -23,7 +23,7 @@
                         <td>{{ref.identifier}}</td>
                         <td>{{ref.getReferenceScope()}}</td>
                         <td>
-                            <button *ngIf="allowDelete" class="btn btn-xs btn-light" (click)="deleteReference(ref)" title="Delete">
+                            <button *ngIf="allowDelete" class="btn btn-xs btn-light" (click)="deleteReference(ref)" [title]="'COMMONS.DELETE'|translate">
                                 <span class="far fa-trash-alt"></span>
                             </button>
                         </td>

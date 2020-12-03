@@ -27,7 +27,7 @@
             <div *ngFor="let v of values" class="listItem">
                 <rdf-resource style="flex: 1;" [resource]="v"></rdf-resource>
                 <button class="btn btn-light btn-xs" (click)="removeValue(v)">
-                    <span class="far fa-trash-alt" title="Remove label"></span>
+                    <span class="far fa-trash-alt" [title]="'COMMONS.REMOVE'|translate"></span>
                 </button>
             </div>
         </div>

@@ -36,7 +36,7 @@
                             <button class="btn btn-light" (click)="addFilter()" title="Add filter">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" (click)="removeFilter()" title="Remove filter" [disabled]="!selectedFilteredClass">
+                            <button class="btn btn-light" (click)="removeFilter()" [title]="'COMMONS.REMOVE'|translate" [disabled]="!selectedFilteredClass">
                                 <span class="fas fa-minus"></span>
                             </button>
                         </div>

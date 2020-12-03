@@ -10,7 +10,7 @@ import { Cookie } from "../../utils/Cookie";
 export class ProjectTableConfigModal {
 
     visualizationModes: { translationKey: string, mode: ProjectViewMode }[] = [
-        { translationKey: "PROJECTS.TABLE.CONFIG_MODAL.TOP_LEVEL_ELEMENT_OPT.OPTIONS.PROJECTS", mode: ProjectViewMode.list }, 
+        { translationKey: "COMMONS.PROJECTS", mode: ProjectViewMode.list }, 
         { translationKey: "PROJECTS.TABLE.CONFIG_MODAL.TOP_LEVEL_ELEMENT_OPT.OPTIONS.DIRECTORIES", mode: ProjectViewMode.dir }
     ];
     selectedVisualizationMode: { translationKey: string, mode: ProjectViewMode };

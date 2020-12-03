@@ -4,7 +4,7 @@
 <div class="modal-body vbox" style="min-height: 100px;">
     <div class="card card-default vbox" style="margin-left: 5px;">
         <div class="card-header">
-            <label style="flex: 1;">Projects</label>
+            <label style="flex: 1;">{{'COMMONS.PROJECTS'|translate}}</label>
             <div class="btn-group btn-group-xs" ngbDropdown>
                 <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                     <span class="fas fa-cog"></span>
@@ -12,7 +12,7 @@
                 <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                     <h6 class="dropdown-header">Top level elements</h6>
                     <a class="dropdown-item" (click)="changeVisualizationMode(ProjectViewMode.list)">
-                        Projects
+                        {{'COMMONS.PROJECTS'|translate}}
                         <span *ngIf="visualizationMode == ProjectViewMode.list" class="fas fa-check float-right"></span>
                     </a>
                     <a class="dropdown-item" (click)="changeVisualizationMode(ProjectViewMode.dir)">

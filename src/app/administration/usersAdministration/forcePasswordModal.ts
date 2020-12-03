@@ -12,10 +12,16 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 export class ForcePasswordModal {
     @Input() user: User;
 
+    translationParam: any;
+
     password: string;
 
     constructor(public activeModal: NgbActiveModal, private userService: UserServices, private authService: AuthServices, 
         private basicModals: BasicModalServices) {
+    }
+
+    ngOnInit() {
+        this.translationParam = { userShow: this.user.getShow() };
     }
 
     isInputValid(): boolean {

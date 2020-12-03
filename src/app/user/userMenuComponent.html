@@ -17,7 +17,7 @@
 		</a>
 		<div class="dropdown-divider"></div>
 		<a class="dropdown-item" [routerLink]="['/Profile']"><span class="fas fa-user"></span> {{'NAVBAR.USER_MENU.VIEW_PROFILE'|translate}}</a>
-		<a *ngIf="isNotificationsVisible" class="dropdown-item" [routerLink]="['/Notifications']"><span class="fas fa-bell"></span> {{'NAVBAR.USER_MENU.NOTIFICATIONS'|translate}}</a>
+		<a *ngIf="isNotificationsVisible" class="dropdown-item" [routerLink]="['/Notifications']"><span class="fas fa-bell"></span> {{'COMMONS.NOTIFICATIONS'|translate}}</a>
 		<a *ngIf="isProjectOpen" class="dropdown-item" [routerLink]="['/Preferences']"><span class="fas fa-cog"></span> {{'NAVBAR.USER_MENU.PREFERENCES'|translate}}</a>
 		<a *ngIf="isAdministrationVisible" class="dropdown-item" [routerLink]="['/Administration']"><span class="fas fa-wrench"></span> {{'NAVBAR.USER_MENU.ADMINISTRATION'|translate}}</a>
 		<div class="dropdown-divider"></div>

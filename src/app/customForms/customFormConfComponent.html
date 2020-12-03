@@ -20,7 +20,7 @@
                                 [disabled]="!isCreateFormAuthorized()">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" title="Delete Custom Form" (click)="deleteCustomForm()"
+                            <button class="btn btn-light" [title]="'COMMONS.DELETE'|translate" (click)="deleteCustomForm()"
                                 [disabled]="!selectedCustomForm || selectedCustomForm.getLevel() == 'system' || !isDeleteFormAuthorized()">
                                 <span class="fas fa-minus"></span>
                             </button>
@@ -57,7 +57,7 @@
                                 [disabled]="!isCreateCollectionAuthorized()">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" title="Delete Form Collection" (click)="deleteFormCollection()"
+                            <button class="btn btn-light" [title]="'COMMONS.DELETE'|translate" (click)="deleteFormCollection()"
                                 [disabled]="!selectedFormColl || selectedFormColl.getLevel() == 'system' || !isDeleteCollectionAuthorized()">
                                 <span class="fas fa-minus"></span>
                             </button>
@@ -92,12 +92,12 @@
             <div class="card card-alt vbox" style="margin-top: 4px;">
                 <div class="card-header">
                     <label style="flex: 1">Forms mapping:</label>
-                    <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-light" title="Create Resource - FormCollection mapping" (click)="createFormCollMapping()"
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-light" [title]="'COMMONS.CREATE'|translate" (click)="createFormCollMapping()"
                             [disabled]="!isCreateMappingAuthorized()">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" title="Remove Resource - FormCollection mapping" (click)="removeFormCollMapping()"
+                        <button class="btn btn-light" [title]="'COMMONS.REMOVE'|translate" (click)="removeFormCollMapping()"
                             [disabled]="!selectedFormCollMapping || !isDeleteMappingAuthorized()">
                             <span class="fas fa-minus"></span>
                         </button>

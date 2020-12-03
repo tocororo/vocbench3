@@ -6,7 +6,7 @@
                 <button class="btn btn-light" (click)="createReporter()" title="Create report" [disabled]="!createReporterAuthorized">
                     <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-light" (click)="deleteReporter()" title="Delete report" [disabled]="!selectedReporter || !deleteReporterAuthorized">
+                <button class="btn btn-light" (click)="deleteReporter()" [title]="'COMMONS.DELETE'|translate" [disabled]="!selectedReporter || !deleteReporterAuthorized">
                     <span class="fas fa-minus"></span>
                 </button>
             </div>
