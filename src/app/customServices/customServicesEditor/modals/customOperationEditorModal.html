@@ -47,7 +47,7 @@
                                 </colgroup>
                                 <tbody>
                                     <tr *ngFor="let p of form.parameters.value; let i=index; let last=last">
-                                        <td><label>Name:</label></td>
+                                        <td><label>{{'COMMONS.NAME'|translate}}:</label></td>
                                         <td><input class="form-control" style="font-family: monospace;" [(ngModel)]="p.name" sanitized></td>
                                         <td><label>Type:</label></td>
                                         <td>
@@ -178,7 +178,7 @@
         <li><span style="font-family: monospace">IRI</span></li>
         <li><span style="font-family: monospace">Literal</span></li>
         <li><span style="font-family: monospace">Resource</span></li>
-        <li><span style="font-family: monospace">Value</span></li>
+        <li><span style="font-family: monospace">{{'COMMONS.VALUE'|translate}}</span></li>
     </ul>
     <p>The allowed return type depends on the actual SPARQL operation:</p>
     <ul>

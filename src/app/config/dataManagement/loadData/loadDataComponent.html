@@ -1,12 +1,12 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1;">Load Data:</label>
+        <label style="flex: 1;">{{'DATA_MANAGEMENT.LOAD.LOAD_DATA'|translate}}:</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" title="Save import configuration" (click)="saveChain()">
+                <button class="btn btn-light" [title]="'COMMONS.SAVE_CONFIGURATION'|translate" (click)="saveChain()">
                     <span class="fas fa-download"></span>
                 </button>
-                <button class="btn btn-light" title="Load import configuration" (click)="loadChain()">
+                <button class="btn btn-light" [title]="'COMMONS.LOAD_CONFIGURATION'|translate" (click)="loadChain()">
                     <span class="fas fa-upload"></span>
                 </button>
             </div>
@@ -16,7 +16,7 @@
     <div class="card-body vbox">
         <div class="card card-alt">
             <div class="card-header">
-                <label style="margin-right: 8px">Load from:</label>
+                <label style="margin-right: 8px">{{'DATA_MANAGEMENT.LOAD.LOAD_FROM'|translate}}:</label>
                 <select class="form-control form-control-sm" style="width: initial" [(ngModel)]="selectedLoader">
                     <option *ngFor="let loaderOpt of loaderOptions" [ngValue]="loaderOpt">{{loaderOpt.label}}</option>
                 </select>
@@ -33,7 +33,7 @@
 
                 <!-- Dataset catalog -->
                 <div class="form-group row" *ngIf="selectedLoader.target == 'datasetCatalog'">
-                    <label class="col-form-label col-sm-1">Data dump:</label>
+                    <label class="col-form-label col-sm-1">{{'DATA_MANAGEMENT.LOAD.DATA_DUMP'|translate}}:</label>
                     <div class="col-sm-5">
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control" [(ngModel)]="dataDumpUrl" readonly>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                     </div>
-                    <label class="col-form-label col-sm-1">Format:</label>
+                    <label class="col-form-label col-sm-1">{{'COMMONS.FORMAT'|translate}}:</label>
                     <div class="col-sm-5">
                         <ng-container *ngTemplateOutlet="formatSelectionTemplate"></ng-container>
                     </div>
@@ -82,26 +82,26 @@
                             (configurationUpdated)="selectedLifterConfig = $event">
                         </extension-configurator>
                     </div>
-                    <label class="col-form-label col-sm-1">Format:</label>
+                    <label class="col-form-label col-sm-1">{{'COMMONS.FORMAT'|translate}}:</label>
                     <div class="col-sm-5">
                         <ng-container *ngTemplateOutlet="formatSelectionTemplate"></ng-container>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-form-label col-sm-1">Base URI:</label>
+                    <label class="col-form-label col-sm-1">{{'COMMONS.BASE_URI'|translate}}:</label>
                     <div class="col-sm-3">
                         <input type="text" class="form-control" [(ngModel)]="baseURI" placeholder="http://example.baseuri.com/" [disabled]="useProjectBaseURI">
                     </div>
                     <div class="col-sm-2 d-flex align-items-center">
                         <div class="form-check">
                             <input class="form-check-input" id="useBaseCheck" type="checkbox" [(ngModel)]="useProjectBaseURI" (ngModelChange)="onBaseUriChecboxChange()">
-                            <label class="form-check-label" for="useBaseCheck">Use project baseURI</label>
+                            <label class="form-check-label" for="useBaseCheck">{{'DATA_MANAGEMENT.LOAD.USE_PROJECT_BASEURI'|translate}}</label>
                         </div>
                     </div>
                     <label class="col-form-label col-sm-1">
-                        Resolve imports:
-                        <span class="fas fa-info-circle" title="Specify the resolution source in case of transitive imports"></span>
+                        {{'DATA_MANAGEMENT.LOAD.RESOLVE_IMPORTS'|translate}}:
+                        <span class="fas fa-info-circle" [title]="'DATA_MANAGEMENT.LOAD.IMPORTS_RESOLUTION_TOOLTIP'|translate"></span>
                     </label>
                     <div class="col-sm-5">
                         <select class="form-control" [(ngModel)]="selectedImportAllowance">
@@ -115,21 +115,21 @@
 
         <div class="card card-alt vbox" style="flex: 2; margin-top: 4px;">
             <div class="card-header">
-                <label style="flex: 1">Import transformations:</label>
+                <label style="flex: 1">{{'DATA_MANAGEMENT.COMMONS.DATA_TRANSFORMATIONS'|translate}}:</label>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" title="Add transformer" (click)="appendTransformer()">
+                        <button class="btn btn-light" (click)="appendTransformer()">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" title="Remove transformer" (click)="removeTransformer()"
+                        <button class="btn btn-light" (click)="removeTransformer()"
                             [disabled]="transformersChain.length == 0 || !selectedTransformerChainElement">
                             <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-light" title="Move down"  (click)="moveTransformerDown()"
+                        <button class="btn btn-light" [title]="'COMMONS.MOVE_DOWN'|translate" (click)="moveTransformerDown()"
                             [disabled]="isSelectedTransformerLast() || !selectedTransformerChainElement">
                             <span class="fas fa-chevron-down"></span>
                         </button>
-                        <button class="btn btn-light" title="Move up" (click)="moveTransformerUp()"
+                        <button class="btn btn-light" [title]="'COMMONS.MOVE_UP'|translate" (click)="moveTransformerUp()"
                             [disabled]="isSelectedTransformerFirst() || !selectedTransformerChainElement">
                             <span class="fas fa-chevron-up"></span>
                         </button>
@@ -137,9 +137,8 @@
                 </div>
             </div>
             <div class="card-body scrollableContainer">
-                <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 5px;">
-                    Here it is possible to create and configure a sequence of transformers to be applied during the import process.
-                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                <div class="alert alert-info mb-2">
+                    {{'DATA_MANAGEMENT.LOAD.TRANSFORMERS_DESCRIPTION'|translate}}
                 </div>
                 <table class="table table-sm table-hoverable">
                     <colgroup>
@@ -160,7 +159,7 @@
                             </td>
                             <td class="text-center" style="font-size: 14px; font-weight: 700;">
                                 <span *ngIf="requireConfiguration(transformerChainEl)" class="fas fa-exclamation-triangle"
-                                    title="This transformer needs to be configured"></span>
+                                    [title]="'COMMONS.CONFIGURATION_REQUIRED'|translate"></span>
                             </td>
                         </tr>
                     </tbody>
@@ -172,7 +171,7 @@
     <div class="card-footer d-flex align-items-center">
         <div *ngIf="isValidationEnabled()" class="form-check form-check-inline">
             <input class="form-check-input" id="validateCheck" type="checkbox"  [(ngModel)]="validateImplicitly" [disabled]="!isValidationAuthorized()">
-            <label class="form-check-label" for="validateCheck">Implicitly validate loaded data</label>
+            <label class="form-check-label" for="validateCheck">{{'DATA_MANAGEMENT.LOAD.IMPLICITLY_VALIDATE'|translate}}</label>
         </div>
         <span style="flex: 1"></span>
         <div class="float-right">
@@ -186,7 +185,7 @@
         <ng-container *ngIf="!selectedInputFormat && !forceFormat; then unkownFormatBlock; else selectFormatBlock"></ng-container>
         <ng-template #unkownFormatBlock>
             <select class="form-control" disabled>
-                <option>Detect Format</option>
+                <option>{{'DATA_MANAGEMENT.LOAD.DETECT_FORMAT'|translate}}</option>
             </select>
         </ng-template>
         <ng-template #selectFormatBlock>
@@ -197,8 +196,8 @@
         <div class="form-check ml-3">
             <input class="form-check-input" id="formatCheck" type="checkbox" [(ngModel)]="forceFormat">
             <label class="form-check-label text-nowrap" for="formatCheck">
-                Force format
-                <span class="fas fa-info-circle ml-2" title="Allows forcing the selection of a format overriding the one detected by the system"></span>
+                {{'COMMONS.FORCE_FORMAT'|translate}}
+                <span class="fas fa-info-circle ml-2" [title]="'DATA_MANAGEMENT.LOAD.FORCE_FORMAT_TOOLTIP'|translate"></span>
             </label>
         </div>
     </div>

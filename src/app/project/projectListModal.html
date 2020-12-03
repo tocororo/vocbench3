@@ -29,8 +29,8 @@
                 <thead>
                     <tr>
                         <th class="text-center">{{'PROJECTS.TABLE.HEADERS.NAME'|translate}}</th>
-                        <th class="text-center">{{'PROJECTS.TABLE.HEADERS.MODEL'|translate}}</th>
-                        <th class="text-center">{{'PROJECTS.TABLE.HEADERS.LEXICALIZATION'|translate}}</th>
+                        <th class="text-center">{{'COMMONS.MODEL'|translate}}</th>
+                        <th class="text-center">{{'COMMONS.LEXICALIZATION'|translate}}</th>
                         <th class="text-center">{{'PROJECTS.TABLE.HEADERS.HISTORY'|translate}}</th>
                         <th class="text-center">{{'PROJECTS.TABLE.HEADERS.VALIDATION'|translate}}</th>
                         <th class="text-center">{{'PROJECTS.TABLE.HEADERS.REPO_LOCATION'|translate}}</th>
@@ -59,8 +59,8 @@
                 <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
                 <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
                     <label class="text-center" style="flex: 3">{{'PROJECTS.TABLE.HEADERS.NAME'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'PROJECTS.TABLE.HEADERS.MODEL'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'PROJECTS.TABLE.HEADERS.LEXICALIZATION'|translate}}</label>
+                    <label class="text-center" style="flex: 1">{{'COMMONS.MODEL'|translate}}</label>
+                    <label class="text-center" style="flex: 1">{{'COMMONS.LEXICALIZATION'|translate}}</label>
                     <label class="text-center" style="flex: 1">{{'PROJECTS.TABLE.HEADERS.HISTORY'|translate}}</label>
                     <label class="text-center" style="flex: 1">{{'PROJECTS.TABLE.HEADERS.VALIDATION'|translate}}</label>
                     <label class="text-center" style="flex: 2">{{'PROJECTS.TABLE.HEADERS.REPO_LOCATION'|translate}}</label>
@@ -113,5 +113,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProject">Access</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">Close</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CLOSE'|translate}}</button>
 </div>

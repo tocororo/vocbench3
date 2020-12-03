@@ -5,7 +5,7 @@
     <div class="hbox" style="align-items: center; margin-bottom: 4px;">
         <div style="flex: 1;" (keydown)="onKeydown($event)">
             <div class="hbox" style="align-items: center;">
-                <label style="width: 50px;">Value:</label>
+                <label style="width: 50px;">{{'COMMONS.VALUE'|translate}}:</label>
                 <textarea ngbAutofocus type="text" class="form-control form-control-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
                     [(ngModel)]="value" [disabled]="valueReadonly"></textarea>
                 <lang-picker [(ngModel)]="lang" [disabled]="langReadonly" 

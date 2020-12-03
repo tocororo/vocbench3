@@ -79,11 +79,8 @@
     "PROJECTS": {
         "TABLE": {
             "HEADERS": {
-                "NAME": "Name",
                 "OPEN_CLOSE": "Open/Close",
                 "ACCESSED": "Accessed",
-                "MODEL": "Model",
-                "LEXICALIZATION": "Lexicalization",
                 "HISTORY": "History",
                 "VALIDATION": "Validation",
                 "REPO_LOCATION": "Repository Location",
@@ -111,7 +108,6 @@
         "CREATE_FORM": {
             "BACKEND_TYPE": "Backend type",
             "BLACKLIST": "Blacklisting",
-            "CONFIGURATION": "Configuration",
             "CREATE_PROJECT": "Create project",
             "DATA_PRELOADING": "Optional data preloading",
             "DATA_REPO_ID": "Data Repository ID",
@@ -119,9 +115,7 @@
             "ENABLE_SHAPE_VALIDATION": "Enable shape validation",
             "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference",
             "HISTORY": "History",
-            "LEXICALIZATION": "Lexicalization",
             "LEFT_RIGHT": "Left/Right",
-            "MODEL": "Model",
             "OPTIONAL_SETTINGS": "Optional settings",
             "PRELOAD": "Preload",
             "PROJECT_NAME": "Project name",
@@ -247,6 +241,62 @@
             }
         }
     },
+    "DATA_MANAGEMENT": {
+        "DATASET_CATALOG": {
+            "CATALOG": "Catalog",
+            "DATASET_DESCRIPTION": "Dataset description",
+            "DATASET_PAGE": "Dataset page",
+            "DATA_DUMPS": "Data dumps",
+            "URI_PREFIX": "URI prefix",
+            "DATASET_CATALOG": "Dataset Catalog",
+            "SEARCH_RESULTS": "Search results",
+            "NO_RESULTS_FOUND": "No results found",
+            "TOT_RESULTS": "risultati"
+        },
+        "EXPORT": {
+            "EXPORT_DATA": "Export data",
+            "GRAPHS_TO_EXPORT": "Graphs to export",
+            "NO_GRAPHS_EXPORTED_MSG": "If no graph is selected, all named graphs will be exported",
+            "TRANSFORMERS_DESCRIPTION": "Here it is possible to create and configure a sequence of transformations to be applied during the export process. Each transformer is applied to a subset of the exported graphs. No graph means every exported graph",
+            "GRAPHS": "Graphs",
+            "INCLUDE_INFERRED": "Include inferred"
+        },
+        "LOAD": {
+            "LOAD_DATA": "Load Data",
+            "LOAD_FROM": "Load from",
+            "DATA_DUMP": "Data dump",
+            "USE_PROJECT_BASEURI": "Use project baseURI",
+            "RESOLVE_IMPORTS": "Resolve imports",
+            "IMPORTS_RESOLUTION_TOOLTIP": "Specify the resolution source in case of transitive imports",
+            "TRANSFORMERS_DESCRIPTION": "Here it is possible to create and configure a sequence of transformers to be applied during the load process.",
+            "IMPLICITLY_VALIDATE": "Implicitly validate loaded data",
+            "DETECT_FORMAT": "Detect Format",
+            "FORCE_FORMAT_TOOLTIP": "Allows forcing the selection of a format overriding the one detected by the system"
+        },
+        "REFACTOR": {
+            "DATA_REFACTOR": "Data refactor",
+            "SKOS_TO_SKOSXL_INFO": "This refactor operation transforms all the SKOS labels and notes into reified SKOS-XL labels and notes.",
+            "REIFY_NOTES": "Reify SKOS notes",
+            "SKOSXL_TO_SKOS_INFO": "This refactor operation transforms all the reified SKOS-XL labels and notes into flattened SKOS labels and notes. Note: this is NOT a loss-less operation, all the information related to the SKOS-XL labels and notes will be lost.",
+            "FLATTEN_NOTES": "Flatten reified SKOS notes",
+            "MIGRATE_DATA": "Migrate data to baseURI graph",
+            "MIGRATE_INFO": "This operation will move the content of the default graph to a graph named after the base URI of the current project. It will also clear the default graph and preserve the information already contained in the destination graph."
+        },
+        "VERSIONING": {
+            "VERSIONS": "Versions",
+            "SWITCH_TO": "Switch to",
+            "DUMP": "Dump",
+            "DUMP_NEW_VERSION": "Dump a new version",
+            "DUMP_NEW_VERSION_DIFFERENT_LOCATION": "Dump a new version to a different location",
+            "VERSION_ID": "Version ID",
+            "DATETIME": "Datetime",
+            "REPO_CONFIGURATION": "Repo Configuration",
+            "REPO_LOCATION": "Repo Location"
+        },
+        "COMMONS": {
+            "DATA_TRANSFORMATIONS": "Data transformations"
+        }
+    },
     "METADATA": {
         "NAMESPACES_AND_IMPORTS": {
             "NAMESPACE_MANAGEMENT": "Namespace management",
@@ -277,7 +327,6 @@
                 "ALTERNATIVE_URL": "Alternative URL",
                 "MIRROR_FILE_NAME": "Mirror file name",
                 "TRANSITIVE_IMPORTS": "Transitive imports",
-                "ONTOLOGY_IRI": "Ontology IRI",
                 "DATA_DUMP": "Data dump",
                 "USE_DATA_DUMP": "Use data dump",
                 "DATA_DUMP_CHECK": "If checked, import is added from the provided data dump instead of the ontology IRI"
@@ -295,11 +344,9 @@
                 "OTHER_VERSIONS": "Other versions",
                 "ADD_DATASET_VERSION": "Add Dataset Version",
                 "DELETE_DATASET_VERSION": "Delete Dataset Version",
-                "TITLE": "Title",
                 "IDENTITY": "Identity",
                 "DEREFERENCEABLE": "Dereferenceable",
                 "DEREFERENCIATION_SYSTEM": "Dereferenciation System",
-                "SPARQL_ENDPOINT": "SPARQL Endpoint",
                 "NO_AGGREGATION": "No aggregation",
                 "NO_AGGREGATION_TOOLTIP": "If checked it means that the aggregation may be supported, but its support is insufficient for the purposes of Vocbench",
                 "URI_SPACE": "URI space",
@@ -313,7 +360,6 @@
                 "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Delete All Embedded Lexicalization Set",
                 "LEXICALIZATION_SET": "Lexicalization Set",
                 "LEXICON_DATASET": "Lexicon Dataset",
-                "LEXICALIZATION_MODEL": "Lexicalization Model",
                 "REFERENCES": "References",
                 "LEXICAL_ENTRIES": "Lexical Entries",
                 "LEXICALIZATIONS": "Lexicalizations",
@@ -376,7 +422,6 @@
         "STATUS": {
             "RESOURCE_NOT_EXISTING": "This resource is not available in the current project",
             "RESOURCE_UNKNOWN_HOST": "This resource is not available on accessible local projects nor can be reached on the Web",
-            "STATUS": "Status",
             "ACCESS_METHOD": "Access method",
             "LOCAL_PROJECT": "Local Project",
             "OTHER_LOCAL_PROJECT": "Other local Project",
@@ -465,9 +510,20 @@
         "FORGOT_PASSWORD": "Forgot password?",
         "SIGNUP": "Sign up"
     },
+    "WIDGETS": {
+        "FILE_PICKER": {
+            "BROWSE": "Browse",
+            "SELECT_A_FILE": "Select a file"
+        }
+    },
     "COMMONS": {
+        "ACTIVE": "Active",
         "BASE_URI": "Base URI",
         "CANCEL": "Cancel",
+        "CLOSE": "Close",
+        "CONFIGURATION": "Configuration",
+        "CONFIGURE": "Configure",
+        "CONFIGURATION_REQUIRED": "Configuration required",
         "CREATE": "Create",
         "DATASET": "Dataset",
         "DESCRIPTION": "Description",
@@ -475,14 +531,30 @@
         "EXPORT": "Export",
         "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
-        "MANDATORY_FIELD": "Mandatory field",
         "LANGUAGE": "Language",
+        "LEXICALIZATION": "Lexicalization",
+        "LEXICALIZATION_MODEL": "Lexicalization Model",
+        "LOAD_CONFIGURATION": "Load configuration",
+        "MANDATORY_FIELD": "Mandatory field",
+        "MODEL": "Model",
+        "MOVE_DOWN": "Move down",
+        "MOVE_UP": "Move up",
+        "NAME": "Name",
+        "NEW": "New",
+        "ONTOLOGY_IRI": "Ontology IRI",
         "OPTIONAL_FIELD": "Optional field",
         "PAGE_OF_TOT": "of",
         "REFRESH": "Refresh",
+        "REPOSITORY_ID": "Repository ID",
         "SAVE": "Save",
+        "SAVE_CONFIGURATION": "Save configuration",
         "SEARCH": "Search",
         "SETTINGS": "Settings",
-        "SUBMIT": "Submit"
+        "SPARQL_ENDPOINT": "SPARQL Endpoint",
+        "START": "Start",
+        "STATUS": "Status",
+        "SUBMIT": "Submit",
+        "TITLE": "Title",
+        "VALUE": "Value"
     }
 }

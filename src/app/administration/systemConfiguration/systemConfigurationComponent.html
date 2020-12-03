@@ -270,10 +270,10 @@
                             <label style="flex: 1;">Custom fields:</label>
                             <div class="btn-toolbar">
                                 <div class="btn-group btn-group-xs">
-                                    <button class="btn btn-light" (click)="moveCustomField('DOWN')" title="Move down" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField)+1 >= customFormFields.length">
+                                    <button class="btn btn-light" (click)="moveCustomField('DOWN')" [title]="'COMMONS.MOVE_DOWN'|translate" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField)+1 >= customFormFields.length">
                                         <span class="fas fa-chevron-down"></span>
                                     </button>
-                                    <button class="btn btn-light" (click)="moveCustomField('UP')" title="Move up" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField) == 0">
+                                    <button class="btn btn-light" (click)="moveCustomField('UP')" [title]="'COMMONS.MOVE_UP'|translate" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField) == 0">
                                         <span class="fas fa-chevron-up"></span>
                                     </button>
                                     <button class="btn btn-light" (click)="removeCustomField()" title="Remove" [disabled]="!selectedCustomField">

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { BrokenAlignmentComponent } from "../icv/brokenAlignment/brokenAlignmentComponent";
 import { BrokenDefinitionComponent } from "../icv/brokenDefinition/brokenDefinitionComponent";
 import { ConflictualLabelComponent } from "../icv/conflictualLabel/conflictualLabelComponent";
@@ -38,6 +39,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         FormsModule,
         NgbDropdownModule,
         SharedModule,
+        TranslateModule,
         TreeAndListModule,
     ],
     declarations: [

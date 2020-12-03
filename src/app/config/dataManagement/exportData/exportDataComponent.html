@@ -1,12 +1,12 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1;">Export data:</label>
+        <label style="flex: 1;">{{'DATA_MANAGEMENT.EXPORT.EXPORT_DATA'|translate}}:</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" title="Save export configuration" (click)="saveChain()">
+                <button class="btn btn-light" [title]="'COMMONS.SAVE_CONFIGURATION'|translate" (click)="saveChain()">
                     <span class="fas fa-download"></span>
                 </button>
-                <button class="btn btn-light" title="Load export configuration" (click)="loadChain()">
+                <button class="btn btn-light" [title]="'COMMONS.LOAD_CONFIGURATION'|translate" (click)="loadChain()">
                     <span class="fas fa-upload"></span>
                 </button>
             </div>
@@ -18,11 +18,11 @@
         <div class="card card-alt vbox" style="min-height: 150px;">
             <div class="card-header">
                 <label style="flex: 1">
-                    Graphs to export
+                    {{'DATA_MANAGEMENT.EXPORT.GRAPHS_TO_EXPORT'|translate}}
                 </label>
                 <span *ngIf="areAllGraphDeselected()" class="grayText">
                     <span class="fas fa-exclamation-triangle"></span>
-                    If no graph is selected, all named graphs will be exported
+                    {{'DATA_MANAGEMENT.EXPORT.NO_GRAPHS_EXPORTED_MSG'|translate}}
                 </span>
             </div>
             <div class="card-body scrollableContainer">
@@ -35,22 +35,22 @@
 
         <div class="card card-alt vbox" style="flex: 2; margin-top: 4px;">
             <div class="card-header">
-                <label style="flex: 1">Export transformations:</label>
+                <label style="flex: 1">{{'DATA_MANAGEMENT.COMMONS.DATA_TRANSFORMATIONS'|translate}}:</label>
 
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" title="Add filter" (click)="appendFilter()">
+                        <button class="btn btn-light" (click)="appendFilter()">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" title="Remove filter" (click)="removeFilter()"
+                        <button class="btn btn-light" (click)="removeFilter()"
                             [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
                             <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-light" title="Move down"  (click)="moveFilterDown()"
+                        <button class="btn btn-light" [title]="'COMMONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
                             [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
                             <span class="fas fa-chevron-down"></span>
                         </button>
-                        <button class="btn btn-light" title="Move up" (click)="moveFilterUp()"
+                        <button class="btn btn-light" [title]="'COMMONS.MOVE_UP'|translate" (click)="moveFilterUp()"
                             [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
                             <span class="fas fa-chevron-up"></span>
                         </button>
@@ -58,10 +58,8 @@
                 </div>
             </div>
             <div class="card-body scrollableContainer">
-                <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 5px;">
-                    Here it is possible to create and configure a sequence of transformations to be applied during the export process.
-                    Each transformer is applied to a subset of the exported graphs. No graph means every exported graph.
-                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                <div class="alert alert-info mb-2">
+                    {{'DATA_MANAGEMENT.EXPORT.TRANSFORMERS_DESCRIPTION'|translate}}
                 </div>
                 <table class="table table-sm table-hoverable">
                     <colgroup>
@@ -80,11 +78,11 @@
                                     (configStatusUpdated)="onConfigStatusUpdated(filterChainEl, $event)"
                                     style="flex: 1;">
                                 </extension-configurator>
-                                <button class="btn btn-light" (click)="configureGraphs(filterChainEl)" style="margin-left: 4px;">Graphs</button>
+                                <button class="btn btn-light" (click)="configureGraphs(filterChainEl)" style="margin-left: 4px;">{{'DATA_MANAGEMENT.EXPORT.GRAPHS'|translate}}</button>
                             </td>
                             <td class="text-center" style="font-size: 14px;">
                                 <span *ngIf="requireConfiguration(filterChainEl)" class="fas fa-exclamation-triangle"
-                                    title="This filter needs to be configured"></span>
+                                    [title]="'COMMONS.CONFIGURATION_REQUIRED'|translate"></span>
                             </td>
                         </tr>
                     </tbody>
@@ -127,7 +125,7 @@
                                     </extension-configurator>
                                 </ng-container>
                                 <div *ngIf="requireConfigurationDeployer()" style="font-size: 14px; margin-left: 4px;">
-                                    <span class="fas fa-exclamation-triangle" title="Configuration required"></span>
+                                    <span class="fas fa-exclamation-triangle" [title]="'COMMONS.CONFIGURATION_REQUIRED'|translate"></span>
                                 </div>
                             </div>
                         </td>
@@ -145,7 +143,7 @@
                                 </extension-configurator>
 
                                 <div *ngIf="requireConfigurationFormatter()" style="font-size: 14px; margin-left: 4px;">
-                                    <span class="fas fa-exclamation-triangle" title="Configuration required"></span>
+                                    <span class="fas fa-exclamation-triangle" [title]="'COMMONS.CONFIGURATION_REQUIRED'|translate"></span>
                                 </div>
         
                                 <div class="hbox" style="align-items: center; flex: initial; margin-left: 8px;">
@@ -168,7 +166,7 @@
         <div class="float-right d-flex align-items-center">
             <div class="form-check form-check-inline mr-5">
                 <input class="form-check-input" id="inferCheck" type="checkbox" [(ngModel)]="includeInferred">
-                <label class="form-check-label" for="inferCheck">Include inferred</label>
+                <label class="form-check-label" for="inferCheck">{{'DATA_MANAGEMENT.EXPORT.INCLUDE_INFERRED'|translate}}</label>
             </div>
             <button type="submit" class="btn btn-light btn-sm" (click)="export()">{{'COMMONS.SUBMIT'|translate}}</button>
         </div>

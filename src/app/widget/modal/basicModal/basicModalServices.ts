@@ -190,14 +190,11 @@ export class BasicModalServices {
      * @param message the message to show in the modal dialog body. If null no message will be in the modal
      * @param downloadLink link for download
      * @param fileName name of the file to download
-     * @param placeholder text to show in the filepicker when no file is selected
      */
-    selectFile(title: string, message?: string, label?: string, placeholder?: string, accept?: string) {
+    selectFile(title: string, message?: string, accept?: string) {
         const modalRef: NgbModalRef = this.modalService.open(FilePickerModal, new ModalOptions());
         modalRef.componentInstance.title = title;
         if (message != null) modalRef.componentInstance.message = message;
-        if (label != null) modalRef.componentInstance.label = label;
-        if (placeholder != null) modalRef.componentInstance.placeholder = placeholder;
         if (accept != null) modalRef.componentInstance.accept = accept;
         return modalRef.result;
     }

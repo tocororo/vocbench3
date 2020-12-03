@@ -35,7 +35,7 @@
         },
         "CURRENT_PROJECT": "Progetto corrente",
         "GLOBAL_DATA_MENU": {
-            "GLOBAL_DATA_MANAGEMENT": "Gestione globale dei dati",
+            "GLOBAL_DATA_MANAGEMENT": "Gestione dei dati globali",
             "LOAD_DATA": "Carica dati",
             "EXPORT_DATA": "Esporta dati",
             "CLEAR_DATA": "Elimina dati",
@@ -79,11 +79,8 @@
     "PROJECTS": {
         "TABLE": {
             "HEADERS": {
-                "NAME": "Nome",
                 "OPEN_CLOSE": "Aperto/Chiuso",
                 "ACCESSED": "Acceduto",
-                "MODEL": "Modello",
-                "LEXICALIZATION": "Lessicalizzazione",
                 "HISTORY": "Storico",
                 "VALIDATION": "Validazione",
                 "REPO_LOCATION": "Posizione Repository",
@@ -111,7 +108,6 @@
         "CREATE_FORM": {
             "BACKEND_TYPE": "Tipo backend",
             "BLACKLIST": "Lista nera",
-            "CONFIGURATION": "Configurazione",
             "CREATE_PROJECT": "Crea progetto",
             "DATA_PRELOADING": "Pre-caricamento opzionale di dati",
             "DATA_REPO_ID": "ID Repository dati",
@@ -119,11 +115,9 @@
             "ENABLE_SHAPE_VALIDATION": "Abilita validazione shape",
             "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
             "HISTORY": "Storico",
-            "LEXICALIZATION": "Lessicalizzazione",
             "LEFT_RIGHT": "Sinistro/Destro",
-            "MODEL": "Modello",
             "OPTIONAL_SETTINGS": "Impostazioni opzionali",
-            "PRELOAD": "Preload",
+            "PRELOAD": "Precarica",
             "PROJECT_NAME": "Nome progetto",
             "RENDERING_ENGINE": "Rendering Engine",
             "REPO_ACCESS": "Accesso al Repository",
@@ -247,6 +241,62 @@
             }
         }
     },
+    "DATA_MANAGEMENT": {
+        "DATASET_CATALOG": {
+            "CATALOG": "Catalogo",
+            "DATASET_DESCRIPTION": "Descrizione dataset",
+            "DATASET_PAGE": "Pagina dataset",
+            "DATA_DUMPS": "Dump dati",
+            "URI_PREFIX": "Prefisso URI",
+            "DATASET_CATALOG": "Dataset Catalog",
+            "SEARCH_RESULTS": "Risultati della ricerca",
+            "NO_RESULTS_FOUND": "Nessun risultato trovato",
+            "TOT_RESULTS": "risultati"
+        },
+        "EXPORT": {
+            "EXPORT_DATA": "Esporta dati",
+            "GRAPHS_TO_EXPORT": "Grafi da esportare",
+            "NO_GRAPHS_EXPORTED_MSG": "Nessun grafo selezionato, tutti i named graph saranno esportati",
+            "TRANSFORMERS_DESCRIPTION": "Qui è possibile creare e configurare una sequenza di transformers da applicare durante il processo di esportazione. Ogni transformer è applicato su un sottoinsieme di grafi. Nessun grafo implica l'esportazione di tutti i grafi",
+            "GRAPHS": "Grafi",
+            "INCLUDE_INFERRED": "Includi informazioni inferite"
+        },
+        "LOAD": {
+            "LOAD_DATA": "Carica dati",
+            "LOAD_FROM": "Carica da",
+            "DATA_DUMP": "Data dump",
+            "USE_PROJECT_BASEURI": "Usa baseURI del progetto",
+            "RESOLVE_IMPORTS": "Risoluzione import",
+            "IMPORTS_RESOLUTION_TOOLTIP": "Specifica la sorgente per risolvere import transitivi",
+            "TRANSFORMERS_DESCRIPTION": "Qui è possibile creare e configurare una sequenza di transformers da applicare durante il processo di caricamento dati",
+            "IMPLICITLY_VALIDATE": "Valida implicitamente i dati caricati",
+            "DETECT_FORMAT": "Rileva formato",
+            "FORCE_FORMAT_TOOLTIP": "Consente di forzare la selezione di un formato sovrascrivendo quello rilevato dal sistema"
+        },
+        "REFACTOR": {
+            "DATA_REFACTOR": "Data refactoring",
+            "SKOS_TO_SKOSXL_INFO": "Questa operazione trasforma tutte le label e le note SKOS in label e note reificate SKOS-XL.",
+            "REIFY_NOTES": "Reifica note SKOS",
+            "SKOSXL_TO_SKOS_INFO": "Questa operazione trasforma tutte le label e le note SKOS-XL (reificate) in label e note SKOS. Nota: Questa non è un'operazione loss-less, tutte le informazioni relative alle label e note SKOS-XL andranno perse.",
+            "FLATTEN_NOTES": "Dereifica note SKOS",
+            "MIGRATE_DATA": "Migra i dati nel grafo baseURI",
+            "MIGRATE_INFO": "Questa operazione sposta il contenuto del grafo di default verso un grafo con lo stesso IRI del baseURI del progetti. Verrà cancellato inoltre il grafo di default mentre saranno preservate le informazioni già presenti nel grafo di destinazione."
+        },
+        "VERSIONING": {
+            "VERSIONS": "Versioni",
+            "SWITCH_TO": "Passa a",
+            "DUMP": "Dump",
+            "DUMP_NEW_VERSION": "Dump di una nuova versione",
+            "DUMP_NEW_VERSION_DIFFERENT_LOCATION": "Dump di una nuova versione in posizione differente",
+            "VERSION_ID": "ID versione",
+            "DATETIME": "Datetime",
+            "REPO_CONFIGURATION": "Configurazione repository",
+            "REPO_LOCATION": "Posizione repository"
+        },
+        "COMMONS": {
+            "DATA_TRANSFORMATIONS": "Trasformazione dati"
+        }
+    },
     "METADATA": {
         "NAMESPACES_AND_IMPORTS": {
             "NAMESPACE_MANAGEMENT": "Gestione Namespace",
@@ -277,7 +327,6 @@
                 "ALTERNATIVE_URL": "URL alternativo",
                 "MIRROR_FILE_NAME": "Nome del file mirror",
                 "TRANSITIVE_IMPORTS": "Import transitivi",
-                "ONTOLOGY_IRI": "IRI ontologia",
                 "DATA_DUMP": "Data dump",
                 "USE_DATA_DUMP": "Usa data dump",
                 "DATA_DUMP_CHECK": "Se spuntato, l'import è aggiunto dal data dump indicato anzichè dall'IRI dell'ontologia"
@@ -295,11 +344,9 @@
                 "OTHER_VERSIONS": "Altre versioni",
                 "ADD_DATASET_VERSION": "Aggiungi versione dataset",
                 "DELETE_DATASET_VERSION": "Cancella versione dataset",
-                "TITLE": "Titolo",
                 "IDENTITY": "Identità",
                 "DEREFERENCEABLE": "Dereferenziabile",
                 "DEREFERENCIATION_SYSTEM": "Sistema di dereferenziazione",
-                "SPARQL_ENDPOINT": "Endpoint SPARQL",
                 "NO_AGGREGATION": "No aggregazione",
                 "NO_AGGREGATION_TOOLTIP": "Se spuntato, significa che l'aggregazione potrebbe essere supportata, ma il suo supporto è insufficiente per i propositi di Vocbench",
                 "URI_SPACE": "URI space",
@@ -313,7 +360,6 @@
                 "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Cancella tutti gli Embedded Lexicalization Set",
                 "LEXICALIZATION_SET": "Lexicalization Set",
                 "LEXICON_DATASET": "Lexicon Dataset",
-                "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
                 "REFERENCES": "Riferimenti",
                 "LEXICAL_ENTRIES": "Lexical Entries",
                 "LEXICALIZATIONS": "Lessicalizzazioni",
@@ -376,7 +422,6 @@
         "STATUS": {
             "RESOURCE_NOT_EXISTING": "Questa risorsa non è disponibile nel progetto corrente",
             "RESOURCE_UNKNOWN_HOST": "Questa risorsa non è disponibile o accessibile in progetti locali nè può essere raggiungibile sul Web",
-            "STATUS": "Stato",
             "ACCESS_METHOD": "Metodo di accesso",
             "LOCAL_PROJECT": "Progetto locale",
             "OTHER_LOCAL_PROJECT": "Altro progetto locale",
@@ -465,9 +510,20 @@
         "FORGOT_PASSWORD": "Password dimenticata?",
         "SIGNUP": "Registrati"
     },
+    "WIDGETS": {
+        "FILE_PICKER": {
+            "BROWSE": "Sfoglia",
+            "SELECT_A_FILE": "Seleziona un file"
+        }
+    },
     "COMMONS": {
+        "ACTIVE": "Attivo",
         "BASE_URI": "Base URI",
         "CANCEL": "Annulla",
+        "CLOSE": "Chiudi",
+        "CONFIGURATION": "Configurazione",
+        "CONFIGURE": "Configura",
+        "CONFIGURATION_REQUIRED": "Configurazione necessaria",
         "CREATE": "Crea",
         "DATASET": "Dataset",
         "DESCRIPTION": "Descrizione",
@@ -475,14 +531,30 @@
         "EXPORT": "Esporta",
         "FORCE_FORMAT": "Forza il formato",
         "FORMAT": "Formato",
-        "MANDATORY_FIELD": "Campo obbligatorio",
         "LANGUAGE": "Lingua",
+        "LEXICALIZATION": "Lessicalizzazione",
+        "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
+        "LOAD_CONFIGURATION": "Carica configurazione",
+        "MANDATORY_FIELD": "Campo obbligatorio",
+        "MODEL": "Modello",
+        "MOVE_DOWN": "Sposta giù",
+        "MOVE_UP": "Sposta su",
+        "NAME": "Name",
+        "NEW": "Nuovo",
+        "ONTOLOGY_IRI": "IRI ontologia",
         "OPTIONAL_FIELD": "Campo opzionale",
         "PAGE_OF_TOT": "di",
         "REFRESH": "Aggiorna",
+        "REPOSITORY_ID": "ID repository",
         "SAVE": "Salva",
+        "SAVE_CONFIGURATION": "Salva configurazione",
         "SEARCH": "Cerca",
         "SETTINGS": "Impostazioni",
-        "SUBMIT": "Invia"
+        "SPARQL_ENDPOINT": "Endpoint SPARQL",
+        "START": "Avvia",
+        "STATUS": "Stato",
+        "SUBMIT": "Invia",
+        "TITLE": "Titolo",
+        "VALUE": "Value"
     }
 }

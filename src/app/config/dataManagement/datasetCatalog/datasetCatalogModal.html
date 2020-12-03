@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Dataset Catalog</h3>
+    <h3 class="modal-title">{{'DATA_MANAGEMENT.DATASET_CATALOG.DATASET_CATALOG'|translate}}</h3>
 </div>
 <div class="modal-body vbox blockingDivHost" style="min-height: 75vh;">
 
@@ -10,7 +10,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <td nowrap><label>Catalog:</label></td>
+                <td nowrap><label>{{'DATA_MANAGEMENT.DATASET_CATALOG.CATALOG'|translate}}:</label></td>
                 <td>
                    <extension-configurator *ngIf="extensions" [extensions]="extensions"
                     (extensionUpdated)="onExtensionChange($event)"
@@ -18,7 +18,7 @@
                 </td>
             </tr>
             <tr>
-                <td nowrap><label>Search:</label></td>
+                <td nowrap><label>{{'COMMONS.SEARCH'|translate}}:</label></td>
                 <td>
                     <div class="input-group">
                         <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
@@ -36,11 +36,11 @@
     <div class="hbox" style="margin-top: 4px;">
         <div class="card card-default vbox" style="flex: 1;">
             <div class="card-header">
-                <label>Search results:</label>
+                <label>{{'DATA_MANAGEMENT.DATASET_CATALOG.SEARCH_RESULTS'|translate}}:</label>
             </div>
             <div class="card-body hbox">
                 <div class="vbox scrollableContainer">
-                    <div *ngIf="searchDatasetResult?.totalResults == 0" class="searchDatasetResult">No results found</div>
+                    <div *ngIf="searchDatasetResult?.totalResults == 0" class="searchDatasetResult">{{'DATA_MANAGEMENT.DATASET_CATALOG.NO_RESULTS_FOUND'|translate}}</div>
                     <div *ngFor="let d of searchDatasetResult?.content">
                         <div class="listItem searchDatasetResult" [ngClass]="{active: d == selectedDataset}" (click)="selectDataset(d)">
                             <div style="font-size: 13px">
@@ -72,13 +72,13 @@
             </div>
             <div class="card-footer">
                 <div *ngIf="searchDatasetResult" class="hbox float-right" style="align-items: center;">
-                    <span style="margin-right: 4px;">{{searchDatasetResult.totalResults}} results</span>
+                    <span style="margin-right: 4px;">{{searchDatasetResult.totalResults}} {{'DATA_MANAGEMENT.DATASET_CATALOG.TOT_RESULTS'|translate}}</span>
                     <div *ngIf="searchDatasetResult.totalResults > 0" class="btn-group btn-group-xs">
                         <button class="btn btn-light" title="Previous page" (click)="prevPage()" [disabled]="page==0">
                             <span class="fas fa-caret-left"></span>
                         </button>
                         <button class="btn btn-light" style="cursor: auto" disabled>
-                            <span>{{page+1}} of {{totPage}}</span>
+                            <span>{{page+1}} {{'COMMONS.PAGE_OF_TOT'|translate}} {{totPage}}</span>
                         </button>
                         <button class="btn btn-light" title="Next page" (click)="nextPage()" [disabled]="searchDatasetResult.tail">
                             <span class="fas fa-caret-right"></span>

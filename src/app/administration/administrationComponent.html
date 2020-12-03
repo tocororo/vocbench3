@@ -6,7 +6,7 @@
         <button class="btn btn-light" [routerLink]="['/Administration/Roles']" routerLinkActive="active" 
             [disabled]="!isRoleManagementAuthorized()">Roles</button>
         <button *ngIf="isAdmin()" class="btn btn-light" [routerLink]="['/Administration/Groups']" routerLinkActive="active">Groups</button>
-        <button *ngIf="isAdmin()" class="btn btn-light" [routerLink]="['/Administration/Configuration']" routerLinkActive="active">Configuration</button>
+        <button *ngIf="isAdmin()" class="btn btn-light" [routerLink]="['/Administration/Configuration']" routerLinkActive="active">{{'COMMONS.CONFIGURATION'|translate}}</button>
     </div>
     <router-outlet></router-outlet>
 </div>

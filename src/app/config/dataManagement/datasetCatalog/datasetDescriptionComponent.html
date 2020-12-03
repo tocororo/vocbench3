@@ -1,6 +1,6 @@
 <div class="card card-default vbox" style="flex: 1; margin-left: 4px;">
     <div class="card-header">
-        <label>Dataset description:</label>
+        <label>{{'DATA_MANAGEMENT.DATASET_CATALOG.DATASET_DESCRIPTION'|translate}}:</label>
     </div>
 
     <div class="card-body hbox">
@@ -15,13 +15,13 @@
                                 <td>{{dataset.id}}</td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: top;"><label>Title</label></td>
+                                <td style="vertical-align: top;"><label>{{'COMMONS.TITLE'|translate}}</label></td>
                                 <td>
                                     <div *ngFor="let t of dataset.titles" style="margin-bottom: 4px;">{{t.getValue()}} @{{t.getLang()}}</div>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: top;"><label>Description</label></td>
+                                <td style="vertical-align: top;"><label>{{'COMMONS.DESCRIPTION'|translate}}</label></td>
                                 <td>
                                     <div *ngFor="let d of dataset.descriptions" style="margin-bottom: 4px;">
                                         {{d.getValue()}} @{{d.getLang()}}
@@ -29,11 +29,11 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: top;" nowrap><label>Dataset page</label></td>
+                                <td style="vertical-align: top;" nowrap><label>{{'DATA_MANAGEMENT.DATASET_CATALOG.DATASET_PAGE'|translate}}</label></td>
                                 <td><a [href]="dataset.datasetPage" target="_blank">{{dataset.datasetPage}}</a></td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: top;" nowrap><label>Ontology IRI</label></td>
+                                <td style="vertical-align: top;" nowrap><label>{{'COMMONS.ONTOLOGY_IRI'|translate}}</label></td>
                                 <td>
                                     <a *ngIf="dataset.ontologyIRI" [href]="dataset.ontologyIRI.getURI()" target="_blank">
                                         {{dataset.ontologyIRI.getURI()}}
@@ -41,7 +41,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: top;" nowrap><label>Data dumps</label></td>
+                                <td style="vertical-align: top;" nowrap><label>{{'DATA_MANAGEMENT.DATASET_CATALOG.DATA_DUMPS'|translate}}</label></td>
                                 <td>
                                     <div *ngFor="let dump of dataset.dataDumps" style="margin-bottom: 4px;">
                                         <a [href]="dump.accessURL" target="_blank" [title]="dump.getPreferredTitle()?.toNT()">{{dump.accessURL}}</a>
@@ -49,19 +49,19 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: top;" nowrap><label>URI prefix</label></td>
+                                <td style="vertical-align: top;" nowrap><label>{{'DATA_MANAGEMENT.DATASET_CATALOG.URI_PREFIX'|translate}}</label></td>
                                 <td>{{dataset.uriPrefix}}</td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: top;" nowrap><label>SPARQL Endpoint</label></td>
+                                <td style="vertical-align: top;" nowrap><label>{{'COMMONS.SPARQL_ENDPOINT'|translate}}</label></td>
                                 <td>{{dataset.sparqlEndpoint}}</td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: top;"><label>Model</label></td>
+                                <td style="vertical-align: top;"><label>{{'COMMONS.MODEL'|translate}}</label></td>
                                 <td>{{dataset.model}}</td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: top;" nowrap><label>Lexicalization Model</label></td>
+                                <td style="vertical-align: top;" nowrap><label>{{'COMMONS.LEXICALIZATION_MODEL'|translate}}</label></td>
                                 <td>{{dataset.lexicalizationModel}}</td>
                             </tr>
                         </tbody>

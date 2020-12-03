@@ -103,7 +103,7 @@
                     <!--&laquo;-->
                 </button>
                 <button class="btn btn-light" style="cursor: auto" disabled>
-                    <span>{{page+1}} of {{totPage}}</span>
+                    <span>{{page+1}} {{'COMMONS.PAGE_OF_TOT'|translate}} {{totPage}}</span>
                 </button>
                 <button class="btn btn-light" title="Next page" (click)="nextPage()" [disabled]="page==totPage-1">
                     <span class="fas fa-caret-right"></span>

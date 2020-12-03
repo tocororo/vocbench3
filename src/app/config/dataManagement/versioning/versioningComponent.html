@@ -1,10 +1,10 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1">Versions:</label>
+        <label style="flex: 1">{{'DATA_MANAGEMENT.VERSIONING.VERSIONS'|translate}}:</label>
 
         <div class="btn-group btn-group-xs" style="margin-right: 5px">
             <button class="btn btn-light" (click)="swithcToVersion()" [disabled]="!selectedVersion">
-                Switch to
+                {{'DATA_MANAGEMENT.VERSIONING.SWITCH_TO'|translate}}
             </button>
             <!-- <button class="btn btn-light" (click)="deleteVersion()" [disabled]="!selectedVersion">
                 Delete
@@ -13,12 +13,12 @@
 
         <div class="dropdown float-right" ngbDropdown>
             <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" [disabled]="!isDumpAuthorized" ngbDropdownToggle>
-                Dump...
+                {{'DATA_MANAGEMENT.VERSIONING.DUMP'|translate}}...
                 <span class="fas fa-caret-down fa-sm"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="dump()">Dump a new version</a>
-                <a class="dropdown-item" (click)="dumpWithLocation()">Dump a new version to a different location</a>
+                <a class="dropdown-item" (click)="dump()">{{'DATA_MANAGEMENT.VERSIONING.DUMP_NEW_VERSION'|translate}}</a>
+                <a class="dropdown-item" (click)="dumpWithLocation()">{{'DATA_MANAGEMENT.VERSIONING.DUMP_NEW_VERSION_DIFFERENT_LOCATION'|translate}}</a>
             </div>
         </div>
 
@@ -28,12 +28,12 @@
         <table class="table table-sm table-hoverable" style="flex: 1">
             <thead>
                 <tr>
-                    <th class="text-center">Version ID</th>
-                    <th class="text-center">Datetime</th>
-                    <th class="text-center">Repository ID</th>
-                    <th class="text-center">Repo Location</th>
-                    <th class="text-center">Active</th>
-                    <th class="text-center">Status</th>
+                    <th class="text-center">{{'DATA_MANAGEMENT.VERSIONING.VERSION_ID'|translate}}</th>
+                    <th class="text-center">{{'DATA_MANAGEMENT.VERSIONING.DATETIME'|translate}}</th>
+                    <th class="text-center">{{'COMMONS.REPOSITORY_ID'|translate}}</th>
+                    <th class="text-center">{{'DATA_MANAGEMENT.VERSIONING.REPO_LOCATION'|translate}}</th>
+                    <th class="text-center">{{'COMMONS.ACTIVE'|translate}}</th>
+                    <th class="text-center">{{'COMMONS.STATUS'|translate}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,7 +61,7 @@
                             {{v.repositoryStatus | lowercase}}
                             <button class="btn btn-xs btn-light" (click)="closeVersion(v)"
                                 [disabled]="v.repositoryStatus != 'INITIALIZED' || isActiveVersion(v)">
-                                Close
+                                {{'COMMONS.CLOSE'|translate}}
                             </button>
                         </ng-container>
                     </td>

@@ -9,8 +9,6 @@ export class FilePickerModal {
 
     @Input() title: string;
     @Input() message: string;
-    @Input() label: string;
-    @Input() placeholder: string;
     @Input() accept: string;
 
     private pickedFile: File;

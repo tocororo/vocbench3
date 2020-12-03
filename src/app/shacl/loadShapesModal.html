@@ -7,7 +7,7 @@
         <div class="col-sm-7">
             <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker>
         </div>
-        <label class="col-form-label col-sm-1">Format:</label>
+        <label class="col-form-label col-sm-1">{{'COMMONS.FORMA'|translate}}:</label>
         <div class="col-sm-3">
             <select class="form-control" [(ngModel)]="selectedInputFormat">
                 <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>

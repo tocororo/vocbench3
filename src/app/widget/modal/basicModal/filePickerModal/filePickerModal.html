@@ -10,12 +10,10 @@
         {{message}}
     </div>
 
-    <file-picker (fileChanged)="fileChangeEvent($event)" [label]="label"
-        [accept]="accept" [placeholder]="placeholder">
-    </file-picker>
+    <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="accept"></file-picker>
 
 </div>
 <div class="modal-footer">
     <button class="btn btn-sm btn-primary" (click)="ok()">Ok</button>
-    <button class="btn btn-sm btn-secondary" (click)="close()">Close</button>
+    <button class="btn btn-sm btn-secondary" (click)="close()">{{'COMMONS.CLOSE'|translate}}</button>
 </div>

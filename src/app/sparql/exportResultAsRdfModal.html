@@ -23,11 +23,11 @@
                     [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
                     <span class="fas fa-minus"></span>
                 </button>
-                <button class="btn btn-light" title="Move down"  (click)="moveFilterDown()"
+                <button class="btn btn-light" [title]="'COMMONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
                     [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
                     <span class="fas fa-chevron-down"></span>
                 </button>
-                <button class="btn btn-light" title="Move up" (click)="moveFilterUp()"
+                <button class="btn btn-light" [title]="'COMMONS.MOVE_UP'|translate" (click)="moveFilterUp()"
                     [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
                     <span class="fas fa-chevron-up"></span>
                 </button>

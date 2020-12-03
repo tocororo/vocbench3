@@ -11,7 +11,7 @@
         <tbody>
             <tr>
                 <td class="text-right">
-                    <label>Name</label>
+                    <label>{{'COMMONS.NAME'|translate}}</label>
                 </td>
                 <td>
                     <input class="form-control form-control-sm" [(ngModel)]="name" [disabled]="ref || readOnly">
@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td class="text-right">
-                    <label>Description</label>
+                    <label>{{'COMMONS.DESCRIPTION'|translate}}</label>
                 </td>
                 <td>
                     <textarea class="form-control form-control-sm" style="resize: vertical; max-height: 300px;" [(ngModel)]="description" 

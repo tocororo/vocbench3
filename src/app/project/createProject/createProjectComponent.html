@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.MODEL'|translate}}:</label>
+                <label class="col-form-label col-sm-1">{{'COMMONS.MODEL'|translate}}:</label>
                 <div class="col-sm-3">
                     <div class="hbox" style="align-items: center">
                         <select class="form-control" [(ngModel)]="ontoModelType" (ngModelChange)="onOntoModelChanged()" [disabled]="ontoModelLocked">
@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <ng-container *ngIf="!isEdoalProject(); else edoalBlock">
-                    <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.LEXICALIZATION'|translate}}:</label>
+                    <label class="col-form-label col-sm-1">{{'COMMONS.LEXICALIZATION'|translate}}:</label>
                     <div class="col-sm-4">
                         <div class="hbox" style="align-items: center">
                             <select class="form-control" [(ngModel)]="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
@@ -205,7 +205,7 @@
                         </div>
                         <ng-container *ngIf="isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
-                                <label>{{'PROJECTS.CREATE_FORM.CONFIGURATION'|translate}}</label>
+                                <label>{{'COMMONS.CONFIGURATION'|translate}}</label>
                             </div>
                             <div class="col-sm-5">
                                 <extension-configurator #dataRepoConfigurator *ngIf="dataRepoExtensions"
@@ -245,7 +245,7 @@
                         </div>
                         <ng-container *ngIf="isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1" style="white-space: nowrap">
-                                <label>{{'PROJECTS.CREATE_FORM.CONFIGURATION'|translate}}</label>
+                                <label>{{'COMMONS.CONFIGURATION'|translate}}</label>
                                 <span class="fas fa-info-circle ml-2" title="It is highly recommended not to use inference"></span>
                             </div>
                             <div class="col-sm-5">
@@ -303,7 +303,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.CONFIGURATION'|translate}}:</label>
+                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIGURATION'|translate}}:</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
                                             <select class="form-control" [(ngModel)]="selectedUriGenPluginConf">
@@ -312,7 +312,7 @@
                                                 </option>
                                             </select>
                                             <span class="input-group-append">
-                                                <button class="btn btn-light" (click)="configureUriGenConf()">Configure</button>
+                                                <button class="btn btn-light" (click)="configureUriGenConf()">{{'COMMONS.CONFIGURE'|translate}}</button>
                                             </span>
                                         </div>
                                     </div>
@@ -343,7 +343,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">{{'PROJECTS.CREATE_FORM.CONFIGURATION'|translate}}:</label>
+                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIGURATION'|translate}}:</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
                                             <select class="form-control" [(ngModel)]="selectedRendEngPluginConf" [disabled]="rendEngUseDefaultSetting">
@@ -352,7 +352,7 @@
                                                 </option>
                                             </select>
                                             <span class="input-group-append">
-                                                <button class="btn btn-light" (click)="configureRendEngConf()" [disabled]="rendEngUseDefaultSetting">Configure</button>
+                                                <button class="btn btn-light" (click)="configureRendEngConf()" [disabled]="rendEngUseDefaultSetting">{{'COMMONS.CONFIGURE'|translate}}</button>
                                             </span>
                                         </div>
                                     </div>

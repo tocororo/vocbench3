@@ -9,10 +9,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class FilePickerComponent {
     
-    @Input() label: string = "Browse";
     @Input() size: string;
     @Input() accept: string;
-    @Input() placeholder: string = "Select a file...";
     @Input() file: File; //in case the file is already known when the component is initialized
     
     @Output() fileChanged = new EventEmitter<File>();
