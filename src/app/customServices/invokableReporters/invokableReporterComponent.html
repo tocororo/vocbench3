@@ -80,11 +80,11 @@
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-sm">
-                            <button class="btn btn-light" (click)="createServiceInvocation()" title="Create service invocation" 
+                            <button class="btn btn-light" (click)="createServiceInvocation()" [title]="'COMMONS.ACTIONS.CREATE'|translate" 
                                 [disabled]="!createInvocationAuthorized">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" (click)="deleteServiceInvocation()" [title]="'COMMONS.DELETE'|translate" 
+                            <button class="btn btn-light" (click)="deleteServiceInvocation()" [title]="'COMMONS.ACTIONS.DELETE'|translate" 
                                 [disabled]="!selectedServiceInvocation || !deleteInvocationAuthorized">
                                 <span class="fas fa-minus"></span>
                             </button>

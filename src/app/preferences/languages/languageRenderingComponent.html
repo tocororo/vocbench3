@@ -6,10 +6,10 @@
             No language selected implicitly means all languages
         </span>
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-light" (click)="changeAllLangStatus(true)" title="Check all">
+            <button class="btn btn-light" (click)="changeAllLangStatus(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
                 <span class="far fa-check-square"></span>
             </button>
-            <button class="btn btn-light" (click)="changeAllLangStatus(false)" title="Uncheck all">
+            <button class="btn btn-light" (click)="changeAllLangStatus(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate">
                 <span class="far fa-square"></span>
             </button>
         </div>
@@ -40,7 +40,7 @@
                             </button>
                         </th>
                         <th class="text-center" style="padding: 0px 8px;" nowrap>
-                            ISO code
+                            {{'COMMONS.LANGUAGE.ISO_CODE'|translate}}
                             <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeIsocodeOrder()">
                                 <span class="fas fa-sort-alpha-down" *ngSwitchCase="'isocode_ascending'" ></span>
                                 <span class="fas fa-sort-alpha-down-alt" *ngSwitchCase="'isocode_descending'"></span>

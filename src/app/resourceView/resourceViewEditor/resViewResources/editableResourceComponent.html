@@ -5,7 +5,7 @@
         <img [src]="resource.getURI()" (error)="isImage=false" style="max-height: 100px; max-width: 300px;" [title]="resource.getURI()">
     </a>
     
-    <div class="dropdown float-right" style="align-self: flex-start;" [title]="'COMMONS.EDIT'|translate" ngbDropdown>
+    <div class="dropdown float-right" style="align-self: flex-start;" [title]="'COMMONS.ACTIONS.EDIT'|translate" ngbDropdown>
         <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="editMenuDisabled">
             <span class="fas fa-caret-down fa-sm"></span>
         </button>
@@ -16,7 +16,7 @@
             </a>
 
             <a *ngIf="editActionScenario != 'xLabel'" class="dropdown-item" [ngClass]="{ disabled: !editAuthorized || isInferred }" (click)="edit()">
-                {{'COMMONS.EDIT'|translate}}
+                {{'COMMONS.ACTIONS.EDIT'|translate}}
             </a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkEditAuthorized }"
                 (click)="bulkEdit()" title="Update the value for every resource that has this predicate-value relation">
@@ -39,7 +39,7 @@
             <a *ngIf="isInferred && partition != 'lexicalizations'" class="dropdown-item" [ngClass]="{ disabled: !assertAuthorized }" (click)="assertInferred()">
                 Assert inferred statement
             </a>
-            <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized || isInferred }" (click)="delete()">{{'COMMONS.DELETE'|translate}}</a>
+            <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized || isInferred }" (click)="delete()">{{'COMMONS.ACTIONS.DELETE'|translate}}</a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkDeleteAuthorized }" 
                 (click)="bulkDelete()" title="Delete the value for every resource that has this predicate-value relation">
                 Bulk delete
@@ -59,7 +59,7 @@
             <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="confirmEdit()" placeholder="Confirm">
                 <span class="fas fa-check" style="color: green"></span>
             </button>
-            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="cancelEdit()" placeholder="{{'COMMONS.CANCEL'|translate}}">
+            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="cancelEdit()" placeholder="{{'COMMONS.ACTIONS.CANCEL'|translate}}">
                 <span class="fas fa-times" style="color: red"></span>
             </button>
         </div>

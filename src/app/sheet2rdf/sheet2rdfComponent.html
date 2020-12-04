@@ -107,10 +107,10 @@
                         <div class="btn-group btn-group-xs">
                             <!-- Workaround to show input file as simple <button> -->
                             <input #inputFile type="file" (change)="loadPearl(inputFile.files[0])" accept=".pr, text/plain" style="display:none">
-                            <button class="btn btn-light" style="margin-left: -1px" (click)="inputFile.click()" title="Load Pearl" [disabled]="!tablePreview">
+                            <button class="btn btn-light" style="margin-left: -1px" (click)="inputFile.click()" [title]="'COMMONS.ACTIONS.LOAD'|translate" [disabled]="!tablePreview">
                                 <span class="fas fa-upload"></span>
                             </button>
-                            <button class="btn btn-light" (click)="exportPearl()" title="Export Pearl" [disabled]="!pearl">
+                            <button class="btn btn-light" (click)="exportPearl()" [title]="'COMMONS.ACTIONS.EXPORT'|translate" [disabled]="!pearl">
                                 <span class="fas fa-download"></span>
                             </button>
                         </div>

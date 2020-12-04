@@ -3,7 +3,7 @@
     <ng-container *ngIf="searchSettings.useAutocompletion">
         <div style="flex: 1;" (keydown.enter)="doSearch()">
             <ng-autocomplete #autocompleter [(ngModel)]="searchStr" (inputChanged)='onChangeSearch()'
-                [placeHolder]="'COMMONS.SEARCH'|translate" minQueryLength="2" debounceTime="500"
+                [placeHolder]="'COMMONS.ACTIONS.SEARCH'|translate" minQueryLength="2" debounceTime="500"
                 [data]="completerData" [isLoading]="isCompleterLoading" [itemTemplate]="itemTemplate" [disabled]="disabled">
             </ng-autocomplete>
             <ng-template #itemTemplate let-item>
@@ -12,7 +12,7 @@
         </div>
     </ng-container>
     <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control form-control-sm" style="flex: 1;" 
-        [(ngModel)]="searchStr" (keydown.enter)="doSearch()" [placeholder]="'COMMONS.SEARCH'|translate" [disabled]="disabled">
+        [(ngModel)]="searchStr" (keydown.enter)="doSearch()" [placeholder]="'COMMONS.ACTIONS.SEARCH'|translate" [disabled]="disabled">
 
     <div class="btn-group btn-group-xs dropup ml-2" ngbDropdown placement="top-right">
         <button class="btn btn-light" type="button" (click)="doSearch()" [disabled]="disabled">

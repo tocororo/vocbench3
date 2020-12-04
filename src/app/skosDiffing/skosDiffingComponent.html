@@ -3,10 +3,10 @@
         <label style="flex: 1;">SKOS diffing tasks</label>
 
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-light" (click)="createTask()" title="Create task" [disabled]="serverDown">
+            <button class="btn btn-light" (click)="createTask()" [title]="'COMMONS.ACTIONS.CREATE'|translate" [disabled]="serverDown">
                 <span class="fas fa-plus"></span>
             </button>
-            <button class="btn btn-sm btn-light" (click)="deleteTask()" [title]="'COMMONS.DELETE'|translate" [disabled]="!selectedTask || serverDown">
+            <button class="btn btn-sm btn-light" (click)="deleteTask()" [title]="'COMMONS.ACTIONS.DELETE'|translate" [disabled]="!selectedTask || serverDown">
                 <span class="fas fa-minus"></span>
             </button>
         </div>

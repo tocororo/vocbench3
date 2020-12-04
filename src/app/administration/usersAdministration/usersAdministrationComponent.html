@@ -21,7 +21,7 @@
                                 </button>
                             </div>
                             <div class="btn-group btn-group-xs">
-                                <button class="btn btn-light" (click)="createUser()" title="Create user">
+                                <button class="btn btn-light" (click)="createUser()" [title]="'COMMONS.ACTIONS.CREATE'|translate">
                                     <span class="fas fa-plus"></span>
                                 </button>
                             </div>
@@ -78,10 +78,10 @@
                         <label style="flex: 1;">Template</label>
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group btn-group-xs">
-                                <button class="btn btn-light" (click)="storeTemplate()" title="Store template">
+                                <button class="btn btn-light" (click)="storeTemplate()" [title]="'COMMONS.ACTIONS.STORE'|translate">
                                     <span class="fas fa-download"></span>
                                 </button>
-                                <button class="btn btn-light" (click)="loadTemplate()" title="Load existing template">
+                                <button class="btn btn-light" (click)="loadTemplate()" [title]="'COMMONS.ACTIONS.LOAD'|translate">
                                     <span class="fas fa-upload"></span>
                                 </button>
                             </div>

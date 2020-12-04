@@ -16,27 +16,27 @@
                     <div class="card-header">
                         <label style="flex: 1">Custom Forms:</label>
                         <div class="btn-group btn-group-xs" role="group">
-                            <button class="btn btn-light" title="Create Custom Form" (click)="createCustomForm()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CREATE'|translate" (click)="createCustomForm()"
                                 [disabled]="!isCreateFormAuthorized()">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" [title]="'COMMONS.DELETE'|translate" (click)="deleteCustomForm()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.DELETE'|translate" (click)="deleteCustomForm()"
                                 [disabled]="!selectedCustomForm || selectedCustomForm.getLevel() == 'system' || !isDeleteFormAuthorized()">
                                 <span class="fas fa-minus"></span>
                             </button>
-                            <button class="btn btn-light" title="Modify Custom Form" (click)="editCustomForm()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.EDIT'|translate" (click)="editCustomForm()"
                                 [disabled]="!selectedCustomForm || !isUpdateFormAuthorized()">
                                 <span class="fas fa-pencil-alt"></span>
                             </button>
-                            <button class="btn btn-light" title="Clone Custom Form" (click)="cloneCustomForm()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CLONE'|translate" (click)="cloneCustomForm()"
                                 [disabled]="!selectedCustomForm || !isCreateFormAuthorized()">
                                 <span class="fas fa-copy"></span>
                             </button>
-                            <button class="btn btn-light" title="Export Custom Form" (click)="exportCustomForm()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.EXPORT'|translate" (click)="exportCustomForm()"
                                 [disabled]="!selectedCustomForm">
                                 <span class="fas fa-download"></span>
                             </button>
-                            <button class="btn btn-light" title="Import Custom Form" (click)="importCustomForm()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.IMPORT'|translate" (click)="importCustomForm()"
                                 [disabled]="!isCreateFormAuthorized()">
                                 <span class="fas fa-upload"></span>
                             </button>
@@ -53,27 +53,27 @@
                     <div class="card-header">
                         <label style="flex: 1">Form Collections:</label>
                         <div class="btn-group btn-group-xs" role="group">
-                            <button class="btn btn-light" title="Create Form Collection" (click)="createFormCollection()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CREATE'|translate" (click)="createFormCollection()"
                                 [disabled]="!isCreateCollectionAuthorized()">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" [title]="'COMMONS.DELETE'|translate" (click)="deleteFormCollection()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.DELETE'|translate" (click)="deleteFormCollection()"
                                 [disabled]="!selectedFormColl || selectedFormColl.getLevel() == 'system' || !isDeleteCollectionAuthorized()">
                                 <span class="fas fa-minus"></span>
                             </button>
-                            <button class="btn btn-light" title="Change Form Collection" (click)="editFormCollection()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.EDIT'|translate" (click)="editFormCollection()"
                                 [disabled]="!selectedFormColl || !isUpdateCollectionAuthorized()">
                                 <span class="fas fa-pencil-alt"></span>
                             </button>
-                            <button class="btn btn-light" title="Clone Form Collection" (click)="cloneFormCollection()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CLONE'|translate" (click)="cloneFormCollection()"
                                 [disabled]="!selectedFormColl || !isCreateCollectionAuthorized()">
                                 <span class="fas fa-copy"></span>
                             </button>
-                            <button class="btn btn-light" title="Export Form Collection" (click)="exportFormCollection()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.EXPORT'|translate" (click)="exportFormCollection()"
                                 [disabled]="!selectedCustomForm">
                                 <span class="fas fa-download"></span>
                             </button>
-                            <button class="btn btn-light" title="Import Form Collection" (click)="importFormCollection()"
+                            <button class="btn btn-light" [title]="'COMMONS.ACTIONS.IMPORT'|translate" (click)="importFormCollection()"
                                 [disabled]="!isCreateCollectionAuthorized()">
                                 <span class="fas fa-upload"></span>
                             </button>
@@ -93,11 +93,11 @@
                 <div class="card-header">
                     <label style="flex: 1">Forms mapping:</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" [title]="'COMMONS.CREATE'|translate" (click)="createFormCollMapping()"
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CREATE'|translate" (click)="createFormCollMapping()"
                             [disabled]="!isCreateMappingAuthorized()">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'COMMONS.REMOVE'|translate" (click)="removeFormCollMapping()"
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.REMOVE'|translate" (click)="removeFormCollMapping()"
                             [disabled]="!selectedFormCollMapping || !isDeleteMappingAuthorized()">
                             <span class="fas fa-minus"></span>
                         </button>

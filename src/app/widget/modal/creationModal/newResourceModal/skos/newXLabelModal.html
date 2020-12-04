@@ -35,7 +35,7 @@
             <div *ngFor="let v of values" class="listItem">
                 <rdf-resource style="flex: 1;" [resource]="v"></rdf-resource>
                 <button class="btn btn-light btn-xs" (click)="removeValue(v)">
-                    <span class="far fa-trash-alt" [title]="'COMMONS.REMOVE'|translate"></span>
+                    <span class="far fa-trash-alt" [title]="'COMMONS.ACTIONS.REMOVE'|translate"></span>
                 </button>
             </div>
         </div>
@@ -54,7 +54,7 @@
                 title="Warning: the value currently typed will not be considered. It needs to be added through the '+' button">
             </span>
             <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-            <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+            <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
         </div>
     </div>
 </div>

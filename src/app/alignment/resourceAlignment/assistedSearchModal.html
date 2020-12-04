@@ -36,7 +36,7 @@
         <div class="card card-default">
             <div class="card-header">
                 <label style="flex: 1;">Remote datasets</label>
-                <button class="btn btn-light btn-xs" (click)="addRemoteDataset()" title="Add Remote Dataset">
+                <button class="btn btn-light btn-xs" (click)="addRemoteDataset()" [title]="'COMMONS.ACTIONS.ADD'|translate">
                     <span class="fas fa-plus"></span>
                 </button>
             </div>
@@ -129,5 +129,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

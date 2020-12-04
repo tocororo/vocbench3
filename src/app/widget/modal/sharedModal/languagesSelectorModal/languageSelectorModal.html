@@ -12,8 +12,8 @@
             <thead>
                 <tr>
                     <th class="text-center" style="padding: 0px 8px;">Selected</th>
-                    <th class="text-center" style="padding: 0px 8px;" nowrap>ISO code</th>
-                    <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.LANGUAGE'|translate}}</th>
+                    <th class="text-center" style="padding: 0px 8px;" nowrap>{{'COMMONS.LANGUAGE.ISO_CODE'|translate}}</th>
+                    <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,5 +37,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="okDisabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

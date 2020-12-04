@@ -13,20 +13,20 @@
 
     <div *ngIf="project && selectedGroup" class="card card-alt vbox" style="margin-left: 5px; flex: 3;">
         <div class="card-header">
-            <label>Project-Group settings:</label>
+            <label>{{'ADMINISTRATION.PROJECTS.PROJ_GROUP.PROJ_GROUP_SETTINGS'|translate}}:</label>
         </div>
         <div class="card-body vbox">
 
             <div *ngIf="projectClosed; else elseBlock" class="alert alert-warning">
-                Project {{project.getName()}} is closed. It is possible to edit group settings only for open projects.
+                {{'ADMINISTRATION.PROJECTS.PROJ_GROUP.PROJ_CLOSED_WARNING'|translate:translationParam}}
             </div>
 
             <ng-template #elseBlock>
                 <div class="vbox" *ngIf="isProjectSkosCompliant(); else owlBlock">
                     <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
-                        <span class="fas fa-info-circle" title="Base broader property to be selected when creating narrower concepts"></span>
+                        <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PROJ_GROUP.BASE_BROADER_PROP_INFO'|translate"></span>
                         <label style="white-space: nowrap; margin: 0px 4px;">
-                            Base broader property:
+                            {{'ADMINISTRATION.PROJECTS.PROJ_GROUP.BASE_BROADER_PROP'|translate}}:
                         </label>
                         <div class="input-group" style="flex: 1;">
                             <input type="text" class="form-control" [ngModel]="baseBroaderProp" readonly>
@@ -41,10 +41,8 @@
                     <div class="card card-default vbox">
                         <div class="card-header">
                             <label>
-                                Management of broader/narrower
-                                <span class="fas fa-info-circle" title="Customizes the properties on which the concept tree hierarchy is based on.
-If none of broader/narrower properties is selected, then skos:broader^ and skos:narrower will be used (in OR) to check narrower concepts.
-If any of the two is selected (with one or more properties), then only the selected properties will be used.">
+                                {{'ADMINISTRATION.PROJECTS.PROJ_GROUP.BROADER_NARROWER_MGMT'|translate}}
+                                <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PROJ_GROUP.BROADER_NARROWER_MGMT_INFO'|translate">
                                 </span>
                             </label>
                         </div>
@@ -92,13 +90,13 @@ If any of the two is selected (with one or more properties), then only the selec
                             <div class="mt-2">
                                 <div class="form-check">
                                     <input class="form-check-input" id="syncInvCheck" type="checkbox" [(ngModel)]="syncInverse" (ngModelChange)="onSyncChange()">
-                                    <label class="form-check-label" for="syncInvCheck">Sync inverse properties</label>
-                                    <span class="fas fa-info-circle ml-2" title="Keep synced the broader/narrower properties with their inverse properties"></span>
+                                    <label class="form-check-label" for="syncInvCheck">{{'ADMINISTRATION.PROJECTS.PROJ_GROUP.SYNC_INV_PROP'|translate}}</label>
+                                    <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.PROJECTS.PROJ_GROUP.SYNC_INV_PROP_INFO'|translate"></span>
                                 </div>
                                 <div class="form-check mt-1">
                                     <input class="form-check-input" id="includeSubCheck" type="checkbox" [(ngModel)]="includeSubProps" (ngModelChange)="onIncludeSubPropsChange()">
-                                    <label class="form-check-label" for="includeSubCheck">Include subProperties</label>
-                                    <span class="fas fa-info-circle ml-2" title="Includes the subProperties of the selected broader/narrower properties"></span>
+                                    <label class="form-check-label" for="includeSubCheck">{{'ADMINISTRATION.PROJECTS.PROJ_GROUP.INCLUDE_SUBPROP'|translate}}</label>
+                                    <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.PROJECTS.PROJ_GROUP.INCLUDE_SUBPROP_INFO'|translate"></span>
                                 </div>
                             </div>
                         </div>
@@ -107,8 +105,8 @@ If any of the two is selected (with one or more properties), then only the selec
                     <div class="card card-default vbox" style="margin-top: 4px;">
                         <div class="card-header">
                             <label style="flex:1">
-                                ConceptScheme authorizations
-                                <span class="fas fa-info-circle" title="Determines which ConceptScheme the group is authorized to work with."></span>
+                                {{'ADMINISTRATION.PROJECTS.PROJ_GROUP.SCHEME_AUTH'|translate}}
+                                <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PROJ_GROUP.SCHEME_AUTH_INFO'|translate"></span>
                             </label>
                             <div class="btn-toolbar" role="toolbar">
                                 <div class="btn-group btn-group-xs">
@@ -130,7 +128,7 @@ If any of the two is selected (with one or more properties), then only the selec
 
                 <ng-template #owlBlock>
                     <div class="alert alert-warning">
-                        Project {{project.getName()}} adopts OWL model. Currently it is possible to edit group settings only for SKOS projects.
+                        {{'ADMINISTRATION.PROJECTS.PROJ_GROUP.OWL_PROJECT_WARNING'|translate:translationParam}}
                     </div>
                 </ng-template>
 

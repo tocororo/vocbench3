@@ -1,17 +1,17 @@
 <div class="modal-header">
-    <h3 class="modal-title">Import Role</h3>
+    <h3 class="modal-title">{{'ADMINISTRATION.ROLES.IMPORT_ROLE'|translate}}</h3>
 </div>
 <div class="modal-body">
 
     <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'.pl'"></file-picker>
 
     <div class="hbox mt-2" style="align-items: center">
-        <label style="white-space: nowrap">Role name:</label>
+        <label style="white-space: nowrap">{{'ADMINISTRATION.ROLES.ROLE_NAME'|translate}}:</label>
         <input type="text" class="form-control ml-2" [(ngModel)]="roleName" sanitized>
     </div>
 
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

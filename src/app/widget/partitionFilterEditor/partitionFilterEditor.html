@@ -19,10 +19,10 @@
                 <label style="flex: 1;">Partitions</label>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, true)" title="Check all">
+                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
                             <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, false)" title="Uncheck all">
+                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate">
                             <span class="far fa-square"></span>
                         </button>
                     </div>

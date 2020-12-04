@@ -48,7 +48,7 @@
     </div>
 
     <button class="btn btn-xs btn-light" style="margin-bottom: 3px; align-self: center" (click)="addOperations()">
-        Add <span class="fas fa-chevron-down"></span>
+        {{'COMMONS.ACTIONS.ADD'|translate}} <span class="fas fa-chevron-down"></span>
     </button>
 
     <div class="card card-default vbox">
@@ -65,5 +65,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="operationsToAdd.length == 0">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

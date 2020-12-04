@@ -5,12 +5,12 @@
 
     <div class="card card-default mb-3">
         <div class="card-header">
-            <label>Topic</label>
+            <label>{{'ADMINISTRATION.ROLES.TOPIC'|translate}}</label>
         </div>
         <div class="card-body vbox">
 
             <div class="form-group row">
-                <label class="col-form-label col-sm-3">Area:</label>
+                <label class="col-form-label col-sm-3">{{'ADMINISTRATION.ROLES.AREA'|translate}}:</label>
                 <div class="col-sm-9">
                     <select class="form-control" [(ngModel)]="area" (ngModelChange)="updateExtendedCapability()">
                         <option *ngFor="let a of areaStruct" [ngValue]="a.value">{{a.value}} - {{a.description}}</option>
@@ -18,10 +18,9 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-form-label col-sm-3">Subject and scope:</label>
+                <label class="col-form-label col-sm-3">{{'ADMINISTRATION.ROLES.SUBJECT_AND_SCOPE'|translate}}:</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" [(ngModel)]="subjectScope"
-                        (ngModelChange)="updateExtendedCapability()">
+                    <input type="text" class="form-control" [(ngModel)]="subjectScope" (ngModelChange)="updateExtendedCapability()">
                 </div>
             </div>
         </div>
@@ -32,10 +31,10 @@
         <div class="card-header">
             <label style="flex: 1">CRUDV</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="changeAllCrudvStatus(true)" title="Check all">
+                <button class="btn btn-light" (click)="changeAllCrudvStatus(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
                     <span class="far fa-check-square"></span>
                 </button>
-                <button class="btn btn-light" (click)="changeAllCrudvStatus(false)" title="Uncheck all">
+                <button class="btn btn-light" (click)="changeAllCrudvStatus(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate">
                     <span class="far fa-square"></span>
                 </button>
             </div>
@@ -56,5 +55,5 @@
 
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

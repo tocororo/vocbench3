@@ -85,7 +85,7 @@
         <div class="card-header">
             <label style="flex: 1;">Types</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="addTypesGroup()" title="Add group">
+                <button class="btn btn-light" (click)="addTypesGroup()" [title]="'COMMONS.ACTIONS.ADD'|translate">
                     <span class="fas fa-plus"></span>
                 </button>
             </div>
@@ -125,7 +125,7 @@
         <div class="card-header">
             <label style="flex: 1;">Schemes</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="addSchemesGroup()" title="Add group">
+                <button class="btn btn-light" (click)="addSchemesGroup()" [title]="'COMMONS.ACTIONS.ADD'|translate">
                     <span class="fas fa-plus"></span>
                 </button>
             </div>
@@ -165,7 +165,7 @@
         <div class="card-header">
             <label style="flex: 1;">Ingoing links</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="addIngoingGroup()" title="Add group">
+                <button class="btn btn-light" (click)="addIngoingGroup()" [title]="'COMMONS.ACTIONS.ADD'|translate">
                     <span class="fas fa-plus"></span>
                 </button>
             </div>
@@ -310,6 +310,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">{{'COMMONS.SEARCH'|translate}}</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">{{'COMMONS.ACTIONS.SEARCH'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

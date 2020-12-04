@@ -9,26 +9,26 @@
                 <label style="flex: 1">Metadata Patterns:</label>
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" title="Create Metadata Pattern" (click)="createPattern()" [disabled]="!createPatternAuthorized">
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CREATE'|translate" (click)="createPattern()" [disabled]="!createPatternAuthorized">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" title="Delete Metadata Pattern" (click)="deletePattern()"
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.DELETE'|translate" (click)="deletePattern()"
                             [disabled]="!selectedPattern || selectedPattern.scope == 'FACTORY' || !deletePatternAuthorized">
                             <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-light" title="Modify Metadata Pattern" (click)="editPattern()" [disabled]="!selectedPattern || !modifyPatternAuthorized">
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.EDIT'|translate" (click)="editPattern()" [disabled]="!selectedPattern || !modifyPatternAuthorized">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                     </div>
                     <div class="btn-group btn-group-xs" ngbDropdown>
-                        <button class="btn btn-light" title="Clone Metadata Pattern" (click)="clonePattern()"
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CLONE'|translate" (click)="clonePattern()"
                             [disabled]="!selectedPattern || !createPatternAuthorized">
                             <span class="fas fa-copy"></span>
                         </button>
-                        <button class="btn btn-light" title="Export Metadata Pattern" (click)="exportPattern()" [disabled]="!selectedPattern">
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.EXPORT'|translate" (click)="exportPattern()" [disabled]="!selectedPattern">
                             <span class="fas fa-download"></span>
                         </button>
-                        <button class="btn btn-light" title="Import Metadata Pattern" (click)="importPattern()" [disabled]="!createPatternAuthorized">
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.IMPORT'|translate" (click)="importPattern()" [disabled]="!createPatternAuthorized">
                             <span class="fas fa-upload"></span>
                         </button>
                         <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle title="Pattern Library" [disabled]="!createPatternAuthorized">
@@ -54,10 +54,10 @@
             <div class="card-header">
                 <label style="flex: 1">Pattern Associations:</label>
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-light" title="Create Pattern Association" (click)="createAssociation()" [disabled]="!createAssociationAuthorized">
+                    <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CREATE'|translate" (click)="createAssociation()" [disabled]="!createAssociationAuthorized">
                         <span class="fas fa-plus"></span>
                     </button>
-                    <button class="btn btn-light" title="Delete Pattern Association" (click)="deleteAssociation()" [disabled]="!selectedAssociation || !deleteAssociationAuthorized">
+                    <button class="btn btn-light" [title]="'COMMONS.ACTIONS.DELETE'|translate" (click)="deleteAssociation()" [disabled]="!selectedAssociation || !deleteAssociationAuthorized">
                         <span class="fas fa-minus"></span>
                     </button>
                 </div>

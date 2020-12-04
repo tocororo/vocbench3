@@ -12,10 +12,10 @@
                 <div class="card-header">
                     <label style="flex: 1">Resources to check</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" (click)="checkAllRoles(true)" title="Check all">
+                        <button class="btn btn-light" (click)="checkAllRoles(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
                             <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-light" (click)="checkAllRoles(false)" title="Uncheck all">
+                        <button class="btn btn-light" (click)="checkAllRoles(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate">
                             <span class="far fa-square"></span>
                         </button>
                     </div>
@@ -45,10 +45,10 @@
                 <div class="card-header">
                     <label style="flex: 1">Languages to check</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" (click)="checkAllLangs(true)" title="Check all">
+                        <button class="btn btn-light" (click)="checkAllLangs(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
                             <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-light" (click)="checkAllLangs(false)" title="Uncheck all">
+                        <button class="btn btn-light" (click)="checkAllLangs(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate">
                             <span class="far fa-square"></span>
                         </button>
                         <button class="btn btn-light" (click)="checkAllLangsMandatory()" title="Check only the mandatory languages">
@@ -61,7 +61,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Check</th>
-                                <th class="text-center">{{'COMMONS.LANGUAGE'|translate}}</th>
+                                <th class="text-center">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
                                 <th class="text-center">Mandatory</th>
                             </tr>
                         </thead>

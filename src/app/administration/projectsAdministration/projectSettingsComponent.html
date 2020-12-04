@@ -1,15 +1,15 @@
 <div class="hbox">
     <div class="card card-alt vbox">
         <div class="card-header">
-            <label style="flex: 1;">Languages:</label>
+            <label style="flex: 1;">{{'COMMONS.LANGUAGE.LANGUAGES'|translate}}:</label>
             <span *ngIf="noLangActive" class="grayText" style="margin-right: 5px;">
-                <span class="fas fa-exclamation-triangle"></span> No language selected implicitly means all languages
+                <span class="fas fa-exclamation-triangle"></span> {{'ADMINISTRATION.PROJECTS.NO_LANG_INFO'|translate}}
             </span>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="changeAllLangStatus(true)" title="Check all">
+                <button class="btn btn-light" (click)="changeAllLangStatus(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
                     <span class="far fa-check-square"></span>
                 </button>
-                <button class="btn btn-light" (click)="changeAllLangStatus(false)" title="Uncheck all">
+                <button class="btn btn-light" (click)="changeAllLangStatus(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate">
                     <span class="far fa-square"></span>
                 </button>
             </div>
@@ -26,13 +26,11 @@
                     <tr>
                         <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.ACTIVE'|translate}}</th>
                         <th class="text-center" style="padding: 0px 8px;" nowrap>
-                            Mandatory
-                            <span class="fas fa-info-circle" 
-                                title="mandatory languages are expected to be covered extensively in the dataset. Some features of the platform (e.g. ICV) support verification of this constraint">
-                            </span>
+                            {{'ADMINISTRATION.PROJECTS.MANDATORY_LANGS'|translate}}
+                            <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.MANDATORY_LANGS_INFO'|translate"></span>
                         </th>
-                        <th class="text-center" style="padding: 0px 8px;" nowrap>ISO code</th>
-                        <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.LANGUAGE'|translate}}</th>
+                        <th class="text-center" style="padding: 0px 8px;" nowrap>{{'COMMONS.LANGUAGE.ISO_CODE'|translate}}</th>
+                        <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>

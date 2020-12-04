@@ -29,7 +29,7 @@
                             <button *ngIf="isProjSettingsAuthorized()" class="btn btn-light" [ngClass]="{ active: selectedAspect == projSettingsAspect }" 
                                 style="padding: 1px 5px;" (click)="selectedAspect = projSettingsAspect">{{projSettingsAspect}}</button>
                         </div>
-                        <button class="btn btn-xs btn-light" (click)="editACL()" [disabled]="!selectedProject" title="Edit ACL">ACL</button>
+                        <button class="btn btn-xs btn-light" (click)="editACL()" [disabled]="!selectedProject" [title]="'ADMINISTRATION.PROJECTS.EDIT_ACL'|translate">ACL</button>
                     </div>
                 </div>
 

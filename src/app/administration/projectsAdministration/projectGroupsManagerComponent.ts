@@ -41,6 +41,8 @@ export class ProjectGroupsManagerComponent {
     private ownedSchemes: ARTURIResource[] = [];
     private selectedScheme: ARTURIResource;
 
+    translationParam: { projName: string } = { projName: "" };
+
     constructor(private groupsService: UsersGroupsServices, private prefService: PreferencesSettingsServices,
         private resourceService: ResourcesServices, private propService: PropertyServices, private browsingModals: BrowsingModalServices,
         private vbProp: VBProperties) { }
@@ -55,6 +57,7 @@ export class ProjectGroupsManagerComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['project'] && changes['project'].currentValue) {
+            this.translationParam = { projName: this.project.getName() };
             if (this.selectedGroup) {
                 this.initSettings();
             }

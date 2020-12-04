@@ -14,10 +14,10 @@
                             title="Namespaces of the resources that appear as object of mapping relations"></span>
                     </span>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" (click)="checkAllNs(true)" title="Check all" [disabled]="!namespaces">
+                        <button class="btn btn-light" (click)="checkAllNs(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate" [disabled]="!namespaces">
                             <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-light" (click)="checkAllNs(false)" title="Uncheck all" [disabled]="!namespaces">
+                        <button class="btn btn-light" (click)="checkAllNs(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate" [disabled]="!namespaces">
                             <span class="far fa-square"></span>
                         </button>
                         <button class="btn btn-light" (click)="initNamespaces()" [disabled]="rolesToCheck.length==0">

@@ -3,10 +3,10 @@
         <label style="flex: 1;">Custom Services</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="createService()" title="Create service" [disabled]="!createServiceAuthorized">
+                <button class="btn btn-light" (click)="createService()" [title]="'COMMONS.ACTIONS.CREATE'|translate" [disabled]="!createServiceAuthorized">
                     <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-light" (click)="deleteService()" [title]="'COMMONS.DELETE'|translate" [disabled]="!selectedServiceId || !deleteServiceAuthorized">
+                <button class="btn btn-light" (click)="deleteService()" [title]="'COMMONS.ACTIONS.DELETE'|translate" [disabled]="!selectedServiceId || !deleteServiceAuthorized">
                     <span class="fas fa-minus"></span>
                 </button>
             </div>

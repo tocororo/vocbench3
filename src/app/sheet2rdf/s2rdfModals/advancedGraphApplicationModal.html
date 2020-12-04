@@ -4,10 +4,10 @@
         <h3 class="modal-title" style="flex: 1">Advanced Graph Application</h3>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" title="Save advanced graph application" (click)="saveGraph()">
+                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.SAVE'|translate" (click)="saveGraph()">
                     <span class="fas fa-download"></span>
                 </button>
-                <button class="btn btn-light" title="Load advanced graph application" (click)="loadGraph()">
+                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.LOAD'|translate" (click)="loadGraph()">
                     <span class="fas fa-upload"></span>
                 </button>
             </div>
@@ -158,5 +158,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

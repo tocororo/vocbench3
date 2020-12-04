@@ -21,7 +21,7 @@
                         <input class="form-check-input" id="reifyNoteCheck" type="checkbox" [(ngModel)]="reifyNotes">
                         <label class="form-check-label" for="reifyNoteCheck">{{'DATA_MANAGEMENT.REFACTOR.REIFY_NOTES'|translate}}</label>
                     </div>
-                    <button class="btn btn-sm btn-light ml-4" (click)="skosToSkosxl()" [disabled]="!isSkosToSkosxlAuthorized()">{{'COMMONS.START'|translate}}</button>
+                    <button class="btn btn-sm btn-light ml-4" (click)="skosToSkosxl()" [disabled]="!isSkosToSkosxlAuthorized()">{{'COMMONS.ACTIONS.START'|translate}}</button>
                     <span class="clearfix"></span>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                         <input class="form-check-input" id="flatNoteCheck" type="checkbox" [(ngModel)]="flattenNotes">
                         <label class="form-check-label" for="flatNoteCheck">{{'DATA_MANAGEMENT.REFACTOR.FLATTEN_NOTES'|translate}}</label>
                     </div>
-                    <button class="btn btn-sm btn-light ml-4" (click)="skosxlToSkos()" [disabled]="!isSkoxlToSkosAuthorized()">{{'COMMONS.START'|translate}}</button>
+                    <button class="btn btn-sm btn-light ml-4" (click)="skosxlToSkos()" [disabled]="!isSkoxlToSkosAuthorized()">{{'COMMONS.ACTIONS.START'|translate}}</button>
                 </div>
             </div>
 
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-sm btn-light float-right" (click)="migrateData()" [disabled]="!isMigrateAuthorized()">{{'COMMONS.START'|translate}}</button>
+                    <button class="btn btn-sm btn-light float-right" (click)="migrateData()" [disabled]="!isMigrateAuthorized()">{{'COMMONS.ACTIONS.START'|translate}}</button>
                     <span class="clearfix"></span>
                 </div>
             </div>

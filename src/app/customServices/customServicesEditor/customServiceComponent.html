@@ -54,10 +54,10 @@
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" (click)="createOperation()" title="Create operation" [disabled]="!createOperationAuthorized">
+                            <button class="btn btn-light" (click)="createOperation()" [title]="'COMMONS.ACTIONS.CREATE'|translate" [disabled]="!createOperationAuthorized">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" (click)="deleteOperation()" [title]="'COMMONS.DELETE'|translate" [disabled]="!selectedOperation || !deleteOperationAuthorized">
+                            <button class="btn btn-light" (click)="deleteOperation()" [title]="'COMMONS.ACTIONS.DELETE'|translate" [disabled]="!selectedOperation || !deleteOperationAuthorized">
                                 <span class="fas fa-minus"></span>
                             </button>
                         </div>

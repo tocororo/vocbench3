@@ -3,10 +3,10 @@
         <label style="flex: 1;">{{'DATA_MANAGEMENT.EXPORT.EXPORT_DATA'|translate}}:</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" [title]="'COMMONS.SAVE_CONFIGURATION'|translate" (click)="saveChain()">
+                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.SAVE_CONFIGURATION'|translate" (click)="saveChain()">
                     <span class="fas fa-download"></span>
                 </button>
-                <button class="btn btn-light" [title]="'COMMONS.LOAD_CONFIGURATION'|translate" (click)="loadChain()">
+                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.LOAD_CONFIGURATION'|translate" (click)="loadChain()">
                     <span class="fas fa-upload"></span>
                 </button>
             </div>
@@ -46,11 +46,11 @@
                             [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
                             <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'COMMONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
                             [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
                             <span class="fas fa-chevron-down"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'COMMONS.MOVE_UP'|translate" (click)="moveFilterUp()"
+                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.MOVE_UP'|translate" (click)="moveFilterUp()"
                             [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
                             <span class="fas fa-chevron-up"></span>
                         </button>
@@ -168,7 +168,7 @@
                 <input class="form-check-input" id="inferCheck" type="checkbox" [(ngModel)]="includeInferred">
                 <label class="form-check-label" for="inferCheck">{{'DATA_MANAGEMENT.EXPORT.INCLUDE_INFERRED'|translate}}</label>
             </div>
-            <button type="submit" class="btn btn-light btn-sm" (click)="export()">{{'COMMONS.SUBMIT'|translate}}</button>
+            <button type="submit" class="btn btn-light btn-sm" (click)="export()">{{'COMMONS.ACTIONS.SUBMIT'|translate}}</button>
         </div>
     </div>
 </div>

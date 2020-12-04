@@ -11,7 +11,7 @@
     <!-- Edit buttons -->
     <span class="input-group-append">
         <button *ngIf="!editInProgress" class="btn btn-light" type="button" style="width:36px;"
-            (click)="edit()" [title]="'COMMONS.EDIT'|translate" [disabled]="disabled">
+            (click)="edit()" [title]="'COMMONS.ACTIONS.EDIT'|translate" [disabled]="disabled">
             <span class="fas fa-pencil-alt"></span>
         </button>
         <button *ngIf="editInProgress" class="btn btn-light" type="button" style="width:18px; padding: 0px;"
@@ -19,7 +19,7 @@
             <span class="fas fa-check" style="color: green"></span>
         </button>
         <button *ngIf="editInProgress" class="btn btn-light" type="button" style="width:18px; padding: 0px;"
-            (click)="cancelEdit()" title="{{'COMMONS.CANCEL'|translate}}">
+            (click)="cancelEdit()" title="{{'COMMONS.ACTIONS.CANCEL'|translate}}">
             <span class="fas fa-times" style="color: red"></span>
         </button>
     </span>

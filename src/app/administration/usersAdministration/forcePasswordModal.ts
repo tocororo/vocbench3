@@ -12,7 +12,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 export class ForcePasswordModal {
     @Input() user: User;
 
-    translationParam: any;
+    translationParam: { userShow: string };
 
     password: string;
 

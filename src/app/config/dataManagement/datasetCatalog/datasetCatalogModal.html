@@ -18,7 +18,7 @@
                 </td>
             </tr>
             <tr>
-                <td nowrap><label>{{'COMMONS.SEARCH'|translate}}:</label></td>
+                <td nowrap><label>{{'COMMONS.ACTIONS.SEARCH'|translate}}:</label></td>
                 <td>
                     <div class="input-group">
                         <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
@@ -107,5 +107,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedDatasetDescription">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

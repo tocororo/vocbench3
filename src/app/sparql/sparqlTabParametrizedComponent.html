@@ -28,7 +28,7 @@
 <!--Commands (submit, clear, inferred, ...)-->
 <div class="mt-2 d-flex align-items-center">
     <button class="btn btn-xs btn-primary" type="button" (click)="doQuery()" [disabled]="queryInProgress || !queryValid">
-        {{'COMMONS.SUBMIT'|translate}}
+        {{'COMMONS.ACTIONS.SUBMIT'|translate}}
     </button>
     <button class="btn btn-xs btn-info ml-2" type="button" (click)="clear()" [disabled]="queryResultResp == null">{{'SPARQL.RESULTS.CLEAR'|translate}}</button>
     <div class="form-check ml-3">

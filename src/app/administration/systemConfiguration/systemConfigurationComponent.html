@@ -27,7 +27,7 @@
                                     <div class="hbox" style="align-items: center;">
                                         <input class="form-control" style="margin-right: 4px;" [(ngModel)]="stDataFolder">
                                         <button class="btn btn-light btn-sm" (click)="updateDataFolder()" [disabled]="stDataFolder == stDataFolderPristine">
-                                            {{'COMMONS.UPDATE'|translate}}
+                                            {{'COMMONS.ACTIONS.UPDATE'|translate}}
                                         </button>
                                     </div>
                                 </td>
@@ -49,7 +49,7 @@
                                             </span>
                                         </div>
                                         <button class="btn btn-light btn-sm" (click)="updateProfilerThreshold()" [disabled]="profilerThreshold == profilerThresholdPristine">
-                                            {{'COMMONS.UPDATE'|translate}}
+                                            {{'COMMONS.ACTIONS.UPDATE'|translate}}
                                         </button>
                                     </div>
                                 </td>
@@ -173,7 +173,7 @@
                 </div>
                 <div class="card-footer" style="text-align: right;">
                     <button class="btn btn-info btn-sm" (click)="testEmailConfig()">Test</button>
-                    <button type="submit" class="btn btn-light btn-sm" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">{{'COMMONS.SUBMIT'|translate}}</button>
+                    <button type="submit" class="btn btn-light btn-sm" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">{{'COMMONS.ACTIONS.SUBMIT'|translate}}</button>
                 </div>
             </div>
 
@@ -219,7 +219,7 @@
                 </div>
                 <div class="card-footer" style="text-align: right;">
                     <button type="submit" class="btn btn-light btn-sm" (click)="updateNotificationSchedule()" 
-                        [disabled]="!cronHourOfDay || !timezone">{{'COMMONS.SUBMIT'|translate}}</button>
+                        [disabled]="!cronHourOfDay || !timezone">{{'COMMONS.ACTIONS.SUBMIT'|translate}}</button>
                     <button class="btn btn-warning btn-sm" (click)="disableNotificationSchedule()" [title]="'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DISABLE_INFO'|translate"
                         [disabled]="!cronHourOfDay && !timezone">{{'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DISABLE'|translate}}</button>
                 </div>
@@ -255,20 +255,20 @@
                             <label style="flex: 1;">{{'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.CUSTOM_FIELDS'|translate}}:</label>
                             <div class="btn-toolbar">
                                 <div class="btn-group btn-group-xs">
-                                    <button class="btn btn-light" (click)="moveCustomField('DOWN')" [title]="'COMMONS.MOVE_DOWN'|translate" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField)+1 >= customFormFields.length">
+                                    <button class="btn btn-light" (click)="moveCustomField('DOWN')" [title]="'COMMONS.ACTIONS.MOVE_DOWN'|translate" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField)+1 >= customFormFields.length">
                                         <span class="fas fa-chevron-down"></span>
                                     </button>
-                                    <button class="btn btn-light" (click)="moveCustomField('UP')" [title]="'COMMONS.MOVE_UP'|translate" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField) == 0">
+                                    <button class="btn btn-light" (click)="moveCustomField('UP')" [title]="'COMMONS.ACTIONS.MOVE_UP'|translate" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField) == 0">
                                         <span class="fas fa-chevron-up"></span>
                                     </button>
-                                    <button class="btn btn-light" (click)="removeCustomField()" [title]="'COMMONS.REMOVE'|translate" [disabled]="!selectedCustomField">
+                                    <button class="btn btn-light" (click)="removeCustomField()" [title]="'COMMONS.ACTIONS.REMOVE'|translate" [disabled]="!selectedCustomField">
                                         <span class="far fa-trash-alt"></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="alert alert-info mb-2" [innerHTML]="'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.CUSTOM_FIELDS_INFO'|translate:customFieldInfoTranslationParam"></div>
+                            <div class="alert alert-info mb-2" [innerHTML]="'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.CUSTOM_FIELDS_INFO'|translate:translationParam"></div>
                             <table *ngIf="customFormFields" class="table table-sm table-borderless">
                                 <colgroup>
                                     <col style="width: 1%;">
@@ -305,7 +305,7 @@
                 </div>
                 <div class="card-footer" style="text-align: right;">
                     <button class="btn btn-info btn-sm" (click)="previewHomeContent()" [disabled]="!homeContent">{{'ADMINISTRATION.SYSTEM.HOME_PAGE.PREVIEW'|translate}}</button>
-                    <button type="submit" class="btn btn-light btn-sm" (click)="updateHomeContent()" [disabled]="!isHomeContentChanged()">{{'COMMONS.SUBMIT'|translate}}</button>
+                    <button type="submit" class="btn btn-light btn-sm" (click)="updateHomeContent()" [disabled]="!isHomeContentChanged()">{{'COMMONS.ACTIONS.SUBMIT'|translate}}</button>
                 </div>
             </div>
 

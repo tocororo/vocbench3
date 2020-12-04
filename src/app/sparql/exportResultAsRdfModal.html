@@ -19,15 +19,15 @@
                 <button class="btn btn-light" title="Add filter" (click)="appendFilter()">
                     <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-light" [title]="'COMMONS.REMOVE'|translate" (click)="removeFilter()"
+                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.REMOVE'|translate" (click)="removeFilter()"
                     [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
                     <span class="fas fa-minus"></span>
                 </button>
-                <button class="btn btn-light" [title]="'COMMONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
+                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
                     [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
                     <span class="fas fa-chevron-down"></span>
                 </button>
-                <button class="btn btn-light" [title]="'COMMONS.MOVE_UP'|translate" (click)="moveFilterUp()"
+                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.MOVE_UP'|translate" (click)="moveFilterUp()"
                     [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
                     <span class="fas fa-chevron-up"></span>
                 </button>
@@ -68,5 +68,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

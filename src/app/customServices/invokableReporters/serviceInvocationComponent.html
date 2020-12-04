@@ -3,9 +3,9 @@
         <label style="flex: 1">
             {{invocation.label}}
         </label>
-        <div class="btn-toolbar" role="toolbar">
+        <div class="btn-toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="editInvocation()" title="Edit service invocation" [disabled]="!editInvocationAuthorized">
+                <button class="btn btn-light" (click)="editInvocation()" [title]="'COMMONS.ACTIONS.EDIT'|translate" [disabled]="!editInvocationAuthorized">
                     <span class="fas fa-pencil-alt"></span>
                 </button>
             </div>

@@ -34,7 +34,7 @@
                 <td>*</td>
             </tr>
             <tr>
-                <td nowrap><label>{{'COMMONS.LANGUAGE'|translate}}:</label></td>
+                <td nowrap><label>{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}:</label></td>
                 <td>
                     <input type="text" class="form-control form-control-sm" [(ngModel)]="language">
                 </td>
@@ -82,5 +82,5 @@
 <div class="modal-footer">
     <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
 </div>

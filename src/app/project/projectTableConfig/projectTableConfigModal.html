@@ -15,11 +15,11 @@
             <label>{{'PROJECTS.TABLE.CONFIG_MODAL.PROJECT_INFO_PANEL.TITLE'|translate}}</label>
             <label style="flex: 1"></label>
             <div class="btn-group btn-group-xs" style="margin-right: 4px;">
-                <button class="btn btn-light" (click)="moveUp()" [title]="'COMMONS.MOVE_UP'|translate"
+                <button class="btn btn-light" (click)="moveUp()" [title]="'COMMONS.ACTIONS.MOVE_UP'|translate"
                     [disabled]="!selectedColumn || columns.indexOf(selectedColumn) == 0">
                     <span class="fas fa-chevron-up"></span>
                 </button>
-                <button class="btn btn-light" (click)="moveDown()" [title]="'COMMONS.MOVE_DOWN'|translate"
+                <button class="btn btn-light" (click)="moveDown()" [title]="'COMMONS.ACTIONS.MOVE_DOWN'|translate"
                     [disabled]="!selectedColumn || columns[columns.length-1] == selectedColumn">
                     <span class="fas fa-chevron-down"></span>
                 </button>
