@@ -1,16 +1,16 @@
 <div class="modal-header">
     <h3 class="modal-title">
-        Collaboration System configuration
+        {{'COLLABORATION.COLLABORATION_SYSTEM_CONFIG'|translate}}
     </h3>
 </div>
 <div class="modal-body scrollableContainer blockingDivHost">
 
     <div class="hbox" style="align-items: center; margin: 4px;">
-        <label style="margin-right: 4px; white-space: nowrap">Backend type:</label>
+        <label style="margin-right: 4px; white-space: nowrap">{{'COLLABORATION.BACKEND_TYPE'|translate}}:</label>
         <select class="form-control form-control-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onExtensionChange()">
             <option *ngFor="let ext of extensions" [title]="ext.description" [ngValue]="ext">{{ext.name}}</option>
         </select>
-        <button *ngIf="resettable" class="btn btn-light btn-sm" style="margin-left: 4px;" (click)="reset()">Reset</button>
+        <button *ngIf="resettable" class="btn btn-light btn-sm" style="margin-left: 4px;" (click)="reset()">{{'COMMONS.ACTIONS.RESET'|translate}}</button>
     </div>
 
     <settings-renderer-panel *ngIf="projSettings" [(ngModel)]="projSettings"></settings-renderer-panel>

@@ -417,6 +417,35 @@
             "DATA_TRANSFORMATIONS": "Data transformations"
         }
     },
+    "COLLABORATION": {
+        "COLLABORATION_SYSTEM": "Collaboration System",
+        "COLLABORATION_SYSTEM_CONFIG": "Collaboration System configuration",
+        "COLLABORATION_SYSTEM_PROJECTS": "Collaboration System projects",
+        "PROJECT_CONFIG": "Project configuration",
+        "BACKEND_TYPE": "Backend type",
+        "USER_CONFIG": "User configuration",
+        "ASSIGN_PROJECT": "Assign CS project",
+        "ASSIGN_ISSUE": "Assign issue",
+        "CREATE_ISSUE": "Create Issue",
+        "UNCONFIGURED_FOR_PROJECT": "The Collaboration System has not been configured for this project.",
+        "NO_RESOURCE_ASSOCIATED": "No resource(s) associated to this issue",
+        "UNCONFIGURED_CS": {
+            "UNCONFIGURED_CS_WARNING": "No Collaboration System has been configured.",
+            "CONFIGURE": "Configure",
+            "A_CS": "a CS"
+        },
+        "UNSIGNED_USER": {
+            "UNSIGNED_USER_WARNING": "You need to be logged to the CS in order to see the issues list.",
+            "PROVIDE": "Provide",
+            "YOUR_CREDENTIALS": "your credentials"
+        },
+        "UNASSIGNED_PROJ": {
+            "UNASSIGNED_PROJ_WARNING": "There is no CS project assigned to this Vocbench project.",
+            "CREATE_OR_ASSIGN": "Create or assign",
+            "A_PROJECT": "a project"
+        },
+        "CS_NOT_WORKING_WARNING": "Collaboration System seems to be configured but it is not working. Please, check that the configuration is valid, or be sure that the CS server is running."
+    },
     "METADATA": {
         "NAMESPACES_AND_IMPORTS": {
             "NAMESPACE_MANAGEMENT": "Namespace management",
@@ -661,6 +690,7 @@
             "REFRESH": "Refresh",
             "REMOVE": "Remove",
             "REMOVE_ALL": "Remove all",
+            "RESET": "Reset",
             "SAVE": "Save",
             "SAVE_CONFIGURATION": "Save configuration",
             "SEARCH": "Search",

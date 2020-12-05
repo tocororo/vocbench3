@@ -417,6 +417,35 @@
             "DATA_TRANSFORMATIONS": "Trasformazione dati"
         }
     },
+    "COLLABORATION": {
+        "COLLABORATION_SYSTEM": "Collaboration System",
+        "COLLABORATION_SYSTEM_CONFIG": "Configurazione del Collaboration System",
+        "COLLABORATION_SYSTEM_PROJECTS": "Progetti del Collaboration System",
+        "PROJECT_CONFIG": "Configurazione progetto",
+        "BACKEND_TYPE": "Tipo di backend",
+        "USER_CONFIG": "Configurazione utente",
+        "ASSIGN_PROJECT": "Assegna progetto CS",
+        "ASSIGN_ISSUE": "Assegna issue",
+        "CREATE_ISSUE": "Crea issue",
+        "UNCONFIGURED_FOR_PROJECT": "Il Collaboration System non è stato configurato per questo progetto.",
+        "NO_RESOURCE_ASSOCIATED": "Nessuna risorsa associata a questo issue",
+        "UNCONFIGURED_CS": {
+            "UNCONFIGURED_CS_WARNING": "Nessun Collaboration System configurato.",
+            "CONFIGURE": "Configura",
+            "A_CS": "un CS"
+        },
+        "UNSIGNED_USER": {
+            "UNSIGNED_USER_WARNING": "Devi essere loggato al CS per vedere la lista degli issue.",
+            "PROVIDE": "Fornisci",
+            "YOUR_CREDENTIALS": "le tue credenziali"
+        },
+        "UNASSIGNED_PROJ": {
+            "UNASSIGNED_PROJ_WARNING": "Nessun progetto CS assegnato a questo progetto VocBench.",
+            "CREATE_OR_ASSIGN": "Crea o assegna",
+            "A_PROJECT": "un progetto"
+        },
+        "CS_NOT_WORKING_WARNING": "Il Collaboration System sembra essere configurato ma non sta funzionando. Per favore, verifica che la configurazione sia corretta e che il server CS sia in esecuzione."
+    },
     "METADATA": {
         "NAMESPACES_AND_IMPORTS": {
             "NAMESPACE_MANAGEMENT": "Gestione Namespace",
@@ -661,6 +690,7 @@
             "REFRESH": "Aggiorna",
             "REMOVE": "Rimuovi",
             "REMOVE_ALL": "Rimuovi tutto",
+            "RESET": "Reset",
             "SAVE": "Salva",
             "SAVE_CONFIGURATION": "Salva configurazione",
             "SEARCH": "Cerca",
