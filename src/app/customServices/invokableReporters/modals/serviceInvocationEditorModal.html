@@ -12,8 +12,7 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>
-                        Label
-                        <span class="fas fa-info-circle" title="The label of this section"></span>
+                        {{'INVOKABLE_REPORTERS.INVOCATION.LABEL'|translate}}
                     </label>
                 </td>
                 <td><input class="form-control form-control-sm" [(ngModel)]="label"></td>
@@ -22,7 +21,6 @@
                 <td class="text-right" nowrap>
                     <label>
                         {{'COMMONS.DESCRIPTION'|translate}}
-                        <span class="fas fa-info-circle" title="A description of this section"></span>
                     </label>
                 </td>
                 <td><input class="form-control form-control-sm" [(ngModel)]="description"></td>
@@ -30,8 +28,8 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>
-                        Template
-                        <span class="fas fa-info-circle" title="A template for rendering an individual section. The template must conform to Mustache templating language."></span>
+                        {{'INVOKABLE_REPORTERS.INVOCATION.TEMPLATE'|translate}}
+                        <span class="fas fa-info-circle" [title]="'INVOKABLE_REPORTERS.INVOCATION.TEMPLATE_INFO'|translate"></span>
                     </label>
                 </td>
                 <td><mustache-editor style="height: 150px;" [(ngModel)]="template"></mustache-editor></td>
@@ -43,7 +41,7 @@
 
         <div class="card card-default vbox">
             <div class="card-header">
-                <label style="flex: 1;">Custom Services</label>
+                <label style="flex: 1;">{{'CUSTOM_SERVICES.CUSTOM_SERVICES'|translate}}</label>
             </div>
             <div class="card-body vbox scrollableContainer">
                 <div *ngFor="let id of customServiceIds" class="listItem" [ngClass]="{ active: selectedServiceId == id }" (click)="selectService(id).subscribe()">
@@ -63,7 +61,7 @@
                 <div class="card-body hbox">
                     <div class="card card-default vbox">
                         <div class="card-header">
-                            <label style="flex: 1;">Custom Operations</label>
+                            <label style="flex: 1;">{{'INVOKABLE_REPORTERS.INVOCATION.CUSTOM_OPERATIONS'|translate}}</label>
                         </div>
                         <div class="card-body vbox scrollableContainer">
                             <div *ngFor="let o of selectedService.operations" class="listItem" [ngClass]="{ active: selectedOperation == o }" (click)="selectOperation(o)">
@@ -74,7 +72,7 @@
                     <div *ngIf="selectedOperation" class="card card-default vbox" style="margin-left: 4px; flex: 2;">
                         <div class="card-header">
                             <label style="flex: 1;">{{selectedOperation.name}}</label>
-                            <button class="btn btn-xs btn-light" (click)="describeSelectedOperation()" title="See custom operation details">
+                            <button class="btn btn-xs btn-light" (click)="describeSelectedOperation()" [title]="'INVOKABLE_REPORTERS.INVOCATION.SEE_CUSTOM_OPERATIONS_DETAILS'|translate">
                                 <span class="fas fa-eye"></span>
                             </button>
                         </div>
@@ -92,19 +90,18 @@
                                             <input class="form-control form-control-sm" [(ngModel)]="p.value">
                                         </td>
                                         <td>
-                                            <span *ngIf="!p.param.required" class="fas fa-question-circle" title="Optional parameter"></span>
-                                            <span *ngIf="p.param.required" class="fas fa-exclamation-circle" title="Mandatory parameter"></span>
+                                            <span *ngIf="!p.param.required" class="fas fa-question-circle" [title]="'CUSTOM_SERVICES.OPERATION.OPTIONAL_PARAMETER'|translate"></span>
+                                            <span *ngIf="p.param.required" class="fas fa-exclamation-circle" [title]="'CUSTOM_SERVICES.OPERATION.MANDATORY_PARAMETER'|translate"></span>
                                         </td>
                                     </tr>
                                 </table>
                                 <ng-template #noParamsBlock>
-                                    <div class="alert alert-info">This operations has no parameters, it can be invoked without any configuration</div>
+                                    <div class="alert alert-info">{{'INVOKABLE_REPORTERS.INVOCATION.NO_PARAM_OPERATION_INFO'|translate}}</div>
                                 </ng-template>
                             </ng-container>
                             <ng-template #voidBlock>
                                 <div class="alert alert-warning">
-                                    Invokable reporter cannot define a service invocation that executes and update, it can only exploit read-only Custom Operations.
-                                    <i>{{selectedOperation.name}}</i> is not a read operation, so it cannot be used.
+                                    {{'INVOKABLE_REPORTERS.INVOCATION.INVALID_UPDATE_OPERATION'|translate}}
                                 </div>
                             </ng-template>
                         </div>

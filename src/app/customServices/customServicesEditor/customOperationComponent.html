@@ -36,8 +36,8 @@
                     <span *ngIf="parameters.length == 0" class="form-control" style="background-color: #eee;"></span>
                     <div *ngFor="let p of parameters" class="hbox" style="align-items: center; margin-bottom: 2px;">
                         <span class="form-control" style="background-color: #eee; font-family: monospace;">{{p.prettyPrint}}</span>
-                        <span *ngIf="!p.required" class="fas fa-question-circle" style="margin: 0px 4px;" title="Optional parameter"></span>
-                        <span *ngIf="p.required" class="fas fa-exclamation-circle" style="margin: 0px 4px;" title="Mandatory parameter"></span>
+                        <span *ngIf="!p.required" class="fas fa-question-circle" style="margin: 0px 4px;" [title]="'CUSTOM_SERVICES.OPERATION.OPTIONAL_PARAMETER'|translate"></span>
+                        <span *ngIf="p.required" class="fas fa-exclamation-circle" style="margin: 0px 4px;" [title]="'CUSTOM_SERVICES.OPERATION.MANDATORY_PARAMETER'|translate"></span>
                     </div> 
                 </div>
             </div>

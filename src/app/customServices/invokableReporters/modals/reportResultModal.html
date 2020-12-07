@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Report</h3>
+    <h3 class="modal-title">{{'INVOKABLE_REPORTERS.REPORT'|translate}}</h3>
 </div>
 <div class="modal-body scrollableContainer">
 
@@ -16,15 +16,15 @@
                 </colgroup>
                 <tbody>
                     <tr>
-                        <td><label>Service</label></td>
+                        <td><label>{{'INVOKABLE_REPORTERS.INVOCATION.REPORT'|translate}}</label></td>
                         <td>{{s.service}}</td>
                     </tr>
                     <tr>
-                        <td><label>Operation</label></td>
+                        <td><label>{{'INVOKABLE_REPORTERS.INVOCATION.OPERATION'|translate}}</label></td>
                         <td>{{s.operation}}</td>
                     </tr>
                     <tr *ngIf="s.arguments && objectKeys(s.arguments).length > 0">
-                        <td><label>Arguments</label></td>
+                        <td><label>{{'INVOKABLE_REPORTERS.INVOCATION.ARGUMENTS'|translate}}</label></td>
                         <td>
                             <div class="card card-default">
                                 <div class="card-body">
@@ -47,7 +47,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><label>Result</label></td>
+                        <td><label>{{'INVOKABLE_REPORTERS.RESULT'|translate}}</label></td>
                         <td>
                             <json-editor class="CodeMirror-md" [ngModel]="jsonStringify(s.result, null, 2)" [disabled]="true"></json-editor>
                         </td>

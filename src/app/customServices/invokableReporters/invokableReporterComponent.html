@@ -2,11 +2,11 @@
     <div class="card-header">
         <label style="flex: 1">{{ref.identifier}}</label>
         <div class="hbox" style="flex: initial;">
-            <button class="btn btn-light btn-sm" (click)="edit()" title="Edit basic info" [disabled]="!editReporterAuthorized">
+            <button class="btn btn-light btn-sm" (click)="edit()" [title]="'COMMONS.ACTIONS.EDIT'|translate" [disabled]="!editReporterAuthorized">
                 <span class="fas fa-pencil-alt"></span>
             </button>
             <div class="btn-group btn-group-sm" style="margin-left: 5px;">
-                <button class="btn btn-light" (click)="compileReport()" title="Compile report">
+                <button class="btn btn-light" (click)="compileReport()" [title]="'INVOKABLE_REPORTERS.COMPILE_REPORT'|translate">
                     <span class="fas fa-play"></span>
                 </button>
             </div>
@@ -16,7 +16,7 @@
                         <option *ngFor="let f of reportFormats" [ngValue]="f">{{f.label}}</option>
                     </select>
                     <span class="input-group-append">
-                        <button class="btn btn-light" (click)="compileAndDownloadReport()" title="Compile and download report">
+                        <button class="btn btn-light" (click)="compileAndDownloadReport()" [title]="'INVOKABLE_REPORTERS.COMPILE_AND_DOWNLOAD_REPORT'|translate">
                             <span class="fas fa-download"></span>
                         </button>
                     </span>

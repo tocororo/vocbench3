@@ -47,8 +47,8 @@
                 </div>
                 <div *ngIf="selectedTypeRestriction!=typeRestrictionNone && (selectedType || selectedParamType)" class="form-group row">
                     <label class="col-form-label col-sm-2">
-                        {{'CUSTOM_SERVICES.AUTH_HELPER.SCOPE'|translate}}
-                        <span class="fas fa-info-circle" title="Refines the scope of the selected type"></span>
+                        {{'COMMONS.SCOPE'|translate}}
+                        <span class="fas fa-info-circle" [title]="'CUSTOM_SERVICES.AUTH_HELPER.SCOPE_INFO'|translate"></span>
                     </label>
                     <div class="col-sm-10 hbox" style="align-items: center;">
                         <input class="form-control" [(ngModel)]="scope" (ngModelChange)="update()">

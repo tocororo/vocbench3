@@ -14,7 +14,7 @@
     <div class="card-body vbox scrollableContainer">
         <div class="gridRow">
             <div class="gridEntry">
-                <label class="entryLabel">Label:</label>
+                <label class="entryLabel">{{'INVOKABLE_REPORTERS.INVOCATION.LABEL'|translate}}:</label>
                 <div style="flex: 1">
                     <input class="form-control form-control-sm" [ngModel]="invocation.label" readonly>
                 </div>
@@ -30,7 +30,7 @@
         </div>
         <div class="gridRow">
             <div class="gridEntry">
-                <label class="entryLabel">Service:</label>
+                <label class="entryLabel">{{'INVOKABLE_REPORTERS.INVOCATION.SERVICE'|translate}}:</label>
                 <div style="flex: 1">
                     <input class="form-control form-control-sm" [ngModel]="invocation.service" readonly>
                 </div>
@@ -38,7 +38,7 @@
         </div>
         <div class="gridRow">
             <div class="gridEntry">
-                <label class="entryLabel">Operation:</label>
+                <label class="entryLabel">{{'INVOKABLE_REPORTERS.INVOCATION.OPERATION'|translate}}:</label>
                 <div style="flex: 1">
                     <input class="form-control form-control-sm" [ngModel]="invocation.operation" readonly>
                 </div>
@@ -46,7 +46,7 @@
         </div>
         <div class="gridRow">
             <div class="gridEntry">
-                <label class="entryLabel">Arguments:</label>
+                <label class="entryLabel">{{'INVOKABLE_REPORTERS.INVOCATION.ARGUMENTS'|translate}}:</label>
                 <div class="card card-default" style="flex: 1; min-height: 28px;">
                     <div class="card-body">
                         <table *ngIf="invocation.arguments" class="table table-borderless table-sm" style="font-family: monospace;">
@@ -69,7 +69,7 @@
         </div>
         <div class="gridRow">
             <div class="gridEntry">
-                <label class="entryLabel">Template:</label>
+                <label class="entryLabel">{{'INVOKABLE_REPORTERS.INVOCATION.TEMPLATE'|translate}}:</label>
                 <div style="flex: 1">
                     <mustache-editor [ngModel]="invocation.template" [disabled]="true"></mustache-editor>
                 </div>

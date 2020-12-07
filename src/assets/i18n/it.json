@@ -192,7 +192,6 @@
         },
         "USER_MENU": {
             "VIEW_PROFILE": "Mostra profilo",
-            "NOTIFICATIONS": "Notifiche",
             "PREFERENCES": "Preferenze",
             "ADMINISTRATION": "Amministrazione"
         }
@@ -286,6 +285,8 @@
         "OPERATION": {
             "AUTHORIZATION": "Autorizzazione",
             "PARAMETERS": "Parametri",
+            "OPTIONAL_PARAMETER": "Parametro opzionale",
+            "MANDATORY_PARAMETER": "Parametro obbligatorio",
             "RETURNS": "Return",
             "PARAM_HELPER": {
                 "INTRO": [
@@ -325,8 +326,8 @@
             },
             "RESTRICTION": "Restrizione",
             "PARAMETER": "Parametro",
+            "SCOPE_INFO": "Limita lo scope del tipo selezionato",
             "NO_PARAM_OPERATION": "L'operazione non prevede alcun parametro",
-            "SCOPE": "Scope",
             "CAPABILITIES_DOCUMENTATION_REF": "Per ulteriori dettagli riguardo il vocabolario delle capability, fare riferimento alla <a href=\"http://vocbench.uniroma2.it/doc/user/roles_adm.jsf#capabilities_vocabulary\" target=\"_blank\">documentazione</a> di VB."
         },
         "SERVICE": {
@@ -483,6 +484,25 @@
             "TIME_TO": "a",
             "DATETIME_FORMAT": "Formato: yyyy-MM-ddThh:mm",
             "APPLY": "Applica"
+        }
+    },
+    "INVOKABLE_REPORTERS": {
+        "INVOKABLE_REPORTS": "Invokable Reports",
+        "REPORT": "Report",
+        "COMPILE_REPORT": "Compila report",
+        "COMPILE_AND_DOWNLOAD_REPORT": "Compila e scarica report",
+        "RESULT": "Risultato",
+        "INVOCATION": {
+            "LABEL": "Etichetta",
+            "SERVICE": "Servizio",
+            "OPERATION": "Operazione",
+            "ARGUMENTS": "Argomenti",
+            "TEMPLATE": "Template",
+            "TEMPLATE_INFO": "Un template per renderizzare una singola sezione. Il template deve essere conforme al linguaggio di templating Mustache",
+            "CUSTOM_OPERATIONS": "Custom Operations",
+            "SEE_CUSTOM_OPERATIONS_DETAILS": "Vedi dettagli della Custom Operation",
+            "NO_PARAM_OPERATION_INFO": "Questa operazione non ha parametri, può essere invocata senza alcuna configurazione",
+            "INVALID_UPDATE_OPERATION": "Un Invokable Report non può definire un'invocazione ad un servizio che esegue una update, può solo usare le Custom Operations read-only. L'operazione selezionata non è un'operazione di lettura, perciò non può essere utilizzata."
         }
     },
     "METADATA": {
@@ -874,6 +894,7 @@
         "RESOURCE": "Risorsa",
         "RESOURCE_TYPE": "Tipo risorsa",
         "ROLES": "Ruoli",
+        "SCOPE": "Scope",
         "SETTINGS": "Impostazioni",
         "SPARQL_ENDPOINT": "Endpoint SPARQL",
         "STATUS": "Stato",
