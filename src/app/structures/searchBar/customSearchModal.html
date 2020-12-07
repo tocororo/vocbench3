@@ -1,8 +1,8 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">Custom search</h3>
-        <button class="btn btn-light btn-xs" [ngClass]="{active: detailsOn}" title="Show/hide SPARQL details about the custom search" (click)="detailsOn = !detailsOn">
-            Details
+        <h3 class="modal-title" style="flex: 1">{{'SEARCH.CUSTOM_SEARCH.CUSTOM_SEARCH'|translate}}</h3>
+        <button class="btn btn-light btn-xs" [ngClass]="{active: detailsOn}" [title]="'SEARCH.CUSTOM_SEARCH.SHOW_HIDE_SPARQL_DETAILS'|translate" (click)="detailsOn = !detailsOn">
+            {{'COMMONS.DETAILS'|translate}}
             <span *ngIf="detailsOn" class="fas fa-eye"></span>
             <span *ngIf="!detailsOn" class="fas fa-eye-slash"></span>
         </button>
@@ -15,7 +15,7 @@
     </div>
 
     <div *ngIf="staticParameterization && !detailsOn" class="alert alert-warning" style="margin-bottom: 4px;">
-        This search has no parameters so can only be run as is.
+        {{'SEARCH.CUSTOM_SEARCH.NO_PARAM_SEARCH'|translate}}
     </div>
 
     <query-param-form [bindings]="parameterization" (update)="onVarBindingsUpdate($event)" [configurable]="false" 

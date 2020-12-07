@@ -1,9 +1,13 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">Assisted search</h3>
+        <h3 class="modal-title" style="flex: 1">{{'SEARCH.ASSISTED_SEARCH.ASSISTED_SEARCH'|translate}}</h3>
         <div class="btn-group btn-group-sm float-right" style="margin-bottom: 5px; align-self: flex-end;">
-            <button class="btn btn-light" [ngClass]="{ active : targetPosition == ResourcePositionEnum.local }" (click)="changeTargetPosition(ResourcePositionEnum.local)">Local</button>
-            <button class="btn btn-light" [ngClass]="{ active : targetPosition == ResourcePositionEnum.remote }" (click)="changeTargetPosition(ResourcePositionEnum.remote)" [disabled]="!isRemoteAuthorized()">Remote</button>
+            <button class="btn btn-light" [ngClass]="{ active : targetPosition == ResourcePositionEnum.local }" (click)="changeTargetPosition(ResourcePositionEnum.local)">
+                {{'SEARCH.ASSISTED_SEARCH.LOCAL'|translate}}
+            </button>
+            <button class="btn btn-light" [ngClass]="{ active : targetPosition == ResourcePositionEnum.remote }" (click)="changeTargetPosition(ResourcePositionEnum.remote)" [disabled]="!isRemoteAuthorized()">
+                {{'SEARCH.ASSISTED_SEARCH.REMOTE'|translate}}
+            </button>
         </div>
     </div>
 </div>
@@ -25,8 +29,9 @@
 
         <div *ngIf="selectedProject" style="margin-top: 4px;">
             <div *ngIf="!isProjectMetadataAvailable(); else mediationBlock" class="alert alert-warning">
-                VoID/LIME Metadata not available for local project '{{selectedProject.getName()}}'.
-                Click <a (click)="generateProjectMetadata()" style="cursor: pointer">here</a> to generate it.
+                {{'SEARCH.ASSISTED_SEARCH.METADATA_UNAVAILABLE_LOCAL_WARNING.METADATA_NOT_AVAILABLE'|translate:translationParams}}
+                <a (click)="generateProjectMetadata()" style="cursor: pointer">{{'SEARCH.ASSISTED_SEARCH.METADATA_UNAVAILABLE_LOCAL_WARNING.HERE'|translate}}</a>
+                {{'SEARCH.ASSISTED_SEARCH.METADATA_UNAVAILABLE_LOCAL_WARNING.TO_GENERATE_IT'|translate}}
             </div>
         </div>
     </ng-container>
@@ -35,7 +40,7 @@
     <ng-container *ngIf="targetPosition == ResourcePositionEnum.remote">
         <div class="card card-default">
             <div class="card-header">
-                <label style="flex: 1;">Remote datasets</label>
+                <label style="flex: 1;">{{'SEARCH.ASSISTED_SEARCH.REMOTE_DATASETS'|translate}}</label>
                 <button class="btn btn-light btn-xs" (click)="addRemoteDataset()" [title]="'COMMONS.ACTIONS.ADD'|translate">
                     <span class="fas fa-plus"></span>
                 </button>
@@ -51,8 +56,7 @@
 
         <div *ngIf="selectedDataset" style="margin-top: 4px;">
             <div *ngIf="!isDatasetMetadataAvailable(); else mediationBlock" class="alert alert-warning">
-                VoID/LIME Metadata not available for remote dataset '{{selectedDataset.uriSpace}}'.
-                You need to generate/add 'Embedded Lexicalization Sets' from the Metadata Registry management in order to exploit this feature.
+                {{'SEARCH.ASSISTED_SEARCH.METADATA_UNAVAILABLE_REMOTE_WARNING'|translate:translationParams}}
             </div>
         </div>
     </ng-container>
@@ -61,10 +65,10 @@
         <div class="card card-default">
             <div class="card-header">
                 <div style="flex: 1;">
-                    <label style="margin-right: 4px;">Paired Lexicalization Sets</label>
-                    <span class="fas fa-info-circle" title="Lexicalization sets shared between the source resource and the target project/dataset."></span>
+                    <label style="margin-right: 4px;">{{'SEARCH.ASSISTED_SEARCH.PAIRED_LEX_SETS'|translate}}</label>
+                    <span class="fas fa-info-circle" [title]="'SEARCH.ASSISTED_SEARCH.PAIRED_LEX_SETS_TOOLTIP'|translate"></span>
                 </div>
-                <button *ngIf="targetPosition == ResourcePositionEnum.local" class="btn btn-xs btn-light" (click)="refreshTargetMetadata()" title="Refresh metadata of the target project">
+                <button *ngIf="targetPosition == ResourcePositionEnum.local" class="btn btn-xs btn-light" (click)="refreshTargetMetadata()" [title]="'SEARCH.ASSISTED_SEARCH.REFRESH_METADATA_TOOLTIP'|translate">
                     <span class="fas fa-redo"></span>
                 </button>
             </div>
@@ -72,10 +76,10 @@
                 <table class="table table-sm table-hoverable">
                     <thead>
                         <tr>
-                            <th>Lang</th>
-                            <th class="text-center" title="Percentage of resources that have a lexicalization in the given language">%</th>
-                            <th class="text-center" title="Average number of lexicalizations">Avg</th>
-                            <th class="text-center" title="Lexicalization Model">LexModel</th>
+                            <th>{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
+                            <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.PERCENTAGE_TOOLTIP'|translate">%</th>
+                            <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.AVG_TOOLTIP'|translate">Avg</th>
+                            <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.LEXICALIZATION_MODEL'|translate">LexModel</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,18 +105,18 @@
         <div class="card card-default" style="margin-top: 4px;">
             <div class="card-header">
                 <span style="flex: 1">
-                    <label style="margin-right: 4px;">Search mode</label>
-                    <span class="fas fa-info-circle" title="String match modes on which the lexicalizations comparison is based on."></span>
+                    <label style="margin-right: 4px;">{{'SEARCH.SETTINGS.SEARCH_MODE'|translate}}</label>
+                    <span class="fas fa-info-circle" [title]="'SEARCH.ASSISTED_SEARCH.SEARCH_MODE_TOOLTIP'|translate"></span>
                 </span>
                 <span *ngIf="getCheckedSearchMode().length == 0" class="grayText">
                     <span class="fas fa-exclamation-triangle"></span>
-                    If none is selected, 'Fuzzy' and 'Contains' are used by default
+                    {{'SEARCH.ASSISTED_SEARCH.NO_SEARCH_MODE_SELECTED_WARNING'|translate}}
                 </span>
             </div>
             <div class="card-body">
-                <div *ngFor="let sm of searchModes; let i=index" class="form-check mt-2">
+                <div *ngFor="let sm of stringMatchModes; let i=index" class="form-check mt-2">
                     <input class="form-check-input" [id]="'smCheck'+i" type="checkbox" [(ngModel)]="sm.checked">
-                    <label class="form-check-label" [for]="'smCheck'+i">{{sm.show}}</label>
+                    <label class="form-check-label" [for]="'smCheck'+i">{{sm.labelTranslationKey|translate}}</label>
                 </div>
             </div>
         </div>

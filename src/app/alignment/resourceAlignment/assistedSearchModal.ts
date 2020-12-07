@@ -47,13 +47,16 @@ export class AssistedSearchModal {
 
     private languagesToCheck: { lang: string, lexModel: string, checked: boolean }[] = [];
 
-    private searchModes: { mode: SearchMode, show: string, checked: boolean }[] = [
-        { mode: SearchMode.startsWith, show: "Starts with", checked: false },
-        { mode: SearchMode.contains, show: "Contains", checked: true },
-        { mode: SearchMode.endsWith, show: "Ends with", checked: false },
-        { mode: SearchMode.exact, show: "Exact", checked: false },
-        { mode: SearchMode.fuzzy, show: "Fuzzy", checked: false }
-    ]
+    stringMatchModes: { labelTranslationKey: string, value: SearchMode, checked: boolean }[] = [
+        { labelTranslationKey: "SEARCH.SETTINGS.STARTS_WITH", value: SearchMode.startsWith, checked: false },
+        { labelTranslationKey: "SEARCH.SETTINGS.CONTAINS", value: SearchMode.contains, checked: true },
+        { labelTranslationKey: "SEARCH.SETTINGS.ENDS_WITH", value: SearchMode.endsWith, checked: false },
+        { labelTranslationKey: "SEARCH.SETTINGS.EXACT", value: SearchMode.exact, checked: false },
+        { labelTranslationKey: "SEARCH.SETTINGS.FUZZY", value: SearchMode.fuzzy, checked: false }
+    ];
+    private activeStringMatchMode: SearchMode;
+
+    translationParams: { datasetUriSpace: string, projName: string };
     
     constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private alignmentService: AlignmentServices,
         private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices,
@@ -116,6 +119,7 @@ export class AssistedSearchModal {
 
     private selectProject(project: Project) {
         this.selectedProject = project;
+        this.updateTranslationParams();
         if (this.projectMetadataAvailabilityMap.has(this.selectedProject)) {
             //metadata availability has already been checked (the entry is in the map)
             this.profileMediationLocalProject();
@@ -165,6 +169,7 @@ export class AssistedSearchModal {
 
     private selectDataset(dataset: DatasetMetadata) {
         this.selectedDataset = dataset;
+        this.updateTranslationParams();
         if (this.datasetMetadataAvailabilityMap.has(this.selectedDataset)) {
             //metadata availability has already been checked (the entry is in the map)
             this.profileMediationRemoteDataset();
@@ -248,9 +253,9 @@ export class AssistedSearchModal {
 
     private getCheckedSearchMode(): SearchMode[] {
         let checkedSearchModes: SearchMode[] = [];
-        this.searchModes.forEach(m => {
+        this.stringMatchModes.forEach(m => {
             if (m.checked) {
-                checkedSearchModes.push(m.mode);
+                checkedSearchModes.push(m.value);
             }
         });
         return checkedSearchModes;
@@ -325,6 +330,13 @@ export class AssistedSearchModal {
     
     cancel() {
         this.activeModal.dismiss();
+    }
+
+    private updateTranslationParams() {
+        this.translationParams = { 
+            datasetUriSpace: this.selectedDataset != null ? this.selectedDataset.uriSpace : null, 
+            projName: this.selectedProject != null ? this.selectedProject.getName() : null
+        }
     }
 
 }

@@ -4,7 +4,7 @@
 <div class="modal-body vbox">
 
     <div class="hbox" style="align-items: center; flex: initial;">
-        <label>Type:</label>
+        <label>{{'COMMONS.TYPE'|translate}}:</label>
         <select class="form-control" style="margin-left: 4px;" [(ngModel)]="selectedCustomOperation" (ngModelChange)="onOperationChanged()">
             <option *ngFor="let c of customOperations" [ngValue]="c">{{c.shortName}}</option>
         </select>
@@ -49,7 +49,7 @@
                                     <tr *ngFor="let p of form.parameters.value; let i=index; let last=last">
                                         <td><label>{{'COMMONS.NAME'|translate}}:</label></td>
                                         <td><input class="form-control" style="font-family: monospace;" [(ngModel)]="p.name" sanitized></td>
-                                        <td><label>Type:</label></td>
+                                        <td><label>{{'COMMONS.TYPE'|translate}}:</label></td>
                                         <td>
                                             <type-editor [(ngModel)]="p.type" parameter="true"></type-editor>
                                         </td>

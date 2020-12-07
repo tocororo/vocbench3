@@ -36,14 +36,24 @@ export class AdvancedSearchModal {
     useLocalName: boolean = true;
     useNotes: boolean = true;
 
-    searchModes: { show: string, value: SearchMode }[] = [
-        { show: "Starts with", value: SearchMode.startsWith },
-        { show: "Contains", value: SearchMode.contains },
-        { show: "Ends with", value: SearchMode.endsWith },
-        { show: "Exact", value: SearchMode.exact },
-        { show: "Fuzzy", value: SearchMode.fuzzy }
+    // searchModes: { show: string, value: SearchMode }[] = [
+    //     { show: "Starts with", value: SearchMode.startsWith },
+    //     { show: "Contains", value: SearchMode.contains },
+    //     { show: "Ends with", value: SearchMode.endsWith },
+    //     { show: "Exact", value: SearchMode.exact },
+    //     { show: "Fuzzy", value: SearchMode.fuzzy }
+    // ];
+    // activeSearchMode: SearchMode;
+
+    stringMatchModes: { labelTranslationKey: string, value: SearchMode }[] = [
+        { labelTranslationKey: "SEARCH.SETTINGS.STARTS_WITH", value: SearchMode.startsWith },
+        { labelTranslationKey: "SEARCH.SETTINGS.CONTAINS", value: SearchMode.contains },
+        { labelTranslationKey: "SEARCH.SETTINGS.ENDS_WITH", value: SearchMode.endsWith },
+        { labelTranslationKey: "SEARCH.SETTINGS.EXACT", value: SearchMode.exact },
+        { labelTranslationKey: "SEARCH.SETTINGS.FUZZY", value: SearchMode.fuzzy }
     ];
-    activeSearchMode: SearchMode;
+    activeStringMatchMode: SearchMode;
+    
 
     restrictLang: boolean = false;
     includeLocales: boolean = false;
@@ -71,7 +81,7 @@ export class AdvancedSearchModal {
         this.useURI = searchSettings.useURI;
         this.useNotes = searchSettings.useNotes;
 
-        this.activeSearchMode = searchSettings.stringMatchMode;
+        this.activeStringMatchMode = searchSettings.stringMatchMode;
 
         this.restrictLang = searchSettings.restrictLang;
         this.includeLocales = searchSettings.includeLocales;
@@ -338,7 +348,7 @@ export class AdvancedSearchModal {
         }
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.useNotes, this.activeSearchMode, 
+        this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.useNotes, this.activeStringMatchMode, 
             this.selectedStatus, langsPar, includeLocalesPar, typesParam, schemesParam, ingoingParam, outgoingLinksParam, outgoingSearchParam).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);

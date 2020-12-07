@@ -27,11 +27,11 @@ export class SearchSettingsModal {
 
     //search mode startsWith/contains/endsWith
     stringMatchModes: { labelTranslationKey: string, value: SearchMode }[] = [
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.STARTS_WITH", value: SearchMode.startsWith },
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.CONTAINS", value: SearchMode.contains },
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.ENDS_WITH", value: SearchMode.endsWith },
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.EXACT", value: SearchMode.exact },
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.FUZZY", value: SearchMode.fuzzy }
+        { labelTranslationKey: "SEARCH.SETTINGS.STARTS_WITH", value: SearchMode.startsWith },
+        { labelTranslationKey: "SEARCH.SETTINGS.CONTAINS", value: SearchMode.contains },
+        { labelTranslationKey: "SEARCH.SETTINGS.ENDS_WITH", value: SearchMode.endsWith },
+        { labelTranslationKey: "SEARCH.SETTINGS.EXACT", value: SearchMode.exact },
+        { labelTranslationKey: "SEARCH.SETTINGS.FUZZY", value: SearchMode.fuzzy }
     ];
     private activeStringMatchMode: SearchMode;
 

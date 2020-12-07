@@ -54,7 +54,7 @@
                         <tbody>
                             <tr>
                                 <td *ngFor="let h of headers" class="columnHeader">
-                                    <span *ngIf="h.id==subjectHeader.id" class="badge badge-success" title="Subject">S</span>
+                                    <span *ngIf="h.id==subjectHeader.id" class="badge badge-success" [title]="'COMMONS.SUBJECT'|translate">S</span>
                                     <span [class]="h.cssClass" style="font-weight: bold;">
                                         {{h.nameStruct.fullName}}
                                     </span>
@@ -159,9 +159,9 @@
                     <table class="table table-sm table-hoverable" style="flex: 1">
                         <thead>
                             <tr>
-                                <th>Subject</th>
-                                <th>Predicate</th>
-                                <th>Object</th>
+                                <th>{{'COMMONS.SUBJECT'|translate}}</th>
+                                <th>{{'COMMONS.PREDICATE'|translate}}</th>
+                                <th>{{'COMMONS.OBJECT'|translate}}</th>
                             </tr>
                         </thead>
                         <tbody style="overflow: auto;">

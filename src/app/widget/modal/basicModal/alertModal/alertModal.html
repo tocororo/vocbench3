@@ -10,7 +10,7 @@
                 <div class="expandCollapseBtnContainer" style="display: inline">
                     <img src="./assets/images/icons/arrow.png" [ngClass]="{'arrow-right': detailsCollapsed}">
                 </div>
-                <label>Details:</label>
+                <label>{{'COMMONS.DETAILS'|translate}}:</label>
             </div>
             <div *ngIf="!detailsCollapsed" class="card vbox">
                 <div class="card-body overflow-auto" style="font-size: .8rem;">

@@ -253,112 +253,66 @@
         }
     },
     "DATA": {
-        "TABS": {
-            "CLASS": {
-                "TITLE": "Class",
-                "ACTIONS": {
-                    "CREATE": "Create class",
-                    "CREATE_CHILD": "Create subClass",
-                    "DELETE": "Delete class"
-                }
-            },
-            "COLLECTION": {
-                "TITLE": "Collection",
-                "ACTIONS": {
-                    "CREATE": "Create collection",
-                    "CREATE_CHILD": "Create nested collection",
-                    "DELETE": "Delete collection"
-                }
-            },
-            "CONCEPT": {
-                "TITLE": "Concept",
-                "ACTIONS": {
-                    "CREATE": "Create concept",
-                    "CREATE_CHILD": "Create narrower concept",
-                    "DELETE": "Delete concept"
-                }
-            },
-            "DATATYPE": {
-                "TITLE": "Datatype",
-                "ACTIONS": {
-                    "CREATE": "Create datatype",
-                    "DELETE": "Delete datatype"
-                }
-            },
-            "LEXICON": {
-                "TITLE": "Lexicon",
-                "ACTIONS": {
-                    "CREATE": "Create lexicon",
-                    "DELETE": "Delete lexicon"
-                }
-            },
-            "LEX_ENTRY": {
-                "TITLE": "Lex.Entry",
-                "ACTIONS": {
-                    "CREATE": "Create lexical entry",
-                    "DELETE": "Delete lexical entry"
-                }
-            },
-            "PROPERTY": {
-                "TITLE": "Property",
-                "ACTIONS": {
-                    "CREATE": "Create property",
-                    "CREATE_CHILD": "Create subProperty",
-                    "DELETE": "Delete property"
-                }
-            },
-            "SCHEME": {
-                "TITLE": "Scheme",
-                "ACTIONS": {
-                    "CREATE": "Create scheme ",
-                    "DELETE": "Delete scheme"
-                }
-            },
-            "COMMONS": {
-                "ACTIONS": {
-                    "DEPRECATE": "Deprecate"
-                }
-            }
+        "CLASS": {
+            "CLASS": "Class",
+            "CLASSES": "Classes",
+            "CREATE": "Create class",
+            "CREATE_CHILD": "Create subClass",
+            "DELETE": "Delete class"
         },
-        "SEARCH": {
-            "ADVANCED_SEARCH": "Advanced Search",
-            "CUSTOM_SEARCH": "Custom Search",
-            "SETTINGS": {
-                "TITLE": "Search settings",
-                "STRING_MATCH_MODE": {
-                    "TITLE": "String match mode",
-                    "STARTS_WITH": "Starts with",
-                    "CONTAINS": "Contains",
-                    "ENDS_WITH": "Ends with",
-                    "EXACT": "Exact",
-                    "FUZZY": "Fuzzy"
-                },
-                "SEARCH_MODE": {
-                    "TITLE": "Search mode",
-                    "TOOLTIP": "Search always looks for the input string among the lexicalizations",
-                    "SEARCH_IN_URI": "Search in URI",
-                    "SEARCH_IN_LOCAL_NAME": "Search in local name",
-                    "SEARCH_IN_NOTES": "Search in notes"
-                },
-                "LEXICALIZATIONS_SEARCH": {
-                    "TITLE": "Lexicalizations search",
-                    "RESTRICT_TO_LANGUAGES": "Restrict search to languages",
-                    "INCLUDE_LOCALES": "Include locales in search (e.g. en-GB, en-US)"
-                },
-                "AUTOCOMPLETION": {
-                    "TITLE": "Autocompletion",
-                    "TOOLTIP": "It is highly recommended to disable this feature in big project not hosted by a GraphDB server",
-                    "ENABLE_AUTOCOMPLETION": "Enable autocompletion support during typing"
-                },
-                "CONCEPTS_SEARCH": {
-                    "TITLE": "Concept search",
-                    "RESTRICT_TO_SCHEME": "Restrict the search to the active skos:ConceptScheme(s)"
-                },
-                "INSTANCES_SEARCH": {
-                    "LABEL": "Instances search",
-                    "EXTEND_TO_ALL": "Extend the search to all the individuals (also belonging to other classes)"
-                }
-            }
+        "COLLECTION": {
+            "COLLECTION": "Collection",
+            "COLLECTIONS": "Collections",
+            "CREATE": "Create collection",
+            "CREATE_CHILD": "Create nested collection",
+            "DELETE": "Delete collection"
+        },
+        "CONCEPT": {
+            "CONCEPT": "Concept",
+            "CONCEPTS": "Concepts",
+            "CREATE": "Create concept",
+            "CREATE_CHILD": "Create narrower concept",
+            "DELETE": "Delete concept"
+        },
+        "DATATYPE": {
+            "DATATYPE": "Datatype",
+            "DATATYPES": "Datatypes",
+            "CREATE": "Create datatype",
+            "DELETE": "Delete datatype"
+        },
+        "INSTANCE": {
+            "INSTANCE": "Instance",
+            "INSTANCES": "Instances",
+            "CREATE": "Create instance",
+            "DELETE": "Delete instance"
+        },
+        "LEXICON": {
+            "LEXICON": "Lexicon",
+            "LEXICONS": "Lexicons",
+            "CREATE": "Create lexicon",
+            "DELETE": "Delete lexicon"
+        },
+        "LEX_ENTRY": {
+            "LEX_ENTRY": "Lex.Entry",
+            "LEX_ENTRIES": "Lex.Entries",
+            "CREATE": "Create lexical entry",
+            "DELETE": "Delete lexical entry"
+        },
+        "PROPERTY": {
+            "PROPERTY": "Property",
+            "PROPERTIES": "Properties",
+            "CREATE": "Create property",
+            "CREATE_CHILD": "Create subProperty",
+            "DELETE": "Delete property"
+        },
+        "SCHEME": {
+            "SCHEME": "Scheme",
+            "SCHEMES": "Schemes",
+            "CREATE": "Create scheme ",
+            "DELETE": "Delete scheme"
+        },
+        "COMMONS": {
+            "DEPRECATE": "Deprecate"
         }
     },
     "DATA_MANAGEMENT": {
@@ -581,6 +535,73 @@
             "REMOTE_DATASET": "Remote Dataset"
         }
     },
+    "SEARCH": {
+        "ADV_SEARCH": {
+            "ADVANCED_SEARCH": "Advanced Search",
+            "SEARCH_STRING": "Search string",
+            "TYPES": "Types",
+            "SCHEMES": "Schemes",
+            "INGOING_LINKS": "Ingoing links",
+            "OUTGOING_LINKS": "Outgoing links",
+            "ADD_SET_OF_VALUES": "Add set of values",
+            "ADD_FREE_TEXT": "Add free text search",
+            "ADD_RESOURCE": "Add resource",
+            "ADD_LITERAL": "Add literal"
+        },
+        "ASSISTED_SEARCH": {
+            "ASSISTED_SEARCH": "Assisted search",
+            "LOCAL": "Local",
+            "REMOTE": "Remote",
+            "METADATA_UNAVAILABLE_LOCAL_WARNING": {
+                "METADATA_NOT_AVAILABLE": "VoID/LIME Metadata not available for local project '{{projName}}'. Click",
+                "HERE": "here",
+                "TO_GENERATE_IT": "to generate it"
+            },
+            "REMOTE_DATASETS": "Remote datasets",
+            "METADATA_UNAVAILABLE_REMOTE_WARNING": "VoID/LIME Metadata not available for remote dataset '{{datasetUriSpace}}'. You need to generate/add 'Embedded Lexicalization Sets' from the Metadata Registry management in order to exploit this feature.",
+            "PAIRED_LEX_SETS": "Paired Lexicalization Sets",
+            "PAIRED_LEX_SETS_TOOLTIP": "Lexicalization sets shared between the source resource and the target project/dataset",
+            "REFRESH_METADATA_TOOLTIP": "Refresh metadata of the target project",
+            "PERCENTAGE_TOOLTIP": "Percentage of resources that have a lexicalization in the given language",
+            "AVG_TOOLTIP": "Average number of lexicalizations",
+            "LEXICALIZATION_MODEL": "Lexicalization Model",
+            "NO_SEARCH_MODE_SELECTED_WARNING": "If none is selected, 'Fuzzy' and 'Contains' are used by default",
+            "SEARCH_MODE_TOOLTIP": "String match modes on which the lexicalizations comparison is based on",
+            "MATCHED_LANG": "Matched language",
+            "MATCH_MODE": "Match mode"
+        },
+        "CUSTOM_SEARCH": {
+            "CUSTOM_SEARCH": "Custom Search",
+            "SHOW_HIDE_SPARQL_DETAILS": "Show/hide SPARQL details about the custom search",
+            "NO_PARAM_SEARCH": "This search has no parameters so can only be run as is.",
+            "LOAD_CUSTOM_SEARCH": "Load Stored Custom Search",
+            "STORE_CUSTOM_SEARCH": "Stored Custom Search"
+        },
+        "SETTINGS": {
+            "SEARCH_SETTINGS": "Search settings",
+            "STRING_MATCH_MODE": "String match mode",
+            "STARTS_WITH": "Starts with",
+            "CONTAINS": "Contains",
+            "ENDS_WITH": "Ends with",
+            "EXACT": "Exact",
+            "FUZZY": "Fuzzy",
+            "SEARCH_MODE": "Search mode",
+            "SEARCH_MODE_TOOLTIP": "Search always looks for the input string among the lexicalizations",
+            "SEARCH_IN_URI": "Search in URI",
+            "SEARCH_IN_LOCAL_NAME": "Search in local name",
+            "SEARCH_IN_NOTES": "Search in notes",
+            "LEXICALIZATIONS_SEARCH": "Lexicalizations search",
+            "RESTRICT_TO_LANGUAGES": "Restrict search to languages",
+            "INCLUDE_LOCALES": "Include locales in search (e.g. en-GB, en-US)",
+            "AUTOCOMPLETION": "Autocompletion",
+            "AUTOCOMPLETION_TOOLTIP": "It is highly recommended to disable this feature in big project not hosted by a GraphDB server",
+            "ENABLE_AUTOCOMPLETION": "Enable autocompletion support during typing",
+            "CONCEPTS_SEARCH": "Concept search",
+            "RESTRICT_TO_SCHEME": "Restrict the search to the active skos:ConceptScheme(s)",
+            "INSTANCES_SEARCH": "Instances search",
+            "EXTEND_TO_ALL": "Extend the search to all the individuals (also belonging to other classes)"
+        }
+    },
     "SPARQL": {
         "QUERY": {
             "ADD_PARAMETERIZED_QUERY_TAB": "Add parameterized query tab",
@@ -711,10 +732,12 @@
         "CONFIGURATION_REQUIRED": "Configuration required",
         "DATASET": "Dataset",
         "DESCRIPTION": "Description",
+        "DETAILS": "Details",
         "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
         "GROUPS": "Groups",
         "INACTIVE": "Inactive",
+        "LEVEL": "Level",
         "LEXICALIZATION": "Lexicalization",
         "LEXICALIZATION_MODEL": "Lexicalization Model",
         "MANDATORY_FIELD": "Mandatory field",
@@ -722,9 +745,11 @@
         "NAME": "Name",
         "NEW": "New",
         "NOTIFICATIONS": "Notifications",
+        "OBJECT": "Object",
         "ONTOLOGY_IRI": "Ontology IRI",
         "OPTIONAL_FIELD": "Optional field",
         "PAGE_OF_TOT": "of",
+        "PREDICATE": "Predicate",
         "PROJECTS": "Projects",
         "REPOSITORY_ID": "Repository ID",
         "RESOURCE": "Resource",
@@ -733,8 +758,10 @@
         "SETTINGS": "Settings",
         "SPARQL_ENDPOINT": "SPARQL Endpoint",
         "STATUS": "Status",
+        "SUBJECT": "Subject",
         "TIME": "Time",
         "TITLE": "Title",
+        "TYPE": "Type",
         "USERS": "Users",
         "VALUE": "Value"
     }

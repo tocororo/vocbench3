@@ -34,11 +34,11 @@ export class SearchBarComponent {
 
     //search mode startsWith/contains/endsWith
     stringMatchModes: { labelTranslationKey: string, value: SearchMode, symbol: string }[] = [
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.STARTS_WITH", value: SearchMode.startsWith, symbol: "α.." },
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.CONTAINS", value: SearchMode.contains, symbol: ".α." },
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.ENDS_WITH", value: SearchMode.endsWith, symbol: "..α" },
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.EXACT", value: SearchMode.exact, symbol: "α" },
-        { labelTranslationKey: "DATA.SEARCH.SETTINGS.STRING_MATCH_MODE.FUZZY", value: SearchMode.fuzzy, symbol: "~α" }
+        { labelTranslationKey: "SEARCH.SETTINGS.STARTS_WITH", value: SearchMode.startsWith, symbol: "α.." },
+        { labelTranslationKey: "SEARCH.SETTINGS.CONTAINS", value: SearchMode.contains, symbol: ".α." },
+        { labelTranslationKey: "SEARCH.SETTINGS.ENDS_WITH", value: SearchMode.endsWith, symbol: "..α" },
+        { labelTranslationKey: "SEARCH.SETTINGS.EXACT", value: SearchMode.exact, symbol: "α" },
+        { labelTranslationKey: "SEARCH.SETTINGS.FUZZY", value: SearchMode.fuzzy, symbol: "~α" }
     ];
 
     searchSettings: SearchSettings;

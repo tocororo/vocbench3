@@ -112,7 +112,7 @@
                                     <div style="margin-left: 10px;">
                                         Score: <b [title]="s.score">{{s.scoreRound}}</b>
                                     </div>
-                                    <button class="btn btn-light btn-xs" style="margin-left: 12px;" (click)="describeSynonymizer(s)" title="Details">
+                                    <button class="btn btn-light btn-xs" style="margin-left: 12px;" (click)="describeSynonymizer(s)" [title]="'COMMONS.DETAILS'|translate">
                                         <span class="fas fa-info-circle"></span>
                                     </button>
                                 </div>

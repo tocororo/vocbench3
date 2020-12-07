@@ -20,7 +20,7 @@
 <div class="modal-body vbox">
     <div *ngIf="enrichingProperty != rootProperty && propChangeable" class="hbox" style="flex: initial; margin-bottom: 4px;">
         <div class="hbox" style="margin-right: 6px; align-items: center;">
-            <label style="margin-right: 4px;">Property:</label>
+            <label style="margin-right: 4px;">{{'DATA.PROPERTY.PROPERTY'|translate}}:</label>
             <div class="form-control-sm input-resource" style="flex: 1;">
                 <rdf-resource [resource]="rdfN"></rdf-resource>
             </div>

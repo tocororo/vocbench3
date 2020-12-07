@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Andvanced search</h3>
+    <h3 class="modal-title">{{'SEARCH.ADV_SEARCH.ADVANCED_SEARCH'|translate}}</h3>
 </div>
 <div class="modal-body scrollableContainer blockingDivHost">
 
@@ -10,11 +10,11 @@
         </colgroup>
         <tbody>
             <tr>
-                <td nowrap><label>Search string:</label></td>
+                <td nowrap><label>{{'SEARCH.ADV_SEARCH.SEARCH_STRING'|translate}}:</label></td>
                 <td><input class="form-control" [(ngModel)]="searchString"></td>
             </tr>
             <tr>
-                <td><label>Status:</label></td>
+                <td><label>{{'COMMONS.STATUS'|translate}}:</label></td>
                 <td>
                     <select class="form-control" [(ngModel)]="selectedStatus">
                         <option *ngFor="let s of statuses" [value]="s.value">{{s.show}}</option>
@@ -26,27 +26,27 @@
 
     <div class="card card-default mt-2">
         <div class="card-header">
-            <label>Search mode</label>
+            <label>{{'SEARCH.SETTINGS.SEARCH_MODE'|translate}}</label>
         </div>
         <div class="card-body">
             <div class="hbox" style="align-items: center;">
-                <label style="white-space: nowrap; margin-right: 4px;">String match mode:</label>
-                <select class="form-control" [(ngModel)]="activeSearchMode">
-                    <option *ngFor="let sm of searchModes" [value]="sm.value">{{sm.show}}</option>
+                <label style="white-space: nowrap; margin-right: 4px;">{{'SEARCH.SETTINGS.STRING_MATCH_MODE'|translate}}:</label>
+                <select class="form-control" [(ngModel)]="activeStringMatchMode">
+                    <option *ngFor="let sm of stringMatchModes" [value]="sm.value">{{sm.labelTranslationKey|translate}}</option>
                 </select>
             </div>
             <div class="mt-2">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" id="uriCheck" type="checkbox" [(ngModel)]="useURI">
-                    <label class="form-check-label" for="uriCheck">Search in URI</label>
+                    <label class="form-check-label" for="uriCheck">{{'SEARCH.SETTINGS.SEARCH_IN_URI'|translate}}</label>
                 </div>
                 <div class="form-check form-check-inline ml-2">
                     <input class="form-check-input" id="localNameCheck" type="checkbox" [(ngModel)]="useLocalName">
-                    <label class="form-check-label" for="localNameCheck">Search in local name</label>
+                    <label class="form-check-label" for="localNameCheck">{{'SEARCH.SETTINGS.SEARCH_IN_LOCAL_NAME'|translate}}</label>
                 </div>
                 <div class="form-check form-check-inline ml-2">
                     <input class="form-check-input" id="notesCheck" type="checkbox" [(ngModel)]="useNotes">
-                    <label class="form-check-label" for="notesCheck">Search in notes</label>
+                    <label class="form-check-label" for="notesCheck">{{'SEARCH.SETTINGS.SEARCH_IN_NOTES'|translate}}</label>
                 </div>
             </div>
         </div>
@@ -54,13 +54,13 @@
 
     <div class="card card-default mt-2">
         <div class="card-header">
-            <label>Lexicalization</label>
+            <label>{{'SEARCH.SETTINGS.LEXICALIZATIONS_SEARCH'|translate}}</label>
         </div>
         <div class="card-body">
             <div class="d-flex align-items-center">
                 <div class="form-check">
                     <input class="form-check-input" id="langCheck" type="checkbox" [(ngModel)]="restrictLang">
-                    <label class="form-check-label" for="langCheck">Restrict search to languages</label>
+                    <label class="form-check-label" for="langCheck">{{'SEARCH.SETTINGS.RESTRICT_TO_LANGUAGES'|translate}}</label>
                 </div>
                 <div class="hbox" style="align-items: center; margin-left: 8px;">
                     <div class="input-group">
@@ -75,7 +75,7 @@
             </div>
             <div class="form-check mt-2">
                 <input class="form-check-input" id="localeCheck" type="checkbox" [(ngModel)]="includeLocales" [disabled]="!restrictLang">
-                <label class="form-check-label" for="localeCheck">Include locales in search (e.g. en-GB, en-US)</label>
+                <label class="form-check-label" for="localeCheck">{{'SEARCH.SETTINGS.INCLUDE_LOCALES'|translate}}</label>
             </div>
         </div>
     </div>
@@ -83,7 +83,7 @@
     <!-- Types -->
     <div class="card card-default mt-2" >
         <div class="card-header">
-            <label style="flex: 1;">Types</label>
+            <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.TYPES'|translate}}</label>
             <div class="btn-group btn-group-xs">
                 <button class="btn btn-light" (click)="addTypesGroup()" [title]="'COMMONS.ACTIONS.ADD'|translate">
                     <span class="fas fa-plus"></span>
@@ -123,7 +123,7 @@
     <!-- Schemes -->
     <div *ngIf="showSchemeSelector" class="card card-default mt-2">
         <div class="card-header">
-            <label style="flex: 1;">Schemes</label>
+            <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.SCHEMES'|translate}}</label>
             <div class="btn-group btn-group-xs">
                 <button class="btn btn-light" (click)="addSchemesGroup()" [title]="'COMMONS.ACTIONS.ADD'|translate">
                     <span class="fas fa-plus"></span>
@@ -163,7 +163,7 @@
     <!-- Ingoing links -->
     <div class="card card-default mt-2">
         <div class="card-header">
-            <label style="flex: 1;">Ingoing links</label>
+            <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.INGOING_LINKS'|translate}}</label>
             <div class="btn-group btn-group-xs">
                 <button class="btn btn-light" (click)="addIngoingGroup()" [title]="'COMMONS.ACTIONS.ADD'|translate">
                     <span class="fas fa-plus"></span>
@@ -176,7 +176,7 @@
                     <div class="card card-default" style="flex: 1;">
                         <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">Predicate:</label>
+                                <label style="margin-right: 4px;">{{'COMMONS.PREDICATE'|translate}}:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true"
                                     (resourceChanged)="updatePropIngoing(group, $event)">
                                 </resource-picker>
@@ -214,14 +214,14 @@
     <!-- Outgoing links -->
     <div class="card card-default mt-2">
         <div class="card-header">
-            <label style="flex: 1;">Outgoing links</label>
+            <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.OUTGOING_LINKS'|translate}}</label>
             <div class="btn-group btn-group-xs dropup" ngbDropdown>
                 <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                     <span class="fas fa-plus"></span>
                 </button>
                 <div class="dropdown-menu float-right" ngbDropdownMenu>
-                    <a class="dropdown-item" (click)="addOutgoingGroupValue()">Add set of values</a>
-                    <a class="dropdown-item" (click)="addOutgoingGroupFreeText()">Add free text search</a>
+                    <a class="dropdown-item" (click)="addOutgoingGroupValue()">{{'SEARCH.ADV_SEARCH.ADD_SET_OF_VALUES'|translate}}</a>
+                    <a class="dropdown-item" (click)="addOutgoingGroupFreeText()">{{'SEARCH.ADV_SEARCH.ADD_FREE_TEXT'|translate}}</a>
                 </div>
             </div>
         </div>
@@ -232,7 +232,7 @@
                     <div class="card card-default" style="flex: 1;">
                         <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">Predicate:</label>
+                                <label style="margin-right: 4px;">{{'COMMONS.PREDICATE'|translate}}:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true" 
                                     (resourceChanged)="updatePropOutgoingValue(group, $event)">
                                 </resource-picker>
@@ -255,8 +255,8 @@
                                             <span class="fas fa-plus"></span>
                                         </button>
                                         <div class="dropdown-menu" ngbDropdownMenu>
-                                            <a class="dropdown-item" (click)="addOutgoingValue(group, 'resource')">Add resource</a>
-                                            <a class="dropdown-item" (click)="addOutgoingValue(group, 'literal')">Add literal</a>
+                                            <a class="dropdown-item" (click)="addOutgoingValue(group, 'resource')">{{'SEARCH.ADV_SEARCH.ADD_RESOURCE'|translate}}</a>
+                                            <a class="dropdown-item" (click)="addOutgoingValue(group, 'literal')">{{'SEARCH.ADV_SEARCH.ADD_LITERAL'|translate}}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -277,7 +277,7 @@
                     <div class="card card-default" style="flex: 1;">
                         <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">Predicate:</label>
+                                <label style="margin-right: 4px;">{{'COMMONS.PREDICATE'|translate}}:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.predicate" [config]="{ roles: ['property'] }" [editable]="true" 
                                     (resourceChanged)="updatePropOutgoingFreeText(group, $event)">
                                 </resource-picker>

@@ -52,14 +52,14 @@ export class TabsetPanelComponent {
     private ONTO_TYPE: string;
     
     tabs: { role: RDFResourceRolesEnum, label: string, translationKey: string }[] = [
-        { role: RDFResourceRolesEnum.cls, label: "Class", translationKey: 'DATA.TABS.CLASS.TITLE' },
-        { role: RDFResourceRolesEnum.concept, label: "Concept", translationKey: 'DATA.TABS.CONCEPT.TITLE' },
-        { role: RDFResourceRolesEnum.conceptScheme, label: "Scheme", translationKey: 'DATA.TABS.SCHEME.TITLE' },
-        { role: RDFResourceRolesEnum.skosCollection, label: "Collection", translationKey: 'DATA.TABS.COLLECTION.TITLE' },
-        { role: RDFResourceRolesEnum.property, label: "Property", translationKey: 'DATA.TABS.PROPERTY.TITLE' },
-        { role: RDFResourceRolesEnum.limeLexicon, label: "Lexicon", translationKey: 'DATA.TABS.LEXICON.TITLE' },
-        { role: RDFResourceRolesEnum.ontolexLexicalEntry, label: "Lex.Entry", translationKey: 'DATA.TABS.LEX_ENTRY.TITLE' },
-        { role: RDFResourceRolesEnum.dataRange, label: "Datatype", translationKey: 'DATA.TABS.DATATYPE.TITLE' }
+        { role: RDFResourceRolesEnum.cls, label: "Class", translationKey: 'DATA.CLASS.CLASS' },
+        { role: RDFResourceRolesEnum.concept, label: "Concept", translationKey: 'DATA.CONCEPT.CONCEPT' },
+        { role: RDFResourceRolesEnum.conceptScheme, label: "Scheme", translationKey: 'DATA.SCHEME.SCHEME' },
+        { role: RDFResourceRolesEnum.skosCollection, label: "Collection", translationKey: 'DATA.COLLECTION.COLLECTION' },
+        { role: RDFResourceRolesEnum.property, label: "Property", translationKey: 'DATA.PROPERTY.PROPERTY' },
+        { role: RDFResourceRolesEnum.limeLexicon, label: "Lexicon", translationKey: 'DATA.LEXICON.LEXICON' },
+        { role: RDFResourceRolesEnum.ontolexLexicalEntry, label: "Lex.Entry", translationKey: 'DATA.LEX_ENTRY.LEX_ENTRY' },
+        { role: RDFResourceRolesEnum.dataRange, label: "Datatype", translationKey: 'DATA.DATATYPE.DATATYPE' }
     ];
     private activeTab: RDFResourceRolesEnum;
     private allowMultiselection: boolean = true;

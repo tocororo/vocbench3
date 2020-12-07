@@ -25,15 +25,15 @@
                 </td>
             </tr>
             <tr *ngIf="project">
-                <td><label>Type:</label></td>
+                <td><label>{{'COMMONS.TYPE'|translate}}:</label></td>
                 <td>
                     <select class="form-control form-control-sm " [(ngModel)]="activeView" (ngModelChange)="onAlignTypeChanged()">
-                        <option value="cls">Class</option>
-                        <option value="individual">Individual</option>
-                        <option value="property">Property</option>
-                        <option *ngIf="isProjectSKOS()" value="concept">Concept</option>
+                        <option value="cls">{{'DATA.CLASS.CLASS'|translate}}</option>
+                        <option value="individual">{{'DATA.INSTANCE.INSTANCE'|translate}}</option>
+                        <option value="property">{{'DATA.PROPERTY.PROPERTY'|translate}}</option>
+                        <option *ngIf="isProjectSKOS()" value="concept">{{'DATA.CONCEPT.CONCEPT'|translate}}</option>
                         <option *ngIf="isProjectSKOS()" value="conceptScheme">ConceptScheme</option>
-                        <option *ngIf="isProjectSKOS()" value="skosCollection">Collection</option>
+                        <option *ngIf="isProjectSKOS()" value="skosCollection">{{'DATA.COLLECTION.COLLECTION'|translate}}</option>
                     </select>
                 </td>
             </tr>

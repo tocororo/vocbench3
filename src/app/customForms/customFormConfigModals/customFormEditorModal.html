@@ -34,7 +34,7 @@
     <div class="entryRow">
         <div class="hbox" style="align-items: center;">
             <label class="entryLabel">
-                Name:
+                {{'COMMONS.NAME'|translate}}:
                 <span class="fas fa-info-circle" title="The name that will be shown to the user to identify this form"></span>
             </label>
             <input type="text" class="form-control" style="flex: 1" [(ngModel)]="name" [disabled]="readOnly">
@@ -54,7 +54,7 @@
     <div class="entryRow">
         <div class="hbox" style="align-items: center;">
             <label class="entryLabel">
-                Type:
+                {{'COMMONS.TYPE'|translate}}:
             </label>
             <select class="form-control" style="flex: 1;" [(ngModel)]="type" [disabled]="cfId">
                 <option value="graph">Graph</option>
