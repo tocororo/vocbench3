@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Operation authorization</h3>
+    <h3 class="modal-title">{{'CUSTOM_SERVICES.AUTH_HELPER.OPERATION_AUTH'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
@@ -9,25 +9,22 @@
 
         <div class="card card-default">
             <div class="card-header">
-                <label>Type restriction</label>
+                <label>{{'CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.TYPE_RESTRICTION'|translate}}</label>
             </div>
             <div class="card-body">
-                <p>
-                    Determines if the <i>rdf</i> capability is required on a specific resource type. 
-                    It is possible to select a type among those available in VB or to let the system infer the type from a parameter of the operation.
-                </p>
+                <p [innerHTML]="'CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.TYPE_RESTRICTION_INFO'|translate"></p>
                    
                 <div class="form-group row">
-                    <label class="col-form-label col-sm-2">Restriction</label>
+                    <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.RESTRICTION'|translate}}</label>
                     <div class="col-sm-10">
                         <select class="form-control" [(ngModel)]="selectedTypeRestriction" (ngModelChange)="update()">
-                            <option *ngFor="let r of typeRestrictions">{{r}}</option>
+                            <option *ngFor="let r of typeRestrictions">{{r|translate}}</option>
                         </select>
                     </div>
                 </div>
         
                 <div *ngIf="selectedTypeRestriction==typeRestrictionType" class="form-group row">
-                    <label class="col-form-label col-sm-2">Type</label>
+                    <label class="col-form-label col-sm-2">{{'COMMONS.TYPE'|translate}}</label>
                     <div class="col-sm-10">
                         <select class="form-control" [(ngModel)]="selectedType" (ngModelChange)="update()">
                             <option *ngFor="let r of roles">{{r}}</option>
@@ -35,7 +32,7 @@
                     </div>
                 </div>
                 <div *ngIf="selectedTypeRestriction==typeRestrictionParam" class="form-group row">
-                    <label class="col-form-label col-sm-2">Parameter</label>
+                    <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.PARAMETER'|translate}}</label>
                     <div class="col-sm-10">
                         <select *ngIf="parameters?.length > 0; else noParamTypeBlock" class="form-control" style="font-family: monospace;"
                             [(ngModel)]="selectedParamType" (ngModelChange)="update()">
@@ -43,14 +40,14 @@
                         </select>
                         <ng-template #noParamTypeBlock>
                             <div class="form-control" style="background-color: #eee;">
-                                <span class="fas fa-exclamation-triangle"></span> The operation does not foreseen any parameter
+                                <span class="fas fa-exclamation-triangle"></span> {{'CUSTOM_SERVICES.AUTH_HELPER.NO_PARAM_OPERATION'|translate}}
                             </div>
                         </ng-template>
                     </div>
                 </div>
                 <div *ngIf="selectedTypeRestriction!=typeRestrictionNone && (selectedType || selectedParamType)" class="form-group row">
                     <label class="col-form-label col-sm-2">
-                        Scope
+                        {{'CUSTOM_SERVICES.AUTH_HELPER.SCOPE'|translate}}
                         <span class="fas fa-info-circle" title="Refines the scope of the selected type"></span>
                     </label>
                     <div class="col-sm-10 hbox" style="align-items: center;">
@@ -60,8 +57,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                For further details about the capability vocabulary, please refer to the VB 
-                <a href="http://vocbench.uniroma2.it/doc/user/roles_adm.jsf#capabilities_vocabulary" target="_blank">documentation</a>.
+                <span [innerHTML]="'CUSTOM_SERVICES.AUTH_HELPER.CAPABILITIES_DOCUMENTATION_REF'|translate"></span>
             </div>
         </div>
 
@@ -69,19 +65,18 @@
 
         <div class="card card-default" style="margin-top: 6px;">
             <div class="card-header">
-                <label>Language requirement</label>
+                <label>{{'CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.LANGUAGE_REQUIREMENT'|translate}}</label>
             </div>
             <div class="card-body">
                 <p>
-                    Determines if the operation requires that the user which performs the operation has a specifica language assigned.
-                    It is possible to select a language among those available in VB or to let the system infer it from a parameter of the operation.
+                    {{'CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.LANGUAGE_REQUIREMENT_INFO'|translate}}
                 </p>
                 
                 <div class="form-group row">
-                    <label class="col-form-label col-sm-2">Restriction</label>
+                    <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.RESTRICTION'|translate}}</label>
                     <div class="col-sm-10">
                         <select class="form-control" [(ngModel)]="selectedLangRequirement" (ngModelChange)="update()">
-                            <option *ngFor="let r of langRequirements">{{r}}</option>
+                            <option *ngFor="let r of langRequirements" [value]="r">{{r|translate}}</option>
                         </select>
                     </div>
                 </div>
@@ -94,7 +89,7 @@
                     </div>
                 </div>
                 <div *ngIf="selectedLangRequirement==langRequirementParam" class="form-group row">
-                    <label class="col-form-label col-sm-2">Parameter</label>
+                    <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.PARAMETER'|translate}}</label>
                     <div class="col-sm-10">
                         <select *ngIf="parameters?.length > 0; else noParamLangBlock" class="form-control" style="font-family: monospace;"
                             [(ngModel)]="selectedParamLang" (ngModelChange)="update()">
@@ -102,7 +97,7 @@
                         </select>
                         <ng-template #noParamLangBlock>
                             <div class="form-control" style="background-color: #eee;">
-                                <span class="fas fa-exclamation-triangle"></span> The operation does not foreseen any parameter
+                                <span class="fas fa-exclamation-triangle"></span> {{'CUSTOM_SERVICES.AUTH_HELPER.NO_PARAM_OPERATION'|translate}}
                             </div>
                         </ng-template>
                     </div>

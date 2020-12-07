@@ -3,7 +3,7 @@
         <label style="flex: 1">{{id}}</label>
 
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-light" (click)="initCustomService()" title="Refresh">
+            <button class="btn btn-light" (click)="initCustomService()" [title]="'COMMONS.ACTIONS.REFRESH'|translate">
                 <span class="fas fa-redo"></span>
             </button>
             <div class="btn-group btn-group-xs" ngbDropdown>
@@ -11,8 +11,8 @@
                     <span class="fas fa-caret-down fa-sm"></span>
                 </button>
                 <div class="dropdown-menu float-right" ngbDropdownMenu>
-                    <a class="dropdown-item" (click)="reload()" title="Reload service (useful when the Custom Service is changed manually)">
-                        Force reload from filesystem
+                    <a class="dropdown-item text-nowrap" (click)="reload()" [title]="'CUSTOM_SERVICES.FORCE_RELOAD_INFO'|translate">
+                        {{'CUSTOM_SERVICES.FORCE_RELOAD'|translate}}
                         <span class="fas fa-redo float-right ml-2"></span>
                     </a>
                 </div>

@@ -279,6 +279,63 @@
             "USE_ID_OF_IMPORTED": "Usa ID del {{type}} importato"
         }
     },
+    "CUSTOM_SERVICES": {
+        "CUSTOM_SERVICES": "Custom Services",
+        "FORCE_RELOAD": "Forza ricaricamento dal filesystem",
+        "FORCE_RELOAD_INFO": "Ricarica i servizi (utile quando i Custom Service sono modificati/caricati manualmente)",
+        "OPERATION": {
+            "AUTHORIZATION": "Autorizzazione",
+            "PARAMETERS": "Parametri",
+            "RETURNS": "Return",
+            "PARAM_HELPER": {
+                "INTRO": [
+                    "I parametri sono mappati nella SPARQL query a variabili con lo stesso nome. I parametri effettivi passati nella chiamata al servizio vengono assegnati alla corrispondente variabile nella query SPARQL. Una variabile riservata è",
+                    "a cui di default è assegnato il grafo di lavoro del progetto."
+                ],
+                "ALLOWED_PARAM_TYPES_ARE": "I tipi di parametro ammessi sono",
+                "ALLOWED_RETURN_TYPE": "I tipi di ritorno dipendono dal tipo dell'operazione SPARQL",
+                "LIST_T_WHERE": "dove",
+                "T_TYPE_OTP1": "può essere uno qualsiasi dei suddetti tipi di parametro ammessi (in questo caso la SELECT deve ritornare una sola variabile)",
+                "T_TYPE_OPT2": {
+                    "BE": "è", 
+                    "WHERE": "dove", 
+                    "MIGHT_BE": "può essere"
+                },
+                "T_TYPE_OPT2_ADDENDA": [
+                    "in questo caso la SELECT deve ritornare una sola variabile più parametri addizionali",
+                    "per attributi addizionali"
+                ]
+            }
+        },
+        "AUTH_HELPER": {
+            "OPERATION_AUTH": "Autorizzazione operazione",
+            "TYPE_RESTR": {
+            "TYPE_RESTRICTION": "Restrizione sul tipo",
+            "TYPE_RESTRICTION_INFO": "Determina se la capability <i>rdf</i> è richiesta su un tipo specifico di risorsa. E' possibile selezionare un tipo tra quelli disponibili in VB o lasciarlo inferire al sistema da un parametro dell'operazione",
+                "RESTRICTION_NONE": "Nessuna",
+                "RESTRICTION_TO_SPECIFIC_TYPE": "Restringi a un tipo specifico",
+                "RESTRICTION_TO_PARAMETER_TYPE": "Restringi al tipo di un parametro"
+            },
+            "LANG_REQUIREMENT": {
+                "LANGUAGE_REQUIREMENT": "Requisito linguistico",
+                "LANGUAGE_REQUIREMENT_INFO": "Determina se l'operazione richiede che l'utente che esegue l'operazione abbia una specifica lingua assegnata. E' possibile selezionare una lingua tra quelle disponibili in VB o lasciarla inferire al sistema da un parametro dell'operazione.",
+                "REQUIRE_NONE": "Nessuno",
+                "REQUIRE_SPECIFIC_LANG": "Richiedi una lingua specifica",
+                "REQUIRE_PARAMETER_LANG": "Richiedi la lingua di un parametro"
+            },
+            "RESTRICTION": "Restrizione",
+            "PARAMETER": "Parametro",
+            "NO_PARAM_OPERATION": "L'operazione non prevede alcun parametro",
+            "SCOPE": "Scope",
+            "CAPABILITIES_DOCUMENTATION_REF": "Per ulteriori dettagli riguardo il vocabolario delle capability, fare riferimento alla <a href=\"http://vocbench.uniroma2.it/doc/user/roles_adm.jsf#capabilities_vocabulary\" target=\"_blank\">documentazione</a> di VB."
+        },
+        "SERVICE": {
+            "SERVICE_NAME": "Nome servizio",
+            "ID_INFO": "Un identificativo unico",
+            "SERVICE_NAME_INFO": "Il nome usato per raggruppare le operazioni definite da questo Custom Service",
+            "DESCRIPTION_INFO": "Una descrizione di questo Custom Service"
+        }
+    },
     "DATA": {
         "CLASS": {
             "CLASS": "Classe",

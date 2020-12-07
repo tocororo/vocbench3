@@ -160,12 +160,11 @@
 
 <ng-template #popContent>
     <p>
-        The parameters are mapped to variables with the same name in the SPARQL query. 
-        Actual parameters passed to a service upon invocation are pre-bound to the corresponding variable in the SPARQL query.
-        A reserved variable is <span style="font-family: monospace">workingGraph</span>,
-        which is bound by default to the working graph of the project.
+        {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.INTRO.0'|translate}}
+        <span style="font-family: monospace">workingGraph</span>,
+        {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.INTRO.1'|translate}}
     </p>
-    <p>The allowed parameter types are:</p>
+    <p>{{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.ALLOWED_PARAM_TYPES_ARE'|translate}}:</p>
     <ul>
         <li><span style="font-family: monospace">boolean</span></li>
         <li><span style="font-family: monospace">integer</span></li>
@@ -177,24 +176,33 @@
         <li><span style="font-family: monospace">BNode</span></li>
         <li><span style="font-family: monospace">IRI</span></li>
         <li><span style="font-family: monospace">Literal</span></li>
-        <li><span style="font-family: monospace">{{'COMMONS.RESOURCE'|translate}}</span></li>
-        <li><span style="font-family: monospace">{{'COMMONS.VALUE'|translate}}</span></li>
+        <li><span style="font-family: monospace">Resource</span></li>
+        <li><span style="font-family: monospace">Value</span></li>
     </ul>
-    <p>The allowed return type depends on the actual SPARQL operation:</p>
+    <p>{{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.ALLOWED_RETURN_TYPE'|translate}}:</p>
     <ul>
         <li>Udpate => <span style="font-family: monospace;">void</span></li>
         <li>ASK => <span style="font-family: monospace;">boolean</span></li>
         <li>SELECT => 
-            <span style="font-family: monospace;">List&lt;T&gt;</span>, where <span style="font-family: monospace;">T</span>
+            <span style="font-family: monospace;">List&lt;T&gt;</span> {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.LIST_T_WHERE'|translate}} <span style="font-family: monospace;">T</span>:
             <ul>
-                <li>might be any of the above accepted parameter types (in this case the SELECT must return one variable)</li>
-                <li>be <span style="font-family: monospace;">AnnotatedValue&lt;S&gt;</span> where <span style="font-family: monospace;">S</span> might be:
+                <li>{{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OTP1'|translate}}</li>
+                <li>
+                    {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2.BE'|translate}}
+                    <span style="font-family: monospace;">AnnotatedValue&lt;S&gt;</span>,
+                    {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2.WHERE'|translate}}
+                    <span style="font-family: monospace;">S</span>
+                    {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2.MIGHT_BE'|translate}}:
                     <ul>
                         <li><span style="font-family: monospace;">BNode</span></li>
                         <li><span style="font-family: monospace;">IRI</span></li>
-                        <li><span style="font-family: monospace;">{{'COMMONS.RESOURCE'|translate}}</span></li>
+                        <li><span style="font-family: monospace;">Resource</span></li>
                     </ul>
-                    (in this case the SELECT must return one variable plus additional variables <span style="font-family: monospace;">?attr_...</span> for additional attibutes)
+                    <span>
+                        ({{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2_ADDENDA.0'|translate}}
+                        <span style="font-family: monospace;">?attr...</span>
+                        {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2_ADDENDA.1'|translate}})
+                    </span>
                 </li>
             </ul>
         </li>

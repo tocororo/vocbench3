@@ -13,7 +13,7 @@
             <button class="btn btn-light btn-xs" title="Rendering" (click)="rendering=!rendering" [ngClass]="{ active: rendering }">
                 <span class="fas fa-font"></span>
             </button>
-            <button class="btn btn-light btn-xs" title="Refresh" (click)="refresh()">
+            <button class="btn btn-light btn-xs" [title]="'COMMONS.ACTIONS.REFRESH'|translate" (click)="refresh()">
                 <span class="fas fa-redo"></span>
             </button>
             <button *ngIf="isOpenSettingsAvailable()" class="btn btn-light btn-xs" title="Settings" (click)="settings()">

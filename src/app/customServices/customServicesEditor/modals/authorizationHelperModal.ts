@@ -28,10 +28,10 @@ export class AuthorizationHelperModal {
     private selectedArea: AreaStruct = this.areas[0];
 
     //type restriction
-    readonly typeRestrictionNone: string = "None";
-    readonly typeRestrictionType: string = "Restrict to a specific type";
-    readonly typeRestrictionParam: string = "Restrict to the type of a parameter";
-    typeRestrictions: string[] = [ this.typeRestrictionNone, this.typeRestrictionType, this.typeRestrictionParam];
+    readonly typeRestrictionNone: string = "CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.RESTRICTION_NONE";
+    readonly typeRestrictionType: string = "CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.RESTRICTION_TO_SPECIFIC_TYPE";
+    readonly typeRestrictionParam: string = "CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.RESTRICTION_TO_PARAMETER_TYPE";
+    typeRestrictions: string[] = [this.typeRestrictionNone, this.typeRestrictionType, this.typeRestrictionParam];
     selectedTypeRestriction: string = this.typeRestrictionNone;
     selectedType: RDFResourceRolesEnum;
     selectedParamType: string;
@@ -60,9 +60,9 @@ export class AuthorizationHelperModal {
     ];
 
     //language restriction
-    readonly langRequirementNone: string = "None";
-    readonly langRequirementLang: string = "Require a specific language";
-    readonly langRequirementParam: string = "Require the language of a parameter";
+    readonly langRequirementNone: string = "CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.REQUIRE_NONE";
+    readonly langRequirementLang: string = "CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.REQUIRE_SPECIFIC_LANG";
+    readonly langRequirementParam: string = "CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.REQUIRE_PARAMETER_LANG";
     langRequirements: string[] = [ this.langRequirementNone, this.langRequirementLang, this.langRequirementParam];
     selectedLangRequirement: string = this.langRequirementNone;
     private selectedLang: Language;

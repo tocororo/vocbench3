@@ -2,7 +2,7 @@
 
     <ul class="nav nav-tabs" (click)="$event.preventDefault()">
         <li class="nav-item" [ngClass]="{active : currentRoute == 'customService', disabled: !csAuthorized }">
-            <a class="nav-link" (click)="currentRoute = 'customService'">Custom Services</a>
+            <a class="nav-link" (click)="currentRoute = 'customService'">{{'CUSTOM_SERVICES.CUSTOM_SERVICES'|translate}}</a>
         </li>
         <li class="nav-item" [ngClass]="{active : currentRoute == 'reporter', disabled: !reporterAuthorized }">
             <a class="nav-link" (click)="currentRoute = 'reporter'">Reports</a>

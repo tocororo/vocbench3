@@ -192,7 +192,6 @@
         },
         "USER_MENU": {
             "VIEW_PROFILE": "View profile",
-            
             "PREFERENCES": "Preferences",
             "ADMINISTRATION": "Administration"
         }
@@ -277,6 +276,63 @@
             "SELECT_CLASS": "Select class",
             "SELECT_PROPERTY": "Select property",
             "USE_ID_OF_IMPORTED": "Use ID of the imported {{type}}"
+        }
+    },
+    "CUSTOM_SERVICES": {
+        "CUSTOM_SERVICES": "Custom Services",
+        "FORCE_RELOAD": "Force reload from filesystem",
+        "FORCE_RELOAD_INFO": "Reload services (useful when the Custom Services are changed/loaded manually)",
+        "OPERATION": {
+            "AUTHORIZATION": "Authorization",
+            "PARAMETERS": "Parameters",
+            "RETURNS": "Returns",
+            "PARAM_HELPER": {
+                "INTRO": [
+                    "The parameters are mapped to variables with the same name in the SPARQL query. Actual parameters passed to a service upon invocation are pre-bound to the corresponding variable in the SPARQL query. A reserved variable is",
+                    "which is bound by default to the working graph of the project."
+                ],
+                "ALLOWED_PARAM_TYPES_ARE": "The allowed parameter types are",
+                "ALLOWED_RETURN_TYPE": "The allowed return type depends on the actual SPARQL operation",
+                "LIST_T_WHERE": "where",
+                "T_TYPE_OTP1": "might be any of the above accepted parameter types (in this case the SELECT must return one variable)",
+                "T_TYPE_OPT2": {
+                    "BE": "be",
+                    "WHERE": "where",
+                    "MIGHT_BE": "might be"
+                },
+                "T_TYPE_OPT2_ADDENDA": [
+                    "in this case the SELECT must return one variable plus additional variables",
+                    "for additional attibutes"
+                ]
+            }
+        },
+        "AUTH_HELPER": {
+            "OPERATION_AUTH": "Operation authorization",
+            "TYPE_RESTR": {
+                "TYPE_RESTRICTION": "Type restriction",
+                "TYPE_RESTRICTION_INFO": "Determines if the <i>rdf</i> capability is required on a specific resource type. It is possible to select a type among those available in VB or to let the system infer the type from a parameter of the operation.",
+                "RESTRICTION_NONE": "None",
+                "RESTRICTION_TO_SPECIFIC_TYPE": "Restrict to a specific type",
+                "RESTRICTION_TO_PARAMETER_TYPE": "Restrict to the type of a parameter"
+            },
+            "LANG_REQUIREMENT": {
+                "LANGUAGE_REQUIREMENT": "Language requirement",
+                "LANGUAGE_REQUIREMENT_INFO": "Determines if the operation requires that the user which performs the operation has a specific language assigned. It is possible to select a language among those available in VB or to let the system infer it from a parameter of the operation.",
+                "REQUIRE_NONE": "None",
+                "REQUIRE_SPECIFIC_LANG": "Require a specific language",
+                "REQUIRE_PARAMETER_LANG": "Require the language of a parameter"
+            },
+            "RESTRICTION": "Restriction",
+            "PARAMETER": "Parameter",
+            "NO_PARAM_OPERATION": "The operation does not foreseen any parameter",
+            "SCOPE": "Scope",
+            "CAPABILITIES_DOCUMENTATION_REF": "For further details about the capability vocabulary, please refer to the VB <a href=\"http://vocbench.uniroma2.it/doc/user/roles_adm.jsf#capabilities_vocabulary\" target=\"_blank\">documentation</a>."
+        },
+        "SERVICE": {
+            "SERVICE_NAME": "Service name",
+            "ID_INFO": "A unique identifier",
+            "SERVICE_NAME_INFO": "The name used to group all operations defined by this custom service",
+            "DESCRIPTION_INFO": "A description of this custom service"
         }
     },
     "DATA": {
@@ -745,9 +801,9 @@
         "ACTIONS": {
             "ACCEPT": "Accept",
             "ACTION": "Action",
-            "ADD": "Add", 
+            "ADD": "Add",
             "ADD_AFTER": "Add after",
-            "ADD_ALL": "Add all", 
+            "ADD_ALL": "Add all",
             "ADD_BEFORE": "Add before",
             "ASSIGN": "Assign",
             "CANCEL": "Cancel",

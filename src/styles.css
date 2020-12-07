@@ -908,7 +908,7 @@ label {
 .popover-body {
     max-height: 200px;
     overflow-y: auto;
-    font-size: 1rem;
+    font-size: 1.125rem;
 }
 
 /*not available in bootstrap*/
