@@ -2,8 +2,8 @@
 
     <div class="card card-default vbox">
         <div class="card-header">
-            <label style="flex: 1">Custom Forms configuration:</label>
-            <button class="btn btn-xs btn-light" (click)="showBrokenCFS()" title="Show broken CustomForm structures">
+            <label style="flex: 1">{{'CUSTOM_FORMS.CONFIG.CUSTOM_FORMS_CONFIG'|translate}}:</label>
+            <button class="btn btn-xs btn-light" (click)="showBrokenCFS()" [title]="'CUSTOM_FORMS.CONFIG.SHOW_BROKEN_CF'|translate">
                 <span class="fas fa-exclamation-triangle"></span>
             </button>
         </div>
@@ -11,10 +11,9 @@
         <div class="card-body vbox">
 
             <div class="hbox">
-
                 <div class="card card-alt vbox">
                     <div class="card-header">
-                        <label style="flex: 1">Custom Forms:</label>
+                        <label style="flex: 1">{{'CUSTOM_FORMS.FORMS.CUSTOM_FORMS'|translate}}:</label>
                         <div class="btn-group btn-group-xs" role="group">
                             <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CREATE'|translate" (click)="createCustomForm()"
                                 [disabled]="!isCreateFormAuthorized()">
@@ -51,7 +50,7 @@
                 
                 <div class="card card-alt vbox" style="margin-left: 4px;">
                     <div class="card-header">
-                        <label style="flex: 1">Form Collections:</label>
+                        <label style="flex: 1">{{'CUSTOM_FORMS.COLLECTIONS.FORM_COLLECTIONS'|translate}}:</label>
                         <div class="btn-group btn-group-xs" role="group">
                             <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CREATE'|translate" (click)="createFormCollection()"
                                 [disabled]="!isCreateCollectionAuthorized()">
@@ -91,7 +90,7 @@
 
             <div class="card card-alt vbox" style="margin-top: 4px;">
                 <div class="card-header">
-                    <label style="flex: 1">Forms mapping:</label>
+                    <label style="flex: 1">{{'CUSTOM_FORMS.MAPPINGS.FORM_MAPPINGS'|translate}}:</label>
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-light" [title]="'COMMONS.ACTIONS.CREATE'|translate" (click)="createFormCollMapping()"
                             [disabled]="!isCreateMappingAuthorized()">
@@ -110,11 +109,11 @@
                             <thead style="border-bottom: 1px solid #ddd;">
                                 <tr>
                                     <th>{{'DATA.PROPERTY.PROPERTY'|translate}}/{{'DATA.CLASS.CLASS'|translate}}</th>
-                                    <th>Form Collection</th>
+                                    <th>{{'CUSTOM_FORMS.COLLECTIONS.FORM_COLLECTION'|translate}}</th>
                                     <th style="width: 1%" nowrap>
-                                        Replace
+                                        {{'CUSTOM_FORMS.CONFIG.REPLACE'|translate}}
                                         <span class="fas fa-info-circle" 
-                                            title="Tells if the CustomForm replaces the 'default' form. Valid only for CustomRanges (not CustomConstructors)">
+                                            [title]="'CUSTOM_FORMS.CONFIG.REPLACE_INFO'|translate">
                                         </span>
                                     </th>
                                 </tr>
@@ -142,10 +141,10 @@
 
         <div class="card-footer">
             <span class="float-right grayText" style="padding: 2px; margin: 0px 2px; border: 1px solid #ccc; border-radius: 2px; background: #fff;">
-                System level elements
+                {{'CUSTOM_FORMS.CONFIG.SYSTEM_LEVEL_ELEM'|translate}}
             </span>
             <span class="float-right"  style="padding: 2px; margin: 0px 2px; border: 1px solid #ccc; border-radius: 2px; background: #fff;">
-                Project level elements
+                {{'CUSTOM_FORMS.CONFIG.PROJECT_LEVEL_ELEM'|translate}}
             </span>
         </div>
 

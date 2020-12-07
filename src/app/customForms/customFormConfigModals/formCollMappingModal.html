@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Create Resource - FormCollection mapping</h3>
+    <h3 class="modal-title">{{'CUSTOM_FORMS.MAPPINGS.CREATE_MAPPING'|translate}}</h3>
 </div>
 <div class="modal-body vbox" style="min-height: 40vh;">
     
@@ -8,19 +8,19 @@
         <input class="form-control form-control-sm" style="margin: 0px 4px;" [(ngModel)]="selectedResourceIri" placeholder="http://example#resource">
         <div class="dropdown" ngbDropdown>
             <button class="btn btn-light dropdown-toggle btn-sm" >
-                Select
+                {{'COMMONS.ACTIONS.SELECT'|translate}}
                 <span class="fas fa-caret-down"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
                 <a class="dropdown-item" (click)="selectClass()">
-                    <img src="./assets/images/icons/res/class.png" /> Select class
+                    <img src="./assets/images/icons/res/class.png" /> {{'CUSTOM_FORMS.COMMONS.SELECT_CLASS'|translate}}
                 </a>
                 <a class="dropdown-item" (click)="selectProperty()">
-                    <img src="./assets/images/icons/res/prop.png" /> Select property
+                    <img src="./assets/images/icons/res/prop.png" /> {{'CUSTOM_FORMS.COMMONS.SELECT_PROPERTY'|translate}}
                 </a>
                 <a *ngIf="selectedFormColl" class="dropdown-item" (click)="selectSuggested()">
                     <span class="fas fa-star" style="width: 16px; padding-left: 3px;"></span>
-                    Select suggested for FormCollection
+                    {{'CUSTOM_FORMS.MAPPINGS.SELECT_SUGGESTED'|translate}}
                 </a>
             </div>
         </div>
@@ -28,7 +28,7 @@
     
     <div class="card card-default vbox">
         <div class="card-header">
-            <label style="flex: 1">Form Collection:</label>
+            <label style="flex: 1">{{'CUSTOM_FORMS.COLLECTIONS.FORM_COLLECTION'|translate}}:</label>
         </div>
         <div class="card-body vbox">
             <div class="scrollableContainer">

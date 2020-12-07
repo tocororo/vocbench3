@@ -1,23 +1,20 @@
 <div class="modal-header">
-    <h3 class="modal-title">Pearl annotations inference</h3>
+    <h3 class="modal-title">{{'CUSTOM_FORMS.FORMS.PEARL_INFERENCE_VALIDATION.PEARL_ANNOTATIONS_INFERENCE'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
-    <div class="alert alert-warning">
-        Note: in case no annotation has been inferred, the two PEARL might not differ at all. 
-        Anyway, the inference process might apply changes, such as reordering the prefix definitions and removing comments.<br>
-        It is also possible to edit the resulting PEARL before applying the changes.
+    <div class="alert alert-warning" [innerHTML]="'CUSTOM_FORMS.FORMS.PEARL_INFERENCE_VALIDATION.WARNING_MSG'|translate">
     </div>
 
     <div class="hbox" style="margin-top: 4px;">
         <div class="card card-default vbox">
-            <div class="card-header"><label>Original PEARL</label></div>
+            <div class="card-header"><label>{{'CUSTOM_FORMS.FORMS.PEARL_INFERENCE_VALIDATION.ORIGINAL_PEARL'|translate}}</label></div>
             <div class="card-body vbox">
                 <pearl-editor [ngModel]="oldPearl" [disabled]="true"></pearl-editor>
             </div>
         </div>
         <div class="card card-default vbox" style="margin-left: 5px;" >
-            <div class="card-header"><label>Inferred PEARL</label></div>
+            <div class="card-header"><label>{{'CUSTOM_FORMS.FORMS.PEARL_INFERENCE_VALIDATION.INFERRED_PEARL'|translate}}</label></div>
             <div class="card-body vbox">
                 <pearl-editor [(ngModel)]="newPearl"></pearl-editor>
             </div>
@@ -26,6 +23,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Accept</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">Discard</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">{{'COMMONS.ACTIONS.ACCEPT'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.DISCARD'|translate}}</button>
 </div>

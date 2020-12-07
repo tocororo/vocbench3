@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h3 *ngIf="!id" class="modal-title">Create Form Collection</h3>
-    <h3 *ngIf="id" class="modal-title">Edit Form Collection</h3>
+    <h3 *ngIf="!id" class="modal-title">{{'CUSTOM_FORMS.COLLECTIONS.CREATE_FORM_COLLECTION'|translate}}</h3>
+    <h3 *ngIf="id" class="modal-title">{{'CUSTOM_FORMS.COLLECTIONS.EDIT_FORM_COLLECTION'|translate}}</h3>
 </div>
 <div class="modal-body vbox" style="min-height: 50vh;">
     
     <div class="hbox" style="align-items: center; flex: initial;">
-        <label style="white-space: nowrap; margin: 0px 3px;">Form Collection ID:</label>
+        <label style="white-space: nowrap; margin: 0px 3px;">ID:</label>
         <div class="input-group" style="flex: 1">
             <ng-container *ngIf="namespaceLocked">
                 <span class="input-group-prepend">
@@ -20,7 +20,8 @@
             
             <div class="input-group-append">
                 <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
-                    title="Lock/Unlock namespace" [ngClass]="{active: namespaceLocked}" [disabled]="mode == 'edit'">
+                    [title]="'CUSTOM_FORMS.COMMONS.LOCK_UNLOCK_NAMESPACE'|translate" [ngClass]="{active: namespaceLocked}" 
+                    [disabled]="mode == 'edit'">
                     <span class="fas fa-lock" style="font-size: 10px;"></span>
                 </button>
             </div>
@@ -30,7 +31,7 @@
     <div class="hbox" style="margin: 10px 0 10px;">
         <div class="card card-default vbox">
             <div class="card-header">
-                <label style="flex: 1">Custom Forms:</label>
+                <label style="flex: 1">{{'CUSTOM_FORMS.FORMS.CUSTOM_FORMS'|translate}}:</label>
             </div>
             <div class="card-body vbox">
                 <div class="scrollableContainer">
@@ -57,7 +58,7 @@
         
         <div class="card card-default vbox">
             <div class="card-header">
-                <label style="flex: 1">Available Custom Forms:</label>
+                <label style="flex: 1">{{'CUSTOM_FORMS.COLLECTIONS.AVAILABLE_CUSTOM_FORMS'|translate}}:</label>
             </div>
             <div class="card-body vbox">
                 <div class="scrollableContainer">
@@ -77,8 +78,8 @@
     <div class="card card-default vbox" style="min-height: 100px;">
         <div class="card-header">
             <label style="flex: 1">
-                Suggestions:
-                <span class="" title="Property/Classes suggested to use with this FormCollection"></span>
+                {{'CUSTOM_FORMS.COLLECTIONS.SUGGESTIONS'|translate}}
+                <span [title]="'CUSTOM_FORMS.COLLECTIONS.SUGGESTIONS_INFO'|translate"></span>
             </label>
             <div class="btn-group btn-group-xs">
                 <div class="btn-group btn-group-xs" [title]="'COMMONS.ACTIONS.ADD'|translate" ngbDropdown>
@@ -87,10 +88,10 @@
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu>
                         <a class="dropdown-item" (click)="addSuggestionClass()">
-                            <img src="./assets/images/icons/actions/cls_create.png" /> Select class
+                            <img src="./assets/images/icons/actions/cls_create.png" /> {{'CUSTOM_FORMS.COMMONS.SELECT_CLASS'|translate}}
                         </a>
                         <a class="dropdown-item" (click)="addSuggestionProperty()">
-                            <img src="./assets/images/icons/actions/property_create.png" /> Select property
+                            <img src="./assets/images/icons/actions/property_create.png" /> {{'CUSTOM_FORMS.COMMONS.SELECT_PROPERTY'|translate}}
                         </a>
                     </div>
                 </div>

@@ -66,9 +66,9 @@
             <div class="card-header">
                 <div style="flex: 1;">
                     <label style="margin-right: 4px;">{{'SEARCH.ASSISTED_SEARCH.PAIRED_LEX_SETS'|translate}}</label>
-                    <span class="fas fa-info-circle" [title]="'SEARCH.ASSISTED_SEARCH.PAIRED_LEX_SETS_TOOLTIP'|translate"></span>
+                    <span class="fas fa-info-circle" [title]="'SEARCH.ASSISTED_SEARCH.PAIRED_LEX_SETS_INFO'|translate"></span>
                 </div>
-                <button *ngIf="targetPosition == ResourcePositionEnum.local" class="btn btn-xs btn-light" (click)="refreshTargetMetadata()" [title]="'SEARCH.ASSISTED_SEARCH.REFRESH_METADATA_TOOLTIP'|translate">
+                <button *ngIf="targetPosition == ResourcePositionEnum.local" class="btn btn-xs btn-light" (click)="refreshTargetMetadata()" [title]="'SEARCH.ASSISTED_SEARCH.REFRESH_METADATA_INFO'|translate">
                     <span class="fas fa-redo"></span>
                 </button>
             </div>
@@ -77,8 +77,8 @@
                     <thead>
                         <tr>
                             <th>{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
-                            <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.PERCENTAGE_TOOLTIP'|translate">%</th>
-                            <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.AVG_TOOLTIP'|translate">Avg</th>
+                            <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.PERCENTAGE_INFO'|translate">%</th>
+                            <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.AVG_INFO'|translate">Avg</th>
                             <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.LEXICALIZATION_MODEL'|translate">LexModel</th>
                         </tr>
                     </thead>
@@ -106,7 +106,7 @@
             <div class="card-header">
                 <span style="flex: 1">
                     <label style="margin-right: 4px;">{{'SEARCH.SETTINGS.SEARCH_MODE'|translate}}</label>
-                    <span class="fas fa-info-circle" [title]="'SEARCH.ASSISTED_SEARCH.SEARCH_MODE_TOOLTIP'|translate"></span>
+                    <span class="fas fa-info-circle" [title]="'SEARCH.ASSISTED_SEARCH.SEARCH_MODE_INFO'|translate"></span>
                 </span>
                 <span *ngIf="getCheckedSearchMode().length == 0" class="grayText">
                     <span class="fas fa-exclamation-triangle"></span>

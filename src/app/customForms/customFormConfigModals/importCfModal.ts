@@ -15,6 +15,8 @@ export class ImportCfModal {
     private file: File;
     useImportedId: boolean = true;
 
+    translationParam: { type: string };
+
     constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {
@@ -23,6 +25,7 @@ export class ImportCfModal {
         } else {
             this.prefix = FormCollection.PREFIX;
         }
+        this.translationParam = { type: this.type };
     }
 
     fileChangeEvent(file: File) {

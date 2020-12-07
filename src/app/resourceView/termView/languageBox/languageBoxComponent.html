@@ -7,7 +7,7 @@
         </button>
     </div>
     <div class="btn-group semitransparent" style="display: flex;" ngbDropdown>
-        <button class="btn btn-xs add-button" (click)="addTermBox()" title="Add new Term" [disabled]="!addLabelAuthorized || emptyTerm || readonly">
+        <button class="btn btn-xs add-button" (click)="addTermBox()" [title]="'COMMONS.ACTIONS.ADD'|translate" [disabled]="!addLabelAuthorized || emptyTerm || readonly">
             <span class="fas fa-plus" style="font-size: 9px;"></span>
         </button>
         <button class="btn add-button arrow dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>

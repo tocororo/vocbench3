@@ -197,59 +197,86 @@
             "ADMINISTRATION": "Amministrazione"
         }
     },
-    "PROJECTS": {
-        "TABLE": {
-            "HEADERS": {
-                "OPEN_CLOSE": "Aperto/Chiuso",
-                "ACCESSED": "Acceduto",
-                "HISTORY": "Storico",
-                "VALIDATION": "Validazione",
-                "REPO_LOCATION": "Posizione Repository",
-                "ACTIONS": "Azioni"
-            },
-            "CONFIG_MODAL": {
-                "TITLE": "Impostazioni della vista progetti",
-                "TOP_LEVEL_ELEMENT_OPT": {
-                    "LABEL": "Raggruppa per",
-                    "OPTIONS": {
-                        "DIRECTORIES": "Cartelle"
-                    }
-                },
-                "PROJECT_INFO_PANEL": {
-                    "TITLE": "Info progetto",
-                    "DESCRIPTION": "Da qui è possibile mostrare o nascondere le informazioni riguardanti i progetti e modificarne l'ordine",
-                    "HEADERS": {
-                        "COL_NAME": "Nome colonna",
-                        "SHOW": "Mostra"
-                    }
-                }
+    "COLLABORATION": {
+        "COLLABORATION_SYSTEM": "Collaboration System",
+        "COLLABORATION_SYSTEM_CONFIG": "Configurazione del Collaboration System",
+        "COLLABORATION_SYSTEM_PROJECTS": "Progetti del Collaboration System",
+        "PROJECT_CONFIG": "Configurazione progetto",
+        "BACKEND_TYPE": "Tipo di backend",
+        "USER_CONFIG": "Configurazione utente",
+        "ASSIGN_PROJECT": "Assegna progetto CS",
+        "ASSIGN_ISSUE": "Assegna issue",
+        "CREATE_ISSUE": "Crea issue",
+        "UNCONFIGURED_FOR_PROJECT": "Il Collaboration System non è stato configurato per questo progetto.",
+        "NO_RESOURCE_ASSOCIATED": "Nessuna risorsa associata a questo issue",
+        "UNCONFIGURED_CS": {
+            "UNCONFIGURED_CS_WARNING": "Nessun Collaboration System configurato.",
+            "CONFIGURE": "Configura",
+            "A_CS": "un CS"
+        },
+        "UNSIGNED_USER": {
+            "UNSIGNED_USER_WARNING": "Devi essere loggato al CS per vedere la lista degli issue.",
+            "PROVIDE": "Fornisci",
+            "YOUR_CREDENTIALS": "le tue credenziali"
+        },
+        "UNASSIGNED_PROJ": {
+            "UNASSIGNED_PROJ_WARNING": "Nessun progetto CS assegnato a questo progetto VocBench.",
+            "CREATE_OR_ASSIGN": "Crea o assegna",
+            "A_PROJECT": "un progetto"
+        },
+        "CS_NOT_WORKING_WARNING": "Il Collaboration System sembra essere configurato ma non sta funzionando. Per favore, verifica che la configurazione sia corretta e che il server CS sia in esecuzione."
+    },
+    "CUSTOM_FORMS": {
+        "FORMS": {
+            "CUSTOM_FORMS": "Custom Forms",
+            "CREATE_CUSTOM_FORM": "Crea Custom Form",
+            "EDIT_CUSTOM_FORM": "Modifica Custom Form",
+            "NAME_INFO": "Nome che verrà mostrato all'utente per identificare questo Form",
+            "DESCRIPTION_INFO": "Descrizione in linguaggio naturale che spiega brevemente l'utilizzo di questo Form",
+            "REF_INFO": "In caso di typo Graph dovrebbe contenere una regola PEARL altrimenti, in caso di tipo Node, dovrebbe contenere un semplice projection operator PEARL",
+            "PICK_CONVERTER": "Seleziona converter",
+            "INFER_ANNOTATIONS": "Inferisci annotazioni",
+            "INFER_ANNOTATIONS_INFO": "Inferisce annotazioni dalla definizione del CF",
+            "FROM_SHACLE": "Da SHACL",
+            "FROM_SHACLE_INFO": "Estrae il PEARL da una shape SHACL",
+            "SHOW_PROP_CHAIN": "Show property chain",
+            "SHOW_PROP_CHAIN_INFO": "Una property chain da seguire per recuperare il valore da mostrare per rappresentare il grafo generato da questo Form",
+            "EXTRACT_FROM_SHACL": "Estrai da SHACL",
+            "SHAPE_SOURCE": "Shape sorgente",
+            "PEARL_INFERENCE_VALIDATION": {
+                "PEARL_ANNOTATIONS_INFERENCE": "Pearl annotations inference",
+                "WARNING_MSG": "Nota: qualora nessuna annotazione venga inferita, i due PEARL potrebbero non differire. Nonostante ciò, il processo di inferenza potrebbe applicare delle modifiche, come il riordinamento dei prefissi definiti e la rimozione di commenti.<br> E' possibile inoltre modificare il PEARL risultante prima di applicare le modifiche.",
+                "ORIGINAL_PEARL": "PEARL originale",
+                "INFERRED_PEARL": "PEARL inferito"
             }
         },
-        "CREATE_FORM": {
-            "BACKEND_TYPE": "Tipo backend",
-            "BLACKLIST": "Lista nera",
-            "CREATE_PROJECT": "Crea progetto",
-            "DATA_PRELOADING": "Pre-caricamento opzionale di dati",
-            "DATA_REPO_ID": "ID Repository dati",
-            "DATA_STORE": "Data Store",
-            "ENABLE_SHAPE_VALIDATION": "Abilita validazione shape",
-            "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
-            "HISTORY": "Storico",
-            "LEFT_RIGHT": "Sinistro/Destro",
-            "OPTIONAL_SETTINGS": "Impostazioni opzionali",
-            "PRELOAD": "Precarica",
-            "PROJECT_NAME": "Nome progetto",
-            "RENDERING_ENGINE": "Rendering Engine",
-            "REPO_ACCESS": "Accesso al Repository",
-            "RESOURCE_METADATA": "Resource Metadata",
-            "SHACLE_SHAPE_VALIDATION": "Validazione SHACL Shape",
-            "SUPPORT_REPO_ID": "ID Repository Storico/Validazione",
-            "TRANSITIVE_IMPORTS": "Transitive imports",
-            "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
-            "URI_GENERATOR": "URI Generator",
-            "USE_DEFAULT": "Usa impostazioni predefinite",
-            "USE_RESOURCE_METADATA": "Usa Resource Metadata",
-            "VALIDATION": "Validazione"
+        "COLLECTIONS": {
+            "FORM_COLLECTION": "Form Collection",
+            "FORM_COLLECTIONS": "Form Collections",
+            "CREATE_FORM_COLLECTION": "Crea Form Collection",
+            "EDIT_FORM_COLLECTION": "Modifica Form Collection",
+            "AVAILABLE_CUSTOM_FORMS": "Custom Forms disponibili",
+            "SUGGESTIONS": "Suggerimenti",
+            "SUGGESTIONS_INFO": "Proprietà/Classi suggerite per l'uso di questa FormCollection"
+        },
+        "MAPPINGS": {
+            "FORM_MAPPINGS": "Form mappings",
+            "CREATE_MAPPING": "Crea mapping risorsa - FormCollection",
+            "SELECT_SUGGESTED": "Seleziona suggerimento per FormCollection"
+        },
+        "CONFIG": {
+            "CUSTOM_FORMS_CONFIG": "Configurazione Custom Forms",
+            "SHOW_BROKEN_CF": "Mostra le strutture corrotte",
+            "REPLACE": "Rimpiazza",
+            "REPLACE_INFO": "Indica se il CustomForm rimpiazzerà il form di default. Valido solo per CustomRanges (non per CustomConstructors)",
+            "SYSTEM_LEVEL_ELEM": "Elementi a livello di sistema",
+            "PROJECT_LEVEL_ELEM": "Elementi a livello di progetto"
+        },
+        "COMMONS": {
+            "LOCK_UNLOCK_NAMESPACE": "Blocca/sblocca namespace",
+            "SELECT_CLASS": "Seleziona classe",
+            "SELECT_PROPERTY": "Seleziona proprietà",
+            "USE_ID_OF_IMPORTED": "Usa ID del {{type}} importato"
         }
     },
     "DATA": {
@@ -341,11 +368,11 @@
             "DATA_DUMP": "Data dump",
             "USE_PROJECT_BASEURI": "Usa baseURI del progetto",
             "RESOLVE_IMPORTS": "Risoluzione import",
-            "IMPORTS_RESOLUTION_TOOLTIP": "Specifica la sorgente per risolvere import transitivi",
+            "IMPORTS_RESOLUTION_INFO": "Specifica la sorgente per risolvere import transitivi",
             "TRANSFORMERS_DESCRIPTION": "Qui è possibile creare e configurare una sequenza di transformers da applicare durante il processo di caricamento dati",
             "IMPLICITLY_VALIDATE": "Valida implicitamente i dati caricati",
             "DETECT_FORMAT": "Rileva formato",
-            "FORCE_FORMAT_TOOLTIP": "Consente di forzare la selezione di un formato sovrascrivendo quello rilevato dal sistema"
+            "FORCE_FORMAT_INFO": "Consente di forzare la selezione di un formato sovrascrivendo quello rilevato dal sistema"
         },
         "REFACTOR": {
             "DATA_REFACTOR": "Data refactoring",
@@ -371,34 +398,35 @@
             "DATA_TRANSFORMATIONS": "Trasformazione dati"
         }
     },
-    "COLLABORATION": {
-        "COLLABORATION_SYSTEM": "Collaboration System",
-        "COLLABORATION_SYSTEM_CONFIG": "Configurazione del Collaboration System",
-        "COLLABORATION_SYSTEM_PROJECTS": "Progetti del Collaboration System",
-        "PROJECT_CONFIG": "Configurazione progetto",
-        "BACKEND_TYPE": "Tipo di backend",
-        "USER_CONFIG": "Configurazione utente",
-        "ASSIGN_PROJECT": "Assegna progetto CS",
-        "ASSIGN_ISSUE": "Assegna issue",
-        "CREATE_ISSUE": "Crea issue",
-        "UNCONFIGURED_FOR_PROJECT": "Il Collaboration System non è stato configurato per questo progetto.",
-        "NO_RESOURCE_ASSOCIATED": "Nessuna risorsa associata a questo issue",
-        "UNCONFIGURED_CS": {
-            "UNCONFIGURED_CS_WARNING": "Nessun Collaboration System configurato.",
-            "CONFIGURE": "Configura",
-            "A_CS": "un CS"
-        },
-        "UNSIGNED_USER": {
-            "UNSIGNED_USER_WARNING": "Devi essere loggato al CS per vedere la lista degli issue.",
-            "PROVIDE": "Fornisci",
-            "YOUR_CREDENTIALS": "le tue credenziali"
-        },
-        "UNASSIGNED_PROJ": {
-            "UNASSIGNED_PROJ_WARNING": "Nessun progetto CS assegnato a questo progetto VocBench.",
-            "CREATE_OR_ASSIGN": "Crea o assegna",
-            "A_PROJECT": "un progetto"
-        },
-        "CS_NOT_WORKING_WARNING": "Il Collaboration System sembra essere configurato ma non sta funzionando. Per favore, verifica che la configurazione sia corretta e che il server CS sia in esecuzione."
+    "HISTORY_VALIDATION": {
+        "COMMITS": "Commits",
+        "STAGED_COMMITS": "Staged Commits",
+        "OPERATION_SORT": "Ordine operazioni",
+        "TIME_SORT": "Ordine temporale",
+        "SORT_UNORDERED": "Non ordinare",
+        "SORT_ASCENDING": "Ascendente",
+        "SORT_DESCENDING": "Discentente",
+        "COMMIT_ID": "ID Commit",
+        "OPERATION": "Operazione",
+        "1ST_PARAM": "1o param",
+        "2ND_PARAM": "2o param",
+        "OTHER_PARAMS": "Altri param",
+        "USER": "Utente",
+        "DATE": "Data",
+        "ACCEPT_ALL": "Accetta tutto",
+        "REJECT_ALL": "Rifiuta tutto",
+        "VALIDATE": "Valida",
+        "PROVIDE_COMMENT": "Fornisci un commento per l'azione di validazione",
+        "FILTERS": {
+            "SHOW_FILTERS": "Mostra filtri",
+            "HIDE_FILTERS": "Nascondi filtri",
+            "OPERATIONS": "Operazioni",
+            "PERFORMERS": "Autori",
+            "TIME_FROM": "Da",
+            "TIME_TO": "a",
+            "DATETIME_FORMAT": "Formato: yyyy-MM-ddThh:mm",
+            "APPLY": "Applica"
+        }
     },
     "METADATA": {
         "NAMESPACES_AND_IMPORTS": {
@@ -451,7 +479,7 @@
                 "DEREFERENCEABLE": "Dereferenziabile",
                 "DEREFERENCIATION_SYSTEM": "Sistema di dereferenziazione",
                 "NO_AGGREGATION": "No aggregazione",
-                "NO_AGGREGATION_TOOLTIP": "Se spuntato, significa che l'aggregazione potrebbe essere supportata, ma il suo supporto è insufficiente per i propositi di Vocbench",
+                "NO_AGGREGATION_INFO": "Se spuntato, significa che l'aggregazione potrebbe essere supportata, ma il suo supporto è insufficiente per i propositi di Vocbench",
                 "URI_SPACE": "URI space",
                 "VERSION_INFO": "Info versione"
             },
@@ -477,6 +505,61 @@
     "NOTIFICATIONS": {
         "NOTIFICATION_SETTINGS": "Impostazioni notifiche",
         "CLEAR_NOTIFICATIONS": "Elimina notifiche"
+    },
+    "PROJECTS": {
+        "TABLE": {
+            "HEADERS": {
+                "OPEN_CLOSE": "Aperto/Chiuso",
+                "ACCESSED": "Acceduto",
+                "HISTORY": "Storico",
+                "VALIDATION": "Validazione",
+                "REPO_LOCATION": "Posizione Repository",
+                "ACTIONS": "Azioni"
+            },
+            "CONFIG_MODAL": {
+                "TITLE": "Impostazioni della vista progetti",
+                "TOP_LEVEL_ELEMENT_OPT": {
+                    "LABEL": "Raggruppa per",
+                    "OPTIONS": {
+                        "DIRECTORIES": "Cartelle"
+                    }
+                },
+                "PROJECT_INFO_PANEL": {
+                    "TITLE": "Info progetto",
+                    "DESCRIPTION": "Da qui è possibile mostrare o nascondere le informazioni riguardanti i progetti e modificarne l'ordine",
+                    "HEADERS": {
+                        "COL_NAME": "Nome colonna",
+                        "SHOW": "Mostra"
+                    }
+                }
+            }
+        },
+        "CREATE_FORM": {
+            "BACKEND_TYPE": "Tipo backend",
+            "BLACKLIST": "Lista nera",
+            "CREATE_PROJECT": "Crea progetto",
+            "DATA_PRELOADING": "Pre-caricamento opzionale di dati",
+            "DATA_REPO_ID": "ID Repository dati",
+            "DATA_STORE": "Data Store",
+            "ENABLE_SHAPE_VALIDATION": "Abilita validazione shape",
+            "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
+            "HISTORY": "Storico",
+            "LEFT_RIGHT": "Sinistro/Destro",
+            "OPTIONAL_SETTINGS": "Impostazioni opzionali",
+            "PRELOAD": "Precarica",
+            "PROJECT_NAME": "Nome progetto",
+            "RENDERING_ENGINE": "Rendering Engine",
+            "REPO_ACCESS": "Accesso al Repository",
+            "RESOURCE_METADATA": "Resource Metadata",
+            "SHACLE_SHAPE_VALIDATION": "Validazione SHACL Shape",
+            "SUPPORT_REPO_ID": "ID Repository Storico/Validazione",
+            "TRANSITIVE_IMPORTS": "Transitive imports",
+            "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
+            "URI_GENERATOR": "URI Generator",
+            "USE_DEFAULT": "Usa impostazioni predefinite",
+            "USE_RESOURCE_METADATA": "Usa Resource Metadata",
+            "VALIDATION": "Validazione"
+        }
     },
     "RESOURCE_VIEW": {
         "PARTITIONS": {
@@ -560,13 +643,13 @@
             "REMOTE_DATASETS": "Dataset remoti",
             "METADATA_UNAVAILABLE_REMOTE_WARNING": "Metadati VoID/LIME non disponibili per il dataset remoto '{{datasetUriSpace}}'. E' necessario generare/aggiungere 'Embedded Lexicalization Sets' dal Registro Metadati per usare questa funzionalità.",
             "PAIRED_LEX_SETS": "Lexicalization Sets accoppiati",
-            "PAIRED_LEX_SETS_TOOLTIP": "Lexicalization sets condivisi tra la risorsa sorgente e il progetto/dataset destinazione",
-            "REFRESH_METADATA_TOOLTIP": "Aggiorna i metadati del progetto destinazione",
-            "PERCENTAGE_TOOLTIP": "Percentuale di risorse che hanno una lessicalizzazione nella lingua indicata",
-            "AVG_TOOLTIP": "Quantità media di lessicalizzazioni",
+            "PAIRED_LEX_SETS_INFO": "Lexicalization sets condivisi tra la risorsa sorgente e il progetto/dataset destinazione",
+            "REFRESH_METADATA_INFO": "Aggiorna i metadati del progetto destinazione",
+            "PERCENTAGE_INFO": "Percentuale di risorse che hanno una lessicalizzazione nella lingua indicata",
+            "AVG_INFO": "Quantità media di lessicalizzazioni",
             "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
             "NO_SEARCH_MODE_SELECTED_WARNING": "Se nulla è selezionato, 'Fuzzy' e 'Contiene' sono usati di default",
-            "SEARCH_MODE_TOOLTIP": "Modalità di match tra stringhe sulle quali il confronto tra lessicalizzazioni viene basato",
+            "SEARCH_MODE_INFO": "Modalità di match tra stringhe sulle quali il confronto tra lessicalizzazioni viene basato",
             "MATCHED_LANG": "Lingue matchate",
             "MATCH_MODE": "Modalità di match"
         },
@@ -586,7 +669,7 @@
             "EXACT": "Esatta",
             "FUZZY": "Fuzzy",
             "SEARCH_MODE": "Modalità di ricerca",
-            "SEARCH_MODE_TOOLTIP": "La ricerca viene sempre effettuata nelle lessicalizzazioni",
+            "SEARCH_MODE_INFO": "La ricerca viene sempre effettuata nelle lessicalizzazioni",
             "SEARCH_IN_URI": "Cerca nell'URI",
             "SEARCH_IN_LOCAL_NAME": "Cerca nel local name",
             "SEARCH_IN_NOTES": "Cerca nelle note",
@@ -594,7 +677,7 @@
             "RESTRICT_TO_LANGUAGES": "Restringi la ricerca alle lingue",
             "INCLUDE_LOCALES": "Includi i locali nella ricerca (es. en-GB, en-US)",
             "AUTOCOMPLETION": "Autocompletamento",
-            "AUTOCOMPLETION_TOOLTIP": "E' raccomandabile disabililtare questa funzionalità in grandi progetti non hostati su un server GraphDB",
+            "AUTOCOMPLETION_INFO": "E' raccomandabile disabililtare questa funzionalità in grandi progetti non hostati su un server GraphDB",
             "ENABLE_AUTOCOMPLETION": "Abilita l'autocompletamento durante la digitazione",
             "CONCEPTS_SEARCH": "Ricerca dei concetti",
             "RESTRICT_TO_SCHEME": "Restringi la ricerca agli skos:ConceptScheme attivi",
@@ -629,36 +712,6 @@
             "VARIABLE_BINDINGS": "Binding delle variabili"
         }
     },
-    "HISTORY_VALIDATION": {
-        "COMMITS": "Commits",
-        "STAGED_COMMITS": "Staged Commits",
-        "OPERATION_SORT": "Ordine operazioni",
-        "TIME_SORT": "Ordine temporale",
-        "SORT_UNORDERED": "Non ordinare",
-        "SORT_ASCENDING": "Ascendente",
-        "SORT_DESCENDING": "Discentente",
-        "COMMIT_ID": "ID Commit",
-        "OPERATION": "Operazione",
-        "1ST_PARAM": "1o param",
-        "2ND_PARAM": "2o param",
-        "OTHER_PARAMS": "Altri param",
-        "USER": "Utente",
-        "DATE": "Data",
-        "ACCEPT_ALL": "Accetta tutto",
-        "REJECT_ALL": "Rifiuta tutto",
-        "VALIDATE": "Valida",
-        "PROVIDE_COMMENT": "Fornisci un commento per l'azione di validazione",
-        "FILTERS": {
-            "SHOW_FILTERS": "Mostra filtri",
-            "HIDE_FILTERS": "Nascondi filtri",
-            "OPERATIONS": "Operazioni",
-            "PERFORMERS": "Autori",
-            "TIME_FROM": "Da",
-            "TIME_TO": "a",
-            "DATETIME_FORMAT": "Formato: yyyy-MM-ddThh:mm",
-            "APPLY": "Applica"
-        }
-    },
     "USER": {
         "FORM": {
             "GIVEN_NAME": "Nome",
@@ -690,9 +743,12 @@
     },
     "COMMONS": {
         "ACTIONS": {
+            "ACCEPT": "Accetta",
             "ACTION": "Azione",
             "ADD": "Aggiungi",
+            "ADD_AFTER": "Aggiungi dopo",
             "ADD_ALL": "Aggiungi tutto",
+            "ADD_BEFORE": "Aggiungi prima",
             "ASSIGN": "Assegna",
             "CANCEL": "Cancella",
             "CHECK_ALL": "Seleziona tutto",
@@ -701,20 +757,26 @@
             "CONFIGURE": "Configura",
             "CREATE": "Crea",
             "DELETE": "Elimina",
+            "DISCARD": "Scarta",
             "EDIT": "Modifica",
+            "EDIT_MANUALLY": "Modifica manualmente",
             "EXPORT": "Esporta",
             "IMPORT": "Importa",
             "LOAD": "Carica",
             "LOAD_CONFIGURATION": "Carica configurazione",
+            "MOVE_AFTER": "Sposta prima",
+            "MOVE_BEFORE": "Sposta dopo",
             "MOVE_DOWN": "Sposta giù",
             "MOVE_UP": "Sposta su",
             "REFRESH": "Aggiorna",
+            "REJECT": "Rifiuta",
             "REMOVE": "Rimuovi",
             "REMOVE_ALL": "Rimuovi tutto",
             "RESET": "Reset",
             "SAVE": "Salva",
             "SAVE_CONFIGURATION": "Salva configurazione",
             "SEARCH": "Cerca",
+            "SELECT": "Seleziona",
             "START": "Inizia",
             "STORE": "Salva",
             "SUBMIT": "Invia",
