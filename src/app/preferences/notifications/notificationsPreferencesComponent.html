@@ -1,13 +1,13 @@
 <div *ngIf="!hideModeChange" class="card card-default" style="margin-bottom: 4px;">
     <div class="card-body">
         <div class="hbox"  style="align-items: center;">
-            <label>Mode:</label>
+            <label>{{'COMMONS.MODE'|translate}}:</label>
             <select class="form-control" style="margin-left: 6px;" [(ngModel)]="activeNotificationOpt" (ngModelChange)="changeNotificationStatus()">
-                <option *ngFor="let opt of notificationOptions" [ngValue]="opt">{{opt.show}}</option>
+                <option *ngFor="let opt of notificationOptions" [ngValue]="opt">{{opt.show|translate}}</option>
             </select>
         </div>
         <div class="alert alert-info" style="margin-top: 4px;">
-            {{activeNotificationOpt.description}}
+            {{activeNotificationOpt.description|translate}}
         </div>
     </div>
 </div>
@@ -15,16 +15,16 @@
 <div class="card card-default vbox" style="margin-bottom: 4px; flex: initial;">
     <div class="card-header">
         <label style="flex: 1;">
-            Type-event notifications
-            <span class="fas fa-info-circle" 
-                title="For each type of resource you can select the events for which you want to receive notifications">
+            {{'PREFERENCES.NOTIFICATIONS.TYPE_EVENT_NOTIFICATIONS'|translate}}
+            <span class="fas fa-info-circle ml-1" 
+                [title]="'PREFERENCES.NOTIFICATIONS.TYPE_EVENT_NOTIFICATIONS_INFO'|translate">
             </span>
         </label>
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-light" (click)="checkAllActions(true)" title="Enable all notifications">
+            <button class="btn btn-light" (click)="checkAllActions(true)" [title]="'PREFERENCES.NOTIFICATIONS.ENABLE_ALL'|translate">
                 <span class="far fa-check-square"></span>
             </button>
-            <button class="btn btn-light" (click)="checkAllActions(false)" title="Disable all notifications">
+            <button class="btn btn-light" (click)="checkAllActions(false)" [title]="'PREFERENCES.NOTIFICATIONS.DISABLE_ALL'|translate">
                 <span class="far fa-square"></span>
             </button>
         </div>
@@ -45,11 +45,11 @@
                         <div class="hbox" style="align-items: center;">
                             <label style="flex: 1;">{{rs.show}}</label>
                             <button #btnCheck class="btn btn-transparent btn-xs" (click)="checkAllActionsForRole(rs.role, true)"
-                                (mouseup)="btnCheck.blur()" title="Enable all actions for this type">
+                                (mouseup)="btnCheck.blur()" [title]="'PREFERENCES.NOTIFICATIONS.ENABLE_ALL_FOR_TYPE'|translate">
                                 <span class="far fa-check-square"></span>
                             </button>
                             <button #btnUncheck class="btn btn-transparent btn-xs" (click)="checkAllActionsForRole(rs.role, false)" 
-                                (mouseup)="btnUncheck.blur()" title="Disable all actions for this type">
+                                (mouseup)="btnUncheck.blur()" [title]="'PREFERENCES.NOTIFICATIONS.DISABLE_ALL_FOR_TYPE'|translate">
                                 <span class="far fa-square"></span>
                             </button>
                         </div>
@@ -65,18 +65,18 @@
 
 <div class="card card-default vbox" style="flex: initial;">
     <div class="card-header">
-        <label>Watching resources</label>
+        <label>{{'PREFERENCES.NOTIFICATIONS.WATCHING_RESOURCES'|translate}}</label>
     </div>
     <div class="card-body scrollableContainer">
         <div *ngIf="watchingResources.length == 0" class="alert alert-warning">
-            You did not enabled notifications on any resources.
-            You can start watching resources by clicking on the <span class="fas fa-bell"></span> button
-            placed on the toolbar of a ResourceView.
+            {{'PREFERENCES.NOTIFICATIONS.NO_RESOURCE_WATCHING_MSG.0'|translate}}
+            <span class="fas fa-bell"></span>
+            {{'PREFERENCES.NOTIFICATIONS.NO_RESOURCE_WATCHING_MSG.1'|translate}}
         </div>
 
         <div *ngFor="let r of watchingResources" class="listItem">
             <rdf-resource [resource]="r" style="flex: 1"></rdf-resource>
-            <button class="btn btn-xs btn-light" (click)="stopWatching(r)" title="Stop watching resource">
+            <button class="btn btn-xs btn-light" (click)="stopWatching(r)" [title]="'PREFERENCES.NOTIFICATIONS.STOP_WATCHING_RES'|translate">
                 <span class="fas fa-minus"></span>
             </button>
         </div>

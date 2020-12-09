@@ -22,10 +22,10 @@ export class NotificationsPreferencesComponent {
     //Notification options
 
     private notificationOptions: NotificationPrefStruct[] = [
-        { value: NotificationStatus.no_notifications, show: "No notifications", description: "You will not receive any notification" },
-        { value: NotificationStatus.in_app_only, show: "In-app only", description: "You will be able to read notifications only in app from a dedicated page" },
-        { value: NotificationStatus.email_instant, show: "Email (instant)", description: "You will receive email instantly" },
-        { value: NotificationStatus.email_daily_digest, show: "Email (daily digest)", description: "You will receive a daily email report" },
+        { value: NotificationStatus.no_notifications, show: "PREFERENCES.NOTIFICATIONS.MODES.NO_NOTIFICATIONS", description: "PREFERENCES.NOTIFICATIONS.MODES.NO_NOTIFICATIONS_INFO" },
+        { value: NotificationStatus.in_app_only, show: "PREFERENCES.NOTIFICATIONS.MODES.IN_APP", description: "PREFERENCES.NOTIFICATIONS.MODES.IN_APP_INFO" },
+        { value: NotificationStatus.email_instant, show: "PREFERENCES.NOTIFICATIONS.MODES.EMAIL_INSTANT", description: "PREFERENCES.NOTIFICATIONS.MODES.EMAIL_INSTANT_INFO" },
+        { value: NotificationStatus.email_daily_digest, show: "PREFERENCES.NOTIFICATIONS.MODES.EMAIL_DAILY", description: "PREFERENCES.NOTIFICATIONS.MODES.EMAIL_DAILY_INFO" },
     ];
     private activeNotificationOpt: NotificationPrefStruct;
 

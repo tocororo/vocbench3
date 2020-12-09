@@ -1,9 +1,9 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1">Rendering Languages</label>
+        <label style="flex: 1">{{'PREFERENCES.LANG.RENDERING.RENDERING_LANGS'|translate}}</label>
         <span *ngIf="getActiveLanguageItems().length == 0" class="grayText" style="margin-right: 5px;">
             <span class="fas fa-exclamation-triangle"></span>
-            No language selected implicitly means all languages
+            {{'COMMONS.LANGUAGE.NO_LANG_INFO'|translate}}
         </span>
         <div class="btn-group btn-group-xs">
             <button class="btn btn-light" (click)="changeAllLangStatus(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
@@ -16,8 +16,8 @@
     </div>
     <div class="card-body vbox">
 
-        <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
-            Select the languages (and their order) used for rendering the resources
+        <div class="alert alert-info mb-2">
+            {{'PREFERENCES.LANG.RENDERING.DESCRIPTION'|translate}}
         </div>
         
         <div class="table-responsive">
@@ -32,7 +32,7 @@
                     <tr>
                         <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.ACTIVE'|translate}}</th>
                         <th class="text-center" style="padding: 0px 8px;" nowrap>
-                            Position
+                            {{'COMMONS.POSITION'|translate}}
                             <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changePositionOrder()">
                                 <span class="fas fa-sort-numeric-down" *ngSwitchCase="'position_ascending'" ></span>
                                 <span class="fas fa-sort-numeric-down-alt" *ngSwitchCase="'position_descending'"></span>
@@ -48,7 +48,7 @@
                             </button>
                         </th>
                         <th class="text-center" style="padding: 0px 8px;" nowrap>
-                            Language
+                            {{'COMMONS.LANGUAGE.LANGUAGE'|translate}}
                             <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeLanguageOrder()">
                                 <span class="fas fa-sort-alpha-down" *ngSwitchCase="'language_ascending'"></span>
                                 <span class="fas fa-sort-alpha-down-alt" *ngSwitchCase="'language_descending'"></span>

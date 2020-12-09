@@ -4,7 +4,7 @@
 <div class="modal-body vbox">
 
     <div class="hbox" style="flex: initial; align-items: center;">
-        <label>Mode:</label>
+        <label>{{'COMMONS.MODE'|translate}}:</label>
         <select class="form-control ml-2" [(ngModel)]="mode" (ngModelChange)="onModeChange()">
             <option *ngFor="let m of modes" [ngValue]="m.mode">{{m.show}}</option>
         </select>

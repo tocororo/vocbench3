@@ -1,9 +1,9 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1">Value-filter Languages</label>
+        <label style="flex: 1">{{'PREFERENCES.LANG.VALUE_FILTER.VALUE_FILTER_LANGS'|translate}}</label>
         <span *ngIf="getActiveLanguageItems().length == 0" class="grayText" style="margin-right: 5px;">
             <span class="fas fa-exclamation-triangle"></span>
-            No language selected implicitly means all languages
+            {{'COMMONS.LANGUAGE.NO_LANG_INFO'|translate}}
         </span>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
@@ -21,9 +21,8 @@
     </div>
     <div class="card-body vbox">
 
-        <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
-            Select the languages that will be shown when filtering literal values in resource descriptions.
-            Toggle the filter in order to hide the values with the unselected languages.
+        <div class="alert alert-info mb-2">
+            {{'PREFERENCES.LANG.VALUE_FILTER.DESCRIPTION'|translate}}
         </div>
         
         <div class="table-responsive">

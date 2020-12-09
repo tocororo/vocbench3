@@ -1,8 +1,8 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label>Vocbench Preferences</label>
+        <label>{{'PREFERENCES.VB_PREFS'|translate}}</label>
     </div>
-    
+
     <div class="card-body scrollableContainer">
 
         <res-view-pref></res-view-pref>
@@ -14,7 +14,7 @@
 
                 <div class="card card-default vbox" style="flex: 1; margin-left: 6px;">
                     <div class="card-header">
-                        <label>Notifications</label>
+                        <label>{{'NOTIFICATIONS.NOTIFICATIONS'|translate}}</label>
                     </div>
                     <div class="card-body vbox">
                         <notifications-pref></notifications-pref>
@@ -26,7 +26,7 @@
 
         <div class="card card-default" style="margin-top: 6px;">
             <div class="card-header">
-                <label style="flex: 1">Other preferences</label>
+                <label style="flex: 1">{{'PREFERENCES.OTHER.OTHER_PREFS'|translate}}</label>
             </div>
             <div class="card-body scrollableContainer">
 
@@ -35,8 +35,8 @@
                         <div class="form-check">
                             <input class="form-check-input" id="flagCheck" type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()">
                             <label class="form-check-label" for="flagCheck">
-                                Show flags
-                                <span class="fas fa-info-circle" title="Determines if the flags icon are shown in place of the language ISO code"></span>
+                                {{'PREFERENCES.OTHER.SHOW_FLAGS'|translate}}
+                                <span class="fas fa-info-circle" [title]="'PREFERENCES.OTHER.SHOW_FLAGS_INFO'|translate"></span>
                             </label>
                         </div>
                     </div>
@@ -44,8 +44,9 @@
 
                 <div class="card card-default" style="padding: 4px; margin-bottom: 2px">
                     <div class="card-body">
-                        <label>Project theme
-                            <span class="fas fa-info-circle" title="Changes the color of the header/navigationBar for the current project"></span>
+                        <label>
+                            {{'PREFERENCES.OTHER.PROJECT_THEME'|translate}}
+                            <span class="fas fa-info-circle" [title]="'PREFERENCES.OTHER.PROJECT_THEME_INFO'|translate"></span>
                         </label>
                         <div *ngFor="let t of themes; let i=index" class="form-check form-check-inline ml-3">
                             <input class="form-check-input" [id]="'themeCheck'+i" type="checkbox" [checked]="t == selectedTheme" (click)="changeTheme(t)">
@@ -61,7 +62,6 @@
 
             </div>
         </div>
-
 
     </div>
 

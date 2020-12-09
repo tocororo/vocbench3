@@ -8,7 +8,7 @@
             <div class="card-body hbox">
                 <div class="vbox" style="margin-right: 8px;">
                     <div class="d-flex align-items-center">
-                        <label>Mode:</label>
+                        <label>{{'COMMONS.MODE'|translate}}:</label>
                         <select class="form-control ml-2" [(ngModel)]="resViewMode" (ngModelChange)="onResViewModeChange()">
                             <option value="splitted">Splitted</option>
                             <option value="tabbed">Tabbed</option>
@@ -16,22 +16,19 @@
                     </div>
                     <div class="alert alert-info mt-2">
                         <span *ngIf="resViewMode == 'tabbed'">
-                            The Resource View is shown in a tab and multiple Resource View can be open in different tabs.
+                            {{'PREFERENCES.RES_VIEW.TABBED_INFO'|translate}}
                         </span>
                         <span *ngIf="resViewMode == 'splitted'">
-                            The Resource View panel is splitted in two: on the left there is a main Resource View which describes
-                            (and is synched with) the resource selected in the tree/list; on the right there is an optional
-                            secondary Resource View which describes a resource selected (double click) from the main Resource View.<br>
-                            <span class="fas fa-exclamation-triangle"></span> This mode is not recommended in screen with resolution width below 1440px
+                            {{'PREFERENCES.RES_VIEW.SPLITTED_INFO.0'|translate}}<br>
+                            <span class="fas fa-exclamation-triangle"></span> 
+                            {{'PREFERENCES.RES_VIEW.SPLITTED_INFO.1'|translate}}
                         </span>
                     </div>
                     <div *ngIf="resViewMode == 'tabbed'" class="form-check mt-2">
                         <input class="form-check-input" id="syncCheck" type="checkbox" [(ngModel)]="resViewTabSync" (ngModelChange)="onTabSyncChange()">
                         <label class="form-check-label" for="syncCheck">
-                            Keep selected tab synchronized with tree/list
-                            <span class="fas fa-exclamation-circle"
-                                title="It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.">
-                            </span>
+                            {{'PREFERENCES.RES_VIEW.SYNC_WITH_TREE_LIST'|translate}}
+                            <span class="fas fa-exclamation-circle ml-1" [title]="'PREFERENCES.RES_VIEW.SYNC_WITH_TREE_LIST_WARNING'|translate"></span>
                         </label>
                     </div>
                 </div>
@@ -46,8 +43,8 @@
             <div class="card-body">
                 <div class="hbox" style="align-items: center;">
                     <label style="white-space: nowrap;">
-                        Initial view for concepts:
-                        <span class="fas fa-info-circle" title="This selection will be used by default for browsing SKOS concepts. The user can switch to other views during their session of work, but this selection will be applied as an initial setting at each new login"></span>
+                        {{'PREFERENCES.RES_VIEW.INITIAL_VIEW_FOR_CONCEPTS'|translate}}:
+                        <span class="fas fa-info-circle ml-1" [title]="'PREFERENCES.RES_VIEW.INITIAL_VIEW_FOR_CONCEPTS_INFO'|translate"></span>
                     </label>
                     <select class="form-control ml-2" [(ngModel)]="selectedRvConceptType" (ngModelChange)="onResViewConceptTypeChange()">
                         <option *ngFor="let t of rvConceptTypes" [ngValue]="t">{{t.show}}</option>
@@ -64,10 +61,8 @@
                 <div class="form-check">
                     <input class="form-check-input" id="imageCheck" type="checkbox" [(ngModel)]="displayImg" (ngModelChange)="onDisplayImgChange()">
                     <label class="form-check-label" for="imageCheck">
-                        Display images
-                        <span class="fas fa-info-circle ml-1"
-                            title="If enabled, URL values resolvable to images on the web will be displayed as images (preview) in the ResourceView">
-                        </span>
+                        {{'PREFERENCES.RES_VIEW.DISPLAY_IMAGES'|translate}}
+                        <span class="fas fa-info-circle ml-1" [title]="'PREFERENCES.RES_VIEW.DISPLAY_IMAGES_INFO'|translate"></span>
                     </label>
                 </div>
             </div>
@@ -78,10 +73,8 @@
                 <div class="form-check">
                     <input class="form-check-input" id="deprecatedCheck" type="checkbox" [(ngModel)]="showDeprecated" (ngModelChange)="onShowDeprecatedChange()">
                     <label class="form-check-label" for="deprecatedCheck">
-                        Show deprecated values
-                        <span class="fas fa-info-circle ml-1"
-                            title="If enabled, linked resources marked as deprecated will be shown in the ResourceView">
-                        </span>
+                        {{'PREFERENCES.RES_VIEW.SHOW_DEPRECATED'|translate}}
+                        <span class="fas fa-info-circle ml-1" [title]="'PREFERENCES.RES_VIEW.SHOW_DEPRECATED_INFO'|translate"></span>
                     </label>
                 </div>
             </div>
@@ -92,10 +85,8 @@
                 <div class="form-check">
                     <input class="form-check-input" id="badgeCheck" type="checkbox" [(ngModel)]="showDatatypeBadge" (ngModelChange)="onShowDatatypeBadge()">
                     <label class="form-check-label" for="badgeCheck">
-                        Always show datatype badge
-                        <span class="fas fa-info-circle ml-1"
-                            title="If enabled, a datatype badge will be always shown beside the value. If not, the badge is only shown in case of an unknown datype (the icon on the left of the value will classify the known datatype)">
-                        </span>
+                        {{'PREFERENCES.RES_VIEW.SHOW_DATATYPE_BADGE'|translate}}
+                        <span class="fas fa-info-circle ml-1" [title]="'PREFERENCES.RES_VIEW.SHOW_DATATYPE_BADGE_INFO'|translate"></span>
                     </label>
                 </div>
             </div>

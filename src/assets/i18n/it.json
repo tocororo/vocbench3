@@ -8,7 +8,6 @@
         },
         "PROJECTS": {
             "EDIT_ACL": "Modifica ACL",
-            "NO_LANG_INFO": "Nessuna lingua selezionata implica tutte le lingue",
             "MANDATORY_LANGS": "Obbligatorie",
             "MANDATORY_LANGS_INFO": " Le lingue obbligatorie dovrebbero essere utilizzate largamente nel dataset. Alcune funzionalità del sistema (es. ICV) supportano la verifica di tale vincolo",
             "PROJ_GROUP": {
@@ -298,8 +297,8 @@
                 "LIST_T_WHERE": "dove",
                 "T_TYPE_OTP1": "può essere uno qualsiasi dei suddetti tipi di parametro ammessi (in questo caso la SELECT deve ritornare una sola variabile)",
                 "T_TYPE_OPT2": {
-                    "BE": "è", 
-                    "WHERE": "dove", 
+                    "BE": "è",
+                    "WHERE": "dove",
                     "MIGHT_BE": "può essere"
                 },
                 "T_TYPE_OPT2_ADDENDA": [
@@ -311,8 +310,8 @@
         "AUTH_HELPER": {
             "OPERATION_AUTH": "Autorizzazione operazione",
             "TYPE_RESTR": {
-            "TYPE_RESTRICTION": "Restrizione sul tipo",
-            "TYPE_RESTRICTION_INFO": "Determina se la capability <i>rdf</i> è richiesta su un tipo specifico di risorsa. E' possibile selezionare un tipo tra quelli disponibili in VB o lasciarlo inferire al sistema da un parametro dell'operazione",
+                "TYPE_RESTRICTION": "Restrizione sul tipo",
+                "TYPE_RESTRICTION_INFO": "Determina se la capability <i>rdf</i> è richiesta su un tipo specifico di risorsa. E' possibile selezionare un tipo tra quelli disponibili in VB o lasciarlo inferire al sistema da un parametro dell'operazione",
                 "RESTRICTION_NONE": "Nessuna",
                 "RESTRICTION_TO_SPECIFIC_TYPE": "Restringi a un tipo specifico",
                 "RESTRICTION_TO_PARAMETER_TYPE": "Restringi al tipo di un parametro"
@@ -534,7 +533,10 @@
         "ICV": "Validatore vincoli di integrità (ICV)",
         "GO": "Vai",
         "RUN": "Esegui",
-        "PRESS_RUN_TO_RUN_CHECK": ["Premi", "per eseguire il controllo"],
+        "PRESS_RUN_TO_RUN_CHECK": [
+            "Premi",
+            "per eseguire il controllo"
+        ],
         "QUICK_ACTION": "Azioni veloci",
         "CONFIG": {
             "ICV_CONFIG": "Configurazione ICV",
@@ -592,7 +594,10 @@
                 "DESCRIPTION": "skos:Concept che hanno relazioni gerarchiche ridondanti con altri concetti",
                 "SAME_SCHEME": "Stesso schema",
                 "SAME_SCHEME_INFO": "Se selezionato, il controllo sarà effettuato solo su relazioni tra concetti appartenenti allo stesso schema",
-                "EXAMPLE": ["es.", "La 3a tripla è ridondante in quanto è una conseguenza di 1 e 2"]
+                "EXAMPLE": [
+                    "es.",
+                    "La 3a tripla è ridondante in quanto è una conseguenza di 1 e 2"
+                ]
             },
             "CYCLIC_HIERARCHICAL_CONCEPTS": {
                 "NAME": "Concetti gerarchicamente ciclici",
@@ -694,40 +699,6 @@
         }
     },
     "METADATA": {
-        "NAMESPACES_AND_IMPORTS": {
-            "NAMESPACE_MANAGEMENT": "Gestione Namespace",
-            "ADD_MAPPING": "Aggiungi mapping",
-            "REMOVE_MAPPING": "Rimuovi mapping",
-            "CHANGE_PREFIX": "Cambia prefisso",
-            "BIND_NS_AND_BASEURI": "Vincola/svincola namespace e baseURI",
-            "APPLY_CHANGES": "Applica modifiche",
-            "PREFIX": "Prefisso",
-            "NAMESPACE": "Namespace",
-            "RESOLVE_WITH_PREFIXCC": "Tenta la risoluzione tramite prefix.cc",
-            "IMPORTS": "Import",
-            "ADD_IMPORT_FROM": "Aggiungi import da",
-            "WEB": "Web",
-            "WEB_TO_MIRROR": "Web a mirror",
-            "DATASET_CATALOG": "Dataset Catalog",
-            "LOCAL_FILE": "File locale",
-            "ONTOLOGY_MIRROR": "Ontology mirror",
-            "ONTOLOGY_MIRROR_MANAGER": {
-                "ONTOLOGY_MIRROR_MANAGEMENT": "Gestione Ontology Mirror",
-                "UPDATE_FROM_WEB_BASEURI": "Aggiorna dal web usando il baseURI",
-                "UPDATE_FROM_WEB_ALT_URL": "Aggiorna dal web usando un URL alternativo",
-                "UPDATE_FROM_LOCAL_FILE": "Aggiorna da un file locale",
-                "DELETE_MIRROR": "Cancella mirror"
-            },
-            "ONTOLOGY_IMPORT": {
-                "NO_ONTOLOGIES_MIRRORED": "Nessun mirror di ontologie",
-                "ALTERNATIVE_URL": "URL alternativo",
-                "MIRROR_FILE_NAME": "Nome del file mirror",
-                "TRANSITIVE_IMPORTS": "Import transitivi",
-                "DATA_DUMP": "Data dump",
-                "USE_DATA_DUMP": "Usa data dump",
-                "DATA_DUMP_CHECK": "Se spuntato, l'import è aggiunto dal data dump indicato anzichè dall'IRI dell'ontologia"
-            }
-        },
         "METADATA_REGISTRY": {
             "DATASET_METADATA": {
                 "CATALOG_RECORDS": "Catalog Records",
@@ -765,11 +736,111 @@
         },
         "METADATA_VOCABULARIES": {
             "METADATA_VOCABULARY": "Vocabolario dei metadati"
+        },
+        "NAMESPACES_AND_IMPORTS": {
+            "NAMESPACE_MANAGEMENT": "Gestione Namespace",
+            "ADD_MAPPING": "Aggiungi mapping",
+            "REMOVE_MAPPING": "Rimuovi mapping",
+            "CHANGE_PREFIX": "Cambia prefisso",
+            "BIND_NS_AND_BASEURI": "Vincola/svincola namespace e baseURI",
+            "APPLY_CHANGES": "Applica modifiche",
+            "PREFIX": "Prefisso",
+            "NAMESPACE": "Namespace",
+            "RESOLVE_WITH_PREFIXCC": "Tenta la risoluzione tramite prefix.cc",
+            "IMPORTS": "Import",
+            "ADD_IMPORT_FROM": "Aggiungi import da",
+            "WEB": "Web",
+            "WEB_TO_MIRROR": "Web a mirror",
+            "DATASET_CATALOG": "Dataset Catalog",
+            "LOCAL_FILE": "File locale",
+            "ONTOLOGY_MIRROR": "Ontology mirror",
+            "ONTOLOGY_MIRROR_MANAGER": {
+                "ONTOLOGY_MIRROR_MANAGEMENT": "Gestione Ontology Mirror",
+                "UPDATE_FROM_WEB_BASEURI": "Aggiorna dal web usando il baseURI",
+                "UPDATE_FROM_WEB_ALT_URL": "Aggiorna dal web usando un URL alternativo",
+                "UPDATE_FROM_LOCAL_FILE": "Aggiorna da un file locale",
+                "DELETE_MIRROR": "Cancella mirror"
+            },
+            "ONTOLOGY_IMPORT": {
+                "NO_ONTOLOGIES_MIRRORED": "Nessun mirror di ontologie",
+                "ALTERNATIVE_URL": "URL alternativo",
+                "MIRROR_FILE_NAME": "Nome del file mirror",
+                "TRANSITIVE_IMPORTS": "Import transitivi",
+                "DATA_DUMP": "Data dump",
+                "USE_DATA_DUMP": "Usa data dump",
+                "DATA_DUMP_CHECK": "Se spuntato, l'import è aggiunto dal data dump indicato anzichè dall'IRI dell'ontologia"
+            }
         }
     },
     "NOTIFICATIONS": {
+        "NOTIFICATIONS": "Notifiche",
         "NOTIFICATION_SETTINGS": "Impostazioni notifiche",
         "CLEAR_NOTIFICATIONS": "Elimina notifiche"
+    },
+    "PREFERENCES": {
+        "VB_PREFS": "Preferenze di VocBench",
+        "OTHER": {
+            "OTHER_PREFS": "Altre preferenze",
+            "SHOW_FLAGS": "Mostra bandiere",
+            "SHOW_FLAGS_INFO": "Determina se le icone delle bandiere devono essere mostrate al posto dell'ISO code della lingua",
+            "PROJECT_THEME": "Tema progetto",
+            "PROJECT_THEME_INFO": "Cambia i colori della barra di navigazione per il progetto corrente"
+        },
+        "LANG": {
+            "EDITING": {
+                "EDITING_LANGS": "Lingua di editing",
+                "DESCRIPTION": "Seleziona la lingua richiesta di default quando si crea un literal con lingua"
+            },
+            "RENDERING": {
+                "RENDERING_LANGS": "Lingue di rendering",
+                "DESCRIPTION": "Seleziona le lingue (ed il loro ordine) usate per il rendering delle risorse"
+            },
+            "VALUE_FILTER": {
+                "VALUE_FILTER_LANGS": "Lingue Value-filter",
+                "DESCRIPTION": "Seleziona le lingue che verranno mostrate quando si filtrano i valori literal nella descrizione delle risorse. Attiva il filtro in modo da nascondere i valori con le lingue non selezionate."
+            }
+        },
+        "NOTIFICATIONS": {
+            "TYPE_EVENT_NOTIFICATIONS": "Notifiche tipo-evento",
+            "TYPE_EVENT_NOTIFICATIONS_INFO": "Per ogni tipo di risorsa è possibile selezionare gli eventi per i quali si vogliono ricevere notifiche",
+            "ENABLE_ALL": "Abilita tutte le notifiche",
+            "DISABLE_ALL": "Disabilita tutte le notifiche",
+            "ENABLE_ALL_FOR_TYPE": "Abilita tutte le notifiche per questo tipo",
+            "DISABLE_ALL_FOR_TYPE": "Disabilita tutte le notifiche per questo tipo",
+            "WATCHING_RESOURCES": "Risorse sotto osservazione",
+            "NO_RESOURCE_WATCHING_MSG": [
+                "Non hai abilitato le notifiche su alcuna risorsa. Puoi iniziare ad osservare risorse cliccando sul bottone",
+                "posizionato sulla toolbar del ResourceView."
+            ],
+            "STOP_WATCHING_RES": "Smetti di osservare questa risorsa",
+            "MODES": {
+                "NO_NOTIFICATIONS": "Nessuna notifica",
+                "NO_NOTIFICATIONS_INFO": "Non riceverai alcuna notifica",
+                "IN_APP": "Solo in app",
+                "IN_APP_INFO": "Potrai leggere le notifiche solo in app dalla pagina dedicata",
+                "EMAIL_INSTANT": "Email (istantanea)",
+                "EMAIL_INSTANT_INFO": "Riceverai email istantaneamente",
+                "EMAIL_DAILY": "Email (giornalmente)",
+                "EMAIL_DAILY_INFO": "Riceverai un riepilogo giornaliero via email"
+            }
+        },
+        "RES_VIEW": {
+            "TABBED_INFO": "Il ResourceView viene mostrato in un tab e multipli ResourceView possono essere aperti in tab differenti.",
+            "SPLITTED_INFO": [
+                "Il pannello del ResourceView è diviso in due: sulla sinistra viene mostrato un ResourceView principale che descrive (ed è sincronizzato con) la risorsa selezionata nell'albero/lista; sulla destra viene mostrato un secondo ResourceView opzionale il quale descrive una risorsa aperta (tramite doppio click) dal principale",
+                "Questa modalità non è raccomandata per schermi con larghezza di risoluzione minore di 1440px"
+            ],
+            "SYNC_WITH_TREE_LIST": "Mantieni sincronizzato l'albero/lista con il tab selezionato",
+            "SYNC_WITH_TREE_LIST_WARNING": "E' raccomandabile disabilitare questa opzione. La sincronizzazione tra tab e alberi/liste potrebbe rallentare la navigazione del ResourceView.",
+            "INITIAL_VIEW_FOR_CONCEPTS": "Visualizzazione iniziale per i concetti",
+            "INITIAL_VIEW_FOR_CONCEPTS_INFO": "Questa scelta verrà usata di default per la visualizzazione di concetti SKOS. L'utente può passare ad altre visualizzazioni durante la sessione di lavoro, questa scelta verrò comunque applicata come impostazione iniziale ad ogni nuovo login",
+            "DISPLAY_IMAGES": "Mostra immagini",
+            "DISPLAY_IMAGES_INFO": "Se attiva, valori URL risolvibili ad immagini sul web, verranno mostrati come immagini (antprime) nel ResourceView",
+            "SHOW_DEPRECATED": "Mostra valori deprecati",
+            "SHOW_DEPRECATED_INFO": "Se attiva, risorse collegate segnate come deprecate verranno mostrate nel ResourceView",
+            "SHOW_DATATYPE_BADGE": "Mostra sempre il datatype badge",
+            "SHOW_DATATYPE_BADGE_INFO": "Se attiva, una targhetta contenente il datatyp verrà sempre mostrato di fianco ai valori. In caso contrario, il badge verrò solo mostrata in caso di datatype sconosciuti (l'icona alla sinistra del valore indicherà il datatype)"
+        }
     },
     "PROJECTS": {
         "TABLE": {
@@ -1053,7 +1124,8 @@
         "LANGUAGE": {
             "LANGUAGE": "Lingua",
             "LANGUAGES": "Lingue",
-            "ISO_CODE": "Codice ISO"
+            "ISO_CODE": "Codice ISO",
+            "NO_LANG_INFO": "Nessuna lingua selezionata implica tutte le lingue"
         },
         "PAGING": {
             "PAGE_OF_TOT": "di",
@@ -1087,12 +1159,13 @@
         "LEXICALIZATION": "Lessicalizzazione",
         "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
         "MANDATORY_FIELD": "Campo obbligatorio",
+        "MODE": "Modalità",
         "MODEL": "Modello",
         "NAME": "Nome",
         "NEW": "Nuovo",
-        "NOTIFICATIONS": "Notifiche",
         "ONTOLOGY_IRI": "IRI ontologia",
         "OPTIONAL_FIELD": "Campo opzionale",
+        "POSITION": "Posizione",
         "PROJECTS": "Progetti",
         "REPOSITORY_ID": "ID repository",
         "SCOPE": "Scope",
