@@ -19,45 +19,67 @@ export class IcvListComponent {
         open: true,
         list: [
             {
-                name: "Dangling concepts", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/DanglingConcept",
-                description: "skos:Concept(s) that have no skos:broader or are not skos:topConceptOf in the skos:ConceptScheme where they belong",
+                name: "ICV.STRUCTURAL.DANGLING_CONCEPTS.NAME", 
+                model: [SKOS.uri],
+                lexicalization: [],
+                routeName: "/Icv/DanglingConcept",
+                description: "ICV.STRUCTURAL.DANGLING_CONCEPTS.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericConcept
             },
             {
-                name: "Omitted topConcept", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/NoTopConceptScheme",
-                description: "skos:ConceptScheme(s) that have no top concept",
+                name: "ICV.STRUCTURAL.OMITTED_TOP_CONCEPT.NAME",
+                model: [SKOS.uri],
+                lexicalization: [],
+                routeName: "/Icv/NoTopConceptScheme",
+                description: "ICV.STRUCTURAL.OMITTED_TOP_CONCEPT.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericConcept
             },
             {
-                name: "Concepts in no scheme", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/NoSchemeConcept",
-                description: "skos:Concept(s) that doesn't belong to any scheme",
+                name: "ICV.STRUCTURAL.CONCEPT_IN_NO_SCHEME.NAME",
+                model: [SKOS.uri],
+                lexicalization: [],
+                routeName: "/Icv/NoSchemeConcept",
+                description: "ICV.STRUCTURAL.CONCEPT_IN_NO_SCHEME.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericConcept
             },
             {
-                name: "TopConcept with broader", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/TopConceptWithBroader",
-                description: "skos:Concept(s) that are skos:topConceptOf some scheme and have some skos:broader concept",
+                name: "ICV.STRUCTURAL.TOP_CONCEPT_WITH_BROADER.NAME",
+                model: [SKOS.uri],
+                lexicalization: [],
+                routeName: "/Icv/TopConceptWithBroader",
+                description: "ICV.STRUCTURAL.TOP_CONCEPT_WITH_BROADER.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericConcept
             },
             {
-                name: "Concepts related disjoint relations", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/DisjointRelatedConcept",
-                description: "skos:Concept(s) connected to another with both the skos:related and the skos:broaderTransitive "
-                    + "(skos:related relation is disjoint with skos:broaderTransitive)",
+                name: "ICV.STRUCTURAL.CONCEPTS_RELATED_DISJOINT.NAME",
+                model: [SKOS.uri],
+                lexicalization: [],
+                routeName: "/Icv/DisjointRelatedConcept",
+                description: "ICV.STRUCTURAL.CONCEPTS_RELATED_DISJOINT.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericConcept
             },
             {
-                name: "Concepts exactMatch disjoint relations", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/DisjointExactMatchConcept",
-                description: "skos:Concept(s) connected to another with both the skos:exactMatch and one of skos:broadMatch or skos:relatedMatch "
-                    + "(skos:exactMatch relation is disjoint with skos:broadMatch and skos:relatedMatch)",
+                name: "ICV.STRUCTURAL.CONCEPT_EXACT_MATCH_DISJOINT.NAME",
+                model: [SKOS.uri],
+                lexicalization: [],
+                routeName: "/Icv/DisjointExactMatchConcept",
+                description: "ICV.STRUCTURAL.CONCEPT_EXACT_MATCH_DISJOINT.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericConcept
             },
             {
-                name: "Hierarchical redundancies", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/HierarchicalRedundancy",
-                description: "skos:Concept(s) that have redundant hierarchical relations with another concept",
+                name: "ICV.STRUCTURAL.HIERARCHICAL_REDUNDANCIES.NAME",
+                model: [SKOS.uri],
+                lexicalization: [],
+                routeName: "/Icv/HierarchicalRedundancy",
+                description: "ICV.STRUCTURAL.HIERARCHICAL_REDUNDANCIES.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericConcept
             },
             {
-                name: "Cyclic hierarchical concepts", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/HierarchicalCycle",
-                description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader relations",
+                name: "ICV.STRUCTURAL.CYCLIC_HIERARCHICAL_CONCEPTS.NAME",
+                model: [SKOS.uri],
+                lexicalization: [],
+                routeName: "/Icv/HierarchicalCycle",
+                description: "ICV.STRUCTURAL.CYCLIC_HIERARCHICAL_CONCEPTS.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericConcept
             },
         ]
@@ -67,49 +89,75 @@ export class IcvListComponent {
         open: true,
         list: [
             {
-                name: "No skos:prefLabel resources", model: [], lexicalization: [SKOS.uri], routeName: "/Icv/NoLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel",
+                name: "ICV.LABEL.NO_SKOS_PREFLABEL.NAME",
+                model: [],
+                lexicalization: [SKOS.uri],
+                routeName: "/Icv/NoLabelResource",
+                description: "ICV.LABEL.NO_SKOS_PREFLABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "No skosxl:prefLabel resources", model: [], lexicalization: [SKOSXL.uri], routeName: "/Icv/NoLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel",
+                name: "ICV.LABEL.NO_SKOSXL_PREFLABEL.NAME",
+                model: [],
+                lexicalization: [SKOSXL.uri],
+                routeName: "/Icv/NoLabelResource",
+                description: "ICV.LABEL.NO_SKOSXL_PREFLABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "No mandatory label resources", model: [], lexicalization: [],
+                name: "ICV.LABEL.NO_MANDATORY_LABEL.NAME",
+                model: [],
+                lexicalization: [],
                 routeName: "/Icv/NoMandatoryLabelResource",
-                description: "Resources that don't have any label in the given languages",
+                description: "ICV.LABEL.NO_MANDATORY_LABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "Only alternative label resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/OnlyAltLabelResource",
-                description: "Resources that have an alternative label but not a preferred in the same language",
+                name: "ICV.LABEL.ONLY_ALTLABEL.NAME",
+                model: [],
+                lexicalization: [SKOS.uri, SKOSXL.uri],
+                routeName: "/Icv/OnlyAltLabelResource",
+                description: "ICV.LABEL.ONLY_ALTLABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "No language tag label resources", model: [], lexicalization: [],
-                routeName: "/Icv/NoLangLabelResource", description: "Resources that have a label without language tag",
+                name: "ICV.LABEL.NO_LANGTAG_LABEL.NAME",
+                model: [],
+                lexicalization: [],
+                routeName: "/Icv/NoLangLabelResource",
+                description: "ICV.LABEL.NO_LANGTAG_LABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "Overlapped label resources", model: [], lexicalization: [], routeName: "/Icv/OverlappedLabelResource",
-                description: "Resources that have the same label in the same language duplicated as pref, alt or hidden label",
+                name: "ICV.LABEL.OVERLAPPED_LABEL.NAME",
+                model: [],
+                lexicalization: [],
+                routeName: "/Icv/OverlappedLabelResource",
+                description: "ICV.LABEL.OVERLAPPED_LABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "Conflictual label resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/ConflictualLabelResource",
-                description: "Resources or, specifically, concepts in the same scheme, that have the same preferred label in the same language",
+                name: "ICV.LABEL.CONFLICTUAL_LABEL.NAME",
+                model: [],
+                lexicalization: [SKOS.uri, SKOSXL.uri],
+                routeName: "/Icv/ConflictualLabelResource",
+                description: "ICV.LABEL.CONFLICTUAL_LABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "Extra whitespace label resources", model: [], lexicalization: [],
-                routeName: "/Icv/ExtraSpaceLabelResource", description: "Resources that have some extra whitespace in a label",
+                name: "ICV.LABEL.EXTRA_WHITESPACE_LABEL.NAME",
+                model: [],
+                lexicalization: [],
+                routeName: "/Icv/ExtraSpaceLabelResource",
+                description: "ICV.LABEL.EXTRA_WHITESPACE_LABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "Multiple preferred labels resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri],
-                routeName: "/Icv/MutliplePrefLabelResource", description: "Resources that have multiple preferred labels in the same language",
+                name: "ICV.LABEL.MULTIPLE_PREFLABEL.NAME",
+                model: [],
+                lexicalization: [SKOS.uri, SKOSXL.uri],
+                routeName: "/Icv/MutliplePrefLabelResource",
+                description: "ICV.LABEL.MULTIPLE_PREFLABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             // {
@@ -117,8 +165,11 @@ export class IcvListComponent {
             //     description: "skosxl:Label(s) that don't specify a literal form"
             // },
             {
-                name: "Dangling skosxl:Label(s)", model: [], lexicalization: [SKOSXL.uri], routeName: "/Icv/DanglingXLabel",
-                description: "skosxl:Label(s) that are not linked with any skos:Concept",
+                name: "ICV.LABEL.DANGLING_SKOSXL_LABEL.NAME",
+                model: [],
+                lexicalization: [SKOSXL.uri],
+                routeName: "/Icv/DanglingXLabel",
+                description: "ICV.LABEL.DANGLING_SKOSXL_LABEL.DESCRIPTION",
                 authAction: VBActionsEnum.icvDanglingXLabel
             }
         ]
@@ -128,23 +179,35 @@ export class IcvListComponent {
         open: true,
         list: [
             {
-                name: "No definition resources", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/NoDefinitionResource",
-                description: "Resources that don't have any skos definition in the given language(s)",
+                name: "ICV.GENERIC.NO_DEFINITION.NAME",
+                model: [SKOS.uri],
+                lexicalization: [], 
+                routeName: "/Icv/NoDefinitionResource",
+                description: "ICV.GENERIC.NO_DEFINITION.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "Broken alignments", model: [], lexicalization: [], routeName: "/Icv/BrokenAlignment",
-                description: "Alignment where the object resource doesn't exist or is deprecated",
+                name: "ICV.GENERIC.BROKEN_ALIGNMENTS.NAME",
+                model: [],
+                lexicalization: [],
+                routeName: "/Icv/BrokenAlignment",
+                description: "ICV.GENERIC.BROKEN_ALIGNMENTS.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "Broken definitions", model: [], lexicalization: [], routeName: "/Icv/BrokenDefinition",
-                description: "Definitions of resources  where the object resource doesn't exist or is deprecated",
+                name: "ICV.GENERIC.BROKEN_DEFINITIONS.NAME",
+                model: [],
+                lexicalization: [],
+                routeName: "/Icv/BrokenDefinition",
+                description: "ICV.GENERIC.BROKEN_DEFINITIONS.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             },
             {
-                name: "Invalid URI local resources", model: [], lexicalization: [], routeName: "/Icv/InvalidURI",
-                description: "Locally defined resources whith syntactically invalid URI",
+                name: "ICV.GENERIC.INVALID_URI_LOCAL_RES.NAME",
+                model: [],
+                lexicalization: [],
+                routeName: "/Icv/InvalidURI",
+                description: "ICV.GENERIC.INVALID_URI_LOCAL_RES.DESCRIPTION",
                 authAction: VBActionsEnum.icvGenericResource
             }
         ]

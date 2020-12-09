@@ -486,7 +486,10 @@
         "LINKS_FILTER": {
             "EXPAND_NODE": "Espandi nodo",
             "TOO_MUCH_RELATIONS_WARNING": "La risorsa che stai espandendo ha una grande quantità di relazioni, ciò produrrebbe molti link e nodi che potrebbero rendere confusa la visualizzazione del grafo. E' consigliabile filtrare alcune relazioni in modo da limitare le dimensioni del grafo.",
-            "VISIBLE_X_OUT_OF_Y": ["Visibili", "di"]
+            "VISIBLE_X_OUT_OF_Y": [
+                "Visibili",
+                "di"
+            ]
         },
         "FORCE_CONTROL": {
             "LINKS": "Link",
@@ -525,6 +528,151 @@
             "TIME_TO": "a",
             "DATETIME_FORMAT": "Formato: yyyy-MM-ddThh:mm",
             "APPLY": "Applica"
+        }
+    },
+    "ICV": {
+        "ICV": "Validatore vincoli di integrità (ICV)",
+        "GO": "Vai",
+        "RUN": "Esegui",
+        "PRESS_RUN_TO_RUN_CHECK": ["Premi", "per eseguire il controllo"],
+        "QUICK_ACTION": "Azioni veloci",
+        "CONFIG": {
+            "ICV_CONFIG": "Configurazione ICV",
+            "RESOURCES_TO_CHECK": "Risorse da controllare",
+            "CHECK": "Controlla",
+            "LANGUAGES_TO_CHECK": "Lingue da controllare",
+            "ONLY_MANDATORY": "Solo obbligatorie",
+            "ONLY_MANDATORY_INFO": "Controlla solo le lingue obbligatorie",
+            "MANDATORY": "Obbligatoria"
+        },
+        "STRUCTURAL": {
+            "STRUCTUAL_CHECKS": "Controlli strutturali",
+            "DANGLING_CONCEPTS": {
+                "NAME": "Concetti dangling",
+                "DESCRIPTION": "skos:Concept che non hanno skos:broader o non sono skos:topConceptOf nello skos:ConceptScheme di appartenenza",
+                "ALL_SCHEMES": "Tutti gli schemi",
+                "SELECT_BROADER": "Seleziona skos:broader",
+                "SELECT_BROADER_FOR_ALL": "Seleziona skos:broader per tutti",
+                "SET_AS_TOP": "Seleziona skos:topConceptOf",
+                "SET_ALL_AS_TOP": "Setta tutti come skos:topConceptOf",
+                "REMOVE_FROM_SCHEME": "Rimuovi da schema",
+                "REMOVE_ALL_FROM_SCHEME": "Rimuovi tutti da schema"
+            },
+            "OMITTED_TOP_CONCEPT": {
+                "NAME": "TopConcept mancanti",
+                "DESCRIPTION": "skos:ConceptScheme che non hanno top concept",
+                "SELECT_TOP_CONCEPT": "Seleziona top concept",
+                "CREATE_TOP_CONCEPT": "Cre top concept"
+            },
+            "CONCEPT_IN_NO_SCHEME": {
+                "NAME": "Concetti in nessun schema",
+                "DESCRIPTION": "skos:Concept che non appartengono a nessuno schema",
+                "WARNING": "Attenzione: aggiungere il concetto ad uno skos:ConceptScheme potrebbe non essere sufficiente per garantire che sia visibile nell'albero dei concetti. Il concetto potrebbe restare dangling.",
+                "ADD_TO_SCHEME": "Aggiungi a skos:ConceptScheme",
+                "ADD_ALL_TO_SCHEME": "Aggiungi tutti a skos:ConceptScheme"
+            },
+            "TOP_CONCEPT_WITH_BROADER": {
+                "NAME": "TopConcept con broader",
+                "DESCRIPTION": "skos:Concept che sono skos:topConceptOf qualche schema e che hanno dei skos:broader",
+                "REMOVE_BROADER": "Rimuovi broader",
+                "REMOVE_BROADER_TO_ALL": "Rimuovi broader a tutti",
+                "REMOVE_AS_TOP": "Rimuovi da topConceptOf",
+                "REMOVE_ALL_AS_TOP": "Rimuovi tutti da topConceptOf"
+            },
+            "CONCEPTS_RELATED_DISJOINT": {
+                "NAME": "Concetti related con relazioni disgiunte",
+                "DESCRIPTION": "skos:Concept legati ad altri con entrambe le relazioni skos:related e skos:broaderTransitive (skos:related è disgiunta da skos:broaderTransitive)"
+            },
+            "CONCEPT_EXACT_MATCH_DISJOINT": {
+                "NAME": "Concetti exactMatch con relazioni disgiunte",
+                "DESCRIPTION": "skos:Concept legati ad altri con entrambe le relazioni skos:exactMatch e una tra skos:broadMatch o skos:relatedMatch (skos:exactMatch è disgiunta da skos:broadMatch e skos:relatedMatch)"
+            },
+            "HIERARCHICAL_REDUNDANCIES": {
+                "NAME": "Ridondanze gerarchiche",
+                "DESCRIPTION": "skos:Concept che hanno relazioni gerarchiche ridondanti con altri concetti",
+                "SAME_SCHEME": "Stesso schema",
+                "SAME_SCHEME_INFO": "Se selezionato, il controllo sarà effettuato solo su relazioni tra concetti appartenenti allo stesso schema",
+                "EXAMPLE": ["es.", "La 3a tripla è ridondante in quanto è una conseguenza di 1 e 2"]
+            },
+            "CYCLIC_HIERARCHICAL_CONCEPTS": {
+                "NAME": "Concetti gerarchicamente ciclici",
+                "DESCRIPTION": "skos:Concept che formano un ciclo gerarchico tramite le relazioni skos:narrower e skos:broader",
+                "CYCLES": "Cicli"
+            }
+        },
+        "LABEL": {
+            "LABEL_CHECKS": "Controlli su label",
+            "NO_SKOS_PREFLABEL": {
+                "NAME": "Risorse senza skos:prefLabel",
+                "DESCRIPTION": "skos:Concept o skos:ConceptScheme che non hanno alcuna skos:prefLabel",
+                "ADD_PREFLABEL": "Aggiungi skos:prefLabel"
+            },
+            "NO_SKOSXL_PREFLABEL": {
+                "NAME": "Risorse senza skosxl:prefLabel",
+                "DESCRIPTION": "skos:Concept o skos:ConceptScheme che non hanno alcuna skosxl:prefLabel",
+                "ADD_PREFLABEL": "Aggiungi skosxl:prefLabel"
+            },
+            "NO_MANDATORY_LABEL": {
+                "NAME": "Risorse senza label obbligatoria",
+                "DESCRIPTION": "Risorse che non hanno alcuna label nelle lingue specificate",
+                "MISSING_LANG_LABEL": "Lingua(e) con label mancante"
+            },
+            "ONLY_ALTLABEL": {
+                "NAME": "Risorse con solo label alternative",
+                "DESCRIPTION": "Risorse che hanno una label alternativa (altLabel) ma non una preferita (prefLabel) in una stessa lingua"
+            },
+            "NO_LANGTAG_LABEL": {
+                "NAME": "Risorse senza language tag",
+                "DESCRIPTION": "Risorse che hanno una label sprovvista di language tag"
+            },
+            "OVERLAPPED_LABEL": {
+                "NAME": "Risorse con label sovrapposte",
+                "DESCRIPTION": "Risorse che hanno la stessa label nella stessa lingua duplicata come pref, alt o hidden"
+            },
+            "CONFLICTUAL_LABEL": {
+                "NAME": "Risorse con label in conflitto",
+                "DESCRIPTION": "Risorse o, nello specifico, concetti nello stesso schema, che hanno la stessa label preferita (prefLabel) nella stessa lingua"
+            },
+            "EXTRA_WHITESPACE_LABEL": {
+                "NAME": "Risorsa con spazi extra nella label",
+                "DESCRIPTION": "Risorse che hanno degli spazi extra in una loro label"
+            },
+            "MULTIPLE_PREFLABEL": {
+                "NAME": "Risorse con multiple label preferite",
+                "DESCRIPTION": "Resources that have multiple preferred labels in the same language"
+            },
+            "DANGLING_SKOSXL_LABEL": {
+                "NAME": "Label SKOSXL dangling",
+                "DESCRIPTION": "skosxl:Label che non sono legate ad alcuno skos:Concept",
+                "DELETE_LABEL": "Elimina label",
+                "ADD_TO_CONCEPT": "Aggiungi ad un concetto"
+            }
+        },
+        "GENERIC": {
+            "GENERIC_CHECKS": "Controlli generici",
+            "NO_DEFINITION": {
+                "NAME": "Risorse senza definizione",
+                "DESCRIPTION": "Risorse che non hanno alcuna definizione skos nelle lingue indicate"
+            },
+            "BROKEN_ALIGNMENTS": {
+                "NAME": "Allineamenti corrotti",
+                "DESCRIPTION": "Allineamenti dove la risorsa oggetto non esiste o è deprecata",
+                "RELOAD_INFO": "I tipi delle risorse da controllare sono cambiati, è consigliabile ricaricare i namespace",
+                "NAMESPACES_TO_CHECK": "Namespace da controllare",
+                "NAMESPACES_TO_CHECK_INFO": "Namespace delle risorse che appaiono come oggetti nelle relazioni di mapping",
+                "ALIGN_COUNT": "Numero allineamenti",
+                "LOCATIONS": "Posizione"
+            },
+            "BROKEN_DEFINITIONS": {
+                "NAME": "Definizioni corrotte",
+                "DESCRIPTION": "Definizioni di risorse dove la risorsa oggetto non esiste o è deprecata",
+                "DEFINITION_PROP": "Proprietà definizione",
+                "DEFINITION_PROP_INFO": "L'ICV cerca risorse con definizioni corrotte legate tramite questa proprietà o sue sotto-proprietà"
+            },
+            "INVALID_URI_LOCAL_RES": {
+                "NAME": "Risorse locali con URI non valido",
+                "DESCRIPTION": "Risorse definite localmente con URI sintatticamente non valido"
+            }
         }
     },
     "INVOKABLE_REPORTERS": {
@@ -874,6 +1022,7 @@
             "CONFIGURE": "Configura",
             "CREATE": "Crea",
             "DELETE": "Elimina",
+            "DELETE_ALL": "Cancella tutto",
             "DISCARD": "Scarta",
             "EDIT": "Modifica",
             "EDIT_MANUALLY": "Modifica manualmente",
@@ -887,6 +1036,7 @@
             "MOVE_UP": "Sposta su",
             "REFRESH": "Aggiorna",
             "REJECT": "Rifiuta",
+            "RELOAD": "Ricarica",
             "REMOVE": "Rimuovi",
             "REMOVE_ALL": "Rimuovi tutto",
             "RESET": "Reset",
@@ -916,6 +1066,7 @@
             "OBJECT": "Oggetto",
             "PREDICATE": "Predicato",
             "RESOURCE": "Risorsa",
+            "RESOURCES": "Risorse",
             "RESOURCE_TYPE": "Tipo risorsa",
             "ROLE": "Ruolo",
             "ROLES": "Ruoli",

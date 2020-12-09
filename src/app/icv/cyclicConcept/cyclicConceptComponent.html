@@ -1,7 +1,7 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
-        <label style="flex: 1;">Cyclic hierarchical concepts</label>
-        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+        <label style="flex: 1;">{{'ICV.STRUCTURAL.CYCLIC_HIERARCHICAL_CONCEPTS.NAME'|translate}}</label>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
         
@@ -10,7 +10,7 @@
                 <table *ngIf="brokenRecordList" class="table table-sm table-hoverable">
                     <thead>
                         <tr>
-                            <th class="text-center">Cycles</th>
+                            <th class="text-center">{{'ICV.STRUCTURAL.CYCLIC_HIERARCHICAL_CONCEPTS.CYCLES'|translate}}</th>
                         </tr>
                     </thead>
                     <tbody>

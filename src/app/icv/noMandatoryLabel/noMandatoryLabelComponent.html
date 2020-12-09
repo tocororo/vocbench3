@@ -1,7 +1,7 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
-        <label style="flex: 1;">No mandatory labels resources</label>
-        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+        <label style="flex: 1;">{{'ICV.LABEL.NO_MANDATORY_LABEL.NAME'|translate}}</label>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
         
@@ -15,7 +15,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">{{'COMMONS.RESOURCES.RESOURCE'|translate}}</th>
-                            <th class="text-center">Missing language(s) label</th>
+                            <th class="text-center">{{'ICV.LABEL.NO_MANDATORY_LABEL.MISSING_LANG_LABEL'|translate}}</th>
                         </tr>
                     </thead>
                     <tbody>

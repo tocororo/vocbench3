@@ -1,7 +1,7 @@
 <div class="card card-default vbox" style="position: relative">
         <div class="card-header">
-            <label style="flex: 1;">Conflictual label resources</label>
-            <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+            <label style="flex: 1;">{{'ICV.LABEL.CONFLICTUAL_LABEL.NAME'|translate}}</label>
+            <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
         </div>
         <div class="card-body vbox">
             
@@ -13,8 +13,8 @@
                     <table *ngIf="brokenRecordList" class="table table-sm table-hoverable">
                         <thead>
                             <tr>
-                                <th class="text-center">Resources</th>
-                                <th class="text-center">Label</th>
+                                <th class="text-center">{{'COMMONS.RESOURCES.RESOURCES'|translate}}</th>
+                                <th class="text-center">{{'COMMONS.RESOURCES.LABEL'|translate}}</th>
                             </tr>
                         </thead>
                         <tbody>

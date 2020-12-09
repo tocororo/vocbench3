@@ -1,6 +1,6 @@
 <div class="card card-default vbox">
 <div class="card-header">
-    <label>Integrity Constraint Validator:</label>
+    <label>{{'ICV.ICV'|translate}}:</label>
 </div>
 
 <div class="card-body vbox scrollableContainer">
@@ -11,7 +11,7 @@
                 <img src="./assets/images/icons/arrow.png" (click)="togglePanel(structuralIcv)"
                     [ngClass]="{'arrow-right': !structuralIcv.open}">
             </div>
-            <label>Structural checks</label>
+            <label>{{'ICV.STRUCTURAL.STRUCTUAL_CHECKS'|translate}}</label>
         </div>
         <div class="card-body" *ngIf="structuralIcv.open">
             <table class="table table-sm table-borderless table-hoverable">
@@ -23,10 +23,10 @@
                 <tbody>
                     <ng-container *ngFor="let icv of structuralIcv.list">
                         <tr *ngIf="isCompatibleWithProject(icv)">
-                            <td nowrap><strong>{{icv.name}}</strong></td>
-                            <td><i>{{icv.description}}</i></td>
+                            <td nowrap><strong>{{icv.name|translate}}</strong></td>
+                            <td><i>{{icv.description|translate}}</i></td>
                             <td>
-                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">Go</button>
+                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">{{'ICV.GO'|translate}}</button>
                             </td>
                         </tr>
                     </ng-container>
@@ -41,7 +41,7 @@
                 <img src="./assets/images/icons/arrow.png" (click)="togglePanel(labelIcv)"
                     [ngClass]="{'arrow-right': !labelIcv.open}">
             </div>
-            <label>Label checks</label>
+            <label>{{'ICV.LABEL.LABEL_CHECKS'|translate}}</label>
         </div>
         <div class="card-body" *ngIf="labelIcv.open">
             <table class="table table-sm table-borderless table-hoverable">
@@ -53,10 +53,10 @@
                 <tbody>
                     <ng-container *ngFor="let icv of labelIcv.list">
                         <tr *ngIf="isCompatibleWithProject(icv)">
-                            <td nowrap><strong>{{icv.name}}</strong></td>
-                            <td><i>{{icv.description}}</i></td>
+                            <td nowrap><strong>{{icv.name|translate}}</strong></td>
+                            <td><i>{{icv.description|translate}}</i></td>
                             <td>
-                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">Go</button>
+                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">{{'ICV.GO'|translate}}</button>
                             </td>
                         </tr>
                     </ng-container>
@@ -71,7 +71,7 @@
                 <img src="./assets/images/icons/arrow.png" (click)="togglePanel(genericIcv)"
                     [ngClass]="{'arrow-right': !genericIcv.open}">
             </div>
-            <label>Generic checks</label>
+            <label>{{'ICV.GENERIC.GENERIC_CHECKS'|translate}}</label>
         </div>
         <div class="card-body" *ngIf="genericIcv.open">
             <table class="table table-sm table-borderless table-hoverable">
@@ -83,10 +83,10 @@
                 <tbody>
                     <ng-container *ngFor="let icv of genericIcv.list">
                         <tr *ngIf="isCompatibleWithProject(icv)">
-                            <td nowrap><strong>{{icv.name}}</strong></td>
-                            <td><i>{{icv.description}}</i></td>
+                            <td nowrap><strong>{{icv.name|translate}}</strong></td>
+                            <td><i>{{icv.description|translate}}</i></td>
                             <td>
-                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">Go</button>
+                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">{{'ICV.GO'|translate}}</button>
                             </td>
                         </tr>
                     </ng-container>

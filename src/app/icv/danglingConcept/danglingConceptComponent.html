@@ -1,25 +1,17 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
-        <label style="flex: 1;">Dangling concepts</label>
-        <span>Scheme:</span>
+        <label style="flex: 1;">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.NAME'|translate}}</label>
+        <span>{{'DATA.SCHEME.SCHEME'|translate}}:</span>
         <select class="form-control form-control-sm ml-1" style="width: initial;" [(ngModel)]="selectedScheme">
-            <option [ngValue]="null" style="font-style: italic">All schemes</option>
+            <option [ngValue]="null" style="font-style: italic">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.ALL_SCHEMES'|translate}}</option>
             <option *ngFor="let s of schemeList" [ngValue]="s">{{s.getShow()}}</option>
         </select>
-        <button class="btn btn-xs btn-light ml-3" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light ml-3" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
         
-        <div class="alert alert-info" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i>
-                skos:Concept(s) that are not reachable in a concept tree because they have no broader
-                concept and are not top concept of its scheme.
-            </i>
-        </div>
-
         <div *ngIf="!brokenConceptList && !brokenConceptMap" style="padding: 4px;">
-            Press <strong>Run</strong> button to run the check.
+            {{'ICV.PRESS_RUN_TO_RUN_CHECK.0'|translate}} <strong>{{'ICV.RUN'|translate}}</strong> {{'ICV.PRESS_RUN_TO_RUN_CHECK.1'|translate}}
         </div>
 
         <div *ngIf="brokenConceptList" class="scrollableContainer">
@@ -27,7 +19,7 @@
                 <thead>
                     <tr>
                         <th class="text-center">{{'DATA.CONCEPT.CONCEPT'|translate}}</th>
-                        <th class="text-center" style="width: 1%">Action</th>
+                        <th class="text-center" style="width: 1%">{{'COMMONS.ACTIONS.ACTION'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,10 +28,10 @@
                             <rdf-resource class="clickable" [resource]="concept" (click)="onResourceClick(concept)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-light" (click)="selectBroader(concept, selectedScheme)">Select skos:broader</button>
-                            <button class="btn btn-xs btn-light" (click)="setAsTopConcept(concept, selectedScheme)">Set as skos:topConceptOf</button>
-                            <button class="btn btn-xs btn-light" (click)="removeFromScheme(concept, selectedScheme)">Remove from scheme</button>
-                            <button class="btn btn-xs btn-light" (click)="deleteConcept(concept)">Delete concept</button>
+                            <button class="btn btn-xs btn-light" (click)="selectBroader(concept, selectedScheme)">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.SELECT_BROADER'|translate}}</button>
+                            <button class="btn btn-xs btn-light ml-1" (click)="setAsTopConcept(concept, selectedScheme)">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.SET_AS_TOP'|translate}}</button>
+                            <button class="btn btn-xs btn-light ml-1" (click)="removeFromScheme(concept, selectedScheme)">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.REMOVE_FROM_SCHEME'|translate}}</button>
+                            <button class="btn btn-xs btn-light ml-1" (click)="deleteConcept(concept)">{{'DATA.CONCEPT.DELETE_CONCEPT'|translate}}</button>
                         </td>
                     </tr>
                 </tbody>
@@ -50,9 +42,9 @@
             <table class="table table-sm" style="flex: 1;">
                 <thead>
                     <tr>
-                        <th class="text-center">Scheme</th>
+                        <th class="text-center">{{'DATA.SCHEME.SCHEME'|translate}}</th>
                         <th class="text-center">{{'DATA.CONCEPT.CONCEPT'|translate}}</th>
-                        <th class="text-center" style="width: 1%">Action</th>
+                        <th class="text-center" style="width: 1%">{{'COMMONS.ACTIONS.ACTION'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,10 +57,10 @@
                                 <rdf-resource class="clickable" [resource]="concept" (click)="onResourceClick(concept)"></rdf-resource>
                             </td>
                             <td style="white-space: nowrap">
-                                <button class="btn btn-xs btn-light" (click)="selectBroader(concept, entry.scheme)">Select skos:broader</button>
-                                <button class="btn btn-xs btn-light" (click)="setAsTopConcept(concept, entry.scheme)">Set as skos:topConceptOf</button>
-                                <button class="btn btn-xs btn-light" (click)="removeFromScheme(concept, entry.scheme)">Remove from scheme</button>
-                                <button class="btn btn-xs btn-light" (click)="deleteConcept(concept)">Delete concept</button>
+                                <button class="btn btn-xs btn-light" (click)="selectBroader(concept, entry.scheme)">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.SELECT_BROADER'|translate}}</button>
+                                <button class="btn btn-xs btn-light ml-1" (click)="setAsTopConcept(concept, entry.scheme)">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.SET_AS_TOP'|translate}}</button>
+                                <button class="btn btn-xs btn-light ml-1" (click)="removeFromScheme(concept, entry.scheme)">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.REMOVE_FROM_SCHEME'|translate}}</button>
+                                <button class="btn btn-xs btn-light ml-1" (click)="deleteConcept(concept)">{{'DATA.CONCEPT.DELETE_CONCEPT'|translate}}</button>
                             </td>
                         </tr>
                     </ng-container>
@@ -79,14 +71,14 @@
     <div *ngIf="brokenConceptList && brokenConceptList.length != 0" class="card-footer">
         <div class="dropup" ngbDropdown>
             <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle>
-                Quick action
+                {{'ICV.QUICK_ACTION'|translate}}
                 <span class="fas fa-caret-up fa-sm"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="setAllTopConcept()" style="cursor: pointer;">Set all as skos:topConceptOf</a>
-                <a class="dropdown-item" (click)="selectBroaderForAll()" style="cursor: pointer;">Select a skos:broader for all</a>
-                <a class="dropdown-item" (click)="removeAllFromScheme()" style="cursor: pointer;">Remove all from scheme</a>
-                <a class="dropdown-item" (click)="deleteAll()" style="cursor: pointer;">Delete all</a>
+                <a class="dropdown-item" (click)="setAllTopConcept()" style="cursor: pointer;">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.SET_ALL_AS_TOP'|translate}}</a>
+                <a class="dropdown-item" (click)="selectBroaderForAll()" style="cursor: pointer;">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.SELECT_BROADER_FOR_ALL'|translate}}</a>
+                <a class="dropdown-item" (click)="removeAllFromScheme()" style="cursor: pointer;">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.REMOVE_ALL_FROM_SCHEME'|translate}}</a>
+                <a class="dropdown-item" (click)="deleteAll()" style="cursor: pointer;">{{'COMMONS.ACTIONS.DELETE_ALL'|translate}}</a>
             </div>
         </div>
     </div>

@@ -1,23 +1,18 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
-        <label style="flex: 1;">{{title}}</label>
-        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+        <label style="flex: 1;">{{title|translate}}</label>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
-        <div class="alert alert-info" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i>{{message}}</i>
-        </div>
-
         <div *ngIf="!brokenResourceList" style="padding: 4px;">
-            Press <strong>Run</strong> button to run the check.
+            {{'ICV.PRESS_RUN_TO_RUN_CHECK.0'|translate}} <strong>{{'ICV.RUN'|translate}}</strong> {{'ICV.PRESS_RUN_TO_RUN_CHECK.1'|translate}}
         </div>
         <div *ngIf="brokenResourceList" class="scrollableContainer">
             <table class="table table-sm table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
                         <th class="text-center">{{'COMMONS.RESOURCES.RESOURCE'|translate}}</th>
-                        <th class="text-center" style="width: 1%">Action</th>
+                        <th class="text-center" style="width: 1%">{{'COMMONS.ACTIONS.ACTION'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>

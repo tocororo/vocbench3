@@ -46,55 +46,57 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 this.rolesUpdated = false;
                 this.namespaces = [];
-                for (var i = 0; i < ns.length; i++) {
+                ns.forEach(n => {
                     this.namespaces.push({ 
-                        namespace: ns[i].namespace,
-                        count: ns[i].count,
+                        namespace: n.namespace,
+                        count: n.count,
                         check: true,
-                        locations: ns[i].locations,
+                        locations: n.locations,
                         resolutions: null,
                         chosenResolutionLocation: null,
                         chosenResolutionOpt: null
                     });
-                }
+                })
                 //init resolutions
                 this.namespaces.forEach(ns => {
                     let resolutions: NsResolution = {};
                     if (ns.locations.length == 0) {
                         resolutions["remote"] = [this.HTTP_DEFERENCIATION];
                     }
-                    for (var i = 0; i < ns.locations.length; i++) {
-                        if (ns.locations[i].type == "local") {
+                    ns.locations.forEach(nsLocation => {
+                        if (nsLocation.type == "local") {
                             let option = { 
-                                show: "project: '" + ns.locations[i].name + "'",
-                                value: ns.locations[i].name
+                                show: "project: '" + nsLocation.name + "'",
+                                value: nsLocation.name
                             }
-                            if (resolutions[ns.locations[i].type] == null) {
-                                resolutions[ns.locations[i].type] = [option];
+                            if (resolutions[nsLocation.type] == null) {
+                                resolutions[nsLocation.type] = [option];
                             } else {
-                                resolutions[ns.locations[i].type].push(option);
+                                resolutions[nsLocation.type].push(option);
                             }
                         } else { //remote
-                            let option = { 
-                                show: "Endpoint: " + ns.locations[i].sparqlEndpoint,
-                                value: ns.locations[i].sparqlEndpoint
-                            }
-                            if (ns.locations[i].sparqlEndpoint != null) {
-                                if (resolutions[ns.locations[i].type] == null) {
-                                    resolutions[ns.locations[i].type] = [option];
-                                } else {
-                                    resolutions[ns.locations[i].type].push(option);
+                            if (nsLocation.sparqlEndpoint != null) {
+                                let option = { 
+                                    show: "Endpoint: " + nsLocation.sparqlEndpoint,
+                                    value: nsLocation.sparqlEndpoint
                                 }
-                            }
-                            if (ns.locations[i].dereferenceable) {
-                                if (resolutions[ns.locations[i].type] == null) {
-                                    resolutions[ns.locations[i].type] = [this.HTTP_DEFERENCIATION];
+                                if (resolutions[nsLocation.type] == null) {
+                                    resolutions[nsLocation.type] = [option];
                                 } else {
-                                    resolutions[ns.locations[i].type].push(this.HTTP_DEFERENCIATION);
+                                    resolutions[nsLocation.type].push(option);
+                                }
+                            } else {
+                                resolutions["remote"] = [this.HTTP_DEFERENCIATION];
+                            }
+                            if (nsLocation.dereferenceable) {
+                                if (resolutions[nsLocation.type] == null) {
+                                    resolutions[nsLocation.type] = [this.HTTP_DEFERENCIATION];
+                                } else {
+                                    resolutions[nsLocation.type].push(this.HTTP_DEFERENCIATION);
                                 }
                             }
                         }
-                    }
+                    });
                     ns.resolutions = resolutions;
                     ns.chosenResolutionLocation = Object.keys(resolutions)[0];
                     ns.chosenResolutionOpt = resolutions[ns.chosenResolutionLocation][0].value;

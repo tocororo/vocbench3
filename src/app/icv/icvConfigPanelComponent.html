@@ -4,13 +4,13 @@
             <img src="./assets/images/icons/arrow.png" (click)="configPanelOpen = !configPanelOpen"
                 [ngClass]="{'arrow-right': !configPanelOpen}">
         </div>
-        <label>ICV configuration</label>
+        <label>{{'ICV.CONFIG.ICV_CONFIG'|translate}}</label>
     </div>
     <div class="card-body">
         <div *ngIf="configPanelOpen" class="hbox">
             <div *ngIf="checkRoles" class="card card-alt vbox" style="margin: 2px;">
                 <div class="card-header">
-                    <label style="flex: 1">Resources to check</label>
+                    <label style="flex: 1">{{'ICV.CONFIG.RESOURCES_TO_CHECK'|translate}}</label>
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-light" (click)="checkAllRoles(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
                             <span class="far fa-check-square"></span>
@@ -24,7 +24,7 @@
                     <table class="table table-sm table-borderless table-hoverable">
                         <thead>
                             <tr>
-                                <th class="text-center">Check</th>
+                                <th class="text-center">{{'ICV.CONFIG.CHECK'|translate}}</th>
                                 <th class="text-center">{{'COMMONS.RESOURCES.RESOURCE_TYPE'|translate}}</th>
                             </tr>
                         </thead>
@@ -43,7 +43,7 @@
             </div>
             <div *ngIf="checkLanguages" class="card card-alt vbox" style="margin: 2px;">
                 <div class="card-header">
-                    <label style="flex: 1">Languages to check</label>
+                    <label style="flex: 1">{{'ICV.CONFIG.LANGUAGES_TO_CHECK'|translate}}</label>
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-light" (click)="checkAllLangs(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
                             <span class="far fa-check-square"></span>
@@ -51,8 +51,8 @@
                         <button class="btn btn-light" (click)="checkAllLangs(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate">
                             <span class="far fa-square"></span>
                         </button>
-                        <button class="btn btn-light" (click)="checkAllLangsMandatory()" title="Check only the mandatory languages">
-                            Only mandatory
+                        <button class="btn btn-light" (click)="checkAllLangsMandatory()" [title]="'ICV.CONFIG.ONLY_MANDATORY_INFO'|translate">
+                            {{'ICV.CONFIG.ONLY_MANDATORY'|translate}}
                         </button>
                     </div>
                 </div>
@@ -60,9 +60,9 @@
                     <table class="table table-sm table-borderless table-hoverable">
                         <thead>
                             <tr>
-                                <th class="text-center">Check</th>
+                                <th class="text-center">{{'ICV.CONFIG.CHECK'|translate}}</th>
                                 <th class="text-center">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
-                                <th class="text-center">Mandatory</th>
+                                <th class="text-center">{{'ICV.CONFIG.MANDATORY'|translate}}</th>
                             </tr>
                         </thead>
                         <tbody>

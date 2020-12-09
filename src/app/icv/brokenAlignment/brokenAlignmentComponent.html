@@ -1,7 +1,7 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
-        <label style="flex: 1;">Broken alignments</label>
-        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+        <label style="flex: 1;">{{'ICV.GENERIC.BROKEN_ALIGNMENTS.NAME'|translate}}</label>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
 
@@ -9,9 +9,8 @@
             <div class="card card-alt vbox" style="flex: initial; margin: 2px;">
                 <div class="card-header">
                     <span style="flex: 1;">
-                        <label>Namespaces to check</label>
-                        <span class="fas fa-info-circle"
-                            title="Namespaces of the resources that appear as object of mapping relations"></span>
+                        <label>{{'ICV.GENERIC.BROKEN_ALIGNMENTS.NAMESPACES_TO_CHECK'|translate}}</label>
+                        <span class="fas fa-info-circle ml-1" [title]="'ICV.GENERIC.BROKEN_ALIGNMENTS.NAMESPACES_TO_CHECK_INFO'|translate"></span>
                     </span>
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-light" (click)="checkAllNs(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate" [disabled]="!namespaces">
@@ -21,9 +20,9 @@
                             <span class="far fa-square"></span>
                         </button>
                         <button class="btn btn-light" (click)="initNamespaces()" [disabled]="rolesToCheck.length==0">
-                            <span>Reload</span>
-                            <span *ngIf="rolesUpdated" class="fas fa-exclamation-circle" style="color: red"
-                                title="The types of resource to check are changed, is highly recommended to reload the namespaces"></span>
+                            <span>{{'COMMONS.ACTIONS.RELOAD'|translate}}</span>
+                            <span *ngIf="rolesUpdated" class="fas fa-exclamation-circle ml-1" style="color: red"
+                                [title]="'ICV.GENERIC.BROKEN_ALIGNMENTS.RELOAD_INFO'|translate"></span>
                         </button>
                     </div>
                 </div>
@@ -31,10 +30,10 @@
                     <table *ngIf="namespaces" class="table table-sm table-borderless table-hoverable">
                         <thead>
                             <tr>
-                                <th class="text-center">Check</th>
+                                <th class="text-center">{{'ICV.CONFIG.CHECK'|translate}}</th>
                                 <th class="text-center">Namespace</th>
-                                <th class="text-center" nowrap>Alignments count</th>
-                                <th class="text-center" colspan="2">Locations</th>
+                                <th class="text-center" nowrap>{{'ICV.GENERIC.BROKEN_ALIGNMENTS.ALIGN_COUNT'|translate}}</th>
+                                <th class="text-center" colspan="2">{{'ICV.GENERIC.BROKEN_ALIGNMENTS.LOCATIONS'|translate}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,8 +54,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <select class="form-control" [(ngModel)]="ns.chosenResolutionOpt"
-                                    [disabled]="ns.resolutions[ns.chosenResolutionLocation].length == 1">
+                                    <select class="form-control" [(ngModel)]="ns.chosenResolutionOpt" [disabled]="ns.resolutions[ns.chosenResolutionLocation].length == 1">
                                         <option *ngFor="let opt of ns.resolutions[ns.chosenResolutionLocation]" [ngValue]="opt.value">{{opt.show}}</option>
                                     </select>
                                 </td>

@@ -7,7 +7,7 @@
                     <label style="white-space: nowrap; margin-right: 4px;">Spreadsheet file:</label>
                     <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"></file-picker>
                     <button class="btn btn-light" style="margin-left: 4px;" (click)="loadSpreadsheet()" [disabled]="!spreadsheetFile">
-                        <span class="fas fa-redo" title="Reload"></span>
+                        <span class="fas fa-redo" [title]="'COMMONS.ACTIONS.RELOAD'|translate"></span>
                     </button>
                 </div>
             </div>

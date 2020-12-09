@@ -1,24 +1,19 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
-        <label style="flex: 1;">ConceptScheme without topConcept</label>
-        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+        <label style="flex: 1;">{{'ICV.STRUCTURAL.OMITTED_TOP_CONCEPT.NAME'|translate}}</label>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
         
-        <div class="alert alert-info" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i>skos:ConceptScheme(s) that don't have a topConcept or simply empty.</i>
-        </div>
-
         <div *ngIf="!brokenSchemeList" style="padding: 4px;">
-            Press <strong>Run</strong> button to run the check.
+            {{'ICV.PRESS_RUN_TO_RUN_CHECK.0'|translate}} <strong>{{'ICV.RUN'|translate}}</strong> {{'ICV.PRESS_RUN_TO_RUN_CHECK.1'|translate}}
         </div>
         <div *ngIf="brokenSchemeList" class="scrollableContainer">
             <table class="table table-sm table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
-                        <th class="text-center">ConceptScheme</th>
-                        <th class="text-center" style="width: 1%">Action</th>
+                        <th class="text-center">{{'DATA.SCHEME.SCHEME'}}</th>
+                        <th class="text-center" style="width: 1%">{{'COMMONS.ACTIONS.ACTION'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,9 +22,9 @@
                             <rdf-resource class="clickable" [resource]="scheme" (click)="onResourceClick(scheme)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-light" (click)="selectTopConcept(scheme)">Select top concept</button>
-                            <button class="btn btn-xs btn-light" (click)="createTopConcept(scheme)">Create top concept</button>
-                            <button class="btn btn-xs btn-light" (click)="deleteScheme(scheme)">Delete scheme</button>
+                            <button class="btn btn-xs btn-light" (click)="selectTopConcept(scheme)">{{'ICV.STRUCTURAL.OMITTED_TOP_CONCEPT.SELECT_TOP_CONCEPT'|translate}}</button>
+                            <button class="btn btn-xs btn-light" (click)="createTopConcept(scheme)">{{'ICV.STRUCTURAL.OMITTED_TOP_CONCEPT.CREATE_TOP_CONCEPT'|translate}}</button>
+                            <button class="btn btn-xs btn-light" (click)="deleteScheme(scheme)">{{'DATA.SCHEME.DELETE'}}</button>
                         </td>
                     </tr>
                 </tbody>
@@ -40,7 +35,7 @@
         <div  class="dropup float-right">
             <button *ngIf="brokenSchemeList && brokenSchemeList.length != 0" class="btn btn-light btn-xs" type="button"
                 (click)="deleteAllScheme()">
-                Delete all scheme
+                {{'COMMONS.ACTIONS.DELETE_ALL'|translate}}
             </button>
         </div>
     </div>

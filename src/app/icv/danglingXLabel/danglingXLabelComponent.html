@@ -1,19 +1,12 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
-        <label style="flex: 1;">Dangling xLabels</label>
-        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+        <label style="flex: 1;">{{'ICV.LABEL.DANGLING_SKOSXL_LABEL.NAME'|translate}}</label>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
         
-        <div class="alert alert-info" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i>
-                skosxl:Label(s) that are not linked with any skos:Concept.
-            </i>
-        </div>
-
         <div *ngIf="!brokenLabelList" style="padding: 4px;">
-            Press <strong>Run</strong> button to run the check.
+            {{'ICV.PRESS_RUN_TO_RUN_CHECK.0'|translate}} <strong>{{'ICV.RUN'|translate}}</strong> {{'ICV.PRESS_RUN_TO_RUN_CHECK.1'|translate}}
         </div>
         
         <div *ngIf="brokenLabelList" class="scrollableContainer">
@@ -21,7 +14,7 @@
                 <thead>
                     <tr>
                         <th class="text-center">XLabel</th>
-                        <th class="text-center" style="width: 1%">Action</th>
+                        <th class="text-center" style="width: 1%">{{'COMMONS.ACTIONS.ACTION'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,8 +23,8 @@
                             <rdf-resource [resource]="label"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-light" (click)="deleteLabel(label)">Delete label</button>
-                            <button class="btn btn-xs btn-light" (click)="assignLabel(label)">Add to a concept</button>
+                            <button class="btn btn-xs btn-light" (click)="deleteLabel(label)">{{'ICV.LABEL.DANGLING_SKOSXL_LABEL.DELETE_LABEL'|translate}}</button>
+                            <button class="btn btn-xs btn-light" (click)="assignLabel(label)">{{'ICV.LABEL.DANGLING_SKOSXL_LABEL.ADD_TO_CONCEPT'|translate}}</button>
                         </td>
                     </tr>
                 </tbody>
@@ -40,9 +33,8 @@
     </div>
     <div class="card-footer">
         <div  class="dropup float-right">
-            <button *ngIf="brokenLabelList && brokenLabelList.length != 0" class="btn btn-light btn-xs" type="button"
-                (click)="deleteAllLabel()">
-                Delete all
+            <button *ngIf="brokenLabelList && brokenLabelList.length != 0" class="btn btn-light btn-xs" (click)="deleteAllLabel()">
+                {{'COMMONS.ACTIONS.DELETE_ALL'|translate}}
             </button>
         </div>
     </div>

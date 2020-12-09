@@ -1,20 +1,12 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
-        <label style="flex: 1;">Top concepts with broader</label>
-        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+        <label style="flex: 1;">{{'ICV.STRUCTURAL.TOP_CONCEPT_WITH_BROADER.NAME'|translate}}</label>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
         
-        <div class="alert alert-info" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i>
-                skos:Concept(s) that are skos:topConceptOf a skos:ConceptScheme 
-                and have some broader concept in the same skos:ConceptScheme
-            </i>
-        </div>
-
         <div *ngIf="!brokenRecordList" style="padding: 4px;">
-            Press <strong>Run</strong> button to run the check.
+            {{'ICV.PRESS_RUN_TO_RUN_CHECK.0'|translate}} <strong>{{'ICV.RUN'|translate}}</strong> {{'ICV.PRESS_RUN_TO_RUN_CHECK.1'|translate}}
         </div>
         
         <div *ngIf="brokenRecordList" class="scrollableContainer">
@@ -22,8 +14,8 @@
                 <thead>
                     <tr>
                         <th class="text-center">{{'DATA.CONCEPT.CONCEPT'|translate}}</th>
-                        <th class="text-center">Scheme</th>
-                        <th class="text-center" style="width: 1%">Action</th>
+                        <th class="text-center">{{'DATA.SCHEME.SCHEME'|translate}}</th>
+                        <th class="text-center" style="width: 1%">{{'COMMONS.ACTIONS.ACTION'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,8 +27,8 @@
                             <rdf-resource class="clickable" [resource]="record.scheme" (click)="onResourceClick(record.scheme)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-light" (click)="removeBroaders(record)">Remove broader(s)</button>
-                            <button class="btn btn-xs btn-light" (click)="removeAsTopConceptOf(record)">Remove as topConceptOf</button>
+                            <button class="btn btn-xs btn-light" (click)="removeBroaders(record)">{{'ICV.STRUCTURAL.TOP_CONCEPT_WITH_BROADER.REMOVE_BROADER'|translate}}</button>
+                            <button class="btn btn-xs btn-light" (click)="removeAsTopConceptOf(record)">{{'ICV.STRUCTURAL.TOP_CONCEPT_WITH_BROADER.REMOVE_AS_TOP'|translate}}</button>
                         </td>
                     </tr>
                 </tbody>
@@ -46,12 +38,12 @@
     <div class="card-footer">
         <div *ngIf="brokenRecordList && brokenRecordList.length != 0" class="dropup float-right" ngbDropdown>
             <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle>
-                Quick action
+                {{'ICV.QUICK_ACTION'|translate}}
                 <span class="fas fa-caret-down fa-sm"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="removeBroadersToAll()" style="cursor: pointer;">Remove broader(s) to all</a>
-                <a class="dropdown-item" (click)="removeAllAsTopConceptOf()" style="cursor: pointer;">Remove all as skos:topConceptOf</a>
+                <a class="dropdown-item" (click)="removeBroadersToAll()" style="cursor: pointer;">{{'ICV.STRUCTURAL.TOP_CONCEPT_WITH_BROADER.REMOVE_BROADER_TO_ALL'|translate}}</a>
+                <a class="dropdown-item" (click)="removeAllAsTopConceptOf()" style="cursor: pointer;">{{'ICV.STRUCTURAL.TOP_CONCEPT_WITH_BROADER.REMOVE_ALL_AS_TOP'|translate}}</a>
             </div>
         </div>
     </div>
