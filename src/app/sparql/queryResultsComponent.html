@@ -60,13 +60,13 @@
             <img src="./assets/images/icons/res/ontology.png" title="See results as graph" width="11px">
         </button>
         <div class="btn-group btn-group-xs float-right">
-            <button class="btn btn-light" title="Previous page" (click)="resultsPage=resultsPage-1" [disabled]="resultsPage==0">
+            <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="resultsPage=resultsPage-1" [disabled]="resultsPage==0">
                 <span class="fas fa-caret-left"></span>
             </button>
             <button class="btn btn-light" style="cursor: auto" disabled>
-                <span>{{resultsPage+1}} {{'COMMONS.PAGE_OF_TOT'|translate}} {{resultsTotPage}}</span>
+                <span>{{resultsPage+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{resultsTotPage}}</span>
             </button>
-            <button class="btn btn-light" title="Next page" (click)="resultsPage=resultsPage+1" [disabled]="resultsPage>=resultsTotPage-1">
+            <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="resultsPage=resultsPage+1" [disabled]="resultsPage>=resultsTotPage-1">
                 <span class="fas fa-caret-right"></span>
             </button>
         </div>

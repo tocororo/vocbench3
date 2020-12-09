@@ -1,18 +1,18 @@
 <div class="modal-header">
-    <h3 class="modal-title">Data-Oriented Graph settings</h3>
+    <h3 class="modal-title">{{'GRAPHS.SETTINGS.DATA_GRAPH_SETTINGS'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
     <div class="hbox">
         <lang-value-filter-pref class="vbox"></lang-value-filter-pref>
 
-        <div class="card card-default vbox" style="margin-left: 4px;">
+        <div class="card card-default vbox ml-2">
             <div class="card-header">
-                <label>Graph filter</label>
+                <label>{{'GRAPHS.SETTINGS.GRAPH_FILTER'|translate}}</label>
             </div>
             <div class="card-body vbox">
-                <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
-                    Select the partition of the resource description that will be shown when expanding a node.
+                <div class="alert alert-info mb-2">
+                    {{'GRAPHS.SETTINGS.PARTITION_FILTER_INFO'|translate}}
                 </div>
                 <partition-filter-editor [(ngModel)]="graphFilter" (ngModelChange)="updateFilter()"></partition-filter-editor>
             </div>
@@ -24,8 +24,8 @@
             <div class="form-check">
                 <input class="form-check-input" id="literalCheck" type="checkbox" [(ngModel)]="hideLiteralNodes" (ngModelChange)="onHideLiteralChange()">
                 <label class="form-check-label" for="literalCheck">
-                    Hide literal nodes
-                    <span class="fas fa-info-circle ml-2" title="If checked, all the literal nodes will be hidden in the graph"></span>
+                    {{'GRAPHS.SETTINGS.HIDE_LITERAL_NODES'|translate}}
+                    <span class="fas fa-info-circle ml-2" [title]="'GRAPHS.SETTINGS.HIDE_LITERAL_NODES_INFO'|translate"></span>
                 </label>
             </div>
         </div>

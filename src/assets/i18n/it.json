@@ -456,6 +456,47 @@
             "DATA_TRANSFORMATIONS": "Trasformazione dati"
         }
     },
+    "EDOAL": {
+        "NEW_ALIGNMENT": "Nuovo allineamento",
+        "RELATION": "Relazione",
+        "MEASURE": "Confidenza",
+        "ALIGNMENTS": "Allineamenti",
+        "SYNC_ENTITIES": "Sincronizza entità",
+        "LEFT_ENTITY": "Entità sinistra",
+        "RIGHT_ENTITY": "Entità destra",
+        "MAPPING_PROP": "Prop di mapping",
+        "CHANGE_MEASURE": "Modifica confidenza"
+    },
+    "GRAPHS": {
+        "ADD_NEW_NODE": "Aggiungi nuovo nodo",
+        "DELETE_SELECTED_NODE": "Rimuovi nodo selezionato",
+        "EXPAND_SUB_RESOURCES": "Espandi risorse figlie",
+        "EXPAND_SUPER_RESOURCES": "Espandi risorse padri",
+        "EXPORT_SNAPSHOT": "Esporta un'istantanea del grafo (.svg)",
+        "FIX_NODE_POSITION": "Blocca posizione nodo",
+        "FIX_NODES_POSITION": "Blocca posizione nodi",
+        "HIDE_GENERIC_LINKS": "Nascondi link di relazioni generiche",
+        "SETTINGS": {
+            "DATA_GRAPH_SETTINGS": "Impostazioni grafo Data-Oriented",
+            "GRAPH_FILTER": "Filtri grafo",
+            "PARTITION_FILTER_INFO": "Seleziona le partizioni della descrizione della risorsa che verranno mostrate quando si espande un nodo.",
+            "HIDE_LITERAL_NODES": "Nascondi nodi literal",
+            "HIDE_LITERAL_NODES_INFO": "Se spuntata, tutti i nodi literal saranno nascosti nel grafo"
+        },
+        "LINKS_FILTER": {
+            "EXPAND_NODE": "Espandi nodo",
+            "TOO_MUCH_RELATIONS_WARNING": "La risorsa che stai espandendo ha una grande quantità di relazioni, ciò produrrebbe molti link e nodi che potrebbero rendere confusa la visualizzazione del grafo. E' consigliabile filtrare alcune relazioni in modo da limitare le dimensioni del grafo.",
+            "VISIBLE_X_OUT_OF_Y": ["Visibili", "di"]
+        },
+        "FORCE_CONTROL": {
+            "LINKS": "Link",
+            "STRENGTH": "Forza",
+            "LENGTH": "Lunghezza"
+        },
+        "RESOURCE_DETAILS": {
+            "SHOW_THE_COMPLETE_RES_VIEW": "Mostra il completo"
+        }
+    },
     "HISTORY_VALIDATION": {
         "COMMITS": "Commits",
         "STAGED_COMMITS": "Staged Commits",
@@ -493,7 +534,6 @@
         "COMPILE_AND_DOWNLOAD_REPORT": "Compila e scarica report",
         "RESULT": "Risultato",
         "INVOCATION": {
-            "LABEL": "Etichetta",
             "SERVICE": "Servizio",
             "OPERATION": "Operazione",
             "ARGUMENTS": "Argomenti",
@@ -865,7 +905,23 @@
             "LANGUAGES": "Lingue",
             "ISO_CODE": "Codice ISO"
         },
-        "ACTIVE": "Active",
+        "PAGING": {
+            "PAGE_OF_TOT": "di",
+            "PREV_PAGE": "Pagina precedente",
+            "NEXT_PAGE": "Pagina successiva"
+        },
+        "RESOURCES": {
+            "DEPRECATED": "Deprecato",
+            "LABEL": "Etichetta",
+            "OBJECT": "Oggetto",
+            "PREDICATE": "Predicato",
+            "RESOURCE": "Risorsa",
+            "RESOURCE_TYPE": "Tipo risorsa",
+            "ROLE": "Ruolo",
+            "ROLES": "Ruoli",
+            "SUBJECT": "Soggetto"
+        },
+        "ACTIVE": "Attivo",
         "BASE_URI": "Base URI",
         "CONFIGURATION": "Configurazione",
         "CONFIGURATION_REQUIRED": "Configurazione necessaria",
@@ -884,21 +940,14 @@
         "NAME": "Nome",
         "NEW": "Nuovo",
         "NOTIFICATIONS": "Notifiche",
-        "OBJECT": "Oggetto",
         "ONTOLOGY_IRI": "IRI ontologia",
         "OPTIONAL_FIELD": "Campo opzionale",
-        "PAGE_OF_TOT": "di",
-        "PREDICATE": "Predicato",
         "PROJECTS": "Progetti",
         "REPOSITORY_ID": "ID repository",
-        "RESOURCE": "Risorsa",
-        "RESOURCE_TYPE": "Tipo risorsa",
-        "ROLES": "Ruoli",
         "SCOPE": "Scope",
         "SETTINGS": "Impostazioni",
         "SPARQL_ENDPOINT": "Endpoint SPARQL",
         "STATUS": "Stato",
-        "SUBJECT": "Soggetto",
         "TIME": "Tempo",
         "TITLE": "Titolo",
         "TYPE": "Tipo",

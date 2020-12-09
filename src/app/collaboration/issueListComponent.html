@@ -32,13 +32,13 @@
 
 <div *ngIf="showPaging" style="align-self: flex-end">
     <div class="btn-group btn-group-xs float-right" style="margin-top: 4px;" role="group">
-        <button class="btn btn-light" title="Previous page" (click)="previousPage()" [disabled]="page==0">
+        <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="previousPage()" [disabled]="page==0">
             <span class="fas fa-caret-left"></span>
         </button>
         <button class="btn btn-light" style="cursor: auto" disabled>
-            <span>{{page+1}} {{'COMMONS.PAGE_OF_TOT'|translate}} {{totPage}}</span>
+            <span>{{page+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totPage}}</span>
         </button>
-        <button class="btn btn-light" title="Next page" (click)="nextPage()" [disabled]="page==totPage-1">
+        <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="nextPage()" [disabled]="page==totPage-1">
             <span class="fas fa-caret-right"></span>
         </button>
     </div>

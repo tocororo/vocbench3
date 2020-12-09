@@ -23,9 +23,9 @@
                 <table *ngIf="brokenRecordList" class="table table-sm table-hoverable">
                     <thead>
                         <tr>
-                            <th class="text-center">{{'COMMONS.SUBJECT'|translate}}</th>
-                            <th class="text-center">{{'COMMONS.PREDICATE'|translate}}</th>
-                            <th class="text-center">{{'COMMONS.OBJECT'|translate}}</th>
+                            <th class="text-center">{{'COMMONS.RESOURCES.SUBJECT'|translate}}</th>
+                            <th class="text-center">{{'COMMONS.RESOURCES.PREDICATE'|translate}}</th>
+                            <th class="text-center">{{'COMMONS.RESOURCES.OBJECT'|translate}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,13 +48,13 @@
 
             <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="card-footer">
                 <div class="btn-group btn-group-xs float-right" role="group">
-                    <button class="btn btn-light" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
+                    <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="page=page-1" [disabled]="page <= 0">
                         <span class="fas fa-caret-left"></span>
                     </button>
                     <button class="btn btn-light" style="cursor: auto" disabled>
-                        <span>{{page+1}} {{'COMMONS.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
+                        <span>{{page+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
                     </button>
-                    <button class="btn btn-light" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                    <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="page=page+1" [disabled]="page+1 >= pageCount">
                         <span class="fas fa-caret-right"></span>
                     </button>
                 </div>

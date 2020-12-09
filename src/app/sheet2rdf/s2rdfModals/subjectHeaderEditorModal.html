@@ -88,13 +88,13 @@
                     </colgroup>
                     <tbody>
                         <tr *ngFor="let po of additionalPredObjs">
-                            <td><label>{{'COMMONS.PREDICATE'|translate}}:</label></td>
+                            <td><label>{{'COMMONS.RESOURCES.PREDICATE'|translate}}:</label></td>
                             <td>
                                 <resource-picker [resource]="po.predicate" [editable]="true" [config]="{ roles: ['property'] }" 
                                     (resourceChanged)="onAdditionalPropChanged(po, $event)">
                                 </resource-picker>
                             </td>
-                            <td><label>{{'COMMONS.OBJECT'|translate}}:</label></td>
+                            <td><label>{{'COMMONS.RESOURCES.OBJECT'|translate}}:</label></td>
                             <td>
                                 <value-picker [value]="po.object" [editable]="true" (valueChanged)="onAdditionalObjChanged(po, $event)"></value-picker>
                             </td>

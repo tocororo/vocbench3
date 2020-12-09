@@ -456,6 +456,47 @@
             "DATA_TRANSFORMATIONS": "Data transformations"
         }
     },
+    "EDOAL": {
+        "NEW_ALIGNMENT": "New alignment",
+        "RELATION": "Relation",
+        "MEASURE": "Measure",
+        "ALIGNMENTS": "Alignments",
+        "SYNC_ENTITIES": "Sync entities",
+        "LEFT_ENTITY": "Left entity",
+        "RIGHT_ENTITY": "Right entity",
+        "MAPPING_PROP": "Mapping Prop",
+        "CHANGE_MEASURE": "Change measure"
+    },
+    "GRAPHS": {
+        "ADD_NEW_NODE": "Add a new node",
+        "DELETE_SELECTED_NODE": "Delete selected node",
+        "EXPAND_SUB_RESOURCES": "Expand sub-resources",
+        "EXPAND_SUPER_RESOURCES": "Expand super-resources",
+        "EXPORT_SNAPSHOT": "Export a snapshot of the graph (.svg)",
+        "FIX_NODE_POSITION": "Fix node position",
+        "FIX_NODES_POSITION": "Fix nodes position",
+        "HIDE_GENERIC_LINKS": "Hide generic relation links",
+        "SETTINGS": {
+            "DATA_GRAPH_SETTINGS": "Data-Oriented Graph settings",
+            "GRAPH_FILTER": "Graph filter",
+            "PARTITION_FILTER_INFO": "Select the partition of the resource description that will be shown when expanding a node.",
+            "HIDE_LITERAL_NODES": "Hide literal nodes",
+            "HIDE_LITERAL_NODES_INFO": "If checked, all the literal nodes will be hidden in the graph"
+        },
+        "LINKS_FILTER": {
+            "EXPAND_NODE": "Expand node",
+            "TOO_MUCH_RELATIONS_WARNING": "The resource you are expanding has a big amount of relations, thus it would generate a lot of links and nodes that could confuse the graph visualization. It is highly recommended to filter out some relations in order to limit the graph size.",
+            "VISIBLE_OUT_OF": ["Visible", "out of"]
+        },
+        "FORCE_CONTROL": {
+            "LINKS": "Links",
+            "STRENGTH": "Strength",
+            "LENGTH": "Length"
+        },
+        "RESOURCE_DETAILS": {
+            "SHOW_THE_COMPLETE": "Show the complete"
+        }
+    },
     "HISTORY_VALIDATION": {
         "COMMITS": "Commits",
         "STAGED_COMMITS": "Staged Commits",
@@ -493,7 +534,6 @@
         "COMPILE_AND_DOWNLOAD_REPORT": "Compile and download report",
         "RESULT": "Result",
         "INVOCATION": {
-            "LABEL": "Label",
             "SERVICE": "Service",
             "OPERATION": "Operation",
             "ARGUMENTS": "Arguments",
@@ -865,6 +905,22 @@
             "LANGUAGES": "Languages",
             "ISO_CODE": "ISO code"
         },
+        "PAGING": {
+            "PAGE_OF_TOT": "of",
+            "PREV_PAGE": "Previous page",
+            "NEXT_PAGE": "Next page"
+        },
+        "RESOURCES": {
+            "DEPRECATED": "Deprecated",
+            "LABEL": "Label",
+            "OBJECT": "Object",
+            "PREDICATE": "Predicate",
+            "RESOURCE": "Resource",
+            "RESOURCE_TYPE": "Resource type",
+            "ROLE": "Role",
+            "ROLES": "Roles",
+            "SUBJECT": "Subject"
+        },
         "ACTIVE": "Active",
         "BASE_URI": "Base URI",
         "CONFIGURATION": "Configuration",
@@ -884,21 +940,14 @@
         "NAME": "Name",
         "NEW": "New",
         "NOTIFICATIONS": "Notifications",
-        "OBJECT": "Object",
         "ONTOLOGY_IRI": "Ontology IRI",
         "OPTIONAL_FIELD": "Optional field",
-        "PAGE_OF_TOT": "of",
-        "PREDICATE": "Predicate",
         "PROJECTS": "Projects",
         "REPOSITORY_ID": "Repository ID",
-        "RESOURCE": "Resource",
-        "RESOURCE_TYPE": "Resource type",
-        "ROLES": "Roles",
         "SCOPE": "Scope",
         "SETTINGS": "Settings",
         "SPARQL_ENDPOINT": "SPARQL Endpoint",
         "STATUS": "Status",
-        "SUBJECT": "Subject",
         "TIME": "Time",
         "TITLE": "Title",
         "TYPE": "Type",

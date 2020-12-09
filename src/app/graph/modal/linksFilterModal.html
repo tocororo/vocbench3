@@ -1,23 +1,22 @@
 <div class="modal-header">
     <h3 class="modal-title">
-        Expand node
+        {{'GRAPHS.LINKS_FILTER.EXPAND_NODE'|translate}}
     </h3>
 </div>
 <div class="modal-body vbox">
 
     <div class="alert alert-warning">
-        The resource you are expanding has a big amount of relations, thus it would generate a lot of links and nodes that could
-        confuse the graph visualization. It is highly recommended to filter out some relations in order to limit the graph size.
+        {{'GRAPHS.LINKS_FILTER.TOO_MUCH_RELATIONS_WARNING'|translate}}
     </div>
 
     <div class="card card-default vbox" style="margin-top: 4px;">
         <div class="card-body scrollableContainer">
-            <div *ngFor="let filter of filters" class="card card-default" style="margin-bottom: 4px;">
+            <div *ngFor="let filter of filters" class="card card-default mb-2">
                 <div class="card-header hbox">
                     <label style="flex: 1;">{{filter.partition.labelTranslationKey|translate}} ({{getPartitionCount(filter)}})</label>
 
-                    <div class="btn-toolbar" role="toolbar">
-                        <div class="btn-group btn-group-xs" role="group">
+                    <div class="btn-toolbar">
+                        <div class="btn-group btn-group-xs">
                             <button class="btn btn-light" title="Select all" (click)="checkAll(filter, true)">
                                 <span class="far fa-check-square" style="width: 16px;"></span>
                             </button>
@@ -41,7 +40,10 @@
             </div>
         </div>
         <div class="card-footer">
-            <span class="float-right" style="font-weight: bold">Visible {{getVisibleCount()}} out of {{totalObjCount}}</span>
+            <span class="float-right" style="font-weight: bold">
+                {{'GRAPHS.LINKS_FILTER.VISIBLE_X_OUT_OF_Y.0'|translate}} {{getVisibleCount()}}
+                {{'GRAPHS.LINKS_FILTER.VISIBLE_X_OUT_OF_Y.1'|translate}} {{totalObjCount}}
+            </span>
         </div>
     </div>
 

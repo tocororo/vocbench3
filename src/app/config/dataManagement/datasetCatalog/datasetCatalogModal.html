@@ -74,13 +74,13 @@
                 <div *ngIf="searchDatasetResult" class="hbox float-right" style="align-items: center;">
                     <span style="margin-right: 4px;">{{searchDatasetResult.totalResults}} {{'DATA_MANAGEMENT.DATASET_CATALOG.TOT_RESULTS'|translate}}</span>
                     <div *ngIf="searchDatasetResult.totalResults > 0" class="btn-group btn-group-xs">
-                        <button class="btn btn-light" title="Previous page" (click)="prevPage()" [disabled]="page==0">
+                        <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="prevPage()" [disabled]="page==0">
                             <span class="fas fa-caret-left"></span>
                         </button>
                         <button class="btn btn-light" style="cursor: auto" disabled>
-                            <span>{{page+1}} {{'COMMONS.PAGE_OF_TOT'|translate}} {{totPage}}</span>
+                            <span>{{page+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totPage}}</span>
                         </button>
-                        <button class="btn btn-light" title="Next page" (click)="nextPage()" [disabled]="searchDatasetResult.tail">
+                        <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="nextPage()" [disabled]="searchDatasetResult.tail">
                             <span class="fas fa-caret-right"></span>
                         </button>
                     </div>

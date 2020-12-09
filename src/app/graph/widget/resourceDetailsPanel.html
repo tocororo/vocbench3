@@ -6,7 +6,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <td><label>{{'COMMONS.RESOURCE'|translate}}:</label></td>
+                <td><label>{{'COMMONS.RESOURCES.RESOURCE'|translate}}:</label></td>
                 <td><rdf-resource *ngIf="resource" [resource]="resource"></rdf-resource></td>
             </tr>
             <tr *ngIf="resource.isURIResource()">
@@ -18,22 +18,22 @@
                 <td>{{resource.getId()}}</td>
             </tr>
             <tr>
-                <td><label>Label:</label></td>
+                <td><label>{{'COMMONS.RESOURCES.LABEL'|translate}}:</label></td>
                 <td>{{resource.getShow()}}</td>
             </tr>
             <tr *ngIf="resource.isResource()">
-                <td><label>Role:</label></td>
+                <td><label>{{'COMMONS.RESOURCES.ROLE'|translate}}:</label></td>
                 <td>{{resource.getRole()}}</td>
             </tr>
             <tr *ngIf="resource.isResource()">
-                <td><label>Deprecated:</label></td>
+                <td><label>{{'COMMONS.RESOURCES.DEPRECATED'|translate}}:</label></td>
                 <td>{{resource.isDeprecated()}}</td>
             </tr>
         </tbody>
         <tfoot>
             <tr *ngIf="resource.isResource()">
                 <td colspan="2">
-                    Show the complete <a style="cursor: pointer" (click)="showResourceView()">ResourceView</a>
+                    {{'GRAPHS.RESOURCE_DETAILS.SHOW_THE_COMPLETE_RES_VIEW'|translate}} <a style="cursor: pointer" href="javascript:void(0)" (click)="showResourceView()">ResourceView</a>
                 </td>
             </tr>   
         </tfoot>

@@ -12,7 +12,7 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-sm btn-light" title="Settings" (click)="settings()">
+        <button class="btn btn-sm btn-light" [title]="'COMMONS.SETTINGS'|translate" (click)="settings()">
             <span class="fas fa-cog"></span>
         </button>
     </div>
@@ -54,7 +54,7 @@
                         <tbody>
                             <tr>
                                 <td *ngFor="let h of headers" class="columnHeader">
-                                    <span *ngIf="h.id==subjectHeader.id" class="badge badge-success" [title]="'COMMONS.SUBJECT'|translate">S</span>
+                                    <span *ngIf="h.id==subjectHeader.id" class="badge badge-success" [title]="'COMMONS.RESOURCES.SUBJECT'|translate">S</span>
                                     <span [class]="h.cssClass" style="font-weight: bold;">
                                         {{h.nameStruct.fullName}}
                                     </span>
@@ -159,9 +159,9 @@
                     <table class="table table-sm table-hoverable" style="flex: 1">
                         <thead>
                             <tr>
-                                <th>{{'COMMONS.SUBJECT'|translate}}</th>
-                                <th>{{'COMMONS.PREDICATE'|translate}}</th>
-                                <th>{{'COMMONS.OBJECT'|translate}}</th>
+                                <th>{{'COMMONS.RESOURCES.SUBJECT'|translate}}</th>
+                                <th>{{'COMMONS.RESOURCES.PREDICATE'|translate}}</th>
+                                <th>{{'COMMONS.RESOURCES.OBJECT'|translate}}</th>
                             </tr>
                         </thead>
                         <tbody style="overflow: auto;">

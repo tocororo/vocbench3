@@ -22,7 +22,7 @@
             <button class="btn btn-light btn-xs" [title]="'COMMONS.ACTIONS.REFRESH'|translate" (click)="refresh()">
                 <span class="fas fa-redo"></span>
             </button>
-            <button *ngIf="isOpenSettingsAvailable()" class="btn btn-light btn-xs" title="Settings"
+            <button *ngIf="isOpenSettingsAvailable()" class="btn btn-light btn-xs" [title]="'COMMONS.SETTINGS'|translate"
                 (click)="settings()">
                 <span class="fas fa-cog"></span>
             </button>

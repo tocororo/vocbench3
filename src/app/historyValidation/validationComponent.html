@@ -133,13 +133,13 @@
         <div class="hbox  float-right" style="align-items: center">
 
             <div class="btn-group btn-group-xs mr-2">
-                <button class="btn btn-light" title="Previous" (click)="getPreviousCommits()" [disabled]="page <= 0">
+                <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="getPreviousCommits()" [disabled]="page <= 0">
                     <span class="fas fa-caret-left"></span>
                 </button>
                 <button class="btn btn-light" style="cursor: auto" disabled>
-                    <span>{{page+1}} {{'COMMONS.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
+                    <span>{{page+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
                 </button>
-                <button class="btn btn-light" title="Next" (click)="getNextCommits()" [disabled]="page+1 >= pageCount">
+                <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="getNextCommits()" [disabled]="page+1 >= pageCount">
                     <span class="fas fa-caret-right"></span>
                 </button>
             </div>

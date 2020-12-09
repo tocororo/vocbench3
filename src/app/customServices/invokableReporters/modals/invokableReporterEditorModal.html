@@ -35,7 +35,7 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>{{form.label.displayName}}</label>
-                    <span class="fas fa-info-circle" [title]="form.label.description"></span>
+                    <span class="fas fa-info-circle ml-1" [title]="form.label.description"></span>
                 </td>
                 <td><input class="form-control form-control-sm" [(ngModel)]="form.label.value"></td>
                 <td><ng-container *ngIf="form.label.required">*</ng-container></td>
@@ -43,7 +43,7 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>{{form.description.displayName}}</label>
-                    <span class="fas fa-info-circle" [title]="form.description.description"></span>
+                    <span class="fas fa-info-circle ml-1" [title]="form.description.description"></span>
                 </td>
                 <td><textarea class="form-control form-control-sm" style="resize: vertical" [(ngModel)]="form.description.value"></textarea></td>
                 <td><ng-container *ngIf="form.description.required">*</ng-container></td>
@@ -51,7 +51,7 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>{{form.template.displayName}}</label>
-                    <span class="fas fa-info-circle" [title]="form.template.description"></span>
+                    <span class="fas fa-info-circle ml-1" [title]="form.template.description"></span>
                 </td>
                 <td>
                     <mustache-editor [(ngModel)]="form.template.value"></mustache-editor>
@@ -61,7 +61,7 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>{{form.mimeType.displayName}}</label>
-                    <span class="fas fa-info-circle" [title]="form.mimeType.description"></span>
+                    <span class="fas fa-info-circle ml-1" [title]="form.mimeType.description"></span>
                 </td>
                 <td><input class="form-control form-control-sm" [(ngModel)]="form.mimeType.value"></td>
                 <td><ng-container *ngIf="form.mimeType.required">*</ng-container></td>
