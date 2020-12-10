@@ -1,7 +1,7 @@
 import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ConfigurationComponents } from "../../../models/Configuration";
-import { DownloadDescription, TransitiveImportMethodAllowance } from "../../../models/Metadata";
+import { DownloadDescription, TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, TransformationStep } from "../../../models/Plugins";
 import { DataFormat } from "../../../models/RDFFormat";
 import { ExtensionsServices } from "../../../services/extensionsServices";
@@ -32,13 +32,7 @@ export class LoadDataComponent {
 
     private fileToUpload: File;
 
-    importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
-        { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
-        { allowance: TransitiveImportMethodAllowance.web, show: "From Web" },
-        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "From Web with fallback to Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirror, show: "From Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "From Ontology Mirror with fallback to Web" }
-    ];
+    importAllowances: { allowance: TransitiveImportMethodAllowance, showTranslationKey: string }[] = TransitiveImportUtils.importAllowancesList;
     selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     private validateImplicitly: boolean = false;

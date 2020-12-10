@@ -336,13 +336,13 @@ export class ProjectUtils {
     public static getDefaultProjectTableColumns(): ProjectTableColumnStruct[] {
         return [
             { id: ProjectColumnId.name, translationKey: "COMMONS.NAME", show: true, flex: 3, mandatory: true },
-            { id: ProjectColumnId.open, translationKey: "PROJECTS.TABLE.HEADERS.OPEN_CLOSE", show: true, flex: 1, mandatory: true },
-            { id: ProjectColumnId.accessed, translationKey: "PROJECTS.TABLE.HEADERS.ACCESSED", show: true, flex: 1, mandatory: true },
+            { id: ProjectColumnId.open, translationKey: "PROJECTS.OPEN_CLOSE", show: true, flex: 1, mandatory: true },
+            { id: ProjectColumnId.accessed, translationKey: "PROJECTS.ACCESSED", show: true, flex: 1, mandatory: true },
             { id: ProjectColumnId.model, translationKey: "COMMONS.MODEL", show: true, flex: 1 },
             { id: ProjectColumnId.lexicalization, translationKey: "COMMONS.LEXICALIZATION", show: true, flex: 1 },
-            { id: ProjectColumnId.history, translationKey: "PROJECTS.TABLE.HEADERS.HISTORY", show: true, flex: 1 },
-            { id: ProjectColumnId.validation, translationKey: "PROJECTS.TABLE.HEADERS.VALIDATION", show: true, flex: 1 },
-            { id: ProjectColumnId.location, translationKey: "PROJECTS.TABLE.HEADERS.REPO_LOCATION", show: true, flex: 2 }
+            { id: ProjectColumnId.history, translationKey: "PROJECTS.HISTORY", show: true, flex: 1 },
+            { id: ProjectColumnId.validation, translationKey: "PROJECTS.VALIDATION", show: true, flex: 1 },
+            { id: ProjectColumnId.location, translationKey: "PROJECTS.REPO_LOCATION", show: true, flex: 2 }
         ];
     }
 

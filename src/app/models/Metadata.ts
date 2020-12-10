@@ -42,6 +42,16 @@ export enum TransitiveImportMethodAllowance {
     nowhere = "nowhere"
 }
 
+export class TransitiveImportUtils {
+    static importAllowancesList: { allowance: TransitiveImportMethodAllowance, showTranslationKey: string }[] = [
+        { allowance: TransitiveImportMethodAllowance.nowhere, showTranslationKey: "METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.FROM_OPT.NOWHERE" },
+        { allowance: TransitiveImportMethodAllowance.web, showTranslationKey: "METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.FROM_OPT.WEB" },
+        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, showTranslationKey: "METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.FROM_OPT.WEB_FALLBACK_MIRROR" },
+        { allowance: TransitiveImportMethodAllowance.mirror, showTranslationKey: "METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.FROM_OPT.MIRROR" },
+        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, showTranslationKey: "METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.FROM_OPT.MIRROR_FALLBACK_WEB" }
+    ];
+}
+
 export class DatasetMetadata {
     public identity: string;
     public uriSpace: string;

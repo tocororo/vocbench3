@@ -4,7 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { TransitiveImportMethodAllowance } from "../../models/Metadata";
+import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
 import { Properties } from "../../models/Properties";
@@ -54,13 +54,7 @@ export class CreateProjectComponent {
     private preloadCatalog: string; //id-title of the datasetCatalog
     preloadedData: { summary?: PreloadedDataSummary, option: PreloadOpt };
 
-    importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
-        { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
-        { allowance: TransitiveImportMethodAllowance.web, show: "Resolve from web" },
-        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "Resolve from web with fallback to Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirror, show: "Resolve from Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Resolve from Ontology Mirror with fallback to Web" }
-    ];
+    importAllowances: { allowance: TransitiveImportMethodAllowance, showTranslationKey: string }[] = TransitiveImportUtils.importAllowancesList;
     selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     //baseURI
@@ -880,10 +874,10 @@ export class CreateProjectComponent {
 }
 
 enum PreloadOpt {
-    NONE = "Do not preload any data",
-    FROM_LOCAL_FILE = "Preload from local file",
-    FROM_URI = "Preload from URI",
-    FROM_DATASET_CATALOG = "Preload from Dataset Catalog"
+    NONE = "PROJECTS.PRELOAD.OPT.NONE",
+    FROM_LOCAL_FILE = "PROJECTS.PRELOAD.OPT.FROM_LOCAL_FILE",
+    FROM_URI = "PROJECTS.PRELOAD.OPT.FROM_URI",
+    FROM_DATASET_CATALOG = "PROJECTS.PRELOAD.OPT.FROM_DATASET_CATALOG"
 }
 
 interface MetadataAssociationStruct { 

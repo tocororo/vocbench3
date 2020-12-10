@@ -200,7 +200,6 @@
         "COLLABORATION_SYSTEM_CONFIG": "Configurazione del Collaboration System",
         "COLLABORATION_SYSTEM_PROJECTS": "Progetti del Collaboration System",
         "PROJECT_CONFIG": "Configurazione progetto",
-        "BACKEND_TYPE": "Tipo di backend",
         "USER_CONFIG": "Configurazione utente",
         "ASSIGN_PROJECT": "Assegna progetto CS",
         "ASSIGN_ISSUE": "Assegna issue",
@@ -765,10 +764,19 @@
                 "NO_ONTOLOGIES_MIRRORED": "Nessun mirror di ontologie",
                 "ALTERNATIVE_URL": "URL alternativo",
                 "MIRROR_FILE_NAME": "Nome del file mirror",
-                "TRANSITIVE_IMPORTS": "Import transitivi",
                 "DATA_DUMP": "Data dump",
                 "USE_DATA_DUMP": "Usa data dump",
                 "DATA_DUMP_CHECK": "Se spuntato, l'import è aggiunto dal data dump indicato anzichè dall'IRI dell'ontologia"
+            },
+            "TRANSITIVE_IMPORTS": {
+                "TRANSITIVE_IMPORTS": "Import transitivi",
+                "FROM_OPT": {
+                    "NOWHERE": "Non risolvere",
+                    "WEB": "Resolvi da web",
+                    "WEB_FALLBACK_MIRROR": "Resolvi da web con fallback sull'Ontology Mirror",
+                    "MIRROR": "Resolvi da Ontology Mirror",
+                    "MIRROR_FALLBACK_WEB": "Resolvi dall'Ontology Mirror con fallback sul Web"
+                }
             }
         }
     },
@@ -843,58 +851,59 @@
         }
     },
     "PROJECTS": {
-        "TABLE": {
-            "HEADERS": {
-                "OPEN_CLOSE": "Aperto/Chiuso",
-                "ACCESSED": "Acceduto",
-                "HISTORY": "Storico",
-                "VALIDATION": "Validazione",
-                "REPO_LOCATION": "Posizione Repository",
-                "ACTIONS": "Azioni"
-            },
-            "CONFIG_MODAL": {
-                "TITLE": "Impostazioni della vista progetti",
-                "TOP_LEVEL_ELEMENT_OPT": {
-                    "LABEL": "Raggruppa per",
-                    "OPTIONS": {
-                        "DIRECTORIES": "Cartelle"
-                    }
-                },
-                "PROJECT_INFO_PANEL": {
-                    "TITLE": "Info progetto",
-                    "DESCRIPTION": "Da qui è possibile mostrare o nascondere le informazioni riguardanti i progetti e modificarne l'ordine",
-                    "HEADERS": {
-                        "COL_NAME": "Nome colonna",
-                        "SHOW": "Mostra"
-                    }
-                }
+        "ACCESSED": "Acceduto",
+        "BACKEND_TYPE": "Tipo Backend",
+        "BLACKLIST": "Lista nera",
+        "BLACKLIST_INFO": "Abilita questa opzione per mettere in lista nera i termini che sono stati respinti tramite la validazione",
+        "CREATE_PROJECT": "Crea progetto",
+        "DATA_REPO_ID": "ID repository dati",
+        "DATA_STORE": "Data Store",
+        "ENABLE_SHAPE_VALIDATION": "Abilita validazione shape",
+        "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
+        "HISTORY": "Storico",
+        "HISTORY_INFO": "Abilita questa opzione per tenere traccia delle modifiche effettuate sul grafo di lavoro",
+        "INFERENCE_DISCOURAGED_INFO": "E' raccomandabile non usare l'inferenza",
+        "LEFT_RIGHT": "Sinistro/Destro",
+        "LEFT_RIGHT_INFO": "A causa di limitazioni tecnologiche, i due dataset devo essere remoti",
+        "OPEN_CLOSE": "Aperto/Chiuso",
+        "OPTIONAL_SETTINGS": "Impostazioni opzionali",
+        "PROJECT_NAME": "Nome progetto",
+        "RENDERING_ENGINE": "Rendering Engine",
+        "REPO_ACCESS": "Accesso al repository",
+        "REPO_LOCATION": "Posizione repository",
+        "RESOURCE_METADATA": "Resource Metadata",
+        "SELECT_REMOTE_REPO": "Seleziona repository remoto",
+        "SHACLE_SHAPE_VALIDATION": "Validazione shape SHACL",
+        "SUPPORT_REPO_ID": "ID repository Storico/Validazione",
+        "TRANSITIVE_IMPORTS": "Import transitivi",
+        "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
+        "URI_GENERATOR": "URI Generator",
+        "USE_DEFAULT": "Usa settings di default",
+        "USE_RESOURCE_METADATA": "Usa Resource Metadata",
+        "USE_RESOURCE_METADATA_INFO": "L'utilizzo del Resource Metadata può essere abilitato anche dopo la creazione del progetto",
+        "VALIDATION": "Validazione",
+        "VALIDATION_INFO": "Abilita questa opzione per tenere traccia delle richieste di modifiche in modo da validarle in un secondo momento (accettarle o rifiutarle)",
+        "PRELOAD": {
+            "PRELOAD": "Precarica",
+            "DATA_PRELOADING": "Caricamento opzionale dati",
+            "DATA_LOADED_CORRECTLY": "Dati caricati correttamente",
+            "DATA_NOT_LOADED": "Dati non caricati",
+            "SELECTION_AUTO_DETERMINED": "Questa scelta è stata determinata automaticamente sulla base dei dati precaricati; modificala solo se sei consapevole di ciò che stai facendo",
+            "SELECTION_UNDETERMINED": "L'operazione di precaricamento non è stata in grado di determinare questa informazione. Inserirla manualmente",
+            "OPT": {
+                "NONE": "Nessun precaricamento",
+                "FROM_LOCAL_FILE": "Precarica da file locale",
+                "FROM_URI": "Precarica da URI",
+                "FROM_DATASET_CATALOG": "Precarica da Dataset Catalog"
             }
         },
-        "CREATE_FORM": {
-            "BACKEND_TYPE": "Tipo backend",
-            "BLACKLIST": "Lista nera",
-            "CREATE_PROJECT": "Crea progetto",
-            "DATA_PRELOADING": "Pre-caricamento opzionale di dati",
-            "DATA_REPO_ID": "ID Repository dati",
-            "DATA_STORE": "Data Store",
-            "ENABLE_SHAPE_VALIDATION": "Abilita validazione shape",
-            "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
-            "HISTORY": "Storico",
-            "LEFT_RIGHT": "Sinistro/Destro",
-            "OPTIONAL_SETTINGS": "Impostazioni opzionali",
-            "PRELOAD": "Precarica",
-            "PROJECT_NAME": "Nome progetto",
-            "RENDERING_ENGINE": "Rendering Engine",
-            "REPO_ACCESS": "Accesso al Repository",
-            "RESOURCE_METADATA": "Resource Metadata",
-            "SHACLE_SHAPE_VALIDATION": "Validazione SHACL Shape",
-            "SUPPORT_REPO_ID": "ID Repository Storico/Validazione",
-            "TRANSITIVE_IMPORTS": "Transitive imports",
-            "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
-            "URI_GENERATOR": "URI Generator",
-            "USE_DEFAULT": "Usa impostazioni predefinite",
-            "USE_RESOURCE_METADATA": "Usa Resource Metadata",
-            "VALIDATION": "Validazione"
+        "CONFIG": {
+            "PROJ_VIEW_SETTINGS": "Impostazione Project view",
+            "TOP_LEVEL_ELEMENTS": "Elementi top level",
+            "DIRECTORIES": "Cartelle",
+            "PROJ_INFO": "Info progetti",
+            "PROJ_INFO_INFO": "Da qui è possibile mostrare o nascondeere le informazioni dei progetti e personalizzarne l'ordine",
+            "COL_NAME": "Nome colonna"
         }
     },
     "RESOURCE_VIEW": {
@@ -1081,6 +1090,7 @@
         "ACTIONS": {
             "ACCEPT": "Accetta",
             "ACTION": "Azione",
+            "ACTIONS": "Azioni",
             "ADD": "Aggiungi",
             "ADD_AFTER": "Aggiungi dopo",
             "ADD_ALL": "Aggiungi tutto",
@@ -1115,6 +1125,7 @@
             "SAVE_CONFIGURATION": "Salva configurazione",
             "SEARCH": "Cerca",
             "SELECT": "Seleziona",
+            "SHOW": "Mostra",
             "START": "Inizia",
             "STORE": "Salva",
             "SUBMIT": "Invia",

@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ImportType, OntologyMirror, TransitiveImportMethodAllowance } from "../../models/Metadata";
+import { ImportType, OntologyMirror, TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
 import { RDFFormat } from "../../models/RDFFormat";
 import { ExportServices } from "../../services/exportServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
@@ -36,13 +36,7 @@ export class ImportOntologyModal {
     private mirrorList: OntologyMirror[]; //used for type "fromOntologyMirror"
     private selectedMirror: OntologyMirror; //used for type "fromOntologyMirror"
 
-    importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
-        { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
-        { allowance: TransitiveImportMethodAllowance.web, show: "Resolve from web" },
-        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "Resolve from web with fallback to Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirror, show: "Resolve from Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Resolve from Ontology Mirror with fallback to Web" }
-    ];
+    importAllowances: { allowance: TransitiveImportMethodAllowance, showTranslationKey: string }[] = TransitiveImportUtils.importAllowancesList;
     selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     constructor(public activeModal: NgbActiveModal, public ontoMgrService: OntoManagerServices, public exportService: ExportServices) {

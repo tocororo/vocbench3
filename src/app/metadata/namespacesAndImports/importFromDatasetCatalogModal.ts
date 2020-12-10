@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { DatasetCatalogModal, DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
-import { TransitiveImportMethodAllowance } from "../../models/Metadata";
+import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
 import { RDFFormat } from "../../models/RDFFormat";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
@@ -25,13 +25,7 @@ export class ImportFromDatasetCatalogModal {
     private formats: RDFFormat[];
     private rdfFormat: RDFFormat;
 
-    importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
-        { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
-        { allowance: TransitiveImportMethodAllowance.web, show: "Resolve from web" },
-        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "Resolve from web with fallback to Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirror, show: "Resolve from Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Resolve from Ontology Mirror with fallback to Web" }
-    ];
+    importAllowances: { allowance: TransitiveImportMethodAllowance, showTranslationKey: string }[] = TransitiveImportUtils.importAllowancesList;
     selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, public basicModals: BasicModalServices,

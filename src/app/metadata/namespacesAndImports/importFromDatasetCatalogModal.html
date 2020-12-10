@@ -59,10 +59,10 @@
                 </tr>
             </ng-container>
             <tr>
-                <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.TRANSITIVE_IMPORTS'|translate}}:</label></td>
+                <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.TRANSITIVE_IMPORTS'|translate}}:</label></td>
                 <td>
                     <select class="form-control" [(ngModel)]="selectedImportAllowance">
-                        <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
+                        <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.showTranslationKey|translate}}</option>
                     </select>                    
                 </td>
             </tr>

@@ -1,10 +1,10 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{'PROJECTS.TABLE.CONFIG_MODAL.TITLE'|translate}}</h3>
+    <h3 class="modal-title">{{'PROJECTS.CONFIG.PROJ_VIEW_SETTINGS'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
     <div class="hbox" style="align-items: center;">
-        <label style="white-space: nowrap; margin-right: 4px;">{{'PROJECTS.TABLE.CONFIG_MODAL.TOP_LEVEL_ELEMENT_OPT.LABEL'|translate}}:</label>
+        <label style="white-space: nowrap; margin-right: 4px;">{{'PROJECTS.CONFIG.TOP_LEVEL_ELEMENTS'|translate}}:</label>
         <select class="form-control" [(ngModel)]="selectedVisualizationMode">
             <option *ngFor="let m of visualizationModes" [ngValue]="m">{{m.translationKey|translate}}</option>
         </select>
@@ -12,7 +12,7 @@
 
     <div class="card card-default" style="margin-top: 6px;">
         <div class="card-header">
-            <label>{{'PROJECTS.TABLE.CONFIG_MODAL.PROJECT_INFO_PANEL.TITLE'|translate}}</label>
+            <label>{{'PROJECTS.CONFIG.PROJ_INFO'|translate}}</label>
             <label style="flex: 1"></label>
             <div class="btn-group btn-group-xs" style="margin-right: 4px;">
                 <button class="btn btn-light" (click)="moveUp()" [title]="'COMMONS.ACTIONS.MOVE_UP'|translate"
@@ -31,13 +31,13 @@
         <div class="card-body">
 
             <div class="alert alert-info" style="margin-bottom: 8px;">
-                {{'PROJECTS.TABLE.CONFIG_MODAL.PROJECT_INFO_PANEL.DESCRIPTION'|translate}}
+                {{'PROJECTS.CONFIG.PROJ_INFO_INFO'|translate}}
             </div>
             
             <table class="table table-hoverable table-sm table-borderless">
                 <thead>
-                    <th class="text-center">{{'PROJECTS.TABLE.CONFIG_MODAL.PROJECT_INFO_PANEL.HEADERS.COL_NAME'|translate}}</th>
-                    <th class="text-center">{{'PROJECTS.TABLE.CONFIG_MODAL.PROJECT_INFO_PANEL.HEADERS.SHOW'|translate}}</th>
+                    <th class="text-center">{{'PROJECTS.CONFIG.NAME'|translate}}</th>
+                    <th class="text-center">{{'COMMONS.ACTIONS.SHOW'|translate}}</th>
                 </thead>
                 <tbody>
                     <tr *ngFor="let c of columns" [ngClass]="{ 'table-primary': c == selectedColumn }" (click)="selectColumn(c)">

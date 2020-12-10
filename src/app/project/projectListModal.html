@@ -28,12 +28,12 @@
             <table *ngIf="visualizationMode == ProjectViewMode.list" class="table table-sm table-hoverable table-borderless">
                 <thead>
                     <tr>
-                        <th class="text-center">{{'PROJECTS.TABLE.HEADERS.NAME'|translate}}</th>
+                        <th class="text-center">{{'COMMONS.NAME'|translate}}</th>
                         <th class="text-center">{{'COMMONS.MODEL'|translate}}</th>
                         <th class="text-center">{{'COMMONS.LEXICALIZATION'|translate}}</th>
-                        <th class="text-center">{{'PROJECTS.TABLE.HEADERS.HISTORY'|translate}}</th>
-                        <th class="text-center">{{'PROJECTS.TABLE.HEADERS.VALIDATION'|translate}}</th>
-                        <th class="text-center">{{'PROJECTS.TABLE.HEADERS.REPO_LOCATION'|translate}}</th>
+                        <th class="text-center">{{'PROJECTS.HISTORY'|translate}}</th>
+                        <th class="text-center">{{'PROJECTS.VALIDATION'|translate}}</th>
+                        <th class="text-center">{{'PROJECTS.REPO_LOCATION'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,12 +58,12 @@
             <ng-container *ngIf="visualizationMode == ProjectViewMode.dir">
                 <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
                 <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
-                    <label class="text-center" style="flex: 3">{{'PROJECTS.TABLE.HEADERS.NAME'|translate}}</label>
+                    <label class="text-center" style="flex: 3">{{'COMMONS.NAME'|translate}}</label>
                     <label class="text-center" style="flex: 1">{{'COMMONS.MODEL'|translate}}</label>
                     <label class="text-center" style="flex: 1">{{'COMMONS.LEXICALIZATION'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'PROJECTS.TABLE.HEADERS.HISTORY'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'PROJECTS.TABLE.HEADERS.VALIDATION'|translate}}</label>
-                    <label class="text-center" style="flex: 2">{{'PROJECTS.TABLE.HEADERS.REPO_LOCATION'|translate}}</label>
+                    <label class="text-center" style="flex: 1">{{'PROJECTS.HISTORY'|translate}}</label>
+                    <label class="text-center" style="flex: 1">{{'PROJECTS.VALIDATION'|translate}}</label>
+                    <label class="text-center" style="flex: 2">{{'PROJECTS.REPO_LOCATION'|translate}}</label>
                 </div>
                 <ng-container *ngFor="let pd of projectDirs">
                     <div class="groupPanel">
