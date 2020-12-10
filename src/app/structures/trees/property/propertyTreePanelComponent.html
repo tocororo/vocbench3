@@ -47,18 +47,18 @@
                     <a class="dropdown-item" (click)="toggleMultiselection()">
                         <span style="flex: 1;">
                             <span class="far fa-check-square" style="margin-right: 4px;"></span>
-                            Multiselection
+                            {{'DATA.COMMONS.MULTISELECTION'|translate}}
                         </span>
                         <span *ngIf="multiselection" class="fas fa-check float-right"></span>
                     </a>
                     <a *ngIf="context=='dataPanel' && multiselection" class="dropdown-item" [ngClass]="{ disabled: checkedNodes.length == 0 }" (click)="enrichMultiSubject()">
                         <span class="far fa-check-square" style="margin-right: 4px; margin-left: 16px;"></span>
-                        Add a property value to selected values
+                        {{'DATA.COMMONS.ADD_PROP_VALUE_TO_SELECTION'|translate}}
                     </a>
                 </ng-container>
                 <a *ngIf="isOpenGraphEnabled(GraphModeEnum.dataOriented)" class="dropdown-item" (click)="openDataGraph()">
                     <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
-                    Show data-oriented graph
+                    {{'DATA.COMMONS.SHOW_DATA_GRAPH'|translate}}
                 </a>
             </div>
         </div>

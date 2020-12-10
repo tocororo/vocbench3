@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h3 class="modal-title">Class tree settings</h3>
+    <h3 class="modal-title">{{'DATA.CLASS.SETTINGS.CLASS_TREE_SETTINGS'|translate}}</h3>
 </div>
 <div class="modal-body vbox" style="min-height: 40vh;">
 
     <div class="hbox" style="align-items: center; flex: initial;">
         <label style="white-space: nowrap; margin-right: 4px;">
-            Root class:
+            {{'DATA.CLASS.SETTINGS.ROOT_CLASS'|translate}}:
         </label>
         <input-editable *ngIf="rootClass" [value]="rootClass.getURI()" (valueEdited)="updateRootClass($event)" style="flex: 1;"></input-editable>
         <button class="btn btn-light btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeClass()">
@@ -16,17 +16,17 @@
     <div class="card card-default vbox" style="margin-top: 8px;">
         <div class="card-header">
             <label>
-                SubClasses filter
-                <span class="fas fa-info-circle" title="Here you can create filters in order to hide subClasses of classes."></span>
+                {{'DATA.CLASS.SETTINGS.SUBCLASS_FILTER'|translate}}
+                <span class="fas fa-info-circle" [title]="'DATA.CLASS.SETTINGS.SUBCLASS_FILTER_INFO'|translate"></span>
             </label>
             <div style="flex: 1"></div>
-            <label>Enabled</label>
-            <input type="checkbox" style="margin-left: 6px;" [(ngModel)]="filterEnabled" title="Enable filter">
+            <label>{{'COMMONS.ENABLED'|translate}}</label>
+            <input type="checkbox" style="margin-left: 6px;" [(ngModel)]="filterEnabled">
         </div>
         <div class="card-body hbox">
             <div class="card card-alt vbox">
                 <div class="card-header">
-                    <label style="flex: 1">Classes</label>
+                    <label style="flex: 1">{{'DATA.CLASS.CLASSES'|translate}}</label>
                     <div class="btn-toolbar">
                         <button class="btn btn-light btn-xs" title="Rendering" (click)="renderingClasses = !renderingClasses"
                             [ngClass]="{active: renderingClasses}">
@@ -52,10 +52,9 @@
 
             <div class="card card-alt vbox" style="margin-left: 4px;">
                 <div class="card-header">
-                    <label style="flex: 1">Filtered subClasses</label>
+                    <label style="flex: 1">{{'DATA.CLASS.SETTINGS.FILTERED_SUBCLASSES'|translate}}</label>
                     <div class="btn-toolbar">
-                        <button class="btn btn-light btn-xs" title="Rendering" (click)="renderingFilter = !renderingFilter"
-                            [ngClass]="{active: renderingFilter}">
+                        <button class="btn btn-light btn-xs" title="Rendering" (click)="renderingFilter = !renderingFilter" [ngClass]="{active: renderingFilter}">
                             <span class="fas fa-font"></span>
                         </button>
                         <div class="btn-group btn-group-xs">
@@ -82,7 +81,7 @@
     <div class="mt-2">
         <div class="form-check">
             <input class="form-check-input" id="instanceCheck" type="checkbox" [(ngModel)]="showInstNumb">
-            <label class="form-check-label" for="instanceCheck">Show instances number</label>
+            <label class="form-check-label" for="instanceCheck">{{'DATA.CLASS.SETTINGS.SHOW_INSTANCES_NUMBER'|translate}}</label>
         </div>
     </div>
 

@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">Export as RDF</h3>
+    <h3 class="modal-title text-info">{{'SPARQL.EXPORT.EXPORT_AS_RDF'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
     
@@ -9,14 +9,14 @@
 
     <div class="form-check my-2 mx-1">
         <input class="form-check-input" id="filterCheck" type="checkbox" [(ngModel)]="applyFilter">
-        <label class="form-check-label" for="filterCheck">Apply export filters</label>
+        <label class="form-check-label" for="filterCheck">{{'SPARQL.EXPORT.APPLY_EXPORT_FILTERS'|translate}}</label>
     </div>
 
     <div *ngIf="applyFilter" class="card card-alt vbox">
         <div class="card-header">
-            <label style="flex: 1">Export transformations:</label>
-            <div class="btn-group btn-group-xs" role="group">
-                <button class="btn btn-light" title="Add filter" (click)="appendFilter()">
+            <label style="flex: 1">{{'SPARQL.EXPORT.EXPORT_TRANSFORMATIONS'|translate}}:</label>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.ADD'|translate" (click)="appendFilter()">
                     <span class="fas fa-plus"></span>
                 </button>
                 <button class="btn btn-light" [title]="'COMMONS.ACTIONS.REMOVE'|translate" (click)="removeFilter()"
@@ -34,9 +34,8 @@
             </div>
         </div>
         <div class="card-body scrollableContainer" style="min-height: 60px;">
-            <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 5px;">
-                Here it is possible to create and configure a sequence of transformations to be applied during the export process.
-                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+            <div class="alert alert-info mb-2">
+                {{'SPARQL.EXPORT.TRANSFORMATION_INFO'|translate}}
             </div>
             <table class="table table-sm table-hoverable">
                 <colgroup>
@@ -56,7 +55,7 @@
                         </td>
                         <td class="text-center" style="font-size: 14px; font-weight: 700;">
                             <span *ngIf="requireConfiguration(filterChainEl)" class="fas fa-exclamation-triangle"
-                                title="This filter needs to be configured"></span>
+                                [title]="'SPARQL.EXPORT.UNCONFIGURED_FILTER'|translate"></span>
                         </td>
                     </tr>
                 </tbody>

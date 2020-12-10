@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../../models/ARTResources";
-import { ConceptTreePreference, ConceptTreeVisualizationMode, MultischemeMode, Properties } from "../../../models/Properties";
+import { ConceptTreePreference, ConceptTreeVisualizationMode, MultischemeMode, Properties, VisualizationModeTranslation } from "../../../models/Properties";
 import { UsersGroup } from "../../../models/User";
 import { SKOS } from "../../../models/Vocabulary";
 import { PreferencesSettingsServices } from "../../../services/preferencesSettingsServices";
@@ -20,9 +20,9 @@ export class ConceptTreeSettingsModal {
     private pristineConcPref: ConceptTreePreference;
 
     visualization: ConceptTreeVisualizationMode;
-    visualizationModes: { label: string, value: ConceptTreeVisualizationMode }[] = [
-        { label: "Hierarchy based", value: ConceptTreeVisualizationMode.hierarchyBased },
-        { label: "Search based", value: ConceptTreeVisualizationMode.searchBased }
+    visualizationModes: { value: ConceptTreeVisualizationMode, labelTranslationKey: string }[] = [
+        { value: ConceptTreeVisualizationMode.hierarchyBased, labelTranslationKey: VisualizationModeTranslation.translationMap[ConceptTreeVisualizationMode.hierarchyBased] },
+        { value: ConceptTreeVisualizationMode.searchBased, labelTranslationKey: VisualizationModeTranslation.translationMap[ConceptTreeVisualizationMode.searchBased] }
     ]
 
     private safeToGoLimit: number;

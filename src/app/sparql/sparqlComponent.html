@@ -5,7 +5,7 @@
         <li *ngFor="let t of tabs" class="nav-item" [ngClass]="{active : t.active}">
             <a href class="nav-link" (click)="selectTab(t)">
                 <span *ngIf="t.type=='query'" class="badge badge-primary" title="Query">Q</span>
-                <span *ngIf="t.type=='parameterization'" class="badge badge-info" title="Parameterized query">P</span>
+                <span *ngIf="t.type=='parameterization'" class="badge badge-info" [title]="'SPARQL.QUERY.PARAMETERIZED_QUERY'|translate">P</span>
                 <span>
                     {{t.name}}
                     <span *ngIf="!t.saved">*</span>

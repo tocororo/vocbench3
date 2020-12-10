@@ -242,3 +242,15 @@ export class SystemSettings {
     showFlags: boolean = true;
     homeContent: string;
 }
+
+export class VisualizationModeTranslation {
+    static translationMap: {[key: string]: string} = {
+        [ConceptTreeVisualizationMode.hierarchyBased]: "DATA.COMMONS.VISUALIZATION_MODE.HIERARCHY_BASED",
+        [ConceptTreeVisualizationMode.searchBased]: "DATA.COMMONS.VISUALIZATION_MODE.SEARCH_BASED",
+        [LexEntryVisualizationMode.indexBased]: "DATA.COMMONS.VISUALIZATION_MODE.INDEX_BASED",
+        [LexEntryVisualizationMode.searchBased]: "DATA.COMMONS.VISUALIZATION_MODE.SEARCH_BASED",
+        [InstanceListVisualizationMode.searchBased]: "DATA.COMMONS.VISUALIZATION_MODE.SEARCH_BASED",
+        [InstanceListVisualizationMode.standard]: "DATA.COMMONS.VISUALIZATION_MODE.STANDARD"
+    }
+    
+}

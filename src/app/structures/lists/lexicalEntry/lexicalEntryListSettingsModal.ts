@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { LexEntryVisualizationMode, LexicalEntryListPreference } from "../../../models/Properties";
+import { LexEntryVisualizationMode, LexicalEntryListPreference, VisualizationModeTranslation } from "../../../models/Properties";
 import { VBContext } from "../../../utils/VBContext";
 import { VBProperties } from "../../../utils/VBProperties";
 
@@ -13,9 +13,9 @@ export class LexicalEntryListSettingsModal {
     private pristineLexEntryPref: LexicalEntryListPreference;
 
     visualization: LexEntryVisualizationMode;
-    visualizationModes: { label: string, value: LexEntryVisualizationMode }[] = [
-        { label: "Index based", value: LexEntryVisualizationMode.indexBased },
-        { label: "Search based", value: LexEntryVisualizationMode.searchBased }
+    visualizationModes: { value: LexEntryVisualizationMode, labelTranslationKey: string }[] = [
+        { value: LexEntryVisualizationMode.indexBased, labelTranslationKey: VisualizationModeTranslation.translationMap[LexEntryVisualizationMode.indexBased] },
+        { value: LexEntryVisualizationMode.searchBased, labelTranslationKey: VisualizationModeTranslation.translationMap[LexEntryVisualizationMode.searchBased] }
     ]
 
     private safeToGoLimit: number;

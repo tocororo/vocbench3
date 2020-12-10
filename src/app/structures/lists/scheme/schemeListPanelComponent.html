@@ -12,14 +12,14 @@
         <div class="btn-toolbar" role="toolbar">
             <ng-container *ngIf="editable && context == 'dataPanel'">
                 <button class="btn btn-xs btn-light" style="font-size: 10px; font-weight: bold; width: 28px; height: 20px; padding: 1px 2px;" 
-                    (click)="switchMultischemeMode()" title="Toggles between OR and AND scheme-based filter of concepts in the concept tree">
+                    (click)="switchMultischemeMode()" [title]="'DATA.CONCEPT.SETTINGS.TOGGLE_OR_AND'|translate">
                     {{multischemeMode | uppercase}}
                 </button>
                 <div class="btn-group btn-group-xs" style="margin-right: 5px;">
                     <button class="btn btn-light" (click)="activateAllScheme()">
                         <span class="far fa-check-square" style="width: 16px;"></span>
                     </button>
-                    <button class="btn btn-light" title="Deselect all schemes" (click)="deactivateAllScheme()">
+                    <button class="btn btn-light" (click)="deactivateAllScheme()">
                         <span class="far fa-square" style="width: 16px;"></span>
                     </button>
                 </div>
@@ -43,22 +43,23 @@
                     <a class="dropdown-item" (click)="toggleMultiselection()">
                         <span style="flex: 1;">
                             <span class="far fa-check-square" style="margin-right: 4px;"></span>
-                            Multiselection
+                            {{'DATA.COMMONS.MULTISELECTION'|translate}}
                         </span>
                         <span *ngIf="multiselection" class="fas fa-check float-right"></span>
                     </a>
                     <a *ngIf="context=='dataPanel' && multiselection" class="dropdown-item" [ngClass]="{ disabled: checkedNodes.length == 0 }" (click)="enrichMultiSubject()">
                         <span class="far fa-check-square" style="margin-right: 4px; margin-left: 16px;"></span>
-                        Add a property value to selected values
+                        {{'DATA.COMMONS.ADD_PROP_VALUE_TO_SELECTION'|translate}}
                     </a>
                 </ng-container>
                 <a *ngIf="isAddAllConceptsEnabled()" class="dropdown-item" (click)="addAllConcepts()">
                     <span class="fas fa-share" style="margin-right: 4px; transform: rotate(90deg)"></span>
-                    Add all concepts to the selected scheme
+                    {{'DATA.CONCEPT.ADD_ALL_CONCEPTS'|translate}}
+                    
                 </a>
                 <a *ngIf="isOpenGraphEnabled(GraphModeEnum.dataOriented)" class="dropdown-item" (click)="openDataGraph()">
                     <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
-                    Show data-oriented graph
+                    {{'DATA.COMMONS.SHOW_DATA_GRAPH'|translate}}
                 </a>
             </div>
         </div>

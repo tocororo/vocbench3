@@ -3,10 +3,10 @@
         <label style="flex: 1">{{'SPARQL.PARAMETERIZATION.VARIABLE_BINDINGS'|translate}}</label>
         <div class="btn-toolbar" role="toolbar">
             <button class="btn btn-xs btn-light" [ngClass]="{ active: showDisplayName }" (click)="showDisplayName = !showDisplayName" 
-                [title]="'SPARQL.VARIABLE_BINDINGS_DISPLAY_NAME'|translate">
+                [title]="'SPARQL.SHOW_VARIABLE_BINDINGS_DISPLAY_NAME'|translate">
                 <span class="fas fa-eye"></span>
             </button>
-            <button *ngIf="configurable" class="btn btn-xs btn-light" (click)="editParameterization()" title="Edit parameterization">
+            <button *ngIf="configurable" class="btn btn-xs btn-light" (click)="editParameterization()" [title]="'COMMONS.ACTIONS.EDIT'|translate">
                 <span class="fas fa-pencil-alt"></span>
             </button>
         </div>

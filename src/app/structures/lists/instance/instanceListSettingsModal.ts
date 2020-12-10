@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { InstanceListPreference, InstanceListVisualizationMode } from "../../../models/Properties";
+import { InstanceListPreference, InstanceListVisualizationMode, VisualizationModeTranslation } from "../../../models/Properties";
 import { VBContext } from "../../../utils/VBContext";
 import { VBProperties } from "../../../utils/VBProperties";
 
@@ -13,9 +13,9 @@ export class InstanceListSettingsModal {
     private pristineInstancePref: InstanceListPreference;
 
     visualization: InstanceListVisualizationMode;
-    visualizationModes: { label: string, value: InstanceListVisualizationMode }[] = [
-        { label: "Standard", value: InstanceListVisualizationMode.standard },
-        { label: "Search based", value: InstanceListVisualizationMode.searchBased }
+    visualizationModes: { value: InstanceListVisualizationMode, labelTranslationKey: string }[] = [
+        { value: InstanceListVisualizationMode.standard, labelTranslationKey: VisualizationModeTranslation.translationMap[InstanceListVisualizationMode.standard] },
+        { value: InstanceListVisualizationMode.searchBased, labelTranslationKey: VisualizationModeTranslation.translationMap[InstanceListVisualizationMode.searchBased] }
     ]
 
     constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties) {}

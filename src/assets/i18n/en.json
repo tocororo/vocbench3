@@ -13,14 +13,6 @@
             "PROJ_GROUP": {
                 "PROJ_GROUP_SETTINGS": "Project-Group settings",
                 "PROJ_CLOSED_WARNING": "Project {{projName}} is closed. It is possible to edit group settings only for open projects.",
-                "BASE_BROADER_PROP": "Base broader property",
-                "BASE_BROADER_PROP_INFO": "Base broader property to be selected when creating narrower concepts",
-                "BROADER_NARROWER_MGMT": "Management of broader/narrower",
-                "BROADER_NARROWER_MGMT_INFO": "Customizes the properties on which the concept tree hierarchy is based on. If none of broader/narrower properties is selected, then skos:broader^ and skos:narrower will be used (in OR) to check narrower concepts. If any of the two is selected (with one or more properties), then only the selected properties will be used.",
-                "SYNC_INV_PROP": "Sync inverse properties",
-                "SYNC_INV_PROP_INFO": "Keep synced the broader/narrower properties with their inverse properties",
-                "INCLUDE_SUBPROP": "Include subProperties",
-                "INCLUDE_SUBPROP_INFO": "Includes the subProperties of the selected broader/narrower properties",
                 "SCHEME_AUTH": "ConceptScheme authorizations",
                 "SCHEME_AUTH_INFO": "Determines which ConceptScheme the group is authorized to work with.",
                 "OWL_PROJECT_WARNING": "Project {{projName}} adopts OWL model. Currently it is possible to edit group settings only for SKOS projects."
@@ -341,7 +333,18 @@
             "CLASSES": "Classes",
             "CREATE": "Create class",
             "CREATE_CHILD": "Create subClass",
-            "DELETE": "Delete class"
+            "DELETE": "Delete class",
+            "SHOW_CLASS_DIAGRAM": "Show class-diagram",
+            "SHOW_MODEL_GRAPH": "Show model-oriented graph",
+            "SHOW_MODEL_GRAPH_ROOTED": "Show model-oriented graph rooted on the selected node",
+            "SETTINGS": {
+                "CLASS_TREE_SETTINGS": "Class tree settings",
+                "ROOT_CLASS": "Root class",
+                "SUBCLASS_FILTER": "SubClass filter",
+                "SUBCLASS_FILTER_INFO": "Here you can create filters in order to hide subClasses of classes",
+                "FILTERED_SUBCLASSES": "Filtered subClasses",
+                "SHOW_INSTANCES_NUMBER": "Show instances number"
+            }
         },
         "COLLECTION": {
             "COLLECTION": "Collection",
@@ -355,7 +358,26 @@
             "CONCEPTS": "Concepts",
             "CREATE": "Create concept",
             "CREATE_CHILD": "Create narrower concept",
-            "DELETE": "Delete concept"
+            "DELETE": "Delete concept",
+            "ADD_SUBTREE_TO_SCHEME": "Add selected concept's subtree to scheme...",
+            "NO_SCHEME_SELECTED_WARN": "No ConceptScheme selected, creation operations are disabled",
+            "USE_SEARCH_MSG": "Please use the search field to retrieve concepts",
+            "SETTINGS": {
+                "CONCEPT_TREE_SETTINGS": "Concept tree settings",
+                "TOP_CONCEPTS_LIMIT": "Top concepts limitation",
+                "TOP_CONCEPTS_LIMIT_INFO": "Sets the maximum amount of top concepts visible in the tree. This setting prevents the initialization of a tree that might cause performance issues",
+                "MULTISCHEME_MODE": "Multi-scheme mode",
+                "TOGGLE_OR_AND": "Toggles between OR and AND scheme-based filter of concepts in the concept tree",
+                "BASE_BROADER_PROP": "Base broader property",
+                "BASE_BROADER_PROP_INFO": "Base broader property to be selected when creating narrower concepts",
+                "BROADER_NARROWER_MGMT": "Management of broader/narrower",
+                "BROADER_NARROWER_MGMT_INFO": "Customizes the properties on which the concept tree hierarchy is based on. If none of broader/narrower properties is selected, then skos:broader^ and skos:narrower will be used (in OR) to check narrower concepts. If any of the two is selected (with one or more properties), then only the selected properties will be used.",
+                "SYNC_INV_PROP": "Sync inverse properties",
+                "SYNC_INV_PROP_INFO": "Keep synced the broader/narrower properties with their inverse properties",
+                "INCLUDE_SUBPROP": "Include subProperties",
+                "INCLUDE_SUBPROP_INFO": "Includes the subProperties of the selected broader/narrower properties",
+                "APPLY_GROUP_SETTINGS": "Apply group settings"
+            }
         },
         "DATATYPE": {
             "DATATYPE": "Datatype",
@@ -367,7 +389,10 @@
             "INSTANCE": "Instance",
             "INSTANCES": "Instances",
             "CREATE": "Create instance",
-            "DELETE": "Delete instance"
+            "DELETE": "Delete instance",
+            "SETTINGS": {
+                "INSTANCE_LIST_SETTINGS": "Instance list settings"
+            }
         },
         "LEXICON": {
             "LEXICON": "Lexicon",
@@ -379,7 +404,15 @@
             "LEX_ENTRY": "Lex.Entry",
             "LEX_ENTRIES": "Lex.Entries",
             "CREATE": "Create lexical entry",
-            "DELETE": "Delete lexical entry"
+            "DELETE": "Delete lexical entry",
+            "NO_LEXICON_SELECTED_WARN": "No Lexicon selected, creation operations are disabled",
+            "USE_SEARCH_MSG": "Please use the search field to retrieve lexical entries",
+            "SETTINGS": {
+                "LEX_ENTRY_SETTINGS": "Lexical Entry list settings",
+                "LEX_ENTRIES_LIMIT": "Lexical entries limitation",
+                "LEX_ENTRIES_LIMIT_INFO": "Sets the maximum amount of lexical entries visible in the list. This setting prevents the initialization of a list that might cause performance issues",
+                "INDEX_LENGHT": "Index lenght"
+            }
         },
         "PROPERTY": {
             "PROPERTY": "Property",
@@ -392,10 +425,25 @@
             "SCHEME": "Scheme",
             "SCHEMES": "Schemes",
             "CREATE": "Create scheme ",
-            "DELETE": "Delete scheme"
+            "DELETE": "Delete scheme",
+            "ADD_ALL_CONCEPTS": "Add all concepts to the selected scheme"
         },
         "COMMONS": {
-            "DEPRECATE": "Deprecate"
+            "DEPRECATE": "Deprecate",
+            "MULTISELECTION": "Multiselection",
+            "ADD_PROP_VALUE_TO_SELECTION": "Add a property value to selected resources",
+            "SHOW_DATA_GRAPH": "Show data-oriented graph",
+            "VISUALIZATION_MODE": {
+                "MODE": "Visualization mode",
+                "STANDARD": "Standard",
+                "SEARCH_BASED": "Search based",
+                "INDEX_BASED": "Index based",
+                "HIERARCHY_BASED": "Hierarchy based"
+            }
+        },
+        "SETTINGS": {
+            "TREE_LIST_SETTINGS": "Tree/List settings",
+            "SHOW_DEPRECATED_RES": "Show deprecated resources in tree/list"
         }
     },
     "DATA_MANAGEMENT": {
@@ -1062,6 +1110,7 @@
             "FETCH_FROM_PREFIXCC": "Fetch prefix from prefix.cc",
             "LOAD_PARAMETERIZED_QUERY": "Load parameterized query",
             "LOAD_QUERY": "Load query",
+            "PARAMETERIZED_QUERY": "Parameterized query",
             "SAVE_PARAMETERIZED_QUERY": "Save parameterized query",
             "SAVE_QUERY": "Save query",
             "STORED_QUERY": "Stored query",
@@ -1076,9 +1125,21 @@
             "SAVE_RESULTS_AS": "Save results as"
         },
         "PARAMETERIZATION": {
+            "QUERY_PARAMETERIZATION": "Query parameterization",
+            "QUERY_PARAMETERS": "Query parameters",
+            "DISPLAY_NAME": "Display Name",
+            "BINDING_TYPE": "Binding Type",
             "SHOW_VARIABLE_BINDINGS_DISPLAY_NAME": "Show variable bindings display name",
             "USE_VARIABLE_BINDINGS": "Use variable bindings",
+            "VARIABLE_BINDING": "Variable binding",
             "VARIABLE_BINDINGS": "Variable bindings"
+        },
+        "EXPORT": {
+            "EXPORT_AS_RDF": "Export as RDF",
+            "APPLY_EXPORT_FILTERS": "Apply export filters",
+            "EXPORT_TRANSFORMATIONS": "Export transformations",
+            "TRANSFORMATION_INFO": "Here it is possible to create and configure a sequence of transformations to be applied during the export process.",
+            "UNCONFIGURED_FILTER": "This filter needs to be configured"
         }
     },
     "USER": {
@@ -1186,6 +1247,7 @@
         "DATASET": "Dataset",
         "DESCRIPTION": "Description",
         "DETAILS": "Details",
+        "ENABLED": "Enabled",
         "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
         "GROUPS": "Groups",

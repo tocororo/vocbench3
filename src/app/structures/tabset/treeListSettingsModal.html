@@ -1,12 +1,12 @@
 <div class="modal-header">
-    <h3 class="modal-title">Tree/List settings</h3>
+    <h3 class="modal-title">{{'DATA.SETTINGS.TREE_LIST_SETTINGS'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
     <div class="card card-default">
         <div class="card-body">
             <div class="form-check">
                 <input class="form-check-input" id="deprecatedCheck" type="checkbox" [(ngModel)]="showDeprecated" (ngModelChange)="onShowDeprecatedChange()">
-                <label class="form-check-label" for="deprecatedCheck">Show deprecated resources in tree/list</label>
+                <label class="form-check-label" for="deprecatedCheck">{{'DATA.SETTINGS.SHOW_DEPRECATED_RES'|translate}}</label>
             </div>
         </div>
     </div>

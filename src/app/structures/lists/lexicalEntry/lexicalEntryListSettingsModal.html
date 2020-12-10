@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Lexical Entry list settings</h3>
+    <h3 class="modal-title">{{'DATA.LEX_ENTRY.SETTINGS.LEX_ENTRY_SETTINGS'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
@@ -10,10 +10,10 @@
         </colgroup>
         <tbody>
             <tr>
-                <td nowrap><label>Visualization mode</label></td>
+                <td nowrap><label>{{'DATA.COMMONS.VISUALIZATION_MODE.MODE'|translate}}</label></td>
                 <td>
                     <select class="form-control form-control-sm" [(ngModel)]="visualization">
-                        <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.label}}</option>
+                        <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.labelTranslationKey|translate}}</option>
                     </select>
                 </td>
             </tr>
@@ -21,9 +21,8 @@
                 <tr>
                     <td nowrap>
                         <label>
-                            Lexical entries limitation
-                            <span class="fas fa-info-circle" 
-                                title="Sets the maximum amount of lexical entries visible in the list. This setting prevents the initialization of a list that might cause performance issues"></span>
+                            {{'DATA.LEX_ENTRY.SETTINGS.LEX_ENTRIES_LIMIT'|translate}}
+                            <span class="fas fa-info-circle ml-1" [title]="'DATA.LEX_ENTRY.SETTINGS.LEX_ENTRIES_LIMIT_INFO'|translate"></span>
                         </label>
                     </td>
                     <td>
@@ -32,7 +31,7 @@
                 </tr>
                 <tr>
                     <td nowrap>
-                        <label>Index length</label>
+                        <label>{{'DATA.LEX_ENTRY.SETTINGS.INDEX_LENGHT'|translate}}</label>
                     </td>
                     <td>
                         <select class="form-control form-control-sm" [(ngModel)]="indexLenght">

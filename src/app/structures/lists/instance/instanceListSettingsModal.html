@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Instance list settings</h3>
+    <h3 class="modal-title">{{'DATA.INSTANCE.SETTINGS.INSTANCE_LIST_SETTINGS'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
@@ -10,10 +10,10 @@
         </colgroup>
         <tbody>
             <tr>
-                <td nowrap><label>Visualization mode</label></td>
+                <td nowrap><label>{{'DATA.COMMONS.VISUALIZATION_MODE.MODE'|translate}}</label></td>
                 <td>
                     <select class="form-control form-control-sm" [(ngModel)]="visualization">
-                        <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.label}}</option>
+                        <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.labelTranslationKey|translate}}</option>
                     </select>
                 </td>
             </tr>

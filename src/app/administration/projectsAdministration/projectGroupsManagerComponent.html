@@ -24,9 +24,9 @@
             <ng-template #elseBlock>
                 <div class="vbox" *ngIf="isProjectSkosCompliant(); else owlBlock">
                     <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
-                        <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PROJ_GROUP.BASE_BROADER_PROP_INFO'|translate"></span>
+                        <span class="fas fa-info-circle" [title]="'DATA.CONCEPT.SETTINGS.BASE_BROADER_PROP_INFO'|translate"></span>
                         <label style="white-space: nowrap; margin: 0px 4px;">
-                            {{'ADMINISTRATION.PROJECTS.PROJ_GROUP.BASE_BROADER_PROP'|translate}}:
+                            {{'DATA.CONCEPT.SETTINGS.BASE_BROADER_PROP'|translate}}:
                         </label>
                         <div class="input-group" style="flex: 1;">
                             <input type="text" class="form-control" [ngModel]="baseBroaderProp" readonly>
@@ -41,8 +41,8 @@
                     <div class="card card-default vbox">
                         <div class="card-header">
                             <label>
-                                {{'ADMINISTRATION.PROJECTS.PROJ_GROUP.BROADER_NARROWER_MGMT'|translate}}
-                                <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PROJ_GROUP.BROADER_NARROWER_MGMT_INFO'|translate">
+                                {{'DATA.CONCEPT.SETTINGS.BROADER_NARROWER_MGMT'|translate}}
+                                <span class="fas fa-info-circle ml-1" [title]="'DATA.CONCEPT.SETTINGS.BROADER_NARROWER_MGMT_INFO'|translate">
                                 </span>
                             </label>
                         </div>
@@ -90,13 +90,13 @@
                             <div class="mt-2">
                                 <div class="form-check">
                                     <input class="form-check-input" id="syncInvCheck" type="checkbox" [(ngModel)]="syncInverse" (ngModelChange)="onSyncChange()">
-                                    <label class="form-check-label" for="syncInvCheck">{{'ADMINISTRATION.PROJECTS.PROJ_GROUP.SYNC_INV_PROP'|translate}}</label>
-                                    <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.PROJECTS.PROJ_GROUP.SYNC_INV_PROP_INFO'|translate"></span>
+                                    <label class="form-check-label" for="syncInvCheck">{{'DATA.CONCEPT.SETTINGS.SYNC_INV_PROP'|translate}}</label>
+                                    <span class="fas fa-info-circle ml-2" [title]="'DATA.CONCEPT.SETTINGS.SYNC_INV_PROP_INFO'|translate"></span>
                                 </div>
                                 <div class="form-check mt-1">
                                     <input class="form-check-input" id="includeSubCheck" type="checkbox" [(ngModel)]="includeSubProps" (ngModelChange)="onIncludeSubPropsChange()">
-                                    <label class="form-check-label" for="includeSubCheck">{{'ADMINISTRATION.PROJECTS.PROJ_GROUP.INCLUDE_SUBPROP'|translate}}</label>
-                                    <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.PROJECTS.PROJ_GROUP.INCLUDE_SUBPROP_INFO'|translate"></span>
+                                    <label class="form-check-label" for="includeSubCheck">{{'DATA.CONCEPT.SETTINGS.INCLUDE_SUBPROP'|translate}}</label>
+                                    <span class="fas fa-info-circle ml-2" [title]="'DATA.CONCEPT.SETTINGS.INCLUDE_SUBPROP_INFO'|translate"></span>
                                 </div>
                             </div>
                         </div>

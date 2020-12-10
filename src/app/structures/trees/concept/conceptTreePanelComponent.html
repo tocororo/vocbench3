@@ -11,7 +11,7 @@
         </div>
         <div *ngIf="editable" style="margin: 0px 5px;">
             <img *ngIf="isNoSchemeMode()" src="./assets/images/icons/warning.png"
-                title="No ConceptScheme selected, creation operation are disabled">
+                [title]="'DATA.CONCEPT.NO_SCHEME_SELECTED_WARN'|translate">
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">
@@ -39,23 +39,23 @@
                     <a class="dropdown-item" (click)="toggleMultiselection()">
                         <span style="flex: 1;">
                             <span class="far fa-check-square" style="margin-right: 4px;"></span>
-                            Multiselection
+                            {{'DATA.COMMONS.MULTISELECTION'|translate}}
                         </span>
                         <span *ngIf="multiselection" class="fas fa-check float-right"></span>
                     </a>
                     <a *ngIf="context=='dataPanel' && multiselection" class="dropdown-item"
                         [ngClass]="{ disabled: checkedNodes.length == 0 }" (click)="enrichMultiSubject()">
                         <span class="far fa-check-square" style="margin-right: 4px; margin-left: 16px;"></span>
-                        Add a property value to selected values
+                        {{'DATA.COMMONS.ADD_PROP_VALUE_TO_SELECTION'|translate}}
                     </a>
                 </ng-container>
                 <a *ngIf="isAddToSchemeEnabled()" class="dropdown-item" (click)="addToScheme()">
                     <span class="fas fa-share" style="margin-right: 4px;"></span>
-                    Add selected concept's subtree to scheme...
+                    {{'DATA.CONCEPT.ADD_SUBTREE_TO_SCHEME'|translate}}
                 </a>
                 <a *ngIf="isOpenGraphEnabled(GraphModeEnum.dataOriented)" class="dropdown-item" (click)="openDataGraph()">
                     <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
-                    Show data-oriented graph
+                    {{'DATA.COMMONS.SHOW_DATA_GRAPH'|translate}}
                 </a>
             </div>
         </div>
@@ -65,7 +65,7 @@
     <div class="card-body vbox">
 
         <div *ngIf="schemeChangeable" style="padding-bottom: 3px; display: flex; align-items: center">
-            <span style="white-space: nowrap; margin: 0px 3px;">Concept Scheme:</span>
+            <span style="white-space: nowrap; margin: 0px 3px;">{{'DATA.SCHEME.SCHEME'|translate}}:</span>
             <select class="form-control form-control-sm " [(ngModel)]="selectedSchemeUri"
                 (ngModelChange)="onSchemeSelectionChange()">
                 <option value="---">no-scheme</option>
@@ -75,7 +75,7 @@
 
         <div *ngIf="visualizationMode == 'searchBased' && !lastSearch" class="alert alert-warning"
             style="margin-bottom: 4px;">
-            Please use the search field to retrieve concepts
+            {{'DATA.CONCEPT.USE_SEARCH_MSG'}}
         </div>
 
         <concept-tree [projectCtx]="projectCtx" [schemes]="workingSchemes" [rendering]="rendering"

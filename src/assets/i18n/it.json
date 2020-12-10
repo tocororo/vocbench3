@@ -13,14 +13,6 @@
             "PROJ_GROUP": {
                 "PROJ_GROUP_SETTINGS": "Impostazioni progetto-gruppo",
                 "PROJ_CLOSED_WARNING": "Il progetto {{projName}} è chiuso. E' possibile modificare le impostazioni di un gruppo solo per progetti aperti.",
-                "BASE_BROADER_PROP": "Proprietà broader predefinita",
-                "BASE_BROADER_PROP_INFO": "Proprietà broader usata nella creazione di concetti narrower",
-                "BROADER_NARROWER_MGMT": "Gestione broader/narrower",
-                "BROADER_NARROWER_MGMT_INFO": "Personalizza le proprietà su cui è costruita la gerarchia dei concetti. Se nessuna proprietà broader/narrower è selezionata, allora skos:broader^ e skos:narrower saranno usate (in OR) per ottenere i concetti narrower. Se una delle due è selezionata (con una o più proprietà), saranno usate solo le proprietà indicate.",
-                "SYNC_INV_PROP": "Sincronizza proprietà inverse",
-                "SYNC_INV_PROP_INFO": "Mantiene sincronizzate le proprietà broader/narrower con le relative inverse",
-                "INCLUDE_SUBPROP": "Includi sotto-proprietà",
-                "INCLUDE_SUBPROP_INFO": "Include le sotto-proprietà delle proprietà broader/narrower selezionate",
                 "SCHEME_AUTH": "Autorizzazioni ConceptScheme",
                 "SCHEME_AUTH_INFO": "Determina su quale ConceptScheme è autorizzato a lavorare il gruppo",
                 "OWL_PROJECT_WARNING": "Il progetto {{projName}} adotta il modello OWL. Attualmente è possibile modificare le impostazioni di un gruppo solo per progetti SKOS."
@@ -341,7 +333,18 @@
             "CLASSES": "Classi",
             "CREATE": "Crea classe",
             "CREATE_CHILD": "Crea sotto classe",
-            "DELETE": "Cancella classe"
+            "DELETE": "Cancella classe",
+            "SHOW_CLASS_DIAGRAM": "Mostra class-diagram",
+            "SHOW_MODEL_GRAPH": "Mostra grafo model-oriented",
+            "SHOW_MODEL_GRAPH_ROOTED": "Mostra grafo model-oriented centrato sul nodo selezionato",
+            "SETTINGS": {
+                "CLASS_TREE_SETTINGS": "Impostazioni albero delle classi",
+                "ROOT_CLASS": "Classe root",
+                "SUBCLASS_FILTER": "Filtro sottoclassi",
+                "SUBCLASS_FILTER_INFO": "Da qui è possibile crare filtri in modo da nascondere le sottoclassi di classi",
+                "FILTERED_SUBCLASSES": "Sottoclassi filtrate",
+                "SHOW_INSTANCES_NUMBER": "Mostra numero istanze"
+            }
         },
         "COLLECTION": {
             "COLLECTION": "Collezione",
@@ -355,7 +358,26 @@
             "CONCEPTS": "Concetti",
             "CREATE": "Crea concetto",
             "CREATE_CHILD": "Crea concetto narrower",
-            "DELETE": "Cancella concetto"
+            "DELETE": "Cancella concetto",
+            "ADD_SUBTREE_TO_SCHEME": "Aggiungi il sottoalbero del concetto selezionato allo schema...",
+            "NO_SCHEME_SELECTED_WARN": "Nessun ConceptScheme selezionato, le operazioni di creazione sono disabilitate",
+            "USE_SEARCH_MSG": "Usa il campo di ricerca per recuperare concetti",
+            "SETTINGS": {
+                "CONCEPT_TREE_SETTINGS": "Impostazioni albero dei concetti",
+                "TOP_CONCEPTS_LIMIT": "Limite top concept",
+                "TOP_CONCEPTS_LIMIT_INFO": "Imposta la quantità massima di top concept visibili nell'albero. Questo setting evita che venga inizializzato un albero che potrebbe causare problemi di performance",
+                "MULTISCHEME_MODE": "Modalità multi-scheme",
+                "TOGGLE_OR_AND": "Alterna tra OR e AND il filtro basato sugli schemi per la costruzione dell'albero dei concetti",
+                "BASE_BROADER_PROP": "Proprietà broader predefinita",
+                "BASE_BROADER_PROP_INFO": "Proprietà broader usata nella creazione di concetti narrower",
+                "BROADER_NARROWER_MGMT": "Gestione broader/narrower",
+                "BROADER_NARROWER_MGMT_INFO": "Personalizza le proprietà su cui è costruita la gerarchia dei concetti. Se nessuna proprietà broader/narrower è selezionata, allora skos:broader^ e skos:narrower saranno usate (in OR) per ottenere i concetti narrower. Se una delle due è selezionata (con una o più proprietà), saranno usate solo le proprietà indicate.",
+                "SYNC_INV_PROP": "Sincronizza proprietà inverse",
+                "SYNC_INV_PROP_INFO": "Mantiene sincronizzate le proprietà broader/narrower con le relative inverse",
+                "INCLUDE_SUBPROP": "Includi sotto-proprietà",
+                "INCLUDE_SUBPROP_INFO": "Include le sotto-proprietà delle proprietà broader/narrower selezionate",
+                "APPLY_GROUP_SETTINGS": "Applica impostazioni gruppo"
+            }
         },
         "DATATYPE": {
             "DATATYPE": "Datatype",
@@ -367,7 +389,10 @@
             "INSTANCE": "Istanza",
             "INSTANCES": "Istanze",
             "CREATE": "Create instance",
-            "DELETE": "Delete instance"
+            "DELETE": "Delete instance",
+            "SETTINGS": {
+                "INSTANCE_LIST_SETTINGS": "Impostazione lista istanze"
+            }
         },
         "LEXICON": {
             "LEXICON": "Lessico",
@@ -379,7 +404,15 @@
             "LEX_ENTRY": "Lex.Entry",
             "LEX_ENTRIES": "Lex.Entries",
             "CREATE": "Crea lexical entry",
-            "DELETE": "Cancella lexical entry"
+            "DELETE": "Cancella lexical entry",
+            "NO_LEXICON_SELECTED_WARN": "Nessun lessico selezionato, le operazioni di creazione sono disabilitate",
+            "USE_SEARCH_MSG": "Usa il campo di ricerca per recuperare le lexical entry",
+            "SETTINGS": {
+                "LEX_ENTRY_SETTINGS": "Impostazioni lista lexical entry",
+                "LEX_ENTRIES_LIMIT": "Limite lexical entry",
+                "LEX_ENTRIES_LIMIT_INFO": "Imposta la quantità massima di lexical entry visibili nella lista. Questo setting evita che venga inizializzata una lista che potrebbe causare problemi di performance",
+                "INDEX_LENGHT": "Lunghezza indice"
+            }
         },
         "PROPERTY": {
             "PROPERTY": "Proprietà",
@@ -395,7 +428,21 @@
             "DELETE": "Cancella schema"
         },
         "COMMONS": {
-            "DEPRECATE": "Depreca"
+            "DEPRECATE": "Depreca",
+            "MULTISELECTION": "Multiselezione",
+            "ADD_PROP_VALUE_TO_SELECTION": "Aggiungi una coppia proprietà-valore alle risorse selezionate",
+            "SHOW_DATA_GRAPH": "Mostra grafo data-oriented",
+            "VISUALIZATION_MODE": {
+                "MODE": "Modalità di visualizzazione",
+                "STANDARD": "Standard",
+                "SEARCH_BASED": "Basata su ricerca",
+                "INDEX_BASED": "Basata su indice",
+                "HIERARCHY_BASED": "Gerarchica"
+            }
+        },
+        "SETTINGS": {
+            "TREE_LIST_SETTINGS": "Impostazioni alberi/liste",
+            "SHOW_DEPRECATED_RES": "Mostra le risorse deprecate negli alberi/liste"
         }
     },
     "DATA_MANAGEMENT": {
@@ -1062,6 +1109,7 @@
             "FETCH_FROM_PREFIXCC": "Recupera prefissi da prefix.cc",
             "LOAD_PARAMETERIZED_QUERY": "Carica query parametrizzata",
             "LOAD_QUERY": "Carica query",
+            "PARAMETERIZED_QUERY": "Query parametrizzata",
             "SAVE_PARAMETERIZED_QUERY": "Salva query parametrizzata",
             "SAVE_QUERY": "Salva query",
             "STORED_QUERY": "Query memorizzata",
@@ -1076,9 +1124,21 @@
             "SAVE_RESULTS_AS": "Salva risultati come"
         },
         "PARAMETERIZATION": {
+            "QUERY_PARAMETERIZATION": "Parametrizzazione query",
+            "QUERY_PARAMETERS": "Parametri query",
+            "DISPLAY_NAME": "Display Name",
+            "BINDING_TYPE": "Tipo di binding",
             "SHOW_VARIABLE_BINDINGS_DISPLAY_NAME": "Mostra il diplay name del binding delle variabili",
             "USE_VARIABLE_BINDINGS": "Usa binding delle variabili",
-            "VARIABLE_BINDINGS": "Binding delle variabili"
+            "VARIABLE_BINDING": "Binding variabile",
+            "VARIABLE_BINDINGS": "Binding variabili"
+        },
+        "EXPORT": {
+            "EXPORT_AS_RDF": "Esporta come RDF",
+            "APPLY_EXPORT_FILTERS": "Applica filtri di export",
+            "EXPORT_TRANSFORMATIONS": "Trasformazioni di export",
+            "TRANSFORMATION_INFO": "Qui è possibile creare e configurare una sequenza di trasformazioni da applicare durante il processo di export",
+            "UNCONFIGURED_FILTER": "Questo filtro deve essere configurato"
         }
     },
     "USER": {

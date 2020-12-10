@@ -4,9 +4,9 @@
 <div class="modal-body vbox">
 
     <div class="hbox" style="align-items: center; flex: initial">
-        <label style="margin-right: 4px; white-space: nowrap;">Visualization mode:</label>
+        <label style="margin-right: 4px; white-space: nowrap;">{{'DATA.COMMONS.VISUALIZATION_MODE.MODE'|translate}}:</label>
         <select class="form-control" [(ngModel)]="visualization">
-            <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.label}}</option>
+            <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.labelTranslationKey|translate}}</option>
         </select>
     </div>
 
@@ -14,20 +14,18 @@
         <div class="card-body vbox">
 
             <div class="form-group row">
-                <label class="col-form-label col-sm-4">
-                    Top concepts limitation
-                    <span class="fas fa-info-circle" 
-                        title="Sets the maximum amount of top concepts visible in the tree. This setting prevents the initialization of a tree that might cause performance issues"></span>
+                <label class="col-form-label col-sm-4 text-nowrap">
+                    {{'DATA.CONCEPT.SETTINGS.TOP_CONCEPTS_LIMIT'|translate}}
+                    <span class="fas fa-info-circle ml-1" [title]="'DATA.CONCEPT.SETTINGS.TOP_CONCEPTS_LIMIT_INFO'|translate"></span>
                 </label>
                 <div class="col-sm-8">
                     <input class="form-control" type="number" min="1" [(ngModel)]="safeToGoLimit">
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-form-label col-sm-4">
-                    Multi-scheme mode
-                    <span class="fas fa-info-circle" 
-                        title="Toggles between OR and AND scheme-based filter of concepts in the concept tree"></span>
+                <label class="col-form-label col-sm-4 text-nowrap">
+                    {{'DATA.CONCEPT.SETTINGS.MULTISCHEME_MODE'|translate}}
+                    <span class="fas fa-info-circle ml-1" [title]="'DATA.CONCEPT.SETTINGS.TOGGLE_OR_AND'|translate"></span>
                 </label>
                 <div class="col-sm-8">
                     <select class="form-control" [(ngModel)]="selectedMultischemeMode">
@@ -36,15 +34,15 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-form-label col-sm-4">
-                    Base broader property
-                    <span class="fas fa-info-circle" title="Base broader property to be selected when creating narrower concepts"></span>
+                <label class="col-form-label col-sm-4 text-nowrap">
+                    {{'DATA.CONCEPT.SETTINGS.BASE_BROADER_PROP'|translate}}
+                    <span class="fas fa-info-circle ml-1" [title]="'DATA.CONCEPT.SETTINGS.BASE_BROADER_PROP_INFO'|translate"></span>
                 </label>
                 <div class="col-sm-8">
                     <div class="input-group">
                         <input type="text" class="form-control" [ngModel]="baseBroaderProp" readonly>
                         <div class="input-group-append">
-                            <button class="btn btn-light" (click)="changeBaseBroaderProperty()">
+                            <button class="btn btn-light py-0" (click)="changeBaseBroaderProperty()">
                                 <img src="./assets/images/icons/res/propObject.png"/>
                             </button>
                         </div>
@@ -54,21 +52,19 @@
 
             <div class="card card-default vbox" style="margin-top: 6px;">
                 <div class="card-header">
-                    <label>Management of broader/narrower</label>
+                    <label>{{'DATA.CONCEPT.SETTINGS.BROADER_NARROWER_MGMT'|translate}}</label>
                 </div>
                 <div class="card-body vbox">
 
-                    <div class="alert alert-info" style="margin-bottom: 4px;">
-                        Here it is possible to customize the properties on which the concept tree hierarchy is based on.<br>
-                        If none of broader/narrower properties is selected, then skos:broader^ and skos:narrower will be used (in OR) to check narrower concepts.
-                        If any of the two is selected (with one or more properties), then only the selected properties will be used.
+                    <div class="alert alert-info mb-2">
+                        {{'DATA.CONCEPT.SETTINGS.BROADER_NARROWER_MGMT_INFO'|translate}}
                     </div>
 
                     <div class="hbox">
                         <div class="card card-alt vbox">
                             <div class="card-header">
                                 <label style="flex:1">Broader</label>
-                                <div class="btn-toolbar" role="toolbar">
+                                <div class="btn-toolbar">
                                     <div class="btn-group btn-group-xs">
                                         <button class="btn btn-light" (click)="addBroader()">
                                             <span class="fas fa-plus"></span>
@@ -87,7 +83,7 @@
                         <div class="card card-alt vbox" style="margin-left: 4px;">
                             <div class="card-header">
                                 <label style="flex:1">Narrower</label>
-                                <div class="btn-toolbar" role="toolbar">
+                                <div class="btn-toolbar">
                                     <div class="btn-group btn-group-xs">
                                         <button class="btn btn-light" (click)="addNarrower()">
                                             <span class="fas fa-plus"></span>
@@ -108,17 +104,16 @@
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" id="inverseCheck" type="checkbox" [(ngModel)]="syncInverse" (ngModelChange)="onSyncChange()">
                             <label class="form-check-label" for="inverseCheck">
-                                Sync inverse properties
-                                <span class="fas fa-info-circle ml-1" title="Keep synced the broader/narrower properties with their inverse properties">
+                                {{'DATA.CONCEPT.SETTINGS.SYNC_INV_PROP'|translate}}
+                                <span class="fas fa-info-circle ml-1" [title]="'DATA.CONCEPT.SETTINGS.SYNC_INV_PROP_INFO'|translate">
                                 </span>
                             </label>
                         </div>
                         <div class="form-check form-check-inline ml-3">
                             <input class="form-check-input" id="subCheck" type="checkbox" [(ngModel)]="includeSubProps">
                             <label class="form-check-label" for="subCheck">
-                                Include subProperties
-                                <span class="fas fa-info-circle ml-1"
-                                    title="Includes the subProperties of the selected broader/narrower properties">
+                                {{'DATA.CONCEPT.SETTINGS.INCLUDE_SUBPROP'|translate}}
+                                <span class="fas fa-info-circle ml-1" [title]="'DATA.CONCEPT.SETTINGS.INCLUDE_SUBPROP_INFO'|translate">
                                 </span>
                             </label>
                         </div>
@@ -130,7 +125,7 @@
 
         <div *ngIf="userGroup" class="card-footer" style="margin-top: 6px;">
             <button class="btn btn-xs btn-light float-right" (click)="applyGroupSettings()">
-                Apply group settings
+                {{'DATA.CONCEPT.SETTINGS.APPLY_GROUP_SETTINGS'|translate}}
                 <span class="fas fa-info-circle" [title]="'Group: ' + userGroup.shortName"></span>
             </button>
         </div>

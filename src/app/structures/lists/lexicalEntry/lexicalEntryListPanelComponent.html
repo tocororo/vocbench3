@@ -10,7 +10,7 @@
         </div>
         <div *ngIf="editable" style="margin: 0px 5px;">
             <img *ngIf="!workingLexicon" src="./assets/images/icons/warning.png"
-                title="No Lexicon selected, creation operation are disabled">
+                [title]="'DATA.LEX_ENTRY.NO_LEXICON_SELECTED_WARN'|translate">
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">
@@ -34,18 +34,18 @@
                     <a class="dropdown-item" (click)="toggleMultiselection()">
                         <span style="flex: 1;">
                             <span class="far fa-check-square" style="margin-right: 4px;"></span>
-                            Multiselection
+                            {{'DATA.COMMONS.MULTISELECTION'|translate}}
                         </span>
                         <span *ngIf="multiselection" class="fas fa-check float-right"></span>
                     </a>
                     <a *ngIf="context=='dataPanel' && multiselection" class="dropdown-item" [ngClass]="{ disabled: checkedNodes.length == 0 }" (click)="enrichMultiSubject()">
                         <span class="far fa-check-square" style="margin-right: 4px; margin-left: 16px;"></span>
-                        Add a property value to selected values
+                        {{'DATA.COMMONS.ADD_PROP_VALUE_TO_SELECTION'|translate}}
                     </a>
                 </ng-container>
                 <a *ngIf="isOpenGraphEnabled(GraphModeEnum.dataOriented)" class="dropdown-item" (click)="openDataGraph()">
                     <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
-                    Show data-oriented graph
+                    {{'DATA.COMMONS.SHOW_DATA_GRAPH'|translate}}
                 </a>
             </div>
         </div>
@@ -75,7 +75,7 @@
         </div>
 
         <div *ngIf="visualizationMode == 'searchBased' && !lastSearch" class="alert alert-warning" style="margin-bottom: 4px;">
-            Please use the search field to retrieve lexical entries
+            {{'DATA.LEX_ENTRY.USE_SEARCH_MSG'}}
         </div>
 
         <lexical-entry-list [lexicon]="workingLexicon" [index]="index" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
