@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Create task</h3>
+    <h3 class="modal-title">{{'SKOS_DIFF.CREATE_TASK'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
@@ -14,15 +14,15 @@
         <div class="card-body">
             <div class="hbox">
                 <div class="vbox">
-                    <label class="text-center mb-2 p-2">Left dataset</label>
+                    <label class="text-center mb-2 p-2">{{'SKOS_DIFF.LEFT_DATASET'|translate}}</label>
                     <div *ngIf="mode == 'projects'" class="form-group row">
-                        <label class="col-form-label col-sm-3">Project:</label>
+                        <label class="col-form-label col-sm-3">{{'PROJECTS.PROJECT'|translate}}:</label>
                         <div class="col-sm-9">
                             <input class="form-control" [ngModel]="leftDataset.project.getName()" disabled>
                         </div>
                     </div>
                     <div *ngIf="mode == 'versions'" class="form-group row">
-                        <label class="col-form-label col-sm-3">Version:</label>
+                        <label class="col-form-label col-sm-3">{{'SKOS_DIFF.VERSION'|translate}}:</label>
                         <div class="col-sm-9">
                             <select class="form-control" [(ngModel)]="leftDataset.version">
                                 <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>
@@ -31,9 +31,9 @@
                     </div>
                 </div>
                 <div class="vbox">
-                    <label class="text-center mb-2 p-2">Right dataset</label>   
+                    <label class="text-center mb-2 p-2">{{'SKOS_DIFF.RIGHT_DATASET'|translate}}</label>   
                     <div *ngIf="mode == 'projects'" class="form-group row">
-                        <label class="col-form-label col-sm-3">Project:</label>
+                        <label class="col-form-label col-sm-3">{{'PROJECTS.PROJECT'|translate}}:</label>
                         <div class="col-sm-9">
                             <select class="form-control" [(ngModel)]="rightDataset.project">
                                 <option *ngFor="let p of projects" [ngValue]="p">{{p.getName()}}</option>
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                     <div *ngIf="mode == 'versions'" class="form-group row">
-                        <label class="col-form-label col-sm-3">Version:</label>
+                        <label class="col-form-label col-sm-3">{{'SKOS_DIFF.VERSION'|translate}}:</label>
                         <div class="col-sm-9">
                             <select class="form-control" [(ngModel)]="rightDataset.version">
                                 <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>

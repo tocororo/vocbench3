@@ -5,8 +5,8 @@
 
     <div class="card card-default vbox">
         <div class="card-header">
-            <label style="flex: 1">Metadata Pattern</label>
-            <button class="btn btn-xs btn-light" (click)="showPattern()" [disabled]="!selectedPattern" title="Show pattern details">
+            <label style="flex: 1">{{'RESOURCE_METADATA.METADATA_PATTERN'|translate}}</label>
+            <button class="btn btn-xs btn-light" (click)="showPattern()" [disabled]="!selectedPattern" [title]="'RESOURCE_METADATA.SHOW_DETAILS'|translate">
                 <span class="fas fa-eye"></span>
             </button>
         </div>

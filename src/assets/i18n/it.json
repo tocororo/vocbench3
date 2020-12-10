@@ -851,6 +851,8 @@
         }
     },
     "PROJECTS": {
+        "PROJECT": "Progetto",
+        "PROJECTS": "Progetti",
         "ACCESSED": "Acceduto",
         "BACKEND_TYPE": "Tipo Backend",
         "BLACKLIST": "Lista nera",
@@ -905,6 +907,20 @@
             "PROJ_INFO_INFO": "Da qui è possibile mostrare o nascondeere le informazioni dei progetti e personalizzarne l'ordine",
             "COL_NAME": "Nome colonna"
         }
+    },
+    "RESOURCE_METADATA": {
+        "RESOURCE_METADATA_CONFIG": "Configurazione Resource Metadata",
+        "METADATA_PATTERN": "Metadata Pattern",
+        "METADATA_PATTERNS": "Metadata Pattern",
+        "PATTERN_LIBRARY": "Libreria Pattern",
+        "IMPORT_FROM_LIBRARY": "Importa pattern da libreria condivisa",
+        "STORE_IN_LIBRARY": "Salva Pattern in libreria condivisa",
+        "PATTERN_ASSOSIACTIONS": "Associazioni Pattern",
+        "PATTERN_ID": "ID Pattern",
+        "PATTERN_FACTORY_PROVIDED": "Pattern predefinito",
+        "SHOW_DETAILS": "Mostra dettagli Pattern",
+        "DESTRUCTION_PATTERN_INFO": "Si noti che quando una risorsa viene cancellata, tutte le sue triple uscenti vengono automaticamente cancellate, quindi fornire un destruction pattern risulta necessario solo qualora ci siano altre risorse collegate a quella da cancellare (e solo ad essa) che dovrebbero essere cancellate a loro volta (ciò accade, ad esempio, nel caso di metadati reificati)",
+        "SHARED_PATTERNS": "Pattern condivisi"
     },
     "RESOURCE_VIEW": {
         "PARTITIONS": {
@@ -1029,6 +1045,14 @@
             "INSTANCES_SEARCH": "Ricerca delle istanze",
             "EXTEND_TO_ALL": "Estendi la ricerca a tutte le istanze (anche appartenenti ad altre classi)"
         }
+    },
+    "SKOS_DIFF": {
+        "SKOS_DIFFING_TASKS": "Task di SKOS diffing",
+        "DOWNLOAD_TASK_RESULT": "Download risultati task",
+        "LEFT_DATASET": "Dataset sinistro",
+        "RIGHT_DATASET": "Dataset destro",
+        "VERSION": "Versione",
+        "CREATE_TASK": "Crea task"
     },
     "SPARQL": {
         "QUERY": {
@@ -1177,7 +1201,6 @@
         "ONTOLOGY_IRI": "IRI ontologia",
         "OPTIONAL_FIELD": "Campo opzionale",
         "POSITION": "Posizione",
-        "PROJECTS": "Progetti",
         "REPOSITORY_ID": "ID repository",
         "SCOPE": "Scope",
         "SETTINGS": "Impostazioni",

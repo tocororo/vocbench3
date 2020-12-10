@@ -1,6 +1,6 @@
 <div class="card card-default vbox blockingDivHost">
     <div class="card-header">
-        <label style="flex: 1;">SKOS diffing tasks</label>
+        <label style="flex: 1;">{{'SKOS_DIFF.SKOS_DIFFING_TASKS'|translate}}</label>
 
         <div class="btn-group btn-group-xs">
             <button class="btn btn-light" (click)="createTask()" [title]="'COMMONS.ACTIONS.CREATE'|translate" [disabled]="serverDown">
@@ -17,7 +17,7 @@
                     <option *ngFor="let f of resultFormats" [ngValue]="f">{{f | uppercase}}</option>
                 </select>
                 <span class="input-group-append">
-                    <button class="btn btn-light" (click)="downloadTaskResult()" title="Download task result" [disabled]="!selectedTask || serverDown">
+                    <button class="btn btn-light" (click)="downloadTaskResult()" [title]="'SKOS_DIFF.DOWNLOAD_TASK_RESULT'|translate" [disabled]="!selectedTask || serverDown">
                         <span class="fas fa-download"></span>
                     </button>
                 </span>
@@ -35,8 +35,8 @@
         <table class="table table-sm table-hoverable">
             <thead>
                 <tr>
-                    <th>Left Dataset</th>
-                    <th>Right Dataset</th>
+                    <th>{{'SKOS_DIFF.LEFT_DATASET'|translate}}</th>
+                    <th>{{'SKOS_DIFF.RIGHT_DATASET'|translate}}</th>
                     <th>{{'COMMONS.STATUS'|translate}}</th>
                 </tr>
             </thead>
@@ -44,15 +44,15 @@
                 <tr *ngFor="let task of tasks" [ngClass]="{ 'table-primary': selectedTask == task }" (click)="selectTask(task)">
                     <td>
                         {{task.leftDataset.projectName}}
-                        <span *ngIf="task.leftDataset.versionId" class="text-muted" style="margin-left: 4px;">(version: {{task.leftDataset.versionId}})</span>
+                        <span *ngIf="task.leftDataset.versionId" class="text-muted ml-2">({{'SKOS_DIFF.VERSION'|translate}}: {{task.leftDataset.versionId}})</span>
                     </td>
                     <td>
                         {{task.rightDataset.projectName}}
-                        <span *ngIf="task.rightDataset.versionId" class="text-muted" style="margin-left: 4px;">(version: {{task.rightDataset.versionId}})</span>
+                        <span *ngIf="task.rightDataset.versionId" class="text-muted ml-2">({{'SKOS_DIFF.VERSION'|translate}}: {{task.rightDataset.versionId}})</span>
                     </td>
                     <td>
                         {{task.status}}
-                        <span *ngIf="task.executionTime" class="text-muted" style="margin-left: 4px;">(in: {{task.executionTime}})</span>
+                        <span *ngIf="task.executionTime" class="text-muted ml-2">(in: {{task.executionTime}})</span>
                     </td>
                 </tr>
             </tbody>

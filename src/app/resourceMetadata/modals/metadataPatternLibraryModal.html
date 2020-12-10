@@ -5,18 +5,18 @@
 
     <div class="hbox" style="align-items: center; margin-bottom: 8px;">
         <label style="white-space: nowrap;">
-            Name
+            {{'COMMONS.NAME'|translate}}
             <span class="fas fa-info-circle" [title]="nameTooltip"></span>
         </label>
-        <input class="form-control-sm form-control" style="margin-left: 6px;" [(ngModel)]="name">
+        <input class="form-control-sm form-control ml-2" [(ngModel)]="name">
     </div>
 
     <div class="card card-alt vbox">
         <div class="card-header">
-            <label style="flex: 1">Shared Patterns:</label>
+            <label style="flex: 1">{{'RESOURCE_METADATA.SHARED_PATTERNS'|translate}}:</label>
             <div class="btn-toolbar">
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-light" title="Delete Metadata Pattern" (click)="deletePattern()"
+                    <button class="btn btn-light" [title]="'COMMONS.ACTIONS.DELETE'|translate" (click)="deletePattern()"
                         [disabled]="!selectedPattern || !deletePatternAuthorized">
                         <span class="fas fa-minus"></span>
                     </button>

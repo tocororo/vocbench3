@@ -22,16 +22,16 @@
                 <td><label>{{'COMMONS.BASE_URI'|translate}}:</label></td>
                 <td *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror' || importType == 'fromLocalFile'">
                     <div *ngIf="baseURIOptional" class="hbox" style="align-items: center">
-                        <input class="form-control form-control-sm" [(ngModel)]="baseURI" [disabled]="!baseURICheck">
+                        <input class="form-control" [(ngModel)]="baseURI" [disabled]="!baseURICheck">
                         <input *ngIf="baseURIOptional" type="checkbox" style="margin-left: 3px;" [(ngModel)]="baseURICheck">
                     </div>
-                    <input *ngIf="!baseURIOptional" class="form-control form-control-sm" [(ngModel)]="baseURI" [disabled]="editorMode == 'repair'">
+                    <input *ngIf="!baseURIOptional" class="form-control" [(ngModel)]="baseURI" [disabled]="editorMode == 'repair'">
                 </td>
                 <td *ngIf="importType == 'fromOntologyMirror'">
-                    <select *ngIf="mirrorList" class="form-control form-control-sm" [(ngModel)]="selectedMirror">
+                    <select *ngIf="mirrorList" class="form-control" [(ngModel)]="selectedMirror">
                         <option *ngFor="let m of mirrorList" [ngValue]="m">{{m.baseURI}}</option>
                     </select>
-                    <select *ngIf="!mirrorList" class="form-control form-control-sm" disabled>
+                    <select *ngIf="!mirrorList" class="form-control" disabled>
                         <option>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.NO_ONTOLOGIES_MIRRORED'|translate}}</option>
                     </select>
                 </td>
@@ -42,7 +42,7 @@
                 </td>
                 <td>
                     <div class="hbox" style="align-items: center">
-                        <input type="text" class="form-control form-control-sm" [(ngModel)]="altURL" [disabled]="!altURLCheck">
+                        <input type="text" class="form-control" [(ngModel)]="altURL" [disabled]="!altURLCheck">
                         <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="altURLCheck">
                     </div>
                 </td>
@@ -58,9 +58,9 @@
                     <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.MIRROR_FILE_NAME'|translate}}:</label>
                 </td>
                 <td>
-                    <input *ngIf="importType == 'fromWebToMirror'" type="text" class="form-control form-control-sm" [(ngModel)]="mirrorFile">
+                    <input *ngIf="importType == 'fromWebToMirror'" type="text" class="form-control" [(ngModel)]="mirrorFile">
                     <div *ngIf="importType == 'fromLocalFile'" class="hbox" style="align-items: center">
-                        <input class="form-control form-control-sm" [(ngModel)]="mirrorFile" [disabled]="!mirrorFileCheck">
+                        <input class="form-control" [(ngModel)]="mirrorFile" [disabled]="!mirrorFileCheck">
                         <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="mirrorFileCheck">
                     </div>
                 </td>
@@ -71,7 +71,7 @@
                 </td>
                 <td>
                     <div class="hbox" style="align-items: center">
-                        <select class="form-control form-control-sm" [(ngModel)]="rdfFormat" [disabled]="!forceFormatCheck">
+                        <select class="form-control" [(ngModel)]="rdfFormat" [disabled]="!forceFormatCheck">
                             <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
                         </select>
                         <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="forceFormatCheck">
@@ -81,7 +81,7 @@
             <tr>
                 <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.TRANSITIVE_IMPORTS'|translate}}:</label></td>
                 <td>
-                    <select class="form-control form-control-sm" [(ngModel)]="selectedImportAllowance">
+                    <select class="form-control" [(ngModel)]="selectedImportAllowance">
                         <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.showTranslationKey|translate}}</option>
                     </select>                    
                 </td>

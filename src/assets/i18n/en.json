@@ -851,6 +851,8 @@
         }
     },
     "PROJECTS": {
+        "PROJECT": "Project",
+        "PROJECTS": "Projects",
         "ACCESSED": "Accessed",
         "BACKEND_TYPE": "Backend type",
         "BLACKLIST": "Blacklisting",
@@ -905,6 +907,20 @@
             "PROJ_INFO_INFO": "Here you can show or hide info about the projects and customize their order.",
             "COL_NAME": "Column name"
         }
+    },
+    "RESOURCE_METADATA": {
+        "RESOURCE_METADATA_CONFIG": "Resource Metadata configuration",
+        "METADATA_PATTERN": "Metadata Pattern",
+        "METADATA_PATTERNS": "Metadata Patterns",
+        "PATTERN_LIBRARY": "Pattern Library",
+        "IMPORT_FROM_LIBRARY": "Import Pattern from shared library",
+        "STORE_IN_LIBRARY": "Store Pattern in shared library",
+        "PATTERN_ASSOSIACTIONS": "Pattern Associations",
+        "PATTERN_ID": "Pattern ID",
+        "PATTERN_FACTORY_PROVIDED": "Pattern Factory-provided",
+        "SHOW_DETAILS": "Show pattern details",
+        "DESTRUCTION_PATTERN_INFO": "Please notice that when the resource is deleted, all of its outgoing triples will be automatically deleted, so developing a destruction pattern is only necessary in case there are other resources linked by this resource (and only by it) that should thus be deleted in turn (this happens, e.g., in the case of reified metadata)",
+        "SHARED_PATTERNS": "Shared Patterns"
     },
     "RESOURCE_VIEW": {
         "PARTITIONS": {
@@ -1029,6 +1045,14 @@
             "INSTANCES_SEARCH": "Instances search",
             "EXTEND_TO_ALL": "Extend the search to all the individuals (also belonging to other classes)"
         }
+    },
+    "SKOS_DIFF": {
+        "SKOS_DIFFING_TASKS": "SKOS diffing tasks",
+        "DOWNLOAD_TASK_RESULT": "Download task result",
+        "LEFT_DATASET": "Left Dataset",
+        "RIGHT_DATASET": "Right Dataset",
+        "VERSION": "Version",
+        "CREATE_TASK": "Create task"
     },
     "SPARQL": {
         "QUERY": {
@@ -1177,7 +1201,6 @@
         "ONTOLOGY_IRI": "Ontology IRI",
         "OPTIONAL_FIELD": "Optional field",
         "POSITION": "Position",
-        "PROJECTS": "Projects",
         "REPOSITORY_ID": "Repository ID",
         "SCOPE": "Scope",
         "SETTINGS": "Settings",
