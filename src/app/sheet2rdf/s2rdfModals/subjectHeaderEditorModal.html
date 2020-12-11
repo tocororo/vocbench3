@@ -1,5 +1,5 @@
 <div class="modal-header">
-        <h3 class="modal-title">Subject Header editor</h3>
+        <h3 class="modal-title">{{'SHEET2RDF.HEADER_EDITOR.SUBJECT_HEADER_EDITOR'|translate}}</h3>
     </div>
     <div class="modal-body vbox scrollableContainer">
 
@@ -12,7 +12,7 @@
                 <tr>
                     <td class="text-right">
                         <label style="white-space: nowrap;">
-                            Header: <span class="fas fa-info-circle" title="Set the header used for the creation of the subject"></span>
+                            {{'SHEET2RDF.HEADER_EDITOR.HEADER'|translate}}: <span class="fas fa-info-circle" [title]="'SHEET2RDF.HEADER_EDITOR.SUBJ_HEADER_INFO'|translate"></span>
                         </label>
                     </td>
                     <td>
@@ -22,7 +22,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="text-right" nowrap><label>PEARL feature:</label></td>
+                    <td class="text-right" nowrap><label>{{'SHEET2RDF.HEADER_EDITOR.PEARL_FEATURE'|translate}}:</label></td>
                     <td>
                         <input type="text" class="form-control" [ngModel]="selectedHeader?.pearlFeature" readonly>
                     </td>
@@ -30,7 +30,7 @@
                 <tr>
                     <td class="text-right" nowrap>
                         <label>
-                            Node ID: <span class="fas fa-info-circle" title="This value is readonly, 'subject' is a reserved keyword for the subject node"></span>
+                            {{'SHEET2RDF.HEADER_EDITOR.NODE_ID'|translate}}: <span class="fas fa-info-circle" [title]="'SHEET2RDF.HEADER_EDITOR.SUBJ_NODE_ID_INFO'|translate"></span>
                         </label>
                     </td>
                     <td>
@@ -55,9 +55,8 @@
                             <div class="form-check ml-2">
                                 <input class="form-check-input" id="typeCheck" type="checkbox" [(ngModel)]="assertType">
                                 <label class="form-check-label" for="typeCheck">
-                                    Assert type
-                                    <span class="fas fa-info-circle ml-1"
-                                        title="Check this option in order to assert a class membership for the subject node">
+                                    {{'SHEET2RDF.HEADER_EDITOR.ASSERT_TYPE'|translate}}
+                                    <span class="fas fa-info-circle ml-1" [title]="'SHEET2RDF.HEADER_EDITOR.ASSERT_TYPE_INFO'|translate">
                                     </span>
                                 </label>
                             </div>
@@ -72,7 +71,7 @@
 
         <div class="card card-default" style="margin-top: 4px;">
             <div class="card-header">
-                <label style="flex: 1;">Additional predicate-object</label>
+                <label style="flex: 1;">{{'SHEET2RDF.HEADER_EDITOR.ADDITIONAL_PRED_OBJ'|translate}}</label>
                 <button class="btn btn-xs btn-light" (click)="addAdditionalPredObj()">
                     <span class="fas fa-plus"></span>
                 </button>

@@ -1005,7 +1005,7 @@
                 "HIDE_FOR_ALL": "Nascondi per tutti i tipi di risorsa",
                 "SET_VISIBLE_ALL": "Rendi visibili tutte le partizioni per tutti i tipi di risorsa"
             }
-        },     
+        },
         "ACTIONS": {
             "RENAME": "Rinomina",
             "BLOCK_NAMESPACE": "Blocca namespace",
@@ -1136,6 +1136,82 @@
             "RESTRICT_TO_SCHEME": "Restringi la ricerca agli skos:ConceptScheme attivi",
             "INSTANCES_SEARCH": "Ricerca delle istanze",
             "EXTEND_TO_ALL": "Estendi la ricerca a tutte le istanze (anche appartenenti ad altre classi)"
+        }
+    },
+    "SHEET2RDF": {
+        "SPREADSHEET": {
+            "FILE": "File spreadsheet",
+            "PREVIEW": "Anteprima spreadsheet",
+            "SUBJECT_MAPPING": "Mapping soggetto",
+            "EDIT_SUBJECT_HEADER": "Modifica header soggetto",
+            "ROWS": "Righe",
+            "LOAD_STATUS": "Carica Mapping Status",
+            "EXPORT_STATUS": "Esporta Mapping Status",
+            "LEGEND": {
+                "LEGEND": "Legenda",
+                "NOT_CONFIGURED": "Header non configurato",
+                "VALID_CONFIGURATION": "Header con almeno una configurazione valida",
+                "PARTIALLY_CONFIGURED": "Header parzialmente configurato (es. solo un nodo configurato)",
+                "IGNORED": "Header ignorato",
+                "INCOMPLETED_SUBJECT": "Header soggetto incompleto",
+                "SUBJECT_HEADER": "Header usato per il mapping del soggetto"
+            }
+        },
+        "PEARL": {
+            "GENERATE_PEARL": "Genera Pearl",
+            "INSERT_CONVERTER": "Inserisci converter"
+        },
+        "TRIPLES": {
+            "GENERATE_TRIPLES": "Genera triple",
+            "GENERATED_TRIPLES_PREVIEW": "Anteprima triple generate",
+            "ADD_TRIPLES": "Aggiungi triple"
+        },
+        "HEADER_EDITOR": {
+            "HEADER_EDITOR": "Editor Header",
+            "IGNORE_HEADER": "Ignora header",
+            "IGNORE_HEADER_INFO": "Se selezionato, il presente header verrà ignorato nel PEARL generato e quindi nel processo di conversione",
+            "HEADER": "Header",
+            "PEARL_FEATURE": "Feature PEARL",
+	    "NODES": "Nodi",
+            "NODES_INFO": "Liste di nodi generati dall'header corrente",
+            "NODE_ID": "ID nodo",
+            "CONVERTER_TYPE": "Tipo converter",
+            "CONVERTER_URI": "URI Converter",
+            "GRAPH_APPLICATIONS": "Graph applications",
+            "GRAPH_APPLICATIONS_INFO": "Lista delle applications dei nodi definiti nel pannello 'Nodi'",
+            "ADD_SIMPLE_GRAPH_APPL": "Aggiungi simple graph application",
+            "ADD_ADV_GRAPH_APPL": "Aggiungi advanced graph application",
+            "NODE_EDITOR": "Editor nodo",
+            "SUBJECT_HEADER_EDITOR": "Editor Header soggetto",
+            "SUBJ_HEADER_INFO": "Indica l'header usato per la creazione del soggetto",
+            "SUBJ_NODE_ID_INFO": "Questo valore è in sola lettura, 'subject' è una keyword riservata per il nodo soggetto",
+            "ASSERT_TYPE": "Dichiara tipo",
+            "ASSERT_TYPE_INFO": "Spunta questa opzione per dichiarare l'appartenenza ad una classe per il nodo soggetto",
+            "ADDITIONAL_PRED_OBJ": "Coppie predicato-oggetto addizionali"
+        },
+        "GRAPH_APPLICATIONS": {
+            "ADVANCED": {
+                "ADV_GRAPH_APPL": "Advanced Graph Application",
+                "GRAPH": "Graph",
+                "PREFIX_NS_MAPPINGS": "Mapping prefix-namespace",
+                "GRAPH_PATTERN": "Graph pattern",
+                "GRAPH_PATTERN_INFO": "Il graph pattern deve contenere solo ID di nodi definiti in qualunque header.<br>Può anche contenere un placeholder <code>{{pred}}</code> che verrà rimpiazzato con il predicato dell'header. Qualora <code>{{pred}}</code> sia usato nel pattern, un predicato di default <strong>deve</strong> essere fornito come fallback laddove l'header non rappresenti alcun predicato valido.",
+                "DEFAULT_PREDICATE": "Predicato di default",
+                "DEFAULT_PREDICATE_INFO": "Se il graph pattern contiene il placeholder 'pred' questo predicato è obbligatorio, altrimenti verrà ignorato"
+            },
+            "SIMPLE": {
+                "SIMPLE_GRAPH_APPL": "Simple Graph Application",
+                "RANGE": "Range",
+                "UNDETERMINED": "Indeterminato",
+                "RANGE_TYPE": "Tipo range",
+                "ASSERT_TYPE_INFO": "Spunta questa opzione per dichiarare il rdf:type del nodo generato",
+                "NODE": "Nodo"
+            }
+        },
+        "SETTINGS": {
+            "S2RDF_SETTINGS": "Impostazioni Sheet2RDF",
+            "FS_NAMING": "FS naming",
+            "FS_NAMING_INFO": "Strategia da usare per assegnare i nomi alle Feature Structure UIMA relative agli header"
         }
     },
     "SKOS_DIFF": {

@@ -45,7 +45,7 @@
                     </td>
                 </tr>
                 <tr *ngIf="useDataDump">
-                    <td nowrap><label>{{'COMMONS.FORMAT'}}:</label></td>
+                    <td nowrap><label>{{'COMMONS.FORMAT'|translate}}:</label></td>
                     <td>
                         <div class="hbox">
                             <select class="form-control" [(ngModel)]="rdfFormat" [disabled]="lockFormat">

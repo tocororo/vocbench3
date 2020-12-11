@@ -4,7 +4,7 @@
         <div class="card card-default" style="flex: 1; margin-right: 4px;">
             <div class="card-body">
                 <div class="hbox" style="flex: initial; align-items: center;">
-                    <label style="white-space: nowrap; margin-right: 4px;">Spreadsheet file:</label>
+                    <label style="white-space: nowrap; margin-right: 4px;">{{'SHEET2RDF.SPREADSHEET.FILE'|translate}}:</label>
                     <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"></file-picker>
                     <button class="btn btn-light" style="margin-left: 4px;" (click)="loadSpreadsheet()" [disabled]="!spreadsheetFile">
                         <span class="fas fa-redo" [title]="'COMMONS.ACTIONS.RELOAD'|translate"></span>
@@ -24,26 +24,28 @@
             <div #previewPanel class="card card-alt vbox" [ngStyle]="{ 'flex': previewPanelFlex }">
                 <div class="card-header">
                     <span style="flex: 1;">
-                        <label>Spreadsheet preview</label>
-                        <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">(Rows: {{truncatedRows}} out of {{totalRows}})</span>
+                        <label>{{'SHEET2RDF.SPREADSHEET.PREVIEW'|translate}}</label>
+                        <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">
+                            ({{'SHEET2RDF.SPREADSHEET.ROWS'|translate}}: {{truncatedRows}} {{'COMMONS.PAGING.OF'|translate}} {{totalRows}})
+                        </span>
                     </span>
                     <div class="btn-toolbar" role="toolbar">
                         <button class="btn btn-light btn-xs" [ngClass]="getSubjHeaderCssClass()" (click)="editSubjectHeader()"
-                            title="Edit subject header" [disabled]="!tablePreview">
-                            Subject mapping
+                            [title]="'SHEET2RDF.SPREADSHEET.EDIT_SUBJECT_HEADER'|translate" [disabled]="!tablePreview">
+                            {{'SHEET2RDF.SPREADSHEET.SUBJECT_MAPPING'|translate}}
                         </button>
     
-                        <button class="btn btn-light btn-xs" (click)="generatePearl()" title="Generate Pearl" [disabled]="!tablePreview">
+                        <button class="btn btn-light btn-xs" (click)="generatePearl()" [title]="'SHEET2RDF.PEARL.GENERATE_PEARL'|translate" [disabled]="!tablePreview">
                             <span class="fas fa-play"></span>
                         </button>
 
                         <div class="btn-group btn-group-xs">
                             <!-- Workaround to show input file as simple <button> -->
                             <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" (click)="$event.target.value=null" accept=".json, text/plain" style="display:none">
-                            <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" title="Load Mapping Status" [disabled]="!tablePreview">
+                            <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" [title]="'SHEET2RDF.SPREADSHEET.LOAD_STATUS'|translate" [disabled]="!tablePreview">
                                 <span class="fas fa-upload"></span>
                             </button>
-                            <button class="btn btn-light" (click)="exportStatus()" title="Export Mapping Status" [disabled]="!tablePreview">
+                            <button class="btn btn-light" (click)="exportStatus()" [title]="'SHEET2RDF.SPREADSHEET.EXPORT_STATUS'|translate" [disabled]="!tablePreview">
                                 <span class="fas fa-download"></span>
                             </button>
                         </div>
@@ -58,7 +60,7 @@
                                     <span [class]="h.cssClass" style="font-weight: bold;">
                                         {{h.nameStruct.fullName}}
                                     </span>
-                                    <button class="btn btn-xs btn-light" style="padding: 0px 3px;" title="Edit header" (click)="editHeader(h)">
+                                    <button class="btn btn-xs btn-light" style="padding: 0px 3px;" [title]="'COMMONS.ACTIONS.EDIT'|translate" (click)="editHeader(h)">
                                         <span class="fas fa-edit"></span>
                                     </button>
                                 </td>
@@ -72,17 +74,18 @@
                 <div class="card-footer">
                     <div class="dropdown float-right dropup" ngbDropdown>
                         <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle>
-                            Legend <span class="fas fa-caret-up fa-sm"></span>
+                            {{'SHEET2RDF.SPREADSHEET.LEGEND.LEGEND'|translate}} <span class="fas fa-caret-up fa-sm"></span>
                         </button>
                         <div class="dropdown-menu" ngbDropdownMenu>
                             <a class="dropdown-item">
-                                <div><span class="fas fa-stop unconfiguredHeader"></span> Header not configured</div>
-                                <div><span class="fas fa-stop configuredHeader"></span> Header with at least a valid configuration</div>
-                                <div><span class="fas fa-stop partiallyConfiguredHeader"></span> Header partially configured (e.g. only node defined)</div>
-                                <div><span class="fas fa-stop ignoredHeader"></span> Header ignored</div>
-                                <div><span class="fas fa-stop incompleteSubjectHeader"></span> Incompleted Subject header</div>
+                                <div><span class="fas fa-stop unconfiguredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.NOT_CONFIGURED'|translate}}</div>
+                                <div><span class="fas fa-stop configuredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.VALID_CONFIGURATION'|translate}}</div>
+                                <div><span class="fas fa-stop partiallyConfiguredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.PARTIALLY_CONFIGURED'|translate}}</div>
+                                <div><span class="fas fa-stop ignoredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.IGNORED'|translate}}</div>
+                                <div><span class="fas fa-stop incompleteSubjectHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.INCOMPLETED_SUBJECT'|translate}}</div>
                                 <div class="hbox" style="align-items: center;">
-                                    <span class="badge badge-success" style="padding: 1px 2px; width: 10px; margin: 0px 2px 0px 1px;">S</span> Header used for the subject mapping
+                                    <span class="badge badge-success" style="padding: 1px 2px; width: 10px; margin: 0px 2px 0px 1px;">S</span>
+                                    {{'SHEET2RDF.SPREADSHEET.LEGEND.SUBJECT_HEADER'|translate}}
                                 </div>
                             </a>
                         </div>
@@ -101,7 +104,7 @@
                         [title]="pearlValidation.details"></span>
 
                     <div class="btn-toolbar" role="toolbar">
-                        <button class="btn btn-light btn-xs" (click)="generateTriples()" title="Generate Triples" [disabled]="!pearl">
+                        <button class="btn btn-light btn-xs" (click)="generateTriples()" [title]="'SHEET2RDF.TRIPLES.GENERATE_TRIPLES'|translate" [disabled]="!pearl">
                             <span class="fas fa-play"></span>
                         </button>
                         <div class="btn-group btn-group-xs">
@@ -120,7 +123,7 @@
                     <pearl-editor [(ngModel)]="pearl" (ngModelChange)="onPearlChange()" style="flex: 1;" [disabled]="!tablePreview">
                     </pearl-editor>
                     <button class="btn btn-light btn-xs" (click)="insertConverter()" style="align-self: flex-end; margin-left: 4px;"
-                        title="Insert converter" [disabled]="!tablePreview">
+                        [title]="'SHEET2RDF.PEARL.INSERT_CONVERTER'|translate" [disabled]="!tablePreview">
                         <span class="fas fa-pencil-alt"></span>
                     </button>
                 </div>
@@ -134,19 +137,19 @@
             <div class="card card-alt vbox">
                 <div class="card-header">
                     <span style="flex: 1;">
-                        <label>Generated triples preview</label>
-                        <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} out of {{totalTriples}})</span>
+                        <label>{{'SHEET2RDF.TRIPLES.GENERATED_TRIPLES_PREVIEW'|translate}}</label>
+                        <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} {{'COMMONS.PAGING.OF'|translate}} {{totalTriples}})</span>
                     </span>
 
                     <div class="btn-toolbar" role="toolbar">
-                        <button class="btn btn-light btn-xs" (click)="addTriples()" title="Add triples" [disabled]="!triplesPreview">
+                        <button class="btn btn-light btn-xs" (click)="addTriples()" [title]="'SHEET2RDF.TRIPLES.ADD_TRIPLES'|translate" [disabled]="!triplesPreview">
                             <span class="fas fa-file-signature"></span>
                         </button>
 
                         <div class="btn-group btn-group-xs">
                             <div class="dropdown float-right" ngbDropdown>
                                 <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle [disabled]="!triplesPreview">
-                                    Export as... <span class="fas fa-caret-down fa-sm"></span>
+                                    {{'COMMONS.ACTIONS.EXPORT'|translate}}... <span class="fas fa-caret-down fa-sm"></span>
                                 </button>
                                 <div class="dropdown-menu" ngbDropdownMenu>
                                     <a *ngFor="let f of exportFormats" class="dropdown-item" (click)="exportTriplesAs(f)">{{f.name}}</a>

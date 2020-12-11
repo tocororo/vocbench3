@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Simple Graph Application</h3>
+    <h3 class="modal-title">{{'SHEET2RDF.GRAPH_APPLICATIONS.SIMPLE.SIMPLE_GRAPH_APPL'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
@@ -27,21 +27,21 @@
             </tr>
 
             <tr>
-                <td class="text-right"><label>Range:</label></td>
+                <td class="text-right"><label>{{'SHEET2RDF.GRAPH_APPLICATIONS.SIMPLE.RANGE'|translate}}:</label></td>
                 <td>
                     <div class="form-control" readonly>
                         <ng-container *ngIf="rangeCollection?.length > 0">
                             <rdf-resource *ngFor="let c of rangeCollection" [resource]="c"></rdf-resource>
                         </ng-container>
                         <ng-container *ngIf="rangeCollection?.length == 0">
-                            Undetermined
+                            {{'SHEET2RDF.GRAPH_APPLICATIONS.SIMPLE.UNDETERMINED'|translate}}
                         </ng-container>
                     </div>
                 </td>
             </tr>
 
             <tr>
-                <td class="text-right text-nowrap"><label>Range type:</label></td>
+                <td class="text-right text-nowrap"><label>{{'SHEET2RDF.GRAPH_APPLICATIONS.SIMPLE.RANGE_TYPE'|translate}}:</label></td>
                 <td>
                     <select class="form-control" [(ngModel)]="selectedRangeType" [disabled]="!property">
                         <option *ngFor="let rt of rangeTypes" [ngValue]="rt">{{rt.show}}</option>
@@ -66,8 +66,8 @@
                         <div class="form-check ml-2">
                             <input class="form-check-input" id="typeCheck" type="checkbox" [(ngModel)]="assertType">
                             <label class="form-check-label" for="typeCheck">
-                                Assert type
-                                <span class="fas fa-info-circle ml-1" title="Check this option in order to assert the rdf:type of the generated node"></span>
+                                {{'SHEET2RDF.HEADER_EDITOR.ASSERT_TYPE'|translate}}
+                                <span class="fas fa-info-circle ml-1" [title]="'SHEET2RDF.GRAPH_APPLICATIONS.SIMPLE.ASSERT_TYPE_INFO'|translate"></span>
                             </label>
                         </div>
                     </div>
@@ -75,14 +75,14 @@
             </tr>
 
             <tr *ngIf="selectedRangeType?.type == 'literal'">
-                <td class="text-right"><label>Datatype:</label></td>
+                <td class="text-right"><label>{{'DATA.DATATYPE.DATATYPE'|translate}}:</label></td>
                 <td>
                     <datatype-picker [(ngModel)]="datatype" [allowedDatatypes]="allowedDatatypes"></datatype-picker>
                 </td>
             </tr>
 
             <tr>
-                <td class="text-right"><label>Node:</label></td>
+                <td class="text-right"><label>{{'SHEET2RDF.GRAPH_APPLICATIONS.SIMPLE.NODE'|translate}}:</label></td>
                 <td>
                     <div class="input-group">
                         <select class="form-control" [(ngModel)]="selectedNode" [disabled]="!isNodeSelectionEnabled()">

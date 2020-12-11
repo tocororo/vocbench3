@@ -1005,7 +1005,7 @@
                 "HIDE_FOR_ALL": "Hide for all resource types",
                 "SET_VISIBLE_ALL": "Set visible all the partitions of all the Resource types"
             }
-        },     
+        },
         "ACTIONS": {
             "RENAME": "Rename",
             "BLOCK_NAMESPACE": "Block namespace",
@@ -1138,6 +1138,82 @@
             "EXTEND_TO_ALL": "Extend the search to all the individuals (also belonging to other classes)"
         }
     },
+    "SHEET2RDF": {
+        "SPREADSHEET": {
+            "FILE": "Spreadsheet file",
+            "PREVIEW": "Spreadsheet preview",
+            "SUBJECT_MAPPING": "Subject mapping",
+            "EDIT_SUBJECT_HEADER": "Edit subject header",
+            "ROWS": "Rows",
+            "LOAD_STATUS": "Load Mapping Status",
+            "EXPORT_STATUS": "Export Mapping Status",
+            "LEGEND": {
+                "LEGEND": "Legend",
+                "NOT_CONFIGURED": "Header not configured",
+                "VALID_CONFIGURATION": "Header with at least a valid configuration",
+                "PARTIALLY_CONFIGURED": "Header partially configured (e.g. only node defined)",
+                "IGNORED": "Header ignored",
+                "INCOMPLETED_SUBJECT": "Incompleted Subject header",
+                "SUBJECT_HEADER": "Header used for the subject mapping"
+            }
+        },
+        "PEARL": {
+            "GENERATE_PEARL": "Generate Pearl",
+            "INSERT_CONVERTER": "Insert converter"
+        },
+        "TRIPLES": {
+            "GENERATE_TRIPLES": "Generate Triples",
+            "GENERATED_TRIPLES_PREVIEW": "Generated triples preview",
+            "ADD_TRIPLES": "Add triples"
+        },
+        "HEADER_EDITOR": {
+            "HEADER_EDITOR": "Header editor",
+            "IGNORE_HEADER": "Ignore header",
+            "IGNORE_HEADER_INFO": "If checked, the current header will be ignored in the generated PEARL code and thus in the conversion process",
+            "HEADER": "Header",
+            "PEARL_FEATURE": "PEARL feature",
+            "NODES": "Nodes",
+            "NODES_INFO": "List of nodes generated from the current header",
+            "NODE_ID": "Node ID",
+            "CONVERTER_TYPE": "Converter type",
+            "CONVERTER_URI": "Converter URI",
+            "GRAPH_APPLICATIONS": "Graph applications",
+            "GRAPH_APPLICATIONS_INFO": "List of applications of the nodes defined in the 'Nodes' panel",
+            "ADD_SIMPLE_GRAPH_APPL": "Add simple graph application",
+            "ADD_ADV_GRAPH_APPL": "Add advanced graph application",
+            "NODE_EDITOR": "Node editor",
+            "SUBJECT_HEADER_EDITOR": "Subject Header editor",
+            "SUBJ_HEADER_INFO": "Set the header used for the creation of the subject",
+            "SUBJ_NODE_ID_INFO": "This value is readonly, 'subject' is a reserved keyword for the subject node",
+            "ASSERT_TYPE": "Assert type",
+            "ASSERT_TYPE_INFO": "Check this option in order to assert a class membership for the subject node",
+            "ADDITIONAL_PRED_OBJ": "Additional predicate-object"
+        },
+        "GRAPH_APPLICATIONS": {
+            "ADVANCED": {
+                "ADV_GRAPH_APPL": "Advanced Graph Application",
+                "GRAPH": "Graph",
+                "PREFIX_NS_MAPPINGS": "Prefix-Namespace mappings",
+                "GRAPH_PATTERN": "Graph pattern",
+                "GRAPH_PATTERN_INFO": "The graph pattern must contain only node IDs already defined in any header.<br>It could also contains a <code>{{pred}}</code> placeholder that will be replaced with the predicate of the header. In case the <code>{{pred}}</code> is used in the pattern, a default predicate <strong>must</strong> be provided as fallback when the header does not represent any valid predicate.",
+                "DEFAULT_PREDICATE": "Default predicate",
+                "DEFAULT_PREDICATE_INFO": "If the graph pattern contains the 'pred' placeholder this predicate is mandatory, otherwise it will be ignored"
+            },
+            "SIMPLE": {
+                "SIMPLE_GRAPH_APPL": "Simple Graph Application",
+                "RANGE": "Range",
+                "UNDETERMINED": "Undetermined",
+                "RANGE_TYPE": "Range type",
+                "ASSERT_TYPE_INFO": "Check this option in order to assert the rdf:type of the generated node",
+                "NODE": "Node"
+            }
+        },
+        "SETTINGS": {
+            "S2RDF_SETTINGS": "Sheet2RDF settings",
+            "FS_NAMING": "FS naming",
+            "FS_NAMING_INFO": "Strategy to use for naming the UIMA Feature Structures related to the headers"
+        }
+    },
     "SKOS_DIFF": {
         "SKOS_DIFFING_TASKS": "SKOS diffing tasks",
         "DOWNLOAD_TASK_RESULT": "Download task result",
@@ -1206,7 +1282,7 @@
         "REGISTRATION": {
             "USER_REGISTRATION": "User registration",
             "NO_USER_REGISTERED_MSG": [
-                "VocBench found no registered user. In order to use the platform, you need to create an administrator account by entering personal data and login credentials. A pre-defined user", 
+                "VocBench found no registered user. In order to use the platform, you need to create an administrator account by entering personal data and login credentials. A pre-defined user",
                 "is available for letting those willing to use VocBench as a simple desktop tool and skip the user creation procedure."
             ],
             "FILL_PREDEFINED_USER": "Fill pre-defined user"

@@ -857,8 +857,8 @@ nav {
 .card-footer {
     padding: 6px;
 }
-.card-footer .btn {
-    margin-left: .25rem;
+.card-footer>.btn {
+    margin-left: .5rem;
 }
 
 .card-alt { border-color: #ddd; }
@@ -995,9 +995,6 @@ label {
 .modal-footer {
     display: block;
     text-align: right;
-}
-.modal-footer .btn {
-    margin-left: .25rem;
 }
 
 /* 

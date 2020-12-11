@@ -75,7 +75,7 @@
 
         <div *ngIf="visualizationMode == 'searchBased' && !lastSearch" class="alert alert-warning"
             style="margin-bottom: 4px;">
-            {{'DATA.CONCEPT.USE_SEARCH_MSG'}}
+            {{'DATA.CONCEPT.USE_SEARCH_MSG'|translate}}
         </div>
 
         <concept-tree [projectCtx]="projectCtx" [schemes]="workingSchemes" [rendering]="rendering"

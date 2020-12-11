@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Sheet2RDF settings</h3>
+    <h3 class="modal-title">{{'SHEET2RDF.SETTINGS.S2RDF_SETTINGS'|translate}}</h3>
 </div>
 <div class="modal-body vbox scrollableContainer">
 
@@ -11,8 +11,8 @@
         <tbody>
             <tr>
                 <td class="text-right" nowrap>
-                    <label>FS naming:</label>
-                    <span class="fas fa-info-circle" title="Strategy to use for naming the UIMA Feature Structure related to the header"></span>
+                    <label>{{'SHEET2RDF.SETTINGS.FS_NAMING'|translate}}:</label>
+                    <span class="fas fa-info-circle" [title]="'SHEET2RDF.SETTINGS.FS_NAMING_INFO'|translate"></span>
                 </td>
                 <td>
                     <select class="form-control form-control-sm" [(ngModel)]="fsNamingStrategy">

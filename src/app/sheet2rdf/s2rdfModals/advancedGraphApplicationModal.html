@@ -1,7 +1,7 @@
 <div class="modal-header">
 
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">Advanced Graph Application</h3>
+        <h3 class="modal-title" style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.ADV_GRAPH_APPL'|translate}}</h3>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
                 <button class="btn btn-light" [title]="'COMMONS.ACTIONS.SAVE'|translate" (click)="saveGraph()">
@@ -18,13 +18,12 @@
 <div class="modal-body vbox scrollableContainer">
     <div class="card card-default" style="margin-top: 4px;">
         <div class="card-header">
-            <label style="flex: 1">Nodes</label>
-            <div class="btn-toolbar" role="toolbar">
+            <label style="flex: 1">{{'SHEET2RDF.HEADER_EDITOR.NODES'|translate}}</label>
+            <div class="btn-toolbar">
                 <div class="btn-group btn-group-xs">
                     <button class="btn btn-light" (click)="addNode()">
                         <span class="fas fa-plus"></span>
                     </button>
-                    <!-- <button class="btn btn-light" (click)="removeNode()" [disabled]="!selectedNode || selectedNode.readonly"> -->
                     <button class="btn btn-light" (click)="removeNode()" [disabled]="!selectedNode">
                         <span class="fas fa-minus"></span>
                     </button>
@@ -35,9 +34,9 @@
             <table class="table table-sm">
                 <thead>
                     <tr>
-                        <th>Node ID</th>
-                        <th>Converter type</th>
-                        <th>Converter URI</th>
+                        <th>{{'SHEET2RDF.HEADER_EDITOR.NODE_ID'|translate}}</th>
+                        <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_TYPE'|translate}}</th>
+                        <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_URI'|translate}}</th>
                         <th>{{'COMMONS.DETAILS'|translate}}</th>
                     </tr>
                 </thead>
@@ -48,10 +47,10 @@
                         <td class="grayText">{{n.converter?.contractUri}}</td>
                         <td class="grayText">
                             <span *ngIf="n.converter?.language; else dtBlock">
-                                <label style="white-space: pre">Lang: </label>{{n.converter.language}}
+                                <label style="white-space: pre">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}: </label>{{n.converter.language}}
                             </span>
                             <span #dtBlock *ngIf="n.converter?.datatypeUri">
-                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
+                                <label style="white-space: pre">{{'DATA.DATATYPE.DATATYPE'|translate}}: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
                             </span>
                         </td>
                     </tr>
@@ -66,14 +65,14 @@
                         </td>
                         <td nowrap>
                             <span *ngIf="n.converter?.language; else dtBlock">
-                                <label style="white-space: pre">Lang: </label>
+                                <label style="white-space: pre">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}: </label>
                                 {{n.converter.language}}
                                 <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-light" (click)="changeLiteralConverter(n)">
                                     <span class="fas fa-pencil-alt"></span>
                                 </button>
                             </span>
                             <span #dtBlock *ngIf="n.converter?.datatypeUri">
-                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
+                                <label style="white-space: pre">{{'DATA.DATATYPE.DATATYPE'|translate}}: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
                             </span>
                         </td>
                     </tr>
@@ -84,14 +83,14 @@
 
     <div class="card card-default" style="margin-top: 4px;">
         <div class="card-header">
-            <label style="flex: 1">Graph</label>
+            <label style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.GRAPH'|translate}}</label>
         </div>
         <div class="card-body vbox">
 
             <div class="card card-alt" style="margin-top: 4px;">
                 <div class="card-header">
-                    <label style="flex: 1">Prefix-Namespace mappings</label>
-                    <div class="btn-toolbar" role="toolbar">
+                    <label style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.PREFIX_NS_MAPPINGS'|translate}}</label>
+                    <div class="btn-toolbar">
                         <div class="btn-group btn-group-xs">
                             <button class="btn btn-light" (click)="addMapping()">
                                 <span class="fas fa-plus"></span>
@@ -106,8 +105,8 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>Prefix</th>
-                                <th>Namespace</th>
+                                <th>{{'METADATA.NAMESPACES_AND_IMPORTS.PREFIX'|translate}}</th>
+                                <th>{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -126,27 +125,20 @@
 
             <div class="card card-alt vbox" style="margin-top: 4px;">
                 <div class="card-header">
-                    <label style="flex: 1">Graph pattern</label>
+                    <label style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.GRAPH_PATTERN'|translate}}</label>
                 </div>
                 <div class="card-body vbox">
-                    <div class="alert alert-info alert-dismissible alert-multiline" style="margin-bottom: 5px;">
-                        The graph pattern must contain only node IDs already defined in any header.<br>
-                        It could also contains a <span style="font-family: monospace;" ngNonBindable>{{pred}}</span>
-                        placeholder that will be replaced with the predicate of the header. 
-                        In case the <span style="font-family: monospace;" ngNonBindable>{{pred}}</span> is used in the pattern,
-                        a default predicate <strong>must</strong> be provided as fallback when the header does not represent any valid predicate.
-                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                    </div>
+                    <div class="alert alert-info mb-2" [innerHTML]="'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.GRAPH_PATTERN_INFO'|translate"></div>
                     <textarea class="form-control form-control-sm" style="resize: vertical" rows="5" [(ngModel)]="graphPattern"></textarea>
                 </div>
                 <div class="card-footer">
                     <div class="hbox" style="align-items: center">
-                        <label style="margin-right: 4px;">Default predicate:</label>
+                        <label style="margin-right: 4px;">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.DEFAULT_PREDICATE'|translate}}:</label>
                         <resource-picker [resource]="defaultPredicate" size="sm" [config]="{ roles: ['property']}"
                             (resourceChanged)="updateDefaultPredicate($event)" style="flex: 1">
                         </resource-picker>
                         <span class="fas fa-info-circle" style="margin-left: 4px" 
-                            title="If the graph pattern contains the 'pred' placeholder this predicate is mandatory, otherwise it will be ignored">
+                            title="'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.DEFAULT_PREDICATE_INFO'|translate">
                         </span>
                     </div>
                 </div>
