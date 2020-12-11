@@ -12,37 +12,37 @@
         <div class="dropdown-menu" ngbDropdownMenu>
             <a *ngIf="editActionScenario == 'xLabel' || editActionScenario == 'langTaggedLiteral' || editActionScenario == 'typedLiteral'"
                 class="dropdown-item" [ngClass]="{ disabled: !editAuthorized || isInferred }" (click)="editLiteral()">
-                Edit literal content
+                {{'RESOURCE_VIEW.ACTIONS.EDIT_LITERAL_CONTENT'|translate}}
             </a>
 
             <a *ngIf="editActionScenario != 'xLabel'" class="dropdown-item" [ngClass]="{ disabled: !editAuthorized || isInferred }" (click)="edit()">
                 {{'COMMONS.ACTIONS.EDIT'|translate}}
             </a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkEditAuthorized }"
-                (click)="bulkEdit()" title="Update the value for every resource that has this predicate-value relation">
-                Bulk edit
+                (click)="bulkEdit()" [title]="'RESOURCE_VIEW.ACTIONS.BULD_EDIT_INFO'|translate">
+                {{'RESOURCE_VIEW.ACTIONS.BULD_EDIT'|translate}}
             </a>
             <a *ngIf="isReplaceMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !editAuthorized || isInferred }" (click)="replace()">
-                Replace with existing resource
+                {{'RESOURCE_VIEW.ACTIONS.REPLACE_WITH_EXISTING_RES'|translate}}
             </a>
             <ng-container *ngIf="isXLabelMenuItemAvailable">
                 <a class="dropdown-item" [ngClass]="{ disabled: !spawnFromLabelAuthorized || isInferred }" (click)="spawnNewConceptWithLabel()">
-                    Spawn new concept from this xLabel
+                    {{'RESOURCE_VIEW.ACTIONS.SPAWN_FROM_XLABEL'|translate}}
                 </a>
                 <a class="dropdown-item" [ngClass]="{ disabled: !moveLabelAuthorized || isInferred }" (click)="moveLabelToConcept()">
-                    Move xLabel to another concept
+                    {{'RESOURCE_VIEW.ACTIONS.MOVE_XLABEL_TO_CONCEPT'|translate}}
                 </a>
             </ng-container>
             <a *ngIf="copyLocalesAction.available" class="dropdown-item" [ngClass]="{ disabled: !copyLocalesAuthorized }" (click)="copyLocales()">
-                Copy value to other locales
+                {{'RESOURCE_VIEW.ACTIONS.COPY_VALUE_TO_LOCALES'|translate}}
             </a>
             <a *ngIf="isInferred && partition != 'lexicalizations'" class="dropdown-item" [ngClass]="{ disabled: !assertAuthorized }" (click)="assertInferred()">
-                Assert inferred statement
+                {{'RESOURCE_VIEW.ACTIONS.ASSERT_INFERRED_STATEMENT'|translate}}
             </a>
             <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized || isInferred }" (click)="delete()">{{'COMMONS.ACTIONS.DELETE'|translate}}</a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkDeleteAuthorized }" 
-                (click)="bulkDelete()" title="Delete the value for every resource that has this predicate-value relation">
-                Bulk delete
+                (click)="bulkDelete()" [title]="'RESOURCE_VIEW.ACTIONS.BULK_DELETE_INFO'|translate">
+                {{'RESOURCE_VIEW.ACTIONS.BULK_DELETE'|translate}}
             </a>
         </div>
     </div>

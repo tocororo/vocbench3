@@ -2,11 +2,11 @@
     <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()" placeholder="http://example.org" [readonly]="!editable" [disabled]="disabled">
     <div class="input-group-append" ngbDropdown>
         <!-- Allowed only local -->
-        <button *ngIf="config.allowLocal && !config.allowRemote" class="btn btn-light" (click)="pickLocalResource()" title="Pick an existing resource" [disabled]="disabled">
+        <button *ngIf="config.allowLocal && !config.allowRemote" class="btn btn-light" (click)="pickLocalResource()" [title]="'WIDGETS.VALUE_PICKER.PICK_EXISTING_RESOURCE'|translate" [disabled]="disabled">
             <span class="fas fa-pencil-alt"></span>
         </button>
         <!-- Allowed only remote -->
-        <button *ngIf="!config.allowLocal && config.allowRemote" class="btn btn-light" (click)="pickExternalResource()" title="Pick a resource from external project" [disabled]="disabled">
+        <button *ngIf="!config.allowLocal && config.allowRemote" class="btn btn-light" (click)="pickExternalResource()" [title]="'WIDGETS.VALUE_PICKER.PICK_FROM_EXTERNAL_PROJ'|translate" [disabled]="disabled">
             <span class=" fas fa-share"></span>
         </button>
         <!-- Allowed both local and remote -->
@@ -15,8 +15,8 @@
                 <span class="fas fa-pencil-alt"></span>
             </button>
             <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="pickLocalResource()">From current project</a>
-                <a class="dropdown-item" (click)="pickExternalResource()">From external project</a>
+                <a class="dropdown-item" (click)="pickLocalResource()">{{'WIDGETS.VALUE_PICKER.FROM_CURRENT_PROJ'|translate}}</a>
+                <a class="dropdown-item" (click)="pickExternalResource()">{{'WIDGETS.VALUE_PICKER.FROM_EXTERNAL_PROJ'|translate}}</a>
             </div>
         </ng-container>
     </div>

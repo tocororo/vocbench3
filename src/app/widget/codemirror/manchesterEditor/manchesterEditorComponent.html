@@ -1,12 +1,12 @@
 <div class="card card-default vbox">
     <div style="padding: 6px 6px 0px">
-        <button class="btn btn-xs btn-light" (click)="openHelper()">Helper</button>
+        <button class="btn btn-xs btn-light" (click)="openHelper()">{{'WIDGETS.EDITORS.MANCHESTER.HELPER'|translate}}</button>
     </div>
     <div class="card-body vbox" style="overflow: auto; position: relative">
         <div *ngIf="!codeValid" style="position: absolute; top: 12px; right: 30px; z-index: 1;" [title]="codeInvalidDetails">
             <span class="fas fa-exclamation-triangle" style="color: red;"></span>
         </div>
         <ngx-codemirror #cmEditor [(ngModel)]="code" (ngModelChange)="onCodeChange()" [options]="editorConfig"></ngx-codemirror>
-        <span style="margin-top: 5px;">Press 'ctrl-space' to show hints.</span>
+        <span style="margin-top: 5px;">{{'WIDGETS.EDITORS.MANCHESTER.PREST_CTRL_SPACE'|translate}}</span>
     </div>
 </div>

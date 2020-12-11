@@ -14,7 +14,7 @@
                     <span class="far fa-square"></span>
                 </button>
             </div>
-            <button class="btn btn-xs btn-light" (click)="toggleFilter()" title="Enable filter" [ngClass]="{ active: filterEnabled }">
+            <button class="btn btn-xs btn-light" (click)="toggleFilter()" [title]="'COMMONS.ACTIONS.ENABLE'|translate" [ngClass]="{ active: filterEnabled }">
                 <span class="fas fa-filter"></span>
             </button>
         </div>

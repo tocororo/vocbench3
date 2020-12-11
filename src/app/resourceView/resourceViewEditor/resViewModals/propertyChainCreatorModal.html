@@ -2,7 +2,7 @@
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span>
-            <button class="btn btn-light btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!propChangeable">
+            <button class="btn btn-light btn-xs" [title]="'RESOURCE_VIEW.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
                 <rdf-resource [resource]="enrichingProperty"></rdf-resource>
             </button>
         </span>
@@ -17,7 +17,7 @@
             <div class="form-check mt-2">
                 <input class="form-check-input" id="inverseCheck" type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedTreeProperty?.getRole() != 'objectProperty'">
                 <label class="form-check-label" for="inverseCheck">
-                    Inverse Property
+                    {{'RESOURCE_VIEW.MISC.INVERSE_PROPERTY'|translate}}
                 </label>
             </div>
         </div>
@@ -33,7 +33,7 @@
 
         <div class="card card-default vbox">
             <div class="card-header">
-                <label style="flex: 1">Property chain</label>
+                <label style="flex: 1">{{'RESOURCE_VIEW.MISC.PROPERTY_CHAIN'|translate}}</label>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-light" (click)="moveDown()" [disabled]="!selectedChainProperty || isSelectedPropLast()">

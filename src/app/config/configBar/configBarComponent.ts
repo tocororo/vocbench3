@@ -116,7 +116,6 @@ export class ConfigBarComponent {
 
     private clearData() {
         this.basicModals.confirm("Clear data", "This operation will erase all the data stored in the project." +
-            " The project will be closed and then you will be redirect to the projects page." +
             " Are you sure to proceed?", ModalType.warning).then(
             () => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);

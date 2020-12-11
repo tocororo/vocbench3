@@ -27,7 +27,7 @@
     </div>
         
     <div *ngIf="duplicateInstance" class="alert alert-danger" style="margin-top: 4px;" role="alert">
-        <strong>{{duplicateInstance.getShow()}}</strong> is already in the list!
+        <strong>{{duplicateInstance.getShow()}}</strong> {{'RESOURCE_VIEW.MISC.IS_ALREADY_IN_LIST'|translate}}
     </div>
 </div>
 <div class="modal-footer">

@@ -6,7 +6,7 @@
         <button class="btn btn-xs btn-light" style="margin-left: 3px;" (click)="buildResourceView(resource)" [title]="'COMMONS.ACTIONS.REFRESH'|translate">
             <span class="fas fa-redo"></span>
         </button>
-        <button class="btn btn-light btn-xs" style="margin-left: 3px;" (click)="openSettings()" title="ResourceView settings">
+        <button class="btn btn-light btn-xs" style="margin-left: 3px;" (click)="openSettings()" [title]="'COMMONS.SETTINGS'|translate">
             <span class="fas fa-cog"></span>
         </button>
     </div>
@@ -20,7 +20,7 @@
                         <p>{{resource.getShow()}}</p>
                         <p *ngFor="let def of definitions">{{def.getShow()}} ({{def.getAdditionalProperty('lang')}})</p>
                     </div>
-                    <h2 class="concept"><span>Broader Concepts</span></h2>
+                    <h2 class="concept"><span>{{'RESOURCE_VIEW.TERM_VIEW.BROADER_CONCEPTS'|translate}}</span></h2>
                     <div>
                         <p *ngFor="let broader of broaders">{{broader.getShow()}}</p>
                     </div>
@@ -41,10 +41,10 @@
         </ng-container>
 
         <div *ngIf="unexistingResource" class="alert alert-danger">
-            This resource is not available in the current project
+            {{'RESOURCE_VIEW.STATUS.RESOURCE_NOT_EXISTING'|translate}}
         </div>
         <div *ngIf="unknownHost" class="alert alert-danger">
-            This resource is not available on accessible local projects nor can be reached on the Web
+            {{'RESOURCE_VIEW.STATUS.RESOURCE_UNKNOWN_HOST'|translate}}
         </div>
 
     </div>

@@ -21,7 +21,7 @@
         <div class="card card-default vbox">
             <div class="card-header">
                 <div style="flex: 1;"></div>
-                <div class="btn-toolbar" role="toolbar">
+                <div class="btn-toolbar">
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-light btn-xs" (click)="moveDown()" [disabled]="!ordered || !selectedConstituentTarget || isLastInList()">
                             <span class="fas fa-chevron-down"></span>
@@ -38,7 +38,7 @@
             <div class="card-footer float-right">
                 <div class="form-check">
                     <input class="form-check-input" id="orderedCheck" type="checkbox" [(ngModel)]="ordered">
-                    <label class="form-check-label" for="orderedCheck">Ordered</label>
+                    <label class="form-check-label" for="orderedCheck">{{'RESOURCE_VIEW.MISC.ORDERED'|translate}}</label>
                 </div>
             </div>
         </div>

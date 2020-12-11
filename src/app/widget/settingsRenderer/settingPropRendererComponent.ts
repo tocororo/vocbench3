@@ -15,6 +15,7 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
     @Input() disabled: boolean = false;
     
     prop: SettingsProp;
+    translationParam: { propTypeName: string };
 
     constructor() { }
 
@@ -116,6 +117,7 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
     writeValue(obj: SettingsProp) {
         if (obj) {
             this.prop = obj;
+            this.translationParam = { propTypeName: this.prop.type.name };
         }
     }
     /**

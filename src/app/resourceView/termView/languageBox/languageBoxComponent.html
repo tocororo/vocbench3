@@ -2,7 +2,7 @@
     <div class="links">
         <lang-item class="groupPanel-heading-content" [language]="langForFlag" [showTag]="false" [showName]="false" [size]="'md'"></lang-item>
         <button *ngIf="emptyDef && terms.length == 0" (click)="removeBox()" class="btn btn-xs btn-light remove-button"
-            title="Remove box" [disabled]="readonly">
+            [title]="'RESOURCE_VIEW.TERM_VIEW.REMOVE_BOX'|translate" [disabled]="readonly">
             <span class="fas fa-times" style="font-size: 7px;"></span>
         </button>
     </div>
@@ -14,7 +14,7 @@
             <span class="fas fa-caret-down fa-sm"></span>
         </button>
         <div class="dropdown-menu float-right" ngbDropdownMenu>
-            <a class="dropdown-item" [ngClass]="{ disabled : (!addDefAuthorized || emptyDef || readonly) }" (click)="addDefinitionItem()">Add definition</a>
+            <a class="dropdown-item" [ngClass]="{ disabled : (!addDefAuthorized || emptyDef || readonly) }" (click)="addDefinitionItem()">{{'RESOURCE_VIEW.TERM_VIEW.ADD_DEFINITION'|translate}}</a>
         </div>
     </div>
 </div>

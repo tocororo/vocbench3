@@ -589,8 +589,7 @@
             "CHECK": "Check",
             "LANGUAGES_TO_CHECK": "Languages to check",
             "ONLY_MANDATORY": "Only mandatory",
-            "ONLY_MANDATORY_INFO": "Check only the mandatory languages",
-            "MANDATORY": "Mandatory"
+            "ONLY_MANDATORY_INFO": "Check only the mandatory languages"
         },
         "STRUCTURAL": {
             "STRUCTUAL_CHECKS": "Structural checks",
@@ -998,8 +997,15 @@
             "SUBTERMS": "Subterms",
             "SUPERPROPERTIES": "Superproperties",
             "TOP_CONCEPT_OF": "Top concept of",
-            "TYPES": "Types"
-        },
+            "TYPES": "Types",
+            "PARTITIONS": "Partitions",
+            "FILTER": {
+                "RESOURCE_TYPES": "Resource Types",
+                "SET_VISIBLE_FOR_ALL": "Set visible for all resource types",
+                "HIDE_FOR_ALL": "Hide for all resource types",
+                "SET_VISIBLE_ALL": "Set visible all the partitions of all the Resource types"
+            }
+        },     
         "ACTIONS": {
             "RENAME": "Rename",
             "BLOCK_NAMESPACE": "Block namespace",
@@ -1014,7 +1020,22 @@
             "SET_AS_DEPRECATED": "Set as deprecated",
             "ASSERT_INFERRED_STATEMENTS": "Assert all the inferred statements",
             "SPAWN_CONCEPT_FROM_XLABEL": "Spawn new concept from this xLabel",
-            "SHOW_IN_DATA_GRAPH": "Show in data-oriented graph"
+            "SHOW_IN_DATA_GRAPH": "Show in data-oriented graph",
+            "ADD_VALUE_MANUALLY": "Add value manually",
+            "ADD_VALUE_FROM_ANOTHER_PROJ": "Add value from another project",
+            "DELETE_ALL_VALUES": "Delete all values",
+            "SHOW_ALL": "Show all...",
+            "CHANGE_PROPERTY": "Change property",
+            "EDIT_LITERAL_CONTENT": "Edit literal content",
+            "BULD_EDIT": "Bulk edit",
+            "BULD_EDIT_INFO": "Update the value for every resource that has this predicate-value relation",
+            "REPLACE_WITH_EXISTING_RES": "Replace with existing resource",
+            "SPAWN_FROM_XLABEL": "Spawn new concept from this xLabel",
+            "MOVE_XLABEL_TO_CONCEPT": "Move xLabel to another concept",
+            "COPY_VALUE_TO_LOCALES": "Copy value to other locales",
+            "ASSERT_INFERRED_STATEMENT": "Assert inferred statement",
+            "BULK_DELETE": "Bulk delete",
+            "BULK_DELETE_INFO": "Delete the value for every resource that has this predicate-value relation"
         },
         "STATUS": {
             "RESOURCE_NOT_EXISTING": "This resource is not available in the current project",
@@ -1022,7 +1043,32 @@
             "ACCESS_METHOD": "Access method",
             "LOCAL_PROJECT": "Local Project",
             "OTHER_LOCAL_PROJECT": "Other local Project",
-            "REMOTE_DATASET": "Remote Dataset"
+            "REMOTE_DATASET": "Remote Dataset",
+            "UNKNOWN_POSITION": "Unknown position",
+            "CLOSE_ALL_TABS": "Close all tabs",
+            "PREVIOUS_RESOURCE": "Previous resource"
+        },
+        "MISC": {
+            "SHOW_ALL_CLASSES": "Show all classes",
+            "INVERSE_PROPERTY": "Inverse Property",
+            "INVERSE_PROPERTY_MULTIVALUE_WARN": "In case of multiple properties selected, the 'Inverse Property' flag is applied to all of them (available only if all ObjectProperties)",
+            "EDIT_DATARANGE": "Edit datarange",
+            "IS_ALREADY_IN_LIST": "is already in the list!",
+            "PROPERTY_CHAIN": "Property chain",
+            "ORDERED": "Ordered",
+            "VALLUE_TO_COPY": "Value to copy",
+            "TARGET_LANGS": "Target languages"
+        },
+        "CODE_EDITOR": {
+            "APPLY_CHANGES": "Apply changes",
+            "DISABLED_UNDER_VALIDATION": "The Code view tab has been disabled as this resource - or part of its description - is under validation"
+        },
+        "TERM_VIEW": {
+            "BROADER_CONCEPTS": "Broader Concepts",
+            "TERM": "Term",
+            "DEFINITION": "Definition",
+            "REMOVE_BOX": "Remove box",
+            "ADD_DEFINITION": "Add definition"
         }
     },
     "SEARCH": {
@@ -1179,9 +1225,33 @@
         }
     },
     "WIDGETS": {
+        "EDITORS": {
+            "MANCHESTER": {
+                "HELPER": "Helper",
+                "MANCHESTER_SYNTAX_HELPER": "Manchester Syntax helper",
+                "PREST_CTRL_SPACE": "Press 'ctrl-space' to show hints",
+                "TABLE_CONSTRUCTORS_INFO": "This table shows the conversions between DL syntax and Manchester syntax for these constructors",
+                "TABLE_AXIOMS_INFO": "This table shows the conversions between DL syntax and Manchester syntax for these axioms",
+                "CONSTRUCTOR": "Constructor",
+                "DL_SYNTAX": "DL syntax",
+                "MANCHESTER_SYNTAX": "Manchester syntax",
+                "AXIOM": "Axiom"
+            }
+        },
         "FILE_PICKER": {
             "BROWSE": "Browse",
             "SELECT_A_FILE": "Select a file"
+        },
+        "SETTINGS_RENDERER": {
+            "ADD_OPTIONAL_VALUE": "Add optional value",
+            "DELETE_OPTIONAL_VALUE": "Delete optional value",
+            "UNKNOWN_TYPE_WARN": "This parameter has an unknown type ({{propTypeName}}). The entered value will be interpreted as a low-level JSON value"
+        },
+        "VALUE_PICKER": {
+            "PICK_EXISTING_RESOURCE": "Pick an existing resource",
+            "PICK_FROM_EXTERNAL_PROJ": "Pick a resource from external project",
+            "FROM_CURRENT_PROJ": "From current project",
+            "FROM_EXTERNAL_PROJ": "From external project"
         }
     },
     "COMMONS": {
@@ -1193,6 +1263,8 @@
             "ADD_AFTER": "Add after",
             "ADD_ALL": "Add all",
             "ADD_BEFORE": "Add before",
+            "ADD_FIRST": "Add first",
+            "ADD_LAST": "Add last",
             "ASSIGN": "Assign",
             "CANCEL": "Cancel",
             "CHECK_ALL": "Check all",
@@ -1206,6 +1278,8 @@
             "DISCARD": "Discard",
             "EDIT": "Edit",
             "EDIT_MANUALLY": "Edit manually",
+            "ENABLE": "Enable",
+            "ENABLE_ALL": "Enable all",
             "EXPORT": "Export",
             "IMPORT": "Import",
             "LOAD": "Load",
@@ -1269,12 +1343,14 @@
         "LEVEL": "Level",
         "LEXICALIZATION": "Lexicalization",
         "LEXICALIZATION_MODEL": "Lexicalization Model",
+        "MANDATORY": "Mandatory",
         "MANDATORY_FIELD": "Mandatory field",
         "MODE": "Mode",
         "MODEL": "Model",
         "NAME": "Name",
         "NEW": "New",
         "ONTOLOGY_IRI": "Ontology IRI",
+        "OPTIONAL": "Optional",
         "OPTIONAL_FIELD": "Optional field",
         "POSITION": "Position",
         "REPOSITORY_ID": "Repository ID",

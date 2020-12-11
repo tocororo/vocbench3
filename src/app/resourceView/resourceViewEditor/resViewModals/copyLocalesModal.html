@@ -1,16 +1,16 @@
 <div class="modal-header">
-    <h3 class="modal-title">Copy value to locales</h3>
+    <h3 class="modal-title">{{'RESOURCE_VIEW.ACTIONS.COPY_VALUE_TO_LOCALES'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
     <div style="padding: 6px;">
-        <label>Value to copy:</label>
+        <label>{{'RESOURCE_VIEW.MISC.VALLUE_TO_COPY'|translate}}:</label>
         <rdf-resource [resource]="value"></rdf-resource>
     </div>
 
     <div class="card card-default vbox">
         <div class="card-header">
-            <label>Target languages:</label>
+            <label>{{'RESOURCE_VIEW.MISC.TARGET_LANGS'|translate}}:</label>
         </div>
         <div class="card-body scrollableContainer">
             <div *ngFor="let l of locales" class="listNodeItem">

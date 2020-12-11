@@ -2,7 +2,7 @@
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span *ngIf="enrichingProperty">
-            <button class="btn btn-light btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!propChangeable">
+            <button class="btn btn-light btn-xs" [title]="'RESOURCE_VIEW.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
                 <rdf-resource [resource]="enrichingProperty"></rdf-resource>
             </button>
         </span>
@@ -17,7 +17,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <td><label>Project:</label></td>
+                <td><label>{{'PROJECTS.PROJECT'|translate}}:</label></td>
                 <td>
                     <select class="form-control form-control-sm " [(ngModel)]="project" (ngModelChange)="onProjectChange()">
                         <option *ngFor="let p of projectList" [ngValue]="p">{{p.getName()}}</option>
@@ -32,7 +32,7 @@
                         <option value="individual">{{'DATA.INSTANCE.INSTANCE'|translate}}</option>
                         <option value="property">{{'DATA.PROPERTY.PROPERTY'|translate}}</option>
                         <option *ngIf="isProjectSKOS()" value="concept">{{'DATA.CONCEPT.CONCEPT'|translate}}</option>
-                        <option *ngIf="isProjectSKOS()" value="conceptScheme">ConceptScheme</option>
+                        <option *ngIf="isProjectSKOS()" value="conceptScheme">{{'DATA.SCHEME.SCHEME'|translate}}</option>
                         <option *ngIf="isProjectSKOS()" value="skosCollection">{{'DATA.COLLECTION.COLLECTION'|translate}}</option>
                     </select>
                 </td>

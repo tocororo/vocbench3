@@ -18,8 +18,8 @@
                     <span class="fas fa-caret-down fa-sm" style="margin: 0px;"></span>
                 </button>
                 <div class="dropdown-menu float-right" ngbDropdownMenu>
-                    <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addHandler(null, 'manually')">Add value manually</a>
-                    <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addHandler(null, 'remote')">Add value from another project</a>
+                    <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addHandler(null, 'manually')">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
+                    <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addHandler(null, 'remote')">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_FROM_ANOTHER_PROJ'|translate}}</a>
                 </div>
             </div>
         </span>

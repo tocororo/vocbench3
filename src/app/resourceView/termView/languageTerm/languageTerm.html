@@ -5,11 +5,11 @@
 
     <div class="groupPanel-body">
         <div class="term-wrap">
-            <label [ngClass]="term?.isPrefLabel ? 'prefLabelColor' : 'altLabelcolor'" [title]="term.predicate.getShow()" style="font-size: 13px;">Term:</label>
+            <label [ngClass]="term?.isPrefLabel ? 'prefLabelColor' : 'altLabelcolor'" [title]="term.predicate.getShow()" style="font-size: 13px;">{{'RESOURCE_VIEW.TERM_VIEW.TERM'|translate}}:</label>
             <inline-editable-value style="flex: 1; margin-left: 4px;" [focusOnInit]="focus" [value]="term.object" (valueEdited)="onValueEdited($event)" 
                 [disabled]="!editTermAuthorized || readonly">
             </inline-editable-value>
-            <button class="btn btn-xs btn-light minus-button " (click)="deleteTermBox()" [disabled]="!deleteTermAuthorized || readonly" title="Delete Term">
+            <button class="btn btn-xs btn-light minus-button " (click)="deleteTermBox()" [disabled]="!deleteTermAuthorized || readonly" [title]="'COMMONS.ACTIONS.DELETE'|translate">
                 <span class="fas fa-minus" style="font-size: 9px;"></span>
             </button>
         </div>

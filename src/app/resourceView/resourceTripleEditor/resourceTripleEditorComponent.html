@@ -10,9 +10,8 @@
     </div>
     <div class="card-footer" style="min-height: 31px;">
         <button class="btn btn-xs btn-light float-right" (click)="applyChanges()" [disabled]="!isApplyEnabled()">
-            Apply changes
-            <span *ngIf="pendingValidation" class="fas fa-exclamation-triangle" style="margin-left: 4px;" 
-                title="The Code view tab has been disabled as this resource - or part of its description - is under validation"></span>
+            {{'RESOURCE_VIEW.CODE_EDITOR.APPLY_CHANGES'|translate}}
+            <span *ngIf="pendingValidation" class="fas fa-exclamation-triangle ml-1" [title]="'RESOURCE_VIEW.CODE_EDITOR.DISABLED_UNDER_VALIDATION'|translate"></span>
         </button>
     </div>
 

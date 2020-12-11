@@ -13,10 +13,10 @@
                 <img [src]="addBtnImgSrc"/>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="addFirst()">Add first</a>
-                <a class="dropdown-item" (click)="addLast()">Add last</a>
-                <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addBefore()">Add before the selected member</a>
-                <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addAfter()">Add after the selected member</a>
+                <a class="dropdown-item" (click)="addFirst()">{{'COMMONS.ACTIONS.ADD_FIRST'|translate}}</a>
+                <a class="dropdown-item" (click)="addLast()">{{'COMMONS.ACTIONS.ADD_LAST'|translate}}</a>
+                <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addBefore()">{{'COMMONS.ACTIONS.ADD_BEFORE'|translate}}</a>
+                <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addAfter()">{{'COMMONS.ACTIONS.ADD_AFTER'|translate}}</a>
             </div>
         </span>
     </div>
@@ -43,14 +43,14 @@
                                 <label style="flex: 1">Members</label>
                                 <div class="btn-group float-right" ngbDropdown>
                                     <button class="btn btn-xs btn-light dropdown-toggle predObjRenderPanelBtn" style="padding: 3px 6px;"
-                                        data-toggle="dropdown" ngbDropdownToggle title="Add member" [disabled]="addDisabled">
+                                        data-toggle="dropdown" ngbDropdownToggle [title]="addBtnImgTitle" [disabled]="addDisabled">
                                         <span class="fas fa-plus" style="font-size: 9px;"></span>
                                     </button>
                                     <div class="dropdown-menu" ngbDropdownMenu>
-                                        <a class="dropdown-item" (click)="addFirst(po.getPredicate())">Add first</a>
-                                        <a class="dropdown-item" (click)="addLast(po.getPredicate())">Add last</a>
-                                        <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addBefore(po.getPredicate())">Add before the selected member</a>
-                                        <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addAfter(po.getPredicate())">Add after the selected member</a>
+                                        <a class="dropdown-item" (click)="addFirst(po.getPredicate())">{{'COMMONS.ACTIONS.ADD_FIRST'|translate}}</a>
+                                        <a class="dropdown-item" (click)="addLast(po.getPredicate())">{{'COMMONS.ACTIONS.ADD_LAST'|translate}}</a>
+                                        <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addBefore(po.getPredicate())">{{'COMMONS.ACTIONS.ADD_BEFORE'|translate}}</a>
+                                        <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addAfter(po.getPredicate())">{{'COMMONS.ACTIONS.ADD_AFTER'|translate}}</a>
                                     </div>
                                 </div>
                             </div>

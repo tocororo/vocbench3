@@ -32,11 +32,11 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let b of bindings">
-                        <td><input class="form-control form-control-sm" [(ngModel)]="b.varName"></td>
-                        <td><input class="form-control form-control-sm" [(ngModel)]="b.displayName"></td>
-                        <td><textarea class="form-control form-control-sm" style="resize: vertical" rows="1" [(ngModel)]="b.description"></textarea></td>
+                        <td><input class="form-control" [(ngModel)]="b.varName"></td>
+                        <td><input class="form-control" [(ngModel)]="b.displayName"></td>
+                        <td><textarea class="form-control" style="resize: vertical" rows="1" [(ngModel)]="b.description"></textarea></td>
                         <td>
-                            <select class="form-control form-control-sm" [(ngModel)]="b.bindingType" (ngModelChange)="onBindingTypeChange()">
+                            <select class="form-control" [(ngModel)]="b.bindingType" (ngModelChange)="onBindingTypeChange()">
                                 <option *ngFor="let t of bindingTypes" [ngValue]="t">{{t.show}}</option>
                             </select>
                         </td>
@@ -45,11 +45,11 @@
                                 <value-picker [value]="b.value" (valueChanged)="updateValue(b, $event)"></value-picker>
                             </div>
                             <ng-template #constraintBlock>
-                                <select *ngIf="b.bindingType?.specialization=='datatype'; else roleBlock" class="form-control form-control-sm" [(ngModel)]="b.datatype">
+                                <select *ngIf="b.bindingType?.specialization=='datatype'; else roleBlock" class="form-control" [(ngModel)]="b.datatype">
                                     <option *ngFor="let d of datatypes" [ngValue]="d">{{d.getShow()}}</option>
                                 </select>
                                 <ng-template #roleBlock>
-                                    <select class="form-control form-control-sm" [(ngModel)]="b.resourceRole">
+                                    <select class="form-control" [(ngModel)]="b.resourceRole">
                                         <option *ngFor="let r of roles" [value]="r.value">{{r.show}}</option>
                                     </select>
                                 </ng-template>

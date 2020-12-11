@@ -12,11 +12,11 @@
                 <img [src]="addBtnImgSrc"/>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="importFromWeb()">Add import from Web</a>
-                <a class="dropdown-item" (click)="importFromWebToMirror()">Add import from Web to mirror</a>
-                <a class="dropdown-item" (click)="importFromLocalFile()">Add import from Local file</a>
-                <a class="dropdown-item" (click)="importFromOntologyMirror()">Add import from Ontology mirror</a>
-                <a class="dropdown-item" (click)="importFromDatasetCatalog()">Add import from Dataset Catalog</a>
+                <a class="dropdown-item" (click)="importFromWeb()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.WEB'|translate}}</a>
+                <a class="dropdown-item" (click)="importFromWebToMirror()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.WEB_TO_MIRROR'|translate}}</a>
+                <a class="dropdown-item" (click)="importFromLocalFile()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.LOCAL_FILE'|translate}}</a>
+                <a class="dropdown-item" (click)="importFromOntologyMirror()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_MIRROR'|translate}}</a>
+                <a class="dropdown-item" (click)="importFromDatasetCatalog()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.DATASET_CATALOG'|translate}}</a>
             </div>
         </span>
     </div>
@@ -28,15 +28,15 @@
                     <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
                     <div class="btn-group float-right" ngbDropdown>
                         <button class="btn btn-xs btn-light dropdown-toggle predObjRenderPanelBtn" style="padding: 3px 6px;"
-                            data-toggle="dropdown" ngbDropdownToggle title="Add import" [disabled]="addDisabled">
+                            data-toggle="dropdown" ngbDropdownToggle [title]="addBtnImgTitle" [disabled]="addDisabled">
                             <span class="fas fa-plus" style="font-size: 9px;"></span>
                         </button>
                         <div class="dropdown-menu" ngbDropdownMenu>
-                            <a class="dropdown-item" (click)="importFromWeb()">Add import from Web</a>
-                            <a class="dropdown-item" (click)="importFromWebToMirror()">Add import from Web to mirror</a>
-                            <a class="dropdown-item" (click)="importFromLocalFile()">Add import from Local file</a>
-                            <a class="dropdown-item" (click)="importFromOntologyMirror()">Add import from Ontology mirror</a>
-                            <a class="dropdown-item" (click)="importFromDatasetCatalog()">Add import from Dataset Catalog</a>
+                            <a class="dropdown-item" (click)="importFromWeb()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.WEB'|translate}}</a>
+                            <a class="dropdown-item" (click)="importFromWebToMirror()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.WEB_TO_MIRROR'|translate}}</a>
+                            <a class="dropdown-item" (click)="importFromLocalFile()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.LOCAL_FILE'|translate}}</a>
+                            <a class="dropdown-item" (click)="importFromOntologyMirror()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_MIRROR'|translate}}</a>
+                            <a class="dropdown-item" (click)="importFromDatasetCatalog()">{{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} {{'METADATA.NAMESPACES_AND_IMPORTS.DATASET_CATALOG'|translate}}</a>
                         </div>
                     </div>
                 </div>

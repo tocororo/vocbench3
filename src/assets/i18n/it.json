@@ -589,8 +589,7 @@
             "CHECK": "Controlla",
             "LANGUAGES_TO_CHECK": "Lingue da controllare",
             "ONLY_MANDATORY": "Solo obbligatorie",
-            "ONLY_MANDATORY_INFO": "Controlla solo le lingue obbligatorie",
-            "MANDATORY": "Obbligatoria"
+            "ONLY_MANDATORY_INFO": "Controlla solo le lingue obbligatorie"
         },
         "STRUCTURAL": {
             "STRUCTUAL_CHECKS": "Controlli strutturali",
@@ -998,8 +997,15 @@
             "SUBTERMS": "Sottotermini",
             "SUPERPROPERTIES": "Super proprietà",
             "TOP_CONCEPT_OF": "Top concept di",
-            "TYPES": "Tipi"
-        },
+            "TYPES": "Tipi",
+            "PARTITIONS": "Partizioni",
+            "FILTER": {
+                "RESOURCE_TYPES": "Tipi di risorsa",
+                "SET_VISIBLE_FOR_ALL": "Rendi visibile per tutti i tipi di risorsa",
+                "HIDE_FOR_ALL": "Nascondi per tutti i tipi di risorsa",
+                "SET_VISIBLE_ALL": "Rendi visibili tutte le partizioni per tutti i tipi di risorsa"
+            }
+        },     
         "ACTIONS": {
             "RENAME": "Rinomina",
             "BLOCK_NAMESPACE": "Blocca namespace",
@@ -1014,7 +1020,22 @@
             "SET_AS_DEPRECATED": "Segna come deprecato",
             "ASSERT_INFERRED_STATEMENTS": "Asserisci le informazioni inferite",
             "SPAWN_CONCEPT_FROM_XLABEL": "Crea un nuovo concetto da questa xLabel",
-            "SHOW_IN_DATA_GRAPH": "Mostra in un grafo orientato ai dati"
+            "SHOW_IN_DATA_GRAPH": "Mostra in un grafo orientato ai dati",
+            "ADD_VALUE_MANUALLY": "Aggiungi valore manualmente",
+            "ADD_VALUE_FROM_ANOTHER_PROJ": "Aggiungi valore da un altro progetto",
+            "DELETE_ALL_VALUES": "Cancella tutti i valori",
+            "SHOW_ALL": "Mostra tutto...",
+            "CHANGE_PROPERTY": "Cambia proprietà",
+            "EDIT_LITERAL_CONTENT": "Modifica contenuto letterale",
+            "BULD_EDIT": "Modifica di massa",
+            "BULD_EDIT_INFO": "Aggiorna il valore per ogni risorsa che ha questa relazione predicato-oggetto",
+            "REPLACE_WITH_EXISTING_RES": "Rimpiazza con risorsa esistente",
+            "SPAWN_FROM_XLABEL": "Genera nuovo concetto da questa xLabel",
+            "MOVE_XLABEL_TO_CONCEPT": "Assegna xLabel ad un altro concetto",
+            "COPY_VALUE_TO_LOCALES": "Copia valore in altri locali",
+            "ASSERT_INFERRED_STATEMENT": "Asserisci informazione inferita",
+            "BULK_DELETE": "Cancellazione di massa",
+            "BULK_DELETE_INFO": "Cancella i valori per ogni risorsa che ha questa relazione predicato-oggetto"
         },
         "STATUS": {
             "RESOURCE_NOT_EXISTING": "Questa risorsa non è disponibile nel progetto corrente",
@@ -1022,7 +1043,32 @@
             "ACCESS_METHOD": "Metodo di accesso",
             "LOCAL_PROJECT": "Progetto locale",
             "OTHER_LOCAL_PROJECT": "Altro progetto locale",
-            "REMOTE_DATASET": "Dataset remoto"
+            "REMOTE_DATASET": "Dataset remoto",
+            "UNKNOWN_POSITION": "Posizione sconosciuta",
+            "CLOSE_ALL_TABS": "Chiudi tutti i tab",
+            "PREVIOUS_RESOURCE": "Risorsa precedente"
+        },
+        "MISC": {
+            "SHOW_ALL_CLASSES": "Mostra tutte le classi",
+            "INVERSE_PROPERTY": "Proprietà inversa",
+            "INVERSE_PROPERTY_MULTIVALUE_WARN": "In caso di più proprietà selezionate, il flag 'Proprietà inversa' verrà applicato a tutte (disponibile solo se sono tutte ObjectProperty)",
+            "EDIT_DATARANGE": "Modifica datarange",
+            "IS_ALREADY_IN_LIST": "è già nella lista!",
+            "PROPERTY_CHAIN": "Property chain",
+            "ORDERED": "Ordinati",
+            "VALLUE_TO_COPY": "Valore da copiare",
+            "TARGET_LANGS": "Lingue target"
+        },
+        "CODE_EDITOR": {
+            "APPLY_CHANGES": "Applica modifiche",
+            "DISABLED_UNDER_VALIDATION": "Il tab Code è stato disabilitato in quanto questa risorsa - o parte della sua descrizione - è sotto validazione"
+        },
+        "TERM_VIEW": {
+            "BROADER_CONCEPTS": "Concetti broader",
+            "TERM": "Termine",
+            "DEFINITION": "Definizione",
+            "REMOVE_BOX": "Rimuovi box",
+            "ADD_DEFINITION": "Aggiungi definizione"
         }
     },
     "SEARCH": {
@@ -1179,9 +1225,33 @@
         }
     },
     "WIDGETS": {
+        "EDITORS": {
+            "MANCHESTER": {
+                "HELPER": "Helper",
+                "MANCHESTER_SYNTAX_HELPER": "Helper sintassi Manchester",
+                "PREST_CTRL_SPACE": "Premi 'ctrl-space' per mostrare suggerimenti",
+                "TABLE_CONSTRUCTORS_INFO": "Questa tabella mostra le conversioni tra sintassi DL e sintassi Manchester per i seguenti costrutti",
+                "TABLE_AXIOMS_INFO": "Questa tabella mostra le conversioni tra sintassi DL e sintassi Manchester per i seguenti assiomi",
+                "CONSTRUCTOR": "Costrutto",
+                "DL_SYNTAX": "Sintassi DL",
+                "MANCHESTER_SYNTAX": "Sintassi Manchester",
+                "AXIOM": "Assioma"
+            }
+        },
         "FILE_PICKER": {
             "BROWSE": "Sfoglia",
             "SELECT_A_FILE": "Seleziona un file"
+        },
+        "SETTINGS_RENDERER": {
+            "ADD_OPTIONAL_VALUE": "Aggiungi valore opzionale",
+            "DELETE_OPTIONAL_VALUE": "Cancella valore opzionale",
+            "UNKNOWN_TYPE_WARN": "Questo parametro ha un tipo sconosciuto ({{propTypeName}}). Il valore inserito sarà interpretato come un valore JSON a basso livello"
+        },
+        "VALUE_PICKER": {
+            "PICK_EXISTING_RESOURCE": "Scegli una risorsa esistente",
+            "PICK_FROM_EXTERNAL_PROJ": "Scegli una risorsa da un progetto esterno",
+            "FROM_CURRENT_PROJ": "Dal progetto corrente",
+            "FROM_EXTERNAL_PROJ": "Da un progetto esterno"
         }
     },
     "COMMONS": {
@@ -1193,6 +1263,8 @@
             "ADD_AFTER": "Aggiungi dopo",
             "ADD_ALL": "Aggiungi tutto",
             "ADD_BEFORE": "Aggiungi prima",
+            "ADD_FIRST": "Aggiungi all'inizio",
+            "ADD_LAST": "Aggiungi alla fine",
             "ASSIGN": "Assegna",
             "CANCEL": "Cancella",
             "CHECK_ALL": "Seleziona tutto",
@@ -1206,6 +1278,8 @@
             "DISCARD": "Scarta",
             "EDIT": "Modifica",
             "EDIT_MANUALLY": "Modifica manualmente",
+            "ENABLE": "Abilita",
+            "ENABLE_ALL": "Abilita tutto",
             "EXPORT": "Esporta",
             "IMPORT": "Importa",
             "LOAD": "Carica",
@@ -1269,12 +1343,14 @@
         "LEVEL": "Livello",
         "LEXICALIZATION": "Lessicalizzazione",
         "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
+        "MANDATORY": "Obbligatorio",
         "MANDATORY_FIELD": "Campo obbligatorio",
         "MODE": "Modalità",
         "MODEL": "Modello",
         "NAME": "Nome",
         "NEW": "Nuovo",
         "ONTOLOGY_IRI": "IRI ontologia",
+        "OPTIONAL": "Opzionale",
         "OPTIONAL_FIELD": "Campo opzionale",
         "POSITION": "Posizione",
         "REPOSITORY_ID": "ID repository",
