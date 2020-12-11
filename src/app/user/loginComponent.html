@@ -6,6 +6,6 @@
 	<input type="text" class="form-control mb-2" [(ngModel)]="email" placeholder="E-mail address">
 	<input type="password" class="form-control mb-2" [(ngModel)]="password" placeholder="Password">
 	<button class="btn btn-primary mb-2" (click)="login()">{{'USER.LOGIN'|translate}}</button>
-	<a (click)="forgotPassword()" style="cursor: pointer">{{'USER.FORGOT_PASSWORD'|translate}}</a>
+	<a (click)="forgotPassword()" style="cursor: pointer">{{'USER.PASSWORD.FORGOT_PASSWORD'|translate}}</a>
 	<a [routerLink]="['/Registration/0']">{{'USER.SIGNUP'|translate}}</a>
 </div>

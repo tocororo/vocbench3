@@ -56,10 +56,10 @@
             <input type="text" class="form-control" [(ngModel)]="resourceStringValue">
         </ng-template>
         <div class="input-group-append">
-            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="confirmEdit()" placeholder="Confirm">
+            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="confirmEdit()" [title]="'COMMONS.ACTIONS.CONFIRM'|translate">
                 <span class="fas fa-check" style="color: green"></span>
             </button>
-            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="cancelEdit()" placeholder="{{'COMMONS.ACTIONS.CANCEL'|translate}}">
+            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="cancelEdit()" [title]="'COMMONS.ACTIONS.CANCEL'|translate">
                 <span class="fas fa-times" style="color: red"></span>
             </button>
         </div>

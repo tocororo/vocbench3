@@ -106,9 +106,7 @@
             "ADMINISTRATOR": "Amministratore",
             "ADMIN_ASSIGNED_PROJECTS_INFO": "L'amministratore ha automaticamente accesso a tutti i progetti",
             "ASSIGNED_TO_PROJECTS": "Assegnato ai progetti",
-            "CHANGE_PASSWORD": "Cambia password",
             "FORCE_PASSWORD_WARNING": "Questa procedura forza la modifica della password di {{userShow}}.<br>Nota: Esiste una procedura dedicata <i>password dimenticata</i> (accessibile dal form di login). E' raccomandabile lasciar aggiornare all'utente la propria password tramite tale procedura. Usate questa procedura solo se strettamente necessario.",
-            "NEW_PASSWORD": "Nuova password",
             "TEMPLATE_INFO": "Qui è possibile assegnare un ResourceView template all'utente. Il template descrive quali partizioni del ResourceView sono visibili di default.<br>E' inoltre possibile caricare template esistenti, o salvare template definiti, tramite la toolbar presente in alto al pannello."
         }
     },
@@ -425,7 +423,8 @@
             "SCHEME": "Schema",
             "SCHEMES": "Schemi",
             "CREATE": "Crea schema",
-            "DELETE": "Cancella schema"
+            "DELETE": "Cancella schema",
+            "ADD_ALL_CONCEPTS": "Aggiungi tutti i concetti allo schema selezionato"
         },
         "COMMONS": {
             "DEPRECATE": "Depreca",
@@ -1158,11 +1157,26 @@
             "OPTIONAL_RECOMMENDED_FIELD": "Campo opzionale ma raccomandato",
             "REGISTERED": "Registrato"
         },
+        "REGISTRATION": {
+            "USER_REGISTRATION": "Registrazione utente",
+            "NO_USER_REGISTERED_MSG": [
+                "VocBench non ha rilevato alcun utente registrato. Per usare la piattaforma è necessario creare un amministratore inserendo dati personali e le credenziali di accesso. Un utente predefinito", 
+                "è disponibile per coloro che desiderino usare VocBench come un semplice tool desktop e saltare la procedura di creazione utente."
+            ],
+            "FILL_PREDEFINED_USER": "Riempi dati utente predefinito"
+        },
         "USER_DETAILS": "Dettagli utente",
-        "USER_LOGIN": "Login utente",
-        "LOGIN": "Accedi",
-        "FORGOT_PASSWORD": "Password dimenticata?",
-        "SIGNUP": "Registrati"
+        "USER_LOGIN": "User login",
+        "LOGIN": "Log in",
+        "SIGNUP": "Registrati",
+        "PASSWORD": {
+            "CHANGE_PASSWORD": "Cambia password",
+            "FORGOT_PASSWORD": "Password dimenticata?",
+            "RESET_PASSWORD": "Resetta password",
+            "OLD_PASSWORD": "Vecchia password",
+            "NEW_PASSWORD": "Nuova password",
+            "CONFIRM_NEW_PASSWORD": "Conferma nuova password"
+        }
     },
     "WIDGETS": {
         "FILE_PICKER": {
@@ -1185,6 +1199,7 @@
             "CLONE": "Clona",
             "CLOSE": "Chiudi",
             "CONFIGURE": "Configura",
+            "CONFIRM": "Conferma",
             "CREATE": "Crea",
             "DELETE": "Elimina",
             "DELETE_ALL": "Cancella tutto",
@@ -1246,6 +1261,7 @@
         "DATASET": "Dataset",
         "DESCRIPTION": "Descrizione",
         "DETAILS": "Dettagli",
+        "ENABLED": "Abilitato",
         "FORCE_FORMAT": "Forza il formato",
         "FORMAT": "Formato",
         "GROUPS": "Gruppi",

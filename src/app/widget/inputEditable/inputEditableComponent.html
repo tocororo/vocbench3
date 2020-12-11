@@ -15,11 +15,11 @@
             <span class="fas fa-pencil-alt"></span>
         </button>
         <button *ngIf="editInProgress" class="btn btn-light" type="button" style="width:18px; padding: 0px;"
-            (click)="confirmEdit()" title="Confirm">
+            (click)="confirmEdit()" [title]="'COMMONS.ACTIONS.CONFIRM'|translate">
             <span class="fas fa-check" style="color: green"></span>
         </button>
         <button *ngIf="editInProgress" class="btn btn-light" type="button" style="width:18px; padding: 0px;"
-            (click)="cancelEdit()" title="{{'COMMONS.ACTIONS.CANCEL'|translate}}">
+            (click)="cancelEdit()" [title]="'COMMONS.ACTIONS.CANCEL'|translate">
             <span class="fas fa-times" style="color: red"></span>
         </button>
     </span>

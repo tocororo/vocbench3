@@ -434,7 +434,14 @@ export class NamespacesAndImportsComponent {
         this.viewChildResView.buildResourceView(this.baseUriRes);
     }
 
+    private ontoInitialized: boolean = false;
     onOntologyUpdated() {
+        //when the ResView of the ontology is initialized, emits an "update" event.
+        //This check is in order to prevent the refresh of imports and prefix-ns mappings (that is already done in ngOnInit) when ontology ResView in initialized
+        if (!this.ontoInitialized) {
+            this.ontoInitialized = true;
+            return;
+        }
         this.refreshImports();
         this.refreshNSPrefixMappings();
     }

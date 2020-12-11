@@ -2,7 +2,7 @@
 
     <div class="card card-default vbox" style="flex: initial">
         <div class="card-header">
-            <label><span class="fas fa-user"></span> User registration:</label>
+            <label><span class="fas fa-user"></span> {{'USER.REGISTRATION.USER_REGISTRATION'|translate}}:</label>
         </div>
         <div class="card-body scrollableContainer">
             <div *ngIf="privacyStatementAvailable" class="alert alert-info" style="margin-bottom: 6px;">
@@ -12,12 +12,11 @@
                 </a>
             </div>
 
-            <div *ngIf="firstAccess" class="alert alert-info" style="margin-bottom: 4px;">
-                VocBench found no registered user. In order to use the platform, you need to create an administrator account by entering
-                personal data and login credentials. A pre-defined user
+            <div *ngIf="firstAccess" class="alert alert-info mb-2">
+                {{'USER.REGISTRATION.NO_USER_REGISTERED_MSG.0'|translate}}
                 (<span style="font-weight: bold;">username:</span> admin@vocbench.com, <span style="font-weight: bold;">password:</span> admin)
-                is available for letting those willing to use VocBench as a simple desktop tool and skip the user creation procedure.
-                <button class="btn btn-xs btn-primary" (click)="fillDefaultUser()">Fill pre-defined user</button>
+                {{'USER.REGISTRATION.NO_USER_REGISTERED_MSG.1'|translate}}
+                <button class="btn btn-xs btn-primary" (click)="fillDefaultUser()">{{'USER.REGISTRATION.FILL_PREDEFINED_USER'|translate}}</button>
             </div>
             <user-create [(ngModel)]="userForm"></user-create>
         </div>

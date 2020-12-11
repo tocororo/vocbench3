@@ -106,9 +106,7 @@
             "ADMINISTRATOR": "Administrator",
             "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has autmoatically access to all projects",
             "ASSIGNED_TO_PROJECTS": "Assigned to projects",
-            "CHANGE_PASSWORD": "Change password",
             "FORCE_PASSWORD_WARNING": "This procedure will force the change of {{userShow}}'s password.<br>Note: A <i>forgot password</i> procedure already exists (available in the login form). It is recommended to let the user update its own password through that procedure. Use this procedure only if strictly necessary.",
-            "NEW_PASSWORD": "New password",
             "TEMPLATE_INFO": "Here you can assign a ResourceView template to the user. This template describes which ResourceView partitions are visible by default.<br>You can also load an already existing template, or decide to save the template you defined, through the toolbar in panel header."
         }
     },
@@ -1159,11 +1157,26 @@
             "OPTIONAL_RECOMMENDED_FIELD": "Optional but highly recommended field",
             "REGISTERED": "Registered"
         },
+        "REGISTRATION": {
+            "USER_REGISTRATION": "User registration",
+            "NO_USER_REGISTERED_MSG": [
+                "VocBench found no registered user. In order to use the platform, you need to create an administrator account by entering personal data and login credentials. A pre-defined user", 
+                "is available for letting those willing to use VocBench as a simple desktop tool and skip the user creation procedure."
+            ],
+            "FILL_PREDEFINED_USER": "Fill pre-defined user"
+        },
         "USER_DETAILS": "User details",
         "USER_LOGIN": "User login",
         "LOGIN": "Log in",
-        "FORGOT_PASSWORD": "Forgot password?",
-        "SIGNUP": "Sign up"
+        "SIGNUP": "Sign up",
+        "PASSWORD": {
+            "CHANGE_PASSWORD": "Change password",
+            "FORGOT_PASSWORD": "Forgot password?",
+            "RESET_PASSWORD": "Reset password",
+            "OLD_PASSWORD": "Old password",
+            "NEW_PASSWORD": "New password",
+            "CONFIRM_NEW_PASSWORD": "Confirm new password"
+        }
     },
     "WIDGETS": {
         "FILE_PICKER": {
@@ -1186,6 +1199,7 @@
             "CLONE": "Clone",
             "CLOSE": "Close",
             "CONFIGURE": "Configure",
+            "CONFIRM": "Confirm",
             "CREATE": "Create",
             "DELETE": "Delete",
             "DELETE_ALL": "Delete all",
