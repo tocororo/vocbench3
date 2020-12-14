@@ -2,7 +2,7 @@
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span>
-            <button class="btn btn-light btn-xs" title="Change class" (click)="changeClass()" [disabled]="!clsChangeable">
+            <button class="btn btn-light btn-xs" [title]="'DATA.CLASS.CHANGE_CLASS'|translate" (click)="changeClass()" [disabled]="!clsChangeable">
                 <rdf-resource [resource]="resourceClass"></rdf-resource>
             </button>
         </span>
@@ -17,7 +17,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <td class="text-right"><label>{{'MODELS.RESOURCES.LABEL'|translate}}:</label></td>
+                <td class="text-right"><label>{{'MODELS.RESOURCE.LABEL'|translate}}:</label></td>
                 <td>
                     <div class="form-control">
                         <rdf-resource [resource]="xLabel"></rdf-resource>
@@ -27,7 +27,7 @@
             <tr>
                 <td class="text-right"><label>URI:</label></td>
                 <td>
-                    <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
+                    <editable-ns-input [(ngModel)]="uri" [placeholder]="'DATA.COMMONS.LEAVE_EMPTY_FOR_RANDOM_URI'|translate">
                     </editable-ns-input>
                 </td>
             </tr>
@@ -55,7 +55,7 @@
                 </td>
             </tr>
             <tr *ngIf="isPositionSibling()">
-                <td class="text-right"><label>Sibling:</label></td>
+                <td class="text-right"><label>{{'DATA.CONCEPT.SPAWN_FROM_LABEL.SIBLING'|translate}}:</label></td>
                 <td>
                     <div class="input-group">
                         <div class="form-control">
@@ -71,8 +71,7 @@
             </tr>
             <tr *ngIf="isPositionSibling() && multipleSiblingBroaders">
                 <td class="text-right" style="white-space: nowrap">
-                    <span class="fas fa-info-circle"
-                        title="Selected sibling concept has multiple broaders, select which one will be the broader of the spawning concept"></span>
+                    <span class="fas fa-info-circle" [title]="'DATA.CONCEPT.SPAWN_FROM_LABEL.MULTIPLE_SIBLING_WARN'|translate"></span>
                     <label>Broader:</label>
                 </td>
                 <td>

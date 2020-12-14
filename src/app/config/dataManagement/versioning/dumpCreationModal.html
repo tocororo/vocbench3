@@ -6,7 +6,7 @@
     <div class="form-group row">
         <label class="col-form-label col-sm-3">{{'DATA_MANAGEMENT.VERSIONING.VERSION_ID'|translate}}:</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" [(ngModel)]="versionId" placeholder="Version ID" sanitized>
+            <input type="text" class="form-control" [(ngModel)]="versionId" sanitized>
         </div>
     </div>
 
@@ -48,7 +48,7 @@
                     <input type="text" class="form-control" [(ngModel)]="repositoryId" [disabled]="isSelectedRepoAccessCreateMode()">
                     <span class="input-group-append">
                         <button class="btn btn-light" type="button" (click)="changeRemoteRepository()"
-                            title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode()">
+                            [title]="'PROJECTS.SELECT_REMOTE_REPO'|translate" [disabled]="isSelectedRepoAccessCreateMode()">
                             <span class="fas fa-folder-open"></span>
                         </button>
                     </span>

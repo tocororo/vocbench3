@@ -98,8 +98,8 @@
                                     {{item.operationParameters[2].value}}
                                 </span>
                             </ng-container>
-                            <button *ngIf="showOtherParamButton(item)" class="btn btn-xs btn-light" (click)="inspectParams(item)"
-                                title="Show all parameters">
+                            <button *ngIf="showOtherParamButton(item)" class="btn btn-xs btn-light" (click)="inspectParams(item)" 
+                                [title]="'COMMONS.ACTIONS.SHOW_ALL'|translate">
                                 <span class="fas fa-ellipsis-h"></span>
                             </button>
                         </td>

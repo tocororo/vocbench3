@@ -4,10 +4,10 @@
 <div class="modal-body vbox">
 
     <div class="hbox" style="flex: initial; align-items: center; margin-bottom: 5px;">
-        <label style="margin-right: 4px;">Lexicon:</label>
-        <button class="btn btn-light btn-xs" title="Change Lexicon" (click)="changeLexicon()" [disabled]="!lexiconChangeable">
+        <label style="margin-right: 4px;">{{'DATA.LEXICON.LEXICON'|translate}}:</label>
+        <button class="btn btn-light btn-xs" [title]="'DATA.LEXICON.CHANGE_LEXICON'|translate" (click)="changeLexicon()" [disabled]="!lexiconChangeable">
             <rdf-resource *ngIf="activeLexicon" [resource]="activeLexicon"></rdf-resource>
-            <span *ngIf="!activeLexicon">Select Lexicon</span>
+            <span *ngIf="!activeLexicon">{{'DATA.LEXICON.SELECT_LEXICON'|translate}}</span>
         </button>
     </div>
 

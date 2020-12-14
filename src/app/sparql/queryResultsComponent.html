@@ -57,7 +57,7 @@
             </div>
         </div>
         <button *ngIf="isOpenGraphEnabled()" class="btn btn-xs btn-light ml-2" (click)="openGraph()">
-            <img src="./assets/images/icons/res/ontology.png" title="See results as graph" width="11px">
+            <img src="./assets/images/icons/res/ontology.png" [title]="'SPARQL.RESULTS.SHOW_RESULTS_AS_GRAPH'|translate" width="11px">
         </button>
         <div class="btn-group btn-group-xs float-right">
             <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="resultsPage=resultsPage-1" [disabled]="resultsPage==0">

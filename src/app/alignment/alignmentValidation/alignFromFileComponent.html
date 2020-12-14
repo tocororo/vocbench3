@@ -5,7 +5,7 @@
             <table class="table table-sm table-borderless">
                 <tbody>
                     <tr style="margin-bottom: 4px">
-                        <td style="width: 1%" class="text-right" nowrap><label>{{'ALIGNMENT.FROM_FILE.ALIGN_FILE'|translate}}:</label></td>
+                        <td style="width: 1%" class="text-right" nowrap><label>{{'ALIGNMENT.VALIDATION.FROM_FILE.ALIGN_FILE'|translate}}:</label></td>
                         <td>
                             <div class="hbox">
                                 <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'application/rdf+xml'"></file-picker>
@@ -17,11 +17,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 1%" class="text-right" nowrap><label>{{'ALIGNMENT.FROM_FILE.LEFT_ONTO_URI'|translate}}:</label></td>
+                        <td style="width: 1%" class="text-right" nowrap><label>{{'ALIGNMENT.VALIDATION.FROM_FILE.LEFT_ONTO_URI'|translate}}:</label></td>
                         <td><input type="text" class="form-control" [(ngModel)]="sourceBaseURI" readonly></td>
                     </tr>
                     <tr>
-                        <td style="width: 1%" class="text-right" nowrap><label>{{'ALIGNMENT.FROM_FILE.RIGHT_ONTO_URI'|translate}}:</label></td>
+                        <td style="width: 1%" class="text-right" nowrap><label>{{'ALIGNMENT.VALIDATION.FROM_FILE.RIGHT_ONTO_URI'|translate}}:</label></td>
                         <td><input type="text" class="form-control" [(ngModel)]="targetBaseURI" readonly></td>
                     </tr>
                 </tbody>

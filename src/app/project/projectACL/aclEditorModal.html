@@ -1,10 +1,10 @@
 <div class="modal-header">
-    <h3 class="modal-title">Project ACL</h3>
+    <h3 class="modal-title">{{'PROJECTS.ACL.PROJECT_ACL'|translate}}</h3>
 </div>
 <div class="modal-body vbox blockingDivHost">
 
     <div class="input-group" style="margin-bottom: 4px;">
-        <input class="form-control" placeholder="Consumer Project name" [(ngModel)]="filterProject">
+        <input class="form-control" [placeholder]="'MODEL.PROJECT.CONSUMER'|translate" [(ngModel)]="filterProject">
         <span class="input-group-append">
             <span class="input-group-text">
                 <span class="fas fa-filter"></span>
@@ -14,7 +14,7 @@
 
     <div class="card card-default vbox">
         <div class="card-header">
-            <label>Access Control List of project <i>{{project.getName()}}</i></label>
+            <label>{{'PROJECTS.ACL.ACL_OF_PROJECT'|translate}} <i>{{project.getName()}}</i></label>
         </div>
 
         <div class="card-body scrollableContainer">
@@ -41,7 +41,7 @@
 
         <div *ngIf="lock" class="card-footer">
             <div class="row">
-                <label class="col-form-label col-sm-4">Lockable:</label>
+                <label class="col-form-label col-sm-4">{{'PROJECTS.ACL.LOCKABLE'|translate}}:</label>
                 <div class="col-sm-8">
                     <select class="form-control form-control-sm" (ngModelChange)="onLockLevelChange($event)" [(ngModel)]="lock.availableLockLevel">
                         <option *ngFor="let ll of lockLevels" [value]="ll">{{ll}}</option>

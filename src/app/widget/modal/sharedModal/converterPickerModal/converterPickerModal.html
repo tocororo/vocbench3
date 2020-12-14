@@ -12,7 +12,7 @@
                 <tr>
                     <th>{{'COMMONS.NAME'|translate}}</th>
                     <th>{{'COMMONS.DESCRIPTION'|translate}}</th>
-                    <th nowrap>RDF Capability</th>
+                    <th nowrap>{{'SHEET2RDF.CONVERTER.RDF_CAPABILITY'|translate}}</th>
                     <th>URI</th>
                 </tr>
             </thead>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="row mt-3">
-        <label class="col-form-label col-sm-1">Signature:</label>
+        <label class="col-form-label col-sm-1">{{'SHEET2RDF.CONVERTER.SIGNATURE'|translate}}:</label>
         <div class="col-sm-11">
             <div class="input-group">
                 <span *ngIf="selectedConverter?.getRDFCapability() == 'node'" class="input-group-prepend" ngbDropdown>
@@ -44,7 +44,7 @@
                 </span>
                 <input type="text" class="form-control" [ngModel]="projectionOperator" readonly>
                 <span class="input-group-append">
-                    <button class="btn btn-light" (click)="chooseSignature()" title="Change signature" [disabled]="!isSignatureEditable()">
+                    <button class="btn btn-light" (click)="chooseSignature()" [title]="'COMMONS.ACTIONS.EDIT'|translate" [disabled]="!isSignatureEditable()">
                         <span class="fas fa-pencil-alt"></span>
                     </button>
                 </span>

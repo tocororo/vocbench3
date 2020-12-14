@@ -23,7 +23,7 @@
                             <td>
                                 <div class="dropdown float-right" ngbDropdown>
                                     <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle
-                                        title="Update mirror from..." [disabled]="!isUpdateMirrorAuthorized()">
+                                        [title]="'METADATA.ONTOLOGY_MIRROR_MANAGER.UPDATE_FROM_WEB_BASEURI'|translate" [disabled]="!isUpdateMirrorAuthorized()">
                                         <span class="fas fa-pencil-alt"></span>
                                     </button>
                                     <div class="dropdown-menu" ngbDropdownMenu>

@@ -10,10 +10,10 @@
                 <button class="btn btn-xs btn-light" (click)="initProjects()" [title]="'COMMONS.ACTIONS.REFRESH'|translate">
                     <span class="fas fa-redo"></span>
                 </button>
-                <button class="btn btn-xs btn-light" (click)="openACLModal()" title="Show ACL matrix">
+                <button class="btn btn-xs btn-light" (click)="openACLModal()" [title]="'PROJECTS.ACL.SHOW_ACL_MATRIX'|translate">
                     ACL
                 </button>
-                <button class="btn btn-xs btn-light" (click)="settings()" title="Project view settings">
+                <button class="btn btn-xs btn-light" (click)="settings()" [title]="'PROJECTS.CONFIG.PROJ_VIEW_SETTINGS'|translate">
                     <span class="fas fa-cog"></span>
                 </button>
             </div>
@@ -36,7 +36,7 @@
                                 </label>
                             </div>
                             <div class="groupPanel-heading-content clickable" style="margin-left: 4px;">
-                                <button *ngIf="pd.dir" class="close" (click)="renameDirectory(pd.dir)" title="Rename directory" style="font-size: 12px;">
+                                <button *ngIf="pd.dir" class="close" (click)="renameDirectory(pd.dir)" [title]="'PROJECTS.RENAME_DIR'|translate" style="font-size: 12px;">
                                     <span class="fas fa-pencil-alt"></span>
                                 </button>
                             </div>
@@ -65,12 +65,12 @@
                                         {{p.getLexicalizationModelType(true)}}
                                     </div>
                                     <div *ngIf="columnOrder['history']" class="text-center" [ngStyle]="{ order: columnOrder['history'].order, flex: columnOrder['history'].flex }">
-                                        <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green" title="History enabled"></span>
-                                        <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred" title="History disabled"></span>
+                                        <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green"></span>
+                                        <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred"></span>
                                     </div>
                                     <div *ngIf="columnOrder['validation']" class="text-center" [ngStyle]="{ order: columnOrder['validation'].order, flex: columnOrder['validation'].flex }">
-                                        <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green" title="Validation enabled"></span>
-                                        <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred" title="Validation disabled"></span>
+                                        <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green"></span>
+                                        <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred"></span>
                                     </div>
                                     <div *ngIf="columnOrder['location']" class="text-center" [ngStyle]="{ order: columnOrder['location'].order, flex: columnOrder['location'].flex }">
                                         {{p.getRepositoryLocation().location}}
@@ -86,12 +86,12 @@
                                                     <span class="fas fa-caret-down"></span>
                                                 </button>
                                                 <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                                                    <button class="dropdown-item" (click)="editDirectory(p, pd.dir)">Change directory</button>
-                                                    <button class="dropdown-item" (click)="editACL(p)">Edit ACL</button>
-                                                    <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</button>
-                                                    <button class="dropdown-item" (click)="editDescription(p)">Edit description</button>
+                                                    <button class="dropdown-item" (click)="editDirectory(p, pd.dir)">{{'PROJECTS.ACTIONS.CHANGE_DIR'|translate}}</button>
+                                                    <button class="dropdown-item" (click)="editACL(p)">{{'PROJECTS.ACTIONS.EDIT_ACL'|translate}}</button>
+                                                    <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
+                                                    <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
                                                     <div class="dropdown-divider"></div>
-                                                    <button class="dropdown-item" (click)="openPropertyModal(p)">Properties</button>
+                                                    <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.PROPERTIES'|translate}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -130,12 +130,12 @@
                             {{p.getLexicalizationModelType(true)}}
                         </div>
                         <div *ngIf="columnOrder['history']" class="text-center" [ngStyle]="{ order: columnOrder['history'].order, flex: columnOrder['history'].flex }">
-                            <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green" title="History enabled"></span>
-                            <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred" title="History disabled"></span>
+                            <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green"></span>
+                            <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred"></span>
                         </div>
                         <div *ngIf="columnOrder['validation']" class="text-center" [ngStyle]="{ order: columnOrder['validation'].order, flex: columnOrder['validation'].flex }">
-                            <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green" title="Validation enabled"></span>
-                            <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred" title="Validation disabled"></span>
+                            <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green"></span>
+                            <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred"></span>
                         </div>
                         <div *ngIf="columnOrder['location']" class="text-center" [ngStyle]="{ order: columnOrder['location'].order, flex: columnOrder['location'].flex }">
                             {{p.getRepositoryLocation().location}}

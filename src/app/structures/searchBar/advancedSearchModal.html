@@ -66,7 +66,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
                         <span class="input-group-append">
-                            <button class="btn btn-light" (click)="selectRestrictionLanguages()" placeholder="Select languages" [disabled]="!restrictLang">
+                            <button class="btn btn-light" (click)="selectRestrictionLanguages()" [title]="'SEARCH.SETTINGS.SELECT_LANGS'|translate" [disabled]="!restrictLang">
                                 <span class="fas fa-pencil-alt"></span>
                             </button>
                         </span>
@@ -176,7 +176,7 @@
                     <div class="card card-default" style="flex: 1;">
                         <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">{{'MODELS.RESOURCES.PREDICATE'|translate}}:</label>
+                                <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true"
                                     (resourceChanged)="updatePropIngoing(group, $event)">
                                 </resource-picker>
@@ -232,7 +232,7 @@
                     <div class="card card-default" style="flex: 1;">
                         <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">{{'MODELS.RESOURCES.PREDICATE'|translate}}:</label>
+                                <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true" 
                                     (resourceChanged)="updatePropOutgoingValue(group, $event)">
                                 </resource-picker>
@@ -277,7 +277,7 @@
                     <div class="card card-default" style="flex: 1;">
                         <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">{{'MODELS.RESOURCES.PREDICATE'|translate}}:</label>
+                                <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.predicate" [config]="{ roles: ['property'] }" [editable]="true" 
                                     (resourceChanged)="updatePropOutgoingFreeText(group, $event)">
                                 </resource-picker>

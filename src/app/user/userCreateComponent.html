@@ -1,11 +1,11 @@
 <div class="form-group row">
-    <label class="col-sm-2 col-form-label">{{'USER.FORM.EMAIL'|translate}}: <span style="color: red">*</span></label>
+    <label class="col-sm-2 col-form-label">{{'MODELS.USER.EMAIL'|translate}}: <span style="color: red">*</span></label>
     <div class="col-sm-10">
-        <input type="email" class="form-control" [(ngModel)]="form.email" (ngModelChange)="onModelChange()"  placeholder="E-mail address">
+        <input type="email" class="form-control" [(ngModel)]="form.email" (ngModelChange)="onModelChange()"  [placeholder]="'MODELS.USER.EMAIL'|translate">
     </div>
 </div>
 <div class="form-group row">
-    <label class="col-sm-2 col-form-label">{{'USER.FORM.PASSWORD'|translate}}: <span style="color: red">*</span></label>
+    <label class="col-sm-2 col-form-label">{{'MODELS.USER.PASSWORD'|translate}}: <span style="color: red">*</span></label>
     <div class="col-sm-4">
         <div class="input-group">
             <input *ngIf="!showPwd" type="password" class="form-control" [(ngModel)]="form.password" (ngModelChange)="onModelChange()" placeholder="Password">
@@ -18,7 +18,7 @@
             </span>
         </div>
     </div>
-    <label class="col-sm-2 col-form-label" style="white-space: nowrap;">{{'USER.FORM.CONFIRM_PASSWORD'|translate}}: <span style="color: red">*</span></label>
+    <label class="col-sm-2 col-form-label" style="white-space: nowrap;">{{'MODELS.USER.CONFIRM_PASSWORD'|translate}}: <span style="color: red">*</span></label>
     <div class="col-sm-4">
         <div class="input-group">
             <input *ngIf="!showPwdConf" type="password" class="form-control" [ngClass]="{invalid : !isConfirmPwdOk()}" 
@@ -35,15 +35,15 @@
     </div>
 </div>
 <div class="form-group row">
-    <label class="col-sm-2 col-form-label">{{'USER.FORM.GIVEN_NAME'|translate}}: <span style="color: red">*</span></label>
+    <label class="col-sm-2 col-form-label">{{'MODELS.USER.GIVEN_NAME'|translate}}: <span style="color: red">*</span></label>
     <div class="col-sm-10">
-        <input class="form-control" [(ngModel)]="form.givenName" (ngModelChange)="onModelChange()"  placeholder="Given name">
+        <input class="form-control" [(ngModel)]="form.givenName" (ngModelChange)="onModelChange()"  [placeholder]="'MODELS.USER.GIVEN_NAME'|translate">
     </div>
 </div>
 <div class="form-group row">
-    <label class="col-sm-2 col-form-label">{{'USER.FORM.FAMILY_NAME'|translate}}: <span style="color: red">*</span></label>
+    <label class="col-sm-2 col-form-label">{{'MODELS.USER.FAMILY_NAME'|translate}}: <span style="color: red">*</span></label>
     <div class="col-sm-10">
-        <input class="form-control" [(ngModel)]="form.familyName" (ngModelChange)="onModelChange()"  placeholder="Family name">
+        <input class="form-control" [(ngModel)]="form.familyName" (ngModelChange)="onModelChange()"  [placeholder]="'MODELS.USER.FAMILY_NAME'|translate">
     </div>
 </div>
 
@@ -70,32 +70,32 @@
 <!-- Others -->
 <div class="form-group row">
     <label class="col-sm-2 col-form-label">
-        {{'USER.FORM.USER_IRI'|translate}}:
+        {{'MODELS.USER.USER_IRI'|translate}}:
         <span class="fas fa-info-circle" [title]="iriInfoTitle"></span>
     </label>
     <div class="col-sm-10">
-        <input *ngIf="!personalUrlVisible" class="form-control" [(ngModel)]="form.iri" placeholder="User IRI" (ngModelChange)="onModelChange()">
+        <input *ngIf="!personalUrlVisible" class="form-control" [(ngModel)]="form.iri" [placeholder]="'MODELS.USER.USER_IRI'|translate" (ngModelChange)="onModelChange()">
         <div *ngIf="personalUrlVisible" class="input-group">
-            <input class="form-control" [(ngModel)]="form.iri" placeholder="User IRI" (ngModelChange)="onModelChange()" [disabled]="form.urlAsIri">
+            <input class="form-control" [(ngModel)]="form.iri" [placeholder]="'MODELS.USER.USER_IRI'|translate" (ngModelChange)="onModelChange()" [disabled]="form.urlAsIri">
             <span class="input-group-append">
                 <span class="input-group-text">
-                    <input type="checkbox" [(ngModel)]="form.urlAsIri" title="Use personal URL as user IRI" (ngModelChange)="onUrlAsIriChange()">
+                    <input type="checkbox" [(ngModel)]="form.urlAsIri" [title]="'MODELS.USER.PERSONAL_URL_AS_IRI'|translate" (ngModelChange)="onUrlAsIriChange()">
                 </span>
             </span>
         </div>
     </div>
 </div>
 <div class="form-group row">
-    <label class="col-sm-2 col-form-label">{{'USER.FORM.AVATAR_URL'|translate}}:</label>
+    <label class="col-sm-2 col-form-label">{{'MODELS.USER.AVATAR_URL'|translate}}:</label>
     <div class="col-sm-10">
-        <input class="form-control" [(ngModel)]="form.avatarUrl" placeholder="Avatar URL" (ngModelChange)="onModelChange()">
+        <input class="form-control" [(ngModel)]="form.avatarUrl" [placeholder]="'MODELS.USER.AVATAR_URL'" (ngModelChange)="onModelChange()">
     </div>
 </div>
 <div class="form-group row">
-    <label class="col-sm-2 col-form-label">{{'USER.FORM.LANGUAGE_PROFICIENCIES'|translate}}: <span style="color: red">**</span></label>
+    <label class="col-sm-2 col-form-label">{{'MODELS.USER.LANGUAGE_PROFICIENCIES'|translate}}: <span style="color: red">**</span></label>
     <div class="col-sm-10">
         <div class="input-group">
-            <input class="form-control" [(ngModel)]="form.languageProficiencies" placeholder="Language proficiencies" readonly>
+            <input class="form-control" [(ngModel)]="form.languageProficiencies" [placeholder]="'MODELS.USER.LANGUAGE_PROFICIENCIES'|translate" readonly>
             <span class="input-group-append">
                 <button class="btn btn-light" (click)="editLanguages()">
                     <span class="fas fa-pencil-alt"></span>

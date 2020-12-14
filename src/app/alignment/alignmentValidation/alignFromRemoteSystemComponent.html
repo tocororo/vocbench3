@@ -2,11 +2,11 @@
 
     <div class="card card-alt vbox">
         <div class="card-header">
-            <label>{{'ALIGNMENT.REMOTE_SYS.MAIN.REMOTE_ALIGN_SYS'|translate}}</label>
+            <label>{{'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.REMOTE_ALIGN_SYS'|translate}}</label>
             <div *ngIf="serviceMetadata" class="ml-3 text-muted">
                 {{serviceMetadata.service}} <b>[</b>{{serviceMetadata.version}}<b>]</b>
             </div>
-            <span *ngIf="serverDown" class="fas fa-exclamation-triangle ml-3" [title]="'ALIGNMENT.REMOTE_SYS.MAIN.SERVICE_DOWN'|translate"></span>
+            <span *ngIf="serverDown" class="fas fa-exclamation-triangle ml-3" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.SERVICE_DOWN'|translate"></span>
             <div style="flex: 1"></div> <!-- a spacer -->
             <div class="btn-toolbar">
                 <button *ngIf="isSettingsAuthorized" class="btn btn-xs btn-light" (click)="settings()" [title]="'COMMONS.SETTINGS'|translate">
@@ -19,7 +19,7 @@
             <div class="card card-default vbox" style="min-height: 90px; max-height: 150px;">
                 <div class="card-header">
                     <div class="hbox">
-                        <label style="flex: 1;">{{'ALIGNMENT.REMOTE_SYS.MAIN.TASKS'|translate}}</label>
+                        <label style="flex: 1;">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.TASKS'|translate}}</label>
                         <div class="btn-toolbar">
                             <div class="btn-group btn-group-xs">
                                 <button class="btn btn-light" (click)="createTask()" [title]="'COMMONS.ACTIONS.CREATE'|translate" [disabled]="serverDown || serviceNotConfigured">
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="card-body scrollableContainer">
-                    <div *ngIf="serviceNotConfigured; else tasksListBlock" class="alert alert-warning" [innerHTML]="'ALIGNMENT.REMOTE_SYS.MAIN.UNCONFIGURED_WARN'|translate">
+                    <div *ngIf="serviceNotConfigured; else tasksListBlock" class="alert alert-warning" [innerHTML]="'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.UNCONFIGURED_WARN'|translate">
                     </div>
 
                     <ng-template #tasksListBlock>
@@ -51,11 +51,11 @@
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th>{{'ALIGNMENT.REMOTE_SYS.MAIN.LEFT_PROJECT'|translate}}</th>
-                                    <th>{{'ALIGNMENT.REMOTE_SYS.MAIN.RIGHT_PROJECT'|translate}}</th>
+                                    <th>{{'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.LEFT_PROJECT'|translate}}</th>
+                                    <th>{{'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.RIGHT_PROJECT'|translate}}</th>
                                     <th>{{'COMMONS.STATUS.STATUS'|translate}}</th>
-                                    <th>{{'ALIGNMENT.REMOTE_SYS.MAIN.START_TIME'|translate}}</th>
-                                    <th>{{'ALIGNMENT.REMOTE_SYS.MAIN.END_TIME'|translate}}</th>
+                                    <th>{{'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.START_TIME'|translate}}</th>
+                                    <th>{{'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.END_TIME'|translate}}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -72,7 +72,7 @@
                                     <td>{{task.endTime}}</td>
                                     <td>
                                         <button class="btn btn-sm btn-light text-nowrap" (click)="fetchAlignment(task)" [disabled]="task.status != 'completed'">
-                                            {{'ALIGNMENT.REMOTE_SYS.MAIN.START_VALIDATION'|translate}}
+                                            {{'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.START_VALIDATION'|translate}}
                                         </button>
                                     </td>
                                 </tr>

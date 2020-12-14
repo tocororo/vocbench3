@@ -1,14 +1,12 @@
 <div class="modal-header">
     <h3 class="modal-title">
-        Validation comments
+        {{'HISTORY_VALIDATION.VALIDATION_COMMENT.VALIDATION_COMMENTS'|translate}}
     </h3>
 </div>
 <div class="modal-body vbox">
 
-    <div class="alert alert-warning" style="margin-bottom: 6px;">
-        For the following rejected commits it is possible to provide a comment in order to motivate the decision to reject.
-        Some rejection has no comment provided. Even if the comment is optional, it is recommended to provide it.
-        Anyway, if you don't want to provide a comment at all, you can leave empty the text field and continue.
+    <div class="alert alert-warning mb-2">
+        {{'HISTORY_VALIDATION.VALIDATION_COMMENT.COMMENT_INFO'|translate}}
     </div>
 
     <div class="scrollableContainer">
@@ -20,9 +18,9 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th class="text-center">Commit ID</th>
+                    <th class="text-center">{{'HISTORY_VALIDATION.COMMIT.COMMIT_ID'|translate}}</th>
                     <th class="text-center">{{'COMMONS.ACTIONS.ACTION'|translate}}</th>
-                    <th class="text-center">Comment</th>
+                    <th class="text-center">{{'HISTORY_VALIDATION.VALIDATION_COMMENT.COMMENT'|translate}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,7 +31,7 @@
                     <td class="text-center" nowrap>
                         <span *ngIf="item.operation" [title]="item.operation.getURI()">
                             {{item.operation.getShow()}}
-                            <button class="btn btn-xs btn-light" (click)="inspectParams(commit)" title="Show parameters">
+                            <button class="btn btn-xs btn-light" (click)="inspectParams(commit)" [title]="'HISTORY_VALIDATION.VALIDATION_COMMENT.SHOW_PARAMS'|translate">
                                 <span class="fas fa-ellipsis-h"></span>
                             </button>
                         </span>

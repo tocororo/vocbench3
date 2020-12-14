@@ -42,12 +42,12 @@
                         <td class="text-center">{{p.getModelType(true)}}</td>
                         <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
                         <td class="text-center">
-                            <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green" title="History enabled"></span>
-                            <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred" title="History disabled"></span>
+                            <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green"></span>
+                            <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred"></span>
                         </td>
                         <td class="text-center">
-                            <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green" title="Validation enabled"></span>
-                            <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred" title="Validation disabled"></span>
+                            <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green"></span>
+                            <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred"></span>
                         </td>
                         <td class="text-center">{{p.getRepositoryLocation().location}}</td>
                     </tr>
@@ -91,12 +91,12 @@
                                         {{p.getLexicalizationModelType(true)}}
                                     </div>
                                     <div class="text-center" style="flex: 1">
-                                        <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green" title="History enabled"></span>
-                                        <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred" title="History disabled"></span>
+                                        <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green"></span>
+                                        <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred"></span>
                                     </div>
                                     <div class="text-center" style="flex: 1">
-                                        <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green" title="Validation enabled"></span>
-                                        <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred" title="Validation disabled"></span>
+                                        <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green"></span>
+                                        <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred"></span>
                                     </div>
                                     <div class="text-center" style="flex: 2">
                                         {{p.getRepositoryLocation().location}}

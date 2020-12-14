@@ -1,17 +1,17 @@
 <div class="modal-header">
-    <h3 class="modal-title">Project Directory</h3>
+    <h3 class="modal-title">{{'PROJECTS.DIRS.PROJECT_DIR'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
     <div class="hbox" style="align-items: center;">
-        <label style="white-space: nowrap;">Directory name:</label>
+        <label style="white-space: nowrap;">{{'PROJECTS.DIRS.DIR_NAME'|translate}}:</label>
         <input class="form-control form-control-sm" style="margin-left: 4px;" [(ngModel)]="dirName">
-        <span class="fas fa-info-circle" style="margin-left: 4px;" title="If left empty the project will be removed from the directory and set as 'Unclassified'"></span>
+        <span class="fas fa-info-circle" style="margin-left: 4px;" [title]="'PROJECTS.DIRS.DIR_NAME_INFO'|translate"></span>
     </div>
 
     <div class="card card-default" style="margin-top: 6px;">
         <div class="card-header">
-            <label style="flex: 1;">All directories</label>
+            <label style="flex: 1;">{{'PROJECTS.DIRS.DIRECTORIES'|translate}}</label>
         </div>
         <div class="card-body scrollableContainer">
             <div *ngFor="let dir of directories" class="listItem" (click)="dirName = dir">

@@ -1,10 +1,10 @@
 <div class="modal-header">
-    <h3 class="modal-title">Remote repositories</h3>
+    <h3 class="modal-title">{{'PROJECTS.REMOTE_REPO.REMOTE_REPOSITORIES'|translate}}</h3>
 </div>
 <div class="modal-body vbox scrollableContainer">
 
-    <div *ngIf="!repoSummaries || repoSummaries.length == 0" class="alert alert-info" style="margin: 4px;">
-        There are no remote repositories related to this project
+    <div *ngIf="!repoSummaries || repoSummaries.length == 0" class="alert alert-info m-2">
+        {{'PROJECTS.REMOTE_REPO.NO_REMOTE_REPO_WARN'|translate}}
     </div>
 
     <div *ngFor="let repo of repoSummaries" class="card card-default mb-2">
@@ -41,18 +41,16 @@
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" id="batchCheck" type="checkbox" [(ngModel)]="repo.batch">
                     <label class="form-check-label" for="batchCheck">
-                        Batch modify
-                        <span class="fas fa-info-circle ml-1"
-                            title="Modifies, all at once, the access credentials of (possibly) many repositories with the same serverURL.">
+                        {{'PROJECTS.REMOTE_REPO.BATCH_MODIFY'|translate}}
+                        <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.REMOTE_REPO.BATCH_MODIFY_INFO'|translate">
                         </span>
                     </label>
                 </div>
                 <div *ngIf="repo.batch" class="form-check form-check-inline">
                     <input class="form-check-input" id="matchCheck" type="checkbox" [(ngModel)]="repo.matchUsername">
                     <label class="form-check-label" for="matchCheck">
-                        Match username
-                        <span class="fas fa-info-circle ml-1"
-                            title="If checked, modifies credentials of repositories with same serverURL and username (empty 'old' username indicates repositories with no associated username)">
+                        {{'PROJECTS.REMOTE_REPO.MATCH_USERNAME'|translate}}
+                        <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.REMOTE_REPO.MATCH_USERNAME_INFO'|translate">
                         </span>
                     </label>
                 </div>

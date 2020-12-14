@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Add new alignment</h3>
+    <h3 class="modal-title">{{'ALIGNMENT.CREATION.ADD_NEW_ALIGNMENT'|translate}}</h3>
 </div>
 <div class="modal-body blockingDivHost">
     
@@ -11,7 +11,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <td nowrap><label>Source Resource:</label></td>
+                <td nowrap><label>{{'ALIGNMENT.CREATION.SOURCE_RESOURCE'|translate}}:</label></td>
                 <td>
                     <div class="form-control input-resource">
                         <rdf-resource [resource]="resource"></rdf-resource>
@@ -19,21 +19,21 @@
                 </td>
             </tr>
             <tr>
-                <td nowrap><label>Target Resource:</label></td>
+                <td nowrap><label>{{'ALIGNMENT.CREATION.TARGET_RESOURCE'|translate}}:</label></td>
                 <td>
                     <div class="form-control input-resource">
                         <rdf-resource *ngIf="alignedObject" [resource]="alignedObject"></rdf-resource>
                     </div>
                 </td>
                 <td>
-                    <div class="btn-group" title="Pick external resource" ngbDropdown>
+                    <div class="btn-group" [title]="'ALIGNMENT.CREATION.PICK_EXTERNAL_RES'|translate" ngbDropdown>
                         <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                         <div class="dropdown-menu" ngbDropdownMenu>
-                            <a class="dropdown-item" (click)="browseLocalProjects()">Browse local projects</a>
-                            <a class="dropdown-item" (click)="assistedSearch()">Assisted search</a>
-                            <a class="dropdown-item" (click)="enterManually()">Enter value manually</a>
+                            <a class="dropdown-item" (click)="browseLocalProjects()">{{'ALIGNMENT.CREATION.BROWSE_LOCAL_PROJ'|translate}}</a>
+                            <a class="dropdown-item" (click)="assistedSearch()">{{'SEARCH.ASSISTED_SEARCH.ASSISTED_SEARCH'|translate}}</a>
+                            <a class="dropdown-item" (click)="enterManually()">{{'ALIGNMENT.CREATION.ENTER_MANUALLY'|translate}}</a>
                         </div>
                     </div>
                 </td>
@@ -46,9 +46,9 @@
                     </select>
                 </td>
                 <td>
-                    <div class="form-check form-check-inline" title="Show all mapping properties">
+                    <div class="form-check form-check-inline" [title]="'ALIGNMENT.CREATION.ALL_PROP_INFO'|translate">
                         <input class="form-check-input" id="allPropCheck" type="checkbox" [(ngModel)]="allPropCheck" (ngModelChange)="initPropList()">
-                        <label class="form-check-label text-nowrap" for="allPropCheck">All prop.</label>
+                        <label class="form-check-label text-nowrap" for="allPropCheck">{{'ALIGNMENT.CREATION.ALL_PROP'|translate}}</label>
                     </div>
                 </td>
             </tr>

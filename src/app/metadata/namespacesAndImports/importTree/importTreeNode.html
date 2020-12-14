@@ -6,16 +6,16 @@
     <div style="flex: 1;" [ngClass]="{ proposedAddTriple: import.status == 'STAGED_ADDITION', proposedRemoveTriple: import.status == 'STAGED_REMOVAL' }">
         {{import.id}}
     </div>
-    <span *ngIf="import.status == 'LOOP'" class="fas fa-redo" style="margin-right: 6px;" title="Loop of imports"></span>
+    <span *ngIf="import.status == 'LOOP'" class="fas fa-redo" style="margin-right: 6px;" [title]="'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.LOOP_IMPORTS'|translate"></span>
     
     <div *ngIf="import.status == 'FAILED'" class="btn-group" ngbDropdown>
-        <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle title="Failed import">
+        <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [title]="'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.FAILED_IMPORT'|translate">
             <span class="fas fa-exclamation-triangle"></span>
         </button>
         <div class="dropdown-menu float-right" ngbDropdownMenu>
-            <a class="dropdown-item" (click)="repairFromLocalFile()">Repair from local file</a>
-            <a class="dropdown-item" (click)="repairFromWeb()">Repair from web</a>
-            <a class="dropdown-item" (click)="repairFromWebToMirror()">Repair from web to mirror</a>
+            <a class="dropdown-item" (click)="repairFromLocalFile()">{{'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.REPAIR_FROM_LOCAL_FILE'|translate}}</a>
+            <a class="dropdown-item" (click)="repairFromWeb()">{{'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.REPAIR_FROM_WEB'|translate}}</a>
+            <a class="dropdown-item" (click)="repairFromWebToMirror()">{{'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.REPAIR_FROM_WEB_TO_MIRROR'|translate}}</a>
         </div>
     </div>
 

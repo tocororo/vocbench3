@@ -114,154 +114,91 @@
         }
     },
     "ALIGNMENT": {
-        "ALIGNMENT_VALIDATION": "Validazione allineamenti",
-        "FROM_FILE": {
-            "ALIGN_FILE": "File allineamento",
-            "LEFT_ONTO_URI": "BaseURI ontologia sinistra",
-            "RIGHT_ONTO_URI": "BaseURI ontologia destra"
+        "CREATION": {
+            "ADD_NEW_ALIGNMENT": "Crea nuovo allineamento",
+            "SOURCE_RESOURCE": "Risorsa sorgente",
+            "TARGET_RESOURCE": "Risorsa target",
+            "PICK_EXTERNAL_RES": "Seleziona risorsa esterna",
+            "BROWSE_LOCAL_PROJ": "Sfoglia progetti locali",
+            "ENTER_MANUALLY": "Inserisci valore manualmente",
+            "ALL_PROP": "Tutte le prop.",
+            "ALL_PROP_INFO": "Mostra tutte le proprietà di mapping"
         },
-        "REMOTE_SYS": {
-            "CONFIG": {
-                "REMOTE_ALIGN_SYS_CONFIG": "Configurazione del sistema remoto d'allineamentio",
-                "DEFAULT_CHECK_INFO": "Se spuntato, la nuova configurazione sarà automaticamente settada di default",
-                "ID_INFO": "ID configurazione"
+        "VALIDATION": {
+            "ALIGNMENT_VALIDATION": "Validazione allineamenti",
+            "FROM_FILE": {
+                "ALIGN_FILE": "File allineamento",
+                "LEFT_ONTO_URI": "BaseURI ontologia sinistra",
+                "RIGHT_ONTO_URI": "BaseURI ontologia destra"
             },
-            "MAIN": {
-                "REMOTE_ALIGN_SYS": "Sistema remoto di allineamento",
-                "SERVICE_DOWN": "Servizio inattivo",
-                "TASKS": "Task",
-                "UNCONFIGURED_WARN": "Non è stata rilevata alcuna connessione ad un sistema remoto di allineamento. Crea o seleziona una configurazione cliccando sul bottone <span class=\"fas fa-cog\"></span> nell'angolo in alto a destra.",
-                "LEFT_PROJECT": "Progetto sinistro",
-                "RIGHT_PROJECT": "Progetto destro",
-                "START_TIME": "Ora inizio",
-                "END_TIME": "Ora fine",
-                "START_VALIDATION": "Inizia validazione"
+            "REMOTE_SYS": {
+                "CONFIG": {
+                    "REMOTE_ALIGN_SYS_CONFIG": "Configurazione del sistema remoto d'allineamentio",
+                    "DEFAULT_CHECK_INFO": "Se spuntato, la nuova configurazione sarà automaticamente settada di default",
+                    "ID_INFO": "ID configurazione"
+                },
+                "MAIN": {
+                    "REMOTE_ALIGN_SYS": "Sistema remoto di allineamento",
+                    "SERVICE_DOWN": "Servizio inattivo",
+                    "TASKS": "Task",
+                    "UNCONFIGURED_WARN": "Non è stata rilevata alcuna connessione ad un sistema remoto di allineamento. Crea o seleziona una configurazione cliccando sul bottone <span class=\"fas fa-cog\"></span> nell'angolo in alto a destra.",
+                    "LEFT_PROJECT": "Progetto sinistro",
+                    "RIGHT_PROJECT": "Progetto destro",
+                    "START_TIME": "Ora inizio",
+                    "END_TIME": "Ora fine",
+                    "START_VALIDATION": "Inizia validazione"
+                },
+                "CREATE_TASK": {
+                    "PROFILE_PROJECT": "Profila progetto",
+                    "METADATA_PROFILE_AVAILABLE": "Profilo metadati disponibile",
+                    "METADATA_PROFILE_NOT_AVAILABLE": "Profilo metadati non disponibile",
+                    "PROFILE_MATCHING": "Profila matching",
+                    "PAIRINGS": "Abbinamenti",
+                    "USE": "Usa",
+                    "SYNONIMIZERS": "Sinonimizzatori",
+                    "SYNONIMIZERS_INFO": "Permette l'utilizzo di un sinonimizzatore per migliorare la qualità dell'allineamento",
+                    "MATCHERS": "Matcher",
+                    "MATCHERS_INFO": [
+                        "Opzionalmente si può fornire un matcher al sistema di allineamento. Clicca",
+                        "qui",
+                        "per cercare i matcher disponibili."
+                    ],
+                    "PAIRINGS_CHANGED_WARN": [
+                        "La selezione degli abbinamenti è cambiata, la list adei matcher potrebbe non essere più aggiornata. Clicca",
+                        "qui",
+                        "per aggiornare la lista."
+                    ],
+                    "JSON_SETTINGS_INFO": "I settings JSON devono rispettare lo schema mostrato sulla destra",
+                    "SYNONYMIZER_DATASETS": "Synonymizer datasets",
+                    "CONCEPTUALIZATION_SET": "Conceptualization Set"
+                }
             },
-            "CREATE_TASK": {
-                "PROFILE_PROJECT": "Profila progetto",
-                "METADATA_PROFILE_AVAILABLE": "Profilo metadati disponibile",
-                "METADATA_PROFILE_NOT_AVAILABLE": "Profilo metadati non disponibile",
-                "PROFILE_MATCHING": "Profila matching",
-                "PAIRINGS": "Abbinamenti",
-                "USE": "Usa",
-                "SYNONIMIZERS": "Sinonimizzatori",
-                "SYNONIMIZERS_INFO": "Permette l'utilizzo di un sinonimizzatore per migliorare la qualità dell'allineamento",
-                "MATCHERS": "Matcher",
-                "MATCHERS_INFO": [
-                    "Opzionalmente si può fornire un matcher al sistema di allineamento. Clicca",
-                    "qui",
-                    "per cercare i matcher disponibili."
-                ],
-                "PAIRINGS_CHANGED_WARN": [
-                    "La selezione degli abbinamenti è cambiata, la list adei matcher potrebbe non essere più aggiornata. Clicca",
-                    "qui",
-                    "per aggiornare la lista."
-                ],
-                "JSON_SETTINGS_INFO": "I settings JSON devono rispettare lo schema mostrato sulla destra",
-                "SYNONYMIZER_DATASETS": "Synonymizer datasets",
-                "CONCEPTUALIZATION_SET": "Conceptualization Set"
+            "MANAGEMENT": {
+                "ALIGNMENTS": "Allineamenti",
+                "SOURCE_ENTITY": "Entità sorgente",
+                "TARGET_ENTITY": "Entità target",
+                "RELATION": "Relazione",
+                "MAPPING_PROP": "Proprietà di mapping",
+                "QUICK_ACTIONS": "Quick action",
+                "DO_QUICK_ACTION": "Esegui quick action",
+                "APPLY_TO_DATASET": "Applica al Dataset",
+                "APPLY_TO_EDOAL": "Applica al linkset EDOAL",
+                "YOU_CAN_FORCE_PROP": "Puoi forzare una proprietà",
+                "SET_DEFAULT_FOR_RELATION": "Imposta la proprietà come default per la relazione"
+            },
+            "REPORT": {
+                "ALIGN_REPORT": "Report allineamento",
+                "ACTION_PERFORMED": "Azione eseguita"
+            },
+            "SETTINGS": {
+                "ALIGN_VALIATION_SETTINGS": "Impostazioni della validazione allineamenti",
+                "REJECTED_ALIGN_ACTION": "Azione allineamenti rifiutati",
+                "REJECTED_ALIGN_ACTION_INFO": "Specifica cosa farne degli allineamenti rifiutati quando le validazioni sono scritte nell'ontologia",
+                "RELATION_METER_ASPECT": "Aspetto del relation meter",
+                "SHOW_RELATION_AS": "Mostra relazioni come",
+                "SHOW_CONF_ON_METER": "Mostra la confidenza sul meter",
+                "MAX_ALING_SHOWN": "Numero massimo di allineamenti mostrati (1÷100)"
             }
-        },
-        "MANAGEMENT": {
-            "ALIGNMENTS": "Allineamenti",
-            "SOURCE_ENTITY": "Entità sorgente",
-            "TARGET_ENTITY": "Entità target",
-            "RELATION": "Relazione",
-            "MAPPING_PROP": "Proprietà di mapping",
-            "QUICK_ACTIONS": "Quick action",
-            "DO_QUICK_ACTION": "Esegui quick action",
-            "APPLY_TO_DATASET": "Applica al Dataset",
-            "APPLY_TO_EDOAL": "Applica al linkset EDOAL",
-            "YOU_CAN_FORCE_PROP": "Puoi forzare una proprietà",
-            "SET_DEFAULT_FOR_RELATION": "Imposta la proprietà come default per la relazione"
-        },
-        "REPORT": {
-            "ALIGN_REPORT": "Report allineamento",
-            "ACTION_PERFORMED": "Azione eseguita"
-        },
-        "SETTINGS": {
-            "ALIGN_VALIATION_SETTINGS": "Impostazioni della validazione allineamenti",
-            "REJECTED_ALIGN_ACTION": "Azione allineamenti rifiutati",
-            "REJECTED_ALIGN_ACTION_INFO": "Specifica cosa farne degli allineamenti rifiutati quando le validazioni sono scritte nell'ontologia",
-            "RELATION_METER_ASPECT": "Aspetto del relation meter",
-            "SHOW_RELATION_AS": "Mostra relazioni come",
-            "SHOW_CONF_ON_METER": "Mostra la confidenza sul meter",
-            "MAX_ALING_SHOWN": "Numero massimo di allineamenti mostrati (1÷100)"
-        }
-    },
-    "HOME": {
-        "WELCOME": "Benvenuto in VocBench",
-        "DESCRIPTION": "VocBench è una piattaforma web collaborativa e multilinguale per la gestione di ontologie <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a>, tesauri <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>), lessici <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> e generici dataset RDF.",
-        "POWERED_BY": "VocBench è realizzato col supporto del framework per la gestione e acquisizione della conoscenza <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a>",
-        "PRIVACY_STATEMENT": {
-            "READ_OUR": "Per favore, leggi la nostra",
-            "LINK_TEXT": "informativa sulla privacy"
-        },
-        "DEVELOPED_BY": {
-            "TITLE": "VocBench 3 è sviluppato da",
-            "TOR_VERGATA_NAME": "Università degli studi di Roma \"Tor Vergata\"",
-            "TOR_VERGATA_SUBTITLE": "Oggi, l´Ateneo del domani"
-        },
-        "MANAGED_BY": {
-            "TITLE": "Contratto gestito da",
-            "INFEUROPE_NAME": "Infeurope",
-            "INFEUROPE_SUBTITLE": "Architecture begins where engineering ends"
-        },
-        "FUNDED_BY": {
-            "TITLE": "VocBench 3 è finanziato da",
-            "ISA2_NAME": "ISA<sup>2</sup>",
-            "ISA2_SUBTITLE": "Interoperability solutions for public administrations, business and citizens",
-            "OP_NAME": "Ufficio Pubblicazioni dell'Unione Europea",
-            "OP_SUBTITLE": "EU law and publications"
-        }
-    },
-    "TOP_BAR": {
-        "ABOUT_MENU": {
-            "ABOUT_VB": "About VocBench",
-            "VB_SITE": "VocBench website",
-            "CONTACT_US": "Contattaci",
-            "SUPPORT": "Supporto",
-            "PRIVACY_STATEMENT": "Informativa sulla privacy"
-        },
-        "CURRENT_PROJECT": "Progetto corrente",
-        "GLOBAL_DATA_MENU": {
-            "GLOBAL_DATA_MANAGEMENT": "Gestione dei dati globali",
-            "LOAD_DATA": "Carica dati",
-            "EXPORT_DATA": "Esporta dati",
-            "CLEAR_DATA": "Elimina dati",
-            "VERSIONING": "Versioning",
-            "REFACTOR": "Refactor",
-            "LOAD_SHAPES": "Carica shapes",
-            "EXPORT_SHAPES": "Esporta shapes",
-            "CLEAR_SHAPES": "Elimina shapes"
-        }
-    },
-    "NAVBAR": {
-        "DATA": "Data",
-        "METADATA": {
-            "TITLE": "Metadati",
-            "NAMESPACES_AND_IMPORTS": "Namespace e Import",
-            "METADATA_VOCABULARIES": "Vocabolari di Metadati",
-            "METADATA_REGISTRY": "Registro Metadati"
-        },
-        "SPARQL": "SPARQL",
-        "HISTORY": "Storico",
-        "VALIDATION": "Validazione",
-        "TOOLS": {
-            "TITLE": "Strumenti",
-            "ALIGNMENT_VALIDATION": "Validazione Allineamenti",
-            "COLLABORATION_SYSTEM": "Sistema Collaborativo",
-            "CUSTOM_FORMS": "Custom Form",
-            "CUSTOM_SERVICES_AND_REPORTS": "Custom Service e Report",
-            "ICV": "Validatore dei Vincoli di Integrità (ICV)",
-            "RESOURCE_METADATA": "ResourceMetadata",
-            "SHEET2RDF": "Sheet2RDF",
-            "SKOS_DIFFING": "SKOS Diffing"
-        },
-        "USER_MENU": {
-            "VIEW_PROFILE": "Mostra profilo",
-            "PREFERENCES": "Preferenze",
-            "ADMINISTRATION": "Amministrazione"
         }
     },
     "COLLABORATION": {
@@ -339,7 +276,6 @@
             "PROJECT_LEVEL_ELEM": "Elementi a livello di progetto"
         },
         "COMMONS": {
-            "LOCK_UNLOCK_NAMESPACE": "Blocca/sblocca namespace",
             "SELECT_CLASS": "Seleziona classe",
             "SELECT_PROPERTY": "Seleziona proprietà",
             "USE_ID_OF_IMPORTED": "Usa ID del {{type}} importato"
@@ -414,6 +350,7 @@
             "SHOW_CLASS_DIAGRAM": "Mostra class-diagram",
             "SHOW_MODEL_GRAPH": "Mostra grafo model-oriented",
             "SHOW_MODEL_GRAPH_ROOTED": "Mostra grafo model-oriented centrato sul nodo selezionato",
+            "CHANGE_CLASS": "Cambia classe",
             "SETTINGS": {
                 "CLASS_TREE_SETTINGS": "Impostazioni albero delle classi",
                 "ROOT_CLASS": "Classe root",
@@ -436,9 +373,22 @@
             "CREATE": "Crea concetto",
             "CREATE_CHILD": "Crea concetto narrower",
             "DELETE": "Cancella concetto",
+            "CHANGE_BROADER_PROP": "Cambia proprietà broader",
             "ADD_SUBTREE_TO_SCHEME": "Aggiungi il sottoalbero del concetto selezionato allo schema...",
             "NO_SCHEME_SELECTED_WARN": "Nessun ConceptScheme selezionato, le operazioni di creazione sono disabilitate",
             "USE_SEARCH_MSG": "Usa il campo di ricerca per recuperare concetti",
+            "ADD_TO_SCHEME": {
+                "ADD_CONCEPT_TO_SCHEME": "Aggiungi concetti a schema",
+                "CONFIRM_MSG": "Stai per aggiongere il concetto '{{concept}}' e i suoi discendenti allo schema '{{scheme}}'. Sei sicuro?",
+                "SET_TOP_CONCEPT": "Setta top concept",
+                "SET_TOP_CONCEPT_INFO": "Se selezionato, imposta il concetto indicato come top concept dello schema destinazione",
+                "SCHEMES_FILTER": "Filtro schemi",
+                "SCHEMES_FILTER_INFO": "Solo i concetti (tra i discendenti di '{{concept}}') appartenenti ad almeno uno dei seguenti schemi saranno aggiunti allo schema destinazione"
+            },
+            "SPAWN_FROM_LABEL": {
+                "SIBLING": "Sibling",
+                "MULTIPLE_SIBLING_WARN": "Il concetto sibling selezionato ha più broader, seleziona quale sarà il broader del concetto generato"
+            },
             "SETTINGS": {
                 "CONCEPT_TREE_SETTINGS": "Impostazioni albero dei concetti",
                 "TOP_CONCEPTS_LIMIT": "Limite top concept",
@@ -475,7 +425,9 @@
             "LEXICON": "Lessico",
             "LEXICONS": "Lessici",
             "CREATE": "Crea lessico",
-            "DELETE": "Cancella lessico"
+            "DELETE": "Cancella lessico",
+            "SELECT_LEXICON": "Seleziona lessico",
+            "CHANGE_LEXICON": "Cambia lessico"
         },
         "LEX_ENTRY": {
             "LEX_ENTRY": "Lex.Entry",
@@ -496,7 +448,8 @@
             "PROPERTIES": "Proprietà",
             "CREATE": "Crea proprietà",
             "CREATE_CHILD": "Crea sotto proprietà",
-            "DELETE": "Cancella proprietà"
+            "DELETE": "Cancella proprietà",
+            "SHOW_ALL": "Mostra tutte le proprietà"
         },
         "SCHEME": {
             "SCHEME": "Schema",
@@ -510,6 +463,10 @@
             "MULTISELECTION": "Multiselezione",
             "ADD_PROP_VALUE_TO_SELECTION": "Aggiungi una coppia proprietà-valore alle risorse selezionate",
             "SHOW_DATA_GRAPH": "Mostra grafo data-oriented",
+            "LEAVE_EMPTY_FOR_RANDOM_URI": "Lasciare vuoto per generare un URI randomico",
+            "NO_LANGUAGE_ASSIGNED_WARN": "Non puoi creare risorse. Non hai alcuna lingua assegnata nel progetto corrente",
+            "DUPLICATED_VALUES_WARN": "Non puoi creare valori multipli nella stessa lingua",
+            "MULTIVALUE_WARN": "Attenzione: il valore attualmente digitato non sarà considerato, deve essere aggiunto tramite il pulsante '+'",
             "VISUALIZATION_MODE": {
                 "MODE": "Modalità di visualizzazione",
                 "STANDARD": "Standard",
@@ -642,6 +599,14 @@
         "REJECT_ALL": "Rifiuta tutto",
         "VALIDATE": "Valida",
         "PROVIDE_COMMENT": "Fornisci un commento per l'azione di validazione",
+        "COMMIT": {
+            "COMMIT_ID": "ID commit",
+            "COMMIT_DETAILS": "Dettagli commit",
+            "ADDED": "Aggiunta",
+            "REMOVED": "Rimossa",
+            "COMMENT": "Commenta",
+            "CONTEXT": "Contesto"
+        },
         "FILTERS": {
             "SHOW_FILTERS": "Mostra filtri",
             "HIDE_FILTERS": "Nascondi filtri",
@@ -650,7 +615,45 @@
             "TIME_FROM": "Da",
             "TIME_TO": "a",
             "DATETIME_FORMAT": "Formato: yyyy-MM-ddThh:mm",
-            "APPLY": "Applica"
+            "APPLY": "Applica",
+            "OPERATION_PICKER": {
+                "ADD_OPERATION": "Aggiungi operazione",
+                "EXTENSION_PATH": "Extension path",
+                "SERVICE_CLASS": "Classe dei servizi",
+                "OPERATIONS": "Operazioni"
+            }
+        },
+        "VALIDATION_COMMENT": {
+            "COMMENT": "Commento",
+            "COMMENT_INFO": "Per le seguenti commit rifiutatet è possibile fornire un commento in modo da motivare la decisione presa. Anche se il commento è opzionale, è consigliato fornirne uno. Se non si desidera fornire alcun commento è possibile lasciar vuoto il campo di testo e continuare.",
+            "SHOW_PARAMS": "Mostra parametri",
+            "VALIDATION_COMMENTS": "Commenta validazione"
+        }
+    },
+    "HOME": {
+        "WELCOME": "Benvenuto in VocBench",
+        "DESCRIPTION": "VocBench è una piattaforma web collaborativa e multilinguale per la gestione di ontologie <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a>, tesauri <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>), lessici <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> e generici dataset RDF.",
+        "POWERED_BY": "VocBench è realizzato col supporto del framework per la gestione e acquisizione della conoscenza <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a>",
+        "PRIVACY_STATEMENT": {
+            "READ_OUR": "Per favore, leggi la nostra",
+            "LINK_TEXT": "informativa sulla privacy"
+        },
+        "DEVELOPED_BY": {
+            "TITLE": "VocBench 3 è sviluppato da",
+            "TOR_VERGATA_NAME": "Università degli studi di Roma \"Tor Vergata\"",
+            "TOR_VERGATA_SUBTITLE": "Oggi, l´Ateneo del domani"
+        },
+        "MANAGED_BY": {
+            "TITLE": "Contratto gestito da",
+            "INFEUROPE_NAME": "Infeurope",
+            "INFEUROPE_SUBTITLE": "Architecture begins where engineering ends"
+        },
+        "FUNDED_BY": {
+            "TITLE": "VocBench 3 è finanziato da",
+            "ISA2_NAME": "ISA<sup>2</sup>",
+            "ISA2_SUBTITLE": "Interoperability solutions for public administrations, business and citizens",
+            "OP_NAME": "Ufficio Pubblicazioni dell'Unione Europea",
+            "OP_SUBTITLE": "EU law and publications"
         }
     },
     "ICV": {
@@ -876,8 +879,16 @@
             "DATASET_CATALOG": "Dataset Catalog",
             "LOCAL_FILE": "File locale",
             "ONTOLOGY_MIRROR": "Ontology mirror",
+            "IMPORT_TREE": {
+                "LOOP_IMPORTS": "Loop di import",
+                "FAILED_IMPORT": "Import fallito",
+                "REPAIR_FROM_LOCAL_FILE": "Ripara da file locale",
+                "REPAIR_FROM_WEB": "Ripara da web",
+                "REPAIR_FROM_WEB_TO_MIRROR": "Ripara da web a mirror"
+            },
             "ONTOLOGY_MIRROR_MANAGER": {
                 "ONTOLOGY_MIRROR_MANAGEMENT": "Gestione Ontology Mirror",
+                "UPDATE_MIRROR_FROM": "Aggiorna mirror da...",
                 "UPDATE_FROM_WEB_BASEURI": "Aggiorna dal web usando il baseURI",
                 "UPDATE_FROM_WEB_ALT_URL": "Aggiorna dal web usando un URL alternativo",
                 "UPDATE_FROM_LOCAL_FILE": "Aggiorna da un file locale",
@@ -940,6 +951,7 @@
         "PROJECT": {
             "PROJECT": "Progetto",
             "PROJECTS": "Progetti",
+            "CONSUMER": "Consumer",
             "BASE_URI": "Base URI",
             "LEXICALIZATION": "Lessicalizzazione",
             "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
@@ -951,7 +963,7 @@
             "REPO_LOCATION": "Posizione Repository",
             "VALIDATION": "Validazione"
         },
-        "RESOURCES": {
+        "RESOURCE": {
             "DEPRECATED": "Deprecato",
             "LABEL": "Etichetta",
             "OBJECT": "Oggetto",
@@ -960,6 +972,51 @@
             "RESOURCES": "Risorse",
             "RESOURCE_TYPE": "Tipo risorsa",
             "SUBJECT": "Soggetto"
+        },
+        "USER": {
+	"GIVEN_NAME": "Nome",
+            "FAMILY_NAME": "Cognome",
+            "EMAIL": "E-mail",
+            "PASSWORD": "Password",
+            "CONFIRM_PASSWORD": "Conferma password",
+            "OFFICE_ADDRESS": "Indirizzo ufficio",
+            "PHONE": "Telefono",
+            "AFFILIATION": "Affiliazione",
+            "PERSONAL_URL": "URL personale",
+            "AVATAR_URL": "URL avatar",
+            "LANGUAGE_PROFICIENCIES": "Competenze linguistiche",
+            "USER_IRI": "IRI utente",
+            "PERSONAL_URL_AS_IRI": "Usa l'URL personale come IRI utente",
+            "OPTIONAL_RECOMMENDED_FIELD": "Campo opzionale ma raccomandato",
+            "REGISTERED": "Registrato"
+        }
+    },
+    "NAVBAR": {
+        "DATA": "Data",
+        "METADATA": {
+            "TITLE": "Metadati",
+            "NAMESPACES_AND_IMPORTS": "Namespace e Import",
+            "METADATA_VOCABULARIES": "Vocabolari di Metadati",
+            "METADATA_REGISTRY": "Registro Metadati"
+        },
+        "SPARQL": "SPARQL",
+        "HISTORY": "Storico",
+        "VALIDATION": "Validazione",
+        "TOOLS": {
+            "TITLE": "Strumenti",
+            "ALIGNMENT_VALIDATION": "Validazione Allineamenti",
+            "COLLABORATION_SYSTEM": "Sistema Collaborativo",
+            "CUSTOM_FORMS": "Custom Form",
+            "CUSTOM_SERVICES_AND_REPORTS": "Custom Service e Report",
+            "ICV": "Validatore dei Vincoli di Integrità (ICV)",
+            "RESOURCE_METADATA": "ResourceMetadata",
+            "SHEET2RDF": "Sheet2RDF",
+            "SKOS_DIFFING": "SKOS Diffing"
+        },
+        "USER_MENU": {
+            "VIEW_PROFILE": "Mostra profilo",
+            "PREFERENCES": "Preferenze",
+            "ADMINISTRATION": "Amministrazione"
         }
     },
     "NOTIFICATIONS": {
@@ -1047,6 +1104,7 @@
         "OPEN_CLOSE": "Aperto/Chiuso",
         "OPTIONAL_SETTINGS": "Impostazioni opzionali",
         "PROJECT_NAME": "Nome progetto",
+        "RENAME_DIR": "Rinomina cartella",
         "RENDERING_ENGINE": "Rendering Engine",
         "RESOURCE_METADATA": "Resource Metadata",
         "SELECT_REMOTE_REPO": "Seleziona repository remoto",
@@ -1059,6 +1117,26 @@
         "USE_RESOURCE_METADATA": "Usa Resource Metadata",
         "USE_RESOURCE_METADATA_INFO": "L'utilizzo del Resource Metadata può essere abilitato anche dopo la creazione del progetto",
         "VALIDATION_INFO": "Abilita questa opzione per tenere traccia delle richieste di modifiche in modo da validarle in un secondo momento (accettarle o rifiutarle)",
+        "ACL": {
+            "EDIT_ACL": "Modifica ACL progetto",
+            "SHOW_ACL_MATRIX": "Mostra matrice ACL",
+            "PROJECT_ACL": "ACL progetto",
+            "ACL_OF_PROJECT": "Access Control List del progetto",
+            "LOCKABLE": "Lockabile"
+        },
+        "ACTIONS": {
+            "CHANGE_DIR": "Cambia cartella",
+            "EDIT_ACL": "Modifica ACL",
+            "EDIT_REMOTE_REPO_CONFIG": "Modifica configurazione repository remoto",
+            "EDIT_DESCRIPTION": "Modifica descrizione",
+            "PROPERTIES": "Proprietà"
+        },
+        "DIRS": {
+            "PROJECT_DIR": "Cartella progetto",
+            "DIRECTORIES": "Cartelle",
+            "DIR_NAME": "Nome cartella",
+            "DIR_NAME_INFO": "Se lasciato vuoto, il progetto sarà rimosso dalla sua cartella e messo sotto 'Unclassified'"
+        },
         "PRELOAD": {
             "PRELOAD": "Precarica",
             "DATA_PRELOADING": "Caricamento opzionale dati",
@@ -1073,13 +1151,22 @@
                 "FROM_DATASET_CATALOG": "Precarica da Dataset Catalog"
             }
         },
+        "REMOTE_REPO": {
+            "REMOTE_REPOSITORIES": "Repository remoti",
+            "NO_REMOTE_REPO_WARN": "Non ci sono repository remoti collegati a questo progetto",
+            "BATCH_MODIFY": "Modifica in blocco",
+            "BATCH_MODIFY_INFO": "Modifica, tutte in blocco, le credenziali di accesso di (potenzialmente) più  repository con lo stesso URL server",
+            "MATCH_USERNAME": "Match username",
+            "MATCH_USERNAME_INFO": "Se selezionato, modifica le credenziali dei repository con gli stessi URL server e username (il campo useername lasciato vuoto indica che il repository non ha un username associato)"
+        },
         "CONFIG": {
             "PROJ_VIEW_SETTINGS": "Impostazione Project view",
             "TOP_LEVEL_ELEMENTS": "Elementi top level",
             "DIRECTORIES": "Cartelle",
             "PROJ_INFO": "Info progetti",
             "PROJ_INFO_INFO": "Da qui è possibile mostrare o nascondeere le informazioni dei progetti e personalizzarne l'ordine",
-            "COL_NAME": "Nome colonna"
+            "COL_NAME": "Nome colonna",
+            "RESTORE_DEFAULT": "Ripristina default"
         }
     },
     "RESOURCE_METADATA": {
@@ -1153,7 +1240,6 @@
             "ADD_VALUE_MANUALLY": "Aggiungi valore manualmente",
             "ADD_VALUE_FROM_ANOTHER_PROJ": "Aggiungi valore da un altro progetto",
             "DELETE_ALL_VALUES": "Cancella tutti i valori",
-            "SHOW_ALL": "Mostra tutto...",
             "CHANGE_PROPERTY": "Cambia proprietà",
             "EDIT_LITERAL_CONTENT": "Modifica contenuto letterale",
             "BULD_EDIT": "Modifica di massa",
@@ -1164,7 +1250,8 @@
             "COPY_VALUE_TO_LOCALES": "Copia valore in altri locali",
             "ASSERT_INFERRED_STATEMENT": "Asserisci informazione inferita",
             "BULK_DELETE": "Cancellazione di massa",
-            "BULK_DELETE_INFO": "Cancella i valori per ogni risorsa che ha questa relazione predicato-oggetto"
+            "BULK_DELETE_INFO": "Cancella i valori per ogni risorsa che ha questa relazione predicato-oggetto",
+            "SHOW_ISSUES": "Mostra issue"
         },
         "STATUS": {
             "RESOURCE_NOT_EXISTING": "Questa risorsa non è disponibile nel progetto corrente",
@@ -1257,6 +1344,7 @@
             "LEXICALIZATIONS_SEARCH": "Ricerca lessicalizzazioni",
             "RESTRICT_TO_LANGUAGES": "Restringi la ricerca alle lingue",
             "INCLUDE_LOCALES": "Includi i locali nella ricerca (es. en-GB, en-US)",
+            "SELECT_LANGS": "Seleziona lingue",
             "AUTOCOMPLETION": "Autocompletamento",
             "AUTOCOMPLETION_INFO": "E' raccomandabile disabililtare questa funzionalità in grandi progetti non hostati su un server GraphDB",
             "ENABLE_AUTOCOMPLETION": "Abilita l'autocompletamento durante la digitazione",
@@ -1267,6 +1355,15 @@
         }
     },
     "SHEET2RDF": {
+        "CONVERTER": {
+            "CONVERTER": "Converter",
+            "CONVERTER_PARAMETERIZATION": "Parametrizzazione converter",
+            "RDF_CAPABILITY": "RDF Capability",
+            "PARAMS": "Parametri",
+            "SIGNATURE": "Firma",
+            "MEMOIZE": "Memoize",
+            "MEMOIZE_INFO": "Applica la memoizzazione: dato lo stesso input, il converter genera lo stesso output"
+        },
         "SPREADSHEET": {
             "FILE": "File spreadsheet",
             "PREVIEW": "Anteprima spreadsheet",
@@ -1369,7 +1466,8 @@
             "DONE_IN": "Completato in",
             "INCLUDE_INFERRED": "Includi inferite",
             "RESULTS_COUNT": "Conteggio risultati",
-            "SAVE_RESULTS_AS": "Salva risultati come"
+            "SAVE_RESULTS_AS": "Salva risultati come",
+            "SHOW_RESULTS_AS_GRAPH": "Mostra risultati come grafo"
         },
         "PARAMETERIZATION": {
             "QUERY_PARAMETERIZATION": "Parametrizzazione query",
@@ -1389,30 +1487,37 @@
             "UNCONFIGURED_FILTER": "Questo filtro deve essere configurato"
         }
     },
-    "USER": {
-        "FORM": {
-            "GIVEN_NAME": "Nome",
-            "FAMILY_NAME": "Cognome",
-            "EMAIL": "E-mail",
-            "PASSWORD": "Password",
-            "CONFIRM_PASSWORD": "Conferma password",
-            "OFFICE_ADDRESS": "Indirizzo ufficio",
-            "PHONE": "Telefono",
-            "AFFILIATION": "Affiliazione",
-            "PERSONAL_URL": "URL personale",
-            "AVATAR_URL": "URL avatar",
-            "LANGUAGE_PROFICIENCIES": "Competenze linguistiche",
-            "USER_IRI": "IRI utente",
-            "OPTIONAL_RECOMMENDED_FIELD": "Campo opzionale ma raccomandato",
-            "REGISTERED": "Registrato"
+    "TOP_BAR": {
+        "ABOUT_MENU": {
+            "ABOUT_VB": "About VocBench",
+            "VB_SITE": "VocBench website",
+            "CONTACT_US": "Contattaci",
+            "SUPPORT": "Supporto",
+            "PRIVACY_STATEMENT": "Informativa sulla privacy"
         },
+        "CURRENT_PROJECT": "Progetto corrente",
+        "CHANGE_PROJECT": "Cambia progetto",
+        "GLOBAL_DATA_MENU": {
+            "GLOBAL_DATA_MANAGEMENT": "Gestione dei dati globali",
+            "LOAD_DATA": "Carica dati",
+            "EXPORT_DATA": "Esporta dati",
+            "CLEAR_DATA": "Elimina dati",
+            "VERSIONING": "Versioning",
+            "REFACTOR": "Refactor",
+            "LOAD_SHAPES": "Carica shapes",
+            "EXPORT_SHAPES": "Esporta shapes",
+            "CLEAR_SHAPES": "Elimina shapes"
+        }
+    },
+    "USER": {
         "REGISTRATION": {
             "USER_REGISTRATION": "Registrazione utente",
             "NO_USER_REGISTERED_MSG": [
                 "VocBench non ha rilevato alcun utente registrato. Per usare la piattaforma è necessario creare un amministratore inserendo dati personali e le credenziali di accesso. Un utente predefinito",
                 "è disponibile per coloro che desiderino usare VocBench come un semplice tool desktop e saltare la procedura di creazione utente."
             ],
-            "FILL_PREDEFINED_USER": "Riempi dati utente predefinito"
+            "FILL_PREDEFINED_USER": "Riempi dati utente predefinito",
+            "OPTIONAL_RECOMMENDED_FIELD": "Campo opzionale ma raccomandato"
         },
         "USER_DETAILS": "Dettagli utente",
         "USER_LOGIN": "User login",
@@ -1488,6 +1593,7 @@
             "IMPORT": "Importa",
             "LOAD": "Carica",
             "LOAD_CONFIGURATION": "Carica configurazione",
+            "LOCK_UNLOCK_NAMESPACE": "Blocca/sblocca namespace",
             "MOVE_AFTER": "Sposta prima",
             "MOVE_BEFORE": "Sposta dopo",
             "MOVE_DOWN": "Sposta giù",
@@ -1503,6 +1609,7 @@
             "SEARCH": "Cerca",
             "SELECT": "Seleziona",
             "SHOW": "Mostra",
+            "SHOW_ALL": "Mostra tutto",
             "START": "Inizia",
             "STORE": "Salva",
             "SUBMIT": "Invia",
@@ -1530,6 +1637,7 @@
         },
         "STATUS": {
             "ACTIVE": "Attivo",
+            "DEFAULT": "Default",
             "ENABLED": "Abilitato",
             "INACTIVE": "Non attivo",
             "NEW": "Nuovo",

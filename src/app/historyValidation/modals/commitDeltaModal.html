@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h3 class="modal-title">
-        Commit details
+        {{'HISTORY_VALIDATION.COMMIT.COMMIT_DETAILS'|translate}}
     </h3>
 </div>
 <div class="modal-body vbox blockingDivHost" style="min-height: 20vh;">
@@ -21,16 +21,16 @@
             <thead>
                 <tr>
                     <th class="text-center"></th>
-                    <th class="text-center">{{'MODELS.RESOURCES.SUBJECT'|translate}}</th>
-                    <th class="text-center">{{'MODELS.RESOURCES.PREDICATE'|translate}}</th>
-                    <th class="text-center">{{'MODELS.RESOURCES.OBJECT'|translate}}</th>
-                    <th class="text-center">Context</th>
+                    <th class="text-center">{{'MODELS.RESOURCE.SUBJECT'|translate}}</th>
+                    <th class="text-center">{{'MODELS.RESOURCE.PREDICATE'|translate}}</th>
+                    <th class="text-center">{{'MODELS.RESOURCE.OBJECT'|translate}}</th>
+                    <th class="text-center">{{'HISTORY_VALIDATION.COMMIT.CONTEXT'|translate}}Context</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let add of additions">
                     <td class="text-center" style="background: lightgreen !important; padding: 3px 6px;">
-                        <span class="fas fa-plus" style="color: green" title="Added"></span>
+                        <span class="fas fa-plus" style="color: green" [title]="'HISTORY_VALIDATION.COMMIT.ADDED'|translate"></span>
                     </td>
                     <td class="text-center clickable" (click)="openResource(add.subject)">
                         {{getShow(add.subject)}}
@@ -47,7 +47,7 @@
                 </tr>
                 <tr *ngFor="let rem of removals">
                     <td class="text-center" style="background: lightpink !important; padding: 3px 6px;">
-                        <span class="fas fa-minus" style="color: red" title="Removed"></span>
+                        <span class="fas fa-minus" style="color: red" [title]="'HISTORY_VALIDATION.COMMIT.REMOVED'|translate"></span>
                     </td>
                     <td class="text-center clickable" (click)="openResource(rem.subject)">
                         {{getShow(rem.subject)}}

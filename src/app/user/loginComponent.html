@@ -3,7 +3,7 @@
 		<span class="fas fa-sign-in-alt"></span>
 		<span> {{'USER.USER_LOGIN'|translate}}</span>
 	</div>
-	<input type="text" class="form-control mb-2" [(ngModel)]="email" placeholder="E-mail address">
+	<input type="text" class="form-control mb-2" [(ngModel)]="email" [placeholder]="'MODELS.USER.EMAIL'|translate">
 	<input type="password" class="form-control mb-2" [(ngModel)]="password" placeholder="Password">
 	<button class="btn btn-primary mb-2" (click)="login()">{{'USER.LOGIN'|translate}}</button>
 	<a (click)="forgotPassword()" style="cursor: pointer">{{'USER.PASSWORD.FORGOT_PASSWORD'|translate}}</a>

@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">{{'ALIGNMENT.REMOTE_SYS.CONFIG.REMOTE_ALIGN_SYS_CONFIG'|translate}}</h3>
+    <h3 class="modal-title text-info">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.REMOTE_ALIGN_SYS_CONFIG'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
     
@@ -55,7 +55,7 @@
                     <tr>
                         <td><label>{{'COMMONS.STATUS.NEW'|translate}}:</label></td>
                         <td>
-                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.id" [placeholder]="'ALIGNMENT.REMOTE_SYS.CONFIG.ID_INFO'|translate">
+                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.id" [placeholder]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.ID_INFO'|translate">
                         </td>
                         <td>
                             <input class="form-control form-control-sm" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl:8080">
@@ -67,7 +67,7 @@
                             <input class="form-control form-control-sm" [(ngModel)]="newConfig.password" [placeholder]="'COMMONS.CONFIG.PASSWORD'|translate">
                         </td>
                         <td class="text-center">
-                            <div class="form-check form-check-inline" [title]="'ALIGNMENT.REMOTE_SYS.CONFIG.DEFAULT_CHECK_INFO'|translate">
+                            <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.DEFAULT_CHECK_INFO'|translate">
                                 <input class="form-check-input" id="defaultCheck" type="checkbox" [(ngModel)]="newConfig.default">
                                 <label class="form-check-label" for="defaultCheck">{{'COMMONS.STATUS.DEFAULT'|translate}}</label>
                             </div>

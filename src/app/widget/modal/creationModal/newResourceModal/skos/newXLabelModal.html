@@ -2,7 +2,7 @@
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span>
-            <button class="btn btn-light btn-xs" title="Change class" (click)="changeClass()" [disabled]="!clsChangeable">
+            <button class="btn btn-light btn-xs" [title]="'DATA.CLASS.CHANGE_CLASS'|translate" (click)="changeClass()" [disabled]="!clsChangeable">
                 <rdf-resource [resource]="labelClass"></rdf-resource>
             </button>
         </span>
@@ -25,7 +25,7 @@
                 <span class="fas fa-plus"></span>
             </button>
             <div style="width: 14px; margin-left: 2px;">
-                <span *ngIf="isDuplicateLangViolated()" class="fas fa-exclamation-circle" title="You cannot create multiple values with the same language"></span>
+                <span *ngIf="isDuplicateLangViolated()" class="fas fa-exclamation-circle" [title]="'DATA.COMMONS.DUPLICATED_VALUES_WARN'|translate"></span>
             </div>
         </div>
     </div>
@@ -46,12 +46,12 @@
     <div class="hbox" style="align-items: center;">
         <div style="flex: 1; margin-right: 14px; text-align: initial;">
             <div *ngIf="!lang && viewInitialized" class="alert alert-danger" style="padding: 7px;">
-                You cannot create resources. You have no language assigned for the current project.
+                {{'DATA.COMMONS.NO_LANGUAGE_ASSIGNED_WARN'|translate}}
             </div>
         </div>
         <div>
             <span *ngIf="isOkWarningActive()" class="fas fa-exclamation-triangle" style="margin-right: 2px;"
-                title="Warning: the value currently typed will not be considered. It needs to be added through the '+' button">
+                [title]="'DATA.COMMONS.MULTIVALUE_WARN'|translate">
             </span>
             <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
             <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>

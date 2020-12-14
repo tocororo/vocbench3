@@ -1,12 +1,12 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">{{'ALIGNMENT.REMOTE_SYS.CONFIG.REMOTE_ALIGN_SYS_CONFIG'|translate}}</h3>
+    <h3 class="modal-title text-info">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.REMOTE_ALIGN_SYS_CONFIG'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
     
     <div class="card card-default">
         <div class="card-header">
             <span style="flex: 1"></span>
-            <button *ngIf="isAdmin" class="btn btn-xs btn-light" (click)="administration()" title="Administration">
+            <button *ngIf="isAdmin" class="btn btn-xs btn-light" (click)="administration()" [title]="'COMMONS.CONFIG.CONFIGURATION'|translate">
                 <span class="fas fa-wrench"></span>
             </button>
         </div>

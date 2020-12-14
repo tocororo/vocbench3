@@ -4,7 +4,7 @@
 <div class="modal-body vbox">
     <div *ngIf="resource" class="form-check mb-2">
         <input class="form-check-input" id="allCheck" type="checkbox" [(ngModel)]="showAll" (ngModelChange)="onShowAllChanged()">
-        <label class="form-check-label" for="allCheck">Show all properties</label>
+        <label class="form-check-label" for="allCheck">{{'DATA.PROPERTY.SHOW_ALL'|translate}}</label>
     </div>
     <property-tree-panel [editable]="false" [roots]="rootProperties" [resource]="domainRes" [type]="type" [projectCtx]="projectCtx"
         (nodeSelected)="onPropertySelected($event)">

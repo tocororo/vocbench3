@@ -356,10 +356,10 @@ export class UserFormOptionalField {
     public static URL_IRI: string = "http://semanticturkey.uniroma2.it/puvoc#url";
 
     public static fieldLabelMap: {iri: string, translationKey: string}[] = [
-        {iri: UserFormOptionalField.ADDRESS_IRI, translationKey: "USER.FORM.OFFICE_ADDRESS"},
-        {iri: UserFormOptionalField.PHONE_IRI, translationKey: "USER.FORM.PHONE"},
-        {iri: UserFormOptionalField.AFFILIATION_IRI, translationKey: "USER.FORM.AFFILIATION"},
-        {iri: UserFormOptionalField.URL_IRI, translationKey: "USER.FORM.PERSONAL_URL"}
+        {iri: UserFormOptionalField.ADDRESS_IRI, translationKey: "MODELS.USER.OFFICE_ADDRESS"},
+        {iri: UserFormOptionalField.PHONE_IRI, translationKey: "MODELS.USER.PHONE"},
+        {iri: UserFormOptionalField.AFFILIATION_IRI, translationKey: "MODELS.USER.AFFILIATION"},
+        {iri: UserFormOptionalField.URL_IRI, translationKey: "MODELS.USER.PERSONAL_URL"}
     ];
     public static getOptionalFieldLabel(field: UserFormOptionalField): string {
         return UserFormOptionalField.fieldLabelMap.find(entry => entry.iri == field.iri).translationKey;

@@ -55,7 +55,7 @@
 </div>
 <div class="modal-footer">
     <span *ngIf="isOkWarningActive()" class="fas fa-exclamation-triangle" style="margin-right: 2px;"
-        title="Warning: the value currently typed will not be considered. It needs to be added through the '+' button">
+        [title]="'DATA.COMMONS.MULTIVALUE_WARN'|translate">
     </span>
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
     <button class="btn btn-light btn-sm" (click)="close()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>

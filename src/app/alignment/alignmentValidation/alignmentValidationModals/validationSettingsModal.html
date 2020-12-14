@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{'ALIGNMENT.SETTINGS.ALIGN_VALIATION_SETTINGS'|translate}}</h3>
+    <h3 class="modal-title">{{'ALIGNMENT.VALIDATION.SETTINGS.ALIGN_VALIATION_SETTINGS'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
     
     <div class="hbox" style="align-items: center; flex: initial; margin-bottom: 5px;">
-        <span class="fas fa-info-circle" style="top: 0" [title]="'ALIGNMENT.SETTINGS.REJECTED_ALIGN_ACTION_INFO'|translate"></span>
-        <label style="white-space: nowrap; margin: 0px 3px;">{{'ALIGNMENT.SETTINGS.REJECTED_ALIGN_ACTION'|translate}}Rejected alignment action:</label>
+        <span class="fas fa-info-circle" style="top: 0" [title]="'ALIGNMENT.VALIDATION.SETTINGS.REJECTED_ALIGN_ACTION_INFO'|translate"></span>
+        <label style="white-space: nowrap; margin: 0px 3px;">{{'ALIGNMENT.VALIDATION.SETTINGS.REJECTED_ALIGN_ACTION'|translate}}Rejected alignment action:</label>
         <select class="form-control" style="display: inline-block" [(ngModel)]="rejectedAlignmentAction">
             <option *ngFor="let opt of rejectedAlignmentOptions" [value]="opt.value">{{opt.label}}</option>
         </select>
@@ -13,12 +13,12 @@
     
     <div class="card card-default">
         <div class="card-header">
-            <label>{{'ALIGNMENT.SETTINGS.RELATION_METER_ASPECT'|translate}}</label>
+            <label>{{'ALIGNMENT.VALIDATION.SETTINGS.RELATION_METER_ASPECT'|translate}}</label>
         </div>
         <div class="card-body">
             <div class="card card-default" style="margin-bottom: 5px;">
                 <div class="card-body">
-                    <div>{{'ALIGNMENT.SETTINGS.SHOW_RELATION_AS'|translate}}:</div>
+                    <div>{{'ALIGNMENT.VALIDATION.SETTINGS.SHOW_RELATION_AS'|translate}}:</div>
                     <div *ngFor="let opt of showRelationOptions; let i=index" class="form-check mt-2">
                         <input #relRadio class="form-check-input" [id]="'optRadio'+i" type="radio" name="relRadio" [value]="opt.value" (click)="showRelationType=relRadio.value"
                         [checked]="showRelationType==relRadio.value">
@@ -28,14 +28,14 @@
             </div>
             
             <div class="hbox" style="align-items: center">
-                <span style="margin-right: 3px;">{{'ALIGNMENT.SETTINGS.SHOW_CONF_ON_METER'|translate}}</span>
+                <span style="margin-right: 3px;">{{'ALIGNMENT.VALIDATION.SETTINGS.SHOW_CONF_ON_METER'|translate}}</span>
                 <input type="checkbox" [(ngModel)]="confOnMeterCheck">
             </div>
         </div>
     </div>
     
     <div class="hbox" style="align-items: center; flex: initial; margin-top: 5px">
-        <label style="white-space: nowrap; margin-right: 3px;">{{'ALIGNMENT.SETTINGS.MAX_ALING_SHOWN'|translate}}:</label>
+        <label style="white-space: nowrap; margin-right: 3px;">{{'ALIGNMENT.VALIDATION.SETTINGS.MAX_ALING_SHOWN'|translate}}:</label>
         <input class="form-control" type="number" step="1" [(ngModel)]="maxAlignment"
             [ngClass]="{submitted: submitted, 'ng-invalid': maxAlignment < 1 || maxAlignment > 100 }">
     </div>

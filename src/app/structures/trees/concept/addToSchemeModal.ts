@@ -22,6 +22,8 @@ export class AddToSchemeModal {
     schemeList: { scheme: ARTURIResource, checked: boolean }[] =[];
     private collapsed: boolean = true;
 
+    translationParam: { concept: string, scheme: string };
+
     constructor(public activeModal: NgbActiveModal, private skosService: SkosServices) {}
 
     ngOnInit() {
@@ -32,6 +34,10 @@ export class AddToSchemeModal {
                 });
             }
         );
+        this.translationParam = {
+            concept: this.concept != null ? this.concept.getShow() : null,
+            scheme: this.scheme != null ? this.scheme.getShow() : null,
+        }
     }
 
     isOkEnabled() {

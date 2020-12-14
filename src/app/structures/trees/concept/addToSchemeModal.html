@@ -1,18 +1,17 @@
 <div class="modal-header">
-    <h3 class="modal-title">Add concepts to scheme</h3>
+    <h3 class="modal-title">{{'DATA.CONCEPT.ADD_TO_SCHEME.ADD_CONCEPT_TO_SCHEME'|translate}}</h3>
 </div>
 <div class="modal-body vbox blockingDivHost">
 
     <div class="alert alert-warning">
-        You are going to add the concept '{{concept.getShow()}}' and its descendants to the scheme '{{scheme.getShow()}}'.
-        Are you sure?<br>
+        {{'DATA.CONCEPT.ADD_TO_SCHEME.CONFIRM_MSG'|translate:translationParam}}
     </div>
 
     <div class="form-check mt-3 mb-1 mr-2" style="align-self: flex-end;">
         <input class="form-check-input" id="topCheck" type="checkbox" [(ngModel)]="setTopConcept">
         <label class="form-check-label" for="topCheck">
-            Set top concept
-            <span class="fas fa-info-circle ml-1" title="If checked, set the provided concept as top concept of the target scheme"></span>
+            {{'DATA.CONCEPT.ADD_TO_SCHEME.SET_TOP_CONCEPT'|translate}}
+            <span class="fas fa-info-circle ml-1" [title]="'DATA.CONCEPT.ADD_TO_SCHEME.SET_TOP_CONCEPT_INFO'|translate"></span>
         </label>
     </div>
     
@@ -22,15 +21,14 @@
                 <img src="./assets/images/icons/arrow.png" (click)="collapsed = !collapsed" [ngClass]="{'arrow-right': collapsed}">
             </div>
             <span style="flex: 1">
-                <label class="groupPanel-heading-content">Schemes filter:</label>
+                <label class="groupPanel-heading-content">{{'DATA.CONCEPT.ADD_TO_SCHEME.SCHEMES_FILTER'|translate}}:</label>
             </span>
         </div>
         <div class="groupPanel-body vbox">
             <ng-container *ngIf="!collapsed">
 
                 <div class="alert alert-info">
-                    Only the concepts (among the descendants of '{{concept.getShow()}}') belonging to at least one of the following
-                    schemes will be added to the target scheme.
+                    {{'DATA.CONCEPT.ADD_TO_SCHEME.SCHEMES_FILTER_INFO'|translate:translationParam}}
                 </div>
 
                 <div class="scrollableContainer" style="margin-top: 6px; border: 1px solid #ccc; border-radius: 3px;">

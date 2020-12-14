@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Project ACL</h3>
+    <h3 class="modal-title">{{'PROJECTS.ACL.PROJECT_ACL'|translate}}</h3>
 </div>
 <div class="modal-body vbox blockingDivHost">
     <div class="scrollableContainer">
@@ -8,8 +8,8 @@
                 <tr>
                     <th style="vertical-align: bottom;" class="firstCol" style="border-left: 0; border-right: 0; vertical-align: bottom;">
                         <div class="hbox">
-                            <div style="flex: 1"><span class="fas fa-chevron-down"></span> Project</div>
-                            <div style="margin-left: 15px">Consumer <span class="fas fa-chevron-right"></span></div>
+                            <div style="flex: 1"><span class="fas fa-chevron-down"></span> {{'MODEL.PROJECT.PROJECTS'|translate}}</div>
+                            <div style="margin-left: 15px">{{'MODEL.PROJECT.CONSUMER'|translate}} <span class="fas fa-chevron-right"></span></div>
                         </div>
                     </th>
                     <th *ngFor="let cons of consumerList" class="rotate" [title]="cons">
@@ -27,7 +27,7 @@
                         <td style="font-weight: bold;" class="firstCol">
                             <div class="hbox" style="align-items: center;">
                                 <div class="ellipsable" style="flex: 1;">{{row.project}}</div>
-                                <button class="btn btn-light btn-xs float-right" style="margin-left: 8px;" title="Edit project ACL" (click)="editProjectACL(row.project)">
+                                <button class="btn btn-light btn-xs float-right" style="margin-left: 8px;" [title]="'PROJECTS.ACL.SHOW_ACL_MATRIX'|translate" (click)="editProjectACL(row.project)">
                                     <span class="fas fa-pencil-alt"></span>
                                 </button>
 

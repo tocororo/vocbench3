@@ -38,7 +38,7 @@
             </div>
 
             <div *ngIf="collaborationAvailable" class="dropdown ml-2" ngbDropdown>
-                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle title="Issues">
+                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [title]="'RESOURCE_VIEW.ACTIONS.SHOW_ISSUES'|translate">
                     <span [class]="'fas fa-exclamation-circle ' + issuesStruct.btnClass"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
