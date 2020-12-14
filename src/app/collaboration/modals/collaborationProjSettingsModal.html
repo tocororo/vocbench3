@@ -6,7 +6,7 @@
 <div class="modal-body scrollableContainer blockingDivHost">
 
     <div class="hbox" style="align-items: center; margin: 4px;">
-        <label style="margin-right: 4px; white-space: nowrap">{{'PROJECTS.BACKEND_TYPE'|translate}}:</label>
+        <label style="margin-right: 4px; white-space: nowrap">{{'MODELS.PROJECT.BACKEND_TYPE'|translate}}:</label>
         <select class="form-control form-control-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onExtensionChange()">
             <option *ngFor="let ext of extensions" [title]="ext.description" [ngValue]="ext">{{ext.name}}</option>
         </select>

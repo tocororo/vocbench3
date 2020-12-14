@@ -4,7 +4,7 @@
 <div class="modal-body vbox" style="min-height: 100px;">
     <div class="card card-default vbox" style="margin-left: 5px;">
         <div class="card-header">
-            <label style="flex: 1;">{{'PROJECTS.PROJECTS'|translate}}</label>
+            <label style="flex: 1;">{{'MODELS.PROJECT.PROJECTS'|translate}}</label>
             <div class="btn-group btn-group-xs" ngbDropdown>
                 <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                     <span class="fas fa-cog"></span>
@@ -12,7 +12,7 @@
                 <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                     <h6 class="dropdown-header">{{'PROJECTS.CONFIG.TOP_LEVEL_ELEMENTS'|translate}}</h6>
                     <a class="dropdown-item" (click)="changeVisualizationMode(ProjectViewMode.list)">
-                        {{'PROJECTS.PROJECTS'|translate}}
+                        {{'MODELS.PROJECT.PROJECTS'|translate}}
                         <span *ngIf="visualizationMode == ProjectViewMode.list" class="fas fa-check float-right"></span>
                     </a>
                     <a class="dropdown-item" (click)="changeVisualizationMode(ProjectViewMode.dir)">
@@ -29,11 +29,11 @@
                 <thead>
                     <tr>
                         <th class="text-center">{{'COMMONS.NAME'|translate}}</th>
-                        <th class="text-center">{{'COMMONS.MODEL'|translate}}</th>
-                        <th class="text-center">{{'COMMONS.LEXICALIZATION'|translate}}</th>
-                        <th class="text-center">{{'PROJECTS.HISTORY'|translate}}</th>
-                        <th class="text-center">{{'PROJECTS.VALIDATION'|translate}}</th>
-                        <th class="text-center">{{'PROJECTS.REPO_LOCATION'|translate}}</th>
+                        <th class="text-center">{{'MODELS.PROJECT.MODEL'|translate}}</th>
+                        <th class="text-center">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</th>
+                        <th class="text-center">{{'MODELS.PROJECT.HISTORY'|translate}}</th>
+                        <th class="text-center">{{'MODELS.PROJECT.VALIDATION'|translate}}</th>
+                        <th class="text-center">{{'MODELS.PROJECT.REPO_LOCATION'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,11 +59,11 @@
                 <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
                 <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
                     <label class="text-center" style="flex: 3">{{'COMMONS.NAME'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'COMMONS.MODEL'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'COMMONS.LEXICALIZATION'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'PROJECTS.HISTORY'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'PROJECTS.VALIDATION'|translate}}</label>
-                    <label class="text-center" style="flex: 2">{{'PROJECTS.REPO_LOCATION'|translate}}</label>
+                    <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.MODEL'|translate}}</label>
+                    <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</label>
+                    <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.HISTORY'|translate}}</label>
+                    <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.VALIDATION'|translate}}</label>
+                    <label class="text-center" style="flex: 2">{{'MODELS.PROJECT.REPO_LOCATION'|translate}}</label>
                 </div>
                 <ng-container *ngFor="let pd of projectDirs">
                     <div class="groupPanel">

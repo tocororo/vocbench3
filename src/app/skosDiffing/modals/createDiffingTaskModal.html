@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{'SKOS_DIFF.CREATE_TASK'|translate}}</h3>
+    <h3 class="modal-title">{{'COMMONS.ACTIONS.CREATE_TASK'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
 
@@ -16,7 +16,7 @@
                 <div class="vbox">
                     <label class="text-center mb-2 p-2">{{'SKOS_DIFF.LEFT_DATASET'|translate}}</label>
                     <div *ngIf="mode == 'projects'" class="form-group row">
-                        <label class="col-form-label col-sm-3">{{'PROJECTS.PROJECT'|translate}}:</label>
+                        <label class="col-form-label col-sm-3">{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
                         <div class="col-sm-9">
                             <input class="form-control" [ngModel]="leftDataset.project.getName()" disabled>
                         </div>
@@ -33,7 +33,7 @@
                 <div class="vbox">
                     <label class="text-center mb-2 p-2">{{'SKOS_DIFF.RIGHT_DATASET'|translate}}</label>   
                     <div *ngIf="mode == 'projects'" class="form-group row">
-                        <label class="col-form-label col-sm-3">{{'PROJECTS.PROJECT'|translate}}:</label>
+                        <label class="col-form-label col-sm-3">{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
                         <div class="col-sm-9">
                             <select class="form-control" [(ngModel)]="rightDataset.project">
                                 <option *ngFor="let p of projects" [ngValue]="p">{{p.getName()}}</option>

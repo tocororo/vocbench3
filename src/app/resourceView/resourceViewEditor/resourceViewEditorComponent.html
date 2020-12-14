@@ -195,7 +195,7 @@
             <div class="dropup float-right" ngbDropdown placement="top-right">
                 <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle style="padding: 0px; border: none; background-color: transparent;">
                     <span [ngSwitch]="resource.getAdditionalProperty('accessMethod')">
-                        {{'COMMONS.STATUS'|translate}}:
+                        {{'COMMONS.STATUS.STATUS'|translate}}:
                         <ng-container *ngSwitchCase="'local'">
                             <img *ngIf="resourcePositionLocalProj" src="./assets/images/icons/local_current_project.png" style="width: 11px; margin-bottom: 3px;">
                             <img *ngIf="!resourcePositionLocalProj" src="./assets/images/icons/local_other_project.png" style="width: 11px; margin-bottom: 3px;">

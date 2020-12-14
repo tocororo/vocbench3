@@ -12,83 +12,83 @@
                     <td><input class="form-control form-control-sm" [ngModel]="shortType" [title]="dataset['@type']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset.uriSpace">
-                    <td class="text-right" nowrap><label>URI space:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.URI_SPACE'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset.uriSpace" readonly></td>
                 </tr>
                 <tr *ngIf="dataset.conformsTo">
-                    <td class="text-right" nowrap><label>Conforms to:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.CONFORMS_TO'}}:</label></td>
                     <td><h5><span [class]="'badge ' + modelBadgeClass" [title]="dataset.conformsTo">{{shortConformsTo}}</span></h5></td>
                 </tr>
                 <tr *ngIf="dataset.sparqlEndpoint">
-                    <td class="text-right" nowrap><label>SPARQL endpoint:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.SPARQL_ENDPOINT'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset.sparqlEndpoint" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['avgAmbiguity']">
-                    <td class="text-right" nowrap><label>Avg ambiguity:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.AVG_AMBIGUITY'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['avgAmbiguity']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['avgNumOfLexicalizations']">
-                    <td class="text-right" nowrap><label title="Average number of lexicalizations">Avg lexicalizations</label></td>
+                    <td class="text-right" nowrap><label [title]="'MODELS.MAPLE.DATASET.AVG_LEXICALIZATIONS_INFO'">{{'MODELS.MAPLE.DATASET.AVG_LEXICALIZATIONS'}}</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['avgNumOfLexicalizations']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['avgSynonymy']">
-                    <td class="text-right" nowrap><label>Avg synonymy:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.AVG_SYNONYMY'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['avgSynonymy']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['concepts']">
-                    <td class="text-right" nowrap><label>Concepts:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.CONCEPTS'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['concepts']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['conceptualDataset']">
-                    <td class="text-right" nowrap><label>Conceptual dataset:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.CONCEPTUAL_DATASET'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['conceptualDataset']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['conceptualizations']">
-                    <td class="text-right" nowrap><label>Conceptualizations:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.CONCEPTUALIZATIONS'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['conceptualizations']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['languageLexvo']">
-                    <td class="text-right" nowrap><label>Language Lexvo:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.LANGUAGE_LEXVO'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['languageLexvo']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['languageLOC']">
-                    <td class="text-right" nowrap><label>Language LOC:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.LANGUAGE_LOC'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['languageLOC']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['languageTag']">
-                    <td class="text-right" nowrap><label>Language Tag:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.LANGUAGE_TAG'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['languageTag']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['lexicalEntries']">
-                    <td class="text-right" nowrap><label>Lexical entries:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.LEXICAL_ENTRIES'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['lexicalEntries']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['lexicalizationModel']">
-                    <td class="text-right" nowrap><label>Lexicalization model:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.LEXICALIZATION_MODEL'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['lexicalizationModel']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['lexicalizations']">
-                    <td class="text-right" nowrap><label>Lexicalizations:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.LEXICALIZATIONS'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['lexicalizations']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['lexiconDataset']">
-                    <td class="text-right" nowrap><label>Lexicon dataset:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.LEXICON_DATASET'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['lexiconDataset']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['linguisticCatalog']">
-                    <td class="text-right" nowrap><label>Linguistic catalog:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.LINGUISTIC_CATALOG'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['linguisticCatalog']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['percentage']">
-                    <td class="text-right" nowrap><label>Percentage:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.PERCENTAGE'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['percentage']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['referenceDataset']">
-                    <td class="text-right" nowrap><label>Reference dataset:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.REFERENCE_DATASET'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['referenceDataset']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['references']">
-                    <td class="text-right" nowrap><label>References:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.REFERENCES'}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="dataset['references']" readonly></td>
                 </tr>
             </tbody>

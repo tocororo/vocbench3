@@ -4,11 +4,11 @@
 <div class="modal-body vbox">
     <div class="alert alert-warning">
         {{message}}
-        <div>You can force a property</div>
+        <div>{{'ALIGNMENT.MANAGEMENT.YOU_CAN_FORCE_PROP'|translate}}</div>
     </div>
 
     <div class="hbox" style="align-items: center; margin-top: 4px;">
-        <label style="margin-right: 4px; white-space: nowrap">Mapping property: </label>
+        <label style="margin-right: 4px; white-space: nowrap">{{'ALIGNMENT.MANAGEMENT.MAPPING_PROP'|translate}}: </label>
         <select class="form-control form-control-sm" [(ngModel)]="selectedProperty">
             <option *ngFor="let p of mappingPropList" [title]="p.getURI()" [ngValue]="p">{{p.getShow()}}</option>
         </select>
@@ -16,7 +16,7 @@
 
     <div class="form-check mt-2">
         <input class="form-check-input" id="defaultCheck" type="checkbox" [(ngModel)]="setAsDefault">
-        <label class="form-check-label" for="defaultCheck">Set the property as default for the relation</label>
+        <label class="form-check-label" for="defaultCheck">{{'ALIGNMENT.MANAGEMENT.SET_DEFAULT_FOR_RELATION'|translate}}</label>
     </div>
 
 </div>

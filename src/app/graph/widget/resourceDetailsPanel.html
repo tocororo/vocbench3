@@ -6,7 +6,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <td><label>{{'COMMONS.RESOURCES.RESOURCE'|translate}}:</label></td>
+                <td><label>{{'MODELS.RESOURCES.RESOURCE'|translate}}:</label></td>
                 <td><rdf-resource *ngIf="resource" [resource]="resource"></rdf-resource></td>
             </tr>
             <tr *ngIf="resource.isURIResource()">
@@ -18,15 +18,15 @@
                 <td>{{resource.getId()}}</td>
             </tr>
             <tr>
-                <td><label>{{'COMMONS.RESOURCES.LABEL'|translate}}:</label></td>
+                <td><label>{{'MODELS.RESOURCES.LABEL'|translate}}:</label></td>
                 <td>{{resource.getShow()}}</td>
             </tr>
             <tr *ngIf="resource.isResource()">
-                <td><label>{{'COMMONS.RESOURCES.ROLE'|translate}}:</label></td>
+                <td><label>{{'COMMONS.ROLE'|translate}}:</label></td>
                 <td>{{resource.getRole()}}</td>
             </tr>
             <tr *ngIf="resource.isResource()">
-                <td><label>{{'COMMONS.RESOURCES.DEPRECATED'|translate}}:</label></td>
+                <td><label>{{'MODELS.RESOURCES.DEPRECATED'|translate}}:</label></td>
                 <td>{{resource.isDeprecated()}}</td>
             </tr>
         </tbody>

@@ -19,7 +19,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <td><label>{{'COMMONS.BASE_URI'|translate}}:</label></td>
+                <td><label>{{'MODELS.PROJECT.BASE_URI'|translate}}:</label></td>
                 <td *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror' || importType == 'fromLocalFile'">
                     <div *ngIf="baseURIOptional" class="hbox" style="align-items: center">
                         <input class="form-control" [(ngModel)]="baseURI" [disabled]="!baseURICheck">

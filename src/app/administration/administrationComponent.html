@@ -2,11 +2,11 @@
     <div class="btn-group mb-2" style="display: block">
         <button *ngIf="isAdmin()" class="btn btn-light" [routerLink]="['/Administration/Users']" routerLinkActive="active">{{'COMMONS.USERS'|translate}}</button>
         <button class="btn btn-light" [routerLink]="['/Administration/Projects']" routerLinkActive="active"
-            [disabled]="!isProjManagementAuthorized()">{{'PROJECTS.PROJECTS'|translate}}</button>
+            [disabled]="!isProjManagementAuthorized()">{{'MODELS.PROJECT.PROJECTS'|translate}}</button>
         <button class="btn btn-light" [routerLink]="['/Administration/Roles']" routerLinkActive="active" 
-            [disabled]="!isRoleManagementAuthorized()">{{'COMMONS.RESOURCES.ROLES'|translate}}</button>
+            [disabled]="!isRoleManagementAuthorized()">{{'COMMONS.ROLES'|translate}}</button>
         <button *ngIf="isAdmin()" class="btn btn-light" [routerLink]="['/Administration/Groups']" routerLinkActive="active">{{'COMMONS.GROUPS'|translate}}</button>
-        <button *ngIf="isAdmin()" class="btn btn-light" [routerLink]="['/Administration/Configuration']" routerLinkActive="active">{{'COMMONS.CONFIGURATION'|translate}}</button>
+        <button *ngIf="isAdmin()" class="btn btn-light" [routerLink]="['/Administration/Configuration']" routerLinkActive="active">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}</button>
     </div>
     <router-outlet></router-outlet>
 </div>

@@ -1,6 +1,6 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">Create task</h3>
+        <h3 class="modal-title" style="flex: 1">{{'COMMONS.ACTIONS.CREATE_TASK'|translate}}</h3>
         <button *ngIf="serviceMetadata?.settings?.stProperties" class="btn btn-xs btn-light" (click)="systemSettings()">
             <span class="fas fa-wrench"></span>
         </button>
@@ -10,22 +10,22 @@
 
     <div class="row">
         <div class="col-sm-6 text-center">
-            <label>Left project</label>
+            <label>{{'ALIGNMENT.REMOTE_SYS.MAIN.LEFT_PROJECT'|translate}}</label>
         </div>
         <div class="col-sm-6 text-center">
-            <label>Right project</label>
+            <label>{{'ALIGNMENT.REMOTE_SYS.MAIN.RIGHT_PROJECT'|translate}}</label>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col-sm-6">
             <div class="hbox" style="align-items: center;">
                 <input class="form-control" [ngModel]="leftProjectStruct.project.getName()" readonly>
-                <button class="btn btn-light ml-2" (click)="profileProject(leftProjectStruct)" title="Profile project">
+                <button class="btn btn-light ml-2" (click)="profileProject(leftProjectStruct)" [title]="'ALIGNMENT.REMOTE_SYS.CREATE_TASK.PROFILE_PROJECT'|translate">
                     <span class="fas fa-align-right" style="transform: rotate(90deg)"></span>
                 </button>
                 <div style="margin-left: 4px;">
-                    <span *ngIf="leftProjectStruct.profileAvailable" class="fas fa-check" title="Metadata profile available"></span>
-                    <span *ngIf="!leftProjectStruct.profileAvailable" class="fas fa-times" title="Metadata profile not available"></span>
+                    <span *ngIf="leftProjectStruct.profileAvailable" class="fas fa-check" [title]="'ALIGNMENT.REMOTE_SYS.CREATE_TASK.METADATA_PROFILE_AVAILABLE'|translate"></span>
+                    <span *ngIf="!leftProjectStruct.profileAvailable" class="fas fa-times" [title]="'ALIGNMENT.REMOTE_SYS.CREATE_TASK.METADATA_PROFILE_NOT_AVAILABLE'|translate"></span>
                 </div>
             </div>
         </div>
@@ -37,12 +37,12 @@
                         <option *ngIf="p.getName() != leftProjectStruct.project.getName()" [ngValue]="p">{{p.getName()}}</option>
                     </ng-container>
                 </select>
-                <button *ngIf="rightProjectStruct" class="btn btn-light ml-2" (click)="profileProject(rightProjectStruct)" title="Profile project">
+                <button *ngIf="rightProjectStruct" class="btn btn-light ml-2" (click)="profileProject(rightProjectStruct)" [title]="'ALIGNMENT.REMOTE_SYS.CREATE_TASK.PROFILE_PROJECT'|translate">
                     <span class="fas fa-align-right" style="transform: rotate(90deg)"></span>
                 </button>
                 <div *ngIf="rightProjectStruct" style="margin-left: 4px;">
-                    <span *ngIf="rightProjectStruct.profileAvailable" class="fas fa-check" title="Metadata profile available"></span>
-                    <span *ngIf="!rightProjectStruct.profileAvailable" class="fas fa-times" title="Metadata profile not available"></span>
+                    <span *ngIf="rightProjectStruct.profileAvailable" class="fas fa-check" [title]="'ALIGNMENT.REMOTE_SYS.CREATE_TASK.METADATA_PROFILE_AVAILABLE'|translate"></span>
+                    <span *ngIf="!rightProjectStruct.profileAvailable" class="fas fa-times" [title]="'ALIGNMENT.REMOTE_SYS.CREATE_TASK.METADATA_PROFILE_NOT_AVAILABLE'|translate"></span>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
 
     <div class="row mt-3">
         <div class="col-sm-12 text-center">
-            <button class="btn btn-sm btn-info" (click)="profileMatching()" [disabled]="!isProfileEnabled()">Profile matching</button>
+            <button class="btn btn-sm btn-info" (click)="profileMatching()" [disabled]="!isProfileEnabled()">{{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.PROFILE_MATCHING'|translate}}</button>
         </div>
     </div>
 
@@ -64,7 +64,7 @@
 
         <div class="card card-default" style="margin-top: 6px;">
             <div class="card-header">
-                <label>Pairings</label>
+                <label>{{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.PAIRINGS'|translate}}</label>
             </div>
             <div class="card-body">
                 <div *ngFor="let p of refinablePairings; let i=index" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
@@ -73,7 +73,7 @@
                         <div class="groupPanel-heading-content">
                             <div class="form-check">
                                 <input class="form-check-input" [id]="'pairingCheck'+i" type="checkbox" [(ngModel)]="p.checked" (ngModelChange)="onPairingSelectionChange()">
-                                <label class="form-check-label" [for]="'pairingCheck'+i">Use</label>
+                                <label class="form-check-label" [for]="'pairingCheck'+i">{{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.USE'|translate}}</label>
                             </div>
                         </div>
                     </div>
@@ -83,11 +83,11 @@
                             <lang-item [language]="p.language" size="lg" [showName]="false"></lang-item>
                             <div style="margin-left: 10px;">
                                 <div class="text-center">
-                                    <span>Score:</span>
+                                    <span>{{'MODESL.MAPLE.PAIRING.SCORE'|translate}}:</span>
                                     <b [title]="p.score">{{p.scoreRound}}</b>
                                 </div>
                                 <div class="text-center">
-                                    <span>Best combined score:</span>
+                                    <span>{{'MODESL.MAPLE.PAIRING.BEST_COMBINED_SCORE'|translate}}:</span>
                                     <b [title]="p.bestCombinedScore">{{p.bestCombinedScoreRound}}</b>
                                 </div>
                             </div>
@@ -96,8 +96,8 @@
                             <div class="groupPanel-heading">
                                 <div class="groupPanel-heading-content">
                                     <label>
-                                        Synonymizers
-                                        <span class="fas fa-info-circle" title="Allow the usage of a synonymizer for improving the quality of the alignment"></span>
+                                        {{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.SYNONIMIZERS'|translate}}
+                                        <span class="fas fa-info-circle" [title]="'ALIGNMENT.REMOTE_SYS.CREATE_TASK.SYNONIMIZERS_INFO'|translate"></span>
                                     </label>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                                         <i style="margin-left: 12px;">{{s.lexiconDataset['@id']}}</i>
                                     </ng-template>
                                     <div style="margin-left: 10px;">
-                                        Score: <b [title]="s.score">{{s.scoreRound}}</b>
+                                        {{'MODESL.MAPLE.PAIRING.SCORE'|translate}}: <b [title]="s.score">{{s.scoreRound}}</b>
                                     </div>
                                     <button class="btn btn-light btn-xs" style="margin-left: 12px;" (click)="describeSynonymizer(s)" [title]="'COMMONS.DETAILS'|translate">
                                         <span class="fas fa-info-circle"></span>
@@ -125,7 +125,7 @@
 
         <div class="card card-default" style="margin-top: 6px;">
             <div class="card-header">
-                <label style="flex: 1">Matchers</label>
+                <label style="flex: 1">{{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.MATCHERS'|translate}}</label>
             </div>
             <div class="card-body">
 
@@ -133,22 +133,24 @@
 
                 <ng-template #noMatchersBlock>
                     <div *ngIf="!matchers" class="alert alert-info">
-                        Optionally a matcher can be provided to the alignment system.
-                        Click <a href="javascript:void(0)" (click)="searchMatchers()"><b>here</b></a> to search for available matchers.
+                        {{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.MATCHERS_INFO.0'|translate}} 
+                        <a href="javascript:void(0)" (click)="searchMatchers()"><b>{{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.MATCHERS_INFO.1'|translate}}</b></a>
+                        {{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.MATCHERS_INFO.2'|translate}} 
                     </div>
                 </ng-template>
 
                 <ng-template #matchersBlock>
                     <div *ngIf="outdatedMatchers && matchers.length > 0" class="alert alert-warning" style="margin-bottom: 8px;">
-                        The pairings selection has changed, the list of available matchers could be outdated.
-                        Click <a href="javascript:void(0)" (click)="searchMatchers()"><b>here</b></a> to refresh the list.
+                        {{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.PAIRINGS_CHANGED_WARN.0'|translate}} 
+                        <a href="javascript:void(0)" (click)="searchMatchers()"><b>{{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.PAIRINGS_CHANGED_WARN.1'|translate}}</b></a>
+                        {{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.PAIRINGS_CHANGED_WARN.2'|translate}} 
                     </div>
                     <div *ngFor="let m of matchers; let i=index" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
                         <div class="groupPanel-heading">
                             <div class="groupPanel-heading-content">
-                                <div class="form-check" title="If selected use this matcher">
+                                <div class="form-check">
                                     <input class="form-check-input" [id]="'matcherRadio'+i" type="radio" (click)="selectMatcher(m)" [checked]="selectedMatcher == m">
-                                    <label class="form-check-label" [for]="'matcherRadio'+i">Use</label>
+                                    <label class="form-check-label" [for]="'matcherRadio'+i">{{'ALIGNMENT.REMOTE_SYS.CREATE_TASK.USE'|translate}}</label>
                                 </div>
                             </div>
                         </div>
@@ -164,9 +166,9 @@
                                     <div class="clickable" (click)="m.settings.open = !m.settings.open">
                                         <span [class]="'fas fa-chevron-' + (m.settings.open ? 'down' : 'right')"></span>
                                     </div>
-                                    <label style="flex: 1;">Settings</label>
+                                    <label style="flex: 1;">{{'COMMONS.SETTINGS'|translate}}</label>
                                     <span *ngIf="!m.settings.stProperties" class="fas fa-exclamation-triangle" 
-                                        style="margin-right: 4px;" title="The JSON settings must follow the schema specifications shown on the right">
+                                        style="margin-right: 4px;" [title]="'ALIGNMENT.REMOTE_SYS.CREATE_TASK.JSON_SETTINGS_INFO'|translate">
                                     </span>
                                 </div>
                                 <div class="card-body">

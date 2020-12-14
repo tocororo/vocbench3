@@ -16,7 +16,7 @@
     <ng-container *ngIf="targetPosition == ResourcePositionEnum.local">
         <div class="card card-default">
             <div class="card-header">
-                <label>{{'PROJECTS.PROJECTS'|translate}}</label>
+                <label>{{'MODELS.PROJECT.PROJECTS'|translate}}</label>
             </div>
             <div class="card-body vbox scrollableContainer" style="max-height: 150px;">
                 <div *ngFor="let p of projectList">
@@ -79,7 +79,7 @@
                             <th>{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
                             <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.PERCENTAGE_INFO'|translate">%</th>
                             <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.AVG_INFO'|translate">Avg</th>
-                            <th class="text-center" [title]="'SEARCH.ASSISTED_SEARCH.LEXICALIZATION_MODEL'|translate">LexModel</th>
+                            <th class="text-center" [title]="'MODELS.MAPLE.DATASET.LEXICALIZATION_MODEL'|translate">LexModel</th>
                         </tr>
                     </thead>
                     <tbody>

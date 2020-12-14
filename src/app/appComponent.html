@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="mainNavbar" [ngbCollapse]="navbarCollapsed">
         <ul class="navbar-nav mr-auto">
             <li *ngIf="isUserLogged() && isUserAdmin()" class="nav-item" routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['/Projects']">{{'PROJECTS.PROJECTS'|translate}}</a>
+                <a class="nav-link" [routerLink]="['/Projects']">{{'MODELS.PROJECT.PROJECTS'|translate}}</a>
             </li>
             <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item" [ngClass]="{ disabled : !isDataAuthorized() }" routerLinkActive="active">
                 <a *ngIf="!isProjectEdoal()" class="nav-link" [routerLink]="['/Data']">{{'NAVBAR.DATA'|translate}}</a>

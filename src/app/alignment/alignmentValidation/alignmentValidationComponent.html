@@ -1,11 +1,11 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label>Alignment Validation:</label>
+        <label>{{'ALIGNMENT.ALIGNMENT_VALIDATION'|translate}}:</label>
     </div>
     
     <div class="card-body vbox">
         <div style="display: flex; align-items: center; margin-bottom: 8px;">
-            <label style="margin-right: 4px;">Source:</label>
+            <label style="margin-right: 4px;">{{'COMMONS.SOURCE'|translate}}:</label>
             <select class="form-control" [(ngModel)]="selectedSource">
                 <option *ngFor="let source of alignmentSources">{{source}}</option>
             </select>

@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">Remote Alignment System settings</h3>
+    <h3 class="modal-title text-info">{{'ALIGNMENT.REMOTE_SYS.CONFIG.REMOTE_ALIGN_SYS_CONFIG'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
     
@@ -14,16 +14,16 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="text-center">{{'COMMONS.ACTIVE'|translate}}</th>
+                        <th class="text-center">{{'COMMONS.STATUS.ACTIVE'|translate}}</th>
                         <th class="text-center">ID</th>
-                        <th class="text-center">Server URL</th>
-                        <th class="text-center">Username</th>
-                        <th class="text-center">Password</th>
+                        <th class="text-center">{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
+                        <th class="text-center">{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
+                        <th class="text-center">{{'COMMONS.CONFIG.PASSWORD'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngIf="savedConfigs?.length == 0">
-                        <td colspan="4">No configuration found. Please, create a new one.</td>
+                        <td colspan="4">{{'COMMONS.CONFIG.NO_CONFIG_FOUND'|translate}}</td>
                     </tr>
                     <tr *ngFor="let conf of savedConfigs">
                         <td class="text-center">

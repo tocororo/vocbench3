@@ -5,7 +5,7 @@
 
     <div class="card card-default vbox">
         <div class="card-header">
-            <label>{{'COMMONS.RESOURCES.RESOURCE_TYPE'|translate}}</label>
+            <label>{{'MODELS.RESOURCES.RESOURCE_TYPE'|translate}}</label>
         </div>
         <div class="card-body scrollableContainer">
             <div *ngFor="let t of resourceTypes" class="listItem" [ngClass]="{ active: selectedType == t }" (click)="selectedType = t">

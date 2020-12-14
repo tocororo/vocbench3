@@ -8,9 +8,9 @@
             <table class="table table-sm table-hoverable">
                 <thead>
                     <tr>
-                        <th>Server URL</th>
-                        <th>Username</th>
-                        <th>Password</th>
+                        <th>{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
+                        <th>{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
+                        <th>{{'COMMONS.CONFIG.PASSWORD'|translate}}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -39,7 +39,7 @@
         </div>
         <div class="card-footer">
             <div class="hbox" style="align-items: center;">
-                <label>{{'COMMONS.NEW'|translate}}:</label>
+                <label>{{'COMMONS.STATUS.NEW'|translate}}:</label>
                 <input class="form-control form-control-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl">
                 <input class="form-control form-control-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.username" placeholder="username">
                 <input class="form-control form-control-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.password" placeholder="password">

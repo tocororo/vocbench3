@@ -24,13 +24,13 @@
                     <tr>
                         <td nowrap><label>{{'COMMONS.REPOSITORY_ID'|translate}}:</label></td>
                         <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.repositoryId" readonly></td>
-                        <td nowrap><label>Server URL:</label></td>
+                        <td nowrap><label>{{'COMMONS.CONFIG.SERVER_URL'|translate}}:</label></td>
                         <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.serverURL" readonly></td>
                     </tr>
                     <tr>
-                        <td><label>Username:</label></td>
+                        <td><label>{{'COMMONS.CONFIG.USERNAME'|translate}}:</label></td>
                         <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.username" placeholder="username"></td>
-                        <td><label>Password:</label></td>
+                        <td><label>{{'COMMONS.CONFIG.PASSWORD'|translate}}:</label></td>
                         <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.password" placeholder="password"></td>
                     </tr>
                 </tbody>

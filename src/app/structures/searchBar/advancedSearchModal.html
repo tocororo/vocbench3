@@ -14,7 +14,7 @@
                 <td><input class="form-control" [(ngModel)]="searchString"></td>
             </tr>
             <tr>
-                <td><label>{{'COMMONS.STATUS'|translate}}:</label></td>
+                <td><label>{{'COMMONS.STATUS.STATUS'|translate}}:</label></td>
                 <td>
                     <select class="form-control" [(ngModel)]="selectedStatus">
                         <option *ngFor="let s of statuses" [value]="s.value">{{s.show}}</option>
@@ -176,7 +176,7 @@
                     <div class="card card-default" style="flex: 1;">
                         <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">{{'COMMONS.RESOURCES.PREDICATE'|translate}}:</label>
+                                <label style="margin-right: 4px;">{{'MODELS.RESOURCES.PREDICATE'|translate}}:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true"
                                     (resourceChanged)="updatePropIngoing(group, $event)">
                                 </resource-picker>
@@ -232,7 +232,7 @@
                     <div class="card card-default" style="flex: 1;">
                         <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">{{'COMMONS.RESOURCES.PREDICATE'|translate}}:</label>
+                                <label style="margin-right: 4px;">{{'MODELS.RESOURCES.PREDICATE'|translate}}:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true" 
                                     (resourceChanged)="updatePropOutgoingValue(group, $event)">
                                 </resource-picker>
@@ -277,7 +277,7 @@
                     <div class="card card-default" style="flex: 1;">
                         <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">{{'COMMONS.RESOURCES.PREDICATE'|translate}}:</label>
+                                <label style="margin-right: 4px;">{{'MODELS.RESOURCES.PREDICATE'|translate}}:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.predicate" [config]="{ roles: ['property'] }" [editable]="true" 
                                     (resourceChanged)="updatePropOutgoingFreeText(group, $event)">
                                 </resource-picker>

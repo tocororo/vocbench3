@@ -338,11 +338,11 @@ export class ProjectUtils {
             { id: ProjectColumnId.name, translationKey: "COMMONS.NAME", show: true, flex: 3, mandatory: true },
             { id: ProjectColumnId.open, translationKey: "PROJECTS.OPEN_CLOSE", show: true, flex: 1, mandatory: true },
             { id: ProjectColumnId.accessed, translationKey: "PROJECTS.ACCESSED", show: true, flex: 1, mandatory: true },
-            { id: ProjectColumnId.model, translationKey: "COMMONS.MODEL", show: true, flex: 1 },
-            { id: ProjectColumnId.lexicalization, translationKey: "COMMONS.LEXICALIZATION", show: true, flex: 1 },
-            { id: ProjectColumnId.history, translationKey: "PROJECTS.HISTORY", show: true, flex: 1 },
-            { id: ProjectColumnId.validation, translationKey: "PROJECTS.VALIDATION", show: true, flex: 1 },
-            { id: ProjectColumnId.location, translationKey: "PROJECTS.REPO_LOCATION", show: true, flex: 2 }
+            { id: ProjectColumnId.model, translationKey: "MODELS.PROJECT.MODEL", show: true, flex: 1 },
+            { id: ProjectColumnId.lexicalization, translationKey: "MODELS.PROJECT.LEXICALIZATION", show: true, flex: 1 },
+            { id: ProjectColumnId.history, translationKey: "MODELS.PROJECT.HISTORY", show: true, flex: 1 },
+            { id: ProjectColumnId.validation, translationKey: "MODELS.PROJECT.VALIDATION", show: true, flex: 1 },
+            { id: ProjectColumnId.location, translationKey: "MODELS.PROJECT.REPO_LOCATION", show: true, flex: 2 }
         ];
     }
 

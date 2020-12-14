@@ -113,6 +113,82 @@
             "TEMPLATE_INFO": "Here you can assign a ResourceView template to the user. This template describes which ResourceView partitions are visible by default.<br>You can also load an already existing template, or decide to save the template you defined, through the toolbar in panel header."
         }
     },
+    "ALIGNMENT": {
+        "ALIGNMENT_VALIDATION": "Alignment Validation",
+        "FROM_FILE": {
+            "ALIGN_FILE": "Alignment file",
+            "LEFT_ONTO_URI": "Left ontology baseURI",
+            "RIGHT_ONTO_URI": "Right ontology baseURI"
+        },
+        "REMOTE_SYS": {
+            "CONFIG": {
+                "REMOTE_ALIGN_SYS_CONFIG": "Remote Alignment System configurations",
+                "DEFAULT_CHECK_INFO": "If checked the new configuration is automatically set as default",
+                "ID_INFO": "Configuration ID"
+            },
+            "MAIN": {
+                "REMOTE_ALIGN_SYS": "Remote Alignment System",
+                "SERVICE_DOWN": "Service down",
+                "TASKS": "Tasks",
+                "UNCONFIGURED_WARN": "No connection to a Remote Alignment System has been detected. Please, create or select a configuration by clicking on the <span class=\"fas fa-cog\"></span> button on the top right corner.",
+                "LEFT_PROJECT": "Left project",
+                "RIGHT_PROJECT": "Right project",
+                "START_TIME": "Start time",
+                "END_TIME": "End time",
+                "START_VALIDATION": "Start validation"
+            },
+            "CREATE_TASK": {
+                "PROFILE_PROJECT": "Profile project",
+                "METADATA_PROFILE_AVAILABLE": "Metadata profile available",
+                "METADATA_PROFILE_NOT_AVAILABLE": "Metadata profile not available",
+                "PROFILE_MATCHING": "Profile matching",
+                "PAIRINGS": "Pairings",
+                "USE": "Use",
+                "SYNONIMIZERS": "Synonymizers",
+                "SYNONIMIZERS_INFO": "Allow the usage of a synonymizer for improving the quality of the alignment",
+                "MATCHERS": "Matchers",
+                "MATCHERS_INFO": [
+                    "Optionally a matcher can be provided to the alignment system. Click",
+                    "here",
+                    "to search for available matchers."
+                ],
+                "PAIRINGS_CHANGED_WARN": [
+                    "The pairings selection has changed, the list of available matchers could be outdated. Click",
+                    "here",
+                    "to refresh the list."
+                ],
+                "JSON_SETTINGS_INFO": "The JSON settings must follow the schema specifications shown on the right",
+                "SYNONYMIZER_DATASETS": "Synonymizer datasets",
+                "CONCEPTUALIZATION_SET": "Conceptualization Set"
+            }
+        },
+        "MANAGEMENT": {
+            "ALIGNMENTS": "Alignments",
+            "SOURCE_ENTITY": "Source entity",
+            "TARGET_ENTITY": "Target entity",
+            "RELATION": "Relation",
+            "MAPPING_PROP": "Mapping Property",
+            "QUICK_ACTIONS": "Quick Actions",
+            "DO_QUICK_ACTION": "Do quick action",
+            "APPLY_TO_DATASET": "Apply to Dataset",
+            "APPLY_TO_EDOAL": "Apply to EDOAL linkset",
+            "YOU_CAN_FORCE_PROP": "You can force a property",
+            "SET_DEFAULT_FOR_RELATION": "Set the property as default for the relation"
+        },
+        "REPORT": {
+            "ALIGN_REPORT": "Alignment report",
+            "ACTION_PERFORMED": "Action performed"
+        },
+        "SETTINGS": {
+            "ALIGN_VALIATION_SETTINGS": "Alignment validation settings",
+            "REJECTED_ALIGN_ACTION": "Rejected alignment action",
+            "REJECTED_ALIGN_ACTION_INFO": "Specifies what to do with rejected alignments when applyng the validation to the ontology",
+            "RELATION_METER_ASPECT": "Relation meter aspect",
+            "SHOW_RELATION_AS": "Show relation as",
+            "SHOW_CONF_ON_METER": "Show confidence on meter",
+            "MAX_ALING_SHOWN": "Maximum number of alignments shown (1÷100)"
+        }
+    },
     "HOME": {
         "WELCOME": "Welcome to VocBench",
         "DESCRIPTION": "VocBench is a web-based, multilingual, collaborative development platform for managing <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a> ontologies, <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>) thesauri, <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> lexicons and generic RDF datasets.",
@@ -763,7 +839,6 @@
                 "DEREFERENCIATION_SYSTEM": "Dereferenciation System",
                 "NO_AGGREGATION": "No aggregation",
                 "NO_AGGREGATION_INFO": "If checked it means that the aggregation may be supported, but its support is insufficient for the purposes of Vocbench",
-                "URI_SPACE": "URI space",
                 "VERSION_INFO": "Version Info"
             },
             "LEXICALIZATION_SET": {
@@ -826,6 +901,65 @@
                     "MIRROR_FALLBACK_WEB": "Resolve from Ontology Mirror with fallback to Web"
                 }
             }
+        }
+    },
+    "MODELS": {
+        "MAPLE": {
+            "DATASET": {
+                "DATASET": "Dataset",
+                "URI_SPACE": "URI space",
+                "CONFORMS_TO": "Conforms to",
+                "SPARQL_ENDPOINT": "SPARQL Endpoint",
+                "AVG_AMBIGUITY": "Avg ambiguity",
+                "AVG_LEXICALIZATIONS": "Avg lexicalizations",
+                "AVG_LEXICALIZATIONS_INFO": "Average number of lexicalizations",
+                "AVG_SYNONYMY": "Avg synonymy",
+                "CONCEPTS": "Concepts",
+                "CONCEPTUAL_DATASET": "Conceptual dataset",
+                "CONCEPTUALIZATIONS": "Conceptualizations",
+                "LANGUAGE_LEXVO": "Language Lexvo",
+                "LANGUAGE_LOC": "Language LOC",
+                "LANGUAGE_TAG": "Language Tag",
+                "LEXICAL_ENTRIES": "Lexical entries",
+                "LEXICALIZATION_MODEL": "Lexicalization model",
+                "LEXICALIZATIONS": "Lexicalizations",
+                "LEXICON_DATASET": "Lexicon dataset",
+                "LINGUISTIC_CATALOG": "Linguistic catalog",
+                "PERCENTAGE": "Percentage",
+                "REFERENCE_DATASET": "Reference dataset",
+                "REFERENCES": "References"
+            },
+            "PAIRING": {
+                "SCORE": "Score",
+                "BEST_COMBINED_SCORE": "Best combined score",
+                "SOURCE": "Source",
+                "TARGET": "Target",
+                "SYNONYMIZER": "Synonymizer"
+            }
+        },
+        "PROJECT": {
+            "PROJECT": "Project",
+            "PROJECTS": "Projects",
+            "BASE_URI": "Base URI",
+            "LEXICALIZATION": "Lexicalization",
+            "LEXICALIZATION_MODEL": "Lexicalization Model",
+            "MODEL": "Model",
+            "BACKEND_TYPE": "Backend type",
+            "DATA_STORE": "Data Store",
+            "HISTORY": "History",
+            "REPO_ACCESS": "Repository Access",
+            "REPO_LOCATION": "Repository Location",
+            "VALIDATION": "Validation"
+        },
+        "RESOURCES": {
+            "DEPRECATED": "Deprecated",
+            "LABEL": "Label",
+            "OBJECT": "Object",
+            "PREDICATE": "Predicate",
+            "RESOURCE": "Resource",
+            "RESOURCES": "Resources",
+            "RESOURCE_TYPE": "Resource type",
+            "SUBJECT": "Subject"
         }
     },
     "NOTIFICATIONS": {
@@ -899,18 +1033,13 @@
         }
     },
     "PROJECTS": {
-        "PROJECT": "Project",
-        "PROJECTS": "Projects",
         "ACCESSED": "Accessed",
-        "BACKEND_TYPE": "Backend type",
         "BLACKLIST": "Blacklisting",
         "BLACKLIST_INFO": "Enable this to blacklist terms that have been rejected through validation",
         "CREATE_PROJECT": "Create project",
         "DATA_REPO_ID": "Data Repository ID",
-        "DATA_STORE": "Data Store",
         "ENABLE_SHAPE_VALIDATION": "Enable shape validation",
         "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference",
-        "HISTORY": "History",
         "HISTORY_INFO": "Enable this to keep track of the changes made on the working graph",
         "INFERENCE_DISCOURAGED_INFO": "It is highly recommended not to use inference",
         "LEFT_RIGHT": "Left/Right",
@@ -919,8 +1048,6 @@
         "OPTIONAL_SETTINGS": "Optional settings",
         "PROJECT_NAME": "Project name",
         "RENDERING_ENGINE": "Rendering Engine",
-        "REPO_ACCESS": "Repository Access",
-        "REPO_LOCATION": "Repository Location",
         "RESOURCE_METADATA": "Resource Metadata",
         "SELECT_REMOTE_REPO": "Select remote repository",
         "SHACLE_SHAPE_VALIDATION": "SHACL Shape Validation",
@@ -931,7 +1058,6 @@
         "USE_DEFAULT": "Use default settings",
         "USE_RESOURCE_METADATA": "Use Resource Metadata",
         "USE_RESOURCE_METADATA_INFO": "Usage of Resource Metadata can be enabled also after the project creation",
-        "VALIDATION": "Validation",
         "VALIDATION_INFO": "Enable this to keep track of change requests in order to validate them later (accepting or rejecting)",
         "PRELOAD": {
             "PRELOAD": "Preload",
@@ -1103,7 +1229,6 @@
             "REFRESH_METADATA_INFO": "Refresh metadata of the target project",
             "PERCENTAGE_INFO": "Percentage of resources that have a lexicalization in the given language",
             "AVG_INFO": "Average number of lexicalizations",
-            "LEXICALIZATION_MODEL": "Lexicalization Model",
             "NO_SEARCH_MODE_SELECTED_WARNING": "If none is selected, 'Fuzzy' and 'Contains' are used by default",
             "SEARCH_MODE_INFO": "String match modes on which the lexicalizations comparison is based on",
             "MATCHED_LANG": "Matched language",
@@ -1222,8 +1347,7 @@
         "DOWNLOAD_TASK_RESULT": "Download task result",
         "LEFT_DATASET": "Left Dataset",
         "RIGHT_DATASET": "Right Dataset",
-        "VERSION": "Version",
-        "CREATE_TASK": "Create task"
+        "VERSION": "Version"
     },
     "SPARQL": {
         "QUERY": {
@@ -1352,6 +1476,7 @@
             "CONFIGURE": "Configure",
             "CONFIRM": "Confirm",
             "CREATE": "Create",
+            "CREATE_TASK": "Create task",
             "DELETE": "Delete",
             "DELETE_ALL": "Delete all",
             "DISCARD": "Discard",
@@ -1384,6 +1509,14 @@
             "UNCHECK_ALL": "Uncheck all",
             "UPDATE": "Update"
         },
+        "CONFIG": {
+            "CONFIGURATION": "Configuration",
+            "CONFIGURATION_REQUIRED": "Configuration required",
+            "NO_CONFIG_FOUND": "No configuration found. Please, create a new one",
+            "SERVER_URL": "Server URL",
+            "USERNAME": "Username",
+            "PASSWORD": "Password"
+        },
         "LANGUAGE": {
             "LANGUAGE": "Language",
             "LANGUAGES": "Languages",
@@ -1395,48 +1528,34 @@
             "PREV_PAGE": "Previous page",
             "NEXT_PAGE": "Next page"
         },
-        "RESOURCES": {
-            "DEPRECATED": "Deprecated",
-            "LABEL": "Label",
-            "OBJECT": "Object",
-            "PREDICATE": "Predicate",
-            "RESOURCE": "Resource",
-            "RESOURCES": "Resources",
-            "RESOURCE_TYPE": "Resource type",
-            "ROLE": "Role",
-            "ROLES": "Roles",
-            "SUBJECT": "Subject"
+        "STATUS": {
+            "ACTIVE": "Active",
+            "DEFAULT": "Default",
+            "ENABLED": "Enabled",
+            "INACTIVE": "Inactive",
+            "NEW": "New",
+            "STATUS": "Status"
         },
-        "ACTIVE": "Active",
-        "BASE_URI": "Base URI",
-        "CONFIGURATION": "Configuration",
-        "CONFIGURATION_REQUIRED": "Configuration required",
-        "DATASET": "Dataset",
         "DESCRIPTION": "Description",
         "DETAILS": "Details",
-        "ENABLED": "Enabled",
         "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
         "GROUPS": "Groups",
-        "INACTIVE": "Inactive",
         "LEVEL": "Level",
-        "LEXICALIZATION": "Lexicalization",
-        "LEXICALIZATION_MODEL": "Lexicalization Model",
         "MANDATORY": "Mandatory",
         "MANDATORY_FIELD": "Mandatory field",
         "MODE": "Mode",
-        "MODEL": "Model",
         "NAME": "Name",
-        "NEW": "New",
         "ONTOLOGY_IRI": "Ontology IRI",
         "OPTIONAL": "Optional",
         "OPTIONAL_FIELD": "Optional field",
         "POSITION": "Position",
         "REPOSITORY_ID": "Repository ID",
+        "ROLE": "Role",
+        "ROLES": "Roles",
         "SCOPE": "Scope",
         "SETTINGS": "Settings",
-        "SPARQL_ENDPOINT": "SPARQL Endpoint",
-        "STATUS": "Status",
+        "SOURCE": "Source",
         "TIME": "Time",
         "TITLE": "Title",
         "TYPE": "Type",

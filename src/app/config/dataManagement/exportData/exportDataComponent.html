@@ -82,7 +82,7 @@
                             </td>
                             <td class="text-center" style="font-size: 14px;">
                                 <span *ngIf="requireConfiguration(filterChainEl)" class="fas fa-exclamation-triangle"
-                                    [title]="'COMMONS.CONFIGURATION_REQUIRED'|translate"></span>
+                                    [title]="'COMMONS.CONFIG.CONFIGURATION_REQUIRED'|translate"></span>
                             </td>
                         </tr>
                     </tbody>
@@ -125,7 +125,7 @@
                                     </extension-configurator>
                                 </ng-container>
                                 <div *ngIf="requireConfigurationDeployer()" style="font-size: 14px; margin-left: 4px;">
-                                    <span class="fas fa-exclamation-triangle" [title]="'COMMONS.CONFIGURATION_REQUIRED'|translate"></span>
+                                    <span class="fas fa-exclamation-triangle" [title]="'COMMONS.CONFIG.CONFIGURATION_REQUIRED'|translate"></span>
                                 </div>
                             </div>
                         </td>
@@ -143,7 +143,7 @@
                                 </extension-configurator>
 
                                 <div *ngIf="requireConfigurationFormatter()" style="font-size: 14px; margin-left: 4px;">
-                                    <span class="fas fa-exclamation-triangle" [title]="'COMMONS.CONFIGURATION_REQUIRED'|translate"></span>
+                                    <span class="fas fa-exclamation-triangle" [title]="'COMMONS.CONFIG.CONFIGURATION_REQUIRED'|translate"></span>
                                 </div>
         
                                 <div class="hbox" style="align-items: center; flex: initial; margin-left: 8px;">

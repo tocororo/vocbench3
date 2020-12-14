@@ -113,6 +113,82 @@
             "TEMPLATE_INFO": "Qui è possibile assegnare un ResourceView template all'utente. Il template descrive quali partizioni del ResourceView sono visibili di default.<br>E' inoltre possibile caricare template esistenti, o salvare template definiti, tramite la toolbar presente in alto al pannello."
         }
     },
+    "ALIGNMENT": {
+        "ALIGNMENT_VALIDATION": "Validazione allineamenti",
+        "FROM_FILE": {
+            "ALIGN_FILE": "File allineamento",
+            "LEFT_ONTO_URI": "BaseURI ontologia sinistra",
+            "RIGHT_ONTO_URI": "BaseURI ontologia destra"
+        },
+        "REMOTE_SYS": {
+            "CONFIG": {
+                "REMOTE_ALIGN_SYS_CONFIG": "Configurazione del sistema remoto d'allineamentio",
+                "DEFAULT_CHECK_INFO": "Se spuntato, la nuova configurazione sarà automaticamente settada di default",
+                "ID_INFO": "ID configurazione"
+            },
+            "MAIN": {
+                "REMOTE_ALIGN_SYS": "Sistema remoto di allineamento",
+                "SERVICE_DOWN": "Servizio inattivo",
+                "TASKS": "Task",
+                "UNCONFIGURED_WARN": "Non è stata rilevata alcuna connessione ad un sistema remoto di allineamento. Crea o seleziona una configurazione cliccando sul bottone <span class=\"fas fa-cog\"></span> nell'angolo in alto a destra.",
+                "LEFT_PROJECT": "Progetto sinistro",
+                "RIGHT_PROJECT": "Progetto destro",
+                "START_TIME": "Ora inizio",
+                "END_TIME": "Ora fine",
+                "START_VALIDATION": "Inizia validazione"
+            },
+            "CREATE_TASK": {
+                "PROFILE_PROJECT": "Profila progetto",
+                "METADATA_PROFILE_AVAILABLE": "Profilo metadati disponibile",
+                "METADATA_PROFILE_NOT_AVAILABLE": "Profilo metadati non disponibile",
+                "PROFILE_MATCHING": "Profila matching",
+                "PAIRINGS": "Abbinamenti",
+                "USE": "Usa",
+                "SYNONIMIZERS": "Sinonimizzatori",
+                "SYNONIMIZERS_INFO": "Permette l'utilizzo di un sinonimizzatore per migliorare la qualità dell'allineamento",
+                "MATCHERS": "Matcher",
+                "MATCHERS_INFO": [
+                    "Opzionalmente si può fornire un matcher al sistema di allineamento. Clicca",
+                    "qui",
+                    "per cercare i matcher disponibili."
+                ],
+                "PAIRINGS_CHANGED_WARN": [
+                    "La selezione degli abbinamenti è cambiata, la list adei matcher potrebbe non essere più aggiornata. Clicca",
+                    "qui",
+                    "per aggiornare la lista."
+                ],
+                "JSON_SETTINGS_INFO": "I settings JSON devono rispettare lo schema mostrato sulla destra",
+                "SYNONYMIZER_DATASETS": "Synonymizer datasets",
+                "CONCEPTUALIZATION_SET": "Conceptualization Set"
+            }
+        },
+        "MANAGEMENT": {
+            "ALIGNMENTS": "Allineamenti",
+            "SOURCE_ENTITY": "Entità sorgente",
+            "TARGET_ENTITY": "Entità target",
+            "RELATION": "Relazione",
+            "MAPPING_PROP": "Proprietà di mapping",
+            "QUICK_ACTIONS": "Quick action",
+            "DO_QUICK_ACTION": "Esegui quick action",
+            "APPLY_TO_DATASET": "Applica al Dataset",
+            "APPLY_TO_EDOAL": "Applica al linkset EDOAL",
+            "YOU_CAN_FORCE_PROP": "Puoi forzare una proprietà",
+            "SET_DEFAULT_FOR_RELATION": "Imposta la proprietà come default per la relazione"
+        },
+        "REPORT": {
+            "ALIGN_REPORT": "Report allineamento",
+            "ACTION_PERFORMED": "Azione eseguita"
+        },
+        "SETTINGS": {
+            "ALIGN_VALIATION_SETTINGS": "Impostazioni della validazione allineamenti",
+            "REJECTED_ALIGN_ACTION": "Azione allineamenti rifiutati",
+            "REJECTED_ALIGN_ACTION_INFO": "Specifica cosa farne degli allineamenti rifiutati quando le validazioni sono scritte nell'ontologia",
+            "RELATION_METER_ASPECT": "Aspetto del relation meter",
+            "SHOW_RELATION_AS": "Mostra relazioni come",
+            "SHOW_CONF_ON_METER": "Mostra la confidenza sul meter",
+            "MAX_ALING_SHOWN": "Numero massimo di allineamenti mostrati (1÷100)"
+        }
+    },
     "HOME": {
         "WELCOME": "Benvenuto in VocBench",
         "DESCRIPTION": "VocBench è una piattaforma web collaborativa e multilinguale per la gestione di ontologie <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a>, tesauri <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>), lessici <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> e generici dataset RDF.",
@@ -763,7 +839,6 @@
                 "DEREFERENCIATION_SYSTEM": "Sistema di dereferenziazione",
                 "NO_AGGREGATION": "No aggregazione",
                 "NO_AGGREGATION_INFO": "Se spuntato, significa che l'aggregazione potrebbe essere supportata, ma il suo supporto è insufficiente per i propositi di Vocbench",
-                "URI_SPACE": "URI space",
                 "VERSION_INFO": "Info versione"
             },
             "LEXICALIZATION_SET": {
@@ -826,6 +901,65 @@
                     "MIRROR_FALLBACK_WEB": "Resolvi dall'Ontology Mirror con fallback sul Web"
                 }
             }
+        }
+    },
+    "MODELS": {
+        "MAPLE": {
+            "DATASET": {
+                "DATASET": "Dataset",
+                "URI_SPACE": "URI space",
+                "CONFORMS_TO": "Confore a",
+                "SPARQL_ENDPOINT": "Endpoint SPARQL",
+                "AVG_AMBIGUITY": "Avg ambiguity",
+                "AVG_LEXICALIZATIONS": "Avg lexicalizations",
+                "AVG_LEXICALIZATIONS_INFO": "Quantità media di lessicalizzazioni",
+                "AVG_SYNONYMY": "Avg synonymy",
+                "CONCEPTS": "Concetti",
+                "CONCEPTUAL_DATASET": "Conceptual dataset",
+                "CONCEPTUALIZATIONS": "Concettualizzazioni",
+                "LANGUAGE_LEXVO": "Lingua Lexvo",
+                "LANGUAGE_LOC": "Lingua LOC",
+                "LANGUAGE_TAG": "Tag lingua",
+                "LEXICAL_ENTRIES": "Lexical entries",
+                "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
+                "LEXICALIZATIONS": "Lessicalizzazioni",
+                "LEXICON_DATASET": "Lexicon dataset",
+                "LINGUISTIC_CATALOG": "Linguistic catalog",
+                "PERCENTAGE": "Percentuale",
+                "REFERENCE_DATASET": "Reference dataset",
+                "REFERENCES": "Riferimenti"
+            },
+            "PAIRING": {
+                "SCORE": "Score",
+                "BEST_COMBINED_SCORE": "Miglior score combinato",
+                "SOURCE": "Sorgente",
+                "TARGET": "Target",
+                "SYNONYMIZER": "Sinonimizzatore"
+            }
+        },
+        "PROJECT": {
+            "PROJECT": "Progetto",
+            "PROJECTS": "Progetti",
+            "BASE_URI": "Base URI",
+            "LEXICALIZATION": "Lessicalizzazione",
+            "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
+            "MODEL": "Modello",
+            "BACKEND_TYPE": "Tipo di backend",
+            "DATA_STORE": "Data Store",
+            "HISTORY": "Storico",
+            "REPO_ACCESS": "Repository Access",
+            "REPO_LOCATION": "Posizione Repository",
+            "VALIDATION": "Validazione"
+        },
+        "RESOURCES": {
+            "DEPRECATED": "Deprecato",
+            "LABEL": "Etichetta",
+            "OBJECT": "Oggetto",
+            "PREDICATE": "Predicato",
+            "RESOURCE": "Risorsa",
+            "RESOURCES": "Risorse",
+            "RESOURCE_TYPE": "Tipo risorsa",
+            "SUBJECT": "Soggetto"
         }
     },
     "NOTIFICATIONS": {
@@ -899,18 +1033,13 @@
         }
     },
     "PROJECTS": {
-        "PROJECT": "Progetto",
-        "PROJECTS": "Progetti",
         "ACCESSED": "Acceduto",
-        "BACKEND_TYPE": "Tipo Backend",
         "BLACKLIST": "Lista nera",
         "BLACKLIST_INFO": "Abilita questa opzione per mettere in lista nera i termini che sono stati respinti tramite la validazione",
         "CREATE_PROJECT": "Crea progetto",
         "DATA_REPO_ID": "ID repository dati",
-        "DATA_STORE": "Data Store",
         "ENABLE_SHAPE_VALIDATION": "Abilita validazione shape",
         "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
-        "HISTORY": "Storico",
         "HISTORY_INFO": "Abilita questa opzione per tenere traccia delle modifiche effettuate sul grafo di lavoro",
         "INFERENCE_DISCOURAGED_INFO": "E' raccomandabile non usare l'inferenza",
         "LEFT_RIGHT": "Sinistro/Destro",
@@ -919,8 +1048,6 @@
         "OPTIONAL_SETTINGS": "Impostazioni opzionali",
         "PROJECT_NAME": "Nome progetto",
         "RENDERING_ENGINE": "Rendering Engine",
-        "REPO_ACCESS": "Accesso al repository",
-        "REPO_LOCATION": "Posizione repository",
         "RESOURCE_METADATA": "Resource Metadata",
         "SELECT_REMOTE_REPO": "Seleziona repository remoto",
         "SHACLE_SHAPE_VALIDATION": "Validazione shape SHACL",
@@ -931,7 +1058,6 @@
         "USE_DEFAULT": "Usa settings di default",
         "USE_RESOURCE_METADATA": "Usa Resource Metadata",
         "USE_RESOURCE_METADATA_INFO": "L'utilizzo del Resource Metadata può essere abilitato anche dopo la creazione del progetto",
-        "VALIDATION": "Validazione",
         "VALIDATION_INFO": "Abilita questa opzione per tenere traccia delle richieste di modifiche in modo da validarle in un secondo momento (accettarle o rifiutarle)",
         "PRELOAD": {
             "PRELOAD": "Precarica",
@@ -1103,7 +1229,6 @@
             "REFRESH_METADATA_INFO": "Aggiorna i metadati del progetto destinazione",
             "PERCENTAGE_INFO": "Percentuale di risorse che hanno una lessicalizzazione nella lingua indicata",
             "AVG_INFO": "Quantità media di lessicalizzazioni",
-            "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
             "NO_SEARCH_MODE_SELECTED_WARNING": "Se nulla è selezionato, 'Fuzzy' e 'Contiene' sono usati di default",
             "SEARCH_MODE_INFO": "Modalità di match tra stringhe sulle quali il confronto tra lessicalizzazioni viene basato",
             "MATCHED_LANG": "Lingue matchate",
@@ -1175,7 +1300,7 @@
             "IGNORE_HEADER_INFO": "Se selezionato, il presente header verrà ignorato nel PEARL generato e quindi nel processo di conversione",
             "HEADER": "Header",
             "PEARL_FEATURE": "Feature PEARL",
-	    "NODES": "Nodi",
+            "NODES": "Nodi",
             "NODES_INFO": "Liste di nodi generati dall'header corrente",
             "NODE_ID": "ID nodo",
             "CONVERTER_TYPE": "Tipo converter",
@@ -1222,8 +1347,7 @@
         "DOWNLOAD_TASK_RESULT": "Download risultati task",
         "LEFT_DATASET": "Dataset sinistro",
         "RIGHT_DATASET": "Dataset destro",
-        "VERSION": "Versione",
-        "CREATE_TASK": "Crea task"
+        "VERSION": "Versione"
     },
     "SPARQL": {
         "QUERY": {
@@ -1285,7 +1409,7 @@
         "REGISTRATION": {
             "USER_REGISTRATION": "Registrazione utente",
             "NO_USER_REGISTERED_MSG": [
-                "VocBench non ha rilevato alcun utente registrato. Per usare la piattaforma è necessario creare un amministratore inserendo dati personali e le credenziali di accesso. Un utente predefinito", 
+                "VocBench non ha rilevato alcun utente registrato. Per usare la piattaforma è necessario creare un amministratore inserendo dati personali e le credenziali di accesso. Un utente predefinito",
                 "è disponibile per coloro che desiderino usare VocBench come un semplice tool desktop e saltare la procedura di creazione utente."
             ],
             "FILL_PREDEFINED_USER": "Riempi dati utente predefinito"
@@ -1352,6 +1476,7 @@
             "CONFIGURE": "Configura",
             "CONFIRM": "Conferma",
             "CREATE": "Crea",
+            "CREATE_TASK": "Crea task",
             "DELETE": "Elimina",
             "DELETE_ALL": "Cancella tutto",
             "DISCARD": "Scarta",
@@ -1384,6 +1509,14 @@
             "UNCHECK_ALL": "Deseleziona tutto",
             "UPDATE": "Aggiorna"
         },
+        "CONFIG": {
+            "CONFIGURATION": "Configurazione",
+            "CONFIGURATION_REQUIRED": "Configurazione necessaria",
+            "NO_CONFIG_FOUND": "Nessuna configurazione trovata. Creane una nuova.",
+            "SERVER_URL": "URL Server",
+            "USERNAME": "Username",
+            "PASSWORD": "Password"
+        },
         "LANGUAGE": {
             "LANGUAGE": "Lingua",
             "LANGUAGES": "Lingue",
@@ -1395,48 +1528,33 @@
             "PREV_PAGE": "Pagina precedente",
             "NEXT_PAGE": "Pagina successiva"
         },
-        "RESOURCES": {
-            "DEPRECATED": "Deprecato",
-            "LABEL": "Etichetta",
-            "OBJECT": "Oggetto",
-            "PREDICATE": "Predicato",
-            "RESOURCE": "Risorsa",
-            "RESOURCES": "Risorse",
-            "RESOURCE_TYPE": "Tipo risorsa",
-            "ROLE": "Ruolo",
-            "ROLES": "Ruoli",
-            "SUBJECT": "Soggetto"
+        "STATUS": {
+            "ACTIVE": "Attivo",
+            "ENABLED": "Abilitato",
+            "INACTIVE": "Non attivo",
+            "NEW": "Nuovo",
+            "STATUS": "Stato"
         },
-        "ACTIVE": "Attivo",
-        "BASE_URI": "Base URI",
-        "CONFIGURATION": "Configurazione",
-        "CONFIGURATION_REQUIRED": "Configurazione necessaria",
-        "DATASET": "Dataset",
         "DESCRIPTION": "Descrizione",
         "DETAILS": "Dettagli",
-        "ENABLED": "Abilitato",
         "FORCE_FORMAT": "Forza il formato",
         "FORMAT": "Formato",
         "GROUPS": "Gruppi",
-        "INACTIVE": "Non attivo",
         "LEVEL": "Livello",
-        "LEXICALIZATION": "Lessicalizzazione",
-        "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
         "MANDATORY": "Obbligatorio",
         "MANDATORY_FIELD": "Campo obbligatorio",
         "MODE": "Modalità",
-        "MODEL": "Modello",
         "NAME": "Nome",
-        "NEW": "Nuovo",
         "ONTOLOGY_IRI": "IRI ontologia",
         "OPTIONAL": "Opzionale",
         "OPTIONAL_FIELD": "Campo opzionale",
         "POSITION": "Posizione",
         "REPOSITORY_ID": "ID repository",
+        "ROLE": "Ruolo",
+        "ROLES": "Ruoli",
         "SCOPE": "Scope",
         "SETTINGS": "Impostazioni",
-        "SPARQL_ENDPOINT": "Endpoint SPARQL",
-        "STATUS": "Stato",
+        "SOURCE": "Sorgente",
         "TIME": "Tempo",
         "TITLE": "Titolo",
         "TYPE": "Tipo",

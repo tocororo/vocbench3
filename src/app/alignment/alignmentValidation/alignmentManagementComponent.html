@@ -1,7 +1,7 @@
 <div class="card card-default vbox">
 
     <div class="card-header" style="display: flex;">
-        <label style="flex: 1">Alignments:</label>
+        <label style="flex: 1">{{'ALIGNMENT.MANAGEMENT.ALIGNMENTS'|translate}}:</label>
         <button class="btn btn-light btn-xs" style="margin-right: 4px;" [ngClass]="{active: rendering}" title="Rendering"
             (click)="toggleRendering()">
             <span class="fas fa-font"></span>
@@ -17,12 +17,12 @@
             <table class="table table-sm table-hoverable">
                 <thead>
                     <tr>
-                        <th class="text-center">Source entity</th>
-                        <th class="text-center">target entity</th>
-                        <th class="text-center">Relation</th>
-                        <th class="text-center">Mapping Property</th>
+                        <th class="text-center">{{'ALIGNMENT.MANAGEMENT.SOURCE_ENTITY'|translate}}</th>
+                        <th class="text-center">{{'ALIGNMENT.MANAGEMENT.TARGET_ENTITY'|translate}}</th>
+                        <th class="text-center">{{'ALIGNMENT.MANAGEMENT.RELATION'|translate}}</th>
+                        <th class="text-center">{{'ALIGNMENT.MANAGEMENT.MAPPING_PROP'|translate}}</th>
                         <th class="text-center" style="width: 1%">{{'COMMONS.ACTIONS.ACTION'|translate}}</th>
-                        <th class="text-center" style="width: 1%">{{'COMMONS.STATUS'|translate}}</th>
+                        <th class="text-center" style="width: 1%">{{'COMMONS.STATUS.STATUS'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody class="text-center">
@@ -115,7 +115,7 @@
     
     <div class="card-footer">
         <span>
-            <label>Quick Actions:</label>
+            <label>{{'ALIGNMENT.MANAGEMENT.QUICK_ACTIONS'|translate}}:</label>
             
             <select class="form-control form-control-sm ml-2" style="width: auto; display: inline-block" [(ngModel)]="chosenQuickAction"
                 [disabled]="alignmentCellList.length == 0">
@@ -125,13 +125,13 @@
                 class="form-control form-control-sm ml-2" style="width: auto; display: inline-block"
                 type="number" min="0" max="1" step="0.01" [(ngModel)]="threshold">
             <button class="btn btn-light btn-sm ml-2" [disabled]="chosenQuickAction=='---'" (click)="doQuickAction()">
-                Do quick action
+                {{'ALIGNMENT.MANAGEMENT.DO_QUICK_ACTION'|translate}}
             </button>
         </span>
         <span class="float-right">
             <button class="btn btn-light btn-sm" (click)="applyValidation()" [disabled]="alignmentCellList.length == 0">
-                <span *ngIf="!isEdoal">Apply to Dataset</span>
-                <span *ngIf="isEdoal">Apply to EDOAL linkset</span>
+                <span *ngIf="!isEdoal">{{'ALIGNMENT.MANAGEMENT.APPLY_TO_DATASET'|translate}}</span>
+                <span *ngIf="isEdoal">{{'ALIGNMENT.MANAGEMENT.APPLY_TO_EDOAL'|translate}}</span>
             </button>
             <button class="btn btn-light btn-sm ml-2" (click)="export()" [disabled]="alignmentCellList.length == 0">
                 {{'COMMONS.ACTIONS.SAVE'|translate}}

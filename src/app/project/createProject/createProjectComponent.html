@@ -70,7 +70,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">{{'COMMONS.BASE_URI'|translate}}:</label>
+                <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.BASE_URI'|translate}}:</label>
                 <div class="col-sm-11">
 
                     <div class="hbox" style="align-items: center">
@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">{{'COMMONS.MODEL'|translate}}:</label>
+                <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.MODEL'|translate}}:</label>
                 <div class="col-sm-3">
                     <div class="hbox" style="align-items: center">
                         <select class="form-control" [(ngModel)]="ontoModelType" (ngModelChange)="onOntoModelChanged()" [disabled]="ontoModelLocked">
@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <ng-container *ngIf="!isEdoalProject(); else edoalBlock">
-                    <label class="col-form-label col-sm-1">{{'COMMONS.LEXICALIZATION'|translate}}:</label>
+                    <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}:</label>
                     <div class="col-sm-4">
                         <div class="hbox" style="align-items: center">
                             <select class="form-control" [(ngModel)]="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
@@ -139,14 +139,14 @@
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" id="historyCheck" type="checkbox" [(ngModel)]="history">
                         <label class="form-check-label" for="historyCheck">
-                            {{'PROJECTS.HISTORY'|translate}}
+                            {{'MODELS.PROJECT.HISTORY'|translate}}
                             <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.HISTORY_INFO'|translate"></span>
                         </label>
                     </div>
                     <div class="form-check form-check-inline ml-3">
                         <input class="form-check-input" id="validationCheck" type="checkbox" [(ngModel)]="validation" (input)="blacklisting=false">
                         <label class="form-check-label" for="validationCheck">
-                            {{'PROJECTS.VALIDATION'|translate}}
+                            {{'MODELS.PROJECT.VALIDATION'|translate}}
                             <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.VALIDATION_INFO'|translate"></span>
                         </label>
                     </div>
@@ -163,12 +163,12 @@
             <!--Triple store configuration-->
             <div class="card card-alt mb-2">
                 <div class="card-header">
-                    <label>{{'PROJECTS.DATA_STORE'|translate}}</label>
+                    <label>{{'MODELS.PROJECT.DATA_STORE'|translate}}</label>
                 </div>
                 <div class="card-body">
 
                     <div class="form-group row">
-                        <label class="col-form-label col-sm-2">{{'PROJECTS.REPO_ACCESS'|translate}}:</label>
+                        <label class="col-form-label col-sm-2">{{'MODELS.PROJECT.REPO_ACCESS'|translate}}:</label>
                         <div class="col-sm-10">
                             <div class="hbox">
                                 <select class="form-control" style="flex: 4" [(ngModel)]="selectedRepositoryAccess" (ngModelChange)="onRepoAccessChange()">
@@ -205,7 +205,7 @@
                         </div>
                         <ng-container *ngIf="isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
-                                <label>{{'COMMONS.CONFIGURATION'|translate}}</label>
+                                <label>{{'COMMONS.CONFIG.CONFIGURATION'|translate}}</label>
                             </div>
                             <div class="col-sm-5">
                                 <extension-configurator #dataRepoConfigurator *ngIf="dataRepoExtensions"
@@ -217,7 +217,7 @@
                         </ng-container>
                         <ng-container *ngIf="!isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
-                                <label>{{'PROJECTS.BACKEND_TYPE'|translate}}</label>
+                                <label>{{'MODELS.PROJECT.BACKEND_TYPE'|translate}}</label>
                             </div>
                             <div class="col-sm-5">
                                 <select class="form-control" [(ngModel)]="selectedCoreRepoBackendType">
@@ -245,7 +245,7 @@
                         </div>
                         <ng-container *ngIf="isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1" style="white-space: nowrap">
-                                <label>{{'COMMONS.CONFIGURATION'|translate}}</label>
+                                <label>{{'COMMONS.CONFIG.CONFIGURATION'|translate}}</label>
                                 <span class="fas fa-info-circle ml-2" [title]="'PROJECTS.INFERENCE_DISCOURAGED_INFO'|translate"></span>
                             </div>
                             <div class="col-sm-5">
@@ -258,7 +258,7 @@
                         </ng-container>
                         <ng-container *ngIf="!isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
-                                <label>{{'PROJECTS.BACKEND_TYPE'|translate}}</label>
+                                <label>{{'MODELS.PROJECT.BACKEND_TYPE'|translate}}</label>
                             </div>
                             <div class="col-sm-5">
                                 <select class="form-control" [(ngModel)]="selectedSupportRepoBackendType" [disabled]="!(history || validation)">
@@ -303,7 +303,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIGURATION'|translate}}:</label>
+                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}:</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
                                             <select class="form-control" [(ngModel)]="selectedUriGenPluginConf">
@@ -343,7 +343,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIGURATION'|translate}}:</label>
+                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}:</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
                                             <select class="form-control" [(ngModel)]="selectedRendEngPluginConf" [disabled]="rendEngUseDefaultSetting">
@@ -386,7 +386,7 @@
                                     <tbody>
                                         <tr *ngFor="let ma of metadataAssociations; let last = last">
                                             <td class="text-rigth" nowrap>
-                                                <label>{{'COMMONS.RESOURCES.RESOURCE_TYPE'|translate}}:</label>
+                                                <label>{{'MODELS.RESOURCES.RESOURCE_TYPE'|translate}}:</label>
                                             </td>
                                             <td>
                                                 <select class="form-control" [(ngModel)]="ma.role">
