@@ -11,45 +11,45 @@
                 <a class="nav-link" [routerLink]="['/Projects']">{{'MODELS.PROJECT.PROJECTS'|translate}}</a>
             </li>
             <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item" [ngClass]="{ disabled : !isDataAuthorized() }" routerLinkActive="active">
-                <a *ngIf="!isProjectEdoal()" class="nav-link" [routerLink]="['/Data']">{{'NAVBAR.DATA'|translate}}</a>
-                <a *ngIf="isProjectEdoal()" class="nav-link" [routerLink]="['/Edoal']">{{'NAVBAR.DATA'|translate}}</a>
+                <a *ngIf="!isProjectEdoal()" class="nav-link" [routerLink]="['/Data']">{{'APP.NAVBAR.DATA'|translate}}</a>
+                <a *ngIf="isProjectEdoal()" class="nav-link" [routerLink]="['/Edoal']">{{'APP.NAVBAR.DATA'|translate}}</a>
             </li>
             <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item dropdown" ngbDropdown display="dynamic">
                 <a [routerLink]="" class="nav-link dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-                    {{'NAVBAR.METADATA.TITLE'|translate}}
+                    {{'APP.NAVBAR.METADATA.TITLE'|translate}}
                     <span class="fas fa-caret-down ml-1"></span>
                 </a>
                 <div class="dropdown-menu" style="font-size: 12px; line-height: 20px;" ngbDropdownMenu>
-                    <a class="dropdown-item" [routerLink]="['/Imports']">{{'NAVBAR.METADATA.NAMESPACES_AND_IMPORTS'|translate}}</a>
-                    <a *ngIf="isMetadataVocAuthorized()" class="dropdown-item" [routerLink]="['/Vocabularies']">{{'NAVBAR.METADATA.METADATA_VOCABULARIES'|translate}}</a>
-                    <a *ngIf="isMetadataRegistryAuthorized()" class="dropdown-item" [routerLink]="['/MetadataRegistry']">{{'NAVBAR.METADATA.METADATA_REGISTRY'|translate}}</a>
+                    <a class="dropdown-item" [routerLink]="['/Imports']">{{'APP.NAVBAR.METADATA.NAMESPACES_AND_IMPORTS'|translate}}</a>
+                    <a *ngIf="isMetadataVocAuthorized()" class="dropdown-item" [routerLink]="['/Vocabularies']">{{'APP.NAVBAR.METADATA.METADATA_VOCABULARIES'|translate}}</a>
+                    <a *ngIf="isMetadataRegistryAuthorized()" class="dropdown-item" [routerLink]="['/MetadataRegistry']">{{'APP.NAVBAR.METADATA.METADATA_REGISTRY'|translate}}</a>
                 </div>
             </li>
             <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item" [ngClass]="{ disabled : !isSparqlAuthorized() }" routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['/Sparql']">{{'NAVBAR.SPARQL'|translate}}</a>
+                <a class="nav-link" [routerLink]="['/Sparql']">{{'APP.NAVBAR.SPARQL'|translate}}</a>
             </li>
             <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" class="nav-item" [ngClass]="{ disabled : !isHistoryAuthorized() }"
                 routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['/History']">{{'NAVBAR.HISTORY'|translate}}</a>
+                <a class="nav-link" [routerLink]="['/History']">{{'APP.NAVBAR.HISTORY'|translate}}</a>
             </li>
             <li *ngIf="isUserLogged() && isProjectOpen() && isProjectValidationEnabled()" class="nav-item" [ngClass]="{ disabled : !isValidationAuthorized() }"
                 routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['/Validation']">{{'NAVBAR.VALIDATION'|translate}}</a>
+                <a class="nav-link" [routerLink]="['/Validation']">{{'APP.NAVBAR.VALIDATION'|translate}}</a>
             </li>
             <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item dropdown" ngbDropdown display="dynamic">
                 <a [routerLink]="" class="nav-link dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-                    {{'NAVBAR.TOOLS.TITLE'|translate}}
+                    {{'APP.NAVBAR.TOOLS.TITLE'|translate}}
                     <span class="fas fa-caret-down ml-1"></span>
                 </a>
                 <div class="dropdown-menu" style="font-size: 12px; line-height: 20px;" ngbDropdownMenu>
-                    <a *ngIf="isAlignValidationAuthorized()" class="dropdown-item" [routerLink]="['/AlignmentValidation']">{{'NAVBAR.TOOLS.ALIGNMENT_VALIDATION'|translate}}</a>
-                    <a *ngIf="isCollaborationAuthorized()" class="dropdown-item" [routerLink]="['/Collaboration']">{{'NAVBAR.TOOLS.COLLABORATION_SYSTEM'|translate}}</a>
-                    <a *ngIf="isCustomFormAuthorized()" class="dropdown-item" [routerLink]="['/CustomForm']">{{'NAVBAR.TOOLS.CUSTOM_FORMS'|translate}}</a>
-                    <a *ngIf="isCustomServicesAuthorized()" class="dropdown-item" [routerLink]="['/CustomServices']">{{'NAVBAR.TOOLS.CUSTOM_SERVICES_AND_REPORTS'|translate}}</a>
-                    <a class="dropdown-item" [routerLink]="['/Icv']">{{'NAVBAR.TOOLS.ICV'|translate}}</a>
-                    <a *ngIf="isResourceMetadataAuthorized()" class="dropdown-item" [routerLink]="['/ResourceMetadata']">{{'NAVBAR.TOOLS.RESOURCE_METADATA'|translate}}</a>
-                    <a *ngIf="isSheet2RdfAuthorized()" class="dropdown-item" [routerLink]="['/Sheet2RDF']">{{'NAVBAR.TOOLS.SHEET2RDF'|translate}}</a>
-                    <a *ngIf="isSkosDiffingAuthorized()" class="dropdown-item" [routerLink]="['/SkosDiffing']">{{'NAVBAR.TOOLS.SKOS_DIFFING'|translate}}</a>
+                    <a *ngIf="isAlignValidationAuthorized()" class="dropdown-item" [routerLink]="['/AlignmentValidation']">{{'APP.NAVBAR.TOOLS.ALIGNMENT_VALIDATION'|translate}}</a>
+                    <a *ngIf="isCollaborationAuthorized()" class="dropdown-item" [routerLink]="['/Collaboration']">{{'APP.NAVBAR.TOOLS.COLLABORATION_SYSTEM'|translate}}</a>
+                    <a *ngIf="isCustomFormAuthorized()" class="dropdown-item" [routerLink]="['/CustomForm']">{{'APP.NAVBAR.TOOLS.CUSTOM_FORMS'|translate}}</a>
+                    <a *ngIf="isCustomServicesAuthorized()" class="dropdown-item" [routerLink]="['/CustomServices']">{{'APP.NAVBAR.TOOLS.CUSTOM_SERVICES_AND_REPORTS'|translate}}</a>
+                    <a class="dropdown-item" [routerLink]="['/Icv']">{{'APP.NAVBAR.TOOLS.ICV'|translate}}</a>
+                    <a *ngIf="isResourceMetadataAuthorized()" class="dropdown-item" [routerLink]="['/ResourceMetadata']">{{'APP.NAVBAR.TOOLS.RESOURCE_METADATA'|translate}}</a>
+                    <a *ngIf="isSheet2RdfAuthorized()" class="dropdown-item" [routerLink]="['/Sheet2RDF']">{{'APP.NAVBAR.TOOLS.SHEET2RDF'|translate}}</a>
+                    <a *ngIf="isSkosDiffingAuthorized()" class="dropdown-item" [routerLink]="['/SkosDiffing']">{{'APP.NAVBAR.TOOLS.SKOS_DIFFING'|translate}}</a>
                 </div>
             </li>
         </ul>

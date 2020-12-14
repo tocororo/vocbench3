@@ -201,6 +201,58 @@
             }
         }
     },
+    "APP": {
+        "NAVBAR": {
+            "DATA": "Data",
+            "METADATA": {
+                "TITLE": "Metadata",
+                "NAMESPACES_AND_IMPORTS": "Namespaces and Imports",
+                "METADATA_VOCABULARIES": "Metadata Vocabularies",
+                "METADATA_REGISTRY": "Metadata Registry"
+            },
+            "SPARQL": "SPARQL",
+            "HISTORY": "History",
+            "VALIDATION": "Validation",
+            "TOOLS": {
+                "TITLE": "Tools",
+                "ALIGNMENT_VALIDATION": "Alignment Validation",
+                "COLLABORATION_SYSTEM": "Collaboration System",
+                "CUSTOM_FORMS": "Custom Forms",
+                "CUSTOM_SERVICES_AND_REPORTS": "Custom Services and Reports",
+                "ICV": "Integrity Constraint Validation (ICV)",
+                "RESOURCE_METADATA": "ResourceMetadata",
+                "SHEET2RDF": "Sheet2RDF",
+                "SKOS_DIFFING": "SKOS Diffing"
+            },
+            "USER_MENU": {
+                "VIEW_PROFILE": "View profile",
+                "PREFERENCES": "Preferences",
+                "ADMINISTRATION": "Administration"
+            }
+        },
+        "TOP_BAR": {
+            "ABOUT_MENU": {
+                "ABOUT_VB": "About VocBench",
+                "VB_SITE": "VocBench website",
+                "CONTACT_US": "Contact us",
+                "SUPPORT": "Support",
+                "PRIVACY_STATEMENT": "Privacy statement"
+            },
+            "CURRENT_PROJECT": "Current project",
+            "CHANGE_PROJECT": "Change project",
+            "GLOBAL_DATA_MENU": {
+                "GLOBAL_DATA_MANAGEMENT": "Global Data Management",
+                "LOAD_DATA": "Load data",
+                "EXPORT_DATA": "Export data",
+                "CLEAR_DATA": "Clear data",
+                "VERSIONING": "Versioning",
+                "REFACTOR": "Refactor",
+                "LOAD_SHAPES": "Load shapes",
+                "EXPORT_SHAPES": "Export shapes",
+                "CLEAR_SHAPES": "Clear shapes"
+            }
+        }
+    },
     "COLLABORATION": {
         "COLLABORATION_SYSTEM": "Collaboration System",
         "COLLABORATION_SYSTEM_CONFIG": "Collaboration System configuration",
@@ -991,34 +1043,6 @@
             "REGISTERED": "Registered"
         }
     },
-    "NAVBAR": {
-        "DATA": "Data",
-        "METADATA": {
-            "TITLE": "Metadata",
-            "NAMESPACES_AND_IMPORTS": "Namespaces and Imports",
-            "METADATA_VOCABULARIES": "Metadata Vocabularies",
-            "METADATA_REGISTRY": "Metadata Registry"
-        },
-        "SPARQL": "SPARQL",
-        "HISTORY": "History",
-        "VALIDATION": "Validation",
-        "TOOLS": {
-            "TITLE": "Tools",
-            "ALIGNMENT_VALIDATION": "Alignment Validation",
-            "COLLABORATION_SYSTEM": "Collaboration System",
-            "CUSTOM_FORMS": "Custom Forms",
-            "CUSTOM_SERVICES_AND_REPORTS": "Custom Services and Reports",
-            "ICV": "Integrity Constraint Validation (ICV)",
-            "RESOURCE_METADATA": "ResourceMetadata",
-            "SHEET2RDF": "Sheet2RDF",
-            "SKOS_DIFFING": "SKOS Diffing"
-        },
-        "USER_MENU": {
-            "VIEW_PROFILE": "View profile",
-            "PREFERENCES": "Preferences",
-            "ADMINISTRATION": "Administration"
-        }
-    },
     "NOTIFICATIONS": {
         "NOTIFICATIONS": "Notifications",
         "NOTIFICATION_SETTINGS": "Notification Settings",
@@ -1485,28 +1509,6 @@
             "EXPORT_TRANSFORMATIONS": "Export transformations",
             "TRANSFORMATION_INFO": "Here it is possible to create and configure a sequence of transformations to be applied during the export process.",
             "UNCONFIGURED_FILTER": "This filter needs to be configured"
-        }
-    },
-    "TOP_BAR": {
-        "ABOUT_MENU": {
-            "ABOUT_VB": "About VocBench",
-            "VB_SITE": "VocBench website",
-            "CONTACT_US": "Contact us",
-            "SUPPORT": "Support",
-            "PRIVACY_STATEMENT": "Privacy statement"
-        },
-        "CURRENT_PROJECT": "Current project",
-        "CHANGE_PROJECT": "Change project",
-        "GLOBAL_DATA_MENU": {
-            "GLOBAL_DATA_MANAGEMENT": "Global Data Management",
-            "LOAD_DATA": "Load data",
-            "EXPORT_DATA": "Export data",
-            "CLEAR_DATA": "Clear data",
-            "VERSIONING": "Versioning",
-            "REFACTOR": "Refactor",
-            "LOAD_SHAPES": "Load shapes",
-            "EXPORT_SHAPES": "Export shapes",
-            "CLEAR_SHAPES": "Clear shapes"
         }
     },
     "USER": {
