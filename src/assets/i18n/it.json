@@ -620,7 +620,8 @@
                 "ADD_OPERATION": "Aggiungi operazione",
                 "EXTENSION_PATH": "Extension path",
                 "SERVICE_CLASS": "Classe dei servizi",
-                "OPERATIONS": "Operazioni"
+                "OPERATIONS": "Operazioni",
+                "OPERATION_FILTER": "Filtro operazione"
             }
         },
         "VALIDATION_COMMENT": {
