@@ -103,6 +103,9 @@
         "USERS": {
             "CREATE_USER": "Create user",
             "USER_DETAILS": "User Details",
+            "SHOW_HIDE_ACTIVE_USER": "Show/Hide active users",
+            "SHOW_HIDE_INACTIVE_USER": "Show/Hide inactive users",
+            "SHOW_HIDE_NEW_USER": "Show/Hide new users",
             "ADMINISTRATOR": "Administrator",
             "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has autmoatically access to all projects",
             "ASSIGNED_TO_PROJECTS": "Assigned to projects",

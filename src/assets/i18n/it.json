@@ -103,6 +103,9 @@
         "USERS": {
             "CREATE_USER": "Crea utente",
             "USER_DETAILS": "Dettagli utente",
+            "SHOW_HIDE_ACTIVE_USER": "Mostra/nascondi utenti attivi",
+            "SHOW_HIDE_INACTIVE_USER": "Mostra/nascondi utenti inattivi",
+            "SHOW_HIDE_NEW_USER": "Mostra/nascondi nuovi utenti",
             "ADMINISTRATOR": "Amministratore",
             "ADMIN_ASSIGNED_PROJECTS_INFO": "L'amministratore ha automaticamente accesso a tutti i progetti",
             "ASSIGNED_TO_PROJECTS": "Assegnato ai progetti",

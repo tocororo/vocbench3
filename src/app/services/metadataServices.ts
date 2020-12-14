@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ImportStatus, OntologyImport, PrefixMapping, TransitiveImportMethodAllowance } from "../models/Metadata";
 import { RDFFormat } from "../models/RDFFormat";
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
@@ -49,11 +49,17 @@ export class MetadataServices {
      * @param namespace
      */
     setNSPrefixMapping(prefix: string, namespace: string) {
-        var params = {
+        let params = {
             prefix: prefix,
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "setNSPrefixMapping", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.ontology.NSPrefixMappingUpdateException']
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "setNSPrefixMapping", params, options);
     }
 
     /**

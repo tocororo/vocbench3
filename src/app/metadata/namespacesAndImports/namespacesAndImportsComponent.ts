@@ -250,6 +250,11 @@ export class NamespacesAndImportsComponent {
                 this.metadataService.setNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
                         this.refreshNSPrefixMappings();
+                    },
+                    (err: Error) => {
+                        if (err.name.endsWith("NSPrefixMappingUpdateException")) {
+                            this.basicModals.alert("Invalid prefix", "The provided prefix is not valid, try a different one", ModalType.warning);
+                        }
                     }
                 )
             },

@@ -26,7 +26,7 @@
                     <span style="flex: 1;">
                         <label>{{'SHEET2RDF.SPREADSHEET.PREVIEW'|translate}}</label>
                         <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">
-                            ({{'SHEET2RDF.SPREADSHEET.ROWS'|translate}}: {{truncatedRows}} {{'COMMONS.PAGING.OF'|translate}} {{totalRows}})
+                            ({{'SHEET2RDF.SPREADSHEET.ROWS'|translate}}: {{truncatedRows}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totalRows}})
                         </span>
                     </span>
                     <div class="btn-toolbar" role="toolbar">
@@ -138,7 +138,7 @@
                 <div class="card-header">
                     <span style="flex: 1;">
                         <label>{{'SHEET2RDF.TRIPLES.GENERATED_TRIPLES_PREVIEW'|translate}}</label>
-                        <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} {{'COMMONS.PAGING.OF'|translate}} {{totalTriples}})</span>
+                        <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totalTriples}})</span>
                     </span>
 
                     <div class="btn-toolbar" role="toolbar">
