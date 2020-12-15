@@ -190,11 +190,11 @@
 
                     <!-- Data repo -->
                     <div class="form-group row">
-                        <label class="col-form-label col-sm-2">{{'PROJECTS.DATA_REPO_ID'|translate}}</label>
+                        <label class="col-form-label col-sm-2">{{'MODELS.PROJECT.DATA_REPO_ID'|translate}}</label>
                         <div class="col-sm-4">
                             <div class="input-group">
                                 <input type="text" class="form-control" [(ngModel)]="dataRepoId"
-                                    [placeholder]="'PROJECTS.DATA_REPO_ID'|translate" [disabled]="isSelectedRepoAccessCreateMode()">
+                                    [placeholder]="'MODELS.PROJECT.DATA_REPO_ID'|translate" [disabled]="isSelectedRepoAccessCreateMode()">
                                 <span class="input-group-append">
                                     <button class="btn btn-light" (click)="changeRemoteRepository('data')"
                                         [title]="'PROJECTS.SELECT_REMOTE_REPO'|translate" [disabled]="isSelectedRepoAccessCreateMode()">
@@ -230,11 +230,11 @@
                     <!-- Support repo -->
 
                     <div class="form-group row">
-                        <label class="col-form-label col-sm-2">{{'PROJECTS.SUPPORT_REPO_ID'|translate}}</label>
+                        <label class="col-form-label col-sm-2">{{'MODELS.PROJECT.SUPPORT_REPO_ID'|translate}}</label>
                         <div class="col-sm-4">
                             <div class="input-group">
                                 <input type="text" class="form-control" [(ngModel)]="supportRepoId"
-                                    [placeholder]="'PROJECTS.SUPPORT_REPO_ID'|translate" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
+                                    [placeholder]="'MODELS.PROJECT.SUPPORT_REPO_ID'|translate" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
                                 <span class="input-group-append">
                                     <button class="btn btn-light" type="button" (click)="changeRemoteRepository('support')"
                                         [title]="'PROJECTS.SELECT_REMOTE_REPO'|translate" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
@@ -312,7 +312,7 @@
                                                 </option>
                                             </select>
                                             <span class="input-group-append">
-                                                <button class="btn btn-light" (click)="configureUriGenConf()">{{'COMMONS.ACTIONS.CONFIGURE'|translate}}</button>
+                                                <button class="btn btn-light" (click)="configureUriGenConf()">{{'COMMONS.CONFIG.CONFIGURE'|translate}}</button>
                                             </span>
                                         </div>
                                     </div>
@@ -352,7 +352,7 @@
                                                 </option>
                                             </select>
                                             <span class="input-group-append">
-                                                <button class="btn btn-light" (click)="configureRendEngConf()" [disabled]="rendEngUseDefaultSetting">{{'COMMONS.ACTIONS.CONFIGURE'|translate}}</button>
+                                                <button class="btn btn-light" (click)="configureRendEngConf()" [disabled]="rendEngUseDefaultSetting">{{'COMMONS.CONFIG.CONFIGURE'|translate}}</button>
                                             </span>
                                         </div>
                                     </div>

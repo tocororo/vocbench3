@@ -71,7 +71,8 @@
                 "MAIL_SERVER_URL_INFO": "IP/URL del server di posta SMTP",
                 "MAIL_SERVER_PORT_INFO": "Porta del server di posta",
                 "CRYPTOGRAPHIC_PROTOCOL": "Protocollo di crittografia",
-                "AUTHENTICATION_INFO": "True se il server SMTP richiede l'autenticazione",
+                "AUTHENTICATION": "Autenticazione",
+                "AUTHENTICATION_INFO": "Indica se il server SMTP richiede l'autenticazione",
                 "MAIL_FROM": "Indirizzo email usato per inviare email di amministrazione",
                 "MAIL_PASSWORD": "Password del suddetto indirizzo email",
                 "MAIL_ALIAS": "Alias mostrato nelle email di amministrazione"
@@ -1006,6 +1007,7 @@
             "PROJECTS": "Progetti",
             "CONSUMER": "Consumer",
             "BASE_URI": "Base URI",
+            "DATA_REPO_ID": "ID repository dati",
             "LEXICALIZATION": "Lessicalizzazione",
             "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
             "MODEL": "Modello",
@@ -1014,6 +1016,8 @@
             "HISTORY": "Storico",
             "REPO_ACCESS": "Repository Access",
             "REPO_LOCATION": "Posizione Repository",
+            "REPOSITORY_ID": "ID repository",
+            "SUPPORT_REPO_ID": "ID repository Storico/Validazione",
             "VALIDATION": "Validazione"
         },
         "RESOURCE": {
@@ -1027,7 +1031,7 @@
             "SUBJECT": "Soggetto"
         },
         "USER": {
-	"GIVEN_NAME": "Nome",
+            "GIVEN_NAME": "Nome",
             "FAMILY_NAME": "Cognome",
             "EMAIL": "E-mail",
             "PASSWORD": "Password",
@@ -1040,7 +1044,6 @@
             "LANGUAGE_PROFICIENCIES": "Competenze linguistiche",
             "USER_IRI": "IRI utente",
             "PERSONAL_URL_AS_IRI": "Usa l'URL personale come IRI utente",
-            "OPTIONAL_RECOMMENDED_FIELD": "Campo opzionale ma raccomandato",
             "REGISTERED": "Registrato"
         }
     },
@@ -1119,7 +1122,6 @@
         "BLACKLIST": "Lista nera",
         "BLACKLIST_INFO": "Abilita questa opzione per mettere in lista nera i termini che sono stati respinti tramite la validazione",
         "CREATE_PROJECT": "Crea progetto",
-        "DATA_REPO_ID": "ID repository dati",
         "ENABLE_SHAPE_VALIDATION": "Abilita validazione shape",
         "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
         "HISTORY_INFO": "Abilita questa opzione per tenere traccia delle modifiche effettuate sul grafo di lavoro",
@@ -1134,7 +1136,6 @@
         "RESOURCE_METADATA": "Resource Metadata",
         "SELECT_REMOTE_REPO": "Seleziona repository remoto",
         "SHACLE_SHAPE_VALIDATION": "Validazione shape SHACL",
-        "SUPPORT_REPO_ID": "ID repository Storico/Validazione",
         "TRANSITIVE_IMPORTS": "Import transitivi",
         "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
         "URI_GENERATOR": "URI Generator",
@@ -1581,7 +1582,6 @@
             "CHECK_ALL": "Seleziona tutto",
             "CLONE": "Clona",
             "CLOSE": "Chiudi",
-            "CONFIGURE": "Configura",
             "CONFIRM": "Conferma",
             "CREATE": "Crea",
             "CREATE_TASK": "Crea task",
@@ -1595,7 +1595,6 @@
             "EXPORT": "Esporta",
             "IMPORT": "Importa",
             "LOAD": "Carica",
-            "LOAD_CONFIGURATION": "Carica configurazione",
             "LOCK_UNLOCK_NAMESPACE": "Blocca/sblocca namespace",
             "MOVE_AFTER": "Sposta prima",
             "MOVE_BEFORE": "Sposta dopo",
@@ -1608,7 +1607,6 @@
             "REMOVE_ALL": "Rimuovi tutto",
             "RESET": "Reset",
             "SAVE": "Salva",
-            "SAVE_CONFIGURATION": "Salva configurazione",
             "SEARCH": "Cerca",
             "SELECT": "Seleziona",
             "SHOW": "Mostra",
@@ -1622,7 +1620,10 @@
         "CONFIG": {
             "CONFIGURATION": "Configurazione",
             "CONFIGURATION_REQUIRED": "Configurazione necessaria",
+            "CONFIGURE": "Configura",
+            "LOAD_CONFIGURATION": "Carica configurazione",
             "NO_CONFIG_FOUND": "Nessuna configurazione trovata. Creane una nuova.",
+            "SAVE_CONFIGURATION": "Salva configurazione",
             "SERVER_URL": "URL Server",
             "USERNAME": "Username",
             "PASSWORD": "Password"
@@ -1660,7 +1661,6 @@
         "OPTIONAL": "Opzionale",
         "OPTIONAL_FIELD": "Campo opzionale",
         "POSITION": "Posizione",
-        "REPOSITORY_ID": "ID repository",
         "ROLE": "Ruolo",
         "ROLES": "Ruoli",
         "SCOPE": "Scope",
