@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Configuration for remote data store</h3>
+    <h3 class="modal-title">{{'WIDGETS.REMOTE_ACCESS_CONFIG.CONFIG_FOR_REMOTE'|translate}}</h3>
 </div>
 <div class="modal-body">
 
@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                     <tr *ngIf="savedConfigs.length == 0">
-                        <td colspan="4">No Remote Access Configuration found. Please, create a new one.</td>
+                        <td colspan="4">{{'WIDGETS.REMOTE_ACCESS_CONFIG.NO_CONFIG_FOUND'|translate}}</td>
                     </tr>
                     <tr *ngFor="let conf of savedConfigs">
                         <td>

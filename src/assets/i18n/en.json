@@ -1554,6 +1554,10 @@
             "BROWSE": "Browse",
             "SELECT_A_FILE": "Select a file"
         },
+        "REMOTE_ACCESS_CONFIG": {
+            "CONFIG_FOR_REMOTE": "Configuration for remote data store",
+            "NO_CONFIG_FOUND": "No Remote Access Configuration found. Please, create a new one."
+        },
         "SETTINGS_RENDERER": {
             "ADD_OPTIONAL_VALUE": "Add optional value",
             "DELETE_OPTIONAL_VALUE": "Delete optional value",
@@ -1616,6 +1620,12 @@
             "SUBMIT": "Submit",
             "UNCHECK_ALL": "Uncheck all",
             "UPDATE": "Update"
+        },
+        "BOOLEAN": {
+            "FALSE": "False",
+            "NO": "No",
+            "TRUE": "True",
+            "YES": "Yes"
         },
         "CONFIG": {
             "CONFIGURATION": "Configuration",

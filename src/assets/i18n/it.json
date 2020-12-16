@@ -1554,6 +1554,10 @@
             "BROWSE": "Sfoglia",
             "SELECT_A_FILE": "Seleziona un file"
         },
+        "REMOTE_ACCESS_CONFIG": {
+            "CONFIG_FOR_REMOTE": "Configurazione Data Store remoto",
+            "NO_CONFIG_FOUND": "Nessuna configurazione per accesso remoto trovata. Creane una nuova."
+        },
         "SETTINGS_RENDERER": {
             "ADD_OPTIONAL_VALUE": "Aggiungi valore opzionale",
             "DELETE_OPTIONAL_VALUE": "Cancella valore opzionale",
@@ -1616,6 +1620,12 @@
             "SUBMIT": "Invia",
             "UNCHECK_ALL": "Deseleziona tutto",
             "UPDATE": "Aggiorna"
+        },
+        "BOOLEAN": {
+            "FALSE": "Falso",
+            "NO": "No",
+            "TRUE": "Vero",
+            "YES": "Sì"
         },
         "CONFIG": {
             "CONFIGURATION": "Configurazione",
