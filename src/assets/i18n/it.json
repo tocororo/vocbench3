@@ -630,7 +630,7 @@
             "LENGTH": "Lunghezza"
         },
         "RESOURCE_DETAILS": {
-            "SHOW_THE_COMPLETE_RES_VIEW": "Mostra il completo"
+            "SHOW_THE_COMPLETE": "Mostra il completo"
         }
     },
     "HISTORY_VALIDATION": {
@@ -1071,7 +1071,7 @@
                 "DESCRIPTION": "Seleziona le lingue (ed il loro ordine) usate per il rendering delle risorse"
             },
             "VALUE_FILTER": {
-                "VALUE_FILTER_LANGS": "Lingue Value-filter",
+                "VALUE_FILTER_LANGS": "Filtro valori per lingua",
                 "DESCRIPTION": "Seleziona le lingue che verranno mostrate quando si filtrano i valori literal nella descrizione delle risorse. Attiva il filtro in modo da nascondere i valori con le lingue non selezionate."
             }
         },
@@ -1374,7 +1374,7 @@
             "AUTOCOMPLETION": "Autocompletamento",
             "AUTOCOMPLETION_INFO": "E' raccomandabile disabililtare questa funzionalità in grandi progetti non hostati su un server GraphDB",
             "ENABLE_AUTOCOMPLETION": "Abilita l'autocompletamento durante la digitazione",
-            "CONCEPTS_SEARCH": "Ricerca dei concetti",
+            "CONCEPTS_SEARCH": "Ricerca concetti",
             "RESTRICT_TO_SCHEME": "Restringi la ricerca agli skos:ConceptScheme attivi",
             "INSTANCES_SEARCH": "Ricerca delle istanze",
             "EXTEND_TO_ALL": "Estendi la ricerca a tutte le istanze (anche appartenenti ad altre classi)"

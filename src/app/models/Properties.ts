@@ -252,5 +252,4 @@ export class VisualizationModeTranslation {
         [InstanceListVisualizationMode.searchBased]: "DATA.COMMONS.VISUALIZATION_MODE.SEARCH_BASED",
         [InstanceListVisualizationMode.standard]: "DATA.COMMONS.VISUALIZATION_MODE.STANDARD"
     }
-    
 }
