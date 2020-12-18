@@ -113,7 +113,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                 if (errors.length == 1) { //if only one error, try to handle it
                     let err: Error = errors[0].error;
                     if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
-                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
+                        this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
                             confirm => {
                                 this.lexicalizationEnrichmentHelper.getAddLabelFn(
                                     <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, cls, 

@@ -273,7 +273,7 @@ export class AlignmentManagementComponent {
     private changeRelation(cell: AlignmentCell, relation: string) {
         //change relation only if user choses a relation different from the current
         if (cell.getRelation() != relation) {
-            this.basicModals.confirm("Change relation",
+            this.basicModals.confirm({key:"ACTIONS.CHANGE_RELATION"},
                 "Manually changing the relation will set automatically the measure of the alignment to 1.0. Do you want to continue?",
                 ModalType.warning).then(
                 (confirm: any) => {

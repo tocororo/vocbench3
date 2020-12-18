@@ -63,7 +63,7 @@ export class PropertyEnrichmentHelper {
                     } else if (ranges.type == RangeType.undetermined) {
                         var options = [RDFTypesEnum.resource, RDFTypesEnum.literal];
                         return from(
-                            basicModals.select("Select range type", null, options).then(
+                            basicModals.select({key:"ACTIONS.SELECT_RANGE_TYPE"}, null, options).then(
                                 (selectedRange: any) => {
                                     if (selectedRange == RDFTypesEnum.resource) {
                                         return { type: EnrichmentType.resource }
@@ -77,7 +77,7 @@ export class PropertyEnrichmentHelper {
                             )
                         );
                     } else if (ranges.type == "inconsistent") {
-                        basicModals.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", ModalType.warning);
+                        basicModals.alert({key:"STATUS.ERROR"}, "Error range of " + predicate.getShow() + " property is inconsistent", ModalType.warning);
                         return of({ type: null });
                     }
                 }
@@ -100,7 +100,7 @@ export class PropertyEnrichmentHelper {
 
                     //ask the user to choose
                     return from(
-                        basicModals.selectCustomForm({ key: "MESSAGES.SELECT_RANGE" }, rangeOptions).then(
+                        basicModals.selectCustomForm({ key: "ACTIONS.SELECT_RANGE" }, rangeOptions).then(
                             (selectedCF: CustomForm) => {
                                 //check if selected range is one of the customs
                                 for (var i = 0; i < customForms.length; i++) {
@@ -129,7 +129,7 @@ export class PropertyEnrichmentHelper {
                     } else if (customForms.length > 1) { //multiple CREntry => ask which one to use
                         //prepare the range options with the custom range entries
                         return from(
-                            basicModals.selectCustomForm({ key: "MESSAGES.SELECT_CUSTOM_RANGE" }, customForms).then(
+                            basicModals.selectCustomForm({ key: "ACTIONS.SELECT_CUSTOM_RANGE" }, customForms).then(
                                 (selectedCF: CustomForm) => {
                                     return { type: EnrichmentType.customForm, form: selectedCF };
                                 },

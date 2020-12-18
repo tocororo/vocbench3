@@ -58,7 +58,7 @@ export class LexicalizationSetMetadataComponent {
     updateLexiconDataset(newValue: string) {
         if (newValue != this.lexiconDataset) {
             if (!ResourceUtils.testIRI(newValue)) {
-                this.basicModals.alert("Invalid data", "'" + newValue + "' is not a valid IRI", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + newValue + "' is not a valid IRI", ModalType.warning);
                 //restore old value
                 this.lexiconDataset = newValue;
                 setTimeout(() => {
@@ -82,7 +82,7 @@ export class LexicalizationSetMetadataComponent {
         if (newValue != this.language) {
             let langRegexp = new RegExp("^[a-z]{2,3}(?:-[A-Z]{2,3}(?:-[a-zA-Z]{4})?)?$");
             if (!langRegexp.test(newValue)) {
-                this.basicModals.alert("Invalid data", "'" + this.language + "' is not a valid language tag", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + this.language + "' is not a valid language tag", ModalType.warning);
                 //restore old value
                 this.language = newValue;
                 setTimeout(() => {

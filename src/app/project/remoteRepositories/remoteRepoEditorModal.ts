@@ -51,7 +51,7 @@ export class RemoteRepoEditorModal {
                             msg += " and username '" + oldUsername + "'";
                         }
                         msg += " have been updated";
-                        this.basicModals.alert("Credentials updated", msg);
+                        this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, msg);
                         this.initRepos();
                     }
                 );
@@ -59,7 +59,7 @@ export class RemoteRepoEditorModal {
             this.projectService.modifyRepositoryAccessCredentials(this.project, repo.id,
                 repo.remoteRepoSummary.username, repo.remoteRepoSummary.password).subscribe(
                     stResp => {
-                        this.basicModals.alert("Credentials updated", "Credentials for the '" + repo.id +
+                        this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Credentials for the '" + repo.id +
                             "' remote repository have been updated");
                     }
                 );

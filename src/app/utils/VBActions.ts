@@ -368,7 +368,7 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
@@ -383,7 +383,7 @@ export class VBActionFunctions {
                                     }
                                 );
                             } else if (err.name.endsWith('BlacklistForbiddendException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         HttpServiceContext.setContextForce(true);
@@ -422,7 +422,7 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, data.broaderProp, data.cfValue, false).subscribe(
@@ -471,7 +471,7 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue, false).subscribe(
@@ -505,7 +505,7 @@ export class VBActionFunctions {
                             },
                         );
                     } else {
-                        this.basicModals.confirm("Delete scheme", "The scheme is not empty. Deleting it will produce dangling concepts."
+                        this.basicModals.confirm({key: "DATA.SCHEME.DELETE"}, "The scheme is not empty. Deleting it will produce dangling concepts."
                             + " Are you sure to continue?", ModalType.warning).then(
                             confirm => {
                                 UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -718,7 +718,7 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
                                             stResp => {
@@ -750,7 +750,7 @@ export class VBActionFunctions {
                             },
                             (err: Error) => {
                                 if (err.name.endsWith('PrefAltLabelClashException')) {
-                                    this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                    this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
                                         confirm => {
                                             this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue, false).subscribe(
                                                 stResp => {

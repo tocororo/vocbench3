@@ -70,7 +70,7 @@ export class ClassListCreatorModal {
                             this.duplicateResource = null;
                         } else {
                             let detailsMsgs: string[] = checkResp.details.map(d => d.msg);
-                            this.basicModals.alert("Invalid Expression", "'" + expr + "' is not a valid Manchester Expression", ModalType.warning, detailsMsgs.join("\n"));
+                            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + expr + "' is not a valid Manchester Expression", ModalType.warning, detailsMsgs.join("\n"));
                         }
                     }
                 )

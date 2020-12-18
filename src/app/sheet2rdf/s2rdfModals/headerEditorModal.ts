@@ -88,7 +88,7 @@ export class HeaderEditorModal {
     }
 
     private renameNode(node: NodeConversion) {
-        this.basicModals.prompt("Rename node", { value: "ID" }, null, node.nodeId, false, true).then(
+        this.basicModals.prompt({key:"ACTIONS.RENAME_NODE"}, { value: "ID" }, null, node.nodeId, false, true).then(
             (newID: string) => {
                 if (newID != node.nodeId) {
                     this.s2rdfService.renameNodeId(this.header.id, node.nodeId, newID).subscribe(
@@ -109,7 +109,7 @@ export class HeaderEditorModal {
         let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
         //TODO allow to forcing the deletion a referenced node or not allow at all? 
         if (referenced) { //cannot delete a node used by a graph application
-            this.basicModals.confirm("Delete node", "Warning: the node '" + this.selectedNode.nodeId + "' is used in one or more graph application. " +
+            this.basicModals.confirm({key:"ACTIONS.DELETE_NODE"}, "Warning: the node '" + this.selectedNode.nodeId + "' is used in one or more graph application. " +
                 "This operation will affect also the graph application. Do you want to continue?", ModalType.warning).then(
                 confirm => {
                     this.removeNodeImpl();
@@ -258,7 +258,7 @@ export class HeaderEditorModal {
 
     ok() {
         if (this.changed && this.header.isMultiple) {
-            this.basicModals.confirm("Multiple headers", "There are multiple headers with the same name (" + this.header.nameStruct.name +
+            this.basicModals.confirm({key:"SHEET2RDF.SPREADSHEET.MULTIPLE_HEADERS"}, "There are multiple headers with the same name (" + this.header.nameStruct.name +
                 "). Do you want to apply the changes to all of them?", ModalType.warning).then(
                 confirm => {
                     this.s2rdfService.replicateMultipleHeader(this.header.id).subscribe(

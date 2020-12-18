@@ -80,7 +80,7 @@
                                 <button *ngIf="puBinding?.getGroup()" class="btn btn-xs btn-light" [ngClass]="{ active: puBinding.isSubjectToGroupLimitations()}" (click)="changeGroupLimitations()" 
                                     [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.GROUPS.RESTRICTIONS_INFO'|translate" [disabled]="selectedUser.isAdmin()">
                                     <span *ngIf="puBinding.isSubjectToGroupLimitations()" class="greenText" style="font-weight: bold">{{'ADMINISTRATION.PROJECTS.PROJ_USER.GROUPS.RESTRICTIONS_APPLIED'|translate}}</span>
-                                    <span *ngIf="!puBinding.isSubjectToGroupLimitations()" class="grayText">{{'ADMINISTRATION.PROJECTS.PROJ_USER.GROUPS.APPLY_RESTRICTIONS'|translate}}</span>
+                                    <span *ngIf="!puBinding.isSubjectToGroupLimitations()" class="grayText">{{'ACTIONS.APPLY_RESTRICTIONS'|translate}}</span>
                                 </button>
                             </div>
                             <div class="card-body vbox scrollableContainer">
@@ -151,7 +151,7 @@
                                     <div class="dropdown-menu" ngbDropdownMenu>
                                         <a class="dropdown-item" (click)="addAllLanguages()">{{'ACTIONS.ADD_ALL'|translate}}</a>
                                         <a class="dropdown-item" (click)="addProficienciesLangs()">
-                                            {{'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.ADD_ALL_PROFICIENCIES'|translate}}
+                                            {{'ACTIONS.ADD_ALL_PROFICIENCIES'|translate}}
                                             <span class="fas fa-star"></span>
                                         </a>
                                     </div>
@@ -168,7 +168,7 @@
                                     <div class="dropdown-menu" ngbDropdownMenu>
                                         <a class="dropdown-item" (click)="removeAllLanguages()">{{'ACTIONS.REMOVE_ALL'|translate}}</a>
                                         <a class="dropdown-item" (click)="leaveProficienciesLangs()">
-                                            {{'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.LEAVE_ONLY_PROFICIENCIES'|translate}}
+                                            {{'ACTIONS.LEAVE_ONLY_PROFICIENCIES'|translate}}
                                             <span class="fas fa-star"></span>
                                         </a>
                                     </div>
@@ -179,7 +179,7 @@
                             <div class="card-header">
                                 <label style="flex: 1">{{'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.AVAILABLE_LANGUAGES'|translate}}:</label>
                                 <button class="btn btn-xs btn-light" (click)="toggleFilterProficencies()" [ngClass]="{ active: filterProficiencies }">
-                                    <span class="fas fa-star" [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.SHOW_ONLY_PROFICIENCIES'|translate"></span>
+                                    <span class="fas fa-star" [title]="'ACTIONS.SHOW_ONLY_PROFICIENCIES'|translate"></span>
                                 </button>
                             </div>
                             <div class="card-body vbox scrollableContainer">

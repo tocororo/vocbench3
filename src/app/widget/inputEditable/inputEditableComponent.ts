@@ -55,11 +55,11 @@ export class InputEditableComponent implements OnInit {
             if (this.allowEmpty) {
                 this.value = null;
             } else {
-                this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The inserted value is empty or not valid. Please check and retry.", ModalType.warning);
                 return;
             }
         } else if (this.type == "email" && !UserForm.isValidEmail(this.value)) {
-            this.basicModals.alert("Invalid value", "The inserted value is not valid. Please check and retry.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The inserted value is not valid. Please check and retry.", ModalType.warning);
             return;
         }
         this.editInProgress = false;

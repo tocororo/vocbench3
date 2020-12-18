@@ -199,7 +199,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 this.visualizationMode = projPref.conceptTreePreferences.visualization;
                 if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
                     if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
+                        this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found for '" + searchedText + "'", ModalType.warning);
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
@@ -214,7 +214,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     }
                 } else { //searchBased
                     if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
+                        this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found for '" + searchedText + "'", ModalType.warning);
                     }
                     this.viewChildTree.forceList(searchResult);
                 }
@@ -246,7 +246,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     this.selectResourceVisualizationModeAware(resource);
                 } else {
                     if (schemes.length == 0) { //searched concept doesn't belong to any scheme => ask switch to no-scheme mode
-                        this.basicModals.confirm("Search", "Searched concept '" + resource.getShow() + "' does not belong to any scheme. Do you want to switch to no-scheme mode?", ModalType.warning).then(
+                        this.basicModals.confirm({key:"SEARCH.SEARCH"}, "Searched concept '" + resource.getShow() + "' does not belong to any scheme. Do you want to switch to no-scheme mode?", ModalType.warning).then(
                             confirm => {
                                 this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), []); //update the active schemes
                                 setTimeout(() => {

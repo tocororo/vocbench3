@@ -68,7 +68,7 @@ export class ModelGraphComponent extends AbstractGraph {
                     let links: Link[] = this.convertModelToLinks(graphModel);
 
                     if (links.length > this.linkLimit) {
-                        this.basicModals.confirm("Graph", "The graph you're trying to show has an high number of relations (" + links.length + "). " +
+                        this.basicModals.confirm({key:"GRAPHS.GRAPH"}, "The graph you're trying to show has an high number of relations (" + links.length + "). " +
                             "A performance decrease could be experienced with a growing amount of visual elements in the graph. " +
                             "Do you want to show the graph anyway?\n\n" +
                             "Alternatively it is available an 'incremental' explorable model-oriented graph " +
@@ -97,7 +97,7 @@ export class ModelGraphComponent extends AbstractGraph {
 
     addNode(res: ARTURIResource) {
         if (this.graph.getNode(res)) {
-            this.basicModals.alert("Add node", "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", ModalType.warning);
             return;
         }
         //add the node to the graph

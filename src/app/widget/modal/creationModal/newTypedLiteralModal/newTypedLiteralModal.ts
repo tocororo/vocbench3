@@ -56,7 +56,7 @@ export class NewTypedLiteralModal {
                 this.values.push(this.value);
                 this.value = null;
             } else {
-                this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), ModalType.warning);
                 return;
             }
         } else { //selected dataRangeAspectSelector
@@ -126,7 +126,7 @@ export class NewTypedLiteralModal {
                 if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                     //first validate
                     if (!this.validate || this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
-                        this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), ModalType.warning);
                         return;
                     }
                     literals = [this.value];
@@ -138,7 +138,7 @@ export class NewTypedLiteralModal {
             if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                 //first validate
                 if (!this.validate || this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
-                    this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), ModalType.warning);
                     return;
                 }
                 literals = [this.value];

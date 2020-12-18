@@ -36,10 +36,10 @@ export class CollaborationProjectModal {
             },
             (err: Error) => {
                 if (err.name.endsWith("ConnectException")) {
-                    this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot retrieve the issues list. " +
                         "Connection to Collaboration System server failed." , ModalType.error, err.name + " " + err.message);
                 } else if (err.name.endsWith("CollaborationBackendException")) {
-                    this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot retrieve the issues list. " +
                         "Connection to Collaboration System server failed during the Login. Please check the credentials.", ModalType.error, err.stack);
                 }
                 this.vbCollaboration.setWorking(false);
@@ -53,7 +53,7 @@ export class CollaborationProjectModal {
         this.headers.forEach((h: string) => 
             projectProps[h] = null
         );
-        this.basicModals.promptProperties("Create project", projectProps, false).then(
+        this.basicModals.promptProperties({key:"ACTIONS.CREATE_PROJECT"}, projectProps, false).then(
             props => {
                 this.collaborationService.createProject(props).subscribe(
                     stResp => {

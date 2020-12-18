@@ -44,27 +44,27 @@ export class RegistrationComponent {
             (!this.userForm.confirmedPassword || this.userForm.confirmedPassword.trim() == "") ||
             (!this.userForm.givenName || this.userForm.givenName.trim() == "") ||
             (!this.userForm.familyName || this.userForm.familyName.trim() == "")) {
-            this.basicModals.alert("Invalid data", "Please fill all the required fields", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "Please fill all the required fields", ModalType.warning);
             return;
         }
         if (this.userForm.urlAsIri && (this.userForm.url == null || this.userForm.url.trim() == "")) {
-            this.basicModals.alert("Invalid data", "You checked the option to use the personal URL as user IRI, but the URL is not provided." + 
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "You checked the option to use the personal URL as user IRI, but the URL is not provided." + 
                 " Please enter a valid URL or uncheck the above option", ModalType.warning);
             return
         }
         //check email
         if (!UserForm.isValidEmail(this.userForm.email)) {
-            this.basicModals.alert("Invalid data", "Please enter a valid e-mail address", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "Please enter a valid e-mail address", ModalType.warning);
             return;
         }
         //check password
         if (this.userForm.password != this.userForm.confirmedPassword) {
-            this.basicModals.alert("Invalid data", "Password and confirmed password are different.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "Password and confirmed password are different.", ModalType.warning);
             return;
         }
         //check IRI
         if (this.userForm.urlAsIri && !UserForm.isIriValid(this.userForm.iri)) {
-            this.basicModals.alert("Invalid data", "Please enter a valid IRI.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "Please enter a valid IRI.", ModalType.warning);
             return;
         }
         
@@ -87,7 +87,7 @@ export class RegistrationComponent {
                     message = "Your account has been created and is now pending activation. After the system administrator accepts your request, " +
                         "it will be possible to login with your email (" + this.userForm.email + ") and the password you provided";
                 }
-                this.basicModals.alert("Registration complete", message).then(
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, message).then(
                     result => {
                         if (this.firstAccess) {
                             this.authService.login(this.userForm.email, this.userForm.password).subscribe(

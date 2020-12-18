@@ -68,7 +68,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
+                    this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found for '" + searchedText + "'", ModalType.warning);
                 } else { //1 or more results
                     if (searchResult.length == 1) {
                         this.openAt(searchResult[0]);
@@ -110,7 +110,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
     private addAllConcepts() {
         //message to warn the user that in case of a lot of concept the process could be long?
-        this.basicModals.confirm("Add concepts to scheme", "You are going to add all the existing concepts to the scheme '" +
+        this.basicModals.confirm({key:"ACTIONS.ADD_CONCEPT_TO_SCHEME"}, "You are going to add all the existing concepts to the scheme '" +
             this.selectedNode.getShow() + "'. Are you sure?", ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);

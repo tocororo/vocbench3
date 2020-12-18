@@ -102,7 +102,7 @@ export class ProjectUsersManagerComponent {
                         Languages.sortLanguages(this.projectLanguages);
                         this.initAvailableLanguages();
                     } catch (err) {
-                        this.basicModals.alert("Error", "Initialization of languages for project '" + this.project.getName() + 
+                        this.basicModals.alert({key:"STATUS.ERROR"}, "Initialization of languages for project '" + this.project.getName() + 
                             "' has encountered a problem during parsing the 'languages' settings. " + 
                             "Please, report this to the system administrator.", ModalType.error);
                     }
@@ -164,7 +164,7 @@ export class ProjectUsersManagerComponent {
     }
 
     removeUserFromProject() {
-        this.basicModals.confirm("Remove user", "You are removing the user " + this.selectedUser.getShow() + " form the project " + this.project.getName() + ". Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.REMOVE_USER"}, "You are removing the user " + this.selectedUser.getShow() + " form the project " + this.project.getName() + ". Are you sure?", ModalType.warning).then(
             () => {
                 this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
                     stResp => {
@@ -190,9 +190,9 @@ export class ProjectUsersManagerComponent {
     private cloneSettings() {
         this.projectService.listProjects().subscribe(
             projects => {
-                this.basicModals.select("Duplicate settings", "Select the target project", projects.map(p => p.getName())).then(
+                this.basicModals.select({key:"ACTIONS.DUPLICATE_SETTINGS"}, "Select the target project", projects.map(p => p.getName())).then(
                     targetProj => {
-                        this.basicModals.confirm("Duplicate settings", "With this operation you will overwrite any roles, group, languages " + 
+                        this.basicModals.confirm({key:"ACTIONS.DUPLICATE_SETTINGS"}, "With this operation you will overwrite any roles, group, languages " + 
                             "and ResourceView template assigned to " + this.selectedUser.getShow() + " in the target project '" + targetProj + 
                             "'. Are you sure?\n\nNote: the project-level roles will not be cloned", ModalType.warning).then(
                             () => {
@@ -200,7 +200,7 @@ export class ProjectUsersManagerComponent {
                                 let userIri: ARTURIResource = new ARTURIResource(this.selectedUser.getIri());
                                 this.adminService.clonePUBinding(userIri, this.project.getName(), userIri, targetProj).subscribe(
                                     () => {
-                                        this.basicModals.alert("Duplicate settings", "Settings duplicated successfully");
+                                        this.basicModals.alert({key:"ACTIONS.DUPLICATE_SETTINGS"}, "Settings duplicated successfully");
                                     }
                                 );
                                 //clone template

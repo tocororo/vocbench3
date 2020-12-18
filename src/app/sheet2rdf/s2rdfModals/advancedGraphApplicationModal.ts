@@ -97,7 +97,7 @@ export class AdvancedGraphApplicationModal {
             let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
             //TODO allow to forcing the deletion a referenced node or not allow at all? 
             if (referenced) { //cannot delete a node used by a graph application
-                this.basicModals.confirm("Delete node", "Warning: the node '" + this.selectedNode.nodeId + "' is used in one or more graph application. " +
+                this.basicModals.confirm({key:"ACTIONS.DELETE_NODE"}, "Warning: the node '" + this.selectedNode.nodeId + "' is used in one or more graph application. " +
                     "This operation will affect also the graph application. Do you want to continue?", ModalType.warning).then(
                     confirm => {
                         this.removeNodeImpl();
@@ -169,12 +169,12 @@ export class AdvancedGraphApplicationModal {
                     this.globalPrefixMappings.some(m => m.prefix == mapping.prefix) || 
                     this.localPrefixMappings.some(m => m.prefix == mapping.prefix)
                 ) {
-                    this.basicModals.alert("Add prefix-namespace mapping", "A mapping with prefix " + mapping.prefix + " is already defined", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "A mapping with prefix " + mapping.prefix + " is already defined", ModalType.warning);
                 } else if (
                     this.globalPrefixMappings.some(m => m.namespace == mapping.namespace) || 
                     this.localPrefixMappings.some(m => m.namespace == mapping.namespace)
                 ) {
-                    this.basicModals.alert("Add prefix-namespace mapping", "A mapping with namespace " + mapping.namespace + " is already defined", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "A mapping with namespace " + mapping.namespace + " is already defined", ModalType.warning);
                 } else { //not used => add it
                     let newMapping = { prefix: mapping.prefix, namespace: mapping.namespace, explicit: true };
                     this.localPrefixMappings.push(newMapping);
@@ -261,7 +261,7 @@ export class AdvancedGraphApplicationModal {
         return this.s2rdfService.validateGraphPattern(pearl).pipe(
             map(validation => {
                 if (!validation.valid) {
-                    this.basicModals.alert("Advanced Graph Application", "The provided graph pattern is not valid.", ModalType.warning, validation.details);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided graph pattern is not valid.", ModalType.warning, validation.details);
                     return validation;
                 } else {
                     validation.usedNodes.forEach((nodeId, index, list) => {
@@ -279,7 +279,7 @@ export class AdvancedGraphApplicationModal {
 
     saveGraph() {
         if (!this.isOkEnabled()) {
-            this.basicModals.alert("Store Advanced Graph Application", "The Graph Application is not completed. " + 
+            this.basicModals.alert({key:"STATUS.WARNING"}, "The Graph Application is not completed. " + 
                 "Please, provide a list of nodes and a graph pattern.", ModalType.warning);
             return;
         }
@@ -322,7 +322,7 @@ export class AdvancedGraphApplicationModal {
                     };
                     this.sharedModals.storeConfiguration("Save Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
                         () => {
-                            this.basicModals.alert("Save configuration", "Configuration saved succesfully");
+                            this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration saved succesfully");
                         },
                         () => {}
                     );
@@ -403,7 +403,7 @@ export class AdvancedGraphApplicationModal {
             () => {
                 if (replacedNodeIds.length > 0) { //report of changes
                     let report: string = replacedNodeIds.map(n => " - '" + n.old + "' → '" + n.new + "'").join("\n");
-                    this.basicModals.alert("Load Advanced Graph Application", "One or more nodes defined in the loaded " + 
+                    this.basicModals.alert({key:"STATUS.WARNING"}, "One or more nodes defined in the loaded " + 
                         "Advanced Graph Application, have ID already in use by other nodes. They have been replaced:\n"  + report, ModalType.warning);
                 }
                 /**
@@ -484,7 +484,7 @@ export class AdvancedGraphApplicationModal {
          */
 
         if (this.graphPattern.includes(this.PRED_PLACEHOLDER) && this.defaultPredicate == null) {
-            this.basicModals.alert("Missing default predicate", 
+            this.basicModals.alert({key:"STATUS.WARNING"}, 
                 "The graph pattern contains the {{pred}} placeholder, but a default predicate has not been provided", ModalType.warning);
             return;
         }

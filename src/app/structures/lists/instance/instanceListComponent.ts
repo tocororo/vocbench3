@@ -79,7 +79,7 @@ export class InstanceListComponent extends AbstractList {
                                     description: "Visualization mode can be changed also from the instance panel settings"
                                 },
                             ]
-                            this.basicModals.select("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
+                            this.basicModals.select({key:"DATA.INSTANCE.UNSAFE_WARN.TOO_MANY_ELEM"}, "Warning: the selected class (" + this.cls.getShow() 
                                 + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process, "
                                 + "you might experience performance decrease. What do you want to do?", opts, ModalType.warning)
                             .then(

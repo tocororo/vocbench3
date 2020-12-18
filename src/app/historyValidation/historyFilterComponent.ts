@@ -70,11 +70,11 @@ export class HistoryFilterComponent {
     applyFilter() {
         let timeRegexp: RegExp = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$");
         if (this.fromTime != null && !timeRegexp.test(this.fromTime)) {
-            this.basicModals.alert("Invalid time", "'From' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", ModalType.error);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'From' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", ModalType.error);
             return;
         }
         if (this.toTime != null && !timeRegexp.test(this.toTime)) {
-            this.basicModals.alert("Invalid time", "'To' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", ModalType.error);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'To' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", ModalType.error);
             return;
         }
         this.apply.emit({ operations: this.operations, performers: this.performers, fromTime: this.fromTime, toTime: this.toTime });

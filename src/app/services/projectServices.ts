@@ -382,11 +382,11 @@ export class ProjectServices {
                 let message = "The sail required for the " + missingSail.feature + " feature " + 
                     "is reported to be missing from the triple store; please contact the administrator in order to " + 
                     "have the " + missingSail.jar + " bundle deployed within the triple store connected for this project";
-                basicModals.alert("Error", message, ModalType.error, error.name + ": " + error.message);
+                basicModals.alert({key:"STATUS.ERROR"}, message, ModalType.error, error.name + ": " + error.message);
             } else {
                 let errorMsg = error.message != null ? error.message : "Unknown response from the server";
                 let errorDetails = error.stack ? error.stack : error.name;
-                basicModals.alert("Error", errorMsg, ModalType.error, errorDetails);
+                basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error, errorDetails);
             }
         }
     }

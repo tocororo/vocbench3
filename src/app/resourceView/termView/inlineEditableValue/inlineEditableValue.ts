@@ -106,7 +106,7 @@ export class InlineEditableValue implements OnInit {
         this.editInProgress = false;
         if (this.pristineStringValue != this.stringValue) {
             if (this.stringValue == undefined || this.stringValue.trim() == "") {
-                this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The inserted value is empty or not valid. Please check and retry.", ModalType.warning);
                 this.stringValue = this.pristineStringValue;
                 return;
             }

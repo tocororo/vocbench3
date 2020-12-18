@@ -20,7 +20,7 @@
         <div class="col-sm-6">
             <div class="hbox" style="align-items: center;">
                 <input class="form-control" [ngModel]="leftProjectStruct.project.getName()" readonly>
-                <button class="btn btn-light ml-2" (click)="profileProject(leftProjectStruct)" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CREATE_TASK.PROFILE_PROJECT'|translate">
+                <button class="btn btn-light ml-2" (click)="profileProject(leftProjectStruct)" [title]="'ACTIONS.PROFILE_PROJECT'|translate">
                     <span class="fas fa-align-right" style="transform: rotate(90deg)"></span>
                 </button>
                 <div style="margin-left: 4px;">
@@ -37,7 +37,7 @@
                         <option *ngIf="p.getName() != leftProjectStruct.project.getName()" [ngValue]="p">{{p.getName()}}</option>
                     </ng-container>
                 </select>
-                <button *ngIf="rightProjectStruct" class="btn btn-light ml-2" (click)="profileProject(rightProjectStruct)" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CREATE_TASK.PROFILE_PROJECT'|translate">
+                <button *ngIf="rightProjectStruct" class="btn btn-light ml-2" (click)="profileProject(rightProjectStruct)" [title]="'ACTIONS.PROFILE_PROJECT'|translate">
                     <span class="fas fa-align-right" style="transform: rotate(90deg)"></span>
                 </button>
                 <div *ngIf="rightProjectStruct" style="margin-left: 4px;">

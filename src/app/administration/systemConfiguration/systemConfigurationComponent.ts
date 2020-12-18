@@ -129,7 +129,7 @@ export class SystemConfigurationComponent {
     updateDataFolder() {
         this.adminService.setDataDir(this.stDataFolder).subscribe(
             () => {
-                this.basicModals.alert("Update configuration", "SemanticTurkey data folder updated");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "SemanticTurkey data folder updated");
                 this.stDataFolderPristine = this.stDataFolder;
             }
         );
@@ -138,7 +138,7 @@ export class SystemConfigurationComponent {
     updateProfilerThreshold() {
         this.adminService.setPreloadProfilerThreshold(this.profilerThreshold).subscribe(
             () => {
-                this.basicModals.alert("Update configuration", "Preload profiler threshold updated");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Preload profiler threshold updated");
                 this.profilerThresholdPristine = this.profilerThreshold;
             }
         )
@@ -177,18 +177,18 @@ export class SystemConfigurationComponent {
 
     testEmailConfig() {
         if (this.isEmailConfigChanged()) {
-            this.basicModals.alert("Email configuration test", "Email configuration has been changed, you need first to submit the changes.", ModalType.warning);
+            this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, "Email configuration has been changed, you need first to submit the changes.", ModalType.warning);
             return;
         }
 
-        this.basicModals.prompt("Email configuration test", { value: "Mail to" }, "This test will send an e-mail to the provided address in order to "
+        this.basicModals.prompt({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, { value: "Mail to" }, "This test will send an e-mail to the provided address in order to "
             + "check the e-mail configuration", VBContext.getLoggedUser().getEmail()).then(
                 mailTo => {
                     UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                     this.adminService.testEmailConfig(mailTo).subscribe(
                         () => {
                             UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                            this.basicModals.alert("Email configuration test", "The configuration works fine. A test e-mail has been sent to " + mailTo + ".");
+                            this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, "The configuration works fine. A test e-mail has been sent to " + mailTo + ".");
                         }
                     );
                 },
@@ -331,7 +331,7 @@ export class SystemConfigurationComponent {
             if (duplicatedStandardField) {
                 message += "in the standard registration form";
             }
-            this.basicModals.alert("Duplicated field", message, ModalType.warning).then(
+            this.basicModals.alert({key:"STATUS.ERROR"}, message, ModalType.warning).then(
                 () => { //restore the old value
                     //temporary replace the .label at the edited index, so that the ngOnChanges will be fired in the input-edit component
                     this.customFormFields[index] = { iri: null, label: "" };

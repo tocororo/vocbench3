@@ -52,7 +52,7 @@ export class AddManuallyValueModal {
                 throw new Error("Not a valid N-Triples representation: " + this.inputTxt);
             }
         } catch (err) {
-            this.basicModals.alert("Invalid value", err, ModalType.error);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, err, ModalType.error);
             return;
         }
         this.activeModal.close({ value: value, property: this.enrichingProperty });

@@ -10,11 +10,11 @@
             <div class="btn-group btn-group-xs" role="group">
                 <button type="button" class="btn btn-light" (click)="changeUserStatus()"
                     [ngClass]="{'active': isUserActive()}" style="color: green" [disabled]="isChangeStatusButtonDisabled()">
-                    {{'COMMONS.STATUS.ACTIVE'|translate}}
+                    {{'STATUS.ACTIVE'|translate}}
                 </button>
                 <button type="button" class="btn btn-light" (click)="changeUserStatus()"
                     [ngClass]="{'active': !isUserActive()}" style="color: red" [disabled]="isChangeStatusButtonDisabled()">
-                    {{'COMMONS.STATUS.INACTIVE'|translate}}
+                    {{'STATUS.INACTIVE'|translate}}
                 </button>
             </div>
         </div>

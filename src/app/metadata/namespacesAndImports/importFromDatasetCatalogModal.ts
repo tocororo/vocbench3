@@ -68,7 +68,7 @@ export class ImportFromDatasetCatalogModal {
 
     ok() {
         if (this.ontologyIRI == null) {
-            this.basicModals.alert("Import from Dataset Catalog", "The selected Dataset does not provide any ontology IRI, " + 
+            this.basicModals.alert({key:"STATUS.WARNING"}, "The selected Dataset does not provide any ontology IRI, " + 
                 "so it cannot be imported. Please change the Dataset.", ModalType.warning);
             return;
         }

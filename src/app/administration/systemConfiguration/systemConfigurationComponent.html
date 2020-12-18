@@ -209,7 +209,7 @@
                                             <option *ngFor="let t of timezones">{{t}}</option>
                                         </select>
                                         <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="detectTimezone()" [title]="'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DETECT_INFO'|translate">
-                                            {{'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DETECT'|translate}}
+                                            {{'ACTIONS.DETECT'|translate}}
                                         </button>
                                     </div>
                                 </td>
@@ -221,7 +221,7 @@
                     <button type="submit" class="btn btn-light btn-sm" (click)="updateNotificationSchedule()" 
                         [disabled]="!cronHourOfDay || !timezone">{{'ACTIONS.SUBMIT'|translate}}</button>
                     <button class="btn btn-warning btn-sm" (click)="disableNotificationSchedule()" [title]="'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DISABLE_INFO'|translate"
-                        [disabled]="!cronHourOfDay && !timezone">{{'ADMINISTRATION.SYSTEM.NOTIFICATIONS.DISABLE'|translate}}</button>
+                        [disabled]="!cronHourOfDay && !timezone">{{'ACTIONS.DISABLE'|translate}}</button>
                 </div>
             </div>
 

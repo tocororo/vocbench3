@@ -101,11 +101,11 @@ export class ResourcePickerComponent {
                 }
                 
                 if (projects.length == 0) {
-                    this.basicModals.alert("Pick resource", "You have no granted access to any existing open project", ModalType.warning);
+                    this.basicModals.alert({key: "ACTIONS.PICK_RESOURCE"}, "You have no granted access to any existing open project", ModalType.warning);
                     return;
                 }
                 let options = projects.map(p => p.getName());
-                this.basicModals.select("Pick resource", "Select a project", options).then(
+                this.basicModals.select({key: "ACTIONS.PICK_RESOURCE"}, "Select a project", options).then(
                     projName => {
                         //initialize the context of the selected external project
                         let externalProject: Project = projects.find(p => p.getName() == projName);
@@ -158,7 +158,7 @@ export class ResourcePickerComponent {
             return of(resourceTypes[options[0]]);
         } else {
             return from(
-                this.basicModals.select("Pick resource", "Select the type of resource to pick", options).then(
+                this.basicModals.select({key: "ACTIONS.PICK_RESOURCE"}, "Select the type of resource to pick", options).then(
                     (role: string) => {
                         return resourceTypes[role];
                     },

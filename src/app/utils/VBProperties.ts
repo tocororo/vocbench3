@@ -453,7 +453,7 @@ export class VBProperties {
                     Languages.sortLanguages(systemLanguages);
                     Languages.setSystemLanguages(systemLanguages);
                 } catch (err) {
-                    this.basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "Initialization of system languages has encountered a problem during parsing the " +
                         "'languages' property. Please, report this to the system administrator.", ModalType.error);
                 }
                 //home content
@@ -486,7 +486,7 @@ export class VBProperties {
                     projectSettings.projectLanguagesSetting = <Language[]>JSON.parse(langsValue);
                     Languages.sortLanguages(projectSettings.projectLanguagesSetting);
                 } catch (err) {
-                    this.basicModals.alert("Error", "Project setting initialization has encountered a problem during parsing " +
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "Project setting initialization has encountered a problem during parsing " +
                         "languages settings. Default languages will be set for this project.", ModalType.error);
                     projectSettings.projectLanguagesSetting = [
                         { name: "German" , tag: "de" }, { name: "English" , tag: "en" }, { name: "Spanish" , tag: "es" },

@@ -68,7 +68,7 @@ export class VersioningComponent {
     // }
 
     dump() {
-        this.basicModals.prompt("Create a version dump", { value: "Version ID" }).then(
+        this.basicModals.prompt({key:"ACTIONS.CREATE_VERSION_DUMP"}, { value: "Version ID" }).then(
             (id: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.versionsService.createVersionDump(id).subscribe(

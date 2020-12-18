@@ -62,7 +62,7 @@ export abstract class AbstractCustomConstructorModal {
                 } else if (customForms.length == 1) {
                     this.customFormId = customForms[0].getId();
                 } else { //(forms.length > 1) //let user choose
-                    return this.basicModals.selectCustomForm({ key: "MESSAGES.SELECT_CONSTRUCTOR" }, customForms).then(
+                    return this.basicModals.selectCustomForm({ key: "ACTIONS.SELECT_CONSTRUCTOR" }, customForms).then(
                         (selectedCF: any) => {
                             this.customFormId = (<CustomForm>selectedCF).getId();
                         },
@@ -132,7 +132,7 @@ export abstract class AbstractCustomConstructorModal {
     ok() {
         let constraintViolatedMsg = CustomFormUtils.isFormConstraintOk(this.formFields);
         if (constraintViolatedMsg != null) {
-            this.basicModals.alert("Incompleted form", constraintViolatedMsg, ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, constraintViolatedMsg, ModalType.warning);
             return;
         }
         this.okImpl();

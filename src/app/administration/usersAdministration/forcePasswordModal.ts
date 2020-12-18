@@ -31,7 +31,7 @@ export class ForcePasswordModal {
     ok() {
         this.userService.forcePassword(this.user.getEmail(), this.password).subscribe(
             stResp => {
-                this.basicModals.alert("Password changed", "Password of " + this.user.getShow() + " has been succesfully changed.").then(
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Password of " + this.user.getShow() + " has been succesfully changed.").then(
                     () => {
                         this.activeModal.close();
                     }

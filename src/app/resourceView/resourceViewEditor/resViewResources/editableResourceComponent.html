@@ -19,8 +19,8 @@
                 {{'ACTIONS.EDIT'|translate}}
             </a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkEditAuthorized }"
-                (click)="bulkEdit()" [title]="'RESOURCE_VIEW.ACTIONS.BULD_EDIT_INFO'|translate">
-                {{'RESOURCE_VIEW.ACTIONS.BULD_EDIT'|translate}}
+                (click)="bulkEdit()" [title]="'RESOURCE_VIEW.ACTIONS.BULK_EDIT'|translate">
+                {{'RESOURCE_VIEW.ACTIONS.BULK_EDIT'|translate}}
             </a>
             <a *ngIf="isReplaceMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !editAuthorized || isInferred }" (click)="replace()">
                 {{'RESOURCE_VIEW.ACTIONS.REPLACE_WITH_EXISTING_RES'|translate}}

@@ -48,7 +48,7 @@ export class SparqlTabComponent extends AbstractSparqlTabComponent {
         }
         this.sharedModals.storeConfiguration("Store SPARQL query", ConfigurationComponents.SPARQL_STORE, queryConfig, this.storedQueryReference).then(
             (relativeRef: string) => {
-                this.basicModals.alert("Save query", "Query saved succesfully");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Query saved succesfully");
                 this.storedQueryReference = relativeRef;
                 this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":")+1));
                 this.savedStatus.emit(true);

@@ -115,7 +115,7 @@ export class ConfigBarComponent {
     }
 
     private clearData() {
-        this.basicModals.confirm("Clear data", "This operation will erase all the data stored in the project." +
+        this.basicModals.confirm({key:"ACTIONS.CLEAR_DATA"}, "This operation will erase all the data stored in the project." +
             " Are you sure to proceed?", ModalType.warning).then(
             () => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -123,7 +123,7 @@ export class ConfigBarComponent {
                     stResp => {
                         this.prefService.setActiveSchemes().subscribe();
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert("Clear data", "All data cleared successfully.");
+                        this.basicModals.alert({key:"ACTIONS.CLEAR_DATA"}, "All data cleared successfully.");
                     }
                 );
             },

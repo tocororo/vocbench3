@@ -52,7 +52,7 @@ export class RemoteSystemConfigurationsAdministration {
     createConfig() {
         //add the new configuration only if another config with the same ID doesn't exist
         if (this.savedConfigs.some(c => c.id == this.newConfig.id)) {
-            this.basicModals.alert("Duplicate configuration", "A configuration with the same ID already exists", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.ERROR"}, "A configuration with the same ID already exists", ModalType.warning);
             return;
         }
         this.remoteAlignmentService.addRemoteAlignmentService(this.newConfig.id, this.newConfig.serverURL, this.newConfig.username, this.newConfig.password, this.newConfig['default']).subscribe(
@@ -64,7 +64,7 @@ export class RemoteSystemConfigurationsAdministration {
     }
 
     deleteConfig(config: RemoteAlignmentServiceConfigurationDef) {
-        this.basicModals.confirm("Delete configuration", "You are going to delete configuration '" + config.id +
+        this.basicModals.confirm({key:"ACTIONS.DELETE_CONFIGURATION"}, "You are going to delete configuration '" + config.id +
             "'. If this configuration is used in a project, by deleting it you could prevent the Remote Alignment System from working. " + 
             "Are you sure?", ModalType.warning).then(
             () => {

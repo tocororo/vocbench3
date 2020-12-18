@@ -32,7 +32,7 @@ export class RemoteAccessConfigModal {
         //add the new configuration only if another config with the same url doesn't exist
         for (var i = 0; i < this.savedConfigs.length; i++) {
             if (this.savedConfigs[i].serverURL == this.newConfig.serverURL) {
-                this.basicModals.alert("Duplicate configuration", "A configuration for the serverURL '" + this.newConfig.serverURL 
+                this.basicModals.alert({key:"STATUS.ERROR"}, "A configuration for the serverURL '" + this.newConfig.serverURL 
                     + "' already exists", ModalType.warning);
                 return;
             }
@@ -43,7 +43,7 @@ export class RemoteAccessConfigModal {
     }
 
     private deleteConfig(c: RemoteRepositoryAccessConfig) {
-        this.basicModals.confirm("Delete configuration", "You are deleting the configuration. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_CONFIGURATION"}, "You are deleting the configuration. Are you sure?", ModalType.warning).then(
             () => {
                 this.savedConfigs.splice(this.savedConfigs.indexOf(c), 1);
                 this.updateConfigurations();

@@ -14,7 +14,7 @@
                 <td><input class="form-control" [(ngModel)]="searchString"></td>
             </tr>
             <tr>
-                <td><label>{{'COMMONS.STATUS.STATUS'|translate}}:</label></td>
+                <td><label>{{'STATUS.STATUS'|translate}}:</label></td>
                 <td>
                     <select class="form-control" [(ngModel)]="selectedStatus">
                         <option *ngFor="let s of statuses" [value]="s.value">{{s.show}}</option>

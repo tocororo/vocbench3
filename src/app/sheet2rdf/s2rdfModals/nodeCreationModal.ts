@@ -108,7 +108,7 @@ export class NodeCreationModal {
         this.isNodeAlreadyInUse(this.nodeId).subscribe(
             used => {
                 if (used) {
-                    this.basicModals.alert("Node creation", "Id '" + this.nodeId + "' is already used for another node", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, "Id '" + this.nodeId + "' is already used for another node", ModalType.warning);
                     return;
                 }
                 let newNode: NodeConversion = { nodeId: this.nodeId, converter: this.selectedConverter, memoize: this.memoize }

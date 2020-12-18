@@ -51,7 +51,7 @@ export class ACLEditorModal {
             message = "Are you sure to change Access Level of '" + this.project.getName() + "' to '" + newLevel + 
                 "' for the consumer '" + consumer.name + "'?";
         }
-        this.basicModals.confirm("Update Access Level", message, ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.UPDATE_ACCESS_LEVEL"}, message, ModalType.warning).then(
             confirm => {
                 let updateFn: Observable<void>;
                 if (VBContext.getLoggedUser().isAdmin()) {
@@ -75,7 +75,7 @@ export class ACLEditorModal {
     private onLockLevelChange(newLevel: LockLevel) {
         var oldLevel: LockLevel = this.lock.availableLockLevel;
         let message: string = "Are you sure to change project lock to '" + newLevel + "'?";
-        this.basicModals.confirm("Update Lock Level", message, ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.UPDATE_LOCK_LEVEL"}, message, ModalType.warning).then(
             confirm => {
                 let updateFn: Observable<void>;
                 if (VBContext.getLoggedUser().isAdmin()) {

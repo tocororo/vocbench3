@@ -135,7 +135,7 @@ export class DanglingConceptComponent {
      * Fixes concept by removing the concept from the current scheme 
      */
     private removeFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
-        this.basicModals.confirm("Remove from scheme", "Warning, if this concept has narrowers, removing the " +
+        this.basicModals.confirm({key:"ACTIONS.REMOVE_FROM_SCHEME"}, "Warning, if this concept has narrowers, removing the " +
             "dangling concept from the scheme may generate other dangling concepts. Are you sure to proceed?").then(
             result => {
                 this.skosService.removeConceptFromScheme(concept, scheme).subscribe(
@@ -152,7 +152,7 @@ export class DanglingConceptComponent {
      * Fixes concepts by removing them all from the current scheme 
      */
     private removeAllFromScheme() {
-        this.basicModals.confirm("Remove from scheme", "Warning, if the concepts have narrowers, removing them " +
+        this.basicModals.confirm({key:"ACTIONS.REMOVE_FROM_SCHEME"}, "Warning, if the concepts have narrowers, removing them " +
             "may generate other dangling concepts. Are you sure to proceed?").then(
             result => {
                 this.icvService.removeAllDanglingFromScheme(this.selectedScheme).subscribe(

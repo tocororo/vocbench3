@@ -748,7 +748,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         }
         
         if (assertFn.length == 0) {
-            this.basicModals.alert("Assert inferred statements", "There are no inferred statements to assert", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, "There are no inferred statements to assert", ModalType.warning);
         } else {
             let onComplete = () => { //when the assert of all the statements is completed, stop the loading and rebuild the ResView
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
@@ -791,7 +791,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             },
             (err: Error) => {
                 if (this.collaborationWorking) {
-                    this.basicModals.alert("Collaboration System error", "The Collaboration System seems to be configured "
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "The Collaboration System seems to be configured "
                         + "but it's not working (configuration could be not valid or the server may be not reachable), "
                         + "so it will be disabled.", ModalType.error, err.stack);
                     this.vbCollaboration.setWorking(false);

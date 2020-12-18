@@ -67,10 +67,10 @@ export class RolesAdministrationComponent {
     }
 
     createRole() {
-        this.basicModals.prompt("Create role", { value: "Role name" }, null, null, false, true).then(
+        this.basicModals.prompt({key:"ACTIONS.CREATE_ROLE"}, { value: "Role name" }, null, null, false, true).then(
             (result: any) => {
                 if (this.roleExists(result)) {
-                    this.basicModals.alert("Duplicated role", "A role with the same name (" + result + ") already exists", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "A role with the same name (" + result + ") already exists", ModalType.warning);
                     return;
                 }
                 this.adminService.createRole(result).subscribe(
@@ -95,7 +95,7 @@ export class RolesAdministrationComponent {
         this.modalService.open(ImportRoleModal, new ModalOptions()).result.then(
             (data: any) => {
                 if (this.roleExists(data.name)) {
-                    this.basicModals.alert("Duplicated role", "A role with the same name (" + data.name + ") already exists", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "A role with the same name (" + data.name + ") already exists", ModalType.warning);
                     return;
                 }
                 this.adminService.importRole(data.file, data.name).subscribe(
@@ -112,16 +112,16 @@ export class RolesAdministrationComponent {
         this.adminService.exportRole(this.selectedRole.getName()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ADMINISTRATION.ROLES.IMPORT_ROLE" }, null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
+                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_ROLE" }, null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
             }
         )
     }
 
     cloneRole() {
-        this.basicModals.prompt("Clone role " + this.selectedRole.getName(), { value: "Role name" }, null, null, false, true).then(
+        this.basicModals.prompt({key:"ACTIONS.CLONE_ROLE"}, { value: "Role name" }, null, null, false, true).then(
             (newRoleName: any) => {
                 if (this.roleExists(newRoleName)) {
-                    this.basicModals.alert("Duplicated role", "A role with the same name (" + newRoleName + ") already exists", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "A role with the same name (" + newRoleName + ") already exists", ModalType.warning);
                     return;
                 }
                 this.adminService.cloneRole(this.selectedRole.getName(), newRoleName).subscribe(
@@ -151,7 +151,7 @@ export class RolesAdministrationComponent {
         this.openCapabilityEditorModal("Add capability to " + this.selectedRole.getName(), null).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
-                    this.basicModals.alert("Duplicated capability", "Capability " + capability + 
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "Capability " + capability + 
                         " already exists in role " + this.selectedRole.getName(), ModalType.warning).then();
                     return;
                 }
@@ -179,7 +179,7 @@ export class RolesAdministrationComponent {
         this.openCapabilityEditorModal("Edit capability", this.selectedCapability).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
-                    this.basicModals.alert("Duplicated capability", "Capability " + capability + 
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "Capability " + capability + 
                         " already exists in role " + this.selectedRole.getName(), ModalType.warning).then();
                     return;
                 }

@@ -78,7 +78,7 @@ export class ResourceRenameComponent {
         //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
         if (this.namespaceLocked) { //just the namespace has changed
             if (this.localName.trim() == "") {
-                this.basicModals.alert("Rename", "You have to write a valid local name", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "You have to write a valid local name", ModalType.warning);
                 this.cancelRename()
                 return;
             }
@@ -86,7 +86,7 @@ export class ResourceRenameComponent {
         } else { //complete renaming (ns + localName)
             newUri = this.totalRenameInput.nativeElement.value;
             if (newUri.trim() == "") {
-                this.basicModals.alert("Rename", "You have to write a valid URI", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "You have to write a valid URI", ModalType.warning);
                 this.cancelRename()
                 return;
             }
@@ -121,9 +121,9 @@ export class ResourceRenameComponent {
         try {
             var successful = document.execCommand('copy');
             var msg = successful ? 'successful' : 'unsuccessful';
-            this.basicModals.alert("Copy resource URI", "Resource URI copied in clipboard!");
+            this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Resource URI copied in clipboard!");
         } catch (err) {
-            this.basicModals.alert("Copy resource URI", "Unable to copy the resource URI in the clipboard");
+            this.basicModals.alert({key:"STATUS.ERROR"}, "Unable to copy the resource URI in the clipboard", ModalType.error);
         } finally {
             document.body.removeChild(textArea);
         }

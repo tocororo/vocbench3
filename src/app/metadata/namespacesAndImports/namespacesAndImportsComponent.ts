@@ -160,7 +160,7 @@ export class NamespacesAndImportsComponent {
             var message = "Save change of ";
             if (this.baseURI != this.pristineBaseURI && this.namespace != this.pristineNamespace) {//changed both baseURI and namespace
                 message += "baseURI and namespace? (Attention, baseURI refactoring could be a long process)";
-                this.basicModals.confirm("Refactor", message, ModalType.warning).then(
+                this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, message, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
@@ -168,7 +168,7 @@ export class NamespacesAndImportsComponent {
                                 this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                                     stResp => {
                                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                        this.basicModals.alert("Refactor", "BaseURI and namespace have been updated successfully");
+                                        this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, "BaseURI and namespace have been updated successfully");
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
                                         this.nsBaseURISubmitted = true;
@@ -186,13 +186,13 @@ export class NamespacesAndImportsComponent {
                 );
             } else if (this.baseURI != this.pristineBaseURI) { //changed only baseURI
                 message += "baseURI? (Attention, baseURI refactoring could be a long process)";
-                this.basicModals.confirm("Refactor", message, ModalType.warning).then(
+                this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, message, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                             stResp => {
                                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                this.basicModals.alert("Refactor", "BaseURI has been updated successfully and refactor complete.");
+                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, "BaseURI has been updated successfully and refactor complete.");
                                 this.refreshBaseURI();
                                 this.nsBaseURISubmitted = true;
                             }
@@ -206,11 +206,11 @@ export class NamespacesAndImportsComponent {
                 )
             } else if (this.namespace != this.pristineNamespace) {//changed only namespace
                 message += "namespace?";
-                this.basicModals.confirm("Save changes", message, ModalType.warning).then(
+                this.basicModals.confirm({key:"ACTIONS.SAVE_CHANGES"}, message, ModalType.warning).then(
                     confirm => {
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
                             stResp => {
-                                this.basicModals.alert("Refactor", "Mamespace has been updated successfully");
+                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, "Mamespace has been updated successfully");
                                 this.refreshDefaultNamespace();
                                 this.nsBaseURISubmitted = true;
                             }
@@ -224,7 +224,7 @@ export class NamespacesAndImportsComponent {
                 )
             }
         } else {
-            this.basicModals.alert("Error", "Please insert valid namespace and baseURI", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.ERROR"}, "Please insert valid namespace and baseURI", ModalType.warning);
         }
     }
 
@@ -253,7 +253,7 @@ export class NamespacesAndImportsComponent {
                     },
                     (err: Error) => {
                         if (err.name.endsWith("NSPrefixMappingUpdateException")) {
-                            this.basicModals.alert("Invalid prefix", "The provided prefix is not valid, try a different one", ModalType.warning);
+                            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided prefix is not valid, try a different one", ModalType.warning);
                         }
                     }
                 )

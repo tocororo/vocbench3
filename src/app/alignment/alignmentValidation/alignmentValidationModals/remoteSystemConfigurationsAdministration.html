@@ -8,7 +8,7 @@
             <table class="table table-sm">
                 <thead>
                     <tr>
-                        <th class="text-center">{{'COMMONS.STATUS.DEFAULT'|translate}}</th>
+                        <th class="text-center">{{'STATUS.DEFAULT'|translate}}</th>
                         <th class="text-center">ID</th>
                         <th class="text-center">{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
                         <th class="text-center">{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
@@ -53,7 +53,7 @@
             <table class="table table-sm table-borderless">
                 <tbody>
                     <tr>
-                        <td><label>{{'COMMONS.STATUS.NEW'|translate}}:</label></td>
+                        <td><label>{{'STATUS.NEW'|translate}}:</label></td>
                         <td>
                             <input class="form-control form-control-sm" [(ngModel)]="newConfig.id" [placeholder]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.ID_INFO'|translate">
                         </td>
@@ -69,7 +69,7 @@
                         <td class="text-center">
                             <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.DEFAULT_CHECK_INFO'|translate">
                                 <input class="form-check-input" id="defaultCheck" type="checkbox" [(ngModel)]="newConfig.default">
-                                <label class="form-check-label" for="defaultCheck">{{'COMMONS.STATUS.DEFAULT'|translate}}</label>
+                                <label class="form-check-label" for="defaultCheck">{{'STATUS.DEFAULT'|translate}}</label>
                             </div>
                         </td>
                         <td>

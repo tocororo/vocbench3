@@ -94,7 +94,7 @@ export class QueryResultsComponent {
 
     private openGraph() {
         if ((<QueryResultBinding[]>this.queryResult).length > 100) { //limit of triples
-            this.basicModals.confirm("Graph view", "Attention: The graph you are trying to show will have a large amount of nodes and links. " + 
+            this.basicModals.confirm({key:"GRAPHS.GRAPH"}, "Attention: The graph you are trying to show will have a large amount of nodes and links. " + 
                 "It could be really confused and not much readable. Do you want to show it anyway?", ModalType.warning).then(
                 confirm => {
                     this.graphModals.openGraphQuertyResult(<GraphResultBindings[]><any>this.queryResult);

@@ -95,7 +95,7 @@ export class DataTypeRestrictionsModal {
         if (this.manchExpr != null) {
             return this.datatypeService.setDatatypeManchesterRestriction(this.datatype, this.manchExpr);
         } else {
-            this.basicModals.alert("Empty expression", "You have to provide a valid manchester expression.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, "You have to provide a valid manchester expression.", ModalType.warning);
             return null;
         }
     }
@@ -104,7 +104,7 @@ export class DataTypeRestrictionsModal {
         if (this.literalEnumerations != null && this.literalEnumerations.length > 0) {
             return this.datatypeService.setDatatypeEnumerationRestrictions(this.datatype, this.literalEnumerations);
         } else {
-            this.basicModals.alert("Missing values", "You have to provide at least one value.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, "You have to provide at least one value.", ModalType.warning);
             return null;
         }
     }
@@ -115,7 +115,7 @@ export class DataTypeRestrictionsModal {
             this.facetsDescription.facets.maxExclusive == null && this.facetsDescription.facets.maxInclusive == null &&
             (this.facetsDescription.facets.pattern == null || this.facetsDescription.facets.pattern.trim() == "")
         ) {
-            this.basicModals.alert("Missing facets", "No facets has been provided. Please, fill at least one of the available facets", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, "No facets has been provided. Please, fill at least one of the available facets", ModalType.warning);
             return null;
         }
 
@@ -129,7 +129,7 @@ export class DataTypeRestrictionsModal {
             max = this.facetsDescription.facets.maxInclusive;
         }
         if (min != null && max != null && min >= max) {
-            this.basicModals.alert("Invalid facets", "The minimun and maximum facets are inconsistent.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "The minimun and maximum facets are inconsistent.", ModalType.warning);
             return null;
         }
 
@@ -138,7 +138,7 @@ export class DataTypeRestrictionsModal {
             try {
                 new RegExp(this.facetsDescription.facets.pattern);
             } catch (e) {
-                this.basicModals.alert("Invalid pattern", "The provided pattern is not valid", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided pattern is not valid", ModalType.warning);
                 return null;
             }
         }

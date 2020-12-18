@@ -69,7 +69,7 @@ export class ResourceTripleEditorComponent {
 
     applyChanges() {
         if (VBContext.getWorkingProject().isValidationEnabled() && Cookie.getCookie(Cookie.WARNING_CODE_CHANGE_VALIDATION, VBContext.getLoggedUser().getIri()) != "false") {
-            this.basicModals.alertCheckCookie("Code editor", 
+            this.basicModals.alertCheckCookie({key: "RESOURCE_VIEW.CODE_EDITOR.CODE_EDITOR"}, 
                 "Warning: the current project has the Validation feature enabled. This changes will not undergo to validation.", 
                 Cookie.WARNING_CODE_CHANGE_VALIDATION).then(
                 () => {
@@ -91,7 +91,7 @@ export class ResourceTripleEditorComponent {
             },
             (err: Error) => {
                 if (err.name.endsWith("IllegalArgumentException")) {
-                    this.basicModals.alert("Code editor", "You cannot modify a different resource. The only admitted subject is the editing resource (" + this.resource.toNT() + ")", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "You cannot modify a different resource. The only admitted subject is the editing resource (" + this.resource.toNT() + ")", ModalType.warning);
                 }
             }
         );

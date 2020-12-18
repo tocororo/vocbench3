@@ -67,12 +67,12 @@ export class ResourceAlignmentModal {
     }
 
     enterManually() {
-        this.basicModals.prompt("Insert value manually", { value: "IRI" }).then(
+        this.basicModals.prompt({key:"ACTIONS.INSERT_VALUE_MANUALLY"}, { value: "IRI" }).then(
             valueIRI => {
                 if (ResourceUtils.testIRI(valueIRI)) {
                     this.alignedObject = new ARTURIResource(valueIRI);
                 } else {
-                    this.basicModals.alert("Invalid IRI", valueIRI + " is not a valid IRI", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, valueIRI + " is not a valid IRI", ModalType.warning);
                 }
             }
         );

@@ -353,7 +353,7 @@ export class AdvancedSearchModal {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found", ModalType.warning);
+                    this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found", ModalType.warning);
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
                     this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(

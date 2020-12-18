@@ -40,14 +40,14 @@ export class LoginComponent {
     }
 
     forgotPassword() {
-        this.basicModals.prompt("Forgot password", { value: "E-mail" }, "Insert the e-mail address of your account. " + 
+        this.basicModals.prompt({key:"USER.PASSWORD.FORGOT_PASSWORD"}, { value: "E-mail" }, "Insert the e-mail address of your account. " + 
             "You will receive an e-mail with the instructions for resetting the password").then(
             (email: string) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.userService.forgotPassword(email.trim()).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert("Forgot password", 
+                        this.basicModals.alert({key:"USER.PASSWORD.FORGOT_PASSWORD"}, 
                             "An e-mail with the instructions for resetting password has been sent to the provided address.");
                     }
                 );

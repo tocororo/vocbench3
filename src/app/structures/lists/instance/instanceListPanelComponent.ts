@@ -105,7 +105,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
+                    this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found for '" + searchedText + "'", ModalType.warning);
                     return;
                 }
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -175,7 +175,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
         } else {
             if (types.length == 1) {
                 return from(
-                    this.basicModals.confirm("Search", "Searched instance " + individual.getShow() + " belong to a class currently not selected " + 
+                    this.basicModals.confirm({key:"SEARCH.SEARCH"}, "Searched instance " + individual.getShow() + " belong to a class currently not selected " + 
                         types[0].getShow() + ". Do you want to switch class?").then(
                         () => { //confirmed => switch class
                             return types[0];

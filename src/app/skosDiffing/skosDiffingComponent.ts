@@ -68,7 +68,7 @@ export class SkosDiffingComponent {
             },
             (err: Error) => {
                 this.serverDown = true;
-                this.basicModals.alert("SKOS diffing server error", "The SKOS diffing server didn't respond, "
+                this.basicModals.alert({key:"STATUS.ERROR"}, "The SKOS diffing server didn't respond, "
                     + "make sure it is up and running.", ModalType.warning);
             }
         );

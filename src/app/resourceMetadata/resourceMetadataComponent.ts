@@ -79,7 +79,7 @@ export class ResourceMetadataComponent {
             message += "Note: the Metadata Pattern is used in one (or more) association. By deleting the pattern, the association(s) will be deleted as well.\n"
         }
         message += "Do you want to continue?";
-        this.basicModals.confirm("Delete Metadata Pattern", message, ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_PATTERN"}, message, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
                     () => {
@@ -95,10 +95,10 @@ export class ResourceMetadataComponent {
     }
 
     clonePattern() {
-        this.basicModals.prompt("Clone Metadata Pattern", { value: "Name", tooltip: "The name of the new pattern" }).then(
+        this.basicModals.prompt({key:"ACTIONS.CLONE_METADATA_PATTERN"}, { value: "Name", tooltip: "The name of the new pattern" }).then(
             (patternName: string) => {
                 if (this.patterns.some(p => p.name == patternName)) {
-                    this.basicModals.alert("Already existing Pattern", "A Metadata Pattern with the name '" + patternName + "' already exists", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, "A Metadata Pattern with the name '" + patternName + "' already exists", ModalType.warning);
                     return;
                 }
                 this.resourceMetadataService.clonePattern(this.selectedPattern.reference, patternName).subscribe(
@@ -189,7 +189,7 @@ export class ResourceMetadataComponent {
     }
 
     deleteAssociation() {
-        this.basicModals.confirm("Delete Metadata Association", "You are deleting the association between '" + this.selectedAssociation.role + 
+        this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_ASSOCIATION"}, "You are deleting the association between '" + this.selectedAssociation.role + 
             "' and '" + this.selectedAssociation.pattern.reference + "'. Are you sure?", ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deleteAssociation(this.selectedAssociation.ref).subscribe(

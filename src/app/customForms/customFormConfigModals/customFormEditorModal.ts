@@ -128,7 +128,7 @@ export class CustomFormEditorModal {
         this.cfService.validatePearl(this.ref, this.type).subscribe(
             (result: PearlValidationResult) => {
                 if (!result.valid) {
-                    this.basicModals.alert("Invalid PEARL", "Cannot infer annotations on an invalid PEARL:\n" + result.details, ModalType.error);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot infer annotations on an invalid PEARL:\n" + result.details, ModalType.error);
                     return;
                 }
                 this.cfService.inferPearlAnnotations(this.ref).subscribe(
@@ -251,7 +251,7 @@ export class CustomFormEditorModal {
             serializedPropChain = serializedPropChain.slice(0, -1);//delete last ","
         }
 
-        this.basicModals.prompt("Edit property chain", null, "Write the chain as sequence of comma (,) separated IRIs (QNames are accepted as well)",
+        this.basicModals.prompt({key:"ACTIONS.EDIT_PROPERTY_CHAIN"}, null, "Write the chain as sequence of comma (,) separated IRIs (QNames are accepted as well)",
             serializedPropChain, true).then(
             (value: any) => {
                 var chain: string = String(value).trim();
@@ -302,7 +302,7 @@ export class CustomFormEditorModal {
         this.cfService.validatePearl(this.ref, this.type).subscribe(
             (result: PearlValidationResult) => {
                 if (!result.valid) {
-                    this.basicModals.alert("Invalid PEARL", result.details, ModalType.error);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, result.details, ModalType.error);
                     return;
                 }
                 if (this.description == null) { //set empty definition if it is not provided (prevent setting "undefined" as definition of CRE)

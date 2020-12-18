@@ -30,7 +30,7 @@ export class ResetPasswordComponent {
         this.userService.resetPassword(this.email, this.token).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert("Reset password", "Password has been successfully reset. "
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Password has been successfully reset. "
                     + "You will receive an e-mail with the new temporary password.").then(
                     confirm => {
                         this.router.navigate(["/Home"]);

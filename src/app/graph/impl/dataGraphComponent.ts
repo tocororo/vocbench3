@@ -46,7 +46,7 @@ export class DataGraphComponent extends AbstractGraph {
 
     addNode(res: ARTURIResource) {
         if (this.graph.getNode(res)) {
-            this.basicModals.alert("Add node", "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", ModalType.warning);
             return;
         }
 

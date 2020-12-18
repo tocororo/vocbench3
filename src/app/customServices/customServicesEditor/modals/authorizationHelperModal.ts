@@ -143,7 +143,7 @@ export class AuthorizationHelperModal {
 
             if (authMatch == null) {
                 //cannot parse the input authorizations
-                this.basicModals.alert("Operation authorization", "Unable to parse authorization you're trying to edit (" + 
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "Unable to parse authorization you're trying to edit (" + 
                     this.authorization + "). The form has not been restored.", ModalType.warning);
             } else {
                 /* 

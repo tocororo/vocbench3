@@ -88,16 +88,16 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
             if (err.name == "it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException") {
                 if (err.message.includes("HttpHostConnectException")) {
                     this.serverDown = true;
-                    this.basicModals.alert("Alignment Service server error", "The Alignment Service server didn't respond, "
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "The Alignment Service server didn't respond, "
                         + "make sure it is up and running or the configuration is correct", ModalType.warning);
                 } else {
-                    this.basicModals.alert("Alignment Service server error", err.message, ModalType.warning, err.stack);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, err.message, ModalType.warning, err.stack);
                 }
             } else if (err.name == "java.lang.IllegalStateException") {
                 if (err.message.includes("No alignement service configured")) {
                     this.serviceNotConfigured = true;
                 } else {
-                    this.basicModals.alert("Alignment Service error", err.message, ModalType.error, err.stack);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, err.message, ModalType.error, err.stack);
                 }
             }
         }
@@ -148,8 +148,9 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
      */
     private profileProject(project: Project, datasetPosition: DatasetPosition): Observable<boolean> {
         return from(
-            this.basicModals.confirm("Unavailable metadata", "Unable to find metadata about the " + datasetPosition + 
-                " project '" + project.getName() +  "', do you want to generate them? (Required for the alignment)").then(
+            this.basicModals.confirm({key:"ALIGNMENT.VALIDATION.REMOTE_SYS.CREATE_TASK.METADATA_PROFILE_NOT_AVAILABLE"},
+                "Unable to find metadata about the " + datasetPosition + " project '" + project.getName() + 
+                "', do you want to generate them? (Required for the alignment)").then(
                 confirm => {
                     HttpServiceContext.setContextProject(project);
                     UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);

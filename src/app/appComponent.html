@@ -38,18 +38,18 @@
             </li>
             <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item dropdown" ngbDropdown display="dynamic">
                 <a [routerLink]="" class="nav-link dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-                    {{'APP.NAVBAR.TOOLS.TITLE'|translate}}
+                    {{'APP.NAVBAR.TOOLS'|translate}}
                     <span class="fas fa-caret-down ml-1"></span>
                 </a>
                 <div class="dropdown-menu" style="font-size: 12px; line-height: 20px;" ngbDropdownMenu>
-                    <a *ngIf="isAlignValidationAuthorized()" class="dropdown-item" [routerLink]="['/AlignmentValidation']">{{'APP.NAVBAR.TOOLS.ALIGNMENT_VALIDATION'|translate}}</a>
-                    <a *ngIf="isCollaborationAuthorized()" class="dropdown-item" [routerLink]="['/Collaboration']">{{'APP.NAVBAR.TOOLS.COLLABORATION_SYSTEM'|translate}}</a>
-                    <a *ngIf="isCustomFormAuthorized()" class="dropdown-item" [routerLink]="['/CustomForm']">{{'APP.NAVBAR.TOOLS.CUSTOM_FORMS'|translate}}</a>
-                    <a *ngIf="isCustomServicesAuthorized()" class="dropdown-item" [routerLink]="['/CustomServices']">{{'APP.NAVBAR.TOOLS.CUSTOM_SERVICES_AND_REPORTS'|translate}}</a>
-                    <a class="dropdown-item" [routerLink]="['/Icv']">{{'APP.NAVBAR.TOOLS.ICV'|translate}}</a>
-                    <a *ngIf="isResourceMetadataAuthorized()" class="dropdown-item" [routerLink]="['/ResourceMetadata']">{{'APP.NAVBAR.TOOLS.RESOURCE_METADATA'|translate}}</a>
-                    <a *ngIf="isSheet2RdfAuthorized()" class="dropdown-item" [routerLink]="['/Sheet2RDF']">{{'APP.NAVBAR.TOOLS.SHEET2RDF'|translate}}</a>
-                    <a *ngIf="isSkosDiffingAuthorized()" class="dropdown-item" [routerLink]="['/SkosDiffing']">{{'APP.NAVBAR.TOOLS.SKOS_DIFFING'|translate}}</a>
+                    <a *ngIf="isAlignValidationAuthorized()" class="dropdown-item" [routerLink]="['/AlignmentValidation']">{{'ALIGNMENT.VALIDATION.ALIGNMENT_VALIDATION'|translate}}</a>
+                    <a *ngIf="isCollaborationAuthorized()" class="dropdown-item" [routerLink]="['/Collaboration']">{{'COLLABORATION.COLLABORATION_SYSTEM'|translate}}</a>
+                    <a *ngIf="isCustomFormAuthorized()" class="dropdown-item" [routerLink]="['/CustomForm']">{{'"CUSTOM_FORMS.FORMS.CUSTOM_FORMS'|translate}}</a>
+                    <a *ngIf="isCustomServicesAuthorized()" class="dropdown-item" [routerLink]="['/CustomServices']">{{'APP.NAVBAR.CUSTOM_SERVICES_AND_REPORTS'|translate}}</a>
+                    <a class="dropdown-item" [routerLink]="['/Icv']">{{'ICV.ICV'|translate}}</a>
+                    <a *ngIf="isResourceMetadataAuthorized()" class="dropdown-item" [routerLink]="['/ResourceMetadata']">ResourceMetadata</a>
+                    <a *ngIf="isSheet2RdfAuthorized()" class="dropdown-item" [routerLink]="['/Sheet2RDF']">Sheet2RDF</a>
+                    <a *ngIf="isSkosDiffingAuthorized()" class="dropdown-item" [routerLink]="['/SkosDiffing']">SKOS diffing</a>
                 </div>
             </li>
         </ul>

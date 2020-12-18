@@ -94,12 +94,12 @@ export class CreateDiffingTaskModal {
         }
         if (this.mode == DiffingMode.projects) {
             if (!this.leftDataset.project.isRepositoryRemote()) {
-                this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on project '" + this.leftDataset.project.getName() 
+                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on project '" + this.leftDataset.project.getName() 
                     + "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }
             if (!this.rightDataset.project.isRepositoryRemote()) {
-                this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on project '" + this.rightDataset.project.getName() 
+                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on project '" + this.rightDataset.project.getName() 
                     + "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }
@@ -111,23 +111,23 @@ export class CreateDiffingTaskModal {
         } else { //versions
             //check if selected versions are different
             if (this.leftDataset.version == this.rightDataset.version) {
-                this.basicModals.alert("SKOS diffing", "Cannot compare two identical versions of the project", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot compare two identical versions of the project", ModalType.warning);
                 return;
             }
             //check if selected versions are remote
             if ((this.leftDataset.version.repositoryId == null || this.leftDataset.version.repositoryId == null) && !this.leftDataset.project.isRepositoryRemote()) {
                 //current version of a local project
-                this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on version 'CURRENT' since it is hosted on a " + 
+                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on version 'CURRENT' since it is hosted on a " + 
                     "repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }
             if (this.leftDataset.version.repositoryId != null && this.leftDataset.version.repositoryLocation != RepositoryLocation.REMOTE) {
-                this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on version '" + this.leftDataset.version.versionId + 
+                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on version '" + this.leftDataset.version.versionId + 
                     "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }
             if (this.rightDataset.version.repositoryId != null && this.rightDataset.version.repositoryLocation != RepositoryLocation.REMOTE) {
-                this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on version '" + this.rightDataset.version.versionId + 
+                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on version '" + this.rightDataset.version.versionId + 
                     "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }

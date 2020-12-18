@@ -88,7 +88,7 @@ export class InvokableReporterComponent {
 
     compileReport() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
-            this.basicModals.alert("Compile report", "The reporter cannot be compiled since it has no service invocation provided", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, "The reporter cannot be compiled since it has no service invocation provided", ModalType.warning);
         } else {
             UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.invokableReporterService.compileReport(this.ref.relativeReference, false).subscribe(
@@ -105,7 +105,7 @@ export class InvokableReporterComponent {
 
     compileAndDownloadReport() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
-            this.basicModals.alert("Download report", "The reporter cannot be compiled since it has no service invocation provided", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, "The reporter cannot be compiled since it has no service invocation provided", ModalType.warning);
         } else {
             UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.invokableReporterService.compileAndDownloadReport(this.ref.relativeReference, this.selectedReportFormat.value).subscribe(
@@ -123,9 +123,9 @@ export class InvokableReporterComponent {
 
     private compilationErrorHandler(error: Error) {
         if (error.name.endsWith("InvokableReporterException") && error.message.includes("AccessDeniedException")) { //not enough privileges
-            this.basicModals.alert("Error", "You have not enough priviledges for invoking one (or more) service invocation performed by this report.", ModalType.error, error.message);
+            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "You have not enough priviledges for invoking one (or more) service invocation performed by this report.", ModalType.error, error.message);
         } else { //if not due to access denied show in error modal
-            this.basicModals.alert("Error", error.message, ModalType.error, error.stack);
+            this.basicModals.alert({key:"STATUS.ERROR"}, error.message, ModalType.error, error.stack);
         }
     }
     

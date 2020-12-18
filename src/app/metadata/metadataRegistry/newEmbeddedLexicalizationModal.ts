@@ -45,7 +45,7 @@ export class NewEmbeddedLexicalizationModal {
             if (ResourceUtils.testIRI(this.lexicalizationSet)) {
                 lexicalizationSetPar = new ARTURIResource(this.lexicalizationSet);
             } else {
-                this.basicModals.alert("Invalid data", "'" + this.lexicalizationSet + "' is not a valid IRI", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + this.lexicalizationSet + "' is not a valid IRI", ModalType.warning);
                 return;
             }
         }
@@ -53,14 +53,14 @@ export class NewEmbeddedLexicalizationModal {
             if (ResourceUtils.testIRI(this.lexiconDataset)) {
                 lexiconDatasetPar = new ARTURIResource(this.lexiconDataset);
             } else {
-                this.basicModals.alert("Invalid data", "'" + this.lexiconDataset + "' is not a valid IRI", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + this.lexiconDataset + "' is not a valid IRI", ModalType.warning);
                 return;
             }
         }
 
         let langRegexp = new RegExp("^[a-z]{2,3}(?:-[A-Z]{2,3}(?:-[a-zA-Z]{4})?)?$");
         if (!langRegexp.test(this.language)) {
-            this.basicModals.alert("Invalid data", "'" + this.language + "' is not a valid language tag", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + this.language + "' is not a valid language tag", ModalType.warning);
             return;
         }
 

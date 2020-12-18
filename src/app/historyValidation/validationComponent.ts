@@ -108,7 +108,7 @@ export class ValidationComponent extends AbstractHistValidComponent {
     }
 
     private editComment(commit: CommitInfo) {
-        this.basicModals.prompt("Comment", null, null, commit[this.COMMENT_ATTR]).then(
+        this.basicModals.prompt({key:"ACTIONS.COMMENT"}, null, null, commit[this.COMMENT_ATTR]).then(
             comment => {
                 commit[this.COMMENT_ATTR] = comment;
             },

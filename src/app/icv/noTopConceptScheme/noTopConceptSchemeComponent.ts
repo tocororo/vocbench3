@@ -67,7 +67,7 @@ export class NoTopConceptSchemeComponent {
                     },
                     (err: Error) => {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
-                            this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
+                            this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
                                 confirm => {
                                     this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
                                         stResp => {
@@ -89,7 +89,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by deleting it 
      */
     deleteScheme(scheme: ARTURIResource) {
-        this.basicModals.confirm("Delete scheme", "Warning, deleting this scheme, if it contains some concepts, " +
+        this.basicModals.confirm({key:"DATA.SCHEME.DELETE"}, "Warning, deleting this scheme, if it contains some concepts, " +
             "will generate concepts in no scheme. Are you sure to proceed?").then(
             result => {
                 this.skosService.deleteConceptScheme(scheme).subscribe(
@@ -106,7 +106,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes schemes by deleting them all 
      */
     deleteAllScheme() {
-        this.basicModals.confirm("Delete scheme", "Warning, deleting the schemes, if they contain some concepts, " +
+        this.basicModals.confirm({key:"DATA.SCHEME.DELETE"}, "Warning, deleting the schemes, if they contain some concepts, " +
             "will generate concepts in no scheme. Are you sure to proceed?").then(
             confirm => {
                 var deleteSchemeFnArray: any[] = [];

@@ -373,7 +373,7 @@ export class Sheet2RdfComponent {
 
     generateTriples() {
         if (this.pearlValidation != null && !this.pearlValidation.valid) {
-            this.basicModals.alert("Invalid pearl code", "Pearl code contains errors.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.ERROR"}, "Pearl code contains errors.", ModalType.warning);
             return;
         } else {
             this.invokeGetTriplesPreview();
@@ -418,7 +418,7 @@ export class Sheet2RdfComponent {
         this.s2rdfService.addTriples().subscribe(
             resp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert("Triples added", "The generated triples have been added");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "The generated triples have been added");
             }
         )
 

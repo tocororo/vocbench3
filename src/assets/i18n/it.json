@@ -26,7 +26,6 @@
                 "GROUPS": {
                     "ASSIGNED_GROUP": "Gruppo assegnato",
                     "AVAILABLE_GROUPS": "Gruppi disponibili",
-                    "APPLY_RESTRICTIONS": "Applica restrizioni",
                     "RESTRICTIONS_APPLIED": "Restrizioni applicate",
                     "RESTRICTIONS_INFO": "Se abilitato, l'utente è soggetto alle limitazioni del gruppo"
                 },
@@ -34,10 +33,7 @@
                     "ASSIGNED_LANGUAGES": "Lingue assegnate",
                     "AVAILABLE_LANGUAGES": "Lingue disponibili",
                     "LANG_PROFICIENCIES_INFO": "Questa lingua è una competenza linguistica dell'utente selezionato",
-                    "LANGUAGE_ADMIN_INFO": "Per l'utente amministratore, nessuna lingua assegnata implica tutte le lingue di progetto",
-                    "ADD_ALL_PROFICIENCIES": "Aggiungi tutte le lingue di competenza",
-                    "LEAVE_ONLY_PROFICIENCIES": "Lascia solo le lingue di competenza",
-                    "SHOW_ONLY_PROFICIENCIES": "Mostra solo le lingue di competenza dell'utente"
+                    "LANGUAGE_ADMIN_INFO": "Per l'utente amministratore, nessuna lingua assegnata implica tutte le lingue di progetto"
                 },
                 "TEMPLATE": {
                     "RES_VIEW_TEMPLATE": "Template del ResourceView",
@@ -50,8 +46,6 @@
             "TOPIC": "Topic",
             "AREA": "Area",
             "SUBJECT_AND_SCOPE": "Soggetto e scope",
-            "IMPORT_ROLE": "Importa ruolo",
-            "EXPORT_ROLE": "Esporta ruolo",
             "ROLE_NAME": "Nome ruolo"
         },
         "SYSTEM": {
@@ -72,7 +66,8 @@
                 "AUTHENTICATION_INFO": "Indica se il server SMTP richiede l'autenticazione",
                 "MAIL_FROM": "Indirizzo email usato per inviare email di amministrazione",
                 "MAIL_PASSWORD": "Password del suddetto indirizzo email",
-                "MAIL_ALIAS": "Alias mostrato nelle email di amministrazione"
+                "MAIL_ALIAS": "Alias mostrato nelle email di amministrazione",
+                "EMAIL_CONFIG_TEST": "Test configurazione email"
             },
             "NOTIFICATIONS": {
                 "NOTIFICATION_SCHEDULER": "Scheduler delle notifiche",
@@ -80,9 +75,7 @@
                 "HOURS_OF_DAY": "Ora del giorno",
                 "HOURS_OF_DAY_INFO": "L'ora del giorno in cui il report verrà inviato quotidianamente",
                 "TIMEZONE_ID_INFO": "ID di una timezone",
-                "DETECT": "Rileva",
                 "DETECT_INFO": "Rileva la timezone del browser",
-                "DISABLE": "Disabilita",
                 "DISABLE_INFO": "Disabilita la sintesi giornaliera delle notifiche"
             },
             "REGISTRATION_FORM": {
@@ -99,11 +92,7 @@
             }
         },
         "USERS": {
-            "CREATE_USER": "Crea utente",
             "USER_DETAILS": "Dettagli utente",
-            "SHOW_HIDE_ACTIVE_USER": "Mostra/nascondi utenti attivi",
-            "SHOW_HIDE_INACTIVE_USER": "Mostra/nascondi utenti inattivi",
-            "SHOW_HIDE_NEW_USER": "Mostra/nascondi nuovi utenti",
             "ADMINISTRATOR": "Amministratore",
             "ADMIN_ASSIGNED_PROJECTS_INFO": "L'amministratore ha automaticamente accesso a tutti i progetti",
             "ASSIGNED_TO_PROJECTS": "Assegnato ai progetti",
@@ -147,7 +136,6 @@
                     "START_VALIDATION": "Inizia validazione"
                 },
                 "CREATE_TASK": {
-                    "PROFILE_PROJECT": "Profila progetto",
                     "METADATA_PROFILE_AVAILABLE": "Profilo metadati disponibile",
                     "METADATA_PROFILE_NOT_AVAILABLE": "Profilo metadati non disponibile",
                     "PROFILE_MATCHING": "Profila matching",
@@ -213,17 +201,8 @@
             "SPARQL": "SPARQL",
             "HISTORY": "Storico",
             "VALIDATION": "Validazione",
-            "TOOLS": {
-                "TITLE": "Strumenti",
-                "ALIGNMENT_VALIDATION": "Validazione Allineamenti",
-                "COLLABORATION_SYSTEM": "Sistema Collaborativo",
-                "CUSTOM_FORMS": "Custom Form",
-                "CUSTOM_SERVICES_AND_REPORTS": "Custom Service e Report",
-                "ICV": "Validatore dei Vincoli di Integrità (ICV)",
-                "RESOURCE_METADATA": "ResourceMetadata",
-                "SHEET2RDF": "Sheet2RDF",
-                "SKOS_DIFFING": "SKOS Diffing"
-            },
+            "TOOLS": "Strumenti",
+            "CUSTOM_SERVICES_AND_REPORTS": "Custom Service e Report",
             "USER_MENU": {
                 "VIEW_PROFILE": "Mostra profilo",
                 "PREFERENCES": "Preferenze",
@@ -243,7 +222,6 @@
             "GLOBAL_DATA_MENU": {
                 "GLOBAL_DATA_MANAGEMENT": "Gestione dei dati globali",
                 "VERSIONING": "Versioning",
-                "REFACTOR": "Refactor",
                 "LOAD_SHACL_SHAPES": "Carica SHACL shapes",
                 "EXPORT_SHACL_SHAPES": "Esporta SHACL shapes",
                 "CLEAR_SHACL_SHAPES": "Elimina SHACL shapes"
@@ -427,7 +405,6 @@
             "NO_SCHEME_SELECTED_WARN": "Nessun ConceptScheme selezionato, le operazioni di creazione sono disabilitate",
             "USE_SEARCH_MSG": "Usa il campo di ricerca per recuperare concetti",
             "ADD_TO_SCHEME": {
-                "ADD_CONCEPT_TO_SCHEME": "Aggiungi concetti a schema",
                 "CONFIRM_MSG": "Stai per aggiongere il concetto '{{concept}}' e i suoi discendenti allo schema '{{scheme}}'. Sei sicuro?",
                 "SET_TOP_CONCEPT": "Setta top concept",
                 "SET_TOP_CONCEPT_INFO": "Se selezionato, imposta il concetto indicato come top concept dello schema destinazione",
@@ -464,8 +441,11 @@
         "INSTANCE": {
             "INSTANCE": "Istanza",
             "INSTANCES": "Istanze",
-            "CREATE": "Create instance",
-            "DELETE": "Delete instance",
+            "CREATE": "Crea istanza",
+            "DELETE": "Cancella istanza",
+            "UNSAFE_WARN": {
+                "TOO_MANY_ELEM": "Troppe istanze"
+            },
             "SETTINGS": {
                 "INSTANCE_LIST_SETTINGS": "Impostazione lista istanze"
             }
@@ -562,12 +542,14 @@
             "FORCE_FORMAT_INFO": "Consente di forzare la selezione di un formato sovrascrivendo quello rilevato dal sistema"
         },
         "REFACTOR": {
+            "REFACTOR": "Refactor",
             "DATA_REFACTOR": "Data refactoring",
+            "SKOS_TO_SKOSXL": "SKOS a SKOS-XL",
+            "SKOSXL_TO_SKOS": "SKOS-XL a SKOS",
             "SKOS_TO_SKOSXL_INFO": "Questa operazione trasforma tutte le label e le note SKOS in label e note reificate SKOS-XL.",
             "REIFY_NOTES": "Reifica note SKOS",
             "SKOSXL_TO_SKOS_INFO": "Questa operazione trasforma tutte le label e le note SKOS-XL (reificate) in label e note SKOS. Nota: Questa non è un'operazione loss-less, tutte le informazioni relative alle label e note SKOS-XL andranno perse.",
             "FLATTEN_NOTES": "Dereifica note SKOS",
-            "MIGRATE_DATA": "Migra i dati nel grafo baseURI",
             "MIGRATE_INFO": "Questa operazione sposta il contenuto del grafo di default verso un grafo con lo stesso IRI del baseURI del progetti. Verrà cancellato inoltre il grafo di default mentre saranno preservate le informazioni già presenti nel grafo di destinazione."
         },
         "VERSIONING": {
@@ -597,6 +579,7 @@
         "CHANGE_MEASURE": "Modifica confidenza"
     },
     "GRAPHS": {
+        "GRAPH": "Grafo",
         "ADD_NEW_NODE": "Aggiungi nuovo nodo",
         "DELETE_SELECTED_NODE": "Rimuovi nodo selezionato",
         "EXPAND_SUB_RESOURCES": "Espandi risorse figlie",
@@ -879,7 +862,6 @@
                 "CATALOG_RECORDS": "Catalog Records",
                 "ADD_DATASET": "Aggiungi Dataset",
                 "ADD_CATALOG_RECORD": "Aggiungi Catalog record",
-                "DISCOVER_DATASET": "Trova dataset",
                 "DELETE_DATASET": "Cancella Dataset",
                 "ISSUED": "Pubblicato",
                 "MODIFIED": "Modificato",
@@ -1004,6 +986,7 @@
             "CONSUMER": "Consumer",
             "BASE_URI": "Base URI",
             "DATA_REPO_ID": "ID repository dati",
+            "DESCRIPTION": "Descrizione progetto",
             "LEXICALIZATION": "Lessicalizzazione",
             "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
             "MODEL": "Modello",
@@ -1117,7 +1100,6 @@
         "ACCESSED": "Acceduto",
         "BLACKLIST": "Lista nera",
         "BLACKLIST_INFO": "Abilita questa opzione per mettere in lista nera i termini che sono stati respinti tramite la validazione",
-        "CREATE_PROJECT": "Crea progetto",
         "ENABLE_SHAPE_VALIDATION": "Abilita validazione shape",
         "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
         "HISTORY_INFO": "Abilita questa opzione per tenere traccia delle modifiche effettuate sul grafo di lavoro",
@@ -1140,6 +1122,7 @@
         "USE_RESOURCE_METADATA_INFO": "L'utilizzo del Resource Metadata può essere abilitato anche dopo la creazione del progetto",
         "VALIDATION_INFO": "Abilita questa opzione per tenere traccia delle richieste di modifiche in modo da validarle in un secondo momento (accettarle o rifiutarle)",
         "ACL": {
+            "ACL_MATRIX": "Matrice ACL",
             "SHOW_ACL_MATRIX": "Mostra matrice ACL",
             "PROJECT_ACL": "ACL progetto",
             "ACL_OF_PROJECT": "Access Control List del progetto",
@@ -1185,8 +1168,7 @@
             "DIRECTORIES": "Cartelle",
             "PROJ_INFO": "Info progetti",
             "PROJ_INFO_INFO": "Da qui è possibile mostrare o nascondeere le informazioni dei progetti e personalizzarne l'ordine",
-            "COL_NAME": "Nome colonna",
-            "RESTORE_DEFAULT": "Ripristina default"
+            "COL_NAME": "Nome colonna"
         }
     },
     "RESOURCE_METADATA": {
@@ -1262,8 +1244,8 @@
             "DELETE_ALL_VALUES": "Cancella tutti i valori",
             "CHANGE_PROPERTY": "Cambia proprietà",
             "EDIT_LITERAL_CONTENT": "Modifica contenuto letterale",
-            "BULD_EDIT": "Modifica di massa",
-            "BULD_EDIT_INFO": "Aggiorna il valore per ogni risorsa che ha questa relazione predicato-oggetto",
+            "BULK_EDIT": "Modifica di massa",
+            "BULK_EDIT_INFO": "Aggiorna il valore per ogni risorsa che ha questa relazione predicato-oggetto",
             "REPLACE_WITH_EXISTING_RES": "Rimpiazza con risorsa esistente",
             "SPAWN_FROM_XLABEL": "Genera nuovo concetto da questa xLabel",
             "MOVE_XLABEL_TO_CONCEPT": "Assegna xLabel ad un altro concetto",
@@ -1296,6 +1278,7 @@
             "TARGET_LANGS": "Lingue target"
         },
         "CODE_EDITOR": {
+            "CODE_EDITOR": "Code editor",
             "APPLY_CHANGES": "Applica modifiche",
             "DISABLED_UNDER_VALIDATION": "Il tab Code è stato disabilitato in quanto questa risorsa - o parte della sua descrizione - è sotto validazione"
         },
@@ -1308,6 +1291,7 @@
         }
     },
     "SEARCH": {
+        "SEARCH": "Ricerca",
         "ADV_SEARCH": {
             "ADVANCED_SEARCH": "Ricerca avanzata",
             "SEARCH_STRING": "Cerca parola",
@@ -1391,6 +1375,7 @@
             "EDIT_SUBJECT_HEADER": "Modifica header soggetto",
             "ROWS": "Righe",
             "LOAD_STATUS": "Carica Mapping Status",
+            "MULTIPLE_HEADERS": "Header multipli",
             "LEGEND": {
                 "LEGEND": "Legenda",
                 "NOT_CONFIGURED": "Header non configurato",
@@ -1593,14 +1578,6 @@
             "PREV_PAGE": "Pagina precedente",
             "NEXT_PAGE": "Pagina successiva"
         },
-        "STATUS": {
-            "ACTIVE": "Attivo",
-            "DEFAULT": "Default",
-            "ENABLED": "Abilitato",
-            "INACTIVE": "Non attivo",
-            "NEW": "Nuovo",
-            "STATUS": "Stato"
-        },
         "DESCRIPTION": "Descrizione",
         "DETAILS": "Dettagli",
         "FORCE_FORMAT": "Forza il formato",
@@ -1631,29 +1608,62 @@
         "ACTION": "Azione",
         "ACTIONS": "Azioni",
         "ADD": "Aggiungi",
+        "ADD_ADMINISTRATOR": "Aggiungi amministratore",
         "ADD_AFTER": "Aggiungi dopo",
         "ADD_ALL": "Aggiungi tutto",
+        "ADD_ALL_PROFICIENCIES": "Aggiungi tutte le lingue di competenza",
         "ADD_BEFORE": "Aggiungi prima",
+        "ADD_CONCEPT_TO_SCHEME": "Aggiungi concetti a schema",
         "ADD_FIRST": "Aggiungi all'inizio",
         "ADD_LAST": "Aggiungi alla fine",
+        "ADD_MEMBER": "Aggiungi membro",
         "ADD_USER_TO_PROJ": "Aggiungi utente al progetto",
+        "APPLY_RESTRICTIONS": "Applica restrizioni",
         "ASSIGN": "Assegna",
         "CANCEL": "Cancella",
+        "CHANGE_RELATION": "Cambia relazione",
         "CHECK_ALL": "Seleziona tutto",
         "CLEAR_DATA": "Elimina dati",
         "CLONE": "Clona",
+        "CLONE_CUSTOM_FORM": "Clona CustomForm",
+        "CLONE_FORM_COLLECTION": "Clona FormCollection",
+        "CLONE_METADATA_PATTERN": "Clona Metadata Pattern",
+        "CLONE_ROLE": "Clona ruolo",
         "CLOSE": "Chiudi",
+        "COMMENT": "Commenta",
         "CONFIRM": "Conferma",
         "CREATE": "Crea",
+        "CREATE_PROJECT": "Crea progetto",
+        "CREATE_ROLE": "Crea ruolo",
         "CREATE_TASK": "Crea task",
+        "CREATE_USER": "Crea utente",
+        "CREATE_VERSION_DUMP": "Crea un version dump",
         "DELETE": "Elimina",
         "DELETE_ALL": "Cancella tutto",
+        "DELETE_ALL_VALUES": "Cancella tutti i valori",
+        "DELETE_CONFIGURATION": "Cancella configurazione",
+        "DELETE_CONSTITUENT": "Cancella costituenti",
+        "DELETE_CUSTOM_FORM": "Cancella CustomForm",
+        "DELETE_CUSTOM_SERVICE": "Cancella CustomService",
+        "DELETE_FORM_COLLECTION": "Cancella FormCollection",
+        "DELETE_INVOKABLE_REPORTER": "Cancella Invokable Reporter",
+        "DELETE_MEMBER": "Cancella membro",
+        "DELETE_METADATA_ASSOCIATION": "Cancella Metadata Association",
+        "DELETE_METADATA_PATTERN": "Cancella Metadata Pattern",
+        "DELETE_NODE": "Cancella nodo",
+        "DELETE_PROJECT": "Cancella progetto",
+        "DELETE_USER": "Cancella utente",
+        "DETECT": "Rileva",
+        "DISABLE": "Disabilita",
         "DISCARD": "Scarta",
+        "DISCOVER_DATASET": "Trova dataset",
+        "DUPLICATE_SETTINGS": "Duplica impostazioni",
         "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ": "Duplica impostazioni in altro progetto",
         "EDIT": "Modifica",
         "EDIT_ACL": "Modifica ACL",
         "EDIT_MANUALLY": "Modifica manualmente",
         "EDIT_PROJECT_ACL": "Modifica ACL progetto",
+        "EDIT_PROPERTY_CHAIN": "Modifica property chain",
         "ENABLE": "Abilita",
         "ENABLE_ALL": "Abilita tutto",
         "EXPORT": "Esporta",
@@ -1661,64 +1671,78 @@
         "EXPORT_FORM_COLLECTION": "Esporta FormCollection",
         "EXPORT_GRAPH_SNAPSHOT": "Esporta un'istantanea del grafo (.svg)",
         "EXPORT_MAPPING_STATUS": "Esporta Mapping Status",
+        "EXPORT_METADATA": "Esporta metadati",
+        "EXPORT_METADATA_PATTERN": "Esporta metadata pattern",
+        "EXPORT_PEARL": "Esporta PEARL",
+        "EXPORT_ROLE": "Esporta ruolo",
+        "EXPORT_SKOS_DIFFING_RESULT": "Scarica risultato dello SKOS diffing",
+        "EXPORT_TRIPLES": "Esporta triple",
         "IMPORT": "Importa",
+        "IMPORT_ROLE": "Importa ruolo",
+        "INSERT_VALUE_MANUALLY": "Inserisci valore manualmente",
+        "LEAVE_ONLY_PROFICIENCIES": "Lascia solo le lingue di competenza",
         "LOAD": "Carica",
         "LOAD_DATA": "Carica dati",
         "LOCK_UNLOCK_NAMESPACE": "Blocca/sblocca namespace",
+        "MIGRATE_DATA_TO_BASEURI_GRAPH": "Migra i dati nel grafo baseURI",
         "MOVE_AFTER": "Sposta prima",
         "MOVE_BEFORE": "Sposta dopo",
         "MOVE_DOWN": "Sposta giù",
         "MOVE_UP": "Sposta su",
+        "PICK_RESOURCE": "Seleziona risorsa",
+        "PROFILE_PROJECT": "Profila progetto",
         "REFRESH": "Aggiorna",
         "REJECT": "Rifiuta",
         "RELOAD": "Ricarica",
         "REMOVE": "Rimuovi",
         "REMOVE_ALL": "Rimuovi tutto",
+        "REMOVE_FROM_SCHEME": "Rimuovi da schema",
+        "REMOVE_USER": "Rimuovi utente",
         "REMOVE_USER_FROM_PROJ": "Rimuovi utente dal progetto",
+        "RENAME_NODE": "Rinomina nodo",
+        "RENAME_PROJECT_DIRECTORY": "Rinomina cartella progetto",
         "RESET": "Reset",
+        "RESET_COLLABORATION_SYSTEM": "Resetta Collaboration System",
+        "RESTORE_DEFAULT": "Ripristina default",
+        "REVOKE_ADMINISTRATOR": "Revoca amministratore",
         "SAVE": "Salva",
+        "SAVE_CHANGES": "Salva modifiche",
         "SEARCH": "Cerca",
         "SELECT": "Seleziona",
+        "SELECT_CONSTRUCTOR": "Seleziona constructor",
+        "SELECT_CUSTOM_RANGE": "Seleziona un Custom Range",
+        "SELECT_RANGE": "Seleziona un range",
+        "SELECT_RANGE_TYPE": "Seleziona tipo di range",
+        "SET_AS_DEFAULT": "Imposta come default",
         "SHOW": "Mostra",
         "SHOW_ALL": "Mostra tutto",
+        "SHOW_HIDE_ACTIVE_USER": "Mostra/nascondi utenti attivi",
+        "SHOW_HIDE_INACTIVE_USER": "Mostra/nascondi utenti inattivi",
+        "SHOW_HIDE_NEW_USER": "Mostra/nascondi nuovi utenti",
+        "SHOW_ONLY_PROFICIENCIES": "Mostra solo le lingue di competenza dell'utente",
         "START": "Inizia",
         "STORE": "Salva",
         "SUBMIT": "Invia",
         "UNCHECK_ALL": "Deseleziona tutto",
-        "UPDATE": "Aggiorna"
+        "UPDATE": "Aggiorna",
+        "UPDATE_ACCESS_LEVEL": "Aggiorna Access Level",
+        "UPDATE_LOCK_LEVEL": "Aggiorna Lock Level",
+        "UPDATE_ONTO_MIRROR_FROM_ALT_URL": "Aggiorna ontology mirror da URL alternativo",
+        "UPDATE_ONTO_MIRROR_FROM_WEB": "Aggiorna ontology mirror da web"
     },
-    "MESSAGES": {
-        "SELECT_CONSTRUCTOR": "Seleziona constructor",
-        "SELECT_CUSTOM_RANGE": "Seleziona un Custom Range",
-        "SELECT_RANGE": "Seleziona un range",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": ""
+    "MESSAGES": {},
+    "STATUS": {
+        "ACTIVE": "Attivo",
+        "DEFAULT": "Default",
+        "ENABLED": "Abilitato",
+        "ERROR": "Errore",
+        "INACTIVE": "Non attivo",
+        "INVALID_DATA": "Dati non validi",
+        "INVALID_VALUE": "Valore non valido",
+        "NEW": "Nuovo",
+        "OPERATION_DENIED": "Operazione negata",
+        "OPERATION_DONE": "Operazione completata",
+        "STATUS": "Stato",
+        "WARNING": "Attenzione"
     }
 }

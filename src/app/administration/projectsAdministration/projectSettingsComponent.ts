@@ -41,7 +41,7 @@ export class ProjectSettingsComponent {
                             this.updateActiveLanguages();
                         }
                     } catch (err) {
-                        this.basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
+                        this.basicModals.alert({key:"STATUS.ERROR"}, "Initialization of system languages has encountered a problem during parsing the " +
                             "'" + Properties.setting_languages + "' property. Please, report this to the system administrator.", ModalType.error);
                     }
                 }
@@ -70,7 +70,7 @@ export class ProjectSettingsComponent {
                         }
                     }
                 } catch (err) {
-                    this.basicModals.alert("Error", "Initialization of languages for project '" + this.project.getName() + 
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "Initialization of languages for project '" + this.project.getName() + 
                         "' has encountered a problem during parsing the '" + Properties.setting_languages + "' settings. " + 
                         "Please, report this to the system administrator.", ModalType.error);
                 }

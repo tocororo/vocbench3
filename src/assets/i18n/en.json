@@ -26,7 +26,6 @@
                 "GROUPS": {
                     "ASSIGNED_GROUP": "Assigned Group",
                     "AVAILABLE_GROUPS": "Available Groups",
-                    "APPLY_RESTRICTIONS": "Apply restrictions",
                     "RESTRICTIONS_APPLIED": "Restrictions applied",
                     "RESTRICTIONS_INFO": "If enabled, the user is subject to the group limitations"
                 },
@@ -34,10 +33,7 @@
                     "ASSIGNED_LANGUAGES": "Assigned Languages",
                     "AVAILABLE_LANGUAGES": "Available Languages",
                     "LANG_PROFICIENCIES_INFO": "This language is in the language proficiencies of the selected user",
-                    "LANGUAGE_ADMIN_INFO": "For administrator user, no language assigned implicitly means all project languages",
-                    "ADD_ALL_PROFICIENCIES": "Add all proficiencies",
-                    "LEAVE_ONLY_PROFICIENCIES": "Leave only proficiencies",
-                    "SHOW_ONLY_PROFICIENCIES": "Show only language proficiencies of the user"
+                    "LANGUAGE_ADMIN_INFO": "For administrator user, no language assigned implicitly means all project languages"
                 },
                 "TEMPLATE": {
                     "RES_VIEW_TEMPLATE": "ResourceView template",
@@ -50,8 +46,6 @@
             "TOPIC": "Topic",
             "AREA": "Area",
             "SUBJECT_AND_SCOPE": "Subject and scope",
-            "IMPORT_ROLE": "Import Role",
-            "EXPORT_ROLE": "Export Role",
             "ROLE_NAME": "Role name"
         },
         "SYSTEM": {
@@ -72,7 +66,8 @@
                 "AUTHENTICATION_INFO": "Tells if SMTP server requires authentication",
                 "MAIL_FROM": "Email address used to send administration emails",
                 "MAIL_PASSWORD": "Password of the above email address",
-                "MAIL_ALIAS": "Alias name shown in the administration emails"
+                "MAIL_ALIAS": "Alias name shown in the administration emails",
+                "EMAIL_CONFIG_TEST": "Email configuration test"
             },
             "NOTIFICATIONS": {
                 "NOTIFICATION_SCHEDULER": "Notification scheduler",
@@ -80,9 +75,7 @@
                 "HOURS_OF_DAY": "Hour of the day",
                 "HOURS_OF_DAY_INFO": "The hour of the day when the report will be sent every day",
                 "TIMEZONE_ID_INFO": "A timezone id",
-                "DETECT": "Detect",
                 "DETECT_INFO": "Detect the browser timezone",
-                "DISABLE": "Disable",
                 "DISABLE_INFO": "Disable the notifications daily digest"
             },
             "REGISTRATION_FORM": {
@@ -99,11 +92,7 @@
             }
         },
         "USERS": {
-            "CREATE_USER": "Create user",
             "USER_DETAILS": "User Details",
-            "SHOW_HIDE_ACTIVE_USER": "Show/Hide active users",
-            "SHOW_HIDE_INACTIVE_USER": "Show/Hide inactive users",
-            "SHOW_HIDE_NEW_USER": "Show/Hide new users",
             "ADMINISTRATOR": "Administrator",
             "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has autmoatically access to all projects",
             "ASSIGNED_TO_PROJECTS": "Assigned to projects",
@@ -147,7 +136,6 @@
                     "START_VALIDATION": "Start validation"
                 },
                 "CREATE_TASK": {
-                    "PROFILE_PROJECT": "Profile project",
                     "METADATA_PROFILE_AVAILABLE": "Metadata profile available",
                     "METADATA_PROFILE_NOT_AVAILABLE": "Metadata profile not available",
                     "PROFILE_MATCHING": "Profile matching",
@@ -213,17 +201,8 @@
             "SPARQL": "SPARQL",
             "HISTORY": "History",
             "VALIDATION": "Validation",
-            "TOOLS": {
-                "TITLE": "Tools",
-                "ALIGNMENT_VALIDATION": "Alignment Validation",
-                "COLLABORATION_SYSTEM": "Collaboration System",
-                "CUSTOM_FORMS": "Custom Forms",
-                "CUSTOM_SERVICES_AND_REPORTS": "Custom Services and Reports",
-                "ICV": "Integrity Constraint Validation (ICV)",
-                "RESOURCE_METADATA": "ResourceMetadata",
-                "SHEET2RDF": "Sheet2RDF",
-                "SKOS_DIFFING": "SKOS Diffing"
-            },
+            "TOOLS": "Tools",
+            "CUSTOM_SERVICES_AND_REPORTS": "Custom Services and Reports",
             "USER_MENU": {
                 "VIEW_PROFILE": "View profile",
                 "PREFERENCES": "Preferences",
@@ -243,7 +222,6 @@
             "GLOBAL_DATA_MENU": {
                 "GLOBAL_DATA_MANAGEMENT": "Global Data Management",
                 "VERSIONING": "Versioning",
-                "REFACTOR": "Refactor",
                 "LOAD_SHACL_SHAPES": "Load SHACL shapes",
                 "EXPORT_SHACL_SHAPES": "Export SHACL shapes",
                 "CLEAR_SHACL_SHAPES": "Clear SHACL shapes"
@@ -427,7 +405,6 @@
             "NO_SCHEME_SELECTED_WARN": "No ConceptScheme selected, creation operations are disabled",
             "USE_SEARCH_MSG": "Please use the search field to retrieve concepts",
             "ADD_TO_SCHEME": {
-                "ADD_CONCEPT_TO_SCHEME": "Add concepts to scheme",
                 "CONFIRM_MSG": "You are going to add the concept '{{concept}}' and its descendants to the scheme '{{scheme}}'. Are you sure?",
                 "SET_TOP_CONCEPT": "Set top concept",
                 "SET_TOP_CONCEPT_INFO": "If checked, set the provided concept as top concept of the target scheme",
@@ -466,6 +443,9 @@
             "INSTANCES": "Instances",
             "CREATE": "Create instance",
             "DELETE": "Delete instance",
+            "UNSAFE_WARN": {
+                "TOO_MANY_ELEM": "Too many instances"
+            },
             "SETTINGS": {
                 "INSTANCE_LIST_SETTINGS": "Instance list settings"
             }
@@ -562,12 +542,14 @@
             "FORCE_FORMAT_INFO": "Allows forcing the selection of a format overriding the one detected by the system"
         },
         "REFACTOR": {
+            "REFACTOR": "Refactor",
             "DATA_REFACTOR": "Data refactor",
+            "SKOS_TO_SKOSXL": "SKOS to SKOS-XL",
+            "SKOSXL_TO_SKOS": "SKOS-XL to SKOS",
             "SKOS_TO_SKOSXL_INFO": "This refactor operation transforms all the SKOS labels and notes into reified SKOS-XL labels and notes.",
             "REIFY_NOTES": "Reify SKOS notes",
             "SKOSXL_TO_SKOS_INFO": "This refactor operation transforms all the reified SKOS-XL labels and notes into flattened SKOS labels and notes. Note: this is NOT a loss-less operation, all the information related to the SKOS-XL labels and notes will be lost.",
             "FLATTEN_NOTES": "Flatten reified SKOS notes",
-            "MIGRATE_DATA": "Migrate data to baseURI graph",
             "MIGRATE_INFO": "This operation will move the content of the default graph to a graph named after the base URI of the current project. It will also clear the default graph and preserve the information already contained in the destination graph."
         },
         "VERSIONING": {
@@ -597,6 +579,7 @@
         "CHANGE_MEASURE": "Change measure"
     },
     "GRAPHS": {
+        "GRAPH": "Graph",
         "ADD_NEW_NODE": "Add a new node",
         "DELETE_SELECTED_NODE": "Delete selected node",
         "EXPAND_SUB_RESOURCES": "Expand sub-resources",
@@ -706,7 +689,7 @@
         }
     },
     "ICV": {
-        "ICV": "Integrity Constraint Validator",
+        "ICV": "Integrity Constraint Validation (ICV)",
         "GO": "Go",
         "RUN": "Run",
         "PRESS_RUN_TO_RUN_CHECK": [
@@ -879,7 +862,6 @@
                 "CATALOG_RECORDS": "Catalog Records",
                 "ADD_DATASET": "Add Dataset",
                 "ADD_CATALOG_RECORD": "Add Catalog record",
-                "DISCOVER_DATASET": "Discover dataset",
                 "DELETE_DATASET": "Delete Dataset",
                 "ISSUED": "Issued",
                 "MODIFIED": "Modified",
@@ -1004,6 +986,7 @@
             "CONSUMER": "Consumer",
             "BASE_URI": "Base URI",
             "DATA_REPO_ID": "Data Repository ID",
+            "DESCRIPTION": "Project description",
             "LEXICALIZATION": "Lexicalization",
             "LEXICALIZATION_MODEL": "Lexicalization Model",
             "MODEL": "Model",
@@ -1117,7 +1100,6 @@
         "ACCESSED": "Accessed",
         "BLACKLIST": "Blacklisting",
         "BLACKLIST_INFO": "Enable this to blacklist terms that have been rejected through validation",
-        "CREATE_PROJECT": "Create project",
         "ENABLE_SHAPE_VALIDATION": "Enable shape validation",
         "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference",
         "HISTORY_INFO": "Enable this to keep track of the changes made on the working graph",
@@ -1140,6 +1122,7 @@
         "USE_RESOURCE_METADATA_INFO": "Usage of Resource Metadata can be enabled also after the project creation",
         "VALIDATION_INFO": "Enable this to keep track of change requests in order to validate them later (accepting or rejecting)",
         "ACL": {
+            "ACL_MATRIX": "ACL matrix",
             "SHOW_ACL_MATRIX": "Show ACL matrix",
             "PROJECT_ACL": "Project ACL",
             "ACL_OF_PROJECT": "Access Control List of project",
@@ -1185,12 +1168,11 @@
             "DIRECTORIES": "Directories",
             "PROJ_INFO": "Project info",
             "PROJ_INFO_INFO": "Here you can show or hide info about the projects and customize their order.",
-            "COL_NAME": "Column name",
-            "RESTORE_DEFAULT": "Restore default"
+            "COL_NAME": "Column name"
         }
     },
     "RESOURCE_METADATA": {
-        "RESOURCE_METADATA_CONFIG": "Resource Metadata configuration",
+        "RESOURCE_METADATA_CONFIG": "Configurazione Resource Metadata",
         "METADATA_PATTERN": "Metadata Pattern",
         "METADATA_PATTERNS": "Metadata Patterns",
         "PATTERN_LIBRARY": "Pattern Library",
@@ -1262,8 +1244,8 @@
             "DELETE_ALL_VALUES": "Delete all values",
             "CHANGE_PROPERTY": "Change property",
             "EDIT_LITERAL_CONTENT": "Edit literal content",
-            "BULD_EDIT": "Bulk edit",
-            "BULD_EDIT_INFO": "Update the value for every resource that has this predicate-value relation",
+            "BULK_EDIT": "Bulk edit",
+            "BULK_EDIT_INFO": "Update the value for every resource that has this predicate-value relation",
             "REPLACE_WITH_EXISTING_RES": "Replace with existing resource",
             "SPAWN_FROM_XLABEL": "Spawn new concept from this xLabel",
             "MOVE_XLABEL_TO_CONCEPT": "Move xLabel to another concept",
@@ -1296,6 +1278,7 @@
             "TARGET_LANGS": "Target languages"
         },
         "CODE_EDITOR": {
+            "CODE_EDITOR": "Code editor",
             "APPLY_CHANGES": "Apply changes",
             "DISABLED_UNDER_VALIDATION": "The Code view tab has been disabled as this resource - or part of its description - is under validation"
         },
@@ -1308,6 +1291,7 @@
         }
     },
     "SEARCH": {
+        "SEARCH": "Search",
         "ADV_SEARCH": {
             "ADVANCED_SEARCH": "Advanced Search",
             "SEARCH_STRING": "Search string",
@@ -1391,6 +1375,7 @@
             "EDIT_SUBJECT_HEADER": "Edit subject header",
             "ROWS": "Rows",
             "LOAD_STATUS": "Load Mapping Status",
+            "MULTIPLE_HEADERS": "Multiple headers",
             "LEGEND": {
                 "LEGEND": "Legend",
                 "NOT_CONFIGURED": "Header not configured",
@@ -1523,7 +1508,7 @@
         "SIGNUP": "Sign up",
         "PASSWORD": {
             "CHANGE_PASSWORD": "Change password",
-            "FORGOT_PASSWORD": "Forgot password?",
+            "FORGOT_PASSWORD": "Forgot password",
             "RESET_PASSWORD": "Reset password",
             "OLD_PASSWORD": "Old password",
             "NEW_PASSWORD": "New password",
@@ -1593,14 +1578,6 @@
             "PREV_PAGE": "Previous page",
             "NEXT_PAGE": "Next page"
         },
-        "STATUS": {
-            "ACTIVE": "Active",
-            "DEFAULT": "Default",
-            "ENABLED": "Enabled",
-            "INACTIVE": "Inactive",
-            "NEW": "New",
-            "STATUS": "Status"
-        },
         "DESCRIPTION": "Description",
         "DETAILS": "Details",
         "FORCE_FORMAT": "Force format",
@@ -1631,29 +1608,62 @@
         "ACTION": "Action",
         "ACTIONS": "Actions",
         "ADD": "Add",
+        "ADD_ADMINISTRATOR": "Add administrator",
         "ADD_AFTER": "Add after",
         "ADD_ALL": "Add all",
+        "ADD_ALL_PROFICIENCIES": "Add all proficiencies",
         "ADD_BEFORE": "Add before",
+        "ADD_CONCEPT_TO_SCHEME": "Add concepts to scheme",
         "ADD_FIRST": "Add first",
         "ADD_LAST": "Add last",
+        "ADD_MEMBER": "Add member",
         "ADD_USER_TO_PROJ": "Add user to project",
+        "APPLY_RESTRICTIONS": "Apply restrictions",
         "ASSIGN": "Assign",
         "CANCEL": "Cancel",
+        "CHANGE_RELATION": "Change relation",
         "CHECK_ALL": "Check all",
         "CLEAR_DATA": "Clear data",
         "CLONE": "Clone",
+        "CLONE_CUSTOM_FORM": "Clone CustomForm",
+        "CLONE_FORM_COLLECTION": "Clone FormCollection",
+        "CLONE_METADATA_PATTERN": "Clone Metadata Pattern",
+        "CLONE_ROLE": "Clone role",
         "CLOSE": "Close",
+        "COMMENT": "Comment",
         "CONFIRM": "Confirm",
         "CREATE": "Create",
+        "CREATE_PROJECT": "Create project",
+        "CREATE_ROLE": "Create role",
         "CREATE_TASK": "Create task",
+        "CREATE_USER": "Create user",
+        "CREATE_VERSION_DUMP": "Create a version dump",
         "DELETE": "Delete",
         "DELETE_ALL": "Delete all",
+        "DELETE_ALL_VALUES": "Delete all values",
+        "DELETE_CONFIGURATION": "Delete configuration",
+        "DELETE_CONSTITUENT": "Delete constituent",
+        "DELETE_CUSTOM_FORM": "Delete CustomForm",
+        "DELETE_CUSTOM_SERVICE": "Delete CustomService",
+        "DELETE_FORM_COLLECTION": "Delete FormCollection",
+        "DELETE_INVOKABLE_REPORTER": "Delete Invokable Reporter",
+        "DELETE_MEMBER": "Delete member",
+        "DELETE_METADATA_ASSOCIATION": "Delete Metadata Association",
+        "DELETE_METADATA_PATTERN": "Delete Metadata Pattern",
+        "DELETE_NODE": "Delete node",
+        "DELETE_PROJECT": "Delete project",
+        "DELETE_USER": "Delete user",
+        "DETECT": "Detect",
+        "DISABLE": "Disable",
         "DISCARD": "Discard",
+        "DISCOVER_DATASET": "Discover dataset",
+        "DUPLICATE_SETTINGS": "Duplicate settings",
         "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ": "Duplicate settings to another project",
         "EDIT": "Edit",
         "EDIT_ACL": "Edit ACL",
         "EDIT_MANUALLY": "Edit manually",
         "EDIT_PROJECT_ACL": "Edit project ACL",
+        "EDIT_PROPERTY_CHAIN": "Edit property chain",
         "ENABLE": "Enable",
         "ENABLE_ALL": "Enable all",
         "EXPORT": "Export",
@@ -1664,66 +1674,75 @@
         "EXPORT_METADATA": "Export metadata",
         "EXPORT_METADATA_PATTERN": "Export metadata pattern",
         "EXPORT_PEARL": "Export PEARL",
+        "EXPORT_ROLE": "Export Role",
         "EXPORT_SKOS_DIFFING_RESULT": "Download SKOS diffing result",
         "EXPORT_TRIPLES": "Export triples",
         "IMPORT": "Import",
+        "IMPORT_ROLE": "Import Role",
+        "INSERT_VALUE_MANUALLY": "Insert value manually",
+        "LEAVE_ONLY_PROFICIENCIES": "Leave only proficiencies",
         "LOAD": "Load",
         "LOAD_DATA": "Load data",
         "LOCK_UNLOCK_NAMESPACE": "Lock/Unlock namespace",
+        "MIGRATE_DATA_TO_BASEURI_GRAPH": "Migrate data to baseURI graph",
         "MOVE_AFTER": "Move after",
         "MOVE_BEFORE": "Move before",
         "MOVE_DOWN": "Move down",
         "MOVE_UP": "Move up",
+        "PICK_RESOURCE": "Pick resource",
+        "PROFILE_PROJECT": "Profile project",
         "REFRESH": "Refresh",
         "REJECT": "Reject",
         "RELOAD": "Reload",
         "REMOVE": "Remove",
         "REMOVE_ALL": "Remove all",
+        "REMOVE_FROM_SCHEME": "Remove from scheme",
+        "REMOVE_USER": "Remove user",
         "REMOVE_USER_FROM_PROJ": "Remove user from project",
+        "RENAME_NODE": "Rename node",
+        "RENAME_PROJECT_DIRECTORY": "Rename project directory",
         "RESET": "Reset",
+        "RESET_COLLABORATION_SYSTEM": "Reset Collaboration System",
+        "RESTORE_DEFAULT": "Restore default",
+        "REVOKE_ADMINISTRATOR": "Revoke administrator",
         "SAVE": "Save",
+        "SAVE_CHANGES": "Save changes",
         "SEARCH": "Search",
         "SELECT": "Select",
+        "SELECT_CONSTRUCTOR": "Select constructor",
+        "SELECT_CUSTOM_RANGE": "Select a Custom Range",
+        "SELECT_RANGE": "Select a range",
+        "SELECT_RANGE_TYPE": "Select range type",
+        "SET_AS_DEFAULT": "Set as default",
         "SHOW": "Show",
         "SHOW_ALL": "Show all",
+        "SHOW_HIDE_ACTIVE_USER": "Show/Hide active users",
+        "SHOW_HIDE_INACTIVE_USER": "Show/Hide inactive users",
+        "SHOW_HIDE_NEW_USER": "Show/Hide new users",
+        "SHOW_ONLY_PROFICIENCIES": "Show only language proficiencies of the user",
         "START": "Start",
         "STORE": "Store",
         "SUBMIT": "Submit",
         "UNCHECK_ALL": "Uncheck all",
-        "UPDATE": "Update"
+        "UPDATE": "Update",
+        "UPDATE_ACCESS_LEVEL": "Update Access Level",
+        "UPDATE_LOCK_LEVEL": "Update Lock Level",
+        "UPDATE_ONTO_MIRROR_FROM_ALT_URL": "Update ontology mirror from alternative URL",
+        "UPDATE_ONTO_MIRROR_FROM_WEB": "Update ontology mirror from web"
     },
-    "MESSAGES": {
-        "SELECT_CONSTRUCTOR": "Select constructor",
-        "SELECT_CUSTOM_RANGE": "Select a Custom Range",
-        "SELECT_RANGE": "Select a range",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": ""
+    "MESSAGES": {},
+    "STATUS": {
+        "ACTIVE": "Active",
+        "DEFAULT": "Default",
+        "ENABLED": "Enabled",
+        "ERROR": "Error",
+        "INACTIVE": "Inactive",
+        "INVALID_DATA": "Invalid data",
+        "INVALID_VALUE": "Invalid value",
+        "NEW": "New",
+        "OPERATION_DENIED": "Operation denied",
+        "OPERATION_DONE": "Operation done",
+        "STATUS": "Status",
+        "WARNING": "Warning"
     }
 }

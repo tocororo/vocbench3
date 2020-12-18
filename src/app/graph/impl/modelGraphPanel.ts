@@ -35,7 +35,7 @@ export class ModelGraphPanel extends AbstractGraphPanel {
         this.browsingModals.browseClassTree("Add node").then(
             (cls: ARTURIResource) => {
                 if (!cls.getAdditionalProperty(ResAttribute.EXPLICIT)) {
-                    this.basicModals.alert("Add node", "Cannot add a new node for " + cls.getShow() + 
+                    this.basicModals.alert({key:"STATUS.WARNING"}, "Cannot add a new node for " + cls.getShow() + 
                         ". In the model-oriented graph you can only add resources locally defined.", ModalType.warning);
                     return;
                 }

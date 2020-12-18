@@ -112,7 +112,7 @@ export class DumpCreationModal {
 
     changeRemoteRepository() {
         if (this.selectedRemoteRepoConfig == null) {
-            this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
+            this.basicModals.alert({key:"STATUS.WARNING"}, "You need to select a configuration for the selected remote Repository Access. " +
                 "Please, select an existing one from the related combobox or create a new one.", ModalType.warning);
             return;
         }
@@ -129,13 +129,13 @@ export class DumpCreationModal {
         //check if all the data is ok
         //valid version id
         if (this.versionId == null || this.versionId.trim() == "") {
-            this.basicModals.alert("Invalid data", "Enter a valid version ID", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "Enter a valid version ID", ModalType.warning);
             return;
         }
         //valid repository access configuration (in case of repository access remote)
         if (this.isSelectedRepoAccessRemote()) {
             if (this.selectedRemoteRepoConfig == null) {
-                this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
+                this.basicModals.alert({key:"STATUS.WARNING"}, "You need to select a configuration for the selected remote Repository Access. " +
                 "Please, select an existing one from the related combobox or create a new one.", ModalType.warning);
                 return;
             }
@@ -143,7 +143,7 @@ export class DumpCreationModal {
         //valid repo id (in case of remote repo accessing mode)
         if (!this.isSelectedRepoAccessCreateMode()) {
             if (this.repositoryId == null || this.repositoryId.trim() == "") {
-                this.basicModals.alert("Invalid data", "Enter a valid repository ID", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "Enter a valid repository ID", ModalType.warning);
                 return;
             }
         }
@@ -152,7 +152,7 @@ export class DumpCreationModal {
             //check if repository configuration needs to be configured
             if (this.selectedRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Missing configuration", "Required parameter(s) missing in repository configuration (" +
+                this.basicModals.alert({key:"STATUS.WARNING"}, "Required parameter(s) missing in repository configuration (" +
                     this.selectedRepoConfig.shortName + ")", ModalType.warning);
                 return;
             }

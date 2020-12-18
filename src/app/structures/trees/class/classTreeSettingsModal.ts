@@ -80,7 +80,7 @@ export class ClassTreeSettingsModal {
                     ) {
                         let message: string = "Selecting a specific class as a root could hide newly created classes " + 
                             "that are not subclasses of the chosen root.";
-                        this.basicModals.alertCheckCookie("Warning", message, Cookie.WARNING_CUSTOM_ROOT);
+                        this.basicModals.alertCheckCookie({key:"STATUS.WARNING"}, message, Cookie.WARNING_CUSTOM_ROOT);
                     }
                 }
                 this.rootClass = cls;
@@ -97,7 +97,7 @@ export class ClassTreeSettingsModal {
                 if (position.isLocal()) {
                     this.rootClass = cls;
                 } else {
-                    this.basicModals.alert("Error", "Wrong URI: no resource with URI " + cls.getNominalValue() + " exists in the current project", ModalType.error);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "Wrong URI: no resource with URI " + cls.getNominalValue() + " exists in the current project", ModalType.error);
                     //temporarly reset the root class and the restore it (in order to trigger the change detection editable-input)
                     let oldRootClass = this.rootClass;
                     this.rootClass = null;
@@ -156,7 +156,7 @@ export class ClassTreeSettingsModal {
                 if (this.getFilterMapEntry(cls) == null) {
                     this.filterMapRes.push({ cls: cls, subClasses: null });
                 } else {
-                    this.basicModals.alert("Error", "A filter for class " + cls.getShow() + " already exists.", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, "A filter for class " + cls.getShow() + " already exists.", ModalType.warning);
                 }
             },
             () => {}

@@ -337,7 +337,7 @@ export class ExportDataComponent {
 
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.filtersChain[i].status == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert("Unsaved configuration", "Filter at position " + (i+1) + " is not saved. " +
+                this.basicModals.alert({key:"STATUS.WARNING"}, "Filter at position " + (i+1) + " is not saved. " +
                     "In order to save a filter chain all its filters need to be saved.", ModalType.warning);
                 return;
             }
@@ -364,7 +364,7 @@ export class ExportDataComponent {
         let deployerSpec: { extensionID: string, configRef: string };
         if (this.useDeployer()) {
             if (this.deployerStatus == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert("Unsaved configuration", "Deployer configuration is not saved. " +
+                this.basicModals.alert({key:"STATUS.WARNING"}, "Deployer configuration is not saved. " +
                     "In order to save the exporter configuration all its sub-configurations need to be saved.", ModalType.warning);
                 return;
             }
@@ -378,7 +378,7 @@ export class ExportDataComponent {
         let reformattingExporterSpec: { extensionID: string, configRef: string };
         if (this.useReformatter()) {
             if (this.reformatterStatus == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert("Unsaved configuration", "Reformatter configuration is not saved. " +
+                this.basicModals.alert({key:"STATUS.WARNING"}, "Reformatter configuration is not saved. " +
                     "In order to save the exporter configuration all its sub-configurations need to be saved.", ModalType.warning);
                 return;
             }
@@ -399,7 +399,7 @@ export class ExportDataComponent {
 
         this.sharedModals.storeConfiguration("Save exporter chain configuration", ConfigurationComponents.EXPORTER, config).then(
             () => {
-                this.basicModals.alert("Save configuration", "Configuration saved succesfully");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration saved succesfully");
             },
             () => {}
         );
@@ -537,7 +537,7 @@ export class ExportDataComponent {
         //check if every filter has been configured
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
-                this.basicModals.alert("Missing filter configuration", "An export filter ("
+                this.basicModals.alert({key:"STATUS.WARNING"}, "An export filter ("
                     + this.filtersChain[i].selectedFactory.name + ") needs to be configured", ModalType.warning);
                 return;
             }
@@ -567,7 +567,7 @@ export class ExportDataComponent {
             };
             if (this.selectedReformatterConfig != null) {
                 if (this.requireConfigurationFormatter()) {
-                    this.basicModals.alert("Missing configuration", "The reformatting exporter ("
+                    this.basicModals.alert({key:"STATUS.WARNING"}, "The reformatting exporter ("
                         + this.selectedReformatterConfig.shortName + ") needs to be configured", ModalType.warning);
                     return;
                 }
@@ -586,7 +586,7 @@ export class ExportDataComponent {
             }
             if (this.selectedDeployerConfig != null) {
                 if (this.requireConfigurationDeployer()) {
-                    this.basicModals.alert("Missing configuration", "The deployer needs to be configured", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, "The deployer needs to be configured", ModalType.warning);
                     return;
                 }
                 deployerSpec.configType = this.selectedDeployerConfig.type;
@@ -603,7 +603,7 @@ export class ExportDataComponent {
             },
             (err: Error) => {
                 if (err.name.endsWith('ExportPreconditionViolationException')) {
-                    this.basicModals.confirm("Warning", err.message + " Do you want to force the export?", ModalType.warning).then(
+                    this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the export?", ModalType.warning).then(
                         yes => {
                             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                             this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline),  reformattingExporterSpec, deployerSpec, 

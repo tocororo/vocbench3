@@ -51,7 +51,7 @@ export class MetadataAssociationEditorModal {
     ok() {
         //check if the same association already exists
         if (this.existingAssociations.some(a => a.role == this.selectedType.role && a.pattern.reference == this.selectedPattern.reference)) {
-            this.basicModals.alert("Association already existing", "An association between the same resource type and pattern already exists.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, "An association between the same resource type and pattern already exists.", ModalType.warning);
             return;
         }
         this.resourceMetadataService.addAssociation(this.selectedType.role, this.selectedPattern.reference).subscribe(

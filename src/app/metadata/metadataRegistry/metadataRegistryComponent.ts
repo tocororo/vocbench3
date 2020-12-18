@@ -86,7 +86,7 @@ export class MetadataRegistryComponent {
     }
 
     discoverDataset() {
-        this.basicModals.prompt("Discover Dataset", { value: "Resource IRI", tooltip: "This IRI can be directly the IRI of the VoID description " + 
+        this.basicModals.prompt({key:"ACTIONS.DISCOVER_DATASET"}, { value: "Resource IRI", tooltip: "This IRI can be directly the IRI of the VoID description " + 
             "of the Dataset (the instance of void:Dataset) or the IRI of any resource in the Dataset that points to this VoID description" }).then(
             iri => {
                 if (ResourceUtils.testIRI(iri)) {
@@ -98,7 +98,7 @@ export class MetadataRegistryComponent {
                         }
                     );
                 } else {
-                    this.basicModals.alert("Invalid IRI", "'" + iri + "' is not a valid IRI");
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + iri + "' is not a valid IRI");
                 }
             }
         )   

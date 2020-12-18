@@ -173,7 +173,7 @@ export abstract class PartitionRenderer {
                         } else { //value type not compliant with predicate range
                             let warningMsg = "The type of value is not compliant with the range of the property " + property.getShow()
                                 + ". The operation may cause inconsistencies and malfunction. Do you want to force the add operation? ";
-                            this.basicModals.confirm("Warning", warningMsg, ModalType.warning).then(
+                            this.basicModals.confirm({key:"STATUS.WARNING"}, warningMsg, ModalType.warning).then(
                                 confirm => {
                                     this.resourcesService.addValue(this.resource, property, value).subscribe(
                                         stResp => this.update.emit()
@@ -220,7 +220,7 @@ export abstract class PartitionRenderer {
      */
     private removeHandler(predicate: ARTURIResource, object?: ARTNode) {
         if (object == null) {
-            this.basicModals.confirm("Delete all values", "You are deleting all the " + predicate.getShow() + " values. Are you sure?", ModalType.warning).then(
+            this.basicModals.confirm({key: "ACTIONS.DELETE_ALL_VALUES"}, "You are deleting all the " + predicate.getShow() + " values. Are you sure?", ModalType.warning).then(
                 yes => this.removeAllValues(predicate),
                 no => { }
             )

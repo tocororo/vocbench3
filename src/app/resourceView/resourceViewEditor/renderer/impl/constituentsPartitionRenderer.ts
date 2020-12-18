@@ -52,7 +52,7 @@ export class ConstituentsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        this.basicModals.confirm("Delete constituent", "Deleting a single constituent could compromise the integrity of the constituents section."
+        this.basicModals.confirm({key:"ACTIONS.DELETE_CONSTITUENT"}, "Deleting a single constituent could compromise the integrity of the constituents section."
             + " If you want to edit the constituents of the LexicalEntry, it is highly recommended to use the add procedure which will replace the current constituent list."
             + " Do you want to confirm the deletion?", ModalType.warning).then(
             () => {

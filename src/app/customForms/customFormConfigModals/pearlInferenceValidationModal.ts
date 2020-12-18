@@ -22,7 +22,7 @@ export class PearlInferenceValidationModal {
                 if (result.valid) {
                     this.activeModal.close(this.newPearl);
                 } else {
-                    this.basicModals.alert("Invalid PEARL", result.details, ModalType.error);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, result.details, ModalType.error);
                     return;
                 }
             }

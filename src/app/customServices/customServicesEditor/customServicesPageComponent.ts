@@ -54,7 +54,7 @@ export class CustomServicesPageComponent {
     }
 
     deleteService() {
-        this.basicModals.confirm("Delete CustomService", "You are deleting CustomService '" + this.selectedServiceId + "'. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_CUSTOM_SERVICE"}, "You are deleting CustomService '" + this.selectedServiceId + "'. Are you sure?", ModalType.warning).then(
             () => {
                 this.customServService.deleteCustomService(this.selectedServiceId).subscribe(
                     () => {

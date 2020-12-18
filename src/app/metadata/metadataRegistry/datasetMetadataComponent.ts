@@ -67,7 +67,7 @@ export class DatasetMetadataComponent {
             if (ResourceUtils.testIRI(newValue)) {
                 sparqlEndpoint = new ARTURIResource(newValue);
             } else { //invalid IRI
-                this.basicModals.alert("Invalid SPARQL Endpoint", newValue + " is not a valid IRI", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, newValue + " is not a valid IRI", ModalType.warning);
                 //restore old id
                 let backupId: string = this.dataset.sparqlEndpointMetadata.id;
                 this.dataset.sparqlEndpointMetadata.id = null + "new";

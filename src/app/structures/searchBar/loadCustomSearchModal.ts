@@ -66,7 +66,7 @@ export class LoadCustomSearchModal {
                     }
                 });
                 if (alreadyIn) {
-                    this.basicModals.alert("Duplicated Custom Search", "The stored parameterized SPARQL query '" + ref + 
+                    this.basicModals.alert({key:"STATUS.WARNING"}, "The stored parameterized SPARQL query '" + ref + 
                         "' is already in the Stored Custom Search list. It will not be added", ModalType.warning);
                     return;
                 }

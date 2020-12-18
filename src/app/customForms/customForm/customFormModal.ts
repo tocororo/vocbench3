@@ -33,7 +33,7 @@ export class CustomFormModal {
     ok() {
         let constraintViolatedMsg = CustomFormUtils.isFormConstraintOk(this.formFields);
         if (constraintViolatedMsg != null) {
-            this.basicModals.alert("Incompleted form", constraintViolatedMsg, ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, constraintViolatedMsg, ModalType.warning);
             return;
         }
 

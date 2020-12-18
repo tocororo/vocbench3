@@ -354,7 +354,7 @@ export class CreateProjectComponent {
                         }
                     );
                 } else {
-                    this.basicModals.alert("Preload from Dataset Catalog", "The selected dataset doesn't have a data dump neither an ontology IRI, so cannot be used to preload data.", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, "The selected dataset doesn't have a data dump neither an ontology IRI, so cannot be used to preload data.", ModalType.warning);
                 }
             },
             () => { }
@@ -367,7 +367,7 @@ export class CreateProjectComponent {
             summary.warnings.forEach(w => {
                 message += w.message + "\n";
             })
-            this.basicModals.alert("Preload data", message, ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, message, ModalType.warning);
         }
         this.preloadedData = {
             summary: summary,
@@ -522,7 +522,7 @@ export class CreateProjectComponent {
 
     changeRemoteRepository(repoType: "data" | "support") {
         if (this.selectedRemoteRepoConfig == null) {
-            this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
+            this.basicModals.alert({key:"STATUS.WARNING"}, "You need to select a configuration for the selected remote Repository Access. " +
                 "Please, select an existing one from the related combobox or create a new one.", ModalType.warning);
             return;
         }
@@ -658,26 +658,26 @@ export class CreateProjectComponent {
 
         //check project name
         if (!this.projectName || this.projectName.trim() == "") {
-            this.basicModals.alert("Create project", "Project name is missing or not valid", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "Project name is missing or not valid", ModalType.warning);
             return;
         }
 
         //check preloading data
         if (this.selectedPreloadOpt != this.preloadOptNone && this.preloadedData == null) {
-            this.basicModals.alert("Create project", "No data preloaded. Please, load data or select '" + this.preloadOptNone + "' if you don't want to preload any.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "No data preloaded. Please, load data or select '" + this.preloadOptNone + "' if you don't want to preload any.", ModalType.warning);
             return
         }
 
         //check baseURI
         if (!this.baseUri || this.baseUri.trim() == "" || !ResourceUtils.testIRI(this.baseUri)) {
-            this.basicModals.alert("Create project", "BaseURI is missing or not valid", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "BaseURI is missing or not valid", ModalType.warning);
             return;
         }
 
         //check EDOAL projects
         if (this.isEdoalProject()) {
             if (this.leftProject == null || this.rightProject == null) {
-                this.basicModals.alert("Create project", "Left or right dataset missing", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "Left or right dataset missing", ModalType.warning);
                 return;
             }
         }
@@ -690,7 +690,7 @@ export class CreateProjectComponent {
         if (this.isSelectedRepoAccessRemote()) {
             //check if configuration is set
             if (this.selectedRemoteRepoConfig == null) {
-                this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
+                this.basicModals.alert({key:"STATUS.WARNING"}, "You need to select a configuration for the selected remote Repository Access. " +
                 "Please, select an existing one from the related combobox or create a new one.", ModalType.warning);
                 return;
             }
@@ -706,7 +706,7 @@ export class CreateProjectComponent {
             //check if data repository configuration needs to be configured
             if (this.selectedDataRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "Data Repository (" + this.selectedDataRepoConfig.shortName
+                this.basicModals.alert({key:"STATUS.WARNING"}, "Data Repository (" + this.selectedDataRepoConfig.shortName
                     + ") requires to be configured", ModalType.warning);
                 return;
             }
@@ -730,7 +730,7 @@ export class CreateProjectComponent {
         if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
             if (this.selectedSupportRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "History/Validation Repository (" + this.selectedSupportRepoConfig.shortName
+                this.basicModals.alert({key:"STATUS.WARNING"}, "History/Validation Repository (" + this.selectedSupportRepoConfig.shortName
                     + ") requires to be configured", ModalType.warning);
                 return;
             }
@@ -768,7 +768,7 @@ export class CreateProjectComponent {
             //check if uriGenerator plugin needs to be configured
             if (this.selectedUriGenPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName
+                this.basicModals.alert({key:"STATUS.WARNING"}, "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName
                     + ") requires configuration", ModalType.warning);
                 return;
             }
@@ -788,7 +788,7 @@ export class CreateProjectComponent {
             //check if uriGenerator plugin needs to be configured
             if (this.selectedRendEngPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName
+                this.basicModals.alert({key:"STATUS.WARNING"}, "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName
                     + ") requires configuration", ModalType.warning);
                 return;
             }
@@ -823,7 +823,7 @@ export class CreateProjectComponent {
         let metadataAssociationsPar: Pair<RDFResourceRolesEnum, string>[];
         if (this.useResourceMetadata) { //resource metadata enabled => check if data is ok
             if (this.metadataAssociations.some(a => a.role == null || a.pattern == null)) {
-                this.basicModals.alert("Create project", "An incomplete association has been detected in the configuration of Resource Metadata. " + 
+                this.basicModals.alert({key:"STATUS.WARNING"}, "An incomplete association has been detected in the configuration of Resource Metadata. " + 
                     "Please, fix it or disabled the Resource Metadata", ModalType.warning);
                 return;
             }
@@ -839,7 +839,7 @@ export class CreateProjectComponent {
         if (this.enableSHACL && this.isSelectedRepoAccessCreateMode()) {
             shaclSettingsPar = new Map();
             if (this.shaclSettings.requireConfiguration()) {
-                this.basicModals.alert("Create project", "You have enabled SHACL validation, but it requires configuration", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, "You have enabled SHACL validation, but it requires configuration", ModalType.warning);
                 return;
             }
             this.shaclSettings.properties.forEach(p => {
@@ -861,7 +861,7 @@ export class CreateProjectComponent {
             preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                    this.basicModals.alert("Create project", "Project created successfully").then(
+                    this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Project created successfully").then(
                         () => this.router.navigate(['/Projects'])
                     );
                 },

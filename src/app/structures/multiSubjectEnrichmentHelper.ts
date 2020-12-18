@@ -70,10 +70,10 @@ export class MultiSubjectEnrichmentHelper {
         });
         
         if (subjects.length == 0) {
-            this.basicModals.alert("Multivalue addition", "All the selected resources are not explicit, so they cannot be edited", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "All the selected resources are not explicit, so they cannot be edited", ModalType.warning);
             return;
         } else if (excludedSubject.length > 0) {
-            this.basicModals.alert("Multivalue addition", 
+            this.basicModals.alert({key:"STATUS.WARNING"}, 
                 "Some of the selected resources are not explicit, they cannot be edited, so they will be not affected by the changes:\n" + 
                 excludedSubject.map(s => " - " + s.getShow()).join("\n"), ModalType.warning).then(
                 resp => {
@@ -426,7 +426,7 @@ export class MultiSubjectEnrichmentHelper {
 
     private lexicalizationsHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
         if (predicate.equals(SKOS.prefLabel) || predicate.equals(SKOSXL.prefLabel)) {
-            this.basicModals.alert("Add " + predicate.getShow(), "This operation is not allowed for the selected property. " + 
+            this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "This operation is not allowed for the selected property. " + 
                 "Multiple resources cannot have the same " + predicate.getShow() + ".", ModalType.warning);
             return;
         }
@@ -530,7 +530,7 @@ export class MultiSubjectEnrichmentHelper {
         //check if all the properties are of the same type
         for (let i = 0; i < subjects.length; i++) {
             if (subjects[i].getRole() != subjects[0].getRole()) {
-                this.basicModals.alert("Add range", "The addition of the same range to multiple properties is not allowed on properties of different types", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, "The addition of the same range to multiple properties is not allowed on properties of different types", ModalType.warning);
                 return;
             }
         }
@@ -710,7 +710,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private unavailableOperation(predicate: ARTURIResource) {
-        this.basicModals.alert("Unavailable operation", "Cannot enrich multiple subject with the same property-value for the predicate " + predicate.getShow());
+        this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot enrich multiple subject with the same property-value for the predicate " + predicate.getShow());
     }
 
 
@@ -829,14 +829,14 @@ export class MultiSubjectEnrichmentHelper {
         let message = "The addition for the subject " + error.subject.toNT() + " has failed due to the following reason:\n" +  error.error.name + 
                 ((error.error.message != null) ? ":\n" + error.error.message : "");
         let details = error.error.stack;
-        this.basicModals.alert("Error", message, ModalType.error, details);
+        this.basicModals.alert({key:"STATUS.ERROR"}, message, ModalType.error, details);
     }
     private handleMultipleMultiAddError(errors: MultiSubjectAddError[]) {
         let message = "The addition for the following subject have failed:"
         errors.forEach((e: MultiSubjectAddError) => {
             message += "\n\n" + e.subject.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
         });
-        this.basicModals.alert("Error", message, ModalType.error);
+        this.basicModals.alert({key:"STATUS.ERROR"}, message, ModalType.error);
     }
 
 }

@@ -105,11 +105,11 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     private deleteProject(project: Project) {
         if (project.isOpen()) {
-            this.basicModals.alert("Delete project", project.getName() +
+            this.basicModals.alert({key:"ACTIONS.DELETE_PROJECT"}, project.getName() +
                 " is currently open. Please, close the project and then retry.", ModalType.warning);
             return;
         } else {
-            this.basicModals.confirm("Delete project", "Warning, this operation will delete the project " +
+            this.basicModals.confirm({key:"ACTIONS.DELETE_PROJECT"}, "Warning, this operation will delete the project " +
                 project.getName() + ". Are you sure to proceed?", ModalType.warning).then(
                 result => {
                     //retrieve the remote repositories referenced by the deleting project (this must be done before the deletion in order to prevent errors)
@@ -195,7 +195,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     openACLModal() {
         if (this.projectList.length > 50) {
-            this.basicModals.confirm("ACL matrix", "Warning: there are a lot of projects (" + this.projectList.length + "), " +
+            this.basicModals.confirm({key:"PROJECTS.ACL.ACL_MATRIX"}, "Warning: there are a lot of projects (" + this.projectList.length + "), " +
                 "thus the ACL matrix might be slow to load and hardly readable. Do you want to continue anyway?\n\n" +
                 "Alternatively the ACL for a specific project is available from the related action menu, 'Edit ACL' entry.", ModalType.warning).then(
                 () => { //confirmed
@@ -223,7 +223,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
      */
     private editRemoteRepoCredential(project: Project) {
         if (project.isOpen()) {
-            this.basicModals.alert("Edit remote repository credentials", 
+            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, 
                 "You cannot edit credentials of remote repositories linked to an open project. Please, close the project and retry", ModalType.warning);
             return;
         }
@@ -254,11 +254,11 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     private renameDirectory(directory: string) {
-        this.basicModals.prompt("Rename project directory", { value: "Directory name" }, null, directory).then(
+        this.basicModals.prompt({key:"ACTIONS.RENAME_PROJECT_DIRECTORY"}, { value: "Directory name" }, null, directory).then(
             newName => {
                 if (newName != directory) {
                     if (this.projectDirs.some(pd => pd.dir == newName)) { //name changed, but a directory with the same name already exists
-                        this.basicModals.confirm("Rename project directory", "Warning: a project directory named '" + newName + 
+                        this.basicModals.confirm({key:"ACTIONS.RENAME_PROJECT_DIRECTORY"}, "Warning: a project directory named '" + newName + 
                             "' already exists. You will move there all the projects contained in directory '" + directory + 
                             "'. Do you want to continue?", ModalType.warning).then(
                             () => { //confirmed => apply rename
@@ -283,7 +283,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     private editDescription(project: Project) {
-        this.basicModals.prompt("Project description", { value: "Description" }, null, project.getDescription(), true).then(
+        this.basicModals.prompt({key:"MODELS.PROJECT.DESCRIPTION"}, { value: "Description" }, null, project.getDescription(), true).then(
             descr => {
                 if (descr.trim() == "") {
                     descr = null;

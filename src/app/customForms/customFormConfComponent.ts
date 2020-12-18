@@ -73,7 +73,7 @@ export class CustomFormConfigComponent {
                 for (var i = 0; i < this.cfConfigurationMap.length; i++) {
                     if (this.cfConfigurationMap[i].getResource().getURI() == resource.getURI()) {
                         //already in a mapping
-                        this.basicModals.alert("Denied", "A FormCollection is already assigned to " + resource.getShow() +
+                        this.basicModals.alert({key:"STATUS.ERROR"}, "A FormCollection is already assigned to " + resource.getShow() +
                             ". Please, select another resource, or if you want to add a form to " + resource.getShow() +
                             ", add more CustomForm to the assigned FormCollection (" + this.cfConfigurationMap[i].getFormCollection().getId() + ")",
                             ModalType.warning);
@@ -150,7 +150,7 @@ export class CustomFormConfigComponent {
     }
 
     deleteFormCollection() {
-        this.basicModals.confirm("Delete Form Collection", "You are deleting Form Collection " + this.selectedFormColl.getId() + ". Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_FORM_COLLECTION"}, "You are deleting Form Collection " + this.selectedFormColl.getId() + ". Are you sure?", ModalType.warning).then(
             confirm => {
                 this.customFormsService.deleteFormCollection(this.selectedFormColl.getId()).subscribe(
                     stResp => {
@@ -164,11 +164,11 @@ export class CustomFormConfigComponent {
     }
 
     cloneFormCollection() {
-        this.basicModals.promptPrefixed("Clone FormCollection", FormCollection.PREFIX, "ID", null, false, true, true).then(
+        this.basicModals.promptPrefixed({key:"ACTIONS.CLONE_FORM_COLLECTION"}, FormCollection.PREFIX, "ID", null, false, true, true).then(
             (fcId: any) => {
                 for (var i = 0; i < this.formCollectionList.length; i++) {
                     if (this.formCollectionList[i].getId() == fcId) {
-                        this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.WARNING"}, "A CustomForm with ID " + fcId + " already exists", ModalType.warning);
                         return;
                     }
                 }
@@ -252,11 +252,11 @@ export class CustomFormConfigComponent {
     }
 
     cloneCustomForm() {
-        this.basicModals.promptPrefixed("Clone CustomForm", CustomForm.PREFIX, "ID", null, false, true, true).then(
+        this.basicModals.promptPrefixed({key:"ACTIONS.CLONE_CUSTOM_FORM"}, CustomForm.PREFIX, "ID", null, false, true, true).then(
             (fcId: any) => {
                 for (var i = 0; i < this.customFormList.length; i++) {
                     if (this.customFormList[i].getId() == fcId) {
-                        this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.WARNING"}, "A CustomForm with ID " + fcId + " already exists", ModalType.warning);
                         return;
                     }
                 }
@@ -275,7 +275,7 @@ export class CustomFormConfigComponent {
             result => {
                 if (result) { //selectedCustomForm belong to a CR
                     let deletEmptyCollCkeckOpt: ConfirmCheckOptions = { label: "Delete also FormCollection(s) left empty", value: true };
-                    this.basicModals.confirmCheck("Delete CustomForm", "You are deleting a CustomForm that " +
+                    this.basicModals.confirmCheck({key:"ACTIONS.DELETE_CUSTOM_FORM"}, "You are deleting a CustomForm that " +
                         "belongs to one or more FormCollection(s). Are you sure?", [deletEmptyCollCkeckOpt], ModalType.warning).then(
                         (checkboxOpts: ConfirmCheckOptions[]) => {
                             let deleteEmptyColl: boolean = checkboxOpts[0].value;
@@ -292,7 +292,7 @@ export class CustomFormConfigComponent {
                         () => { }
                         );
                 } else { //selectedCustomForm does not belong to any FormCollection
-                    this.basicModals.confirm("Delete CustomForm", "You are deleting CustomForm " + this.selectedCustomForm.getId() +
+                    this.basicModals.confirm({key:"ACTIONS.DELETE_CUSTOM_FORM"}, "You are deleting CustomForm " + this.selectedCustomForm.getId() +
                         ". Are you sure?", ModalType.warning).then(
                         confirm => {
                             this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId()).subscribe(

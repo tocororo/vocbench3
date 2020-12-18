@@ -55,7 +55,7 @@ export class BrowseExternalResourceModal {
             this.checkPropertyRangeResource(this.enrichingProperty).subscribe(
                 allowsResource => {
                     if (!allowsResource) {
-                        this.basicModals.alert("Invalid property range", this.enrichingProperty.getShow() +
+                        this.basicModals.alert({key:"STATUS.ERROR"}, this.enrichingProperty.getShow() +
                             " range doesn't admit resources. You cannot enrich this property with a remote value", ModalType.warning);
                         this.cancel();
                     }
@@ -141,7 +141,7 @@ export class BrowseExternalResourceModal {
                             if (allowsResource) {
                                 this.enrichingProperty = selectedProp;
                             } else {
-                                this.basicModals.alert("Invalid property range", selectedProp.getShow() +
+                                this.basicModals.alert({key:"STATUS.ERROR"}, selectedProp.getShow() +
                                     " range doesn't admit resources. You cannot enrich this property with a remote value", ModalType.warning);
                             }
                         }

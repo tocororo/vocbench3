@@ -327,7 +327,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                 } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral) {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, (<ARTLiteral>this.resource).getDatatype(), null);
                     if (!this.isTypedLiteralValid(newValue)) {
-                        this.basicModals.alert("Invalid value", newValue.getValue() + " is not a valid value for the given datatype: " + newValue.getDatatype(), ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, newValue.getValue() + " is not a valid value for the given datatype: " + newValue.getDatatype(), ModalType.warning);
                         this.cancelEdit();
                         return;
                     }
@@ -348,7 +348,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
                         let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
                             + ". The change may cause an inconsistency. Do you want to apply the change? ";
-                        this.basicModals.confirm("Warning", warningMsg, ModalType.warning).then(
+                        this.basicModals.confirm({key:"STATUS.WARNING"}, warningMsg, ModalType.warning).then(
                             confirm => {
                                 this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
                                     stResp => this.update.emit()
@@ -357,7 +357,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             reject => { this.cancelEdit(); }
                         );
                     } else {
-                        this.basicModals.confirm("Bulk edit", "Warning. You are updating the value for every resource that has this predicate-value relation. Are you sure?").then(
+                        this.basicModals.confirm({key:"RESOURCE_VIEW_ACTIONS.BULK_EDIT"}, "Warning. You are updating the value for every resource that has this predicate-value relation. Are you sure?").then(
                             () => {
                                 this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
                                     stResp => this.update.emit()
@@ -369,7 +369,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         );
                     }
                 } catch (err) {
-                    this.basicModals.alert("Edit", err, ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, err, ModalType.warning);
                     this.cancelEdit();
                 }
             } else if (this.editInProgress) {
@@ -380,7 +380,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
                             let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
                                 + ". The change may cause an inconsistency. Do you want to apply the change?";
-                            this.basicModals.confirm("Warning", warningMsg, ModalType.warning).then(
+                            this.basicModals.confirm({key:"STATUS.WARNING"}, warningMsg, ModalType.warning).then(
                                 confirm => { this.updateTriple(this.subject, this.predicate, this.resource, newValue); },
                                 reject => { this.cancelEdit(); }
                             );
@@ -401,7 +401,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         }
                     }
                 } catch (err) {
-                    this.basicModals.alert("Edit", err, ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, err, ModalType.warning);
                     this.cancelEdit();
                 }
             }
@@ -517,7 +517,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     );
                 } else {
                     let detailsMsg: string[] = checkResp.details.map(d => d.msg);
-                    this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", ModalType.warning, detailsMsg.join("\n"));
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + expression + "' is not a valid Manchester Expression", ModalType.warning, detailsMsg.join("\n"));
                 }
             }
         )
@@ -578,7 +578,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             },
                             (err: Error) => {
                                 if (err.name.endsWith("AlreadyExistingLiteralFormForResourceException")) {
-                                    this.basicModals.confirm("Operation denied", err.message + ". Do you want to force the operation?", ModalType.warning).then(
+                                    this.basicModals.confirm({key:"STATUS.OPERATION_DENIED"}, err.message + ". Do you want to force the operation?", ModalType.warning).then(
                                         confirm => {
                                             this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept, true).subscribe(
                                                 stResp => {
@@ -623,7 +623,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
     //====== "Delete" HANDLER =====
 
     private bulkDelete() {
-        this.basicModals.confirm("Bulk delete", "Warning. You are deleting the value for every resource that has this predicate-value relation. Are you sure?").then(
+        this.basicModals.confirm({key:"RESOURCE_VIEW_ACTIONS.BULK_DELETE"}, "Warning. You are deleting the value for every resource that has this predicate-value relation. Are you sure?").then(
             () => {
                 this.resourcesService.removePredicateObject(this.predicate, this.resource).subscribe(
                     stResp => {
