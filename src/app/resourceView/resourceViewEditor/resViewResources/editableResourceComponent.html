@@ -5,7 +5,7 @@
         <img [src]="resource.getURI()" (error)="isImage=false" style="max-height: 100px; max-width: 300px;" [title]="resource.getURI()">
     </a>
     
-    <div class="dropdown float-right" style="align-self: flex-start;" [title]="'COMMONS.ACTIONS.EDIT'|translate" ngbDropdown>
+    <div class="dropdown float-right" style="align-self: flex-start;" [title]="'ACTIONS.EDIT'|translate" ngbDropdown>
         <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="editMenuDisabled">
             <span class="fas fa-caret-down fa-sm"></span>
         </button>
@@ -16,7 +16,7 @@
             </a>
 
             <a *ngIf="editActionScenario != 'xLabel'" class="dropdown-item" [ngClass]="{ disabled: !editAuthorized || isInferred }" (click)="edit()">
-                {{'COMMONS.ACTIONS.EDIT'|translate}}
+                {{'ACTIONS.EDIT'|translate}}
             </a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkEditAuthorized }"
                 (click)="bulkEdit()" [title]="'RESOURCE_VIEW.ACTIONS.BULD_EDIT_INFO'|translate">
@@ -39,7 +39,7 @@
             <a *ngIf="isInferred && partition != 'lexicalizations'" class="dropdown-item" [ngClass]="{ disabled: !assertAuthorized }" (click)="assertInferred()">
                 {{'RESOURCE_VIEW.ACTIONS.ASSERT_INFERRED_STATEMENT'|translate}}
             </a>
-            <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized || isInferred }" (click)="delete()">{{'COMMONS.ACTIONS.DELETE'|translate}}</a>
+            <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized || isInferred }" (click)="delete()">{{'ACTIONS.DELETE'|translate}}</a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkDeleteAuthorized }" 
                 (click)="bulkDelete()" [title]="'RESOURCE_VIEW.ACTIONS.BULK_DELETE_INFO'|translate">
                 {{'RESOURCE_VIEW.ACTIONS.BULK_DELETE'|translate}}
@@ -56,10 +56,10 @@
             <input type="text" class="form-control" [(ngModel)]="resourceStringValue">
         </ng-template>
         <div class="input-group-append">
-            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="confirmEdit()" [title]="'COMMONS.ACTIONS.CONFIRM'|translate">
+            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="confirmEdit()" [title]="'ACTIONS.CONFIRM'|translate">
                 <span class="fas fa-check" style="color: green"></span>
             </button>
-            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="cancelEdit()" [title]="'COMMONS.ACTIONS.CANCEL'|translate">
+            <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="cancelEdit()" [title]="'ACTIONS.CANCEL'|translate">
                 <span class="fas fa-times" style="color: red"></span>
             </button>
         </div>

@@ -11,10 +11,10 @@
         
         <div style="align-self: center; margin: 5px;">
             <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="addConstituentToList()" [disabled]="!selectedConstituentSource">
-                {{'COMMONS.ACTIONS.ADD'|translate}}<span class="fas fa-chevron-right ml-1"></span>
+                {{'ACTIONS.ADD'|translate}}<span class="fas fa-chevron-right ml-1"></span>
             </button>
             <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="removeConstituentFromList()" [disabled]="!selectedConstituentTarget">
-                <span class="fas fa-chevron-left mr-1"></span>{{'COMMONS.ACTIONS.REMOVE'|translate}}
+                <span class="fas fa-chevron-left mr-1"></span>{{'ACTIONS.REMOVE'|translate}}
             </button>
         </div>
         
@@ -48,5 +48,5 @@
 
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="list.length == 0">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

@@ -271,7 +271,7 @@ export class Sheet2RdfComponent {
         this.s2rdfService.exportStatus().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink("Export Mapping Status", null, exportLink, "s2rdf_status.json");
+                this.basicModals.downloadLink({key:"ACTIONS.EXPORT_MAPPING_STATUS"}, null, exportLink, "s2rdf_status.json");
             }
         );
     }
@@ -338,7 +338,7 @@ export class Sheet2RdfComponent {
         var data = new Blob([this.pearl], { type: 'text/plain' });
         var textFile = window.URL.createObjectURL(data);
         var fileName = "pearl_export.pr";
-        this.basicModals.downloadLink("Save SPARQL results", null, textFile, fileName).then(
+        this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_PEARL" }, null, textFile, fileName).then(
             (done: any) => { window.URL.revokeObjectURL(textFile); },
             () => { }
         );
@@ -428,7 +428,7 @@ export class Sheet2RdfComponent {
         this.s2rdfService.exportTriples(format).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink("Export triples in " + format.name, null, exportLink, "triples." + format.defaultFileExtension);
+                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_TRIPLES"}, null, exportLink, "triples." + format.defaultFileExtension);
             }
         )
     }

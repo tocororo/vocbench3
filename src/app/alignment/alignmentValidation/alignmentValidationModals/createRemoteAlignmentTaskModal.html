@@ -1,6 +1,6 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{'COMMONS.ACTIONS.CREATE_TASK'|translate}}</h3>
+        <h3 class="modal-title" style="flex: 1">{{'ACTIONS.CREATE_TASK'|translate}}</h3>
         <button *ngIf="serviceMetadata?.settings?.stProperties" class="btn btn-xs btn-light" (click)="systemSettings()">
             <span class="fas fa-wrench"></span>
         </button>
@@ -201,7 +201,7 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>
 
 <div #blockingDiv class="blockingDiv" style="display:none">

@@ -6,13 +6,13 @@
             <div class="card-header">
                 <label style="flex: 1;">{{'COMMONS.GROUPS'|translate}}:</label>
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-light" (click)="createGroup()" [title]="'COMMONS.ACTIONS.CREATE'|translate">
+                    <button class="btn btn-light" (click)="createGroup()" [title]="'ACTIONS.CREATE'|translate">
                         <span class="fas fa-plus"></span>
                     </button>
-                    <button class="btn btn-light" (click)="deleteGroup()" [title]="'COMMONS.ACTIONS.DELETE'|translate" [disabled]="!selectedGroup">
+                    <button class="btn btn-light" (click)="deleteGroup()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!selectedGroup">
                         <span class="fas fa-minus"></span>
                     </button>
-                    <button class="btn btn-light" (click)="editGroup()" [title]="'COMMONS.ACTIONS.EDIT'|translate" [disabled]="!selectedGroup">
+                    <button class="btn btn-light" (click)="editGroup()" [title]="'ACTIONS.EDIT'|translate" [disabled]="!selectedGroup">
                         <span class="fas fa-pencil-alt"></span>
                     </button>
                 </div>

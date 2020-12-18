@@ -23,7 +23,7 @@
                 
                 <div class="input-group-append">
                     <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
-                        [title]="'COMMONS.ACTIONS.LOCK_UNLOCK_NAMESPACE'|translate" [ngClass]="{active: namespaceLocked}" [disabled]="mode == 'edit'">
+                        [title]="'ACTIONS.LOCK_UNLOCK_NAMESPACE'|translate" [ngClass]="{active: namespaceLocked}" [disabled]="mode == 'edit'">
                         <span class="fas fa-lock" style="font-size: 10px;"></span>
                     </button>
                 </div>
@@ -119,12 +119,12 @@
                         <span class="fas fa-pencil-alt"></span>
                     </button>
                     <div class="dropdown-menu float-right" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="addPropToChain()">{{'COMMONS.ACTIONS.ADD'|translate}}</a>
-                        <a class="dropdown-item" (click)="editPropChain()">{{'COMMONS.ACTIONS.EDIT_MANUALLY'|translate}}</a>
-                        <a class="dropdown-item" [ngClass]="{disabled : !selectedPropInChain}" (click)="addPropToChain('before')">{{'COMMONS.ACTIONS.ADD_BEFORE'|translate}}</a>
-                        <a class="dropdown-item" [ngClass]="{disabled : !selectedPropInChain}" (click)="addPropToChain('after')">{{'COMMONS.ACTIONS.ADD_AFTER'|translate}}</a>
-                        <a class="dropdown-item" [ngClass]="{disabled : disableMove('before')}" (click)="movePropInChain('before')">{{'COMMONS.ACTIONS.MOVE_BEFORE'|translate}}</a>
-                        <a class="dropdown-item" [ngClass]="{disabled : disableMove('after')}" (click)="movePropInChain('after')">{{'COMMONS.ACTIONS.MOVE_AFTER'|translate}}</a>
+                        <a class="dropdown-item" (click)="addPropToChain()">{{'ACTIONS.ADD'|translate}}</a>
+                        <a class="dropdown-item" (click)="editPropChain()">{{'ACTIONS.EDIT_MANUALLY'|translate}}</a>
+                        <a class="dropdown-item" [ngClass]="{disabled : !selectedPropInChain}" (click)="addPropToChain('before')">{{'ACTIONS.ADD_BEFORE'|translate}}</a>
+                        <a class="dropdown-item" [ngClass]="{disabled : !selectedPropInChain}" (click)="addPropToChain('after')">{{'ACTIONS.ADD_AFTER'|translate}}</a>
+                        <a class="dropdown-item" [ngClass]="{disabled : disableMove('before')}" (click)="movePropInChain('before')">{{'ACTIONS.MOVE_BEFORE'|translate}}</a>
+                        <a class="dropdown-item" [ngClass]="{disabled : disableMove('after')}" (click)="movePropInChain('after')">{{'ACTIONS.MOVE_AFTER'|translate}}</a>
                     </div>
                 </div>
             </div>
@@ -142,6 +142,6 @@
             </div>
         </div>
         <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="readOnly">Ok</button>
-        <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+        <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
 </div>

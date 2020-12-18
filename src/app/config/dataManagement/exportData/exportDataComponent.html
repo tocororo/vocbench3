@@ -1,6 +1,6 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1;">{{'DATA_MANAGEMENT.EXPORT.EXPORT_DATA'|translate}}:</label>
+        <label style="flex: 1;">{{'ACTIONS.EXPORT_DATA'|translate}}:</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
                 <button class="btn btn-light" [title]="'COMMONS.CONFIG.SAVE_CONFIGURATION'|translate" (click)="saveChain()">
@@ -46,11 +46,11 @@
                             [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
                             <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
+                        <button class="btn btn-light" [title]="'ACTIONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
                             [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
                             <span class="fas fa-chevron-down"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.MOVE_UP'|translate" (click)="moveFilterUp()"
+                        <button class="btn btn-light" [title]="'ACTIONS.MOVE_UP'|translate" (click)="moveFilterUp()"
                             [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
                             <span class="fas fa-chevron-up"></span>
                         </button>
@@ -168,7 +168,7 @@
                 <input class="form-check-input" id="inferCheck" type="checkbox" [(ngModel)]="includeInferred">
                 <label class="form-check-label" for="inferCheck">{{'DATA_MANAGEMENT.EXPORT.INCLUDE_INFERRED'|translate}}</label>
             </div>
-            <button type="submit" class="btn btn-light btn-sm" (click)="export()">{{'COMMONS.ACTIONS.SUBMIT'|translate}}</button>
+            <button type="submit" class="btn btn-light btn-sm" (click)="export()">{{'ACTIONS.SUBMIT'|translate}}</button>
         </div>
     </div>
 </div>

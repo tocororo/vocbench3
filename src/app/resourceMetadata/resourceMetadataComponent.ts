@@ -131,7 +131,7 @@ export class ResourceMetadataComponent {
         this.resourceMetadataService.exportPattern(this.selectedPattern.reference).subscribe(
             pattern => {
                 let url = window.URL.createObjectURL(pattern);
-                this.basicModals.downloadLink("Export Metadata Pattern", null, url, this.selectedPattern.name + ".cfg");
+                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_METADATA_PATTERN" }, null, url, this.selectedPattern.name + ".cfg");
             }
         )
     }

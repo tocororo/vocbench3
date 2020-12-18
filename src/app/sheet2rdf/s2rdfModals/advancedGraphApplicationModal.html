@@ -4,10 +4,10 @@
         <h3 class="modal-title" style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.ADV_GRAPH_APPL'|translate}}</h3>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.SAVE'|translate" (click)="saveGraph()">
+                <button class="btn btn-light" [title]="'ACTIONS.SAVE'|translate" (click)="saveGraph()">
                     <span class="fas fa-download"></span>
                 </button>
-                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.LOAD'|translate" (click)="loadGraph()">
+                <button class="btn btn-light" [title]="'ACTIONS.LOAD'|translate" (click)="loadGraph()">
                     <span class="fas fa-upload"></span>
                 </button>
             </div>
@@ -150,5 +150,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

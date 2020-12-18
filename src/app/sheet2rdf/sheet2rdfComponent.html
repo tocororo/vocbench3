@@ -7,7 +7,7 @@
                     <label style="white-space: nowrap; margin-right: 4px;">{{'SHEET2RDF.SPREADSHEET.FILE'|translate}}:</label>
                     <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"></file-picker>
                     <button class="btn btn-light" style="margin-left: 4px;" (click)="loadSpreadsheet()" [disabled]="!spreadsheetFile">
-                        <span class="fas fa-redo" [title]="'COMMONS.ACTIONS.RELOAD'|translate"></span>
+                        <span class="fas fa-redo" [title]="'ACTIONS.RELOAD'|translate"></span>
                     </button>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                             <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" [title]="'SHEET2RDF.SPREADSHEET.LOAD_STATUS'|translate" [disabled]="!tablePreview">
                                 <span class="fas fa-upload"></span>
                             </button>
-                            <button class="btn btn-light" (click)="exportStatus()" [title]="'SHEET2RDF.SPREADSHEET.EXPORT_STATUS'|translate" [disabled]="!tablePreview">
+                            <button class="btn btn-light" (click)="exportStatus()" [title]="'ACTIONS.EXPORT_MAPPING_STATUS'|translate" [disabled]="!tablePreview">
                                 <span class="fas fa-download"></span>
                             </button>
                         </div>
@@ -60,7 +60,7 @@
                                     <span [class]="h.cssClass" style="font-weight: bold;">
                                         {{h.nameStruct.fullName}}
                                     </span>
-                                    <button class="btn btn-xs btn-light" style="padding: 0px 3px;" [title]="'COMMONS.ACTIONS.EDIT'|translate" (click)="editHeader(h)">
+                                    <button class="btn btn-xs btn-light" style="padding: 0px 3px;" [title]="'ACTIONS.EDIT'|translate" (click)="editHeader(h)">
                                         <span class="fas fa-edit"></span>
                                     </button>
                                 </td>
@@ -110,10 +110,10 @@
                         <div class="btn-group btn-group-xs">
                             <!-- Workaround to show input file as simple <button> -->
                             <input #inputFile type="file" (change)="loadPearl(inputFile.files[0])" accept=".pr, text/plain" style="display:none">
-                            <button class="btn btn-light" style="margin-left: -1px" (click)="inputFile.click()" [title]="'COMMONS.ACTIONS.LOAD'|translate" [disabled]="!tablePreview">
+                            <button class="btn btn-light" style="margin-left: -1px" (click)="inputFile.click()" [title]="'ACTIONS.LOAD'|translate" [disabled]="!tablePreview">
                                 <span class="fas fa-upload"></span>
                             </button>
-                            <button class="btn btn-light" (click)="exportPearl()" [title]="'COMMONS.ACTIONS.EXPORT'|translate" [disabled]="!pearl">
+                            <button class="btn btn-light" (click)="exportPearl()" [title]="'ACTIONS.EXPORT'|translate" [disabled]="!pearl">
                                 <span class="fas fa-download"></span>
                             </button>
                         </div>
@@ -149,7 +149,7 @@
                         <div class="btn-group btn-group-xs">
                             <div class="dropdown float-right" ngbDropdown>
                                 <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle [disabled]="!triplesPreview">
-                                    {{'COMMONS.ACTIONS.EXPORT'|translate}}... <span class="fas fa-caret-down fa-sm"></span>
+                                    {{'ACTIONS.EXPORT'|translate}}... <span class="fas fa-caret-down fa-sm"></span>
                                 </button>
                                 <div class="dropdown-menu" ngbDropdownMenu>
                                     <a *ngFor="let f of exportFormats" class="dropdown-item" (click)="exportTriplesAs(f)">{{f.name}}</a>

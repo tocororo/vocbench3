@@ -16,7 +16,7 @@
             <label style="flex: 1">{{'RESOURCE_METADATA.SHARED_PATTERNS'|translate}}:</label>
             <div class="btn-toolbar">
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-light" [title]="'COMMONS.ACTIONS.DELETE'|translate" (click)="deletePattern()"
+                    <button class="btn btn-light" [title]="'ACTIONS.DELETE'|translate" (click)="deletePattern()"
                         [disabled]="!selectedPattern || !deletePatternAuthorized">
                         <span class="fas fa-minus"></span>
                     </button>
@@ -33,5 +33,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

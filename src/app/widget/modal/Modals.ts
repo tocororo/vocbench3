@@ -39,3 +39,9 @@ export class ModalOptions implements NgbModalOptions {
     }
 
 }
+
+/**
+ * string if the provided text doesn't need to be translated
+ * { key, params } if needs to be translated (key is the translation key, params is the optional params object)
+ */
+export type TextOrTranslation = string | { key: string, params?: {} }

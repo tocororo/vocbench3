@@ -56,14 +56,14 @@
                 <div class="dropdown-menu" ngbDropdownMenu>
                     <a routerLink="/Config/LoadData" class="dropdown-item"
                         [ngClass]="{ disabled : !loadDataAuthorized }">
-                        <span class="fas fa-upload" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.LOAD_DATA'|translate}}
+                        <span class="fas fa-upload" style="margin-right: 5px"></span>{{'ACTIONS.LOAD_DATA'|translate}}
                     </a>
                     <a routerLink="/Config/ExportData" class="dropdown-item"
                         [ngClass]="{ disabled : !exportDataAuthorized }">
-                        <span class="fas fa-download" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.EXPORT_DATA'|translate}}
+                        <span class="fas fa-download" style="margin-right: 5px"></span>{{'ACTIONS.EXPORT_DATA'|translate}}
                     </a>
                     <a (click)="clearData()" class="dropdown-item" [ngClass]="{ disabled : !clearDataAuthorized }">
-                        <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.CLEAR_DATA'|translate}}
+                        <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'ACTIONS.CLEAR_DATA'|translate}}
                     </a>
                     <div class="dropdown-divider"></div>
                     <a routerLink="/Config/Versioning" class="dropdown-item"
@@ -78,15 +78,15 @@
                         <div class="dropdown-divider"></div>
                         <a (click)="loadShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !loadShapesAuthorized }">
-                            <span class="fas fa-upload" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.LOAD_SHAPES'|translate}}
+                            <span class="fas fa-upload" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.LOAD_SHACL_SHAPES'|translate}}
                         </a>
                         <a (click)="exportShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !exportShapesAuthorized }">
-                            <span class="fas fa-download" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.EXPORT_SHAPES'|translate}}
+                            <span class="fas fa-download" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.EXPORT_SHACL_SHAPES'|translate}}
                         </a>
                         <a (click)="clearShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !clearShapesAuthorized }">
-                            <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.CLEAR_SHAPES'|translate}}
+                            <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.CLEAR_SHACL_SHAPES'|translate}}
                         </a>
                     </ng-container>
                 </div>

@@ -1,6 +1,6 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1;">{{'DATA_MANAGEMENT.LOAD.LOAD_DATA'|translate}}:</label>
+        <label style="flex: 1;">{{'ACTIONS.LOAD_DATA'|translate}}:</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
                 <button class="btn btn-light" [title]="'COMMONS.CONFIG.SAVE_CONFIGURATION'|translate" (click)="saveChain()">
@@ -125,11 +125,11 @@
                             [disabled]="transformersChain.length == 0 || !selectedTransformerChainElement">
                             <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.MOVE_DOWN'|translate" (click)="moveTransformerDown()"
+                        <button class="btn btn-light" [title]="'ACTIONS.MOVE_DOWN'|translate" (click)="moveTransformerDown()"
                             [disabled]="isSelectedTransformerLast() || !selectedTransformerChainElement">
                             <span class="fas fa-chevron-down"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'COMMONS.ACTIONS.MOVE_UP'|translate" (click)="moveTransformerUp()"
+                        <button class="btn btn-light" [title]="'ACTIONS.MOVE_UP'|translate" (click)="moveTransformerUp()"
                             [disabled]="isSelectedTransformerFirst() || !selectedTransformerChainElement">
                             <span class="fas fa-chevron-up"></span>
                         </button>
@@ -175,7 +175,7 @@
         </div>
         <span style="flex: 1"></span>
         <div class="float-right">
-            <button type="submit" class="btn btn-light btn-sm" (click)="load()" [disabled]="isDataValid()">{{'COMMONS.ACTIONS.SUBMIT'|translate}}</button>
+            <button type="submit" class="btn btn-light btn-sm" (click)="load()" [disabled]="isDataValid()">{{'ACTIONS.SUBMIT'|translate}}</button>
         </div>
     </div>
 </div>

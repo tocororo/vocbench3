@@ -186,7 +186,7 @@ export class CustomFormConfigComponent {
         this.customFormsService.exportFormCollection(this.selectedFormColl.getId()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink("Export FormCollection", null, exportLink, this.selectedFormColl.getId() + ".xml");
+                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedFormColl.getId() + ".xml");
             }
         );
     }
@@ -312,7 +312,7 @@ export class CustomFormConfigComponent {
         this.customFormsService.exportCustomForm(this.selectedCustomForm.getId()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink("Export FormCollection", null, exportLink, this.selectedCustomForm.getId() + ".xml");
+                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedCustomForm.getId() + ".xml");
             }
         );
     }

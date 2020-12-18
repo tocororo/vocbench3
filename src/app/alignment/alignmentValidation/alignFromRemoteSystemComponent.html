@@ -22,14 +22,14 @@
                         <label style="flex: 1;">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.MAIN.TASKS'|translate}}</label>
                         <div class="btn-toolbar">
                             <div class="btn-group btn-group-xs">
-                                <button class="btn btn-light" (click)="createTask()" [title]="'COMMONS.ACTIONS.CREATE'|translate" [disabled]="serverDown || serviceNotConfigured">
+                                <button class="btn btn-light" (click)="createTask()" [title]="'ACTIONS.CREATE'|translate" [disabled]="serverDown || serviceNotConfigured">
                                     <span class="fas fa-plus"></span>
                                 </button>
-                                <button class="btn btn-sm btn-light" (click)="deleteTask()" [title]="'COMMONS.ACTIONS.DELETE'|translate" [disabled]="!selectedTask || serverDown || serviceNotConfigured">
+                                <button class="btn btn-sm btn-light" (click)="deleteTask()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!selectedTask || serverDown || serviceNotConfigured">
                                     <span class="fas fa-minus"></span>
                                 </button>
                             </div>
-                            <button class="btn btn-xs btn-light" (click)="listTask()" [title]="'COMMONS.ACTIONS.REFRESH'|translate" [disabled]="serviceNotConfigured">
+                            <button class="btn btn-xs btn-light" (click)="listTask()" [title]="'ACTIONS.REFRESH'|translate" [disabled]="serviceNotConfigured">
                                 <span class="fas fa-redo"></span>
                             </button>
                         </div>

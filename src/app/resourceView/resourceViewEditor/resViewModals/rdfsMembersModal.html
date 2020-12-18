@@ -1,6 +1,6 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{'COMMONS.ACTIONS.ADD'|translate}} {{property.getShow()}}</h3>
+        <h3 class="modal-title" style="flex: 1">{{'ACTIONS.ADD'|translate}} {{property.getShow()}}</h3>
         <div class="btn-group">
             <button class="btn btn-xs btn-light" (click)="changeProperty()" [disabled]="!propChangeable || enrichingProperty != rootProperty">
                 <rdf-resource [resource]="enrichingProperty"></rdf-resource>
@@ -39,5 +39,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedConstituent">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

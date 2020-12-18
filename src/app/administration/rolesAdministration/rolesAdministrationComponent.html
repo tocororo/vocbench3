@@ -11,17 +11,17 @@
                         <button class="btn btn-light" (click)="createRole()" [title]="getCreateRoleTitle()" [disabled]="!isProjectOpen()">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" (click)="deleteRole()" [title]="'COMMONS.ACTIONS.DELETE'|translate"
+                        <button class="btn btn-light" (click)="deleteRole()" [title]="'ACTIONS.DELETE'|translate"
                              [disabled]="!selectedRole || selectedRole.getLevel() == 'system'">
                             <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-light" (click)="cloneRole()" [title]="'COMMONS.ACTIONS.CLONE'|translate" [disabled]="!isProjectOpen() || !selectedRole">
+                        <button class="btn btn-light" (click)="cloneRole()" [title]="'ACTIONS.CLONE'|translate" [disabled]="!isProjectOpen() || !selectedRole">
                             <span class="fas fa-copy"></span>
                         </button>
-                        <button class="btn btn-light" (click)="importRole()" [title]="'COMMONS.ACTIONS.IMPORT'|translate" [disabled]="!isProjectOpen()">
+                        <button class="btn btn-light" (click)="importRole()" [title]="'ACTIONS.IMPORT'|translate" [disabled]="!isProjectOpen()">
                             <span class="fas fa-upload"></span>
                         </button>
-                        <button class="btn btn-light" (click)="exportRole()" [title]="'COMMONS.ACTIONS.EXPORT'|translate" [disabled]="!selectedRole">
+                        <button class="btn btn-light" (click)="exportRole()" [title]="'ACTIONS.EXPORT'|translate" [disabled]="!selectedRole">
                             <span class="fas fa-download"></span>
                         </button>
                     </div>
@@ -40,15 +40,15 @@
                 <div class="card-header">
                     <label style="flex: 1;">{{'ADMINISTRATION.ROLES.ROLE_CAPABILITIES'|translate}}:</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" (click)="addCapability()" [title]="'COMMONS.ACTIONS.ADD'|translate"
+                        <button class="btn btn-light" (click)="addCapability()" [title]="'ACTIONS.ADD'|translate"
                             [disabled]="!selectedRole || selectedRole.getLevel() == 'system'">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" (click)="removeCapability()" [title]="'COMMONS.ACTIONS.REMOVE'|translate"
+                        <button class="btn btn-light" (click)="removeCapability()" [title]="'ACTIONS.REMOVE'|translate"
                             [disabled]="!selectedCapability || (selectedRole && selectedRole.getLevel() == 'system')">
                             <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-light" (click)="editCapability()" [title]="'COMMONS.ACTIONS.EDIT'|translate"
+                        <button class="btn btn-light" (click)="editCapability()" [title]="'ACTIONS.EDIT'|translate"
                             [disabled]="!selectedCapability || (selectedRole && selectedRole.getLevel() == 'system')">
                             <span class="fas fa-pencil-alt"></span>
                         </button>

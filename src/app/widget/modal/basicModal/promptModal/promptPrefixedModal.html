@@ -22,7 +22,7 @@
                 
                 <div *ngIf="prefixEditable" class="input-group-append">
                     <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
-                        [title]="'COMMONS.ACTIONS.LOCK_UNLOCK_NAMESPACE'|translate" [ngClass]="{active: namespaceLocked}">
+                        [title]="'ACTIONS.LOCK_UNLOCK_NAMESPACE'|translate" [ngClass]="{active: namespaceLocked}">
                         <span class="fas fa-lock" style="font-size: 10px;"></span>
                     </button>
                 </div>
@@ -36,5 +36,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!inputOptional && !isInputValid()">Ok</button>
-    <button *ngIf="!hideNo" class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button *ngIf="!hideNo" class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

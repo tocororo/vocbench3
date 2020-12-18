@@ -16,7 +16,7 @@
             <button class="btn btn-light btn-xs" (click)="rendering=!rendering" title="Rendering"  [ngClass]="{ active: rendering }">
                 <span class="fas fa-font"></span>
             </button>
-            <button class="btn btn-light btn-xs" (click)="snapshot()" [title]="'GRAPHS.EXPORT_SNAPSHOT'|translate">
+            <button class="btn btn-light btn-xs" (click)="snapshot()" [title]="'ACTIONS.EXPORT_GRAPH_SNAPSHOT'|translate">
                 <span class="fas fa-camera"></span>
             </button>
             <button type="button" class="btn btn-light btn-xs" [title]="'GRAPHS.FIX_NODES_POSITION'|translate" (click)="isLock? unfixAll() : fixAll()"  [ngClass]="{ active: isLock }">

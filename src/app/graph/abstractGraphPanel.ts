@@ -67,7 +67,7 @@ export abstract class AbstractGraphPanel {
 
     snapshot() {
         let exportUrl = this.viewChildGraph.getExportUrl();
-        this.basicModals.downloadLink("Export Graph SVG", null, exportUrl, "graph.svg");
+        this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_GRAPH_SNAPSHOT" }, null, exportUrl, "graph.svg");
     }
 
 }

@@ -3,10 +3,10 @@
         <label style="flex: 1;">{{'SKOS_DIFF.SKOS_DIFFING_TASKS'|translate}}</label>
 
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-light" (click)="createTask()" [title]="'COMMONS.ACTIONS.CREATE'|translate" [disabled]="serverDown">
+            <button class="btn btn-light" (click)="createTask()" [title]="'ACTIONS.CREATE'|translate" [disabled]="serverDown">
                 <span class="fas fa-plus"></span>
             </button>
-            <button class="btn btn-sm btn-light" (click)="deleteTask()" [title]="'COMMONS.ACTIONS.DELETE'|translate" [disabled]="!selectedTask || serverDown">
+            <button class="btn btn-sm btn-light" (click)="deleteTask()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!selectedTask || serverDown">
                 <span class="fas fa-minus"></span>
             </button>
         </div>
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <button class="btn btn-xs btn-light" style="margin-left: 5px;" (click)="listTasks()" [title]="'COMMONS.ACTIONS.REFRESH'|translate">
+        <button class="btn btn-xs btn-light" style="margin-left: 5px;" (click)="listTasks()" [title]="'ACTIONS.REFRESH'|translate">
             <span class="fas fa-redo"></span>
         </button>
         <!-- <button *ngIf="isSettingsAuthorized" class="btn btn-xs btn-light" style="margin-left: 5px;" (click)="settings()" [title]="'COMMONS.SETTINGS'|translate">

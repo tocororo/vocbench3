@@ -61,7 +61,7 @@
                             {{v.repositoryStatus | lowercase}}
                             <button class="btn btn-xs btn-light" (click)="closeVersion(v)"
                                 [disabled]="v.repositoryStatus != 'INITIALIZED' || isActiveVersion(v)">
-                                {{'COMMONS.ACTIONS.CLOSE'|translate}}
+                                {{'ACTIONS.CLOSE'|translate}}
                             </button>
                         </ng-container>
                     </td>

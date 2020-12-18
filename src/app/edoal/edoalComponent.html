@@ -48,7 +48,7 @@
                     </div>
                     <button class="btn btn-xs btn-light float-right" (click)="addCorrespondence()"
                         [disabled]="!leftSelectedResource || !rightSelectedResource || !selectedRelation || !measure">
-                        {{'COMMONS.ACTIONS.CREATE'|translate}}
+                        {{'ACTIONS.CREATE'|translate}}
                     </button>
                 </div>
             </div>
@@ -61,10 +61,10 @@
                     <button class="btn btn-xs btn-light" style="transform: rotate(90deg);" [title]="'EDOAL.SYNC_ENTITIES'|translate" (click)="syncCorrespondece()" [disabled]="!selectedCorrespondence">
                         <span class="fas fa-sort"></span>
                     </button>
-                    <button class="btn btn-xs btn-light" (click)="deleteCorrespondece()" [title]="'COMMONS.ACTIONS.DELETE'|translate" [disabled]="!selectedCorrespondence">
+                    <button class="btn btn-xs btn-light" (click)="deleteCorrespondece()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!selectedCorrespondence">
                         <span class="fas fa-minus"></span>
                     </button>
-                    <button class="btn btn-xs btn-light" (click)="listCorrespondences()" [title]="'COMMONS.ACTIONS.REFRESH'|translate">
+                    <button class="btn btn-xs btn-light" (click)="listCorrespondences()" [title]="'ACTIONS.REFRESH'|translate">
                         <span class="fas fa-redo"></span>
                     </button>
                 </div>

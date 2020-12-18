@@ -631,9 +631,9 @@ export class ExportDataComponent {
     private exportSuccessHandler(data: any | Blob, downloadExpected: boolean) {
         if (downloadExpected) {
             var exportLink = window.URL.createObjectURL(data);
-            this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
+            this.basicModals.downloadLink({key: "ACTIONS.EXPORT_DATA" }, null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
         } else {
-            this.basicModals.alert("Export data", "The export result has been deployed succesfully");
+            this.basicModals.alert({key: "ACTIONS.EXPORT_DATA" }, "The export result has been deployed succesfully");
         }
     }
 

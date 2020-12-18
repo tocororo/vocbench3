@@ -19,10 +19,10 @@
                 <label style="flex: 1;">{{'RESOURCE_VIEW.PARTITIONS.PARTITIONS'|translate}}</label>
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
+                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, true)" [title]="'ACTIONS.CHECK_ALL'|translate">
                             <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate">
+                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, false)" [title]="'ACTIONS.UNCHECK_ALL'|translate">
                             <span class="far fa-square"></span>
                         </button>
                     </div>
@@ -58,7 +58,7 @@
     <div class="card-footer">
         <button class="btn btn-xs btn-light float-right" (click)="reset()" [title]="'RESOURCE_VIEW.PARTITIONS.FILTER.SET_VISIBLE_ALL'|translate">
             <span class="fas fa-eye mr-1"></span>
-            {{'COMMONS.ACTIONS.ENABLE_ALL'|translate}}
+            {{'ACTIONS.ENABLE_ALL'|translate}}
         </button>
     </div>
 </div>

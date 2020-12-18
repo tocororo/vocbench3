@@ -13,14 +13,14 @@
                         <span class="fas fa-info-circle ml-1" [title]="'ICV.GENERIC.BROKEN_ALIGNMENTS.NAMESPACES_TO_CHECK_INFO'|translate"></span>
                     </span>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" (click)="checkAllNs(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate" [disabled]="!namespaces">
+                        <button class="btn btn-light" (click)="checkAllNs(true)" [title]="'ACTIONS.CHECK_ALL'|translate" [disabled]="!namespaces">
                             <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-light" (click)="checkAllNs(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate" [disabled]="!namespaces">
+                        <button class="btn btn-light" (click)="checkAllNs(false)" [title]="'ACTIONS.UNCHECK_ALL'|translate" [disabled]="!namespaces">
                             <span class="far fa-square"></span>
                         </button>
                         <button class="btn btn-light" (click)="initNamespaces()" [disabled]="rolesToCheck.length==0">
-                            <span>{{'COMMONS.ACTIONS.RELOAD'|translate}}</span>
+                            <span>{{'ACTIONS.RELOAD'|translate}}</span>
                             <span *ngIf="rolesUpdated" class="fas fa-exclamation-circle ml-1" style="color: red"
                                 [title]="'ICV.GENERIC.BROKEN_ALIGNMENTS.RELOAD_INFO'|translate"></span>
                         </button>

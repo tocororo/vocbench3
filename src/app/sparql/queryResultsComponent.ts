@@ -268,7 +268,7 @@ export class QueryResultsComponent {
             blob => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink("Export SPARQL results", null, exportLink, "sparql_export." + format);
+                this.basicModals.downloadLink({ key: "SPARQL.RESULTS.EXPORT_RESULTS" }, null, exportLink, "sparql_export." + format);
             }
         );
     }
@@ -287,7 +287,7 @@ export class QueryResultsComponent {
         var data = new Blob([fileContent], { type: 'text/plain' });
         var textFile = window.URL.createObjectURL(data);
         var fileName = "result." + type;
-        this.basicModals.downloadLink("Export SPARQL results", null, textFile, fileName).then(
+        this.basicModals.downloadLink({ key: "SPARQL.RESULTS.EXPORT_RESULTS" }, null, textFile, fileName).then(
             done => { window.URL.revokeObjectURL(textFile); },
             () => { }
         );

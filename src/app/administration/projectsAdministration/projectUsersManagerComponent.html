@@ -3,11 +3,11 @@
         <div class="card-header">
             <label style="flex: 1;">{{'COMMONS.USERS'|translate}}:</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="addUserToProject()" [disabled]="!project" [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.ADD_USER_TO_PROJ'|translate">
+                <button class="btn btn-light" (click)="addUserToProject()" [disabled]="!project" [title]="'ACTIONS.ADD_USER_TO_PROJ'|translate">
                     <span class="fas fa-plus"></span>
                 </button>
                 <button class="btn btn-light" (click)="removeUserFromProject()" 
-                    [disabled]="!selectedUser || selectedUser.isAdmin() || !project" [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.REMOVE_USER_FROM_PROJ'|translate">
+                    [disabled]="!selectedUser || selectedUser.isAdmin() || !project" [title]="'ACTIONS.REMOVE_USER_FROM_PROJ'|translate">
                     <span class="fas fa-minus"></span>
                 </button>
             </div>
@@ -22,7 +22,7 @@
     <div *ngIf="selectedUser" class="card card-alt vbox" style="margin-left: 5px; flex: 3;">
         <div class="card-header">
             <label style="flex: 1;">{{'ADMINISTRATION.PROJECTS.PROJ_USER.PROJ_USER_SETTINGS'|translate}}:</label>
-            <button *ngIf="isLoggedUserAdmin()" class="btn btn-xs btn-light" (click)="cloneSettings()" [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.DUPLICATE_TO_ANOTHER_PROJ'|translate">
+            <button *ngIf="isLoggedUserAdmin()" class="btn btn-xs btn-light" (click)="cloneSettings()" [title]="'ACTIONS.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ'|translate">
                 <span class="fas fa-copy"></span>
             </button>
         </div>
@@ -47,10 +47,10 @@
                         </div>
                         <div style="align-self: center; margin: 5px;">
                             <button class="btn btn-light btn-sm btn-block" (click)="addRole()" [disabled]="!selectedRole || !puBinding">
-                                <span class="fas fa-chevron-left"></span> {{'COMMONS.ACTIONS.ADD'|translate}}
+                                <span class="fas fa-chevron-left"></span> {{'ACTIONS.ADD'|translate}}
                             </button>
                             <button class="btn btn-light btn-sm btn-block"  (click)="removeRole()" [disabled]="!selectedUserRole">
-                                {{'COMMONS.ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
+                                {{'ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                             </button>
                         </div>
                         <div class="card card-alt vbox">
@@ -94,10 +94,10 @@
                         </div>
                         <div style="align-self: center; margin: 5px;">
                             <button class="btn btn-light btn-sm btn-block" (click)="assignGroup()" [disabled]="!selectedGroup || !puBinding">
-                                <span class="fas fa-chevron-left"></span> {{'COMMONS.ACTIONS.ASSIGN'|translate}}
+                                <span class="fas fa-chevron-left"></span> {{'ACTIONS.ASSIGN'|translate}}
                             </button>
                             <button class="btn btn-light btn-sm btn-block"  (click)="removeGroup()" [disabled]="!selectedUserGroup">
-                                {{'COMMONS.ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
+                                {{'ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                             </button>
                         </div>
                         <div class="card card-alt vbox" style="margin: 0px">
@@ -142,14 +142,14 @@
                         <div class="vbox" style="align-self: center; margin: 5px; flex: initial;">
                             <div class="btn-group" style="display: flex; margin-bottom: 5px;">
                                 <button class="btn btn-sm btn-light" style="width: 100%" (click)="addLanguage()" [disabled]="!selectedLang || !puBinding">
-                                    <span class="fas fa-chevron-left"></span> {{'COMMONS.ACTIONS.ADD'|translate}}
+                                    <span class="fas fa-chevron-left"></span> {{'ACTIONS.ADD'|translate}}
                                 </button>
                                 <div class="btn-group" ngbDropdown>
                                     <button class="btn btn-sm btn-light dropdown-toggle" style="padding: 5px 3px;" data-toggle="dropdown" ngbDropdownToggle>
                                         <span class="fas fa-caret-down fa-sm"></span>
                                     </button>
                                     <div class="dropdown-menu" ngbDropdownMenu>
-                                        <a class="dropdown-item" (click)="addAllLanguages()">{{'COMMONS.ACTIONS.ADD_ALL'|translate}}</a>
+                                        <a class="dropdown-item" (click)="addAllLanguages()">{{'ACTIONS.ADD_ALL'|translate}}</a>
                                         <a class="dropdown-item" (click)="addProficienciesLangs()">
                                             {{'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.ADD_ALL_PROFICIENCIES'|translate}}
                                             <span class="fas fa-star"></span>
@@ -159,14 +159,14 @@
                             </div>
                             <div class="btn-group">
                                 <button class="btn btn-sm btn-light" (click)="removeLanguage()" [disabled]="!selectedUserLang">
-                                    {{'COMMONS.ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
+                                    {{'ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                                 </button>
                                 <div class="btn-group" ngbDropdown>
                                     <button class="btn btn-sm btn-light dropdown-toggle" style="padding: 5px 3px;" data-toggle="dropdown" ngbDropdownToggle>
                                         <span class="fas fa-caret-down fa-sm"></span>
                                     </button>
                                     <div class="dropdown-menu" ngbDropdownMenu>
-                                        <a class="dropdown-item" (click)="removeAllLanguages()">{{'COMMONS.ACTIONS.REMOVE_ALL'|translate}}</a>
+                                        <a class="dropdown-item" (click)="removeAllLanguages()">{{'ACTIONS.REMOVE_ALL'|translate}}</a>
                                         <a class="dropdown-item" (click)="leaveProficienciesLangs()">
                                             {{'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.LEAVE_ONLY_PROFICIENCIES'|translate}}
                                             <span class="fas fa-star"></span>
@@ -203,10 +203,10 @@
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" (click)="storeTemplate()" [title]="'COMMONS.ACTIONS.STORE'|translate">
+                            <button class="btn btn-light" (click)="storeTemplate()" [title]="'ACTIONS.STORE'|translate">
                                 <span class="fas fa-download"></span>
                             </button>
-                            <button class="btn btn-light" (click)="loadTemplate()" [title]="'COMMONS.ACTIONS.LOAD'|translate">
+                            <button class="btn btn-light" (click)="loadTemplate()" [title]="'ACTIONS.LOAD'|translate">
                                 <span class="fas fa-upload"></span>
                             </button>
                         </div>

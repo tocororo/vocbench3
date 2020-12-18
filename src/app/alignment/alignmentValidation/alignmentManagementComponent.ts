@@ -459,7 +459,7 @@ export class AlignmentManagementComponent {
         }
 
         if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "delete") {
-            this.basicModals.confirm("Apply validation", message, ModalType.warning).then(
+            this.basicModals.confirm({ key: "ALIGNMENT.VALIDATION.MANAGEMENT.APPLY_VALIDATION" }, message, ModalType.warning).then(
                 () => {
                     let deleteRejected = this.rejectedAlignmentAction == "delete";
                     if (this.isEdoal) {
@@ -472,7 +472,7 @@ export class AlignmentManagementComponent {
                 () => { }
             );
         } else { //ask
-            this.basicModals.confirmCheck("Apply valdiation", message, [{ label: "Delete triples of rejected alignments", value: false }], ModalType.warning).then(
+            this.basicModals.confirmCheck({ key: "ALIGNMENT.VALIDATION.MANAGEMENT.APPLY_VALIDATION" }, message, [{ label: "Delete triples of rejected alignments", value: false }], ModalType.warning).then(
                 (checkOpts: ConfirmCheckOptions[]) => {
                     if (this.isEdoal) {
                         this.applyToEdoalLinkset(checkOpts[0].value)
@@ -506,7 +506,7 @@ export class AlignmentManagementComponent {
         this.alignmentService.applyValidationToEdoal(deleteRejected).subscribe(
             () => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert("Apply validation", "All correspondences have been added succesfully");
+                this.basicModals.alert({ key: "ALIGNMENT.VALIDATION.MANAGEMENT.APPLY_TO_EDOAL" }, "All correspondences have been added succesfully");
             }
         );
     }
@@ -515,7 +515,7 @@ export class AlignmentManagementComponent {
         this.alignmentService.exportAlignment().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink("Export alignment", 
+                this.basicModals.downloadLink({ key: "ALIGNMENT.VALIDATION.MANAGEMENT.EXPORT_ALIGNMENT" }, 
                     "Please notice that the validation data is not stored internally and must be restored through the saved file available at this download link", 
                     exportLink, "alignment.rdf");
             }

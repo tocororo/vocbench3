@@ -2,7 +2,7 @@
     <div class="card-header">
         <label style="flex: 1">{{ref.identifier}}</label>
         <div class="hbox" style="flex: initial;">
-            <button class="btn btn-light btn-sm" (click)="edit()" [title]="'COMMONS.ACTIONS.EDIT'|translate" [disabled]="!editReporterAuthorized">
+            <button class="btn btn-light btn-sm" (click)="edit()" [title]="'ACTIONS.EDIT'|translate" [disabled]="!editReporterAuthorized">
                 <span class="fas fa-pencil-alt"></span>
             </button>
             <div class="btn-group btn-group-sm" style="margin-left: 5px;">
@@ -80,11 +80,11 @@
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-sm">
-                            <button class="btn btn-light" (click)="createServiceInvocation()" [title]="'COMMONS.ACTIONS.CREATE'|translate" 
+                            <button class="btn btn-light" (click)="createServiceInvocation()" [title]="'ACTIONS.CREATE'|translate" 
                                 [disabled]="!createInvocationAuthorized">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" (click)="deleteServiceInvocation()" [title]="'COMMONS.ACTIONS.DELETE'|translate" 
+                            <button class="btn btn-light" (click)="deleteServiceInvocation()" [title]="'ACTIONS.DELETE'|translate" 
                                 [disabled]="!selectedServiceInvocation || !deleteInvocationAuthorized">
                                 <span class="fas fa-minus"></span>
                             </button>

@@ -3,11 +3,11 @@
     <div class="card card-default vbox">
         <div class="card-header">
             <button class="btn btn-xs btn-light" (click)="createProject()">
-                {{'COMMONS.ACTIONS.CREATE'|translate}}
+                {{'ACTIONS.CREATE'|translate}}
             </button>
             <span style="flex: 1;"></span>
             <div class="btn-toolbar">
-                <button class="btn btn-xs btn-light" (click)="initProjects()" [title]="'COMMONS.ACTIONS.REFRESH'|translate">
+                <button class="btn btn-xs btn-light" (click)="initProjects()" [title]="'ACTIONS.REFRESH'|translate">
                     <span class="fas fa-redo"></span>
                 </button>
                 <button class="btn btn-xs btn-light" (click)="openACLModal()" [title]="'PROJECTS.ACL.SHOW_ACL_MATRIX'|translate">
@@ -87,7 +87,7 @@
                                                 </button>
                                                 <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                                                     <button class="dropdown-item" (click)="editDirectory(p, pd.dir)">{{'PROJECTS.ACTIONS.CHANGE_DIR'|translate}}</button>
-                                                    <button class="dropdown-item" (click)="editACL(p)">{{'PROJECTS.ACTIONS.EDIT_ACL'|translate}}</button>
+                                                    <button class="dropdown-item" (click)="editACL(p)">{{'ACTIONS.EDIT_ACL'|translate}}</button>
                                                     <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
                                                     <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
                                                     <div class="dropdown-divider"></div>
@@ -175,6 +175,6 @@
         </label>
     </ng-container>
     <label class="text-center" style="width: 100px; order: 99;">
-        {{'COMMONS.ACTIONS.ACTIONS'|translate}}
+        {{'ACTIONS.ACTIONS'|translate}}
     </label>
 </ng-template>

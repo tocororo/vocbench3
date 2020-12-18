@@ -33,10 +33,10 @@
                             <span class="fas fa-font"></span>
                         </button>
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" (click)="addFilter()" [title]="'COMMONS.ACTIONS.ADD'|translate">
+                            <button class="btn btn-light" (click)="addFilter()" [title]="'ACTIONS.ADD'|translate">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" (click)="removeFilter()" [title]="'COMMONS.ACTIONS.REMOVE'|translate" [disabled]="!selectedFilteredClass">
+                            <button class="btn btn-light" (click)="removeFilter()" [title]="'ACTIONS.REMOVE'|translate" [disabled]="!selectedFilteredClass">
                                 <span class="fas fa-minus"></span>
                             </button>
                         </div>
@@ -58,10 +58,10 @@
                             <span class="fas fa-font"></span>
                         </button>
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" (click)="checkAllClasses(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate" [disabled]="!selectedFilteredClass">
+                            <button class="btn btn-light" (click)="checkAllClasses(true)" [title]="'ACTIONS.CHECK_ALL'|translate" [disabled]="!selectedFilteredClass">
                                 <span class="far fa-check-square"></span>
                             </button>
-                            <button class="btn btn-light" (click)="checkAllClasses(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate" [disabled]="!selectedFilteredClass">
+                            <button class="btn btn-light" (click)="checkAllClasses(false)" [title]="'ACTIONS.UNCHECK_ALL'|translate" [disabled]="!selectedFilteredClass">
                                 <span class="far fa-square"></span>
                             </button>
                         </div>
@@ -88,5 +88,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

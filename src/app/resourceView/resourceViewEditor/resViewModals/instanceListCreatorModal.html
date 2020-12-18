@@ -10,10 +10,10 @@
         
         <div style="align-self: center; margin: 5px;">
             <button class="btn btn-light btn-sm btn-block" (click)="addToList()" [disabled]="!selectedSourceInstance">
-                {{'COMMONS.ACTIONS.ADD'|translate}}<span class="fas fa-chevron-right"></span>
+                {{'ACTIONS.ADD'|translate}}<span class="fas fa-chevron-right"></span>
             </button>
             <button class="btn btn-light btn-sm btn-block" (click)="removeFromList()" [disabled]="!selectedTargetInstance">
-                <span class="fas fa-chevron-left"></span>{{'COMMONS.ACTIONS.REMOVE'|translate}}
+                <span class="fas fa-chevron-left"></span>{{'ACTIONS.REMOVE'|translate}}
             </button>
         </div>
 
@@ -32,5 +32,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="instanceList.length == 0">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

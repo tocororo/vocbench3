@@ -15,11 +15,11 @@
             <label>{{'PROJECTS.CONFIG.PROJ_INFO'|translate}}</label>
             <label style="flex: 1"></label>
             <div class="btn-group btn-group-xs" style="margin-right: 4px;">
-                <button class="btn btn-light" (click)="moveUp()" [title]="'COMMONS.ACTIONS.MOVE_UP'|translate"
+                <button class="btn btn-light" (click)="moveUp()" [title]="'ACTIONS.MOVE_UP'|translate"
                     [disabled]="!selectedColumn || columns.indexOf(selectedColumn) == 0">
                     <span class="fas fa-chevron-up"></span>
                 </button>
-                <button class="btn btn-light" (click)="moveDown()" [title]="'COMMONS.ACTIONS.MOVE_DOWN'|translate"
+                <button class="btn btn-light" (click)="moveDown()" [title]="'ACTIONS.MOVE_DOWN'|translate"
                     [disabled]="!selectedColumn || columns[columns.length-1] == selectedColumn">
                     <span class="fas fa-chevron-down"></span>
                 </button>
@@ -37,7 +37,7 @@
             <table class="table table-hoverable table-sm table-borderless">
                 <thead>
                     <th class="text-center">{{'PROJECTS.CONFIG.NAME'|translate}}</th>
-                    <th class="text-center">{{'COMMONS.ACTIONS.SHOW'|translate}}</th>
+                    <th class="text-center">{{'ACTIONS.SHOW'|translate}}</th>
                 </thead>
                 <tbody>
                     <tr *ngFor="let c of columns" [ngClass]="{ 'table-primary': c == selectedColumn }" (click)="selectColumn(c)">

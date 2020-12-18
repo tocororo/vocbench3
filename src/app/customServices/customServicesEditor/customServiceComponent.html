@@ -3,7 +3,7 @@
         <label style="flex: 1">{{id}}</label>
 
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-light" (click)="initCustomService()" [title]="'COMMONS.ACTIONS.REFRESH'|translate">
+            <button class="btn btn-light" (click)="initCustomService()" [title]="'ACTIONS.REFRESH'|translate">
                 <span class="fas fa-redo"></span>
             </button>
             <div class="btn-group btn-group-xs" ngbDropdown>
@@ -54,10 +54,10 @@
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" (click)="createOperation()" [title]="'COMMONS.ACTIONS.CREATE'|translate" [disabled]="!createOperationAuthorized">
+                            <button class="btn btn-light" (click)="createOperation()" [title]="'ACTIONS.CREATE'|translate" [disabled]="!createOperationAuthorized">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" (click)="deleteOperation()" [title]="'COMMONS.ACTIONS.DELETE'|translate" [disabled]="!selectedOperation || !deleteOperationAuthorized">
+                            <button class="btn btn-light" (click)="deleteOperation()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!selectedOperation || !deleteOperationAuthorized">
                                 <span class="fas fa-minus"></span>
                             </button>
                         </div>

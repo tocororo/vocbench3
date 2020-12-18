@@ -3,10 +3,10 @@
         <label style="flex: 1;">{{'INVOKABLE_REPORTERS.INVOKABLE_REPORTS'|translate}}</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="createReporter()" [title]="'COMMONS.ACTIONS.CREATE'|translate" [disabled]="!createReporterAuthorized">
+                <button class="btn btn-light" (click)="createReporter()" [title]="'ACTIONS.CREATE'|translate" [disabled]="!createReporterAuthorized">
                     <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-light" (click)="deleteReporter()" [title]="'COMMONS.ACTIONS.DELETE'|translate" [disabled]="!selectedReporter || !deleteReporterAuthorized">
+                <button class="btn btn-light" (click)="deleteReporter()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!selectedReporter || !deleteReporterAuthorized">
                     <span class="fas fa-minus"></span>
                 </button>
             </div>

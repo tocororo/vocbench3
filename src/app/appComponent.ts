@@ -30,8 +30,13 @@ export class AppComponent {
             }
         });
 
-        //set the available languages
+        //set the available factory-provided i18n languages
         translate.addLangs(['en', 'it']);
+        //add additional supported i18n languages
+        let additionalLangs: string[] = window['additional_i18n_langs'];
+        if (additionalLangs.length > 0) {
+            translate.addLangs(additionalLangs);
+        }
         //fallback when a translation isn't found in the current language
         translate.setDefaultLang('en');
         //restore the lang to use, check first the cookies, if not found, set english by default

@@ -100,7 +100,7 @@ export class PropertyEnrichmentHelper {
 
                     //ask the user to choose
                     return from(
-                        basicModals.selectCustomForm("Select a range type", rangeOptions).then(
+                        basicModals.selectCustomForm({ key: "MESSAGES.SELECT_RANGE" }, rangeOptions).then(
                             (selectedCF: CustomForm) => {
                                 //check if selected range is one of the customs
                                 for (var i = 0; i < customForms.length; i++) {
@@ -129,7 +129,7 @@ export class PropertyEnrichmentHelper {
                     } else if (customForms.length > 1) { //multiple CREntry => ask which one to use
                         //prepare the range options with the custom range entries
                         return from(
-                            basicModals.selectCustomForm("Select a Custom Range", customForms).then(
+                            basicModals.selectCustomForm({ key: "MESSAGES.SELECT_CUSTOM_RANGE" }, customForms).then(
                                 (selectedCF: CustomForm) => {
                                     return { type: EnrichmentType.customForm, form: selectedCF };
                                 },

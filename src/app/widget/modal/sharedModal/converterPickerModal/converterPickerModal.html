@@ -44,7 +44,7 @@
                 </span>
                 <input type="text" class="form-control" [ngModel]="projectionOperator" readonly>
                 <span class="input-group-append">
-                    <button class="btn btn-light" (click)="chooseSignature()" [title]="'COMMONS.ACTIONS.EDIT'|translate" [disabled]="!isSignatureEditable()">
+                    <button class="btn btn-light" (click)="chooseSignature()" [title]="'ACTIONS.EDIT'|translate" [disabled]="!isSignatureEditable()">
                         <span class="fas fa-pencil-alt"></span>
                     </button>
                 </span>
@@ -55,5 +55,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedConverter">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

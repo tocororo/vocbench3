@@ -96,7 +96,7 @@
                     </label>
                     <div class="hbox" style="align-items: center;">
                         <input class="form-control" [(ngModel)]="form.authorization.value">
-                        <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  [title]="'COMMONS.ACTIONS.EDIT'|translate">
+                        <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  [title]="'ACTIONS.EDIT'|translate">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                     </div>
@@ -155,7 +155,7 @@
 <div class="modal-footer">
     <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
     <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>
 
 <ng-template #popContent>

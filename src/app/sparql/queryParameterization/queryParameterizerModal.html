@@ -6,7 +6,7 @@
     <div class="card card-default vbox">
         <div class="card-header">
             <label style="flex: 1">{{'SPARQL.PARAMETERIZATION.QUERY_PARAMETERS'|translate}}</label>
-            <button class="btn btn-xs btn-light" (click)="addBinding()" [title]="'COMMONS.ACTIONS.ADD'|translate">
+            <button class="btn btn-xs btn-light" (click)="addBinding()" [title]="'ACTIONS.ADD'|translate">
                 <span class="fas fa-plus"></span>
             </button>
         </div>
@@ -69,5 +69,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="bindings.length == 0">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

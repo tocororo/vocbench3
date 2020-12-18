@@ -20,7 +20,7 @@
             
             <div class="input-group-append">
                 <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
-                    [title]="'COMMONS.ACTIONS.LOCK_UNLOCK_NAMESPACE'|translate" [ngClass]="{active: namespaceLocked}" 
+                    [title]="'ACTIONS.LOCK_UNLOCK_NAMESPACE'|translate" [ngClass]="{active: namespaceLocked}" 
                     [disabled]="mode == 'edit'">
                     <span class="fas fa-lock" style="font-size: 10px;"></span>
                 </button>
@@ -49,10 +49,10 @@
         
         <div style="align-self: center; margin: 5px;">
             <button class="btn btn-light btn-sm btn-block" (click)="addForm()" [disabled]="!selectedFormAvailable || readOnly">
-                <span class="fas fa-chevron-left"></span>{{'COMMONS.ACTIONS.ADD'|translate}}
+                <span class="fas fa-chevron-left"></span>{{'ACTIONS.ADD'|translate}}
             </button>
             <button class="btn btn-light btn-sm btn-block" (click)="removeForm()" [disabled]="!selectedForm || readOnly">
-                {{'COMMONS.ACTIONS.REMOVE'|translate}}<span class="fas fa-chevron-right"></span>
+                {{'ACTIONS.REMOVE'|translate}}<span class="fas fa-chevron-right"></span>
             </button>
         </div>
         
@@ -82,7 +82,7 @@
                 <span [title]="'CUSTOM_FORMS.COLLECTIONS.SUGGESTIONS_INFO'|translate"></span>
             </label>
             <div class="btn-group btn-group-xs">
-                <div class="btn-group btn-group-xs" [title]="'COMMONS.ACTIONS.ADD'|translate" ngbDropdown>
+                <div class="btn-group btn-group-xs" [title]="'ACTIONS.ADD'|translate" ngbDropdown>
                     <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" [disabled]="readOnly" ngbDropdownToggle>
                         <span class="fas fa-plus"></span>
                     </button>
@@ -95,7 +95,7 @@
                         </a>
                     </div>
                 </div>
-                <button class="btn btn-light" [title]="'COMMONS.ACTIONS.REMOVE'|translate" (click)="removeSuggestion()"
+                <button class="btn btn-light" [title]="'ACTIONS.REMOVE'|translate" (click)="removeSuggestion()"
                     [disabled]="!selectedSuggestion || readOnly">
                     <span class="fas fa-minus"></span>
                 </button>
@@ -115,6 +115,6 @@
             </div>
         </div>
         <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="readOnly">Ok</button>
-        <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+        <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
 </div>

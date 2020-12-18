@@ -134,7 +134,7 @@ export class MetadataVocabulariesComponent {
                     blob => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         var exportLink = window.URL.createObjectURL(blob);
-                        this.basicModals.downloadLink("Export Metadata", null, exportLink, "metadata_export." + this.selectedExportFormat.defaultFileExtension);
+                        this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_METADATA" }, null, exportLink, "metadata_export." + this.selectedExportFormat.defaultFileExtension);
                     }
                 );
             }

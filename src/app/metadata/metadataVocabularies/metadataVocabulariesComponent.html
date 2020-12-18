@@ -34,7 +34,7 @@
     
     <div class="card-footer">
         <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
-        <button type="submit" class="btn btn-light btn-sm float-right" (click)="saveSettings()" [disabled]="!settingsStructs">{{'COMMONS.ACTIONS.SAVE'|translate}}</button>
+        <button type="submit" class="btn btn-light btn-sm float-right" (click)="saveSettings()" [disabled]="!settingsStructs">{{'ACTIONS.SAVE'|translate}}</button>
         <div class="col-sm-2 float-right">
             <div class="input-group">
                 <select class="form-control form-control-sm" [(ngModel)]="selectedExportFormat">
@@ -42,7 +42,7 @@
                 </select>
                 <span class="input-group-append">
                     <button class="btn btn-light btn-sm" (click)="export()" [disabled]="!settingsStructs">
-                        {{'COMMONS.ACTIONS.EXPORT'|translate}}
+                        {{'ACTIONS.EXPORT'|translate}}
                     </button>
                 </span>
             </div>

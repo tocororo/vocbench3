@@ -13,7 +13,7 @@
     <div class="card card-default vbox">
         <div class="card-header">
             <label style="flex: 1;">{{'SEARCH.CUSTOM_SEARCH.STORE_CUSTOM_SEARCH'|translate}}</label>
-            <button class="btn btn-xs btn-light" (click)="add()" [title]="'COMMONS.ACTIONS.DELETE'|translate">
+            <button class="btn btn-xs btn-light" (click)="add()" [title]="'ACTIONS.DELETE'|translate">
                 <span class="fas fa-plus"></span>
             </button>
         </div>
@@ -28,7 +28,7 @@
                     <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{ 'table-primary': selectedRef == ref }">
                         <td>{{ref.identifier}}</td>
                         <td>
-                            <button class="btn btn-xs btn-light" (click)="deleteReference(ref)" [title]="'COMMONS.ACTIONS.DELETE'|translate">
+                            <button class="btn btn-xs btn-light" (click)="deleteReference(ref)" [title]="'ACTIONS.DELETE'|translate">
                                 <span class="far fa-trash-alt"></span>
                             </button>
                         </td>
@@ -41,5 +41,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedRef">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

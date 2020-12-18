@@ -5,7 +5,7 @@
 <div *ngIf="object" class="vbox" style="margin-left: 5px; position: relative">
     <resource-view [resource]="object" (dblclickObj)="objectDblClick($event)" (update)="onSecondaryResourceUpdate($event)"></resource-view>
     <div style="position: absolute; left: 2px; top: 0px;">
-        <button type="button" class="close" (click)="closeSecondaryResView()" [title]="'COMMONS.ACTIONS.CLOSE'|translate">
+        <button type="button" class="close" (click)="closeSecondaryResView()" [title]="'ACTIONS.CLOSE'|translate">
             <span class="fas fa-times" style="font-size: 10px"></span>
         </button>
         <button *ngIf="resStack.length > 0" type="button" class="close" (click)="previousResView()" [title]="'RESOURCE_VIEW.MISC.PREVIOUS_RESOURCE'|translate">

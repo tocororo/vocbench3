@@ -5,7 +5,7 @@
             <button class="btn btn-xs btn-light" (click)="clear()" [title]="'NOTIFICATIONS.CLEAR_NOTIFICATIONS'|translate">
                 <span class="fas fa-eraser"></span>
             </button>
-            <button class="btn btn-xs btn-light" (click)="init()" [title]="'COMMONS.ACTIONS.REFRESH'|translate">
+            <button class="btn btn-xs btn-light" (click)="init()" [title]="'ACTIONS.REFRESH'|translate">
                 <span class="fas fa-redo"></span>
             </button>
             <button class="btn btn-xs btn-light" (click)="settings()" [title]="'COMMONS.SETTINGS'|translate">
@@ -43,7 +43,7 @@
                             </button>
                         </th>
                         <th class="text-center" style="padding: 2px;">
-                            {{'COMMONS.ACTIONS.ACTION'|translate}}
+                            {{'ACTIONS.ACTION'|translate}}
                             <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeActionOrder()">
                                 <span *ngSwitchCase="'action_ascending'" class="fas fa-sort-alpha-down"></span>
                                 <span *ngSwitchCase="'action_descending'" class="fas fa-sort-alpha-down-alt"></span>

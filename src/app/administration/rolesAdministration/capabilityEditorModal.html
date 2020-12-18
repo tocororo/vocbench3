@@ -31,10 +31,10 @@
         <div class="card-header">
             <label style="flex: 1">CRUDV</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="changeAllCrudvStatus(true)" [title]="'COMMONS.ACTIONS.CHECK_ALL'|translate">
+                <button class="btn btn-light" (click)="changeAllCrudvStatus(true)" [title]="'ACTIONS.CHECK_ALL'|translate">
                     <span class="far fa-check-square"></span>
                 </button>
-                <button class="btn btn-light" (click)="changeAllCrudvStatus(false)" [title]="'COMMONS.ACTIONS.UNCHECK_ALL'|translate">
+                <button class="btn btn-light" (click)="changeAllCrudvStatus(false)" [title]="'ACTIONS.UNCHECK_ALL'|translate">
                     <span class="far fa-square"></span>
                 </button>
             </div>
@@ -55,5 +55,5 @@
 
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

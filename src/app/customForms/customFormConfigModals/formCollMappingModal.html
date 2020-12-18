@@ -8,7 +8,7 @@
         <input class="form-control form-control-sm" style="margin: 0px 4px;" [(ngModel)]="selectedResourceIri" placeholder="http://example#resource">
         <div class="dropdown" ngbDropdown>
             <button class="btn btn-light dropdown-toggle btn-sm" >
-                {{'COMMONS.ACTIONS.SELECT'|translate}}
+                {{'ACTIONS.SELECT'|translate}}
                 <span class="fas fa-caret-down"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
@@ -47,5 +47,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedResourceIri || !selectedFormColl">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'COMMONS.ACTIONS.CANCEL'|translate}}</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

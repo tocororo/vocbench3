@@ -112,7 +112,7 @@ export class RolesAdministrationComponent {
         this.adminService.exportRole(this.selectedRole.getName()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink("Export Role", null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
+                this.basicModals.downloadLink({ key: "ADMINISTRATION.ROLES.IMPORT_ROLE" }, null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
             }
         )
     }
