@@ -35,7 +35,7 @@
                             ------
                         </ng-container>
                     </a>
-                    <button class="btn btn-light" style="padding-left: 2px;" (click)="changeProject()" [title]="'APP.TOP_BAR.CHANGE_PROJECT'|translate">
+                    <button class="btn btn-light" style="padding-left: 2px;" (click)="changeProject()" [title]="'ACTIONS.CHANGE_PROJECT'|translate">
                         <span class="far fa-list-alt" style="line-height: 1"></span>
                     </button>
                 </div>
@@ -78,15 +78,15 @@
                         <div class="dropdown-divider"></div>
                         <a (click)="loadShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !loadShapesAuthorized }">
-                            <span class="fas fa-upload" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.LOAD_SHACL_SHAPES'|translate}}
+                            <span class="fas fa-upload" style="margin-right: 5px"></span>{{'ACTIONS.LOAD_SHACL_SHAPES'|translate}}
                         </a>
                         <a (click)="exportShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !exportShapesAuthorized }">
-                            <span class="fas fa-download" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.EXPORT_SHACL_SHAPES'|translate}}
+                            <span class="fas fa-download" style="margin-right: 5px"></span>{{'ACTIONS.EXPORT_SHACL_SHAPES'|translate}}
                         </a>
                         <a (click)="clearShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !clearShapesAuthorized }">
-                            <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.CLEAR_SHACL_SHAPES'|translate}}
+                            <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'ACTIONS.CLEAR_SHACL_SHAPES'|translate}}
                         </a>
                     </ng-container>
                 </div>

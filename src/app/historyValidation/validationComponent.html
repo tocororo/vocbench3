@@ -31,8 +31,8 @@
         </div>
 
         <button class="btn btn-xs btn-light" [ngClass]="{active: showFilterBox}" (click)="showFilterBox = !showFilterBox">
-            <span *ngIf="!showFilterBox">{{'HISTORY_VALIDATION.FILTERS.SHOW_FILTERS'|translate}}</span>
-            <span *ngIf="showFilterBox">{{'HISTORY_VALIDATION.FILTERS.HIDE_FILTERS'|translate}}</span>
+            <span *ngIf="!showFilterBox">{{'ACTIONS.SHOW_FILTERS'|translate}}</span>
+            <span *ngIf="showFilterBox">{{'ACTIONS.HIDE_FILTERS'|translate}}</span>
             <span class="fas fa-filter ml-2"></span>
         </button>
     </div>
@@ -145,11 +145,11 @@
             </div>
 
             <div class="btn-group btn-group-xs mr-3">
-                <button *ngIf="isValidator" class="btn btn-xs btn-light" (click)="acceptAll()">{{'HISTORY_VALIDATION.ACCEPT_ALL'|translate}}</button>
-                <button class="btn btn-xs btn-light" (click)="rejectAll()">{{'HISTORY_VALIDATION.REJECT_ALL'|translate}}</button>
+                <button *ngIf="isValidator" class="btn btn-xs btn-light" (click)="acceptAll()">{{'ACTIONS.ACCEPT_ALL'|translate}}</button>
+                <button class="btn btn-xs btn-light" (click)="rejectAll()">{{'ACTIONS.REJECT_ALL'|translate}}</button>
             </div>
 
-            <button type="submit" class="btn btn-light btn-sm float-right" (click)="validate()">{{'HISTORY_VALIDATION.VALIDATE'|translate}}</button>
+            <button type="submit" class="btn btn-light btn-sm float-right" (click)="validate()">{{'ACTIONS.VALIDATE'|translate}}</button>
         </div>
     </div>
 

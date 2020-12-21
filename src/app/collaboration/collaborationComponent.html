@@ -12,7 +12,7 @@
             <div class="dropdown-menu float-right" ngbDropdownMenu>
                 <a *ngIf="isCollProjManagementAuthorized()" class="dropdown-item" (click)="openProjectConfig()">{{'COLLABORATION.PROJECT_CONFIG'|translate}}</a>
                 <a class="dropdown-item" (click)="openUserConfig()">{{'COLLABORATION.USER_CONFIG'|translate}}</a>
-                <a *ngIf="isCollProjManagementAuthorized()" class="dropdown-item" [ngClass]="{ disabled : !csProjectLinked }" (click)="assignProject()">{{'COLLABORATION.ASSIGN_PROJECT'|translate}}</a>
+                <a *ngIf="isCollProjManagementAuthorized()" class="dropdown-item" [ngClass]="{ disabled : !csProjectLinked }" (click)="assignProject()">{{'ACTIONS.ASSIGN_PROJECT'|translate}}</a>
             </div>
         </div>
 

@@ -277,7 +277,7 @@ export class NamespacesAndImportsComponent {
      * Changes the prefix of a prefix namespace mapping
      */
     changeMapping() {
-        this.sharedModals.prefixNamespace({key:"ACTIONS.EDIT_PREFIX_NAMESPACE_MAPPING"}, this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
+        this.sharedModals.prefixNamespace({key:"ACTIONS.EDIT_MAPPING"}, this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
             (mapping: any) => {
                 this.metadataService.changeNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {

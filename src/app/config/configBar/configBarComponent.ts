@@ -139,20 +139,20 @@ export class ConfigBarComponent {
         this.shaclService.exportShapes().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "APP.TOP_BAR.GLOBAL_DATA_MENU.EXPORT_SHACL_SHAPES" }, null, exportLink, "shapes.ttl");
+                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_SHACL_SHAPES" }, null, exportLink, "shapes.ttl");
             }
         )
     }
 
     clearShacleShapes() {
-        this.basicModals.confirm({ key: "APP.TOP_BAR.GLOBAL_DATA_MENU.CLEAR_SHACL_SHAPES" }, "This operation will delete all the SHACL shapes stored in the project. Are you sure to proceed?",
+        this.basicModals.confirm({ key: "ACTIONS.CLEAR_SHACL_SHAPES" }, "This operation will delete all the SHACL shapes stored in the project. Are you sure to proceed?",
             ModalType.warning).then(
             () => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.shaclService.clearShapes().subscribe(
                     () => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({ key: "APP.TOP_BAR.GLOBAL_DATA_MENU.CLEAR_SHACL_SHAPES" }, "All SHACL shapes cleared successfully.");
+                        this.basicModals.alert({ key: "ACTIONS.CLEAR_SHACL_SHAPES" }, "All SHACL shapes cleared successfully.");
                     }
                 );
             },

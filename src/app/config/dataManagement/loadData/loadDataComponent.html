@@ -185,7 +185,7 @@
         <ng-container *ngIf="!selectedInputFormat && !forceFormat; then unkownFormatBlock; else selectFormatBlock"></ng-container>
         <ng-template #unkownFormatBlock>
             <select class="form-control" disabled>
-                <option>{{'DATA_MANAGEMENT.LOAD.DETECT_FORMAT'|translate}}</option>
+                <option>{{'ACTIONS.DETECT_FORMAT'|translate}}</option>
             </select>
         </ng-template>
         <ng-template #selectFormatBlock>

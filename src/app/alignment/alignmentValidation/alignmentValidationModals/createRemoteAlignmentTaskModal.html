@@ -50,7 +50,7 @@
 
     <div class="row mt-3">
         <div class="col-sm-12 text-center">
-            <button class="btn btn-sm btn-info" (click)="profileMatching()" [disabled]="!isProfileEnabled()">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CREATE_TASK.PROFILE_MATCHING'|translate}}</button>
+            <button class="btn btn-sm btn-info" (click)="profileMatching()" [disabled]="!isProfileEnabled()">{{'ACTIONS.PROFILE_MATCHING'|translate}}</button>
         </div>
     </div>
 
@@ -73,7 +73,7 @@
                         <div class="groupPanel-heading-content">
                             <div class="form-check">
                                 <input class="form-check-input" [id]="'pairingCheck'+i" type="checkbox" [(ngModel)]="p.checked" (ngModelChange)="onPairingSelectionChange()">
-                                <label class="form-check-label" [for]="'pairingCheck'+i">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CREATE_TASK.USE'|translate}}</label>
+                                <label class="form-check-label" [for]="'pairingCheck'+i">{{'ACTIONS.USE'|translate}}</label>
                             </div>
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                             <div class="groupPanel-heading-content">
                                 <div class="form-check">
                                     <input class="form-check-input" [id]="'matcherRadio'+i" type="radio" (click)="selectMatcher(m)" [checked]="selectedMatcher == m">
-                                    <label class="form-check-label" [for]="'matcherRadio'+i">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CREATE_TASK.USE'|translate}}</label>
+                                    <label class="form-check-label" [for]="'matcherRadio'+i">{{'ACTIONS.USE'|translate}}</label>
                                 </div>
                             </div>
                         </div>

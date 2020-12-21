@@ -7,14 +7,14 @@
             <div class="card-header">
                 <label style="flex: 1">{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE_MANAGEMENT'|translate}}:</label>
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-light" [title]="'METADATA.NAMESPACES_AND_IMPORTS.ADD_MAPPING'|translate" (click)="addMapping()" [disabled]="!isAddNsPrefixMappingAuthorized()">
+                    <button class="btn btn-light" [title]="'ACTIONS.ADD_MAPPING'|translate" (click)="addMapping()" [disabled]="!isAddNsPrefixMappingAuthorized()">
                         <span class="fas fa-plus"></span>
                     </button>
-                    <button class="btn btn-light" [title]="'METADATA.NAMESPACES_AND_IMPORTS.REMOVE_MAPPING'|translate" (click)="removeMapping()"
+                    <button class="btn btn-light" [title]="'ACTIONS.DELETE_MAPPING'|translate" (click)="removeMapping()"
                         [disabled]="!selectedMapping || !selectedMapping.explicit || !isRemoveNsPrefixMappingAuthorized()">
                         <span class="fas fa-minus"></span>
                     </button>
-                    <button class="btn btn-light" [title]="'ACTIONS.EDIT_PREFIX_NAMESPACE_MAPPING'|translate" (click)="changeMapping()"
+                    <button class="btn btn-light" [title]="'ACTIONS.EDIT_MAPPING'|translate" (click)="changeMapping()"
                         [disabled]="!selectedMapping || !isChangeNsPrefixMappingAuthorized()">
                         <span class="fas fa-pencil-alt"></span>
                     </button>
@@ -44,7 +44,7 @@
                                                 (click)="bindNamespaceBaseURI()">
                                                 <span class="fas fa-link"></span>
                                             </button>
-                                            <button class="btn btn-light" [title]="'METADATA.NAMESPACES_AND_IMPORTS.APPLY_CHANGES'|translate"
+                                            <button class="btn btn-light" [title]="'ACTIONS.APPLY_CHANGES'|translate"
                                                 [ngClass]="{'btn-primary': areNamespaceBaseURIChanged(), 'btn-light': !areNamespaceBaseURIChanged()}"
                                                 (click)="applyNamespaceBaseURI()" [disabled]="!areNamespaceBaseURIChanged() || !isBaseuriNsEditAuthorized()">
                                                 <span class="fas fa-check"></span>
@@ -91,7 +91,7 @@
                 <label style="flex: 1">{{'METADATA.NAMESPACES_AND_IMPORTS.IMPORTS'|translate}}:</label>
                 <div class="dropdown" ngbDropdown>
                     <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle [disabled]="!isAddImportAuthorized()">
-                        {{'METADATA.NAMESPACES_AND_IMPORTS.ADD_IMPORT_FROM'|translate}} <span class="fas fa-caret-down fa-sm"></span>
+                        {{'ACTIONS.ADD_IMPORT_FROM'|translate}} <span class="fas fa-caret-down fa-sm"></span>
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu>
                         <a class="dropdown-item" (click)="importFromWeb()">{{'METADATA.NAMESPACES_AND_IMPORTS.WEB'|translate}}</a>

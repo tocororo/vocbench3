@@ -75,7 +75,7 @@ export class OntologyMirrorModal {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromLocalFile(mirror: { file: string, baseURI: string }) {
-        this.basicModals.selectFile({ key: "METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_MIRROR_MANAGER.UPDATE_MIRROR" }, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
+        this.basicModals.selectFile({ key: "ACTIONS.UPDATE_MIRROR" }, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
             (file: any) => {
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                 this.ontoMgrService.updateOntologyMirrorEntry("updateFromFile", mirror.baseURI, mirror.file, null, file).subscribe(

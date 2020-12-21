@@ -2,7 +2,7 @@
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span *ngIf="broader" style="margin-right: 4px;">
-            <button class="btn btn-light btn-xs" [title]="'DATA.CONCEPT.CHANGE_BROADER_PROP'|translate" (click)="changeBroaderProp()">
+            <button class="btn btn-light btn-xs" [title]="'ACTIONS.CHANGE_BROADER_PROP'|translate" (click)="changeBroaderProp()">
                 <rdf-resource [resource]="broaderProp"></rdf-resource>
             </button>
         </span>

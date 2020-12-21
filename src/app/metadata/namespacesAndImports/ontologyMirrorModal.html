@@ -5,7 +5,7 @@
     
     <div class="card card-default vbox">
         <div class="card-header">
-            <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_MIRROR_MANAGER.ONTOLOGY_MIRROR_MANAGEMENT'|translate}}:</label>
+            <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_MIRROR_MANAGEMENT'|translate}}:</label>
         </div>
         <div class="card-body vbox">
             <div class="scrollableContainer">
@@ -23,18 +23,18 @@
                             <td>
                                 <div class="dropdown float-right" ngbDropdown>
                                     <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle
-                                        [title]="'METADATA.ONTOLOGY_MIRROR_MANAGER.UPDATE_FROM_WEB_BASEURI'|translate" [disabled]="!isUpdateMirrorAuthorized()">
+                                        [title]="'ACTIONS.UPDATE_MIRROR'|translate" [disabled]="!isUpdateMirrorAuthorized()">
                                         <span class="fas fa-pencil-alt"></span>
                                     </button>
                                     <div class="dropdown-menu" ngbDropdownMenu>
-                                        <a class="dropdown-item" (click)="updateMirrorFromWebWithUri(m)">{{'METADATA.ONTOLOGY_MIRROR_MANAGER.UPDATE_FROM_WEB_BASEURI'|translate}}</a>
-                                        <a class="dropdown-item" (click)="updateMirrorFromWebFromAltUrl(m)">{{'METADATA.ONTOLOGY_MIRROR_MANAGER.UPDATE_FROM_WEB_ALT_URL'|translate}}</a>
-                                        <a class="dropdown-item" (click)="updateMirrorFromLocalFile(m)">{{'METADATA.ONTOLOGY_MIRROR_MANAGER.UPDATE_FROM_LOCAL_FILE'|translate}}</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromWebWithUri(m)">{{'ACTIONS.UPDATE_FROM_WEB_BASEURI'|translate}}</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromWebFromAltUrl(m)">{{'ACTIONS.UPDATE_FROM_WEB_ALT_URL'|translate}}</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromLocalFile(m)">{{'ACTIONS.UPDATE_FROM_LOCAL_FILE'|translate}}</a>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <button class="btn btn-light btn-xs" (click)="deleteOntoMirror(m)" [title]="'METADATA.ONTOLOGY_MIRROR_MANAGER.DELETE_MIRROR'|translate"
+                                <button class="btn btn-light btn-xs" (click)="deleteOntoMirror(m)" [title]="'ACTIONS.DELETE_MIRROR'|translate"
                                     [disabled]="!isDeleteMirrorAuthorized()">
                                     <span class="far fa-trash-alt"></span>
                                 </button>

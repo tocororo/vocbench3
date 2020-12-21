@@ -4,7 +4,7 @@
 
         <div class="btn-group btn-group-xs" style="margin-right: 5px">
             <button class="btn btn-light" (click)="swithcToVersion()" [disabled]="!selectedVersion">
-                {{'DATA_MANAGEMENT.VERSIONING.SWITCH_TO'|translate}}
+                {{'ACTIONS.SWITCH_TO_VERSION'|translate}}
             </button>
             <!-- <button class="btn btn-light" (click)="deleteVersion()" [disabled]="!selectedVersion">
                 Delete
@@ -17,8 +17,8 @@
                 <span class="fas fa-caret-down fa-sm"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="dump()">{{'DATA_MANAGEMENT.VERSIONING.DUMP_NEW_VERSION'|translate}}</a>
-                <a class="dropdown-item" (click)="dumpWithLocation()">{{'DATA_MANAGEMENT.VERSIONING.DUMP_NEW_VERSION_DIFFERENT_LOCATION'|translate}}</a>
+                <a class="dropdown-item" (click)="dump()">{{'ACTIONS.DUMP_NEW_VERSION'|translate}}</a>
+                <a class="dropdown-item" (click)="dumpWithLocation()">{{'ACTIONS.DUMP_NEW_VERSION_DIFFERENT_LOCATION'|translate}}</a>
             </div>
         </div>
 

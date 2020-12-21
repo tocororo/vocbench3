@@ -6,12 +6,12 @@
             <option [ngValue]="null" style="font-style: italic">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.ALL_SCHEMES'|translate}}</option>
             <option *ngFor="let s of schemeList" [ngValue]="s">{{s.getShow()}}</option>
         </select>
-        <button class="btn btn-xs btn-light ml-3" (click)="runIcv()">{{'ICV.RUN'|translate}}</button>
+        <button class="btn btn-xs btn-light ml-3" (click)="runIcv()">{{'ACTIONS.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
         
         <div *ngIf="!brokenConceptList && !brokenConceptMap" style="padding: 4px;">
-            {{'ICV.PRESS_RUN_TO_RUN_CHECK.0'|translate}} <strong>{{'ICV.RUN'|translate}}</strong> {{'ICV.PRESS_RUN_TO_RUN_CHECK.1'|translate}}
+            {{'ICV.PRESS_RUN_TO_RUN_CHECK.0'|translate}} <strong>{{'ACTIONS.RUN'|translate}}</strong> {{'ICV.PRESS_RUN_TO_RUN_CHECK.1'|translate}}
         </div>
 
         <div *ngIf="brokenConceptList" class="scrollableContainer">

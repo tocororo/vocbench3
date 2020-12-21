@@ -1,6 +1,6 @@
 <div class="modal-header">
-    <h3 *ngIf="!id" class="modal-title">{{'CUSTOM_FORMS.FORMS.CREATE_CUSTOM_FORM'|translate}}</h3>
-    <h3 *ngIf="id" class="modal-title">{{'CUSTOM_FORMS.FORMS.EDIT_CUSTOM_FORM'|translate}}</h3>
+    <h3 *ngIf="!id" class="modal-title">{{'ACTIONS.CREATE_CUSTOM_FORM'|translate}}</h3>
+    <h3 *ngIf="id" class="modal-title">{{'ACTIONS.EDIT_CUSTOM_FORM'|translate}}</h3>
 </div>
 <div class="modal-body vbox">
     
@@ -81,7 +81,7 @@
                     <ng-container *ngIf="type == 'graph'">
                         <button class="btn btn-light btn-sm" (click)="inferAnnotations()" style="margin-top: 4px;" 
                             [title]="'CUSTOM_FORMS.FORMS.INFER_ANNOTATIONS_INFO'|translate" [disabled]="!ref || readOnly">
-                            {{'CUSTOM_FORMS.FORMS.INFER_ANNOTATIONS'|translate}}
+                            {{'ACTIONS.INFER_ANNOTATIONS'|translate}}
                         </button>
                         <button *ngIf="extractFromShaclAuthorized" class="btn btn-light btn-sm" (click)="extractFromShacl()" style="margin-top: 4px;" 
                             [title]="'CUSTOM_FORMS.FORMS.FROM_SHACLE_INFO'|translate" [disabled]="readOnly">
