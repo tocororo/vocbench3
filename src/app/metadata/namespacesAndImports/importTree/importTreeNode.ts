@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ModalOptions } from 'src/app/widget/modal/Modals';
+import { TranslateService } from "@ngx-translate/core";
+import { ModalOptions, Translation } from 'src/app/widget/modal/Modals';
 import { ImportType, OntologyImport } from "../../../models/Metadata";
 import { MetadataServices } from "../../../services/metadataServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -19,14 +20,14 @@ export class ImportTreeNodeComponent {
 
     open: boolean = true;
 
-    constructor(private metadataService: MetadataServices, private modalService: NgbModal) { }
+    constructor(private metadataService: MetadataServices, private modalService: NgbModal, private translateService: TranslateService) { }
 
     removeImport() {
         this.nodeRemoved.emit(this.import);
     }
 
     repairFromLocalFile() {
-        this.openImportModal("Repair failed import from local file", ImportType.fromLocalFile).then(
+        this.openImportModal({key:"ACTIONS.REPAIR_FROM_LOCAL_FILE"}, ImportType.fromLocalFile).then(
             (data: RepairFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.getFromLocalFile(data.baseURI, data.localFile, data.transitiveImportAllowance, data.mirrorFile).subscribe(
@@ -41,7 +42,7 @@ export class ImportTreeNodeComponent {
     }
 
     repairFromWeb() {
-        this.openImportModal("Repair failed import from web", ImportType.fromWeb).then(
+        this.openImportModal({key:"ACTIONS.REPAIR_FROM_WEB"}, ImportType.fromWeb).then(
             (data: RepairFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.downloadFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -56,7 +57,7 @@ export class ImportTreeNodeComponent {
     }
 
     repairFromWebToMirror() {
-        this.openImportModal("Repair failed import from web to mirror", ImportType.fromWebToMirror).then(
+        this.openImportModal({key:"ACTIONS.REPAIR_FROM_WEB_TO_MIRROR"}, ImportType.fromWebToMirror).then(
             (data: RepairFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.downloadFromWebToMirror(
@@ -82,9 +83,9 @@ export class ImportTreeNodeComponent {
      * fromLocalFile) object contains "baseURI", "localFile" and "mirrorFile";
      * fromOntologyMirror) mirror object contains "namespace" and "file".
      */
-    private openImportModal(title: string, importType: ImportType): Promise<ImportOntologyReturnData> {
+    private openImportModal(title: Translation, importType: ImportType): Promise<ImportOntologyReturnData> {
         const modalRef: NgbModalRef = this.modalService.open(ImportOntologyModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.importType = importType;
 		modalRef.componentInstance.baseUriInput = this.import.id;
         return modalRef.result;

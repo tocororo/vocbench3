@@ -42,7 +42,7 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (predicate.getURI() == this.rootProperty.getURI()) {
-            this.creationModals.newOntoLexicalizationCf("Add a denotation", this.rootProperty, false).then(
+            this.creationModals.newOntoLexicalizationCf({key:"ACTIONS.ADD_DENOTATION"}, this.rootProperty, false).then(
                 (data: NewOntoLexicalizationCfModalReturnData) => {
                     this.ontolexService.addLexicalization(this.resource, data.linkedResource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
                         stResp => {

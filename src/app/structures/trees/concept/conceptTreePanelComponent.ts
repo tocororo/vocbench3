@@ -204,7 +204,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                            this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
                                     this.selectSearchedResource(selectedResource);
                                 },
@@ -265,7 +265,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         }
                         this.resourceService.getResourcesInfo(schemes).subscribe(
                             schemes => {
-                                this.sharedModals.selectResource("Search", message, schemes, this.rendering).then(
+                                this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, message, schemes, this.rendering).then(
                                     (scheme: ARTURIResource) => {
                                         this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(scheme)); //update the active schemes
                                         setTimeout(() => {
@@ -332,7 +332,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddMultipleToScheme);
     }
     private addToScheme() {
-        this.browsingModals.browseSchemeList("Select scheme").then(
+        this.browsingModals.browseSchemeList({key:"ACTIONS.SELECT_SCHEME"}).then(
             scheme => {
                 const modalRef: NgbModalRef = this.modalService.open(AddToSchemeModal, new ModalOptions());
                 modalRef.componentInstance.title = "Add concepts to scheme";

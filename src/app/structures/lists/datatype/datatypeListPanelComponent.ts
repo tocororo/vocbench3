@@ -70,7 +70,7 @@ export class DatatypeListPanelComponent extends AbstractListPanel {
                         this.openAt(searchResult[0]);
                     } else { //multiple results, ask the user which one select
                         ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, searchResult.length + " results found.", searchResult, this.rendering).then(
                             (selectedResource: any) => {
                                 this.openAt(selectedResource);
                             },

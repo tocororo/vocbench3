@@ -139,7 +139,7 @@ export class UserDetailsComponent {
     }
 
     editLanguages() {
-        this.sharedModals.selectLanguages("Language proficiencies", this.user.getLanguageProficiencies()).then(
+        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGES"}, this.user.getLanguageProficiencies()).then(
             langs => {
                 this.userService.updateUserLanguageProficiencies(this.user.getEmail(), langs).subscribe(
                     user => {

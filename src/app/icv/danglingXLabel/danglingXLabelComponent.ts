@@ -52,10 +52,10 @@ export class DanglingXLabelComponent {
     assignLabel(xlabel: ARTResource) {
         //as pref alt or hidden?
         var predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
-        this.sharedModals.selectResource("Set skosxl:Label as", null, predOpts).then(
+        this.sharedModals.selectResource({key:"ACTIONS.SELECT_LEXICALIZATION_PROPERTY"}, null, predOpts).then(
             (selectedPred: any) => {
                 let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
-                this.browsingModals.browseConceptTree("Assign xLabel to concept", activeSchemes, true).then(
+                this.browsingModals.browseConceptTree({key:"ACTIONS.SELECT_CONCEPT"}, activeSchemes, true).then(
                     (concept: any) => {
                         var xlabelPred: ARTURIResource;
                         this.icvService.setDanglingXLabel(concept, selectedPred, xlabel).subscribe(

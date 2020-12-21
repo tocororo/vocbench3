@@ -50,7 +50,7 @@ export class HistoryFilterComponent {
     }
 
     private selectOperationPerformer() {
-        this.sharedModals.selectUser("Select User", true).then(
+        this.sharedModals.selectUser({key:"ACTIONS.SELECT_USER"}, true).then(
             (user: User) => {
                 for (let i = 0; i < this.performers.length; i++) {
                     if (this.performers[i].getIri() == user.getIri()) {

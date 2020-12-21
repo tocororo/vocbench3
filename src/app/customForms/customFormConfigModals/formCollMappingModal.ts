@@ -41,7 +41,7 @@ export class FormCollMappingModal {
                 if (suggestions.length == 0) {
                     this.basicModals.alert({key:"STATUS.WARNING"}, "No classes/properties suggested for the FormCollection " + fc.getId(), ModalType.warning);
                 } else {
-                    this.sharedModals.selectResource("Suggested resources", null, suggestions).then(
+                    this.sharedModals.selectResource({key:"ACTIONS.SELECT_RESOURCE"}, null, suggestions).then(
                         (res: ARTURIResource) => {
                             this.selectedResourceIri = res.getURI();
                         },
@@ -53,7 +53,7 @@ export class FormCollMappingModal {
     }
 
     selectProperty() {
-        this.browsingModals.browsePropertyTree("Select a property").then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}).then(
             (res: ARTURIResource) => {
                 this.selectedResourceIri = res.getURI();
             },
@@ -62,7 +62,7 @@ export class FormCollMappingModal {
     }
 
     selectClass() {
-        this.browsingModals.browseClassTree("Select a class", [RDF.property, OWL.class, OWL.thing]).then(
+        this.browsingModals.browseClassTree({key:"ACTIONS.SELECT_CLASS"}, [RDF.property, OWL.class, OWL.thing]).then(
             (res: ARTURIResource) => {
                 this.selectedResourceIri = res.getURI();
             },

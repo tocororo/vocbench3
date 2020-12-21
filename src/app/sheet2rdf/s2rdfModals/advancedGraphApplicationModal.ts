@@ -162,7 +162,7 @@ export class AdvancedGraphApplicationModal {
     }
 
     addMapping() {
-        this.sharedModals.prefixNamespace("Add prefix-namespace mapping").then(
+        this.sharedModals.prefixNamespace({key:"ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING"}).then(
             (mapping: { prefix: string, namespace: string }) => {
                 //check if the prefix or the namespace are not already defined
                 if (
@@ -320,7 +320,7 @@ export class AdvancedGraphApplicationModal {
                         prefixMapping: prefixMappingToStore,
                         defaultPredicate: this.defaultPredicate != null ? this.defaultPredicate.toNT() : null
                     };
-                    this.sharedModals.storeConfiguration("Save Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
+                    this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_ADVANCED_GRAPH_APPLICATION"}, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
                         () => {
                             this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration saved succesfully");
                         },
@@ -334,7 +334,7 @@ export class AdvancedGraphApplicationModal {
     loadGraph() {
         this.s2rdfService.getDefaultAdvancedGraphApplicationConfigurations().subscribe(
             references => {
-                this.sharedModals.loadConfiguration("Load Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, true, true, references).then(
+                this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_ADVANCED_GRAPH_APPLICATION"}, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, true, true, references).then(
                     (data: LoadConfigurationModalReturnData) => {
                         //reset the current status
                         this.newDefinedNodes = [];

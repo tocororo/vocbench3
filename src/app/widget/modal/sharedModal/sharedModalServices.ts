@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { DatasetCatalogModal } from 'src/app/config/dataManagement/datasetCatalog/datasetCatalogModal';
 import { ImportFromDatasetCatalogModal } from 'src/app/metadata/namespacesAndImports/importFromDatasetCatalogModal';
 import { ImportOntologyModal } from 'src/app/metadata/namespacesAndImports/importOntologyModal';
@@ -15,7 +16,7 @@ import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { User } from '../../../models/User';
 import { ProjectContext } from '../../../utils/VBContext';
 import { ResourceSelectionModal } from '../basicModal/selectionModal/resourceSelectionModal';
-import { ModalOptions } from '../Modals';
+import { ModalOptions, TextOrTranslation } from '../Modals';
 import { LoadConfigurationModal } from "./configurationStoreModal/loadConfigurationModal";
 import { StoreConfigurationModal } from "./configurationStoreModal/storeConfigurationModal";
 import { ConverterPickerModal } from "./converterPickerModal/converterPickerModal";
@@ -30,7 +31,7 @@ import { UserSelectionModal } from './userSelectionModal/userSelectionModal';
 @Injectable()
 export class SharedModalServices {
 
-    constructor(private modalService: NgbModal) { }
+    constructor(private modalService: NgbModal, private translateService: TranslateService) { }
 
     /**
      * Opens a modal to change a plugin configuration.
@@ -58,9 +59,9 @@ export class SharedModalServices {
      * @param title
      * @param remoteRepoConfig contains serverURL, username and password
      */
-    selectRemoteRepository(title: string, remoteRepoConfig: RemoteRepositoryAccessConfig) {
+    selectRemoteRepository(title: TextOrTranslation, remoteRepoConfig: RemoteRepositoryAccessConfig) {
         const modalRef: NgbModalRef = this.modalService.open(RemoteRepoSelectionModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.repoConfig = remoteRepoConfig;
         return modalRef.result;
     }
@@ -85,9 +86,9 @@ export class SharedModalServices {
      * @param projectAware if true, allow selection only of languages available in the current project
      * @param projectCtx allow to customize the available languages for the contextual project
      */
-    selectLanguages(title: string, languages: string[], radio?: boolean, projectAware?: boolean, projectCtx?: ProjectContext) {
+    selectLanguages(title: TextOrTranslation, languages: string[], radio?: boolean, projectAware?: boolean, projectCtx?: ProjectContext) {
         const modalRef: NgbModalRef = this.modalService.open(LanguageSelectorModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.languages = languages;
         if (radio != null) modalRef.componentInstance.radio = radio;
         if (projectAware != null) modalRef.componentInstance.projectAware = projectAware;
@@ -100,9 +101,9 @@ export class SharedModalServices {
      * @param title 
      * @param message 
      */
-    selectConverter(title: string, message?: string, capabilities?: RDFCapabilityType[]) {
+    selectConverter(title: TextOrTranslation, message?: string, capabilities?: RDFCapabilityType[]) {
         const modalRef: NgbModalRef = this.modalService.open(ConverterPickerModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (message != null) modalRef.componentInstance.message = message;
         if (capabilities != null) modalRef.componentInstance.capabilities = capabilities;
         return modalRef.result;
@@ -117,9 +118,9 @@ export class SharedModalServices {
      * @param relativeRef if provided suggest to override a previously saved configuration
      * @return the relativeReference of the stored configuration
      */
-    storeConfiguration(title: string, configurationComponent: string, configurationObject: { [key: string]: any }, relativeRef?: string) {
+    storeConfiguration(title: TextOrTranslation, configurationComponent: string, configurationObject: { [key: string]: any }, relativeRef?: string) {
         const modalRef: NgbModalRef = this.modalService.open(StoreConfigurationModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.configurationComponent = configurationComponent;
         modalRef.componentInstance.configurationObject = configurationObject;
         if (relativeRef != null) modalRef.componentInstance.relativeRef = relativeRef;
@@ -141,9 +142,9 @@ export class SharedModalServices {
      * 
      * @return returns a LoadConfigurationModalReturnData object with configuration and relativeReference
      */
-    loadConfiguration(title: string, configurationComponent: string, allowLoad?: boolean, allowDelete?: boolean, additionalReferences?: Reference[]) {
+    loadConfiguration(title: TextOrTranslation, configurationComponent: string, allowLoad?: boolean, allowDelete?: boolean, additionalReferences?: Reference[]) {
         const modalRef: NgbModalRef = this.modalService.open(LoadConfigurationModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.configurationComponent = configurationComponent;
         if (allowLoad !== undefined) modalRef.componentInstance.allowLoad = allowLoad;
         if (allowDelete !== undefined) modalRef.componentInstance.allowDelete = allowDelete;
@@ -157,9 +158,9 @@ export class SharedModalServices {
      * @param roles 
      * @param editable 
      */
-    pickResource(title: string, roles?: RDFResourceRolesEnum[], editable?: boolean) {
+    pickResource(title: TextOrTranslation, roles?: RDFResourceRolesEnum[], editable?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(ResourcePickerModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (roles != null) modalRef.componentInstance.roles = roles;
         if (editable != null) modalRef.componentInstance.editable = editable;
         return modalRef.result;
@@ -170,9 +171,9 @@ export class SharedModalServices {
      * @param title 
      * @param importType 
      */
-    importOntology(title: string, importType: ImportType) {
+    importOntology(title: TextOrTranslation, importType: ImportType) {
         const modalRef: NgbModalRef = this.modalService.open(ImportOntologyModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.importType = importType;
         return modalRef.result;
     }
@@ -181,9 +182,9 @@ export class SharedModalServices {
      * 
      * @param title 
      */
-    importFromDatasetCatalog(title: string) {
+    importFromDatasetCatalog(title: TextOrTranslation) {
         const modalRef: NgbModalRef = this.modalService.open(ImportFromDatasetCatalogModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         return modalRef.result;
     }
 
@@ -194,9 +195,9 @@ export class SharedModalServices {
      * @param unselectableUsers a (optional) list of user not selectable (disabled). This list can be useful in order to
      * disable the selection of some users when the modal is used to enrich an existing list of users
      */
-    selectUser(title: string, projectDependent?: boolean, unselectableUsers?: User[]) {
+    selectUser(title: TextOrTranslation, projectDependent?: boolean, unselectableUsers?: User[]) {
         const modalRef: NgbModalRef = this.modalService.open(UserSelectionModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (projectDependent != null) modalRef.componentInstance.projectDepending = projectDependent;
         if (unselectableUsers != null) modalRef.componentInstance.unselectableUsers = unselectableUsers;
         return modalRef.result;
@@ -218,9 +219,9 @@ export class SharedModalServices {
      * @param namespaceReadonly tells if namespace value can be changed
      * @return returns a mapping object containing "prefix" and "namespace"
      */
-    prefixNamespace(title: string, prefix?: string, namespace?: string, namespaceReadonly?: boolean): Promise<{ prefix: string, namespace: string }> {
+    prefixNamespace(title: TextOrTranslation, prefix?: string, namespace?: string, namespaceReadonly?: boolean): Promise<{ prefix: string, namespace: string }> {
         const modalRef: NgbModalRef = this.modalService.open(PrefixNamespaceModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (prefix != null) modalRef.componentInstance.prefixInput = prefix;
         if (namespace != null) modalRef.componentInstance.namespaceInput = namespace;
         if (namespaceReadonly != null) modalRef.componentInstance.namespaceReadonly = namespaceReadonly;
@@ -233,9 +234,9 @@ export class SharedModalServices {
      * @param expression 
      * @return returns a manchester expression
      */
-    manchesterExpression(title: string, expression?: string): Promise<string> {
+    manchesterExpression(title: TextOrTranslation, expression?: string): Promise<string> {
         const modalRef: NgbModalRef = this.modalService.open(ManchesterExprModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (expression != null) modalRef.componentInstance.expression = expression;
         return modalRef.result;
     }
@@ -257,9 +258,9 @@ export class SharedModalServices {
      * @param rendering in case of array of resources, it tells whether the resources should be rendered
      * @return if the modal closes with ok returns a promise containing the selected resource
      */
-    selectResource(title: string, message: string, resourceList: Array<ARTNode>, rendering?: boolean) {
+    selectResource(title: TextOrTranslation, message: string, resourceList: Array<ARTNode>, rendering?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(ResourceSelectionModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.message = message;
         modalRef.componentInstance.resourceList = resourceList;
         if (rendering != null) modalRef.componentInstance.rendering = rendering;

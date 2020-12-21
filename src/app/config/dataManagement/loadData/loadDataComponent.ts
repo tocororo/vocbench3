@@ -317,7 +317,7 @@ export class LoadDataComponent {
             loaderSpec: loaderSpec
         }
 
-        this.sharedModals.storeConfiguration("Save importer chain configuration", ConfigurationComponents.IMPORTER, config).then(
+        this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_IMPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.IMPORTER, config).then(
             () => {
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration saved succesfully");
             },
@@ -326,7 +326,7 @@ export class LoadDataComponent {
     }
 
     loadChain() {
-        this.sharedModals.loadConfiguration("Load importer chain configuration", ConfigurationComponents.IMPORTER).then(
+        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_IMPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.IMPORTER).then(
             (conf: LoadConfigurationModalReturnData) => {
                 this.transformersChain = []; //reset the chain
                 let configurations: SettingsProp[] = conf.configuration.properties;

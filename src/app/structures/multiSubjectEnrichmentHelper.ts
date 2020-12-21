@@ -86,7 +86,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private selectProperty(subjects: ARTURIResource[]) {
-        this.browsingModals.browsePropertyTree("Select a property", null, subjects[0]).then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, null, subjects[0]).then(
             (selectedProp: ARTURIResource) => {
                 /**
                  * Here plartially replicate the behaviour of the ResourceView partitions.
@@ -170,7 +170,7 @@ export class MultiSubjectEnrichmentHelper {
      */
 
     private broaderHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a broader", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_BROADER"}, subjects[0], predicate, false, null, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let value: ARTURIResource = data.value[0]; //multiselection has been disallowed in addPropertyValue => it's safety to get only the 1st value
                 let addFunctions: MultiSubjectAddFunction[] = [];
@@ -188,7 +188,7 @@ export class MultiSubjectEnrichmentHelper {
 
     private classAxiomsHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
         if (predicate.getURI() == OWL.oneOf.getURI()) {
-            this.resViewModals.createInstanceList("Add " + predicate.getShow()).then(
+            this.resViewModals.createInstanceList({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
                 (instances: ARTURIResource[]) => {
                     let addFunctions: MultiSubjectAddFunction[] = [];
                     subjects.forEach((s: ARTURIResource) => {
@@ -202,7 +202,7 @@ export class MultiSubjectEnrichmentHelper {
                 () => { }
             );
         } else if (predicate.getURI() == OWL.intersectionOf.getURI() || predicate.getURI() == OWL.unionOf.getURI()) {
-            this.resViewModals.createClassList("Add " + predicate.getShow()).then(
+            this.resViewModals.createClassList({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
                 (classes: ARTURIResource[]) => {
                     let addFunctions: MultiSubjectAddFunction[] = [];
                     if (predicate.getURI() == OWL.intersectionOf.getURI()) {
@@ -226,7 +226,7 @@ export class MultiSubjectEnrichmentHelper {
             );
         } else { //rdfs:subClassOf, owl:equivalentClass, owl:disjointWith, owl:complementOf
             //ask the user to choose to add an existing class or to add a class expression
-            this.resViewModals.addPropertyValue("Add " + predicate.getShow(), subjects[0], predicate, false, null, false).then(
+            this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, subjects[0], predicate, false, null, false).then(
                 (data: AddPropertyValueModalReturnData) => {
                     let addFunctions: MultiSubjectAddFunction[] = [];
                     var value: any = data.value; //value can be a class or a manchester Expression
@@ -263,7 +263,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private constituentsHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.createConstituentList("Create a constituents list").then(
+        this.resViewModals.createConstituentList({key:"ACTIONS.CREATE_CONSTITUENTS_LIST"}).then(
             (data: ConstituentListCreatorModalReturnData) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 subjects.forEach((s: ARTURIResource) => {
@@ -279,7 +279,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private denotationsHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.creationModals.newOntoLexicalizationCf("Add a denotation", predicate, false).then(
+        this.creationModals.newOntoLexicalizationCf({key:"ACTIONS.ADD_DENOTATION"}, predicate, false).then(
             (data: NewOntoLexicalizationCfModalReturnData) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 subjects.forEach((s: ARTURIResource) => {
@@ -295,7 +295,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private disjointPropertiesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a disjoint property", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_DISJOINT_PROPERTY"}, subjects[0], predicate, false, null, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let inverse: boolean = data.inverseProperty;
                 let value: ARTURIResource = data.value[0];
@@ -313,7 +313,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private domainsPropertiesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a domain", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_DOMAIN"}, subjects[0], predicate, false, null, false).then(
             (data: any) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 let value: any = data.value; //value can be class(es) or a manchester Expression
@@ -339,7 +339,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private equivalentPropertiesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add an equivalent property", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_EQUIVALENT_PROPERTY"}, subjects[0], predicate, false, null, false).then(
             (data: any) => {
                 let inverse: boolean = data.inverseProperty;
                 let value: ARTURIResource = data.value[0];
@@ -362,7 +362,7 @@ export class MultiSubjectEnrichmentHelper {
     }
     
     private labelRelationsHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add " + predicate.getShow(), subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, subjects[0], predicate, false, null, false).then(
             (data: any) => {
                 let value: ARTURIResource = data.value[0];
                 let addFunctions: MultiSubjectAddFunction[] = [];
@@ -382,7 +382,7 @@ export class MultiSubjectEnrichmentHelper {
         //multiple subjects (lexical entry) have the same language, so it is safe to get the form language of the first one
         this.ontolexService.getLexicalEntryLanguage(subjects[0]).subscribe(
             lang => {
-                this.creationModals.newResourceWithLiteralCf("Create " + predicate.getShow(), OntoLex.form, true, "Written rep", lang, { constrain: true, locale: true }).then(
+                this.creationModals.newResourceWithLiteralCf({key: "ACTIONS.CREATE_X", params: {x: predicate.getShow()}}, OntoLex.form, true, "Written rep", lang, { constrain: true, locale: true }).then(
                     (data: NewResourceWithLiteralCfModalReturnData) => {
                         let addFunctions: MultiSubjectAddFunction[] = [];
                         if (predicate.getURI() == OntoLex.canonicalForm.getURI()) {
@@ -409,7 +409,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private lexicalSensesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.creationModals.newOntoLexicalizationCf("Add a lexical sense", predicate, false).then(
+        this.creationModals.newOntoLexicalizationCf({key:"ACTIONS.ADD_LEXICAL_SENSE"}, predicate, false).then(
             (data: NewOntoLexicalizationCfModalReturnData) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 subjects.forEach((s: ARTURIResource) => {
@@ -431,7 +431,7 @@ export class MultiSubjectEnrichmentHelper {
             return;
         }
         if (predicate.getBaseURI() == SKOSXL.namespace) { //SKOSXL
-            this.creationModals.newXLabel("Add " + predicate.getShow()).then(
+            this.creationModals.newXLabel({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
                 (data: NewXLabelModalReturnData) => {
                     let addFunctions: MultiSubjectAddFunction[] = [];
                     if (predicate.equals(SKOSXL.altLabel)) {
@@ -454,7 +454,7 @@ export class MultiSubjectEnrichmentHelper {
                 () => {}
             );
         } else if (predicate.getBaseURI() == SKOS.namespace) {
-            this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
+            this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
                 (labels: ARTLiteral[]) => {
                     let addFunctions: MultiSubjectAddFunction[] = [];
                     if (predicate.equals(SKOS.altLabel)) {
@@ -477,7 +477,7 @@ export class MultiSubjectEnrichmentHelper {
                 () => { }
             );
         } else if (predicate.equals(RDFS.label)) {
-            this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
+            this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
                 (labels: ARTLiteral[]) => {
                     let addFunctions: MultiSubjectAddFunction[] = [];
                     subjects.forEach((s: ARTURIResource) => {
@@ -490,7 +490,7 @@ export class MultiSubjectEnrichmentHelper {
                 }
             );
         } else if (predicate.equals(OntoLex.isDenotedBy)) {
-            this.creationModals.newOntoLexicalizationCf("Add a lexical sense", predicate, false).then(
+            this.creationModals.newOntoLexicalizationCf({key:"ACTIONS.ADD_LEXICAL_SENSE"}, predicate, false).then(
                 (data: NewOntoLexicalizationCfModalReturnData) => {
                     let addFunctions: MultiSubjectAddFunction[] = [];
                     subjects.forEach((s: ARTURIResource) => {
@@ -507,7 +507,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private membersHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a member", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_MEMBER"}, subjects[0], predicate, false, null, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let value: ARTURIResource = data.value[0];
                 let addFunctions: MultiSubjectAddFunction[] = [];
@@ -534,7 +534,7 @@ export class MultiSubjectEnrichmentHelper {
                 return;
             }
         }
-        this.resViewModals.addPropertyValue("Add a range", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_RANGE"}, subjects[0], predicate, false, null, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
                 /** If the rerource is a datatype property, value could be a:
@@ -591,7 +591,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private schemesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add Concept to a Scheme", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_TO_SCHEME"}, subjects[0], predicate, false, null, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let value: ARTURIResource = data.value[0];
 
@@ -609,7 +609,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private subPropertyChainsHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.createPropertyChain("Create a property chain", predicate, false).then(
+        this.resViewModals.createPropertyChain({key: "ACTIONS.CREATE_PROPERTY_CHAIN"}, predicate, false).then(
             (data: PropertyListCreatorModalReturnData) => {
                 let chain: string[] = data.chain;
                 let addFunctions: MultiSubjectAddFunction[] = [];
@@ -627,7 +627,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private subtermsHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.browsingModals.browseLexicalEntryList("Add a subterm", null, true, true, false, false).then(
+        this.browsingModals.browseLexicalEntryList({key:"ACTIONS.ADD_SUBTERM"}, null, true, true, false, false).then(
             (value: ARTURIResource) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 subjects.forEach((s: ARTURIResource) => {
@@ -643,7 +643,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private superpropertiesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a superproperty", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_SUPERPROPERTY"}, subjects[0], predicate, false, null, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let inverse: boolean = data.inverseProperty;
                 let value: ARTURIResource = data.value[0];
@@ -661,7 +661,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private topconceptofHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Set as top Concept of", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.SET_AS_TOP_CONCEPT"}, subjects[0], predicate, false, null, false).then(
             (data: any) => {
                 let value: ARTURIResource = data.value[0];
                 let addFunctions: MultiSubjectAddFunction[] = [];
@@ -678,7 +678,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private typesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a type", subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_TYPE"}, subjects[0], predicate, false, null, false).then(
             (data: any) => {
                 let value: ARTURIResource = data.value[0];
                 let addFunctions: MultiSubjectAddFunction[] = [];
@@ -720,7 +720,7 @@ export class MultiSubjectEnrichmentHelper {
      */
 
     private enrichWithCustomForm(subjects: ARTURIResource[], predicate: ARTURIResource, form: CustomForm) {
-        this.resViewModals.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
+        this.resViewModals.enrichCustomForm({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, form.getId()).then(
             (entryMap: any) => {
                 let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
                 let addFunctions: MultiSubjectAddFunction[] = [];
@@ -737,7 +737,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private enrichWithPlainLiteral(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
+        this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
             (literals: ARTLiteral[]) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 subjects.forEach((s: ARTURIResource) => {
@@ -753,7 +753,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private enrichWithTypedLiteral(subjects: ARTURIResource[], predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), predicate, allowedDatatypes, dataRanges, true, true).then(
+        this.creationModals.newTypedLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, predicate, allowedDatatypes, dataRanges, true, true).then(
             (literals: ARTLiteral[]) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 subjects.forEach((s: ARTURIResource) => {
@@ -769,7 +769,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private enrichWithResource(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add " + predicate.getShow(), subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, subjects[0], predicate, false, null, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let value: ARTURIResource = data.value[0];
                 let addFunctions: MultiSubjectAddFunction[] = [];

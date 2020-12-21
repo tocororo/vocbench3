@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ModalOptions } from 'src/app/widget/modal/Modals';
+import { TranslateService } from "@ngx-translate/core";
+import { ModalOptions, Translation } from 'src/app/widget/modal/Modals';
 import { UsersGroup } from "../../models/User";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
 import { GroupEditorModal } from "./groupEditorModal";
@@ -16,7 +17,7 @@ export class GroupsAdministrationComponent {
     groupList: UsersGroup[];
     selectedGroup: UsersGroup;
 
-    constructor(private groupsSevice: UsersGroupsServices, private modalService: NgbModal) { }
+    constructor(private groupsSevice: UsersGroupsServices, private modalService: NgbModal, private translateService: TranslateService) { }
 
     ngOnInit() {
         this.initGroups();
@@ -44,7 +45,7 @@ export class GroupsAdministrationComponent {
     }
 
     createGroup() {
-        this.openGroupEditor("Create group").then(
+        this.openGroupEditor({key:"ACTIONS.CREATE_GROUP"}).then(
             data => {
                 this.initGroups();
             },
@@ -61,7 +62,7 @@ export class GroupsAdministrationComponent {
     }
 
     editGroup() {
-        this.openGroupEditor("Edit group " + this.selectedGroup.shortName, this.selectedGroup).then(
+        this.openGroupEditor({key:"ACTIONS.EDIT_GROUP"}, this.selectedGroup).then(
             (updatedGroup: UsersGroup) => {
                 this.initGroups(updatedGroup);
             },
@@ -69,9 +70,9 @@ export class GroupsAdministrationComponent {
         );
     }
 
-    private openGroupEditor(title: string, group?: UsersGroup) {
+    private openGroupEditor(title: Translation, group?: UsersGroup) {
         const modalRef: NgbModalRef = this.modalService.open(GroupEditorModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.group = group;
         return modalRef.result;
     }

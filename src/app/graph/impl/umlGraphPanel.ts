@@ -36,7 +36,7 @@ export class UmlGraphPanel extends AbstractGraphPanel {
 
 
     addNode() {
-        this.browsingModals.browseClassTree("Add node").then(
+        this.browsingModals.browseClassTree({key:"ACTIONS.ADD_NODE"}).then(
             (cls: ARTURIResource) => {
                 if (!cls.getAdditionalProperty(ResAttribute.EXPLICIT)) {
                     this.basicModals.alert({key:"STATUS.WARNING"}, "Cannot add a new node for " + cls.getShow() +

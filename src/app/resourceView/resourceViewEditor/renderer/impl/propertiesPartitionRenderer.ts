@@ -73,7 +73,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     private enrichWithLabel(predicate: ARTURIResource) {
         if (predicate.equals(SKOSXL.prefLabel) || predicate.equals(SKOSXL.altLabel) || predicate.equals(SKOSXL.hiddenLabel)) { //SKOSXL
             let prefLabelPred: boolean = predicate.equals(SKOSXL.prefLabel);
-            this.creationModals.newXLabel("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+            this.creationModals.newXLabel({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (data: NewXLabelModalReturnData) => {
                     this.addMultipleLabelValues(predicate, data.labels, data.cls);
                 },
@@ -81,7 +81,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
             );
         } else { //SKOS or RDFS
             let prefLabelPred: boolean = predicate.equals(SKOS.prefLabel);
-            this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+            this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (labels: ARTLiteral[]) => {
                     this.addMultipleLabelValues(predicate, labels);
                 },
@@ -144,7 +144,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree("Select a property", null, <ARTURIResource>this.resource).then(
+            this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, null, <ARTURIResource>this.resource).then(
                 selectedProp => {
                     return selectedProp
                 },

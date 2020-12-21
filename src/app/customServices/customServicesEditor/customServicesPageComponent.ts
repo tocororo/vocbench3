@@ -45,7 +45,7 @@ export class CustomServicesPageComponent {
 
 
     createService() {
-        this.customServiceModals.openCustomServiceEditor("New Custom Service").then(
+        this.customServiceModals.openCustomServiceEditor({key:"ACTIONS.CREATE_CUSTOM_SERVICE"}).then(
             () => {
                 this.initServices();
             },

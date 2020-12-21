@@ -45,7 +45,7 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
         this.getLexiconLang().subscribe(
             lang => {
                 this.lexiconLang = lang;
-                this.creationModals.newResourceWithLiteralCf("Create " + predicate.getShow(), OntoLex.form, true, "Written rep", this.lexiconLang, { constrain: true, locale: true }).then(
+                this.creationModals.newResourceWithLiteralCf({key: "ACTIONS.CREATE_X", params: {x: predicate.getShow()}}, OntoLex.form, true, "Written rep", this.lexiconLang, { constrain: true, locale: true }).then(
                     (data: NewResourceWithLiteralCfModalReturnData) => {
                         if (predicate.getURI() == OntoLex.canonicalForm.getURI()) {
                             this.ontolexService.setCanonicalForm(<ARTURIResource>this.resource, data.literal, data.uriResource, data.cfValue).subscribe(
@@ -74,7 +74,7 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
+            this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
                 (selectedProp: any) => {
                     return selectedProp;
                 },

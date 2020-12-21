@@ -35,7 +35,7 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add a superproperty", this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_SUPERPROPERTY"}, this.resource, predicate, propChangeable).then(
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let inverse: boolean = data.inverseProperty;

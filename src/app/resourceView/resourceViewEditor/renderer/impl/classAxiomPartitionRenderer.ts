@@ -57,7 +57,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
             this.createClassList(predicate);
         } else { //rdfs:subClassOf, owl:equivalentClass, owl:disjointWith, owl:complementOf
             //ask the user to choose to add an existing class or to add a class expression
-            this.resViewModals.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
+            this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, this.resource, predicate, false).then(
                 (data: any) => {
                     var value: any = data.value; //value can be a class or a manchester Expression
                     if (typeof value == "string") {
@@ -93,7 +93,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
+            this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
                 (selectedProp: any) => {
                     return selectedProp;
                 },
@@ -114,14 +114,14 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
      * Opens a modal to create a class list.
      * Called to enrich intersectionOf and unionOf
      */
-    private createClassList(property: ARTURIResource) {
-        this.resViewModals.createClassList("Add " + property.getShow()).then(
+    private createClassList(predicate: ARTURIResource) {
+        this.resViewModals.createClassList({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
             (classes: any) => {
-                if (property.getURI() == OWL.intersectionOf.getURI()) {
+                if (predicate.getURI() == OWL.intersectionOf.getURI()) {
                     this.clsService.addIntersectionOf(<ARTURIResource>this.resource, classes).subscribe(
                         stResp => this.update.emit(null)
                     );
-                } else if (property.getURI() == OWL.unionOf.getURI()) {
+                } else if (predicate.getURI() == OWL.unionOf.getURI()) {
                     this.clsService.addUnionOf(<ARTURIResource>this.resource, classes).subscribe(
                         stResp => this.update.emit(null)
                     );
@@ -135,8 +135,8 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
      * Opens a modal to create an instance list
      * Called to enrich oneOf
      */
-    private createInstanceList(property: ARTURIResource) {
-        this.resViewModals.createInstanceList("Add " + property.getShow()).then(
+    private createInstanceList(predicate: ARTURIResource) {
+        this.resViewModals.createInstanceList({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
             (instances: any) => {
                 this.clsService.addOneOf(<ARTURIResource>this.resource, instances).subscribe(
                     stResp => this.update.emit(null)

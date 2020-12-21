@@ -81,7 +81,7 @@ export class AddPropertyValueModal {
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
             (selectedProp: any) => {
                 if (!this.enrichingProperty.equals(selectedProp)) {
                     this.enrichingProperty = selectedProp;

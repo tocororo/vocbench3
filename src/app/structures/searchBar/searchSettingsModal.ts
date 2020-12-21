@@ -73,7 +73,7 @@ export class SearchSettingsModal {
     }
 
     selectRestrictionLanguages() {
-        this.sharedModals.selectLanguages("Language restrictions", this.languages, false, true, this.projectCtx).then(
+        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGES"}, this.languages, false, true, this.projectCtx).then(
             (langs: string[]) => {
                 this.languages = langs;
                 this.updateSettings();

@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
 import { ARTURIResource } from "../models/ARTResources";
 import { CustomForm, CustomFormLevel, FormCollection, FormCollectionMapping } from "../models/CustomForms";
 import { CustomFormsServices } from "../services/customFormsServices";
@@ -7,7 +8,7 @@ import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../utils/VBActions";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ConfirmCheckOptions } from '../widget/modal/basicModal/confirmModal/confirmCheckModal';
-import { ModalOptions, ModalType } from '../widget/modal/Modals';
+import { ModalOptions, ModalType, Translation } from '../widget/modal/Modals';
 import { BrokenCFStructReportModal } from "./customFormConfigModals/brokenCFStructReportModal";
 import { CustomFormEditorModal } from "./customFormConfigModals/customFormEditorModal";
 import { FormCollEditorModal } from "./customFormConfigModals/formCollEditorModal";
@@ -29,7 +30,8 @@ export class CustomFormConfigComponent {
     selectedFormColl: FormCollection;
     selectedCustomForm: CustomForm;
 
-    constructor(private customFormsService: CustomFormsServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
+    constructor(private customFormsService: CustomFormsServices, private basicModals: BasicModalServices, private modalService: NgbModal,
+        private translateService: TranslateService) { }
 
     ngOnInit() {
         this.initCFConfMap();
@@ -192,7 +194,7 @@ export class CustomFormConfigComponent {
     }
 
     importFormCollection() {
-        return this.openImportCfModal("Import FormCollection", "FormCollection").then(
+        return this.openImportCfModal({key:"ACTIONS.IMPORT_FORM_COLLECTION"}, "FormCollection").then(
             (data: ImportCfModalReturnData) => {
                 this.customFormsService.importFormCollection(data.file, data.id).subscribe(
                     () => {
@@ -318,7 +320,7 @@ export class CustomFormConfigComponent {
     }
 
     importCustomForm() {
-        this.openImportCfModal("Import CustomForm", "CustomForm").then(
+        this.openImportCfModal({key:"ACTIONS.IMPORT_CUSTOM_FORM"}, "CustomForm").then(
             (data: any) => {
                 this.customFormsService.importCustomForm(data.file, data.id).subscribe(
                     stResp => {
@@ -330,9 +332,9 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private openImportCfModal(title: string, type: "CustomForm" | "FormCollection") {
+    private openImportCfModal(title: Translation, type: "CustomForm" | "FormCollection") {
         const modalRef: NgbModalRef = this.modalService.open(ImportCfModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.type = type;
         return modalRef.result;
     }

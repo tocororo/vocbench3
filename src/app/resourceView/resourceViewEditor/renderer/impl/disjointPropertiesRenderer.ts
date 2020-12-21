@@ -33,7 +33,7 @@ export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRo
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add a disjoint property", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_DISJOINT_PROPERTY"}, this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let inverse: boolean = data.inverseProperty;

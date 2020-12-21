@@ -190,7 +190,7 @@ export abstract class PartitionRenderer {
     }
 
     private addExternal(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.browseExternalResource("Select external resource", predicate, propChangeable).then(
+        this.resViewModals.browseExternalResource({key:"ACTIONS.SELECT_EXTERNAL_RESOURCE"}, predicate, propChangeable).then(
             (data: BrowseExternalResourceModalReturnData) => {
                 this.resourcesService.addValue(this.resource, data.property, data.resource).subscribe(
                     stResp => this.update.emit()

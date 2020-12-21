@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { LanguageConstraint } from '../../../models/LanguagesCountries';
-import { ModalOptions } from '../Modals';
+import { ModalOptions, TextOrTranslation } from '../Modals';
 import { NewPlainLiteralModal } from "./newPlainLiteralModal/newPlainLiteralModal";
 import { NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
 import { NewOntoLexicalizationCfModal } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
@@ -16,7 +17,7 @@ import { NewTypedLiteralModal } from "./newTypedLiteralModal/newTypedLiteralModa
 @Injectable()
 export class CreationModalServices {
 
-    constructor(private modalService: NgbModal) { }
+    constructor(private modalService: NgbModal, private translateService: TranslateService) { }
 
     /**
      * Opens a modal to create a new resource with uri plus custom form supplement fields
@@ -26,10 +27,10 @@ export class CreationModalServices {
      * @param cfId the custom form id
      * @return
      */
-    newResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean) {
+    newResourceCf(title: TextOrTranslation, cls: ARTURIResource, clsChangeable?: boolean) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewResourceCfModal, _options);
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.cls = cls;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
@@ -45,11 +46,11 @@ export class CreationModalServices {
      * @param langConstraints constraints to apply to the lang
      * @return
      */
-    newResourceWithLiteralCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, literalLabel?: string,
+    newResourceWithLiteralCf(title: TextOrTranslation, cls: ARTURIResource, clsChangeable?: boolean, literalLabel?: string,
         lang?: string, langConstraints?: LanguageConstraint) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewResourceWithLiteralCfModal, _options);
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.cls = cls;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         if (literalLabel != null) modalRef.componentInstance.literalLabel = literalLabel;
@@ -68,10 +69,10 @@ export class CreationModalServices {
      * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
      * @return 
      */
-    newConceptCf(title: string, broader?: ARTURIResource, schemes?: ARTURIResource[], cls?: ARTURIResource, clsChangeable?: boolean, lang?: string) {
+    newConceptCf(title: TextOrTranslation, broader?: ARTURIResource, schemes?: ARTURIResource[], cls?: ARTURIResource, clsChangeable?: boolean, lang?: string) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewConceptCfModal, _options);
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (broader != null) modalRef.componentInstance.broader = broader;
         if (schemes != null) modalRef.componentInstance.schemes = schemes;
         if (cls != null) modalRef.componentInstance.cls = cls;
@@ -85,10 +86,10 @@ export class CreationModalServices {
      * @param title 
      * @param clsChangeable 
      */
-    newLexiconCf(title: string, clsChangeable?: boolean) {
+    newLexiconCf(title: TextOrTranslation, clsChangeable?: boolean) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewLexiconCfModal, _options);
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
     }
@@ -100,10 +101,10 @@ export class CreationModalServices {
      *  (OntoLex.senses | OntoLex.denotes | Ontolex.isDenotedBy)
      * @param clsChangeable 
      */
-    newOntoLexicalizationCf(title: string, lexicalizationProp: ARTURIResource, clsChangeable?: boolean) {
+    newOntoLexicalizationCf(title: TextOrTranslation, lexicalizationProp: ARTURIResource, clsChangeable?: boolean) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewOntoLexicalizationCfModal, _options);
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.lexicalizationProp = lexicalizationProp;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
@@ -120,11 +121,11 @@ export class CreationModalServices {
      * @param multivalueOpt options about the creation of multiple labels
      * @return if the modal closes with ok returns a promise containing an object with label and cls
      */
-    newXLabel(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean,
+    newXLabel(title: TextOrTranslation, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean,
         clsChangeable?: boolean, multivalueOpt?: { enabled: boolean, allowSameLang: boolean }) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewXLabelModal, _options);
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (value != null) modalRef.componentInstance.value = value;
         if (valueReadonly != null) modalRef.componentInstance.valueReadonly = valueReadonly;
         if (lang != null) modalRef.componentInstance.lang = lang;
@@ -145,11 +146,11 @@ export class CreationModalServices {
      * @param multivalueOpt options about the creation of multiple labels
      * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
-    newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean,
+    newPlainLiteral(title: TextOrTranslation, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean,
         langConstraints?: LanguageConstraint, multivalueOpt?: { enabled: boolean, allowSameLang: boolean }) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewPlainLiteralModal, _options);
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (value != null) modalRef.componentInstance.value = value;
         if (valueReadonly != null) modalRef.componentInstance.valueReadonly = valueReadonly;
         if (lang != null) modalRef.componentInstance.lang = lang;
@@ -169,10 +170,10 @@ export class CreationModalServices {
      * @param validation if true, validates the provided value according the datatype
      * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
-    newTypedLiteral(title: string, predicate?: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[], multivalue?: boolean, validation?: boolean) {
+    newTypedLiteral(title: TextOrTranslation, predicate?: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[], multivalue?: boolean, validation?: boolean) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewTypedLiteralModal, _options);
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (predicate != null) modalRef.componentInstance.predicate = predicate;
         if (allowedDatatypes != null) modalRef.componentInstance.allowedDatatypes = allowedDatatypes;
         if (dataRanges != null) modalRef.componentInstance.dataRanges = dataRanges;
@@ -189,10 +190,10 @@ export class CreationModalServices {
      * @param clsChangeable tells if the class of the creating resource can be changed
      * @param sibling a concept that if provided, set the default sibling in case of position chosen "sibling"
      */
-    newConceptFromLabel(title: string, xLabel: ARTResource, cls: ARTURIResource, clsChangeable?: boolean, sibling?: ARTURIResource) {
+    newConceptFromLabel(title: TextOrTranslation, xLabel: ARTResource, cls: ARTURIResource, clsChangeable?: boolean, sibling?: ARTURIResource) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewConceptFromLabelModal, _options);
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.xLabel = xLabel;
         modalRef.componentInstance.cls = cls;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;

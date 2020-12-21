@@ -1,12 +1,13 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
 import { PatternStruct, ResourceMetadataAssociation, ResourceMetadataUtils } from "../models/ResourceMetadata";
 import { ResourceMetadataServices } from "../services/resourceMetadataServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { VBActionsEnum } from "../utils/VBActions";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { ModalOptions, ModalType } from '../widget/modal/Modals';
+import { ModalOptions, ModalType, TextOrTranslation, Translation } from '../widget/modal/Modals';
 import { ImportPatternModal } from "./modals/importPatternModal";
 import { MetadataAssociationEditorModal } from "./modals/metadataAssociationEditorModal";
 import { MetadataPatternEditorModal } from "./modals/metadataPatternEditorModal";
@@ -32,7 +33,8 @@ export class ResourceMetadataComponent {
     createAssociationAuthorized: boolean;
     deleteAssociationAuthorized: boolean;
 
-    constructor(private resourceMetadataService: ResourceMetadataServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
+    constructor(private resourceMetadataService: ResourceMetadataServices, private basicModals: BasicModalServices, private modalService: NgbModal,
+        private translateService: TranslateService) { }
 
     ngOnInit() {
         //init authorizations
@@ -59,14 +61,14 @@ export class ResourceMetadataComponent {
     }
 
     createPattern() {
-        this.openPatternEditor("Create Metadata Pattern").then(
+        this.openPatternEditor({key:"ACTIONS.CREATE_METADATA_PATTERN"}).then(
             () => this.initPatterns(),
             () => {}
         );
     }
 
     editPattern() {
-        this.openPatternEditor("Edit Metadata Pattern", this.selectedPattern.reference).then(
+        this.openPatternEditor({key:"ACTIONS.EDIT_METADATA_PATTERN"}, this.selectedPattern.reference).then(
             () => this.initPatterns(),
             () => {}
         );
@@ -137,7 +139,7 @@ export class ResourceMetadataComponent {
     }
 
     importPatternFromLibrary() {
-        this.openPatterLibrary("Import shared Metadata Pattern").then(
+        this.openPatterLibrary({key:"ACTIONS.IMPORT_SHARED_METADATA_PATTERN"}).then(
             pattern => {
                 this.initPatterns();
             },
@@ -146,22 +148,22 @@ export class ResourceMetadataComponent {
     }
 
     storePatternInLibrary() {
-        this.openPatterLibrary("Share Metadata Pattern", this.selectedPattern);
+        this.openPatterLibrary({key:"ACTIONS.SHARE_METADATA_PATTERN"}, this.selectedPattern);
     }
 
-    private openPatternEditor(title: string, patternRef?: string) {
+    private openPatternEditor(title: Translation, patternRef?: string) {
         let readonly: boolean = (patternRef != null) ? patternRef.startsWith("factory") : false;
         const modalRef: NgbModalRef = this.modalService.open(MetadataPatternEditorModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.existingPatterns = this.patterns;
         modalRef.componentInstance.ref = patternRef;
         modalRef.componentInstance.readOnly = readonly;
         return modalRef.result;
     }
 
-    private openPatterLibrary(title: string, patternToShare?: PatternStruct) {
+    private openPatterLibrary(title: Translation, patternToShare?: PatternStruct) {
         const modalRef: NgbModalRef = this.modalService.open(MetadataPatternLibraryModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.patternToShare = patternToShare;
 		modalRef.componentInstance.existinPatterns = this.patterns;
         return modalRef.result;
@@ -182,7 +184,7 @@ export class ResourceMetadataComponent {
     }
 
     createAssociation() {
-        this.openAssociationEditor("Add Metadata Association").then(
+        this.openAssociationEditor({key:"ACTIONS.CREATE_METADATA_ASSOCIATION"}).then(
             () => this.initAssociations(),
             () => {}
         );
@@ -200,9 +202,9 @@ export class ResourceMetadataComponent {
         );
     }
 
-    private openAssociationEditor(title: string) {
+    private openAssociationEditor(title: Translation) {
         const modalRef: NgbModalRef = this.modalService.open(MetadataAssociationEditorModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.existingAssociations = this.associations;
         return modalRef.result;
     }

@@ -81,7 +81,7 @@ export class UserCreateComponent implements ControlValueAccessor {
     }
 
     editLanguages() {
-        this.sharedModals.selectLanguages("Language proficiencies", this.form.languageProficiencies).then(
+        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGES"}, this.form.languageProficiencies).then(
             langs => {
                 this.form.languageProficiencies = langs;
                 this.onModelChange();

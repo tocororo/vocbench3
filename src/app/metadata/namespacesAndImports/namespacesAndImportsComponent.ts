@@ -245,7 +245,7 @@ export class NamespacesAndImportsComponent {
      * Adds a new prefix namespace mapping
      */
     addMapping() {
-        this.sharedModals.prefixNamespace("Add prefix namespace mapping").then(
+        this.sharedModals.prefixNamespace({key:"ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING"}).then(
             (mapping: any) => {
                 this.metadataService.setNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
@@ -277,7 +277,7 @@ export class NamespacesAndImportsComponent {
      * Changes the prefix of a prefix namespace mapping
      */
     changeMapping() {
-        this.sharedModals.prefixNamespace("Change prefix namespace mapping", this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
+        this.sharedModals.prefixNamespace({key:"ACTIONS.EDIT_PREFIX_NAMESPACE_MAPPING"}, this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
             (mapping: any) => {
                 this.metadataService.changeNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
@@ -296,7 +296,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromWeb() {
-        this.sharedModals.importOntology("Import from web", ImportType.fromWeb).then(
+        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_WEB"}, ImportType.fromWeb).then(
             (data: ImportFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -318,7 +318,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromWebToMirror() {
-        this.sharedModals.importOntology("Import from web to mirror", ImportType.fromWebToMirror).then(
+        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_WEB_TO_MIRROR"}, ImportType.fromWebToMirror).then(
             (data: ImportFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -340,7 +340,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromLocalFile() {
-        this.sharedModals.importOntology("Import from local file", ImportType.fromLocalFile).then(
+        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_LOCAL_FILE"}, ImportType.fromLocalFile).then(
             (data: ImportFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
@@ -362,7 +362,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromOntologyMirror() {
-        this.sharedModals.importOntology("Import from ontology mirror", ImportType.fromOntologyMirror).then(
+        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_ONTOLOGY_MIRROR"}, ImportType.fromOntologyMirror).then(
             (data: ImportFromMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
@@ -384,7 +384,7 @@ export class NamespacesAndImportsComponent {
      * Once done refreshes the imports list and the namespace prefix mapping
      */
     importFromDatasetCatalog() {
-        this.sharedModals.importFromDatasetCatalog("Import from Dataset Catalog").then(
+        this.sharedModals.importFromDatasetCatalog({key:"ACTIONS.IMPORT_FROM_DATASET_CATALOG"}).then(
             (data: ImportFromDatasetCatalogModalReturnData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.ontologyIRI, data.transitiveImportAllowance, data.dataDump, data.rdfFormat).subscribe(

@@ -59,7 +59,7 @@ export class NoLabelResourceComponent {
      */
     fix(resource: ARTURIResource) {
         if (this.lexicalizationModel == SKOS.uri) {
-            this.creationModals.newPlainLiteral("Add skos:prefLabel").then(
+            this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: SKOS.prefLabel.getShow()}}).then(
                 (literal: ARTLiteral[]) => {
                     this.skosService.setPrefLabel(resource, literal[0]).subscribe(
                         () => {
@@ -70,7 +70,7 @@ export class NoLabelResourceComponent {
                 () => { }
             );
         } else if (this.lexicalizationModel == SKOSXL.uri) {
-            this.creationModals.newXLabel("Add skosxl:prefLabel").then(
+            this.creationModals.newXLabel({key: "ACTIONS.ADD_X", params:{x: SKOSXL.prefLabel.getShow()}}).then(
                 (data: NewXLabelModalReturnData) => {
                     this.skosxlService.setPrefLabel(resource, data.labels[0], data.cls).subscribe(
                         () => {

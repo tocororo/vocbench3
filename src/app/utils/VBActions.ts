@@ -304,7 +304,7 @@ export class VBActionFunctions {
 
     private classesCreateClass = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf("Create a new class", ctx.metaClass).then(
+            this.creationModals.newResourceCf({key: "ACTIONS.CREATE_CLASS"}, ctx.metaClass).then(
                 (data: any) => {
                     let superClass: ARTURIResource = OWL.thing;
                     if (data.cls.getURI() == RDFS.class.getURI()) {
@@ -325,7 +325,7 @@ export class VBActionFunctions {
 
     private classesCreateSubClass = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf("Create a subClass of " + parent.getShow(), ctx.metaClass).then(
+            this.creationModals.newResourceCf({key: "ACTIONS.CREATE_SUBCLASS"}, ctx.metaClass).then(
                 (data: any) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.classesService.createClass(data.uriResource, parent, data.cls, data.cfValue).subscribe(
@@ -358,7 +358,7 @@ export class VBActionFunctions {
 
     private skosCreateTopConcept = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newConceptCf("Create new skos:Concept", null, ctx.schemes, ctx.metaClass, true).then(
+            this.creationModals.newConceptCf({key:"ACTIONS.CREATE_CONCEPT"}, null, ctx.schemes, ctx.metaClass, true).then(
                 (data: NewConceptCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
@@ -412,7 +412,7 @@ export class VBActionFunctions {
 
     private skosCreateNarrowerConcept = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newConceptCf("Create a skos:narrower", parent, null, ctx.metaClass, true).then(
+            this.creationModals.newConceptCf({key:"ACTIONS.CREATE_NARROWER_CONCEPT"}, parent, null, ctx.metaClass, true).then(
                 (data: NewConceptCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, data.broaderProp, data.cfValue).subscribe(
@@ -461,7 +461,7 @@ export class VBActionFunctions {
 
     private skosCreateScheme = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf("Create new " + ctx.metaClass.getShow(), ctx.metaClass, true).then(
+            this.creationModals.newResourceWithLiteralCf({key:"ACTIONS.CREATE_SCHEME"}, ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue).subscribe(
@@ -505,7 +505,7 @@ export class VBActionFunctions {
                             },
                         );
                     } else {
-                        this.basicModals.confirm({key: "DATA.SCHEME.DELETE"}, "The scheme is not empty. Deleting it will produce dangling concepts."
+                        this.basicModals.confirm({key: "ACTIONS.DELETE_SCHEME"}, "The scheme is not empty. Deleting it will produce dangling concepts."
                             + " Are you sure to continue?", ModalType.warning).then(
                             confirm => {
                                 UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -530,7 +530,7 @@ export class VBActionFunctions {
 
     private datatypesCreateDatatype = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf("Create a new datatype", RDFS.datatype, false).then(
+            this.creationModals.newResourceCf({key: "ACTIONS.CREATE_DATATYPE"}, RDFS.datatype, false).then(
                 (data: any) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.datatypeService.createDatatype(data.uriResource).subscribe(
@@ -563,7 +563,7 @@ export class VBActionFunctions {
 
     private classesCreateIndividual = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf("Create a new instance of " + ctx.metaClass.getShow(), ctx.metaClass, false).then(
+            this.creationModals.newResourceCf({key:"ACTIONS.CREATE_INSTANCE"}, ctx.metaClass, false).then(
                 (data: any) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.classesService.createInstance(data.uriResource, ctx.metaClass, data.cfValue).subscribe(
@@ -595,7 +595,7 @@ export class VBActionFunctions {
 
     private ontolexCreateLexicon = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newLexiconCf("Create new lime:Lexicon").then(
+            this.creationModals.newLexiconCf({key:"ACTIONS.CREATE_LEXICON"}).then(
                 (res: NewLexiconCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.ontolexService.createLexicon(res.language, res.uriResource, res.title, res.cfValue).subscribe(
@@ -627,7 +627,7 @@ export class VBActionFunctions {
 
     private ontolexCreateLexicalEntry = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf("Create new ontolex:LexicalEntry", OntoLex.lexicalEntry, true, "Canonical Form",
+            this.creationModals.newResourceWithLiteralCf({key:"ACTIONS.CREATE_LEX_ENTRY"}, OntoLex.lexicalEntry, true, "Canonical Form",
                 ctx.lexicon.lang, { constrain: true, locale: true }).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -662,7 +662,7 @@ export class VBActionFunctions {
 
     private propertiesCreateProperty = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf("Create a new " + ctx.metaClass.getShow(), ctx.metaClass, false).then(
+            this.creationModals.newResourceCf({key:"ACTIONS.CREATE_PROPERTY"}, ctx.metaClass, false).then(
                 (data: any) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.propertyService.createProperty(data.cls, data.uriResource, null, data.cfValue).subscribe(
@@ -678,7 +678,7 @@ export class VBActionFunctions {
     }
     private propertiesCreateSubProperty = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf("Create subProperty of " + parent.getShow(), ctx.metaClass, false).then(
+            this.creationModals.newResourceCf({key:"ACTIONS.CREATE_SUBPROPERTY"}, ctx.metaClass, false).then(
                 (data: any) => {
                     this.propertyService.createProperty(data.cls, data.uriResource, parent, data.cfValue).subscribe(
                         stResp => {
@@ -708,7 +708,7 @@ export class VBActionFunctions {
      */
     private skosCreateCollection = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf("Create new " + ctx.metaClass.getShow(), ctx.metaClass, true).then(
+            this.creationModals.newResourceWithLiteralCf({key:"ACTIONS.CREATE_COLLECTION"}, ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, null, data.cls, data.cfValue).subscribe(
@@ -740,7 +740,7 @@ export class VBActionFunctions {
 
     private skosCreateSubCollection = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf("Create a nested " + ctx.metaClass.getShow(), ctx.metaClass, true).then(
+            this.creationModals.newResourceWithLiteralCf({key:"ACTIONS.CREATE_NESTED_COLLECTION"}, ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                         this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue).subscribe(

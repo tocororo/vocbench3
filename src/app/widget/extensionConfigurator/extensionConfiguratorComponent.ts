@@ -82,7 +82,7 @@ export class ExtensionConfiguratorComponent {
 
     private saveConfig() {
         let config: { [key: string]: any } = this.selectedConfiguration.getPropertiesAsMap(true);
-        this.sharedModals.storeConfiguration("Store configuration", this.selectedExtension.id, config).then(
+        this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_CONFIGURATION"}, this.selectedExtension.id, config).then(
             (relativeRef: string) => {
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration saved succesfully");
                 
@@ -94,7 +94,7 @@ export class ExtensionConfiguratorComponent {
     }
 
     private loadConfig() {
-        this.sharedModals.loadConfiguration("Load configuration", this.selectedExtension.id).then(
+        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_CONFIGURATION"}, this.selectedExtension.id).then(
             (config: LoadConfigurationModalReturnData) => {
                 for (var i = 0; i < this.selectedExtension.configurations.length; i++) {
                     if (this.selectedExtension.configurations[i].type == config.configuration.type) {

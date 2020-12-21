@@ -189,7 +189,7 @@ export class LanguageBoxComponent {
      * Open a modal for entering a new plain definition
      */
     private addPlainDefinition() {
-        this.creationModals.newPlainLiteral("Add a definition", null, false, this.lang, true).then(
+        this.creationModals.newPlainLiteral({key:"ACTIONS.ADD_DEFINITION"}, null, false, this.lang, true).then(
             (literalDef: ARTLiteral) => {
                 this.skosService.addNote(this.resource, SKOS.definition, literalDef).subscribe(
                     () => {
@@ -205,7 +205,7 @@ export class LanguageBoxComponent {
      * @param cf 
      */
     private addCustomFormDefinition(cf: CustomForm) {
-        this.resViewModals.enrichCustomForm("Add " + SKOS.definition.getShow(), cf.getId(), this.lang).then(
+        this.resViewModals.enrichCustomForm({key:"ACTIONS.ADD_DEFINITION"}, cf.getId(), this.lang).then(
             (entryMap: { [key: string]: any }) => {
                 let cfValue: CustomFormValue = new CustomFormValue(cf.getId(), entryMap);
                 this.skosService.addNote(this.resource, SKOS.definition, cfValue).subscribe(

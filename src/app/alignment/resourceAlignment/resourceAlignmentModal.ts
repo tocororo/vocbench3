@@ -47,7 +47,7 @@ export class ResourceAlignmentModal {
     }
     
     browseLocalProjects() {
-        this.resViewModals.browseExternalResource("Select remote resource").then(
+        this.resViewModals.browseExternalResource({key:"ACTIONS.SELECT_EXTERNAL_RESOURCE"}).then(
             (data: BrowseExternalResourceModalReturnData) => { 
                 this.alignedObject = data.resource; 
             },

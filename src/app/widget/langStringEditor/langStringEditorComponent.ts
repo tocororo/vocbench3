@@ -70,7 +70,7 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit, 
     }
 
     editLanguage() {
-        this.sharedModals.selectLanguages("Value language", (this.langTag ? [this.langTag] : []), true, false).then(
+        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGE"}, (this.langTag ? [this.langTag] : []), true, false).then(
             langs => {
                 this.langTag = langs[0];
                 this.onModelChanged();

@@ -51,7 +51,7 @@ export class ClassListCreatorModal {
      * Validates the manchester expression and then adds it to the classList
      */
     addExpressionToList() {
-        this.sharedModals.manchesterExpression("New manchester expression").then(
+        this.sharedModals.manchesterExpression({key:"ACTIONS.ADD_MANCHESTER_EXPRESSION"}).then(
             expr => {
                 this.manchService.checkExpression(expr).subscribe(
                     (checkResp: ExpressionCheckResponse) => {

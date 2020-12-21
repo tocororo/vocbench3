@@ -172,14 +172,14 @@ export class ResourcePickerComponent {
 
     private openSelectionResource(role: RDFResourceRolesEnum, projectCtx: ProjectContext) {
         if (role == RDFResourceRolesEnum.cls) {
-            this.browsingModals.browseClassTree("Select a Class", null, projectCtx).then(
+            this.browsingModals.browseClassTree({key:"ACTIONS.SELECT_CLASS"}, null, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.individual) {
-            this.browsingModals.browseClassIndividualTree("Select an Instance", this.config.classes, projectCtx).then(
+            this.browsingModals.browseClassIndividualTree({key:"ACTIONS.SELECT_INSTANCE"}, this.config.classes, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
@@ -187,21 +187,21 @@ export class ResourcePickerComponent {
             );
         } else if (role == RDFResourceRolesEnum.concept) {
             let activeSchemes: ARTURIResource[] = projectCtx.getProjectPreferences().activeSchemes;
-            this.browsingModals.browseConceptTree("Select a Concept", activeSchemes, true, projectCtx).then(
+            this.browsingModals.browseConceptTree({key:"ACTIONS.SELECT_CONCEPT"}, activeSchemes, true, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.conceptScheme) {
-            this.browsingModals.browseSchemeList("Select a ConceptScheme", projectCtx).then(
+            this.browsingModals.browseSchemeList({key:"ACTIONS.SELECT_SCHEME"}, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.skosCollection) {
-            this.browsingModals.browseCollectionTree("Select a Collection", projectCtx).then(
+            this.browsingModals.browseCollectionTree({key:"ACTIONS.SELECT_COLLECTION"}, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
@@ -210,21 +210,21 @@ export class ResourcePickerComponent {
         } else if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty || 
             role == RDFResourceRolesEnum.datatypeProperty || role == RDFResourceRolesEnum.objectProperty || role == RDFResourceRolesEnum.ontologyProperty) {
             let propType: RDFResourceRolesEnum = (role != RDFResourceRolesEnum.property) ? role : null; //specify a property type only if it's not the generic "property"
-            this.browsingModals.browsePropertyTree("Select a Property", null, null, propType, projectCtx).then(
+            this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, null, null, propType, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.limeLexicon) {
-            this.browsingModals.browseLexiconList("Select a Lexicon", projectCtx).then(
+            this.browsingModals.browseLexiconList({key:"ACTIONS.SELECT_LEXICON"}, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.browsingModals.browseLexicalEntryList("Select a LexicalEntry", null, true, false, false, false, projectCtx).then(
+            this.browsingModals.browseLexicalEntryList({key:"ACTIONS.SELECT_LEXICAL_ENTRY"}, null, true, false, false, false, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },

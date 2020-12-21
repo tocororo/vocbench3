@@ -5,9 +5,9 @@
 
     <div class="hbox" style="flex: initial; align-items: center; margin-bottom: 5px;">
         <label style="margin-right: 4px;">{{'DATA.LEXICON.LEXICON'|translate}}:</label>
-        <button class="btn btn-light btn-xs" [title]="'DATA.LEXICON.CHANGE_LEXICON'|translate" (click)="changeLexicon()" [disabled]="!lexiconChangeable">
+        <button class="btn btn-light btn-xs" [title]="'ACTIONS.CHANGE_LEXICON'|translate" (click)="changeLexicon()" [disabled]="!lexiconChangeable">
             <rdf-resource *ngIf="activeLexicon" [resource]="activeLexicon"></rdf-resource>
-            <span *ngIf="!activeLexicon">{{'DATA.LEXICON.SELECT_LEXICON'|translate}}</span>
+            <span *ngIf="!activeLexicon">{{'ACTIONS.SELECT_LEXICON'|translate}}</span>
         </button>
     </div>
 

@@ -31,7 +31,7 @@ export class ResViewSettingsModal {
     }
 
     loadTemplate() {
-        this.sharedModals.loadConfiguration("Load template", ConfigurationComponents.TEMPLATE_STORE, true, false).then(
+        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE, true, false).then(
             (conf: LoadConfigurationModalReturnData) => {
                 let templateProp: SettingsProp = conf.configuration.properties.find(p => p.name == "template");
                 if (templateProp != null) {
@@ -46,7 +46,7 @@ export class ResViewSettingsModal {
         let config: { [key: string]: any } = {
             template: this.template
         }
-        this.sharedModals.storeConfiguration("Store template", ConfigurationComponents.TEMPLATE_STORE, config);
+        this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE, config);
     }
 
     setUserDefault() {

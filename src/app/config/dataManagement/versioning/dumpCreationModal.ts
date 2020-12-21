@@ -117,7 +117,7 @@ export class DumpCreationModal {
             return;
         }
 
-        this.sharedModals.selectRemoteRepository("Select remote repository", this.selectedRemoteRepoConfig).then(
+        this.sharedModals.selectRemoteRepository({key:"ACTIONS.SELECT_REMOTE_REPO"}, this.selectedRemoteRepoConfig).then(
             (repo: any) => {
                 this.repositoryId = (<Repository>repo).id;
             },

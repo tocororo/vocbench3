@@ -58,7 +58,7 @@ export class SubjectHeaderEditorModal {
     }
 
     changeType() {
-        this.browsingModals.browseClassTree("Select class").then(
+        this.browsingModals.browseClassTree({key:"ACTIONS.SELECT_CLASS"}).then(
             (cls: ARTURIResource) => {
                 this.type = cls;
             }

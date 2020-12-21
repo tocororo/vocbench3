@@ -5,7 +5,8 @@ import { ResourcesServices } from "../../../../services/resourcesServices";
 import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext, VBContext } from "../../../../utils/VBContext";
-import { ModalOptions } from '../../Modals';
+import { ModalOptions, TextOrTranslation } from '../../Modals';
+import { BrowsingModalServices } from "../browsingModalServices";
 import { LexiconListModal } from "../lexiconListModal/lexiconListModal";
 
 @Component({
@@ -28,6 +29,7 @@ export class LexicalEntryListModal {
     multiselection: boolean = false;
 
     constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private resourceService: ResourcesServices,
+        private browsingModals: BrowsingModalServices,
         private elementRef: ElementRef) {
     }
 
@@ -54,24 +56,12 @@ export class LexicalEntryListModal {
     }
 
     changeLexicon() {
-        this.browseLexiconList("Select a Lexicon").then(
+        this.browsingModals.browseLexiconList({key:"ACTIONS.SELECT_LEXICON"}).then(
             (lexicon: ARTURIResource) => {
                 this.activeLexicon = lexicon;
             },
             () => {}
         )
-    }
-
-    /**
-     * Here I don't use the method browseLexiconList() of BrowsingModalService since injecting it here would cause a circular dependency.
-     * (I'm not sure circular DI is the reason, but I cannot inject BrowsingModalService)
-     */
-    //TODO TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO check if now it is possible
-    private browseLexiconList(title: string) {
-        const modalRef: NgbModalRef = this.modalService.open(LexiconListModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
-        modalRef.componentInstance.projectCtx = this.projectCtx;
-        return modalRef.result;
     }
 
     isOkEnabled() {

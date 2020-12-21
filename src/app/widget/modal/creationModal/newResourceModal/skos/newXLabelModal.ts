@@ -45,7 +45,7 @@ export class NewXLabelModal {
 
     changeClass() {
         let rootClass: ARTURIResource = SKOSXL.label;
-        this.browsingModals.browseClassTree("Change class", [rootClass]).then(
+        this.browsingModals.browseClassTree({key:"ACTIONS.CHANGE_CLASS"}, [rootClass]).then(
             (selectedClass: any) => {
                 this.labelClass = selectedClass;
             },

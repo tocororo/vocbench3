@@ -113,7 +113,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                     if (searchResult.length == 1) {
                         this.selectSearchedResource(searchResult[0]);
                     } else { //multiple results, ask the user which one select
-                        this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, searchResult.length + " results found.", searchResult, this.rendering).then(
                             (selectedResource: any) => {
                                 this.selectSearchedResource(selectedResource);
                             },
@@ -187,7 +187,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                 );
             } else { //multiple types
                 return from(
-                    this.sharedModals.selectResource("Search", "Searched instance " + individual.getShow() + 
+                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, "Searched instance " + individual.getShow() + 
                         " belong to the following classes. If you want to complete the search, select one of them and confirm", types, this.rendering).then(
                         res => { //selected => switch class
                             return res;

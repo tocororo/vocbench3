@@ -33,7 +33,7 @@ export class PropertyChainRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.createPropertyChain("Create a property chain", predicate, propChangeable).then(
+        this.resViewModals.createPropertyChain({key: "ACTIONS.CREATE_PROPERTY_CHAIN"}, predicate, propChangeable).then(
             (data: PropertyListCreatorModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let chain: string[] = data.chain;
@@ -47,7 +47,7 @@ export class PropertyChainRenderer extends PartitionRenderSingleRoot {
 
     editHandler(predicate: ARTURIResource, object: ARTNode) {
         //here I can force the cast to ARTBNode since I am sure that all the object handled in this partition are Bnode
-        this.resViewModals.createPropertyChain("Create a property chain", predicate, false, <ARTBNode>object).then(
+        this.resViewModals.createPropertyChain({key: "ACTIONS.CREATE_PROPERTY_CHAIN"}, predicate, false, <ARTBNode>object).then(
             (data: PropertyListCreatorModalReturnData) => {
                 let chain: string[] = data.chain;
                 this.propService.updatePropertyChainAxiom(<ARTURIResource>this.resource, <ARTResource>object, chain.join(","), predicate).subscribe(

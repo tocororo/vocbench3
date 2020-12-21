@@ -14,7 +14,7 @@
                         [disabled]="!selectedMapping || !selectedMapping.explicit || !isRemoveNsPrefixMappingAuthorized()">
                         <span class="fas fa-minus"></span>
                     </button>
-                    <button class="btn btn-light" [title]="'METADATA.NAMESPACES_AND_IMPORTS.CHANGE_PREFIX'|translate" (click)="changeMapping()"
+                    <button class="btn btn-light" [title]="'ACTIONS.EDIT_PREFIX_NAMESPACE_MAPPING'|translate" (click)="changeMapping()"
                         [disabled]="!selectedMapping || !isChangeNsPrefixMappingAuthorized()">
                         <span class="fas fa-pencil-alt"></span>
                     </button>

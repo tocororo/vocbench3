@@ -43,7 +43,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by selecting a top concept 
      */
     selectTopConcept(scheme: ARTURIResource) {
-        this.browsingModals.browseConceptTree("Select a top concept", [scheme], true).then(
+        this.browsingModals.browseConceptTree({key:"ACTIONS.SELECT_CONCEPT"}, [scheme], true).then(
             (concept: any) => {
                 this.skosService.addTopConcept(concept, scheme).subscribe(
                     (stResp: any) => {
@@ -59,7 +59,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        this.creationModals.newConceptCf("Create new skos:Concept", null, null, null, true).then(
+        this.creationModals.newConceptCf({key:"ACTIONS.CREATE_CONCEPT"}, null, null, null, true).then(
             (data: NewConceptCfModalReturnData) => {
                 this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
                     stResp => {
@@ -89,7 +89,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by deleting it 
      */
     deleteScheme(scheme: ARTURIResource) {
-        this.basicModals.confirm({key:"DATA.SCHEME.DELETE"}, "Warning, deleting this scheme, if it contains some concepts, " +
+        this.basicModals.confirm({key:"ACTIONS.DELETE_SCHEME"}, "Warning, deleting this scheme, if it contains some concepts, " +
             "will generate concepts in no scheme. Are you sure to proceed?").then(
             result => {
                 this.skosService.deleteConceptScheme(scheme).subscribe(
@@ -106,7 +106,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes schemes by deleting them all 
      */
     deleteAllScheme() {
-        this.basicModals.confirm({key:"DATA.SCHEME.DELETE"}, "Warning, deleting the schemes, if they contain some concepts, " +
+        this.basicModals.confirm({key:"ACTIONS.DELETE_SCHEME"}, "Warning, deleting the schemes, if they contain some concepts, " +
             "will generate concepts in no scheme. Are you sure to proceed?").then(
             confirm => {
                 var deleteSchemeFnArray: any[] = [];

@@ -144,14 +144,14 @@ export class QueryParameterizerModal {
 
     setAssignemntValue(binding: BindingStruct, type: RDFTypesEnum) {
         if (type == RDFTypesEnum.resource) {
-            this.sharedModals.pickResource("Select a resource").then(
+            this.sharedModals.pickResource({key:"ACTIONS.SELECT_RESOURCE"}).then(
                 (value: ARTNode) => {
                     binding.value = value.toNT();
                 },
                 () => {}
             );
         } else if (type == RDFTypesEnum.literal) {
-            this.creationModals.newTypedLiteral("Create literal").then(
+            this.creationModals.newTypedLiteral({key:"ACTIONS.CREATE_LITERAL"}).then(
                 (values: ARTLiteral[]) => {
                     binding.value = values[0].toNT();
                 },

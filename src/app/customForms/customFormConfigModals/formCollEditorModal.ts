@@ -177,7 +177,7 @@ export class FormCollEditorModal {
     }
 
     addSuggestionClass() {
-        this.browsingModals.browseClassTree("Add class as suggestion").then(
+        this.browsingModals.browseClassTree({key:"ACTIONS.ADD_CLASS_AS_SUGGESTION"}).then(
             cls => {
                 if (!ResourceUtils.containsNode(this.suggestions, cls)) {
                     this.suggestions.push(cls);
@@ -187,7 +187,7 @@ export class FormCollEditorModal {
     }
 
     addSuggestionProperty() {
-        this.browsingModals.browsePropertyTree("Add property as suggestion").then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.ADD_PROPERTY_AS_SUGGESTION"}).then(
             prop => {
                 if (!ResourceUtils.containsNode(this.suggestions, prop)) {
                     this.suggestions.push(prop);

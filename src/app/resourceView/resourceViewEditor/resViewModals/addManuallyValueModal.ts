@@ -29,7 +29,7 @@ export class AddManuallyValueModal {
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
             (selectedProp: any) => {
                 this.enrichingProperty = selectedProp;
             },

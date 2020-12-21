@@ -163,7 +163,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     if (searchResult.length == 1) {
                         this.selectSearchedResource(searchResult[0]);
                     } else { //multiple results, ask the user which one select
-                        this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, searchResult.length + " results found.", searchResult, this.rendering).then(
                             (selectedResource: any) => {
                                 this.selectSearchedResource(selectedResource);
                             },
@@ -196,7 +196,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     } else {
                         message += " lexicon. If you want to activate the lexicon and continue the search, please select it and press OK.";
                     }
-                    this.sharedModals.selectResource("Search", message, lexicons, this.rendering).then(
+                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, message, lexicons, this.rendering).then(
                         (lexicon: ARTURIResource) => {
                             this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), lexicon); //update the active lexicon
                             setTimeout(() => { //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset

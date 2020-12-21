@@ -36,23 +36,23 @@ export class DataGraphPanel extends AbstractGraphPanel {
     addNode() {
         let browsePromise: Promise<ARTURIResource>;
         if (ResourceUtils.roleSubsumes(RDFResourceRolesEnum.property, this.role)) {
-            browsePromise = this.browsingModals.browsePropertyTree("Add node")
+            browsePromise = this.browsingModals.browsePropertyTree({key:"ACTIONS.ADD_NODE"})
         } else if (this.role == RDFResourceRolesEnum.cls) {
-            browsePromise = this.browsingModals.browseClassTree("Add node")
+            browsePromise = this.browsingModals.browseClassTree({key:"ACTIONS.ADD_NODE"})
         } else if (this.role == RDFResourceRolesEnum.concept) {
-            browsePromise = this.browsingModals.browseConceptTree("Add node")
+            browsePromise = this.browsingModals.browseConceptTree({key:"ACTIONS.ADD_NODE"})
         } else if (this.role == RDFResourceRolesEnum.conceptScheme) {
-            browsePromise = this.browsingModals.browseSchemeList("Add node")
+            browsePromise = this.browsingModals.browseSchemeList({key:"ACTIONS.ADD_NODE"})
         } else if (this.role == RDFResourceRolesEnum.dataRange) {
-            browsePromise = this.browsingModals.browseDatatypeList("Add node")
+            browsePromise = this.browsingModals.browseDatatypeList({key:"ACTIONS.ADD_NODE"})
         } else if (this.role == RDFResourceRolesEnum.individual) {
-            browsePromise = this.browsingModals.browseClassIndividualTree("Add node")
+            browsePromise = this.browsingModals.browseClassIndividualTree({key:"ACTIONS.ADD_NODE"})
         } else if (this.role == RDFResourceRolesEnum.limeLexicon) {
-            browsePromise = this.browsingModals.browseLexiconList("Add node")
+            browsePromise = this.browsingModals.browseLexiconList({key:"ACTIONS.ADD_NODE"})
         } else if (this.role == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            browsePromise = this.browsingModals.browseLexicalEntryList("Add node")
+            browsePromise = this.browsingModals.browseLexicalEntryList({key:"ACTIONS.ADD_NODE"})
         } else if (ResourceUtils.roleSubsumes(RDFResourceRolesEnum.skosCollection, this.role)) {
-            browsePromise = this.browsingModals.browseCollectionTree("Add node")
+            browsePromise = this.browsingModals.browseCollectionTree({key:"ACTIONS.ADD_NODE"})
         }
         browsePromise.then(
             res => {

@@ -100,7 +100,7 @@ export class AdvancedSearchModal {
     }
 
     selectRestrictionLanguages() {
-        this.sharedModals.selectLanguages("Language restrictions", this.languages, false, true).then(
+        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGES"}, this.languages, false, true).then(
             (langs: string[]) => {
                 this.languages = langs;
             },
@@ -121,7 +121,7 @@ export class AdvancedSearchModal {
     }
 
     addType(group: ARTURIResource[]) {
-        this.browsingModals.browseClassTree("Select a class").then(
+        this.browsingModals.browseClassTree({key:"ACTIONS.SELECT_CLASS"}).then(
             (type: ARTURIResource) => {
                 group.push(type);
             }
@@ -150,7 +150,7 @@ export class AdvancedSearchModal {
     }
 
     private addScheme(group: ARTURIResource[]) {
-        this.browsingModals.browseSchemeList("Select a scheme").then(
+        this.browsingModals.browseSchemeList({key:"ACTIONS.SELECT_SCHEME"}).then(
             (scheme: ARTURIResource) => {
                 group.push(scheme);
             }
@@ -182,7 +182,7 @@ export class AdvancedSearchModal {
     }
 
     addIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }) {
-        this.sharedModals.pickResource("Select a resource").then(
+        this.sharedModals.pickResource({key:"ACTIONS.SELECT_RESOURCE"}).then(
             (value: ARTNode) => {
                 group.second.push(value);
             },
@@ -216,14 +216,14 @@ export class AdvancedSearchModal {
 
     addOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, type: RDFTypesEnum) {
         if (type == RDFTypesEnum.resource) {
-            this.sharedModals.pickResource("Select a resource").then(
+            this.sharedModals.pickResource({key:"ACTIONS.SELECT_RESOURCE"}).then(
                 (value: ARTNode) => {
                     group.second.push(value);
                 },
                 () => {}
             );
         } else if (type == RDFTypesEnum.literal) {
-            this.creationModals.newTypedLiteral("Create literal").then(
+            this.creationModals.newTypedLiteral({key:"ACTIONS.CREATE_LITERAL"}).then(
                 (values: ARTLiteral[]) => {
                     group.second.push(values[0]);
                 },
@@ -356,7 +356,7 @@ export class AdvancedSearchModal {
                     this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found", ModalType.warning);
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
-                    this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
+                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, searchResult.length + " results found.", searchResult, true).then(
                         (selectedResource: any) => {
                             this.activeModal.close(selectedResource);
                         },

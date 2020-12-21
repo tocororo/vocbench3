@@ -106,7 +106,7 @@ export class CustomSearchModal {
                     this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found", ModalType.warning);
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
-                    this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
+                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, searchResult.length + " results found.", searchResult, true).then(
                         (selectedResource: any) => {
                             this.activeModal.close(selectedResource);
                         },

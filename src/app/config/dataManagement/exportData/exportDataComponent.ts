@@ -397,7 +397,7 @@ export class ExportDataComponent {
             reformattingExporterSpec: reformattingExporterSpec
         }
 
-        this.sharedModals.storeConfiguration("Save exporter chain configuration", ConfigurationComponents.EXPORTER, config).then(
+        this.sharedModals.storeConfiguration({key: "ACTIONS.SAVE_EXPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.EXPORTER, config).then(
             () => {
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration saved succesfully");
             },
@@ -406,7 +406,7 @@ export class ExportDataComponent {
     }
 
     loadChain() {
-        this.sharedModals.loadConfiguration("Load exporter chain configuration", ConfigurationComponents.EXPORTER).then(
+        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_EXPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.EXPORTER).then(
             (conf: LoadConfigurationModalReturnData) => {
                 this.filtersChain = []; //reset the chain
                 let configurations: SettingsProp[] = conf.configuration.properties;

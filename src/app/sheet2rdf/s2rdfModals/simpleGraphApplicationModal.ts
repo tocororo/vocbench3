@@ -93,7 +93,7 @@ export class SimpleGraphApplicationModal {
      * Browse the property tree in order to select a property
      */
     changeProperty() {
-        this.browsingModals.browsePropertyTree("Select property").then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}).then(
             (property: ARTURIResource) => {
                 this.property = property;
                 this.updateHeaderPropertyRange();
@@ -212,7 +212,7 @@ export class SimpleGraphApplicationModal {
      * state a class membership of the node in the graph section)
      */
     private addAssertedType() {
-        this.browsingModals.browseClassTree("Select class", this.rangeCollection).then(
+        this.browsingModals.browseClassTree({key:"ACTIONS.SELECT_CLASS"}, this.rangeCollection).then(
             (cls: ARTURIResource) => {
                 if (!ResourceUtils.containsNode(this.assertableTypes, cls)) {
                     this.assertableTypes.push(cls);

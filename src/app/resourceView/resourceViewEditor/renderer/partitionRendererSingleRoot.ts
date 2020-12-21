@@ -74,7 +74,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     }
 
     public enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
-        this.resViewModals.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
+        this.resViewModals.enrichCustomForm({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, form.getId()).then(
             (entryMap: any) => {
                 let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
                 this.getAddPartitionAware(this.resource, predicate, cfValue).subscribe(() => this.update.emit());
@@ -87,7 +87,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), predicate, allowedDatatypes, dataRanges, true, true).then(
+        this.creationModals.newTypedLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, predicate, allowedDatatypes, dataRanges, true, true).then(
             (literals: ARTLiteral[]) => {
                 let addFunctions: MultiActionFunction[] = [];
                 literals.forEach((l: ARTLiteral) => {
@@ -106,7 +106,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
      * Opens a modal to enrich the predicate with a resource 
      */
     private enrichWithResource(predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
+        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, this.resource, predicate, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;

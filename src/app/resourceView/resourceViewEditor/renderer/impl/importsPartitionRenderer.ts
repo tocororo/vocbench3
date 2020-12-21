@@ -50,7 +50,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromWeb() {
-        this.sharedModals.importOntology("Import from web", ImportType.fromWeb).then(
+        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_WEB"}, ImportType.fromWeb).then(
             (data: any) => {
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
@@ -67,7 +67,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromWebToMirror() {
-        this.sharedModals.importOntology("Import from web to mirror", ImportType.fromWebToMirror).then(
+        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_WEB_TO_MIRROR"}, ImportType.fromWebToMirror).then(
             (data: any) => {
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
@@ -84,7 +84,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromLocalFile() {
-        this.sharedModals.importOntology("Import from local file", ImportType.fromLocalFile).then(
+        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_LOCAL_FILE"}, ImportType.fromLocalFile).then(
             (data: any) => {
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
                     stResp => {
@@ -101,7 +101,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromOntologyMirror() {
-        this.sharedModals.importOntology("Import from ontology mirror", ImportType.fromOntologyMirror).then(
+        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_ONTOLOGY_MIRROR"}, ImportType.fromOntologyMirror).then(
             (data: any) => {
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
                     stResp => {
@@ -118,7 +118,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * Once done refreshes the imports list and the namespace prefix mapping
      */
     importFromDatasetCatalog() {
-        this.sharedModals.importFromDatasetCatalog("Import from Dataset Catalog").then(
+        this.sharedModals.importFromDatasetCatalog({key:"ACTIONS.IMPORT_FROM_DATASET_CATALOG"}).then(
             (data: ImportFromDatasetCatalogModalReturnData) => {
                 this.metadataService.addFromWeb(data.ontologyIRI, data.transitiveImportAllowance, data.dataDump, data.rdfFormat).subscribe(
                     stResp => {

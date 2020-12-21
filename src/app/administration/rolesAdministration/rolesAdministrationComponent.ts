@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { TranslateService } from "@ngx-translate/core";
+import { ModalOptions, ModalType, Translation } from 'src/app/widget/modal/Modals';
 import { Role } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { VBContext } from "../../utils/VBContext";
@@ -23,7 +24,8 @@ export class RolesAdministrationComponent {
     private capabilityList: string[];
     selectedCapability: string;
 
-    constructor(private adminService: AdministrationServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
+    constructor(private adminService: AdministrationServices, private basicModals: BasicModalServices, private modalService: NgbModal, 
+        private translateService: TranslateService) { }
 
     ngOnInit() {
         this.initRoles();
@@ -148,7 +150,7 @@ export class RolesAdministrationComponent {
     }
 
     addCapability() {
-        this.openCapabilityEditorModal("Add capability to " + this.selectedRole.getName(), null).then(
+        this.openCapabilityEditorModal({key:"ACTIONS.ADD_CAPABILITY"}, null).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
                     this.basicModals.alert({key:"STATUS.ERROR"}, "Capability " + capability + 
@@ -176,7 +178,7 @@ export class RolesAdministrationComponent {
     }
 
     editCapability() {
-        this.openCapabilityEditorModal("Edit capability", this.selectedCapability).then(
+        this.openCapabilityEditorModal({key:"ACTIONS.EDIT_CAPABILITY"}, this.selectedCapability).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
                     this.basicModals.alert({key:"STATUS.ERROR"}, "Capability " + capability + 
@@ -194,9 +196,9 @@ export class RolesAdministrationComponent {
         );
     }
 
-    private openCapabilityEditorModal(title: string, capability: string) {
+    private openCapabilityEditorModal(title: Translation, capability: string) {
         const modalRef: NgbModalRef = this.modalService.open(CapabilityEditorModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.capability = capability;
         return modalRef.result
     }

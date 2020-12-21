@@ -35,7 +35,7 @@ export class ConstituentsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.createConstituentList("Create a constituents list").then(
+        this.resViewModals.createConstituentList({key:"ACTIONS.CREATE_CONSTITUENTS_LIST"}).then(
             (data: ConstituentListCreatorModalReturnData) => {
                 this.ontolexService.setLexicalEntryConstituents(<ARTURIResource>this.resource, data.list, data.ordered).subscribe(
                     () => {

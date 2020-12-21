@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { CustomFormModal } from 'src/app/customForms/customForm/customFormModal';
-import { ModalOptions } from 'src/app/widget/modal/Modals';
+import { ModalOptions, TextOrTranslation } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTNode, ARTResource, ARTURIResource } from '../../../models/ARTResources';
 import { Language } from '../../../models/LanguagesCountries';
 import { AddManuallyValueModal } from "./addManuallyValueModal";
@@ -22,7 +23,7 @@ import { RdfsMembersModal } from './rdfsMembersModal';
 @Injectable()
 export class ResViewModalServices {
 
-    constructor(private modalService: NgbModal) { }
+    constructor(private modalService: NgbModal, private translateService: TranslateService) { }
 
     /**
      * Opens a modal to create a list of classes (useful for class axioms)
@@ -30,9 +31,9 @@ export class ResViewModalServices {
      * @return if the modal closes with ok returns a promise containing an array of 
      * classes (ARTURIResource) and expressions (ARTBNode)
      */
-    createClassList(title: string) {
+    createClassList(title: TextOrTranslation) {
         const modalRef: NgbModalRef = this.modalService.open(ClassListCreatorModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         return modalRef.result;
     }
 
@@ -41,15 +42,15 @@ export class ResViewModalServices {
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing an array of instances
      */
-    createInstanceList(title: string) {
+    createInstanceList(title: TextOrTranslation) {
         const modalRef: NgbModalRef = this.modalService.open(InstanceListCreatorModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         return modalRef.result;
     }
 
-    createPropertyChain(title: string, property: ARTURIResource, propChangeable?: boolean, chain?: ARTBNode) {
+    createPropertyChain(title: TextOrTranslation, property: ARTURIResource, propChangeable?: boolean, chain?: ARTBNode) {
         const modalRef: NgbModalRef = this.modalService.open(PropertyChainCreatorModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.property = property;
         if (propChangeable != null) modalRef.componentInstance.propChangeable = propChangeable;
         if (chain != null) modalRef.componentInstance.chain = chain;
@@ -62,9 +63,9 @@ export class ResViewModalServices {
      * @param cfId custom form ID
      * @param language optional language that if provided "suggests" to initialize each lang-picker to it
      */
-    enrichCustomForm(title: string, cfId: string, language?: string) {
+    enrichCustomForm(title: TextOrTranslation, cfId: string, language?: string) {
         const modalRef: NgbModalRef = this.modalService.open(CustomFormModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.cfId = cfId;
 		if (language != null) modalRef.componentInstance.language = language;
         return modalRef.result;
@@ -82,9 +83,9 @@ export class ResViewModalServices {
      * @param allowMultiselection tells whether the multiselection in the tree/list is allowed. Default is true. (some scenario may
      * require to disable the multiselection, like the addFirst/After...() in oreded collection).
      */
-    addPropertyValue(title: string, resource: ARTResource, property: ARTURIResource, propChangeable?: boolean, rootProperty?: ARTURIResource, allowMultiselection?: boolean) {
+    addPropertyValue(title: TextOrTranslation, resource: ARTResource, property: ARTURIResource, propChangeable?: boolean, rootProperty?: ARTURIResource, allowMultiselection?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(AddPropertyValueModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.resource = resource;
         modalRef.componentInstance.property = property;
         if (propChangeable != null) modalRef.componentInstance.propChangeable = propChangeable;
@@ -121,9 +122,9 @@ export class ResViewModalServices {
      * 
      * @param title 
      */
-    createConstituentList(title: string) {
+    createConstituentList(title: TextOrTranslation) {
         const modalRef: NgbModalRef = this.modalService.open(ConstituentListCreatorModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         return modalRef.result;
     }
 
@@ -143,9 +144,9 @@ export class ResViewModalServices {
      * @param property 
      * @param propChangeable 
      */
-    browseExternalResource(title: string, property?: ARTURIResource, propChangeable?: boolean) {
+    browseExternalResource(title: TextOrTranslation, property?: ARTURIResource, propChangeable?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(BrowseExternalResourceModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
 		if (property != null) modalRef.componentInstance.property = property;
 		if (propChangeable != null) modalRef.componentInstance.propChangeable = propChangeable;
         return modalRef.result;
@@ -168,9 +169,9 @@ export class ResViewModalServices {
      * @param datatype the datatype to which add/edit the restriction
      * @param restriction if provided, represents the restriction to edit
      */
-    setDatatypeFacets(title: string, datatype: ARTURIResource, restriction?: ARTBNode) {
+    setDatatypeFacets(title: TextOrTranslation, datatype: ARTURIResource, restriction?: ARTBNode) {
         const modalRef: NgbModalRef = this.modalService.open(DataTypeRestrictionsModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.datatype = datatype;
 		if (restriction != null) modalRef.componentInstance.restriction = restriction;
         return modalRef.result;

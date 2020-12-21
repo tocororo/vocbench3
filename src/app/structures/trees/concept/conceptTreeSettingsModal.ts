@@ -115,7 +115,7 @@ export class ConceptTreeSettingsModal {
         if (this.userGroup != null) {
             rootBroader = new ARTURIResource(this.userGroupBaseBroaderProp);
         }
-        this.browsingModals.browsePropertyTree("Select root class", [rootBroader]).then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [rootBroader]).then(
             (prop: ARTURIResource) => {
                 this.baseBroaderProp = prop.getURI();
             },
@@ -128,7 +128,7 @@ export class ConceptTreeSettingsModal {
      */
 
     private addBroader() {
-        this.browsingModals.browsePropertyTree("Select a broader property", [SKOS.broader]).then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [SKOS.broader]).then(
             (prop: ARTURIResource) => {
                 if (!ResourceUtils.containsNode(this.broaderProps, prop)) {
                     this.broaderProps.push(prop);
@@ -143,7 +143,7 @@ export class ConceptTreeSettingsModal {
     }
 
     private addNarrower() {
-        this.browsingModals.browsePropertyTree("Select a narrower property", [SKOS.narrower]).then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [SKOS.narrower]).then(
             (prop: ARTURIResource) => {
                 if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {
                     this.narrowerProps.push(prop);

@@ -42,7 +42,7 @@ export class BrokenDefinitionComponent extends AbstractIcvComponent {
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree("Change property", [SKOS.note]).then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [SKOS.note]).then(
             property => {
                 this.noteProperty = property;
             },

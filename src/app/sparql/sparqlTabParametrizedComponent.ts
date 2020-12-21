@@ -42,7 +42,7 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
     //LOAD/SAVE/PARAMETERIZE QUERY
 
     changeStoredQuery() {
-        this.sharedModals.loadConfiguration("Load SPARQL query", ConfigurationComponents.SPARQL_STORE).then(
+        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_SPARQL_QUERY"}, ConfigurationComponents.SPARQL_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
                 let relativeRef = data.reference.relativeReference;
                 this.storedQueryReference = relativeRef;
@@ -56,7 +56,7 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
     }
 
     loadConfiguration() {
-        this.sharedModals.loadConfiguration("Load SPARQL parameterized query", ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE).then(
+        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_SPARQL_PARAMETERIZED_QUERY"}, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
                 let relativeRef = data.reference.relativeReference;
                 this.parametrizationRef = relativeRef;
@@ -129,7 +129,7 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
             variableBindings: this.parameterization,
             description: this.description
         }
-        this.sharedModals.storeConfiguration("Save SPARQL query parameterization", ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, config, this.parametrizationRef).then(
+        this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_SPARQL_QUERY_PARAMETERIZATION"}, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, config, this.parametrizationRef).then(
             (relativeRef: string) => {
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Query parameterization saved succesfully");
                 this.parametrizationRef = relativeRef;

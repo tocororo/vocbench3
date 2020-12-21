@@ -116,7 +116,7 @@ export class CustomFormEditorModal {
     // ============= PEARL handler ================
 
     pickConverter() {
-        this.sharedModals.selectConverter("Pick a converter", null).then(
+        this.sharedModals.selectConverter({key:"ACTIONS.PICK_CONVERTER"}, null).then(
             (converter: {projectionOperator: string, contractDesctiption: any }) => {
                 this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
             },
@@ -196,7 +196,7 @@ export class CustomFormEditorModal {
         }
     }
     addPropToChain(where?: "before" | "after") {
-        this.browsingModals.browsePropertyTree("Add property").then(
+        this.browsingModals.browsePropertyTree({key:"ACTIONS.ADD_PROPERTY"}).then(
             (prop: any) => {
                 if (where == null) {
                     this.showPropertyChain.push(prop);

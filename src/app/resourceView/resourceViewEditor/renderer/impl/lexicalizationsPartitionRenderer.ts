@@ -109,7 +109,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                     return of(this.rootProperties[0]);
                 } else { //multiple properties => ask user to select
                     return from(
-                        this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
+                        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
                             (selectedProp: any) => {
                                 return selectedProp;
                             },
@@ -138,14 +138,14 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     private enrichWithLabel(predicate: ARTURIResource) {
         if (predicate.equals(SKOSXL.prefLabel) || predicate.equals(SKOSXL.altLabel) || predicate.equals(SKOSXL.hiddenLabel)) { //SKOSXL
             let prefLabelPred: boolean = predicate.equals(SKOSXL.prefLabel);
-            this.creationModals.newXLabel("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+            this.creationModals.newXLabel({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (data: NewXLabelModalReturnData) => {
                     this.addMultipleValues(predicate, data.labels, data.cls);
                 },
                 () => {}
             );
         } else if (predicate.equals(OntoLex.isDenotedBy)) {
-            this.creationModals.newOntoLexicalizationCf("Add a Lexical Entry", predicate, false).then(
+            this.creationModals.newOntoLexicalizationCf({key:"ACTIONS.ADD_LEX_ENTRY"}, predicate, false).then(
                 (data: NewOntoLexicalizationCfModalReturnData) => {
                     this.ontolexService.addLexicalization(data.linkedResource, this.resource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
                         stResp => {
@@ -157,7 +157,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
             )
         } else { //Not SKOSXL lexicalization
             let prefLabelPred: boolean = predicate.equals(SKOS.prefLabel);
-            this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+            this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (labels: ARTLiteral[]) => {
                     this.addMultipleValues(predicate, labels);
                 },
@@ -167,7 +167,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     private enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
-        this.resViewModals.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
+        this.resViewModals.enrichCustomForm({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, form.getId()).then(
             (entryMap: any) => {
                 let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
                 this.resourcesService.addValue(this.resource, predicate, cfValue).subscribe(

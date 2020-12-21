@@ -36,7 +36,7 @@ export class NoSchemeConceptComponent {
      * Fixes concept by adding it to a scheme 
      */
     addToScheme(concept: ARTURIResource) {
-        this.browsingModals.browseSchemeList("Select a scheme").then(
+        this.browsingModals.browseSchemeList({key:"ACTIONS.SELECT_SCHEME"}).then(
             (scheme: any) => {
                 this.skosService.addConceptToScheme(concept, scheme).subscribe(
                     stResp => {
@@ -52,7 +52,7 @@ export class NoSchemeConceptComponent {
      * Fixes concepts by adding them all to a scheme
      */
     addAllToScheme() {
-        this.browsingModals.browseSchemeList("Select a scheme").then(
+        this.browsingModals.browseSchemeList({key:"ACTIONS.SELECT_SCHEME"}).then(
             (scheme: any) => {
                 this.icvService.addAllConceptsToScheme(scheme).subscribe(
                     stResp => {

@@ -40,7 +40,7 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
         this.getLexiconLang().subscribe(
             lang => {
                 this.lexiconLang = lang;
-                this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, false, this.lexiconLang, false, { constrain: true, locale: true }, { enabled: true, allowSameLang: false }).then(
+                this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, false, this.lexiconLang, false, { constrain: true, locale: true }, { enabled: true, allowSameLang: false }).then(
                     (literals: ARTLiteral[]) => {
                         let addFunctions: MultiActionFunction[] = [];
                         literals.forEach((literal: ARTLiteral) => {
@@ -67,7 +67,7 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
+            this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
                 selectedProp => {
                     return selectedProp;
                 },
