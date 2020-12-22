@@ -75,9 +75,7 @@ export class CustomFormConfigComponent {
                 for (var i = 0; i < this.cfConfigurationMap.length; i++) {
                     if (this.cfConfigurationMap[i].getResource().getURI() == resource.getURI()) {
                         //already in a mapping
-                        this.basicModals.alert({key:"STATUS.ERROR"}, "A FormCollection is already assigned to " + resource.getShow() +
-                            ". Please, select another resource, or if you want to add a form to " + resource.getShow() +
-                            ", add more CustomForm to the assigned FormCollection (" + this.cfConfigurationMap[i].getFormCollection().getId() + ")",
+                        this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.ALREADY_ASSIGNED_FORM_COLL_TO_RESOURCE", params:{resource: resource.getShow()}},
                             ModalType.warning);
                         return;
                     }
@@ -170,7 +168,7 @@ export class CustomFormConfigComponent {
             (fcId: any) => {
                 for (var i = 0; i < this.formCollectionList.length; i++) {
                     if (this.formCollectionList[i].getId() == fcId) {
-                        this.basicModals.alert({key:"STATUS.WARNING"}, "A CustomForm with ID " + fcId + " already exists", ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_FORM_COLLECTION_ID"}, ModalType.warning);
                         return;
                     }
                 }
@@ -258,7 +256,7 @@ export class CustomFormConfigComponent {
             (fcId: any) => {
                 for (var i = 0; i < this.customFormList.length; i++) {
                     if (this.customFormList[i].getId() == fcId) {
-                        this.basicModals.alert({key:"STATUS.WARNING"}, "A CustomForm with ID " + fcId + " already exists", ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_CUSTOM_FORM_ID"}, ModalType.warning);
                         return;
                     }
                 }

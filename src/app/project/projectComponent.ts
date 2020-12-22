@@ -105,8 +105,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     private deleteProject(project: Project) {
         if (project.isOpen()) {
-            this.basicModals.alert({key:"ACTIONS.DELETE_PROJECT"}, project.getName() +
-                " is currently open. Please, close the project and then retry.", ModalType.warning);
+            this.basicModals.alert({key:"ACTIONS.DELETE_PROJECT"}, {key:"MESSAGES.PROJECT_OPEN_CLOSE_AND_RETRY"}, ModalType.warning);
             return;
         } else {
             this.basicModals.confirm({key:"ACTIONS.DELETE_PROJECT"}, "Warning, this operation will delete the project " +
@@ -223,8 +222,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
      */
     private editRemoteRepoCredential(project: Project) {
         if (project.isOpen()) {
-            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, 
-                "You cannot edit credentials of remote repositories linked to an open project. Please, close the project and retry", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS"}, ModalType.warning);
             return;
         }
         const modalRef: NgbModalRef = this.modalService.open(RemoteRepoEditorModal, new ModalOptions());

@@ -55,7 +55,7 @@ export class StoreConfigurationModal {
     ok() {
         let idRegexp = new RegExp("^[\\w\\s\.,-]+$"); //regexp for validating id (id will be the name of the file storing the configuration)
         if (!idRegexp.test(this.identifier)) {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "ID contains character(s) not allowed", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.NOT_ALLOWED_CHARS_IN_ID"}, ModalType.warning);
             return;
         }
 

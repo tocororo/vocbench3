@@ -31,8 +31,7 @@ export class UserDetailsPanelComponent {
 
     private changeUserStatus() {
         if (this.user.isAdmin()) { //check performed for robustness, this should never happen since it is forbidden by the UI
-            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "Cannot change the status of an administrator. " + 
-                "Please revoke the administrator authority first and retry", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.CANNOT_CHANGE_ADMIN_STATUS"}, ModalType.warning);
             return;
         }
         var enabled = this.user.getStatus() == UserStatusEnum.ACTIVE;
@@ -65,10 +64,10 @@ export class UserDetailsPanelComponent {
                 users => {
                     let adminCount = users.map(u => u.isAdmin).length;
                     if (adminCount < 2) {
-                        this.basicModals.alert({key:"ACTIONS.REVOKE_ADMINISTRATOR"}, "Cannot revoke the administrator authority to the selected user. There is only one administrator", ModalType.warning);
+                        this.basicModals.alert({key:"ACTIONS.REVOKE_ADMINISTRATOR"}, {key:"MESSAGES.CANNOT_REVOKE_ADMIN_AUTHORITY"}, ModalType.warning);
                         return;
                     } else {
-                        this.basicModals.confirm({key:"ACTIONS.REVOKE_ADMINISTRATOR"}, "You are revoking the administrator authority to " + this.user.getShow() + ". Are you sure?", ModalType.warning).then(
+                        this.basicModals.confirm({key:"ACTIONS.REVOKE_ADMINISTRATOR"}, {key:"MESSAGES.REVOKING_ADMIN_CONFIRM", params: {user: this.user.getShow()}}, ModalType.warning).then(
                             confirm => {
                                 this.administrationServices.removeAdministrator(this.user.getEmail()).subscribe(
                                     user => {
@@ -83,10 +82,10 @@ export class UserDetailsPanelComponent {
             );
         } else { //assign administrator
             if (this.user.getStatus() != UserStatusEnum.ACTIVE) { //only active user can be administator
-                this.basicModals.alert({key:"ACTIONS.ADD_ADMINISTRATOR"}, "Cannot grant the administrator authority to a non-active user. Please, activate the user and retry", ModalType.warning);
+                this.basicModals.alert({key:"ACTIONS.ADD_ADMINISTRATOR"}, {key:"MESSAGES.CANNOT_GRANT_ADMIN_TO_INACTIVE_USER"}, ModalType.warning);
                 return;
             }
-            this.basicModals.confirm({key:"ACTIONS.ADD_ADMINISTRATOR"}, "You are granting the administrator authority to " + this.user.getShow() + ". Are you sure?", ModalType.warning).then(
+            this.basicModals.confirm({key:"ACTIONS.ADD_ADMINISTRATOR"}, {key:"MESSAGES.GRANTING_ADMIN_CONFIRM", params: {user: this.user.getShow()}}, ModalType.warning).then(
                 confirm => {
                     this.administrationServices.setAdministrator(this.user.getEmail()).subscribe(
                         user => {

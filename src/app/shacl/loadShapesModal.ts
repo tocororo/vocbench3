@@ -56,7 +56,7 @@ export class LoadShapesModal {
 
         this.shaclService.loadShapes(this.file, this.selectedInputFormat, this.clearExisting).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Shacl shapes loaded succesfully").then(
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.SHACL_SHAPES_LOADED"}).then(
                     () => {
                         this.activeModal.close();
                     }

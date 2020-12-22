@@ -189,9 +189,8 @@ export class EdoalComponent {
             },
             (err: Error) => {
                 if (err.name.endsWith("IndexingLanguageNotFound")) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "No user language has been detected for the project '" + 
-                    this.leftProjCtx.getProject().getName() + "'. The system will not be able to initialize the list of alignments.\n" +
-                    "Please access that project, then go to the user preferences and set a rendering language.", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_LANG_DETECTED_IN_EDOAL_ALIGNMENT", params:{projName: this.leftProjCtx.getProject().getName()}},
+                        ModalType.warning);
                 }
             }
         );
@@ -246,7 +245,7 @@ export class EdoalComponent {
 
     private addCorrespondence() {
         if (this.measure < 0 || this.measure > 1) {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The entered measure (" + this.measure + ") is invalid, it must be between 0 and 1.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_ALIGNMENT_MEASURE"}, ModalType.warning);
             return;
         }
         this.edoalService.createCorrespondence(this.alignemnts[0], this.leftSelectedResource, this.rightSelectedResource, this.selectedRelation.relation, this.measure).subscribe(

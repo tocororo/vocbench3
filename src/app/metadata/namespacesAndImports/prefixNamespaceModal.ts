@@ -26,7 +26,7 @@ export class PrefixNamespaceModal {
 
     resolveWithPrefixCC() {
         if (this.namespace == null || this.namespace.trim() == "") {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "Namespace must be provided.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_NAMESPACE"}, ModalType.warning);
             return;
         }
         this.httpClient.get("https://prefix.cc/reverse?uri=" + this.namespace + "&format=json").subscribe(

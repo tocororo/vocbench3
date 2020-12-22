@@ -100,7 +100,7 @@ export class MetadataVocabulariesComponent {
 
         forkJoin(saveSettingsFnArray).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Settings saved succesfully");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.SETTING_SAVED"});
             }
         );
 
@@ -143,8 +143,8 @@ export class MetadataVocabulariesComponent {
 
     private isCommonSettingsConfigure(): boolean {
         if (this.extensionPointSettings.requireConfiguration()) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "Required parameter(s) missing in extension point configuration (" +
-                this.extensionPointSettings.shortName + ")", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_REQUIRED_PARAM_IN_EXT_POINT", params:{extPoint: this.extensionPointSettings.shortName}},
+                ModalType.warning);
             return false;
         } else {
             return true;
@@ -153,8 +153,9 @@ export class MetadataVocabulariesComponent {
 
     private isExporterSettingsConfigured(settingsStruct: SettingsStruct): boolean {
         if (settingsStruct.settings.requireConfiguration()) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "Required parameter(s) missing in exporter configuration (" +
-                settingsStruct.settings.shortName + ", scope: " + settingsStruct.scope + ")", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, 
+                {key:"MESSAGES.MISSING_REQUIRED_PARAM_IN_EXPORTER", params:{exporter: settingsStruct.settings.shortName, scope: settingsStruct.scope}},
+                ModalType.warning);
             return false;
         } else {
             return true;

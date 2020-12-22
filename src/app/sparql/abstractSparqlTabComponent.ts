@@ -62,7 +62,7 @@ export abstract class AbstractSparqlTabComponent {
 
         if (this.queryMode == QueryMode.query) {
             if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlEvaluateQuery)) {
-                this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "You are not authorized to perform SPARQL query");
+                this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.UNAUTHORIZED_SPARQL_QUERY"});
                 return;
             }
             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -74,7 +74,7 @@ export abstract class AbstractSparqlTabComponent {
             );
         } else { //queryMode "update"
             if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlExecuteUpdate)) {
-                this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "You are not authorized to perform SPARQL update");
+                this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.UNAUTHORIZED_SPARQL_UPDATE"});
                 return;
             }
             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);

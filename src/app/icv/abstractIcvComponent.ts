@@ -38,13 +38,13 @@ export abstract class AbstractIcvComponent {
     protected doPreRunCheck(): boolean {
         if (this.checkRoles) {
             if (this.rolesToCheck.length == 0) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "You need to select at least a resource type in order to run the ICV", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_ICV_RESOURCE_TYPE"}, ModalType.warning);
                 return true;
             }
         }
         if (this.checkLanguages) {
             if (this.langsToCheck.length == 0) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "You need to select at least a language in order to run the ICV", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_ICV_LANGUAGE"}, ModalType.warning);
                 return true;
             }
         }

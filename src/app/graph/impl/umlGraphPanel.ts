@@ -39,8 +39,8 @@ export class UmlGraphPanel extends AbstractGraphPanel {
         this.browsingModals.browseClassTree({key:"ACTIONS.ADD_NODE"}).then(
             (cls: ARTURIResource) => {
                 if (!cls.getAdditionalProperty(ResAttribute.EXPLICIT)) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "Cannot add a new node for " + cls.getShow() +
-                        ". In the class-diagram you can only add resources locally defined.", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED", params:{resource: cls.getShow()}},
+                        ModalType.warning);
                     return;
                 }
                 this.viewChildGraph.addNode(cls);

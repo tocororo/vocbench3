@@ -174,13 +174,12 @@ export class QueryParameterizerModal {
             let b: BindingStruct = this.bindings[i];
 
             if (b.varName == null || b.varName.trim() == "") { //check if name is not set
-                this.basicModals.alert({key:"STATUS.WARNING"}, "Missing binding name at position " + (i+1) + ", please insert a name", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_BINDING_NAME", params:{position: i+1}}, ModalType.warning);
                 return;
             }
             
             if (varBindings[b.varName] != null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "Duplicated binding name '" + b.varName
-                    + "', please change the name or delete the binding", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.DUPLICATED_BINDING_NAME", params:{binding: b.varName}}, ModalType.warning);
                 return;
             }
 
@@ -191,23 +190,20 @@ export class QueryParameterizerModal {
             }
             if (b.bindingType.value == BindingTypeEnum.assignment) {
                 if (b.value == null) {//check if type is assignment and the resource is not set
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "Incomplete parameterization for binding '" + b.varName 
-                        + "', please set a value or delete the binding", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_BINDING_PARAMETERIZATION_VALUE", params:{binding: b.varName}}, ModalType.warning);
                     return;
                 }
                 varBindings[b.varName].value = b.value;
             } else if (b.bindingType.value == BindingTypeEnum.constraint) {
                 if (b.bindingType.specialization == "role") {
                     if (b.resourceRole == null) { //check if type is constraint and the role is not set
-                        this.basicModals.alert({key:"STATUS.WARNING"}, "Incomplete parameterization for binding '" + b.varName 
-                            + "', please set a role or delete the binding", ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_BINDING_PARAMETERIZATION_ROLE", params:{binding: b.varName}}, ModalType.warning);
                         return;
                     } 
                     varBindings[b.varName].resourceRole = b.resourceRole;
                 } else if (b.bindingType.specialization == "datatype") {
                     if (b.datatype == null) { //check if type is constraint and the datatype is not set
-                        this.basicModals.alert({key:"STATUS.WARNING"}, "Incomplete parameterization for binding '" + b.varName 
-                            + "', please set a datatype or delete the binding", ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_BINDING_PARAMETERIZATION_DATATYPE", params:{binding: b.varName}}, ModalType.warning);
                         return;
                     } 
                     varBindings[b.varName].datatype = b.datatype.toNT();

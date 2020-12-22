@@ -72,7 +72,7 @@ export class ResourceAlignmentModal {
                 if (ResourceUtils.testIRI(valueIRI)) {
                     this.alignedObject = new ARTURIResource(valueIRI);
                 } else {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, valueIRI + " is not a valid IRI", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: valueIRI}}, ModalType.warning);
                 }
             }
         );

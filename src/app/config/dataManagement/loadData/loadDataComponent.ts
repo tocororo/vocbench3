@@ -285,8 +285,7 @@ export class LoadDataComponent {
 
         for (var i = 0; i < this.transformersChain.length; i++) {
             if (this.transformersChain[i].status == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "Transformer at position " + (i+1) + " is not saved. " +
-                    "In order to save a transformer chain all its transformers need to be saved.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.TRANSFORMER_NOT_SAVED", params:{position: i+1}}, ModalType.warning);
                 return;
             }
 
@@ -302,8 +301,7 @@ export class LoadDataComponent {
         let loaderSpec: { extensionID: string, configRef: string };
         if (this.selectedLoader.target != null) {
             if (this.loaderStatus == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "Loader configuration is not saved. " +
-                    "In order to save the importer configuration all its sub-configurations need to be saved.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.LOADER_NOT_SAVED"}, ModalType.warning);
                 return;
             }
             loaderSpec = {
@@ -319,7 +317,7 @@ export class LoadDataComponent {
 
         this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_IMPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.IMPORTER, config).then(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration saved succesfully");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIGURATION_SAVED"});
             },
             () => {}
         );
@@ -432,14 +430,14 @@ export class LoadDataComponent {
         let validateImplicitlyPar: boolean = this.isValidationEnabled() ? this.validateImplicitly : null;
         
         if (this.baseURI == null || this.baseURI.trim() == "") {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "BaseURI required", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.BASEURI_REQUIRED"}, ModalType.warning);
             return;
         }
 
         //input file collected only if no loader target available (load from file)
         if (this.selectedLoader.target == null) {
             if (this.fileToUpload == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "A file is required", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.FILE_REQUIRED"}, ModalType.warning);
                 return;
             }
             inputFilePar = this.fileToUpload;
@@ -453,7 +451,7 @@ export class LoadDataComponent {
          */
         if (this.selectedLoader.target == null || this.selectedLoader.target == LoaderTarget.stream || this.selectedLoader.target == LoaderTarget.datasetCatalog) {
             if (this.selectedInputFormat == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "Format required. The system has not been able to determine a format according the input.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.FORMAT_REQUIRED_NOT_DETECTED"}, ModalType.warning);
                 return;
             }
             formatPar = this.selectedInputFormat.name;
@@ -463,7 +461,7 @@ export class LoadDataComponent {
             }
             if (this.selectedLifterConfig != null) {
                 if (this.selectedLifterConfig.requireConfiguration()) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "The Lifter needs to be configured", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.LIFTER_NOT_CONFIGURED"}, ModalType.warning);
                     return;
                 }
                 rdfLifterSpec.configType = this.selectedLifterConfig.type;
@@ -483,7 +481,7 @@ export class LoadDataComponent {
             }
             if (this.selectedLoaderConfig != null) { //normally the loader is not configurable
                 if (this.selectedLoaderConfig.requireConfiguration()) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "The Loader needs to be configured", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.LOADER_NOT_CONFIGURED"}, ModalType.warning);
                     return;
                 }
                 loaderSpec.configType = this.selectedLoaderConfig.type;
@@ -501,7 +499,7 @@ export class LoadDataComponent {
             JSON.stringify(tranformationPipeline), validateImplicitlyPar).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Data imported successfully");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.DATA_IMPORTED"});
             }
         );
     }

@@ -123,7 +123,7 @@ export class ConfigBarComponent {
                     stResp => {
                         this.prefService.setActiveSchemes().subscribe();
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({key:"ACTIONS.CLEAR_DATA"}, "All data cleared successfully.");
+                        this.basicModals.alert({key:"ACTIONS.CLEAR_DATA"}, {key:"MESSAGES.DATA_CLEARED"});
                     }
                 );
             },
@@ -152,7 +152,7 @@ export class ConfigBarComponent {
                 this.shaclService.clearShapes().subscribe(
                     () => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({ key: "ACTIONS.CLEAR_SHACL_SHAPES" }, "All SHACL shapes cleared successfully.");
+                        this.basicModals.alert({ key: "ACTIONS.CLEAR_SHACL_SHAPES" }, {key:"MESSAGES.SHACL_SHAPES_CLEARED"});
                     }
                 );
             },

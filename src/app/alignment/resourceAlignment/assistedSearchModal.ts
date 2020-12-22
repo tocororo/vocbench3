@@ -315,7 +315,7 @@ export class AssistedSearchModal {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found.", ModalType.warning);
+                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND"}, ModalType.warning);
                 } else {
                     this.selectSearchResult(searchResult).then(
                         (selectedResource: ARTURIResource) => {

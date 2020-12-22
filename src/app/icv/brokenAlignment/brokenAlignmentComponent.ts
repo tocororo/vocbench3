@@ -111,7 +111,7 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
     executeIcv() {
         let nsParam: string[] = [];
         if (this.namespaces.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "There are no alignments for the selected resource type(s) on which run the ICV", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_ICV_ALIGNMENTS"}, ModalType.warning);
             return;
         }
         for (var i = 0; i < this.namespaces.length; i++) {
@@ -120,7 +120,7 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
             }
         }
         if (nsParam.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "You need to select at least a namespace in order to run the ICV", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_ICV_NAMESPACE"}, ModalType.warning);
             return;
         }
 

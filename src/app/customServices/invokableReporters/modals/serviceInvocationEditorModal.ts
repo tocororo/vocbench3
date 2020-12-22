@@ -134,7 +134,7 @@ export class ServiceInvocationEditorModal {
         if (this.parameters != null) { //check if those required are provided
             for (let p of this.parameters) {
                 if (p.param.required && p.value == null || p.value.trim() == "") {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "The required parameter '" + p.param.name + "' is missing", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_REQUIRED_PARAM", params:{param: p.param.name}}, ModalType.warning);
                     return false; //a required param is not set
                 }
             }

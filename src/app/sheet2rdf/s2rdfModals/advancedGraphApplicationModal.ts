@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
 import { forkJoin, Observable, of } from "rxjs";
 import { flatMap, map } from 'rxjs/operators';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
@@ -41,8 +42,9 @@ export class AdvancedGraphApplicationModal {
     defaultPredicate: ARTURIResource;
     private readonly PRED_PLACEHOLDER: string = "{{pred}}"
 
-    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, 
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
+        private translateService: TranslateService) {
     }
 
     ngOnInit() {
@@ -169,12 +171,12 @@ export class AdvancedGraphApplicationModal {
                     this.globalPrefixMappings.some(m => m.prefix == mapping.prefix) || 
                     this.localPrefixMappings.some(m => m.prefix == mapping.prefix)
                 ) {
-                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "A mapping with prefix " + mapping.prefix + " is already defined", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.ALREADY_DEFINED_MAPPING_WITH_PREFIX"}, ModalType.warning);
                 } else if (
                     this.globalPrefixMappings.some(m => m.namespace == mapping.namespace) || 
                     this.localPrefixMappings.some(m => m.namespace == mapping.namespace)
                 ) {
-                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "A mapping with namespace " + mapping.namespace + " is already defined", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.ALREADY_DEFINED_MAPPING_WITH_NAMESPACE"}, ModalType.warning);
                 } else { //not used => add it
                     let newMapping = { prefix: mapping.prefix, namespace: mapping.namespace, explicit: true };
                     this.localPrefixMappings.push(newMapping);
@@ -261,7 +263,7 @@ export class AdvancedGraphApplicationModal {
         return this.s2rdfService.validateGraphPattern(pearl).pipe(
             map(validation => {
                 if (!validation.valid) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided graph pattern is not valid.", ModalType.warning, validation.details);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_GRAPH_PATTERN"}, ModalType.warning, validation.details);
                     return validation;
                 } else {
                     validation.usedNodes.forEach((nodeId, index, list) => {
@@ -279,8 +281,7 @@ export class AdvancedGraphApplicationModal {
 
     saveGraph() {
         if (!this.isOkEnabled()) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "The Graph Application is not completed. " + 
-                "Please, provide a list of nodes and a graph pattern.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_GRAPH_APPLICATION"}, ModalType.warning);
             return;
         }
 
@@ -322,7 +323,7 @@ export class AdvancedGraphApplicationModal {
                     };
                     this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_ADVANCED_GRAPH_APPLICATION"}, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
                         () => {
-                            this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration saved succesfully");
+                            this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIGURATION_SAVED"});
                         },
                         () => {}
                     );
@@ -403,8 +404,8 @@ export class AdvancedGraphApplicationModal {
             () => {
                 if (replacedNodeIds.length > 0) { //report of changes
                     let report: string = replacedNodeIds.map(n => " - '" + n.old + "' → '" + n.new + "'").join("\n");
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "One or more nodes defined in the loaded " + 
-                        "Advanced Graph Application, have ID already in use by other nodes. They have been replaced:\n"  + report, ModalType.warning);
+                    let msg = this.translateService.instant("MESSAGES.ADV_GRAPH_APP_LOADED_REPORT");
+                    this.basicModals.alert({key:"STATUS.WARNING"}, msg + ":\n" + report, ModalType.warning);
                 }
                 /**
                  * Some node might be referenced as parameter of other node converter => replace there as well
@@ -484,8 +485,7 @@ export class AdvancedGraphApplicationModal {
          */
 
         if (this.graphPattern.includes(this.PRED_PLACEHOLDER) && this.defaultPredicate == null) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, 
-                "The graph pattern contains the {{pred}} placeholder, but a default predicate has not been provided", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_DEFAULT_PRED_IN_GRAPH_PATTERN"}, ModalType.warning);
             return;
         }
 

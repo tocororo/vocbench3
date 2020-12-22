@@ -88,7 +88,7 @@ export class InvokableReporterComponent {
 
     compileReport() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "The reporter cannot be compiled since it has no service invocation provided", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_SERVICE_INVOCATION_PROVIDED"}, ModalType.warning);
         } else {
             UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.invokableReporterService.compileReport(this.ref.relativeReference, false).subscribe(
@@ -105,7 +105,7 @@ export class InvokableReporterComponent {
 
     compileAndDownloadReport() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "The reporter cannot be compiled since it has no service invocation provided", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_SERVICE_INVOCATION_PROVIDED"}, ModalType.warning);
         } else {
             UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.invokableReporterService.compileAndDownloadReport(this.ref.relativeReference, this.selectedReportFormat.value).subscribe(
@@ -123,7 +123,7 @@ export class InvokableReporterComponent {
 
     private compilationErrorHandler(error: Error) {
         if (error.name.endsWith("InvokableReporterException") && error.message.includes("AccessDeniedException")) { //not enough privileges
-            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "You have not enough priviledges for invoking one (or more) service invocation performed by this report.", ModalType.error, error.message);
+            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.NO_PERMISSION_FOR_SERVICE_INVOCATION"}, ModalType.error, error.message);
         } else { //if not due to access denied show in error modal
             this.basicModals.alert({key:"STATUS.ERROR"}, error.message, ModalType.error, error.stack);
         }

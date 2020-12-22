@@ -52,7 +52,7 @@ export class RemoteSystemConfigurationsAdministration {
     createConfig() {
         //add the new configuration only if another config with the same ID doesn't exist
         if (this.savedConfigs.some(c => c.id == this.newConfig.id)) {
-            this.basicModals.alert({key:"STATUS.ERROR"}, "A configuration with the same ID already exists", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_CONFIG_ID"}, ModalType.warning);
             return;
         }
         this.remoteAlignmentService.addRemoteAlignmentService(this.newConfig.id, this.newConfig.serverURL, this.newConfig.username, this.newConfig.password, this.newConfig['default']).subscribe(

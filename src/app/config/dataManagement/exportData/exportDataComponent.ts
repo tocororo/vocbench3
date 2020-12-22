@@ -337,8 +337,7 @@ export class ExportDataComponent {
 
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.filtersChain[i].status == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "Filter at position " + (i+1) + " is not saved. " +
-                    "In order to save a filter chain all its filters need to be saved.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.FILTER_NOT_SAVED", params:{position: i+1}}, ModalType.warning);
                 return;
             }
 
@@ -364,8 +363,7 @@ export class ExportDataComponent {
         let deployerSpec: { extensionID: string, configRef: string };
         if (this.useDeployer()) {
             if (this.deployerStatus == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "Deployer configuration is not saved. " +
-                    "In order to save the exporter configuration all its sub-configurations need to be saved.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.DEPLOYER_NOT_SAVED"}, ModalType.warning);
                 return;
             }
             deployerSpec = {
@@ -378,8 +376,7 @@ export class ExportDataComponent {
         let reformattingExporterSpec: { extensionID: string, configRef: string };
         if (this.useReformatter()) {
             if (this.reformatterStatus == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "Reformatter configuration is not saved. " +
-                    "In order to save the exporter configuration all its sub-configurations need to be saved.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.REFORMETTER_CONFIG_NOT_SAVED"}, ModalType.warning);
                 return;
             }
             reformattingExporterSpec = {
@@ -399,7 +396,7 @@ export class ExportDataComponent {
 
         this.sharedModals.storeConfiguration({key: "ACTIONS.SAVE_EXPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.EXPORTER, config).then(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration saved succesfully");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIGURATION_SAVED"});
             },
             () => {}
         );
@@ -537,8 +534,8 @@ export class ExportDataComponent {
         //check if every filter has been configured
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "An export filter ("
-                    + this.filtersChain[i].selectedFactory.name + ") needs to be configured", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.EXPORT_FILTER_NOT_CONFIGURED", params:{filterName: this.filtersChain[i].selectedFactory.name}},
+                    ModalType.warning);
                 return;
             }
         }
@@ -567,8 +564,8 @@ export class ExportDataComponent {
             };
             if (this.selectedReformatterConfig != null) {
                 if (this.requireConfigurationFormatter()) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "The reformatting exporter ("
-                        + this.selectedReformatterConfig.shortName + ") needs to be configured", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.REFORMATTING_EXPORTER_NOT_CONFIGURED", params:{exporterName: this.selectedReformatterConfig.shortName}},
+                        ModalType.warning);
                     return;
                 }
                 reformattingExporterSpec.configType = this.selectedReformatterConfig.type;
@@ -586,7 +583,7 @@ export class ExportDataComponent {
             }
             if (this.selectedDeployerConfig != null) {
                 if (this.requireConfigurationDeployer()) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "The deployer needs to be configured", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.DEPLOYER_NOT_CONFIGURED"}, ModalType.warning);
                     return;
                 }
                 deployerSpec.configType = this.selectedDeployerConfig.type;
@@ -633,7 +630,7 @@ export class ExportDataComponent {
             var exportLink = window.URL.createObjectURL(data);
             this.basicModals.downloadLink({key: "ACTIONS.EXPORT_DATA" }, null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
         } else {
-            this.basicModals.alert({key: "ACTIONS.EXPORT_DATA" }, "The export result has been deployed succesfully");
+            this.basicModals.alert({key: "ACTIONS.EXPORT_DATA" }, {key:"MESSAGES.EXPORT_RESULT_DEPLOYED"});
         }
     }
 

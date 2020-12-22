@@ -36,11 +36,9 @@ export class CollaborationProjectModal {
             },
             (err: Error) => {
                 if (err.name.endsWith("ConnectException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot retrieve the issues list. " +
-                        "Connection to Collaboration System server failed." , ModalType.error, err.name + " " + err.message);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RETRIEVE_ISSUES_CONNECTION_FAILED"}, ModalType.error, err.name + " " + err.message);
                 } else if (err.name.endsWith("CollaborationBackendException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot retrieve the issues list. " +
-                        "Connection to Collaboration System server failed during the Login. Please check the credentials.", ModalType.error, err.stack);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RETRIEVE_ISSUES_LOGIN_FAILED"}, ModalType.error, err.stack);
                 }
                 this.vbCollaboration.setWorking(false);
                 this.activeModal.dismiss();

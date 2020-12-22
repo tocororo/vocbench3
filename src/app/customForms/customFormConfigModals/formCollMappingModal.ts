@@ -39,7 +39,7 @@ export class FormCollMappingModal {
             fc => {
                 var suggestions: ARTURIResource[] = fc.getSuggestions();
                 if (suggestions.length == 0) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "No classes/properties suggested for the FormCollection " + fc.getId(), ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_RESOURCE_SUGGESTED_FOR_FORM_COLLECTION"}, ModalType.warning);
                 } else {
                     this.sharedModals.selectResource({key:"ACTIONS.SELECT_RESOURCE"}, null, suggestions).then(
                         (res: ARTURIResource) => {
@@ -77,7 +77,7 @@ export class FormCollMappingModal {
     ok() {
         this.selectedResourceIri = this.selectedResourceIri.trim();
         if (!ResourceUtils.testIRI(this.selectedResourceIri)) {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided resource IRI is not valid", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: this.selectedResourceIri}}, ModalType.warning);
             return
         }
         this.activeModal.close({ resource: new ARTURIResource(this.selectedResourceIri), formCollection: this.selectedFormColl.getId() });

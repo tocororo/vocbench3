@@ -88,8 +88,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
             if (err.name == "it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException") {
                 if (err.message.includes("HttpHostConnectException")) {
                     this.serverDown = true;
-                    this.basicModals.alert({key:"STATUS.ERROR"}, "The Alignment Service server didn't respond, "
-                        + "make sure it is up and running or the configuration is correct", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.ALIGNMENT_SERVICE_NOT_RESPONDING"}, ModalType.warning);
                 } else {
                     this.basicModals.alert({key:"STATUS.ERROR"}, err.message, ModalType.warning, err.stack);
                 }

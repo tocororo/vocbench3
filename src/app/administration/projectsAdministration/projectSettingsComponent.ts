@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
@@ -41,8 +42,7 @@ export class ProjectSettingsComponent {
                             this.updateActiveLanguages();
                         }
                     } catch (err) {
-                        this.basicModals.alert({key:"STATUS.ERROR"}, "Initialization of system languages has encountered a problem during parsing the " +
-                            "'" + Properties.setting_languages + "' property. Please, report this to the system administrator.", ModalType.error);
+                        this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.SYS_LANGUAGES_PROP_PARSING_ERR", params:{propName:Properties.setting_languages}}, ModalType.error);
                     }
                 }
             );
@@ -70,9 +70,8 @@ export class ProjectSettingsComponent {
                         }
                     }
                 } catch (err) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, "Initialization of languages for project '" + this.project.getName() + 
-                        "' has encountered a problem during parsing the '" + Properties.setting_languages + "' settings. " + 
-                        "Please, report this to the system administrator.", ModalType.error);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.PROJ_LANGUAGES_PARSING_ERR", params: {projName: this.project.getName(), propName: Properties.setting_languages}},
+                        ModalType.error);
                 }
             }
         );

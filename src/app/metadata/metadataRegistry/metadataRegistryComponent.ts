@@ -98,7 +98,7 @@ export class MetadataRegistryComponent {
                         }
                     );
                 } else {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + iri + "' is not a valid IRI");
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: iri}});
                 }
             }
         )   

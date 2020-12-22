@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { PearlValidationResult } from "../../models/Coda";
@@ -55,7 +56,7 @@ export class CustomFormEditorModal {
 
     constructor(public activeModal: NgbActiveModal, private modalService: NgbModal,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
-        private resourceService: ResourcesServices, private cfService: CustomFormsServices,
+        private resourceService: ResourcesServices, private cfService: CustomFormsServices, private translateService: TranslateService,
         private elementRef: ElementRef) {
     }
 
@@ -128,7 +129,8 @@ export class CustomFormEditorModal {
         this.cfService.validatePearl(this.ref, this.type).subscribe(
             (result: PearlValidationResult) => {
                 if (!result.valid) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot infer annotations on an invalid PEARL:\n" + result.details, ModalType.error);
+                    let msg = this.translateService.instant("MESSAGES.CANNOT_INFER_PEARL_ANNOTATIONS");
+                    this.basicModals.alert({key:"STATUS.ERROR"}, msg + "\n" + result.details, ModalType.error);
                     return;
                 }
                 this.cfService.inferPearlAnnotations(this.ref).subscribe(

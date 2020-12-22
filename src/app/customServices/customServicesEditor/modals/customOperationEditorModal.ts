@@ -150,18 +150,18 @@ export class CustomOperationEditorModal {
                     )
                 )
             ) {
-                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "The required field " + fieldName + " is missing", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.MISSING_REQUIRED_FIELD", params:{fieldName: fieldName}}, ModalType.warning);
                 return;
             } else { //ad hoc checks
                 let validNameRegexp = new RegExp("^[a-zA-Z_$][a-zA-Z_$0-9]*$");
                 if (fieldName == "name" && !validNameRegexp.test(field.value)) { //check that the name is valid
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The name " + field.value + " is not valid", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_NAME"}, ModalType.warning);
                     return;
                 }
                 if (fieldName == "returns") { //check that the type is completed
                     let returnType: OperationType = field.value;
                     if (!TypeUtils.isOperationTypeValid(returnType)) {
-                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided Returns type is not valid", ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_RETURN_TYPE"}, ModalType.warning);
                         return;
                     }
                 }
@@ -170,20 +170,20 @@ export class CustomOperationEditorModal {
                     if (parameters != null) {
                         for (let param of parameters) {
                             if (param.name == null) { //all parameter names must be provided
-                                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "A provided parameter has an empty name", ModalType.warning);
+                                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.EMPTY_PARAM_NAME"}, ModalType.warning);
                                 return;
                             } else if (!validNameRegexp.test(param.name)) { //all parameter names must be valid variable name
-                                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The parameter name " + param.name + " is not valid", ModalType.warning);
+                                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_PARAM_NAME", params:{param: param.name}}, ModalType.warning);
                                 return;
                             } else if (!TypeUtils.isOperationTypeValid(param.type)) {
-                                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The type of the parameter " + param.name + " is not valid", ModalType.warning);
+                                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_PARAM_TYPE", params:{param: param.name}}, ModalType.warning);
                                 return;
                             }
                         }
                     }
                 }
                 if (fieldName == "sparql" && !this.queryValid) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided SPARQL query is not valid", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_SPARQL_QUERY"}, ModalType.warning);
                     return;
                 }
             }

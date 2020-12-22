@@ -143,8 +143,7 @@ export class AuthorizationHelperModal {
 
             if (authMatch == null) {
                 //cannot parse the input authorizations
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "Unable to parse authorization you're trying to edit (" + 
-                    this.authorization + "). The form has not been restored.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.CANNOT_PARSE_AUTH", params:{auth: this.authorization}}, ModalType.warning);
             } else {
                 /* 
                 * authMatch should contain 7 groups:

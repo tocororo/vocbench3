@@ -135,7 +135,7 @@ export class DatasetCatalogModal {
         let connectorSpec: PluginSpecification= { factoryId: this.selectedExtension.id };
         if (this.extensionConfig != null) {
             if (this.requireConfigurationConnector()) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "The catalog connector needs to be configured", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CATALOG_CONNECTOR_NOT_CONFIGURED"}, ModalType.warning);
                 return;
             }
             if (this.extensionConfig != null) {

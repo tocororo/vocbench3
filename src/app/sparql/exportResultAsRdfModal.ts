@@ -60,8 +60,8 @@ export class ExportResultAsRdfModal {
             //check if every filter has been configured
             for (var i = 0; i < this.filtersChain.length; i++) {
                 if (this.requireConfiguration(this.filtersChain[i])) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "An export filter ("
-                        + this.filtersChain[i].selectedFactory.id + ") needs to be configured", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.EXPORT_FILTER_NOT_CONFIGURED", params:{filterName: this.filtersChain[i].selectedFactory.id}},
+                        ModalType.warning);
                     return;
                 }
             }

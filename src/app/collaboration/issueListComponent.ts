@@ -51,11 +51,9 @@ export class IssueListComponent {
             (err: Error) => {
                 //in case listIssues throws an exception set the "working" flag to false
                 if (err.name.endsWith("ConnectException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot retrieve the issues list. " +
-                        "Connection to Collaboration System server failed." , ModalType.warning, err.name + " " + err.message);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RETRIEVE_ISSUES_CONNECTION_FAILED"}, ModalType.warning, err.name + " " + err.message);
                 } else if (err.name.endsWith("CollaborationBackendException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot retrieve the issues list. " +
-                        "Connection to Collaboration System server failed during the Login. Please check the credentials.", ModalType.warning, err.stack);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RETRIEVE_ISSUES_LOGIN_FAILED"}, ModalType.warning, err.stack);
                 }
                 this.vbCollaboration.setWorking(false);
             }

@@ -100,7 +100,7 @@ export class ResourceMetadataComponent {
         this.basicModals.prompt({key:"ACTIONS.CLONE_METADATA_PATTERN"}, { value: "Name", tooltip: "The name of the new pattern" }).then(
             (patternName: string) => {
                 if (this.patterns.some(p => p.name == patternName)) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "A Metadata Pattern with the name '" + patternName + "' already exists", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_METADATA_PATTERN_NAME"}, ModalType.warning);
                     return;
                 }
                 this.resourceMetadataService.clonePattern(this.selectedPattern.reference, patternName).subscribe(

@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
@@ -77,7 +78,7 @@ export class SystemConfigurationComponent {
 
     constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties, 
         private settingsService: SettingsServices, private notificationsService: NotificationServices,
-        private basicModals: BasicModalServices, public sanitizer: DomSanitizer, private router: Router) { }
+        private basicModals: BasicModalServices, private translateService: TranslateService, public sanitizer: DomSanitizer, private router: Router) { }
 
     ngOnInit() {
         this.isInitialConfiguration = this.router.url == "/Sysconfig";
@@ -129,7 +130,7 @@ export class SystemConfigurationComponent {
     updateDataFolder() {
         this.adminService.setDataDir(this.stDataFolder).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "SemanticTurkey data folder updated");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.ST_DATA_FOLDER_UPDATED"});
                 this.stDataFolderPristine = this.stDataFolder;
             }
         );
@@ -138,7 +139,7 @@ export class SystemConfigurationComponent {
     updateProfilerThreshold() {
         this.adminService.setPreloadProfilerThreshold(this.profilerThreshold).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Preload profiler threshold updated");
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PRELOAD_PROFILER_THRESHOLD_UPDATED"});
                 this.profilerThresholdPristine = this.profilerThreshold;
             }
         )
@@ -177,7 +178,7 @@ export class SystemConfigurationComponent {
 
     testEmailConfig() {
         if (this.isEmailConfigChanged()) {
-            this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, "Email configuration has been changed, you need first to submit the changes.", ModalType.warning);
+            this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, {key:"MESSAGES.EMAIL_CONFIG_CHANGED_SUBMIT_FIRST"}, ModalType.warning);
             return;
         }
 
@@ -188,7 +189,7 @@ export class SystemConfigurationComponent {
                     this.adminService.testEmailConfig(mailTo).subscribe(
                         () => {
                             UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                            this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, "The configuration works fine. A test e-mail has been sent to " + mailTo + ".");
+                            this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, {key:"MESSAGES.EMAIL_CONFIG_WORKS_FINE"});
                         }
                     );
                 },
@@ -327,11 +328,11 @@ export class SystemConfigurationComponent {
         let duplicatedCustomField: boolean = this.customFormFields.some(f => f.label.toLocaleLowerCase() == newValue.toLocaleLowerCase());
         let duplicatedStandardField: boolean = UserForm.standardFields.some(f => f.toLocaleLowerCase() == newValue.toLocaleLowerCase());
         if (duplicatedCustomField || duplicatedStandardField) {
-            let message = "Field '" + newValue + "' already defined";
+            let message = this.translateService.instant("MESSAGES.REGISTRATION_FORM_FIELD_ALREADY_DEFINED.FIELD_ALREADY_DEFINED", {fieldName: newValue});
             if (duplicatedStandardField) {
-                message += "in the standard registration form";
+                message += " " + this.translateService.instant("MESSAGES.REGISTRATION_FORM_FIELD_ALREADY_DEFINED.IN_STANDARD_FORM");
             }
-            this.basicModals.alert({key:"STATUS.ERROR"}, message, ModalType.warning).then(
+            this.basicModals.alert({key:"STATUS.WARNING"}, message, ModalType.warning).then(
                 () => { //restore the old value
                     //temporary replace the .label at the edited index, so that the ngOnChanges will be fired in the input-edit component
                     this.customFormFields[index] = { iri: null, label: "" };

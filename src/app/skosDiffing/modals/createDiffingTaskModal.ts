@@ -94,13 +94,13 @@ export class CreateDiffingTaskModal {
         }
         if (this.mode == DiffingMode.projects) {
             if (!this.leftDataset.project.isRepositoryRemote()) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on project '" + this.leftDataset.project.getName() 
-                    + "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_PROJ", params:{project: this.leftDataset.project.getName()}},
+                    ModalType.warning);
                 return;
             }
             if (!this.rightDataset.project.isRepositoryRemote()) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on project '" + this.rightDataset.project.getName() 
-                    + "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_PROJ", params:{project: this.rightDataset.project.getName()}},
+                    ModalType.warning);
                 return;
             }
             this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project, null, null, langs).subscribe(
@@ -111,24 +111,21 @@ export class CreateDiffingTaskModal {
         } else { //versions
             //check if selected versions are different
             if (this.leftDataset.version == this.rightDataset.version) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot compare two identical versions of the project", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_SAME_VERS"}, ModalType.warning);
                 return;
             }
             //check if selected versions are remote
             if ((this.leftDataset.version.repositoryId == null || this.leftDataset.version.repositoryId == null) && !this.leftDataset.project.isRepositoryRemote()) {
                 //current version of a local project
-                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on version 'CURRENT' since it is hosted on a " + 
-                    "repository that does not have a SPARQL endpoint", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS", params:{project: "CURRENT"}}, ModalType.warning);
                 return;
             }
             if (this.leftDataset.version.repositoryId != null && this.leftDataset.version.repositoryLocation != RepositoryLocation.REMOTE) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on version '" + this.leftDataset.version.versionId + 
-                    "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS", params:{project: this.leftDataset.version.versionId}}, ModalType.warning);
                 return;
             }
             if (this.rightDataset.version.repositoryId != null && this.rightDataset.version.repositoryLocation != RepositoryLocation.REMOTE) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot run a SKOS diffing task on version '" + this.rightDataset.version.versionId + 
-                    "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS", params:{project: this.rightDataset.version.versionId}}, ModalType.warning);
                 return;
             }
             this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project, 

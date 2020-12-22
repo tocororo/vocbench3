@@ -93,7 +93,7 @@ export class InvokableReporterEditorModal {
             let reference = ScopeUtils.serializeScope(this.selectedScope) + ":" + this.id;
             //check if id is not duplicated
             if (this.existingReporters.some(r => r.relativeReference == reference)) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "An Invokable Reporter with the same id already exists. Please change the ID and retry", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_INVOKABLE_REPORTER_ID"}, ModalType.warning);
                 return;
             }
             this.invokableReporterService.createInvokableReporter(reference, reporterDef).subscribe(

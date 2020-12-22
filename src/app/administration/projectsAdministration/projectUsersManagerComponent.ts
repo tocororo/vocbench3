@@ -102,9 +102,8 @@ export class ProjectUsersManagerComponent {
                         Languages.sortLanguages(this.projectLanguages);
                         this.initAvailableLanguages();
                     } catch (err) {
-                        this.basicModals.alert({key:"STATUS.ERROR"}, "Initialization of languages for project '" + this.project.getName() + 
-                            "' has encountered a problem during parsing the 'languages' settings. " + 
-                            "Please, report this to the system administrator.", ModalType.error);
+                        this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.PROJ_LANGUAGES_PARSING_ERR", params: {projName: this.project.getName(), propName: Properties.setting_languages}},
+                            ModalType.error);
                     }
                 }
             );
@@ -200,7 +199,7 @@ export class ProjectUsersManagerComponent {
                                 let userIri: ARTURIResource = new ARTURIResource(this.selectedUser.getIri());
                                 this.adminService.clonePUBinding(userIri, this.project.getName(), userIri, targetProj).subscribe(
                                     () => {
-                                        this.basicModals.alert({key:"ACTIONS.DUPLICATE_SETTINGS"}, "Settings duplicated successfully");
+                                        this.basicModals.alert({key:"ACTIONS.DUPLICATE_SETTINGS"}, {key: "MESSAGES.SETTINGS_DUPLICATED_SUCCESSFULLY"});
                                     }
                                 );
                                 //clone template

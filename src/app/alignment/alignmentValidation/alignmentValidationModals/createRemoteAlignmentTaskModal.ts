@@ -218,7 +218,7 @@ export class CreateRemoteAlignmentTaskModal {
     searchMatchers() {
         let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
         if (scenarioDef.pairings.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "You need to select at least one pairing.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.PAIRING_SELECTION_REQUIRED"}, ModalType.warning);
             return;
         }
         this.lastPairingSignatureForMatchers = this.refinablePairings.map(p => p.checked+"").join(",");
@@ -310,7 +310,7 @@ export class CreateRemoteAlignmentTaskModal {
          */
         let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
         if (scenarioDef.pairings.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "You need to select at least one pairing.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.PAIRING_SELECTION_REQUIRED"}, ModalType.warning);
             return;
         }
         
@@ -325,7 +325,7 @@ export class CreateRemoteAlignmentTaskModal {
                     try {
                         parsedSettings = JSON.parse(this.selectedMatcher.settings['settingsJson']);
                     } catch (err) {
-                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided matcher configuration cannot be parsed as JSON", ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.CANNOT_PARSE_JSON_MATCHER_CONFIGURATION"}, ModalType.warning);
                         return;
                     }
                     matcherSettings = parsedSettings;
@@ -346,7 +346,7 @@ export class CreateRemoteAlignmentTaskModal {
                 try {
                     parsedSettings = JSON.parse(this.serviceMetadata.settings['settingsJson']);
                 } catch (err) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided matcher configuration cannot be parsed as JSON", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.CANNOT_PARSE_JSON_METADATA_SETTING"}, ModalType.warning);
                     return;
                 }
                 serviceSettings = parsedSettings;

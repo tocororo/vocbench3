@@ -74,12 +74,12 @@ export class MetadataPatternEditorModal {
     ok() {
         //check if at least one pearl is provided
         if (!this.pearlEditors.some(ps => ps.code != null && ps.code.trim() != "")) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "You need to provide at least one pattern (Construction, Update or Destruction)", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.METADATA_PATTERN_REQUIRED"}, ModalType.warning);
             return;
         }
         //check if pattern are valid
         if (this.pearlEditors.some(p => !p.validation.valid)) {
-            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, "One (or more) pattern is not valid. Please fix it and retry", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.INVALID_METADATA_PATTERN"}, ModalType.warning);
             return;
         }
 
@@ -108,7 +108,7 @@ export class MetadataPatternEditorModal {
         } else { //create
             //in creation check if a pattern with the same name exists
             if (this.existingPatterns.some(p => p.name == this.name)) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "A Metadata Pattern with the same name already exists. Please change the name and retry.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_METADATA_PATTERN_NAME"}, ModalType.warning);
                 return;
             }
             let ref = ScopeUtils.serializeScope(Scope.PROJECT) + ":" + this.name; //store pattern at project level

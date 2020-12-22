@@ -40,7 +40,7 @@
             </div>
             <div class="card-body hbox">
                 <div class="vbox scrollableContainer">
-                    <div *ngIf="searchDatasetResult?.totalResults == 0" class="searchDatasetResult">{{'DATA_MANAGEMENT.DATASET_CATALOG.NO_RESULTS_FOUND'|translate}}</div>
+                    <div *ngIf="searchDatasetResult?.totalResults == 0" class="searchDatasetResult">{{'MESSAGES.NO_RESULTS_FOUND'|translate}}</div>
                     <div *ngFor="let d of searchDatasetResult?.content">
                         <div class="listItem searchDatasetResult" [ngClass]="{active: d == selectedDataset}" (click)="selectDataset(d)">
                             <div style="font-size: 13px">

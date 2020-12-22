@@ -130,7 +130,7 @@ export class PropertyChainCreatorModal {
 
     ok() {
         if (this.propChain.length < 2) {
-            this.basicModals.alert({key:"STATUS.ERROR"}, "The property chain must contain at least two properties", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.PROPERTY_CHAIN_NEEDS_AT_LEAST_TWO_PROPS"}, ModalType.warning);
             return;
         }
 

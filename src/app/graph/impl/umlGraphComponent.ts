@@ -164,7 +164,7 @@ export class UmlGraphComponent extends AbstractGraph {
 
     addNode(res: ARTURIResource) {
         if (this.graph.getNode(res)) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE", params:{resource: res.getShow()}}, ModalType.warning);
             return;
         }
         this.graphService.expandGraphModelNode(res).subscribe(

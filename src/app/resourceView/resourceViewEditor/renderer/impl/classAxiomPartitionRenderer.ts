@@ -46,7 +46,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
      */
     add(predicate: ARTURIResource) {
         if (!this.isKnownProperty(predicate)) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, predicate.getShow() + " is not a class axiom known property, it cannot be handled.", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.UNHANDLED_AXIOM_PROPERTY", params:{property: predicate.getShow()}}, ModalType.warning);
             return;
         }
 

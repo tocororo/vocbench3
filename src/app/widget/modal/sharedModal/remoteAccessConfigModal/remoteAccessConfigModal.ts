@@ -32,8 +32,7 @@ export class RemoteAccessConfigModal {
         //add the new configuration only if another config with the same url doesn't exist
         for (var i = 0; i < this.savedConfigs.length; i++) {
             if (this.savedConfigs[i].serverURL == this.newConfig.serverURL) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, "A configuration for the serverURL '" + this.newConfig.serverURL 
-                    + "' already exists", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.ALREADY_EXISTING_CONFIG_FOR_SERVER_URL"}, ModalType.warning);
                 return;
             }
         }

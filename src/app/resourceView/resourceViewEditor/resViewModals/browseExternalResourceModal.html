@@ -2,7 +2,7 @@
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span *ngIf="enrichingProperty">
-            <button class="btn btn-light btn-xs" [title]="'RESOURCE_VIEW.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
+            <button class="btn btn-light btn-xs" [title]="'ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
                 <rdf-resource [resource]="enrichingProperty"></rdf-resource>
             </button>
         </span>

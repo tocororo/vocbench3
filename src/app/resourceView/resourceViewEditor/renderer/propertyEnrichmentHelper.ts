@@ -77,7 +77,7 @@ export class PropertyEnrichmentHelper {
                             )
                         );
                     } else if (ranges.type == "inconsistent") {
-                        basicModals.alert({key:"STATUS.ERROR"}, "Error range of " + predicate.getShow() + " property is inconsistent", ModalType.warning);
+                        basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.INCONSISTENT_PROPERTY_ERROR", params:{property: predicate.getShow()}}, ModalType.warning);
                         return of({ type: null });
                     }
                 }

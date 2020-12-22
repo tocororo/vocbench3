@@ -327,7 +327,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                 } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral) {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, (<ARTLiteral>this.resource).getDatatype(), null);
                     if (!this.isTypedLiteralValid(newValue)) {
-                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, newValue.getValue() + " is not a valid value for the given datatype: " + newValue.getDatatype(), ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_VALUE_FOR_DATATYPE", params:{value: newValue.getValue(), datatype: newValue.getDatatype()}},
+                            ModalType.warning);
                         this.cancelEdit();
                         return;
                     }
@@ -517,7 +518,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     );
                 } else {
                     let detailsMsg: string[] = checkResp.details.map(d => d.msg);
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "'" + expression + "' is not a valid Manchester Expression", ModalType.warning, detailsMsg.join("\n"));
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_MANCHESTER_EXPR"}, 
+                        ModalType.warning, detailsMsg.join("\n"));
                 }
             }
         )

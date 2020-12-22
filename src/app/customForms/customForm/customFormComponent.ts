@@ -81,8 +81,8 @@ export class CustomFormComponent implements ControlValueAccessor {
             },
             (err: Error) => {
                 if (err.name.endsWith("PRParserException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, "Impossible to create the CustomForm (" + this.cfId
-                        + "). Its description may contains error.", ModalType.warning, err.message);
+                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR", params:{cfId: this.cfId}},
+                        ModalType.warning, err.message);
                 }
             }
         );

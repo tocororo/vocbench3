@@ -91,7 +91,7 @@ export class ResourceTripleEditorComponent {
             },
             (err: Error) => {
                 if (err.name.endsWith("IllegalArgumentException")) {
-                    this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "You cannot modify a different resource. The only admitted subject is the editing resource (" + this.resource.toNT() + ")", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.CANNOT_EDIT_DIFFERENT_RESOURCE_CODE"}, ModalType.warning);
                 }
             }
         );

@@ -101,7 +101,7 @@ export class ResourcePickerComponent {
                 }
                 
                 if (projects.length == 0) {
-                    this.basicModals.alert({key: "ACTIONS.PICK_RESOURCE"}, "You have no granted access to any existing open project", ModalType.warning);
+                    this.basicModals.alert({key: "ACTIONS.PICK_RESOURCE"}, {key:"MESSAGES.NO_ACCESS_GRANTED_TO_ANY_PROJECT"}, ModalType.warning);
                     return;
                 }
                 let options = projects.map(p => p.getName());

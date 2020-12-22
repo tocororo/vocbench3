@@ -168,7 +168,7 @@ export class NamespacesAndImportsComponent {
                                 this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                                     stResp => {
                                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                        this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, "BaseURI and namespace have been updated successfully");
+                                        this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.BASEURI_AND_NAMESPACE_UPDATED"});
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
                                         this.nsBaseURISubmitted = true;
@@ -192,7 +192,7 @@ export class NamespacesAndImportsComponent {
                         this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                             stResp => {
                                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, "BaseURI has been updated successfully and refactor complete.");
+                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.BASEURI_UPDATED"});
                                 this.refreshBaseURI();
                                 this.nsBaseURISubmitted = true;
                             }
@@ -210,7 +210,7 @@ export class NamespacesAndImportsComponent {
                     confirm => {
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
                             stResp => {
-                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, "Mamespace has been updated successfully");
+                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.NAMESPACE_UPDATED"});
                                 this.refreshDefaultNamespace();
                                 this.nsBaseURISubmitted = true;
                             }
@@ -224,7 +224,7 @@ export class NamespacesAndImportsComponent {
                 )
             }
         } else {
-            this.basicModals.alert({key:"STATUS.ERROR"}, "Please insert valid namespace and baseURI", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.INVALID_NAMESPACE_AND_BASEURI"}, ModalType.warning);
         }
     }
 
@@ -253,7 +253,7 @@ export class NamespacesAndImportsComponent {
                     },
                     (err: Error) => {
                         if (err.name.endsWith("NSPrefixMappingUpdateException")) {
-                            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "The provided prefix is not valid, try a different one", ModalType.warning);
+                            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_PREFIX"}, ModalType.warning);
                         }
                     }
                 )

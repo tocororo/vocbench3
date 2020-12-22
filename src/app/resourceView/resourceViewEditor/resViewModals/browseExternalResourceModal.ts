@@ -55,8 +55,8 @@ export class BrowseExternalResourceModal {
             this.checkPropertyRangeResource(this.enrichingProperty).subscribe(
                 allowsResource => {
                     if (!allowsResource) {
-                        this.basicModals.alert({key:"STATUS.ERROR"}, this.enrichingProperty.getShow() +
-                            " range doesn't admit resources. You cannot enrich this property with a remote value", ModalType.warning);
+                        this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES", params:{property: this.enrichingProperty.getShow()}},
+                            ModalType.warning);
                         this.cancel();
                     }
                 }
@@ -141,8 +141,8 @@ export class BrowseExternalResourceModal {
                             if (allowsResource) {
                                 this.enrichingProperty = selectedProp;
                             } else {
-                                this.basicModals.alert({key:"STATUS.ERROR"}, selectedProp.getShow() +
-                                    " range doesn't admit resources. You cannot enrich this property with a remote value", ModalType.warning);
+                                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES", params:{property: selectedProp.getShow()}},
+                                    ModalType.warning);
                             }
                         }
                     );

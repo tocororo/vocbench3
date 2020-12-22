@@ -506,7 +506,7 @@ export class AlignmentManagementComponent {
         this.alignmentService.applyValidationToEdoal(deleteRejected).subscribe(
             () => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert({ key: "ACTIONS.APPLY_TO_EDOAL" }, "All correspondences have been added succesfully");
+                this.basicModals.alert({ key: "ACTIONS.APPLY_TO_EDOAL" }, {key:"MESSAGES.ALL_CORRESPONDENCES_ADDED"});
             }
         );
     }
@@ -515,8 +515,7 @@ export class AlignmentManagementComponent {
         this.alignmentService.exportAlignment().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_ALIGNMENT" }, 
-                    "Please notice that the validation data is not stored internally and must be restored through the saved file available at this download link", 
+                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_ALIGNMENT" }, {key:"MESSAGES.ALIGNMENT_VALIDATION_DATA_STORING_WARN"}, 
                     exportLink, "alignment.rdf");
             }
         );

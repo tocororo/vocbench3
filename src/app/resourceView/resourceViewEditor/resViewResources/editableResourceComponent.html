@@ -23,7 +23,7 @@
                 {{'RESOURCE_VIEW.ACTIONS.BULK_EDIT'|translate}}
             </a>
             <a *ngIf="isReplaceMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !editAuthorized || isInferred }" (click)="replace()">
-                {{'RESOURCE_VIEW.ACTIONS.REPLACE_WITH_EXISTING_RES'|translate}}
+                {{'ACTIONS.REPLACE_WITH_EXISTING_RES'|translate}}
             </a>
             <ng-container *ngIf="isXLabelMenuItemAvailable">
                 <a class="dropdown-item" [ngClass]="{ disabled: !spawnFromLabelAuthorized || isInferred }" (click)="spawnNewConceptWithLabel()">

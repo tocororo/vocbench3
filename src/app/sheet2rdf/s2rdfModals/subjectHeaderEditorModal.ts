@@ -140,7 +140,7 @@ export class SubjectHeaderEditorModal {
         //check that there are no additional PO pending
         for (let po of this.additionalPredObjs) {
             if (po.predicate == null || po.object == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "An incomplete additional predicate-object pair has been detected.", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_PRED_OBJ_PAIR"}, ModalType.warning);
                 return;
             }
         }
