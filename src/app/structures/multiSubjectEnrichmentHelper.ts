@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 import { Observable } from "rxjs";
 import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomForm, CustomFormValue } from "../models/CustomForms";
@@ -38,7 +39,7 @@ export class MultiSubjectEnrichmentHelper {
         private clsService: ClassesServices, private individualService: IndividualsServices, private manchService: ManchesterServices, 
         private ontolexService: OntoLexLemonServices, private propService: PropertyServices, private resourcesService: ResourcesServices, 
         private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private eventHandler: VBEventHandler
+        private eventHandler: VBEventHandler, private translateService: TranslateService
     ) {
         ResViewUtils.orderedResourceViewPartitions.forEach(p => {
             let properties: ARTURIResource[] = ResViewUtils.getPartitionKnownProperties(p);
@@ -70,12 +71,12 @@ export class MultiSubjectEnrichmentHelper {
         });
         
         if (subjects.length == 0) {
-            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "All the selected resources are not explicit, so they cannot be edited", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CANNOT_EDIT_NOT_EXPLICIT_RESOURCES"}, ModalType.warning);
             return;
         } else if (excludedSubject.length > 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, 
-                "Some of the selected resources are not explicit, they cannot be edited, so they will be not affected by the changes:\n" + 
-                excludedSubject.map(s => " - " + s.getShow()).join("\n"), ModalType.warning).then(
+            let msg = this.translateService.instant("MESSAGES.NOT_EXPLICIT_RESOURCES_NOT_AFFECTED_BY_CHANGES");
+            msg += ":\n" + excludedSubject.map(s => " - " + s.getShow()).join("\n");
+            this.basicModals.alert({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                 resp => {
                     this.selectProperty(subjects);
                 }
@@ -426,8 +427,7 @@ export class MultiSubjectEnrichmentHelper {
 
     private lexicalizationsHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
         if (predicate.equals(SKOS.prefLabel) || predicate.equals(SKOSXL.prefLabel)) {
-            this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "This operation is not allowed for the selected property. " + 
-                "Multiple resources cannot have the same " + predicate.getShow() + ".", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.MULTIVALUE_NOT_ALLOWED_FOR_PROPERTY", params:{property: predicate.getShow()}}, ModalType.warning);
             return;
         }
         if (predicate.getBaseURI() == SKOSXL.namespace) { //SKOSXL
@@ -527,10 +527,10 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private rangesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        //check if all the properties are of the same type
+        //check if all the properties are of the same type (e.g. all annotationProps, or all objectProps, datatypeProps...)
         for (let i = 0; i < subjects.length; i++) {
             if (subjects[i].getRole() != subjects[0].getRole()) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "The addition of the same range to multiple properties is not allowed on properties of different types", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CANNOT_ADD_SAME_RANGE_TO_DIFFERENT_PROP_TYPES"}, ModalType.warning);
                 return;
             }
         }
@@ -710,7 +710,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private unavailableOperation(predicate: ARTURIResource) {
-        this.basicModals.alert({key:"STATUS.ERROR"}, "Cannot enrich multiple subject with the same property-value for the predicate " + predicate.getShow());
+        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MULTIPLE_PROP_VALUE_NOT_ALLOWED_FOR_PROPERTY", params:{property: predicate.getShow()}});
     }
 
 

@@ -158,9 +158,8 @@ export abstract class AbstractTreeNode extends AbstractNode {
         if (!this.showDeprecated) {
             for (var i = 0; i < this.children.length; i++) {
                 if (this.children[i].getURI() == path[0].getURI() && this.children[i].isDeprecated()) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, "Node " + path[path.length-1].getShow() + 
-                        " is not reachable in the current tree since the path to reach it contains a deprecated node." +
-                        " Enable the show of deprecated resources and repeat the search", ModalType.warning);
+                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH", params:{resource: path[path.length-1].getShow()}},
+                        ModalType.warning);
                     return;
                 }
             }
@@ -176,15 +175,14 @@ export abstract class AbstractTreeNode extends AbstractNode {
         }
         //if this line is reached it means that the first node of the path has not been found
         if (this.context == TreeListContext.dataPanel) {
-            this.basicModals.confirm({key:"SEARCH.SEARCH"}, "Node " + path[path.length-1].getShow() + " is not reachable in the current tree. "
-                + "Do you want to open its ResourceView in a modal dialog?", ModalType.warning).then(
+            this.basicModals.confirm({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM", params:{resource: path[path.length-1].getShow()}}, ModalType.warning).then(
                 confirm => { 
                     this.sharedModals.openResourceView(path[path.length-1], false);
                 },
                 cancel => {}
             );
         } else {
-            this.basicModals.alert({key:"SEARCH.SEARCH"}, "Node " + path[path.length-1].getShow() + " is not reachable in the current tree.", ModalType.warning);
+            this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE", params:{resource: path[path.length-1].getShow()}}, ModalType.warning);
         }
     }
 

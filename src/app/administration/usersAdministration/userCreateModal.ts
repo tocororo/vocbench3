@@ -41,7 +41,7 @@ export class UserCreateModal {
         }
         //check password
         if (this.userForm.password != this.userForm.confirmedPassword) {
-            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.DIFFERENT_PASSWORD_AND_CONFIRMED"}, ModalType.warning);
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.PASSWORD_AND_CONFIRMED_INCONSISTENT"}, ModalType.warning);
             return;
         }
         //check IRI

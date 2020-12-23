@@ -66,8 +66,7 @@ export class LoadCustomSearchModal {
                     }
                 });
                 if (alreadyIn) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, "The stored parameterized SPARQL query '" + ref + 
-                        "' is already in the Stored Custom Search list. It will not be added", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.STORED_PARAMETERIZED_QUERY_ALREADY_ADDED", params:{ref: ref}}, ModalType.warning);
                     return;
                 }
 

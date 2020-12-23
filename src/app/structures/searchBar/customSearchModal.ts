@@ -52,7 +52,7 @@ export class CustomSearchModal {
                     if (properties[i].name == "relativeReference") {
                         let storedQueryReference: string = properties[i].value;
                         if (storedQueryReference == null) {
-                            this.basicModals.alert({key:"STATUS.ERROR"}, "The stored SPARQL query referenced by the selected custom search does not exist anymore.", ModalType.warning);
+                            this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.REFERENCED_SPARQL_QUERY_NOT_EXISTING"}, ModalType.warning);
                             this.cancel();
                             return;
                         }
@@ -93,7 +93,7 @@ export class CustomSearchModal {
         let filled: boolean = true;
         for (let key of Array.from(this.bindingsMap.keys())) {
             if (this.bindingsMap.get(key) == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, "Missing variable binding '" + key + "'", ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_VARIABLE_BINDING", params:{binding: key}}, ModalType.warning);
                 return;
             }
         }
@@ -103,7 +103,7 @@ export class CustomSearchModal {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found", ModalType.warning);
+                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND"}, ModalType.warning);
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
                     this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, searchResult.length + " results found.", searchResult, true).then(

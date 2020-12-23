@@ -105,7 +105,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found for '" + searchedText + "'", ModalType.warning);
+                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
                     return;
                 }
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);

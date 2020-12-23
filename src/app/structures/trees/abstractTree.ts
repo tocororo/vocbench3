@@ -180,15 +180,14 @@ export abstract class AbstractTree extends AbstractStruct {
 
     onTreeNodeNotFound(node: ARTURIResource) {
         if (this.context == TreeListContext.dataPanel) {
-            this.basicModals.confirm({key:"SEARCH.SEARCH"}, "Node " + node.getShow() + " is not reachable in the current tree. "
-                + "Do you want to open its ResourceView in a modal dialog?", ModalType.warning).then(
+            this.basicModals.confirm({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM", params:{resource: node.getShow()}}, ModalType.warning).then(
                 confirm => { 
                     this.sharedModals.openResourceView(node, false);
                 },
                 cancel => {}
             );
         } else {
-            this.basicModals.alert({key:"SEARCH.SEARCH"}, "Node " + node.getShow() + " is not reachable in the current tree.", ModalType.warning);
+            this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE", params:{resource: node.getShow()}}, ModalType.warning);
         }
         
     }

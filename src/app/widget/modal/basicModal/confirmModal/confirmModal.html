@@ -5,6 +5,6 @@
     <div [class]="alertClass" style="white-space: pre-line">{{message}}</div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">{{yesText}}</button>
-    <button class="btn btn-light btn-sm" (click)="close()">{{noText}}</button>
+    <button class="btn btn-sm btn-primary" (click)="ok()">{{'COMMONS.BOOLEAN.YES'|translate}}</button>
+    <button class="btn btn-sm btn-secondary" (click)="close()">{{'COMMONS.BOOLEAN.NO'|translate}}</button>
 </div>

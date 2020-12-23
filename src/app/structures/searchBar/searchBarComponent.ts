@@ -64,7 +64,7 @@ export class SearchBarComponent {
         if (this.searchStr != undefined && this.searchStr.trim() != "") {
             this.search.emit(this.searchStr);
         } else {
-            this.basicModals.alert({key:"SEARCH.SEARCH"}, "Please enter a valid string to search", ModalType.warning);
+            this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.ENTER_VALID_STRING_TO_SEARCH"}, ModalType.warning);
         }
     }
 

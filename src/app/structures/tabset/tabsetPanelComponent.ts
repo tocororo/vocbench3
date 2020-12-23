@@ -285,7 +285,7 @@ export class TabsetPanelComponent {
                 this.sharedModals.openResourceView(resource, false);    
             }
         } else { //BNode are not in trees or lists => open in modal
-            this.basicModals.alert({key:"SEARCH.SEARCH"}, "The resoruce " + resource.getShow() + " cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog", ModalType.warning).then(
+            this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_FOCUSABLE_RES_VIEW_MODAL", params:{resource: resource.getShow()}}, ModalType.warning).then(
                 () => {
                     this.sharedModals.openResourceView(resource, false);
                 }
@@ -315,7 +315,7 @@ export class TabsetPanelComponent {
                     }
                 });
             } else { //if not visible, open resource in modal
-                this.basicModals.alert({key:"SEARCH.SEARCH"}, "The resoruce " + resource.getShow() + " cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog", ModalType.warning).then(
+                this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_FOCUSABLE_RES_VIEW_MODAL", params:{resource: resource.getShow()}}, ModalType.warning).then(
                     () => {
                         this.sharedModals.openResourceView(resource, false);
                     }

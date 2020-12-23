@@ -35,7 +35,7 @@ export class ChangePasswordModal {
     ok() {
         this.userService.changePassword(VBContext.getLoggedUser().getEmail(), this.oldPwd, this.newPwd).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Your password has been succesfully changed. Now you will be logged out.").then(
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PASSWORD_CHANGED_LOGGING_OUT"}).then(
                     () => {
                         this.authService.logout().subscribe(
                             () => {

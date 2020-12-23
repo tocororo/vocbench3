@@ -199,7 +199,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 this.visualizationMode = projPref.conceptTreePreferences.visualization;
                 if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
                     if (searchResult.length == 0) {
-                        this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found for '" + searchedText + "'", ModalType.warning);
+                        this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
@@ -214,7 +214,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     }
                 } else { //searchBased
                     if (searchResult.length == 0) {
-                        this.basicModals.alert({key:"SEARCH.SEARCH"}, "No results found for '" + searchedText + "'", ModalType.warning);
+                        this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
                     }
                     this.viewChildTree.forceList(searchResult);
                 }

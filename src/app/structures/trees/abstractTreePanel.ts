@@ -42,7 +42,7 @@ export abstract class AbstractTreePanel extends AbstractPanel {
 
     executeAction(act: ActionDescription, role?: RDFResourceRolesEnum) {
         if (act.conditions.pre.selectionRequired && act.conditions.pre.childlessRequired && this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
-            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, "The operation cannot be done on node with children. Please delete the children nodes and then retry", ModalType.warning);
+            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.OPERATION_DENIED_ON_NODE_WITH_CHILDREN"}, ModalType.warning);
             return;
         }
         act.function(this.getActionContext(role), this.selectedNode).subscribe(

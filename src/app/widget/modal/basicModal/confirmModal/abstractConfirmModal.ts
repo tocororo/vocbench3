@@ -8,8 +8,6 @@ export abstract class AbstractConfirmModal implements OnInit {
     @Input() title: string;
     @Input() message: string;
     @Input() type: ModalType;
-    @Input() yesText: string = 'Yes';
-    @Input() noText: string = 'No';
 
     titleClass: string;
     alertClass: string;
