@@ -99,8 +99,7 @@ export class AdvancedGraphApplicationModal {
             let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
             //TODO allow to forcing the deletion a referenced node or not allow at all? 
             if (referenced) { //cannot delete a node used by a graph application
-                this.basicModals.confirm({key:"ACTIONS.DELETE_NODE"}, "Warning: the node '" + this.selectedNode.nodeId + "' is used in one or more graph application. " +
-                    "This operation will affect also the graph application. Do you want to continue?", ModalType.warning).then(
+                this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM"}, ModalType.warning).then(
                     confirm => {
                         this.removeNodeImpl();
                     },

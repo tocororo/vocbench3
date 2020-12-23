@@ -37,8 +37,7 @@ export class Sheet2RdfSettingsModal {
             this.fsNamingStrategy.strategy != this.fsNamingStrategyInput
             // || this.useHeader != this.context.useHeader
         ) {
-            this.basicModals.confirm({key:"SHEET2RDF.SETTINGS.S2RDF_SETTINGS"}, "Warning: Changing the settings requires to re-initialize the model related to the current spreadsheet." +
-                " All the changes applied to the headers will be discarder. Do you want to continue?", ModalType.warning).then(
+            this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.CHANGE_S2RDF_SETTINGS_CONFIRM"}, ModalType.warning).then(
                 confirm => {
                     let updateSettingsFn: Observable<any>[] = [];
                     if (this.fsNamingStrategy.strategy != this.fsNamingStrategyInput) {

@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 import { forkJoin } from 'rxjs';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
 import { UIUtils } from "../../utils/UIUtils";
-import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
@@ -21,9 +21,10 @@ export class NoTopConceptSchemeComponent {
 
     brokenSchemeList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBProperties,
+    constructor(private icvService: IcvServices, private skosService: SkosServices,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices,
-        private creationModals: CreationModalServices, private sharedModals: SharedModalServices) { }
+        private creationModals: CreationModalServices, private sharedModals: SharedModalServices,
+        private translateService: TranslateService) { }
 
     /**
      * Run the check
@@ -67,7 +68,8 @@ export class NoTopConceptSchemeComponent {
                     },
                     (err: Error) => {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
-                            this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
+                            let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                            this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                 confirm => {
                                     this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
                                         stResp => {
@@ -89,8 +91,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by deleting it 
      */
     deleteScheme(scheme: ARTURIResource) {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_SCHEME"}, "Warning, deleting this scheme, if it contains some concepts, " +
-            "will generate concepts in no scheme. Are you sure to proceed?").then(
+        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.DELETE_SCHEME_WITHOUT_TOP_WARN_CONFIRM"}).then(
             result => {
                 this.skosService.deleteConceptScheme(scheme).subscribe(
                     stResp => {
@@ -106,8 +107,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes schemes by deleting them all 
      */
     deleteAllScheme() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_SCHEME"}, "Warning, deleting the schemes, if they contain some concepts, " +
-            "will generate concepts in no scheme. Are you sure to proceed?").then(
+        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.DELETE_SCHEMES_WITHOUT_TOP_WARN_CONFIRM"}).then(
             confirm => {
                 var deleteSchemeFnArray: any[] = [];
                 deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteConceptScheme(sc));

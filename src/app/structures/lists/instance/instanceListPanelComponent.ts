@@ -175,8 +175,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
         } else {
             if (types.length == 1) {
                 return from(
-                    this.basicModals.confirm({key:"SEARCH.SEARCH"}, "Searched instance " + individual.getShow() + " belong to a class currently not selected " + 
-                        types[0].getShow() + ". Do you want to switch class?").then(
+                    this.basicModals.confirm({key:"SEARCH.SEARCH"}, {key:"MESSAGES.SWITCH_CLASS_FOR_SEARCHED_INSTANCE_CONFIRM", params:{cls: types[0].getShow()}}, ModalType.warning).then(
                         () => { //confirmed => switch class
                             return types[0];
                         },
@@ -187,8 +186,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                 );
             } else { //multiple types
                 return from(
-                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, "Searched instance " + individual.getShow() + 
-                        " belong to the following classes. If you want to complete the search, select one of them and confirm", types, this.rendering).then(
+                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.SWITCH_CLASS_FOR_SEARCHED_INSTANCE_SELECT"}, types, this.rendering).then(
                         res => { //selected => switch class
                             return res;
                         },

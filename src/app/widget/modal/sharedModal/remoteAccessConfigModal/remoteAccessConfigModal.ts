@@ -42,7 +42,7 @@ export class RemoteAccessConfigModal {
     }
 
     private deleteConfig(c: RemoteRepositoryAccessConfig) {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_CONFIGURATION"}, "You are deleting the configuration. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_CONFIGURATION"}, {key:"MESSAGES.DELETE_CONFIG_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.savedConfigs.splice(this.savedConfigs.indexOf(c), 1);
                 this.updateConfigurations();

@@ -108,8 +108,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
             this.basicModals.alert({key:"ACTIONS.DELETE_PROJECT"}, {key:"MESSAGES.PROJECT_OPEN_CLOSE_AND_RETRY"}, ModalType.warning);
             return;
         } else {
-            this.basicModals.confirm({key:"ACTIONS.DELETE_PROJECT"}, "Warning, this operation will delete the project " +
-                project.getName() + ". Are you sure to proceed?", ModalType.warning).then(
+            this.basicModals.confirm({key:"ACTIONS.DELETE_PROJECT"}, {key:"MESSAGES.DELETE_PROJECT_CONFIRM", params:{project: project.getName()}}, ModalType.warning).then(
                 result => {
                     //retrieve the remote repositories referenced by the deleting project (this must be done before the deletion in order to prevent errors)
                     this.projectService.getRepositories(project, true).subscribe(
@@ -194,9 +193,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     openACLModal() {
         if (this.projectList.length > 50) {
-            this.basicModals.confirm({key:"PROJECTS.ACL.ACL_MATRIX"}, "Warning: there are a lot of projects (" + this.projectList.length + "), " +
-                "thus the ACL matrix might be slow to load and hardly readable. Do you want to continue anyway?\n\n" +
-                "Alternatively the ACL for a specific project is available from the related action menu, 'Edit ACL' entry.", ModalType.warning).then(
+            this.basicModals.confirm({key:"PROJECTS.ACL.ACL_MATRIX"}, {key:"MESSAGES.ACL_TOO_MUCH_PROJ_CONFIRM", params:{projCount: this.projectList.length}}, ModalType.warning).then(
                 () => { //confirmed
                     this.openACLMatrix();
                 },
@@ -256,9 +253,8 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
             newName => {
                 if (newName != directory) {
                     if (this.projectDirs.some(pd => pd.dir == newName)) { //name changed, but a directory with the same name already exists
-                        this.basicModals.confirm({key:"ACTIONS.RENAME_PROJECT_DIRECTORY"}, "Warning: a project directory named '" + newName + 
-                            "' already exists. You will move there all the projects contained in directory '" + directory + 
-                            "'. Do you want to continue?", ModalType.warning).then(
+                        this.basicModals.confirm({key:"ACTIONS.RENAME_PROJECT_DIRECTORY"}, 
+                        {key:"MESSAGES.ALREADY_EXISTING_PROJ_DIR_CONFIRM", params:{targetDirName: newName, sourceDirName: directory}}, ModalType.warning).then(
                             () => { //confirmed => apply rename
                                 this.projectService.renameProjectFacetDir(directory, newName).subscribe(
                                     () => {

@@ -52,7 +52,7 @@ export class InvokableReportersPageComponent {
     }
 
     deleteReporter() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_INVOKABLE_REPORT"}, "You are deleting the Invokable Reporter '" + this.selectedReporter.identifier + "'. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_INVOKABLE_REPORT"}, {key:"MESSAGES.DELETE_INVOKABLE_REPORT_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.invokableReporterService.deleteInvokableReporter(this.selectedReporter.relativeReference).subscribe(
                     () => {

@@ -157,10 +157,8 @@ export class NamespacesAndImportsComponent {
     applyNamespaceBaseURI() {
         this.nsBaseURISubmitted = true;
         if (this.isBaseURIValid() && this.isNamespaceValid()) {
-            var message = "Save change of ";
             if (this.baseURI != this.pristineBaseURI && this.namespace != this.pristineNamespace) {//changed both baseURI and namespace
-                message += "baseURI and namespace? (Attention, baseURI refactoring could be a long process)";
-                this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, message, ModalType.warning).then(
+                this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.SAVE_BASEURI_NS_CHANGE_CONFIRM"}, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
@@ -185,8 +183,7 @@ export class NamespacesAndImportsComponent {
                     }
                 );
             } else if (this.baseURI != this.pristineBaseURI) { //changed only baseURI
-                message += "baseURI? (Attention, baseURI refactoring could be a long process)";
-                this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, message, ModalType.warning).then(
+                this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.SAVE_BASEURI_CHANGE_CONFIRM"}, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.refactorService.replaceBaseURI(this.baseURI).subscribe(
@@ -205,8 +202,7 @@ export class NamespacesAndImportsComponent {
                     }
                 )
             } else if (this.namespace != this.pristineNamespace) {//changed only namespace
-                message += "namespace?";
-                this.basicModals.confirm({key:"ACTIONS.SAVE_CHANGES"}, message, ModalType.warning).then(
+                this.basicModals.confirm({key:"ACTIONS.SAVE_CHANGES"}, {key:"MESSAGES.SAVE_NS_CHANGE_CONFIRM"}, ModalType.warning).then(
                     confirm => {
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
                             stResp => {

@@ -68,11 +68,7 @@ export class ModelGraphComponent extends AbstractGraph {
                     let links: Link[] = this.convertModelToLinks(graphModel);
 
                     if (links.length > this.linkLimit) {
-                        this.basicModals.confirm({key:"GRAPHS.GRAPH"}, "The graph you're trying to show has an high number of relations (" + links.length + "). " +
-                            "A performance decrease could be experienced with a growing amount of visual elements in the graph. " +
-                            "Do you want to show the graph anyway?\n\n" +
-                            "Alternatively it is available an 'incremental' explorable model-oriented graph " +
-                            "(from the Class-tree: select a resource, then from the contextual menu 'Show model graph rooted on the selected node').",
+                        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.TOO_MUCH_LINKS_GRAPH_WARN_CONFIRM", params:{relCount: links.length}},
                             ModalType.warning
                         ).then(
                             confirm => {

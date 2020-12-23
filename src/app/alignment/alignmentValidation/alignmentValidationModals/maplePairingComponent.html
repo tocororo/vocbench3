@@ -8,23 +8,23 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td class="text-right" nowrap><label>{{'MODESL.MAPLE.PAIRING.SOURCE'|translate}}:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.PAIRING.SOURCE'|translate}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="pairing.source.lexicalizationSet" readonly></td>
                 </tr>
                 <tr>
-                    <td class="text-right" nowrap><label>{{'MODESL.MAPLE.PAIRING.TARGET'|translate}}:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.PAIRING.TARGET'|translate}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="pairing.target.lexicalizationSet" readonly></td>
                 </tr>
                 <tr>
-                    <td class="text-right" nowrap><label>{{'MODESL.MAPLE.PAIRING.SCORE'|translate}}:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.PAIRING.SCORE'|translate}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="pairing.score" readonly></td>
                 </tr>
                 <tr>
-                    <td class="text-right" nowrap><label>{{'MODESL.MAPLE.PAIRING.BEST_COMBINED_SCORE'|translate}}:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.PAIRING.BEST_COMBINED_SCORE'|translate}}:</label></td>
                     <td><input class="form-control form-control-sm" [ngModel]="pairing.bestCombinedScore" readonly></td>
                 </tr>
                 <tr>
-                    <td class="text-right" nowrap><label>{{'MODESL.MAPLE.PAIRING.SYNONYMIZER'|translate}}:</label></td>
+                    <td class="text-right" nowrap><label>{{'MODELS.MAPLE.PAIRING.SYNONYMIZER'|translate}}:</label></td>
                     <td>
                         <select class="form-control form-control-sm" [(ngModel)]="selectedSynonymizer" (ngModelChange)="onSynonimizerChanged()"
                             [title]="'conceptualizationSet: ' + selectedSynonymizer?.conceptualizationSet + '\nlexicon: ' + selectedSynonymizer?.lexicon">

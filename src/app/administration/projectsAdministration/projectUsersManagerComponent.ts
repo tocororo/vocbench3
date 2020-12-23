@@ -163,7 +163,8 @@ export class ProjectUsersManagerComponent {
     }
 
     removeUserFromProject() {
-        this.basicModals.confirm({key:"ACTIONS.REMOVE_USER"}, "You are removing the user " + this.selectedUser.getShow() + " form the project " + this.project.getName() + ". Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.REMOVE_USER"}, {key:"MESSAGES.REMOVE_USER_FROM_PROJ_CONFIRM", params:{user: this.selectedUser.getShow(), project: this.project.getName()}},
+            ModalType.warning).then(
             () => {
                 this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
                     stResp => {
@@ -191,9 +192,8 @@ export class ProjectUsersManagerComponent {
             projects => {
                 this.basicModals.select({key:"ACTIONS.DUPLICATE_SETTINGS"}, "Select the target project", projects.map(p => p.getName())).then(
                     targetProj => {
-                        this.basicModals.confirm({key:"ACTIONS.DUPLICATE_SETTINGS"}, "With this operation you will overwrite any roles, group, languages " + 
-                            "and ResourceView template assigned to " + this.selectedUser.getShow() + " in the target project '" + targetProj + 
-                            "'. Are you sure?\n\nNote: the project-level roles will not be cloned", ModalType.warning).then(
+                        this.basicModals.confirm({key:"ACTIONS.DUPLICATE_SETTINGS"}, {key:"MESSAGES.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM", params:{user: this.selectedUser.getShow(), project: targetProj}},
+                            ModalType.warning).then(
                             () => {
                                 //clone binding-related settings (roles, group, language)
                                 let userIri: ARTURIResource = new ARTURIResource(this.selectedUser.getIri());

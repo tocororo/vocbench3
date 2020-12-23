@@ -50,7 +50,7 @@ export class MetadataPatternLibraryModal {
     }
 
     deletePattern() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_PATTERN"}, "You are deleting the Metadata Pattern '" + this.selectedPattern.name + "' from the library. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_PATTERN"}, {key:"MESSAGES.DELETE_SHARED_METADATA_PATTERN_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
                     () => {
@@ -90,7 +90,7 @@ export class MetadataPatternLibraryModal {
         if (this.patternToShare != null) { //sharing pattern => store the same pattern at system level
             //check if there is another shared pattern with the given name
             if (this.patterns.some(p => p.name == this.name)) {
-                this.basicModals.confirm(this.title, "A shared Pattern with the same name already exists. It will be replaced. Do you want to continue?", ModalType.warning).then(
+                this.basicModals.confirm(this.title, {key:"MESSAGES.REPLACE_SHARED_METADATA_PATTERN_CONFIRM"}, ModalType.warning).then(
                     () => this.storePatternInLibraryImpl(),
                     () => {}
                 )
@@ -100,7 +100,7 @@ export class MetadataPatternLibraryModal {
         } else { //import shared pattern => clone the same pattern at project level
             //check if there is another project pattern with the same name
             if (this.existinPatterns.some(p => p.name == this.name)) {
-                this.basicModals.confirm(this.title, "A Pattern with the same name already exists. It will be replaced. Do you want to continue?", ModalType.warning).then(
+                this.basicModals.confirm(this.title, {key:"MESSAGES.REPLACE_METADATA_PATTERN_CONFIRM"}, ModalType.warning).then(
                     () => this.importPatternImpl(),
                     () => {}
                 )

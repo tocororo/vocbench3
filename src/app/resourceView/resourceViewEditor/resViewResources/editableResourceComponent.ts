@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ShowInterpretation } from "../../../models/ARTResources";
 import { Language, Languages } from "../../../models/LanguagesCountries";
@@ -74,7 +75,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
         private manchesterService: ManchesterServices, private refactorService: RefactorServices, private skosService: SkosServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices, 
-        private rvModalService: ResViewModalServices, private dtValidator: DatatypeValidator) {
+        private rvModalService: ResViewModalServices, private dtValidator: DatatypeValidator,
+        private translateService: TranslateService) {
         super();
     }
 
@@ -347,9 +349,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     let newValue: ARTNode = this.parseEditedValue();
                     //check consistency of the new value
                     if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
-                        let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
-                            + ". The change may cause an inconsistency. Do you want to apply the change? ";
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, warningMsg, ModalType.warning).then(
+                        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params:{property: this.predicate.getShow()}},
+                            ModalType.warning).then(
                             confirm => {
                                 this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
                                     stResp => this.update.emit()
@@ -358,7 +359,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             reject => { this.cancelEdit(); }
                         );
                     } else {
-                        this.basicModals.confirm({key:"RESOURCE_VIEW_ACTIONS.BULK_EDIT"}, "Warning. You are updating the value for every resource that has this predicate-value relation. Are you sure?").then(
+                        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.BULK_EDIT_CONFIRM"}).then(
                             () => {
                                 this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
                                     stResp => this.update.emit()
@@ -379,9 +380,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         let newValue: ARTNode = this.parseEditedValue();
                         //check consistency of the new value
                         if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
-                            let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
-                                + ". The change may cause an inconsistency. Do you want to apply the change?";
-                            this.basicModals.confirm({key:"STATUS.WARNING"}, warningMsg, ModalType.warning).then(
+                            this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params:{property: this.predicate.getShow()}}, 
+                                ModalType.warning).then(
                                 confirm => { this.updateTriple(this.subject, this.predicate, this.resource, newValue); },
                                 reject => { this.cancelEdit(); }
                             );
@@ -580,7 +580,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             },
                             (err: Error) => {
                                 if (err.name.endsWith("AlreadyExistingLiteralFormForResourceException")) {
-                                    this.basicModals.confirm({key:"STATUS.OPERATION_DENIED"}, err.message + ". Do you want to force the operation?", ModalType.warning).then(
+                                    let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                                    this.basicModals.confirm({key:"STATUS.OPERATION_DENIED"}, msg, ModalType.warning).then(
                                         confirm => {
                                             this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept, true).subscribe(
                                                 stResp => {
@@ -625,7 +626,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
     //====== "Delete" HANDLER =====
 
     private bulkDelete() {
-        this.basicModals.confirm({key:"RESOURCE_VIEW_ACTIONS.BULK_DELETE"}, "Warning. You are deleting the value for every resource that has this predicate-value relation. Are you sure?").then(
+        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.BULK_DELETE_CONFIRM"}).then(
             () => {
                 this.resourcesService.removePredicateObject(this.predicate, this.resource).subscribe(
                     stResp => {

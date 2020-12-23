@@ -37,9 +37,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.basicModals.confirm({key:"ACTIONS.ADD_MEMBER"}, "It is not recommended to edit the member list from this section. There are no checks"
-                + " on the rdf:_n predicate so you could compromise the integrity of the list."
-                + " Do you want to continue?", ModalType.warning).then(
+            this.basicModals.confirm({key:"ACTIONS.ADD_MEMBER"}, {key:"MESSAGES.EDIT_RDF_MEMBER_WARN_CONFIRM"}, ModalType.warning).then(
                 confirm => {
                     this.resViewModals.addRdfsMembers(predicate, propChangeable).then(
                         (data: RdfsMembersModalReturnData) => {
@@ -66,9 +64,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         //warning message only when deleting members of lexical entry
         if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.basicModals.confirm({key:"ACTIONS.DELETE_MEMBER"}, "Deleting a single member of an ordered constituent list could compromise the integrity of the members section."
-                + " If you want to edit the members, it is highly recommended to add a new constituent list from the constituents section."
-                + " Do you want to confirm the deletion?", ModalType.warning).then(
+            this.basicModals.confirm({key:"ACTIONS.DELETE_MEMBER"}, {key:"MESSAGES.DELETE_RDF_MEMBER_WARN_CONFIRM"}, ModalType.warning).then(
                 confirm => {
                     this.getRemoveFunction(predicate, object).subscribe(
                         stResp => {

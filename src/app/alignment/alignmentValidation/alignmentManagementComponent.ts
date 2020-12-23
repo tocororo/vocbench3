@@ -3,7 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Observable, of } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { ConfirmCheckOptions } from 'src/app/widget/modal/basicModal/confirmModal/confirmCheckModal';
-import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { ModalOptions, ModalType, Translation } from 'src/app/widget/modal/Modals';
 import { AlignmentCell, AlignmentOverview, AlignmentRelationSymbol } from '../../models/Alignment';
 import { ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, ResourcePosition } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
@@ -273,8 +273,7 @@ export class AlignmentManagementComponent {
     private changeRelation(cell: AlignmentCell, relation: string) {
         //change relation only if user choses a relation different from the current
         if (cell.getRelation() != relation) {
-            this.basicModals.confirm({key:"ACTIONS.CHANGE_RELATION"},
-                "Manually changing the relation will set automatically the measure of the alignment to 1.0. Do you want to continue?",
+            this.basicModals.confirm({key:"ACTIONS.CHANGE_RELATION"}, {key:"MESSAGES.ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM"},
                 ModalType.warning).then(
                 (confirm: any) => {
                     this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
@@ -443,18 +442,18 @@ export class AlignmentManagementComponent {
      * Listener to "Apply to dataset/Edoal linkset" button
      */
     applyValidation() {
-        let message: string;
+        let message: Translation;
         if (this.isEdoal) {
             if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "ask") {
-                message = "This operation will add the accepted alignment to the EDOAL linkset. Are you sure to continue?";
+                message = {key:"MESSAGES.ADD_ALIGNMENT_TO_EDOAL_CONFIRM"};
             } else {
-                message = "This operation will add the accepted alignment to the EDOAL linkset and will delete those rejected. Are you sure to continue?";
+                message = {key:"MESSAGES.ADD_DELETE_ALIGNMENT_TO_EDOAL_CONFIRM"};
             }
         } else {
             if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "ask") {
-                message = "This operation will add to the ontology the triples of the accepted alignments. Are you sure to continue?";
+                message = {key:"MESSAGES.ADD_ALIGNMENT_TO_ONTO_CONFIRM"};
             } else {
-                message = "This operation will add to the ontology the triples of the accepted alignments and delete the triples of the ones rejected. Are you sure to continue?";
+                message = {key:"MESSAGES.ADD_DELETE_ALIGNMENT_TO_ONTO_CONFIRM"};
             }
         }
 

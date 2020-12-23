@@ -64,9 +64,7 @@ export class RemoteSystemConfigurationsAdministration {
     }
 
     deleteConfig(config: RemoteAlignmentServiceConfigurationDef) {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_CONFIGURATION"}, "You are going to delete configuration '" + config.id +
-            "'. If this configuration is used in a project, by deleting it you could prevent the Remote Alignment System from working. " + 
-            "Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_CONFIGURATION"}, {key:"MESSAGES.DELETE_REMOTE_ALIGN_SYS_CONFIG_CONFIRM", params:{config: config.id}}, ModalType.warning).then(
             () => {
                 this.remoteAlignmentService.deleteRemoteAlignmentService(config.id).subscribe(
                     () => {

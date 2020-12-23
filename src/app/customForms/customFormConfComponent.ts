@@ -150,7 +150,7 @@ export class CustomFormConfigComponent {
     }
 
     deleteFormCollection() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_FORM_COLLECTION"}, "You are deleting Form Collection " + this.selectedFormColl.getId() + ". Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_FORM_COLLECTION"}, {key:"MESSAGES.DELETE_FORM_COLLECTION_CONFIRM"}, ModalType.warning).then(
             confirm => {
                 this.customFormsService.deleteFormCollection(this.selectedFormColl.getId()).subscribe(
                     stResp => {
@@ -292,8 +292,7 @@ export class CustomFormConfigComponent {
                         () => { }
                         );
                 } else { //selectedCustomForm does not belong to any FormCollection
-                    this.basicModals.confirm({key:"ACTIONS.DELETE_CUSTOM_FORM"}, "You are deleting CustomForm " + this.selectedCustomForm.getId() +
-                        ". Are you sure?", ModalType.warning).then(
+                    this.basicModals.confirm({key:"ACTIONS.DELETE_CUSTOM_FORM"}, {key:"MESSAGES.DELETE_CUSTOM_FORM_CONFIRM"}, ModalType.warning).then(
                         confirm => {
                             this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId()).subscribe(
                                 stResp => {

@@ -83,11 +83,11 @@
                             <lang-item [language]="p.language" size="lg" [showName]="false"></lang-item>
                             <div style="margin-left: 10px;">
                                 <div class="text-center">
-                                    <span>{{'MODESL.MAPLE.PAIRING.SCORE'|translate}}:</span>
+                                    <span>{{'MODELS.MAPLE.PAIRING.SCORE'|translate}}:</span>
                                     <b [title]="p.score">{{p.scoreRound}}</b>
                                 </div>
                                 <div class="text-center">
-                                    <span>{{'MODESL.MAPLE.PAIRING.BEST_COMBINED_SCORE'|translate}}:</span>
+                                    <span>{{'MODELS.MAPLE.PAIRING.BEST_COMBINED_SCORE'|translate}}:</span>
                                     <b [title]="p.bestCombinedScore">{{p.bestCombinedScoreRound}}</b>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                                         <i style="margin-left: 12px;">{{s.lexiconDataset['@id']}}</i>
                                     </ng-template>
                                     <div style="margin-left: 10px;">
-                                        {{'MODESL.MAPLE.PAIRING.SCORE'|translate}}: <b [title]="s.score">{{s.scoreRound}}</b>
+                                        {{'MODELS.MAPLE.PAIRING.SCORE'|translate}}: <b [title]="s.score">{{s.scoreRound}}</b>
                                     </div>
                                     <button class="btn btn-light btn-xs" style="margin-left: 12px;" (click)="describeSynonymizer(s)" [title]="'COMMONS.DETAILS'|translate">
                                         <span class="fas fa-info-circle"></span>

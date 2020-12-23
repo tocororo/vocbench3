@@ -1,4 +1,5 @@
 import { ElementRef } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 import { Observable, Observer } from "rxjs";
 import { ARTURIResource } from "../models/ARTResources";
 import { OntoLex, OWL, RDFS, SKOS } from "../models/Vocabulary";
@@ -255,7 +256,7 @@ export class VBActionFunctions {
 
     constructor(private skosService: SkosServices, private classesService: ClassesServices, private propertyService: PropertyServices,
         private ontolexService: OntoLexLemonServices, private datatypeService: DatatypesServices, private resourceService: ResourcesServices,
-        private basicModals: BasicModalServices, private creationModals: CreationModalServices) {
+        private basicModals: BasicModalServices, private creationModals: CreationModalServices, private translateService: TranslateService) {
 
         this.actionsFunctionMap = new Map([
             //cls
@@ -368,7 +369,8 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
@@ -383,7 +385,8 @@ export class VBActionFunctions {
                                     }
                                 );
                             } else if (err.name.endsWith('BlacklistForbiddendException')) {
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         HttpServiceContext.setContextForce(true);
@@ -422,7 +425,8 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, data.broaderProp, data.cfValue, false).subscribe(
@@ -471,7 +475,8 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue, false).subscribe(
@@ -505,8 +510,7 @@ export class VBActionFunctions {
                             },
                         );
                     } else {
-                        this.basicModals.confirm({key: "ACTIONS.DELETE_SCHEME"}, "The scheme is not empty. Deleting it will produce dangling concepts."
-                            + " Are you sure to continue?", ModalType.warning).then(
+                        this.basicModals.confirm({key: "ACTIONS.DELETE_SCHEME"}, {key:"MESSAGES.NOT_EMPTY_SCHEME_DANGLING_CONCEPT_WARN_CONFIRM"}, ModalType.warning).then(
                             confirm => {
                                 UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                 this.skosService.deleteConceptScheme(deletingResource).subscribe(
@@ -718,7 +722,8 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                     confirm => {
                                         this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
                                             stResp => {
@@ -750,7 +755,8 @@ export class VBActionFunctions {
                             },
                             (err: Error) => {
                                 if (err.name.endsWith('PrefAltLabelClashException')) {
-                                    this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
+                                    let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                         confirm => {
                                             this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue, false).subscribe(
                                                 stResp => {

@@ -160,7 +160,7 @@ export class PartitionFilterEditor {
      * Restore to visible all the partitions for all the roles
      */
     reset() {
-        this.basicModals.confirm({key:"ACTIONS.ENABLE_ALL"}, "All the partitions will be set visible for all the available resource types. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.ENABLE_ALL"}, {key:"MESSAGES.ENABLE_ALL_PARTITIONS_IN_ALL_TYPES_CONFIRM"}, ModalType.warning).then(
             confirm => {
                 this.rolePartitionsStructs.forEach(rps => {
                     rps.partitions.forEach(p => {

@@ -1,4 +1,5 @@
 import { Component, SimpleChanges } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 import { from, Observable, of } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import { ModalType } from 'src/app/widget/modal/Modals';
@@ -46,7 +47,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         private skosService: SkosServices, private skosxlService: SkosxlServices, private propService: PropertyServices,
         private resViewService: ResourceViewServices, private ontolexService: OntoLexLemonServices,
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices,
-        private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper) {
+        private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper, private translateService: TranslateService) {
         super(resourcesService, cfService, basicModals, resViewModals);
     }
 
@@ -252,7 +253,8 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 if (errors.length == 1) { //if only one error, try to handle it
                     let err: Error = errors[0].error;
                     if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the creation?", ModalType.warning).then(
+                        let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                        this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                             confirm => {
                                 this.lexicalizationEnrichmentHelper.getAddLabelFn(
                                     <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, cls, 

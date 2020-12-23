@@ -56,9 +56,7 @@ export class UmlGraphComponent extends AbstractGraph {
                 this.updateForces(f);
                 let graph = this.convertModelToGraph(graphModel);
                 if (graph.nodes.length > this.nodeLimit) {
-                    this.basicModals.confirm({key:"GRAPHS.GRAPH"}, "The graph you're trying to show has an high number of nodes (" + graph.nodes.length + "). " +
-                        "A performance decrease could be experienced with a growing amount of visual elements in the graph. " +
-                        "Do you want to show the graph anyway?",
+                    this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.TOO_MUCH_NODES_GRAPH_WARN_CONFIRM", params:{nodesCount: graph.nodes.length}},
                         ModalType.warning
                     ).then(
                         confirm => {

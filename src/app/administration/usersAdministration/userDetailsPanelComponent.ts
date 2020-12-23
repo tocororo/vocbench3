@@ -103,8 +103,7 @@ export class UserDetailsPanelComponent {
     }
 
     private deleteUser() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_USER"}, "You are deleting user "
-            + this.user.getShow() + ". Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_USER"}, {key:"MESSAGES.DELETE_USER_CONFIRM", params:{user: this.user.getShow()}}, ModalType.warning).then(
             () => {
                 this.userService.deleteUser(this.user.getEmail()).subscribe(
                     () => {

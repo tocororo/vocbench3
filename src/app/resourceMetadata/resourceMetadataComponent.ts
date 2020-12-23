@@ -76,11 +76,11 @@ export class ResourceMetadataComponent {
 
     deletePattern() {
         let patternUsed: boolean = this.associations.some(a => a.pattern.reference == this.selectedPattern.reference);
-        let message: string = "You are deleting the pattern " + this.selectedPattern.name + ".\n";
+        let message: string = this.translateService.instant("MESSAGES.DELETE_METADATA_PATTERN_CONFIRM.DELETING") + ".\n";
         if (patternUsed) {
-            message += "Note: the Metadata Pattern is used in one (or more) association. By deleting the pattern, the association(s) will be deleted as well.\n"
+            message += this.translateService.instant("MESSAGES.DELETE_METADATA_PATTERN_CONFIRM.USED_IN_ASSOCIATION") + ".\n";
         }
-        message += "Do you want to continue?";
+        message += this.translateService.instant("MESSAGES.DELETE_METADATA_PATTERN_CONFIRM.CONTINUE");
         this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_PATTERN"}, message, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
@@ -191,8 +191,7 @@ export class ResourceMetadataComponent {
     }
 
     deleteAssociation() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_ASSOCIATION"}, "You are deleting the association between '" + this.selectedAssociation.role + 
-            "' and '" + this.selectedAssociation.pattern.reference + "'. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_ASSOCIATION"}, {key:"MESSAGES.DELETE_METADATA_PATTERN_ASSOCIATION_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deleteAssociation(this.selectedAssociation.ref).subscribe(
                     () => this.initAssociations()

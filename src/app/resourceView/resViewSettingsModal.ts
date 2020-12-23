@@ -50,8 +50,7 @@ export class ResViewSettingsModal {
     }
 
     setUserDefault() {
-        this.basicModals.confirm({key: "ACTIONS.SET_AS_DEFAULT"}, "You are setting the current template as default configuration for all the projects. Are you sure?",
-            ModalType.warning).then(
+        this.basicModals.confirm({key: "ACTIONS.SET_AS_DEFAULT"}, {key:"MESSAGES.SET_DEFAULT_TEMPLATE_FOR_ALL_PROJ_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.prefService.setPUSettingUserDefault(Properties.pref_res_view_partition_filter, VBContext.getLoggedUser().getEmail(),
                     JSON.stringify(this.template)).subscribe();
@@ -65,8 +64,7 @@ export class ResViewSettingsModal {
      * Reset the preference to the default, namely remove set the PUSettings, so if there is a default it is retrieved through the fallback
      */
     restoreDefault() {
-        this.basicModals.confirm({key:"ACTIONS.RESTORE_DEFAULT"}, "You are overriding the current template by restoring the default configuration. Are you sure?",
-            ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.RESTORE_DEFAULT"}, {key:"MESSAGES.RESTORE_DEFAULT_TEMPLATE_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, null).subscribe(
                     () => {

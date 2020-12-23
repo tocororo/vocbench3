@@ -148,8 +148,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
     private profileProject(project: Project, datasetPosition: DatasetPosition): Observable<boolean> {
         return from(
             this.basicModals.confirm({key:"ALIGNMENT.VALIDATION.REMOTE_SYS.CREATE_TASK.METADATA_PROFILE_NOT_AVAILABLE"},
-                "Unable to find metadata about the " + datasetPosition + " project '" + project.getName() + 
-                "', do you want to generate them? (Required for the alignment)").then(
+                {key:"MESSAGES.ALIGNED_PROJ_METADATA_NOT_FOUND_GENERATE_CONFIRM", params:{project: project.getName()}}).then(
                 confirm => {
                     HttpServiceContext.setContextProject(project);
                     UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);

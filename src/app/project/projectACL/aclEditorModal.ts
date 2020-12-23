@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from "rxjs";
-import { ModalType } from 'src/app/widget/modal/Modals';
+import { ModalType, Translation } from 'src/app/widget/modal/Modals';
 import { AccessLevel, AccessStatus, ConsumerACL, LockLevel, Project } from '../../models/Project';
 import { ProjectServices } from "../../services/projectServices";
 import { UIUtils } from "../../utils/UIUtils";
@@ -44,12 +44,11 @@ export class ACLEditorModal {
     private onAccessLevelChange(consumer: ConsumerACL, newLevel: AccessLevel) {
         var oldLevel: AccessLevel = consumer.availableACLLevel;
 
-        var message: string;
+        var message: Translation;
         if (newLevel == this.nullAccessLevel) {
-            message = "Are you sure to revoke Access Level of '" + this.project.getName() + "' for the consumer '" + consumer.name + "'?";
+            message = {key:"MESSAGES.ACL_REVOKE_ACCESS_CONFIRM", params:{project: this.project.getName(), consumer: consumer.name}};
         } else {
-            message = "Are you sure to change Access Level of '" + this.project.getName() + "' to '" + newLevel + 
-                "' for the consumer '" + consumer.name + "'?";
+            message = {key:"MESSAGES.ACL_CHANGE_ACCESS_CONFIRM", params:{project: this.project.getName(), level: newLevel, consumer: consumer.name}};
         }
         this.basicModals.confirm({key:"ACTIONS.UPDATE_ACCESS_LEVEL"}, message, ModalType.warning).then(
             confirm => {
@@ -74,8 +73,7 @@ export class ACLEditorModal {
 
     private onLockLevelChange(newLevel: LockLevel) {
         var oldLevel: LockLevel = this.lock.availableLockLevel;
-        let message: string = "Are you sure to change project lock to '" + newLevel + "'?";
-        this.basicModals.confirm({key:"ACTIONS.UPDATE_LOCK_LEVEL"}, message, ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.UPDATE_LOCK_LEVEL"}, {key:"MESSAGES.ACL_CHANGE_LOCK_CONFIRM", params:{level: newLevel}}, ModalType.warning).then(
             confirm => {
                 let updateFn: Observable<void>;
                 if (VBContext.getLoggedUser().isAdmin()) {

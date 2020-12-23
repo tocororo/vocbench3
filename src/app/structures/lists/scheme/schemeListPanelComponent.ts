@@ -110,8 +110,8 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
     private addAllConcepts() {
         //message to warn the user that in case of a lot of concept the process could be long?
-        this.basicModals.confirm({key:"ACTIONS.ADD_CONCEPT_TO_SCHEME"}, "You are going to add all the existing concepts to the scheme '" +
-            this.selectedNode.getShow() + "'. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.ADD_CONCEPT_TO_SCHEME"}, {key:"MESSAGES.ADD_ALL_CONCEPT_TO_SCHEME_CONFIRM", params:{scheme: this.selectedNode.getShow()}},
+            ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.skosService.addMultipleConceptsToScheme(this.selectedNode).subscribe(

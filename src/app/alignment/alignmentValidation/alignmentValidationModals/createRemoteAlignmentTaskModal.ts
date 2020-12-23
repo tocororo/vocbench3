@@ -93,6 +93,11 @@ export class CreateRemoteAlignmentTaskModal {
         this.rightProjectStruct = new AlignedProjectStruct();
         this.rightProjectStruct.project = this.selectedRightProject;
         this.initProjectStruct(this.rightProjectStruct);
+        
+        //reset the status of alignment
+        this.alignmentScenario = null;
+        this.matchers = null;
+        this.selectedMatcher = null;
     }
 
     private initProjectStruct(projStruct: AlignedProjectStruct) {
@@ -108,8 +113,8 @@ export class CreateRemoteAlignmentTaskModal {
 
     profileProject(projStruct: AlignedProjectStruct) {
         if (projStruct.profileAvailable) {
-            this.basicModals.confirm({key: "ACTIONS.PROFILE_PROJECT"}, "The project '" + projStruct.project.getName() + 
-                "' has already been profiled. Do you want to repeat and override the profilation?", ModalType.warning).then(
+            this.basicModals.confirm({key: "ACTIONS.PROFILE_PROJECT"}, {key:"MESSAGES.REFRESH_PROJECT_PROFILE_CONFIRM", params:{project: projStruct.project.getName()}},
+                ModalType.warning).then(
                 confirm => {
                     this.profileProjectImpl(projStruct);
                 },
@@ -185,8 +190,10 @@ export class CreateRemoteAlignmentTaskModal {
                     this.refinablePairings.push(rp)
                 });
                 //initialize as selected pairing the one with the highest score
-                let bestScore = Math.max(...this.refinablePairings.map(p => p.score));
-                this.refinablePairings.find(p => p.score == bestScore).checked = true;
+                if (this.refinablePairings.length > 0) {
+                    let bestScore = Math.max(...this.refinablePairings.map(p => p.score));
+                    this.refinablePairings.find(p => p.score == bestScore).checked = true;
+                }
             }
         );
     }

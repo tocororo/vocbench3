@@ -231,7 +231,7 @@ export class RoleActionResolver {
     constructor(skosService: SkosServices, classesService: ClassesServices, propertyService: PropertyServices,
         ontolexService: OntoLexLemonServices, datatypeService: DatatypesServices, resourceService: ResourcesServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, private translateService: TranslateService) {
-        this.vbFunctions = new VBActionFunctions(skosService, classesService, propertyService, ontolexService, datatypeService, resourceService, basicModals, creationModals);
+        this.vbFunctions = new VBActionFunctions(skosService, classesService, propertyService, ontolexService, datatypeService, resourceService, basicModals, creationModals, translateService);
     }
 
     getActionsForRole(role: RDFResourceRolesEnum): ActionDescription[] {
