@@ -1,4 +1,5 @@
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { Transition } from 'd3';
 
 export enum ModalType {
     info = "info",
@@ -42,7 +43,16 @@ export class ModalOptions implements NgbModalOptions {
 
 /**
  * string if the provided text doesn't need to be translated
- * { key, params } if needs to be translated (key is the translation key, params is the optional params object)
+ * Translation if needs to be translated
  */
 export type TextOrTranslation = string | Translation;
+
+/**
+ * key is the translation key, params is the optional interpolation params object
+ */
 export interface Translation { key: string, params?: {} }
+
+export class SelectionOption {
+    value: string;
+    description: string;
+}

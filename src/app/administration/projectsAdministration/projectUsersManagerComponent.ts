@@ -190,7 +190,7 @@ export class ProjectUsersManagerComponent {
     private cloneSettings() {
         this.projectService.listProjects().subscribe(
             projects => {
-                this.basicModals.select({key:"ACTIONS.DUPLICATE_SETTINGS"}, "Select the target project", projects.map(p => p.getName())).then(
+                this.basicModals.select({key:"ACTIONS.DUPLICATE_SETTINGS"}, {key:"ACTIONS.SELECT_TARGET_PROJECT"}, projects.map(p => p.getName())).then(
                     targetProj => {
                         this.basicModals.confirm({key:"ACTIONS.DUPLICATE_SETTINGS"}, {key:"MESSAGES.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM", params:{user: this.selectedUser.getShow(), project: targetProj}},
                             ModalType.warning).then(

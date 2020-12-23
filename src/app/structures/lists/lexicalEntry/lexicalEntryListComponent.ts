@@ -32,7 +32,9 @@ export class LexicalEntryListComponent extends AbstractList {
 
     private safeToGoLimit: number;
     safeToGo: SafeToGo = { safe: true };
-    private unsafeIndexOneChar: boolean; //true if in case of safeToGo = false, the current index is 1-char
+    unsafeIndexOneChar: boolean; //true if in case of safeToGo = false, the current index is 1-char
+
+    translationParam: { count: number, safeToGoLimit: number };
 
     constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
         super(eventHandler);
@@ -122,6 +124,7 @@ export class LexicalEntryListComponent extends AbstractList {
                     safeness = { safe: count < this.safeToGoLimit, count: count };
                     safeToGoMap[checksum] = safeness; //cache the safeness
                     this.safeToGo = safeness;
+                    this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
                     return of(null)
                 })
             );

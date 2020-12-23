@@ -253,8 +253,7 @@ export class CustomFormEditorModal {
             serializedPropChain = serializedPropChain.slice(0, -1);//delete last ","
         }
 
-        this.basicModals.prompt({key:"ACTIONS.EDIT_PROPERTY_CHAIN"}, null, "Write the chain as sequence of comma (,) separated IRIs (QNames are accepted as well)",
-            serializedPropChain, true).then(
+        this.basicModals.prompt({key:"ACTIONS.EDIT_PROPERTY_CHAIN"}, null, {key:"MESSAGES.CUSTOM_FORM_PROP_CHAIN_DESCR"}, serializedPropChain, true).then(
             (value: any) => {
                 var chain: string = String(value).trim();
                 if (chain.length != 0) {

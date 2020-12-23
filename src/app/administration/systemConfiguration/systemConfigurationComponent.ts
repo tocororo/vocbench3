@@ -182,19 +182,19 @@ export class SystemConfigurationComponent {
             return;
         }
 
-        this.basicModals.prompt({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, { value: "Mail to" }, "This test will send an e-mail to the provided address in order to "
-            + "check the e-mail configuration", VBContext.getLoggedUser().getEmail()).then(
-                mailTo => {
-                    UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                    this.adminService.testEmailConfig(mailTo).subscribe(
-                        () => {
-                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                            this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, {key:"MESSAGES.EMAIL_CONFIG_WORKS_FINE"});
-                        }
-                    );
-                },
-                () => { }
-            );
+        this.basicModals.prompt({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, { value: "Mail to" }, {key:"MESSAGES.EMAIL_CONFIG_TEST_DESCR"},
+            VBContext.getLoggedUser().getEmail()).then(
+            mailTo => {
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                this.adminService.testEmailConfig(mailTo).subscribe(
+                    () => {
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                        this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, {key:"MESSAGES.EMAIL_CONFIG_WORKS_FINE"});
+                    }
+                );
+            },
+            () => { }
+        );
     }
 
     isEmailConfigChanged(): boolean {

@@ -388,6 +388,15 @@
                 "INCLUDE_SUBPROP": "Includi sotto-proprietà",
                 "INCLUDE_SUBPROP_INFO": "Include le sotto-proprietà delle proprietà broader/narrower selezionate",
                 "APPLY_GROUP_SETTINGS": "Applica impostazioni gruppo"
+            },
+            "UNSAFE_WARN": {
+                "ELEMENT_COUNT": "Questo albero dei concetti ha una quantità di top concept ({{count}}) che supera il limite impostato ({{safeToGoLimit}}).",
+                "PERFORMANCE_ISSUE": "Recuperarli tutti potrebbe essere un processo lungo, si potrebbero riscontrare rallentamenti delle prestazioni o si potrebbe addirittura bloccare il sistema.",
+                "SWITCH_MODE": "Si consiglia di passare dalla visualizzazione gerarchica a quella basata sulla ricerca tramite le",
+                "SETTINGS": "impostazioni",
+                "SELECT_SCHEME": "E' inoltre possibile ridurre la quantità di top concept selezionando uno schema dal pannello dedicato.",
+                "FORCE_INIT": "Se si desidera forzare l'inizializzazione dell'albero a proprio rischio, cliccare",
+                "HERE": "qui"
             }
         },
         "DATATYPE": {
@@ -397,11 +406,14 @@
         "INSTANCE": {
             "INSTANCE": "Istanza",
             "INSTANCES": "Istanze",
-            "UNSAFE_WARN": {
-                "TOO_MANY_ELEM": "Troppe istanze"
-            },
             "SETTINGS": {
                 "INSTANCE_LIST_SETTINGS": "Impostazione lista istanze"
+            },
+            "UNSAFE_WARN": {
+                "TOO_MUCH_INST_FORCE_INIT_SELECT": "Attenzione: la classe selezionata ha molte istanze ({{count}}). Recuperarle tutte potrebbe essere un processo lungo, si potrebbero riscontrare rallentamenti delle prestazioni o si potrebbe addirittura bloccare il sistema. Cosa vuoi fare?",
+                "CONTINUE": "Continua comunque",
+                "SWITCH_MODE": "Passa alla visualizzazione delle istanze basata su ricerca",
+                "SWITCH_MODE_DESCR": "La modalità di visualizzazione può essere cambiata anche dalle impostazioni del pannello delle istanze"
             }
         },
         "LEXICON": {
@@ -418,6 +430,17 @@
                 "LEX_ENTRIES_LIMIT": "Limite lexical entry",
                 "LEX_ENTRIES_LIMIT_INFO": "Imposta la quantità massima di lexical entry visibili nella lista. Questo setting evita che venga inizializzata una lista che potrebbe causare problemi di performance",
                 "INDEX_LENGHT": "Lunghezza indice"
+            },
+            "UNSAFE_WARN": {
+                "ELEMENT_COUNT": "Questa lista di LexicalEntry ha una quantità di elementi ({{count}}) che supera il limite impostato ({{safeToGoLimit}}).",
+                "PERFORMANCE_ISSUE": "Recuperarli tutti potrebbe essere un processo lungo, si potrebbero riscontrare rallentamenti delle prestazioni o si potrebbe addirittura bloccare il sistema.",
+                "IT_IS_RECOMMENDED": "Si consiglia di",
+                "CHANGE_INDEX_LENGHT": "cambiare la dimensione dell'indice da 1 a 2 caratteri o",
+                "SWITCH_MODE": "passare dalla modialità di visualizzazione basata su indice a quella basata su ricerca tramite le",
+                "SETTINGS": "impostazioni",
+                "SELECT_LEXICON": "E' inoltre possibile ridurre la quantità di LexicalEntry selezionando un lessico dal pannello dedicato.",
+                "FORCE_INIT": "Se si desidera forzare l'inizializzazione della lista a proprio rischio, cliccare",
+                "HERE": "qui"
             }
         },
         "PROPERTY": {
@@ -1746,14 +1769,17 @@
         "SELECT_LEXICALIZATION_PROPERTY": "Seleziona proprietà di lessicalizzazione",
         "SELECT_LEXICON": "Seleziona lessico",
         "SELECT_PROPERTY": "Seleziona proprietà",
+        "SELECT_PROJECT": "Seleziona un progetto",
         "SELECT_RANGE": "Seleziona un range",
         "SELECT_RANGE_TYPE": "Seleziona tipo di range",
         "SELECT_REMOTE_REPO": "Seleziona repository remoto",
         "SELECT_RESOURCE": "Seleziona risorsa",
+        "SELECT_RESOURCE_TYPE_TO_PICK": "Indica il tipo di risorsa da selezionare",
         "SELECT_ROOT_CLASS": "Seleziona classe root",
         "SELECT_SCHEME": "Seleziona schema",
         "SELECT_STORED_SPARQL_PARAMETERIZED_QUERY": "Seleziona query SPARQL parametrizzata",
         "SELECT_SUGGESTION_FOR_FORM_COLL": "Seleziona suggerimento FormCollection",
+        "SELECT_TARGET_PROJECT": "Seleziona il progetto target",
         "SELECT_USER": "Seleziona utente",
         "SET_AS_DEFAULT": "Imposta come default",
         "SET_AS_TOP_CONCEPT": "Setta come top concept",
@@ -1850,6 +1876,7 @@
         "CHANGE_S2RDF_SETTINGS_CONFIRM": "La modifica ai setting richiede di re-inizializzare il modello relativo allo spreadsheet. Tutte le modifiche fatte agli header verranno perse. Vuoi continuare?",
         "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "Il Collaboration System sembra essere configurato ma non funziona (la configurazione potrebbe non essere valida o il server potrebbe non essere raggiungibile), pertanto verrà disabilitato.",
         "CONFIGURATION_SAVED": "Configurazione salvata con successo",
+        "CUSTOM_FORM_PROP_CHAIN_DESCR": "Scrivi la chain come sequenza di IRI separati da virgole (sono ammessi anche QName)",
         "DATA_CLEARED": "Tutti i dati sono stati cancellati con successo.",
         "DATA_IMPORTED": "Dati importati con successo",
         "DELETE_ALL_VALUES_CONFIRM": "Stai per eliminare tutti i valori per la proprietà {{property}}. Sei sicuro?",
@@ -1880,6 +1907,7 @@
         "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM": "Con questa operazione sovrascriverai qualsiasi ruolo, gruppo, lingua e ResourceView template assegnati a {{user}} nel progetto target '{{project}}'. Sei sicuro?\n\nNota: i ruoli definiti a livello di progetto non verranno clonati",
         "EDIT_RDF_MEMBER_WARN_CONFIRM": "E' sconsigliato modificare la lista dei membri da questa sezione. Non ci sono controlli sui predicati rdf:_n perciò si potrebbe compromettere l'integrità della lista. Vuoi continuare?",
         "EMAIL_CONFIG_CHANGED_SUBMIT_FIRST": "La configurazione Email è cambiata, devi prima confermare le modifiche.",
+        "EMAIL_CONFIG_TEST_DESCR": "Questo test invierà una email all'indirizzo indicato allo scopo di verificare la configurazione",
         "EMAIL_CONFIG_WORKS_FINE": "La configurazione funziona correttamente. Una email di test è stata inviata all'indirizzo fornito.",
         "EMPTY_PARAM_NAME": "Un parametro fornito è senza nome",
         "ENABLE_ALL_PARTITIONS_IN_ALL_TYPES_CONFIRM": "Tutte le partizioni verranno rese visibili per ogni tipo di risorsa. Sei sicuro?",
@@ -2026,11 +2054,22 @@
         "STORED_PARAMETERIZED_QUERY_ALREADY_ADDED": "La query SPARQL parametrizzata '{{ref}}' è già nella lista delle Custom Search salvate, pertanto non verrà aggiunta",
         "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_CONFIRM": "L'istanza cercata appartiene ad una classe al momento non selezionata ({{cls}}). Vuoi passare a tale classe?",
         "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_SELECT": "L'istanza cercata appartiene alle seguenti classi. Per completare la ricerca, selezionane una e conferma",
+        "SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT": {
+            "BELONGS_TO_FOLLOWING": "La LexicalEntry cercata non è raggiungibile nella lista poichè appartiene",
+            "LEXICONS": "ai seguenti lessici. Se vuoi attivare uno di questi lessici e continuare la ricerca, selezionane uno e premi OK.",
+            "LEXICON": "al seguente lessico. Se vuoi attivare il lessico e continuare la ricerca, selezionalo e premi OK."
+        },
         "SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_CONFIRM": "Il concetto cercato non appartiene ad alcuno schema. Vuoi passare alla modalità no-scheme?",
+        "SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_SELECT": {
+            "BELONGS_TO_FOLLOWING": "Il concetto cercato non è raggiungibile nell'albero poichè appertiene",
+            "SCHEMES": "ai seguenti schemi. Se vuoi attivare uno di questi schemi e continuare la ricerca, selezionane uno e premi OK.",
+            "SCHEME": "al seguente schema. Se vuoi attivare lo schema e continuare la ricerca, selezionalo e premi OK."
+        },
         "SYS_LANGUAGES_PROP_PARSING_ERR": "L'inizializzazione delle lingue di sistema ha riscontrato un errore nel parsing della proprietà '{{propName}}'. Si prega di riportare l'errore all'amministratore di sistema.",
         "TOO_MUCH_LINKS_GRAPH_WARN_CONFIRM": "Il grafo che stai cercando di mostrare ha una gran quantità di relazioni ({{relCount}}). Si potrebbe verificare un calo delle prestazioni all'aumentare degli elementi nel grafo. Vuoi mostrare comunque il grafo?\n\nAlternatively it is available an 'incremental' explorable model-oriented graph (from the Class-tree: select a resource, then from the contextual menu 'Show model graph rooted on the selected node').",
         "TOO_MUCH_NODES_GRAPH_WARN_CONFIRM": "Il grafo che stai cercando di mostrare ha una gran quantità di nodi ({{nodesCount}}). Si potrebbe verificare un calo delle prestazioni all'aumentare degli elementi nel grafo. Vuoi mostrare comunque il grafo?",
         "TOO_MUCH_NODES_LINKS_WARN_CONFIRM": "Il grafo che stai cercando di mostrare ha una gran quantità di nodi e link. Potrebbe risultare confuso e non molto leggibile. Vuoi mostrarlo comunque?",
+        "TOT_RESULTS_FOUND": "{{count}} risultati trovati.",
         "TRANSFORMER_NOT_SAVED": "Transformer in posizione {{position}} non è stato salvato. Per salvare la transformer chain, tutti i suoi transformer devono essere salvati.",
         "UNAUTHORIZED_SPARQL_QUERY": "Non sei autorizzato ad eseguire query SPARQL",
         "UNAUTHORIZED_SPARQL_UPDATE": "Non sei autorizzato ad eseguire SPARQL update",
@@ -2041,8 +2080,7 @@
         "USER_CREATED": "Utente creato correttamente",
         "USER_CREATED_PENDING_ACTIVATION": "Il tuo account è stato creato ed è ora in attesa di attivazione. Dopo che l'amministratore avrà accettato la tua richiesta, ti sarà possibile accedere con le credenziali fornite",
         "USER_IRI_PERSONAL_URL_INCONSISTENT": "Hai selezionato l'opzione per usare l'URL personale come IRI utente, ma l'URL non è fornito. Inserisci un URL valido o deseleziona la suddetta opzione",
-        "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "Il tipo del valore non è compatibile con il range della proprietà {{property}}. L'operazione potrebbe causare inconsistenze e malfunzionamenti. Vuoi forzare l'operazione?",
-        "": ""
+        "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "Il tipo del valore non è compatibile con il range della proprietà {{property}}. L'operazione potrebbe causare inconsistenze e malfunzionamenti. Vuoi forzare l'operazione?"
     },
     "STATUS": {
         "ACTIVE": "Attivo",

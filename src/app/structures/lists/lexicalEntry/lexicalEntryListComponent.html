@@ -15,19 +15,19 @@
 
             <ng-template #unsafetyBlock>
                 <div class="alert alert-warning">
-                    This LexicalEntry list has an amount of elements ({{safeToGo.count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).
-                    Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.<br>
-                    It is recommended
+                    {{'DATA.LEX_ENTRY.UNSAFE_WARN.ELEMENT_COUNT'|translate:translationParam}}
+                    {{'DATA.LEX_ENTRY.UNSAFE_WARN.PERFORMANCE_ISSUE'|translate}}
+                    {{'DATA.LEX_ENTRY.UNSAFE_WARN.IT_IS_RECOMMENDED'|translate}}
                     <ng-container *ngIf="unsafeIndexOneChar">
-                        to change the index length from 1-char to 2-char or
+                        {{'DATA.LEX_ENTRY.UNSAFE_WARN.CHANGE_INDEX_LENGHT'|translate}}
                     </ng-container>
-                    to switch from <i>Index based</i> to <i>Search based</i> visualization mode from the list 
-                    <a href="javascript:void(0)" (click)="requireSettings.emit()">settings</a>.
-                    <br>
+                    {{'DATA.LEX_ENTRY.UNSAFE_WARN.SWITCH_MODE'|translate}}
+                    <a href="javascript:void(0)" (click)="requireSettings.emit()">{{'DATA.LEX_ENTRY.UNSAFE_WARN.SETTINGS'|translate}}</a>.<br>
                     <ng-container *ngIf="!lexicon">
-                        You can also reduce the amount of lexical entries by selecting a lexicon from the <i>Lexicon</i> panel.<br>
+                        {{'DATA.LEX_ENTRY.UNSAFE_WARN.SELECT_LEXICON'|translate}}<br>
                     </ng-container>
-                    If you want to force the lexical entry list initialization at your own risk, click <a href="javascript:void(0)" (click)="forceSafeness()">here</a>
+                    {{'DATA.LEX_ENTRY.UNSAFE_WARN.FORCE_INIT'|translate}}
+                    <a href="javascript:void(0)" (click)="forceSafeness()">{{'DATA.LEX_ENTRY.UNSAFE_WARN.HERE'|translate}}</a>.
                 </div>
             </ng-template>
 

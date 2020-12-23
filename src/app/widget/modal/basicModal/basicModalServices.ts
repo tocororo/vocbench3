@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CustomForm } from 'src/app/models/CustomForms';
 import { Cookie } from 'src/app/utils/Cookie';
 import { VBContext } from 'src/app/utils/VBContext';
-import { ModalOptions, ModalType, TextOrTranslation } from '../Modals';
+import { ModalOptions, ModalType, TextOrTranslation, SelectionOption } from '../Modals';
 import { AlertModal } from "./alertModal/alertModal";
 import { ConfirmCheckModal, ConfirmCheckOptions } from './confirmModal/confirmCheckModal';
 import { ConfirmModal } from './confirmModal/confirmModal';
@@ -14,7 +14,7 @@ import { PromptModal } from './promptModal/promptModal';
 import { PromptPrefixedModal } from './promptModal/promptPrefixedModal';
 import { PromptPropertiesModal } from './promptModal/promptPropertiesModal';
 import { CustomFormSelectionModal } from './selectionModal/customFormSelectionModal';
-import { SelectionModal, SelectionOption } from './selectionModal/selectionModal';
+import { SelectionModal } from './selectionModal/selectionModal';
 
 @Injectable()
 export class BasicModalServices {

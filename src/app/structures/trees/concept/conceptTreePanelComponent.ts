@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
 import { Observable, of } from 'rxjs';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
@@ -58,7 +59,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private browsingModals: BrowsingModalServices, private modalService: NgbModal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper,
+        private translateService: TranslateService) {
         super(cfService, resourceService, basicModals, sharedModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
@@ -204,7 +206,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, searchResult.length + " results found.", searchResult, this.rendering).then(
+                            this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
                                 (selectedResource: any) => {
                                     this.selectSearchedResource(selectedResource);
                                 },
@@ -256,12 +258,11 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                             cancel => {}
                         )
                     } else { //searched concept belongs to at least one scheme => ask to activate one of them
-                        let message = "Searched concept '" + resource.getShow() + "' is not reachable in the tree since it belongs to the following";
+                        let message = this.translateService.instant("MESSAGES.SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_SELECT.BELONGS_TO_FOLLOWING");
                         if (schemes.length > 1) {
-                            message += " schemes. If you want to activate one of these schemes and continue the search, "
-                                + "please select the scheme you want to activate and press OK.";
+                            message += " " + this.translateService.instant("MESSAGES.SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_SELECT.SCHEMES");
                         } else {
-                            message += " scheme. If you want to activate the scheme and continue the search, please select it and press OK.";
+                            message += " " + this.translateService.instant("MESSAGES.SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_SELECT.SCHEME");
                         }
                         this.resourceService.getResourcesInfo(schemes).subscribe(
                             schemes => {

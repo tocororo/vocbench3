@@ -1,6 +1,7 @@
 import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 import { Observable, of } from "rxjs";
-import { ModalType } from 'src/app/widget/modal/Modals';
+import { ModalType, SelectionOption } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { InstanceListVisualizationMode } from "../../../models/Properties";
 import { SemanticTurkey } from "../../../models/Vocabulary";
@@ -14,7 +15,6 @@ import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { SelectionOption } from "../../../widget/modal/basicModal/selectionModal/selectionModal";
 import { AbstractList } from "../abstractList";
 import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 
@@ -31,13 +31,15 @@ export class InstanceListComponent extends AbstractList {
 
     private pendingSearchCls: ARTURIResource; //class of a searched instance that is waiting to be selected once the list is initialized
 
-    private instanceLimit: number = 10000;
+    // private instanceLimit: number = 10000;
+    private instanceLimit: number = 1;
 
     structRole = RDFResourceRolesEnum.individual;
 
     list: ARTResource[] = [];
 
-    constructor(private clsService: ClassesServices, private vbProp: VBProperties, private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+    constructor(private clsService: ClassesServices, private vbProp: VBProperties, private basicModals: BasicModalServices, eventHandler: VBEventHandler,
+        private translateService: TranslateService) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: {instance: ARTResource, cls: ARTResource}) => { 
@@ -73,16 +75,13 @@ export class InstanceListComponent extends AbstractList {
                     numInst => {
                         if (numInst > this.instanceLimit) { //too much instances => ask user
                             let opts: SelectionOption[] = [
-                                { value: "Continue anyway", description: null },
+                                { value: this.translateService.instant("DATA.INSTANCE.UNSAFE_WARN.CONTINUE"), description: null },
                                 { 
-                                    value: "Switch visualization of instance list to search-based mode", 
-                                    description: "Visualization mode can be changed also from the instance panel settings"
+                                    value: this.translateService.instant("DATA.INSTANCE.UNSAFE_WARN.SWITCH_MODE"), 
+                                    description: this.translateService.instant("DATA.INSTANCE.UNSAFE_WARN.SWITCH_MODE_DESCR")
                                 },
                             ]
-                            this.basicModals.select({key:"DATA.INSTANCE.UNSAFE_WARN.TOO_MANY_ELEM"}, "Warning: the selected class (" + this.cls.getShow() 
-                                + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process, "
-                                + "you might experience performance decrease. What do you want to do?", opts, ModalType.warning)
-                            .then(
+                            this.basicModals.select({key:"STATUS.WARNING"}, { key: "DATA.INSTANCE.UNSAFE_WARN.TOO_MUCH_INST_FORCE_INIT_SELECT", params: { count: numInst } }, opts, ModalType.warning).then(
                                 (choice: SelectionOption) => {
                                     if (choice == opts[0]) { //continue anyway
                                         this.initStandardModeInstanceList();

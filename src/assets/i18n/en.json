@@ -388,6 +388,15 @@
                 "INCLUDE_SUBPROP": "Include subProperties",
                 "INCLUDE_SUBPROP_INFO": "Includes the subProperties of the selected broader/narrower properties",
                 "APPLY_GROUP_SETTINGS": "Apply group settings"
+            },
+            "UNSAFE_WARN": {
+                "ELEMENT_COUNT": "This Concept tree has an amount of top concepts ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
+                "PERFORMANCE_ISSUE": "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.",
+                "SWITCH_MODE": "It is recommended to switch from 'Hierarchy based' to 'Search based' visualization mode from the",
+                "SETTINGS": "settings",
+                "SELECT_SCHEME": "You can also reduce the amount of top concepts by selecting a scheme from the 'Scheme' panel.",
+                "FORCE_INIT": "If you want to force the Concept tree initialization at your own risk, click",
+                "HERE": "here"
             }
         },
         "DATATYPE": {
@@ -397,11 +406,14 @@
         "INSTANCE": {
             "INSTANCE": "Instance",
             "INSTANCES": "Instances",
-            "UNSAFE_WARN": {
-                "TOO_MANY_ELEM": "Too many instances"
-            },
             "SETTINGS": {
                 "INSTANCE_LIST_SETTINGS": "Instance list settings"
+            },
+            "UNSAFE_WARN": {
+                "TOO_MUCH_INST_FORCE_INIT_SELECT": "The selected class has too many instances ({{count}}). Retrieving them all could be a very long process and it may slow down the server. What do you want to do?",
+                "CONTINUE": "Continue anyway",
+                "SWITCH_MODE": "Switch visualization of instance list to search-based mode",
+                "SWITCH_MODE_DESCR": "Visualization mode can be changed also from the instance panel settings"
             }
         },
         "LEXICON": {
@@ -418,6 +430,17 @@
                 "LEX_ENTRIES_LIMIT": "Lexical entries limitation",
                 "LEX_ENTRIES_LIMIT_INFO": "Sets the maximum amount of lexical entries visible in the list. This setting prevents the initialization of a list that might cause performance issues",
                 "INDEX_LENGHT": "Index lenght"
+            },
+            "UNSAFE_WARN": {
+                "ELEMENT_COUNT": "This LexicalEntry list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
+                "PERFORMANCE_ISSUE": "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.",
+                "IT_IS_RECOMMENDED": "It is recommended",
+                "CHANGE_INDEX_LENGHT": "to change the index lenght from 1-char to 2-char or",
+                "SWITCH_MODE": "to switch from 'Index based' to 'Search based' visualization mode from the",
+                "SETTINGS": "settings",
+                "SELECT_LEXICON": "You can also reduce the amount of lexical entries by selecting a lexicon from the 'Lexicon' panel.",
+                "FORCE_INIT": "If you want to force the lexical entry list initialization at your own risk, click",
+                "HERE": "here"
             }
         },
         "PROPERTY": {
@@ -1746,14 +1769,17 @@
         "SELECT_LEXICALIZATION_PROPERTY": "Select lexicalization property",
         "SELECT_LEXICON": "Select Lexicon",
         "SELECT_PROPERTY": "Select property",
+        "SELECT_PROJECT": "Select a project",
         "SELECT_RANGE": "Select range",
         "SELECT_RANGE_TYPE": "Select range type",
         "SELECT_REMOTE_REPO": "Select remote repository",
         "SELECT_RESOURCE": "Select resource",
+        "SELECT_RESOURCE_TYPE_TO_PICK": "Select the type of resource to pick",
         "SELECT_ROOT_CLASS": "Select root class",
         "SELECT_SCHEME": "Select scheme",
         "SELECT_STORED_SPARQL_PARAMETERIZED_QUERY": "Select stored SPARQL parameterized query",
         "SELECT_SUGGESTION_FOR_FORM_COLL": "Select suggestion for FormCollection",
+        "SELECT_TARGET_PROJECT": "Select the target project",
         "SELECT_USER": "Select user",
         "SET_AS_DEFAULT": "Set as default",
         "SET_AS_TOP_CONCEPT": "Set as top concept",
@@ -1850,6 +1876,7 @@
         "CHANGE_S2RDF_SETTINGS_CONFIRM": "Changing the settings requires to re-initialize the model related to the current spreadsheet. All the changes applied to the headers will be discarder. Do you want to continue?",
         "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "The Collaboration System seems to be configured but it's not working (configuration could be not valid or the server may be not reachable), so it will be disabled.",
         "CONFIGURATION_SAVED": "Configuration saved succesfully",
+        "CUSTOM_FORM_PROP_CHAIN_DESCR": "Write the chain as sequence of comma (,) separated IRIs (QNames are accepted as well)",
         "DATA_CLEARED": "All data cleared successfully.",
         "DATA_IMPORTED": "Data imported successfully",
         "DELETE_ALL_VALUES_CONFIRM": "You are deleting all the {{property}} values. Are you sure?",
@@ -1880,6 +1907,7 @@
         "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM": "With this operation you will overwrite any roles, group, languages and ResourceView template assigned to {{user}} in the target project '{{project}}'. Are you sure?\n\nNote: the project-level roles will not be cloned",
         "EDIT_RDF_MEMBER_WARN_CONFIRM": "It is not recommended to edit the member list from this section. There are no checks on the rdf:_n predicate so you could compromise the integrity of the list. Do you want to continue?",
         "EMAIL_CONFIG_CHANGED_SUBMIT_FIRST": "Email configuration has been changed, you need first to submit the changes.",
+        "EMAIL_CONFIG_TEST_DESCR": "This test will send an e-mail to the provided address in order to check the e-mail configuration",
         "EMAIL_CONFIG_WORKS_FINE": "The configuration works fine. A test e-mail has been sent to the provided email address.",
         "EMPTY_PARAM_NAME": "A provided parameter has an empty name",
         "ENABLE_ALL_PARTITIONS_IN_ALL_TYPES_CONFIRM": "All the partitions will be set visible for all the available resource types. Are you sure?",
@@ -2026,11 +2054,22 @@
         "STORED_PARAMETERIZED_QUERY_ALREADY_ADDED": "The stored parameterized SPARQL query '{{ref}}' is already in the Stored Custom Search list. It will not be added",
         "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_CONFIRM": "Searched instance belongs to a class currently not selected ({{cls}}). Do you want to switch class?",
         "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_SELECT": "Searched instance belong to the following classes. If you want to complete the search, select one of them and confirm",
+        "SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT": {
+            "BELONGS_TO_FOLLOWING": "Searched LexicalEntry is not reachable in the list since it belongs to the following",
+            "LEXICONS": "lexicons. If you want to activate one of these lexicons and continue the search, please select the lexicon you want to activate and press OK.",
+            "LEXICON": "lexicon. If you want to activate the lexicon and continue the search, please select it and press OK."
+        },
         "SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_CONFIRM": "Searched concept does not belong to any scheme. Do you want to switch to no-scheme mode?",
+        "SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_SELECT": {
+            "BELONGS_TO_FOLLOWING": "Searched concept is not reachable in the tree since it belongs to the following",
+            "SCHEMES": "schemes. If you want to activate one of these schemes and continue the search, please select the scheme you want to activate and press OK.",
+            "SCHEME": "scheme. If you want to activate the scheme and continue the search, please select it and press OK."
+        },
         "SYS_LANGUAGES_PROP_PARSING_ERR": "Initialization of system languages has encountered a problem during parsing the '{{propName}}' property. Please, report this to the system administrator.",
         "TOO_MUCH_LINKS_GRAPH_WARN_CONFIRM": "The graph you're trying to show has an high number of relations ({{relCount}}). A performance decrease could be experienced with a growing amount of visual elements in the graph. Do you want to show the graph anyway?\n\nAlternatively it is available an 'incremental' explorable model-oriented graph (from the Class-tree: select a resource, then from the contextual menu 'Show model graph rooted on the selected node').",
         "TOO_MUCH_NODES_GRAPH_WARN_CONFIRM": "The graph you're trying to show has an high number of nodes ({{nodesCount}}). A performance decrease could be experienced with a growing amount of visual elements in the graph. Do you want to show the graph anyway?",
         "TOO_MUCH_NODES_LINKS_WARN_CONFIRM": "The graph you're trying to show has a large amount of nodes and links. It could be really confused and not much readable. Do you want to show it anyway?",
+        "TOT_RESULTS_FOUND": "{{count}} results found.",
         "TRANSFORMER_NOT_SAVED": "Transformer at position {{position}} is not saved. In order to save a transformer chain all its transformers need to be saved.",
         "UNAUTHORIZED_SPARQL_QUERY": "You are not authorized to perform SPARQL query",
         "UNAUTHORIZED_SPARQL_UPDATE": "You are not authorized to perform SPARQL update",
@@ -2041,8 +2080,7 @@
         "USER_CREATED": "User succesfully created",
         "USER_CREATED_PENDING_ACTIVATION": "Your account has been created and is now pending activation. After the system administrator accepts your request, it will be possible to login with the credentials you provided",
         "USER_IRI_PERSONAL_URL_INCONSISTENT": "You checked the option to use the personal URL as user IRI, but the URL is not provided. Please enter a valid URL or uncheck the above option",
-        "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "The type of value is not compliant with the range of the property {{property}}. The operation may cause inconsistencies and malfunction. Do you want to force the operation?",
-        "": ""
+        "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "The type of value is not compliant with the range of the property {{property}}. The operation may cause inconsistencies and malfunction. Do you want to force the operation?"
     },
     "STATUS": {
         "ACTIVE": "Active",

@@ -36,6 +36,8 @@ export class ConceptTreeComponent extends AbstractTree {
     private safeToGoLimit: number;
     safeToGo: SafeToGo = { safe: true };
 
+    translationParam: { count: number, safeToGoLimit: number };
+
     /*
      * when the tree is initialized multiple time in a short amount of time (e.g. when the scheme is changed and then immediately changed again)
      * it might happened that the first initialization request takes more time than the last, so the response of the first is reveived after
@@ -152,6 +154,7 @@ export class ConceptTreeComponent extends AbstractTree {
                         return of(null)
                     }
                     this.safeToGo = safeness;
+                    this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
                     return of(null)
                 })
             );

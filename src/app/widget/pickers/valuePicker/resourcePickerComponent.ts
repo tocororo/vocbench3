@@ -105,7 +105,7 @@ export class ResourcePickerComponent {
                     return;
                 }
                 let options = projects.map(p => p.getName());
-                this.basicModals.select({key: "ACTIONS.PICK_RESOURCE"}, "Select a project", options).then(
+                this.basicModals.select({key: "ACTIONS.PICK_RESOURCE"}, {key:"ACTIONS.SELECT_PROJECT"}, options).then(
                     projName => {
                         //initialize the context of the selected external project
                         let externalProject: Project = projects.find(p => p.getName() == projName);
@@ -158,7 +158,7 @@ export class ResourcePickerComponent {
             return of(resourceTypes[options[0]]);
         } else {
             return from(
-                this.basicModals.select({key: "ACTIONS.PICK_RESOURCE"}, "Select the type of resource to pick", options).then(
+                this.basicModals.select({key: "ACTIONS.PICK_RESOURCE"}, {key:"ACTIONS.SELECT_RESOURCE_TYPE_TO_PICK"}, options).then(
                     (role: string) => {
                         return resourceTypes[role];
                     },

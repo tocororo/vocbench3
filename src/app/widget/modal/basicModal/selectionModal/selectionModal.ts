@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalType } from '../../Modals';
+import { ModalType, SelectionOption } from '../../Modals';
 
 /**
  * Modal that allows to choose among a set of options
@@ -18,7 +18,7 @@ export class SelectionModal {
     headerStyle: string;
     msgStyle: string;
     
-    private optionsWithDescription: boolean; //tells if the option list contains complext object
+    plainOptions: boolean; //tells if the options are plains or complex object (value+description)
     optionSelected: any; //string or {string, string} object, according the input options list
     private size: number;
     
@@ -30,7 +30,7 @@ export class SelectionModal {
             this.size = this.options.length;
         }
 
-        this.optionsWithDescription = (this.options.length > 0 && typeof this.options[0] == "object");
+        this.plainOptions = (this.options.length > 0 && typeof this.options[0] == "string");
 
         //based on the modal type set the css style of the message alert
         if (this.type == null) {
@@ -56,9 +56,4 @@ export class SelectionModal {
     cancel() {
         this.activeModal.dismiss();
     }
-}
-
-export class SelectionOption {
-    value: string;
-    description: string;
 }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
@@ -61,7 +62,8 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private modalService: NgbModal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper,
+        private translateService: TranslateService) {
         super(cfService, resourceService, basicModals, sharedModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
@@ -163,7 +165,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     if (searchResult.length == 1) {
                         this.selectSearchedResource(searchResult[0]);
                     } else { //multiple results, ask the user which one select
-                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, searchResult.length + " results found.", searchResult, this.rendering).then(
+                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
                             (selectedResource: any) => {
                                 this.selectSearchedResource(selectedResource);
                             },
@@ -189,12 +191,11 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                 if (isInActiveLexicon) {
                     this.selectSearchedResource(resource);
                 } else {
-                    let message = "Searched LexicalEntry '" + resource.getShow() + "' is not reachable in the list since it belongs to the following";
+                    let message = this.translateService.instant("MESSAGES.SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT.BELONGS_TO_FOLLOWING");
                     if (lexicons.length > 1) {
-                        message += " lexicon. If you want to activate one of these lexicons and continue the search, "
-                            + "please select the lexicon you want to activate and press OK.";
+                        message += " " + this.translateService.instant("MESSAGES.SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT.LEXICONS");
                     } else {
-                        message += " lexicon. If you want to activate the lexicon and continue the search, please select it and press OK.";
+                        message += " " + this.translateService.instant("MESSAGES.SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT.LEXICON");
                     }
                     this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, message, lexicons, this.rendering).then(
                         (lexicon: ARTURIResource) => {

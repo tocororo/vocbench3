@@ -14,14 +14,15 @@
 
             <ng-template #unsafetyBlock>
                 <div class="alert alert-warning">
-                    This Concept tree has an amount of top concepts ({{safeToGo.count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}). 
-                    Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.<br>
-                    It is recommended to switch from <i>Hierarchy based</i> to <i>Search based</i> visualization mode from the tree <a href="javascript:void(0)" (click)="requireSettings.emit()">settings</a>.
-                    <br>
+                    {{'DATA.CONCEPT.UNSAFE_WARN.ELEMENT_COUNT'|translate:translationParam}}
+                    {{'DATA.CONCEPT.UNSAFE_WARN.PERFORMANCE_ISSUE'|translate}}<br>
+                    {{'DATA.CONCEPT.UNSAFE_WARN.SWITCH_MODE'|translate}}
+                    <a href="javascript:void(0)" (click)="requireSettings.emit()">{{'DATA.CONCEPT.UNSAFE_WARN.SETTINGS'|translate}}</a>.<br>
                     <ng-container *ngIf="!schemes || schemes.length == 0">
-                        You can also reduce the amount of top concepts by selecting a scheme from the <i>Scheme</i> panel.<br>
+                        {{'DATA.CONCEPT.UNSAFE_WARN.SELECT_SCHEME'|translate}}<br>
                     </ng-container>
-                    If you want to force the Concept tree initialization at your own risk, click <a href="javascript:void(0)" (click)="forceSafeness()">here</a>.
+                    {{'DATA.CONCEPT.UNSAFE_WARN.FORCE_INIT'|translate}}
+                    <a href="javascript:void(0)" (click)="forceSafeness()">{{'DATA.CONCEPT.UNSAFE_WARN.HERE'|translate}}</a>.
                 </div>
             </ng-template>
             
