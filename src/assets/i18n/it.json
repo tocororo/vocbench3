@@ -208,7 +208,8 @@
             "CURRENT_PROJECT": "Progetto corrente",
             "GLOBAL_DATA_MENU": {
                 "GLOBAL_DATA_MANAGEMENT": "Gestione dei dati globali",
-                "VERSIONING": "Versioning"
+                "VERSIONING": "Versioning",
+                "REFACTOR": "Refactoring"
             }
         }
     },

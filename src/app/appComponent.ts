@@ -34,7 +34,7 @@ export class AppComponent {
         translate.addLangs(['en', 'it']);
         //add additional supported i18n languages
         let additionalLangs: string[] = window['additional_i18n_langs'];
-        if (additionalLangs.length > 0) {
+        if (additionalLangs && additionalLangs.length > 0) {
             translate.addLangs(additionalLangs);
         }
         //fallback when a translation isn't found in the current language
