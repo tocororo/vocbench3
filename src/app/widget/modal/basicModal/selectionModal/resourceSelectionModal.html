@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="card-body vbox">
-            <resource-list [resources]="resourceList" [rendering]="rendering" (nodeSelected)="onResourceSelected($event)">
+            <resource-list [resources]="resourceList" [rendering]="rendering" (nodeSelected)="onResourceSelected($event)" (dblClicked)="onResDblClicked($event)">
             </resource-list>
         </div>
     </div>

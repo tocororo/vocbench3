@@ -9,6 +9,7 @@ export class ResourceListComponent {
 	@Input() resources: ARTNode[];
 	@Input() rendering: boolean = true;
 	@Output() nodeSelected = new EventEmitter<ARTNode>();
+	@Output() dblClicked = new EventEmitter<ARTNode>();
 
 	@ViewChild('scrollableContainer') scrollableElement: ElementRef;
 
@@ -19,6 +20,10 @@ export class ResourceListComponent {
 	onResourceSelected(resource: ARTNode) {
 		this.resourceSelected = resource;
 		this.nodeSelected.emit(resource);
+	}
+
+	onDblClick(resource: ARTNode) {
+		this.dblClicked.emit(resource);
 	}
 
 	//Resource limitation management

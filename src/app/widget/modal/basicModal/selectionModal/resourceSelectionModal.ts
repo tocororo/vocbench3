@@ -27,6 +27,11 @@ export class ResourceSelectionModal {
         this.resourceSelected = resource;
     }
 
+    onResDblClicked(resource: ARTNode) {
+        this.resourceSelected = resource;
+        this.ok();
+    }
+
     ok() {
         this.activeModal.close(this.resourceSelected);
     }

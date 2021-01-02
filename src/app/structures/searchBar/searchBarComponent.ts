@@ -45,7 +45,7 @@ export class SearchBarComponent {
     searchStr: string;
 
     constructor(private searchService: SearchServices, private modalService: NgbModal, private vbProperties: VBProperties,
-        private eventHandler: VBEventHandler, private basicModals: BasicModalServices) {
+        private basicModals: BasicModalServices) {
     }
 
     ngOnInit() {
@@ -60,7 +60,9 @@ export class SearchBarComponent {
     }
 
     doSearch() {
-        this.autocompleter.close();
+        if (this.autocompleter != null) { //in case using autocompleter, close the suggestions
+            this.autocompleter.close();
+        }
         if (this.searchStr != undefined && this.searchStr.trim() != "") {
             this.search.emit(this.searchStr);
         } else {
