@@ -1504,6 +1504,7 @@
     "ACTIONS": {
         "ACCEPT": "Accept",
         "ACCEPT_ALL": "Accept all",
+        "ACCESS": "Access",
         "ACTION": "Action",
         "ACTIONS": "Actions",
         "ADD": "Add",
