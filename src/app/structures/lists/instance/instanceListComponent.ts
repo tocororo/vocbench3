@@ -31,8 +31,7 @@ export class InstanceListComponent extends AbstractList {
 
     private pendingSearchCls: ARTURIResource; //class of a searched instance that is waiting to be selected once the list is initialized
 
-    // private instanceLimit: number = 10000;
-    private instanceLimit: number = 1;
+    private instanceLimit: number = 10000;
 
     structRole = RDFResourceRolesEnum.individual;
 
