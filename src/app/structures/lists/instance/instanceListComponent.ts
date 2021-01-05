@@ -148,7 +148,7 @@ export class InstanceListComponent extends AbstractList {
             return of(null)
         } else { //never initialized => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            return this.clsService.getNumberOfInstances(this.cls, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+            return this.getNumberOfInstances(this.cls).pipe(
                 flatMap(count => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     safeness = { safe: count < this.safeToGoLimit, count: count }; 

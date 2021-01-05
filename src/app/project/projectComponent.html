@@ -147,13 +147,15 @@
                                     <span class="far fa-trash-alt"></span>
                                 </button>
                                 <div placement="bottom-right" ngbDropdown>
-                                    <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle"></button>
-                                    <div ngbDropdownMenu class="dropdown-menu" ngbDropdownMenu>
-                                        <button class="dropdown-item" (click)="editACL(p)">Edit ACL</button>
-                                        <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</button>
-                                        <button class="dropdown-item" (click)="editDescription(p)">Edit description</button>
+                                    <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle">
+                                        <span class="fas fa-caret-down"></span>
+                                    </button>
+                                    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                                        <button class="dropdown-item" (click)="editACL(p)">{{'ACTIONS.EDIT_ACL'|translate}}</button>
+                                        <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
+                                        <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
                                         <div class="dropdown-divider"></div>
-                                        <button class="dropdown-item" (click)="openPropertyModal(p)">Properties</button>
+                                        <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.PROPERTIES'|translate}}</button>
                                     </div>
                                 </div>
                             </div>
