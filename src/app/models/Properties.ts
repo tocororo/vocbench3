@@ -32,6 +32,7 @@ export class Properties {
     static pref_concept_tree_safe_to_go_limit: string = "concept_tree_safe_to_go_limit";
 
     static pref_instance_list_visualization: string = "instance_list_visualization";
+    static pref_instance_list_safe_to_go_limit: string = "instance_list_safe_to_go_limit";s
 
     static pref_lex_entry_list_visualization: string = "lex_entry_list_visualization";
     static pref_lex_entry_list_index_lenght: string = "lex_entry_list_index_lenght";
@@ -115,8 +116,8 @@ export enum StatusFilter {
 
 export class ClassTreePreference {
     rootClassUri: string;
-    filter: ClassTreeFilter;
-    showInstancesNumber: boolean
+    filter: ClassTreeFilter = { enabled: true, map: {} };
+    showInstancesNumber: boolean;
 }
 export class ClassTreeFilter {
     enabled: boolean;
@@ -172,6 +173,8 @@ export enum LexEntryVisualizationMode {
 
 export class InstanceListPreference {
     visualization: InstanceListVisualizationMode = InstanceListVisualizationMode.standard;
+    safeToGoLimit: number = 1000;
+    safeToGoMap: SafeToGoMap = {}; //this is not a preference, but it is cached with them since it is contextual to the project 
 }
 
 export enum InstanceListVisualizationMode {

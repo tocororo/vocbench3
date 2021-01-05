@@ -2,12 +2,24 @@
     <div class="card-body vbox">
 
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
-            <ng-container *ngFor="let n of list; let idx=index">
-                <instance-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
-                    [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
-                    (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
-                </instance-list-node>
+            <ng-container *ngIf="safeToGo.safe; else unsafetyBlock">
+                <ng-container *ngFor="let n of list; let idx=index">
+                    <instance-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
+                        [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
+                        (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
+                    </instance-list-node>
+                </ng-container>
             </ng-container>
+            <ng-template #unsafetyBlock>
+                <div class="alert alert-warning">
+                    {{'DATA.INSTANCE.UNSAFE_WARN.ELEMENT_COUNT'|translate:translationParam}}
+                    {{'DATA.INSTANCE.UNSAFE_WARN.PERFORMANCE_ISSUE'|translate}}
+                    {{'DATA.INSTANCE.UNSAFE_WARN.SWITCH_MODE'|translate}}
+                    <a href="javascript:void(0)" (click)="requireSettings.emit()">{{'DATA.INSTANCE.UNSAFE_WARN.SETTINGS'|translate}}</a>.<br>
+                    {{'DATA.INSTANCE.UNSAFE_WARN.FORCE_INIT'|translate}}
+                    <a href="javascript:void(0)" (click)="forceSafeness()">{{'DATA.INSTANCE.UNSAFE_WARN.HERE'|translate}}</a>.
+                </div>
+            </ng-template>
         </div>
 
         <div #blockDivList class="blockingDiv" style="display:none">

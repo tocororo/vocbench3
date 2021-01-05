@@ -115,7 +115,7 @@ export class ConceptTreeComponent extends AbstractTree {
     /**
      * Forces the safeness of the structure even if it was reported as not safe, then re initialize it
      */
-    private forceSafeness() {
+    forceSafeness() {
         this.safeToGo.safe = true;
         let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
         let safeToGoMap: SafeToGoMap = conceptTreePreference.safeToGoMap;

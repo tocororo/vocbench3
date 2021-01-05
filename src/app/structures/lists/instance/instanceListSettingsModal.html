@@ -17,6 +17,19 @@
                     </select>
                 </td>
             </tr>
+            <ng-container *ngIf="visualization == 'standard'">
+                <tr>
+                    <td nowrap>
+                        <label>
+                            {{'DATA.INSTANCE.SETTINGS.INSTANCES_LIMIT'|translate}}
+                            <span class="fas fa-info-circle ml-1" [title]="'DATA.INSTANCE.SETTINGS.INSTANCES_LIMIT_INFO'|translate"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <input class="form-control form-control-sm" type="number" min="1" [(ngModel)]="safeToGoLimit">
+                    </td>
+                </tr>
+            </ng-container>
         </tbody>
     </table>
 

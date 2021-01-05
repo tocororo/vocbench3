@@ -45,7 +45,8 @@ export class VBProperties {
             Properties.pref_show_instances_number, Properties.pref_project_theme,
             Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
             Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
-            Properties.pref_class_tree_filter, Properties.pref_class_tree_root, Properties.pref_instance_list_visualization,
+            Properties.pref_class_tree_filter, Properties.pref_class_tree_root,
+            Properties.pref_instance_list_visualization, Properties.pref_instance_list_safe_to_go_limit,
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
             Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
             Properties.pref_concept_tree_multischeme_mode, Properties.pref_concept_tree_safe_to_go_limit,
@@ -127,14 +128,7 @@ export class VBProperties {
 
 
                 //cls tree preferences
-                let classTreePreferences: ClassTreePreference = { 
-                    rootClassUri: (projectCtx.getProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(),
-                    filter: {
-                        enabled: true,
-                        map: {}
-                    },
-                    showInstancesNumber: false
-                };
+                let classTreePreferences: ClassTreePreference = new ClassTreePreference();
                 //- subclass filter
                 let classTreeFilterPref: any = JSON.parse(prefs[Properties.pref_class_tree_filter]); 
                 if (classTreeFilterPref != null) {
@@ -144,6 +138,8 @@ export class VBProperties {
                 let classTreeRootPref: string = prefs[Properties.pref_class_tree_root]; 
                 if (classTreeRootPref != null) {
                     classTreePreferences.rootClassUri = classTreeRootPref;
+                } else { //set default: rdfs:Resource if project is RDFS, owl:Thing if it's OWL
+                    classTreePreferences.rootClassUri = (projectCtx.getProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(); //default
                 }
                 projectPreferences.classTreePreferences = classTreePreferences;
                 //- show Instances number
@@ -160,6 +156,10 @@ export class VBProperties {
                 let instanceListVisualizationPref: string = prefs[Properties.pref_instance_list_visualization];
                 if (instanceListVisualizationPref == InstanceListVisualizationMode.searchBased) {
                     instanceListPreferences.visualization = instanceListVisualizationPref;
+                }
+                let instanceListSafeToGoLimitPref: string = prefs[Properties.pref_instance_list_safe_to_go_limit];
+                if (instanceListSafeToGoLimitPref != null) {
+                    instanceListPreferences.safeToGoLimit = parseInt(instanceListSafeToGoLimitPref);
                 }
                 projectPreferences.instanceListPreferences = instanceListPreferences;
 
@@ -325,6 +325,12 @@ export class VBProperties {
         this.prefService.setPUSetting(Properties.pref_instance_list_visualization, mode).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences.visualization = mode;
     }
+    setInstanceLisSafeToGoLimit(limit: number) {
+        this.prefService.setPUSetting(Properties.pref_instance_list_safe_to_go_limit, limit+"").subscribe();
+        let instanceListPref = VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences;
+        instanceListPref.safeToGoLimit = limit;
+        instanceListPref.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
+    }
 
     //concept tree settings
     setMultischemeMode(mode: MultischemeMode) {
@@ -376,7 +382,7 @@ export class VBProperties {
         VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization = mode;
     }
     setLexicalEntryListSafeToGoLimit(limit: number) {
-        this.prefService.setPUSetting(Properties.pref_concept_tree_safe_to_go_limit, limit+"").subscribe();
+        this.prefService.setPUSetting(Properties.pref_lex_entry_list_safe_to_go_limit, limit+"").subscribe();
         let lexEntryListPref = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
         lexEntryListPref.safeToGoLimit = limit;
         lexEntryListPref.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map

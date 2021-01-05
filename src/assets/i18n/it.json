@@ -408,13 +408,17 @@
             "INSTANCE": "Istanza",
             "INSTANCES": "Istanze",
             "SETTINGS": {
-                "INSTANCE_LIST_SETTINGS": "Impostazione lista istanze"
+                "INSTANCE_LIST_SETTINGS": "Impostazione lista istanze",
+                "INSTANCES_LIMIT": "Limite istanze",
+                "INSTANCES_LIMIT_INFO": "Imposta la quantità massima di istanze visibili nella lista. Questo setting evita che venga inizializzata una lista che potrebbe causare problemi di performance"
             },
             "UNSAFE_WARN": {
-                "TOO_MUCH_INST_FORCE_INIT_SELECT": "Attenzione: la classe selezionata ha molte istanze ({{count}}). Recuperarle tutte potrebbe essere un processo lungo, si potrebbero riscontrare rallentamenti delle prestazioni o si potrebbe addirittura bloccare il sistema. Cosa vuoi fare?",
-                "CONTINUE": "Continua comunque",
-                "SWITCH_MODE": "Passa alla visualizzazione delle istanze basata su ricerca",
-                "SWITCH_MODE_DESCR": "La modalità di visualizzazione può essere cambiata anche dalle impostazioni del pannello delle istanze"
+                "ELEMENT_COUNT": "Questa lista di istanze contiene un numero di elementi ({{count}}) che eccede il limite impostato ({{safeToGoLimit}}).",
+                "PERFORMANCE_ISSUE": "Recuperarle tutte potrebbe essere un processo lungo, si potrebbero riscontrare rallentamenti delle prestazioni o si potrebbe addirittura bloccare il sistema.",
+                "SWITCH_MODE": "Si consiglia di passare alla visualizzazione basata su ricerca dalle",
+                "SETTINGS": "impostazioni",
+                "FORCE_INIT": "Se si desidera forzare l'inizializzazione della lista a proprio rischio, cliccare",
+                "HERE": "qui"
             }
         },
         "LEXICON": {

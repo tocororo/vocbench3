@@ -18,17 +18,25 @@ export class InstanceListSettingsModal {
         { value: InstanceListVisualizationMode.searchBased, labelTranslationKey: VisualizationModeTranslation.translationMap[InstanceListVisualizationMode.searchBased] }
     ]
 
+    private safeToGoLimit: number;
+
     constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties) {}
 
     ngOnInit() {
         let instanceListPref: InstanceListPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences;
         this.pristineInstancePref = JSON.parse(JSON.stringify(instanceListPref));
         this.visualization = instanceListPref.visualization;
+        this.safeToGoLimit = instanceListPref.safeToGoLimit;
     }
 
     ok() {
         if (this.pristineInstancePref.visualization != this.visualization) {
             this.vbProp.setInstanceListVisualization(this.visualization);
+        }
+        if (this.visualization == InstanceListVisualizationMode.standard) {
+            if (this.pristineInstancePref.safeToGoLimit != this.safeToGoLimit) {
+                this.vbProp.setInstanceLisSafeToGoLimit(this.safeToGoLimit);
+            }
         }
         this.activeModal.close();
     }

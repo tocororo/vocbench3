@@ -51,7 +51,7 @@
     <div class="card-body vbox">
         <instance-list [cls]="cls" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
             [context]="context" [projectCtx]="projectCtx"
-            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
+            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (requireSettings)="settings()">
         </instance-list>
     </div>
 

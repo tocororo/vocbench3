@@ -1,9 +1,9 @@
-import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { Observable, of } from "rxjs";
-import { ModalType, SelectionOption } from 'src/app/widget/modal/Modals';
+import { flatMap } from "rxjs/operators";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
-import { InstanceListVisualizationMode } from "../../../models/Properties";
+import { InstanceListPreference, InstanceListVisualizationMode, SafeToGo, SafeToGoMap } from "../../../models/Properties";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -25,17 +25,21 @@ import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 })
 export class InstanceListComponent extends AbstractList {
     @Input() cls: ARTURIResource;
+    @Output() requireSettings = new EventEmitter<void>(); //requires to the parent panel to open/change settings
 
     //InstanceListNodeComponent children of this Component (useful to select the instance during the search)
     @ViewChildren(InstanceListNodeComponent) viewChildrenNode: QueryList<InstanceListNodeComponent>;
 
     private pendingSearchCls: ARTURIResource; //class of a searched instance that is waiting to be selected once the list is initialized
 
-    private instanceLimit: number = 10000;
+    private safeToGoLimit: number;
+    safeToGo: SafeToGo = { safe: true };
 
     structRole = RDFResourceRolesEnum.individual;
 
     list: ARTResource[] = [];
+
+    translationParam: { count: number, safeToGoLimit: number };
 
     constructor(private clsService: ClassesServices, private vbProp: VBProperties, private basicModals: BasicModalServices, eventHandler: VBEventHandler,
         private translateService: TranslateService) {
@@ -70,32 +74,22 @@ export class InstanceListComponent extends AbstractList {
         let visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.visualization;
         if (this.cls != null) { //class provided => init list
             if (visualizationMode == InstanceListVisualizationMode.standard) {
-                this.getNumberOfInstances(this.cls).subscribe(
-                    numInst => {
-                        if (numInst > this.instanceLimit) { //too much instances => ask user
-                            let opts: SelectionOption[] = [
-                                { value: this.translateService.instant("DATA.INSTANCE.UNSAFE_WARN.CONTINUE"), description: null },
-                                { 
-                                    value: this.translateService.instant("DATA.INSTANCE.UNSAFE_WARN.SWITCH_MODE"), 
-                                    description: this.translateService.instant("DATA.INSTANCE.UNSAFE_WARN.SWITCH_MODE_DESCR")
-                                },
-                            ]
-                            this.basicModals.select({key:"STATUS.WARNING"}, { key: "DATA.INSTANCE.UNSAFE_WARN.TOO_MUCH_INST_FORCE_INIT_SELECT", params: { count: numInst } }, opts, ModalType.warning).then(
-                                (choice: SelectionOption) => {
-                                    if (choice == opts[0]) { //continue anyway
-                                        this.initStandardModeInstanceList();
-                                    } else { //swith to search based and reinit the list
-                                        this.vbProp.setInstanceListVisualization(InstanceListVisualizationMode.searchBased);
-                                        this.initImpl();
-                                    }
-                                },
-                                () => {} //canceled
+                this.checkInitializationSafe().subscribe(
+                    () => {
+                        if (this.safeToGo.safe) {
+                            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+                            this.clsService.getInstances(this.cls, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+                                instances => {
+                                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                                    //sort by show if rendering is active, uri otherwise
+                                    ResourceUtils.sortResources(instances, this.rendering ? SortAttribute.show : SortAttribute.value);
+                                    this.list = instances;
+                                    this.resumePendingSearch();
+                                }
                             );
-                        } else { //limited insances => init list
-                            this.initStandardModeInstanceList();
                         }
                     }
-                );
+                )
             } else { //search based
                 //don't do nothing, just check for pending search
                 this.resumePendingSearch();
@@ -106,19 +100,6 @@ export class InstanceListComponent extends AbstractList {
                 this.setInitialStatus();
             });
         }
-    }
-
-    private initStandardModeInstanceList() {
-        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.clsService.getInstances(this.cls, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-            instances => {
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                //sort by show if rendering is active, uri otherwise
-                ResourceUtils.sortResources(instances, this.rendering ? SortAttribute.show : SortAttribute.value);
-                this.list = instances;
-                this.resumePendingSearch();
-            }
-        );
     }
 
     private resumePendingSearch() {
@@ -148,6 +129,53 @@ export class InstanceListComponent extends AbstractList {
         this.selectedNode = node;
         this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         this.nodeSelected.emit(node);
+    }
+
+    /**
+     * Perform a check in order to prevent the initialization of the structure with too many elements
+     * Return true if the initialization is safe or if the user agreed to init the structure anyway
+     */
+    private checkInitializationSafe(): Observable<void> {
+        let instListPreference: InstanceListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences;
+        let safeToGoMap: SafeToGoMap = instListPreference.safeToGoMap;
+        this.safeToGoLimit = instListPreference.safeToGoLimit;
+
+        let checksum = this.getInitRequestChecksum();
+
+        let safeness: SafeToGo = safeToGoMap[checksum];
+        if (safeness != null) { //found safeness in cache
+            this.safeToGo = safeness;
+            return of(null)
+        } else { //never initialized => count
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+            return this.clsService.getNumberOfInstances(this.cls, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+                flatMap(count => {
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                    safeness = { safe: count < this.safeToGoLimit, count: count }; 
+                    safeToGoMap[checksum] = safeness; //cache the safeness
+                    this.safeToGo = safeness;
+                    this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
+                    return of(null)
+                })
+            );
+        }
+    }
+
+    private getInitRequestChecksum() {
+        let checksum = "cls:" + this.cls.toNT();
+        return checksum;
+    }
+
+    /**
+     * Forces the safeness of the structure even if it was reported as not safe, then re initialize it
+     */
+    private forceSafeness() {
+        this.safeToGo = { safe: true };
+        let instListPreference: InstanceListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences;
+        let safeToGoMap: SafeToGoMap = instListPreference.safeToGoMap;
+        let checksum = this.getInitRequestChecksum();
+        safeToGoMap[checksum] = this.safeToGo;
+        this.initImpl();
     }
 
     /**

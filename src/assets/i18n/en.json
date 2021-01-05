@@ -408,13 +408,17 @@
             "INSTANCE": "Instance",
             "INSTANCES": "Instances",
             "SETTINGS": {
-                "INSTANCE_LIST_SETTINGS": "Instance list settings"
+                "INSTANCE_LIST_SETTINGS": "Instance list settings",
+                "INSTANCES_LIMIT": "Instances limit",
+                "INSTANCES_LIMIT_INFO": "Sets the maximum amount of instances visible in the list. This setting prevents the initialization of a list that might cause performance issues"
             },
             "UNSAFE_WARN": {
-                "TOO_MUCH_INST_FORCE_INIT_SELECT": "The selected class has too many instances ({{count}}). Retrieving them all could be a very long process and it may slow down the server. What do you want to do?",
-                "CONTINUE": "Continue anyway",
-                "SWITCH_MODE": "Switch visualization of instance list to search-based mode",
-                "SWITCH_MODE_DESCR": "Visualization mode can be changed also from the instance panel settings"
+                "ELEMENT_COUNT": "This instance list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
+                "PERFORMANCE_ISSUE": "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.",
+                "SWITCH_MODE": "It is recommended to switch the visualization to search-based mode from the",
+                "SETTINGS": "settings",
+                "FORCE_INIT": "If you want to force the instance list initialization at your own risk, click",
+                "HERE": "here"
             }
         },
         "LEXICON": {
@@ -428,7 +432,7 @@
             "USE_SEARCH_MSG": "Please use the search field to retrieve lexical entries",
             "SETTINGS": {
                 "LEX_ENTRY_SETTINGS": "Lexical Entry list settings",
-                "LEX_ENTRIES_LIMIT": "Lexical entries limitation",
+                "LEX_ENTRIES_LIMIT": "Lexical entries limit",
                 "LEX_ENTRIES_LIMIT_INFO": "Sets the maximum amount of lexical entries visible in the list. This setting prevents the initialization of a list that might cause performance issues",
                 "INDEX_LENGHT": "Index lenght"
             },
