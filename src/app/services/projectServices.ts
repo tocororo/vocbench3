@@ -573,4 +573,17 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "setProjectProperty", params);
     }
 
+    /**
+     * Sets the facets of a project
+     * 
+     * @param project
+     * @param facets
+     */
+    setProjectFacets(project: Project, facets: Settings) {
+        var params = {
+            projectName: project.getName(),
+            facets: JSON.stringify(facets.getPropertiesAsMap())
+        }
+        return this.httpMgr.doPost(this.serviceName, "setProjectFacets", params);
+    }
 }

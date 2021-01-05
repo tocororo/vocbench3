@@ -1051,6 +1051,7 @@
             "CHANGE_DIR": "Change directory",
             "EDIT_REMOTE_REPO_CONFIG": "Edit Remote Repo configuration",
             "EDIT_DESCRIPTION": "Edit description",
+            "EDIT_FACETS": "Edit facets",
             "PROPERTIES": "Properties"
         },
         "DIRS": {

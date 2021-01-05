@@ -1051,6 +1051,7 @@
             "CHANGE_DIR": "Cambia cartella",
             "EDIT_REMOTE_REPO_CONFIG": "Modifica configurazione repository remoto",
             "EDIT_DESCRIPTION": "Modifica descrizione",
+            "EDIT_FACETS": "Modifica facets",
             "PROPERTIES": "Proprietà"
         },
         "DIRS": {

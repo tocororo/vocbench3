@@ -16,6 +16,7 @@ import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalOptions, ModalType } from '../widget/modal/Modals';
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ACLEditorModal } from "./projectACL/aclEditorModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
@@ -39,7 +40,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     constructor(private projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
         vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, 
-        private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private modalService: NgbModal, 
+        private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal, 
         private router: Router) {
         super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
     }
@@ -290,6 +291,14 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
             },
             () => {}
         )
+    }
+
+    private editFacets(project: Project) {
+        this.sharedModals.configurePlugin(project.getFacets2()).then(facets => {
+            this.projectService.setProjectFacets(project, facets).subscribe(() => {
+                
+            });
+        }, () => {});
     }
 
     settings() {

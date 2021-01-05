@@ -1,5 +1,6 @@
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { ARTURIResource } from "./ARTResources";
+import { Settings } from "./Plugins";
 import { EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "./Vocabulary";
 
 export class Project {
@@ -16,6 +17,7 @@ export class Project {
     private status: { status: string, message?: string };
     private shaclEnabled: boolean;
     private facets: {[key: string]: string} = {};
+    private facets2: Settings;
     private description: string;
 
     constructor(name?: string) {
@@ -159,6 +161,14 @@ export class Project {
         return this.description;
     }
 
+    public setFacets2(facets: Settings) {
+        this.facets2 = facets;
+    }
+
+    public getFacets2(): Settings {
+        return this.facets2;
+    }
+
     public static deserialize(projJson: any): Project {
         let proj = new Project();
         proj.setName(projJson.name);
@@ -175,6 +185,7 @@ export class Project {
         proj.setShaclEnabled(projJson.shaclEnabled);
         proj.setFacets(projJson.facets);
         proj.setDescription(projJson.description);
+        proj.setFacets2(Settings.parse(projJson.facets2));
         return proj;
     }
 
