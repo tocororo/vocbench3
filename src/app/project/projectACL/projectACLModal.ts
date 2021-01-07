@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions } from 'src/app/widget/modal/Modals';
-import { AccessLevel, AccessStatus, ConsumerACL, LockLevel, LockStatus } from '../../models/Project';
+import { AccessLevel, AccessStatus, ConsumerACL, LockLevel, LockStatus, Project } from '../../models/Project';
 import { ProjectServices } from "../../services/projectServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { ACLEditorModal } from "./aclEditorModal";
@@ -167,7 +167,7 @@ export class ProjectACLModal {
 
     private editProjectACL(project: string) {
         const modalRef: NgbModalRef = this.modalService.open(ACLEditorModal, new ModalOptions('sm'));
-        modalRef.componentInstance.project = project;
+        modalRef.componentInstance.project = new Project(project);
         modalRef.result.then(
             (update: boolean) => {
                 if (update) {

@@ -201,6 +201,7 @@ export class AccessStatus {
     public name: string;
     public consumers: ConsumerACL[];
     public lock: LockStatus;
+    public universalACLLevel: AccessLevel;
 }
 
 export class ConsumerACL {

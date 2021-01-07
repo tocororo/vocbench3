@@ -1046,6 +1046,8 @@
             "SHOW_ACL_MATRIX": "Mostra matrice ACL",
             "PROJECT_ACL": "ACL progetto",
             "ACL_OF_PROJECT": "Access Control List del progetto",
+            "UNIVERSAL_ACCESS_LEVEL": "Livello d'accesso universale",
+            "UNIVERSAL_ACCESS_LEVEL_INFO": "Livello d'accesso concesso a tutti i consumer (eccetto SYSTEM)",
             "LOCKABLE": "Lockabile"
         },
         "ACTIONS": {
@@ -1824,7 +1826,9 @@
     "MESSAGES": {
         "ACL_CHANGE_ACCESS_CONFIRM": "Sei sicuro di voler cambiare l'Access Level di '{{project}}' a '{{level}}' per il consumer '{{consumer}}'?",
         "ACL_CHANGE_LOCK_CONFIRM": "Sei sicuro di voler cambiare il Lock Level del progetto a '{{level}}'?",
+        "ACL_CHANGE_UNIVERSAL_ACCESS_CONFIRM": "Sei sicuro di voler cambiare l'Access Level di '{{project}}' a '{{level}}' per tutti i consumer?",
         "ACL_REVOKE_ACCESS_CONFIRM": "Sei sicuro di voler revocare l'Access Level di '{{project}}' per il consumer '{{consumer}}'?",
+        "ACL_REVOKE_UNIVERSAL_ACCESS_CONFIRM": "Sei sicuro di voler cambiare l'Access Level di '{{project}}' per tutti i consumer?",
         "ACL_TOO_MUCH_PROJ_CONFIRM": "Ci sono una gran quantità di progetti ({{projCount}}), perciò la matrice ACL potrebbe essere lenta a caricare e difficilmente leggibile. Vuoi continuare comunque?\n\nIn alternativa, l'ACL per un progetto specifico è accessibile tramite la voce 'Modifica ACL' nel menu relativo",
         "ADD_ALIGNMENT_TO_EDOAL_CONFIRM": "Questa operazione aggiungerà gli allineamenti accettati al linkset EDOAL. Vuoi continuare?",
         "ADD_ALIGNMENT_TO_ONTO_CONFIRM": "Questa operazione aggiungerà le triple degli allineamenti accettati all'ontologia. Vuoi continuare?",

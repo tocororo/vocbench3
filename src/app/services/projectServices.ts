@@ -288,6 +288,7 @@ export class ProjectServices {
             }
             consumers.push(consumer);
         }
+        let universalACLLevel: AccessLevel = projAclJson.universalACLLevel;
         //lock node
         let lockNode = projAclJson.lock;
         let projectLock: LockStatus = {
@@ -299,7 +300,7 @@ export class ProjectServices {
             projectLock.lockingConsumer = lockNode.lockingConsumer;
             projectLock.acquiredLockLevel = lockNode.acquiredLockLevel;
         }
-        return { name: name, consumers: consumers, lock: projectLock };
+        return { name: name, consumers: consumers, lock: projectLock, universalACLLevel: universalACLLevel };
     }
 
     /**
@@ -311,10 +312,8 @@ export class ProjectServices {
     updateAccessLevel(consumer: Project, accessLevel?: AccessLevel) {
         var params: any = {
             consumerName: consumer.getName(),
+            accessLevel: accessLevel
         };
-        if (accessLevel != null) {
-            params.accessLevel = accessLevel;
-        }
         return this.httpMgr.doPost(this.serviceName, "updateAccessLevel", params);
     }
 
@@ -329,23 +328,36 @@ export class ProjectServices {
         var params: any = {
             projectName: project.getName(),
             consumerName: consumer.getName(),
+            accessLevel: accessLevel
         };
-        if (accessLevel != null) {
-            params.accessLevel = accessLevel;
-        }
         return this.httpMgr.doPost(this.serviceName, "updateProjectAccessLevel", params);
     }
 
     /**
-     * 
-     * @param project 
-     * @param accessLevel 
+     * Grants the given access level from the accessed project to every consumer. 
+     * If the accessLevel is not provided, revokes any universal access level assigned from the project
+     * @param accessLevel
      */
-    updateLockLevel(lockLevel: LockLevel) {
-        var params = {
-            lockLevel: lockLevel,
+    updateUniversalAccessLevel(accessLevel?: AccessLevel) {
+        var params: any = {
+            accessLevel: accessLevel
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateUniversalAccessLevel", params);
+    }
+
+    /**
+     * Grants the given access level from the given project to every consumer. 
+     * If the accessLevel is not provided, revokes any universal access level assigned to the given project
+     * @param project 
+     * @param consumer 
+     * @param accessLevel
+     */
+    updateUniversalProjectAccessLevel(project: Project, accessLevel?: AccessLevel) {
+        var params: any = {
+            projectName: project.getName(),
+            accessLevel: accessLevel
         };
-        return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params);
+        return this.httpMgr.doPost(this.serviceName, "updateUniversalProjectAccessLevel", params);
     }
 
     /**
@@ -359,6 +371,18 @@ export class ProjectServices {
             lockLevel: lockLevel,
         };
         return this.httpMgr.doPost(this.serviceName, "updateProjectLockLevel", params);
+    }
+
+    /**
+     * 
+     * @param project 
+     * @param accessLevel 
+     */
+    updateLockLevel(lockLevel: LockLevel) {
+        var params = {
+            lockLevel: lockLevel,
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params);
     }
 
     /**

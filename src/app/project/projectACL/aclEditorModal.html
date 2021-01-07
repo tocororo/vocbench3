@@ -28,7 +28,8 @@
                                 </div>
                             </td>
                             <td>
-                                <select class="form-control form-control-sm" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel">
+                                <select class="form-control form-control-sm" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel"
+                                    [disabled]="c.name != 'SYSTEM' && universalACLLevel">
                                     <option [ngValue]="nullAccessLevel">---</option>
                                     <option *ngFor="let al of accessLevels" [value]="al">{{al}}</option>
                                 </select>
@@ -40,6 +41,18 @@
         </div>
 
         <div *ngIf="lock" class="card-footer">
+            <div class="row">
+                <label class="col-form-label col-sm-4 text-nowrap">
+                    {{'PROJECTS.ACL.UNIVERSAL_ACCESS_LEVEL'|translate}}:
+                    <span class="fas fa-info-circle" [title]="'PROJECTS.ACL.UNIVERSAL_ACCESS_LEVEL'|translate"></span>
+                </label>
+                <div class="col-sm-8">
+                    <select class="form-control form-control-sm" (ngModelChange)="onUniversalAccessLevelChange($event)" [(ngModel)]="universalACLLevel">
+                        <option [ngValue]="nullAccessLevel">---</option>
+                        <option *ngFor="let al of accessLevels" [value]="al">{{al}}</option>
+                    </select>
+                </div>
+            </div>
             <div class="row">
                 <label class="col-form-label col-sm-4">{{'PROJECTS.ACL.LOCKABLE'|translate}}:</label>
                 <div class="col-sm-8">

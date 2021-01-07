@@ -1046,6 +1046,8 @@
             "SHOW_ACL_MATRIX": "Show ACL matrix",
             "PROJECT_ACL": "Project ACL",
             "ACL_OF_PROJECT": "Access Control List of project",
+            "UNIVERSAL_ACCESS_LEVEL": "Universal access level",
+            "UNIVERSAL_ACCESS_LEVEL_INFO": "Access level granted to all the consumer (except SYSTEM)",
             "LOCKABLE": "Lockable"
         },
         "ACTIONS": {
@@ -1824,7 +1826,9 @@
     "MESSAGES": {
         "ACL_CHANGE_ACCESS_CONFIRM": "Are you sure to change Access Level of '{{project}}' to '{{level}}' for the consumer '{{consumer}}'?",
         "ACL_CHANGE_LOCK_CONFIRM": "Are you sure to change project Lock Level to '{{level}}'?",
+        "ACL_CHANGE_UNIVERSAL_ACCESS_CONFIRM": "Are you sure to change Access Level of '{{project}}' to '{{level}}' for all the consumers?",
         "ACL_REVOKE_ACCESS_CONFIRM": "Are you sure to revoke Access Level of '{{project}}' for the consumer '{{consumer}}'?",
+        "ACL_REVOKE_UNIVERSAL_ACCESS_CONFIRM": "Are you sure to revoke Access Level of '{{project}}' for all the consumers?",
         "ACL_TOO_MUCH_PROJ_CONFIRM": "Warning: there is an high amount of projects ({{projCount}}), thus the ACL matrix might be slow to load and hardly readable. Do you want to continue anyway?\n\nAlternatively the ACL for a specific project is available from the related action menu, 'Edit ACL' entry.",
         "ADD_ALIGNMENT_TO_EDOAL_CONFIRM": "This operation will add the accepted alignment to the EDOAL linkset. Are you sure to continue?",
         "ADD_ALIGNMENT_TO_ONTO_CONFIRM": "This operation will add to the ontology the triples of the accepted alignments. Are you sure to continue?",
