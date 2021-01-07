@@ -32,6 +32,8 @@ export class InstanceListComponent extends AbstractList {
 
     private pendingSearchCls: ARTURIResource; //class of a searched instance that is waiting to be selected once the list is initialized
 
+    visualizationMode: InstanceListVisualizationMode;//this could be changed dynamically, so each time it is used, get it again from preferences
+
     private safeToGoLimit: number;
     safeToGo: SafeToGo = { safe: true };
 
@@ -71,9 +73,9 @@ export class InstanceListComponent extends AbstractList {
             return;
         }
 
-        let visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.visualization;
+        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.visualization;
         if (this.cls != null) { //class provided => init list
-            if (visualizationMode == InstanceListVisualizationMode.standard) {
+            if (this.visualizationMode == InstanceListVisualizationMode.standard) {
                 this.checkInitializationSafe().subscribe(
                     () => {
                         if (this.safeToGo.safe) {

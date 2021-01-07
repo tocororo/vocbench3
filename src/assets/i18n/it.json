@@ -407,6 +407,7 @@
         "INSTANCE": {
             "INSTANCE": "Istanza",
             "INSTANCES": "Istanze",
+            "USE_SEARCH_MSG": "Usa il campo di ricerca per recuperare le istanze",
             "SETTINGS": {
                 "INSTANCE_LIST_SETTINGS": "Impostazione lista istanze",
                 "INSTANCES_LIMIT": "Limite istanze",

@@ -407,6 +407,7 @@
         "INSTANCE": {
             "INSTANCE": "Instance",
             "INSTANCES": "Instances",
+            "USE_SEARCH_MSG": "Please use the search field to retrieve instances",
             "SETTINGS": {
                 "INSTANCE_LIST_SETTINGS": "Instance list settings",
                 "INSTANCES_LIMIT": "Instances limit",

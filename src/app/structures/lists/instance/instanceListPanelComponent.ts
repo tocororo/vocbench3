@@ -66,10 +66,10 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     }
 
     refresh() {
-        if (this.visualizationMode == InstanceListVisualizationMode.standard) {
-            //reinit the list
-            this.viewChildList.init();
-        } else if (this.visualizationMode == InstanceListVisualizationMode.searchBased) {
+        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.visualization;
+        //reinit the list
+        this.viewChildList.init();
+        if (this.visualizationMode == InstanceListVisualizationMode.searchBased) {
             //in search based visualization repeat the search
             if (this.lastSearch != undefined) {
                 this.doSearch(this.lastSearch);
@@ -220,9 +220,8 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                 if (this.visualizationMode == InstanceListVisualizationMode.searchBased) {
                     this.viewChildList.forceList([]);
                     this.lastSearch = null;
-                } else {
-                    this.refresh();
                 }
+                this.refresh();
             },
             () => {}
         );

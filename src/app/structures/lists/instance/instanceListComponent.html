@@ -2,14 +2,17 @@
     <div class="card-body vbox">
 
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
-            <ng-container *ngIf="safeToGo.safe; else unsafetyBlock">
+
+            <ng-container *ngIf="!safeToGo.safe && visualizationMode == 'standard'; then unsafetyBlock else safetyBlock"></ng-container>
+
+            <ng-template #safetyBlock>
                 <ng-container *ngFor="let n of list; let idx=index">
                     <instance-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
                         [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
                         (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
                     </instance-list-node>
                 </ng-container>
-            </ng-container>
+            </ng-template>
             <ng-template #unsafetyBlock>
                 <div class="alert alert-warning">
                     {{'DATA.INSTANCE.UNSAFE_WARN.ELEMENT_COUNT'|translate:translationParam}}
