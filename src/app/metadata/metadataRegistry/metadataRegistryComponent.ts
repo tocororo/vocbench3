@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Data } from "@angular/router";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from "rxjs";
 import { ModalOptions } from 'src/app/widget/modal/Modals';
@@ -22,14 +23,14 @@ import { NewEmbeddedLexicalizationModal } from "./newEmbeddedLexicalizationModal
 })
 export class MetadataRegistryComponent {
 
-    @ViewChild('blockDiv') lexSetBlockDivElement: ElementRef;
+    @ViewChild('blockDiv', { static: false }) lexSetBlockDivElement: ElementRef;
 
     catalogs: CatalogRecord[];
     selectedCatalog: CatalogRecord;
-    activeDatasetMetadata: DatasetMetadata; //dataset of the selected CatalogRecord
-    selectedVersion: DatasetMetadata;
+    catalogDataset: DatasetMetadata;
+    selectedDataset: { dataset: DatasetMetadata, isVersion?: boolean }; //can be the catalogDataset itself or one of its version
 
-    lexicalizationSets: LexicalizationSetMetadata[] = [];
+    lexicalizationSets: LexicalizationSetMetadata[] = []; //lex set of the selected dataset
     selectedLexicalizationSet: LexicalizationSetMetadata;
     
     constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
@@ -47,8 +48,7 @@ export class MetadataRegistryComponent {
             catalogs => {
                 this.catalogs = catalogs;
                 this.selectedCatalog = null;
-                this.activeDatasetMetadata = null;
-                this.selectedVersion = null;
+                this.selectedDataset = null;
                 this.lexicalizationSets = [];
                 //if catalogToSelect has been provided, select it
                 if (catalogToSelect != null) {
@@ -66,23 +66,31 @@ export class MetadataRegistryComponent {
     private selectCatalog(catalog: CatalogRecord) {
         if (this.selectedCatalog != catalog) {
             this.selectedCatalog = catalog;
-            this.selectedVersion = null;
+            this.selectedDataset = null;
             this.lexicalizationSets = [];
-            this.initActiveDatasetMetadata();
+            this.initSelectedCatalogDataset();
         }
     }
 
-    private initActiveDatasetMetadata() {
+    /**
+     * Init the dataset of the selected catalog record
+     */
+    private initSelectedCatalogDataset() {
         this.metadataRegistryService.getDatasetMetadata(new ARTURIResource(this.selectedCatalog.abstractDataset.identity)).subscribe(
             dataset => {
-                this.activeDatasetMetadata = dataset;
-                this.initEmbeddedLexicalizationSets();
+                this.catalogDataset = dataset;
+                //in initEmbeddedLexicalizationSets there's a reference to a loading div visible only when activeDatasetMetadata is not null
+                //timeout gives time to init that div
+                // setTimeout(() => {
+                //     this.initEmbeddedLexicalizationSets();
+                // });
+                
             }
         )
     }
 
     onDatasetUpdate() {
-        this.initActiveDatasetMetadata();
+        this.initSelectedCatalogDataset();
     }
 
     discoverDataset() {
@@ -124,8 +132,23 @@ export class MetadataRegistryComponent {
     }
 
     /**
-     * Dataset version
+     * Dataset and versions
      */
+
+    /**
+     * select the main dataset of the catalog record
+     */
+    selectCatalogDataset() {
+        this.selectedDataset = { dataset: this.catalogDataset, isVersion: false };
+        this.initEmbeddedLexicalizationSets();
+    }
+    /**
+     * Select a version of the dataset
+     */
+    selectVersion(v: DatasetMetadata) {
+        this.selectedDataset = { dataset: v, isVersion: true };
+        this.initEmbeddedLexicalizationSets();
+    }
 
     addDatasetVersion() {
         const modalRef: NgbModalRef = this.modalService.open(NewDatasetVersionModal, new ModalOptions());
@@ -139,11 +162,13 @@ export class MetadataRegistryComponent {
     }
 
     deleteDatasetVersion() {
-        this.metadataRegistryService.deleteDatasetVersion(new ARTURIResource(this.selectedVersion.identity)).subscribe(
-            stResp => {
-                this.initCatalogRecords();
-            }
-        );
+        if (this.selectedDataset.isVersion) {
+            this.metadataRegistryService.deleteDatasetVersion(new ARTURIResource(this.selectedDataset.dataset.identity)).subscribe(
+                stResp => {
+                    this.initCatalogRecords();
+                }
+            );
+        }
     }
 
     onVersionUpdate() {
@@ -156,7 +181,7 @@ export class MetadataRegistryComponent {
 
     private initEmbeddedLexicalizationSets() {
         UIUtils.startLoadingDiv(this.lexSetBlockDivElement.nativeElement);
-        this.metadataRegistryService.getEmbeddedLexicalizationSets(new ARTURIResource(this.selectedCatalog.abstractDataset.identity)).subscribe(
+        this.metadataRegistryService.getEmbeddedLexicalizationSets(new ARTURIResource(this.selectedDataset.dataset.identity)).subscribe(
             sets => {
                 UIUtils.stopLoadingDiv(this.lexSetBlockDivElement.nativeElement);
                 this.lexicalizationSets = sets;
@@ -167,7 +192,7 @@ export class MetadataRegistryComponent {
 
     assessLexicalizationModel() {
         UIUtils.startLoadingDiv(this.lexSetBlockDivElement.nativeElement);
-        this.metadataRegistryService.assessLexicalizationModel(new ARTURIResource(this.selectedCatalog.abstractDataset.identity)).subscribe(
+        this.metadataRegistryService.assessLexicalizationModel(new ARTURIResource(this.selectedDataset.dataset.identity)).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(this.lexSetBlockDivElement.nativeElement);
                 this.initEmbeddedLexicalizationSets();
@@ -177,7 +202,7 @@ export class MetadataRegistryComponent {
 
     addEmbeddedLexicalizationSet() {
         const modalRef: NgbModalRef = this.modalService.open(NewEmbeddedLexicalizationModal, new ModalOptions());
-        modalRef.componentInstance.catalogRecordIdentity = this.selectedCatalog.abstractDataset.identity;
+        modalRef.componentInstance.catalogRecordIdentity = this.selectedDataset.dataset.identity;
         return modalRef.result.then(
             () => {
                 this.initEmbeddedLexicalizationSets();

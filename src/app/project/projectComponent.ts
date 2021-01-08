@@ -301,7 +301,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         }, () => {});
     }
 
-    private editFacetsSchema() {
+    editFacetsSchema() {
         this.projectService.getProjectFacetsSchema().subscribe(facetsSchema => {
             this.sharedModals.configurePlugin(facetsSchema).then(facets => {
                 this.projectService.setProjectFacetsSchema(facets).subscribe(() => {

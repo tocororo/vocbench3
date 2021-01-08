@@ -1,6 +1,6 @@
 <div class="hbox">
 
-    <div class="card card-default vbox" style="flex: 2">
+    <div class="card card-default vbox">
         <div class="card-header">
             <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.CATALOG_RECORDS'|translate}}:</label>
             <div class="btn-group btn-group-xs">
@@ -42,38 +42,43 @@
         </div>
     </div>
 
-    <div class="card card-default vbox" style="flex: 3; margin-left: 4px;">
+    <div *ngIf="catalogDataset" class="card card-default vbox ml-2" style="flex: 2;">
         <div class="card-header">
             <label>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label>
         </div>
-        <div class="card-body vbox">
-            <dataset-metadata [dataset]="activeDatasetMetadata" (update)="onDatasetUpdate()"></dataset-metadata>
+        <div class="card-body hbox">
 
-            <div class="hbox" style="margin-top: 4px;">
+            <div class="vbox">
+                <dataset-metadata [dataset]="catalogDataset" [ngClass]="{ activePanel : catalogDataset == selectedDataset?.dataset }" 
+                    (click)="selectCatalogDataset()" (update)="onDatasetUpdate()">
+                </dataset-metadata>
                 <!-- Other versions -->
-                <div class="card card-alt vbox">
+                <div class="card card-alt vbox mt-2">
                     <div class="card-header">
                         <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.OTHER_VERSIONS'|translate}}:</label>
                         <div class="btn-group btn-group-xs">
                             <button class="btn btn-light" [title]="'ACTIONS.ADD_DATASET_VERSION'|translate" (click)="addDatasetVersion()"
-                                [disabled]="!selectedCatalog || !isAddDatasetAuthorized()">
+                                [disabled]="!catalogDataset || !isAddDatasetAuthorized()">
                                 <span class="fas fa-plus"></span>
                             </button>
                             <button class="btn btn-light" [title]="'ACTIONS.DELETE_DATASET_VERSION'|translate" (click)="deleteDatasetVersion()"
-                                [disabled]="!selectedVersion || !isRemoveDatasetAuthorized()">
+                                [disabled]="!selectedDataset?.isVersion || !isRemoveDatasetAuthorized()">
                                 <span class="fas fa-minus"></span>
                             </button>
                         </div>
                     </div>
                     <div class="card-body scrollableContainer">
-                        <dataset-metadata *ngFor="let v of selectedCatalog?.versions" [dataset]="v" style="margin-bottom: 2px;"
-                            (click)="selectedVersion = v" [ngClass]="{ activePanel : v == selectedVersion }" version="true"
+                        <dataset-metadata *ngFor="let v of selectedCatalog?.versions" [dataset]="v" class="mb-1"
+                            (click)="selectVersion(v)" [ngClass]="{ activePanel : v == selectedDataset?.dataset }" version="true"
                             (update)="onVersionUpdate()">
                         </dataset-metadata>
                     </div>
                 </div>
-                <!-- Embedded lex sets -->
-                <div class="card card-alt vbox blockingDivHost" style="margin-left: 4px;">
+            </div>
+            
+            <!-- Embedded lex sets -->
+            <div class="vbox ml-1">
+                <div class="card card-alt vbox blockingDivHost">
                     <div class="card-header">
                         <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.EMBEDDED_LEXICALIZATION_SETS'|translate}}:</label>
                         <div class="btn-group btn-group-xs">
@@ -82,10 +87,12 @@
                                     <span class="fas fa-plus"></span>
                                 </button>
                                 <div class="dropdown-menu float-right" ngbDropdownMenu>
-                                    <li><a (click)="addEmbeddedLexicalizationSet()" class="text-nowrap">{{'ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate}}</a></li>
-                                    <li [ngClass]="{disabled : lexicalizationSets.length != 0}">
-                                        <a (click)="assessLexicalizationModel()" class="text-nowrap">{{'ACTIONS.ASSESS_LEXICALIZATION_MODEL'|translate}}</a>
-                                    </li>
+                                    <a (click)="addEmbeddedLexicalizationSet()" class="dropdown-item text-nowrap">
+                                        {{'ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate}}
+                                    </a>
+                                    <a (click)="assessLexicalizationModel()" class="dropdown-item text-nowrap" [ngClass]="{disabled : lexicalizationSets.length != 0}">
+                                        {{'ACTIONS.ASSESS_LEXICALIZATION_MODEL'|translate}}
+                                    </a>
                                 </div>
                             </div>
                             <button class="btn btn-light" [title]="'ACTIONS.DELETE_EMBEDDED_LEXICALIZATION_SET'|translate" (click)="deleteEmbeddedLexicalizationSet()"
