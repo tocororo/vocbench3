@@ -13,9 +13,15 @@
                 <button class="btn btn-xs btn-light" (click)="openACLModal()" [title]="'PROJECTS.ACL.SHOW_ACL_MATRIX'|translate">
                     ACL
                 </button>
-                <button class="btn btn-xs btn-light" (click)="settings()" [title]="'PROJECTS.CONFIG.PROJ_VIEW_SETTINGS'|translate">
-                    <span class="fas fa-cog"></span>
-                </button>
+                <div class="ml-1" ngbDropdown>
+                    <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs btn-light dropdown-toggle">
+                        <span class="fas fa-cog"></span>
+                    </button>
+                    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-bottom" ngbDropdownMenu> 
+                        <button class="dropdown-item" (click)="settings()">{{'PROJECTS.CONFIG.PROJ_VIEW_SETTINGS'|translate}}</button>
+                        <button class="dropdown-item" (click)="editFacetsSchema()">{{'PROJECTS.CONFIG.PROJ_FACETS_SCHEMA_SETTINGS'|translate}}</button>    
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-body scrollableContainer" style="padding-left: 8px; padding-right: 8px;">

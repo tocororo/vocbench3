@@ -301,6 +301,18 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         }, () => {});
     }
 
+    private editFacetsSchema() {
+        this.projectService.getProjectFacetsSchema().subscribe(facetsSchema => {
+            this.sharedModals.configurePlugin(facetsSchema).then(facets => {
+                this.projectService.setProjectFacetsSchema(facets).subscribe(() => {
+                   //changed settings
+                   this.initProjects(); 
+                });
+            }, () => {}  //nothing changed
+            );    
+        });
+    }
+
     settings() {
         const modalRef: NgbModalRef = this.modalService.open(ProjectTableConfigModal, new ModalOptions('sm'));
         modalRef.result.then(

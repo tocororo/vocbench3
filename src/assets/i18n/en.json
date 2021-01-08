@@ -1087,6 +1087,7 @@
         },
         "CONFIG": {
             "PROJ_VIEW_SETTINGS": "Project view settings",
+            "PROJ_FACETS_SCHEMA_SETTINGS": "Project facets schema settings",
             "TOP_LEVEL_ELEMENTS": "Top level elements",
             "DIRECTORIES": "Directories",
             "PROJ_INFO": "Project info",

@@ -610,4 +610,29 @@ export class ProjectServices {
         }
         return this.httpMgr.doPost(this.serviceName, "setProjectFacets", params);
     }
+
+    /**
+     * Gets the schema of project facets
+     * 
+     */
+    getProjectFacetsSchema(): Observable<Settings> {
+        var params = {
+        }
+        return this.httpMgr.doGet(this.serviceName, "getProjectFacetsSchema", params).pipe(
+            map(stResp => {
+                return Settings.parse(stResp);
+            })
+        );
+    }
+
+    /**
+     * Sets  the schema of project facets
+     * 
+     */
+    setProjectFacetsSchema(facetsSchema: Settings) {
+        var params = {
+            facetsSchema: JSON.stringify(facetsSchema.getPropertiesAsMap())
+        };
+        return this.httpMgr.doPost(this.serviceName, "setProjectFacetsSchema", params);
+    }
 }

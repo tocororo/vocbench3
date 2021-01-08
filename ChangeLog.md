@@ -28,6 +28,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Fixed issues and other extensions in settings management related to typed literals and set-typed properties
   * Fixed issues in the plugin configuration modal which retained (in some cases) edits after canceling
   * Added support for List-typed configuration properties
+  * Implemented project facets
 
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag
