@@ -641,7 +641,7 @@
         }
     },
     "ICV": {
-        "ICV": "Validatore vincoli di integrità (ICV)",
+        "ICV": "Validazione vincoli di integrità (ICV)",
         "PRESS_RUN_TO_RUN_CHECK": [
             "Premi",
             "per eseguire il controllo"
