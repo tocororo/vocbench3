@@ -1989,7 +1989,7 @@
         "MISSING_REQUIRED_PARAM_IN_EXPORTER": "Required parameter(s) missing in exporter configuration ({{exporter}}, scope: {{scope}})",
         "MISSING_REQUIRED_PARAM_IN_EXT_POINT": "Required parameter(s) missing in extension point configuration ({{extPoint}})",
         "MISSING_REQUIRED_PARAM_IN_REPO_ACCESS_CONFIG": "Required parameter(s) missing in the selected Repository Access configuration",
-        "MISSING_SHACL_VALIDATON_CONFIG": "You have enabled SHACL validation, but it requires configuration",
+        "MISSING_SHACL_VALIDATION_CONFIG": "You have enabled SHACL validation, but it requires configuration",
         "MISSING_URI_GENERATOR_CONFIG": "UriGenerator Plugin requires configuration",
         "MISSING_VARIABLE_BINDING": "Missing variable binding '{{binding}}'",
         "MULTIPLE_PROP_VALUE_NOT_ALLOWED_FOR_PROPERTY": "Cannot enrich multiple subject with the same property-value for the predicate {{property}}",

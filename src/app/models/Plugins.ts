@@ -38,10 +38,20 @@ export class Settings {
         return new Settings(this.shortName, this.type, this.editRequired, properties, this.htmlDescription, this.htmlWarning);
     }
 
+    /**
+     * Tells if the setting needs to be configured
+     */
     public requireConfiguration(): boolean {
-        if (this.editRequired) {
-            for (var i = 0; i < this.properties.length; i++) {
-                if (this.properties[i].requireConfiguration()) {
+        if (this.editRequired) { //setting needs to be edited and one of its props require config
+            for (let p of this.properties) {
+                if (p.requireConfiguration()) {
+                    return true;
+                }
+            }
+        } else {
+            //if edit is not required, check if there is any properties which is an array is incomplete (with a nullish element)
+            for (let p of this.properties) {
+                if (p.value instanceof Array && p.value.some(v => SettingsProp.isNullish(v))) {
                     return true;
                 }
             }
@@ -182,7 +192,7 @@ export class SettingsProp {
         }
     }
 
-    private static isNullish(v: any): boolean {
+    public static isNullish(v: any): boolean {
         return v == null ||
             (typeof v == "string" && v.trim() == "") ||
             (v instanceof Settings && v.requireConfiguration()) ||

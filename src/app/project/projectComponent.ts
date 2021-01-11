@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable } from "rxjs";
 import { map } from 'rxjs/operators';
+import { Settings } from "../models/Plugins";
 import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
@@ -16,6 +17,7 @@ import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalOptions, ModalType } from '../widget/modal/Modals';
+import { PluginSettingsHandler } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ACLEditorModal } from "./projectACL/aclEditorModal";
@@ -295,20 +297,18 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     private editFacets(project: Project) {
         this.sharedModals.configurePlugin(project.getFacets2()).then(facets => {
-            this.projectService.setProjectFacets(project, facets).subscribe(() => {
-                
-            });
+            this.projectService.setProjectFacets(project, facets).subscribe();
         }, () => {});
     }
 
     editFacetsSchema() {
+        let handler: PluginSettingsHandler = (facets: Settings) => this.projectService.setProjectFacetsSchema(facets);
         this.projectService.getProjectFacetsSchema().subscribe(facetsSchema => {
-            this.sharedModals.configurePlugin(facetsSchema).then(facets => {
-                this.projectService.setProjectFacetsSchema(facets).subscribe(() => {
-                   //changed settings
-                   this.initProjects(); 
-                });
-            }, () => {}  //nothing changed
+            this.sharedModals.configurePlugin(facetsSchema, handler).then(
+                facets => { //changed settings
+                    this.initProjects(); 
+                },
+                () => {}  //nothing changed
             );    
         });
     }

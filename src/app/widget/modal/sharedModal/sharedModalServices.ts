@@ -22,7 +22,7 @@ import { StoreConfigurationModal } from "./configurationStoreModal/storeConfigur
 import { ConverterPickerModal } from "./converterPickerModal/converterPickerModal";
 import { LanguageSelectorModal } from "./languagesSelectorModal/languageSelectorModal";
 import { ManchesterExprModal } from './manchesterExprModal/manchesterExprModal';
-import { PluginConfigModal } from "./pluginConfigModal/pluginConfigModal";
+import { PluginConfigModal, PluginSettingsHandler } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal } from "./remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
 import { ResourcePickerModal } from './resourcePickerModal/resourcePickerModal';
@@ -38,9 +38,10 @@ export class SharedModalServices {
      * Returns a new PluginConfiguration, the input configuration doesn't mutate.
      * @param configuration
      */
-    configurePlugin(configuration: Settings) {
+    configurePlugin(configuration: Settings, handler?: PluginSettingsHandler) {
         const modalRef: NgbModalRef = this.modalService.open(PluginConfigModal, new ModalOptions());
         modalRef.componentInstance.configuration = configuration;
+        modalRef.componentInstance.handler = handler;
         return modalRef.result;
     }
 

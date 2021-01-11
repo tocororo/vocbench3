@@ -1989,7 +1989,7 @@
         "MISSING_REQUIRED_PARAM_IN_EXPORTER": "Parametro(i) obbligatorio mancante nella configurazione dell'exporter ({{exporter}}, scope: {{scope}})",
         "MISSING_REQUIRED_PARAM_IN_EXT_POINT": "Parametro(i) obbligatorio mancante nella configurazione dell'extension point ({{extPoint}})",
         "MISSING_REQUIRED_PARAM_IN_REPO_ACCESS_CONFIG": "Parametro(i) necessario mancante nella configurazione del Repository Access selezionato",
-        "MISSING_SHACL_VALIDATON_CONFIG": "Hai abilitato la validazione SHACL, ma non è stata configurata",
+        "MISSING_SHACL_VALIDATION_CONFIG": "Hai abilitato la validazione SHACL, ma non è stata configurata",
         "MISSING_URI_GENERATOR_CONFIG": "UriGenerator Plugin deve essere configurato",
         "MISSING_VARIABLE_BINDING": "Binding variabile '{{binding}}' mancante",
         "MULTIPLE_PROP_VALUE_NOT_ALLOWED_FOR_PROPERTY": "Impossibile valorizzare più soggetti con le stesse coppie proprietà-valore per la proprietà {{property}}",

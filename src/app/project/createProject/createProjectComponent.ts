@@ -836,7 +836,7 @@ export class CreateProjectComponent {
         if (this.enableSHACL && this.isSelectedRepoAccessCreateMode()) {
             shaclSettingsPar = new Map();
             if (this.shaclSettings.requireConfiguration()) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_SHACL_VALIDATON_CONFIG"}, ModalType.warning);
+                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_SHACL_VALIDATION_CONFIG"}, ModalType.warning);
                 return;
             }
             this.shaclSettings.properties.forEach(p => {
