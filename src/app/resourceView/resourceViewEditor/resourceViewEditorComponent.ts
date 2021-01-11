@@ -107,7 +107,6 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     valueFilterLangEnabled: boolean;
 
     collaborationAvailable: boolean = false;
-    private collaborationWorking: boolean = false;
     private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues" | "in-progress-issues"; issues: Issue[] } = { 
         btnClass: "", issues: null
     };
@@ -209,13 +208,11 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         );
 
         setTimeout(() => {
-            this.collaborationWorking = this.vbCollaboration.isWorking();
-            if (this.resource instanceof ARTURIResource && this.collaborationWorking) {
+            this.updateCollaborationStatus();
+            if (this.collaborationAvailable) {
                 this.initCollaboration();
             }
-
             this.versioningAvailable = this.projectCtx == null;
-            this.collaborationAvailable = this.collaborationWorking && this.resource.isURIResource() && this.projectCtx == null;
             this.settingsAvailable = this.context != ResourceViewCtx.modal;
 
             this.initNotificationsAvailable();
@@ -790,7 +787,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 }
             },
             (err: Error) => {
-                if (this.collaborationWorking) {
+                if (this.collaborationAvailable) {
                     this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING"}, ModalType.error, err.stack);
                     this.vbCollaboration.setWorking(false);
                 }
@@ -828,11 +825,23 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         )
     }
 
+    unassignIssue(issue: Issue) {
+        this.collaborationService.removeResourceFromIssue(issue.getId(), <ARTURIResource>this.resource).subscribe( //cast is safe (cs available only for IRI)
+            () => {
+                this.initCollaboration();
+            }
+        )
+    }
+
     private onCollaborationSystemStatusChange() {
-        this.collaborationWorking = this.vbCollaboration.isWorking();
-        if (this.collaborationWorking) { //status changed from notWorking to working => refresh issues lists
+        this.updateCollaborationStatus();
+        if (this.collaborationAvailable) { //status changed, now CS is available => refresh issues lists
             this.initCollaboration();
         }
+    }
+
+    private updateCollaborationStatus() {
+        this.collaborationAvailable = this.resource instanceof ARTURIResource && this.vbCollaboration.isWorking() && this.vbCollaboration.isActive() && this.projectCtx == null;
     }
 
     //Status bar

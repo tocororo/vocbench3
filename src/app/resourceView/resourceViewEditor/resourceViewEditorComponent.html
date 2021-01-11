@@ -42,9 +42,14 @@
                     <span [class]="'fas fa-exclamation-circle ' + issuesStruct.btnClass"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
-                    <a *ngFor="let i of issuesStruct.issues" class="dropdown-item hbox align-items-center" [href]="i.getUrl()" target="_blank" [title]="i.getSummary()">
-                        <span style="flex: 1;">{{i.getKey()}}</span>
-                        <div [class]="'badge float-right ' + i.getStatusClass()" style="font-size: 100%">{{i.getStatus()}}</div>
+                    <a *ngFor="let i of issuesStruct.issues" class="dropdown-item hbox align-items-center">
+                        <a style="flex: 1;" [href]="i.getUrl()" target="_blank" [title]="i.getSummary()">
+                            {{i.getKey()}}
+                            <div [class]="'badge float-right ' + i.getStatusClass()" style="font-size: 100%">{{i.getStatus()}}</div>
+                        </a>
+                        <button class="btn btn-light btn-xs ml-1" (click)="unassignIssue(i)" [title]="'RESOURCE_VIEW.ACTIONS.UNASSIGN_ISSUE'|translate">
+                            <span class="far fa-trash-alt"></span>
+                        </button>
                     </a>
                     <div *ngIf="issuesStruct.issues" class="dropdown-divider"></div>
                     <a class="dropdown-item" (click)="createIssue()">{{'RESOURCE_VIEW.ACTIONS.CREATE_ISSUE'|translate}}</a>

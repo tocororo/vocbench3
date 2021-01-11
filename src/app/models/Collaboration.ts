@@ -87,6 +87,14 @@ export class IssuesStruct {
     numPagesTotal: number;
 }
 
+export interface CollaborationSystemStatus {
+    backendId: string;
+    csActive: boolean; //tells if the CS (even if configured and working) has been activated/deactivated
+    linked: boolean; //tells if a project on the CS has been linked
+    projSettingsConfigured: boolean;
+    userSettingsConfigured: boolean;
+}
+
 export class CollaborationUtils {
 
     public static parseIssue(json: any): Issue {

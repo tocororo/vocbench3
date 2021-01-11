@@ -26,6 +26,7 @@ export class CollaborationComponent {
     csProjectLinked: boolean;
 
     csWorking: boolean;
+    csActive: boolean;
 
     constructor(private vbCollaboration: VBCollaboration, private collModals: CollaborationModalServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
@@ -47,14 +48,15 @@ export class CollaborationComponent {
          * then retrieves the issues list.
          */
         this.vbCollaboration.initCollaborationSystem().subscribe(
-            resp => {
+            () => {
                 this.csProjectLinked = this.vbCollaboration.isLinked();
                 this.projSettingsConfigured = this.vbCollaboration.isProjSettingsConfigured();
                 this.userSettingsConfigured = this.vbCollaboration.isUserSettingsConfigured();
+                this.csActive = this.vbCollaboration.isActive();
 
-                if (this.userSettingsConfigured && this.projSettingsConfigured && this.csProjectLinked && this.vbCollaboration.isEnabled()) {
+                if (this.vbCollaboration.getBackendId() != null && this.userSettingsConfigured && this.projSettingsConfigured && this.csProjectLinked) {
                     //if system was already working simply try to refresh the issue list
-                    if (this.csWorking) {
+                    if (this.csWorking && this.csActive) {
                         this.viewChildList.refresh();
                     } else { 
                         //otherwise update csWorking (conseguentially the issue-list updates itself since csWorking turns to true, it is rendered and initialized again)
@@ -73,7 +75,7 @@ export class CollaborationComponent {
 
     openProjectConfig() {
         this.collModals.editCollaborationProjectSettings().then(
-            res => {
+            () => {
                 this.initIssueList();
             },
             () => {}
@@ -82,7 +84,7 @@ export class CollaborationComponent {
 
     openUserConfig() {
         this.collModals.editCollaborationUserSettings().then(
-            res => {
+            () => {
                 this.initIssueList();
             },
             () => {}
@@ -91,11 +93,16 @@ export class CollaborationComponent {
 
     assignProject() {
         this.collModals.editCollaborationProject().then(
-            res => {
+            () => {
                 this.initIssueList();
             },
             () => {}
         );
+    }
+
+    changeActiveStatus() {
+        this.csActive = !this.csActive;
+        this.vbCollaboration.setActive(this.csActive);
     }
 
     isCollProjManagementAuthorized(): boolean {
@@ -104,6 +111,7 @@ export class CollaborationComponent {
 
     private onCollaborationSystemStatusChange() {
         this.csWorking = this.vbCollaboration.isWorking();
+        this.csActive = this.vbCollaboration.isActive();
     }
 
 }

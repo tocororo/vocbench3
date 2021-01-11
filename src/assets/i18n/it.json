@@ -236,6 +236,7 @@
             "CREATE_OR_ASSIGN": "Crea o assegna",
             "A_PROJECT": "un progetto"
         },
+        "CS_NOT_ACTIVE": "Il Collaboration System è stato disattivato, pertanto la lista dei task non è disponbile. Attiva il CS per visualizzare i task",
         "CS_NOT_WORKING_WARNING": "Il Collaboration System sembra essere configurato ma non sta funzionando. Per favore, verifica che la configurazione sia corretta e che il server CS sia in esecuzione."
     },
     "CUSTOM_FORMS": {
@@ -1173,7 +1174,8 @@
             "ASSERT_INFERRED_STATEMENT": "Asserisci informazione inferita",
             "BULK_DELETE": "Cancellazione di massa",
             "BULK_DELETE_INFO": "Cancella i valori per ogni risorsa che ha questa relazione predicato-oggetto",
-            "SHOW_ISSUES": "Mostra issue"
+            "SHOW_ISSUES": "Mostra issue",
+            "UNASSIGN_ISSUE": "Togli issue"
         },
         "STATUS": {
             "RESOURCE_NOT_EXISTING": "Questa risorsa non è disponibile nel progetto corrente",

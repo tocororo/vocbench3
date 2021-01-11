@@ -297,7 +297,11 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     private editFacets(project: Project) {
         this.sharedModals.configurePlugin(project.getFacets2()).then(facets => {
-            this.projectService.setProjectFacets(project, facets).subscribe();
+            this.projectService.setProjectFacets(project, facets).subscribe(
+                () => {
+                    project.setFacets2(facets); //update facets in project
+                }
+            );
         }, () => {});
     }
 

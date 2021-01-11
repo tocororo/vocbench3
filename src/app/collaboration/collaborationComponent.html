@@ -2,9 +2,17 @@
     <div class="card-header" style="display: flex;">
         <label style="flex: 1">{{'COLLABORATION.COLLABORATION_SYSTEM'|translate}}</label>
 
-        <button class="btn btn-light btn-xs" (click)="initIssueList()" [disabled]="!csWorking">
+
+        <span>{{'STATUS.STATUS'|translate}}:</span>
+        <button *ngIf="isCollProjManagementAuthorized()" class="btn btn-light btn-xs ml-1" (click)="changeActiveStatus()" [ngClass]="{'active': csActive}" [disabled]="!csWorking">
+            <span *ngIf="csActive" class="text-success">{{'STATUS.ACTIVE'|translate}}</span>
+            <span *ngIf="!csActive" class="text-danger">{{'STATUS.INACTIVE'|translate}}</span>
+        </button>
+
+        <button *ngIf="csActive" class="btn btn-light btn-xs ml-2" (click)="initIssueList()" [disabled]="!csWorking">
             <span class="fas fa-redo"></span>
         </button>
+
         <div class="dropdown ml-2" ngbDropdown>
             <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                 <span class="fas fa-cog"></span>
@@ -45,15 +53,21 @@
                     </span>
                 </div>
                 <ng-template #elseBlock3>
-                    <!-- All configured: mandatory settings and preferences, project linked -->
-                    <div *ngIf="!csWorking" class="alert alert-warning m-2">
-                        {{'COLLABORATION.CS_NOT_WORKING_WARNING'|translate}}
+                    <!-- All configured: mandatory settings and preferences, project linked, but CS inactive -->
+                    <div *ngIf="!csActive; else elseBlock4" class="alert alert-warning m-2">
+                        {{'COLLABORATION.CS_NOT_ACTIVE'|translate}}
                     </div>
+                    <ng-template #elseBlock4>
+                        <!-- All configured and CS active but not working -->
+                        <div *ngIf="!csWorking" class="alert alert-warning m-2">
+                            {{'COLLABORATION.CS_NOT_WORKING_WARNING'|translate}}
+                        </div>
+                    </ng-template>
                 </ng-template>
             </ng-template>
         </ng-template>
         
-        <issue-list *ngIf="csWorking"></issue-list>
+        <issue-list *ngIf="csWorking && csActive"></issue-list>
 
     </div>
 

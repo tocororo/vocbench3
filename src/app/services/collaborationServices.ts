@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTURIResource } from '../models/ARTResources';
-import { CollaborationUtils, Issue, IssuesStruct } from '../models/Collaboration';
+import { CollaborationSystemStatus, CollaborationUtils, Issue, IssuesStruct } from '../models/Collaboration';
 import { Settings } from '../models/Plugins';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
@@ -16,9 +16,8 @@ export class CollaborationServices {
     /**
      * 
      */
-    getCollaborationSystemStatus(): 
-        Observable<{ backendId: string, enabled: boolean, linked: boolean, projSettingsConfigured: boolean, userSettingsConfigured: boolean }> {
-        var params: any = {};
+    getCollaborationSystemStatus(): Observable<CollaborationSystemStatus> {
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params);
     }
 
@@ -27,7 +26,7 @@ export class CollaborationServices {
      * @param backendId
      */
     getProjectSettings(backendId: string): Observable<Settings> {
-        var params: any = {
+        let params: any = {
             backendId: backendId,
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params).pipe(
@@ -42,7 +41,7 @@ export class CollaborationServices {
      * @param backendId
      */
     getProjectPreferences(backendId: string): Observable<Settings> {
-        var params: any = {
+        let params: any = {
             backendId: backendId,
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params).pipe(
@@ -57,15 +56,26 @@ export class CollaborationServices {
      * @param backendId 
      */
     activateCollaboratioOnProject(backendId: string) {
-        var params: any = {
+        let params: any = {
             backendId: backendId
         };
         return this.httpMgr.doPost(this.serviceName, "activateCollaboratioOnProject", params);
     }
 
     resetCollaborationOnProject() {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doPost(this.serviceName, "resetCollaborationOnProject", params);
+    }
+
+    /**
+     * Changes the status (enable/disable) of the CS. This is supposed to be used only when CS is working/configured
+     * @param active
+     */
+    setCollaborationSystemActive(active: boolean) {
+        let params: any = {
+            active: active
+        };
+        return this.httpMgr.doPost(this.serviceName, "setCollaborationSystemActive", params);
     }
 
     /**
@@ -74,7 +84,7 @@ export class CollaborationServices {
      * @param currentUserPreferences 
      */
     addPreferencesForCurrentUser(backendId: string, currentUserPreferences: any) {
-        var params: any = {
+        let params: any = {
             backendId: backendId,
             currentUserPreferences: JSON.stringify(currentUserPreferences)
         };
@@ -85,7 +95,7 @@ export class CollaborationServices {
      * 
      */
     getIssueCreationForm(): Observable<Settings> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getIssueCreationForm", params).pipe(
             map(stResp => {
                 return Settings.parse(stResp);
@@ -99,7 +109,7 @@ export class CollaborationServices {
      * @param issueCreationForm a map key-value
      */
     createIssue(resource: ARTURIResource, issueCreationForm: any) {
-        var params: any = {
+        let params: any = {
             resource: resource,
             issueCreationForm: JSON.stringify(issueCreationForm)
         };
@@ -113,7 +123,7 @@ export class CollaborationServices {
      * @param projectId 
      */
     assignProject(projectJson: any) {
-        var params: any = {
+        let params: any = {
             projectJson: JSON.stringify(projectJson)
         };
         return this.httpMgr.doPost(this.serviceName, "assignProject", params);
@@ -125,7 +135,7 @@ export class CollaborationServices {
      * @param projectKey 
      */
     createProject(projectJson: any) {
-        var params: any = {
+        let params: any = {
             projectJson: JSON.stringify(projectJson)
         };
         return this.httpMgr.doPost(this.serviceName, "createProject", params);
@@ -137,7 +147,7 @@ export class CollaborationServices {
      * @param resource 
      */
     assignResourceToIssue(issue: string, resource: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             issue: issue,
             resource: resource
         };
@@ -146,13 +156,26 @@ export class CollaborationServices {
 
     /**
      * 
+     * @param issue 
+     * @param resource 
+     */
+    removeResourceFromIssue(issue: string, resource: ARTURIResource) {
+        let params: any = {
+            issue: issue,
+            resource: resource
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeResourceFromIssue", params);
+    }
+
+    /**
+     * 
      * @param resource 
      */
     listIssuesAssignedToResource(resource: ARTURIResource): Observable<Issue[]> {
-        var params: any = {
+        let params: any = {
             resource: resource
         };
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: [
@@ -174,8 +197,8 @@ export class CollaborationServices {
      * 
      */
     listProjects(): Observable<{ headers: string[], projects: any[] }> {
-        var params: any = {};
-        var options: VBRequestOptions = new VBRequestOptions({
+        let params: any = {};
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: [
@@ -191,10 +214,10 @@ export class CollaborationServices {
      * 
      */
     listIssues(pageOffset: number): Observable<IssuesStruct> {
-        var params: any = {
+        let params: any = {
             pageOffset: pageOffset
         };
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: [
