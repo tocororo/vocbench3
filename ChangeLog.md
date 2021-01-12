@@ -10,9 +10,11 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
     * Updated Angular version to ^10.2.2
     * Dropped dependency from ngx-modialog in favor of ng-bootstrap
     * Updated Bootstrap dependency to version 4.5.3
+  * Implemented support for i18n
   * Improved alignment management in EDOAL project
     * Enabled the storing of validated alignment in the EDOAL linkset
     * Added possibility to specify the mapping property of a correspondence
+  * Improved scalability checks of the instances list
   * Added a badge for showing the datatype of typed values in ResourceView
   * Added data type information in the single-value custom form preview
   * Enabled bulk edit operation for literal values in some partitions of the ResourceView

@@ -150,7 +150,7 @@ export class CustomFormConfigComponent {
     }
 
     deleteFormCollection() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_FORM_COLLECTION"}, {key:"MESSAGES.DELETE_FORM_COLLECTION_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({key:"CUSTOM_FORMS.ACTIONS.DELETE_FORM_COLLECTION"}, {key:"MESSAGES.DELETE_FORM_COLLECTION_CONFIRM"}, ModalType.warning).then(
             confirm => {
                 this.customFormsService.deleteFormCollection(this.selectedFormColl.getId()).subscribe(
                     stResp => {
@@ -164,7 +164,7 @@ export class CustomFormConfigComponent {
     }
 
     cloneFormCollection() {
-        this.basicModals.promptPrefixed({key:"ACTIONS.CLONE_FORM_COLLECTION"}, FormCollection.PREFIX, "ID", null, false, true, true).then(
+        this.basicModals.promptPrefixed({key:"CUSTOM_FORMS.ACTIONS.CLONE_FORM_COLLECTION"}, FormCollection.PREFIX, "ID", null, false, true, true).then(
             (fcId: any) => {
                 for (var i = 0; i < this.formCollectionList.length; i++) {
                     if (this.formCollectionList[i].getId() == fcId) {
@@ -186,13 +186,13 @@ export class CustomFormConfigComponent {
         this.customFormsService.exportFormCollection(this.selectedFormColl.getId()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedFormColl.getId() + ".xml");
+                this.basicModals.downloadLink({ key: "CUSTOM_FORMS.ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedFormColl.getId() + ".xml");
             }
         );
     }
 
     importFormCollection() {
-        return this.openImportCfModal({key:"ACTIONS.IMPORT_FORM_COLLECTION"}, "FormCollection").then(
+        return this.openImportCfModal({key:"CUSTOM_FORMS.ACTIONS.IMPORT_FORM_COLLECTION"}, "FormCollection").then(
             (data: ImportCfModalReturnData) => {
                 this.customFormsService.importFormCollection(data.file, data.id).subscribe(
                     () => {
@@ -252,7 +252,7 @@ export class CustomFormConfigComponent {
     }
 
     cloneCustomForm() {
-        this.basicModals.promptPrefixed({key:"ACTIONS.CLONE_CUSTOM_FORM"}, CustomForm.PREFIX, "ID", null, false, true, true).then(
+        this.basicModals.promptPrefixed({key:"CUSTOM_FORMS.ACTIONS.CLONE_CUSTOM_FORM"}, CustomForm.PREFIX, "ID", null, false, true, true).then(
             (fcId: any) => {
                 for (var i = 0; i < this.customFormList.length; i++) {
                     if (this.customFormList[i].getId() == fcId) {
@@ -275,7 +275,7 @@ export class CustomFormConfigComponent {
             result => {
                 if (result) { //selectedCustomForm belong to a CR
                     let deletEmptyCollCkeckOpt: ConfirmCheckOptions = { label: "Delete also FormCollection(s) left empty", value: true };
-                    this.basicModals.confirmCheck({key:"ACTIONS.DELETE_CUSTOM_FORM"}, "You are deleting a CustomForm that " +
+                    this.basicModals.confirmCheck({key:"CUSTOM_FORMS.ACTIONS.DELETE_CUSTOM_FORM"}, "You are deleting a CustomForm that " +
                         "belongs to one or more FormCollection(s). Are you sure?", [deletEmptyCollCkeckOpt], ModalType.warning).then(
                         (checkboxOpts: ConfirmCheckOptions[]) => {
                             let deleteEmptyColl: boolean = checkboxOpts[0].value;
@@ -292,7 +292,7 @@ export class CustomFormConfigComponent {
                         () => { }
                         );
                 } else { //selectedCustomForm does not belong to any FormCollection
-                    this.basicModals.confirm({key:"ACTIONS.DELETE_CUSTOM_FORM"}, {key:"MESSAGES.DELETE_CUSTOM_FORM_CONFIRM"}, ModalType.warning).then(
+                    this.basicModals.confirm({key:"CUSTOM_FORMS.ACTIONS.DELETE_CUSTOM_FORM"}, {key:"MESSAGES.DELETE_CUSTOM_FORM_CONFIRM"}, ModalType.warning).then(
                         confirm => {
                             this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId()).subscribe(
                                 stResp => {
@@ -311,13 +311,13 @@ export class CustomFormConfigComponent {
         this.customFormsService.exportCustomForm(this.selectedCustomForm.getId()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedCustomForm.getId() + ".xml");
+                this.basicModals.downloadLink({ key: "CUSTOM_FORMS.ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedCustomForm.getId() + ".xml");
             }
         );
     }
 
     importCustomForm() {
-        this.openImportCfModal({key:"ACTIONS.IMPORT_CUSTOM_FORM"}, "CustomForm").then(
+        this.openImportCfModal({key:"CUSTOM_FORMS.ACTIONS.IMPORT_CUSTOM_FORM"}, "CustomForm").then(
             (data: any) => {
                 this.customFormsService.importCustomForm(data.file, data.id).subscribe(
                     stResp => {
