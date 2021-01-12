@@ -15,9 +15,16 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
     @Input() disabled: boolean = false;
     
     prop: SettingsProp;
+
+    radioName: string; //random name of the radio buttons in case of boolean prop (useful to prevent interferences between multiple boolean prop)
+
     translationParam: { propTypeName: string };
 
     constructor() { }
+
+    ngOnInit() {
+        this.radioName = "radio_" + new Date().getTime();
+    }
 
     onModelChanged() {
         this.propagateChange(this.prop);
