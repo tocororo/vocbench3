@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
+import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTLiteral } from "../../models/ARTResources";
 import { Languages } from "../../models/LanguagesCountries";
@@ -14,10 +14,9 @@ import { SharedModalServices } from "../modal/sharedModal/sharedModalServices";
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => LangStringEditorComponent), multi: true,
     }]
 })
-export class LangStringEditorComponent implements ControlValueAccessor, OnInit, AfterViewInit { // based on RdfResourceComponent
+export class LangStringEditorComponent implements ControlValueAccessor, OnInit { // based on RdfResourceComponent
 
     @Input() disabled: boolean = false;
-    @ViewChild('flagIcon') private flagIconRef: ElementRef; 
 
     unknownFlagImgSrc: string = UIUtils.getFlagImgSrc(null); // image associated with unknown (or null) language
 
@@ -30,17 +29,11 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit, 
     
     private literalValue: ARTLiteral; // the rdf:langString being edited (the model) 
 
-    public constructor(private renderer: Renderer2, private sharedModals: SharedModalServices, private preferences: VBProperties) {
+    public constructor(private sharedModals: SharedModalServices, private preferences: VBProperties) {
     }
 
     ngOnInit(): void {
         this.initLangInfo();
-    }
-
-    ngAfterViewInit(): void { // to use the value injected into the @ViewChild annotated field
-        if (!this.disabled) {
-            this.renderer.listen(this.flagIconRef.nativeElement, "click", _ => this.editLanguage());
-        }
     }
 
     /**
@@ -70,6 +63,7 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit, 
     }
 
     editLanguage() {
+        if (this.disabled) return;
         this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGE"}, (this.langTag ? [this.langTag] : []), true, false).then(
             langs => {
                 this.langTag = langs[0];

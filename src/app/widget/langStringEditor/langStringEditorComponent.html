@@ -1,5 +1,5 @@
 <div style="display: flex; align-items: center">
-    <div #flagIcon [title]="language" style="margin-left: 2px; cursor: pointer; z-index: 1">
+    <div [title]="language" style="margin-left: 2px; cursor: pointer; z-index: 1" (click)="editLanguage()">
         <ng-container *ngIf="!langFlagAvailable; else langFlagBlock">
             <img [src]="unknownFlagImgSrc" [ngClass]="{disabled: disabled}">
             <span>{{langTag}}</span>
