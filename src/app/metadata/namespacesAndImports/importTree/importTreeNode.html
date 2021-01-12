@@ -8,14 +8,14 @@
     </div>
     <span *ngIf="import.status == 'LOOP'" class="fas fa-redo" style="margin-right: 6px;" [title]="'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.LOOP_IMPORTS'|translate"></span>
     
-    <div *ngIf="import.status == 'FAILED'" class="btn-group" ngbDropdown>
+    <div *ngIf="import.status == 'FAILED'" class="btn-group" placement="bottom-right" ngbDropdown>
         <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [title]="'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.FAILED_IMPORT'|translate">
             <span class="fas fa-exclamation-triangle"></span>
         </button>
         <div class="dropdown-menu float-right" ngbDropdownMenu>
-            <a class="dropdown-item" (click)="repairFromLocalFile()">{{'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.REPAIR_FROM_LOCAL_FILE'|translate}}</a>
-            <a class="dropdown-item" (click)="repairFromWeb()">{{'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.REPAIR_FROM_WEB'|translate}}</a>
-            <a class="dropdown-item" (click)="repairFromWebToMirror()">{{'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.REPAIR_FROM_WEB_TO_MIRROR'|translate}}</a>
+            <a class="dropdown-item" (click)="repairFromLocalFile()">{{'METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_LOCAL_FILE'|translate}}</a>
+            <a class="dropdown-item" (click)="repairFromWeb()">{{'METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_WEB'|translate}}</a>
+            <a class="dropdown-item" (click)="repairFromWebToMirror()">{{'METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_WEB_TO_MIRROR'|translate}}</a>
         </div>
     </div>
 
