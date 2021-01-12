@@ -163,7 +163,7 @@ export class ProjectUsersManagerComponent {
     }
 
     removeUserFromProject() {
-        this.basicModals.confirm({key:"ACTIONS.REMOVE_USER"}, {key:"MESSAGES.REMOVE_USER_FROM_PROJ_CONFIRM", params:{user: this.selectedUser.getShow(), project: this.project.getName()}},
+        this.basicModals.confirm({key:"ADMINISTRATION.ACTIONS.REMOVE_USER"}, {key:"MESSAGES.REMOVE_USER_FROM_PROJ_CONFIRM", params:{user: this.selectedUser.getShow(), project: this.project.getName()}},
             ModalType.warning).then(
             () => {
                 this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(

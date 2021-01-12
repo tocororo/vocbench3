@@ -4,22 +4,22 @@
             <button class="btn btn-xs btn-light" (click)="addNode()" [title]="'ACTIONS.ADD_NODE'|translate">
                 <span class="fas fa-plus"></span>
             </button>
-            <button class="btn btn-xs btn-light" (click)="removeNode()" [title]="'GRAPHS.DELETE_SELECTED_NODE'|translate" [disabled]="!activeRemove" >
+            <button class="btn btn-xs btn-light" (click)="removeNode()" [title]="'GRAPHS.ACTIONS.DELETE_SELECTED_NODE'|translate" [disabled]="!activeRemove" >
                 <span class="fas fa-minus"></span>
             </button>
         </div> 
         <span style="flex: 1;"></span>
         <div class="btn-toolbar">
-            <button class="btn btn-light btn-xs"  [title]="'GRAPHS.HIDE_GENERIC_LINKS'|translate" (click)="updateArrows()"  [ngClass]="{ active: isHideArrows }">
+            <button class="btn btn-light btn-xs"  [title]="'GRAPHS.ACTIONS.HIDE_GENERIC_LINKS'|translate" (click)="updateArrows()"  [ngClass]="{ active: isHideArrows }">
                 <span class="fas fa-long-arrow-alt-up"></span>
             </button>
             <button class="btn btn-light btn-xs" (click)="rendering=!rendering" title="Rendering"  [ngClass]="{ active: rendering }">
                 <span class="fas fa-font"></span>
             </button>
-            <button class="btn btn-light btn-xs" (click)="snapshot()" [title]="'ACTIONS.EXPORT_GRAPH_SNAPSHOT'|translate">
+            <button class="btn btn-light btn-xs" (click)="snapshot()" [title]="'GRAPHS.ACTIONS.EXPORT_GRAPH_SNAPSHOT'|translate">
                 <span class="fas fa-camera"></span>
             </button>
-            <button type="button" class="btn btn-light btn-xs" [title]="'GRAPHS.FIX_NODES_POSITION'|translate" (click)="isLock? unfixAll() : fixAll()"  [ngClass]="{ active: isLock }">
+            <button type="button" class="btn btn-light btn-xs" [title]="'GRAPHS.ACTIONS.FIX_NODES_POSITION'|translate" (click)="isLock? unfixAll() : fixAll()"  [ngClass]="{ active: isLock }">
                 <span class="fas fa-lock"></span>
             </button>
           <!--  <button class="btn btn-light btn-xs" (click)="openSettings()" [title]="'COMMONS.SETTINGS'|translate">

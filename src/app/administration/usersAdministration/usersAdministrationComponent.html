@@ -11,13 +11,13 @@
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group btn-group-xs">
                                 <button #actBtn class="btn btn-light" [ngClass]="{active: showActive}" (click)="showActive = !showActive"
-                                    [title]="'ACTIONS.SHOW_HIDE_ACTIVE_USER'|translate" (mouseup)="actBtn.blur()">{{'STATUS.ACTIVE'|translate}}
+                                    [title]="'ADMINISTRATION.ACTIONS.SHOW_HIDE_ACTIVE_USER'|translate" (mouseup)="actBtn.blur()">{{'STATUS.ACTIVE'|translate}}
                                 </button>
                                 <button #inactBtn class="btn btn-light" [ngClass]="{active: showInactive}" (click)="showInactive = !showInactive"
-                                    [title]="'ACTIONS.SHOW_HIDE_INACTIVE_USER'|translate" (mouseup)="inactBtn.blur()">{{'STATUS.INACTIVE'|translate}}
+                                    [title]="'ADMINISTRATION.ACTIONS.SHOW_HIDE_INACTIVE_USER'|translate" (mouseup)="inactBtn.blur()">{{'STATUS.INACTIVE'|translate}}
                                 </button>
                                 <button #newBtn class="btn btn-light" [ngClass]="{active: showNew}" (click)="showNew = !showNew"
-                                    [title]="'ACTIONS.SHOW_HIDE_NEW_USER'|translate" (mouseup)="newBtn.blur()">{{'STATUS.NEW'|translate}}
+                                    [title]="'ADMINISTRATION.ACTIONS.SHOW_HIDE_NEW_USER'|translate" (mouseup)="newBtn.blur()">{{'STATUS.NEW'|translate}}
                                 </button>
                             </div>
                             <div class="btn-group btn-group-xs">

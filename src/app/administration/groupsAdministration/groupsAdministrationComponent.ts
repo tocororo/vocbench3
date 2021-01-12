@@ -45,7 +45,7 @@ export class GroupsAdministrationComponent {
     }
 
     createGroup() {
-        this.openGroupEditor({key:"ACTIONS.CREATE_GROUP"}).then(
+        this.openGroupEditor({key:"ADMINISTRATION.ACTIONS.CREATE_GROUP"}).then(
             data => {
                 this.initGroups();
             },
@@ -62,7 +62,7 @@ export class GroupsAdministrationComponent {
     }
 
     editGroup() {
-        this.openGroupEditor({key:"ACTIONS.EDIT_GROUP"}, this.selectedGroup).then(
+        this.openGroupEditor({key:"ADMINISTRATION.ACTIONS.EDIT_GROUP"}, this.selectedGroup).then(
             (updatedGroup: UsersGroup) => {
                 this.initGroups(updatedGroup);
             },

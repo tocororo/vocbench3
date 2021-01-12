@@ -56,7 +56,7 @@ export class LoadCustomSearchModal {
     }
 
     add() {
-        this.sharedModals.loadConfiguration({key:"ACTIONS.SELECT_STORED_SPARQL_PARAMETERIZED_QUERY"}, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, false, false).then(
+        this.sharedModals.loadConfiguration({key:"SPARQL.ACTIONS.SELECT_STORED_SPARQL_PARAMETERIZED_QUERY"}, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, false, false).then(
             (data: LoadConfigurationModalReturnData) => {
                 let ref: string = data.reference.relativeReference;
                 let alreadyIn: boolean = false;

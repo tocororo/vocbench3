@@ -49,7 +49,7 @@ export class CustomOperationComponent {
     }
 
     private editOperation() {
-        this.customServiceModals.openCustomOperationEditor({key:"ACTIONS.EDIT_CUSTOM_OPERATION"}, this.operation.serviceId, this.operation).then(
+        this.customServiceModals.openCustomOperationEditor({key:"CUSTOM_SERVICES.ACTIONS.EDIT_CUSTOM_OPERATION"}, this.operation.serviceId, this.operation).then(
             ()=> {
                 this.update.emit();
             },

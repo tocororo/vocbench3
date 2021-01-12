@@ -61,14 +61,14 @@ export class ResourceMetadataComponent {
     }
 
     createPattern() {
-        this.openPatternEditor({key:"ACTIONS.CREATE_METADATA_PATTERN"}).then(
+        this.openPatternEditor({key:"RESOURCE_METADATA.ACTIONS.CREATE_METADATA_PATTERN"}).then(
             () => this.initPatterns(),
             () => {}
         );
     }
 
     editPattern() {
-        this.openPatternEditor({key:"ACTIONS.EDIT_METADATA_PATTERN"}, this.selectedPattern.reference).then(
+        this.openPatternEditor({key:"RESOURCE_METADATA.ACTIONS.EDIT_METADATA_PATTERN"}, this.selectedPattern.reference).then(
             () => this.initPatterns(),
             () => {}
         );
@@ -81,7 +81,7 @@ export class ResourceMetadataComponent {
             message += this.translateService.instant("MESSAGES.DELETE_METADATA_PATTERN_CONFIRM.USED_IN_ASSOCIATION") + ".\n";
         }
         message += this.translateService.instant("MESSAGES.DELETE_METADATA_PATTERN_CONFIRM.CONTINUE");
-        this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_PATTERN"}, message, ModalType.warning).then(
+        this.basicModals.confirm({key:"RESOURCE_METADATA.ACTIONS.DELETE_METADATA_PATTERN"}, message, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
                     () => {
@@ -97,7 +97,7 @@ export class ResourceMetadataComponent {
     }
 
     clonePattern() {
-        this.basicModals.prompt({key:"ACTIONS.CLONE_METADATA_PATTERN"}, { value: "Name", tooltip: "The name of the new pattern" }).then(
+        this.basicModals.prompt({key:"RESOURCE_METADATA.ACTIONS.CLONE_METADATA_PATTERN"}, { value: "Name", tooltip: "The name of the new pattern" }).then(
             (patternName: string) => {
                 if (this.patterns.some(p => p.name == patternName)) {
                     this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_METADATA_PATTERN_NAME"}, ModalType.warning);
@@ -133,13 +133,13 @@ export class ResourceMetadataComponent {
         this.resourceMetadataService.exportPattern(this.selectedPattern.reference).subscribe(
             pattern => {
                 let url = window.URL.createObjectURL(pattern);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_METADATA_PATTERN" }, null, url, this.selectedPattern.name + ".cfg");
+                this.basicModals.downloadLink({ key: "RESOURCE_METADATA.ACTIONS.EXPORT_METADATA_PATTERN" }, null, url, this.selectedPattern.name + ".cfg");
             }
         )
     }
 
     importPatternFromLibrary() {
-        this.openPatterLibrary({key:"ACTIONS.IMPORT_SHARED_METADATA_PATTERN"}).then(
+        this.openPatterLibrary({key:"RESOURCE_METADATA.ACTIONS.IMPORT_SHARED_METADATA_PATTERN"}).then(
             pattern => {
                 this.initPatterns();
             },
@@ -148,7 +148,7 @@ export class ResourceMetadataComponent {
     }
 
     storePatternInLibrary() {
-        this.openPatterLibrary({key:"ACTIONS.SHARE_METADATA_PATTERN"}, this.selectedPattern);
+        this.openPatterLibrary({key:"RESOURCE_METADATA.ACTIONS.SHARE_METADATA_PATTERN"}, this.selectedPattern);
     }
 
     private openPatternEditor(title: Translation, patternRef?: string) {
@@ -184,14 +184,14 @@ export class ResourceMetadataComponent {
     }
 
     createAssociation() {
-        this.openAssociationEditor({key:"ACTIONS.CREATE_METADATA_ASSOCIATION"}).then(
+        this.openAssociationEditor({key:"RESOURCE_METADATA.ACTIONS.CREATE_METADATA_ASSOCIATION"}).then(
             () => this.initAssociations(),
             () => {}
         );
     }
 
     deleteAssociation() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_ASSOCIATION"}, {key:"MESSAGES.DELETE_METADATA_PATTERN_ASSOCIATION_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({key:"RESOURCE_METADATA.ACTIONS.DELETE_METADATA_ASSOCIATION"}, {key:"MESSAGES.DELETE_METADATA_PATTERN_ASSOCIATION_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deleteAssociation(this.selectedAssociation.ref).subscribe(
                     () => this.initAssociations()

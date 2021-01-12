@@ -50,7 +50,7 @@ export class MetadataPatternLibraryModal {
     }
 
     deletePattern() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_METADATA_PATTERN"}, {key:"MESSAGES.DELETE_SHARED_METADATA_PATTERN_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({key:"RESOURCE_METADATA.ACTIONS.DELETE_METADATA_PATTERN"}, {key:"MESSAGES.DELETE_SHARED_METADATA_PATTERN_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
                     () => {

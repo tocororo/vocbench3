@@ -6,8 +6,8 @@
             </button>
 
             <div *ngIf="isExpandEnabled()" class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="expandSubResources()" [title]="'GRAPHS.EXPAND_SUB_RESOURCES'|translate">Sub</button>
-                <button class="btn btn-light" (click)="expandSuperResources()" [title]="'GRAPHS.EXPAND_SUPER_RESOURCES'|translate">Super</button>
+                <button class="btn btn-light" (click)="expandSubResources()" [title]="'GRAPHS.ACTIONS.EXPAND_SUB_RESOURCES'|translate">Sub</button>
+                <button class="btn btn-light" (click)="expandSuperResources()" [title]="'GRAPHS.ACTIONS.EXPAND_SUPER_RESOURCES'|translate">Super</button>
             </div>
         </div>
         <span style="flex: 1;"></span>
@@ -15,7 +15,7 @@
             <button class="btn btn-light btn-xs" (click)="rendering=!rendering" title="Rendering"  [ngClass]="{ active: rendering }">
                 <span class="fas fa-font"></span>
             </button>
-            <button class="btn btn-light btn-xs" (click)="snapshot()" [title]="'ACTIONS.EXPORT_GRAPH_SNAPSHOT'|translate">
+            <button class="btn btn-light btn-xs" (click)="snapshot()" [title]="'GRAPHS.ACTIONS.EXPORT_GRAPH_SNAPSHOT'|translate">
                 <span class="fas fa-camera"></span>
             </button>
             <button class="btn btn-light btn-xs" (click)="openSettings()" [title]="'COMMONS.SETTINGS'|translate">
@@ -33,7 +33,7 @@
                     <span style="flex: 1;"></span>
                     <div *ngIf="isSelectedElementNode()" class="btn-toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button type="button" class="btn btn-light" [ngClass]="{ active: selectedElement?.fixed }" [title]="'GRAPHS.FIX_NODE_POSITION'|translate" (click)="fixNode()" [disabled]="!selectedElement">
+                            <button type="button" class="btn btn-light" [ngClass]="{ active: selectedElement?.fixed }" [title]="'GRAPHS.ACTIONS.FIX_NODE_POSITION'|translate" (click)="fixNode()" [disabled]="!selectedElement">
                                 <span class="fas fa-lock"></span>
                             </button>
                             <!-- <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" style="padding: 3px; line-height: 1;">

@@ -114,7 +114,7 @@ export class RolesAdministrationComponent {
         this.adminService.exportRole(this.selectedRole.getName()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_ROLE" }, null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
+                this.basicModals.downloadLink({ key: "ADMINISTRATION.ACTIONS.EXPORT_ROLE" }, null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
             }
         )
     }
@@ -150,7 +150,7 @@ export class RolesAdministrationComponent {
     }
 
     addCapability() {
-        this.openCapabilityEditorModal({key:"ACTIONS.ADD_CAPABILITY"}, null).then(
+        this.openCapabilityEditorModal({key:"ADMINISTRATION.ACTIONS.ADD_CAPABILITY"}, null).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
                     this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_CAPABILITY"}, ModalType.warning);
@@ -177,7 +177,7 @@ export class RolesAdministrationComponent {
     }
 
     editCapability() {
-        this.openCapabilityEditorModal({key:"ACTIONS.EDIT_CAPABILITY"}, this.selectedCapability).then(
+        this.openCapabilityEditorModal({key:"ADMINISTRATION.ACTIONS.EDIT_CAPABILITY"}, this.selectedCapability).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
                     this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_CAPABILITY"}, ModalType.warning).then();

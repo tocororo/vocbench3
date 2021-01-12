@@ -81,7 +81,7 @@
                     <ng-container *ngIf="type == 'graph'">
                         <button class="btn btn-light btn-sm" (click)="inferAnnotations()" style="margin-top: 4px;" 
                             [title]="'CUSTOM_FORMS.FORMS.INFER_ANNOTATIONS_INFO'|translate" [disabled]="!ref || readOnly">
-                            {{'ACTIONS.INFER_ANNOTATIONS'|translate}}
+                            {{'CUSTOM_FORMS.ACTIONS.INFER_ANNOTATIONS'|translate}}
                         </button>
                         <button *ngIf="extractFromShaclAuthorized" class="btn btn-light btn-sm" (click)="extractFromShacl()" style="margin-top: 4px;" 
                             [title]="'CUSTOM_FORMS.FORMS.FROM_SHACLE_INFO'|translate" [disabled]="readOnly">

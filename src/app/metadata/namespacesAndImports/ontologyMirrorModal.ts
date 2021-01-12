@@ -37,7 +37,7 @@ export class OntologyMirrorModal {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromWebWithUri(mirror: { file: string, baseURI: string }) {
-        this.basicModals.prompt({key:"ACTIONS.UPDATE_ONTO_MIRROR_FROM_WEB"}, { value: "BaseURI" }).then(
+        this.basicModals.prompt({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_ONTO_MIRROR_FROM_WEB"}, { value: "BaseURI" }).then(
             (newBaseURI: any) => {
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                 this.ontoMgrService.updateOntologyMirrorEntry("updateFromBaseURI", newBaseURI, mirror.file).subscribe(
@@ -56,7 +56,7 @@ export class OntologyMirrorModal {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromWebFromAltUrl(mirror: { file: string, baseURI: string }) {
-        this.basicModals.prompt({key:"ACTIONS.UPDATE_ONTO_MIRROR_FROM_ALT_URL"}, { value: "URL" }).then(
+        this.basicModals.prompt({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_ONTO_MIRROR_FROM_ALT_URL"}, { value: "URL" }).then(
             (url: any) => {
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                 this.ontoMgrService.updateOntologyMirrorEntry("updateFromAlternativeURL", mirror.baseURI, mirror.file, url).subscribe(
@@ -75,7 +75,7 @@ export class OntologyMirrorModal {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromLocalFile(mirror: { file: string, baseURI: string }) {
-        this.basicModals.selectFile({ key: "ACTIONS.UPDATE_MIRROR" }, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
+        this.basicModals.selectFile({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_MIRROR" }, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
             (file: any) => {
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                 this.ontoMgrService.updateOntologyMirrorEntry("updateFromFile", mirror.baseURI, mirror.file, null, file).subscribe(

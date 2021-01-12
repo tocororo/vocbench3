@@ -9,8 +9,8 @@
                         <span class="fas fa-plus"></span>
                     </button>
                     <div class="dropdown-menu float-right" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="addCatalogRecord()">{{'ACTIONS.ADD_CATALOG_RECORD'|translate}}</a>
-                        <a class="dropdown-item" (click)="discoverDataset()">{{'ACTIONS.DISCOVER_DATASET'|translate}}</a>
+                        <a class="dropdown-item" (click)="addCatalogRecord()">{{'METADATA.METADATA_REGISTRY.ACTIONS.ADD_CATALOG_RECORD'|translate}}</a>
+                        <a class="dropdown-item" (click)="discoverDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET'|translate}}</a>
                     </div>
                 </div>
                 <button class="btn btn-light" [title]="'ACTIONS.DELETE_DATASET'|translate" (click)="deleteCatalogRecord()"
@@ -57,11 +57,11 @@
                     <div class="card-header">
                         <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.OTHER_VERSIONS'|translate}}:</label>
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" [title]="'ACTIONS.ADD_DATASET_VERSION'|translate" (click)="addDatasetVersion()"
+                            <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.ADD_DATASET_VERSION'|translate" (click)="addDatasetVersion()"
                                 [disabled]="!catalogDataset || !isAddDatasetAuthorized()">
                                 <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-light" [title]="'ACTIONS.DELETE_DATASET_VERSION'|translate" (click)="deleteDatasetVersion()"
+                            <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_DATASET_VERSION'|translate" (click)="deleteDatasetVersion()"
                                 [disabled]="!selectedDataset?.isVersion || !isRemoveDatasetAuthorized()">
                                 <span class="fas fa-minus"></span>
                             </button>
@@ -82,24 +82,24 @@
                     <div class="card-header">
                         <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.EMBEDDED_LEXICALIZATION_SETS'|translate}}:</label>
                         <div class="btn-group btn-group-xs">
-                            <div class="btn-group" [title]="'ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate" ngbDropdown>
+                            <div class="btn-group" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate" ngbDropdown>
                                 <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!selectedCatalog || !isAddEmbeddedLexicalizationSetAuthorized()">
                                     <span class="fas fa-plus"></span>
                                 </button>
                                 <div class="dropdown-menu float-right" ngbDropdownMenu>
                                     <a (click)="addEmbeddedLexicalizationSet()" class="dropdown-item text-nowrap">
-                                        {{'ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate}}
+                                        {{'METADATA.METADATA_REGISTRY.ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate}}
                                     </a>
                                     <a (click)="assessLexicalizationModel()" class="dropdown-item text-nowrap" [ngClass]="{disabled : lexicalizationSets.length != 0}">
-                                        {{'ACTIONS.ASSESS_LEXICALIZATION_MODEL'|translate}}
+                                        {{'METADATA.METADATA_REGISTRY.ACTIONS.ASSESS_LEXICALIZATION_MODEL'|translate}}
                                     </a>
                                 </div>
                             </div>
-                            <button class="btn btn-light" [title]="'ACTIONS.DELETE_EMBEDDED_LEXICALIZATION_SET'|translate" (click)="deleteEmbeddedLexicalizationSet()"
+                            <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_EMBEDDED_LEXICALIZATION_SET'|translate" (click)="deleteEmbeddedLexicalizationSet()"
                                 [disabled]="!selectedLexicalizationSet || !isRemoveEmbeddedLexicalizationSetAuthorized()">
                                 <span class="fas fa-minus"></span>
                             </button>
-                            <button class="btn btn-light" [title]="'ACTIONS.DELETE_ALL_EMBEDDED_LEXICALIZATION_SET'|translate" (click)="deleteAllEmbeddedLexicalizationSet()"
+                            <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_ALL_EMBEDDED_LEXICALIZATION_SET'|translate" (click)="deleteAllEmbeddedLexicalizationSet()"
                                 [disabled]="!isRemoveEmbeddedLexicalizationSetAuthorized() || lexicalizationSets.length == 0">
                                 <span class="far fa-trash-alt"></span>
                             </button>

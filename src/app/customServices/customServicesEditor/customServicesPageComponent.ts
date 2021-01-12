@@ -45,7 +45,7 @@ export class CustomServicesPageComponent {
 
 
     createService() {
-        this.customServiceModals.openCustomServiceEditor({key:"ACTIONS.CREATE_CUSTOM_SERVICE"}).then(
+        this.customServiceModals.openCustomServiceEditor({key:"CUSTOM_SERVICES.ACTIONS.CREATE_CUSTOM_SERVICE"}).then(
             () => {
                 this.initServices();
             },
@@ -54,7 +54,7 @@ export class CustomServicesPageComponent {
     }
 
     deleteService() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_CUSTOM_SERVICE"}, {key:"MESSAGES.DELETE_CUSTOM_SERVICE_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({key:"CUSTOM_SERVICES.ACTIONS.DELETE_CUSTOM_SERVICE"}, {key:"MESSAGES.DELETE_CUSTOM_SERVICE_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.customServService.deleteCustomService(this.selectedServiceId).subscribe(
                     () => {

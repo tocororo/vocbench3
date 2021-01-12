@@ -6,7 +6,7 @@
                 <span class="fas fa-pencil-alt"></span>
             </button>
             <div class="btn-group btn-group-sm" style="margin-left: 5px;">
-                <button class="btn btn-light" (click)="compileReport()" [title]="'ACTIONS.COMPILE_REPORT'|translate">
+                <button class="btn btn-light" (click)="compileReport()" [title]="'INVOKABLE_REPORTERS.ACTIONS.COMPILE_REPORT'|translate">
                     <span class="fas fa-play"></span>
                 </button>
             </div>
@@ -16,7 +16,7 @@
                         <option *ngFor="let f of reportFormats" [ngValue]="f">{{f.label}}</option>
                     </select>
                     <span class="input-group-append">
-                        <button class="btn btn-light" (click)="compileAndDownloadReport()" [title]="'ACTIONS.COMPILE_AND_DOWNLOAD_REPORT'|translate">
+                        <button class="btn btn-light" (click)="compileAndDownloadReport()" [title]="'INVOKABLE_REPORTERS.ACTIONS.COMPILE_AND_DOWNLOAD_REPORT'|translate">
                             <span class="fas fa-download"></span>
                         </button>
                     </span>

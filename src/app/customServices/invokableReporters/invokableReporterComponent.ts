@@ -78,7 +78,7 @@ export class InvokableReporterComponent {
     }
 
     edit() {
-        this.invokableReporterModals.openInvokableReporterEditor({key:"ACTIONS.EDIT_INVOKABLE_REPORT"}, [], this.ref).then(
+        this.invokableReporterModals.openInvokableReporterEditor({key:"INVOKABLE_REPORTERS.ACTIONS.EDIT_INVOKABLE_REPORT"}, [], this.ref).then(
             () => {
                 this.initReporter(true);
             },
@@ -137,7 +137,7 @@ export class InvokableReporterComponent {
     }
 
     private createServiceInvocation() {
-        this.invokableReporterModals.openServiceInvocationEditor({key:"ACTIONS.CREATE_SERVICE_INVOCATION"}, this.ref).then(
+        this.invokableReporterModals.openServiceInvocationEditor({key:"INVOKABLE_REPORTERS.ACTIONS.CREATE_SERVICE_INVOCATION"}, this.ref).then(
             () => { //operation created => require update
                 this.initReporter(true);
             },

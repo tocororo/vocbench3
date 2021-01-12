@@ -10,7 +10,7 @@
                 <button class="btn btn-xs btn-light" (click)="initProjects()" [title]="'ACTIONS.REFRESH'|translate">
                     <span class="fas fa-redo"></span>
                 </button>
-                <button class="btn btn-xs btn-light" (click)="openACLModal()" [title]="'PROJECTS.ACL.SHOW_ACL_MATRIX'|translate">
+                <button class="btn btn-xs btn-light" (click)="openACLModal()" [title]="'PROJECTS.ACTIONS.SHOW_ACL_MATRIX'|translate">
                     ACL
                 </button>
                 <div class="ml-1" ngbDropdown>
@@ -93,12 +93,12 @@
                                                 </button>
                                                 <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                                                     <button class="dropdown-item" (click)="editDirectory(p, pd.dir)">{{'PROJECTS.ACTIONS.CHANGE_DIR'|translate}}</button>
-                                                    <button class="dropdown-item" (click)="editACL(p)">{{'ACTIONS.EDIT_ACL'|translate}}</button>
+                                                    <button class="dropdown-item" (click)="editACL(p)">{{'PROJECTS.ACTIONS.EDIT_ACL'|translate}}</button>
                                                     <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
                                                     <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
                                                     <button class="dropdown-item" (click)="editFacets(p)">{{'PROJECTS.ACTIONS.EDIT_FACETS'|translate}}</button>
                                                     <div class="dropdown-divider"></div>
-                                                    <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.PROPERTIES'|translate}}</button>
+                                                    <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.SHOW_PROPERTIES'|translate}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -158,12 +158,12 @@
                                         <span class="fas fa-caret-down"></span>
                                     </button>
                                     <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                                        <button class="dropdown-item" (click)="editACL(p)">{{'ACTIONS.EDIT_ACL'|translate}}</button>
+                                        <button class="dropdown-item" (click)="editACL(p)">{{'PROJECTS.ACTIONS.EDIT_ACL'|translate}}</button>
                                         <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
                                         <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
                                         <button class="dropdown-item" (click)="editFacets(p)">{{'PROJECTS.ACTIONS.EDIT_FACETS'|translate}}</button>
                                         <div class="dropdown-divider"></div>
-                                        <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.PROPERTIES'|translate}}</button>
+                                        <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.SHOW_PROPERTIES'|translate}}</button>
                                     </div>
                                 </div>
                             </div>

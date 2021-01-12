@@ -292,7 +292,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromWeb() {
-        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_WEB"}, ImportType.fromWeb).then(
+        this.sharedModals.importOntology({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_WEB"}, ImportType.fromWeb).then(
             (data: ImportFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -314,7 +314,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromWebToMirror() {
-        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_WEB_TO_MIRROR"}, ImportType.fromWebToMirror).then(
+        this.sharedModals.importOntology({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_WEB_TO_MIRROR"}, ImportType.fromWebToMirror).then(
             (data: ImportFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -336,7 +336,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromLocalFile() {
-        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_LOCAL_FILE"}, ImportType.fromLocalFile).then(
+        this.sharedModals.importOntology({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_LOCAL_FILE"}, ImportType.fromLocalFile).then(
             (data: ImportFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
@@ -358,7 +358,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromOntologyMirror() {
-        this.sharedModals.importOntology({key:"ACTIONS.IMPORT_FROM_ONTOLOGY_MIRROR"}, ImportType.fromOntologyMirror).then(
+        this.sharedModals.importOntology({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_ONTOLOGY_MIRROR"}, ImportType.fromOntologyMirror).then(
             (data: ImportFromMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
@@ -380,7 +380,7 @@ export class NamespacesAndImportsComponent {
      * Once done refreshes the imports list and the namespace prefix mapping
      */
     importFromDatasetCatalog() {
-        this.sharedModals.importFromDatasetCatalog({key:"ACTIONS.IMPORT_FROM_DATASET_CATALOG"}).then(
+        this.sharedModals.importFromDatasetCatalog({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_DATASET_CATALOG"}).then(
             (data: ImportFromDatasetCatalogModalReturnData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.ontologyIRI, data.transitiveImportAllowance, data.dataDump, data.rdfFormat).subscribe(

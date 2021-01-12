@@ -252,11 +252,11 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     private renameDirectory(directory: string) {
-        this.basicModals.prompt({key:"ACTIONS.RENAME_PROJECT_DIRECTORY"}, { value: "Directory name" }, null, directory).then(
+        this.basicModals.prompt({key:"PROJECTS.ACTIONS.RENAME_PROJECT_DIRECTORY"}, { value: "Directory name" }, null, directory).then(
             newName => {
                 if (newName != directory) {
                     if (this.projectDirs.some(pd => pd.dir == newName)) { //name changed, but a directory with the same name already exists
-                        this.basicModals.confirm({key:"ACTIONS.RENAME_PROJECT_DIRECTORY"}, 
+                        this.basicModals.confirm({key:"PROJECTS.ACTIONS.RENAME_PROJECT_DIRECTORY"}, 
                         {key:"MESSAGES.ALREADY_EXISTING_PROJ_DIR_CONFIRM", params:{targetDirName: newName, sourceDirName: directory}}, ModalType.warning).then(
                             () => { //confirmed => apply rename
                                 this.projectService.renameProjectFacetDir(directory, newName).subscribe(

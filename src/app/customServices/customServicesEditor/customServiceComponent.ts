@@ -93,7 +93,7 @@ export class CustomServiceComponent {
     }
 
     private createOperation() {
-        this.customServiceModals.openCustomOperationEditor({key:"ACTIONS.CREATE_CUSTOM_OPERATION"}, this.service.id).then(
+        this.customServiceModals.openCustomOperationEditor({key:"CUSTOM_SERVICES.ACTIONS.CREATE_CUSTOM_OPERATION"}, this.service.id).then(
             () => { //operation created => require update
                 this.initCustomService(true);
             },

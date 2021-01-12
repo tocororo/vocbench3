@@ -27,7 +27,7 @@ export class ImportTreeNodeComponent {
     }
 
     repairFromLocalFile() {
-        this.openImportModal({key:"ACTIONS.REPAIR_FROM_LOCAL_FILE"}, ImportType.fromLocalFile).then(
+        this.openImportModal({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_LOCAL_FILE"}, ImportType.fromLocalFile).then(
             (data: RepairFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.getFromLocalFile(data.baseURI, data.localFile, data.transitiveImportAllowance, data.mirrorFile).subscribe(
@@ -42,7 +42,7 @@ export class ImportTreeNodeComponent {
     }
 
     repairFromWeb() {
-        this.openImportModal({key:"ACTIONS.REPAIR_FROM_WEB"}, ImportType.fromWeb).then(
+        this.openImportModal({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_WEB"}, ImportType.fromWeb).then(
             (data: RepairFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.downloadFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -57,7 +57,7 @@ export class ImportTreeNodeComponent {
     }
 
     repairFromWebToMirror() {
-        this.openImportModal({key:"ACTIONS.REPAIR_FROM_WEB_TO_MIRROR"}, ImportType.fromWebToMirror).then(
+        this.openImportModal({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_WEB_TO_MIRROR"}, ImportType.fromWebToMirror).then(
             (data: RepairFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.downloadFromWebToMirror(

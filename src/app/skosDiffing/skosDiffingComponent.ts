@@ -116,7 +116,7 @@ export class SkosDiffingComponent {
                 // let url = window.URL.createObjectURL(report);
                 // window.open(url);
                 let exportLink = window.URL.createObjectURL(report);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_SKOS_DIFFING_RESULT" }, null, exportLink, "result." + this.selectedResultFormat);
+                this.basicModals.downloadLink({ key: "SKOS_DIFF.ACTIONS.EXPORT_SKOS_DIFFING_RESULT" }, null, exportLink, "result." + this.selectedResultFormat);
             },
         );
     }

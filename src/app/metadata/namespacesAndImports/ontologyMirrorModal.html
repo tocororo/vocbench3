@@ -23,13 +23,13 @@
                             <td>
                                 <div class="dropdown float-right" ngbDropdown>
                                     <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle
-                                        [title]="'ACTIONS.UPDATE_MIRROR'|translate" [disabled]="!isUpdateMirrorAuthorized()">
+                                        [title]="'METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_MIRROR'|translate" [disabled]="!isUpdateMirrorAuthorized()">
                                         <span class="fas fa-pencil-alt"></span>
                                     </button>
                                     <div class="dropdown-menu" ngbDropdownMenu>
-                                        <a class="dropdown-item" (click)="updateMirrorFromWebWithUri(m)">{{'ACTIONS.UPDATE_FROM_WEB_BASEURI'|translate}}</a>
-                                        <a class="dropdown-item" (click)="updateMirrorFromWebFromAltUrl(m)">{{'ACTIONS.UPDATE_FROM_WEB_ALT_URL'|translate}}</a>
-                                        <a class="dropdown-item" (click)="updateMirrorFromLocalFile(m)">{{'ACTIONS.UPDATE_FROM_LOCAL_FILE'|translate}}</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromWebWithUri(m)">{{'METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_FROM_WEB_BASEURI'|translate}}</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromWebFromAltUrl(m)">{{'METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_FROM_WEB_ALT_URL'|translate}}</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromLocalFile(m)">{{'METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_FROM_LOCAL_FILE'|translate}}</a>
                                     </div>
                                 </div>
                             </td>

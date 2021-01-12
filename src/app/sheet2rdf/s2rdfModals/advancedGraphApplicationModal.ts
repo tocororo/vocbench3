@@ -320,7 +320,7 @@ export class AdvancedGraphApplicationModal {
                         prefixMapping: prefixMappingToStore,
                         defaultPredicate: this.defaultPredicate != null ? this.defaultPredicate.toNT() : null
                     };
-                    this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_ADVANCED_GRAPH_APPLICATION"}, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
+                    this.sharedModals.storeConfiguration({key:"SHEET2RDF.ACTIONS.SAVE_ADVANCED_GRAPH_APPLICATION"}, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
                         () => {
                             this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIGURATION_SAVED"});
                         },
@@ -334,7 +334,7 @@ export class AdvancedGraphApplicationModal {
     loadGraph() {
         this.s2rdfService.getDefaultAdvancedGraphApplicationConfigurations().subscribe(
             references => {
-                this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_ADVANCED_GRAPH_APPLICATION"}, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, true, true, references).then(
+                this.sharedModals.loadConfiguration({key:"SHEET2RDF.ACTIONS.LOAD_ADVANCED_GRAPH_APPLICATION"}, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, true, true, references).then(
                     (data: LoadConfigurationModalReturnData) => {
                         //reset the current status
                         this.newDefinedNodes = [];

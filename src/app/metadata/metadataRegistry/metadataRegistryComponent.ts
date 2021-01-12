@@ -94,7 +94,7 @@ export class MetadataRegistryComponent {
     }
 
     discoverDataset() {
-        this.basicModals.prompt({key:"ACTIONS.DISCOVER_DATASET"}, { value: "Resource IRI", tooltip: "This IRI can be directly the IRI of the VoID description " + 
+        this.basicModals.prompt({key:"METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET"}, { value: "Resource IRI", tooltip: "This IRI can be directly the IRI of the VoID description " + 
             "of the Dataset (the instance of void:Dataset) or the IRI of any resource in the Dataset that points to this VoID description" }).then(
             iri => {
                 if (ResourceUtils.testIRI(iri)) {

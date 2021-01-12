@@ -26,7 +26,7 @@ export class ServiceInvocationComponent {
     }
     
     editInvocation() {
-        this.invokableReporterModals.openServiceInvocationEditor({key:"ACTIONS.EDIT_SERVICE_INVOCATION"}, this.invocation.reporterRef, { def: this.invocation, idx: this.idx }).then(
+        this.invokableReporterModals.openServiceInvocationEditor({key:"INVOKABLE_REPORTERS.ACTIONS.EDIT_SERVICE_INVOCATION"}, this.invocation.reporterRef, { def: this.invocation, idx: this.idx }).then(
             () => {
                 this.update.emit();
             },

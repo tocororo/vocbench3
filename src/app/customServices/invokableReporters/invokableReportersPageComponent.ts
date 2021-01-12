@@ -43,7 +43,7 @@ export class InvokableReportersPageComponent {
     }
 
     createReporter() {
-        this.invokableReporterModals.openInvokableReporterEditor({key:"ACTIONS.CREATE_INVOKABLE_REPORT"}, this.reporters).then(
+        this.invokableReporterModals.openInvokableReporterEditor({key:"INVOKABLE_REPORTERS.ACTIONS.CREATE_INVOKABLE_REPORT"}, this.reporters).then(
             () => {
                 this.initReporters();
             },
@@ -52,7 +52,7 @@ export class InvokableReportersPageComponent {
     }
 
     deleteReporter() {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_INVOKABLE_REPORT"}, {key:"MESSAGES.DELETE_INVOKABLE_REPORT_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({key:"INVOKABLE_REPORTERS.ACTIONS.DELETE_INVOKABLE_REPORT"}, {key:"MESSAGES.DELETE_INVOKABLE_REPORT_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.invokableReporterService.deleteInvokableReporter(this.selectedReporter.relativeReference).subscribe(
                     () => {

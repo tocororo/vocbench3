@@ -271,7 +271,7 @@ export class Sheet2RdfComponent {
         this.s2rdfService.exportStatus().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({key:"ACTIONS.EXPORT_MAPPING_STATUS"}, null, exportLink, "s2rdf_status.json");
+                this.basicModals.downloadLink({key:"SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS"}, null, exportLink, "s2rdf_status.json");
             }
         );
     }

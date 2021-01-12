@@ -3,11 +3,11 @@
         <div class="card-header">
             <label style="flex: 1;">{{'COMMONS.USERS'|translate}}:</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="addUserToProject()" [disabled]="!project" [title]="'ACTIONS.ADD_USER_TO_PROJ'|translate">
+                <button class="btn btn-light" (click)="addUserToProject()" [disabled]="!project" [title]="'ADMINISTRATION.ACTIONS.ADD_USER_TO_PROJ'|translate">
                     <span class="fas fa-plus"></span>
                 </button>
                 <button class="btn btn-light" (click)="removeUserFromProject()" 
-                    [disabled]="!selectedUser || selectedUser.isAdmin() || !project" [title]="'ACTIONS.REMOVE_USER_FROM_PROJ'|translate">
+                    [disabled]="!selectedUser || selectedUser.isAdmin() || !project" [title]="'ADMINISTRATION.ACTIONS.REMOVE_USER_FROM_PROJ'|translate">
                     <span class="fas fa-minus"></span>
                 </button>
             </div>
@@ -22,7 +22,7 @@
     <div *ngIf="selectedUser" class="card card-alt vbox" style="margin-left: 5px; flex: 3;">
         <div class="card-header">
             <label style="flex: 1;">{{'ADMINISTRATION.PROJECTS.PROJ_USER.PROJ_USER_SETTINGS'|translate}}:</label>
-            <button *ngIf="isLoggedUserAdmin()" class="btn btn-xs btn-light" (click)="cloneSettings()" [title]="'ACTIONS.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ'|translate">
+            <button *ngIf="isLoggedUserAdmin()" class="btn btn-xs btn-light" (click)="cloneSettings()" [title]="'ADMINISTRATION.ACTIONS.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ'|translate">
                 <span class="fas fa-copy"></span>
             </button>
         </div>
@@ -151,7 +151,7 @@
                                     <div class="dropdown-menu" ngbDropdownMenu>
                                         <a class="dropdown-item" (click)="addAllLanguages()">{{'ACTIONS.ADD_ALL'|translate}}</a>
                                         <a class="dropdown-item" (click)="addProficienciesLangs()">
-                                            {{'ACTIONS.ADD_ALL_PROFICIENCIES'|translate}}
+                                            {{'ADMINISTRATION.ACTIONS.ADD_ALL_PROFICIENCIES'|translate}}
                                             <span class="fas fa-star"></span>
                                         </a>
                                     </div>
@@ -168,7 +168,7 @@
                                     <div class="dropdown-menu" ngbDropdownMenu>
                                         <a class="dropdown-item" (click)="removeAllLanguages()">{{'ACTIONS.REMOVE_ALL'|translate}}</a>
                                         <a class="dropdown-item" (click)="leaveProficienciesLangs()">
-                                            {{'ACTIONS.LEAVE_ONLY_PROFICIENCIES'|translate}}
+                                            {{'ADMINISTRATION.ACTIONS.LEAVE_ONLY_PROFICIENCIES'|translate}}
                                             <span class="fas fa-star"></span>
                                         </a>
                                     </div>
@@ -179,7 +179,7 @@
                             <div class="card-header">
                                 <label style="flex: 1">{{'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.AVAILABLE_LANGUAGES'|translate}}:</label>
                                 <button class="btn btn-xs btn-light" (click)="toggleFilterProficencies()" [ngClass]="{ active: filterProficiencies }">
-                                    <span class="fas fa-star" [title]="'ACTIONS.SHOW_ONLY_PROFICIENCIES'|translate"></span>
+                                    <span class="fas fa-star" [title]="'ADMINISTRATION.ACTIONS.SHOW_ONLY_PROFICIENCIES'|translate"></span>
                                 </button>
                             </div>
                             <div class="card-body vbox scrollableContainer">

@@ -63,7 +63,7 @@ export class CollaborationProjSettingsModal {
     }
 
     reset() {
-        this.basicModals.confirm({key: "ACTIONS.RESET_COLLABORATION_SYSTEM"}, {key:"MESSAGES.DISABLE_COLLABORATION_SYSTEM_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({key: "COLLABORATION.ACTIONS.RESET_COLLABORATION_SYSTEM"}, {key:"MESSAGES.DISABLE_COLLABORATION_SYSTEM_CONFIRM"}, ModalType.warning).then(
             () => {
                 this.collaborationService.resetCollaborationOnProject().subscribe(
                     () => {
