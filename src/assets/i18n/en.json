@@ -1616,6 +1616,7 @@
         "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
         "GROUPS": "Groups",
+        "LABEL": "Label",
         "LEVEL": "Level",
         "MANDATORY": "Mandatory",
         "MANDATORY_FIELD": "Mandatory field",

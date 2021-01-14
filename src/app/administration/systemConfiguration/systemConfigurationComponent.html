@@ -272,13 +272,21 @@
                             <table *ngIf="customFormFields" class="table table-sm table-borderless">
                                 <colgroup>
                                     <col style="width: 1%;">
+                                    <col style="width: 1%;">
+                                    <col>
+                                    <col style="width: 1%;">
                                     <col>
                                 </colgroup>
                                 <tbody>
                                     <tr *ngFor="let idx of fieldsIdx;" (click)="selectCustomField(idx)" [ngClass]="{ 'table-primary': selectedCustomField && selectedCustomField == customFormFields[idx] }">
                                         <td class="text-center" style="min-width: 30px;"><label>{{idx+1}}</label></td>
+                                        <td class="text-center">{{'COMMONS.LABEL'|translate}}:</td>
                                         <td>
-                                            <input-editable [value]="customFormFields[idx]?.label" (valueEdited)="updateCustomField(idx, $event)" [disabled]="idx >= customFormFields.length + 1"></input-editable>
+                                            <input-editable [value]="customFormFields[idx]?.label" (valueEdited)="renameCustomField(idx, $event)" [disabled]="idx >= customFormFields.length + 1"></input-editable>
+                                        </td>
+                                        <td class="text-center">{{'COMMONS.DESCRIPTION'|translate}}:</td>
+                                        <td>
+                                            <input-editable [value]="customFormFields[idx]?.description" (valueEdited)="updateCustomFieldDescr(idx, $event)" [disabled]="idx >= customFormFields.length + 1" allowEmpty="true"></input-editable>
                                         </td>
                                     </tr>
                                 </tbody>

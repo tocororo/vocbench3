@@ -59,7 +59,7 @@
 
 <!-- Custom -->
 <div *ngFor="let f of customFields; let idx = index" class="form-group row">
-    <label class="col-sm-2 col-form-label">{{f.label}}:</label>
+    <label class="col-sm-2 col-form-label">{{f.label}}<span *ngIf="f.description" class="fas fa-info-circle ml-1" [title]="f.description"></span>:</label>
     <div class="col-sm-10">
         <input class="form-control" [(ngModel)]="form.customProperties[f.iri]" (ngModelChange)="onModelChange()" [placeholder]="f.label">
     </div>

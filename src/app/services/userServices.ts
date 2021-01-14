@@ -446,12 +446,13 @@ export class UserServices {
         return this.httpMgr.doPost(this.serviceName, "swapUserFormCustomFields", params);
     }
 
-    renameUserFormCustomField(fieldIri: ARTURIResource, newLabel: string) {
+    updateUserFormCustomField(fieldIri: ARTURIResource, label: string, description?: string) {
         var params: any = {
             fieldIri: fieldIri,
-            newLabel: newLabel
+            label: label,
+            description: description
         }
-        return this.httpMgr.doPost(this.serviceName, "renameUserFormCustomField", params);
+        return this.httpMgr.doPost(this.serviceName, "updateUserFormCustomField", params);
     }
 
     removeUserFormCustomField(field: ARTURIResource) {

@@ -323,7 +323,7 @@ export class SystemConfigurationComponent {
     }
 
 
-    private updateCustomField(index: number, newValue: string) {
+    renameCustomField(index: number, newValue: string) {
         let oldField = this.customFormFields[index];
         let duplicatedCustomField: boolean = this.customFormFields.some(f => f.label.toLocaleLowerCase() == newValue.toLocaleLowerCase());
         let duplicatedStandardField: boolean = UserForm.standardFields.some(f => f.toLocaleLowerCase() == newValue.toLocaleLowerCase());
@@ -341,7 +341,7 @@ export class SystemConfigurationComponent {
             );
         } else {
             if (oldField != null) {
-                this.userService.renameUserFormCustomField(new ARTURIResource(oldField.iri), newValue).subscribe(
+                this.userService.updateUserFormCustomField(new ARTURIResource(oldField.iri), newValue).subscribe(
                     () => {
                         this.initFields();
                     }
@@ -357,10 +357,23 @@ export class SystemConfigurationComponent {
         }
     }
 
+    updateCustomFieldDescr(index: number, description: string) {
+        let field = this.customFormFields[index];
+        this.userService.updateUserFormCustomField(new ARTURIResource(field.iri), field.label, description).subscribe(
+            () => {
+                this.initFields();
+            }
+        );
+    }
+
 
     private selectCustomField(idx: number) {
         if (idx < this.customFormFields.length) {
-            this.selectedCustomField = this.customFormFields[idx];
+            if (this.customFormFields[idx] == this.selectedCustomField) {
+                this.selectedCustomField = null; //deselect
+            } else {
+                this.selectedCustomField = this.customFormFields[idx];
+            }
         }
     }
     removeCustomField() {

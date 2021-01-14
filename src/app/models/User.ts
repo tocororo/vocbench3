@@ -345,6 +345,7 @@ export class UserForm {
 export class UserFormCustomField {
     iri: string;
     label: string;
+    description?: string;
 }
 export class UserFormOptionalField {
     iri: string;
