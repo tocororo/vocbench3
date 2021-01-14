@@ -76,18 +76,18 @@
             </ng-container>
 
             <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control" style="resize: vertical" 
-                [(ngModel)]="prop.value" [disabled]="disabled">
+                [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
             </textarea>
 
-            <input *ngSwitchCase="'int'" type="number" class="form-control" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
-            <input *ngSwitchCase="'integer'" type="number" class="form-control" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
-            <input *ngSwitchCase="'long'" type="number" class="form-control" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
-            <input *ngSwitchCase="'float'" type="number" class="form-control" step="0.01" [(ngModel)]="prop.value" [disabled]="disabled">
-            <input *ngSwitchCase="'double'" type="number" class="form-control" step="0.01" [(ngModel)]="prop.value" [disabled]="disabled">
+            <input *ngSwitchCase="'int'" type="number" class="form-control" step="1" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+            <input *ngSwitchCase="'integer'" type="number" class="form-control" step="1" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+            <input *ngSwitchCase="'long'" type="number" class="form-control" step="1" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+            <input *ngSwitchCase="'float'" type="number" class="form-control" step="0.01" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+            <input *ngSwitchCase="'double'" type="number" class="form-control" step="0.01" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
 
             <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
                 <textarea *ngSwitchDefault type="text" rows="1" class="form-control" style="resize: vertical;" 
-                    [(ngModel)]="prop.value" [disabled]="disabled">
+                    [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
                 </textarea>
                 <span class="fas fa-exclamation-triangle" style="position: absolute; top: 8px; right: 8px;"
                     [title]="'WIDGETS.SETTINGS_RENDERER.UNKNOWN_TYPE_WARN'|translate:translationParam">
