@@ -1,0 +1,2114 @@
+{
+    "ADMINISTRATION": {
+        "GROUPS": {
+            "GROUP_DESCRIPTION": "小组描述",
+            "SHORT_NAME": "简称",
+            "FULL_NAME": "全名",
+            "WEB_PAGE": "网页"
+        },
+        "PROJECTS": {
+            "MANDATORY_LANGS": "强制性的",
+            "MANDATORY_LANGS_INFO": "强制性语言须在数据集中广泛涉及。 该平台的某些功能（例如ICV）支持对此约束条件的验证", 
+            "PROJ_GROUP": {
+                "PROJ_GROUP_SETTINGS": "项目组",
+                "PROJ_CLOSED_WARNING": "Project {{projName}} is closed. It is possible to edit group settings only for open projects.",
+                "SCHEME_AUTH": "ConceptScheme authorizations",
+                "SCHEME_AUTH_INFO": "Determines which ConceptScheme the group is authorized to work with.",
+                "OWL_PROJECT_WARNING": "Project {{projName}} adopts OWL model. Currently it is possible to edit group settings only for SKOS projects."
+            },
+            "PROJ_USER": {
+                "PROJ_USER_SETTINGS": "Project-User settings",
+                "ROLES": {
+                    "ASSIGNED_ROLES": "Assigned Roles",
+                    "AVAILABLE_ROLES": "Available Roles",
+                    "DEFINED_AT_PROJ_LEVEL": "Defined at project level"
+                },
+                "GROUPS": {
+                    "ASSIGNED_GROUP": "Assigned Group",
+                    "AVAILABLE_GROUPS": "Available Groups",
+                    "RESTRICTIONS_APPLIED": "Restrictions applied",
+                    "RESTRICTIONS_INFO": "If enabled, the user is subject to the group limitations"
+                },
+                "LANGS": {
+                    "ASSIGNED_LANGUAGES": "Assigned Languages",
+                    "AVAILABLE_LANGUAGES": "Available Languages",
+                    "LANG_PROFICIENCIES_INFO": "This language is in the language proficiencies of the selected user",
+                    "LANGUAGE_ADMIN_INFO": "For administrator user, no language assigned implicitly means all project languages"
+                },
+                "TEMPLATE": {
+                    "RES_VIEW_TEMPLATE": "ResourceView template",
+                    "RES_VIEW_TEMPLATE_DESCRIPTION": "Here you can customize the ResourceView template for the user in the given project. Note: this is exactly the setting of the user, so by changing it you will change directly its ResourceView template."
+                }
+            }
+        },
+        "ROLES": {
+            "ROLE_CAPABILITIES": "Role capabilities",
+            "TOPIC": "Topic",
+            "AREA": "Area",
+            "SUBJECT_AND_SCOPE": "Subject and scope",
+            "ROLE_NAME": "Role name"
+        },
+        "SYSTEM": {
+            "INTRO": "In this section you can setup some core aspects of the system. This panel can be accessed also later from <i>Administration</i> > <i>Configuration</i> (located in the user menu)",
+            "ST_DATA_FOLDER": "SemanticTurkey data folder",
+            "ST_DATA_FOLDER_INFO": "Provide the SemanticTurkey data folder path. This can be absolute or relative to the SemanticTurkey installation folder.",
+            "PRELOAD_THRESHOLD": "Preload profiler threshold",
+            "PRELOAD_THRESHOLD_INFO": "Tells the threshold file size (in bytes) admitted by the preload profiler during the project creation. If unspecified, or 0, the default size is 1048576 bytes (1 megabyte).",
+            "ENABLE_EXPERIMENTAL_FEATURES": "Enable experimental features",
+            "ENABLE_EXPERIMENTAL_FEATURES_INFO": "Check this option in order to enable experimental (very unstable) features",
+            "EMAIL": {
+                "VB_EMAIL_CONFIG": "Vocbench Email Configuration",
+                "VB_EMAIL_CONFIG_INFO": "Configuration of the VocBench e-mail service. This service will be used to send notifications to the system administrator and to the users",
+                "MAIL_SERVER_URL_INFO": "SMTP Mail Server IP/URL",
+                "MAIL_SERVER_PORT_INFO": "Mail Server Port",
+                "CRYPTOGRAPHIC_PROTOCOL": "Cryptographic protocol",
+                "AUTHENTICATION": "Authentication",
+                "AUTHENTICATION_INFO": "Tells if SMTP server requires authentication",
+                "MAIL_FROM": "Email address used to send administration emails",
+                "MAIL_PASSWORD": "Password of the above email address",
+                "MAIL_ALIAS": "Alias name shown in the administration emails",
+                "EMAIL_CONFIG_TEST": "Email configuration test"
+            },
+            "NOTIFICATIONS": {
+                "NOTIFICATION_SCHEDULER": "Notification scheduler",
+                "NOTIFICATION_SCHEDULER_INFO": "Configuration of the VocBench e-mail notification service. The system will send a notifications daily digest to the users who have chosen the <i>Email daily digest</i> as notification mode.",
+                "HOURS_OF_DAY": "Hour of the day",
+                "HOURS_OF_DAY_INFO": "The hour of the day when the report will be sent every day",
+                "TIMEZONE_ID_INFO": "A timezone id",
+                "DETECT_INFO": "Detect the browser timezone",
+                "DISABLE_INFO": "Disable the notifications daily digest"
+            },
+            "REGISTRATION_FORM": {
+                "FORM_FIELDS": "Registration form fields",
+                "OPTIONAL_FIELDS": "Optional fields",
+                "OPTIONAL_FIELDS_INFO": "Show or hide optional information about the user. These information will be shown or hidden in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.",
+                "CUSTOM_FIELDS": "Custom fields",
+                "CUSTOM_FIELDS_INFO": "Add (and reorder) up to {{maxFields}} custom information about the user. These information will be shown in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br> If a field is removed, any values previously stored for that field will be lost for any user.<br> If a field is renamed, any values previously stored for that field will be preserved."
+            },
+            "HOME_PAGE": {
+                "HOME_CONTENT": "Home page content",
+                "HOME_CONTENT_INFO": "Here you can write HTML-formatted text content that will be shown in the home page",
+                "PREVIEW": "Preview"
+            }
+        },
+        "USERS": {
+            "USER_DETAILS": "User Details",
+            "ADMINISTRATOR": "Administrator",
+            "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has autmoatically access to all projects",
+            "ASSIGNED_TO_PROJECTS": "Assigned to projects",
+            "FORCE_PASSWORD_WARNING": "This procedure will force the change of {{userShow}}'s password.<br>Note: A <i>forgot password</i> procedure already exists (available in the login form). It is recommended to let the user update its own password through that procedure. Use this procedure only if strictly necessary.",
+            "TEMPLATE_INFO": "Here you can assign a ResourceView template to the user. This template describes which ResourceView partitions are visible by default.<br>You can also load an already existing template, or decide to save the template you defined, through the toolbar in panel header."
+        }
+    },
+    "ALIGNMENT": {
+        "CREATION": {
+            "SOURCE_RESOURCE": "Source Resource",
+            "TARGET_RESOURCE": "Target Resource",
+            "ALL_PROP": "All prop.",
+            "ALL_PROP_INFO": "Show all mapping properties"
+        },
+        "VALIDATION": {
+            "ALIGNMENT_VALIDATION": "Alignment Validation",
+            "FROM_FILE": {
+                "ALIGN_FILE": "Alignment file",
+                "LEFT_ONTO_URI": "Left ontology baseURI",
+                "RIGHT_ONTO_URI": "Right ontology baseURI"
+            },
+            "REMOTE_SYS": {
+                "CONFIG": {
+                    "REMOTE_ALIGN_SYS_CONFIG": "Remote Alignment System configurations",
+                    "DEFAULT_CHECK_INFO": "If checked the new configuration is automatically set as default",
+                    "ID_INFO": "Configuration ID"
+                },
+                "MAIN": {
+                    "REMOTE_ALIGN_SYS": "Remote Alignment System",
+                    "SERVICE_DOWN": "Service down",
+                    "TASKS": "Tasks",
+                    "UNCONFIGURED_WARN": "No connection to a Remote Alignment System has been detected. Please, create or select a configuration by clicking on the <span class=\"fas fa-cog\"></span> button on the top right corner.",
+                    "LEFT_PROJECT": "Left project",
+                    "RIGHT_PROJECT": "Right project",
+                    "START_TIME": "Start time",
+                    "END_TIME": "End time"
+                },
+                "CREATE_TASK": {
+                    "METADATA_PROFILE_AVAILABLE": "Metadata profile available",
+                    "METADATA_PROFILE_NOT_AVAILABLE": "Metadata profile not available",
+                    "PAIRINGS": "Pairings",
+                    "SYNONIMIZERS": "Synonymizers",
+                    "SYNONIMIZERS_INFO": "Allow the usage of a synonymizer for improving the quality of the alignment",
+                    "MATCHERS": "Matchers",
+                    "MATCHERS_INFO": [
+                        "Optionally a matcher can be provided to the alignment system. Click",
+                        "here",
+                        "to search for available matchers."
+                    ],
+                    "PAIRINGS_CHANGED_WARN": [
+                        "The pairings selection has changed, the list of available matchers could be outdated. Click",
+                        "here",
+                        "to refresh the list."
+                    ],
+                    "JSON_SETTINGS_INFO": "The JSON settings must follow the schema specifications shown on the right",
+                    "SYNONYMIZER_DATASETS": "Synonymizer datasets",
+                    "CONCEPTUALIZATION_SET": "Conceptualization Set"
+                }
+            },
+            "MANAGEMENT": {
+                "ALIGNMENTS": "Alignments",
+                "SOURCE_ENTITY": "Source entity",
+                "TARGET_ENTITY": "Target entity",
+                "RELATION": "Relation",
+                "MAPPING_PROP": "Mapping Property",
+                "QUICK_ACTIONS": "Quick Actions",
+                "YOU_CAN_FORCE_PROP": "You can force a property",
+                "SET_DEFAULT_FOR_RELATION": "Set the property as default for the relation"
+            },
+            "REPORT": {
+                "ALIGN_REPORT": "Alignment report",
+                "ACTION_PERFORMED": "Action performed"
+            },
+            "SETTINGS": {
+                "ALIGN_VALIATION_SETTINGS": "Alignment validation settings",
+                "REJECTED_ALIGN_ACTION": "Rejected alignment action",
+                "REJECTED_ALIGN_ACTION_INFO": "Specifies what to do with rejected alignments when applyng the validation to the ontology",
+                "RELATION_METER_ASPECT": "Relation meter aspect",
+                "SHOW_RELATION_AS": "Show relation as",
+                "SHOW_CONF_ON_METER": "Show confidence on meter",
+                "MAX_ALING_SHOWN": "Maximum number of alignments shown (1÷100)"
+            }
+        }
+    },
+    "APP": {
+        "NAVBAR": {
+            "DATA": "Data",
+            "METADATA": {
+                "TITLE": "Metadata",
+                "NAMESPACES_AND_IMPORTS": "Namespaces and Imports",
+                "METADATA_VOCABULARIES": "Metadata Vocabularies",
+                "METADATA_REGISTRY": "Metadata Registry"
+            },
+            "SPARQL": "SPARQL",
+            "HISTORY": "History",
+            "VALIDATION": "Validation",
+            "TOOLS": "Tools",
+            "CUSTOM_SERVICES_AND_REPORTS": "Custom Services and Reports",
+            "USER_MENU": {
+                "VIEW_PROFILE": "View profile",
+                "PREFERENCES": "Preferences",
+                "ADMINISTRATION": "Administration"
+            }
+        },
+        "TOP_BAR": {
+            "ABOUT_MENU": {
+                "ABOUT_VB": "About VocBench",
+                "VB_SITE": "VocBench website",
+                "CONTACT_US": "Contact us",
+                "SUPPORT": "Support",
+                "PRIVACY_STATEMENT": "Privacy statement"
+            },
+            "CURRENT_PROJECT": "Current project",
+            "GLOBAL_DATA_MENU": {
+                "GLOBAL_DATA_MANAGEMENT": "Global Data Management",
+                "VERSIONING": "Versioning",
+                "REFACTOR": "Refactoring"
+            }
+        }
+    },
+    "COLLABORATION": {
+        "COLLABORATION_SYSTEM": "Collaboration System",
+        "COLLABORATION_SYSTEM_CONFIG": "Collaboration System configuration",
+        "COLLABORATION_SYSTEM_PROJECTS": "Collaboration System projects",
+        "PROJECT_CONFIG": "Project configuration",
+        "USER_CONFIG": "User configuration",
+        "UNCONFIGURED_FOR_PROJECT": "The Collaboration System has not been configured for this project.",
+        "NO_RESOURCE_ASSOCIATED": "No resource(s) associated to this issue",
+        "UNCONFIGURED_CS": {
+            "UNCONFIGURED_CS_WARNING": "No Collaboration System has been configured.",
+            "CONFIGURE": "Configure",
+            "A_CS": "a CS"
+        },
+        "UNSIGNED_USER": {
+            "UNSIGNED_USER_WARNING": "You need to be logged to the CS in order to see the issues list.",
+            "PROVIDE": "Provide",
+            "YOUR_CREDENTIALS": "your credentials"
+        },
+        "UNASSIGNED_PROJ": {
+            "UNASSIGNED_PROJ_WARNING": "There is no CS project assigned to this Vocbench project.",
+            "CREATE_OR_ASSIGN": "Create or assign",
+            "A_PROJECT": "a project"
+        },
+        "CS_NOT_WORKING_WARNING": "Collaboration System seems to be configured but it is not working. Please, check that the configuration is valid, or be sure that the CS server is running."
+    },
+    "CUSTOM_FORMS": {
+        "FORMS": {
+            "CUSTOM_FORMS": "Custom Forms",
+            "NAME_INFO": "The name that will be shown to the user to identify this form",
+            "DESCRIPTION_INFO": "A natural language description that briefly explain the purpose of this form",
+            "REF_INFO": "In case of Graph type this should contain a PEARL rule otherwise, in case of Node type, this should contain simply a PEARL projection operator",
+            "INFER_ANNOTATIONS_INFO": "Infer annotations from CF definition",
+            "FROM_SHACLE": "From SHACL",
+            "FROM_SHACLE_INFO": "Extract PEARL from SHACL shape",
+            "SHOW_PROP_CHAIN": "Show property chain",
+            "SHOW_PROP_CHAIN_INFO": "A property chain to follow to retrieve the value to be shown to represent the graph generated by means of this Form",
+            "SHAPE_SOURCE": "Shape source",
+            "PEARL_INFERENCE_VALIDATION": {
+                "PEARL_ANNOTATIONS_INFERENCE": "Pearl annotations inference",
+                "WARNING_MSG": "Note: in case no annotation has been inferred, the two PEARL might not differ at all. Anyway, the inference process might apply changes, such as reordering the prefix definitions and removing comments.<br> It is also possible to edit the resulting PEARL before applying the changes.",
+                "ORIGINAL_PEARL": "Original PEARL",
+                "INFERRED_PEARL": "Inferred PEARL"
+            }
+        },
+        "COLLECTIONS": {
+            "FORM_COLLECTION": "Form Collection",
+            "FORM_COLLECTIONS": "Form Collections",
+            "AVAILABLE_CUSTOM_FORMS": "Available Custom Forms",
+            "SUGGESTIONS": "Suggestions",
+            "SUGGESTIONS_INFO": "Property/Classes suggested to use with this FormCollection"
+        },
+        "MAPPINGS": {
+            "FORM_MAPPINGS": "Form mappings"
+        },
+        "CONFIG": {
+            "CUSTOM_FORMS_CONFIG": "Custom Forms configuration",
+            "SHOW_BROKEN_CF": "Show broken CustomForm structures",
+            "REPLACE_INFO": "Tells if the CustomForm replaces the 'default' form. Valid only for CustomRanges (not CustomConstructors)",
+            "SYSTEM_LEVEL_ELEM": "System level elements",
+            "PROJECT_LEVEL_ELEM": "Project level elements"
+        },
+        "COMMONS": {
+            "USE_ID_OF_IMPORTED": "Use ID of the imported {{type}}"
+        }
+    },
+    "CUSTOM_SERVICES": {
+        "CUSTOM_SERVICES": "Custom Services",
+        "FORCE_RELOAD": "Force reload from filesystem",
+        "FORCE_RELOAD_INFO": "Reload services (useful when the Custom Services are changed/loaded manually)",
+        "OPERATION": {
+            "AUTHORIZATION": "Authorization",
+            "PARAMETERS": "Parameters",
+            "OPTIONAL_PARAMETER": "Optional parameter",
+            "MANDATORY_PARAMETER": "Mandatory parameter",
+            "RETURNS": "Returns",
+            "PARAM_HELPER": {
+                "INTRO": [
+                    "The parameters are mapped to variables with the same name in the SPARQL query. Actual parameters passed to a service upon invocation are pre-bound to the corresponding variable in the SPARQL query. A reserved variable is",
+                    "which is bound by default to the working graph of the project."
+                ],
+                "ALLOWED_PARAM_TYPES_ARE": "The allowed parameter types are",
+                "ALLOWED_RETURN_TYPE": "The allowed return type depends on the actual SPARQL operation",
+                "LIST_T_WHERE": "where",
+                "T_TYPE_OTP1": "might be any of the above accepted parameter types (in this case the SELECT must return one variable)",
+                "T_TYPE_OPT2": {
+                    "BE": "be",
+                    "WHERE": "where",
+                    "MIGHT_BE": "might be"
+                },
+                "T_TYPE_OPT2_ADDENDA": [
+                    "in this case the SELECT must return one variable plus additional variables",
+                    "for additional attibutes"
+                ]
+            }
+        },
+        "AUTH_HELPER": {
+            "OPERATION_AUTH": "Operation authorization",
+            "TYPE_RESTR": {
+                "TYPE_RESTRICTION": "Type restriction",
+                "TYPE_RESTRICTION_INFO": "Determines if the <i>rdf</i> capability is required on a specific resource type. It is possible to select a type among those available in VB or to let the system infer the type from a parameter of the operation.",
+                "RESTRICTION_NONE": "None",
+                "RESTRICTION_TO_SPECIFIC_TYPE": "Restrict to a specific type",
+                "RESTRICTION_TO_PARAMETER_TYPE": "Restrict to the type of a parameter"
+            },
+            "LANG_REQUIREMENT": {
+                "LANGUAGE_REQUIREMENT": "Language requirement",
+                "LANGUAGE_REQUIREMENT_INFO": "Determines if the operation requires that the user which performs the operation has a specific language assigned. It is possible to select a language among those available in VB or to let the system infer it from a parameter of the operation.",
+                "REQUIRE_NONE": "None",
+                "REQUIRE_SPECIFIC_LANG": "Require a specific language",
+                "REQUIRE_PARAMETER_LANG": "Require the language of a parameter"
+            },
+            "RESTRICTION": "Restriction",
+            "PARAMETER": "Parameter",
+            "SCOPE_INFO": "Refines the scope of the selected type",
+            "NO_PARAM_OPERATION": "The operation does not foreseen any parameter",
+            "CAPABILITIES_DOCUMENTATION_REF": "For further details about the capability vocabulary, please refer to the VB <a href=\"http://vocbench.uniroma2.it/doc/user/roles_adm.jsf#capabilities_vocabulary\" target=\"_blank\">documentation</a>."
+        },
+        "SERVICE": {
+            "SERVICE_NAME": "Service name",
+            "ID_INFO": "A unique identifier",
+            "SERVICE_NAME_INFO": "The name used to group all operations defined by this custom service",
+            "DESCRIPTION_INFO": "A description of this custom service"
+        }
+    },
+    "DATA": {
+        "CLASS": {
+            "CLASS": "Class",
+            "CLASSES": "Classes",
+            "SHOW_CLASS_DIAGRAM": "Show class-diagram",
+            "SHOW_MODEL_GRAPH": "Show model-oriented graph",
+            "SHOW_MODEL_GRAPH_ROOTED": "Show model-oriented graph rooted on the selected node",
+            "SETTINGS": {
+                "CLASS_TREE_SETTINGS": "Class tree settings",
+                "ROOT_CLASS": "Root class",
+                "SUBCLASS_FILTER": "SubClass filter",
+                "SUBCLASS_FILTER_INFO": "Here you can create filters in order to hide subClasses of classes",
+                "FILTERED_SUBCLASSES": "Filtered subClasses",
+                "SHOW_INSTANCES_NUMBER": "Show instances number"
+            }
+        },
+        "COLLECTION": {
+            "COLLECTION": "Collection",
+            "COLLECTIONS": "Collections"
+        },
+        "CONCEPT": {
+            "CONCEPT": "Concept",
+            "CONCEPTS": "Concepts",
+            "ADD_SUBTREE_TO_SCHEME": "Add selected concept's subtree to scheme...",
+            "NO_SCHEME_SELECTED_WARN": "No ConceptScheme selected, creation operations are disabled",
+            "USE_SEARCH_MSG": "Please use the search field to retrieve concepts",
+            "ADD_TO_SCHEME": {
+                "CONFIRM_MSG": "You are going to add the concept '{{concept}}' and its descendants to the scheme '{{scheme}}'. Are you sure?",
+                "SET_TOP_CONCEPT": "Set top concept",
+                "SET_TOP_CONCEPT_INFO": "If checked, set the provided concept as top concept of the target scheme",
+                "SCHEMES_FILTER": "Schemes filter",
+                "SCHEMES_FILTER_INFO": "Only the concepts (among the descendants of '{{concept}}') belonging to at least one of the following schemes will be added to the target scheme."
+            },
+            "SPAWN_FROM_LABEL": {
+                "SIBLING": "Sibling",
+                "MULTIPLE_SIBLING_WARN": "Selected sibling concept has multiple broaders, select which one will be the broader of the spawning concept"
+            },
+            "SETTINGS": {
+                "CONCEPT_TREE_SETTINGS": "Concept tree settings",
+                "TOP_CONCEPTS_LIMIT": "Top concepts limitation",
+                "TOP_CONCEPTS_LIMIT_INFO": "Sets the maximum amount of top concepts visible in the tree. This setting prevents the initialization of a tree that might cause performance issues",
+                "MULTISCHEME_MODE": "Multi-scheme mode",
+                "TOGGLE_OR_AND": "Toggles between OR and AND scheme-based filter of concepts in the concept tree",
+                "BASE_BROADER_PROP": "Base broader property",
+                "BASE_BROADER_PROP_INFO": "Base broader property to be selected when creating narrower concepts",
+                "BROADER_NARROWER_MGMT": "Management of broader/narrower",
+                "BROADER_NARROWER_MGMT_INFO": "Customizes the properties on which the concept tree hierarchy is based on. If none of broader/narrower properties is selected, then skos:broader^ and skos:narrower will be used (in OR) to check narrower concepts. If any of the two is selected (with one or more properties), then only the selected properties will be used.",
+                "SYNC_INV_PROP": "Sync inverse properties",
+                "SYNC_INV_PROP_INFO": "Keep synced the broader/narrower properties with their inverse properties",
+                "INCLUDE_SUBPROP": "Include subProperties",
+                "INCLUDE_SUBPROP_INFO": "Includes the subProperties of the selected broader/narrower properties",
+                "APPLY_GROUP_SETTINGS": "Apply group settings"
+            },
+            "UNSAFE_WARN": {
+                "ELEMENT_COUNT": "This Concept tree has an amount of top concepts ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
+                "PERFORMANCE_ISSUE": "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.",
+                "SWITCH_MODE": "It is recommended to switch from 'Hierarchy based' to 'Search based' visualization mode from the",
+                "SETTINGS": "settings",
+                "SELECT_SCHEME": "You can also reduce the amount of top concepts by selecting a scheme from the 'Scheme' panel.",
+                "FORCE_INIT": "If you want to force the Concept tree initialization at your own risk, click",
+                "HERE": "here"
+            }
+        },
+        "DATATYPE": {
+            "DATATYPE": "Datatype",
+            "DATATYPES": "Datatypes"
+        },
+        "INSTANCE": {
+            "INSTANCE": "Instance",
+            "INSTANCES": "Instances",
+            "USE_SEARCH_MSG": "Please use the search field to retrieve instances",
+            "SETTINGS": {
+                "INSTANCE_LIST_SETTINGS": "Instance list settings",
+                "INSTANCES_LIMIT": "Instances limit",
+                "INSTANCES_LIMIT_INFO": "Sets the maximum amount of instances visible in the list. This setting prevents the initialization of a list that might cause performance issues"
+            },
+            "UNSAFE_WARN": {
+                "ELEMENT_COUNT": "This instance list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
+                "PERFORMANCE_ISSUE": "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.",
+                "SWITCH_MODE": "It is recommended to switch the visualization to search-based mode from the",
+                "SETTINGS": "settings",
+                "FORCE_INIT": "If you want to force the instance list initialization at your own risk, click",
+                "HERE": "here"
+            }
+        },
+        "LEXICON": {
+            "LEXICON": "Lexicon",
+            "LEXICONS": "Lexicons"
+        },
+        "LEX_ENTRY": {
+            "LEX_ENTRY": "Lex.Entry",
+            "LEX_ENTRIES": "Lex.Entries",
+            "NO_LEXICON_SELECTED_WARN": "No Lexicon selected, creation operations are disabled",
+            "USE_SEARCH_MSG": "Please use the search field to retrieve lexical entries",
+            "SETTINGS": {
+                "LEX_ENTRY_SETTINGS": "Lexical Entry list settings",
+                "LEX_ENTRIES_LIMIT": "Lexical entries limit",
+                "LEX_ENTRIES_LIMIT_INFO": "Sets the maximum amount of lexical entries visible in the list. This setting prevents the initialization of a list that might cause performance issues",
+                "INDEX_LENGHT": "Index lenght"
+            },
+            "UNSAFE_WARN": {
+                "ELEMENT_COUNT": "This LexicalEntry list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
+                "PERFORMANCE_ISSUE": "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.",
+                "IT_IS_RECOMMENDED": "It is recommended",
+                "CHANGE_INDEX_LENGHT": "to change the index lenght from 1-char to 2-char or",
+                "SWITCH_MODE": "to switch from 'Index based' to 'Search based' visualization mode from the",
+                "SETTINGS": "settings",
+                "SELECT_LEXICON": "You can also reduce the amount of lexical entries by selecting a lexicon from the 'Lexicon' panel.",
+                "FORCE_INIT": "If you want to force the lexical entry list initialization at your own risk, click",
+                "HERE": "here"
+            }
+        },
+        "PROPERTY": {
+            "PROPERTY": "Property",
+            "PROPERTIES": "Properties"
+        },
+        "SCHEME": {
+            "SCHEME": "Scheme",
+            "SCHEMES": "Schemes",
+            "ADD_ALL_CONCEPTS": "Add all concepts to the selected scheme"
+        },
+        "COMMONS": {
+            "MULTISELECTION": "Multiselection",
+            "ADD_PROP_VALUE_TO_SELECTION": "Add a property value to selected resources",
+            "LEAVE_EMPTY_FOR_RANDOM_URI": "Leave empty in order to autogenerate a random URI",
+            "NO_LANGUAGE_ASSIGNED_WARN": "You cannot create resources. You have no language assigned for the current project",
+            "DUPLICATED_VALUES_WARN": "You cannot create multiple values with the same language",
+            "MULTIVALUE_WARN": "Warning: the value currently typed will not be considered. It needs to be added through the '+' button",
+            "VISUALIZATION_MODE": {
+                "MODE": "Visualization mode",
+                "STANDARD": "Standard",
+                "SEARCH_BASED": "Search based",
+                "INDEX_BASED": "Index based",
+                "HIERARCHY_BASED": "Hierarchy based"
+            }
+        },
+        "SETTINGS": {
+            "TREE_LIST_SETTINGS": "Tree/List settings",
+            "SHOW_DEPRECATED_RES": "Show deprecated resources in tree/list"
+        }
+    },
+    "DATA_MANAGEMENT": {
+        "DATASET_CATALOG": {
+            "CATALOG": "Catalog",
+            "DATASET_DESCRIPTION": "Dataset description",
+            "DATASET_PAGE": "Dataset page",
+            "DATA_DUMPS": "Data dumps",
+            "URI_PREFIX": "URI prefix",
+            "DATASET_CATALOG": "Dataset Catalog",
+            "SEARCH_RESULTS": "Search results",
+            "TOT_RESULTS": "results"
+        },
+        "EXPORT": {
+            "GRAPHS_TO_EXPORT": "Graphs to export",
+            "NO_GRAPHS_EXPORTED_MSG": "If no graph is selected, all named graphs will be exported",
+            "TRANSFORMERS_DESCRIPTION": "Here it is possible to create and configure a sequence of transformations to be applied during the export process. Each transformer is applied to a subset of the exported graphs. No graph means every exported graph",
+            "GRAPHS": "Graphs",
+            "INCLUDE_INFERRED": "Include inferred"
+        },
+        "LOAD": {
+            "LOAD_FROM": "Load from",
+            "DATA_DUMP": "Data dump",
+            "USE_PROJECT_BASEURI": "Use project baseURI",
+            "RESOLVE_IMPORTS": "Resolve imports",
+            "IMPORTS_RESOLUTION_INFO": "Specify the resolution source in case of transitive imports",
+            "TRANSFORMERS_DESCRIPTION": "Here it is possible to create and configure a sequence of transformers to be applied during the load process.",
+            "IMPLICITLY_VALIDATE": "Implicitly validate loaded data",
+            "FORCE_FORMAT_INFO": "Allows forcing the selection of a format overriding the one detected by the system"
+        },
+        "REFACTOR": {
+            "REFACTOR": "Refactor",
+            "DATA_REFACTOR": "Data refactor",
+            "SKOS_TO_SKOSXL": "SKOS to SKOS-XL",
+            "SKOSXL_TO_SKOS": "SKOS-XL to SKOS",
+            "SKOS_TO_SKOSXL_INFO": "This refactor operation transforms all the SKOS labels and notes into reified SKOS-XL labels and notes.",
+            "REIFY_NOTES": "Reify SKOS notes",
+            "SKOSXL_TO_SKOS_INFO": "This refactor operation transforms all the reified SKOS-XL labels and notes into flattened SKOS labels and notes. Note: this is NOT a loss-less operation, all the information related to the SKOS-XL labels and notes will be lost.",
+            "FLATTEN_NOTES": "Flatten reified SKOS notes",
+            "MIGRATE_INFO": "This operation will move the content of the default graph to a graph named after the base URI of the current project. It will also clear the default graph and preserve the information already contained in the destination graph."
+        },
+        "VERSIONING": {
+            "VERSIONS": "Versions",
+            "DUMP": "Dump",
+            "VERSION_ID": "Version ID",
+            "DATETIME": "Datetime",
+            "REPO_CONFIGURATION": "Repo Configuration",
+            "REPO_LOCATION": "Repo Location"
+        },
+        "COMMONS": {
+            "DATA_TRANSFORMATIONS": "Data transformations"
+        }
+    },
+    "EDOAL": {
+        "NEW_ALIGNMENT": "New alignment",
+        "RELATION": "Relation",
+        "MEASURE": "Measure",
+        "ALIGNMENTS": "Alignments",
+        "SYNC_ENTITIES": "Sync entities",
+        "LEFT_ENTITY": "Left entity",
+        "RIGHT_ENTITY": "Right entity",
+        "MAPPING_PROP": "Mapping Prop",
+        "CHANGE_MEASURE": "Change measure"
+    },
+    "GRAPHS": {
+        "DELETE_SELECTED_NODE": "Delete selected node",
+        "EXPAND_SUB_RESOURCES": "Expand sub-resources",
+        "EXPAND_SUPER_RESOURCES": "Expand super-resources",
+        "FIX_NODE_POSITION": "Fix node position",
+        "FIX_NODES_POSITION": "Fix nodes position",
+        "HIDE_GENERIC_LINKS": "Hide generic relation links",
+        "SETTINGS": {
+            "DATA_GRAPH_SETTINGS": "Data-Oriented Graph settings",
+            "GRAPH_FILTER": "Graph filter",
+            "PARTITION_FILTER_INFO": "Select the partition of the resource description that will be shown when expanding a node.",
+            "HIDE_LITERAL_NODES": "Hide literal nodes",
+            "HIDE_LITERAL_NODES_INFO": "If checked, all the literal nodes will be hidden in the graph"
+        },
+        "LINKS_FILTER": {
+            "EXPAND_NODE": "Expand node",
+            "TOO_MUCH_RELATIONS_WARNING": "The resource you are expanding has a big amount of relations, thus it would generate a lot of links and nodes that could confuse the graph visualization. It is highly recommended to filter out some relations in order to limit the graph size.",
+            "VISIBLE_X_OUT_OF_Y": [
+                "Visible",
+                "out of"
+            ]
+        },
+        "FORCE_CONTROL": {
+            "LINKS": "Links",
+            "STRENGTH": "Strength",
+            "LENGTH": "Length"
+        },
+        "RESOURCE_DETAILS": {
+            "SHOW_THE_COMPLETE": "Show the complete"
+        }
+    },
+    "HISTORY_VALIDATION": {
+        "COMMITS": "Commits",
+        "STAGED_COMMITS": "Staged Commits",
+        "OPERATION_SORT": "Operation sort",
+        "TIME_SORT": "Time sort",
+        "SORT_UNORDERED": "Unordered",
+        "SORT_ASCENDING": "Ascending",
+        "SORT_DESCENDING": "Descending",
+        "COMMIT_ID": "Commit ID",
+        "OPERATION": "Operation",
+        "1ST_PARAM": "1st param",
+        "2ND_PARAM": "2nd param",
+        "OTHER_PARAMS": "Other param(s)",
+        "USER": "User",
+        "DATE": "Date",
+        "PROVIDE_COMMENT": "Provide a comment for the validation action",
+        "COMMIT": {
+            "COMMIT_ID": "Commit ID",
+            "COMMIT_DETAILS": "Commit details",
+            "COMMENT": "Comment",
+            "CONTEXT": "Context"
+        },
+        "FILTERS": {
+            "OPERATIONS": "Operations",
+            "PERFORMERS": "Performers",
+            "TIME_FROM": "From",
+            "TIME_TO": "To",
+            "DATETIME_FORMAT": "Datetime format: yyyy-MM-ddThh:mm",
+            "APPLY": "Apply",
+            "OPERATION_PICKER": {
+                "EXTENSION_PATH": "Extension path",
+                "SERVICE_CLASS": "Service class",
+                "OPERATIONS": "Operations",
+                "OPERATION_FILTER": "Operation filter"
+            }
+        },
+        "VALIDATION_COMMENT": {
+            "COMMENT": "Comment",
+            "COMMENT_INFO": "For the following rejected commits it is possible to provide a comment in order to motivate the decision to reject. Even if the comment is optional, it is recommended to provide it. Anyway, if you don't want to provide a comment at all, you can leave empty the text field and continue.",
+            "SHOW_PARAMS": "Show parameters",
+            "VALIDATION_COMMENTS": "Validation comments"
+        }
+    },
+    "HOME": {
+        "WELCOME": "Welcome to VocBench",
+        "DESCRIPTION": "VocBench is a web-based, multilingual, collaborative development platform for managing <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a> ontologies, <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>) thesauri, <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> lexicons and generic RDF datasets.",
+        "POWERED_BY": "VocBench is powered by the <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a> Knowledge Acquisition and Management framework",
+        "PRIVACY_STATEMENT": {
+            "READ_OUR": "Please read our",
+            "LINK_TEXT": "privacy statement"
+        },
+        "DEVELOPED_BY": {
+            "TITLE": "VocBench 3 has been developed by",
+            "TOR_VERGATA_NAME": "University of Rome Tor Vergata",
+            "TOR_VERGATA_SUBTITLE": "Today, the University of tomorrow"
+        },
+        "MANAGED_BY": {
+            "TITLE": "Contract managed by",
+            "INFEUROPE_NAME": "Infeurope",
+            "INFEUROPE_SUBTITLE": "Architecture begins where engineering ends"
+        },
+        "FUNDED_BY": {
+            "TITLE": "VocBench 3 is funded by",
+            "ISA2_NAME": "ISA<sup>2</sup>",
+            "ISA2_SUBTITLE": "Interoperability solutions for public administrations, business and citizens",
+            "OP_NAME": "Publications Office of the European Union",
+            "OP_SUBTITLE": "EU law and publications"
+        }
+    },
+    "ICV": {
+        "ICV": "Integrity Constraint Validation (ICV)",
+        "PRESS_RUN_TO_RUN_CHECK": [
+            "Press",
+            "button to run the check."
+        ],
+        "QUICK_ACTION": "Quick action",
+        "CONFIG": {
+            "ICV_CONFIG": "ICV configuration",
+            "RESOURCES_TO_CHECK": "Resources to check",
+            "CHECK": "Check",
+            "LANGUAGES_TO_CHECK": "Languages to check",
+            "ONLY_MANDATORY": "Only mandatory",
+            "ONLY_MANDATORY_INFO": "Check only the mandatory languages"
+        },
+        "STRUCTURAL": {
+            "STRUCTUAL_CHECKS": "Structural checks",
+            "DANGLING_CONCEPTS": {
+                "NAME": "Dangling concepts",
+                "DESCRIPTION": "skos:Concept(s) that have no skos:broader or are not skos:topConceptOf in the skos:ConceptScheme where they belong",
+                "ALL_SCHEMES": "All schemes",
+                "SELECT_BROADER": "Select skos:broader",
+                "SELECT_BROADER_FOR_ALL": "Select a skos:broader for all",
+                "SET_ALL_AS_TOP": "Set all as skos:topConceptOf",
+                "REMOVE_ALL_FROM_SCHEME": "Remove all from scheme"
+            },
+            "OMITTED_TOP_CONCEPT": {
+                "NAME": "ConceptScheme without topConcept",
+                "DESCRIPTION": "skos:ConceptScheme(s) that don't have a topConcept or that are simply empty",
+                "SELECT_TOP_CONCEPT": "Select top concept",
+                "CREATE_TOP_CONCEPT": "Create top concept"
+            },
+            "CONCEPT_IN_NO_SCHEME": {
+                "NAME": "Concepts in no scheme",
+                "DESCRIPTION": "skos:Concept(s) that doesn't belong to any scheme",
+                "WARNING": "Warning: adding the concept to a skos:ConceptScheme may be not enough to ensure that it is visible in the concept tree. The concept may be still dangling.",
+                "ADD_TO_SCHEME": "Add to a skos:ConceptScheme",
+                "ADD_ALL_TO_SCHEME": "Add all to a skos:ConceptScheme"
+            },
+            "TOP_CONCEPT_WITH_BROADER": {
+                "NAME": "TopConcept with broader",
+                "DESCRIPTION": "skos:Concept(s) that are skos:topConceptOf some scheme and have some skos:broader concept",
+                "REMOVE_BROADER": "Remove broader(s)",
+                "REMOVE_BROADER_TO_ALL": "Remove broader(s) to all",
+                "REMOVE_AS_TOP": "Remove as topConceptOf",
+                "REMOVE_ALL_AS_TOP": "Remove all as topConceptOf"
+            },
+            "CONCEPTS_RELATED_DISJOINT": {
+                "NAME": "Concepts related disjoint relations",
+                "DESCRIPTION": "skos:Concept(s) connected to another with both the skos:related and the skos:broaderTransitive (skos:related relation is disjoint with skos:broaderTransitive)"
+            },
+            "CONCEPT_EXACT_MATCH_DISJOINT": {
+                "NAME": "Concepts exactMatch disjoint relations",
+                "DESCRIPTION": "skos:Concept(s) connected to another with both the skos:exactMatch and one of skos:broadMatch or skos:relatedMatch (skos:exactMatch relation is disjoint with skos:broadMatch and skos:relatedMatch)"
+            },
+            "HIERARCHICAL_REDUNDANCIES": {
+                "NAME": "Hierarchical redundancies",
+                "DESCRIPTION": "skos:Concept(s) that have redundant hierarchical relations with another concept",
+                "SAME_SCHEME": "Same scheme",
+                "SAME_SCHEME_INFO": "If active, the check is performed only to the relations between Concepts belonging to the same ConceptScheme",
+                "EXAMPLE": [
+                    "e.g.",
+                    "3rd statement is redundant since it is a consequence of 1) and 2)"
+                ]
+            },
+            "CYCLIC_HIERARCHICAL_CONCEPTS": {
+                "NAME": "Cyclic hierarchical concepts",
+                "DESCRIPTION": "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader relations",
+                "CYCLES": "Cycles"
+            }
+        },
+        "LABEL": {
+            "LABEL_CHECKS": "Label checks",
+            "NO_SKOS_PREFLABEL": {
+                "NAME": "No skos:prefLabel resources",
+                "DESCRIPTION": "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel",
+                "ADD_PREFLABEL": "Add skos:prefLabel"
+            },
+            "NO_SKOSXL_PREFLABEL": {
+                "NAME": "No skosxl:prefLabel resources",
+                "DESCRIPTION": "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel",
+                "ADD_PREFLABEL": "Add skosxl:prefLabel"
+            },
+            "NO_MANDATORY_LABEL": {
+                "NAME": "No mandatory label resources",
+                "DESCRIPTION": "Resources that don't have any label in the given languages",
+                "MISSING_LANG_LABEL": "Missing language(s) label"
+            },
+            "ONLY_ALTLABEL": {
+                "NAME": "Only alternative label resources",
+                "DESCRIPTION": "Resources that have an alternative label but not a preferred in the same language"
+            },
+            "NO_LANGTAG_LABEL": {
+                "NAME": "No language tag label resources",
+                "DESCRIPTION": "Resources that have a label without language tag"
+            },
+            "OVERLAPPED_LABEL": {
+                "NAME": "Overlapped label resources",
+                "DESCRIPTION": "Resources that have the same label in the same language duplicated as pref, alt or hidden label"
+            },
+            "CONFLICTUAL_LABEL": {
+                "NAME": "Conflictual label resources",
+                "DESCRIPTION": "Resources or, specifically, concepts in the same scheme, that have the same preferred label in the same language"
+            },
+            "EXTRA_WHITESPACE_LABEL": {
+                "NAME": "Extra whitespace label resources",
+                "DESCRIPTION": "Resources that have some extra whitespace in a label"
+            },
+            "MULTIPLE_PREFLABEL": {
+                "NAME": "Multiple preferred labels resources",
+                "DESCRIPTION": "Resources that have multiple preferred labels in the same language"
+            },
+            "DANGLING_SKOSXL_LABEL": {
+                "NAME": "Dangling skosxl:Label(s)",
+                "DESCRIPTION": "skosxl:Label(s) that are not linked with any skos:Concept",
+                "DELETE_LABEL": "Delete label",
+                "ADD_TO_CONCEPT": "Add to a concept"
+            }
+        },
+        "GENERIC": {
+            "GENERIC_CHECKS": "Generic checks",
+            "NO_DEFINITION": {
+                "NAME": "No definition resources",
+                "DESCRIPTION": "Resources that don't have any skos definition in the given language(s)"
+            },
+            "BROKEN_ALIGNMENTS": {
+                "NAME": "Broken alignments",
+                "DESCRIPTION": "Alignment where the object resource doesn't exist or is deprecated",
+                "RELOAD_INFO": "The types of resource to check are changed, is highly recommended to reload the namespaces",
+                "NAMESPACES_TO_CHECK": "Namespaces to check",
+                "NAMESPACES_TO_CHECK_INFO": "Namespaces of the resources that appear as object of mapping relations",
+                "ALIGN_COUNT": "Alignments count",
+                "LOCATIONS": "Locations"
+            },
+            "BROKEN_DEFINITIONS": {
+                "NAME": "Broken definitions",
+                "DESCRIPTION": "Definitions of resources where the object resource doesn't exist or is deprecated",
+                "DEFINITION_PROP": "Definition property",
+                "DEFINITION_PROP_INFO": "The ICV checks for resources with broken definitions linked by means this property or its subProperties"
+            },
+            "INVALID_URI_LOCAL_RES": {
+                "NAME": "Invalid URI local resources",
+                "DESCRIPTION": "Locally defined resources whith syntactically invalid URI"
+            }
+        }
+    },
+    "INVOKABLE_REPORTERS": {
+        "INVOKABLE_REPORTS": "Invokable Reports",
+        "REPORT": "Report",
+        "RESULT": "Result",
+        "INVOCATION": {
+            "SERVICE": "Service",
+            "OPERATION": "Operation",
+            "ARGUMENTS": "Arguments",
+            "TEMPLATE": "Template",
+            "TEMPLATE_INFO": "A template for rendering an individual section. The template must conform to Mustache templating language",
+            "CUSTOM_OPERATIONS": "Custom Operations",
+            "SEE_CUSTOM_OPERATIONS_DETAILS": "See custom operation details",
+            "NO_PARAM_OPERATION_INFO": "This operations has no parameters, it can be invoked without any configuration",
+            "INVALID_UPDATE_OPERATION": "Invokable reporter cannot define a service invocation that executes and update, it can only exploit read-only Custom Operations. The selected operation is not a read operation, so it cannot be used."
+        }
+    },
+    "METADATA": {
+        "METADATA_REGISTRY": {
+            "DATASET_METADATA": {
+                "CATALOG_RECORDS": "Catalog Records",
+                "ISSUED": "Issued",
+                "MODIFIED": "Modified",
+                "OTHER_VERSIONS": "Other versions",
+                "IDENTITY": "Identity",
+                "DEREFERENCEABLE": "Dereferenceable",
+                "DEREFERENCIATION_SYSTEM": "Dereferenciation System",
+                "NO_AGGREGATION": "No aggregation",
+                "NO_AGGREGATION_INFO": "If checked it means that the aggregation may be supported, but its support is insufficient for the purposes of Vocbench",
+                "VERSION_INFO": "Version Info"
+            },
+            "LEXICALIZATION_SET": {
+                "EMBEDDED_LEXICALIZATION_SETS": "Embedded Lexicalization Sets",
+                "LEXICALIZATION_SET": "Lexicalization Set",
+                "LEXICON_DATASET": "Lexicon Dataset",
+                "REFERENCES": "References",
+                "LEXICAL_ENTRIES": "Lexical Entries",
+                "LEXICALIZATIONS": "Lexicalizations",
+                "PERCENTAGE": "Percentage",
+                "AVG_OF_LEXICALIZATIONS": "Avg number of Lexicalizations"
+            }
+        },
+        "METADATA_VOCABULARIES": {
+            "METADATA_VOCABULARY": "Metadata Vocabulary"
+        },
+        "NAMESPACES_AND_IMPORTS": {
+            "NAMESPACE_MANAGEMENT": "Namespace management",
+            "BIND_NS_AND_BASEURI": "Bind/unbind namespace and baseURI",
+            "PREFIX": "Prefix",
+            "NAMESPACE": "Namespace",
+            "RESOLVE_WITH_PREFIXCC": "Try to resolve prefix using prefix.cc",
+            "IMPORTS": "Imports",
+            "WEB": "Web",
+            "WEB_TO_MIRROR": "Web to mirror",
+            "DATASET_CATALOG": "Dataset Catalog",
+            "LOCAL_FILE": "Local file",
+            "ONTOLOGY_MIRROR": "Ontology mirror",
+            "IMPORT_TREE": {
+                "LOOP_IMPORTS": "Loop of imports",
+                "FAILED_IMPORT": "Failed import"
+            },
+            "ONTOLOGY_MIRROR_MANAGEMENT": "Ontology Mirror Management",
+            "ONTOLOGY_IMPORT": {
+                "NO_ONTOLOGIES_MIRRORED": "No ontologies mirrored",
+                "ALTERNATIVE_URL": "Alternative URL",
+                "MIRROR_FILE_NAME": "Mirror file name",
+                "DATA_DUMP": "Data dump",
+                "USE_DATA_DUMP": "Use data dump",
+                "DATA_DUMP_CHECK": "If checked, import is added from the provided data dump instead of the ontology IRI"
+            },
+            "TRANSITIVE_IMPORTS": {
+                "TRANSITIVE_IMPORTS": "Transitive imports",
+                "FROM_OPT": {
+                    "NOWHERE": "Do not resolve",
+                    "WEB": "Resolve from web",
+                    "WEB_FALLBACK_MIRROR": "Resolve from web with fallback to Ontology Mirror",
+                    "MIRROR": "Resolve from Ontology Mirror",
+                    "MIRROR_FALLBACK_WEB": "Resolve from Ontology Mirror with fallback to Web"
+                }
+            }
+        }
+    },
+    "MODELS": {
+        "MAPLE": {
+            "DATASET": {
+                "DATASET": "Dataset",
+                "URI_SPACE": "URI space",
+                "CONFORMS_TO": "Conforms to",
+                "SPARQL_ENDPOINT": "SPARQL Endpoint",
+                "AVG_AMBIGUITY": "Avg ambiguity",
+                "AVG_LEXICALIZATIONS": "Avg lexicalizations",
+                "AVG_LEXICALIZATIONS_INFO": "Average number of lexicalizations",
+                "AVG_SYNONYMY": "Avg synonymy",
+                "CONCEPTS": "Concepts",
+                "CONCEPTUAL_DATASET": "Conceptual dataset",
+                "CONCEPTUALIZATIONS": "Conceptualizations",
+                "LANGUAGE_LEXVO": "Language Lexvo",
+                "LANGUAGE_LOC": "Language LOC",
+                "LANGUAGE_TAG": "Language Tag",
+                "LEXICAL_ENTRIES": "Lexical entries",
+                "LEXICALIZATION_MODEL": "Lexicalization model",
+                "LEXICALIZATIONS": "Lexicalizations",
+                "LEXICON_DATASET": "Lexicon dataset",
+                "LINGUISTIC_CATALOG": "Linguistic catalog",
+                "PERCENTAGE": "Percentage",
+                "REFERENCE_DATASET": "Reference dataset",
+                "REFERENCES": "References"
+            },
+            "PAIRING": {
+                "SCORE": "Score",
+                "BEST_COMBINED_SCORE": "Best combined score",
+                "SOURCE": "Source",
+                "TARGET": "Target",
+                "SYNONYMIZER": "Synonymizer"
+            }
+        },
+        "PROJECT": {
+            "PROJECT": "Project",
+            "PROJECTS": "Projects",
+            "CONSUMER": "Consumer",
+            "BASE_URI": "Base URI",
+            "DATA_REPO_ID": "Data Repository ID",
+            "DESCRIPTION": "Project description",
+            "LEXICALIZATION": "Lexicalization",
+            "LEXICALIZATION_MODEL": "Lexicalization Model",
+            "MODEL": "Model",
+            "BACKEND_TYPE": "Backend type",
+            "DATA_STORE": "Data Store",
+            "HISTORY": "History",
+            "REPO_ACCESS": "Repository Access",
+            "REPO_LOCATION": "Repository Location",
+            "REPOSITORY_ID": "Repository ID",
+            "SUPPORT_REPO_ID": "History/Validation Repository ID",
+            "VALIDATION": "Validation"
+        },
+        "RESOURCE": {
+            "DEPRECATED": "Deprecated",
+            "LABEL": "Label",
+            "OBJECT": "Object",
+            "PREDICATE": "Predicate",
+            "RESOURCE": "Resource",
+            "RESOURCES": "Resources",
+            "RESOURCE_TYPE": "Resource type",
+            "SUBJECT": "Subject"
+        },
+        "USER": {
+            "GIVEN_NAME": "Given name",
+            "FAMILY_NAME": "Family name",
+            "EMAIL": "E-mail",
+            "PASSWORD": "Password",
+            "CONFIRM_PASSWORD": "Confirm password",
+            "OFFICE_ADDRESS": "Office address",
+            "PHONE": "Phone",
+            "AFFILIATION": "Affiliation",
+            "PERSONAL_URL": "Personal URL",
+            "AVATAR_URL": "Avatar URL",
+            "LANGUAGE_PROFICIENCIES": "Language proficiencies",
+            "USER_IRI": "User IRI",
+            "PERSONAL_URL_AS_IRI": "Use personal URL as user IRI",
+            "REGISTERED": "Registered"
+        }
+    },
+    "NOTIFICATIONS": {
+        "NOTIFICATIONS": "Notifications",
+        "NOTIFICATION_SETTINGS": "Notification Settings",
+        "CLEAR_NOTIFICATIONS": "Clear notifications"
+    },
+    "PREFERENCES": {
+        "VB_PREFS": "VocBench Preferences",
+        "OTHER": {
+            "OTHER_PREFS": "Other preferences",
+            "SHOW_FLAGS": "Show flags",
+            "SHOW_FLAGS_INFO": "Determines if the flags icon are shown in place of the language ISO code",
+            "PROJECT_THEME": "Project theme",
+            "PROJECT_THEME_INFO": "Changes the color of the header/navigationBar for the current project"
+        },
+        "LANG": {
+            "EDITING": {
+                "EDITING_LANGS": "Editing Languages",
+                "DESCRIPTION": "Select the language prompted by default when creating a new language-tagged literal"
+            },
+            "RENDERING": {
+                "RENDERING_LANGS": "Rendering Languages",
+                "DESCRIPTION": "Select the languages (and their order) used for rendering the resources"
+            },
+            "VALUE_FILTER": {
+                "VALUE_FILTER_LANGS": "Value-filter Languages",
+                "DESCRIPTION": "Select the languages that will be shown when filtering literal values in resource descriptions. Toggle the filter in order to hide the values with the unselected languages."
+            }
+        },
+        "NOTIFICATIONS": {
+            "TYPE_EVENT_NOTIFICATIONS": "Type-event notifications",
+            "TYPE_EVENT_NOTIFICATIONS_INFO": "For each type of resource you can select the events for which you want to receive notifications",
+            "ENABLE_ALL": "Enable all notifications",
+            "DISABLE_ALL": "Disable all notifications",
+            "ENABLE_ALL_FOR_TYPE": "Enable all actions for this type",
+            "DISABLE_ALL_FOR_TYPE": "Disable all actions for this type",
+            "WATCHING_RESOURCES": "Watching resources",
+            "NO_RESOURCE_WATCHING_MSG": [
+                "You did not enabled notifications on any resources. You can start watching resources by clicking on the",
+                "button placed on the toolbar of a ResourceView."
+            ],
+            "STOP_WATCHING_RES": "Stop watching resource",
+            "MODES": {
+                "NO_NOTIFICATIONS": "No notifications",
+                "NO_NOTIFICATIONS_INFO": "You will not receive any notification",
+                "IN_APP": "In-app only",
+                "IN_APP_INFO": "You will be able to read notifications only in app from a dedicated page",
+                "EMAIL_INSTANT": "Email (instant)",
+                "EMAIL_INSTANT_INFO": "You will receive email instantly",
+                "EMAIL_DAILY": "Email (daily digest)",
+                "EMAIL_DAILY_INFO": "You will receive a daily email report"
+            }
+        },
+        "RES_VIEW": {
+            "TABBED_INFO": "The Resource View is shown in a tab and multiple Resource View can be open in different tabs.",
+            "SPLITTED_INFO": [
+                "The Resource View panel is splitted in two: on the left there is a main Resource View which describes (and is synched with) the resource selected in the tree/list; on the right there is an optional secondary Resource View which describes a resource selected (double click) from the main Resource View",
+                "This mode is not recommended in screen with resolution width below 1440px"
+            ],
+            "SYNC_WITH_TREE_LIST": "Keep selected tab synchronized with tree/list",
+            "SYNC_WITH_TREE_LIST_WARNING": "It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.",
+            "INITIAL_VIEW_FOR_CONCEPTS": "Initial view for concepts",
+            "INITIAL_VIEW_FOR_CONCEPTS_INFO": "This selection will be used by default for browsing SKOS concepts. The user can switch to other views during their session of work, but this selection will be applied as an initial setting at each new login",
+            "DISPLAY_IMAGES": "Display images",
+            "DISPLAY_IMAGES_INFO": "If enabled, URL values resolvable to images on the web will be displayed as images (preview) in the ResourceView",
+            "SHOW_DEPRECATED": "Show deprecated values",
+            "SHOW_DEPRECATED_INFO": "If enabled, linked resources marked as deprecated will be shown in the ResourceView",
+            "SHOW_DATATYPE_BADGE": "Always show datatype badge",
+            "SHOW_DATATYPE_BADGE_INFO": "If enabled, a datatype badge will be always shown beside the value. If not, the badge is only shown in case of an unknown datatype (the icon on the left of the value will classify the known datatype)"
+        }
+    },
+    "PROJECTS": {
+        "ACCESSED": "Accessed",
+        "BLACKLIST": "Blacklisting",
+        "BLACKLIST_INFO": "Enable this to blacklist terms that have been rejected through validation",
+        "ENABLE_SHAPE_VALIDATION": "Enable shape validation",
+        "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference",
+        "HISTORY_INFO": "Enable this to keep track of the changes made on the working graph",
+        "INFERENCE_DISCOURAGED_INFO": "It is highly recommended not to use inference",
+        "LEFT_RIGHT": "Left/Right",
+        "LEFT_RIGHT_INFO": "Due to technology limitations, the two datasets must be remote",
+        "OPEN_CLOSE": "打开/关闭",
+        "OPTIONAL_SETTINGS": "Optional settings",
+        "PROJECT_NAME": "项目",
+        "RENAME_DIR": "Rename directory",
+        "RENDERING_ENGINE": "Rendering Engine",
+        "RESOURCE_METADATA": "Resource Metadata",
+        "SHACLE_SHAPE_VALIDATION": "SHACL Shape Validation",
+        "TRANSITIVE_IMPORTS": "Transitive imports",
+        "TRIVIAL_INFERENCE_ENGINE": "Trivial Inference Engine",
+        "URI_GENERATOR": "URI Generator",
+        "USE_DEFAULT": "Use default settings",
+        "USE_RESOURCE_METADATA": "Use Resource Metadata",
+        "USE_RESOURCE_METADATA_INFO": "Usage of Resource Metadata can be enabled also after the project creation",
+        "VALIDATION_INFO": "Enable this to keep track of change requests in order to validate them later (accepting or rejecting)",
+        "ACL": {
+            "ACL_MATRIX": "ACL matrix",
+            "SHOW_ACL_MATRIX": "Show ACL matrix",
+            "PROJECT_ACL": "Project ACL",
+            "ACL_OF_PROJECT": "Access Control List of project",
+            "UNIVERSAL_ACCESS_LEVEL": "Universal access level",
+            "UNIVERSAL_ACCESS_LEVEL_INFO": "Access level granted to all the consumer (except SYSTEM)",
+            "LOCKABLE": "Lockable"
+        },
+        "ACTIONS": {
+            "CHANGE_DIR": "Change directory",
+            "EDIT_REMOTE_REPO_CONFIG": "Edit Remote Repo configuration",
+            "EDIT_DESCRIPTION": "Edit description",
+            "EDIT_FACETS": "Edit facets",
+            "PROPERTIES": "Properties"
+        },
+        "DIRS": {
+            "PROJECT_DIR": "Project Directory",
+            "DIRECTORIES": "Directories",
+            "DIR_NAME": "Directory name",
+            "DIR_NAME_INFO": "If left empty the project will be removed from the directory and set as 'Unclassified'"
+        },
+        "PRELOAD": {
+            "PRELOAD": "Preload",
+            "DATA_PRELOADING": "Optional data preloading",
+            "DATA_LOADED_CORRECTLY": "Data loaded correctly",
+            "DATA_NOT_LOADED": "Data not loaded",
+            "SELECTION_AUTO_DETERMINED": "This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing",
+            "SELECTION_UNDETERMINED": "Preload operation could not determine this selection. Please provide it manually",
+            "OPT": {
+                "NONE": "Do not preload any data",
+                "FROM_LOCAL_FILE": "Preload from local file",
+                "FROM_URI": "Preload from URI",
+                "FROM_DATASET_CATALOG": "Preload from Dataset Catalog"
+            }
+        },
+        "REMOTE_REPO": {
+            "REMOTE_REPOSITORIES": "Remote repositories",
+            "NO_REMOTE_REPO_WARN": "There are no remote repositories related to this project",
+            "BATCH_MODIFY": "Batch modify",
+            "BATCH_MODIFY_INFO": "Modifies, all at once, the access credentials of (possibly) many repositories with the same serverURL.",
+            "MATCH_USERNAME": "Match username",
+            "MATCH_USERNAME_INFO": "If checked, modifies credentials of repositories with same serverURL and username (empty 'old' username indicates repositories with no associated username)"
+        },
+        "CONFIG": {
+            "PROJ_VIEW_SETTINGS": "Project view settings",
+            "PROJ_FACETS_SCHEMA_SETTINGS": "Project facets schema settings",
+            "TOP_LEVEL_ELEMENTS": "Top level elements",
+            "DIRECTORIES": "Directories",
+            "PROJ_INFO": "Project info",
+            "PROJ_INFO_INFO": "Here you can show or hide info about the projects and customize their order.",
+            "COL_NAME": "Column name"
+        }
+    },
+    "RESOURCE_METADATA": {
+        "RESOURCE_METADATA_CONFIG": "Configurazione Resource Metadata",
+        "METADATA_PATTERN": "Metadata Pattern",
+        "METADATA_PATTERNS": "Metadata Patterns",
+        "PATTERN_LIBRARY": "Pattern Library",
+        "IMPORT_FROM_LIBRARY": "Import Pattern from shared library",
+        "STORE_IN_LIBRARY": "Store Pattern in shared library",
+        "PATTERN_ASSOSIACTIONS": "Pattern Associations",
+        "PATTERN_ID": "Pattern ID",
+        "PATTERN_FACTORY_PROVIDED": "Pattern Factory-provided",
+        "SHOW_DETAILS": "Show pattern details",
+        "DESTRUCTION_PATTERN_INFO": "Please notice that when the resource is deleted, all of its outgoing triples will be automatically deleted, so developing a destruction pattern is only necessary in case there are other resources linked by this resource (and only by it) that should thus be deleted in turn (this happens, e.g., in the case of reified metadata)",
+        "SHARED_PATTERNS": "Shared Patterns"
+    },
+    "RESOURCE_VIEW": {
+        "PARTITIONS": {
+            "BROADERS": "Broaders",
+            "CLASS_AXIOMS": "Class axioms",
+            "CONSTRITUENST": "Constituents",
+            "DATATYPE_DEFINITIONS": "Datatype definitions",
+            "DENOTATIONS": "Denotations",
+            "DISJOINT_PROPERTIES": "Disjoint properties",
+            "DOMAINS": "Domains",
+            "EQUIVALENT_PROPERTIES": "Equivalent properties",
+            "EVOKED_LEXICAL_CONCEPTS": "Evoked lexical concepts",
+            "FACETS": "Facets",
+            "FORM_BASED_PREVIEW": "Custom Form preview",
+            "FORM_PRESENTATIONS": "Form representations",
+            "IMPORTS": "Imports",
+            "LABEL_RELATIONS": "Label relations",
+            "LEXICALIZATIONS": "Lexicalizations",
+            "LEXICAL_FORMS": "Lexical forms",
+            "LEXICAL_SENSES": "Lexical senses",
+            "MEMBERS": "Members",
+            "MEMBERS_ORDERED": "Members (ordered)",
+            "NOTES": "Notes",
+            "PROPERTIES": "Other properties",
+            "RANGES": "Ranges",
+            "RDFS_MEMBERS": "RDFS members",
+            "SCHEMES": "Schemes",
+            "SUBPROPERTY_CHAINS": "Subproperty chain axioms",
+            "SUBTERMS": "Subterms",
+            "SUPERPROPERTIES": "Superproperties",
+            "TOP_CONCEPT_OF": "Top concept of",
+            "TYPES": "Types",
+            "PARTITIONS": "Partitions",
+            "FILTER": {
+                "RESOURCE_TYPES": "Resource Types",
+                "SET_VISIBLE_FOR_ALL": "Set visible for all resource types",
+                "HIDE_FOR_ALL": "Hide for all resource types",
+                "SET_VISIBLE_ALL": "Set visible all the partitions of all the Resource types"
+            }
+        },
+        "ACTIONS": {
+            "BLOCK_NAMESPACE": "Block namespace",
+            "COPY_TO_CLIPBOARD": "Copy to clipboard",
+            "SHOW_HIDE_INFERRED": "Show/hide inferred information",
+            "TOGGLE_VALUE_FILTER_LANG": "Enable/disable value-filter on languages",
+            "TOGGLE_NOTIFICATIONS": "Enable/disable notifications on this resource",
+            "CHANGE_VERSION": "Change version",
+            "CREATE_ISSUE": "Create issue for this resource",
+            "ASSIGN_TO_ISSUE": "Assign this resource to existing issue",
+            "ALIGN_WITH_EXTERNAL_RESOURCE": "Align with external resource",
+            "SET_AS_DEPRECATED": "Set as deprecated",
+            "ASSERT_INFERRED_STATEMENTS": "Assert all the inferred statements",
+            "SPAWN_CONCEPT_FROM_XLABEL": "Spawn new concept from this xLabel",
+            "SHOW_IN_DATA_GRAPH": "Show in data-oriented graph",
+            "ADD_VALUE_MANUALLY": "Add value manually",
+            "ADD_VALUE_FROM_ANOTHER_PROJ": "Add value from another project",
+            "DELETE_ALL_VALUES": "Delete all values",
+            "EDIT_LITERAL_CONTENT": "Edit literal content",
+            "BULK_EDIT": "Bulk edit",
+            "BULK_EDIT_INFO": "Update the value for every resource that has this predicate-value relation",
+            "MOVE_XLABEL_TO_CONCEPT": "Move xLabel to another concept",
+            "COPY_VALUE_TO_LOCALES": "Copy value to other locales",
+            "ASSERT_INFERRED_STATEMENT": "Assert inferred statement",
+            "BULK_DELETE": "Bulk delete",
+            "BULK_DELETE_INFO": "Delete the value for every resource that has this predicate-value relation",
+            "SHOW_ISSUES": "Show issues"
+        },
+        "STATUS": {
+            "RESOURCE_NOT_EXISTING": "This resource is not available in the current project",
+            "RESOURCE_UNKNOWN_HOST": "This resource is not available on accessible local projects nor can be reached on the Web",
+            "ACCESS_METHOD": "Access method",
+            "LOCAL_PROJECT": "Local Project",
+            "OTHER_LOCAL_PROJECT": "Other local Project",
+            "REMOTE_DATASET": "Remote Dataset",
+            "UNKNOWN_POSITION": "Unknown position",
+            "CLOSE_ALL_TABS": "Close all tabs",
+            "PREVIOUS_RESOURCE": "Previous resource"
+        },
+        "MISC": {
+            "SHOW_ALL_CLASSES": "Show all classes",
+            "INVERSE_PROPERTY": "Inverse Property",
+            "INVERSE_PROPERTY_MULTIVALUE_WARN": "In case of multiple properties selected, the 'Inverse Property' flag is applied to all of them (available only if all ObjectProperties)",
+            "EDIT_DATARANGE": "Edit datarange",
+            "IS_ALREADY_IN_LIST": "is already in the list!",
+            "PROPERTY_CHAIN": "Property chain",
+            "ORDERED": "Ordered",
+            "VALLUE_TO_COPY": "Value to copy",
+            "TARGET_LANGS": "Target languages"
+        },
+        "CODE_EDITOR": {
+            "CODE_EDITOR": "Code editor",
+            "DISABLED_UNDER_VALIDATION": "The Code view tab has been disabled as this resource - or part of its description - is under validation"
+        },
+        "TERM_VIEW": {
+            "BROADER_CONCEPTS": "Broader Concepts",
+            "TERM": "Term",
+            "DEFINITION": "Definition",
+            "REMOVE_BOX": "Remove box"
+        }
+    },
+    "SEARCH": {
+        "SEARCH": "Search",
+        "ADV_SEARCH": {
+            "ADVANCED_SEARCH": "Advanced Search",
+            "SEARCH_STRING": "Search string",
+            "TYPES": "Types",
+            "SCHEMES": "Schemes",
+            "INGOING_LINKS": "Ingoing links",
+            "OUTGOING_LINKS": "Outgoing links",
+            "ADD_SET_OF_VALUES": "Add set of values",
+            "ADD_FREE_TEXT": "Add free text search",
+            "ADD_RESOURCE": "Add resource",
+            "ADD_LITERAL": "Add literal"
+        },
+        "ASSISTED_SEARCH": {
+            "ASSISTED_SEARCH": "Assisted search",
+            "LOCAL": "Local",
+            "REMOTE": "Remote",
+            "METADATA_UNAVAILABLE_LOCAL_WARNING": {
+                "METADATA_NOT_AVAILABLE": "VoID/LIME Metadata not available for local project '{{projName}}'. Click",
+                "HERE": "here",
+                "TO_GENERATE_IT": "to generate it"
+            },
+            "REMOTE_DATASETS": "Remote datasets",
+            "METADATA_UNAVAILABLE_REMOTE_WARNING": "VoID/LIME Metadata not available for remote dataset '{{datasetUriSpace}}'. You need to generate/add 'Embedded Lexicalization Sets' from the Metadata Registry management in order to exploit this feature.",
+            "PAIRED_LEX_SETS": "Paired Lexicalization Sets",
+            "PAIRED_LEX_SETS_INFO": "Lexicalization sets shared between the source resource and the target project/dataset",
+            "REFRESH_METADATA_INFO": "Refresh metadata of the target project",
+            "PERCENTAGE_INFO": "Percentage of resources that have a lexicalization in the given language",
+            "AVG_INFO": "Average number of lexicalizations",
+            "NO_SEARCH_MODE_SELECTED_WARNING": "If none is selected, 'Fuzzy' and 'Contains' are used by default",
+            "SEARCH_MODE_INFO": "String match modes on which the lexicalizations comparison is based on",
+            "MATCHED_LANG": "Matched language",
+            "MATCH_MODE": "Match mode"
+        },
+        "CUSTOM_SEARCH": {
+            "CUSTOM_SEARCH": "Custom Search",
+            "SHOW_HIDE_SPARQL_DETAILS": "Show/hide SPARQL details about the custom search",
+            "NO_PARAM_SEARCH": "This search has no parameters so can only be run as is.",
+            "LOAD_CUSTOM_SEARCH": "Load Stored Custom Search",
+            "STORE_CUSTOM_SEARCH": "Stored Custom Search"
+        },
+        "SETTINGS": {
+            "SEARCH_SETTINGS": "Search settings",
+            "STRING_MATCH_MODE": "String match mode",
+            "STARTS_WITH": "Starts with",
+            "CONTAINS": "Contains",
+            "ENDS_WITH": "Ends with",
+            "EXACT": "Exact",
+            "FUZZY": "Fuzzy",
+            "SEARCH_MODE": "Search mode",
+            "SEARCH_MODE_INFO": "Search always looks for the input string among the lexicalizations",
+            "SEARCH_IN_URI": "Search in URI",
+            "SEARCH_IN_LOCAL_NAME": "Search in local name",
+            "SEARCH_IN_NOTES": "Search in notes",
+            "LEXICALIZATIONS_SEARCH": "Lexicalizations search",
+            "RESTRICT_TO_LANGUAGES": "Restrict search to languages",
+            "INCLUDE_LOCALES": "Include locales in search (e.g. en-GB, en-US)",
+            "AUTOCOMPLETION": "Autocompletion",
+            "AUTOCOMPLETION_INFO": "It is highly recommended to disable this feature in big project not hosted by a GraphDB server",
+            "ENABLE_AUTOCOMPLETION": "Enable autocompletion support during typing",
+            "CONCEPTS_SEARCH": "Concept search",
+            "RESTRICT_TO_SCHEME": "Restrict the search to the active skos:ConceptScheme(s)",
+            "INSTANCES_SEARCH": "Instances search",
+            "EXTEND_TO_ALL": "Extend the search to all the individuals (also belonging to other classes)"
+        }
+    },
+    "SHEET2RDF": {
+        "CONVERTER": {
+            "CONVERTER": "Converter",
+            "CONVERTER_PARAMETERIZATION": "Converter parameterization",
+            "RDF_CAPABILITY": "RDF Capability",
+            "PARAMS": "Params",
+            "SIGNATURE": "Signature",
+            "MEMOIZE": "Memoize",
+            "MEMOIZE_INFO": "Apply the memoization: given the same input, the converter will generate the same output"
+        },
+        "SPREADSHEET": {
+            "FILE": "Spreadsheet file",
+            "PREVIEW": "Spreadsheet preview",
+            "SUBJECT_MAPPING": "Subject mapping",
+            "EDIT_SUBJECT_HEADER": "Edit subject header",
+            "ROWS": "Rows",
+            "LOAD_STATUS": "Load Mapping Status",
+            "LEGEND": {
+                "LEGEND": "Legend",
+                "NOT_CONFIGURED": "Header not configured",
+                "VALID_CONFIGURATION": "Header with at least a valid configuration",
+                "PARTIALLY_CONFIGURED": "Header partially configured (e.g. only node defined)",
+                "IGNORED": "Header ignored",
+                "INCOMPLETED_SUBJECT": "Incompleted Subject header",
+                "SUBJECT_HEADER": "Header used for the subject mapping"
+            }
+        },
+        "PEARL": {
+            "GENERATE_PEARL": "Generate Pearl",
+            "INSERT_CONVERTER": "Insert converter"
+        },
+        "TRIPLES": {
+            "GENERATE_TRIPLES": "Generate Triples",
+            "GENERATED_TRIPLES_PREVIEW": "Generated triples preview",
+            "ADD_TRIPLES": "Add triples"
+        },
+        "HEADER_EDITOR": {
+            "HEADER_EDITOR": "Header editor",
+            "IGNORE_HEADER": "Ignore header",
+            "IGNORE_HEADER_INFO": "If checked, the current header will be ignored in the generated PEARL code and thus in the conversion process",
+            "HEADER": "Header",
+            "PEARL_FEATURE": "PEARL feature",
+            "NODES": "Nodes",
+            "NODES_INFO": "List of nodes generated from the current header",
+            "NODE_ID": "Node ID",
+            "CONVERTER_TYPE": "Converter type",
+            "CONVERTER_URI": "Converter URI",
+            "GRAPH_APPLICATIONS": "Graph applications",
+            "GRAPH_APPLICATIONS_INFO": "List of applications of the nodes defined in the 'Nodes' panel",
+            "ADD_SIMPLE_GRAPH_APPL": "Add simple graph application",
+            "ADD_ADV_GRAPH_APPL": "Add advanced graph application",
+            "NODE_EDITOR": "Node editor",
+            "SUBJECT_HEADER_EDITOR": "Subject Header editor",
+            "SUBJ_HEADER_INFO": "Set the header used for the creation of the subject",
+            "SUBJ_NODE_ID_INFO": "This value is readonly, 'subject' is a reserved keyword for the subject node",
+            "ASSERT_TYPE": "Assert type",
+            "ASSERT_TYPE_INFO": "Check this option in order to assert a class membership for the subject node",
+            "ADDITIONAL_PRED_OBJ": "Additional predicate-object"
+        },
+        "GRAPH_APPLICATIONS": {
+            "ADVANCED": {
+                "ADV_GRAPH_APPL": "Advanced Graph Application",
+                "PREFIX_NS_MAPPINGS": "Prefix-Namespace mappings",
+                "GRAPH_PATTERN": "Graph pattern",
+                "GRAPH_PATTERN_INFO": "The graph pattern must contain only node IDs already defined in any header.<br>It could also contains a <code>{{pred}}</code> placeholder that will be replaced with the predicate of the header. In case the <code>{{pred}}</code> is used in the pattern, a default predicate <strong>must</strong> be provided as fallback when the header does not represent any valid predicate.",
+                "DEFAULT_PREDICATE": "Default predicate",
+                "DEFAULT_PREDICATE_INFO": "If the graph pattern contains the 'pred' placeholder this predicate is mandatory, otherwise it will be ignored"
+            },
+            "SIMPLE": {
+                "SIMPLE_GRAPH_APPL": "Simple Graph Application",
+                "RANGE": "Range",
+                "UNDETERMINED": "Undetermined",
+                "RANGE_TYPE": "Range type",
+                "ASSERT_TYPE_INFO": "Check this option in order to assert the rdf:type of the generated node",
+                "NODE": "Node"
+            }
+        },
+        "SETTINGS": {
+            "S2RDF_SETTINGS": "Sheet2RDF settings",
+            "FS_NAMING": "FS naming",
+            "FS_NAMING_INFO": "Strategy to use for naming the UIMA Feature Structures related to the headers"
+        }
+    },
+    "SKOS_DIFF": {
+        "SKOS_DIFFING_TASKS": "SKOS diffing tasks",
+        "DOWNLOAD_TASK_RESULT": "Download task result",
+        "LEFT_DATASET": "Left Dataset",
+        "RIGHT_DATASET": "Right Dataset",
+        "VERSION": "Version"
+    },
+    "SPARQL": {
+        "QUERY": {
+            "ADD_PARAMETERIZED_QUERY_TAB": "Add parameterized query tab",
+            "ADD_QUERY_TAB": "Add query tab",
+            "CHANGE_STORED_QUERY": "Change stored query",
+            "FETCH_FROM_PREFIXCC": "Fetch prefix from prefix.cc",
+            "PARAMETERIZED_QUERY": "Parameterized query",
+            "STORED_QUERY": "Stored query",
+            "UNNAMED_PARAMETERIZED_QUERY": "Unnamed parameterized query",
+            "UNNAMED_QUERY": "Unnamed query"
+        },
+        "RESULTS": {
+            "CLEAR": "Clear",
+            "DONE_IN": "Done in",
+            "EXPORT_RESULTS": "Export SPARQL results",
+            "INCLUDE_INFERRED": "Include inferred",
+            "RESULTS_COUNT": "Results count",
+            "SAVE_RESULTS_AS": "Save results as",
+            "SHOW_RESULTS_AS_GRAPH": "Show results as graph"
+        },
+        "PARAMETERIZATION": {
+            "QUERY_PARAMETERIZATION": "Query parameterization",
+            "QUERY_PARAMETERS": "Query parameters",
+            "DISPLAY_NAME": "Display Name",
+            "BINDING_TYPE": "Binding Type",
+            "SHOW_VARIABLE_BINDINGS_DISPLAY_NAME": "Show variable bindings display name",
+            "USE_VARIABLE_BINDINGS": "Use variable bindings",
+            "VARIABLE_BINDING": "Variable binding",
+            "VARIABLE_BINDINGS": "Variable bindings"
+        },
+        "EXPORT": {
+            "EXPORT_AS_RDF": "Export as RDF",
+            "APPLY_EXPORT_FILTERS": "Apply export filters",
+            "EXPORT_TRANSFORMATIONS": "Export transformations",
+            "TRANSFORMATION_INFO": "Here it is possible to create and configure a sequence of transformations to be applied during the export process.",
+            "UNCONFIGURED_FILTER": "This filter needs to be configured"
+        }
+    },
+    "USER": {
+        "REGISTRATION": {
+            "USER_REGISTRATION": "User registration",
+            "NO_USER_REGISTERED_MSG": [
+                "VocBench found no registered user. In order to use the platform, you need to create an administrator account by entering personal data and login credentials. A pre-defined user",
+                "is available for letting those willing to use VocBench as a simple desktop tool and skip the user creation procedure."
+            ],
+            "FILL_PREDEFINED_USER": "Fill pre-defined user",
+            "OPTIONAL_RECOMMENDED_FIELD": "Optional but highly recommended field"
+        },
+        "USER_DETAILS": "User details",
+        "USER_LOGIN": "User login",
+        "LOGIN": "Log in",
+        "SIGNUP": "Sign up",
+        "PASSWORD": {
+            "CHANGE_PASSWORD": "Change password",
+            "FORGOT_PASSWORD": "Forgot password",
+            "RESET_PASSWORD": "Reset password",
+            "OLD_PASSWORD": "Old password",
+            "NEW_PASSWORD": "New password",
+            "CONFIRM_NEW_PASSWORD": "Confirm new password"
+        }
+    },
+    "WIDGETS": {
+        "EDITORS": {
+            "MANCHESTER": {
+                "HELPER": "Helper",
+                "MANCHESTER_SYNTAX_HELPER": "Manchester Syntax helper",
+                "PREST_CTRL_SPACE": "Press 'ctrl-space' to show hints",
+                "TABLE_CONSTRUCTORS_INFO": "This table shows the conversions between DL syntax and Manchester syntax for these constructors",
+                "TABLE_AXIOMS_INFO": "This table shows the conversions between DL syntax and Manchester syntax for these axioms",
+                "CONSTRUCTOR": "Constructor",
+                "DL_SYNTAX": "DL syntax",
+                "MANCHESTER_SYNTAX": "Manchester syntax",
+                "AXIOM": "Axiom"
+            }
+        },
+        "FILE_PICKER": {
+            "BROWSE": "Browse",
+            "SELECT_A_FILE": "Select a file"
+        },
+        "REMOTE_ACCESS_CONFIG": {
+            "CONFIG_FOR_REMOTE": "Configuration for remote data store",
+            "NO_CONFIG_FOUND": "No Remote Access Configuration found. Please, create a new one."
+        },
+        "SETTINGS_RENDERER": {
+            "ADD_OPTIONAL_VALUE": "Add optional value",
+            "DELETE_OPTIONAL_VALUE": "Delete optional value",
+            "UNKNOWN_TYPE_WARN": "This parameter has an unknown type ({{propTypeName}}). The entered value will be interpreted as a low-level JSON value"
+        },
+        "VALUE_PICKER": {
+            "FROM_CURRENT_PROJ": "From current project",
+            "FROM_EXTERNAL_PROJ": "From external project"
+        }
+    },
+    "COMMONS": {
+        "BOOLEAN": {
+            "FALSE": "False",
+            "NO": "No",
+            "TRUE": "True",
+            "YES": "Yes"
+        },
+        "CONFIG": {
+            "CONFIGURATION": "Configuration",
+            "CONFIGURATION_REQUIRED": "Configuration required",
+            "CONFIGURE": "Configure",
+            "NO_CONFIG_FOUND": "No configuration found. Please, create a new one",
+            "SERVER_URL": "Server URL",
+            "USERNAME": "Username",
+            "PASSWORD": "Password"
+        },
+        "LANGUAGE": {
+            "LANGUAGE": "Language",
+            "LANGUAGES": "Languages",
+            "ISO_CODE": "ISO code",
+            "NO_LANG_INFO": "No language selected implicitly means all languages"
+        },
+        "PAGING": {
+            "PAGE_OF_TOT": "of",
+            "PREV_PAGE": "Previous page",
+            "NEXT_PAGE": "Next page"
+        },
+        "DESCRIPTION": "Description",
+        "DETAILS": "Details",
+        "FORCE_FORMAT": "Force format",
+        "FORMAT": "Format",
+        "GROUPS": "Groups",
+        "LEVEL": "Level",
+        "MANDATORY": "Mandatory",
+        "MANDATORY_FIELD": "Mandatory field",
+        "MODE": "Mode",
+        "NAME": "Name",
+        "ONTOLOGY_IRI": "Ontology IRI",
+        "OPTIONAL": "Optional",
+        "OPTIONAL_FIELD": "Optional field",
+        "POSITION": "Position",
+        "ROLE": "Role",
+        "ROLES": "Roles",
+        "SCOPE": "Scope",
+        "SETTINGS": "Settings",
+        "SOURCE": "Source",
+        "TIME": "Time",
+        "TITLE": "Title",
+        "TYPE": "Type",
+        "USERS": "Users",
+        "VALUE": "Value"
+    },
+    "ACTIONS": {
+        "ACCEPT": "Accept",
+        "ACCEPT_ALL": "Accept all",
+        "ACCESS": "Access",
+        "ACTION": "Action",
+        "ACTIONS": "Actions",
+        "ADD": "Add",
+        "ADD_ADMINISTRATOR": "Add administrator",
+        "ADD_AFTER": "Add after",
+        "ADD_ALL": "Add all",
+        "ADD_ALL_PROFICIENCIES": "Add all proficiencies",
+        "ADD_BEFORE": "Add before",
+        "ADD_BROADER": "Add broader",
+        "ADD_CAPABILITY": "Add capability",
+        "ADD_CATALOG_RECORD": "Add Catalog record",
+        "ADD_CLASS_AS_SUGGESTION": "Add class as suggestion",
+        "ADD_CONCEPT_TO_SCHEME": "Add concepts to scheme",
+        "ADD_DATASET": "Add Dataset",
+        "ADD_DATASET_VERSION": "Add Dataset Version",
+        "ADD_DEFINITION": "Add definition",
+        "ADD_DENOTATION": "Add denotation",
+        "ADD_DISJOINT_PROPERTY": "Add disjoint property",
+        "ADD_DOMAIN": "Add domain",
+        "ADD_EMBEDDED_LEXICALIZATION_SET": "Add Embedded Lexicalization Set",
+        "ADD_EQUIVALENT_PROPERTY": "Add equivalent property",
+        "ADD_FIRST": "Add first",
+        "ADD_IMPORT_FROM": "Add import from",
+        "ADD_INVERSE_PROPERTY": "Add inverse property",
+        "ADD_LABEL_RELATION": "Add label relation",
+        "ADD_LAST": "Add last",
+        "ADD_LEX_ENTRY": "Add Lexical Entry",
+        "ADD_LEXICAL_SENSE": "Add lexical sense",
+        "ADD_MANCHESTER_EXPRESSION": "Add Manchester expression",
+        "ADD_MAPPING": "Add mapping",
+        "ADD_MEMBER": "Add member",
+        "ADD_OPERATION": "Add operation",
+        "ADD_PREFIX_NAMESPACE_MAPPING": "Add prefix-namespace mapping",
+        "ADD_NODE": "Add node",
+        "ADD_PROPERTY": "Add property",
+        "ADD_PROPERTY_AS_SUGGESTION": "Add property as suggestion",
+        "ADD_RANGE": "Add range",
+        "ADD_SCHEME": "Add scheme",
+        "ADD_SUBTERM": "Add subterm",
+        "ADD_SUPERPROPERTY": "Add superproperty",
+        "ADD_TO_SCHEME": "Add to scheme",
+        "ADD_TYPE": "Add type",
+        "ADD_USER_TO_PROJ": "Add user to project",
+        "ADD_X": "Add {{x}}",
+        "APPLY_CHANGES": "Apply changes",
+        "APPLY_RESTRICTIONS": "Apply restrictions",
+        "APPLY_TO_DATASET": "Apply to Dataset",
+        "APPLY_TO_EDOAL": "Apply to EDOAL linkset",
+        "APPLY_VALIDATION": "Apply validation",
+        "ASSESS_LEXICALIZATION_MODEL": "Assess Lexicalization Model",
+        "ASSIGN": "Assign",
+        "ASSIGN_ISSUE": "Assign issue",
+        "ASSIGN_PROJECT": "Assign project",
+        "BROWSE_LOCAL_PROJ": "Browse local projects",
+        "CANCEL": "Cancel",
+        "CHANGE_BROADER_PROP": "Change broader property",
+        "CHANGE_CLASS": "Change class",
+        "CHANGE_LEXICON": "Change Lexicon",
+        "CHANGE_PROJECT": "Change project",
+        "CHANGE_PROPERTY": "Change property",
+        "CHANGE_RELATION": "Change relation",
+        "CHECK_ALL": "Check all",
+        "CLEAR_DATA": "Clear data",
+        "CLEAR_SHACL_SHAPES": "Clear SHACL shapes",
+        "CLONE": "Clone",
+        "CLONE_CUSTOM_FORM": "Clone CustomForm",
+        "CLONE_FORM_COLLECTION": "Clone FormCollection",
+        "CLONE_METADATA_PATTERN": "Clone Metadata Pattern",
+        "CLONE_ROLE": "Clone role",
+        "CLOSE": "Close",
+        "COMMENT": "Comment",
+        "COMPILE_AND_DOWNLOAD_REPORT": "Compile and download report",
+        "COMPILE_REPORT": "Compile report",
+        "CONFIRM": "Confirm",
+        "CREATE": "Create",
+        "CREATE_ALIGNMENT": "Create alignment",
+        "CREATE_CLASS": "Create class",
+        "CREATE_COLLECTION": "Create collection",
+        "CREATE_CONCEPT": "Create concept",
+        "CREATE_CONSTITUENTS_LIST": "Create constituents list",
+        "CREATE_CUSTOM_FORM": "Create Custom Form",
+        "CREATE_CUSTOM_OPERATION": "Create Custom Operation",
+        "CREATE_CUSTOM_SERVICE": "Create Custom Service",
+        "CREATE_DATATYPE": "Create datatype",
+        "CREATE_FORM_COLLECTION": "Create Form Collection",
+        "CREATE_GROUP": "Create group",
+        "CREATE_INSTANCE": "Create instance",
+        "CREATE_INVOKABLE_REPORT": "Create Invokable Report",
+        "CREATE_ISSUE": "Create Issue",
+        "CREATE_LEX_ENTRY": "Create lexical entry",
+        "CREATE_LEXICON": "Create lexicon",
+        "CREATE_LITERAL": "Create literal",
+        "CREATE_METADATA_ASSOCIATION": "Create Metadata Association",
+        "CREATE_METADATA_PATTERN": "Create Metadata Pattern",
+        "CREATE_NARROWER_CONCEPT": "Create narrower concept",
+        "CREATE_NESTED_COLLECTION": "Create nested collection",
+        "CREATE_PROJECT": "Create project",
+        "CREATE_PROPERTY": "Create property",
+        "CREATE_PROPERTY_CHAIN": "Create property chain",
+        "CREATE_RESOURCE_FORM_COLL_MAPPING": "Create Resource - FormCollection mapping",
+        "CREATE_ROLE": "Create role",
+        "CREATE_SCHEME": "Create scheme",
+        "CREATE_SERVICE_INVOCATION": "Create Service Invocation",
+        "CREATE_SUBCLASS": "Create subClass",
+        "CREATE_SUBPROPERTY": "Create subProperty",
+        "CREATE_TASK": "Create task",
+        "CREATE_USER": "Create user",
+        "CREATE_VERSION_DUMP": "Create a version dump",
+        "CREATE_X": "Create {{x}}",
+        "DELETE": "Delete",
+        "DELETE_ALL": "Delete all",
+        "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Delete All Embedded Lexicalization Set",
+        "DELETE_ALL_VALUES": "Delete all values",
+        "DELETE_CLASS": "Delete class",
+        "DELETE_COLLECTION": "Delete collection",
+        "DELETE_CONCEPT": "Delete concept",
+        "DELETE_CONFIGURATION": "Delete configuration",
+        "DELETE_CONSTITUENT": "Delete constituent",
+        "DELETE_CUSTOM_FORM": "Delete CustomForm",
+        "DELETE_CUSTOM_SERVICE": "Delete CustomService",
+        "DELETE_DATASET": "Delete Dataset",
+        "DELETE_DATASET_VERSION": "Delete Dataset Version",
+        "DELETE_DATATYPE": "Delete datatype",
+        "DELETE_EMBEDDED_LEXICALIZATION_SET": "Delete Embedded Lexicalization Set",
+        "DELETE_FORM_COLLECTION": "Delete FormCollection",
+        "DELETE_INSTANCE": "Delete instance",
+        "DELETE_INVOKABLE_REPORT": "Delete Invokable Report",
+        "DELETE_LEX_ENTRY": "Delete lexical entry",
+        "DELETE_LEXICON": "Delete lexicon",
+        "DELETE_MAPPING": "Delete mapping",
+        "DELETE_MEMBER": "Delete member",
+        "DELETE_METADATA_ASSOCIATION": "Delete Metadata Association",
+        "DELETE_METADATA_PATTERN": "Delete Metadata Pattern",
+        "DELETE_MIRROR": "Delete mirror",
+        "DELETE_PROJECT": "Delete project",
+        "DELETE_PROPERTY": "Delete property",
+        "DELETE_SCHEME": "Delete scheme",
+        "DELETE_USER": "Delete user",
+        "DEPRECATE": "Deprecate",
+        "DETECT": "Detect",
+        "DETECT_FORMAT": "Detect Format",
+        "DISABLE": "Disable",
+        "DISCARD": "Discard",
+        "DISCOVER_DATASET": "Discover dataset",
+        "DO_QUICK_ACTION": "Do quick action",
+        "DUMP_NEW_VERSION": "Dump a new version",
+        "DUMP_NEW_VERSION_DIFFERENT_LOCATION": "Dump a new version to a different location",
+        "DUPLICATE_SETTINGS": "Duplicate settings",
+        "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ": "Duplicate settings to another project",
+        "EDIT": "Edit",
+        "EDIT_ACL": "Edit ACL",
+        "EDIT_CAPABILITY": "Edit capability",
+        "EDIT_CUSTOM_FORM": "Edit Custom Form",
+        "EDIT_CUSTOM_OPERATION": "Edit Custom Operation",
+        "EDIT_DATATYPE_RESTRICTIONS": "Edit datatype restrictions",
+        "EDIT_FORM_COLLECTION": "Edit Form Collection",
+        "EDIT_GROUP": "Edit group",
+        "EDIT_INVOKABLE_REPORT": "Edit Invokable Report",
+        "EDIT_MANCHESTER_EXPRESSION": "Edit Manchester expression",
+        "EDIT_MANUALLY": "Edit manually",
+        "EDIT_MAPPING": "Edit mapping",
+        "EDIT_METADATA_PATTERN": "Edit Metadata Pattern",
+        "EDIT_PROJECT_ACL": "Edit project ACL",
+        "EDIT_PROPERTY_CHAIN": "Edit property chain",
+        "EDIT_SERVICE_INVOCATION": "Edit Service Invocation",
+        "EDIT_X": "Edit {{x}}",
+        "ENABLE": "Enable",
+        "ENABLE_ALL": "Enable all",
+        "ENTER_VALUE_MANUALLY": "Enter value manually",
+        "EXPORT": "Export",
+        "EXPORT_ALIGNMENT": "Export alignment",
+        "EXPORT_DATA": "Export data",
+        "EXPORT_FORM_COLLECTION": "Export FormCollection",
+        "EXPORT_GRAPH_SNAPSHOT": "Export a snapshot of the graph (.svg)",
+        "EXPORT_MAPPING_STATUS": "Export Mapping Status",
+        "EXPORT_METADATA": "Export metadata",
+        "EXPORT_METADATA_PATTERN": "Export metadata pattern",
+        "EXPORT_PEARL": "Export PEARL",
+        "EXPORT_ROLE": "Export Role",
+        "EXPORT_SHACL_SHAPES": "Export SHACL shapes",
+        "EXPORT_SKOS_DIFFING_RESULT": "Download SKOS diffing result",
+        "EXPORT_TRIPLES": "Export triples",
+        "EXTRACT_FROM_SHACL": "Extract from SHACL",
+        "GO": "Go",
+        "HIDE_FILTERS": "Hide filters",
+        "IMPORT": "Import",
+        "IMPORT_CUSTOM_FORM": "Import CustomForm",
+        "IMPORT_FORM_COLLECTION": "Import FormCollection",
+        "IMPORT_FROM_DATASET_CATALOG": "Import from Dataset Catalog",
+        "IMPORT_FROM_LOCAL_FILE": "Import from local file",
+        "IMPORT_FROM_ONTOLOGY_MIRROR": "Import from Ontology Mirror",
+        "IMPORT_FROM_WEB": "Import from web",
+        "IMPORT_FROM_WEB_TO_MIRROR": "Import from web to mirror",
+        "IMPORT_ROLE": "Import Role",
+        "IMPORT_SHARED_METADATA_PATTERN": "Import shared Metadata Pattern",
+        "INFER_ANNOTATIONS": "Infer annotations",
+        "INSERT_VALUE_MANUALLY": "Insert value manually",
+        "LEAVE_ONLY_PROFICIENCIES": "Leave only proficiencies",
+        "LOAD": "Load",
+        "LOAD_ADVANCED_GRAPH_APPLICATION": "Load Advanced Graph Application",
+        "LOAD_CONFIGURATION": "Load configuration",
+        "LOAD_DATA": "Load data",
+        "LOAD_EXPORTER_CHAIN_CONFIGURATION": "Load exporter chain configuration",
+        "LOAD_IMPORTER_CHAIN_CONFIGURATION": "Load importer chain configuration",
+        "LOAD_SHACL_SHAPES": "Load SHACL shapes",
+        "LOAD_SPARQL_PARAMETERIZED_QUERY": "Load SPARQL parameterized query",
+        "LOAD_SPARQL_QUERY": "Load SPARQL query",
+        "LOAD_TEMPLATE": "Load template",
+        "LOCK_UNLOCK_NAMESPACE": "Lock/Unlock namespace",
+        "MIGRATE_DATA_TO_BASEURI_GRAPH": "Migrate data to baseURI graph",
+        "MOVE_AFTER": "Move after",
+        "MOVE_BEFORE": "Move before",
+        "MOVE_DOWN": "Move down",
+        "MOVE_UP": "Move up",
+        "PICK_CONVERTER": "Pick converter",
+        "PICK_RESOURCE": "Pick resource",
+        "PROFILE_MATCHING": "Profile matching",
+        "PROFILE_PROJECT": "Profile project",
+        "REFRESH": "Refresh",
+        "REJECT": "Reject",
+        "REJECT_ALL": "Reject all",
+        "RELOAD": "Reload",
+        "REMOVE": "Remove",
+        "REMOVE_ALL": "Remove all",
+        "REMOVE_FROM_SCHEME": "Remove from scheme",
+        "REMOVE_USER": "Remove user",
+        "REMOVE_USER_FROM_PROJ": "Remove user from project",
+        "RENAME": "Rename",
+        "RENAME_NODE": "Rename node",
+        "RENAME_PROJECT_DIRECTORY": "Rename project directory",
+        "REPAIR_FROM_LOCAL_FILE": "Repair from local file",
+        "REPAIR_FROM_WEB": "Repair from web",
+        "REPAIR_FROM_WEB_TO_MIRROR": "Repair from web to mirror",
+        "REPLACE": "Replace",
+        "REPLACE_WITH_EXISTING_RES": "Replace with existing resource",
+        "RESET": "Reset",
+        "RESET_COLLABORATION_SYSTEM": "Reset Collaboration System",
+        "RESTORE_DEFAULT": "Restore default",
+        "REVOKE_ADMINISTRATOR": "Revoke administrator",
+        "RUN": "Run",
+        "SAVE": "Save",
+        "SAVE_ADVANCED_GRAPH_APPLICATION": "Save Advanced Graph Application",
+        "SAVE_CHANGES": "Save changes",
+        "SAVE_CONFIGURATION": "Save configuration",
+        "SAVE_EXPORTER_CHAIN_CONFIGURATION": "Save exporter chain configuration",
+        "SAVE_IMPORTER_CHAIN_CONFIGURATION": "Save importer chain configuration",
+        "SAVE_SPARQL_PARAMETERIZED_QUERY": "Save SPARQL parameterized query",
+        "SAVE_SPARQL_QUERY": "Save SPARQL query",
+        "SAVE_SPARQL_QUERY_PARAMETERIZATION": "Save SPARQL query parameterization",
+        "SAVE_TEMPLATE": "Save template",
+        "SEARCH": "Search",
+        "SELECT": "Select",
+        "SELECT_CLASS": "Select class",
+        "SELECT_COLLECTION": "Select collection",
+        "SELECT_CONCEPT": "Select concept",
+        "SELECT_CONSTRUCTOR": "Select constructor",
+        "SELECT_CUSTOM_RANGE": "Select a Custom Range",
+        "SELECT_EXISTING_RESOURCE": "Select existing resource",
+        "SELECT_EXTERNAL_RESOURCE": "Select external resource",
+        "SELECT_INSTANCE": "Select instance",
+        "SELECT_LANGUAGE": "Select language",
+        "SELECT_LANGUAGES": "Select languages",
+        "SELECT_LEXICAL_ENTRY": "Select Lexical Entry",
+        "SELECT_LEXICALIZATION_PROPERTY": "Select lexicalization property",
+        "SELECT_LEXICON": "Select Lexicon",
+        "SELECT_PROPERTY": "Select property",
+        "SELECT_PROJECT": "Select a project",
+        "SELECT_RANGE": "Select range",
+        "SELECT_RANGE_TYPE": "Select range type",
+        "SELECT_REMOTE_REPO": "Select remote repository",
+        "SELECT_RESOURCE": "Select resource",
+        "SELECT_RESOURCE_TYPE_TO_PICK": "Select the type of resource to pick",
+        "SELECT_ROOT_CLASS": "Select root class",
+        "SELECT_SCHEME": "Select scheme",
+        "SELECT_STORED_SPARQL_PARAMETERIZED_QUERY": "Select stored SPARQL parameterized query",
+        "SELECT_SUGGESTION_FOR_FORM_COLL": "Select suggestion for FormCollection",
+        "SELECT_TARGET_PROJECT": "Select the target project",
+        "SELECT_USER": "Select user",
+        "SET_AS_DEFAULT": "Set as default",
+        "SET_AS_TOP_CONCEPT": "Set as top concept",
+        "SET_DATATYPE_RESTRICTIONS": "Set datatype restrictions",
+        "SET_INVERSE_PROPERTY": "Set inverse property",
+        "SHARE_METADATA_PATTERN": "Share Metadata Pattern",
+        "SHOW": "Show",
+        "SHOW_ALL": "Show all",
+        "SHOW_DATA_ORIENTED_GRAPH": "Show data-oriented graph",
+        "SHOW_FILTERS": "Show filters",
+        "SHOW_HIDE_ACTIVE_USER": "Show/Hide active users",
+        "SHOW_HIDE_INACTIVE_USER": "Show/Hide inactive users",
+        "SHOW_HIDE_NEW_USER": "Show/Hide new users",
+        "SHOW_ONLY_PROFICIENCIES": "Show only language proficiencies of the user",
+        "SPAWN_CONCEPT_FROM_XLABEL": "Spawn concept from xLabel",
+        "START": "Start",
+        "START_VALIDATION": "Start validation",
+        "STORE": "Store",
+        "SUBMIT": "Submit",
+        "SWITCH_TO_VERSION": "Switch to version",
+        "UNCHECK_ALL": "Uncheck all",
+        "UPDATE": "Update",
+        "UPDATE_ACCESS_LEVEL": "Update Access Level",
+        "UPDATE_FROM_LOCAL_FILE": "Update from local file",
+        "UPDATE_FROM_WEB_ALT_URL": "Update from web from alternative URL",
+        "UPDATE_FROM_WEB_BASEURI": "Update from web using baseURI",
+        "UPDATE_LOCK_LEVEL": "Update Lock Level",
+        "UPDATE_MIRROR": "Update mirror",
+        "UPDATE_ONTO_MIRROR_FROM_ALT_URL": "Update ontology mirror from alternative URL",
+        "UPDATE_ONTO_MIRROR_FROM_WEB": "Update ontology mirror from web",
+        "USE": "Use",
+        "VALIDATE": "Validate"
+    },
+    "MESSAGES": {
+        "ACL_CHANGE_ACCESS_CONFIRM": "Are you sure to change Access Level of '{{project}}' to '{{level}}' for the consumer '{{consumer}}'?",
+        "ACL_CHANGE_LOCK_CONFIRM": "Are you sure to change project Lock Level to '{{level}}'?",
+        "ACL_CHANGE_UNIVERSAL_ACCESS_CONFIRM": "Are you sure to change Access Level of '{{project}}' to '{{level}}' for all the consumers?",
+        "ACL_REVOKE_ACCESS_CONFIRM": "Are you sure to revoke Access Level of '{{project}}' for the consumer '{{consumer}}'?",
+        "ACL_REVOKE_UNIVERSAL_ACCESS_CONFIRM": "Are you sure to revoke Access Level of '{{project}}' for all the consumers?",
+        "ACL_TOO_MUCH_PROJ_CONFIRM": "Warning: there is an high amount of projects ({{projCount}}), thus the ACL matrix might be slow to load and hardly readable. Do you want to continue anyway?\n\nAlternatively the ACL for a specific project is available from the related action menu, 'Edit ACL' entry.",
+        "ADD_ALIGNMENT_TO_EDOAL_CONFIRM": "This operation will add the accepted alignment to the EDOAL linkset. Are you sure to continue?",
+        "ADD_ALIGNMENT_TO_ONTO_CONFIRM": "This operation will add to the ontology the triples of the accepted alignments. Are you sure to continue?",
+        "ADD_ALL_CONCEPT_TO_SCHEME_CONFIRM": "You are going to add all the existing concepts to the scheme '{{scheme}}'. Are you sure?",
+        "ADD_DELETE_ALIGNMENT_TO_EDOAL_CONFIRM": "This operation will add the accepted alignment to the EDOAL linkset and will delete those rejected. Are you sure to continue?",
+        "ADD_DELETE_ALIGNMENT_TO_ONTO_CONFIRM": "This operation will add to the ontology the triples of the accepted alignments and delete the triples of the ones rejected. Are you sure to continue?",
+        "ADV_GRAPH_APP_LOADED_REPORT": "One or more nodes defined in the loaded Advanced Graph Application, have ID already in use by other nodes. They have been replaced",
+        "ALIGNED_PROJ_METADATA_NOT_FOUND_GENERATE_CONFIRM": "Unable to find metadata about the {{position}} project '{{project}}', do you want to generate them? (Required for the alignment)",
+        "ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM": "Manually changing the relation will set automatically the measure of the alignment to 1.0. Do you want to continue?",
+        "ALIGNMENT_SERVICE_NOT_RESPONDING": "The Alignment Service server didn't respond, make sure it is up and running or the configuration is correct",
+        "ALIGNMENT_VALIDATION_DATA_STORING_WARN": "Please notice that the validation data is not stored internally and must be restored through the saved file available at this download link",
+        "ALL_CORRESPONDENCES_ADDED": "All correspondences have been added succesfully",
+        "ALREADY_ASSIGNED_FORM_COLL_TO_RESOURCE": "A FormCollection is already assigned to {{resource}}. Please, select another resource, or if you want to add a form to {{resource}}, add more CustomForm to the already assigned FormCollection",
+        "ALREADY_DEFINED_MAPPING_WITH_PREFIX": "A mapping with the provided prefix is already defined",
+        "ALREADY_DEFINED_MAPPING_WITH_NAMESPACE": "A mapping with the provided namespace is already defined",
+        "ALREADY_EXISTING_CAPABILITY": "The provided capability already exists in the selected role",
+        "ALREADY_EXISTING_CONFIG_FOR_SERVER_URL": "A configuration for the same serverURL already exists",
+        "ALREADY_EXISTING_CONFIG_ID": "A configuration with the same ID already exists",
+        "ALREADY_EXISTING_CUSTOM_FORM_ID": "A CustomForm with the same ID already exists",
+        "ALREADY_EXISTING_FILTER_FOR_CLASS": "A filter for the selected class already exists.",
+        "ALREADY_EXISTING_FORM_COLLECTION_ID": "A FormCollection with the same ID already exists",
+        "ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE": "Cannot add a new node for {{resource}} since a node for the same resource already exists",
+        "ALREADY_EXISTING_INVOKABLE_REPORTER_ID": "An Invokable Reporter with the same id already exists. Please change the ID and retry",
+        "ALREADY_EXISTING_METADATA_ASSOCIATION": "An association between the same resource type and pattern already exists.",
+        "ALREADY_EXISTING_METADATA_PATTERN_NAME": "A Metadata Pattern with the same name already exists.",
+        "ALREADY_EXISTING_PROJ_DIR_CONFIRM": "Warning: a project directory named '{{targetDirName}}' already exists. You will move there all the projects contained in directory '{{sourceDirName}}'. Do you want to continue?",
+        "ALREADY_EXISTING_ROLE_NAME": "A role with the same name already exists",
+        "ALREADY_USED_NODE_ID": "The provided node ID is already used for another node",
+        "BASEURI_AND_NAMESPACE_UPDATED": "BaseURI and namespace have been updated successfully",
+        "BASEURI_REQUIRED": "BaseURI required",
+        "BASEURI_UPDATED": "BaseURI has been updated successfully and refactor complete.",
+        "BULK_DELETE_CONFIRM": "You are deleting the value for every resource that has this predicate-value relation. Are you sure?",
+        "BULK_EDIT_CONFIRM": "You are updating the value for every resource that has this predicate-value relation. Are you sure?",
+        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED": "Cannot add a new node for {{resource}}. In this graph you can only add resources locally defined.",
+        "CANNOT_ADD_SAME_RANGE_TO_DIFFERENT_PROP_TYPES": "The addition of the same range to multiple properties is not allowed on properties of different types",
+        "CANNOT_CHANGE_ADMIN_STATUS": "Cannot change the status of an administrator. Please revoke the administrator authority first and retry",
+        "CANNOT_COPY_RESOURCE_URI_IN_CLIPBOARD": "Unable to copy the resource URI in the clipboard",
+        "CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR": "Impossible to create the CustomForm '{{cfId}}'. Its description may contains error.",
+        "CANNOT_EDIT_DIFFERENT_RESOURCE_CODE": "You cannot modify a different resource. The only admitted subject is the editing resource",
+        "CANNOT_EDIT_NOT_EXPLICIT_RESOURCES": "All the selected resources are not explicit, so they cannot be edited",
+        "CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS": "You cannot edit credentials of remote repositories linked to an open project. Please, close the project and retry",
+        "CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES": "{{property}} range doesn't admit resources. You cannot enrich this property with a remote resource",
+        "CANNOT_GRANT_ADMIN_TO_INACTIVE_USER": "Cannot grant the administrator authority to a non-active user. Please, activate the user and retry",
+        "CANNOT_IMPORT_DATASET_MISSING_ONTO_IRI": "The selected Dataset does not provide any ontology IRI, so it cannot be imported. Please change the Dataset.",
+        "CANNOT_INFER_PEARL_ANNOTATIONS": "Cannot infer annotations on an invalid PEARL",
+        "CANNOT_PARSE_AUTH": "Unable to parse authorization you're trying to edit ({{auth}}). The form has not been restored.",
+        "CANNOT_PARSE_JSON_MATCHER_CONFIGURATION": "The provided matcher configuration cannot be parsed as JSON",
+        "CANNOT_PARSE_JSON_METADATA_SETTING": "The provided metadata settings cannot be parsed as JSON",
+        "CANNOT_PRELOAD_DATA_FROM_DATASET": "The selected dataset doesn't have a data dump neither an ontology IRI, so cannot be used to preload data.",
+        "CANNOT_RETRIEVE_ISSUES_CONNECTION_FAILED": "Cannot retrieve the issues list. Connection to Collaboration System server failed.",
+        "CANNOT_RETRIEVE_ISSUES_LOGIN_FAILED": "Cannot retrieve the issues list. Connection to Collaboration System server failed during the Login. Please check the credentials.",
+        "CANNOT_REVOKE_ADMIN_AUTHORITY": "Cannot revoke the administrator authority to the selected user. There is only one administrator",
+        "CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_PROJ": "Cannot run a SKOS diffing task on project '{{project}}' since it is hosted on a repository that does not have a SPARQL endpoint",
+        "CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS": "Cannot run a SKOS diffing task on version '{{version}}' since it is hosted on a repository that does not have a SPARQL endpoint",
+        "CANNOT_RUN_SKOS_DIFFING_SAME_VERS": "Cannot compare two identical versions of the project",
+        "CATALOG_CONNECTOR_NOT_CONFIGURED": "The catalog connector needs to be configured",
+        "CHANGE_S2RDF_SETTINGS_CONFIRM": "Changing the settings requires to re-initialize the model related to the current spreadsheet. All the changes applied to the headers will be discarder. Do you want to continue?",
+        "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "The Collaboration System seems to be configured but it's not working (configuration could be not valid or the server may be not reachable), so it will be disabled.",
+        "CONFIGURATION_SAVED": "Configuration saved succesfully",
+        "CUSTOM_FORM_PROP_CHAIN_DESCR": "Write the chain as sequence of comma (,) separated IRIs (QNames are accepted as well)",
+        "DATA_CLEARED": "All data cleared successfully.",
+        "DATA_IMPORTED": "Data imported successfully",
+        "DELETE_ALL_VALUES_CONFIRM": "You are deleting all the {{property}} values. Are you sure?",
+        "DELETE_CONFIG_CONFIRM": "You are deleting the configuration. Are you sure?",
+        "DELETE_CONSTITUENT_WARN_CONFIRM": "Deleting a single constituent could compromise the integrity of the constituents section. If you want to edit the constituents of the LexicalEntry, it is highly recommended to use the add procedure which will replace the current constituent list. Do you want to confirm the deletion?",
+        "DELETE_CUSTOM_FORM_CONFIRM": "You are deleting the selected CustomForm. Are you sure?",
+        "DELETE_CUSTOM_SERVICE_CONFIRM": "You are deleting the selected CustomService. Are you sure?",
+        "DELETE_FORM_COLLECTION_CONFIRM": "You are deleting the selected FormCollection. Are you sure?",
+        "DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM": "The node you're deleting is used in one or more graph application. This operation will affect also the graph application. Do you want to continue?",
+        "DELETE_INVOKABLE_REPORT_CONFIRM": "You are deleting the selected Invokable Report. Are you sure?",
+        "DELETE_METADATA_PATTERN_ASSOCIATION_CONFIRM": "You are deleting the selected Metadata Pattern association. Are you sure?",
+        "DELETE_METADATA_PATTERN_CONFIRM": {
+            "DELETING": "You are deleting the selected Metadata Pattern.",
+            "USED_IN_ASSOCIATION": "Note: the Metadata Pattern is used in one (or more) association. By deleting the pattern, the association(s) will be deleted as well.",
+            "CONTINUE": "Do you want to continue?"
+        },
+        "DELETE_PROJECT_CONFIRM": "Warning, this operation will delete the project {{project}}. Are you sure to proceed?",
+        "DELETE_RDF_MEMBER_WARN_CONFIRM": "Deleting a single member of the list could compromise the integrity of the members section. If you want to edit the members, it is highly recommended to add a new constituent list from the constituents section. Do you want to confirm the deletion?",
+        "DELETE_REMOTE_ALIGN_SYS_CONFIG_CONFIRM": "You are going to delete configuration '{{config}}'. If this configuration is used in a project, by deleting it you could prevent the Remote Alignment System from working. Are you sure?",
+        "DELETE_SCHEME_WITHOUT_TOP_WARN_CONFIRM": "Deleting this scheme, if it contains some concepts, will generate concepts in no scheme. Are you sure to proceed?",
+        "DELETE_SCHEMES_WITHOUT_TOP_WARN_CONFIRM": "Deleting the schemes, if they contain some concepts, will generate concepts in no scheme. Are you sure to proceed?",
+        "DELETE_SHARED_METADATA_PATTERN_CONFIRM": "You are deleting the selected Metadata Pattern from the library. Are you sure?",
+        "DELETE_USER_CONFIRM": "You are deleting user {{user}}. Are you sure?",
+        "DEPLOYER_NOT_CONFIGURED": "The deployer needs to be configured",
+        "DEPLOYER_NOT_SAVED": "Deployer configuration is not saved. In order to save the exporter configuration all its sub-configurations need to be saved.",
+        "DISABLE_COLLABORATION_SYSTEM_CONFIRM": "You are going to disable the Collaboration System on the current project. Are you sure?",
+        "DUPLICATED_BINDING_NAME": "Duplicated binding name '{{binding}}', please change the name or delete the binding",
+        "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM": "With this operation you will overwrite any roles, group, languages and ResourceView template assigned to {{user}} in the target project '{{project}}'. Are you sure?\n\nNote: the project-level roles will not be cloned",
+        "EDIT_RDF_MEMBER_WARN_CONFIRM": "It is not recommended to edit the member list from this section. There are no checks on the rdf:_n predicate so you could compromise the integrity of the list. Do you want to continue?",
+        "EMAIL_CONFIG_CHANGED_SUBMIT_FIRST": "Email configuration has been changed, you need first to submit the changes.",
+        "EMAIL_CONFIG_TEST_DESCR": "This test will send an e-mail to the provided address in order to check the e-mail configuration",
+        "EMAIL_CONFIG_WORKS_FINE": "The configuration works fine. A test e-mail has been sent to the provided email address.",
+        "EMPTY_PARAM_NAME": "A provided parameter has an empty name",
+        "ENABLE_ALL_PARTITIONS_IN_ALL_TYPES_CONFIRM": "All the partitions will be set visible for all the available resource types. Are you sure?",
+        "ENTER_VALID_EMAIL": "Please enter a valid e-mail address",
+        "ENTER_VALID_IRI": "Please enter a valid IRI.",
+        "ENTER_VALID_STRING_TO_SEARCH": "Please enter a valid string to search",
+        "EXPORT_FILTER_NOT_CONFIGURED": "An export filter ({{filterName}}) needs to be configured",
+        "EXPORT_RESULT_DEPLOYED": "The export result has been deployed succesfully",
+        "FILE_REQUIRED": "A file is required",
+        "FILL_ALL_REQUIRED_FIELDS": "Please fill all the required fields",
+        "FILTER_NOT_SAVED": "Filter at position {{position}} is not saved. In order to save a filter chain all its filters need to be saved.",
+        "FORCE_OPERATION_CONFIRM": "Do you want to force the operation?",
+        "FORMAT_REQUIRED_NOT_DETECTED": "Format required. The system has not been able to determine a format according the input.",
+        "GENERATED_TRIPLES_ADDED": "The generated triples have been added",
+        "GRANTING_ADMIN_CONFIRM": "You are granting the administrator authority to {{user}}. Are you sure?",
+        "INCOMPLETE_BINDING_PARAMETERIZATION_DATATYPE": "Incomplete parameterization for binding '{{binding}}', please set a datatype or delete the binding",
+        "INCOMPLETE_BINDING_PARAMETERIZATION_ROLE": "Incomplete parameterization for binding '{{binding}}', please set a role or delete the binding",
+        "INCOMPLETE_BINDING_PARAMETERIZATION_VALUE": "Incomplete parameterization for binding '{{binding}}', please set a value or delete the binding",
+        "INCOMPLETE_GRAPH_APPLICATION": "The Graph Application is not completed. Please, provide a list of nodes and a graph pattern.",
+        "INCOMPLETE_METADATA_PATTERN_ASSOCIATION": "An incomplete association has been detected in the configuration of Resource Metadata. Please, fix it or disabled the Resource Metadata",
+        "INCOMPLETE_PRED_OBJ_PAIR": "An incomplete additional predicate-object pair has been detected.",
+        "INCONSISTENT_MIN_MAX_FACETS": "The minimun and maximum facets are inconsistent.",
+        "INCONSISTENT_PROPERTY_ERROR": "Error range of property {{property}} is inconsistent",
+        "INVALID_ALIGNMENT_MEASURE": "The entered measure is invalid, it must be between 0 and 1.",
+        "INVALID_FROM_TIME_FORMAT": "'From' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm",
+        "INVALID_GRAPH_PATTERN": "The provided graph pattern is not valid",
+        "INVALID_IRI": "{{iri}} is not a valid IRI",
+        "INVALID_LANG_TAG": "{{lang}} is not a valid language tag",
+        "INVALID_LOCAL_NAME": "The provided local name is not valid",
+        "INVALID_MANCHESTER_EXPR": "The provided expression is not a valid Manchester Expression",
+        "INVALID_METADATA_PATTERN": "One (or more) pattern is not valid. Please fix it and retry",
+        "INVALID_NAME": "The provided name is not valid",
+        "INVALID_NAMESPACE_AND_BASEURI": "Please insert valid namespace and baseURI",
+        "INVALID_OR_EMPTY_VALUE": "The inserted value is empty or not valid. Please check and retry.",
+        "INVALID_PARAM_NAME": "The parameter name {{param}} is not valid",
+        "INVALID_PARAM_TYPE": "The type of the parameter {{param}} is not valid",
+        "INVALID_PATTERN": "The provided pattern is not valid",
+        "INVALID_PREFIX": "The provided prefix is not valid, try a different one",
+        "INVALID_REPO_ID": "Enter a valid repository ID",
+        "INVALID_RETURN_TYPE": "The provided Returns type is not valid",
+        "INVALID_SPARQL_QUERY": "The provided SPARQL query is not valid",
+        "INVALID_TO_TIME_FORMAT": "'To' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm",
+        "INVALID_VALUE_FOR_DATATYPE": "{{value}} is not a valid value for the given datatype: {{datatype}}",
+        "INVALID_VERSION_ID": "Enter a valid version ID",
+        "LIFTER_NOT_CONFIGURED": "The Lifter needs to be configured",
+        "LOADER_NOT_CONFIGURED": "The Loader needs to be configured",
+        "LOADER_NOT_SAVED": "Loader configuration is not saved. In order to save the importer configuration all its sub-configurations need to be saved.",
+        "LONG_PROCESS_WARN_CONFIRM": "This could be a long process. Are you sure to continue?",
+        "METADATA_PATTERN_REQUIRED": "You need to provide at least one pattern (Construction, Update or Destruction)",
+        "MISSING_BINDING_NAME": "Missing binding name at position {{position}}, please insert a name",
+        "MISSING_DATA_REPO_CONFIG": "Data Repository requires to be configured",
+        "MISSING_DEFAULT_PRED_IN_GRAPH_PATTERN": "The graph pattern contains the {{pred}} placeholder, but a default predicate has not been provided",
+        "MISSING_HISTORY_VALIDATION_REPO_CONFIG": "History/Validation Repository requires to be configured",
+        "MISSING_ICV_ALIGNMENTS": "There are no alignments for the selected resource type(s) on which run the ICV",
+        "MISSING_ICV_LANGUAGE": "You need to select at least a language in order to run the ICV",
+        "MISSING_ICV_NAMESPACE": "You need to select at least a namespace in order to run the ICV",
+        "MISSING_ICV_RESOURCE_TYPE": "You need to select at least a resource type in order to run the ICV",
+        "MISSING_LEFT_RIGHT_DATASET": "Left or right dataset missing",
+        "MISSING_NAMESPACE": "Namespace must be provided",
+        "MISSING_OR_INVALID_BASEURI": "BaseURI is missing or not valid",
+        "MISSING_OR_INVALID_PROJECT_NAME": "Project name is missing or not valid",
+        "MISSING_PRELOAD_DATA_SELECT_NO_PRELOAD": "No data preloaded. Please, load data or select '{{doNotPreloadOpt}}' if you don't want to preload any.",
+        "MISSING_RENDERING_ENGINE_CONFIG": "Rendering Engine Plugin requires configuration",
+        "MISSING_REQUIRED_FIELD": "The required field {{fieldName}} is missing",
+        "MISSING_REQUIRED_PARAM": "The required parameter '{{parma}}' is missing",
+        "MISSING_REQUIRED_PARAM_IN_EXPORTER": "Required parameter(s) missing in exporter configuration ({{exporter}}, scope: {{scope}})",
+        "MISSING_REQUIRED_PARAM_IN_EXT_POINT": "Required parameter(s) missing in extension point configuration ({{extPoint}})",
+        "MISSING_REQUIRED_PARAM_IN_REPO_ACCESS_CONFIG": "Required parameter(s) missing in the selected Repository Access configuration",
+        "MISSING_SHACL_VALIDATON_CONFIG": "You have enabled SHACL validation, but it requires configuration",
+        "MISSING_URI_GENERATOR_CONFIG": "UriGenerator Plugin requires configuration",
+        "MISSING_VARIABLE_BINDING": "Missing variable binding '{{binding}}'",
+        "MULTIPLE_PROP_VALUE_NOT_ALLOWED_FOR_PROPERTY": "Cannot enrich multiple subject with the same property-value for the predicate {{property}}",
+        "MULTIVALUE_NOT_ALLOWED_FOR_PROPERTY": "This operation is not allowed for the selected property. Multiple resources cannot have the same {{property}}.",
+        "NAMESPACE_UPDATED": "Namespace has been updated successfully",
+        "NO_ACCESS_GRANTED_TO_ANY_PROJECT": "You have no granted access to any existing open project",
+        "NO_FACETS_PROVIDED": "No facets has been provided. Please, fill at least one of the available facets",
+        "NO_INFERRED_STATEMENTS_TO_ASSERT": "There are no inferred statements to assert",
+        "NO_LANG_DETECTED_IN_EDOAL_ALIGNMENT": "No user language has been detected for the project '{{projName}}'. The system will not be able to initialize the list of alignments.\nPlease access that project, then go to the user preferences and set a rendering language.",
+        "NO_PERMISSION_FOR_SERVICE_INVOCATION": "You have not enough priviledges for invoking one (or more) service invocation performed by this report.",
+        "NO_RESOURCE_SUGGESTED_FOR_FORM_COLLECTION": "No classes/properties suggested for the FormCollection",
+        "NO_RESULTS_FOUND": "No results found",
+        "NO_RESULTS_FOUND_FOR": "No results found for '{{text}}'",
+        "NO_SERVICE_INVOCATION_PROVIDED": "The reporter cannot be compiled since it has no service invocation provided",
+        "NOT_ALLOWED_CHARS_IN_ID": "ID contains character(s) not allowed",
+        "NOT_EMPTY_SCHEME_DANGLING_CONCEPT_WARN_CONFIRM": "The scheme is not empty. Deleting it will produce dangling concepts. Are you sure to continue?",
+        "NOT_EXISTING_RESOURCE_URI": "Wrong URI: no resource with URI {{uri}} exists in the current project",
+        "NOT_EXPLICIT_RESOURCES_NOT_AFFECTED_BY_CHANGES": "Some of the selected resources are not explicit, they cannot be edited, so they will be not affected by the changes",
+        "OPERATION_DENIED_ON_NODE_WITH_CHILDREN": "The operation cannot be done on node with children. Please delete the children nodes and then retry",
+        "PAIRING_SELECTION_REQUIRED": "You need to select at least one pairing.",
+        "PASSWORD_AND_CONFIRMED_INCONSISTENT": "Password and confirmed password are different.",
+        "PASSWORD_CHANGED": "Password has been succesfully changed.",
+        "PASSWORD_CHANGED_LOGGING_OUT": "Your password has been succesfully changed. Now you will be logged out.",
+        "PASSWORD_RESET": "Password has been successfully reset. You will receive an e-mail with the new temporary password.",
+        "PASSWORD_RESET_INSERT_EMAIL": "Insert the e-mail address of your account. You will receive an e-mail with the instructions for resetting the password",
+        "PASSWORD_RESET_INSTRUCTION_SENT": "An e-mail with the instructions for resetting password has been sent to the provided address.",
+        "PEARL_CODE_WITH_ERROR": "Pearl code contains errors.",
+        "PRELOAD_PROFILER_THRESHOLD_UPDATED": "Preload profiler threshold updated",
+        "PROJ_LANGUAGES_PARSING_ERR": "Initialization of languages for project '{{projName}}' has encountered a problem during parsing the '{{propName}}' settings. Please, report this to the system administrator.",
+        "PROJ_LANGUAGES_PARSING_ERR_SETTING_DEFAULT": "Project setting initialization has encountered a problem during parsing languages settings. Default languages will be set for this project.",
+        "PROJECT_CREATED": "Project created successfully",
+        "PROJECT_OPEN_CLOSE_AND_RETRY": "The project is currently open. Please, close the project and then retry.",
+        "PROPERTY_CHAIN_NEEDS_AT_LEAST_TWO_PROPS": "The property chain must contain at least two properties",
+        "PROVIDE_AT_LEAST_ONE_VALUE": "You have to provide at least one value",
+        "QUERY_PARAMETERIZATION_SAVED": "Query parameterization saved succesfully",
+        "QUERY_SAVED": "Query saved succesfully",
+        "REFACTORING_COMPLETED": "Refactoring process completed",
+        "REFERENCED_SPARQL_QUERY_NOT_EXISTING": "The stored SPARQL query referenced by the selected custom search does not exist anymore.",
+        "REFORMETTER_CONFIG_NOT_SAVED": "Reformatter configuration is not saved. In order to save the exporter configuration all its sub-configurations need to be saved.",
+        "REFORMATTING_EXPORTER_NOT_CONFIGURED": "The reformatting exporter ({{exporterName}}) needs to be configured",
+        "REFRESH_PROJECT_PROFILE_CONFIRM": "The project '{{project}}' has already been profiled. Do you want to repeat and override the profilation?",
+        "REGISTRATION_FORM_FIELD_ALREADY_DEFINED": {
+            "FIELD_ALREADY_DEFINED": "Field '{{fieldName}}' already defined",
+            "IN_STANDARD_FORM": "in the standard registration form"
+        },
+        "REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED": "You need to select a configuration for the selected remote Repository Access. Please, select an existing one from the related combobox or create a new one.",
+        "REMOVE_DANGLING_FROM_SCHEME_WARN_CONFIRM": "If this concept has narrowers, removing it from the scheme may generate other dangling concepts. Are you sure to proceed?",
+        "REMOVE_DANGLINGS_FROM_SCHEME_WARN_CONFIRM": "If the concepts have narrowers, removing them from the scheme may generate other dangling concepts. Are you sure to proceed?",
+        "REMOVE_USER_FROM_PROJ_CONFIRM": "You are removing the user {{user}} form the project {{project}}. Are you sure?",
+        "REPLACE_METADATA_PATTERN_CONFIRM": "A Pattern with the same name already exists. It will be replaced. Do you want to continue?",
+        "REPLACE_SHARED_METADATA_PATTERN_CONFIRM": "A shared Pattern with the same name already exists. It will be replaced. Do you want to continue?",
+        "REPO_CREDENTIALS_BATCH_UPDATED": {
+            "CREDENTIALS_OF_SERVER_URL": "Credentials for remote repositories with serverURL {{serverUrl}}",
+            "AND_USERNAME": "and username '{{username}}'",
+            "UPDATED": "have been updated"
+        },
+        "REPO_CREDENTIALS_UPDATED": "Credentials for the '{{repoId}}' remote repository have been updated",
+        "RESOURCE_NOT_FOCUSABLE_RES_VIEW_MODAL": "The resoruce {{resource}} cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog",
+        "RESOURCE_NOT_REACHABLE_IN_TREE": "Resource {{resource}} is not reachable in the current tree.",
+        "RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH": "Resource {{resource}} is not reachable in the current tree since the path to reach it contains a deprecated node. Enable the show of deprecated resources and repeat the search",
+        "RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM": "Resource {{resource}} is not reachable in the current tree. Do you want to open its ResourceView in a modal dialog?",
+        "RESOURCE_URI_COPIED_IN_CLIPBOARD": "Resource URI copied in clipboard!",
+        "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "You are overriding the current template by restoring the default configuration. Are you sure?",
+        "REVOKING_ADMIN_CONFIRM": "You are revoking the administrator authority to {{user}}. Are you sure?",
+        "SAVE_BASEURI_CHANGE_CONFIRM": "Save change of baseURI? (Attention, baseURI refactoring could be a long process)",
+        "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Save change of baseURI and namespace? (Attention, baseURI refactoring could be a long process)",
+        "SAVE_NS_CHANGE_CONFIRM": "Save change of namespace?",
+        "SET_DEFAULT_TEMPLATE_FOR_ALL_PROJ_CONFIRM": "You are setting the current template as default configuration for all the projects. Are you sure?",
+        "SETTING_SAVED": "Settings saved succesfully",
+        "SETTINGS_DUPLICATED_SUCCESSFULLY": "Settings duplicated successfully",
+        "SHACL_SHAPES_CLEARED": "All SHACL shapes cleared successfully.",
+        "SHACL_SHAPES_LOADED": "SHACL shapes loaded succesfully",
+        "SKOS_DIFFING_SERVER_NOT_RESPONDING": "The SKOS diffing server didn't respond, make sure it is up and running.",
+        "ST_DATA_FOLDER_UPDATED": "SemanticTurkey data folder updated",
+        "STORED_PARAMETERIZED_QUERY_ALREADY_ADDED": "The stored parameterized SPARQL query '{{ref}}' is already in the Stored Custom Search list. It will not be added",
+        "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_CONFIRM": "Searched instance belongs to a class currently not selected ({{cls}}). Do you want to switch class?",
+        "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_SELECT": "Searched instance belong to the following classes. If you want to complete the search, select one of them and confirm",
+        "SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT": {
+            "BELONGS_TO_FOLLOWING": "Searched LexicalEntry is not reachable in the list since it belongs to the following",
+            "LEXICONS": "lexicons. If you want to activate one of these lexicons and continue the search, please select the lexicon you want to activate and press OK.",
+            "LEXICON": "lexicon. If you want to activate the lexicon and continue the search, please select it and press OK."
+        },
+        "SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_CONFIRM": "Searched concept does not belong to any scheme. Do you want to switch to no-scheme mode?",
+        "SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_SELECT": {
+            "BELONGS_TO_FOLLOWING": "Searched concept is not reachable in the tree since it belongs to the following",
+            "SCHEMES": "schemes. If you want to activate one of these schemes and continue the search, please select the scheme you want to activate and press OK.",
+            "SCHEME": "scheme. If you want to activate the scheme and continue the search, please select it and press OK."
+        },
+        "SYS_LANGUAGES_PROP_PARSING_ERR": "Initialization of system languages has encountered a problem during parsing the '{{propName}}' property. Please, report this to the system administrator.",
+        "TOO_MUCH_LINKS_GRAPH_WARN_CONFIRM": "The graph you're trying to show has an high number of relations ({{relCount}}). A performance decrease could be experienced with a growing amount of visual elements in the graph. Do you want to show the graph anyway?\n\nAlternatively it is available an 'incremental' explorable model-oriented graph (from the Class-tree: select a resource, then from the contextual menu 'Show model graph rooted on the selected node').",
+        "TOO_MUCH_NODES_GRAPH_WARN_CONFIRM": "The graph you're trying to show has an high number of nodes ({{nodesCount}}). A performance decrease could be experienced with a growing amount of visual elements in the graph. Do you want to show the graph anyway?",
+        "TOO_MUCH_NODES_LINKS_WARN_CONFIRM": "The graph you're trying to show has a large amount of nodes and links. It could be really confused and not much readable. Do you want to show it anyway?",
+        "TOT_RESULTS_FOUND": "{{count}} results found.",
+        "TRANSFORMER_NOT_SAVED": "Transformer at position {{position}} is not saved. In order to save a transformer chain all its transformers need to be saved.",
+        "UNAUTHORIZED_SPARQL_QUERY": "You are not authorized to perform SPARQL query",
+        "UNAUTHORIZED_SPARQL_UPDATE": "You are not authorized to perform SPARQL update",
+        "UNHANDLED_AXIOM_PROPERTY": "{{property}} is not a class axiom known property, it cannot be handled.",
+        "UNHANDLED_LEXICAL_FORM_PROPERTY": "{{property}} is not a lexical form known property, it cannot be handled.",
+        "UPDATE_MULTIPLE_HEADER_SAME_NAME_CONFIRM": "There are multiple headers with the same name ({{headerName}}). Do you want to apply the changes to all of them?",
+        "USER_ADMINISTRATOR_CREATED": "The administrator account has been created. Now you will be automatically logged in with the credentials you provided",
+        "USER_CREATED": "User succesfully created",
+        "USER_CREATED_PENDING_ACTIVATION": "Your account has been created and is now pending activation. After the system administrator accepts your request, it will be possible to login with the credentials you provided",
+        "USER_IRI_PERSONAL_URL_INCONSISTENT": "You checked the option to use the personal URL as user IRI, but the URL is not provided. Please enter a valid URL or uncheck the above option",
+        "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "The type of value is not compliant with the range of the property {{property}}. The operation may cause inconsistencies and malfunction. Do you want to force the operation?"
+    },
+    "STATUS": {
+        "ACTIVE": "Active",
+        "ADDED": "Added",
+        "DEFAULT": "Default",
+        "ENABLED": "Enabled",
+        "ERROR": "Error",
+        "INACTIVE": "Inactive",
+        "INVALID_DATA": "Invalid data",
+        "INVALID_VALUE": "Invalid value",
+        "NEW": "New",
+        "OPERATION_DENIED": "Operation denied",
+        "OPERATION_DONE": "Operation done",
+        "REMOVED": "Removed",
+        "STATUS": "Status",
+        "WARNING": "Warning"
+    }
+}
