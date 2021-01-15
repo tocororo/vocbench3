@@ -1,9 +1,8 @@
 import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTLiteral } from "../../models/ARTResources";
-import { Languages } from "../../models/LanguagesCountries";
+import { Language, Languages } from "../../models/LanguagesCountries";
 import { ResourceUtils } from "../../utils/ResourceUtils";
-import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
 import { SharedModalServices } from "../modal/sharedModal/sharedModalServices";
 
@@ -18,14 +17,8 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
 
     @Input() disabled: boolean = false;
 
-    unknownFlagImgSrc: string = UIUtils.getFlagImgSrc(null); // image associated with unknown (or null) language
-
-    imgSrc: string; // image associated with the current language
-    langFlagAvailable: boolean = false; //true if the language (if any) has a flag icon available
-
+    lang: Language;
     stringValue: string; // string value of the literal
-    langTag: string; // language tag of the literal
-    language: string; // human-friendly rendering of the language (name plus tag)
     
     private literalValue: ARTLiteral; // the rdf:langString being edited (the model) 
 
@@ -33,28 +26,12 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
     }
 
     ngOnInit(): void {
-        this.initLangInfo();
+        this.initLang();   
     }
 
-    /**
-     * Initializes language information. If the language tag is null, then initializes it with the first item in the priority list of languages
-     */
-    private initLangInfo() {
-        if (!this.langTag) {
-            this.langTag = Languages.priorityLangs[0];
-        }
-        let lang = Languages.getLanguageFromTag(this.langTag);
-        if (lang.tag != lang.name) {
-            this.language = lang.name + " (" + lang.tag + ")";
-        } else {
-            this.language = lang.name;
-        }
-        this.imgSrc = UIUtils.getFlagImgSrc(this.langTag);
-        if (this.preferences.getShowFlags()) {
-            //just check if the image name doesn't contains "unknown" since the image name for unavailable flag is flag_unknown.png
-            this.langFlagAvailable = !this.imgSrc.includes("flag_unknown");
-        } else {
-            this.langFlagAvailable = false; //if the show_flag preference is false, show always the langTag
+    initLang() {
+        if (this.lang == null) {
+            this.lang = Languages.getLanguageFromTag(Languages.priorityLangs[0]);
         }
     }
 
@@ -64,9 +41,9 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
 
     editLanguage() {
         if (this.disabled) return;
-        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGE"}, (this.langTag ? [this.langTag] : []), true, false).then(
+        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGE"}, (this.lang ? [this.lang.tag] : []), true, false).then(
             langs => {
-                this.langTag = langs[0];
+                this.lang = Languages.getLanguageFromTag(langs[0]);
                 this.onModelChanged();
             },
             () => { }
@@ -78,9 +55,8 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
         if (text == "") {
             this.literalValue = null;
         } else {
-            this.literalValue = new ARTLiteral(text, null, this.langTag);
+            this.literalValue = new ARTLiteral(text, null, this.lang.tag);
         }
-        this.initLangInfo();
         this.propagateChange(this.literalValue);
     }
 
@@ -101,13 +77,12 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
 
         if (this.literalValue) {
             this.stringValue = this.literalValue.getValue();
-            this.langTag = this.literalValue.getLang();
+            this.lang = Languages.getLanguageFromTag(this.literalValue.getLang());
         } else {
             this.stringValue = null;
-            this.langTag = null;
+            this.lang = null;
         }
-
-        this.initLangInfo();
+        this.initLang();
     }
     /**
      * Set the function to be called when the control receives a change event.

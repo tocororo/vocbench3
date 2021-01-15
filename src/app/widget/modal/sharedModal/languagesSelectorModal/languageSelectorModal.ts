@@ -40,13 +40,17 @@ export class LanguageSelectorModal {
         }
     }
 
-    updateRadioSelection(langTag: string) {
-        for (let item of this.languageItems) {
-            if (item.lang.tag == langTag) {
-                item.selected = true;
-            } else {
-                item.selected = false;
-            }
+    selectLang(lang: LanguageItem) {
+        if (this.radio) {
+            this.languageItems.forEach(l => {
+                if (l == lang) {
+                    l.selected = true;
+                } else {
+                    l.selected = false;
+                }
+            })
+        } else {
+            lang.selected = !lang.selected;
         }
     }
 

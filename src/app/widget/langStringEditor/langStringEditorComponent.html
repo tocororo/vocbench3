@@ -1,13 +1,5 @@
-<div style="display: flex; align-items: center">
-    <div [title]="language" style="margin-left: 2px; cursor: pointer; z-index: 1" (click)="editLanguage()">
-        <ng-container *ngIf="!langFlagAvailable; else langFlagBlock">
-            <img [src]="unknownFlagImgSrc" [ngClass]="{disabled: disabled}">
-            <span>{{langTag}}</span>
-        </ng-container>
-        <ng-template #langFlagBlock>
-            <img [src]="imgSrc" [ngClass]="{disabled: disabled}">
-        </ng-template>
-    </div>
-    <input type="text" class="form-control" style="margin-left: -18px; padding-left: 20px; z-index: 0;"
+<div style="display: flex; align-items: center; position: relative">
+    <lang-item [language]="lang" [showName]="false" style="position: absolute; left: 6px; cursor: pointer; z-index: 1" (click)="editLanguage()"></lang-item>
+    <input type="text" class="form-control" style="padding-left: 24px; z-index: 0;"
         [(ngModel)]="stringValue" (ngModelChange)="onStringValueChanged()" [disabled]="disabled">
 </div>

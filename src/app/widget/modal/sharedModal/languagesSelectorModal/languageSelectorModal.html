@@ -17,10 +17,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let l of languageItems">
+                <tr *ngFor="let l of languageItems" (click)="selectLang(l)">
                     <td class="text-center">
                         <ng-container *ngIf="radio; else checkboxItem">
-                            <input type="radio" style="vertical-align: middle" [checked]="l.selected" value="{{l.lang.tag}}" (change)="updateRadioSelection($event.target.value)">
+                            <input type="radio" name="langRadio" [checked]="l.selected" (click)="selectLang(l)">
                         </ng-container>
                         <ng-template #checkboxItem>
                             <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.selected">
