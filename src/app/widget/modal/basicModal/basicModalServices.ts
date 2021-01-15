@@ -181,7 +181,9 @@ export class BasicModalServices {
     downloadLink(title: TextOrTranslation, msg: TextOrTranslation, downloadLink: string, fileName: string) {
         const modalRef: NgbModalRef = this.modalService.open(DownloadModal, new ModalOptions());
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
+        if (msg != null) {
+            modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
+        }
         modalRef.componentInstance.downloadLink = downloadLink;
         modalRef.componentInstance.fileName = fileName;
         return modalRef.result;
