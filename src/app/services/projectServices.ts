@@ -5,9 +5,8 @@ import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { TransitiveImportMethodAllowance } from '../models/Metadata';
 import { PluginSpecification, Settings } from '../models/Plugins';
 import { AccessLevel, AccessStatus, BackendTypesEnum, ConsumerACL, LockLevel, LockStatus, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
-import { Pair } from '../models/Shared';
+import { Multimap, Pair } from '../models/Shared';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { UIUtils } from '../utils/UIUtils';
 import { VBContext } from '../utils/VBContext';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -31,7 +30,7 @@ export class ProjectServices {
      * @return an array of Project
      */
     listProjects(consumer?: Project, userDependent?: boolean, onlyOpen?: boolean): Observable<Project[]> {
-        var params: any = {
+        let params: any = {
             consumer: "SYSTEM"
         };
         if (consumer != undefined) { //if consumer provided override the default (SYSTEM)
@@ -45,24 +44,41 @@ export class ProjectServices {
         }
         return this.httpMgr.doGet(this.serviceName, "listProjects", params).pipe(
             map(stResp => {
-                var projCollJson: any[] = stResp;
-                var projectList: Project[] = [];
-                for (var i = 0; i < projCollJson.length; i++) {
+                let projCollJson: any[] = stResp;
+                let projectList: Project[] = [];
+                for (let i = 0; i < projCollJson.length; i++) {
                     projectList.push(Project.deserialize(projCollJson[i]));
                 }
                 //sort by name
-                projectList.sort(
-                    function (p1: Project, p2: Project) {
-                        return p1.getName().toLowerCase().localeCompare(p2.getName().toLowerCase());
-                    }
-                )
+                projectList.sort((p1, p2) => p1.getName().toLocaleLowerCase().localeCompare(p2.getName().toLocaleLowerCase()));
                 return projectList;
             })
         );
     }
 
+    retrieveProjects(bagOf?: string, orQueryList?: {[key: string]: any}[][]): Observable<Multimap<Project>> {
+        let params = {
+            bagOf: bagOf,
+            orQueryList: orQueryList ? JSON.stringify(orQueryList) : null
+        };
+        return this.httpMgr.doPost(this.serviceName, "retrieveProjects", params).pipe(
+            map(stResp => {
+                let bagOfProjects: Multimap<Project> = {};
+                for (let bagName of Object.keys(stResp)) {
+                    let projList: Project[] = [];
+                    for (let pJson of stResp[bagName]) {
+                        projList.push(Project.deserialize(pJson));
+                    }
+                    projList.sort((p1, p2) => p1.getName().toLocaleLowerCase().localeCompare(p2.getName().toLocaleLowerCase()));
+                    bagOfProjects[bagName] = projList;
+                }
+                return bagOfProjects;
+            })
+        );
+    }
+
     getProjectInfo(projectName: string, consumer?: Project, requestedAccessLevel?: AccessLevel, requestedLockLevel?: LockLevel): Observable<Project> {
-        var params: any = {
+        let params: any = {
             projectName: projectName,
             consumer: consumer != null ? consumer.getName() : "SYSTEM",
             requestedAccessLevel: requestedAccessLevel,
@@ -90,7 +106,7 @@ export class ProjectServices {
             this.eventHandler.themeChangedEvent.emit(); //when quitting current project, reset the style to the default
         }
 
-        var params = {
+        let params = {
             consumer: "SYSTEM",
             projectName: project.getName()
         };
@@ -106,13 +122,13 @@ export class ProjectServices {
      * @param project the project to access
      */
     accessProject(project: Project) {
-        var params = {
+        let params = {
             consumer: "SYSTEM",
             projectName: project.getName(),
             requestedAccessLevel: "RW",
             requestedLockLevel: "NO"
         };
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException'] 
@@ -141,7 +157,7 @@ export class ProjectServices {
         shaclEnabled?: boolean, shaclSettings?: Map<string, any>, trivialInferenceEnabled?: boolean,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance) {
         
-        var params: any = {
+        let params: any = {
             consumer: "SYSTEM",
             projectName: projectName,
             baseURI: baseURI,
@@ -169,7 +185,7 @@ export class ProjectServices {
             preloadedDataFormat: preloadedDataFormat,
             transitiveImportAllowance: transitiveImportAllowance,
         };
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException', 'org.eclipse.rdf4j.repository.RepositoryException'] 
@@ -183,7 +199,7 @@ export class ProjectServices {
      * @param project the project to delete
      */
     deleteProject(project: Project) {
-        var params = {
+        let params = {
             consumer: "SYSTEM",
             projectName: project.getName(),
         };
@@ -196,7 +212,7 @@ export class ProjectServices {
      * @param projectFile the archieve of the project to import
      */
     importProject(projectName: string, projectFile: File) {
-        var data = {
+        let data = {
             newProjectName: projectName,
             importPackage: projectFile
         };
@@ -208,7 +224,7 @@ export class ProjectServices {
      * @param project the project to export
      */
     exportProject(project: Project) {
-        var params = {
+        let params = {
             projectName: project.getName()
         };
         return this.httpMgr.downloadFile(this.serviceName, "exportProject", params, true);
@@ -219,15 +235,15 @@ export class ProjectServices {
      * @param project 
      */
     getProjectPropertyMap(project: Project): Observable<{name: string, value: string}[]> {
-        var params = {
+        let params = {
             projectName: project.getName()
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params).pipe(
             map(stResp => {
-                var propCollJson: any[] = stResp;
-                var propertyList: Array<any> = [];
-                for (var i = 0; i < propCollJson.length; i++) {
-                    var prop: any = {};
+                let propCollJson: any[] = stResp;
+                let propertyList: Array<any> = [];
+                for (let i = 0; i < propCollJson.length; i++) {
+                    let prop: any = {};
                     prop.name = propCollJson[i].name;
                     prop.value = propCollJson[i].value;
                     propertyList.push(prop);
@@ -241,11 +257,11 @@ export class ProjectServices {
      * 
      */
     getAccessStatusMap(): Observable<AccessStatus[]> {
-        var params = { };
+        let params = { };
         return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params).pipe(
             map(stResp => {
-                var aclMap: AccessStatus[] = [];
-                var projectJsonColl: any[] = stResp;
+                let aclMap: AccessStatus[] = [];
+                let projectJsonColl: any[] = stResp;
                 projectJsonColl.forEach(projAclJson => {
                     aclMap.push(this.parseAccessStatus(projAclJson));
                 })
@@ -274,7 +290,7 @@ export class ProjectServices {
         //consumers node
         let consumers: ConsumerACL[] = [];
         let consumersJsonColl: any[] = projAclJson.consumers;
-        for (var j = 0; j < consumersJsonColl.length; j++) {
+        for (let j = 0; j < consumersJsonColl.length; j++) {
             let consumer: ConsumerACL = {
                 name: consumersJsonColl[j].name,
                 availableACLLevel: null,
@@ -310,7 +326,7 @@ export class ProjectServices {
      * @param accessLevel
      */
     updateAccessLevel(consumer: Project, accessLevel?: AccessLevel) {
-        var params: any = {
+        let params: any = {
             consumerName: consumer.getName(),
             accessLevel: accessLevel
         };
@@ -325,7 +341,7 @@ export class ProjectServices {
      * @param accessLevel
      */
     updateProjectAccessLevel(project: Project, consumer: Project, accessLevel?: AccessLevel) {
-        var params: any = {
+        let params: any = {
             projectName: project.getName(),
             consumerName: consumer.getName(),
             accessLevel: accessLevel
@@ -339,7 +355,7 @@ export class ProjectServices {
      * @param accessLevel
      */
     updateUniversalAccessLevel(accessLevel?: AccessLevel) {
-        var params: any = {
+        let params: any = {
             accessLevel: accessLevel
         }
         return this.httpMgr.doPost(this.serviceName, "updateUniversalAccessLevel", params);
@@ -353,7 +369,7 @@ export class ProjectServices {
      * @param accessLevel
      */
     updateUniversalProjectAccessLevel(project: Project, accessLevel?: AccessLevel) {
-        var params: any = {
+        let params: any = {
             projectName: project.getName(),
             accessLevel: accessLevel
         };
@@ -366,7 +382,7 @@ export class ProjectServices {
      * @param accessLevel 
      */
     updateProjectLockLevel(project: Project, lockLevel: LockLevel) {
-        var params = {
+        let params = {
             projectName: project.getName(),
             lockLevel: lockLevel,
         };
@@ -379,7 +395,7 @@ export class ProjectServices {
      * @param accessLevel 
      */
     updateLockLevel(lockLevel: LockLevel) {
-        var params = {
+        let params = {
             lockLevel: lockLevel,
         };
         return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params);
@@ -422,7 +438,7 @@ export class ProjectServices {
      * @param excludeLocal 
      */
     getRepositories(project: Project, excludeLocal?: boolean): Observable<RepositorySummary[]> {
-        var params: any = {
+        let params: any = {
             projectName: project.getName()
         };
         if (excludeLocal != null) {
@@ -439,7 +455,7 @@ export class ProjectServices {
      * @param newPassword 
      */
     modifyRepositoryAccessCredentials(project: Project, repositoryID: string, newUsername?: string, newPassword?: string) {
-        var params: any = {
+        let params: any = {
             projectName: project.getName(),
             repositoryID: repositoryID,
         };
@@ -463,7 +479,7 @@ export class ProjectServices {
      */
     batchModifyRepostoryAccessCredentials(project: Project, serverURL: string, matchUsername?: boolean, 
         currentUsername?: string, newUsername?: string, newPassword?: string) {
-        var params: any = {
+        let params: any = {
             projectName: project.getName(),
             serverURL: serverURL,
         };
@@ -547,55 +563,20 @@ export class ProjectServices {
 
     /**
      * 
-     * @param projectName 
-     * @param facetValue 
-     */
-    setProjectFacetDir(projectName: string, facetValue?: string) {
-        let params: any = {
-            projectName: projectName,
-            facetValue: facetValue
-        };
-        return this.httpMgr.doPost(this.serviceName, "setProjectFacetDir", params);
-    }
-
-    /**
-     * 
-     * @param oldValue 
-     * @param newValue 
-     */
-    renameProjectFacetDir(oldValue: string, newValue: string) {
-        let params: any = {
-            oldValue: oldValue,
-            newValue: newValue
-        };
-        return this.httpMgr.doPost(this.serviceName, "renameProjectFacetDir", params);
-    }
-
-    /**
-     * 
-     * @param dirName 
-     */
-    deleteProjectDir(dirName: string) {
-        let params: any = {
-            dirName: dirName,
-        };
-        return this.httpMgr.doPost(this.serviceName, "deleteProjectDir", params);
-    }
-
-    /**
-     * 
      * @param project 
      * @param propName 
      * @param propValue 
      */
     setProjectProperty(project: Project, propName: string, propValue: string) {
-        var params = {
+        let params = {
             projectName: project.getName(),
             propName: propName,
             propValue: propValue
         };
         return this.httpMgr.doPost(this.serviceName, "setProjectProperty", params);
     }
+
+    //==== FACETS SERVICES
 
     /**
      * Sets the facets of a project
@@ -604,7 +585,7 @@ export class ProjectServices {
      * @param facets
      */
     setProjectFacets(project: Project, facets: Settings) {
-        var params = {
+        let params = {
             projectName: project.getName(),
             facets: JSON.stringify(facets.getPropertiesAsMap())
         }
@@ -612,12 +593,11 @@ export class ProjectServices {
     }
 
     /**
-     * Gets the schema of custom project facets
+     * Gets the schema of project facets
      * 
      */
     getCustomProjectFacetsSchema(): Observable<Settings> {
-        var params = {
-        }
+        let params = {}
         return this.httpMgr.doGet(this.serviceName, "getCustomProjectFacetsSchema", params).pipe(
             map(stResp => {
                 return Settings.parse(stResp);
@@ -626,13 +606,48 @@ export class ProjectServices {
     }
 
     /**
-     * Sets  the schema of custom project facets
+     * Sets  the schema of project facets
      * 
      */
     setCustomProjectFacetsSchema(facetsSchema: Settings) {
-        var params = {
+        let params = {
             facetsSchema: JSON.stringify(facetsSchema.getPropertiesAsMap())
         };
         return this.httpMgr.doPost(this.serviceName, "setCustomProjectFacetsSchema", params);
     }
+
+    getProjectFacetsForm(): Observable<Settings> {
+        let params = {}
+        return this.httpMgr.doGet(this.serviceName, "getProjectFacetsForm", params).pipe(
+            map(stResp => {
+                return Settings.parse(stResp);
+            })
+        );
+    }
+
+    getProjectFacets(projectName: string) {
+        let params = {
+            projectName: projectName
+        };
+        return this.httpMgr.doGet(this.serviceName, "getProjectFacets", params);
+    }
+
+    createFacetIndex() {
+        let params = {};
+        return this.httpMgr.doPost(this.serviceName, "createFacetIndex", params);
+    }
+
+    recreateFacetIndexForProject(projectName: string) {
+        let params = {
+            projectName: projectName
+        };
+        return this.httpMgr.doPost(this.serviceName, "recreateFacetIndexForProject", params);
+    }
+
+    getFacetsAndValue(): Observable<Multimap<string>> {
+        let params = {};
+        return this.httpMgr.doGet(this.serviceName, "getFacetsAndValue", params);
+    }
+
+
 }

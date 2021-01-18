@@ -4,7 +4,7 @@
 <div class="modal-body vbox">
 
     <div class="hbox" style="align-items: center; flex: initial">
-        <label style="margin-right: 4px; white-space: nowrap;">{{'DATA.COMMONS.VISUALIZATION_MODE.MODE'|translate}}:</label>
+        <label style="margin-right: 4px; white-space: nowrap;">{{'COMMONS.VISUALIZATION_MODE'|translate}}:</label>
         <select class="form-control" [(ngModel)]="visualization">
             <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.labelTranslationKey|translate}}</option>
         </select>

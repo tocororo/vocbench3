@@ -3,7 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
-import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, TransformationStep } from "../../../models/Plugins";
+import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, STProperties, TransformationStep } from "../../../models/Plugins";
 import { DataFormat } from "../../../models/RDFFormat";
 import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
@@ -406,7 +406,7 @@ export class ExportDataComponent {
         this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_EXPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.EXPORTER).then(
             (conf: LoadConfigurationModalReturnData) => {
                 this.filtersChain = []; //reset the chain
-                let configurations: SettingsProp[] = conf.configuration.properties;
+                let configurations: STProperties[] = conf.configuration.properties;
 
                 let deployerSpec: {extensionID: string, configRef: string};
                 let reformattingExporterSpec: {extensionID: string, configRef: string};

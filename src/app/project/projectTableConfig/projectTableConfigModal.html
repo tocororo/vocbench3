@@ -3,14 +3,32 @@
 </div>
 <div class="modal-body vbox">
 
-    <div class="hbox" style="align-items: center;">
-        <label style="white-space: nowrap; margin-right: 4px;">{{'PROJECTS.CONFIG.TOP_LEVEL_ELEMENTS'|translate}}:</label>
-        <select class="form-control" [(ngModel)]="selectedVisualizationMode">
-            <option *ngFor="let m of visualizationModes" [ngValue]="m">{{m.translationKey|translate}}</option>
-        </select>
-    </div>
+    <table class="table table-sm table-borderless">
+        <colgroup>
+            <col style="width: 1%">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td class="text-right" nowrap><label>{{'COMMONS.VISUALIZATION_MODE'|translate}}:</label></td>
+                <td>
+                    <select class="form-control" [(ngModel)]="selectedVisualizationMode">
+                        <option *ngFor="let m of visualizationModes" [ngValue]="m">{{m.translationKey|translate}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr *ngIf="selectedVisualizationMode?.mode == 'facet'">
+                <td class="text-right" nowrap><label>{{'PROJECTS.CONFIG.FACET'|translate}}:</label></td>
+                <td>
+                    <select class="form-control" [(ngModel)]="selectedFacet">
+                        <option *ngFor="let f of facets" [ngValue]="f.name">{{f.displayName}}</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-    <div class="card card-default" style="margin-top: 6px;">
+    <div *ngIf="isAdmin" class="card card-default mt-3">
         <div class="card-header">
             <label>{{'PROJECTS.CONFIG.PROJ_INFO'|translate}}</label>
             <label style="flex: 1"></label>

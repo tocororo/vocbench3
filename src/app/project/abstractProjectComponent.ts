@@ -1,13 +1,17 @@
 import { Directive } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from "rxjs";
-import { Project, ProjectFacets, ProjectViewMode } from "../models/Project";
+import { Project, ProjectViewMode } from "../models/Project";
 import { MetadataServices } from "../services/metadataServices";
+import { ProjectServices } from '../services/projectServices';
 import { UserServices } from "../services/userServices";
 import { Cookie } from "../utils/Cookie";
 import { DatatypeValidator } from "../utils/DatatypeValidator";
 import { VBCollaboration } from "../utils/VBCollaboration";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
+import { ModalOptions } from '../widget/modal/Modals';
+import { ProjectTableConfigModal } from './projectTableConfig/projectTableConfigModal';
 
 @Directive()
 export abstract class AbstractProjectComponent {
@@ -17,45 +21,68 @@ export abstract class AbstractProjectComponent {
     protected projectList: Project[];
     protected projectDirs: ProjectDirEntry[];
 
+    protected projectService: ProjectServices;
     protected userService: UserServices;
     protected metadataService: MetadataServices;
     protected vbCollaboration: VBCollaboration;
     protected vbProp: VBProperties;
     protected dtValidator: DatatypeValidator;
-    constructor(userService: UserServices, metadataService: MetadataServices, vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator) {
+    protected modalService: NgbModal;
+    constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices, 
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal) {
+        this.projectService = projectService;
         this.userService = userService;
         this.metadataService = metadataService;
         this.vbCollaboration = vbCollaboration;
         this.vbProp = vbProp;
         this.dtValidator = dtValidator;
+        this.modalService = modalService;
     }
 
     ngOnInit() {
         this.initProjects();
     }
 
-    protected abstract initProjects(): void;
+    initProjects() {
+        //init visualization mode
+        this.visualizationMode = ProjectViewMode.list; //default
+        let viewModeCookie: string = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE);
+        if (viewModeCookie in ProjectViewMode) {
+            this.visualizationMode = <ProjectViewMode>viewModeCookie;
+        }
+
+        if (this.visualizationMode == ProjectViewMode.list) {
+            //init project list
+            this.projectService.listProjects().subscribe(
+                projectList => {
+                    this.projectList = projectList;
+                }
+            );
+        } else { //facets based
+            this.initProjectDirectories();
+        }
+    }
+
+    abstract initProjectList(): void;
 
     protected initProjectDirectories(): void {
-        //retrieve from cookie the directory to collapse
-        let collapsedDirs: string[] = this.retrieveCollapsedDirectoriesCookie();
-        //init project dirs structure
-        this.projectDirs = [];
-        this.projectList.forEach(p => {
-            let dirName = p.getFacet(ProjectFacets.dir);
-            let pEntry = this.projectDirs.find(p => p.dir == dirName);
-            if (pEntry == null) {
-                pEntry = new ProjectDirEntry(dirName);
-                pEntry.open = !collapsedDirs.some(d => d == dirName);
-                this.projectDirs.push(pEntry);
+        let bagOfFacet = Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
+        this.projectService.retrieveProjects(bagOfFacet).subscribe(
+            projectBags => {
+                this.projectDirs = [];
+                Object.keys(projectBags).forEach(bag => {
+                    let dirEntry = new ProjectDirEntry(bag);
+                    dirEntry.projects = projectBags[bag];
+                    this.projectDirs.push(dirEntry);
+                });
+                this.projectDirs.sort((d1: ProjectDirEntry, d2: ProjectDirEntry) => {
+                    if (d1.dir == null || d1.dir == "") return 1;
+                    else if (d2.dir == null || d2.dir == "") return -1;
+                    else return d1.dir.localeCompare(d2.dir);
+                });
+                //TODO handle open/close directory
             }
-            pEntry.projects.push(p);
-        });
-        this.projectDirs.sort((d1: ProjectDirEntry, d2: ProjectDirEntry) => {
-            if (d1.dir == null) return 1;
-            else if (d2.dir == null) return -1;
-            else return d1.dir.localeCompare(d2.dir);
-        });
+        )
     }
 
     protected accessProject(project: Project) {
@@ -94,6 +121,7 @@ export abstract class AbstractProjectComponent {
         })
         Cookie.setCookie(Cookie.PROJECT_COLLAPSED_DIRS, collapsedDirs.join(","));
     }
+
     protected retrieveCollapsedDirectoriesCookie(): string[] {
         let collapsedDirs: string[] = [];
         let collapsedDirsCookie: string = Cookie.getCookie(Cookie.PROJECT_COLLAPSED_DIRS)
@@ -104,6 +132,16 @@ export abstract class AbstractProjectComponent {
             if (dir == "null") list[index] = null;
         });
         return collapsedDirs;
+    }
+
+    settings() {
+        const modalRef: NgbModalRef = this.modalService.open(ProjectTableConfigModal, new ModalOptions('sm'));
+        modalRef.result.then(
+            () => { //changed settings
+                this.initProjects();
+            },
+            () => {} //nothing changed
+        );
     }
 
 }

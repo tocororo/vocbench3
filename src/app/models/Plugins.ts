@@ -1,4 +1,5 @@
-import { ARTNode, ARTURIResource } from "./ARTResources";
+import { ResourceUtils } from "../utils/ResourceUtils";
+import { ARTLiteral, ARTNode, ARTURIResource } from "./ARTResources";
 
 /**
  * in the future this could have also a description field
@@ -17,10 +18,10 @@ export class Settings {
     public shortName: string;
     public type: string;
     public editRequired: boolean;
-    public properties: SettingsProp[];
+    public properties: STProperties[];
     public htmlDescription?: string;
     public htmlWarning?: string;
-    constructor(shortName: string, type: string, editRequired: boolean, properties: SettingsProp[], htmlDescription?: string, htmlWaning?: string) {
+    constructor(shortName: string, type: string, editRequired: boolean, properties: STProperties[], htmlDescription?: string, htmlWaning?: string) {
         this.shortName = shortName;
         this.editRequired = editRequired;
         this.type = type;
@@ -30,9 +31,9 @@ export class Settings {
     }
 
     public clone(): Settings {
-        var properties: SettingsProp[] = [];
+        var properties: STProperties[] = [];
         for (var i = 0; i < this.properties.length; i++) {
-            let p: SettingsProp = this.properties[i];
+            let p: STProperties = this.properties[i];
             properties.push(p.clone());
         }
         return new Settings(this.shortName, this.type, this.editRequired, properties, this.htmlDescription, this.htmlWarning);
@@ -63,7 +64,7 @@ export class Settings {
      * Returns the property with the given name. Returns null if none property with that name exists
      * @param propName 
      */
-    public getProperty(propName: string): SettingsProp {
+    public getProperty(propName: string): STProperties {
         return this.properties.find(p => p.name == propName);
     }
 
@@ -72,7 +73,7 @@ export class Settings {
      * @param propName 
      */
     public getPropertyValue(propName: string): any {
-        let prop: SettingsProp = this.getProperty(propName);
+        let prop: STProperties = this.getProperty(propName);
         if (prop != null) {
             return prop.value;
         }
@@ -120,19 +121,16 @@ export class Settings {
     }
 
     public static parse(response: any): Settings {
-        let props: SettingsProp[] = [];
-        for (var i = 0; i < response.properties.length; i++) {
-            let name = response.properties[i].name;
-            let displayName = response.properties[i].displayName;
-            let description = response.properties[i].description;
-            let required = response.properties[i].required;
-            let value = response.properties[i].value;
-            let enumeration = response.properties[i].enumeration;
-            let type = SettingsPropType.parse(response.properties[i].type);
-            props.push(new SettingsProp(name, displayName, description, required, type, enumeration, value));
+        let shortName: string = response.shortName;
+        let type: string = response['@type'];
+        let editRequired: boolean = response.editRequired;
+        let htmlDescription: string = response.htmlDescription;
+        let htmlWarning: string = response.htmlWarning;
+        let props: STProperties[] = [];
+        for (let p of response.properties) {
+            props.push(STProperties.parse(p, type.includes("STPropertiesSchema")));
         }
-        let stProps = new Settings(response.shortName, response['@type'], response.editRequired, props, 
-            response.htmlDescription, response.htmlWarning);
+        let stProps = new Settings(shortName, type, editRequired, props, htmlDescription, htmlWarning);
         return stProps;
     }
 }
@@ -142,16 +140,15 @@ export class Enumeration {
     open: boolean;
 };
 
-export class SettingsProp {
+export class STProperties {
     public name: string;
-    public displayName: string;
-    public description: string;
+    public displayName: any;
+    public description: any;
     public required: boolean;
     public type: SettingsPropType;
     public value: any;
     public enumeration: Enumeration;
-
-    constructor (name: string, displayName: string, description: string, required: boolean, type: SettingsPropType, enumeration?: Enumeration, value?: string) {
+    constructor (name: string, displayName: any, description: any, required: boolean, type: SettingsPropType, enumeration?: Enumeration, value?: string) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
@@ -159,27 +156,6 @@ export class SettingsProp {
         this.value = value;
         this.enumeration = enumeration;
         this.type = type;
-    }
-
-    public clone(): SettingsProp {
-        let clonedValue = SettingsProp.cloneValue(this.value);
-        return new SettingsProp(this.name, this.displayName, this.description, this.required, this.type.clone(), this.enumeration, clonedValue);
-    }
-
-    private static cloneValue(value: any): any {
-        if (value === null || typeof value != "object" || value instanceof String) { // "primitive" values that don't need to be cloned
-            return value;
-        } else if (value instanceof Array) {
-            return value.map(v => SettingsProp.cloneValue(v));
-        } else {
-            let propValues = {};
-            for (let prop of Object.getOwnPropertyNames(value)) {
-                propValues[prop] = Object.getOwnPropertyDescriptor(value, prop);
-                propValues[prop].value = SettingsProp.cloneValue(propValues[prop].value);
-            }
-
-            return Object.create(Object.getPrototypeOf(value), propValues);
-        }
     }
 
     public requireConfiguration(): boolean {
@@ -192,6 +168,21 @@ export class SettingsProp {
         }
     }
 
+    protected static cloneValue(value: any): any {
+        if (value === null || typeof value != "object" || value instanceof String) { // "primitive" values that don't need to be cloned
+            return value;
+        } else if (value instanceof Array) {
+            return value.map(v => STProperties.cloneValue(v));
+        } else {
+            let propValues = {};
+            for (let prop of Object.getOwnPropertyNames(value)) {
+                propValues[prop] = Object.getOwnPropertyDescriptor(value, prop);
+                propValues[prop].value = STProperties.cloneValue(propValues[prop].value);
+            }
+            return Object.create(Object.getPrototypeOf(value), propValues);
+        }
+    }
+
     public static isNullish(v: any): boolean {
         return v == null ||
             (typeof v == "string" && v.trim() == "") ||
@@ -200,6 +191,79 @@ export class SettingsProp {
                 v.findIndex(SettingsProp.isNullish) != -1
             ))
     }
+
+    public clone(): STProperties {
+        let clonedValue = STProperties.cloneValue(this.value);
+        return new STProperties(this.name, this.displayName, this.description, this.required, this.type.clone(), this.enumeration, clonedValue);
+    }
+
+    public static parse(stProp: any, schema?: boolean): STProperties {
+        let name = stProp.name;
+        let required = stProp.required;
+        let enumeration = stProp.enumeration;
+        let type = SettingsPropType.parse(stProp.type);
+        let value: any = stProp.value;
+        if (stProp.value != null && schema) { //if the property belong to a schema, its value is a list of properties
+            let props: STProperties[] = [];
+            for (let v of stProp.value) {
+                props.push(STProperties.parse(v))
+            }
+            value = props;
+        }
+        let displayName = stProp.displayName;
+        let description = stProp.description;
+        if (displayName instanceof Array) { //properties are DynamicSettingProp
+            let displayNames: ARTLiteral[] = displayName.map(dn => ResourceUtils.parseLiteral(dn));
+            let descriptions: ARTLiteral[] = description.map(dn => ResourceUtils.parseLiteral(dn));
+            return new DynamicSettingProp(name, displayNames, descriptions, required, type, enumeration, value);
+        } else {
+            return new SettingsProp(name, displayName, description, required, type, enumeration, value)
+        }
+    }
+}
+
+export class SettingsProp extends STProperties {
+    public displayName: string;
+    public description: string;
+}
+
+export class DynamicSettingProp extends STProperties {
+    public displayName: ARTLiteral[];
+    public description: ARTLiteral[];
+
+    /**
+     * Return the display name in the given language.
+     * If no display name is provided for the given languge, returns the first one
+     * @param lang 
+     */
+    getDisplayName(lang: string): string {
+        let dn: string;
+        if (this.displayName.length > 0) {
+            let dnLit = this.displayName.find(d => d.getLang() == lang);
+            if (dnLit == null) {
+                dnLit = this.displayName[0];
+            }
+            dn = dnLit.getValue();
+        }
+        return dn;
+    }
+    /**
+     * Return the description in the given language.
+     * If no description is provided for the given languge, returns the first one
+     * @param lang 
+     */
+    getDescription(lang: string) {
+        let d: string;
+        if (this.description.length != 1) {
+            let dnLit = this.description.find(d => d.getLang() == lang);
+            if (dnLit == null) {
+                dnLit = this.description[0];
+            }
+            d = dnLit.getValue();
+        }
+        return d;
+    }
+
 }
 
 export class SettingsPropType {

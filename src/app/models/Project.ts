@@ -16,8 +16,7 @@ export class Project {
     private repositoryLocation: { location: "remote" | "local", serverURL?: string };
     private status: { status: string, message?: string };
     private shaclEnabled: boolean;
-    private facets: {[key: string]: string} = {};
-    private facets2: Settings;
+    private facets: Settings;
     private description: string;
 
     constructor(name?: string) {
@@ -144,16 +143,6 @@ export class Project {
         return this.status;
     }
 
-    public setFacets(facets: {[key: string]: string}) {
-        this.facets = facets;
-    }
-    public getFacets(): {[key: string]: string} {
-        return this.facets;
-    }
-    public getFacet(facet: string): string {
-        return this.facets[facet];
-    }
-
     public setDescription(description: string) {
         this.description = description;
     }
@@ -161,12 +150,12 @@ export class Project {
         return this.description;
     }
 
-    public setFacets2(facets: Settings) {
-        this.facets2 = facets;
+    public setFacets(facets: Settings) {
+        this.facets = facets;
     }
 
-    public getFacets2(): Settings {
-        return this.facets2;
+    public getFacets(): Settings {
+        return this.facets;
     }
 
     public static deserialize(projJson: any): Project {
@@ -183,9 +172,8 @@ export class Project {
         proj.setRepositoryLocation(projJson.repositoryLocation);
         proj.setStatus(projJson.status);
         proj.setShaclEnabled(projJson.shaclEnabled);
-        proj.setFacets(projJson.facets);
         proj.setDescription(projJson.description);
-        proj.setFacets2(Settings.parse(projJson.facets2));
+        proj.setFacets(Settings.parse(projJson.facets));
         return proj;
     }
 
@@ -315,13 +303,20 @@ export class ExceptionDAO {
     public stacktrace: string;
 }
 
+// export enum ProjectFacets {
+//     dir = "dir"
+// }
 export enum ProjectFacets {
-    dir = "dir"
+        dir = "dir",
+    prjHistoryEnabled = "prjHistoryEnabled",
+    prjLexModel = "prjLexModel",
+    prjModel = "prjModel",
+    prjValidationEnabled = "prjValidationEnabled",
 }
 
 export enum ProjectViewMode {
     list = "list",
-    dir = "dir"
+    facet = "facet",
 }
 
 export enum ProjectColumnId {
@@ -367,6 +362,13 @@ export class ProjectUtils {
         ProjectColumnId.history,
         ProjectColumnId.validation,
         ProjectColumnId.location,
-    ]
+    ];
+
+    public static projectFacetsTranslationStruct: { facet: ProjectFacets, translationKey: string }[] = [
+        { facet: ProjectFacets.prjHistoryEnabled, translationKey: "MODELS.PROJECT.HISTORY" },
+        { facet: ProjectFacets.prjLexModel, translationKey: "MODELS.PROJECT.LEXICALIZATION" },
+        { facet: ProjectFacets.prjModel, translationKey: "MODELS.PROJECT.MODEL" },
+        { facet: ProjectFacets.prjValidationEnabled, translationKey: "MODELS.PROJECT.VALIDATION" }
+    ];
 
 }

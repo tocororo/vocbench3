@@ -6,20 +6,9 @@
         <div class="card-header">
             <label style="flex: 1;">{{'MODELS.PROJECT.PROJECTS'|translate}}</label>
             <div class="btn-group btn-group-xs" ngbDropdown>
-                <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                <button class="btn btn-xs btn-light" (click)="settings()">
                     <span class="fas fa-cog"></span>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                    <h6 class="dropdown-header">{{'PROJECTS.CONFIG.TOP_LEVEL_ELEMENTS'|translate}}</h6>
-                    <a class="dropdown-item" (click)="changeVisualizationMode(ProjectViewMode.list)">
-                        {{'MODELS.PROJECT.PROJECTS'|translate}}
-                        <span *ngIf="visualizationMode == ProjectViewMode.list" class="fas fa-check float-right"></span>
-                    </a>
-                    <a class="dropdown-item" (click)="changeVisualizationMode(ProjectViewMode.dir)">
-                        {{'PROJECTS.CONFIG.DIRECTORIES'|translate}}
-                        <span *ngIf="visualizationMode == ProjectViewMode.dir" class="fas fa-check float-right"></span>
-                    </a>
-                </div>
             </div>
 
         </div>
@@ -55,7 +44,7 @@
             </table>
 
 
-            <ng-container *ngIf="visualizationMode == ProjectViewMode.dir">
+            <ng-container *ngIf="visualizationMode == ProjectViewMode.facet">
                 <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
                 <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
                     <label class="text-center" style="flex: 3">{{'COMMONS.NAME'|translate}}</label>

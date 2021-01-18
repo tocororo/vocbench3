@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="card-body scrollableContainer" style="padding-left: 8px; padding-right: 8px;">
-            <ng-container *ngIf="visualizationMode == ProjectViewMode.dir">
+            <ng-container *ngIf="visualizationMode == ProjectViewMode.facet">
                 <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
                 <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
                     <ng-container *ngTemplateOutlet="headersTemplate"></ng-container>
@@ -40,11 +40,6 @@
                                     <ng-container *ngIf="pd.dir">{{pd.dir}}</ng-container>
                                     <ng-container *ngIf="!pd.dir">Unclassified</ng-container>
                                 </label>
-                            </div>
-                            <div class="groupPanel-heading-content clickable" style="margin-left: 4px;">
-                                <button *ngIf="pd.dir" class="close" (click)="renameDirectory(pd.dir)" [title]="'PROJECTS.RENAME_DIR'|translate" style="font-size: 12px;">
-                                    <span class="fas fa-pencil-alt"></span>
-                                </button>
                             </div>
                         </div>
                     
@@ -92,7 +87,6 @@
                                                     <span class="fas fa-caret-down"></span>
                                                 </button>
                                                 <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                                                    <button class="dropdown-item" (click)="editDirectory(p, pd.dir)">{{'PROJECTS.ACTIONS.CHANGE_DIR'|translate}}</button>
                                                     <button class="dropdown-item" (click)="editACL(p)">{{'PROJECTS.ACTIONS.EDIT_ACL'|translate}}</button>
                                                     <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
                                                     <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>

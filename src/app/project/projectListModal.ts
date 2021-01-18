@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Project, ProjectViewMode } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
@@ -18,20 +18,16 @@ import { AbstractProjectComponent } from "./abstractProjectComponent";
 export class ProjectListModal extends AbstractProjectComponent {
     selectedProject: Project;
 
-    constructor(public activeModal: NgbActiveModal, userService: UserServices, metadataService: MetadataServices,
-        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator,
-        private projectService: ProjectServices, private router: Router) {
-        super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
+    constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal, 
+        private activeModal: NgbActiveModal, private router: Router) {
+        super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService);
     }
 
-    initProjects() {
-        //init visualization mode
-        this.visualizationMode = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE) == ProjectViewMode.dir ? ProjectViewMode.dir : ProjectViewMode.list;
-        
+    initProjectList() {
         this.projectService.listProjects(null, true, true).subscribe(
-            projects => {
-                this.projectList = projects;
-                this.initProjectDirectories();
+            projectList => {
+                this.projectList = projectList;
             }
         );
     }

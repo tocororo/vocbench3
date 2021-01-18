@@ -4,7 +4,7 @@ import { ModalType } from 'src/app/widget/modal/Modals';
 import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { ARTNode } from "../../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
-import { SettingsProp } from "../../models/Plugins";
+import { SettingsProp, STProperties } from "../../models/Plugins";
 import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
 import { ConfigurationsServices } from "../../services/configurationsServices";
 import { SearchServices } from "../../services/searchServices";
@@ -47,7 +47,7 @@ export class CustomSearchModal {
                  * "variableBindings": the map of the bindings parameterization
                  * "description": description of the parameterized query
                  */
-                let properties: SettingsProp[] = configuration.properties;
+                let properties: STProperties[] = configuration.properties;
                 for (var i = 0; i < properties.length; i++) {
                     if (properties[i].name == "relativeReference") {
                         let storedQueryReference: string = properties[i].value;

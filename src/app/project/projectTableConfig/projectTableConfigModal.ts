@@ -1,5 +1,9 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
+import { DynamicSettingProp, SettingsProp, STProperties } from "src/app/models/Plugins";
+import { ProjectServices } from "src/app/services/projectServices";
+import { VBContext } from "src/app/utils/VBContext";
 import { ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode } from "../../models/Project";
 import { Cookie } from "../../utils/Cookie";
 
@@ -9,23 +13,86 @@ import { Cookie } from "../../utils/Cookie";
 })
 export class ProjectTableConfigModal {
 
+    isAdmin: boolean;
+
     visualizationModes: { translationKey: string, mode: ProjectViewMode }[] = [
-        { translationKey: "MODELS.PROJECT.PROJECTS", mode: ProjectViewMode.list }, 
-        { translationKey: "PROJECTS.CONFIG.DIRECTORIES", mode: ProjectViewMode.dir }
+        { translationKey: "PROJECTS.CONFIG.LIST", mode: ProjectViewMode.list }, 
+        { translationKey: "PROJECTS.CONFIG.FACET_BASED", mode: ProjectViewMode.facet }
     ];
     selectedVisualizationMode: { translationKey: string, mode: ProjectViewMode };
+
+    facets: { name: string, displayName: string }[] = [];
+    selectedFacet: string; //name of the facet
 
     columns: ProjectTableColumnStruct[] = [];
     selectedColumn: ProjectTableColumnStruct;
 
-    constructor(public activeModal: NgbActiveModal) { }
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private translateService: TranslateService) { }
 
     ngOnInit() {
+        this.isAdmin = VBContext.getLoggedUser().isAdmin();
         //init visualization mode
-        let mode: ProjectViewMode = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE) == ProjectViewMode.dir ? ProjectViewMode.dir : ProjectViewMode.list;
-        this.selectedVisualizationMode = this.visualizationModes.find(m => m.mode == mode);
+        let projViewModeCookie: string = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE);
+        this.selectedVisualizationMode = this.visualizationModes.find(m => m.mode == projViewModeCookie);
+        if (this.selectedVisualizationMode == null) {
+            this.selectedVisualizationMode = this.visualizationModes[0];
+        }
+        this.selectedFacet = Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
 
         this.initColumnTable();
+        this.initFacets();
+    }
+
+    private initFacets() {
+        this.projectService.getFacetsAndValue().subscribe(
+            facetsAndValues => {
+                Object.keys(facetsAndValues).forEach(facetName => {
+                    this.facets.push({ name: facetName, displayName: facetName }); //temporarly set displayName the same facet name
+                });
+                //compute the display name:
+                //- translate the built-in project facets (e.g. lex model, history, ...)
+                this.facets.forEach(f => {
+                    let translationStruct = ProjectUtils.projectFacetsTranslationStruct.find(fts => fts.facet == f.name);
+                    if (translationStruct != null) {
+                        f.displayName = this.translateService.instant(translationStruct.translationKey);
+                    }
+                });
+                //- get the display name of other facets
+                this.projectService.getProjectFacetsForm().subscribe(
+                    facetsForm => {
+                        let displayName: string;
+                        this.facets.forEach(f => {
+                            //search between factory provided facets
+                            let prop = facetsForm.getProperty(f.name);
+                            if (prop != null) {
+                                displayName = prop.displayName;
+                            }
+                            //if facet not found among the factory provided search among the custom ones
+                            if (displayName == null) {
+                                let customFacets: STProperties  = facetsForm.getProperty("customFacets");
+                                let customFacetsProps: STProperties[] = customFacets.type.schema.properties;
+                                for (let cf of customFacetsProps) {
+                                    if (cf.name == f.name) {
+                                        displayName = cf.displayName;
+                                    }
+                                }
+                            }
+                            if (displayName != null) {
+                                f.displayName = displayName;
+                            }
+                        });
+                        
+                        //sort facets according display name
+                        this.facets.sort((f1, f2) => f1.displayName.localeCompare(f2.displayName));
+
+                        //check if the selected facet exists
+                        if (!this.facets.some(f => f.name == this.selectedFacet)) { //no facet with the stored facet cookie => select the first one
+                            this.selectedFacet = this.facets[0].name;
+                        }
+                    }
+                );
+            }
+        )
     }
 
     private initColumnTable() {
@@ -86,13 +153,17 @@ export class ProjectTableConfigModal {
     ok() {
         let oldModeCookie = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE);
         let newModeCookie = this.selectedVisualizationMode.mode;
+        Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, newModeCookie);
+
+        let oldFacetCookie = Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
+        let newFacetCookie = this.selectedFacet;
+        Cookie.setCookie(Cookie.PROJECT_FACET_BAG_OF, newFacetCookie);
 
         let oldColumnsCookie = Cookie.getCookie(Cookie.PROJECT_TABLE_ORDER);
         let newColumnCookie = this.columns.filter(c => c.show).map(c => c.id).join(",");
+        Cookie.setCookie(Cookie.PROJECT_TABLE_ORDER, newColumnCookie);
 
-        if (oldModeCookie != newModeCookie || oldColumnsCookie != newColumnCookie) { //update the cookies only if changed
-            Cookie.setCookie(Cookie.PROJECT_TABLE_ORDER, newColumnCookie);
-            Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, newModeCookie);
+        if (oldModeCookie != newModeCookie || oldFacetCookie != newFacetCookie || oldColumnsCookie != newColumnCookie) { //close if something changed
             this.activeModal.close();
         } else { //if nothing changed, simply dismiss the modal
             this.activeModal.dismiss();

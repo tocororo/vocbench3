@@ -4,7 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable } from "rxjs";
 import { map } from 'rxjs/operators';
 import { Settings } from "../models/Plugins";
-import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
+import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { RepositoriesServices } from "../services/repositoriesServices";
@@ -22,7 +22,6 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ACLEditorModal } from "./projectACL/aclEditorModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
-import { ProjectDirModal } from "./projectDir/projectDirModal";
 import { ProjectPropertiesModal } from "./projectPropertiesModal";
 import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
 import { DeleteRemoteRepoModal } from "./remoteRepositories/deleteRemoteRepoModal";
@@ -40,17 +39,14 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         ProjectColumnId.location, ProjectColumnId.model, ProjectColumnId.name, ProjectColumnId.open, ProjectColumnId.validation];
     private columnOrder: { [id: string]: { show: string, flex: number, order: number} };
 
-    constructor(private projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
-        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, 
-        private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal, 
+    constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal,
+        private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
         private router: Router) {
-        super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
+        super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService);
     }
 
     initProjects() {
-        //init visualization mode
-        this.visualizationMode = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE) == ProjectViewMode.dir ? ProjectViewMode.dir : ProjectViewMode.list;
-
         //init column order
         this.columnOrder = {};
         let columns: ProjectTableColumnStruct[] = ProjectUtils.getDefaultProjectTableColumns();
@@ -60,12 +56,13 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
             this.columnOrder[colId] = { show: colStruct.translationKey, order: idx, flex: colStruct.flex }
         })
 
-        //init project list
+        super.initProjects();
+    }
+
+    initProjectList() {
         this.projectService.listProjects().subscribe(
             projectList => {
                 this.projectList = projectList;
-
-                this.initProjectDirectories();
             }
         );
     }
@@ -230,55 +227,6 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         return modalRef.result;
     }
 
-    private editDirectory(project: Project, currentDir: string) {
-        let availableDirs: string[] = [];
-        this.projectDirs.forEach(pd => { 
-            if (pd.dir != null) {
-                availableDirs.push(pd.dir);
-            }
-        });
-
-
-        const modalRef: NgbModalRef = this.modalService.open(ProjectDirModal, new ModalOptions());
-        modalRef.componentInstance.project = project;
-		modalRef.componentInstance.currentDir = currentDir;
-		modalRef.componentInstance.availableDirs = availableDirs;
-        return modalRef.result.then(
-            () => { //directory changed
-                this.initProjects();
-            },
-            () => {} //directory not changed
-        )
-    }
-
-    private renameDirectory(directory: string) {
-        this.basicModals.prompt({key:"PROJECTS.ACTIONS.RENAME_PROJECT_DIRECTORY"}, { value: "Directory name" }, null, directory).then(
-            newName => {
-                if (newName != directory) {
-                    if (this.projectDirs.some(pd => pd.dir == newName)) { //name changed, but a directory with the same name already exists
-                        this.basicModals.confirm({key:"PROJECTS.ACTIONS.RENAME_PROJECT_DIRECTORY"}, 
-                        {key:"MESSAGES.ALREADY_EXISTING_PROJ_DIR_CONFIRM", params:{targetDirName: newName, sourceDirName: directory}}, ModalType.warning).then(
-                            () => { //confirmed => apply rename
-                                this.projectService.renameProjectFacetDir(directory, newName).subscribe(
-                                    () => {
-                                        this.initProjects();
-                                    }
-                                );
-                            },
-                            () => {}
-                        )
-                    } else {
-                        this.projectService.renameProjectFacetDir(directory, newName).subscribe(
-                            () => {
-                                this.initProjects();
-                            }
-                        );
-                    }
-                }
-            }
-        )
-    }
-
     private editDescription(project: Project) {
         this.basicModals.prompt({key:"MODELS.PROJECT.DESCRIPTION"}, { value: "Description" }, null, project.getDescription(), true).then(
             descr => {
@@ -296,10 +244,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     private editFacets(project: Project) {
-        this.sharedModals.configurePlugin(project.getFacets2()).then(facets => {
+        this.sharedModals.configurePlugin(project.getFacets()).then(facets => {
             this.projectService.setProjectFacets(project, facets).subscribe(
                 () => {
-                    project.setFacets2(facets); //update facets in project
+                    project.setFacets(facets); //update facets in project
                 }
             );
         }, () => {});
@@ -317,16 +265,6 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         });
     }
 
-    settings() {
-        const modalRef: NgbModalRef = this.modalService.open(ProjectTableConfigModal, new ModalOptions('sm'));
-        modalRef.result.then(
-            () => { //changed settings
-                this.initProjects();
-            },
-            () => {} //nothing changed
-        );
-    }
-
     /**
      * COOKIE MANAGEMENT
      */
@@ -339,7 +277,5 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         }
         return columnOrder;
     }
-
-    
 
 }

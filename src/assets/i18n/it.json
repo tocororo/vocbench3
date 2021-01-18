@@ -517,7 +517,6 @@
             "DUPLICATED_VALUES_WARN": "Non puoi creare valori multipli nella stessa lingua",
             "MULTIVALUE_WARN": "Attenzione: il valore attualmente digitato non sarà considerato, deve essere aggiunto tramite il pulsante '+'",
             "VISUALIZATION_MODE": {
-                "MODE": "Modalità di visualizzazione",
                 "STANDARD": "Standard",
                 "SEARCH_BASED": "Basata su ricerca",
                 "INDEX_BASED": "Basata su indice",
@@ -1121,7 +1120,6 @@
         "OPEN_CLOSE": "Aperto/Chiuso",
         "OPTIONAL_SETTINGS": "Impostazioni opzionali",
         "PROJECT_NAME": "Nome progetto",
-        "RENAME_DIR": "Rinomina cartella",
         "RENDERING_ENGINE": "Rendering Engine",
         "RESOURCE_METADATA": "Resource Metadata",
         "SHACLE_SHAPE_VALIDATION": "Validazione shape SHACL",
@@ -1141,23 +1139,15 @@
             "LOCKABLE": "Lockabile"
         },
         "ACTIONS": {
-            "CHANGE_DIR": "Cambia cartella",
             "EDIT_ACL": "Modifica ACL",
             "EDIT_DESCRIPTION": "Modifica descrizione",
             "EDIT_FACETS": "Modifica facets",
             "EDIT_PROJECT_ACL": "Modifica ACL progetto",
             "EDIT_REMOTE_REPO_CONFIG": "Modifica configurazione repository remoto",
-            "RENAME_PROJECT_DIRECTORY": "Rinomina cartella progetto",
             "SHOW_ACL_MATRIX": "Mostra matrice ACL",
             "SHOW_PROPERTIES": "Proprietà",
             "UPDATE_ACCESS_LEVEL": "Aggiorna Access Level",
             "UPDATE_LOCK_LEVEL": "Aggiorna Lock Level"
-        },
-        "DIRS": {
-            "PROJECT_DIR": "Cartella progetto",
-            "DIRECTORIES": "Cartelle",
-            "DIR_NAME": "Nome cartella",
-            "DIR_NAME_INFO": "Se lasciato vuoto, il progetto sarà rimosso dalla sua cartella e messo sotto 'Unclassified'"
         },
         "PRELOAD": {
             "PRELOAD": "Precarica",
@@ -1186,11 +1176,12 @@
         "CONFIG": {
             "PROJ_VIEW_SETTINGS": "Impostazione Project view",
             "CUSTOM_PROJ_FACETS_SCHEMA_SETTINGS": "Impostazione dello schema della facets di progetto personalizzate",
-            "TOP_LEVEL_ELEMENTS": "Elementi top level",
-            "DIRECTORIES": "Cartelle",
             "PROJ_INFO": "Info progetti",
             "PROJ_INFO_INFO": "Da qui è possibile mostrare o nascondeere le informazioni dei progetti e personalizzarne l'ordine",
-            "COL_NAME": "Nome colonna"
+            "COL_NAME": "Nome colonna",
+            "LIST": "Lista",
+            "FACET": "Facet",
+            "FACET_BASED": "Basato su facet"
         }
     },
     "RESOURCE_METADATA": {
@@ -1635,7 +1626,8 @@
         "TITLE": "Titolo",
         "TYPE": "Tipo",
         "USERS": "Utenti",
-        "VALUE": "Valore"
+        "VALUE": "Valore",
+        "VISUALIZATION_MODE": "Modalità di visualizzazione"
     },
     "ACTIONS": {
         "ACCEPT": "Accetta",
@@ -1884,7 +1876,6 @@
         "ALREADY_EXISTING_INVOKABLE_REPORTER_ID": "Un Invokable Reporter con lo stesso ID già esiste. Cambia l'ID e riprova",
         "ALREADY_EXISTING_METADATA_ASSOCIATION": "Una associazione tra lo stesso tipo di risorsa e pattern già esiste.",
         "ALREADY_EXISTING_METADATA_PATTERN_NAME": "Un Metadata Pattern con lo stesso nome già esiste.",
-        "ALREADY_EXISTING_PROJ_DIR_CONFIRM": "Una cartella di progetti chiamata '{{targetDirName}}' già esiste. Tutti i progetti contenuti nella cartella '{{sourceDirName}}' saranno spostati in essa. Vuoi continuare?",
         "ALREADY_EXISTING_ROLE_NAME": "Esista già un ruolo con lo stesso nome",
         "ALREADY_USED_NODE_ID": "L'ID del nodo fornito è già usato per un altro nodo",
         "BASEURI_AND_NAMESPACE_UPDATED": "BaseURI e namespace aggiornati con successo",

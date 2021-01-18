@@ -517,7 +517,6 @@
             "DUPLICATED_VALUES_WARN": "You cannot create multiple values with the same language",
             "MULTIVALUE_WARN": "Warning: the value currently typed will not be considered. It needs to be added through the '+' button",
             "VISUALIZATION_MODE": {
-                "MODE": "Visualization mode",
                 "STANDARD": "Standard",
                 "SEARCH_BASED": "Search based",
                 "INDEX_BASED": "Index based",
@@ -1121,7 +1120,6 @@
         "OPEN_CLOSE": "打开/关闭",
         "OPTIONAL_SETTINGS": "Optional settings",
         "PROJECT_NAME": "项目名称",
-        "RENAME_DIR": "Rename directory",
         "RENDERING_ENGINE": "Rendering Engine",
         "RESOURCE_METADATA": "Resource Metadata",
         "SHACLE_SHAPE_VALIDATION": "SHACL Shape Validation",
@@ -1141,23 +1139,15 @@
             "LOCKABLE": "Lockable"
         },
         "ACTIONS": {
-            "CHANGE_DIR": "Change directory",
             "EDIT_ACL": "Edit ACL",
             "EDIT_DESCRIPTION": "Edit description",
             "EDIT_FACETS": "Edit facets",
             "EDIT_PROJECT_ACL": "Edit project ACL",
             "EDIT_REMOTE_REPO_CONFIG": "Edit Remote Repo configuration",
-            "RENAME_PROJECT_DIRECTORY": "Rename project directory",
             "SHOW_ACL_MATRIX": "Show ACL matrix",
             "SHOW_PROPERTIES": "Properties",
             "UPDATE_ACCESS_LEVEL": "Update Access Level",
             "UPDATE_LOCK_LEVEL": "Update Lock Level"
-        },
-        "DIRS": {
-            "PROJECT_DIR": "Project Directory",
-            "DIRECTORIES": "Directories",
-            "DIR_NAME": "Directory name",
-            "DIR_NAME_INFO": "If left empty the project will be removed from the directory and set as 'Unclassified'"
         },
         "PRELOAD": {
             "PRELOAD": "Preload",
@@ -1186,11 +1176,12 @@
         "CONFIG": {
             "PROJ_VIEW_SETTINGS": "Project view settings",
             "CUSTOM_PROJ_FACETS_SCHEMA_SETTINGS": "Custom project facets schema settings",
-            "TOP_LEVEL_ELEMENTS": "Top level elements",
-            "DIRECTORIES": "Directories",
             "PROJ_INFO": "Project info",
             "PROJ_INFO_INFO": "Here you can show or hide info about the projects and customize their order.",
-            "COL_NAME": "Column name"
+            "COL_NAME": "Column name",
+            "LIST": "List",
+            "FACET": "Facet",
+            "FACET_BASED": "Facet based"
         }
     },
     "RESOURCE_METADATA": {
@@ -1635,7 +1626,8 @@
         "TITLE": "Title",
         "TYPE": "Type",
         "USERS": "Users",
-        "VALUE": "Value"
+        "VALUE": "Value",
+        "VISUALIZATION_MODE": "Visualization mode"
     },
     "ACTIONS": {
         "ACCEPT": "Accept",
@@ -1884,7 +1876,6 @@
         "ALREADY_EXISTING_INVOKABLE_REPORTER_ID": "An Invokable Reporter with the same id already exists. Please change the ID and retry",
         "ALREADY_EXISTING_METADATA_ASSOCIATION": "An association between the same resource type and pattern already exists.",
         "ALREADY_EXISTING_METADATA_PATTERN_NAME": "A Metadata Pattern with the same name already exists.",
-        "ALREADY_EXISTING_PROJ_DIR_CONFIRM": "Warning: a project directory named '{{targetDirName}}' already exists. You will move there all the projects contained in directory '{{sourceDirName}}'. Do you want to continue?",
         "ALREADY_EXISTING_ROLE_NAME": "A role with the same name already exists",
         "ALREADY_USED_NODE_ID": "The provided node ID is already used for another node",
         "BASEURI_AND_NAMESPACE_UPDATED": "BaseURI and namespace have been updated successfully",

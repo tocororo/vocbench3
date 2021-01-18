@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigurationComponents } from "../models/Configuration";
-import { SettingsProp } from "../models/Plugins";
+import { SettingsProp, STProperties } from "../models/Plugins";
 import { PartitionFilterPreference, Properties } from "../models/Properties";
 import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 import { VBContext } from "../utils/VBContext";
@@ -33,7 +33,7 @@ export class ResViewSettingsModal {
     loadTemplate() {
         this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE, true, false).then(
             (conf: LoadConfigurationModalReturnData) => {
-                let templateProp: SettingsProp = conf.configuration.properties.find(p => p.name == "template");
+                let templateProp: STProperties = conf.configuration.properties.find(p => p.name == "template");
                 if (templateProp != null) {
                     this.template = templateProp.value;
                     this.updateTemplate();
