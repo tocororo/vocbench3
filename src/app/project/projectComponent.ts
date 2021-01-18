@@ -305,9 +305,9 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         }, () => {});
     }
 
-    editFacetsSchema() {
-        let handler: PluginSettingsHandler = (facets: Settings) => this.projectService.setProjectFacetsSchema(facets);
-        this.projectService.getProjectFacetsSchema().subscribe(facetsSchema => {
+    editCustomFacetsSchema() {
+        let handler: PluginSettingsHandler = (facets: Settings) => this.projectService.setCustomProjectFacetsSchema(facets);
+        this.projectService.getCustomProjectFacetsSchema().subscribe(facetsSchema => {
             this.sharedModals.configurePlugin(facetsSchema, handler).then(
                 facets => { //changed settings
                     this.initProjects(); 

@@ -612,13 +612,13 @@ export class ProjectServices {
     }
 
     /**
-     * Gets the schema of project facets
+     * Gets the schema of custom project facets
      * 
      */
-    getProjectFacetsSchema(): Observable<Settings> {
+    getCustomProjectFacetsSchema(): Observable<Settings> {
         var params = {
         }
-        return this.httpMgr.doGet(this.serviceName, "getProjectFacetsSchema", params).pipe(
+        return this.httpMgr.doGet(this.serviceName, "getCustomProjectFacetsSchema", params).pipe(
             map(stResp => {
                 return Settings.parse(stResp);
             })
@@ -626,13 +626,13 @@ export class ProjectServices {
     }
 
     /**
-     * Sets  the schema of project facets
+     * Sets  the schema of custom project facets
      * 
      */
-    setProjectFacetsSchema(facetsSchema: Settings) {
+    setCustomProjectFacetsSchema(facetsSchema: Settings) {
         var params = {
             facetsSchema: JSON.stringify(facetsSchema.getPropertiesAsMap())
         };
-        return this.httpMgr.doPost(this.serviceName, "setProjectFacetsSchema", params);
+        return this.httpMgr.doPost(this.serviceName, "setCustomProjectFacetsSchema", params);
     }
 }

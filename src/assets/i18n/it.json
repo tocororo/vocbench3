@@ -1185,7 +1185,7 @@
         },
         "CONFIG": {
             "PROJ_VIEW_SETTINGS": "Impostazione Project view",
-            "PROJ_FACETS_SCHEMA_SETTINGS": "Impostazione dello schema della facets di progetto",
+            "CUSTOM_PROJ_FACETS_SCHEMA_SETTINGS": "Impostazione dello schema della facets di progetto personalizzate",
             "TOP_LEVEL_ELEMENTS": "Elementi top level",
             "DIRECTORIES": "Cartelle",
             "PROJ_INFO": "Info progetti",
