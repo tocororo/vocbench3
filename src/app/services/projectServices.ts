@@ -649,5 +649,18 @@ export class ProjectServices {
         return this.httpMgr.doGet(this.serviceName, "getFacetsAndValue", params);
     }
 
+    /**
+     * Enables/disables blacklisting in a <em>closed</em> project with <em>validation</em> already enabled
+     * 
+     * @param projectName 
+     * @param projectName 
+     */
+    setBlacklistingEnabled(projectName: string, blacklistingEnabled: boolean) {
+        let params = {
+            projectName: projectName,
+            blacklistingEnabled: blacklistingEnabled
+        };
+        return this.httpMgr.doPost(this.serviceName, "setBlacklistingEnabled", params);
+    }
 
 }

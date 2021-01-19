@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExtensionPointID, Settings, Plugin } from "src/app/models/Plugins";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "src/app/models/Vocabulary";
 import { PluginsServices } from "src/app/services/pluginsServices";
+import { ProjectServices } from "src/app/services/projectServices";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ModalType } from "src/app/widget/modal/Modals";
 import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
@@ -42,7 +43,7 @@ export class ProjSettingsEditorModal {
     selectedUriGenPluginConfList: Settings[]; //plugin configurations for the selected plugin (represent the choices of the <select> element of configurations)
     selectedUriGenPluginConf: Settings; //chosen configuration for the chosen uri generator plugin (selected through a <select> element)
 
-    constructor(public activeModal: NgbActiveModal, private pluginService: PluginsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+    constructor(public activeModal: NgbActiveModal, private pluginService: PluginsServices, private projectService: ProjectServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.initBlacklisting();
@@ -56,13 +57,13 @@ export class ProjSettingsEditorModal {
     initBlacklisting() {
         this.validationEnabled = this.project.isValidationEnabled();
         if (this.validationEnabled) {
-            //TODO init blacklisting according its status in project
+            this.blacklisting = this.project.isBlacklistingEnabled();
         }
     }
 
     changeBlacklisting() {
         this.blacklisting = !this.blacklisting;
-        //TODO service invocation
+        this.projectService.setBlacklistingEnabled(this.project.getName(), this.blacklisting).subscribe();
     }
 
     //================== LEX MODEL ==================
