@@ -4,7 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable } from "rxjs";
 import { map } from 'rxjs/operators';
 import { Settings } from "../models/Plugins";
-import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
+import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { RepositoriesServices } from "../services/repositoriesServices";
@@ -23,6 +23,7 @@ import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ACLEditorModal } from "./projectACL/aclEditorModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectPropertiesModal } from "./projectPropertiesModal";
+import { ProjSettingsEditorModal } from "./projectSettingsEditor/projectSettingsEditorModal";
 import { DeleteRemoteRepoModal } from "./remoteRepositories/deleteRemoteRepoModal";
 import { DeleteRepositoryReportModal } from "./remoteRepositories/deleteRepositoryReportModal";
 import { RemoteRepoEditorModal } from "./remoteRepositories/remoteRepoEditorModal";
@@ -184,7 +185,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     /**
      * Opens a modal to show the properties of the selected project
      */
-    private openPropertyModal(project: Project) {
+    openPropertyModal(project: Project) {
         const modalRef: NgbModalRef = this.modalService.open(ProjectPropertiesModal, new ModalOptions('lg'));
         modalRef.componentInstance.project = project;
         return modalRef.result;
@@ -207,7 +208,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         this.modalService.open(ProjectACLModal, new ModalOptions('full'));
     }
 
-    private editACL(project: Project) {
+    editACL(project: Project) {
         const modalRef: NgbModalRef = this.modalService.open(ACLEditorModal, new ModalOptions('sm'));
         modalRef.componentInstance.project = project;
         return modalRef.result;
@@ -216,7 +217,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     /** 
      * Opens a modal to edit the remote repositories credentials
      */
-    private editRemoteRepoCredential(project: Project) {
+    editRemoteRepoCredential(project: Project) {
         if (project.isOpen()) {
             this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS"}, ModalType.warning);
             return;
@@ -226,7 +227,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         return modalRef.result;
     }
 
-    private editDescription(project: Project) {
+    editDescription(project: Project) {
         this.basicModals.prompt({key:"MODELS.PROJECT.DESCRIPTION"}, { value: "Description" }, null, project.getDescription(), true).then(
             descr => {
                 if (descr.trim() == "") {
@@ -242,11 +243,14 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         )
     }
 
-    private editFacets(project: Project) {
+    editFacets(project: Project) {
         this.sharedModals.configurePlugin(project.getFacets()).then(facets => {
             this.projectService.setProjectFacets(project, facets).subscribe(
                 () => {
                     project.setFacets(facets); //update facets in project
+                    if (this.visualizationMode == ProjectViewMode.facet) {
+                        this.initProjects();
+                    }
                 }
             );
         }, () => {});
@@ -262,6 +266,11 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                 () => {}  //nothing changed
             );    
         });
+    }
+
+    editSettings(project: Project) {
+        const modalRef: NgbModalRef = this.modalService.open(ProjSettingsEditorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.project = project;
     }
 
     /**

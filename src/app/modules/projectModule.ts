@@ -9,6 +9,7 @@ import { ProjectACLModal } from '../project/projectACL/projectACLModal';
 import { ProjectComponent } from "../project/projectComponent";
 import { ProjectListModal } from "../project/projectListModal";
 import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
+import { ProjSettingsEditorModal } from '../project/projectSettingsEditor/projectSettingsEditorModal';
 import { ProjectTableConfigModal } from "../project/projectTableConfig/projectTableConfigModal";
 import { DeleteRemoteRepoModal } from '../project/remoteRepositories/deleteRemoteRepoModal';
 import { DeleteRepositoryReportModal } from '../project/remoteRepositories/deleteRepositoryReportModal';
@@ -33,6 +34,7 @@ import { SharedModule } from './sharedModule';
         ProjectACLModal,
         ProjectListModal, 
         ProjectPropertiesModal, 
+        ProjSettingsEditorModal,
         ProjectTableConfigModal,
         RemoteRepoEditorModal,
     ],
@@ -45,6 +47,7 @@ import { SharedModule } from './sharedModule';
         ProjectACLModal,
         ProjectListModal, 
         ProjectPropertiesModal, 
+        ProjSettingsEditorModal,
         ProjectTableConfigModal,
         RemoteRepoEditorModal,
     ]

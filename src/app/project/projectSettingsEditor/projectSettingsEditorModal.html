@@ -1,0 +1,122 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{'PROJECTS.ACTIONS.EDIT_SETTINGS'|translate}}</h3>
+</div>
+<div class="modal-body vbox scrollableContainer">
+
+    
+
+    <div class="card mb-2">
+        <div class="card-body">
+            <!-- LEX MODEL -->
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</label>
+                <div class="col-sm-10">
+                    <select class="form-control" [(ngModel)]="lexModel" (ngModelChange)="changeLexModel()">
+                        <option *ngFor="let lm of lexModelList" [ngValue]="lm">{{lm.label}}</option>
+                    </select>
+                </div>
+            </div>
+            <!-- BLACKLISTING -->        
+            <div *ngIf="validationEnabled" class="form-group row">
+                <label class="col-form-label col-sm-2">{{'PROJECTS.BLACKLIST'|translate}}:</label>
+                <div class="col-sm-10 d-flex align-items-center">
+                    <button class="btn btn-light btn-sm" [ngClass]="{ active: blacklisting }" (click)="changeBlacklisting()">
+                        <b *ngIf="blacklisting" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
+                        <b *ngIf="!blacklisting" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div *ngIf="validationEnabled" class="form-check form-check-inline">
+        <input class="form-check-input" id="blacklistCheck" type="checkbox" [(ngModel)]="blacklisting">
+        <label class="form-check-label" for="blacklistCheck">
+            {{'PROJECTS.BLACKLIST'|translate}}
+            <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.BLACKLIST_INFO'|translate"></span>
+        </label>
+    </div>
+
+    <div *ngIf="validationEnabled" class="card">
+        <div class="card-body hbox">
+            <label>{{'PROJECTS.BLACKLIST'|translate}}:</label>
+            <button class="btn btn-sm" [ngClass]="{ active: blacklisting }" (click)="changeBlacklisting()">
+                <span *ngIf="blacklisting" class="text-success">{{'STATUS.ACTIVE'|translate}}</span>
+                <span *ngIf="!blacklisting" class="text-danger">{{'STATUS.INACTIVE'|translate}}</span>
+            </button>
+        </div>
+    </div> -->
+    
+    <!-- RENDERING ENGINE -->
+    <div class="card mb-2">
+        <div class="card-header">
+            <label>{{'PROJECTS.RENDERING_ENGINE'|translate}}</label>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2">Plugin:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" [(ngModel)]="selectedRendEngPlugin" (ngModelChange)="onRendEngineChanged()">
+                        <option *ngFor="let rep of rendEngPluginList" [ngValue]="rep">{{rep.factoryID.substring(rep.factoryID.lastIndexOf('.')+1)}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}:</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <select class="form-control" [(ngModel)]="selectedRendEngPluginConf">
+                            <option *ngFor="let repConf of selectedRendEngPluginConfList" [ngValue]="repConf">{{repConf.shortName}}</option>
+                        </select>
+                        <span class="input-group-append">
+                            <button class="btn btn-light" (click)="configureRenderingEngine()">
+                                {{'COMMONS.CONFIG.CONFIGURE'|translate}}
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button type="submit" class="btn btn-info btn-sm" (click)="updateRenderingEngine()">{{'ACTIONS.SUBMIT'|translate}}</button>
+        </div>
+    </div>
+
+    <!-- URI GENERATOR-->
+
+    <div class="card mb-2">
+        <div class="card-header">
+            <label>{{'PROJECTS.URI_GENERATOR'|translate}}</label>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2">Plugin</label>
+                <div class="col-sm-10">
+                    <select class="form-control" [(ngModel)]="selectedUriGenPlugin" (ngModelChange)="onUriGeneratorChanged()">
+                        <option *ngFor="let ugp of uriGenPluginList" [ngValue]="ugp">{{ugp.factoryID.substring(ugp.factoryID.lastIndexOf('.')+1)}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <select class="form-control" [(ngModel)]="selectedUriGenPluginConf">
+                            <option *ngFor="let ugpConf of selectedUriGenPluginConfList" [ngValue]="ugpConf">{{ugpConf.shortName}}</option>
+                        </select>
+                        <span class="input-group-append">
+                            <button class="btn btn-light" (click)="configureUriGenerator()">{{'COMMONS.CONFIG.CONFIGURE'|translate}}</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button type="submit" class="btn btn-info btn-sm" (click)="updateUriGenerator()">{{'ACTIONS.SUBMIT'|translate}}</button>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-light btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
+</div>

@@ -603,8 +603,8 @@ export class CreateProjectComponent {
 
     private configureRendEngConf() {
         this.sharedModals.configurePlugin(this.selectedRendEngPluginConf).then(
-            (config: any) => {
-                this.selectedRendEngPluginConf.properties = (<Settings>config).properties;
+            (config: Settings) => {
+                this.selectedRendEngPluginConf.properties = config.properties;
             },
             () => { }
         )

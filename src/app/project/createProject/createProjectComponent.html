@@ -2,13 +2,13 @@
 
     <div class="card card-default vbox">
         <div class="card-header">
-            <label>{{'ACTIONS.CREATE_PROJECT'|translate}}:</label>
+            <label>{{'ACTIONS.CREATE_PROJECT'|translate}}</label>
         </div>
 
         <div class="card-body scrollableContainer">
 
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">{{'PROJECTS.PROJECT_NAME'|translate}}:</label>
+                <label class="col-form-label col-sm-1">{{'PROJECTS.PROJECT_NAME'|translate}}</label>
                 <div class="col-sm-11">
                     <input type="text" class="form-control" [(ngModel)]="projectName"
                         [placeholder]="'PROJECTS.PROJECT_NAME'|translate" (ngModelChange)="onProjectNameChange()" sanitized>
@@ -16,7 +16,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">{{'PROJECTS.PRELOAD.DATA_PRELOADING'|translate}}:</label>
+                <label class="col-form-label col-sm-1">{{'PROJECTS.PRELOAD.DATA_PRELOADING'|translate}}</label>
                 <div class="col-sm-3">
                     <select class="form-control" [(ngModel)]="selectedPreloadOpt" (ngModelChange)="onPreloadChange()">
                         <option *ngFor="let p of preloadOptList" [value]="p">{{p|translate}}</option>
@@ -26,7 +26,7 @@
                     <div class="hbox" style="align-items: center">
                         <div *ngIf="selectedPreloadOpt == preloadOptFromLocalFile" class="hbox" style="align-items: center">
                             <file-picker (fileChanged)="preloadFromFileChanged($event)" [file]="preloadFile" [accept]="filePickerAccept"></file-picker>
-                            <label style="margin-left: 8px;">{{'COMMONS.FORMAT'|translate}}:</label>
+                            <label style="margin-left: 8px;">{{'COMMONS.FORMAT'|translate}}</label>
                             <select class="form-control" style="margin-left: 5px; width: initial" [(ngModel)]="selectedInputFormat">
                                 <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
                             </select>
@@ -61,7 +61,7 @@
                 </div>
                 <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-3">
                     <div class="hbox" style="align-items: center;">
-                        <label>{{'METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.TRANSITIVE_IMPORTS'|translate}}:</label>
+                        <label>{{'METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.TRANSITIVE_IMPORTS'|translate}}</label>
                         <select class="form-control" style="margin-left: 5px;" [(ngModel)]="selectedImportAllowance">
                             <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.showTranslationKey|translate}}</option>
                         </select>                    
@@ -70,7 +70,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.BASE_URI'|translate}}:</label>
+                <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.BASE_URI'|translate}}</label>
                 <div class="col-sm-11">
 
                     <div class="hbox" style="align-items: center">
@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.MODEL'|translate}}:</label>
+                <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.MODEL'|translate}}</label>
                 <div class="col-sm-3">
                     <div class="hbox" style="align-items: center">
                         <select class="form-control" [(ngModel)]="ontoModelType" (ngModelChange)="onOntoModelChanged()" [disabled]="ontoModelLocked">
@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <ng-container *ngIf="!isEdoalProject(); else edoalBlock">
-                    <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}:</label>
+                    <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</label>
                     <div class="col-sm-4">
                         <div class="hbox" style="align-items: center">
                             <select class="form-control" [(ngModel)]="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
@@ -120,7 +120,7 @@
                 </ng-container>
                 <ng-template #edoalBlock>
                     <label class="col-form-label col-sm-1">
-                        {{'PROJECTS.LEFT_RIGHT'|translate}}:
+                        {{'PROJECTS.LEFT_RIGHT'|translate}}
                         <span class="fas fa-info-circle" [title]="'PROJECTS.LEFT_RIGHT_INFO'|translate"></span>
                     </label>
                     <div class="col-sm-4">
@@ -168,7 +168,7 @@
                 <div class="card-body">
 
                     <div class="form-group row">
-                        <label class="col-form-label col-sm-2">{{'MODELS.PROJECT.REPO_ACCESS'|translate}}:</label>
+                        <label class="col-form-label col-sm-2">{{'MODELS.PROJECT.REPO_ACCESS'|translate}}</label>
                         <div class="col-sm-10">
                             <div class="hbox">
                                 <select class="form-control" style="flex: 4" [(ngModel)]="selectedRepositoryAccess" (ngModelChange)="onRepoAccessChange()">
@@ -278,7 +278,7 @@
                         <img src="./assets/images/icons/arrow.png" (click)="extPointPanelOpen = !extPointPanelOpen"
                             [ngClass]="{'arrow-right' : !extPointPanelOpen}">
                     </div>
-                    <label style="flex: 1">{{'PROJECTS.OPTIONAL_SETTINGS'|translate}}:</label>
+                    <label style="flex: 1">{{'PROJECTS.OPTIONAL_SETTINGS'|translate}}</label>
                 </div>
                 <div class="card-body" *ngIf="extPointPanelOpen">
 
@@ -293,7 +293,7 @@
                         <div class="card-body">
                             <ng-container *ngIf="!uriGenUseDefaultSetting">
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">Plugin:</label>
+                                    <label class="col-form-label col-sm-1">Plugin</label>
                                     <div class="col-sm-11">
                                         <select class="form-control" [(ngModel)]="selectedUriGenPlugin" (ngModelChange)="onUriGenPluginChanged()">
                                             <option *ngFor="let ugp of uriGenPluginList" [ngValue]="ugp">
@@ -303,7 +303,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}:</label>
+                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
                                             <select class="form-control" [(ngModel)]="selectedUriGenPluginConf">
@@ -332,7 +332,7 @@
                         <div class="card-body">
                             <ng-container *ngIf="!rendEngUseDefaultSetting">
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">Plugin:</label>
+                                    <label class="col-form-label col-sm-1">Plugin</label>
                                     <div class="col-sm-11">
                                         <select class="form-control" [(ngModel)]="selectedRendEngPlugin" (ngModelChange)="onRendEnginePluginChanged()"
                                             [disabled]="rendEngUseDefaultSetting">
@@ -343,7 +343,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}:</label>
+                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
                                             <select class="form-control" [(ngModel)]="selectedRendEngPluginConf" [disabled]="rendEngUseDefaultSetting">
@@ -386,7 +386,7 @@
                                     <tbody>
                                         <tr *ngFor="let ma of metadataAssociations; let last = last">
                                             <td class="text-rigth" nowrap>
-                                                <label>{{'MODELS.RESOURCE.RESOURCE_TYPE'|translate}}:</label>
+                                                <label>{{'MODELS.RESOURCE.RESOURCE_TYPE'|translate}}</label>
                                             </td>
                                             <td>
                                                 <select class="form-control" [(ngModel)]="ma.role">
@@ -394,7 +394,7 @@
                                                 </select>
                                             </td>
                                             <td class="text-rigth" nowrap>
-                                                <label>Pattern:</label>
+                                                <label>Pattern</label>
                                             </td>
                                             <td>
                                                 <div class="input-group">

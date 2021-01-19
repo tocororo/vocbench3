@@ -82,7 +82,7 @@
                                             <button class="btn btn-xs btn-light" (click)="deleteProject(p)" style="margin-left: 10px;">
                                                 <span class="far fa-trash-alt"></span>
                                             </button>
-                                            <div class="ml-1" ngbDropdown>
+                                            <div class="ml-1" ngbDropdown container="body">
                                                 <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle">
                                                     <span class="fas fa-caret-down"></span>
                                                 </button>
@@ -91,6 +91,7 @@
                                                     <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
                                                     <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
                                                     <button class="dropdown-item" (click)="editFacets(p)">{{'PROJECTS.ACTIONS.EDIT_FACETS'|translate}}</button>
+                                                    <button class="dropdown-item" (click)="editSettings(p)" [disabled]="p.isOpen()">{{'PROJECTS.ACTIONS.EDIT_SETTINGS'|translate}}</button>
                                                     <div class="dropdown-divider"></div>
                                                     <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.SHOW_PROPERTIES'|translate}}</button>
                                                 </div>
@@ -147,7 +148,7 @@
                                 <button class="btn btn-xs btn-light" (click)="deleteProject(p)" style="margin-left: 10px;">
                                     <span class="far fa-trash-alt"></span>
                                 </button>
-                                <div placement="bottom-right" ngbDropdown>
+                                <div placement="bottom-right" ngbDropdown container="body">
                                     <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle">
                                         <span class="fas fa-caret-down"></span>
                                     </button>
@@ -156,6 +157,7 @@
                                         <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
                                         <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
                                         <button class="dropdown-item" (click)="editFacets(p)">{{'PROJECTS.ACTIONS.EDIT_FACETS'|translate}}</button>
+                                        <button class="dropdown-item" (click)="editSettings(p)" [disabled]="p.isOpen()">{{'PROJECTS.ACTIONS.EDIT_SETTINGS'|translate}}</button>
                                         <div class="dropdown-divider"></div>
                                         <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.SHOW_PROPERTIES'|translate}}</button>
                                     </div>
