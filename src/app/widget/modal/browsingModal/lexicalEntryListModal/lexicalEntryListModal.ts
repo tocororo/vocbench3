@@ -1,12 +1,11 @@
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext, VBContext } from "../../../../utils/VBContext";
-import { ModalOptions, TextOrTranslation } from '../../Modals';
-import { BrowsingModalServices } from "../browsingModalServices";
 import { LexiconListModal } from "../lexiconListModal/lexiconListModal";
 
 @Component({
@@ -29,8 +28,7 @@ export class LexicalEntryListModal {
     multiselection: boolean = false;
 
     constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private resourceService: ResourcesServices,
-        private browsingModals: BrowsingModalServices,
-        private elementRef: ElementRef) {
+        private translateService: TranslateService, private elementRef: ElementRef) {
     }
 
     ngOnInit() {
@@ -56,7 +54,10 @@ export class LexicalEntryListModal {
     }
 
     changeLexicon() {
-        this.browsingModals.browseLexiconList({key:"ACTIONS.SELECT_LEXICON"}).then(
+        //cannot use BrowsingModalServices since it would cause a circular dependency (this modal is opened by BrowsingModalServices and has the same injected)
+        const modalRef: NgbModalRef = this.modalService.open(LexiconListModal);
+        modalRef.componentInstance.title = this.translateService.instant("ACTIONS.SELECT_LEXICON");
+        modalRef.result.then(
             (lexicon: ARTURIResource) => {
                 this.activeLexicon = lexicon;
             },

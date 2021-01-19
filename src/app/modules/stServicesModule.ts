@@ -53,6 +53,7 @@ import { UserServices } from "../services/userServices";
 import { UsersGroupsServices } from "../services/usersGroupsServices";
 import { ValidationServices } from "../services/validationServices";
 import { VersionsServices } from "../services/versionsServices";
+import { LexicographerViewServices } from '../services/lexicographerViewServices';
 
 @NgModule({
     imports: [HttpClientModule],
@@ -81,6 +82,7 @@ import { VersionsServices } from "../services/versionsServices";
         IndividualsServices,
         InputOutputServices,
         InvokableReportersServices,
+        LexicographerViewServices,
         ManchesterServices,
         MapleServices,
         MetadataServices,

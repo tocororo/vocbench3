@@ -10,6 +10,7 @@ import { CollectionTreeModal } from "./collectionTreeModal/collectionTreeModal";
 import { ConceptTreeModal } from "./conceptTreeModal/conceptTreeModal";
 import { DatatypeListModal } from './datatypeListModal/datatypeListModal';
 import { InstanceListModal } from "./instanceListModal/instanceListModal";
+import { LexicalEntryListModal } from './lexicalEntryListModal/lexicalEntryListModal';
 import { LexiconListModal } from './lexiconListModal/lexiconListModal';
 import { PropertyTreeModal } from "./propertyTreeModal/propertyTreeModal";
 import { SchemeListModal } from "./schemeListModal/schemeListModal";
@@ -138,7 +139,7 @@ export class BrowsingModalServices {
     browseLexicalEntryList(title: TextOrTranslation, lexicon?: ARTURIResource, lexiconChangeable?: boolean, editable?: boolean, deletable?: boolean,
         allowMultiselection?: boolean, projectCtx?: ProjectContext) {
         let _options: ModalOptions = new ModalOptions();
-        const modalRef: NgbModalRef = this.modalService.open(ClassTreeModal, _options);
+        const modalRef: NgbModalRef = this.modalService.open(LexicalEntryListModal, _options);
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (lexicon != null) modalRef.componentInstance.lexicon = lexicon;
         if (lexiconChangeable != null) modalRef.componentInstance.lexiconChangeable = lexiconChangeable;

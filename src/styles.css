@@ -194,6 +194,10 @@ resource-list, class-individual-tree, scheme-selection, data-range-editor, impor
     padding: 10px;
 }
 
+button > rdf-resource {
+    vertical-align: middle;
+}
+
 /* Ellipsis of the content of a rdf-resource in a button, in a navigation tab (ResView tabs), and in a .card-header (heading of ResView) */
 /* button > rdf-resource > span, .nav-tabs rdf-resource > span,
 .card-header rdf-resource > span, .tile rdf-resource > span { */
