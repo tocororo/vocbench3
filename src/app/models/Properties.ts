@@ -82,6 +82,7 @@ export enum ResourceViewMode {
 export enum ResourceViewType { //used for set a default type of resource view for concepts
     resourceView = "resourceView",
     termView = "termView",
+    lexicographerView = "lexicographerView",
     sourceCode = "sourceCode"
 }
 

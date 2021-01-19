@@ -1,0 +1,26 @@
+<div class="card card-default vbox blockingDivHost">
+    <div class="card-header">
+        <rdf-resource style="flex: 1;" *ngIf="resource" [resource]="resource"></rdf-resource>
+        <input class="form-control form-control-sm" [ngModel]="resource.getNominalValue()" readonly>
+
+        <button class="btn btn-xs btn-light" style="margin-left: 3px;" (click)="buildLexicographerView(resource)" [title]="'ACTIONS.REFRESH'|translate">
+            <span class="fas fa-redo"></span>
+        </button>
+        <!-- <button class="btn btn-light btn-xs" style="margin-left: 3px;" (click)="openSettings()" [title]="'COMMONS.SETTINGS'|translate">
+            <span class="fas fa-cog"></span>
+        </button> -->
+    </div>
+    <div *ngIf="resource" class="card-body scrollableContainer">
+        {{lv | json}}
+    </div>
+    <div class="card-footer" style="min-height: 31px;"></div>
+
+    <div #blockDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="./assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>

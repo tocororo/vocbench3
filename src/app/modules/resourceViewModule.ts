@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { ResourceTripleEditorComponent } from '../resourceView/resourceTripleEditor/resourceTripleEditorComponent';
+import { LexicographerViewComponent } from '../resourceView/lexicographerView/lexicographerViewComponent';
 import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
 import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/classAxiomPartitionRenderer';
@@ -66,11 +66,10 @@ import { LanguageBoxComponent } from '../resourceView/termView/languageBox/langu
 import { LanguageDefinitionComponent } from '../resourceView/termView/languageDefinition/languageDefinition';
 import { LanguageTermComponent } from '../resourceView/termView/languageTerm/languageTerm';
 import { TermViewComponent } from '../resourceView/termView/termViewComponent';
+import { ResourceTripleEditorComponent } from '../resourceView/tripleEditor/resourceTripleEditorComponent';
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
-
-
 
 @NgModule({
     imports: [
@@ -86,6 +85,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         EditableResourceComponent,
         InlineEditableValue,
         LanguageBoxComponent,
+        LexicographerViewComponent,
         ReifiedResourceComponent,
         ResourceRenameComponent,
         TermViewComponent,

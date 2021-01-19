@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
 import { ResourceViewPreference, ResourceViewType } from '../../models/Properties';
-import { SKOS } from "../../models/Vocabulary";
+import { OntoLex, SKOS } from "../../models/Vocabulary";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
@@ -20,8 +20,9 @@ export class ResourceViewTabContainer {
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
-    private resourceFormStruct: ResViewStruct = { type: ResourceViewType.resourceView, show: "ResView" };
-    private simplifiedFormStruct: ResViewStruct = { type: ResourceViewType.termView, show: "TermView" };
+    private resourceViewStruct: ResViewStruct = { type: ResourceViewType.resourceView, show: "ResView" };
+    private termViewStruct: ResViewStruct = { type: ResourceViewType.termView, show: "TermView" };
+    private lexicographerViewStruct: ResViewStruct = { type: ResourceViewType.lexicographerView, show: "LexicographerView" };
     private sourceCodeStruct: ResViewStruct = { type: ResourceViewType.sourceCode, show: "Code" };
     rViews: ResViewStruct[];
     activeView: ResourceViewType = ResourceViewType.resourceView;
@@ -39,13 +40,14 @@ export class ResourceViewTabContainer {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource']) {
-            this.rViews = [this.resourceFormStruct];
-            //add the simplified form if available
-            if (
-                this.resource.getRole() == RDFResourceRolesEnum.concept && 
-                VBContext.getWorkingProject().getModelType() == SKOS.uri
-            ) {
-                this.rViews.push(this.simplifiedFormStruct)
+            this.rViews = [this.resourceViewStruct];
+            //add the term view if available
+            if (this.resource.getRole() == RDFResourceRolesEnum.concept && VBContext.getWorkingProject().getModelType() == SKOS.uri) {
+                this.rViews.push(this.termViewStruct)
+            }
+            //add the lexicographer view if available
+            if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry && VBContext.getWorkingProject().getModelType() == OntoLex.uri) {
+                this.rViews.push(this.lexicographerViewStruct)
             }
             //add the source code editor if available
             if (this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesGetResourceTriplesDescription, this.resource)) {

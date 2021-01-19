@@ -3,6 +3,7 @@
         (dblclickObj)="onObjectDblClick($event)" (update)="onResourceUpdate($event)" (pendingValidation)="pendingValidation = $event">
     </resource-view-editor>
     <term-view *ngIf="activeView == 'termView'" [resource]="resource" (update)="onResourceUpdate($event)"></term-view>
+    <lexicographer-view *ngIf="activeView == 'lexicographerView'" [resource]="resource" (update)="onResourceUpdate($event)"></lexicographer-view>
     <resource-triple-editor *ngIf="activeView == 'sourceCode'" [resource]="resource" [pendingValidation]="pendingValidation" 
         (update)="onResourceUpdate($event)">
     </resource-triple-editor>
