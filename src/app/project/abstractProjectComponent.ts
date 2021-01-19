@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from "rxjs";
-import { Project, ProjectViewMode } from "../models/Project";
+import { Project, ProjectFacets, ProjectViewMode } from "../models/Project";
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from '../services/projectServices';
 import { UserServices } from "../services/userServices";
@@ -66,7 +66,7 @@ export abstract class AbstractProjectComponent {
     abstract initProjectList(): void;
 
     protected initProjectDirectories(): void {
-        let bagOfFacet = Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
+        let bagOfFacet = this.getCurrentFacetBagOf();
         this.projectService.retrieveProjects(bagOfFacet).subscribe(
             projectBags => {
                 this.projectDirs = [];
@@ -80,7 +80,19 @@ export abstract class AbstractProjectComponent {
                     else if (d2.dir == null || d2.dir == "") return -1;
                     else return d1.dir.localeCompare(d2.dir);
                 });
-                //TODO handle open/close directory
+                //init open/close directory according the stored cookie
+                let collapsedDirs: string[] = this.retrieveCollapsedDirectoriesCookie();
+                this.projectDirs.forEach(pd => {
+                    pd.open = !collapsedDirs.includes(pd.dir);
+                });
+                //init dir displayName (e.g.: prjLexModel and prjModel have values that can be written as RDFS, OWL, SKOS...)
+                this.projectDirs.forEach(pd => pd.dirDisplayName = pd.dir); //init with the same dir as default
+                if (bagOfFacet == ProjectFacets.prjLexModel || bagOfFacet == ProjectFacets.prjModel) {
+                    this.projectDirs.forEach(pd => {
+                        pd.dirDisplayName = Project.getPrettyPrintModelType(pd.dir);
+                    })
+                }
+                
             }
         )
     }
@@ -119,19 +131,36 @@ export abstract class AbstractProjectComponent {
                 collapsedDirs.push(dirNameValue);
             }
         })
-        Cookie.setCookie(Cookie.PROJECT_COLLAPSED_DIRS, collapsedDirs.join(","));
+        let cds: CollapsedDirStore = {
+            facet: this.getCurrentFacetBagOf(),
+            dirs: collapsedDirs
+        }
+        Cookie.setCookie(Cookie.PROJECT_COLLAPSED_DIRS, JSON.stringify(cds));
     }
 
     protected retrieveCollapsedDirectoriesCookie(): string[] {
-        let collapsedDirs: string[] = [];
+        let cds: CollapsedDirStore;
         let collapsedDirsCookie: string = Cookie.getCookie(Cookie.PROJECT_COLLAPSED_DIRS)
         if (collapsedDirsCookie != null) {
-            collapsedDirs = collapsedDirsCookie.split(",");
+            try { //cookie might be not parsed, in case return empty list
+                cds = JSON.parse(collapsedDirsCookie);
+            } catch {
+                return [];
+            }
         }
-        collapsedDirs.forEach((dir, index, list) => { //replace the serialized "null" directory with the null value
-            if (dir == "null") list[index] = null;
-        });
-        return collapsedDirs;
+        if (cds.facet == this.getCurrentFacetBagOf()) {
+            let collapsedDirs = cds.dirs;
+            collapsedDirs.forEach((dir, index, list) => { //replace the serialized "null" directory with the null value
+                if (dir == "null") list[index] = null;
+            });
+            return collapsedDirs;
+        } else {
+            return [];
+        }
+    }
+
+    private getCurrentFacetBagOf() {
+        return Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
     }
 
     settings() {
@@ -148,6 +177,7 @@ export abstract class AbstractProjectComponent {
 
 export class ProjectDirEntry {
     dir: string;
+    dirDisplayName: string;
     open: boolean;
     projects: Project[];
     constructor(dir: string) {
@@ -155,4 +185,9 @@ export class ProjectDirEntry {
         this.open = true;
         this.projects = [];
     }
+}
+
+interface CollapsedDirStore {
+    facet: string; //facet needed to check that the current facet (on which the bag-of is based) is the same of the stored cookie
+    dirs: string[];
 }

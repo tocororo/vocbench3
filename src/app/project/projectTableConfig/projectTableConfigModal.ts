@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
-import { DynamicSettingProp, SettingsProp, STProperties } from "src/app/models/Plugins";
+import { STProperties } from "src/app/models/Plugins";
 import { ProjectServices } from "src/app/services/projectServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode } from "../../models/Project";
@@ -39,7 +39,9 @@ export class ProjectTableConfigModal {
         }
         this.selectedFacet = Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
 
-        this.initColumnTable();
+        if (this.isAdmin) {
+            this.initColumnTable();
+        }
         this.initFacets();
     }
 
@@ -47,7 +49,7 @@ export class ProjectTableConfigModal {
         this.projectService.getFacetsAndValue().subscribe(
             facetsAndValues => {
                 Object.keys(facetsAndValues).forEach(facetName => {
-                    this.facets.push({ name: facetName, displayName: facetName }); //temporarly set displayName the same facet name
+                    this.facets.push({ name: facetName, displayName: null });
                 });
                 //compute the display name:
                 //- translate the built-in project facets (e.g. lex model, history, ...)
@@ -60,27 +62,31 @@ export class ProjectTableConfigModal {
                 //- get the display name of other facets
                 this.projectService.getProjectFacetsForm().subscribe(
                     facetsForm => {
-                        let displayName: string;
                         this.facets.forEach(f => {
+                            if (f.displayName != null) return; //display name already computed
                             //search between factory provided facets
                             let prop = facetsForm.getProperty(f.name);
                             if (prop != null) {
-                                displayName = prop.displayName;
+                                f.displayName = prop.displayName;
+                                return;
                             }
                             //if facet not found among the factory provided search among the custom ones
-                            if (displayName == null) {
-                                let customFacets: STProperties  = facetsForm.getProperty("customFacets");
-                                let customFacetsProps: STProperties[] = customFacets.type.schema.properties;
-                                for (let cf of customFacetsProps) {
-                                    if (cf.name == f.name) {
-                                        displayName = cf.displayName;
-                                    }
+                            let customFacets: STProperties  = facetsForm.getProperty("customFacets");
+                            let customFacetsProps: STProperties[] = customFacets.type.schema.properties;
+                            for (let cf of customFacetsProps) {
+                                if (cf.name == f.name) {
+                                    f.displayName = cf.displayName;
+                                    return;
                                 }
                             }
-                            if (displayName != null) {
-                                f.displayName = displayName;
-                            }
                         });
+
+                        //for those facets which display name has not been computed, set the same facet name
+                        this.facets.forEach(f => {
+                            if (f.displayName == null) {
+                                f.displayName = f.name;
+                            }
+                        })
                         
                         //sort facets according display name
                         this.facets.sort((f1, f2) => f1.displayName.localeCompare(f2.displayName));
@@ -153,16 +159,22 @@ export class ProjectTableConfigModal {
     ok() {
         let oldModeCookie = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE);
         let newModeCookie = this.selectedVisualizationMode.mode;
-        Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, newModeCookie);
-
+        if (oldModeCookie != newModeCookie) {
+            Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, newModeCookie);
+        }
+        
         let oldFacetCookie = Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
         let newFacetCookie = this.selectedFacet;
-        Cookie.setCookie(Cookie.PROJECT_FACET_BAG_OF, newFacetCookie);
-
+        if (oldFacetCookie != newFacetCookie) {
+            Cookie.setCookie(Cookie.PROJECT_FACET_BAG_OF, newFacetCookie);
+        }
+        
         let oldColumnsCookie = Cookie.getCookie(Cookie.PROJECT_TABLE_ORDER);
         let newColumnCookie = this.columns.filter(c => c.show).map(c => c.id).join(",");
-        Cookie.setCookie(Cookie.PROJECT_TABLE_ORDER, newColumnCookie);
-
+        if (this.isAdmin && oldColumnsCookie != newColumnCookie) {
+            Cookie.setCookie(Cookie.PROJECT_TABLE_ORDER, newColumnCookie);
+        }
+        
         if (oldModeCookie != newModeCookie || oldFacetCookie != newFacetCookie || oldColumnsCookie != newColumnCookie) { //close if something changed
             this.activeModal.close();
         } else { //if nothing changed, simply dismiss the modal

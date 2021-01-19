@@ -37,7 +37,7 @@
                                 <span [class]="'fas fa-chevron-' + (pd.open ? 'down' : 'right')"></span>
                                 <span [class]="'fas fa-folder' + (pd.open ? '-open' : '')" style="margin-left: 4px;"></span>
                                 <label class="clickable" style="margin-left: 4px;">
-                                    <ng-container *ngIf="pd.dir">{{pd.dir}}</ng-container>
+                                    <ng-container *ngIf="pd.dir">{{pd.dirDisplayName}}</ng-container>
                                     <ng-container *ngIf="!pd.dir">Unclassified</ng-container>
                                 </label>
                             </div>

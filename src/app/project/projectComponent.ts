@@ -23,7 +23,6 @@ import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ACLEditorModal } from "./projectACL/aclEditorModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectPropertiesModal } from "./projectPropertiesModal";
-import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
 import { DeleteRemoteRepoModal } from "./remoteRepositories/deleteRemoteRepoModal";
 import { DeleteRepositoryReportModal } from "./remoteRepositories/deleteRepositoryReportModal";
 import { RemoteRepoEditorModal } from "./remoteRepositories/remoteRepoEditorModal";
