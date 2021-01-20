@@ -165,7 +165,9 @@ export class BasicModalServices {
     select(title: TextOrTranslation, msg: TextOrTranslation, options: Array<string|SelectionOption>, type?: ModalType) {
         const modalRef: NgbModalRef = this.modalService.open(SelectionModal, new ModalOptions());
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
+        if (msg != null) {
+            modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
+        }
         modalRef.componentInstance.options = options;
         if (type != null) modalRef.componentInstance.type = type;
         return modalRef.result;

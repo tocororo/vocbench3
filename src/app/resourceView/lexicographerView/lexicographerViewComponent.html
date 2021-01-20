@@ -6,13 +6,34 @@
         <button class="btn btn-xs btn-light" style="margin-left: 3px;" (click)="buildLexicographerView(resource)" [title]="'ACTIONS.REFRESH'|translate">
             <span class="fas fa-redo"></span>
         </button>
-        <!-- <button class="btn btn-light btn-xs" style="margin-left: 3px;" (click)="openSettings()" [title]="'COMMONS.SETTINGS'|translate">
+        <button class="btn btn-light btn-xs" style="margin-left: 3px;" (click)="openSettings()" [title]="'COMMONS.SETTINGS'|translate">
             <span class="fas fa-cog"></span>
-        </button> -->
+        </button>
     </div>
-    <div *ngIf="resource" class="card-body scrollableContainer">
-        {{lv | json}}
+
+    <div *ngIf="lemma" class="card-body scrollableContainer">
+
+        <h2 style="font-family: serif; font-style: italic; font-weight: bold;">{{lemma[0].writtenRep[0].getValue()}}</h2>
+        
+        <div *ngFor="let f of otherForms" class="mt-2">
+            {{f.writtenRep[0].getValue()}}
+        </div>
+
+        <div *ngFor="let s of senses" class="sense mt-2">
+            <div *ngFor="let def of s.definition">
+                <rdf-resource [resource]="def"></rdf-resource>
+            </div>
+            <div *ngFor="let c of s.concept">
+                <label>Concept:</label>
+                <rdf-resource [resource]="c"></rdf-resource>
+            </div>
+            <div *ngFor="let ref of s.reference" class="d-flex align-items-center">
+                <label>Semantic reference:</label>
+                <rdf-resource [resource]="ref"></rdf-resource>
+            </div>
+        </div>
     </div>
+
     <div class="card-footer" style="min-height: 31px;"></div>
 
     <div #blockDiv class="blockingDiv" style="display:none">

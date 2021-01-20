@@ -3,6 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Cookie } from "src/app/utils/Cookie";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
@@ -107,6 +108,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
 
         this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
         this.indexLenght = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.indexLength;
+        this.initIndex();
         this.onDigitChange();
     }
 
@@ -299,8 +301,30 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         );
     }
 
+    private initIndex() {
+        //init firstDigitIndex and secondDigitIndex restoring the last selection from cookie (if set)
+        let lastIdxsCookie: string = Cookie.getCookie(Cookie.LEX_ENTRY_LAST_INDEX);
+        if (lastIdxsCookie != null) {
+            lastIdxsCookie = lastIdxsCookie.toUpperCase();
+            if (lastIdxsCookie.length == 1) {
+                this.firstDigitIndex = lastIdxsCookie;
+            } else if (lastIdxsCookie.length == 2) {
+                this.firstDigitIndex = lastIdxsCookie.charAt(0);
+                this.secondDigitIndex = lastIdxsCookie.charAt(1);
+            }
+            //check if the two digits are admitted values (otherwise set AA)
+            if (!this.alphabet.includes(this.firstDigitIndex)) {
+                this.firstDigitIndex = this.alphabet[0];
+            }
+            if (!this.alphabet.includes(this.secondDigitIndex) && this.secondDigitIndex != " ") {
+                this.secondDigitIndex = this.alphabet[0];
+            }
+        }
+    }
+
     private onDigitChange() {
         this.index = (this.indexLenght == 1) ? this.firstDigitIndex : this.firstDigitIndex + this.secondDigitIndex;
+        Cookie.setCookie(Cookie.LEX_ENTRY_LAST_INDEX, this.index);
         this.indexChanged.emit(this.index);
     }
 

@@ -1040,7 +1040,31 @@
     "NOTIFICATIONS": {
         "NOTIFICATIONS": "Notifications",
         "NOTIFICATION_SETTINGS": "Notification Settings",
-        "CLEAR_NOTIFICATIONS": "Clear notifications"
+        "CLEAR_NOTIFICATIONS": "Clear notifications",
+        "SETTINGS": {
+            "TYPE_EVENT_NOTIFICATIONS": "Type-event notifications",
+            "TYPE_EVENT_NOTIFICATIONS_INFO": "For each type of resource you can select the events for which you want to receive notifications",
+            "ENABLE_ALL": "Enable all notifications",
+            "DISABLE_ALL": "Disable all notifications",
+            "ENABLE_ALL_FOR_TYPE": "Enable all actions for this type",
+            "DISABLE_ALL_FOR_TYPE": "Disable all actions for this type",
+            "WATCHING_RESOURCES": "Watching resources",
+            "NO_RESOURCE_WATCHING_MSG": [
+                "You did not enabled notifications on any resources. You can start watching resources by clicking on the",
+                "button placed on the toolbar of a ResourceView."
+            ],
+            "STOP_WATCHING_RES": "Stop watching resource",
+            "MODES": {
+                "NO_NOTIFICATIONS": "No notifications",
+                "NO_NOTIFICATIONS_INFO": "You will not receive any notification",
+                "IN_APP": "In-app only",
+                "IN_APP_INFO": "You will be able to read notifications only in app from a dedicated page",
+                "EMAIL_INSTANT": "Email (instant)",
+                "EMAIL_INSTANT_INFO": "You will receive email instantly",
+                "EMAIL_DAILY": "Email (daily digest)",
+                "EMAIL_DAILY_INFO": "You will receive a daily email report"
+            }
+        }
     },
     "PREFERENCES": {
         "VB_PREFS": "VocBench Preferences",
@@ -1064,47 +1088,6 @@
                 "VALUE_FILTER_LANGS": "Value-filter Languages",
                 "DESCRIPTION": "Select the languages that will be shown when filtering literal values in resource descriptions. Toggle the filter in order to hide the values with the unselected languages."
             }
-        },
-        "NOTIFICATIONS": {
-            "TYPE_EVENT_NOTIFICATIONS": "Type-event notifications",
-            "TYPE_EVENT_NOTIFICATIONS_INFO": "For each type of resource you can select the events for which you want to receive notifications",
-            "ENABLE_ALL": "Enable all notifications",
-            "DISABLE_ALL": "Disable all notifications",
-            "ENABLE_ALL_FOR_TYPE": "Enable all actions for this type",
-            "DISABLE_ALL_FOR_TYPE": "Disable all actions for this type",
-            "WATCHING_RESOURCES": "Watching resources",
-            "NO_RESOURCE_WATCHING_MSG": [
-                "You did not enabled notifications on any resources. You can start watching resources by clicking on the",
-                "button placed on the toolbar of a ResourceView."
-            ],
-            "STOP_WATCHING_RES": "Stop watching resource",
-            "MODES": {
-                "NO_NOTIFICATIONS": "No notifications",
-                "NO_NOTIFICATIONS_INFO": "You will not receive any notification",
-                "IN_APP": "In-app only",
-                "IN_APP_INFO": "You will be able to read notifications only in app from a dedicated page",
-                "EMAIL_INSTANT": "Email (instant)",
-                "EMAIL_INSTANT_INFO": "You will receive email instantly",
-                "EMAIL_DAILY": "Email (daily digest)",
-                "EMAIL_DAILY_INFO": "You will receive a daily email report"
-            }
-        },
-        "RES_VIEW": {
-            "TABBED_INFO": "The Resource View is shown in a tab and multiple Resource View can be open in different tabs.",
-            "SPLITTED_INFO": [
-                "The Resource View panel is splitted in two: on the left there is a main Resource View which describes (and is synched with) the resource selected in the tree/list; on the right there is an optional secondary Resource View which describes a resource selected (double click) from the main Resource View",
-                "This mode is not recommended in screen with resolution width below 1440px"
-            ],
-            "SYNC_WITH_TREE_LIST": "Keep selected tab synchronized with tree/list",
-            "SYNC_WITH_TREE_LIST_WARNING": "It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.",
-            "INITIAL_VIEW_FOR_CONCEPTS": "Initial view for concepts",
-            "INITIAL_VIEW_FOR_CONCEPTS_INFO": "This selection will be used by default for browsing SKOS concepts. The user can switch to other views during their session of work, but this selection will be applied as an initial setting at each new login",
-            "DISPLAY_IMAGES": "Display images",
-            "DISPLAY_IMAGES_INFO": "If enabled, URL values resolvable to images on the web will be displayed as images (preview) in the ResourceView",
-            "SHOW_DEPRECATED": "Show deprecated values",
-            "SHOW_DEPRECATED_INFO": "If enabled, linked resources marked as deprecated will be shown in the ResourceView",
-            "SHOW_DATATYPE_BADGE": "Always show datatype badge",
-            "SHOW_DATATYPE_BADGE_INFO": "If enabled, a datatype badge will be always shown beside the value. If not, the badge is only shown in case of an unknown datatype (the icon on the left of the value will classify the known datatype)"
         }
     },
     "PROJECTS": {
@@ -1277,6 +1260,23 @@
             "BULK_DELETE_INFO": "Delete the value for every resource that has this predicate-value relation",
             "SHOW_ISSUES": "Show issues",
             "UNASSIGN_ISSUE": "Unassign issue"
+        },
+        "SETTINGS": {
+            "TABBED_INFO": "The Resource View is shown in a tab and multiple Resource View can be open in different tabs.",
+            "SPLITTED_INFO": [
+                "The Resource View panel is splitted in two: on the left there is a main Resource View which describes (and is synched with) the resource selected in the tree/list; on the right there is an optional secondary Resource View which describes a resource selected (double click) from the main Resource View",
+                "This mode is not recommended in screen with resolution width below 1440px"
+            ],
+            "SYNC_WITH_TREE_LIST": "Keep selected tab synchronized with tree/list",
+            "SYNC_WITH_TREE_LIST_WARNING": "It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.",
+            "INITIAL_VIEW_FOR_CONCEPTS": "Initial view for concepts",
+            "INITIAL_VIEW_FOR_CONCEPTS_INFO": "This selection will be used by default for browsing SKOS concepts. The user can switch to other views during their session of work, but this selection will be applied as an initial setting at each new login",
+            "DISPLAY_IMAGES": "Display images",
+            "DISPLAY_IMAGES_INFO": "If enabled, URL values resolvable to images on the web will be displayed as images (preview) in the ResourceView",
+            "SHOW_DEPRECATED": "Show deprecated values",
+            "SHOW_DEPRECATED_INFO": "If enabled, linked resources marked as deprecated will be shown in the ResourceView",
+            "SHOW_DATATYPE_BADGE": "Always show datatype badge",
+            "SHOW_DATATYPE_BADGE_INFO": "If enabled, a datatype badge will be always shown beside the value. If not, the badge is only shown in case of an unknown datatype (the icon on the left of the value will classify the known datatype)"
         },
         "STATUS": {
             "RESOURCE_NOT_EXISTING": "This resource is not available in the current project",

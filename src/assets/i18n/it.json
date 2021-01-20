@@ -1040,7 +1040,31 @@
     "NOTIFICATIONS": {
         "NOTIFICATIONS": "Notifiche",
         "NOTIFICATION_SETTINGS": "Impostazioni notifiche",
-        "CLEAR_NOTIFICATIONS": "Elimina notifiche"
+        "CLEAR_NOTIFICATIONS": "Elimina notifiche",
+        "SETTINGS": {
+            "TYPE_EVENT_NOTIFICATIONS": "Notifiche tipo-evento",
+            "TYPE_EVENT_NOTIFICATIONS_INFO": "Per ogni tipo di risorsa è possibile selezionare gli eventi per i quali si vogliono ricevere notifiche",
+            "ENABLE_ALL": "Abilita tutte le notifiche",
+            "DISABLE_ALL": "Disabilita tutte le notifiche",
+            "ENABLE_ALL_FOR_TYPE": "Abilita tutte le notifiche per questo tipo",
+            "DISABLE_ALL_FOR_TYPE": "Disabilita tutte le notifiche per questo tipo",
+            "WATCHING_RESOURCES": "Risorse sotto osservazione",
+            "NO_RESOURCE_WATCHING_MSG": [
+                "Non hai abilitato le notifiche su alcuna risorsa. Puoi iniziare ad osservare risorse cliccando sul bottone",
+                "posizionato sulla toolbar del ResourceView."
+            ],
+            "STOP_WATCHING_RES": "Smetti di osservare questa risorsa",
+            "MODES": {
+                "NO_NOTIFICATIONS": "Nessuna notifica",
+                "NO_NOTIFICATIONS_INFO": "Non riceverai alcuna notifica",
+                "IN_APP": "Solo in app",
+                "IN_APP_INFO": "Potrai leggere le notifiche solo in app dalla pagina dedicata",
+                "EMAIL_INSTANT": "Email (istantanea)",
+                "EMAIL_INSTANT_INFO": "Riceverai email istantaneamente",
+                "EMAIL_DAILY": "Email (giornalmente)",
+                "EMAIL_DAILY_INFO": "Riceverai un riepilogo giornaliero via email"
+            }
+        }
     },
     "PREFERENCES": {
         "VB_PREFS": "Preferenze di VocBench",
@@ -1064,47 +1088,6 @@
                 "VALUE_FILTER_LANGS": "Filtro valori per lingua",
                 "DESCRIPTION": "Seleziona le lingue che verranno mostrate quando si filtrano i valori literal nella descrizione delle risorse. Attiva il filtro in modo da nascondere i valori con le lingue non selezionate."
             }
-        },
-        "NOTIFICATIONS": {
-            "TYPE_EVENT_NOTIFICATIONS": "Notifiche tipo-evento",
-            "TYPE_EVENT_NOTIFICATIONS_INFO": "Per ogni tipo di risorsa è possibile selezionare gli eventi per i quali si vogliono ricevere notifiche",
-            "ENABLE_ALL": "Abilita tutte le notifiche",
-            "DISABLE_ALL": "Disabilita tutte le notifiche",
-            "ENABLE_ALL_FOR_TYPE": "Abilita tutte le notifiche per questo tipo",
-            "DISABLE_ALL_FOR_TYPE": "Disabilita tutte le notifiche per questo tipo",
-            "WATCHING_RESOURCES": "Risorse sotto osservazione",
-            "NO_RESOURCE_WATCHING_MSG": [
-                "Non hai abilitato le notifiche su alcuna risorsa. Puoi iniziare ad osservare risorse cliccando sul bottone",
-                "posizionato sulla toolbar del ResourceView."
-            ],
-            "STOP_WATCHING_RES": "Smetti di osservare questa risorsa",
-            "MODES": {
-                "NO_NOTIFICATIONS": "Nessuna notifica",
-                "NO_NOTIFICATIONS_INFO": "Non riceverai alcuna notifica",
-                "IN_APP": "Solo in app",
-                "IN_APP_INFO": "Potrai leggere le notifiche solo in app dalla pagina dedicata",
-                "EMAIL_INSTANT": "Email (istantanea)",
-                "EMAIL_INSTANT_INFO": "Riceverai email istantaneamente",
-                "EMAIL_DAILY": "Email (giornalmente)",
-                "EMAIL_DAILY_INFO": "Riceverai un riepilogo giornaliero via email"
-            }
-        },
-        "RES_VIEW": {
-            "TABBED_INFO": "Il ResourceView viene mostrato in un tab e multipli ResourceView possono essere aperti in tab differenti.",
-            "SPLITTED_INFO": [
-                "Il pannello del ResourceView è diviso in due: sulla sinistra viene mostrato un ResourceView principale che descrive (ed è sincronizzato con) la risorsa selezionata nell'albero/lista; sulla destra viene mostrato un secondo ResourceView opzionale il quale descrive una risorsa aperta (tramite doppio click) dal principale",
-                "Questa modalità non è raccomandata per schermi con larghezza di risoluzione minore di 1440px"
-            ],
-            "SYNC_WITH_TREE_LIST": "Mantieni sincronizzato l'albero/lista con il tab selezionato",
-            "SYNC_WITH_TREE_LIST_WARNING": "E' raccomandabile disabilitare questa opzione. La sincronizzazione tra tab e alberi/liste potrebbe rallentare la navigazione del ResourceView.",
-            "INITIAL_VIEW_FOR_CONCEPTS": "Visualizzazione iniziale per i concetti",
-            "INITIAL_VIEW_FOR_CONCEPTS_INFO": "Questa scelta verrà usata di default per la visualizzazione di concetti SKOS. L'utente può passare ad altre visualizzazioni durante la sessione di lavoro, questa scelta verrò comunque applicata come impostazione iniziale ad ogni nuovo login",
-            "DISPLAY_IMAGES": "Mostra immagini",
-            "DISPLAY_IMAGES_INFO": "Se attiva, valori URL risolvibili ad immagini sul web, verranno mostrati come immagini (antprime) nel ResourceView",
-            "SHOW_DEPRECATED": "Mostra valori deprecati",
-            "SHOW_DEPRECATED_INFO": "Se attiva, risorse collegate segnate come deprecate verranno mostrate nel ResourceView",
-            "SHOW_DATATYPE_BADGE": "Mostra sempre il datatype badge",
-            "SHOW_DATATYPE_BADGE_INFO": "Se attiva, una targhetta contenente il datatyp verrà sempre mostrato di fianco ai valori. In caso contrario, il badge verrò solo mostrata in caso di datatype sconosciuti (l'icona alla sinistra del valore indicherà il datatype)"
         }
     },
     "PROJECTS": {
@@ -1278,6 +1261,25 @@
             "SHOW_ISSUES": "Mostra issue",
             "UNASSIGN_ISSUE": "Togli issue"
         },
+        "SETTINGS": {
+            "TABBED_INFO": "Il ResourceView viene mostrato in un tab e multipli ResourceView possono essere aperti in tab differenti.",
+            "SPLITTED_INFO": [
+                "Il pannello del ResourceView è diviso in due: sulla sinistra viene mostrato un ResourceView principale che descrive (ed è sincronizzato con) la risorsa selezionata nell'albero/lista; sulla destra viene mostrato un secondo ResourceView opzionale il quale descrive una risorsa aperta (tramite doppio click) dal principale",
+                "Questa modalità non è raccomandata per schermi con larghezza di risoluzione minore di 1440px"
+            ],
+            "SYNC_WITH_TREE_LIST": "Mantieni sincronizzato l'albero/lista con il tab selezionato",
+            "SYNC_WITH_TREE_LIST_WARNING": "E' raccomandabile disabilitare questa opzione. La sincronizzazione tra tab e alberi/liste potrebbe rallentare la navigazione del ResourceView.",
+            "INITIAL_VIEW_FOR_CONCEPTS": "Visualizzazione iniziale per i concetti",
+            "INITIAL_VIEW_FOR_CONCEPTS_INFO": "Questa scelta verrà usata di default per la visualizzazione di concetti SKOS. L'utente può passare ad altre visualizzazioni durante la sessione di lavoro, questa scelta verrò comunque applicata come impostazione iniziale ad ogni nuovo login",
+            "INITIAL_VIEW_FOR_LEXENTRY": "Visualizzazione iniziale per le lexical entry",
+            "INITIAL_VIEW_FOR_LEXENTRY_INFO": "Questa scelta verrà usata di default per la visualizzazione di lexical entry Ontolex. L'utente può passare ad altre visualizzazioni durante la sessione di lavoro, questa scelta verrò comunque applicata come impostazione iniziale ad ogni nuovo login",
+            "DISPLAY_IMAGES": "Mostra immagini",
+            "DISPLAY_IMAGES_INFO": "Se attiva, valori URL risolvibili ad immagini sul web, verranno mostrati come immagini (antprime) nel ResourceView",
+            "SHOW_DEPRECATED": "Mostra valori deprecati",
+            "SHOW_DEPRECATED_INFO": "Se attiva, risorse collegate segnate come deprecate verranno mostrate nel ResourceView",
+            "SHOW_DATATYPE_BADGE": "Mostra sempre il datatype badge",
+            "SHOW_DATATYPE_BADGE_INFO": "Se attiva, una targhetta contenente il datatyp verrà sempre mostrato di fianco ai valori. In caso contrario, il badge verrò solo mostrata in caso di datatype sconosciuti (l'icona alla sinistra del valore indicherà il datatype)"
+        },
         "STATUS": {
             "RESOURCE_NOT_EXISTING": "Questa risorsa non è disponibile nel progetto corrente",
             "RESOURCE_UNKNOWN_HOST": "Questa risorsa non è disponibile o accessibile in progetti locali nè può essere raggiungibile sul Web",
@@ -1288,6 +1290,14 @@
             "UNKNOWN_POSITION": "Posizione sconosciuta",
             "CLOSE_ALL_TABS": "Chiudi tutti i tab",
             "PREVIOUS_RESOURCE": "Risorsa precedente"
+        },
+        "TYPES": {
+            "DETAILED": "Dettagliato",
+            "DETAILED_DESCR": "Il form standard per editare risorse RDF",
+            "TERMINOLOGIST": "Terminologista",
+            "TERMINOLOGIST_DESCR": "Un form semplificato - meno RDF centrico - adattato alle esigenze dei terminologisti",
+            "LEXICOGRAPHER": "Lessicografo",
+            "LEXICOGRAPHER_DESCR": "Un form semplificato - meno RDF centrico - adattato alle esigenze dei lessicografi (dedicato ad Ontolex)"
         },
         "MISC": {
             "SHOW_ALL_CLASSES": "Mostra tutte le classi",

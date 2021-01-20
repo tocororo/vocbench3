@@ -52,7 +52,7 @@ export class VBProperties {
             Properties.pref_concept_tree_multischeme_mode, Properties.pref_concept_tree_safe_to_go_limit,
             Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght, Properties.pref_lex_entry_list_safe_to_go_limit,
             Properties.pref_editing_language, Properties.pref_filter_value_languages,
-            Properties.pref_res_view_partition_filter, Properties.pref_res_view_default_concept_type,
+            Properties.pref_res_view_partition_filter, Properties.pref_res_view_default_concept_type, Properties.pref_res_view_default_lexentry_type,
             Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes,
             Properties.pref_notifications_status
         ];
@@ -99,6 +99,10 @@ export class VBProperties {
                 let resViewConceptTypePref = prefs[Properties.pref_res_view_default_concept_type];
                 if (resViewConceptTypePref in ResourceViewType) {
                     resViewPreferences.defaultConceptType = resViewConceptTypePref;
+                }
+                let resViewLexEntryTypePref = prefs[Properties.pref_res_view_default_lexentry_type];
+                if (resViewLexEntryTypePref in ResourceViewType) {
+                    resViewPreferences.defaultLexEntryType = resViewLexEntryTypePref;
                 }
 
                 let resViewPartitionFilter: PartitionFilterPreference = {};
@@ -396,6 +400,11 @@ export class VBProperties {
     setResourceViewConceptType(type: ResourceViewType) {
         this.prefService.setPUSetting(Properties.pref_res_view_default_concept_type, type).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.defaultConceptType = type;
+    }
+
+    setResourceViewLexEntryType(type: ResourceViewType) {
+        this.prefService.setPUSetting(Properties.pref_res_view_default_lexentry_type, type).subscribe();
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.defaultLexEntryType = type;
     }
 
     setResourceViewPartitionFilter(pref: PartitionFilterPreference) {

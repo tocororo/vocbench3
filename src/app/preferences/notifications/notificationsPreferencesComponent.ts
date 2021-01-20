@@ -22,10 +22,10 @@ export class NotificationsPreferencesComponent {
     //Notification options
 
     private notificationOptions: NotificationPrefStruct[] = [
-        { value: NotificationStatus.no_notifications, show: "PREFERENCES.NOTIFICATIONS.MODES.NO_NOTIFICATIONS", description: "PREFERENCES.NOTIFICATIONS.MODES.NO_NOTIFICATIONS_INFO" },
-        { value: NotificationStatus.in_app_only, show: "PREFERENCES.NOTIFICATIONS.MODES.IN_APP", description: "PREFERENCES.NOTIFICATIONS.MODES.IN_APP_INFO" },
-        { value: NotificationStatus.email_instant, show: "PREFERENCES.NOTIFICATIONS.MODES.EMAIL_INSTANT", description: "PREFERENCES.NOTIFICATIONS.MODES.EMAIL_INSTANT_INFO" },
-        { value: NotificationStatus.email_daily_digest, show: "PREFERENCES.NOTIFICATIONS.MODES.EMAIL_DAILY", description: "PREFERENCES.NOTIFICATIONS.MODES.EMAIL_DAILY_INFO" },
+        { value: NotificationStatus.no_notifications, show: "NOTIFICATIONS.SETTINGS.MODES.NO_NOTIFICATIONS", description: "NOTIFICATIONS.SETTINGS.MODES.NO_NOTIFICATIONS_INFO" },
+        { value: NotificationStatus.in_app_only, show: "NOTIFICATIONS.SETTINGS.MODES.IN_APP", description: "NOTIFICATIONS.SETTINGS.MODES.IN_APP_INFO" },
+        { value: NotificationStatus.email_instant, show: "NOTIFICATIONS.SETTINGS.MODES.EMAIL_INSTANT", description: "NOTIFICATIONS.SETTINGS.MODES.EMAIL_INSTANT_INFO" },
+        { value: NotificationStatus.email_daily_digest, show: "NOTIFICATIONS.SETTINGS.MODES.EMAIL_DAILY", description: "NOTIFICATIONS.SETTINGS.MODES.EMAIL_DAILY_INFO" },
     ];
     private activeNotificationOpt: NotificationPrefStruct;
 

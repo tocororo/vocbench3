@@ -40,6 +40,7 @@ export class Properties {
 
     static pref_res_view_partition_filter: string = "rv_partition_filter";
     static pref_res_view_default_concept_type: string = "res_view_default_concept_type";
+    static pref_res_view_default_lexentry_type: string = "res_view_default_lexentry_type";
 
     static pref_graph_view_partition_filter: string = "graph_partition_filter";
     static pref_hide_literal_graph_nodes: string = "hide_literal_graph_nodes";
@@ -66,6 +67,8 @@ export class ResourceViewPreference {
     syncTabs: boolean = false; //in tabbed mode allows to keep sync'd the resource in the active tab with the same resource in the tree/list
     defaultConceptType: ResourceViewType = ResourceViewType.resourceView; //tells the RV type to be open by default for concepts
     lastConceptType: ResourceViewType;
+    defaultLexEntryType: ResourceViewType = ResourceViewType.resourceView; //tells the RV type to be open by default for lexEntry
+    lastLexEntryType: ResourceViewType;
     displayImg: boolean = false;
     resViewPartitionFilter: PartitionFilterPreference;
     rendering: boolean = true;

@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ResourceViewType, ResourceViewMode, ResourceViewPreference } from "../models/Properties";
+import { ResourceViewMode, ResourceViewPreference, ResourceViewType } from "../models/Properties";
 import { OntoLex, SKOS } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
@@ -14,20 +14,19 @@ export class ResourceViewPreferencesComponent {
     resViewMode: ResourceViewMode;
     private resViewTabSync: boolean;
 
-    typeSelectionAvailable: boolean;
-    private rvConceptTypes: ResViewConceptTypeOpt[] = [
-        { 
-            type: ResourceViewType.resourceView, 
-            show: "Detailed", 
-            description: "The standard form for editing RDF resources"
-        },
-        { 
-            type: ResourceViewType.termView, 
-            show: "Terminologist", 
-            description: "A simplified - less RDF centric - form tailored on the needs of terminologists and lexicographers" 
-        }
+    rvConceptTypeSelectorAvailable: boolean;
+    private rvConceptTypes: ResViewTypeOpt[] = [
+        { type: ResourceViewType.resourceView, showTranslationKey: "RESOURCE_VIEW.TYPES.DETAILED", descrTranslationKey: "RESOURCE_VIEW.TYPES.DETAILED_DESCR" },
+        { type: ResourceViewType.termView, showTranslationKey: "RESOURCE_VIEW.TYPES.TERMINOLOGIST", descrTranslationKey: "RESOURCE_VIEW.TYPES.TERMINOLOGIST_DESCR" }
     ]
-    private selectedRvConceptType: ResViewConceptTypeOpt;
+    private selectedRvConceptType: ResViewTypeOpt;
+
+    rvLexEntryTypeSelectorAvailable: boolean;
+    private rvLexEntryTypes: ResViewTypeOpt[] = [
+        { type: ResourceViewType.resourceView, showTranslationKey: "RESOURCE_VIEW.TYPES.DETAILED", descrTranslationKey: "RESOURCE_VIEW.TYPES.DETAILED_DESCR" },
+        { type: ResourceViewType.lexicographerView, showTranslationKey: "RESOURCE_VIEW.TYPES.LEXICOGRAPHER", descrTranslationKey: "RESOURCE_VIEW.TYPES.LEXICOGRAPHER_DESCR" }
+    ]
+    private selectedRvLexEntryType: ResViewTypeOpt;
 
     displayImg: boolean;
     showDeprecated: boolean;
@@ -44,8 +43,11 @@ export class ResourceViewPreferencesComponent {
         this.showDatatypeBadge = rvPrefs.showDatatypeBadge;
 
         this.selectedRvConceptType = this.rvConceptTypes.find(t => t.type == rvPrefs.defaultConceptType);
+        this.selectedRvLexEntryType = this.rvLexEntryTypes.find(t => t.type == rvPrefs.defaultLexEntryType);
         //selection of RV type for concept available only in skos and ontolex projects
-        this.typeSelectionAvailable = VBContext.getWorkingProject().getModelType() == SKOS.uri || VBContext.getWorkingProject().getModelType() == OntoLex.uri;
+        this.rvConceptTypeSelectorAvailable = VBContext.getWorkingProject().getModelType() == SKOS.uri || VBContext.getWorkingProject().getModelType() == OntoLex.uri;
+        //selection of RV type for lex entry available only in ontolex projects
+        this.rvLexEntryTypeSelectorAvailable = VBContext.getWorkingProject().getModelType() == OntoLex.uri;
     }
 
     onResViewModeChange() {
@@ -55,6 +57,10 @@ export class ResourceViewPreferencesComponent {
 
     onResViewConceptTypeChange() {
         this.vbProp.setResourceViewConceptType(this.selectedRvConceptType.type);
+    }
+
+    onResViewLexEntryTypeChange() {
+        this.vbProp.setResourceViewLexEntryType(this.selectedRvLexEntryType.type);
     }
 
     onTabSyncChange() {
@@ -76,8 +82,8 @@ export class ResourceViewPreferencesComponent {
 
 }
 
-interface ResViewConceptTypeOpt {
+interface ResViewTypeOpt {
     type: ResourceViewType;
-    show: string;
-    description: string;
+    showTranslationKey: string;
+    descrTranslationKey: string;
 }

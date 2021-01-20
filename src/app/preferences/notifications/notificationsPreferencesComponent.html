@@ -15,16 +15,16 @@
 <div class="card card-default vbox" style="margin-bottom: 4px; flex: initial;">
     <div class="card-header">
         <label style="flex: 1;">
-            {{'PREFERENCES.NOTIFICATIONS.TYPE_EVENT_NOTIFICATIONS'|translate}}
+            {{'NOTIFICATIONS.SETTINGS.TYPE_EVENT_NOTIFICATIONS'|translate}}
             <span class="fas fa-info-circle ml-1" 
-                [title]="'PREFERENCES.NOTIFICATIONS.TYPE_EVENT_NOTIFICATIONS_INFO'|translate">
+                [title]="'NOTIFICATIONS.SETTINGS.TYPE_EVENT_NOTIFICATIONS_INFO'|translate">
             </span>
         </label>
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-light" (click)="checkAllActions(true)" [title]="'PREFERENCES.NOTIFICATIONS.ENABLE_ALL'|translate">
+            <button class="btn btn-light" (click)="checkAllActions(true)" [title]="'NOTIFICATIONS.SETTINGS.ENABLE_ALL'|translate">
                 <span class="far fa-check-square"></span>
             </button>
-            <button class="btn btn-light" (click)="checkAllActions(false)" [title]="'PREFERENCES.NOTIFICATIONS.DISABLE_ALL'|translate">
+            <button class="btn btn-light" (click)="checkAllActions(false)" [title]="'NOTIFICATIONS.SETTINGS.DISABLE_ALL'|translate">
                 <span class="far fa-square"></span>
             </button>
         </div>
@@ -45,11 +45,11 @@
                         <div class="hbox" style="align-items: center;">
                             <label style="flex: 1;">{{rs.show}}</label>
                             <button #btnCheck class="btn btn-transparent btn-xs" (click)="checkAllActionsForRole(rs.role, true)"
-                                (mouseup)="btnCheck.blur()" [title]="'PREFERENCES.NOTIFICATIONS.ENABLE_ALL_FOR_TYPE'|translate">
+                                (mouseup)="btnCheck.blur()" [title]="'NOTIFICATIONS.SETTINGS.ENABLE_ALL_FOR_TYPE'|translate">
                                 <span class="far fa-check-square"></span>
                             </button>
                             <button #btnUncheck class="btn btn-transparent btn-xs" (click)="checkAllActionsForRole(rs.role, false)" 
-                                (mouseup)="btnUncheck.blur()" [title]="'PREFERENCES.NOTIFICATIONS.DISABLE_ALL_FOR_TYPE'|translate">
+                                (mouseup)="btnUncheck.blur()" [title]="'NOTIFICATIONS.SETTINGS.DISABLE_ALL_FOR_TYPE'|translate">
                                 <span class="far fa-square"></span>
                             </button>
                         </div>
@@ -65,18 +65,18 @@
 
 <div class="card card-default vbox" style="flex: initial;">
     <div class="card-header">
-        <label>{{'PREFERENCES.NOTIFICATIONS.WATCHING_RESOURCES'|translate}}</label>
+        <label>{{'NOTIFICATIONS.SETTINGS.WATCHING_RESOURCES'|translate}}</label>
     </div>
     <div class="card-body scrollableContainer">
         <div *ngIf="watchingResources.length == 0" class="alert alert-warning">
-            {{'PREFERENCES.NOTIFICATIONS.NO_RESOURCE_WATCHING_MSG.0'|translate}}
+            {{'NOTIFICATIONS.SETTINGS.NO_RESOURCE_WATCHING_MSG.0'|translate}}
             <span class="fas fa-bell"></span>
-            {{'PREFERENCES.NOTIFICATIONS.NO_RESOURCE_WATCHING_MSG.1'|translate}}
+            {{'NOTIFICATIONS.SETTINGS.NO_RESOURCE_WATCHING_MSG.1'|translate}}
         </div>
 
         <div *ngFor="let r of watchingResources" class="listItem">
             <rdf-resource [resource]="r" style="flex: 1"></rdf-resource>
-            <button class="btn btn-xs btn-light" (click)="stopWatching(r)" [title]="'PREFERENCES.NOTIFICATIONS.STOP_WATCHING_RES'|translate">
+            <button class="btn btn-xs btn-light" (click)="stopWatching(r)" [title]="'NOTIFICATIONS.SETTINGS.STOP_WATCHING_RES'|translate">
                 <span class="fas fa-minus"></span>
             </button>
         </div>

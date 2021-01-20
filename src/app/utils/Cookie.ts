@@ -24,6 +24,8 @@ export class Cookie {
 	public static ALIGNMENT_LAST_EXPLORED_PROJECT = "alignment.last_project";
 	public static ALIGNMENT_LAST_CHOSEN_TYPE = "alignment.last_type";
 
+	public static LEX_ENTRY_LAST_INDEX = "structures.lex_entry.last_index";
+
 	public static SEARCH_STRING_MATCH_MODE = "search.string_match_mode";
 	public static SEARCH_USE_URI = "search.use_uri";
 	public static SEARCH_USE_LOCAL_NAME = "search.use_local_name";

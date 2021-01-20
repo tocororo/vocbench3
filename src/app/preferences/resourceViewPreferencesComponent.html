@@ -16,19 +16,19 @@
                     </div>
                     <div class="alert alert-info mt-2">
                         <span *ngIf="resViewMode == 'tabbed'">
-                            {{'PREFERENCES.RES_VIEW.TABBED_INFO'|translate}}
+                            {{'RESOURCE_VIEW.SETTINGS.TABBED_INFO'|translate}}
                         </span>
                         <span *ngIf="resViewMode == 'splitted'">
-                            {{'PREFERENCES.RES_VIEW.SPLITTED_INFO.0'|translate}}<br>
+                            {{'RESOURCE_VIEW.SETTINGS.SPLITTED_INFO.0'|translate}}<br>
                             <span class="fas fa-exclamation-triangle"></span> 
-                            {{'PREFERENCES.RES_VIEW.SPLITTED_INFO.1'|translate}}
+                            {{'RESOURCE_VIEW.SETTINGS.SPLITTED_INFO.1'|translate}}
                         </span>
                     </div>
                     <div *ngIf="resViewMode == 'tabbed'" class="form-check mt-2">
                         <input class="form-check-input" id="syncCheck" type="checkbox" [(ngModel)]="resViewTabSync" (ngModelChange)="onTabSyncChange()">
                         <label class="form-check-label" for="syncCheck">
-                            {{'PREFERENCES.RES_VIEW.SYNC_WITH_TREE_LIST'|translate}}
-                            <span class="fas fa-exclamation-circle ml-1" [title]="'PREFERENCES.RES_VIEW.SYNC_WITH_TREE_LIST_WARNING'|translate"></span>
+                            {{'RESOURCE_VIEW.SETTINGS.SYNC_WITH_TREE_LIST'|translate}}
+                            <span class="fas fa-exclamation-circle ml-1" [title]="'RESOURCE_VIEW.SETTINGS.SYNC_WITH_TREE_LIST_WARNING'|translate"></span>
                         </label>
                     </div>
                 </div>
@@ -39,19 +39,36 @@
             </div>
         </div>
 
-        <div *ngIf="typeSelectionAvailable" class="card card-default mt-2">
+        <div *ngIf="rvConceptTypeSelectorAvailable" class="card card-default mt-2">
             <div class="card-body">
                 <div class="hbox" style="align-items: center;">
                     <label style="white-space: nowrap;">
-                        {{'PREFERENCES.RES_VIEW.INITIAL_VIEW_FOR_CONCEPTS'|translate}}:
-                        <span class="fas fa-info-circle ml-1" [title]="'PREFERENCES.RES_VIEW.INITIAL_VIEW_FOR_CONCEPTS_INFO'|translate"></span>
+                        {{'RESOURCE_VIEW.SETTINGS.INITIAL_VIEW_FOR_CONCEPTS'|translate}}:
+                        <span class="fas fa-info-circle ml-1" [title]="'RESOURCE_VIEW.SETTINGS.INITIAL_VIEW_FOR_CONCEPTS_INFO'|translate"></span>
                     </label>
                     <select class="form-control ml-2" [(ngModel)]="selectedRvConceptType" (ngModelChange)="onResViewConceptTypeChange()">
-                        <option *ngFor="let t of rvConceptTypes" [ngValue]="t">{{t.show}}</option>
+                        <option *ngFor="let t of rvConceptTypes" [ngValue]="t">{{t.showTranslationKey|translate}}</option>
                     </select>
                 </div>
                 <div class="alert alert-info mt-2">
-                    {{selectedRvConceptType.description}}
+                    {{selectedRvConceptType.descrTranslationKey|translate}}
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="rvLexEntryTypeSelectorAvailable" class="card card-default mt-2">
+            <div class="card-body">
+                <div class="hbox" style="align-items: center;">
+                    <label style="white-space: nowrap;">
+                        {{'RESOURCE_VIEW.SETTINGS.INITIAL_VIEW_FOR_LEXENTRY'|translate}}:
+                        <span class="fas fa-info-circle ml-1" [title]="'RESOURCE_VIEW.SETTINGS.INITIAL_VIEW_FOR_LEXENTRY_INFO'|translate"></span>
+                    </label>
+                    <select class="form-control ml-2" [(ngModel)]="selectedRvLexEntryType" (ngModelChange)="onResViewLexEntryTypeChange()">
+                        <option *ngFor="let t of rvLexEntryTypes" [ngValue]="t">{{t.showTranslationKey|translate}}</option>
+                    </select>
+                </div>
+                <div class="alert alert-info mt-2">
+                    {{selectedRvLexEntryType.descrTranslationKey|translate}}
                 </div>
             </div>
         </div>
@@ -61,8 +78,8 @@
                 <div class="form-check">
                     <input class="form-check-input" id="imageCheck" type="checkbox" [(ngModel)]="displayImg" (ngModelChange)="onDisplayImgChange()">
                     <label class="form-check-label" for="imageCheck">
-                        {{'PREFERENCES.RES_VIEW.DISPLAY_IMAGES'|translate}}
-                        <span class="fas fa-info-circle ml-1" [title]="'PREFERENCES.RES_VIEW.DISPLAY_IMAGES_INFO'|translate"></span>
+                        {{'RESOURCE_VIEW.SETTINGS.DISPLAY_IMAGES'|translate}}
+                        <span class="fas fa-info-circle ml-1" [title]="'RESOURCE_VIEW.SETTINGS.DISPLAY_IMAGES_INFO'|translate"></span>
                     </label>
                 </div>
             </div>
@@ -73,8 +90,8 @@
                 <div class="form-check">
                     <input class="form-check-input" id="deprecatedCheck" type="checkbox" [(ngModel)]="showDeprecated" (ngModelChange)="onShowDeprecatedChange()">
                     <label class="form-check-label" for="deprecatedCheck">
-                        {{'PREFERENCES.RES_VIEW.SHOW_DEPRECATED'|translate}}
-                        <span class="fas fa-info-circle ml-1" [title]="'PREFERENCES.RES_VIEW.SHOW_DEPRECATED_INFO'|translate"></span>
+                        {{'RESOURCE_VIEW.SETTINGS.SHOW_DEPRECATED'|translate}}
+                        <span class="fas fa-info-circle ml-1" [title]="'RESOURCE_VIEW.SETTINGS.SHOW_DEPRECATED_INFO'|translate"></span>
                     </label>
                 </div>
             </div>
@@ -85,8 +102,8 @@
                 <div class="form-check">
                     <input class="form-check-input" id="badgeCheck" type="checkbox" [(ngModel)]="showDatatypeBadge" (ngModelChange)="onShowDatatypeBadge()">
                     <label class="form-check-label" for="badgeCheck">
-                        {{'PREFERENCES.RES_VIEW.SHOW_DATATYPE_BADGE'|translate}}
-                        <span class="fas fa-info-circle ml-1" [title]="'PREFERENCES.RES_VIEW.SHOW_DATATYPE_BADGE_INFO'|translate"></span>
+                        {{'RESOURCE_VIEW.SETTINGS.SHOW_DATATYPE_BADGE'|translate}}
+                        <span class="fas fa-info-circle ml-1" [title]="'RESOURCE_VIEW.SETTINGS.SHOW_DATATYPE_BADGE_INFO'|translate"></span>
                     </label>
                 </div>
             </div>

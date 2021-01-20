@@ -30,12 +30,7 @@ export class ResourceViewTabContainer {
     private pendingValidation: boolean; //tells if the resource (or its content) is under validation (prevent the usage of code tab)
 
     ngOnInit() {
-        let resViewPrefs: ResourceViewPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences;
-        this.activeView = resViewPrefs.defaultConceptType;
-        //eventually the last selected type "wins"
-        if (resViewPrefs.lastConceptType != null) {
-            this.activeView = resViewPrefs.lastConceptType;
-        }
+        this.initActiveView();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -54,29 +49,54 @@ export class ResourceViewTabContainer {
                 this.rViews.push(this.sourceCodeStruct)
             }
 
-            /*
-            update the activeView by restoring the last active for the concept
-            (even if the current resource is not a concept, it will be fixed later in case the view is not available)
-            */
-            let previousRes: ARTResource = changes['resource'].previousValue;
-            /* the following if prevents to reset the view in case the input resource is still the same
-            (input resource changes also when changing tab from this component) */
-            if (previousRes != null && !previousRes.equals(this.resource)) {
-                this.activeView = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.lastConceptType;
-            }
+            this.initActiveView(changes['resource'].previousValue);
+        }
+    }
 
-            //if the current active view is not set, or it is no more available, activate the resourceForm as fallback
-            if (this.activeView == null || (this.activeView == ResourceViewType.termView && !this.rViews.some(v => v.type == ResourceViewType.termView))) {
-                this.activeView = ResourceViewType.resourceView;
+    /**
+     * Init the view to activate according the type of the described resource and the preferences
+     * @param previousRes provided if the method is invoked after a change of the Input resource
+     */
+    private initActiveView(previousRes?: ARTResource) {
+        /* try to restore the view from the preference if:
+        - it is the first initialization (previousRes null)
+        - resource is changed. In this case I need to check if previousRes and this.resource are different since 
+          Input resource changes also when user changes the viewTab from this component (changeView method invoked) but the resource is still the same
+        */
+        if (previousRes == null || !previousRes.equals(this.resource)) {
+            let rvPrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences;
+            //restore the last view (for concept and lex entry only) or set the default
+            if (this.resource.getRole() == RDFResourceRolesEnum.concept) {
+                this.activeView = rvPrefs.lastConceptType;
+                if (this.activeView == null) { //null if last selection was not set => set the default
+                    this.activeView = rvPrefs.defaultConceptType;
+                }
+            }   
+            if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                this.activeView = rvPrefs.lastLexEntryType;
+                if (this.activeView == null) { //null if last selection was not set => set the default
+                    this.activeView = rvPrefs.defaultLexEntryType
+                }
             }
+        }
+        /* if the current active view is not set, or it is not among the available
+        (e.g. user went from a concept to a class => the termView is no more available),
+        activate the resourceForm as fallback */
+        if (this.activeView == null || !this.rViews.some(v => v.type == this.activeView)) {
+            this.activeView = ResourceViewType.resourceView;
         }
     }
 
     changeView(view: ResourceViewType) {
         this.activeView = view;
-        //just in case of concept update the setting about the last view activated (execpt for sourceCode)
-        if (this.activeView != ResourceViewType.sourceCode && this.resource.getRole() == RDFResourceRolesEnum.concept) {
-            VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.lastConceptType = this.activeView;
+        //in case of concept or lexEntry, update the setting about the last view activated (execpt for sourceCode)
+        if (this.activeView != ResourceViewType.sourceCode) {
+            if (this.resource.getRole() == RDFResourceRolesEnum.concept) {
+                VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.lastConceptType = this.activeView;
+            }
+            if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.lastLexEntryType = this.activeView;
+            }
         }
         
     }

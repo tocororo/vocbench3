@@ -9,7 +9,7 @@ export class LexicographerView {
 
     public static parse(lvJson: any): LexicographerView {
         let lv: LexicographerView = new LexicographerView();
-        
+
         lv.id = lvJson.id;
 
         let lemma: Form[] = [];
@@ -50,16 +50,18 @@ export class Form {
 
 export class Sense {
     id: string;
-    definition: ARTLiteral[];
-    reference: ARTResource[];
-    concept: ARTResource[];
+    definition: ARTLiteral[] = [];
+    reference: ARTResource[] = [];
+    concept: ARTResource[] = [];
 
     public static parse(sJson: any): Sense {
         let s: Sense = new Sense();
         s.id = sJson.id;
-        s.definition = Deserializer.createLiteralArray(sJson.definition);
-        s.reference = Deserializer.createResourceArray(sJson.definition);
-        s.concept = Deserializer.createResourceArray(sJson.definition);
+        if (sJson.definition) {
+            s.definition = Deserializer.createLiteralArray(sJson.definition);
+        }
+        s.reference = Deserializer.createResourceArray(sJson.reference);
+        s.concept = Deserializer.createResourceArray(sJson.concept);
         return s;
     }
 }
