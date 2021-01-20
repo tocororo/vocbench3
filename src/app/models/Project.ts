@@ -19,6 +19,7 @@ export class Project {
     private shaclEnabled: boolean;
     private facets: Settings;
     private description: string;
+    private createdAt: string;
 
     constructor(name?: string) {
         if (name != undefined) {
@@ -74,12 +75,12 @@ export class Project {
         return this.validationEnabled;
     }
 
-    public isBlacklistingEnabled(): boolean {
-        return this.blacklistingEnabled;
-    }
-
     public setBlacklistingEnabled(enabled: boolean) {
         this.blacklistingEnabled = enabled;
+    }
+
+    public isBlacklistingEnabled(): boolean {
+        return this.blacklistingEnabled;
     }
 
     public setShaclEnabled(enabled: boolean) {
@@ -167,6 +168,22 @@ export class Project {
         return this.facets;
     }
 
+    public setCreatedAt(createdAt: string) {
+        this.createdAt = createdAt;
+    }
+
+    public getCreatedAt(): string {
+        return this.createdAt;
+    }
+
+    public getCreatedAtAsDate(): Date {
+        if (this.createdAt) {
+            return new Date(this.createdAt);
+        } else {
+            return null;
+        }
+    }
+
     public static deserialize(projJson: any): Project {
         let proj = new Project();
         proj.setName(projJson.name);
@@ -183,6 +200,7 @@ export class Project {
         proj.setStatus(projJson.status);
         proj.setShaclEnabled(projJson.shaclEnabled);
         proj.setDescription(projJson.description);
+        proj.setCreatedAt(projJson.createdAt);
         proj.setFacets(Settings.parse(projJson.facets));
         return proj;
     }

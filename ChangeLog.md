@@ -27,6 +27,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
     * Enabled unassign task option
     * Added possibility to the admin or project manager to deactivate CS
   * Updates to the OntoPortal deployer, allowing for a specific configuration dedicated to EcoPortal
+  * Improved the directory based projects organization exploiting the project facets
   * Enabled nesting of settings
   * Enabled open enumerations in settings
   * Added an editor for rdf:langString literals

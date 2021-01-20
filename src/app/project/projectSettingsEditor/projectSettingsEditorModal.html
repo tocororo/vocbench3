@@ -6,7 +6,7 @@
     
 
     <div class="card mb-2">
-        <div class="card-body">
+        <div class="card-body" style="margin-bottom: -1rem;">
             <!-- LEX MODEL -->
             <div class="form-group row">
                 <label class="col-form-label col-sm-2">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</label>
@@ -29,30 +29,12 @@
         </div>
     </div>
 
-    <!-- <div *ngIf="validationEnabled" class="form-check form-check-inline">
-        <input class="form-check-input" id="blacklistCheck" type="checkbox" [(ngModel)]="blacklisting">
-        <label class="form-check-label" for="blacklistCheck">
-            {{'PROJECTS.BLACKLIST'|translate}}
-            <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.BLACKLIST_INFO'|translate"></span>
-        </label>
-    </div>
-
-    <div *ngIf="validationEnabled" class="card">
-        <div class="card-body hbox">
-            <label>{{'PROJECTS.BLACKLIST'|translate}}:</label>
-            <button class="btn btn-sm" [ngClass]="{ active: blacklisting }" (click)="changeBlacklisting()">
-                <span *ngIf="blacklisting" class="text-success">{{'STATUS.ACTIVE'|translate}}</span>
-                <span *ngIf="!blacklisting" class="text-danger">{{'STATUS.INACTIVE'|translate}}</span>
-            </button>
-        </div>
-    </div> -->
-    
     <!-- RENDERING ENGINE -->
     <div class="card mb-2">
         <div class="card-header">
             <label>{{'PROJECTS.RENDERING_ENGINE'|translate}}</label>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="margin-bottom: -1rem;">
             <div class="form-group row">
                 <label class="col-form-label col-sm-2">Plugin:</label>
                 <div class="col-sm-10">
@@ -88,7 +70,7 @@
         <div class="card-header">
             <label>{{'PROJECTS.URI_GENERATOR'|translate}}</label>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="margin-bottom: -1rem;">
             <div class="form-group row">
                 <label class="col-form-label col-sm-2">Plugin</label>
                 <div class="col-sm-10">

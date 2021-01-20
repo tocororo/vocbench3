@@ -64,6 +64,7 @@ export class ProjSettingsEditorModal {
     changeBlacklisting() {
         this.blacklisting = !this.blacklisting;
         this.projectService.setBlacklistingEnabled(this.project.getName(), this.blacklisting).subscribe();
+        this.project.setBlacklistingEnabled(this.blacklisting);
     }
 
     //================== LEX MODEL ==================

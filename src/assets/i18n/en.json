@@ -1120,6 +1120,7 @@
         "OPEN_CLOSE": "Open/Close",
         "OPTIONAL_SETTINGS": "Optional settings",
         "PROJECT_NAME": "Project name",
+        "PROJECT_PROPERTIES": "Project properties",
         "RENDERING_ENGINE": "Rendering Engine",
         "RESOURCE_METADATA": "Resource Metadata",
         "SHACLE_SHAPE_VALIDATION": "SHACL Shape Validation",
