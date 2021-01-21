@@ -32,6 +32,10 @@ export class ProjectListModal extends AbstractProjectComponent {
         );
     }
 
+    getRetrieveProjectsBagsFn(bagOfFacet: string) {
+        return this.projectService.retrieveProjects(bagOfFacet, null, true, true);
+    }
+
     changeVisualizationMode(mode: ProjectViewMode) {
         this.visualizationMode = mode;
         Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, mode);

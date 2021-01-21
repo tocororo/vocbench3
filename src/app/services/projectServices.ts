@@ -56,10 +56,12 @@ export class ProjectServices {
         );
     }
 
-    retrieveProjects(bagOf?: string, orQueryList?: {[key: string]: any}[][]): Observable<Multimap<Project>> {
+    retrieveProjects(bagOf?: string, orQueryList?: {[key: string]: any}[][], userDependent?: boolean, onlyOpen?: boolean): Observable<Multimap<Project>> {
         let params = {
             bagOf: bagOf,
-            orQueryList: orQueryList ? JSON.stringify(orQueryList) : null
+            orQueryList: orQueryList ? JSON.stringify(orQueryList) : null,
+            userDependent: userDependent,
+            onlyOpen: onlyOpen
         };
         return this.httpMgr.doPost(this.serviceName, "retrieveProjects", params).pipe(
             map(stResp => {

@@ -1,7 +1,8 @@
 import { Directive } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin } from "rxjs";
+import { forkJoin, Observable } from "rxjs";
 import { Project, ProjectFacets, ProjectViewMode } from "../models/Project";
+import { Multimap } from '../models/Shared';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from '../services/projectServices';
 import { UserServices } from "../services/userServices";
@@ -65,9 +66,15 @@ export abstract class AbstractProjectComponent {
 
     abstract initProjectList(): void;
 
-    protected initProjectDirectories(): void {
+    abstract getRetrieveProjectsBagsFn(bagOfFacet: string): Observable<Multimap<Project>>;
+
+    /**
+     * Retrieve projects grouped by the given facet
+     * @param bagOfFacet 
+     */
+    private initProjectDirectories() {
         let bagOfFacet = this.getCurrentFacetBagOf();
-        this.projectService.retrieveProjects(bagOfFacet).subscribe(
+        this.getRetrieveProjectsBagsFn(bagOfFacet).subscribe(
             projectBags => {
                 this.projectDirs = [];
                 Object.keys(projectBags).forEach(bag => {
@@ -87,15 +94,15 @@ export abstract class AbstractProjectComponent {
                 });
                 //init dir displayName (e.g.: prjLexModel and prjModel have values that can be written as RDFS, OWL, SKOS...)
                 this.projectDirs.forEach(pd => pd.dirDisplayName = pd.dir); //init with the same dir as default
+                let bagOfFacet = this.getCurrentFacetBagOf();
                 if (bagOfFacet == ProjectFacets.prjLexModel || bagOfFacet == ProjectFacets.prjModel) {
                     this.projectDirs.forEach(pd => {
                         pd.dirDisplayName = Project.getPrettyPrintModelType(pd.dir);
-                    })
+                    });
                 }
-                
             }
         )
-    }
+    };
 
     protected accessProject(project: Project) {
         VBContext.setWorkingProject(project);
@@ -159,7 +166,7 @@ export abstract class AbstractProjectComponent {
         }
     }
 
-    private getCurrentFacetBagOf() {
+    protected getCurrentFacetBagOf() {
         return Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
     }
 

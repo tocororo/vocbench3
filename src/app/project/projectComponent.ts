@@ -67,6 +67,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         );
     }
 
+    getRetrieveProjectsBagsFn(bagOfFacet: string) {
+        return this.projectService.retrieveProjects(bagOfFacet);
+    }
+
     private openOrCloseProject(project: Project) {
         if (project.isOpen()) {
             this.closeProject(project);
