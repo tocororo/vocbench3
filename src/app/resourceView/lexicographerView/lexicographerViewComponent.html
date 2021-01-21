@@ -13,10 +13,20 @@
 
     <div *ngIf="lemma" class="card-body scrollableContainer">
 
-        <h2 style="font-family: serif; font-style: italic; font-weight: bold;">{{lemma[0].writtenRep[0].getValue()}}</h2>
+        <!-- Temporarly take into account only first writtenRep of Form -->
+
+        <ng-container *ngFor="let l of lemma">
+            <inline-editable-value [value]="l.writtenRep[0]" [disabled]="readonly"
+                [textStyle]="'font-family: serif; font-style: italic; font-weight: bold; font-size: 2rem;'"
+                (valueEdited)="onLemmaEdited(l.writtenRep[0], $event)">
+            </inline-editable-value>
+        </ng-container>
+        
         
         <div *ngFor="let f of otherForms" class="mt-2">
-            {{f.writtenRep[0].getValue()}}
+            <inline-editable-value [value]="f.writtenRep[0]" [disabled]="readonly" [textStyle]="'font-family: serif; font-style: italic;'"
+                (valueEdited)="onOtherFormEdited(f, f.writtenRep[0], $event)">
+            </inline-editable-value>
         </div>
 
         <div *ngFor="let s of senses" class="sense mt-2">

@@ -282,7 +282,7 @@ export class CreateProjectComponent {
         this.inOutService.getParserFormatForFileName(this.preloadFile.name).subscribe(
             format => {
                 if (format != null) {
-                    for (var i = 0; i < this.inputFormats.length; i++) {
+                    for (let i = 0; i < this.inputFormats.length; i++) {
                         if (this.inputFormats[i].name == format) {
                             this.selectedInputFormat = this.inputFormats[i];
                         }
@@ -309,7 +309,7 @@ export class CreateProjectComponent {
                 let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
                 //set rdf/xml format as default
                 let rdfIdx: number = 0;
-                for (var i = 0; i < this.inputFormats.length; i++) {
+                for (let i = 0; i < this.inputFormats.length; i++) {
                     this.inputFormats[i].fileExtensions.forEach(ext => extList.push("." + ext)); //add all the extension of the format to the extList
                     if (this.inputFormats[i].name == "RDF/XML") {
                         rdfIdx = i;
@@ -528,7 +528,7 @@ export class CreateProjectComponent {
             return;
         }
 
-        var title: string = repoType == "data" ? "Select Remote Data Repository" : "Select Remote History/Validation Repository";
+        let title: string = repoType == "data" ? "Select Remote Data Repository" : "Select Remote History/Validation Repository";
         this.sharedModals.selectRemoteRepository(title, this.selectedRemoteRepoConfig).then(
             (repo: any) => {
                 if (repoType == "data") {
@@ -552,7 +552,7 @@ export class CreateProjectComponent {
 
     private onUriGenPluginChanged() {
         //check if the selected plugin configuration has already the configuration list
-        var uriGenConfs: Settings[] = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
+        let uriGenConfs: Settings[] = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
         if (uriGenConfs != null) {
             this.selectedUriGenPluginConfList = uriGenConfs;
             this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[0];
@@ -584,7 +584,7 @@ export class CreateProjectComponent {
 
     private onRendEnginePluginChanged() {
         //check if the selected plugin configuration has already the configuration list
-        var rendEngConfs: Settings[] = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
+        let rendEngConfs: Settings[] = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
         if (rendEngConfs != null) {
             this.selectedRendEngPluginConfList = rendEngConfs;
             this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[0];
@@ -688,7 +688,7 @@ export class CreateProjectComponent {
         /**
          * Prepare repositoryAccess parameter
          */
-        var repositoryAccess: RepositoryAccess = new RepositoryAccess(this.selectedRepositoryAccess);
+        let repositoryAccess: RepositoryAccess = new RepositoryAccess(this.selectedRepositoryAccess);
         //if the selected repo access is remote, add the configuration 
         if (this.isSelectedRepoAccessRemote()) {
             //check if configuration is set
@@ -702,7 +702,7 @@ export class CreateProjectComponent {
         /**
          * Prepare core repo parameters
          */
-        var coreRepoSailConfigurerSpecification: PluginSpecification
+        let coreRepoSailConfigurerSpecification: PluginSpecification
         //prepare config of core repo only if it is in creation mode
         if (this.isSelectedRepoAccessCreateMode()) {
             //check if data repository configuration needs to be configured
@@ -726,7 +726,7 @@ export class CreateProjectComponent {
         //supportRepoId is mandatory, in this way avoid to pass it as null (possible in came the user changes the title with remote repoAccess)
         let supportRepoIdPar = (this.supportRepoId != null) ? this.supportRepoId : this.projectName + "_support";
 
-        var supportRepoSailConfigurerSpecification: PluginSpecification
+        let supportRepoSailConfigurerSpecification: PluginSpecification
         //prepare config of core repo only if it is in creation mode and one of history and validation is enabled
         if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
             if (this.selectedSupportRepoConfig.requireConfiguration()) {
@@ -743,8 +743,8 @@ export class CreateProjectComponent {
         }
 
         //backend types
-        var coreRepoBackendType: BackendTypesEnum;
-        var supportRepoBackendType: BackendTypesEnum;
+        let coreRepoBackendType: BackendTypesEnum;
+        let supportRepoBackendType: BackendTypesEnum;
         if (!this.isSelectedRepoAccessCreateMode()) {
             coreRepoBackendType = this.selectedCoreRepoBackendType;
             if (this.validation || this.history) {
@@ -763,7 +763,7 @@ export class CreateProjectComponent {
         /**
          * Prepare uriGeneratorSpecification parameter
          */
-        var uriGeneratorSpecification: PluginSpecification;
+        let uriGeneratorSpecification: PluginSpecification;
         if (!this.uriGenUseDefaultSetting) {
             //check if uriGenerator plugin needs to be configured
             if (this.selectedUriGenPluginConf.requireConfiguration()) {
@@ -776,13 +776,12 @@ export class CreateProjectComponent {
                 configType: this.selectedUriGenPluginConf.type,
                 properties: this.selectedUriGenPluginConf.getPropertiesAsMap()
             }
-            // console.log("uriGeneratorSpecification", uriGeneratorSpecification);
         }
 
         /**
          * Prepare renderingEngineSpecification parameter
          */
-        var renderingEngineSpecification: PluginSpecification;
+        let renderingEngineSpecification: PluginSpecification;
         if (!this.rendEngUseDefaultSetting) {
             //check if uriGenerator plugin needs to be configured
             if (this.selectedRendEngPluginConf.requireConfiguration()) {
@@ -796,7 +795,6 @@ export class CreateProjectComponent {
                 configType: this.selectedRendEngPluginConf.type,
                 properties: this.selectedRendEngPluginConf.getPropertiesAsMap()
             }
-            // console.log("renderingEngineSpecification", renderingEngineSpecification);
         }
 
         /**

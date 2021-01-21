@@ -2062,6 +2062,7 @@
         "REMOVE_DANGLING_FROM_SCHEME_WARN_CONFIRM": "If this concept has narrowers, removing it from the scheme may generate other dangling concepts. Are you sure to proceed?",
         "REMOVE_DANGLINGS_FROM_SCHEME_WARN_CONFIRM": "If the concepts have narrowers, removing them from the scheme may generate other dangling concepts. Are you sure to proceed?",
         "REMOVE_USER_FROM_PROJ_CONFIRM": "You are removing the user {{user}} form the project {{project}}. Are you sure?",
+        "RENDERING_ENGINE_CONFIG_UPDATED": "The configuration of the Rendering Engine has been updated",
         "REPLACE_METADATA_PATTERN_CONFIRM": "A Pattern with the same name already exists. It will be replaced. Do you want to continue?",
         "REPLACE_SHARED_METADATA_PATTERN_CONFIRM": "A shared Pattern with the same name already exists. It will be replaced. Do you want to continue?",
         "REPO_CREDENTIALS_BATCH_UPDATED": {
@@ -2112,6 +2113,7 @@
         "UNHANDLED_AXIOM_PROPERTY": "{{property}} is not a class axiom known property, it cannot be handled.",
         "UNHANDLED_LEXICAL_FORM_PROPERTY": "{{property}} is not a lexical form known property, it cannot be handled.",
         "UPDATE_MULTIPLE_HEADER_SAME_NAME_CONFIRM": "There are multiple headers with the same name ({{headerName}}). Do you want to apply the changes to all of them?",
+        "URI_GENERATOR_CONFIG_UPDATED": "The configuration of the Uri Generator has been updated",
         "USER_ADMINISTRATOR_CREATED": "The administrator account has been created. Now you will be automatically logged in with the credentials you provided",
         "USER_CREATED": "User succesfully created",
         "USER_CREATED_PENDING_ACTIVATION": "Your account has been created and is now pending activation. After the system administrator accepts your request, it will be possible to login with the credentials you provided",

@@ -1,8 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { ARTNode, ARTResource } from '../../../models/ARTResources';
-import { ResourceUtils } from '../../../utils/ResourceUtils';
-import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
+import { ARTNode, ARTResource } from '../../models/ARTResources';
+import { ResourceUtils } from '../../utils/ResourceUtils';
+import { BasicModalServices } from '../modal/basicModal/basicModalServices';
 
 @Component({
     selector: 'inline-editable-value',
@@ -14,6 +14,7 @@ export class InlineEditableValue implements OnInit {
     @Input() disabled: boolean = false;
     @Input() preventEdit: boolean = false; //useful when the edit is handled from outside (e.g. creation of CF value) but the input field should not be disabled
     @Input() focusOnInit: boolean = false;
+    @Input() textStyle: string;
     @Output() valueEdited = new EventEmitter<string>();
 
 
@@ -26,7 +27,7 @@ export class InlineEditableValue implements OnInit {
 
     private renderingClass: string;
 
-    constructor(private basicModals: BasicModalServices) { }
+    constructor(private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         this.initValue();
@@ -48,8 +49,8 @@ export class InlineEditableValue implements OnInit {
     }
 
     /**
-	 * Initializes the class of the resource text: green if the resource is in the staging-add-graph, red if it's in the staging-remove-graph
-	 */
+     * Initializes the class of the resource text: green if the resource is in the staging-add-graph, red if it's in the staging-remove-graph
+     */
     private initRenderingClass() {
         this.renderingClass = "";
         if (this.value instanceof ARTResource) {
@@ -67,6 +68,7 @@ export class InlineEditableValue implements OnInit {
     }
 
     private edit() {
+        console.log("edit", this.value.getShow());
         if (this.disabled || this.preventEdit) return;
 
         if (this.value != null) {
@@ -106,7 +108,7 @@ export class InlineEditableValue implements OnInit {
         this.editInProgress = false;
         if (this.pristineStringValue != this.stringValue) {
             if (this.stringValue == undefined || this.stringValue.trim() == "") {
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_OR_EMPTY_VALUE"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_OR_EMPTY_VALUE" }, ModalType.warning);
                 this.stringValue = this.pristineStringValue;
                 return;
             }
@@ -120,4 +122,30 @@ export class InlineEditableValue implements OnInit {
         this.stringValue = this.pristineStringValue; //restore initial value
     }
 
+
+    /**
+     * Click inside/outside handlers.
+     * Explanation:
+     * onComponentClick is triggered only when the click is detected on the current component
+     * onDocumentClick is triggered at every click on document (both in and outside component)
+     * In case the component is clicked, the two handler are executed in the following order:
+     * 1: onComponentClick, 2: onDocumentClick
+     * The first handler tells that the click is done inside (clickInside),
+     * the second check clickInside and decide how to handle the event: inside start to edit, outside cancel edit
+     */
+
+    private clickInside: boolean = false;
+    @HostListener("click")
+    onComponentClick() {
+        this.clickInside = true;
+    }
+    @HostListener("document:click")
+    onDocumentClick() {
+        if (this.clickInside) {
+            this.edit();
+        } else {
+            this.cancelEdit();
+        }
+        this.clickInside = false;
+    }
 }

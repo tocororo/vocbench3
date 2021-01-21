@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from "rxjs";
 import { map } from "rxjs/operators";
-import { ExtensionPointID, Settings, Plugin } from "src/app/models/Plugins";
+import { ExtensionPointID, Settings, Plugin, PluginSpecification } from "src/app/models/Plugins";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "src/app/models/Vocabulary";
 import { PluginsServices } from "src/app/services/pluginsServices";
 import { ProjectServices } from "src/app/services/projectServices";
@@ -154,7 +154,23 @@ export class ProjSettingsEditorModal {
     }
 
     updateRenderingEngine() {
-        alert("TODO");
+        let pluginSpec: PluginSpecification;
+        //check if plugin needs to be configured
+        if (this.selectedRendEngPluginConf.requireConfiguration()) {
+            //...and in case if every required configuration parameters are not null
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_RENDERING_ENGINE_CONFIG"}, ModalType.warning);
+            return;
+        }
+        pluginSpec = {
+            factoryId: this.selectedRendEngPlugin.factoryID,
+            configType: this.selectedRendEngPluginConf.type,
+            properties: this.selectedRendEngPluginConf.getPropertiesAsMap()
+        }
+        this.projectService.updateRenderingEngineConfiguration(this.project.getName(), pluginSpec).subscribe(
+            () => {
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.RENDERING_ENGINE_CONFIG_UPDATED"});
+            }
+        )
     }
 
     //================== URI GENERATOR ==================
@@ -225,7 +241,22 @@ export class ProjSettingsEditorModal {
     }
 
     updateUriGenerator() {
-        alert("TODO");
+        let pluginSpec: PluginSpecification;
+        //check if plugin needs to be configured
+        if (this.selectedUriGenPluginConf.requireConfiguration()) {
+            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_URI_GENERATOR_CONFIG"}, ModalType.warning);
+            return;
+        }
+        pluginSpec = {
+            factoryId: this.selectedUriGenPlugin.factoryID,
+            configType: this.selectedUriGenPluginConf.type,
+            properties: this.selectedUriGenPluginConf.getPropertiesAsMap()
+        }
+        this.projectService.updateURIGeneratorConfiguration(this.project.getName(), pluginSpec).subscribe(
+            () => {
+                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.URI_GENERATOR_CONFIG_UPDATED"});
+            }
+        );
     }
 
 

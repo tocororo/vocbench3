@@ -2072,6 +2072,7 @@
         "REMOVE_DANGLING_FROM_SCHEME_WARN_CONFIRM": "Se questo concetto ha dei narrower, rimuovendolo dallo schema si potrebbero generare altri concetti dangling. Vuoi procedere?",
         "REMOVE_DANGLINGS_FROM_SCHEME_WARN_CONFIRM": "Se questi concetti hanno dei narrower, rimuovendoli dallo schema si potrebbero generare altri concetti dangling. Vuoi procedere?",
         "REMOVE_USER_FROM_PROJ_CONFIRM": "Stai per rimuovere l'utente {{user}} dal progetto {{project}}. Sei sicuro?",
+        "RENDERING_ENGINE_CONFIG_UPDATED": "La configurazione del Rendering Engine è stata aggiornata",
         "REPLACE_METADATA_PATTERN_CONFIRM": "Un pattern con lo stesso nome già esiste. Verrà rimpiazzato. Vuoi continuare?",
         "REPLACE_SHARED_METADATA_PATTERN_CONFIRM": "Un pattern condiviso con lo stesso nome già esiste. Verrà rimpiazzato. Vuoi continuare?",
         "REPO_CREDENTIALS_BATCH_UPDATED": {
@@ -2122,6 +2123,7 @@
         "UNHANDLED_AXIOM_PROPERTY": "{{property}} non è una proprietà nota per gli assiomi tra classi, pertanto non può essere gestita.",
         "UNHANDLED_LEXICAL_FORM_PROPERTY": "{{property}} non è una proprietà nota per le lexical form, pertanto non può essere gestita.",
         "UPDATE_MULTIPLE_HEADER_SAME_NAME_CONFIRM": "Ci sono più header con lo stesso nome ({{headerName}}). Vuoi applicare le modifiche a tutti?",
+        "URI_GENERATOR_CONFIG_UPDATED": "La configurazione del Uri Generator è stata aggiornata",
         "USER_ADMINISTRATOR_CREATED": "L'account amministratore è stato creato. Verrai ora loggato automaticamente con le credenziali fornite",
         "USER_CREATED": "Utente creato correttamente",
         "USER_CREATED_PENDING_ACTIVATION": "Il tuo account è stato creato ed è ora in attesa di attivazione. Dopo che l'amministratore avrà accettato la tua richiesta, ti sarà possibile accedere con le credenziali fornite",

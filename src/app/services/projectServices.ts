@@ -680,6 +680,14 @@ export class ProjectServices {
         );
     }
 
+    updateURIGeneratorConfiguration(projectName: string, uriGeneratorSpecification: PluginSpecification) {
+        let params = {
+            projectName: projectName,
+            uriGeneratorSpecification: JSON.stringify(uriGeneratorSpecification)
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateURIGeneratorConfiguration", params);
+    }
+
     getRenderingEngineConfiguration(projectName: string): Observable<{ factoryID: string, settings: Settings }> {
         let params = {
             projectName: projectName
@@ -693,6 +701,14 @@ export class ProjectServices {
                 return config;
             })
         );
+    }
+
+    updateRenderingEngineConfiguration(projectName: string, renderingEngineSpecification: PluginSpecification) {
+        let params = {
+            projectName: projectName,
+            renderingEngineSpecification: JSON.stringify(renderingEngineSpecification)
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateRenderingEngineConfiguration", params);
     }
 
 }

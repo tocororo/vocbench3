@@ -1,0 +1,29 @@
+.common {
+    box-shadow: none;
+    height: auto; 
+    min-height: 19px;
+    white-space: pre-wrap; 
+}
+
+textarea {
+    resize: vertical;
+    background-color: #f7f7f7;
+    border: 1px solid #4285f4;
+}
+textarea:focus {
+    background-color: #f7f7f7;
+    border: 1px solid #4285f4;
+}
+
+.editable-div {
+    background-color: #fbfbfb;
+    border: 1px solid #fbfbfb;
+}
+.editable-div:hover {
+    background-color: #eee;
+    border: 1px solid #f4f4f4 !important;
+}
+.editable-div:disabled {
+    background-color: #f4f4f4;
+    cursor: not-allowed;
+}
