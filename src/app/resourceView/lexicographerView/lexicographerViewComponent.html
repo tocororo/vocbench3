@@ -3,7 +3,7 @@
         <rdf-resource style="flex: 1;" *ngIf="resource" [resource]="resource"></rdf-resource>
         <input class="form-control form-control-sm" [ngModel]="resource.getNominalValue()" readonly>
 
-        <button class="btn btn-xs btn-light" style="margin-left: 3px;" (click)="buildLexicographerView(resource)" [title]="'ACTIONS.REFRESH'|translate">
+        <button class="btn btn-xs btn-light" style="margin-left: 3px;" (click)="buildLexicographerView()" [title]="'ACTIONS.REFRESH'|translate">
             <span class="fas fa-redo"></span>
         </button>
         <button class="btn btn-light btn-xs" style="margin-left: 3px;" (click)="openSettings()" [title]="'COMMONS.SETTINGS'|translate">
