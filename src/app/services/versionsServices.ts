@@ -17,14 +17,14 @@ export class VersionsServices {
      * Gets the available versions for the current project
      */
     getVersions(): Observable<VersionInfo[]> {
-        var params: any = {
+        let params: any = {
             setRepositoryStatus: true,
             setRepositoryLocation: true
         };
         return this.httpMgr.doGet(this.serviceName, "getVersions", params).pipe(
             map(stResp => {
-                var versions: VersionInfo[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let versions: VersionInfo[] = [];
+                for (let i = 0; i < stResp.length; i++) {
                     let v: VersionInfo = new VersionInfo(stResp[i].versionId, stResp[i].repositoryId, new Date(stResp[i].dateTime), 
                         stResp[i].repositoryLocation, stResp[i].repositoryStatus);
                     versions.push(v);
@@ -55,7 +55,7 @@ export class VersionsServices {
     createVersionDump(versionId: string, repositoryAccess?: RepositoryAccess, repositoryId?: string,
         repoConfigurerSpecification?: PluginSpecification, backendType?: BackendTypesEnum) {
 
-        var params: any = {
+        let params: any = {
             versionId: versionId
         };
         if (repositoryAccess != null) {
@@ -78,10 +78,17 @@ export class VersionsServices {
      * @param versionId 
      */
     closeVersion(versionId: string) {
-        var params: any = {
+        let params: any = {
             versionId: versionId
         };
         return this.httpMgr.doPost(this.serviceName, "closeVersion", params);
+    }
+
+    deleteVersion(versionId: string) {
+        let params: any = {
+            versionId: versionId
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteVersion", params);
     }
 
 

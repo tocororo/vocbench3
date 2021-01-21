@@ -2,16 +2,16 @@
     <div class="card-header">
         <label style="flex: 1">{{'DATA_MANAGEMENT.VERSIONING.VERSIONS'|translate}}:</label>
 
-        <div class="btn-group btn-group-xs" style="margin-right: 5px">
-            <button class="btn btn-light" (click)="swithcToVersion()" [disabled]="!selectedVersion">
-                {{'ACTIONS.SWITCH_TO_VERSION'|translate}}
-            </button>
-            <!-- <button class="btn btn-light" (click)="deleteVersion()" [disabled]="!selectedVersion">
-                Delete
-            </button> -->
-        </div>
+        <button class="btn btn-light btn-xs" (click)="swithcToVersion()" [disabled]="!selectedVersion">
+            {{'ACTIONS.SWITCH_TO_VERSION'|translate}}
+        </button>
 
-        <div class="dropdown float-right" ngbDropdown>
+        <button *ngIf="isDeleteAuthorized" class="btn btn-light btn-xs ml-1" (click)="deleteVersion()" [title]="'ACTIONS.DELETE'|translate"
+            [disabled]="!selectedVersion || selectedVersion.versionId == 'CURRENT' || isActiveVersion(selectedVersion)">
+            <span class="far fa-trash-alt"></span>
+        </button>
+
+        <div class="dropdown ml-1" ngbDropdown>
             <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" [disabled]="!isDumpAuthorized" ngbDropdownToggle>
                 {{'DATA_MANAGEMENT.VERSIONING.DUMP'|translate}}...
                 <span class="fas fa-caret-down fa-sm"></span>
@@ -57,7 +57,7 @@
                         <ng-container *ngIf="idx == 0">
                             ---
                         </ng-container>
-                        <ng-container *ngIf="idx > 0">
+                        <ng-container *ngIf="idx != 0">
                             {{v.repositoryStatus | lowercase}}
                             <button class="btn btn-xs btn-light" (click)="closeVersion(v)"
                                 [disabled]="v.repositoryStatus != 'INITIALIZED' || isActiveVersion(v)">

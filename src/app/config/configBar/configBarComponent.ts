@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Cookie } from 'src/app/utils/Cookie';
-import { VBEventHandler } from 'src/app/utils/VBEventHandler';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
@@ -44,7 +44,7 @@ export class ConfigBarComponent {
     constructor(private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
         private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
-        private translate: TranslateService) {
+        private translate: TranslateService, private route: Router) {
     }
 
     ngOnInit() {
@@ -115,15 +115,18 @@ export class ConfigBarComponent {
     }
 
     private clearData() {
-        this.basicModals.confirm({key:"ACTIONS.CLEAR_DATA"}, "This operation will erase all the data stored in the project." +
-            " Are you sure to proceed?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.CLEAR_DATA"}, {key: "MESSAGES.CLEAR_DATA_CONFIRM"}, ModalType.warning).then(
             () => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.inOutService.clearData().subscribe(
-                    stResp => {
+                    () => {
                         this.prefService.setActiveSchemes().subscribe();
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.basicModals.alert({key:"ACTIONS.CLEAR_DATA"}, {key:"MESSAGES.DATA_CLEARED"});
+                        //simulate the project change in order to force the destroy of all the Route
+                        VBContext.setProjectChanged(true);
+                        //redirect to the home in order to prevent any kind of error related to not existing resource
+                        this.route.navigate(["/Home"]);
                     }
                 );
             },

@@ -1909,6 +1909,7 @@
         "CANNOT_RUN_SKOS_DIFFING_SAME_VERS": "Cannot compare two identical versions of the project",
         "CATALOG_CONNECTOR_NOT_CONFIGURED": "The catalog connector needs to be configured",
         "CHANGE_S2RDF_SETTINGS_CONFIRM": "Changing the settings requires to re-initialize the model related to the current spreadsheet. All the changes applied to the headers will be discarder. Do you want to continue?",
+        "CLEAR_DATA_CONFIRM": "This operation will erase all the data stored in the project, then you'll be redirect to the home page. Are you sure to proceed?",
         "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "The Collaboration System seems to be configured but it's not working (configuration could be not valid or the server may be not reachable), so it will be disabled.",
         "CONFIGURATION_SAVED": "Configuration saved succesfully",
         "CUSTOM_FORM_PROP_CHAIN_DESCR": "Write the chain as sequence of comma (,) separated IRIs (QNames are accepted as well)",

@@ -1919,6 +1919,7 @@
         "CANNOT_RUN_SKOS_DIFFING_SAME_VERS": "Impossibile confrontare due versioni identiche dello stesso progetto",
         "CATALOG_CONNECTOR_NOT_CONFIGURED": "Il catalog connector deve essere configurato",
         "CHANGE_S2RDF_SETTINGS_CONFIRM": "La modifica ai setting richiede di re-inizializzare il modello relativo allo spreadsheet. Tutte le modifiche fatte agli header verranno perse. Vuoi continuare?",
+        "CLEAR_DATA_CONFIRM": "Con questa operazione cancellerai i dati salvati nel progetto e sarai rimandato alla home page. Vuoi procedere?",
         "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "Il Collaboration System sembra essere configurato ma non funziona (la configurazione potrebbe non essere valida o il server potrebbe non essere raggiungibile), pertanto verrà disabilitato.",
         "CONFIGURATION_SAVED": "Configurazione salvata con successo",
         "CUSTOM_FORM_PROP_CHAIN_DESCR": "Scrivi la chain come sequenza di IRI separati da virgole (sono ammessi anche QName)",

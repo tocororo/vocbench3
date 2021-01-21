@@ -240,6 +240,7 @@ export enum VBActionsEnum {
     validation = "validation", //generic
     //Versions
     versionsCreateVersionDump = "versionsCreateVersionDump",
+    versionsDeleteVersions = "versionsDeleteVersions",
     versionsGetVersions = "versionsGetVersions"
 }
 

@@ -21,15 +21,18 @@ export class VersioningComponent {
     selectedVersion: VersionInfo;
 
     isDumpAuthorized: boolean;
+    isDeleteAuthorized: boolean;
 
     constructor(private versionsService: VersionsServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.initVersions();
-        this.isDumpAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.exportDataDump);
+        this.isDumpAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.versionsCreateVersionDump);
+        this.isDeleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.versionsDeleteVersions);
     }
 
     private initVersions() {
+        this.selectedVersion = null;
         this.versionsService.getVersions().subscribe(
             versions => {
                 this.versionList = [{ 
@@ -62,10 +65,6 @@ export class VersioningComponent {
         }
         VBContext.setProjectChanged(true); //changing version is equivalent to changing project
     }
-
-    // deleteVersion() {
-    //     alert("TODO");
-    // }
 
     dump() {
         this.basicModals.prompt({key:"ACTIONS.CREATE_VERSION_DUMP"}, { value: "Version ID" }).then(
@@ -104,7 +103,7 @@ export class VersioningComponent {
         return modalRef.result;
     }
 
-    private isActiveVersion(version: VersionInfo): boolean {
+    isActiveVersion(version: VersionInfo): boolean {
         var activeVersion: VersionInfo = VBContext.getContextVersion();
         if (activeVersion == null) {
             return this.versionList.indexOf(version) == 0;
@@ -113,10 +112,18 @@ export class VersioningComponent {
         }
     }
 
-    private closeVersion(version: VersionInfo) {
+    closeVersion(version: VersionInfo) {
         this.versionsService.closeVersion(version.versionId).subscribe(
-            stResp => {
+            () => {
                 this.initVersions();
+            }
+        );
+    }
+
+    deleteVersion() {
+        this.versionsService.deleteVersion(this.selectedVersion.versionId).subscribe(
+            () => {
+                this.initVersions();        
             }
         );
     }

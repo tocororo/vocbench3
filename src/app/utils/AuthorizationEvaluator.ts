@@ -196,6 +196,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.sparqlExecuteUpdate]: 'auth(rdf(sparql), "U").',
         [VBActionsEnum.validation]: 'auth(rdf(code), "V").',
         [VBActionsEnum.versionsCreateVersionDump]: 'auth(rdf(dataset, version), "C").',
+        [VBActionsEnum.versionsDeleteVersions]: 'auth(rdf(dataset, version), "D").',
         [VBActionsEnum.versionsGetVersions]: 'auth(rdf(dataset, version), "R").',
     };
 
