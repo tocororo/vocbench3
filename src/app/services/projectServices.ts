@@ -663,4 +663,34 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "setBlacklistingEnabled", params);
     }
 
+    getURIGeneratorConfiguration(projectName: string): Observable<{ factoryID: string, settings: Settings }> {
+        let params = {
+            projectName: projectName
+        };
+        return this.httpMgr.doGet(this.serviceName, "getURIGeneratorConfiguration", params).pipe(
+            map(stResp => {
+                let config = {
+                    factoryID: stResp[0],
+                    settings: Settings.parse(stResp[1])
+                }
+                return config;
+            })
+        );
+    }
+
+    getRenderingEngineConfiguration(projectName: string): Observable<{ factoryID: string, settings: Settings }> {
+        let params = {
+            projectName: projectName
+        };
+        return this.httpMgr.doGet(this.serviceName, "getRenderingEngineConfiguration", params).pipe(
+            map(stResp => {
+                let config = {
+                    factoryID: stResp[0],
+                    settings: Settings.parse(stResp[1])
+                }
+                return config;
+            })
+        );
+    }
+
 }

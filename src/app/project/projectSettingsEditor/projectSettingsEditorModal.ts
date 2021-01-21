@@ -1,5 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from "rxjs";
+import { map } from "rxjs/operators";
 import { ExtensionPointID, Settings, Plugin } from "src/app/models/Plugins";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "src/app/models/Vocabulary";
 import { PluginsServices } from "src/app/services/pluginsServices";
@@ -87,33 +89,56 @@ export class ProjSettingsEditorModal {
     //================== RENDERING ENGINE ==================
 
     private initRenderingEngine() {
-        //TODO init selection according current project settings
         this.pluginService.getAvailablePlugins(ExtensionPointID.RENDERING_ENGINE_ID).subscribe(
             (plugins: Plugin[]) => {
                 this.rendEngPluginList = plugins;
-                this.selectedRendEngPlugin = this.rendEngPluginList[0];
-                this.onRendEngineChanged(); //init configuration for the default selected rendering engine plugin
+                this.projectService.getRenderingEngineConfiguration(this.project.getName()).subscribe(
+                    config => {
+                        let pluginToRestore = config.factoryID;
+                        let configToRestore = config.settings;
+                        //select the plugin among the available
+                        this.selectedRendEngPlugin = this.rendEngPluginList.find(p => p.factoryID == pluginToRestore);
+                        //restore the configuration
+                        this.ensureRenderingEngineConfigLoaded().subscribe(
+                            () => {
+                                //update the list of plugin configurations (according the selected plugin)
+                                this.selectedRendEngPluginConfList = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
+                                //search the configuration to restore among these configuration list, then replace it and set it as selected
+                                let targetConfigIdx = this.selectedRendEngPluginConfList.findIndex(c => c.type == configToRestore.type);
+                                this.selectedRendEngPluginConfList[targetConfigIdx] = configToRestore;
+                                this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[targetConfigIdx];
+                            }
+                        )
+                    }
+                );
             }
         );
+    }
+
+    /**
+     * Ensures that the configurations for the selected plugin is available.
+     * If they are not yet in the map retrieve them form server, otherwise do nothing
+     */
+    private ensureRenderingEngineConfigLoaded(): Observable<void> {
+        let confs: Settings[] = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
+        if (confs != null) { //selected plugin is already in the map, so there's no need to get the configurations
+            return of(null);
+        } else { //configurations for selected plugin not found => get the configurations
+            return this.pluginService.getPluginConfigurations(this.selectedRendEngPlugin.factoryID).pipe(
+                map(configs => {
+                    this.rendEngPluginConfMap.set(configs.factoryID, configs.configurations);
+                })
+            );
+        }
     }
 
     /**
      * When the selected rendering engine changes, update the configurations list
      */
     onRendEngineChanged() {
-        //check if the selected plugin configuration has already the configuration list
-        var rendEngConfs: Settings[] = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
-        if (rendEngConfs != null) {
-            this.selectedRendEngPluginConfList = rendEngConfs;
-            this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[0];
-            return; //selected plugin is already in rendEngPluginConfMap, so there's no need to get the configurations
-        }
-        //configurations for selected plugin not found => get the configurations
-        this.pluginService.getPluginConfigurations(this.selectedRendEngPlugin.factoryID).subscribe(
-            configs => {
-                this.rendEngPluginConfMap.set(configs.factoryID, configs.configurations);
-                this.selectedRendEngPluginConfList = configs.configurations;
-                //set the first configuration as default
+        this.ensureRenderingEngineConfigLoaded().subscribe(
+            () => {
+                this.selectedRendEngPluginConfList = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
                 this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[0];
             }
         )
@@ -135,33 +160,56 @@ export class ProjSettingsEditorModal {
     //================== URI GENERATOR ==================
 
     private initUriGenerator() {
-        //TODO init selection according current project settings
         this.pluginService.getAvailablePlugins(ExtensionPointID.URI_GENERATOR_ID).subscribe(
             (plugins: Plugin[]) => {
                 this.uriGenPluginList = plugins;
-                this.selectedUriGenPlugin = this.uriGenPluginList[0];
-                this.onUriGeneratorChanged(); //init configuration for the default selected uri generator plugin
+                this.projectService.getURIGeneratorConfiguration(this.project.getName()).subscribe(
+                    config => {
+                        let pluginToRestore = config.factoryID;
+                        let configToRestore = config.settings;
+                        //select the plugin among the available
+                        this.selectedUriGenPlugin = this.uriGenPluginList.find(p => p.factoryID == pluginToRestore);
+                        //restore the configuration
+                        this.ensureUriGeneratorConfigLoaded().subscribe(
+                            () => {
+                                //update the list of plugin configurations (according the selected plugin)
+                                this.selectedUriGenPluginConfList = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
+                                //search the configuration to restore among these configuration list, then replace it and set it as selected
+                                let targetConfigIdx = this.selectedUriGenPluginConfList.findIndex(c => c.type == configToRestore.type);
+                                this.selectedUriGenPluginConfList[targetConfigIdx] = configToRestore;
+                                this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[targetConfigIdx];
+                            }
+                        )
+                    }
+                );
             }
         );
     }
 
     /**
-     * When the selected uri generator changes, update the configurations list
+     * Ensures that the configurations for the selected plugin is available.
+     * If they are not yet in the map retrieve them form server, otherwise do nothing
+     */
+    private ensureUriGeneratorConfigLoaded(): Observable<void> {
+        let confs: Settings[] = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
+        if (confs != null) { //selected plugin is already in map, so there's no need to get the configurations
+            return of(null);
+        } else { //configurations for selected plugin not found => get the configurations and store them in the map
+            return this.pluginService.getPluginConfigurations(this.selectedUriGenPlugin.factoryID).pipe(
+                map(configs => {
+                    this.uriGenPluginConfMap.set(configs.factoryID, configs.configurations);
+                })
+            );
+        }
+    }
+
+    /**
+     * When the selected uri generator changes, update the configurations list and select the first config
      */
     onUriGeneratorChanged() {
-        //check if the selected plugin configuration has already the configuration list
-        var uriGenConfs: Settings[] = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
-        if (uriGenConfs != null) {
-            this.selectedUriGenPluginConfList = uriGenConfs;
-            this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[0];
-            return; //selected plugin is already in uriGenPluginConfMap, so there's no need to get the configurations
-        }
-        //configurations for selected plugin not found => get the configurations
-        this.pluginService.getPluginConfigurations(this.selectedUriGenPlugin.factoryID).subscribe(
-            configs => {
-                this.uriGenPluginConfMap.set(configs.factoryID, configs.configurations);
-                this.selectedUriGenPluginConfList = configs.configurations;
-                //set the first configuration as default
+        this.ensureUriGeneratorConfigLoaded().subscribe(
+            () => {
+                this.selectedUriGenPluginConfList = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
                 this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[0];
             }
         )
@@ -169,7 +217,7 @@ export class ProjSettingsEditorModal {
 
     configureUriGenerator() {
         this.sharedModals.configurePlugin(this.selectedUriGenPluginConf).then(
-            (config: any) => {
+            (config: Settings) => {
                 this.selectedUriGenPluginConf.properties = (<Settings>config).properties;
             },
             () => { }
