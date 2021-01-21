@@ -61,7 +61,6 @@ import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/re
 import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
 import { ResourceViewTabbedComponent } from '../resourceView/resourceViewModes/resourceViewTabbedComponent';
 import { ResViewSettingsModal } from '../resourceView/resViewSettingsModal';
-import { InlineEditableValue } from '../resourceView/termView/inlineEditableValue/inlineEditableValue';
 import { LanguageBoxComponent } from '../resourceView/termView/languageBox/languageBoxComponent';
 import { LanguageDefinitionComponent } from '../resourceView/termView/languageDefinition/languageDefinition';
 import { LanguageTermComponent } from '../resourceView/termView/languageTerm/languageTerm';
@@ -83,7 +82,6 @@ import { TreeAndListModule } from "./treeAndListModule";
     ],
     declarations: [
         EditableResourceComponent,
-        InlineEditableValue,
         LanguageBoxComponent,
         LexicographerViewComponent,
         ReifiedResourceComponent,
