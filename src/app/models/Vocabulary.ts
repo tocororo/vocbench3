@@ -243,6 +243,7 @@ export class OntoLex {
     public static denotes = new ARTURIResource(OntoLex.namespace + "denotes", "ontolex:denotes", RDFResourceRolesEnum.objectProperty);
     public static evokes = new ARTURIResource(OntoLex.namespace + "evokes", "ontolex:evokes", RDFResourceRolesEnum.objectProperty);
     public static isDenotedBy = new ARTURIResource(OntoLex.namespace + "isDenotedBy", "ontolex:isDenotedBy", RDFResourceRolesEnum.objectProperty);
+    public static isLexicalizedSenseOf = new ARTURIResource(OntoLex.namespace + "isLexicalizedSenseOf", "ontolex:isLexicalizedSenseOf", RDFResourceRolesEnum.objectProperty);
     public static lexicalForm = new ARTURIResource(OntoLex.namespace + "lexicalForm", "ontolex:LexicalForm", RDFResourceRolesEnum.objectProperty);
     public static otherForm = new ARTURIResource(OntoLex.namespace + "otherForm", "ontolex:otherForm", RDFResourceRolesEnum.objectProperty);
     public static representation = new ARTURIResource(OntoLex.namespace + "representation", "ontolex:representation", RDFResourceRolesEnum.datatypeProperty);

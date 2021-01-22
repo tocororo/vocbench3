@@ -469,12 +469,13 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .btn-transparent.disabled {
 	opacity: 0.15;
-	filter: alpha(opacity=15);
+    filter: alpha(opacity=15);
+    cursor: not-allowed;
 }
 
 .btn-faded {
     border: none;
-    background: #fff;
+    background: transparent;
     transition: all 0.3s ease-out;
 }
 .btn-faded:hover, .btn-faded:focus, .btn-faded:active {
