@@ -1,7 +1,7 @@
 .common {
     box-shadow: none;
     height: auto; 
-    min-height: 19px;
+    min-height: 26px;
     white-space: pre-wrap; 
 }
 
@@ -16,11 +16,11 @@ textarea:focus {
 }
 
 .editable-div {
-    background-color: #fbfbfb;
+    background-color: #fdfdfd;
     border: 1px solid #fbfbfb;
 }
 .editable-div:hover {
-    background-color: #eee;
+    background-color: #f7f7f7;
     border: 1px solid #f4f4f4 !important;
 }
 .editable-div:disabled {

@@ -1,8 +1,9 @@
 import { Deserializer } from "../utils/Deserializer";
-import { ARTLiteral, ARTResource } from "./ARTResources";
+import { ARTLiteral, ARTPredicateObjects, ARTResource, ARTURIResource } from "./ARTResources";
 
 export class LexicographerView {
-    id: string;
+    id: ARTURIResource;
+    morphoSyntacticProps: ARTPredicateObjects[];
     lemma: Form[];
     otherForms: Form[];
     senses: Sense[];
@@ -10,7 +11,9 @@ export class LexicographerView {
     public static parse(lvJson: any): LexicographerView {
         let lv: LexicographerView = new LexicographerView();
 
-        lv.id = lvJson.id;
+        lv.id = new ARTURIResource(lvJson.id);
+
+        lv.morphoSyntacticProps = Deserializer.createPredicateObjectsList(lvJson.morphoSyntacticProps);
 
         let lemma: Form[] = [];
         for (let f of lvJson.lemma) {
@@ -35,13 +38,15 @@ export class LexicographerView {
 }
 
 export class Form {
-    id: string;
+    id: ARTURIResource;
+    morphoSyntacticProps: ARTPredicateObjects[];
     phoneticRep: ARTLiteral[];
     writtenRep: ARTLiteral[];
 
     public static parse(fJson: any): Form {
         let f: Form = new Form();
-        f.id = fJson.id;
+        f.id = new ARTURIResource(fJson.id);
+        f.morphoSyntacticProps = Deserializer.createPredicateObjectsList(fJson.morphoSyntacticProps);
         f.phoneticRep = Deserializer.createLiteralArray(fJson.phoneticRep);
         f.writtenRep = Deserializer.createLiteralArray(fJson.writtenRep);
         return f;
@@ -49,14 +54,14 @@ export class Form {
 }
 
 export class Sense {
-    id: string;
+    id: ARTURIResource;
     definition: ARTLiteral[] = [];
     reference: ARTResource[] = [];
     concept: ARTResource[] = [];
 
     public static parse(sJson: any): Sense {
         let s: Sense = new Sense();
-        s.id = sJson.id;
+        s.id = new ARTURIResource(sJson.id);
         if (sJson.definition) {
             s.definition = Deserializer.createLiteralArray(sJson.definition);
         }

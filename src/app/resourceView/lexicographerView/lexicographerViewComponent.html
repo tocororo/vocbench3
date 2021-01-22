@@ -15,20 +15,35 @@
 
         <!-- Temporarly take into account only first writtenRep of Form -->
 
+        <!-- Lemma -->
         <ng-container *ngFor="let l of lemma">
             <inline-editable-value [value]="l.writtenRep[0]" [disabled]="readonly"
-                [textStyle]="'font-family: serif; font-style: italic; font-weight: bold; font-size: 2rem;'"
+                [textStyle]="lemmaStyle"
                 (valueEdited)="onLemmaEdited(l.writtenRep[0], $event)">
             </inline-editable-value>
         </ng-container>
         
-        
-        <div *ngFor="let f of otherForms" class="mt-2">
-            <inline-editable-value [value]="f.writtenRep[0]" [disabled]="readonly" [textStyle]="'font-family: serif; font-style: italic;'"
+        <!-- Other forms -->
+        <div *ngFor="let f of otherForms; let last=last" class="d-flex align-items-center mt-2">
+            <inline-editable-value style="flex: 1" [value]="f.writtenRep[0]" [disabled]="readonly" [textStyle]="formStyle"
                 (valueEdited)="onOtherFormEdited(f, f.writtenRep[0], $event)">
+            </inline-editable-value>
+            <button class="btn btn-faded btn-xs ml-1" [disabled]="readonly" (click)="deleteOtherForm(f)">
+                <span class="fas fa-minus"></span>
+            </button>
+            <div style="width: 20px">
+                <button *ngIf="last" class="btn btn-faded btn-xs ml-1"  (click)="addOtherForm()" [disabled]="readonly">
+                    <span class="fas fa-plus"></span>
+                </button>
+            </div>
+        </div>
+        <div *ngIf="pendingOtherForm" class="mt-2">
+            <inline-editable-value [textStyle]="formStyle" [focusOnInit]="true" [textStyle]="formStyle"
+                (valueEdited)="onPendingOtherFormConfirmed($event)" (editCanceled)="onPendingOtherFormCanceled()">
             </inline-editable-value>
         </div>
 
+        <!-- Senses -->
         <div *ngFor="let s of senses" class="sense mt-2">
             <div *ngFor="let def of s.definition">
                 <rdf-resource [resource]="def"></rdf-resource>
@@ -39,7 +54,7 @@
             </div>
             <div *ngFor="let ref of s.reference" class="d-flex align-items-center">
                 <label>Semantic reference:</label>
-                <rdf-resource [resource]="ref"></rdf-resource>
+                <rdf-resource class="clickable" [resource]="ref" (dblclick)="resourceDblClick(ref)"></rdf-resource>
             </div>
         </div>
     </div>

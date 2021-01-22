@@ -16,24 +16,22 @@ export class InlineEditableValue implements OnInit {
     @Input() focusOnInit: boolean = false;
     @Input() textStyle: string;
     @Output() valueEdited = new EventEmitter<string>();
+    @Output() editCanceled = new EventEmitter<void>();
 
 
     @ViewChild('editBlock') textarea: ElementRef;
-    private textareaRows: number;
+    textareaRows: number;
 
     editInProgress: boolean = false;
     private stringValue: string;
     private pristineStringValue: string;
 
-    private renderingClass: string;
+    renderingClass: string = "";
 
     constructor(private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         this.initValue();
-        if (this.focusOnInit) {
-            this.edit();
-        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -68,7 +66,8 @@ export class InlineEditableValue implements OnInit {
     }
 
     private edit() {
-        console.log("edit", this.value.getShow());
+        this.focusOnInit = false; //now that component has been initialized, focusOnInit is no more useful, so reset it in order to do not alter onDocumentClick()
+        
         if (this.disabled || this.preventEdit) return;
 
         if (this.value != null) {
@@ -120,6 +119,7 @@ export class InlineEditableValue implements OnInit {
     private cancelEdit() {
         this.editInProgress = false;
         this.stringValue = this.pristineStringValue; //restore initial value
+        this.editCanceled.emit();
     }
 
 
@@ -141,7 +141,13 @@ export class InlineEditableValue implements OnInit {
     }
     @HostListener("document:click")
     onDocumentClick() {
-        if (this.clickInside) {
+        /* 
+        Edit: 
+        - if flagged as click inside
+        - if not already editing
+        - if focusOnInit is true: this component has been likely initialized with a click on a button, so prevent to detected click as outside and cancel edit
+        */
+        if ((this.clickInside && !this.editInProgress) || this.focusOnInit) {
             this.edit();
         } else {
             this.cancelEdit();

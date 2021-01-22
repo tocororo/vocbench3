@@ -3,7 +3,7 @@
     <inline-editable-value style="flex: 1; margin-left: 4px;" [value]="def" [disabled]="!editDefAuthorized || readonly"
         [preventEdit]="defCrConfig.hasCustomRange && !def" (click)="onInlineValueClick()" (valueEdited)="onDefinitionEdited($event,def)">
     </inline-editable-value>
-    <button class="btn btn-xs btn-light minus-button"  (click)="deleteDefinition()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteDefAuthorized || readonly">
+    <button class="btn btn-xs btn-faded ml-1"  (click)="deleteDefinition()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteDefAuthorized || readonly">
         <span class="fas fa-minus" style="font-size: 9px;"></span>
     </button>
 </div>

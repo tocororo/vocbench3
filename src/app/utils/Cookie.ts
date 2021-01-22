@@ -1,6 +1,8 @@
 // this class is partially re-using code from the project:
 // https://github.com/BCJTI/ng2-cookies
 
+import { Project } from "../models/Project";
+
 export class Cookie {
 
 	public static TRANSLATE_LANG = "translate.lang";
@@ -58,6 +60,10 @@ export class Cookie {
 		return (result === null) ? null : myWindow.unescape(result[1]);
 	}
 
+	public static getProjectCookie(name: string, project: Project, userIri?: string): string {
+		return Cookie.getCookie(name + "." + project.getName(), userIri);
+	}
+
 	/**
 	 * Save the Cookie
 	 * @param  {string} name Cookie's identification
@@ -80,6 +86,10 @@ export class Cookie {
 		document.cookie = cookieStr;
 	}
 
+	public static setProjectCookie(name: string, project: Project, value: string, expires?: number, userIri?: string) {
+		Cookie.setCookie(name + "." + project.getName(), value, expires, userIri);
+	}
+
 	/**
 	 * Removes specified Cookie
 	 * @param  {string} name Cookie's identification
@@ -90,6 +100,10 @@ export class Cookie {
 		if (Cookie.getCookie(name)) {
 			Cookie.setCookie(name, '', -1, userIri);
 		}
+	}
+
+	public static deleteProjectCookie(name: string, project: Project, userIri?: string) {
+		Cookie.setCookie(name + "." + project.getName(), userIri);
 	}
 
 }

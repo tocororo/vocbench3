@@ -30,9 +30,14 @@ export class LexicographerViewComponent {
     @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
     private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
+    private lemmaStyle = "font-family: serif; font-style: italic; font-weight: bold; font-size: 2rem;"
+    private formStyle = "font-family: serif; font-style: italic;";
+
     lemma: Form[]; //in case of validation the staging-add is at pos.0, staging-remove at 1 (TODO verify and force it when it will be supported)
     otherForms: Form[];
     senses: Sense[];
+
+    pendingOtherForm: ARTLiteral; //written rep of an other form that is going to be added
 
     constructor(private lexicographerViewService: LexicographerViewServices, private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices,
         private modalService: NgbModal) {}
@@ -68,10 +73,23 @@ export class LexicographerViewComponent {
                 let lv = LexicographerView.parse(resp);
                 this.lemma = lv.lemma;
                 this.otherForms = lv.otherForms;
+                this.sortForms(this.otherForms);
                 this.senses = lv.senses;
+                this.sortSenses(this.senses);
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             }
         );
+    }
+
+    private sortForms(forms: Form[]) {
+        forms.sort((f1, f2) => {
+            return f1.writtenRep[0].getShow().localeCompare(f2.writtenRep[0].getShow())
+        })
+    }
+    private sortSenses(senses: Sense[]) {
+        senses.sort((s1, s2) => {
+            return s1.reference[0].getShow().localeCompare(s2.reference[0].getShow())
+        })
     }
 
     onLemmaEdited(oldWrittenRep: ARTLiteral, newValue: string) {
@@ -84,13 +102,40 @@ export class LexicographerViewComponent {
     }
 
     onOtherFormEdited(form: Form, oldWrittenRep: ARTLiteral, newValue: string) {
-        let formUriRes: ARTURIResource = new ARTURIResource(form.id);
         let newWrittenRep: ARTLiteral = new ARTLiteral(newValue, null, oldWrittenRep.getLang());
-        this.resourceService.updateTriple(formUriRes, OntoLex.writtenRep, oldWrittenRep, newWrittenRep).subscribe(
+        this.resourceService.updateTriple(form.id, OntoLex.writtenRep, oldWrittenRep, newWrittenRep).subscribe(
             () => {
                 this.buildLexicographerView();
             }
         )
+    }
+    
+    addOtherForm() {
+        this.pendingOtherForm = new ARTLiteral("", null, this.lemma[0].writtenRep[0].getLang());
+    }
+    deleteOtherForm(form: Form) {
+        this.ontolexService.removeForm(this.resource, OntoLex.otherForm, form.id).subscribe(
+            () => {
+                this.buildLexicographerView();
+            }
+        )
+    }
+    onPendingOtherFormConfirmed(value: string) {
+        let writtenRep: ARTLiteral = new ARTLiteral(value, null, this.lemma[0].writtenRep[0].getLang());
+        this.ontolexService.addOtherForm(this.resource, writtenRep).subscribe(
+            () => {
+                this.pendingOtherForm = null;
+                this.buildLexicographerView();
+            }
+        )
+    }
+    onPendingOtherFormCanceled() {
+        this.pendingOtherForm = null;
+    }
+
+
+    resourceDblClick(resource: ARTResource) {
+        this.dblclickObj.emit(resource);
     }
 
     /**

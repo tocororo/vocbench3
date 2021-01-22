@@ -463,7 +463,8 @@ input[type=number]::-webkit-outer-spin-button {
     color: #000000;
 }
 .btn-transparent:hover {
-	opacity: 0.9;
+    opacity: 0.9;
+    background: #f7f7f7;
 	filter: alpha(opacity=90);
 }
 .btn-transparent.disabled {
@@ -471,17 +472,27 @@ input[type=number]::-webkit-outer-spin-button {
 	filter: alpha(opacity=15);
 }
 
-/* .btn-light {
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
+.btn-faded {
+    border: none;
+    background: #fff;
+    transition: all 0.3s ease-out;
 }
-.btn-light.active {
-    outline: 0;
-    background-image: none;
-    -webkit-box-shadow: inset 0 3px 5px rgba(0,0,0,0.125);
-    box-shadow: inset 0 3px 5px rgba(0,0,0,0.125);
-} */
+.btn-faded:hover, .btn-faded:focus, .btn-faded:active {
+    background: #ddd !important; /*important in order to "win" over the backgroung in btn-group:hover>btn-faded*/
+    transition: all 0.4s ease-in;
+}
+.btn-faded:focus {
+    outline: none;
+}
+.btn-faded > .fas, .btn-faded > .far {
+    color: #fff;
+}
+
+.btn-group:hover > .btn-faded {
+    background: #eee;
+    transition: all 0.4s ease-in;
+}
+
 .btn-light {
     border-color: #ccc !important;
 }

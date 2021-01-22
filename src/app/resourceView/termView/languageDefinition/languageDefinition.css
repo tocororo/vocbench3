@@ -1,45 +1,6 @@
-  .def-wrap {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 5px;
-  }
-
-  .add-button {
-    border: none;
-    background: rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease-out;
-  }
-
-  .add-button:hover, .add-button:focus, .add-button:active {
-    background: rgba(221, 221, 221, 0.5);
-    transition: all 0.4s ease-in;
-  }
-
-  .add-button:focus {
-    outline: none;
-  }
-
-  .add-button span {
-    color: white;
-  }
-
-  .minus-button {
-    border: none;
-    background: rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease-out;
-    margin-left: 3px;
-  }
-
-  .minus-button:hover, .minus-button:focus, .minus-button:active {
-    background: rgba(221, 221, 221, 0.5);
-    transition: all 0.4s ease-in;
-  }
-
-  .minus-button:focus {
-    outline: none;
-  }
-
-  .minus-button span {
-    color: white;
-  }
+.def-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5px;
+}

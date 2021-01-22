@@ -108,7 +108,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
 
         this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
         this.indexLenght = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.indexLength;
-        this.initIndex();
+        this.restoreLastIndex();
         this.onDigitChange();
     }
 
@@ -301,30 +301,9 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         );
     }
 
-    private initIndex() {
-        //init firstDigitIndex and secondDigitIndex restoring the last selection from cookie (if set)
-        let lastIdxsCookie: string = Cookie.getCookie(Cookie.LEX_ENTRY_LAST_INDEX);
-        if (lastIdxsCookie != null) {
-            lastIdxsCookie = lastIdxsCookie.toUpperCase();
-            if (lastIdxsCookie.length == 1) {
-                this.firstDigitIndex = lastIdxsCookie;
-            } else if (lastIdxsCookie.length == 2) {
-                this.firstDigitIndex = lastIdxsCookie.charAt(0);
-                this.secondDigitIndex = lastIdxsCookie.charAt(1);
-            }
-            //check if the two digits are admitted values (otherwise set AA)
-            if (!this.alphabet.includes(this.firstDigitIndex)) {
-                this.firstDigitIndex = this.alphabet[0];
-            }
-            if (!this.alphabet.includes(this.secondDigitIndex) && this.secondDigitIndex != " ") {
-                this.secondDigitIndex = this.alphabet[0];
-            }
-        }
-    }
-
     private onDigitChange() {
         this.index = (this.indexLenght == 1) ? this.firstDigitIndex : this.firstDigitIndex + this.secondDigitIndex;
-        Cookie.setCookie(Cookie.LEX_ENTRY_LAST_INDEX, this.index);
+        this.storeLastIndex();
         this.indexChanged.emit(this.index);
     }
 
@@ -348,6 +327,36 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                         this.onDigitChange();
                     }
                 );
+            }
+        }
+    }
+
+    /**
+     * Store a cookie with the current index in order to restore in the next sessions
+     */
+    private storeLastIndex() {
+        Cookie.setProjectCookie(Cookie.LEX_ENTRY_LAST_INDEX, VBContext.getWorkingProject(), this.index);
+    }
+    /**
+     * Restore the index selected the last session by getting a dedicated cookie
+     */
+    private restoreLastIndex() {
+        //init firstDigitIndex and secondDigitIndex restoring the last selection from cookie (if set)
+        let lastIdxsCookie: string = Cookie.getProjectCookie(Cookie.LEX_ENTRY_LAST_INDEX, VBContext.getWorkingProject());
+        if (lastIdxsCookie != null) {
+            lastIdxsCookie = lastIdxsCookie.toUpperCase();
+            if (lastIdxsCookie.length == 1) {
+                this.firstDigitIndex = lastIdxsCookie;
+            } else if (lastIdxsCookie.length == 2) {
+                this.firstDigitIndex = lastIdxsCookie.charAt(0);
+                this.secondDigitIndex = lastIdxsCookie.charAt(1);
+            }
+            //check if the two digits are admitted values (otherwise set AA)
+            if (!this.alphabet.includes(this.firstDigitIndex)) {
+                this.firstDigitIndex = this.alphabet[0];
+            }
+            if (!this.alphabet.includes(this.secondDigitIndex) && this.secondDigitIndex != " ") {
+                this.secondDigitIndex = this.alphabet[0];
             }
         }
     }

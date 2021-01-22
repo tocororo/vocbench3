@@ -1,104 +1,31 @@
-  .wrap {
-    display: flex;
-    text-align: center;
-    margin: 2px;
-    position: relative;
-    margin-top: 40px;
-  }
+.wrap {
+  display: flex;
+  text-align: center;
+  margin: 2px;
+  position: relative;
+  margin-top: 40px;
+}
 
-  .links {
-    padding: 0 10px;
-    display: flex;
-    /* justify-content: space-between; */
-    position: relative;
-  }
+.links {
+  padding: 0 10px;
+  display: flex;
+  /* justify-content: space-between; */
+  position: relative;
+}
 
-  .wrap:before {
-    content: '';
-    position: absolute;
-    top: 100%;
-    /* top:50% for flag in middle of the line*/
-    left: 0;
-    border-top: 1px solid black;
-    background: black;
-    width: 100%;
-    transform: translateY(-50%);
-  }
+.wrap:before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  /* top:50% for flag in middle of the line*/
+  left: 0;
+  border-top: 1px solid black;
+  background: black;
+  width: 100%;
+  transform: translateY(-50%);
+}
 
-  .semitransparent {
-    margin-left: auto;
-  }
-
-  .semitransparent:hover>.add-button {
-    background: rgba(221, 221, 221, 0.5);
-    transition: all 0.4s ease-in;
-  }
-
-  .add-button {
-    border: none;
-    background: rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease-out;
-  }
-
-  .add-button:hover, .add-button:focus, .add-button:active {
-    background: rgba(221, 221, 221, 0.5);
-    transition: all 0.4s ease-in;
-  }
-
-  .add-button:focus {
-    outline: none;
-  }
-
-  .add-button span {
-    color: white;
-  }
-
-  .arrow {
-    margin: 0;
-    padding: 0 1px !important;
-  }
-
-  .minus-button {
-    border: none;
-    background: rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease-out;
-    margin-left: 3px;
-  }
-
-  .minus-button:hover, .minus-button:focus, .minus-button:active {
-    background: rgba(221, 221, 221, 0.5);
-    transition: all 0.4s ease-in;
-  }
-
-  .minus-button:focus {
-    outline: none;
-  }
-
-  .minus-button span {
-    color: white;
-  }
-
-  .remove-button {
-    position: absolute;
-    left: 30%;
-    border: none;
-    background: transparent;
-    transition: all 0.3s ease-out;
-  }
-
-  .remove-button:hover, .remove-button:focus, .remove-button:active {
-    background: rgba(124, 124, 124, 0.8);
-    transition: all 0.4s ease-in;
-  }
-
-  .remove-button:hover>span {
-    color: white;
-  }
-
-  .remove-button:focus {
-    outline: none;
-  }
-
-  .remove-button span {
-    color: transparent;
-  }
+.arrow {
+  margin: 0;
+  padding: 0 1px !important;
+}

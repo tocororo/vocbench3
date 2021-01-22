@@ -272,17 +272,13 @@ export class OntoLexLemonServices {
      * @param newForm 
      * @param customFormValue 
      */
-    addOtherForm(lexicalEntry: ARTURIResource, writtenRep: ARTLiteral, newForm: ARTURIResource, customFormValue?: CustomFormValue) {
+    addOtherForm(lexicalEntry: ARTURIResource, writtenRep: ARTLiteral, newForm?: ARTURIResource, customFormValue?: CustomFormValue) {
         var params: any = {
             lexicalEntry: lexicalEntry,
-            writtenRep: writtenRep
+            writtenRep: writtenRep,
+            newForm: newForm,
+            customFormValue: customFormValue
         };
-        if (newForm != null) {
-            params.newForm = newForm;
-        }
-        if (customFormValue != null) {
-            params.customFormValue = customFormValue;
-        }
         return this.httpMgr.doPost(this.serviceName, "addOtherForm", params);
     }
 
