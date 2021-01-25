@@ -602,6 +602,7 @@
             "SELECT_COLLECTION": "Seleziona collezione",
             "SELECT_CONCEPT": "Seleziona concetto",
             "SELECT_INSTANCE": "Seleziona istanza",
+            "SELECT_LEXICAL_CONCEPT": "Seleziona Lexical Concept",
             "SELECT_LEXICAL_ENTRY": "Seleziona Lexical Entry",
             "SELECT_LEXICALIZATION_PROPERTY": "Seleziona proprietà di lessicalizzazione",
             "SELECT_LEXICON": "Seleziona lessico",
@@ -1403,7 +1404,6 @@
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Concetti broader",
             "TERM": "Termine",
-            "DEFINITION": "Definizione",
             "REMOVE_BOX": "Rimuovi box"
         }
     },
@@ -1700,6 +1700,7 @@
             "PREV_PAGE": "Pagina precedente",
             "NEXT_PAGE": "Pagina successiva"
         },
+        "DEFINITION": "Definizione",
         "DESCRIPTION": "Descrizione",
         "DETAILS": "Dettagli",
         "FORCE_FORMAT": "Forza il formato",

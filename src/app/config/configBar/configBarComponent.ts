@@ -149,7 +149,7 @@ export class ConfigBarComponent {
     private changeWGraph() {
         this.exportServices.getNamedGraphs().subscribe(
             graphs => {
-                this.sharedModals.selectResource("Write graph selection", "", graphs, false).then(g => {
+                this.sharedModals.selectResource({key: "APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH"}, null, graphs, false).then(g => {
                     if (VBContext.getWorkingProject()?.getBaseURI() == g.getNominalValue()) {
                         g = null;
                     }

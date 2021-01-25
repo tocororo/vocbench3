@@ -95,12 +95,12 @@ export abstract class ARTResource extends ARTNode {
         return this.role;
     }
 
-    addNature(role: RDFResourceRolesEnum, graph: ARTURIResource) {
+    addNature(role: RDFResourceRolesEnum, graph: ARTURIResource, deprecated: boolean) {
         let n = this.nature.find(n => n.role == role);
         if (n != null) {
             n.graphs.push(graph);
         } else {
-            this.nature.push({ role: role, graphs: [graph] });
+            this.nature.push({ role: role, graphs: [graph], deprecated });
         }
     }
     setNature(nature: ResourceNature[]) {
@@ -469,7 +469,26 @@ export enum TripleScopes {
 
 export class ResourceNature {
     role: RDFResourceRolesEnum;
+    deprecated: boolean;
     graphs: ARTURIResource[];
+
+    public static parse(natureAttr: string): ResourceNature[] {
+        let nature: ResourceNature[] = [];
+        let splittedNatures: string[] = natureAttr.split("|_|");
+        splittedNatures.forEach(n => {
+            let roleGraphDeprecatedTriple: string[] = n.split(",");
+            let roleInNature: RDFResourceRolesEnum = <RDFResourceRolesEnum>roleGraphDeprecatedTriple[0];
+            let graphInNature: ARTURIResource = new ARTURIResource(roleGraphDeprecatedTriple[1]);
+            let deprecatedInNature: boolean = roleGraphDeprecatedTriple[2] == "true";
+            let natureForGraph = nature.find(n => n.graphs.includes(graphInNature));
+            if (natureForGraph != null) {
+                natureForGraph.graphs.push(graphInNature);
+            } else {
+                nature.push({ role: roleInNature, graphs: [graphInNature], deprecated: deprecatedInNature });
+            }
+        });
+        return nature;
+    }
 }
 
 export enum ShowInterpretation {

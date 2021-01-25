@@ -74,18 +74,12 @@ export class LexicographerViewComponent {
         this.lexicographerViewService.getLexicalEntryView(this.resource).subscribe(
             resp => {
                 let lv = LexicographerView.parse(resp);
+                console.log("lv", lv);
                 this.lemma = lv.lemma;
                 this.otherForms = lv.otherForms;
                 this.sortForms(this.otherForms);
                 this.senses = lv.senses;
                 this.sortSenses(this.senses);
-                //temp code just for testing purposes
-                if (this.senses[0] && this.senses[0].definition.length == 0) {
-                    this.senses[0].definition = [
-                        new ARTLiteral("This definition has been added just for testing purposes from the Angular component since this sense has no definition. Decomment the code in order to remove it", null, "en"),
-                        new ARTLiteral("This second test definition has been added like the previous from the Angular component", null, "en"),
-                    ];
-                }
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             }
         );
@@ -176,7 +170,9 @@ export class LexicographerViewComponent {
         sense['pendingDef'] = {}; //add a fake object just to make appear a input field in the UI
     }
     onPendingDefConfirmed(sense: Sense, newDef: string) {
-        alert("TODO add " + newDef + " to sense " + sense.id.getShow())
+        alert("this view is still under development; the addition of definition is not yet working, so the added definition is only visualized temporarly and not stored permanently server side")
+        sense.definition.push(new ARTLiteral(newDef, this.lemma[0].writtenRep[0].getLang()));
+        delete sense['pendingDef'];
     }
     onPendingDefCanceled(sense: Sense) {
         delete sense['pendingDef']; //delete the fake object to makje disappear the input field from the UI
@@ -199,14 +195,15 @@ export class LexicographerViewComponent {
     
     setConcept(sense: Sense) {
         //TODO: this is a huge problem in a real case scenario where ontolex:LexicalConcept has too much instances
-        this.browsingModals.browseInstanceList("", OntoLex.lexicalConcept).then(
+        this.browsingModals.browseInstanceList({key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}, OntoLex.lexicalConcept).then(
             lexConc => {
                 this.resourceService.addValue(sense.id, OntoLex.isLexicalizedSenseOf, lexConc).subscribe(
                     () => {
                         this.buildLexicographerView();
                     }
                 )
-            }
+            },
+            () => {}
         )
     }
     deleteConcept(sense: Sense, concept: ARTURIResource) {
