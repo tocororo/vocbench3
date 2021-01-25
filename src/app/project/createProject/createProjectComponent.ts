@@ -163,6 +163,8 @@ export class CreateProjectComponent {
     //TRIVIAL INFERENCE
     private enableTrivialInference: boolean = false;
 
+    private openAtStartup: boolean = false;
+
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
         private translateService: TranslateService, private router: Router, 
@@ -853,7 +855,7 @@ export class CreateProjectComponent {
             supportRepoSailConfigurerSpecification, supportRepoBackendType,
             leftDataset, rightDataset, uriGeneratorSpecification, renderingEngineSpecification,
             metadataAssociationsPar, this.enableSHACL, shaclSettingsPar, this.enableTrivialInference,
-            preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance).subscribe(
+            preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance, this.openAtStartup).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PROJECT_CREATED"}).then(

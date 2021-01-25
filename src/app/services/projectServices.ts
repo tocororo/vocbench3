@@ -157,7 +157,8 @@ export class ProjectServices {
         uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification,
         resourceMetadataAssociations?: Pair<RDFResourceRolesEnum, string>[],
         shaclEnabled?: boolean, shaclSettings?: Map<string, any>, trivialInferenceEnabled?: boolean,
-        preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance) {
+        preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance,
+        openAtStartup?: boolean) {
         
         let params: any = {
             consumer: "SYSTEM",
@@ -186,6 +187,7 @@ export class ProjectServices {
             preloadedDataFileName: preloadedDataFileName,
             preloadedDataFormat: preloadedDataFormat,
             transitiveImportAllowance: transitiveImportAllowance,
+            openAtStartup: openAtStartup
         };
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
@@ -709,6 +711,21 @@ export class ProjectServices {
             renderingEngineSpecification: JSON.stringify(renderingEngineSpecification)
         };
         return this.httpMgr.doPost(this.serviceName, "updateRenderingEngineConfiguration", params);
+    }
+
+    getOpenAtStartup(projectName: string) {
+        let params = {
+            projectName: projectName
+        };
+        return this.httpMgr.doGet(this.serviceName, "getOpenAtStartup", params);
+    }
+
+    setOpenAtStartup(projectName: string, openAtStartup: boolean) {
+        let params = {
+            projectName: projectName,
+            openAtStartup: openAtStartup
+        };
+        return this.httpMgr.doPost(this.serviceName, "setOpenAtStartup", params);
     }
 
 }

@@ -367,7 +367,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" id="resMetadataCheck" type="checkbox" [(ngModel)]="useResourceMetadata">
                                 <label class="form-check-label" for="resMetadataCheck">
-                                    {{'PROJECTS.USE_RESOURCE_METADATA'|translate}}
+                                    {{'ACTIONS.USE'|translate}}
                                     <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.USE_RESOURCE_METADATA_INFO'|translate"></span>
                                 </label>
                             </div>
@@ -428,7 +428,7 @@
                             <label style="flex: 1;">{{'PROJECTS.SHACLE_SHAPE_VALIDATION'|translate}}</label>
                             <div class="form-check">
                                 <input class="form-check-input" id="shapeCheck" type="checkbox" [(ngModel)]="enableSHACL" (ngModelChange)="onShacleEnableChange()">
-                                <label class="form-check-label" for="shapeCheck">{{'PROJECTS.ENABLE_SHAPE_VALIDATION'|translate}}</label>
+                                <label class="form-check-label" for="shapeCheck">{{'ACTIONS.ENABLE'|translate}}</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -443,15 +443,26 @@
                         </div>
                     </div>
 
-                    <div class="card card-alt">
-                        <div class="card-header">
-                            <label style="flex: 1;">{{'PROJECTS.TRIVIAL_INFERENCE_ENGINE'|translate}}</label>
+                    <div class="card">
+                        <div class="card-body">
                             <div class="form-check">
                                 <input class="form-check-input" id="trivialInferCheck" type="checkbox" [(ngModel)]="enableTrivialInference">
-                                <label class="form-check-label" for="trivialInferCheck">{{'PROJECTS.ENABLE_TRIVIAL_INFERENCE'|translate}}</label>
+                                <span class="form-check-label" for="trivialInferCheck">
+                                    {{'PROJECTS.TRIVIAL_INFERENCE_ENGINE'|translate}}
+                                    <span class="fas fa-info-circle" [title]="'PROJECTS.ENABLE_TRIVIAL_INFERENCE'|translate"></span>
+                                </span>
+                            </div>
+
+                            <div class="form-check mt-1">
+                                <input class="form-check-input" id="openAtStartupCheck" type="checkbox" [(ngModel)]="openAtStartup">
+                                <span class="form-check-label" for="openAtStartupCheck">
+                                    {{'PROJECTS.OPEN_AT_STARTUP'|translate}}
+                                    <span class="fas fa-info-circle" [title]="'PROJECTS.OPEN_AT_STARTUP_INFO'|translate"></span>
+                                </span>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 

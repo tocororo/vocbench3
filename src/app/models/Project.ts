@@ -20,6 +20,7 @@ export class Project {
     private facets: Settings;
     private description: string;
     private createdAt: string;
+    private openAtStartup: boolean;
 
     constructor(name?: string) {
         if (name != undefined) {
@@ -184,6 +185,14 @@ export class Project {
         }
     }
 
+    public setOpenAtStartup(openAtStartup: boolean) {
+        this.openAtStartup = openAtStartup;
+    }
+
+    public getOpenAtStartup(): boolean {
+        return this.openAtStartup;
+    }
+
     public static deserialize(projJson: any): Project {
         let proj = new Project();
         proj.setName(projJson.name);
@@ -202,6 +211,7 @@ export class Project {
         proj.setDescription(projJson.description);
         proj.setCreatedAt(projJson.createdAt);
         proj.setFacets(Settings.parse(projJson.facets));
+        proj.setOpenAtStartup(projJson.openAtStartup);
         return proj;
     }
 

@@ -22,6 +22,8 @@ export class ProjSettingsEditorModal {
     validationEnabled: boolean;
     blacklisting: boolean;
 
+    openAtStartup: boolean;
+
     //LEX MODEL
     lexModel: LexModelEntry;
     lexModelList: LexModelEntry[] = [
@@ -52,6 +54,7 @@ export class ProjSettingsEditorModal {
         this.initLexModel();
         this.initRenderingEngine();
         this.initUriGenerator();
+        this.openAtStartup = this.project.getOpenAtStartup();
     }
 
     //================== BLACKLISTING ==================
@@ -84,6 +87,14 @@ export class ProjSettingsEditorModal {
                 this.initLexModel();
             }
         );
+    }
+
+    //================== OPEN AT STARTUP ==================
+
+    changeOpenAtStartup() {
+        this.openAtStartup = !this.openAtStartup;
+        this.projectService.setOpenAtStartup(this.project.getName(), this.openAtStartup).subscribe();
+        this.project.setOpenAtStartup(this.openAtStartup);
     }
 
     //================== RENDERING ENGINE ==================

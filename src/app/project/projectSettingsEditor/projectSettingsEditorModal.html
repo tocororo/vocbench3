@@ -16,6 +16,16 @@
                     </select>
                 </div>
             </div>
+            <!-- OPEN AT STARTUP -->        
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2">{{'PROJECTS.OPEN_AT_STARTUP'|translate}}:</label>
+                <div class="col-sm-10 d-flex align-items-center">
+                    <button class="btn btn-light btn-sm" [ngClass]="{ active: openAtStartup }" (click)="changeOpenAtStartup()">
+                        <b *ngIf="openAtStartup" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
+                        <b *ngIf="!openAtStartup" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
+                    </button>
+                </div>
+            </div>
             <!-- BLACKLISTING -->        
             <div *ngIf="validationEnabled" class="form-group row">
                 <label class="col-form-label col-sm-2">{{'PROJECTS.BLACKLIST'|translate}}:</label>
