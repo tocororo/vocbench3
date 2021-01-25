@@ -1,3 +1,4 @@
+import { ARTResource, ARTURIResource } from '../models/ARTResources';
 import { VersionInfo } from '../models/History';
 import { PrefixMapping } from '../models/Metadata';
 import { Project } from '../models/Project';
@@ -61,6 +62,37 @@ export class VBContext {
     }
 
     /**
+     * Methods for managing the working graph (the graph that is set as ctx_wgraph requests parameter)
+     */
+    static setContextWGraph(wgraph: ARTResource) {
+        this.workingProjectCtx.setContextWGraph(wgraph);
+    }
+    static getContextWGraph() {
+        if (this.workingProjectCtx != null) {
+            return this.workingProjectCtx.getContextWGraph();
+        } else {
+            return null;
+        }
+    }
+    static removeContextWGraph() {
+        this.workingProjectCtx.setContextWGraph(null);
+    }
+    static getActualWorkingGraph() {
+        if (this.workingProjectCtx != null) {
+            return this.workingProjectCtx.getContextWGraph() || new ARTURIResource(this.workingProjectCtx.getProject().getBaseURI());
+        } else {
+            return null;
+        }
+    }
+    static getActualWorkingGraphString() {
+        if (this.workingProjectCtx != null) {
+            return this.workingProjectCtx.getContextWGraph()?.getNominalValue() || this.workingProjectCtx.getProject().getBaseURI();
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * When project changes set a flag in the context, so the CustomReuseStrategy knows if to reattach or reload a route
      */
     static setProjectChanged(changed: boolean) {
@@ -121,6 +153,7 @@ export class ProjectContext { //TODO move to Project model class?
     private project: Project;
     private prefixMappings: PrefixMapping[];
     private ctxVersion: VersionInfo; // version used
+    private ctxWGraph: ARTResource; // write graph used, if not the projects' main graph
     private puBinging: ProjectUserBinding;
     private preferences: ProjectPreferences;
     private settings: ProjectSettings;
@@ -140,6 +173,9 @@ export class ProjectContext { //TODO move to Project model class?
     setContextVersion(version: VersionInfo) { this.ctxVersion = version; }
     getContextVersion(): VersionInfo { return this.ctxVersion; }
 
+    setContextWGraph(wgraph: ARTResource) { this.ctxWGraph = wgraph; }
+    getContextWGraph(): ARTResource { return this.ctxWGraph; }
+    
     setProjectUserBinding(puBinging: ProjectUserBinding) { this.puBinging = puBinging; }
     getProjectUserBinding(): ProjectUserBinding { return this.puBinging; }
 

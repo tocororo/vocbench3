@@ -169,9 +169,9 @@ export class EditableResourceComponent extends AbstractResViewResource {
         this.isInferred = ResourceUtils.isTripleInferred(this.resource);
 
         //init actions authorization
-        let inMainGraph: boolean = ResourceUtils.containsNode(this.resource.getTripleGraphs(), new ARTURIResource(VBContext.getWorkingProject().getBaseURI()));
+        let inWorkingGraph: boolean = ResourceUtils.containsNode(this.resource.getTripleGraphs(), VBContext.getActualWorkingGraph());
         this.editMenuDisabled = (
-            (!this.isInferred && !inMainGraph) || //neither in the main graph nor in inference graph
+            (!this.isInferred && !inWorkingGraph) || //neither in the working graph nor in inference graph
             // (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT)) || 
             this.readonly ||
             ResourceUtils.isTripleInStaging(this.resource)

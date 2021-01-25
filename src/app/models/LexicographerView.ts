@@ -3,7 +3,7 @@ import { ARTLiteral, ARTPredicateObjects, ARTResource, ARTURIResource } from "./
 
 export class LexicographerView {
     id: ARTURIResource;
-    morphoSyntacticProps: ARTPredicateObjects[];
+    morphosyntacticProps: ARTPredicateObjects[];
     lemma: Form[];
     otherForms: Form[];
     senses: Sense[];
@@ -13,7 +13,7 @@ export class LexicographerView {
 
         lv.id = new ARTURIResource(lvJson.id);
 
-        lv.morphoSyntacticProps = Deserializer.createPredicateObjectsList(lvJson.morphoSyntacticProps);
+        lv.morphosyntacticProps = Deserializer.createPredicateObjectsList(lvJson.morphosyntacticProps);
 
         let lemma: Form[] = [];
         for (let f of lvJson.lemma) {
@@ -39,14 +39,14 @@ export class LexicographerView {
 
 export class Form {
     id: ARTURIResource;
-    morphoSyntacticProps: ARTPredicateObjects[];
+    morphosyntacticProps: ARTPredicateObjects[];
     phoneticRep: ARTLiteral[];
     writtenRep: ARTLiteral[];
 
     public static parse(fJson: any): Form {
         let f: Form = new Form();
         f.id = new ARTURIResource(fJson.id);
-        f.morphoSyntacticProps = Deserializer.createPredicateObjectsList(fJson.morphoSyntacticProps);
+        f.morphosyntacticProps = Deserializer.createPredicateObjectsList(fJson.morphosyntacticProps);
         f.phoneticRep = Deserializer.createLiteralArray(fJson.phoneticRep);
         f.writtenRep = Deserializer.createLiteralArray(fJson.writtenRep);
         return f;

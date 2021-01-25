@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { ARTBNode, ARTLiteral, ARTNode, ARTURIResource } from "../models/ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { VersionInfo } from "../models/History";
 import { Project } from "../models/Project";
@@ -333,6 +333,13 @@ export class HttpManager {
             params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().versionId) + "&";
         }
 
+        //give priority to working graph in HttpServiceContext over version in ctx
+        if (HttpServiceContext.getContextWGraph() != undefined) {
+            params += "ctx_wgraph=" + encodeURIComponent(HttpServiceContext.getContextWGraph().toNT()) + "&";
+        } else if (VBContext.getContextWGraph() != undefined) {
+            params += "ctx_wgraph=" + encodeURIComponent(VBContext.getContextWGraph().toNT()) + "&";
+        }
+
         if (HttpServiceContext.getSessionToken() != undefined) {
             params += "ctx_token=" + encodeURIComponent(HttpServiceContext.getSessionToken()) + "&";
         }
@@ -487,6 +494,7 @@ export class HttpServiceContext {
     private static ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
     private static ctxConsumer: Project; //consumer project temporarly used in some scenarios (e.g. service invoked in group management)
     private static ctxVersion: VersionInfo; //version temporarly used in some scenarios (e.g. versioning res view)
+    private static ctxWGraph: ARTResource; // write graph temporarly used in some scenarios
     private static ctxForce: boolean; //true in order to force some operation (e.g. createConcept, addPrefLabel after rejection in validation)
     private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
     
@@ -530,6 +538,19 @@ export class HttpServiceContext {
     }
     static removeContextVersion() {
         this.ctxVersion = null;
+    }
+
+    /**
+     * Methods for managing a contextual working graph (working graph temporarly used in some scenarios)
+     */
+    static setContextWGraph(wgraph: ARTResource) {
+        this.ctxWGraph = wgraph;
+    }
+    static getContextWGraph(): ARTResource {
+        return this.ctxWGraph;
+    }
+    static removeContextWGraph() {
+        this.ctxWGraph = null;
     }
 
     static setContextForce(force: boolean) {
@@ -586,6 +607,7 @@ export class HttpServiceContext {
         this.ctxProject = null;
         this.ctxConsumer = null;
         this.ctxVersion = null;
+        this.ctxWGraph = null;
         this.sessionToken = null;
         this.interceptError = true;
     }

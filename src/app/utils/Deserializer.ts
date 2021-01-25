@@ -128,18 +128,18 @@ export class Deserializer {
                  * explicit is true if the resource is defined in the main graph (but not in the remove-staging)
                  */
                 if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
-                    var baseURI = VBContext.getWorkingProject() ? VBContext.getWorkingProject().getBaseURI() : null;
+                    var baseURI = VBContext.getActualWorkingGraphString();
                     let resGraphs: ARTURIResource[] = node.getGraphs();
-                    let inMainGraph: boolean = false;
+                    let inWorkingGraph: boolean = false;
                     let inRemoveStagingGraph: boolean = false;
                     for (var i = 0; i < resGraphs.length; i++) {
                         if (resGraphs[i].getURI() == baseURI) {
-                            inMainGraph = true;
+                            inWorkingGraph = true;
                         } else if (resGraphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
                             inRemoveStagingGraph = true;
                         }
                     }
-                    if (inMainGraph && !inRemoveStagingGraph) {
+                    if (inWorkingGraph && !inRemoveStagingGraph) {
                         node.setAdditionalProperty(ResAttribute.EXPLICIT, true);
                     }
                 }

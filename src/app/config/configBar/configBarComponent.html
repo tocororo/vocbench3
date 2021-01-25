@@ -44,6 +44,10 @@
                 <label style="margin-right: 2px;">ver:</label>
                 <span>{{getCtxVersion().versionId}}</span>
             </div>
+            <div *ngIf="getCtxWGraph()" class="ml-2" style="display:flex; align-items: center">
+                <label style="margin-right: 2px;">wgraph:</label>
+                <span>{{getCtxWGraph().toNT()}}</span>
+            </div>
         </div>
 
         <!--Configuration of project data, not available when there is no project accessed-->
@@ -69,6 +73,10 @@
                     <a routerLink="/Config/Versioning" class="dropdown-item"
                         [ngClass]="{ disabled : !versioningAuthorized }">
                         <span class="far fa-clock" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.VERSIONING'|translate}}
+                    </a>
+                    <a (click)="changeWGraph()" class="dropdown-item"
+                        [ngClass]="{ disabled : !wgraphAuthorized }">
+                        <span class="fas fa-pen" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH'|translate}}
                     </a>
                     <div class="dropdown-divider"></div>
                     <a routerLink="/Config/Refactor" class="dropdown-item">

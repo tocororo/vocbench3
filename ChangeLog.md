@@ -10,6 +10,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
     * Updated Angular version to ^10.2.2
     * Dropped dependency from ngx-modialog in favor of ng-bootstrap
     * Updated Bootstrap dependency to version 4.5.3
+  * Enabled changing the working graph
   * Implemented support for i18n
   * Improved alignment management in EDOAL project
     * Enabled the storing of validated alignment in the EDOAL linkset

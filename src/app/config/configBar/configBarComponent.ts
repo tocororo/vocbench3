@@ -2,6 +2,8 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { ARTResource } from "src/app/models/ARTResources";
+import { ExportServices } from "src/app/services/exportServices";
 import { Cookie } from 'src/app/utils/Cookie';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { VersionInfo } from "../../models/History";
@@ -37,11 +39,12 @@ export class ConfigBarComponent {
     private exportDataAuthorized: boolean;
     private clearDataAuthorized: boolean;
     private versioningAuthorized: boolean;
+    private wgraphAuthorized: boolean;
     private loadShapesAuthorized: boolean;
     private exportShapesAuthorized: boolean;
     private clearShapesAuthorized: boolean;
 
-    constructor(private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
+    constructor(private exportServices: ExportServices, private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
         private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
         private translate: TranslateService, private route: Router) {
@@ -76,6 +79,13 @@ export class ConfigBarComponent {
      */
     private getCtxVersion(): VersionInfo {
         return VBContext.getContextVersion();
+    }
+
+    /**
+     * Returns the current write graph of the project 
+     */
+    private getCtxWGraph(): ARTResource {
+        return VBContext.getContextWGraph();
     }
 
     /**
@@ -120,11 +130,9 @@ export class ConfigBarComponent {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.inOutService.clearData().subscribe(
                     () => {
+                        this.prefService.setActiveSchemes().subscribe();
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.basicModals.alert({key:"ACTIONS.CLEAR_DATA"}, {key:"MESSAGES.DATA_CLEARED"});
-                        //reset scheme in order to prevent error when re-init the concept tree
-                        VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes = [];
-                        this.prefService.setActiveSchemes().subscribe();
                         //simulate the project change in order to force the destroy of all the Route
                         VBContext.setProjectChanged(true);
                         //redirect to the home in order to prevent any kind of error related to not existing resource
@@ -134,6 +142,22 @@ export class ConfigBarComponent {
             },
             () => { }
         );
+    }
+
+    private changeWGraph() {
+        this.exportServices.getNamedGraphs().subscribe(
+            graphs => {
+                this.sharedModals.selectResource("Write graph selection", "", graphs, false).then(g => {
+                    if (VBContext.getWorkingProject()?.getBaseURI() == g.getNominalValue()) {
+                        g = null;
+                    }
+                    VBContext.setContextWGraph(g);
+                    VBContext.setProjectChanged(true); //changing wgraph is equivalent to changing projectv
+                    //redirect to the home in order to reset views that were based on the old wgraph
+                    this.route.navigate(["/Home"]);
+                }, () => { });
+            }
+        )
     }
 
     loadShacleShapes() {
@@ -182,6 +206,7 @@ export class ConfigBarComponent {
         this.exportDataAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.exportExport);
         this.clearDataAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.inputOutputClearData);
         this.versioningAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.versionsGetVersions);
+        this.wgraphAuthorized = true; // TODO: replace with proper capability check
         this.loadShapesAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclLoadShapes);
         this.exportShapesAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclExportShapes);
         this.clearShapesAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclClearShapes);
