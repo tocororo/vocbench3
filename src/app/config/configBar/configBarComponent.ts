@@ -130,9 +130,11 @@ export class ConfigBarComponent {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.inOutService.clearData().subscribe(
                     () => {
-                        this.prefService.setActiveSchemes().subscribe();
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.basicModals.alert({key:"ACTIONS.CLEAR_DATA"}, {key:"MESSAGES.DATA_CLEARED"});
+                        //reset scheme in order to prevent error when re-init the concept tree
+                        VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes = [];
+                        this.prefService.setActiveSchemes().subscribe();
                         //simulate the project change in order to force the destroy of all the Route
                         VBContext.setProjectChanged(true);
                         //redirect to the home in order to prevent any kind of error related to not existing resource

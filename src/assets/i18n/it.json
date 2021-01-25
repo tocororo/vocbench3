@@ -612,8 +612,7 @@
             "SELECT_SCHEME": "Seleziona schema",
             "SET_AS_TOP_CONCEPT": "Setta come top concept",
             "SET_DATATYPE_RESTRICTIONS": "Setta restrizioni datatype",
-            "SET_INVERSE_PROPERTY": "Setta proprietà inversa",
-            "SPAWN_CONCEPT_FROM_XLABEL": "Genera concetto da xLabel"
+            "SET_INVERSE_PROPERTY": "Setta proprietà inversa"
         }
     },
     "DATA_MANAGEMENT": {
