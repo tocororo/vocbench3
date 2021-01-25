@@ -196,7 +196,13 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     openACLModal() {
-        if (this.projectList.length > 50) {
+        let projLength: number = 0;
+        if (this.visualizationMode == ProjectViewMode.list) {
+            projLength = this.projectList.length;
+        } else {
+            this.projectDirs.forEach(dir => projLength = projLength + dir.projects.length);
+        }
+        if (projLength > 50) {
             this.basicModals.confirm({key:"PROJECTS.ACL.ACL_MATRIX"}, {key:"MESSAGES.ACL_TOO_MUCH_PROJ_CONFIRM", params:{projCount: this.projectList.length}}, ModalType.warning).then(
                 () => { //confirmed
                     this.openACLMatrix();
