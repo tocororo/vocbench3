@@ -611,8 +611,7 @@
             "SELECT_SCHEME": "Seleziona schema",
             "SET_AS_TOP_CONCEPT": "Setta come top concept",
             "SET_DATATYPE_RESTRICTIONS": "Setta restrizioni datatype",
-            "SET_INVERSE_PROPERTY": "Setta proprietà inversa",
-            "SPAWN_CONCEPT_FROM_XLABEL": "Genera concetto da xLabel"
+            "SET_INVERSE_PROPERTY": "Setta proprietà inversa"
         }
     },
     "DATA_MANAGEMENT": {
@@ -1321,28 +1320,28 @@
             }
         },
         "ACTIONS": {
-            "BLOCK_NAMESPACE": "Blocca namespace",
-            "COPY_TO_CLIPBOARD": "Copia negli appunti",
-            "SHOW_HIDE_INFERRED": "Mostra/nascondi informazioni inferite",
-            "TOGGLE_VALUE_FILTER_LANG": "Abilita/disabilita il filtro-valori sulle lingue",
-            "TOGGLE_NOTIFICATIONS": "Abilita/disabilita notifiche su questa risorsa",
-            "CHANGE_VERSION": "Cambia versione",
-            "ALIGN_WITH_EXTERNAL_RESOURCE": "Allinea con una risorsa esterna",
-            "SET_AS_DEPRECATED": "Segna come deprecato",
-            "ASSERT_INFERRED_STATEMENTS": "Asserisci le informazioni inferite",
-            "SPAWN_CONCEPT_FROM_XLABEL": "Crea un nuovo concetto da questa xLabel",
-            "SHOW_IN_DATA_GRAPH": "Mostra in un grafo orientato ai dati",
-            "ADD_VALUE_MANUALLY": "Aggiungi valore manualmente",
             "ADD_VALUE_FROM_ANOTHER_PROJ": "Aggiungi valore da un altro progetto",
-            "DELETE_ALL_VALUES": "Cancella tutti i valori",
-            "EDIT_LITERAL_CONTENT": "Modifica contenuto letterale",
+            "ADD_VALUE_MANUALLY": "Aggiungi valore manualmente",
+            "ALIGN_WITH_EXTERNAL_RESOURCE": "Allinea con una risorsa esterna",
+            "ASSERT_INFERRED_STATEMENT": "Asserisci informazione inferita",
+            "ASSERT_INFERRED_STATEMENTS": "Asserisci le informazioni inferite",
+            "BLOCK_NAMESPACE": "Blocca namespace",
+            "BULK_DELETE": "Cancellazione di massa",
+            "BULK_DELETE_INFO": "Cancella i valori per ogni risorsa che ha questa relazione predicato-oggetto",
             "BULK_EDIT": "Modifica di massa",
             "BULK_EDIT_INFO": "Aggiorna il valore per ogni risorsa che ha questa relazione predicato-oggetto",
-            "MOVE_XLABEL_TO_CONCEPT": "Assegna xLabel ad un altro concetto",
+            "CHANGE_VERSION": "Cambia versione",
+            "COPY_TO_CLIPBOARD": "Copia negli appunti",
             "COPY_VALUE_TO_LOCALES": "Copia valore in altri locali",
-            "ASSERT_INFERRED_STATEMENT": "Asserisci informazione inferita",
-            "BULK_DELETE": "Cancellazione di massa",
-            "BULK_DELETE_INFO": "Cancella i valori per ogni risorsa che ha questa relazione predicato-oggetto"
+            "DELETE_ALL_VALUES": "Cancella tutti i valori",
+            "EDIT_LITERAL_CONTENT": "Modifica contenuto letterale",
+            "MOVE_XLABEL_TO_CONCEPT": "Assegna xLabel ad un altro concetto",
+            "SET_AS_DEPRECATED": "Segna come deprecato",
+            "SHOW_HIDE_INFERRED": "Mostra/nascondi informazioni inferite",
+            "SHOW_IN_DATA_GRAPH": "Mostra in un grafo orientato ai dati",
+            "SPAWN_CONCEPT_FROM_XLABEL": "Crea un nuovo concetto da xLabel",
+            "TOGGLE_NOTIFICATIONS": "Abilita/disabilita notifiche su questa risorsa",
+            "TOGGLE_VALUE_FILTER_LANG": "Abilita/disabilita il filtro-valori sulle lingue"
         },
         "SETTINGS": {
             "TABBED_INFO": "Il ResourceView viene mostrato in un tab e multipli ResourceView possono essere aperti in tab differenti.",
@@ -1396,6 +1395,9 @@
         "CODE_EDITOR": {
             "CODE_EDITOR": "Code editor",
             "DISABLED_UNDER_VALIDATION": "Il tab Code è stato disabilitato in quanto questa risorsa - o parte della sua descrizione - è sotto validazione"
+        },
+        "LEX_VIEW": {
+            "SEMANTIC_REFERENCE": "Riferimento semantico"
         },
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Concetti broader",

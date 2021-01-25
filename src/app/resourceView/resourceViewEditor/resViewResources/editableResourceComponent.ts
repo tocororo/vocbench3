@@ -552,7 +552,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     private spawnNewConceptWithLabel() {
         //here I can cast resource since this method is called only on object with role "xLabel" that are ARTResource
-        this.creationModals.newConceptFromLabel({key:"DATA.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL"}, <ARTResource>this.resource, SKOS.concept, true, <ARTURIResource>this.subject).then(
+        this.creationModals.newConceptFromLabel({key:"RESOURCE_VIEW.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL"}, <ARTResource>this.resource, SKOS.concept, true, <ARTURIResource>this.subject).then(
             data => {
                 let oldConcept: ARTURIResource = <ARTURIResource>this.subject;
                 this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, data.schemes, oldConcept,

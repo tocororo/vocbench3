@@ -91,7 +91,7 @@
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
                     <a class="dropdown-item" (click)="addDefinition(s)" [disabled]="s.concept.length == 0">
-                        Add definition
+                        {{'DATA.ACTIONS.ADD_DEFINITION'|translate}}
                     </a>
                     <a class="dropdown-item" (click)="setConcept(s)" [disabled]="s.concept.length != 0">
                         Set concept
