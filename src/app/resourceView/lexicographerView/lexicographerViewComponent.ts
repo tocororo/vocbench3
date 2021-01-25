@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Form, LexicographerView, Sense } from "src/app/models/LexicographerView";
-import { OntoLex, XmlSchema } from "src/app/models/Vocabulary";
+import { OntoLex, SKOS, XmlSchema } from "src/app/models/Vocabulary";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
@@ -82,8 +82,8 @@ export class LexicographerViewComponent {
                 //temp code just for testing purposes
                 if (this.senses[0] && this.senses[0].definition.length == 0) {
                     this.senses[0].definition = [
-                        new ARTLiteral("This test definition has been added from the Angular component since this sense has no definition. Decomment the code in order to remove it", XmlSchema.string.getURI()),
-                        new ARTLiteral("This second test definition has been added like the previous from the Angular component", XmlSchema.string.getURI()),
+                        new ARTLiteral("This definition has been added just for testing purposes from the Angular component since this sense has no definition. Decomment the code in order to remove it", null, "en"),
+                        new ARTLiteral("This second test definition has been added like the previous from the Angular component", null, "en"),
                     ];
                 }
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
@@ -181,10 +181,43 @@ export class LexicographerViewComponent {
     onPendingDefCanceled(sense: Sense) {
         delete sense['pendingDef']; //delete the fake object to makje disappear the input field from the UI
     }
+    onDefinitionEdited(sense: Sense, def: ARTLiteral, newValue: string) {
+        let newDefinition = new ARTLiteral(newValue, null, def.getLang())
+        this.resourceService.updateTriple(sense.concept[0], SKOS.definition, def, newDefinition).subscribe(
+            () => {
+                this.buildLexicographerView();
+            }
+        )
+    }
+    deleteDefinition(sense: Sense, def: ARTLiteral) {
+        this.resourceService.removeValue(sense.concept[0], SKOS.definition, def).subscribe(
+            () => {
+                this.buildLexicographerView();
+            }
+        )
+    }
     
     setConcept(sense: Sense) {
-        alert("TODO");
+        //TODO: this is a huge problem in a real case scenario where ontolex:LexicalConcept has too much instances
+        this.browsingModals.browseInstanceList("", OntoLex.lexicalConcept).then(
+            lexConc => {
+                this.resourceService.addValue(sense.id, OntoLex.isLexicalizedSenseOf, lexConc).subscribe(
+                    () => {
+                        this.buildLexicographerView();
+                    }
+                )
+            }
+        )
     }
+    deleteConcept(sense: Sense, concept: ARTURIResource) {
+        this.resourceService.removeValue(sense.id, OntoLex.isLexicalizedSenseOf, concept).subscribe(
+            () => {
+                this.buildLexicographerView();
+            }
+        )
+    }
+
+
 
     resourceDblClick(resource: ARTResource) {
         this.dblclickObj.emit(resource);

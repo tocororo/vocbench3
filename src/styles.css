@@ -475,11 +475,11 @@ input[type=number]::-webkit-outer-spin-button {
 
 .btn-faded {
     border: none;
-    background: transparent;
+    background: #dddddd33;
     transition: all 0.3s ease-out;
 }
 .btn-faded:hover, .btn-faded:focus, .btn-faded:active {
-    background: #ddd !important; /*important in order to "win" over the backgroung in btn-group:hover>btn-faded*/
+    background: #ccc !important; /*important in order to "win" over the backgroung in btn-group:hover>btn-faded*/
     transition: all 0.4s ease-in;
 }
 .btn-faded:focus {

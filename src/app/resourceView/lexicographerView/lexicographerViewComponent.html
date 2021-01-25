@@ -23,71 +23,83 @@
             <button class="btn btn-faded ml-1" (click)="addMorphosintacticPropToLemma(l)" [disabled]="readonly">
                 <span class="fas fa-pencil-alt"></span>
             </button>
+            <button *ngIf="otherForms.length == 0" class="btn btn-faded ml-1" (click)="addOtherForm()" [title]="'ACTIONS.ADD_OTHER_FORM'|translate" [disabled]="readonly">
+                <span class="fas fa-plus"></span>
+            </button>
         </div>
         
         <!-- Other forms -->
         <div *ngFor="let f of otherForms; let last=last" class="d-flex align-items-center mt-2">
-            <inline-editable-value style="flex: 1" [value]="f.writtenRep[0]" [disabled]="readonly" [textStyle]="formStyle"
-                (valueEdited)="onOtherFormEdited(f, f.writtenRep[0], $event)">
+            <inline-editable-value style="flex: 1" [value]="f.writtenRep[0]" [disabled]="readonly" [textStyle]="formStyle" (valueEdited)="onOtherFormEdited(f, f.writtenRep[0], $event)">
             </inline-editable-value>
             <button class="btn btn-faded btn-xs ml-1" (click)="addMorphosintacticPropToForm(f)" [disabled]="readonly">
                 <span class="fas fa-pencil-alt"></span>
             </button>
-            <button class="btn btn-faded btn-xs ml-1" (click)="deleteOtherForm(f)" [disabled]="readonly">
+            <button class="btn btn-faded btn-xs ml-1" (click)="deleteOtherForm(f)" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
                 <span class="fas fa-minus"></span>
             </button>
             <div style="width: 20px">
-                <button *ngIf="last && !pendingOtherForm" class="btn btn-faded btn-xs ml-1" (click)="addOtherForm()"
-                    [disabled]="readonly">
+                <button *ngIf="last && !pendingOtherForm" class="btn btn-faded btn-xs ml-1" (click)="addOtherForm()" [title]="'ACTIONS.ADD_OTHER_FORM'|translate" [disabled]="readonly">
                     <span class="fas fa-plus"></span>
                 </button>
             </div>
         </div>
         <div *ngIf="pendingOtherForm" class="mt-2">
-            <inline-editable-value [textStyle]="formStyle" [focusOnInit]="true"
-                (valueEdited)="onPendingOtherFormConfirmed($event)" (editCanceled)="onPendingOtherFormCanceled()">
+            <inline-editable-value [textStyle]="formStyle" [focusOnInit]="true" (valueEdited)="onPendingOtherFormConfirmed($event)" (editCanceled)="onPendingOtherFormCanceled()">
             </inline-editable-value>
         </div>
 
         <!-- Senses -->
         <div *ngFor="let s of senses" class="sense mt-3">
             <div *ngIf="s.definition.length > 0 || s.pendingDef" class="d-flex">
-                <label class="mr-2">Definition:</label>
+                <label class="mr-2 mt-3">Definition:</label>
                 <div class="vbox">
-                    <rdf-resource *ngFor="let def of s.definition" class="mb-1 ml-1" [resource]="def"></rdf-resource>
-                    <button *ngIf="!s.pendingDef" class="btn btn-faded btn-xs" style="align-self: flex-start" (click)="addDefinition(s)" 
+                    <div *ngFor="let def of s.definition; let last=last" class="d-flex align-items-center mt-2">
+                        <inline-editable-value [value]="def" (valueEdited)="onDefinitionEdited(s, def, $event)" [disabled]="readonly">
+                        </inline-editable-value>
+                        <button class="btn btn-faded btn-xs ml-1" (click)="deleteDefinition(s, def)"  [disabled]="readonly" [title]="'ACTIONS.DELETE'|translate">
+                            <span class="fas fa-minus"></span>
+                        </button>
+                        <button *ngIf="last && !s.pendingDef" class="btn btn-faded btn-xs ml-1" (click)="addDefinition(s)" [disabled]="readonly" [title]="'ACTIONS.ADD'|translate">
+                            <span class="fas fa-plus"></span>
+                        </button>
+                    </div>
+                    <!-- <rdf-resource *ngFor="let def of s.definition" class="mb-1 ml-1" [resource]="def"></rdf-resource> -->
+                    <!-- <button *ngIf="!s.pendingDef" class="btn btn-faded btn-xs" style="align-self: flex-start" (click)="addDefinition(s)" 
                         [disabled]="readonly" [title]="'ACTIONS.ADD'|translate">
                         <span class="fas fa-plus"></span>
-                    </button>
+                    </button> -->
                     <inline-editable-value *ngIf="s.pendingDef" [focusOnInit]="true" (valueEdited)="onPendingDefConfirmed(s, $event)" (editCanceled)="onPendingDefCanceled(s)">
                     </inline-editable-value>
                 </div>
             </div>
-            <div *ngFor="let c of s.concept" class="d-flex align-items-center mt-1">
+            <div *ngFor="let c of s.concept" class="d-flex align-items-center mt-3">
                 <label class="mr-2">Concept:</label>
                 <rdf-resource class="clickable" [resource]="c" (dblclick)="resourceDblClick(c)"></rdf-resource>
+                <button class="btn btn-faded btn-xs ml-1" (click)="deleteConcept(s, c)" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
+                    <span class="fas fa-minus"></span>
+                </button>
             </div>
-            <div *ngFor="let ref of s.reference" class="d-flex align-items-center mt-1">
+            <div *ngFor="let ref of s.reference" class="d-flex align-items-center mt-3">
                 <label class="mr-2">Semantic reference:</label>
                 <rdf-resource class="clickable" [resource]="ref" (dblclick)="resourceDblClick(ref)"></rdf-resource>
             </div>
 
             <div class="dropdown" style="position: absolute; top: 1px; right: 0;" ngbDropdown>
-                <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
                     <span class="fas fa-plus"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
-                    <a class="dropdown-item" (click)="addDefinition(s)">
+                    <a class="dropdown-item" (click)="addDefinition(s)" [disabled]="s.concept.length == 0">
                         Add definition
                     </a>
-                    <a class="dropdown-item" (click)="setConcept(s)">
+                    <a class="dropdown-item" (click)="setConcept(s)" [disabled]="s.concept.length != 0">
                         Set concept
                     </a>
                 </div>
             </div>
         </div>
-        <button class="btn btn-faded btn-xs mt-2" style="align-self: flex-start;" (click)="addSense()"
-            [disabled]="readonly" [title]="'ACTIONS.ADD_LEXICAL_SENSE'|translate">
+        <button class="btn btn-faded btn-xs mt-2" style="align-self: flex-start;" (click)="addSense()" [disabled]="readonly" [title]="'ACTIONS.ADD_LEXICAL_SENSE'|translate">
             <span class="fas fa-plus"></span>
         </button>
     </div>
