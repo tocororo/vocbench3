@@ -242,6 +242,7 @@
             "GLOBAL_DATA_MENU": {
                 "GLOBAL_DATA_MANAGEMENT": "Global Data Management",
                 "VERSIONING": "Versioning",
+                "WGRAPH": "Change working graph",
                 "REFACTOR": "Refactoring"
             }
         }

@@ -241,6 +241,7 @@
             "CURRENT_PROJECT": "Current project",
             "GLOBAL_DATA_MENU": {
                 "GLOBAL_DATA_MANAGEMENT": "Global Data Management",
+                "WGRAPH": "Change working graph",
                 "VERSIONING": "Versioning",
                 "REFACTOR": "Refactoring"
             }
@@ -611,7 +612,8 @@
             "SELECT_SCHEME": "Select scheme",
             "SET_AS_TOP_CONCEPT": "Set as top concept",
             "SET_DATATYPE_RESTRICTIONS": "Set datatype restrictions",
-            "SET_INVERSE_PROPERTY": "Set inverse property"
+            "SET_INVERSE_PROPERTY": "Set inverse property",
+            "SPAWN_CONCEPT_FROM_XLABEL": "Spawn concept from xLabel"
         }
     },
     "DATA_MANAGEMENT": {
