@@ -612,8 +612,7 @@
             "SELECT_SCHEME": "Select scheme",
             "SET_AS_TOP_CONCEPT": "Set as top concept",
             "SET_DATATYPE_RESTRICTIONS": "Set datatype restrictions",
-            "SET_INVERSE_PROPERTY": "Set inverse property",
-            "SPAWN_CONCEPT_FROM_XLABEL": "Spawn concept from xLabel"
+            "SET_INVERSE_PROPERTY": "Set inverse property"
         }
     },
     "DATA_MANAGEMENT": {

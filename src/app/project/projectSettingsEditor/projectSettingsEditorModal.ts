@@ -24,15 +24,6 @@ export class ProjSettingsEditorModal {
 
     openAtStartup: boolean;
 
-    //LEX MODEL
-    lexModel: LexModelEntry;
-    lexModelList: LexModelEntry[] = [
-        { value: RDFS.uri, label: Project.getPrettyPrintModelType(RDFS.uri) },
-        { value: SKOS.uri, label: Project.getPrettyPrintModelType(SKOS.uri) },
-        { value: SKOSXL.uri, label: Project.getPrettyPrintModelType(SKOSXL.uri) },
-        { value: OntoLex.uri, label: Project.getPrettyPrintModelType(OntoLex.uri) },
-    ];
-
     //RENDERING ENGINE PLUGIN
     rendEngPluginList: Plugin[]; //available plugins for rendering engine
     selectedRendEngPlugin: Plugin; //chosen plugin for rendering engine
@@ -51,7 +42,6 @@ export class ProjSettingsEditorModal {
 
     ngOnInit() {
         this.initBlacklisting();
-        this.initLexModel();
         this.initRenderingEngine();
         this.initUriGenerator();
         this.openAtStartup = this.project.getOpenAtStartup();
@@ -70,23 +60,6 @@ export class ProjSettingsEditorModal {
         this.blacklisting = !this.blacklisting;
         this.projectService.setBlacklistingEnabled(this.project.getName(), this.blacklisting).subscribe();
         this.project.setBlacklistingEnabled(this.blacklisting);
-    }
-
-    //================== LEX MODEL ==================
-
-    initLexModel() {
-        this.lexModel = this.lexModelList.find(lm => lm.value == this.project.getLexicalizationModelType());
-    }
-
-    changeLexModel() {
-        this.basicModals.confirm({key: "STATUS.WARNING"}, {key: "MESSAGES.LEX_MODEL_CHANGE_CONFIRM", params: {model: this.lexModel.label}}, ModalType.warning).then(
-            () => {
-                //TODO service invocation
-            },
-            () => { //in case user cancel operation, restore the lex model
-                this.initLexModel();
-            }
-        );
     }
 
     //================== OPEN AT STARTUP ==================
