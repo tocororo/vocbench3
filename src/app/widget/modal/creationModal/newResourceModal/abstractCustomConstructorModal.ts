@@ -38,7 +38,7 @@ export abstract class AbstractCustomConstructorModal {
      * Called by changeClass, that just invoke this method passing the root class
      */
     changeClassWithRoot(rootClass: ARTURIResource) {
-        this.browsingModals.browseClassTree({key:"ACTIONS.CHANGE_CLASS"}, [rootClass]).then(
+        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.CHANGE_CLASS"}, [rootClass]).then(
             (selectedClass: any) => {
                 if ((<ARTURIResource>selectedClass).getURI() != this.resourceClass.getURI()) {
                     this.resourceClass = selectedClass;

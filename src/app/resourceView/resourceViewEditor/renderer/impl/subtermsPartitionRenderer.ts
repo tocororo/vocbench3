@@ -35,7 +35,7 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
 
     //add as top concept
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.browsingModals.browseLexicalEntryList({key:"ACTIONS.ADD_SUBTERM"}, null, true, true, false, true).then(
+        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.ADD_SUBTERM"}, null, true, true, false, true).then(
             (values: ARTURIResource[]) => {
                 let addFunctions: MultiActionFunction[] = [];
                 values.forEach((v: ARTURIResource) => {

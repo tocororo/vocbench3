@@ -190,7 +190,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         this.baseBroaderProp = prop.getURI();
@@ -210,7 +210,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.broaderProps, prop)) {
@@ -239,7 +239,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [SKOS.narrower], null, null, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.narrower], null, null, this.lastBrowsedProjectCtx).then(
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {
@@ -406,7 +406,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browseSchemeList({key:"ACTIONS.SELECT_SCHEME"}, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.SELECT_SCHEME"}, this.lastBrowsedProjectCtx).then(
                     (scheme: ARTURIResource) => {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.ownedSchemes, scheme)) {

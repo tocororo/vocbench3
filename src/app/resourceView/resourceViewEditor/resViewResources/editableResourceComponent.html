@@ -27,7 +27,7 @@
             </a>
             <ng-container *ngIf="isXLabelMenuItemAvailable">
                 <a class="dropdown-item" [ngClass]="{ disabled: !spawnFromLabelAuthorized || isInferred }" (click)="spawnNewConceptWithLabel()">
-                    {{'RESOURCE_VIEW.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL'|translate}}
+                    {{'RESOURCE_VIEW.DATA.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL'|translate}}
                 </a>
                 <a class="dropdown-item" [ngClass]="{ disabled: !moveLabelAuthorized || isInferred }" (click)="moveLabelToConcept()">
                     {{'RESOURCE_VIEW.ACTIONS.MOVE_XLABEL_TO_CONCEPT'|translate}}

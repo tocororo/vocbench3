@@ -273,7 +273,7 @@ export class AlignmentManagementComponent {
     private changeRelation(cell: AlignmentCell, relation: string) {
         //change relation only if user choses a relation different from the current
         if (cell.getRelation() != relation) {
-            this.basicModals.confirm({key:"ACTIONS.CHANGE_RELATION"}, {key:"MESSAGES.ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM"},
+            this.basicModals.confirm({key:"ALIGNMENT.ACTIONS.CHANGE_RELATION"}, {key:"MESSAGES.ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM"},
                 ModalType.warning).then(
                 (confirm: any) => {
                     this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
@@ -458,7 +458,7 @@ export class AlignmentManagementComponent {
         }
 
         if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "delete") {
-            this.basicModals.confirm({ key: "ACTIONS.APPLY_VALIDATION" }, message, ModalType.warning).then(
+            this.basicModals.confirm({ key: "ALIGNMENT.ACTIONS.APPLY_VALIDATION" }, message, ModalType.warning).then(
                 () => {
                     let deleteRejected = this.rejectedAlignmentAction == "delete";
                     if (this.isEdoal) {
@@ -471,7 +471,7 @@ export class AlignmentManagementComponent {
                 () => { }
             );
         } else { //ask
-            this.basicModals.confirmCheck({ key: "ACTIONS.APPLY_VALIDATION" }, message, [{ label: "Delete triples of rejected alignments", value: false }], ModalType.warning).then(
+            this.basicModals.confirmCheck({ key: "ALIGNMENT.ACTIONS.APPLY_VALIDATION" }, message, [{ label: "Delete triples of rejected alignments", value: false }], ModalType.warning).then(
                 (checkOpts: ConfirmCheckOptions[]) => {
                     if (this.isEdoal) {
                         this.applyToEdoalLinkset(checkOpts[0].value)
@@ -505,7 +505,7 @@ export class AlignmentManagementComponent {
         this.alignmentService.applyValidationToEdoal(deleteRejected).subscribe(
             () => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert({ key: "ACTIONS.APPLY_TO_EDOAL" }, {key:"MESSAGES.ALL_CORRESPONDENCES_ADDED"});
+                this.basicModals.alert({ key: "ALIGNMENT.ACTIONS.APPLY_TO_EDOAL" }, {key:"MESSAGES.ALL_CORRESPONDENCES_ADDED"});
             }
         );
     }
@@ -514,7 +514,7 @@ export class AlignmentManagementComponent {
         this.alignmentService.exportAlignment().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_ALIGNMENT" }, {key:"MESSAGES.ALIGNMENT_VALIDATION_DATA_STORING_WARN"}, 
+                this.basicModals.downloadLink({ key: "ALIGNMENT.ACTIONS.EXPORT_ALIGNMENT" }, {key:"MESSAGES.ALIGNMENT_VALIDATION_DATA_STORING_WARN"}, 
                     exportLink, "alignment.rdf");
             }
         );

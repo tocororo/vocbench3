@@ -64,7 +64,7 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
     }
 
     private pickLexicalEntry() {
-        this.browsingModals.browseLexicalEntryList({key:"ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
+        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
             (lexEntry: ARTURIResource) => {
                 this.linkedResource = lexEntry.getURI();
             }

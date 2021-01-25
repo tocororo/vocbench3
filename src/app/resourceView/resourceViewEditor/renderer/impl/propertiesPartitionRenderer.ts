@@ -144,7 +144,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, null, <ARTURIResource>this.resource).then(
+            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, null, <ARTURIResource>this.resource).then(
                 selectedProp => {
                     return selectedProp
                 },

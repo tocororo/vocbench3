@@ -44,7 +44,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by selecting a top concept 
      */
     selectTopConcept(scheme: ARTURIResource) {
-        this.browsingModals.browseConceptTree({key:"ACTIONS.SELECT_CONCEPT"}, [scheme], true).then(
+        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, [scheme], true).then(
             (concept: any) => {
                 this.skosService.addTopConcept(concept, scheme).subscribe(
                     (stResp: any) => {
@@ -60,7 +60,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        this.creationModals.newConceptCf({key:"ACTIONS.CREATE_CONCEPT"}, null, null, null, true).then(
+        this.creationModals.newConceptCf({key:"DATA.ACTIONS.CREATE_CONCEPT"}, null, null, null, true).then(
             (data: NewConceptCfModalReturnData) => {
                 this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
                     stResp => {

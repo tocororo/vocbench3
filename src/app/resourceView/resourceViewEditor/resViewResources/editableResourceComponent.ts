@@ -234,7 +234,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
         if (this.editActionScenario == EditActionScenarioEnum.partition) {
             this.editOutput.emit();
         } else if (this.editActionScenario == EditActionScenarioEnum.manchesterDescr) {
-            this.sharedModals.manchesterExpression({key:"ACTIONS.EDIT_MANCHESTER_EXPRESSION"}, this.resource.getShow()).then(
+            this.sharedModals.manchesterExpression({key:"DATA.ACTIONS.EDIT_MANCHESTER_EXPRESSION"}, this.resource.getShow()).then(
                 expr => {
                     if (expr == this.resource.getShow()) return; //if expression didn't change, don't do nothing
                     this.manchesterService.updateExpression(expr, <ARTBNode>this.resource).subscribe(
@@ -552,7 +552,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     private spawnNewConceptWithLabel() {
         //here I can cast resource since this method is called only on object with role "xLabel" that are ARTResource
-        this.creationModals.newConceptFromLabel({key:"ACTIONS.SPAWN_CONCEPT_FROM_XLABEL"}, <ARTResource>this.resource, SKOS.concept, true, <ARTURIResource>this.subject).then(
+        this.creationModals.newConceptFromLabel({key:"DATA.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL"}, <ARTResource>this.resource, SKOS.concept, true, <ARTURIResource>this.subject).then(
             data => {
                 let oldConcept: ARTURIResource = <ARTURIResource>this.subject;
                 this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, data.schemes, oldConcept,
@@ -569,10 +569,10 @@ export class EditableResourceComponent extends AbstractResViewResource {
     //====== "Move xLabel to another concept" HANDLER =====
 
     private moveLabelToConcept() {
-        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_LEXICALIZATION_PROPERTY"}, [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel]).then(
+        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_LEXICALIZATION_PROPERTY"}, [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel]).then(
             predicate => {
                 let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
-                this.browsingModals.browseConceptTree({key:"ACTIONS.SELECT_CONCEPT"}, activeSchemes, false).then(
+                this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, activeSchemes, false).then(
                     newConcept => {
                         this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept).subscribe(
                             stResp => {

@@ -38,7 +38,7 @@
             </div>
 
             <div *ngIf="collaborationAvailable" class="dropdown ml-2" ngbDropdown>
-                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [title]="'RESOURCE_VIEW.ACTIONS.SHOW_ISSUES'|translate">
+                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [title]="'COLLABORATION.ACTIONS.SHOW_ISSUES'|translate">
                     <span [class]="'fas fa-exclamation-circle ' + issuesStruct.btnClass"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
@@ -47,13 +47,13 @@
                             {{i.getKey()}}
                             <div [class]="'badge float-right ' + i.getStatusClass()" style="font-size: 100%">{{i.getStatus()}}</div>
                         </a>
-                        <button class="btn btn-light btn-xs ml-1" (click)="unassignIssue(i)" [title]="'RESOURCE_VIEW.ACTIONS.UNASSIGN_ISSUE'|translate">
+                        <button class="btn btn-light btn-xs ml-1" (click)="unassignIssue(i)" [title]="'COLLABORATION.ACTIONS.UNASSIGN_ISSUE'|translate">
                             <span class="far fa-trash-alt"></span>
                         </button>
                     </a>
                     <div *ngIf="issuesStruct.issues" class="dropdown-divider"></div>
-                    <a class="dropdown-item" (click)="createIssue()">{{'RESOURCE_VIEW.ACTIONS.CREATE_ISSUE'|translate}}</a>
-                    <a class="dropdown-item" (click)="assignToIssue()">{{'RESOURCE_VIEW.ACTIONS.ASSIGN_TO_ISSUE'|translate}}</a>
+                    <a class="dropdown-item" (click)="createIssue()">{{'COLLABORATION.ACTIONS.CREATE_ISSUE'|translate}}</a>
+                    <a class="dropdown-item" (click)="assignToIssue()">{{'COLLABORATION.ACTIONS.ASSIGN_TO_ISSUE'|translate}}</a>
                 </div>
             </div>
 

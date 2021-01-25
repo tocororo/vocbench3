@@ -63,7 +63,7 @@ export class PropertyEnrichmentHelper {
                     } else if (ranges.type == RangeType.undetermined) {
                         var options = [RDFTypesEnum.resource, RDFTypesEnum.literal];
                         return from(
-                            basicModals.select({key:"ACTIONS.SELECT_RANGE_TYPE"}, null, options).then(
+                            basicModals.select({key:"DATA.ACTIONS.SELECT_RANGE_TYPE"}, null, options).then(
                                 (selectedRange: any) => {
                                     if (selectedRange == RDFTypesEnum.resource) {
                                         return { type: EnrichmentType.resource }
@@ -100,7 +100,7 @@ export class PropertyEnrichmentHelper {
 
                     //ask the user to choose
                     return from(
-                        basicModals.selectCustomForm({ key: "ACTIONS.SELECT_RANGE" }, rangeOptions).then(
+                        basicModals.selectCustomForm({ key: "DATA.ACTIONS.SELECT_RANGE" }, rangeOptions).then(
                             (selectedCF: CustomForm) => {
                                 //check if selected range is one of the customs
                                 for (var i = 0; i < customForms.length; i++) {

@@ -333,7 +333,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddMultipleToScheme);
     }
     private addToScheme() {
-        this.browsingModals.browseSchemeList({key:"ACTIONS.SELECT_SCHEME"}).then(
+        this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.SELECT_SCHEME"}).then(
             scheme => {
                 const modalRef: NgbModalRef = this.modalService.open(AddToSchemeModal, new ModalOptions());
                 modalRef.componentInstance.title = "Add concepts to scheme";

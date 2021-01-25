@@ -130,8 +130,8 @@
         </span>
         <span class="float-right">
             <button class="btn btn-light btn-sm" (click)="applyValidation()" [disabled]="alignmentCellList.length == 0">
-                <span *ngIf="!isEdoal">{{'ACTIONS.APPLY_TO_DATASET'|translate}}</span>
-                <span *ngIf="isEdoal">{{'ACTIONS.APPLY_TO_EDOAL'|translate}}</span>
+                <span *ngIf="!isEdoal">{{'ALIGNMENT.ACTIONS.APPLY_TO_DATASET'|translate}}</span>
+                <span *ngIf="isEdoal">{{'ALIGNMENT.ACTIONS.APPLY_TO_EDOAL'|translate}}</span>
             </button>
             <button class="btn btn-light btn-sm ml-2" (click)="export()" [disabled]="alignmentCellList.length == 0">
                 {{'ACTIONS.SAVE'|translate}}

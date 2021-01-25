@@ -13,7 +13,7 @@
             {{'RESOURCE_VIEW.ACTIONS.ASSERT_INFERRED_STATEMENTS'|translate}}
         </a>
         <a *ngIf="resource.getRole() == 'xLabel'" class="dropdown-item" [ngClass]="{ disabled : isSpawnFromLabelDisabled }" (click)="spawnNewConceptWithLabel()">
-            {{'RESOURCE_VIEW.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL'|translate}}
+            {{'RESOURCE_VIEW.DATA.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL'|translate}}
         </a>
         <a *ngIf="isOpenDataGraphEnabled()" class="dropdown-item" (click)="openDataGraph()">
             {{'RESOURCE_VIEW.ACTIONS.SHOW_IN_DATA_GRAPH'|translate}}

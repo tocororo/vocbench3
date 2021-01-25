@@ -67,7 +67,7 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
+            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
                 selectedProp => {
                     return selectedProp;
                 },

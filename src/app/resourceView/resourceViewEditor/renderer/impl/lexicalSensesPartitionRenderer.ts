@@ -35,7 +35,7 @@ export class LexicalSensesPartitionRenderer extends PartitionRenderSingleRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (predicate.getURI() == this.rootProperty.getURI()) {
-            this.creationModals.newOntoLexicalizationCf({key:"ACTIONS.ADD_LEXICAL_SENSE"}, this.rootProperty, false).then(
+            this.creationModals.newOntoLexicalizationCf({key:"DATA.ACTIONS.ADD_LEXICAL_SENSE"}, this.rootProperty, false).then(
                 (data: NewOntoLexicalizationCfModalReturnData) => {
                     this.ontolexService.addLexicalization(this.resource, data.linkedResource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
                         stResp => {

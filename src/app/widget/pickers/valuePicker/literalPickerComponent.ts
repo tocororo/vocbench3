@@ -38,7 +38,7 @@ export class LiteralPickerComponent {
     }
 
     pickLiteral() {
-        this.creationModals.newTypedLiteral({key:"ACTIONS.CREATE_LITERAL"}, null, this.datatypes).then(
+        this.creationModals.newTypedLiteral({key:"DATA.ACTIONS.CREATE_LITERAL"}, null, this.datatypes).then(
             (values: ARTLiteral[]) => {
                 this.literal = values[0];
                 this.literalNT = this.literal.toNT();

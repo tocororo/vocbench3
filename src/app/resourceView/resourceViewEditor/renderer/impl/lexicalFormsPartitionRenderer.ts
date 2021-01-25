@@ -74,7 +74,7 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
+            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
                 (selectedProp: any) => {
                     return selectedProp;
                 },

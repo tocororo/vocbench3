@@ -68,7 +68,7 @@ export class SchemeSelectionComponent {
     }
 
     private addScheme() {
-        this.browsingModals.browseSchemeList({key:"ACTIONS.ADD_SCHEME"}).then(
+        this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.ADD_SCHEME"}).then(
             (scheme: any) => {
                 //add the chosen scheme only if not already in list
                 if (!ResourceUtils.containsNode(this.schemeList, scheme)) {

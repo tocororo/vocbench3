@@ -56,7 +56,7 @@ export class LexicalEntryListModal {
     changeLexicon() {
         //cannot use BrowsingModalServices since it would cause a circular dependency (this modal is opened by BrowsingModalServices and has the same injected)
         const modalRef: NgbModalRef = this.modalService.open(LexiconListModal);
-        modalRef.componentInstance.title = this.translateService.instant("ACTIONS.SELECT_LEXICON");
+        modalRef.componentInstance.title = this.translateService.instant("DATA.ACTIONS.SELECT_LEXICON");
         modalRef.result.then(
             (lexicon: ARTURIResource) => {
                 this.activeLexicon = lexicon;

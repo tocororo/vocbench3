@@ -133,7 +133,7 @@ export class BrowseExternalResourceModal {
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
+        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
             (selectedProp: ARTURIResource) => {
                 if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
                     this.checkPropertyRangeResource(selectedProp).subscribe(

@@ -71,7 +71,7 @@ export class ClassTreeSettingsModal {
      */
 
     changeClass() {
-        this.browsingModals.browseClassTree({key:"ACTIONS.SELECT_ROOT_CLASS"}, [RDFS.resource]).then(
+        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_ROOT_CLASS"}, [RDFS.resource]).then(
             (cls: ARTURIResource) => {
                 if (Cookie.getCookie(Cookie.WARNING_CUSTOM_ROOT, VBContext.getLoggedUser().getIri()) != "false") {
                     let model: string = VBContext.getWorkingProject().getModelType();
@@ -151,7 +151,7 @@ export class ClassTreeSettingsModal {
     }
 
     addFilter() {
-        this.browsingModals.browseClassTree({key:"ACTIONS.SELECT_CLASS"}, [RDFS.resource]).then(
+        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_CLASS"}, [RDFS.resource]).then(
             (cls: ARTURIResource) => {
                 if (this.getFilterMapEntry(cls) == null) {
                     this.filterMapRes.push({ cls: cls, subClasses: null });

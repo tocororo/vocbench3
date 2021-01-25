@@ -121,7 +121,7 @@ export class AdvancedSearchModal {
     }
 
     addType(group: ARTURIResource[]) {
-        this.browsingModals.browseClassTree({key:"ACTIONS.SELECT_CLASS"}).then(
+        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_CLASS"}).then(
             (type: ARTURIResource) => {
                 group.push(type);
             }
@@ -150,7 +150,7 @@ export class AdvancedSearchModal {
     }
 
     private addScheme(group: ARTURIResource[]) {
-        this.browsingModals.browseSchemeList({key:"ACTIONS.SELECT_SCHEME"}).then(
+        this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.SELECT_SCHEME"}).then(
             (scheme: ARTURIResource) => {
                 group.push(scheme);
             }
@@ -223,7 +223,7 @@ export class AdvancedSearchModal {
                 () => {}
             );
         } else if (type == RDFTypesEnum.literal) {
-            this.creationModals.newTypedLiteral({key:"ACTIONS.CREATE_LITERAL"}).then(
+            this.creationModals.newTypedLiteral({key:"DATA.ACTIONS.CREATE_LITERAL"}).then(
                 (values: ARTLiteral[]) => {
                     group.second.push(values[0]);
                 },

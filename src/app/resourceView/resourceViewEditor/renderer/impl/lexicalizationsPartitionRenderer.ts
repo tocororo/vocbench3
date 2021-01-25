@@ -110,7 +110,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                     return of(this.rootProperties[0]);
                 } else { //multiple properties => ask user to select
                     return from(
-                        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
+                        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
                             (selectedProp: any) => {
                                 return selectedProp;
                             },
@@ -146,7 +146,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 () => {}
             );
         } else if (predicate.equals(OntoLex.isDenotedBy)) {
-            this.creationModals.newOntoLexicalizationCf({key:"ACTIONS.ADD_LEX_ENTRY"}, predicate, false).then(
+            this.creationModals.newOntoLexicalizationCf({key:"DATA.ACTIONS.ADD_LEX_ENTRY"}, predicate, false).then(
                 (data: NewOntoLexicalizationCfModalReturnData) => {
                     this.ontolexService.addLexicalization(data.linkedResource, this.resource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
                         stResp => {

@@ -67,7 +67,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
     }
 
     changeBroaderProp() {
-        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}, [SKOS.broader]).then(
+        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.broader]).then(
             (selectedProp: ARTURIResource) => {
                 this.broaderProp = selectedProp;
             },

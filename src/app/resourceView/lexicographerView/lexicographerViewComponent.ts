@@ -160,7 +160,7 @@ export class LexicographerViewComponent {
     //=== Senses ===
 
     addSense() {
-        this.creationModals.newOntoLexicalizationCf({key:"ACTIONS.ADD_LEXICAL_SENSE"}, OntoLex.sense, false).then(
+        this.creationModals.newOntoLexicalizationCf({key:"DATA.ACTIONS.ADD_LEXICAL_SENSE"}, OntoLex.sense, false).then(
             (data: NewOntoLexicalizationCfModalReturnData) => {
                 this.ontolexService.addLexicalization(this.resource, data.linkedResource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
                     () => {

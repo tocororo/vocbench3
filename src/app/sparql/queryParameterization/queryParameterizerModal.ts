@@ -151,7 +151,7 @@ export class QueryParameterizerModal {
                 () => {}
             );
         } else if (type == RDFTypesEnum.literal) {
-            this.creationModals.newTypedLiteral({key:"ACTIONS.CREATE_LITERAL"}).then(
+            this.creationModals.newTypedLiteral({key:"DATA.ACTIONS.CREATE_LITERAL"}).then(
                 (values: ARTLiteral[]) => {
                     binding.value = values[0].toNT();
                 },

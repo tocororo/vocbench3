@@ -23,7 +23,7 @@
             <button class="btn btn-faded ml-1" (click)="addMorphosintacticPropToLemma(l)" [disabled]="readonly">
                 <span class="fas fa-pencil-alt"></span>
             </button>
-            <button *ngIf="otherForms.length == 0" class="btn btn-faded ml-1" (click)="addOtherForm()" [title]="'ACTIONS.ADD_OTHER_FORM'|translate" [disabled]="readonly">
+            <button *ngIf="otherForms.length == 0" class="btn btn-faded ml-1" (click)="addOtherForm()" [title]="'DATA.ACTIONS.ADD_OTHER_FORM'|translate" [disabled]="readonly">
                 <span class="fas fa-plus"></span>
             </button>
         </div>
@@ -39,7 +39,7 @@
                 <span class="fas fa-minus"></span>
             </button>
             <div style="width: 20px">
-                <button *ngIf="last && !pendingOtherForm" class="btn btn-faded btn-xs ml-1" (click)="addOtherForm()" [title]="'ACTIONS.ADD_OTHER_FORM'|translate" [disabled]="readonly">
+                <button *ngIf="last && !pendingOtherForm" class="btn btn-faded btn-xs ml-1" (click)="addOtherForm()" [title]="'DATA.ACTIONS.ADD_OTHER_FORM'|translate" [disabled]="readonly">
                     <span class="fas fa-plus"></span>
                 </button>
             </div>
@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-faded btn-xs mt-2" style="align-self: flex-start;" (click)="addSense()" [disabled]="readonly" [title]="'ACTIONS.ADD_LEXICAL_SENSE'|translate">
+        <button class="btn btn-faded btn-xs mt-2" style="align-self: flex-start;" (click)="addSense()" [disabled]="readonly" [title]="'DATA.ACTIONS.ADD_LEXICAL_SENSE'|translate">
             <span class="fas fa-plus"></span>
         </button>
     </div>

@@ -53,7 +53,7 @@ export class FormCollMappingModal {
     }
 
     selectProperty() {
-        this.browsingModals.browsePropertyTree({key:"ACTIONS.SELECT_PROPERTY"}).then(
+        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}).then(
             (res: ARTURIResource) => {
                 this.selectedResourceIri = res.getURI();
             },
@@ -62,7 +62,7 @@ export class FormCollMappingModal {
     }
 
     selectClass() {
-        this.browsingModals.browseClassTree({key:"ACTIONS.SELECT_CLASS"}, [RDF.property, OWL.class, OWL.thing]).then(
+        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_CLASS"}, [RDF.property, OWL.class, OWL.thing]).then(
             (res: ARTURIResource) => {
                 this.selectedResourceIri = res.getURI();
             },

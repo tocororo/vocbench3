@@ -103,7 +103,7 @@ export class DanglingConceptComponent {
      * Fixes concept by selecting a broader concept
      */
     private selectBroader(concept: ARTURIResource, scheme: ARTURIResource) {
-        this.browsingModals.browseConceptTree({key:"ACTIONS.SELECT_CONCEPT"}, [scheme], true).then(
+        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, [scheme], true).then(
             (broader: any) => {
                 this.skosService.addBroaderConcept(concept, broader).subscribe(
                     stResp => {
@@ -119,7 +119,7 @@ export class DanglingConceptComponent {
      * Fixes all concepts by selecting a broader concept for them all 
      */
     private selectBroaderForAll() {
-        this.browsingModals.browseConceptTree({key:"ACTIONS.SELECT_CONCEPT"}, [this.selectedScheme], false).then(
+        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, [this.selectedScheme], false).then(
             (broader: any) => {
                 this.icvService.setBroaderForAllDangling(this.selectedScheme, broader).subscribe(
                     stResp => {

@@ -198,7 +198,7 @@ export class CustomFormEditorModal {
         }
     }
     addPropToChain(where?: "before" | "after") {
-        this.browsingModals.browsePropertyTree({key:"ACTIONS.ADD_PROPERTY"}).then(
+        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.ADD_PROPERTY"}).then(
             (prop: any) => {
                 if (where == null) {
                     this.showPropertyChain.push(prop);
@@ -253,7 +253,7 @@ export class CustomFormEditorModal {
             serializedPropChain = serializedPropChain.slice(0, -1);//delete last ","
         }
 
-        this.basicModals.prompt({key:"ACTIONS.EDIT_PROPERTY_CHAIN"}, null, {key:"MESSAGES.CUSTOM_FORM_PROP_CHAIN_DESCR"}, serializedPropChain, true).then(
+        this.basicModals.prompt({key:"DATA.ACTIONS.EDIT_PROPERTY_CHAIN"}, null, {key:"MESSAGES.CUSTOM_FORM_PROP_CHAIN_DESCR"}, serializedPropChain, true).then(
             (value: any) => {
                 var chain: string = String(value).trim();
                 if (chain.length != 0) {

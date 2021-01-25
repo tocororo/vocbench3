@@ -110,7 +110,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
     private addAllConcepts() {
         //message to warn the user that in case of a lot of concept the process could be long?
-        this.basicModals.confirm({key:"ACTIONS.ADD_CONCEPT_TO_SCHEME"}, {key:"MESSAGES.ADD_ALL_CONCEPT_TO_SCHEME_CONFIRM", params:{scheme: this.selectedNode.getShow()}},
+        this.basicModals.confirm({key:"DATA.ACTIONS.ADD_CONCEPT_TO_SCHEME"}, {key:"MESSAGES.ADD_ALL_CONCEPT_TO_SCHEME_CONFIRM", params:{scheme: this.selectedNode.getShow()}},
             ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);

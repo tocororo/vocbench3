@@ -34,7 +34,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue({key:"ACTIONS.ADD_RANGE"}, this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_RANGE"}, this.resource, predicate, propChangeable).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)

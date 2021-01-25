@@ -47,7 +47,7 @@ export class DefinitionEnrichmentHelper {
                     rangeOptions = rangeOptions.concat(crConfig.customForms);
                     return from(
                         //ask the user to choose
-                        basicModals.selectCustomForm({ key: "ACTIONS.SELECT_RANGE" }, rangeOptions).then(
+                        basicModals.selectCustomForm({ key: "DATA.ACTIONS.SELECT_RANGE" }, rangeOptions).then(
                             (selectedCF: CustomForm) => {
                                 if (selectedCF.getId() == RDFTypesEnum.literal) { //if selected range is "literal"
                                     return {type: DefEnrichmentType.literal};

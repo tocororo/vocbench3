@@ -90,7 +90,7 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal {
     }
 
     selectBroader() {
-        this.browsingModals.browseConceptTree({key:"ACTIONS.SELECT_CONCEPT"}).then(
+        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}).then(
             (concept: any) => {
                 this.broader = concept;
             },
@@ -107,7 +107,7 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal {
     }
 
     selectSibling() {
-        this.browsingModals.browseConceptTree({key:"ACTIONS.SELECT_CONCEPT"}).then(
+        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}).then(
             (concept: any) => {
                 this.sibling = concept;
                 this.updateBroaderOfSibling();
