@@ -83,7 +83,7 @@ export class ResourceViewContextMenu {
     }
 
     private spawnNewConceptWithLabel() {
-        this.creationModals.newConceptFromLabel({key:"DATA.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL"}, this.resource, SKOS.concept).then(
+        this.creationModals.newConceptFromLabel({key:"RESOURCE_VIEW.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL"}, this.resource, SKOS.concept).then(
             data => {
                 //from the resView of the xLabel I don't know the concept to which it belongs, 
                 //so oldConcept in spawnNewConceptFromLabel request is null and lets the server find the oldConcept

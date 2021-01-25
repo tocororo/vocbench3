@@ -611,8 +611,7 @@
             "SELECT_SCHEME": "Select scheme",
             "SET_AS_TOP_CONCEPT": "Set as top concept",
             "SET_DATATYPE_RESTRICTIONS": "Set datatype restrictions",
-            "SET_INVERSE_PROPERTY": "Set inverse property",
-            "SPAWN_CONCEPT_FROM_XLABEL": "Spawn concept from xLabel"
+            "SET_INVERSE_PROPERTY": "Set inverse property"
         }
     },
     "DATA_MANAGEMENT": {
@@ -1321,28 +1320,28 @@
             }
         },
         "ACTIONS": {
-            "BLOCK_NAMESPACE": "Block namespace",
-            "COPY_TO_CLIPBOARD": "Copy to clipboard",
-            "SHOW_HIDE_INFERRED": "Show/hide inferred information",
-            "TOGGLE_VALUE_FILTER_LANG": "Enable/disable value-filter on languages",
-            "TOGGLE_NOTIFICATIONS": "Enable/disable notifications on this resource",
-            "CHANGE_VERSION": "Change version",
-            "ALIGN_WITH_EXTERNAL_RESOURCE": "Align with external resource",
-            "SET_AS_DEPRECATED": "Set as deprecated",
-            "ASSERT_INFERRED_STATEMENTS": "Assert all the inferred statements",
-            "SPAWN_CONCEPT_FROM_XLABEL": "Spawn new concept from this xLabel",
-            "SHOW_IN_DATA_GRAPH": "Show in data-oriented graph",
-            "ADD_VALUE_MANUALLY": "Add value manually",
             "ADD_VALUE_FROM_ANOTHER_PROJ": "Add value from another project",
-            "DELETE_ALL_VALUES": "Delete all values",
-            "EDIT_LITERAL_CONTENT": "Edit literal content",
+            "ADD_VALUE_MANUALLY": "Add value manually",
+            "ALIGN_WITH_EXTERNAL_RESOURCE": "Align with external resource",
+            "ASSERT_INFERRED_STATEMENT": "Assert inferred statement",
+            "ASSERT_INFERRED_STATEMENTS": "Assert all the inferred statements",
+            "BLOCK_NAMESPACE": "Block namespace",
+            "BULK_DELETE": "Bulk delete",
+            "BULK_DELETE_INFO": "Delete the value for every resource that has this predicate-value relation",
             "BULK_EDIT": "Bulk edit",
             "BULK_EDIT_INFO": "Update the value for every resource that has this predicate-value relation",
-            "MOVE_XLABEL_TO_CONCEPT": "Move xLabel to another concept",
+            "CHANGE_VERSION": "Change version",
+            "COPY_TO_CLIPBOARD": "Copy to clipboard",
             "COPY_VALUE_TO_LOCALES": "Copy value to other locales",
-            "ASSERT_INFERRED_STATEMENT": "Assert inferred statement",
-            "BULK_DELETE": "Bulk delete",
-            "BULK_DELETE_INFO": "Delete the value for every resource that has this predicate-value relation"
+            "DELETE_ALL_VALUES": "Delete all values",
+            "EDIT_LITERAL_CONTENT": "Edit literal content",
+            "MOVE_XLABEL_TO_CONCEPT": "Move xLabel to another concept",
+            "SET_AS_DEPRECATED": "Set as deprecated",
+            "SHOW_HIDE_INFERRED": "Show/hide inferred information",
+            "SHOW_IN_DATA_GRAPH": "Show in data-oriented graph",
+            "SPAWN_CONCEPT_FROM_XLABEL": "Spawn new concept from xLabel",
+            "TOGGLE_NOTIFICATIONS": "Enable/disable notifications on this resource",
+            "TOGGLE_VALUE_FILTER_LANG": "Enable/disable value-filter on languages"
         },
         "SETTINGS": {
             "TABBED_INFO": "The Resource View is shown in a tab and multiple Resource View can be open in different tabs.",
@@ -1396,6 +1395,9 @@
         "CODE_EDITOR": {
             "CODE_EDITOR": "Code editor",
             "DISABLED_UNDER_VALIDATION": "The Code view tab has been disabled as this resource - or part of its description - is under validation"
+        },
+        "LEX_VIEW": {
+            "SEMANTIC_REFERENCE": "Semantic reference"
         },
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Broader Concepts",
