@@ -158,7 +158,7 @@ export class ProjectServices {
         resourceMetadataAssociations?: Pair<RDFResourceRolesEnum, string>[],
         shaclEnabled?: boolean, shaclSettings?: Map<string, any>, trivialInferenceEnabled?: boolean,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance,
-        openAtStartup?: boolean) {
+        openAtStartup?: boolean, globallyAccessible?: boolean) {
         
         let params: any = {
             consumer: "SYSTEM",
@@ -187,7 +187,8 @@ export class ProjectServices {
             preloadedDataFileName: preloadedDataFileName,
             preloadedDataFormat: preloadedDataFormat,
             transitiveImportAllowance: transitiveImportAllowance,
-            openAtStartup: openAtStartup
+            openAtStartup: openAtStartup,
+            globallyAccessible: globallyAccessible,
         };
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 

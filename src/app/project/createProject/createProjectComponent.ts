@@ -160,10 +160,9 @@ export class CreateProjectComponent {
     private enableSHACL: boolean = false;
     private shaclSettings: Settings;
 
-    //TRIVIAL INFERENCE
     private enableTrivialInference: boolean = false;
-
     private openAtStartup: boolean = false;
+    private globallyAccessible: boolean = false;
 
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
@@ -855,7 +854,7 @@ export class CreateProjectComponent {
             supportRepoSailConfigurerSpecification, supportRepoBackendType,
             leftDataset, rightDataset, uriGeneratorSpecification, renderingEngineSpecification,
             metadataAssociationsPar, this.enableSHACL, shaclSettingsPar, this.enableTrivialInference,
-            preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance, this.openAtStartup).subscribe(
+            preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance, this.openAtStartup, this.globallyAccessible).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PROJECT_CREATED"}).then(

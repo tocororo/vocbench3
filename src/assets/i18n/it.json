@@ -1183,6 +1183,8 @@
         "BLACKLIST": "Lista nera",
         "BLACKLIST_INFO": "Abilita questa opzione per mettere in lista nera i termini che sono stati respinti tramite la validazione",
         "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
+        "GLOBALLY_ACCESSIBLE": "Accedibile globalmente",
+        "GLOBALLY_ACCESSIBLE_INFO": "Abilita questa opzione per rendere il progetto accedibile da tutti gli altri progetti (questa opzioni può essere cambiata in seguito dall'editor ACL)",
         "HISTORY_INFO": "Abilita questa opzione per tenere traccia delle modifiche effettuate sul grafo di lavoro",
         "INFERENCE_DISCOURAGED_INFO": "E' raccomandabile non usare l'inferenza",
         "LEFT_RIGHT": "Sinistro/Destro",

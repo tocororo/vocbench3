@@ -1183,6 +1183,8 @@
         "BLACKLIST": "Blacklisting",
         "BLACKLIST_INFO": "Enable this to blacklist terms that have been rejected through validation",
         "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference",
+        "GLOBALLY_ACCESSIBLE": "Globally accessible",
+        "GLOBALLY_ACCESSIBLE_INFO": "Enable this in order to set this project accessible by all the other projects (this option can be changed later from the ACL editor)",
         "HISTORY_INFO": "Enable this to keep track of the changes made on the working graph",
         "INFERENCE_DISCOURAGED_INFO": "It is highly recommended not to use inference",
         "LEFT_RIGHT": "Left/Right",
