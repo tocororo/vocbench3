@@ -281,7 +281,7 @@ export class CustomFormEditorModal {
         }
 
         if (this.cfId == null) { //check only in create mode
-            if (this.cfShortId == null || !this.cfShortId.match(/^[a-zA-Z0-9.]+$/i)) { //invalid character
+            if (this.cfShortId == null || !this.cfShortId.match(/^[a-zA-Z0-9.-_]+$/i)) { //invalid character
                 this.errorMsg = "The CustomForm ID is not valid (it may be empty or contain invalid characters). Please fix it."
                 valid = false;
             }

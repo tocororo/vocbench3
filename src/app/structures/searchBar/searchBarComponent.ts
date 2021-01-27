@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AutocompleteComponent } from 'angular-ng-autocomplete';
 import { VBRequestOptions } from 'src/app/utils/HttpManager';
@@ -8,7 +8,6 @@ import { SearchMode, SearchSettings } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
 import { TreeListContext } from "../../utils/UIUtils";
 import { ProjectContext, VBContext } from "../../utils/VBContext";
-import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AdvancedSearchModal } from "./advancedSearchModal";
@@ -52,13 +51,6 @@ export class SearchBarComponent {
         this.searchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['cls'] && ! changes['cls'].firstChange) {
-            // this.completerDatasource.setClass(changes['cls'].currentValue);
-        }
-        
-    }
-
     doSearch() {
         if (this.autocompleter != null) { //in case using autocompleter, close the suggestions
             this.autocompleter.close();
@@ -75,7 +67,12 @@ export class SearchBarComponent {
         modalRef.componentInstance.role = this.role;
         modalRef.componentInstance.structureCtx = this.context;
         modalRef.componentInstance.projectCtx = this.projectCtx;
-        return modalRef.result;
+        modalRef.result.then(
+            () => {
+                //search settings might changed, update searchSettings var
+                this.searchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
+            }
+        );
     }
 
     /**

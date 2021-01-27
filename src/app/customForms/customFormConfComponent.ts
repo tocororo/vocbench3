@@ -129,7 +129,9 @@ export class CustomFormConfigComponent {
             existingFormCollIds.push(this.formCollectionList[i].getId());
         }
         this.openFormCollEditor(null, existingFormCollIds, false).then(
-            () => {},
+            () => {
+                this.initFormCollList();
+            },
             () => {}
         );
     }

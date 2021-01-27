@@ -212,7 +212,7 @@ export class FormCollEditorModal {
             if (this.fcShortId == null) {
                 valid = false;
                 this.errorMsg = "The FormCollection ID is empty"
-            } else if (!this.fcShortId.match(/^[a-zA-Z0-9]+$/i)) { //invalid character
+            } else if (!this.fcShortId.match(/^[a-zA-Z0-9.-_]+$/i)) { //invalid character
                 this.errorMsg = "The FormCollection ID is invalid (it may be empty or contain invalid characters). Please fix it."
                 valid = false;
             }
