@@ -18,6 +18,7 @@ export abstract class ARTNode {
     }
 
     equals(node: ARTNode): boolean {
+        if (node == null) return false;
         return this.getNominalValue() == node.getNominalValue();
     }
 

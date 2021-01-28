@@ -1324,6 +1324,7 @@
             }
         },
         "ACTIONS": {
+            "ADD_MORPHOSYNTACTIC_PROP": "Aggiungi proprietà morfosintattica",
             "ADD_VALUE_FROM_ANOTHER_PROJ": "Aggiungi valore da un altro progetto",
             "ADD_VALUE_MANUALLY": "Aggiungi valore manualmente",
             "ALIGN_WITH_EXTERNAL_RESOURCE": "Allinea con una risorsa esterna",

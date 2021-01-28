@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Form, LexicographerView, Sense } from "src/app/models/LexicographerView";
-import { OntoLex, SKOS, XmlSchema } from "src/app/models/Vocabulary";
+import { OntoLex, SKOS } from "src/app/models/Vocabulary";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
@@ -33,7 +33,6 @@ export class LexicographerViewComponent {
     @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
     private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
-    private lemmaStyle = "font-family: serif; font-weight: bold; font-size: 2rem;"
     private formStyle = "font-family: serif; font-style: italic;";
 
     lemma: Form[]; //in case of validation the staging-add is at pos.0, staging-remove at 1 (TODO verify and force it when it will be supported)
@@ -76,6 +75,7 @@ export class LexicographerViewComponent {
                 let lv = LexicographerView.parse(resp);
                 console.log("lv", lv);
                 this.lemma = lv.lemma;
+                this.sortForms(this.lemma);
                 this.otherForms = lv.otherForms;
                 this.sortForms(this.otherForms);
                 this.senses = lv.senses;
@@ -86,10 +86,25 @@ export class LexicographerViewComponent {
     }
 
     private sortForms(forms: Form[]) {
+        //sort forms according the written rep
         forms.sort((f1, f2) => {
             return f1.writtenRep[0].getShow().localeCompare(f2.writtenRep[0].getShow())
         })
+        //sort also the morphosyntactic properties
+        forms.forEach(f => {
+            //by predicate
+            f.morphosyntacticProps.sort((mp1, mp2) => {
+                return mp1.getPredicate().getLocalName().toLocaleLowerCase().localeCompare(mp2.getPredicate().getLocalName().toLocaleLowerCase());
+            })
+            //and for each of them sort the objects
+            f.morphosyntacticProps.forEach(mp => {
+                mp.getObjects().sort((o1, o2) => {
+                    return o1.getNominalValue().toLocaleLowerCase().localeCompare(o2.getNominalValue().toLocaleLowerCase());
+                })
+            })
+        })
     }
+    
     private sortSenses(senses: Sense[]) {
         senses.sort((s1, s2) => {
             return s1.reference[0].getShow().localeCompare(s2.reference[0].getShow())
@@ -98,9 +113,8 @@ export class LexicographerViewComponent {
 
     //=== Lemma ===
 
-    onLemmaEdited(oldWrittenRep: ARTLiteral, newValue: string) {
-        if (oldWrittenRep.getShow() == newValue) return;
-        let newWrittenRep = new ARTLiteral(newValue, null, oldWrittenRep.getLang());
+    onLemmaWrittenRepEdited(newWrittenRep: ARTLiteral) {
+        //this method doesn't need to know which lemma was edited since the edit is allowed only in one lemma is present (no validation pending)
         this.ontolexService.setCanonicalForm(this.resource, newWrittenRep).subscribe(
             () => {
                 this.buildLexicographerView();
@@ -114,9 +128,8 @@ export class LexicographerViewComponent {
 
     //=== Other forms ===
 
-    onOtherFormEdited(form: Form, oldWrittenRep: ARTLiteral, newValue: string) {
-        if (oldWrittenRep.getShow() == newValue) return;
-        let newWrittenRep: ARTLiteral = new ARTLiteral(newValue, null, oldWrittenRep.getLang());
+    onOtherFormWrittenRepEdited(form: Form, newWrittenRep: ARTLiteral) {
+        let oldWrittenRep = form.writtenRep[0];
         this.resourceService.updateTriple(form.id, OntoLex.writtenRep, oldWrittenRep, newWrittenRep).subscribe(
             () => {
                 this.buildLexicographerView();

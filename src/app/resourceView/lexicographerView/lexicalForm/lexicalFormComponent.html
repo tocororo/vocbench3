@@ -1,0 +1,55 @@
+<div class="d-flex align-items-center">
+    <inline-editable-form style="flex: 1" [value]="form" [disabled]="readonly" [textStyle]="inlineEditStyle" (edited)="onFormEdited($event)">
+    </inline-editable-form>
+    <button class="btn btn-xs btn-faded ml-1" (click)="addMorphosintacticProp()" [title]="'RESOURCE_VIEW.ACTIONS.ADD_MORPHOSYNTACTIC_PROP'|translate" [disabled]="readonly">
+        <span class="fas fa-pencil-alt"></span>
+    </button>
+    <button *ngIf="!lemma" class="btn btn-xs btn-faded ml-1" (click)="deleteForm()" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
+        <span class="fas fa-minus"></span>
+    </button>
+</div>
+<!-- morphosyntactic properties -->
+<div class="ml-4">
+    <!-- visualization and editing -->
+    <div *ngFor="let mp of form.morphosyntacticProps" class="d-flex align-items-center mt-1">
+        <ng-container *ngFor="let mv of mp.getObjects()">
+            <label>{{mp.getPredicate().getLocalName()}}:</label>
+            <div class="d-flex align-items-center ml-1">
+                <ng-container *ngIf="isEditingPropValue(mp.getPredicate(), mv); then editingBlock; else showBlock"></ng-container>
+                <ng-template #showBlock>
+                    <span class="clickable form-control form-control-editable" (click)="editMorphosyntacticValue(mp.getPredicate(), mv)">{{mv.getLocalName()}}</span>
+                </ng-template>
+                <ng-template #editingBlock>
+                    <select class="form-control" style="width: initial;" [(ngModel)]="selectedEditingMorphoValue">
+                        <option *ngFor="let mv of morphosyntacticValues" [ngValue]="mv">{{mv.getLocalName()}}</option>
+                    </select>
+                    <div class="btn-toolbar ml-1">
+                        <button class="btn btn-success btn-xs" style="width: 22px;" (click)="confirmEditingMorphValue()">
+                            <span class="fas fa-check"></span>
+                        </button>
+                        <button class="btn btn-danger btn-xs" style="width: 22px;" (click)="cancelEditingMorphValue()">
+                            <span class="fas fa-times"></span>
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+        </ng-container>
+    </div>
+    <!-- addition -->
+    <div *ngIf="pendingMorphoProp" class="d-flex align-items-center">
+        <select class="form-control" style="width: initial;" [(ngModel)]="selectedMorphoProp" (ngModelChange)="onMorphoPropChanged()">
+            <option *ngFor="let mp of morphosyntacticProps" [ngValue]="mp">{{mp.getLocalName()}}</option>
+        </select>
+        <select class="form-control ml-1" style="width: initial;" [(ngModel)]="selectedMorphoValue">
+            <option *ngFor="let mv of morphosyntacticValues" [ngValue]="mv">{{mv.getLocalName()}}</option>
+        </select>
+        <div class="btn-toolbar ml-1">
+            <button class="btn btn-success btn-xs" style="width: 22px;" (click)="confirmPendingMorphPropValue()">
+                <span class="fas fa-check"></span>
+            </button>
+            <button class="btn btn-danger btn-xs" style="width: 22px;" (click)="cancelPendingMorphPropValue()">
+                <span class="fas fa-times"></span>
+            </button>
+        </div>
+    </div>
+</div>

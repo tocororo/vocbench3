@@ -1,23 +1,23 @@
 import { Component, Input } from '@angular/core';
-import { ARTNode, ARTResource } from '../../models/ARTResources';
-import { ResourceUtils } from '../../utils/ResourceUtils';
+import { Form } from 'src/app/models/LexicographerView';
+import { TripleScopes } from '../../models/ARTResources';
 import { BasicModalServices } from '../modal/basicModal/basicModalServices';
 import { AbstractInlineEditable } from './inlineEditable';
 
 @Component({
-    selector: 'inline-editable-value',
-    templateUrl: './inlineEditableValue.html',
+    selector: 'inline-editable-form',
+    templateUrl: './inlineEditableForm.html',
     styleUrls: ["./inlineEditableValue.css"]
 })
-export class InlineEditableValue extends AbstractInlineEditable {
-    @Input() value: ARTNode;
+export class InlineEditableForm extends AbstractInlineEditable {
+    @Input() value: Form;
 
     constructor(basicModals: BasicModalServices) {
-        super(basicModals)
+        super(basicModals);
     }
 
     initValue() {
-        this.stringValue = (this.value != null) ? this.value.getShow() : null;
+        this.stringValue = (this.value != null) ? this.value.writtenRep[0].getShow() : null;
         this.pristineStringValue = this.stringValue;
     }
 
@@ -34,18 +34,18 @@ export class InlineEditableValue extends AbstractInlineEditable {
             proposedRemoveTriple: false
         }
         //init statuses
-        if (this.value instanceof ARTResource) {
-            if (ResourceUtils.isResourceInStagingAdd(this.value)) {
-                this.ngClassValue.proposedAddRes = true;
-            } else if (ResourceUtils.isResourceInStagingRemove(this.value)) {
-                this.ngClassValue.proposedRemoveRes = true;
-            }
+        if (this.value.isInStagingAdd()) {
+            this.ngClassValue.proposedAddRes = true;
+        } else if (this.value.isInStagingRemove()) {
+            this.ngClassValue.proposedRemoveRes = true;
         }
-        if (ResourceUtils.isTripleInStagingAdd(this.value)) {
+        if (this.value.scope == TripleScopes.staged) {
             this.ngClassValue.proposedAddTriple = true;
-        } else if (ResourceUtils.isTripleInStagingRemove(this.value)) {
+        } else if (this.value.scope == TripleScopes.del_staged) {
             this.ngClassValue.proposedRemoveTriple = true;
         }
+        //in addition to the status of the Form, also the writtenRep could have the status
+        //TODO
     }
 
 }

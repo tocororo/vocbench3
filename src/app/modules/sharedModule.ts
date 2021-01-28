@@ -14,6 +14,7 @@ import { NTripleEditorComponent } from '../widget/codemirror/nTripleEditor/nTrip
 import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
+import { InlineEditableForm } from '../widget/inlineEditableValue/inlineEditableForm';
 import { InlineEditableValue } from '../widget/inlineEditableValue/inlineEditableValue';
 import { InputEditableComponent } from '../widget/inputEditable/inputEditableComponent';
 import { LangStringEditorComponent } from '../widget/langStringEditor/langStringEditorComponent';
@@ -49,6 +50,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ExtensionConfiguratorComponent,
         FilePickerComponent,
         HtmlEditorComponent,
+        InlineEditableForm,
         InlineEditableValue,
         InputEditableComponent,
         JsonEditorComponent,
@@ -81,6 +83,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ExtensionConfiguratorComponent,
         FilePickerComponent,
         HtmlEditorComponent,
+        InlineEditableForm,
         InlineEditableValue,
         InputEditableComponent,
         JsonEditorComponent,

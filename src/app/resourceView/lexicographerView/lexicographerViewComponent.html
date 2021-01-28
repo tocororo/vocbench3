@@ -13,92 +13,87 @@
 
     <div *ngIf="lemma" class="card-body scrollableContainer">
 
-        <!-- Temporarly take into account only first writtenRep of Form -->
-
         <!-- Lemma -->
-        <div *ngFor="let l of lemma" class="d-flex align-items-center">
-            <inline-editable-value style="flex: 1" [value]="l.writtenRep[0]" [disabled]="readonly" [textStyle]="lemmaStyle"
-                (valueEdited)="onLemmaEdited(l.writtenRep[0], $event)">
-            </inline-editable-value>
-            <button class="btn btn-faded ml-1" (click)="addMorphosintacticPropToLemma(l)" [disabled]="readonly">
-                <span class="fas fa-pencil-alt"></span>
-            </button>
-            <button *ngIf="otherForms.length == 0" class="btn btn-faded ml-1" (click)="addOtherForm()" [title]="'DATA.ACTIONS.ADD_OTHER_FORM'|translate" [disabled]="readonly">
-                <span class="fas fa-plus"></span>
-            </button>
+        <div class="mb-2">
+            <lexical-form *ngFor="let l of lemma" style="flex: 1" [form]="l" lemma="true" [disabled]="readonly"
+                (writtenRepEdited)="onLemmaWrittenRepEdited($event)" (update)="buildLexicographerView()">
+            </lexical-form>
         </div>
-        
+
         <!-- Other forms -->
-        <div class="ml-3 mr-3">
-            <div *ngFor="let f of otherForms; let last=last" class="d-flex align-items-center mt-2">
-                <inline-editable-value style="flex: 1" [value]="f.writtenRep[0]" [disabled]="readonly" [textStyle]="formStyle" (valueEdited)="onOtherFormEdited(f, f.writtenRep[0], $event)">
-                </inline-editable-value>
-                <button class="btn btn-faded btn-xs ml-1" (click)="addMorphosintacticPropToForm(f)" [disabled]="readonly">
-                    <span class="fas fa-pencil-alt"></span>
-                </button>
-                <button class="btn btn-faded btn-xs ml-1" (click)="deleteOtherForm(f)" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
-                    <span class="fas fa-minus"></span>
-                </button>
-                <div style="width: 20px">
-                    <button *ngIf="last && !pendingOtherForm" class="btn btn-faded btn-xs ml-1" (click)="addOtherForm()" [title]="'DATA.ACTIONS.ADD_OTHER_FORM'|translate" [disabled]="readonly">
-                        <span class="fas fa-plus"></span>
-                    </button>
-                </div>
+        <div class="mb-2">
+            <div *ngFor="let f of otherForms;" class="mb-2">
+                <lexical-form style="flex: 1" [form]="f" [disabled]="readonly" 
+                    (writtenRepEdited)="onOtherFormWrittenRepEdited(f, $event)" (update)="buildLexicographerView()" (delete)="deleteOtherForm(f)">
+                </lexical-form>
             </div>
-            <div *ngIf="pendingOtherForm" class="mt-2">
-                <inline-editable-value [textStyle]="formStyle" [focusOnInit]="true" (valueEdited)="onPendingOtherFormConfirmed($event)" (editCanceled)="onPendingOtherFormCanceled()">
+            <div *ngIf="pendingOtherForm">
+                <inline-editable-value [textStyle]="formStyle" [focusOnInit]="true" (edited)="onPendingOtherFormConfirmed($event)" (editCanceled)="onPendingOtherFormCanceled()">
                 </inline-editable-value>
             </div>
         </div>
 
         <!-- Senses -->
-        <div *ngFor="let s of senses" class="sense mt-3">
-            <div *ngIf="s.definition.length > 0 || s.pendingDef" class="d-flex mb-3">
-                <label class="mt-2 mr-2">{{'COMMONS.DEFINITION'|translate}}:</label>
-                <div class="vbox">
-                    <div *ngFor="let def of s.definition; let last=last" class="d-flex align-items-center mb-2 mr-2">
-                        <inline-editable-value style="flex: 1" [value]="def" (valueEdited)="onDefinitionEdited(s, def, $event)" [disabled]="readonly">
+        <div class="mb-2">
+            <div *ngFor="let s of senses" class="sense mb-2">
+                <div *ngIf="s.definition.length > 0 || s.pendingDef" class="d-flex mb-3">
+                    <label class="mt-2 mr-2">{{'COMMONS.DEFINITION'|translate}}:</label>
+                    <div class="vbox">
+                        <div *ngFor="let def of s.definition; let last=last" class="d-flex align-items-center mr-2" [ngClass]="{ 'mb-2': !last }">
+                            <inline-editable-value style="flex: 1" [value]="def" (edited)="onDefinitionEdited(s, def, $event)" [disabled]="readonly">
+                            </inline-editable-value>
+                            <button class="btn btn-faded btn-xs ml-1" (click)="deleteDefinition(s, def)"  [disabled]="readonly" [title]="'ACTIONS.DELETE'|translate">
+                                <span class="fas fa-minus"></span>
+                            </button>
+                            <button *ngIf="last && !s.pendingDef" class="btn btn-faded btn-xs ml-1" (click)="addDefinition(s)" [disabled]="readonly" [title]="'ACTIONS.ADD'|translate">
+                                <span class="fas fa-plus"></span>
+                            </button>
+                        </div>
+                        <inline-editable-value *ngIf="s.pendingDef" [focusOnInit]="true" (edited)="onPendingDefConfirmed(s, $event)" (editCanceled)="onPendingDefCanceled(s)">
                         </inline-editable-value>
-                        <button class="btn btn-faded btn-xs ml-1" (click)="deleteDefinition(s, def)"  [disabled]="readonly" [title]="'ACTIONS.DELETE'|translate">
-                            <span class="fas fa-minus"></span>
-                        </button>
-                        <button *ngIf="last && !s.pendingDef" class="btn btn-faded btn-xs ml-1" (click)="addDefinition(s)" [disabled]="readonly" [title]="'ACTIONS.ADD'|translate">
-                            <span class="fas fa-plus"></span>
-                        </button>
                     </div>
-                    <inline-editable-value *ngIf="s.pendingDef" [focusOnInit]="true" (valueEdited)="onPendingDefConfirmed(s, $event)" (editCanceled)="onPendingDefCanceled(s)">
-                    </inline-editable-value>
                 </div>
-            </div>
-            <div *ngFor="let c of s.concept" class="d-flex align-items-center mb-3">
-                <label class="mr-2">{{'DATA.CONCEPT.CONCEPT'|translate}}:</label>
-                <rdf-resource class="clickable" [resource]="c" (dblclick)="resourceDblClick(c)"></rdf-resource>
-                <button class="btn btn-faded btn-xs ml-1" (click)="deleteConcept(s, c)" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
-                    <span class="fas fa-minus"></span>
-                </button>
-            </div>
-            <div *ngFor="let ref of s.reference" class="d-flex align-items-center mb-3">
-                <label class="mr-2">{{'RESOURCE_VIEW.LEX_VIEW.SEMANTIC_REFERENCE'|translate}}:</label>
-                <rdf-resource class="clickable" [resource]="ref" (dblclick)="resourceDblClick(ref)"></rdf-resource>
-            </div>
+                <div *ngFor="let c of s.concept" class="d-flex align-items-center mb-3">
+                    <label class="mr-2">{{'DATA.CONCEPT.CONCEPT'|translate}}:</label>
+                    <rdf-resource class="clickable" [resource]="c" (dblclick)="resourceDblClick(c)"></rdf-resource>
+                    <button class="btn btn-faded btn-xs ml-1" (click)="deleteConcept(s, c)" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
+                        <span class="fas fa-minus"></span>
+                    </button>
+                </div>
+                <div *ngFor="let ref of s.reference" class="d-flex align-items-center mb-3">
+                    <label class="mr-2">{{'RESOURCE_VIEW.LEX_VIEW.SEMANTIC_REFERENCE'|translate}}:</label>
+                    <rdf-resource class="clickable" [resource]="ref" (dblclick)="resourceDblClick(ref)"></rdf-resource>
+                </div>
 
-            <div class="dropdown" style="position: absolute; top: -1px; right: -1px;" ngbDropdown>
-                <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
-                    <span class="fas fa-plus"></span>
-                </button>
-                <div class="dropdown-menu" ngbDropdownMenu>
-                    <a class="dropdown-item" (click)="addDefinition(s)" [disabled]="s.concept.length == 0">
-                        {{'DATA.ACTIONS.ADD_DEFINITION'|translate}}
-                    </a>
-                    <a class="dropdown-item" (click)="setConcept(s)" [disabled]="s.concept.length != 0">
-                        Set concept
-                    </a>
+                <div class="dropdown" style="position: absolute; top: -1px; right: -1px;" ngbDropdown>
+                    <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
+                        <span class="fas fa-plus"></span>
+                    </button>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="addDefinition(s)" [disabled]="s.concept.length == 0">
+                            {{'DATA.ACTIONS.ADD_DEFINITION'|translate}}
+                        </a>
+                        <a class="dropdown-item" (click)="setConcept(s)" [disabled]="s.concept.length != 0">
+                            Set concept
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-faded btn-xs mt-2" style="align-self: flex-start;" (click)="addSense()" [disabled]="readonly" [title]="'DATA.ACTIONS.ADD_LEXICAL_SENSE'|translate">
-            <span class="fas fa-plus"></span>
-        </button>
+
+        <div class="dropdown" ngbDropdown>
+            <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
+                <span class="fas fa-plus"></span>
+            </button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <a class="dropdown-item" (click)="addOtherForm()">
+                    {{'DATA.ACTIONS.ADD_OTHER_FORM'|translate}}
+                </a>
+                <a class="dropdown-item" (click)="addSense()">
+                    {{'DATA.ACTIONS.ADD_LEXICAL_SENSE'|translate}}
+                </a>
+            </div>
+        </div>
     </div>
 
     <div class="card-footer" style="min-height: 31px;"></div>

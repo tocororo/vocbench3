@@ -14,16 +14,3 @@ textarea:focus {
     background-color: #f7f7f7;
     border: 1px solid #4285f4;
 }
-
-.editable-div {
-    background-color: #fdfdfd66; /* ending 2 digits represent the opacity */
-    border: 1px solid #fbfbfb;
-}
-.editable-div:hover {
-    background-color: #f7f7f7;
-    border: 1px solid #f4f4f4 !important;
-}
-.editable-div:disabled {
-    background-color: #f4f4f4;
-    cursor: not-allowed;
-}

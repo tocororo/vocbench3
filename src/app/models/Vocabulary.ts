@@ -251,6 +251,13 @@ export class OntoLex {
     public static writtenRep = new ARTURIResource(OntoLex.namespace + "writtenRep", "ontolex:writtenRep", RDFResourceRolesEnum.datatypeProperty);
 }
 
+export class Lexinfo {
+    public static uri = "http://www.lexinfo.net/ontology/3.0/lexinfo";
+    public static namespace = Lexinfo.uri + "#";
+    
+    public static morphosyntacticProperty = new ARTURIResource(Lexinfo.namespace + "morphosyntacticProperty", "lexinfo:morphosyntacticProperty", RDFResourceRolesEnum.objectProperty);
+}
+
 export class Lime {
     public static uri = "http://www.w3.org/ns/lemon/lime";
     public static namespace = Lime.uri + "#";

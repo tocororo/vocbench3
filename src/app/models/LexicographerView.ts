@@ -1,5 +1,11 @@
+import { Observable, of } from "rxjs";
+import { flatMap, map } from "rxjs/operators";
+import { ClassesServices } from "../services/classesServices";
+import { PropertyServices } from "../services/propertyServices";
 import { Deserializer } from "../utils/Deserializer";
-import { ARTLiteral, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceNature, TripleScopes } from "./ARTResources";
+import { ResourceUtils, SortAttribute } from "../utils/ResourceUtils";
+import { ARTLiteral, ARTPredicateObjects, ARTResource, ARTURIResource, ResourceNature, TripleScopes } from "./ARTResources";
+import { Lexinfo, SemanticTurkey } from "./Vocabulary";
 
 export class LexicographerView {
     id: ARTURIResource;
@@ -47,6 +53,26 @@ export class Form {
     nature: ResourceNature[];
     scope: TripleScopes;
 
+    isInStaging(): boolean {
+        return this.isInStagingAdd() || this.isInStagingRemove();
+    }
+    isInStagingAdd(): boolean {
+        for (let n of this.nature) {
+            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingAddGraph))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    isInStagingRemove(): boolean {
+        for (let n of this.nature) {
+            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingRemoveGraph))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static parse(fJson: any): Form {
         let f: Form = new Form();
         f.id = new ARTURIResource(fJson.id);
@@ -57,6 +83,7 @@ export class Form {
         f.scope = fJson.scope;
         return f;
     }
+
 }
 
 export class Sense {
@@ -75,4 +102,70 @@ export class Sense {
         s.concept = Deserializer.createResourceArray(sJson.concept);
         return s;
     }
+}
+
+export class MorphosyntacticCache {
+
+    private static instance: MorphosyntacticCache;
+
+    static getInstance(propertyService: PropertyServices, classService: ClassesServices) {
+        return this.instance || (this.instance = new this(propertyService, classService));
+    }
+
+    private propertyService: PropertyServices;
+    private classService: ClassesServices;
+
+    private propCache: ARTURIResource[];
+    private propValueCache: MorphosyntacticCacheEntry[];
+
+    private constructor(propertyService: PropertyServices, classService: ClassesServices) {
+        this.propertyService = propertyService;
+        this.classService = classService;
+        this.propValueCache = [];
+    }
+
+    getProperties(): Observable<ARTURIResource[]> {
+        if (this.propCache == null) {
+            return this.propertyService.getSubProperties(Lexinfo.morphosyntacticProperty).pipe(
+                map(props => {
+                    ResourceUtils.sortResources(props, SortAttribute.value);
+                    this.propCache = props;
+                    return props;
+                })
+            );
+        } else {
+            return of(this.propCache);
+        }
+    }
+
+    getValues(property: ARTURIResource): Observable<ARTURIResource[]> {
+        let entry = this.propValueCache.find(c => c.prop.equals(property));
+        if (entry != null) {
+            return of(entry.values);
+        } else {
+            return this.propertyService.getRange(property).pipe(
+                flatMap(range => {
+                    if (range.ranges != null && range.ranges.rangeCollection != null && range.ranges.rangeCollection.resources != null) {
+                        let rangeColl = range.ranges.rangeCollection.resources;
+                        if (rangeColl.length == 1) {
+                            let rangeCls = rangeColl[0];
+                            return this.classService.getInstances(rangeCls).pipe(
+                                map(instances => {
+                                    ResourceUtils.sortResources(instances, SortAttribute.value);
+                                    let values = <ARTURIResource[]>instances;
+                                    this.propValueCache.push({ prop: property, values: values }); //store in cache
+                                    return values;
+                                })
+                            )
+                        }
+                    }
+                })
+            )
+        }
+    }
+}
+
+export interface MorphosyntacticCacheEntry {
+    prop: ARTURIResource;
+    values: ARTURIResource[];
 }
