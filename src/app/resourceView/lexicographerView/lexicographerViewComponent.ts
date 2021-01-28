@@ -107,8 +107,16 @@ export class LexicographerViewComponent {
     
     private sortSenses(senses: Sense[]) {
         senses.sort((s1, s2) => {
-            return s1.reference[0].getShow().localeCompare(s2.reference[0].getShow())
-        })
+            if (s1.reference.length != 0 && s2.reference.length != 0) {
+                return s1.reference[0].getShow().localeCompare(s2.reference[0].getShow())
+            } else if (s1.reference.length != 0 && s2.reference.length == 0) {
+                return 1
+            } else if (s1.reference.length == 0 && s2.reference.length != 0) {
+                return -1
+            } else {
+                return s1.id.getURI().localeCompare(s2.id.getURI());
+            }
+        });
     }
 
     //=== Lemma ===

@@ -474,6 +474,7 @@ export class ResourceNature {
     graphs: ARTURIResource[];
 
     public static parse(natureAttr: string): ResourceNature[] {
+        if (natureAttr == "") return [];
         let nature: ResourceNature[] = [];
         let splittedNatures: string[] = natureAttr.split("|_|");
         splittedNatures.forEach(n => {

@@ -6,7 +6,8 @@
 }
 
 textarea {
-    resize: vertical;
+    /* resize: vertical; */
+    resize: both;
     background-color: #f7f7f7;
     border: 1px solid #4285f4;
 }

@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Observable } from "rxjs";
 import { ARTLiteral, ARTURIResource } from "src/app/models/ARTResources";
-import { Form, MorphosyntacticCache } from "src/app/models/LexicographerView";
-import { ClassesServices } from "src/app/services/classesServices";
-import { PropertyServices } from "src/app/services/propertyServices";
+import { Form } from "src/app/models/LexicographerView";
+import { OntoLex } from "src/app/models/Vocabulary";
+import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
+import { MorphosyntacticCache } from "./MorphosyntacticPropChache";
 
 @Component({
     selector: "lexical-form",
@@ -20,6 +21,11 @@ export class LexicalFormComponent {
 
     inlineEditStyle: string;
 
+    //phonetic rep
+    pendingPhoneticRep: boolean;
+    phoneticRep: string;
+
+    //morphosyntactic props
     pendingMorphoProp: boolean;
     morphosyntacticProps: ARTURIResource[];
     selectedMorphoProp: ARTURIResource;
@@ -29,7 +35,7 @@ export class LexicalFormComponent {
     editingMorphoPropValue: { prop: ARTURIResource, value: ARTURIResource } = { prop: null, value: null };
     selectedEditingMorphoValue: ARTURIResource;
 
-    constructor(private propertyService: PropertyServices, private classService: ClassesServices, private resourceService: ResourcesServices) {}
+    constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices, private morphosyntacticCache: MorphosyntacticCache) {}
 
     ngOnInit() {
         this.inlineEditStyle = "font-family: serif;"
@@ -51,7 +57,49 @@ export class LexicalFormComponent {
         this.delete.emit();
     }
 
-    //ADDITION
+    /**
+     * === PHONETIC REP ===
+     */
+
+    onPhoneticRepEdited(oldPhoneticRep: ARTLiteral, newValue: string) {
+        let newPhoneticRep: ARTLiteral = new ARTLiteral(newValue, null, oldPhoneticRep.getLang());
+        this.resourceService.updateTriple(this.form.id, OntoLex.phoneticRep, oldPhoneticRep, newPhoneticRep).subscribe(
+            () => {
+                this.update.emit();
+            }
+        )
+    }
+
+    addPhoneticRep() {
+        this.pendingPhoneticRep = true;
+    }
+    onPendingPhoneticRepConfirmed(value: string) {
+        let phoneticRep: ARTLiteral = new ARTLiteral(value, null, this.form.writtenRep[0].getLang());
+        this.ontolexService.addFormRepresentation(this.form.id, phoneticRep, OntoLex.phoneticRep).subscribe(
+            () => {
+                this.pendingPhoneticRep = false;
+                this.update.emit();
+            }
+        )
+    }
+    onPendingPhoneticRepCanceled() {
+        this.pendingPhoneticRep = false;
+        this.phoneticRep = null;
+    }
+
+    deletePhoneticRep(phoneticRep: ARTLiteral) {
+        this.resourceService.removeValue(this.form.id, OntoLex.phoneticRep, phoneticRep).subscribe(
+            () => {
+                this.update.emit();
+            }
+        )
+    }
+
+    /**
+     * === MORPHOSYNTACTIC PROP ===
+     */
+    
+     //- ADDITION
 
     addMorphosintacticProp() {
         this.pendingMorphoProp = true;
@@ -82,7 +130,7 @@ export class LexicalFormComponent {
         this.pendingMorphoProp = false;
     }
 
-    //EDIT
+    //- EDIT
 
     isEditingPropValue(prop: ARTURIResource, value: ARTURIResource): boolean {
         return prop.equals(this.editingMorphoPropValue.prop) && value.equals(this.editingMorphoPropValue.value);
@@ -110,16 +158,26 @@ export class LexicalFormComponent {
         this.editingMorphoPropValue = { prop: null, value: null };
     }
 
-    //CACHE UTILS
+    //- DELETE
 
-    getMorphosyntacticPropertyCache(): MorphosyntacticCache {
-        return MorphosyntacticCache.getInstance(this.propertyService, this.classService);
+    deleteMorphosintacticProp(prop: ARTURIResource, value: ARTURIResource) {
+        this.resourceService.removeValue(this.form.id, prop, value).subscribe(
+            () => {
+                this.update.emit();
+            }
+        )
     }
+
+    //- CACHE UTILS
+
+    // getMorphosyntacticPropertyCache(): MorphosyntacticCache {
+    //     return MorphosyntacticCache.getInstance(this.lexic this.propertyService, this.classService);
+    // }
     getCachedMorphosyntacticProperty(): Observable<ARTURIResource[]> {
-        return MorphosyntacticCache.getInstance(this.propertyService, this.classService).getProperties();
+        return this.morphosyntacticCache.getProperties();
     }
     getCachedMorphosyntacticValue(property: ARTURIResource): Observable<ARTURIResource[]> {
-        return MorphosyntacticCache.getInstance(this.propertyService, this.classService).getValues(property);
+        return this.morphosyntacticCache.getValues(property);
     }
     
 

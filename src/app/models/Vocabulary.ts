@@ -246,6 +246,7 @@ export class OntoLex {
     public static isLexicalizedSenseOf = new ARTURIResource(OntoLex.namespace + "isLexicalizedSenseOf", "ontolex:isLexicalizedSenseOf", RDFResourceRolesEnum.objectProperty);
     public static lexicalForm = new ARTURIResource(OntoLex.namespace + "lexicalForm", "ontolex:LexicalForm", RDFResourceRolesEnum.objectProperty);
     public static otherForm = new ARTURIResource(OntoLex.namespace + "otherForm", "ontolex:otherForm", RDFResourceRolesEnum.objectProperty);
+    public static phoneticRep = new ARTURIResource(OntoLex.namespace + "phoneticRep", "ontolex:phoneticRep", RDFResourceRolesEnum.datatypeProperty);
     public static representation = new ARTURIResource(OntoLex.namespace + "representation", "ontolex:representation", RDFResourceRolesEnum.datatypeProperty);
     public static sense = new ARTURIResource(OntoLex.namespace + "sense", "ontolex:sense", RDFResourceRolesEnum.objectProperty);
     public static writtenRep = new ARTURIResource(OntoLex.namespace + "writtenRep", "ontolex:writtenRep", RDFResourceRolesEnum.datatypeProperty);

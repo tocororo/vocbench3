@@ -1,4 +1,4 @@
-import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, TripleScopes } from "../models/ARTResources";
 import { DatatypeUtils } from "../models/Datatypes";
 import { PrefixMapping } from "../models/Metadata";
 import { Lime, OntoLex, OWL, RDF, RDFS, SemanticTurkey, SKOS, SKOSXL } from "../models/Vocabulary";
@@ -291,6 +291,9 @@ export class ResourceUtils {
                 return true;
             }
         }
+        if (resource.getAdditionalProperty(ResAttribute.TRIPLE_SCOPE) == TripleScopes.staged) {
+            return true;
+        }
         return false;
     }
     static isTripleInStagingRemove(resource: ARTNode): boolean {
@@ -299,6 +302,9 @@ export class ResourceUtils {
             if (graphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
                 return true;
             }
+        }
+        if (resource.getAdditionalProperty(ResAttribute.TRIPLE_SCOPE) == TripleScopes.del_staged) {
+            return true;
         }
         return false;
     }

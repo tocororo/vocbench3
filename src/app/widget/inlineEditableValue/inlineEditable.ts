@@ -121,11 +121,12 @@ export abstract class AbstractInlineEditable {
         /* 
         Edit: 
         - if flagged as click inside
-        - if not already editing
         - if focusOnInit is true: this component has been likely initialized with a click on a button, so prevent to detected click as outside and cancel edit
         */
-        if ((this.clickInside && !this.editInProgress) || this.focusOnInit) {
-            this.edit();
+        if (this.clickInside || this.focusOnInit) {
+            if (!this.editInProgress) { //only if not already editing
+                this.edit();
+            }
         } else {
             this.cancelEdit();
         }

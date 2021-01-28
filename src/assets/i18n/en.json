@@ -1324,6 +1324,7 @@
             }
         },
         "ACTIONS": {
+            "ADD_PHONETIC_REPRESENTATION": "Add phonetic representation",
             "ADD_MORPHOSYNTACTIC_PROP": "Add morphosyntactic property",
             "ADD_VALUE_FROM_ANOTHER_PROJ": "Add value from another project",
             "ADD_VALUE_MANUALLY": "Add value manually",

@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ARTResource } from "../models/ARTResources";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { Deserializer } from '../utils/Deserializer';
 import { HttpManager } from "../utils/HttpManager";
+import { ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
 
 @Injectable()
 export class LexicographerViewServices {
@@ -14,6 +18,20 @@ export class LexicographerViewServices {
             lexicalEntry: lexicalEntry,
         };
         return this.httpMgr.doGet(this.serviceName, "getLexicalEntryView", params);
+    }
+
+    getMorphosyntacticProperties(role?: RDFResourceRolesEnum, rootsIncluded?: boolean): Observable<ARTURIResource[]> {
+        let params = {
+            role: role,
+            rootsIncluded: rootsIncluded
+        };
+        return this.httpMgr.doGet(this.serviceName, "getMorphosyntacticProperties", params).pipe(
+            map(stResp => {
+               let props = Deserializer.createURIArray(stResp);
+               ResourceUtils.sortResources(props, SortAttribute.value);
+               return props;
+            })
+        );
     }
 
 
