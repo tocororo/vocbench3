@@ -10,6 +10,26 @@ export class LexicographerView {
     otherForms: Form[];
     senses: Sense[];
 
+    isInStaging(): boolean {
+        return this.isInStagingAdd() || this.isInStagingRemove();
+    }
+    isInStagingAdd(): boolean {
+        for (let n of this.nature) {
+            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingAddGraph))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    isInStagingRemove(): boolean {
+        for (let n of this.nature) {
+            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingRemoveGraph))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static parse(lvJson: any): LexicographerView {
         let lv: LexicographerView = new LexicographerView();
 

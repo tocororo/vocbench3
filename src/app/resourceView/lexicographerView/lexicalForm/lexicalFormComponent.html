@@ -1,5 +1,5 @@
 <div class="d-flex align-items-center">
-    <inline-editable-form style="flex: 1" [value]="form" [disabled]="readonly" [textStyle]="inlineEditStyle" [title]="form.id.toNT()" (edited)="onFormEdited($event)">
+    <inline-editable-form style="flex: 1" [value]="form" [disabled]="readonly" [textStyle]="inlineEditStyle" [title]="form.id.toNT()" (edited)="onWrittenRepEdited($event)">
     </inline-editable-form>
     <div class="dropdown ml-1" ngbDropdown>
         <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
@@ -14,7 +14,7 @@
             </a>
         </div>
     </div>
-    <button *ngIf="!lemma" class="btn btn-xs btn-faded ml-1" (click)="deleteForm()" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
+    <button *ngIf="!readonly && !lemma" class="btn btn-xs btn-faded ml-1" (click)="deleteForm()" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
         <span class="fas fa-minus"></span>
     </button>
 </div>

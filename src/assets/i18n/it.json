@@ -613,7 +613,8 @@
             "SELECT_SCHEME": "Seleziona schema",
             "SET_AS_TOP_CONCEPT": "Setta come top concept",
             "SET_DATATYPE_RESTRICTIONS": "Setta restrizioni datatype",
-            "SET_INVERSE_PROPERTY": "Setta proprietà inversa"
+            "SET_INVERSE_PROPERTY": "Setta proprietà inversa",
+            "SET_LEX_CONCEPT": "Assegna lexical concept"
         }
     },
     "DATA_MANAGEMENT": {

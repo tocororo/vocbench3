@@ -138,7 +138,6 @@ export abstract class AbstractInlineEditable {
 }
 
 interface InlineEditableCssClass {
-    disabled?: boolean;
     proposedAddRes?: boolean;
     proposedRemoveRes?: boolean;
     proposedAddTriple?: boolean;

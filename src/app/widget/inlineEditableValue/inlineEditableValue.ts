@@ -27,7 +27,6 @@ export class InlineEditableValue extends AbstractInlineEditable {
     initRenderingClassStatus() {
         //reset all statuses
         this.ngClassValue = {
-            disabled: this.disabled,
             proposedAddRes: false,
             proposedAddTriple: false,
             proposedRemoveRes: false,
@@ -45,6 +44,13 @@ export class InlineEditableValue extends AbstractInlineEditable {
             this.ngClassValue.proposedAddTriple = true;
         } else if (ResourceUtils.isTripleInStagingRemove(this.value)) {
             this.ngClassValue.proposedRemoveTriple = true;
+        }
+
+        if (
+            this.ngClassValue.proposedAddRes || this.ngClassValue.proposedAddTriple || 
+            this.ngClassValue.proposedRemoveRes || this.ngClassValue.proposedRemoveTriple
+        ) {
+            this.disabled = true;
         }
     }
 

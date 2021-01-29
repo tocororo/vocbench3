@@ -19,7 +19,6 @@ import { ResViewSettingsModal } from "../resViewSettingsModal";
 @Component({
     selector: "lexicographer-view",
     templateUrl: "./lexicographerViewComponent.html",
-    styleUrls: ["./lexicographerViewComponent.css"],
     host: { class: "vbox" }
 })
 export class LexicographerViewComponent {
@@ -39,10 +38,10 @@ export class LexicographerViewComponent {
     otherForms: Form[];
     senses: Sense[];
 
-    pendingOtherForm: ARTLiteral; //written rep of an other form that is going to be added
+    pendingOtherForm: boolean;
 
-    constructor(private lexicographerViewService: LexicographerViewServices, private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices,
-        private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices, private modalService: NgbModal) {}
+    constructor(private lexicographerViewService: LexicographerViewServices, private ontolexService: OntoLexLemonServices, 
+        private creationModals: CreationModalServices, private modalService: NgbModal) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
@@ -81,6 +80,10 @@ export class LexicographerViewComponent {
                 this.senses = lv.senses;
                 this.sortSenses(this.senses);
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+
+                if (lv.isInStaging()) {
+                    this.readonly = true;
+                }
             }
         );
     }
@@ -119,42 +122,15 @@ export class LexicographerViewComponent {
         });
     }
 
-    //=== Lemma ===
-
-    onLemmaWrittenRepEdited(newWrittenRep: ARTLiteral) {
-        //this method doesn't need to know which lemma was edited since the edit is allowed only in one lemma is present (no validation pending)
-        this.ontolexService.setCanonicalForm(this.resource, newWrittenRep).subscribe(
-            () => {
-                this.buildLexicographerView();
-            }
-        )
-    }
-
-    addMorphosintacticPropToLemma(lemma: Form) {
-        alert("TODO: add morphosintactic prop to lemma " + lemma.id.getShow());
-    }
-
     //=== Other forms ===
 
-    onOtherFormWrittenRepEdited(form: Form, newWrittenRep: ARTLiteral) {
-        let oldWrittenRep = form.writtenRep[0];
-        this.resourceService.updateTriple(form.id, OntoLex.writtenRep, oldWrittenRep, newWrittenRep).subscribe(
-            () => {
-                this.buildLexicographerView();
-            }
-        )
-    }
-    
     addOtherForm() {
-        this.pendingOtherForm = new ARTLiteral("");
+        this.pendingOtherForm = true;
     }
-    deleteOtherForm(form: Form) {
-        this.ontolexService.removeForm(this.resource, OntoLex.otherForm, form.id).subscribe(
-            () => {
-                this.buildLexicographerView();
-            }
-        )
+    onPendingOtherFormCanceled() {
+        this.pendingOtherForm = false;
     }
+
     onPendingOtherFormConfirmed(value: string) {
         let writtenRep: ARTLiteral = new ARTLiteral(value, null, this.lemma[0].writtenRep[0].getLang());
         this.ontolexService.addOtherForm(this.resource, writtenRep).subscribe(
@@ -164,14 +140,7 @@ export class LexicographerViewComponent {
             }
         )
     }
-    onPendingOtherFormCanceled() {
-        this.pendingOtherForm = null;
-    }
-
-    addMorphosintacticPropToForm(form: Form) {
-        alert("TODO: add morphosintactic prop to form " + form.id.getShow());
-    }
-
+    
     //=== Senses ===
 
     addSense() {
@@ -186,55 +155,6 @@ export class LexicographerViewComponent {
             () => {}
         )
     }
-
-    addDefinition(sense: Sense) {
-        sense['pendingDef'] = {}; //add a fake object just to make appear a input field in the UI
-    }
-    onPendingDefConfirmed(sense: Sense, newDef: string) {
-        alert("this view is still under development; the addition of definition is not yet working, so the added definition is only visualized temporarly and not stored permanently server side")
-        sense.definition.push(new ARTLiteral(newDef, this.lemma[0].writtenRep[0].getLang()));
-        delete sense['pendingDef'];
-    }
-    onPendingDefCanceled(sense: Sense) {
-        delete sense['pendingDef']; //delete the fake object to makje disappear the input field from the UI
-    }
-    onDefinitionEdited(sense: Sense, def: ARTLiteral, newValue: string) {
-        let newDefinition = new ARTLiteral(newValue, null, def.getLang())
-        this.resourceService.updateTriple(sense.concept[0], SKOS.definition, def, newDefinition).subscribe(
-            () => {
-                this.buildLexicographerView();
-            }
-        )
-    }
-    deleteDefinition(sense: Sense, def: ARTLiteral) {
-        this.resourceService.removeValue(sense.concept[0], SKOS.definition, def).subscribe(
-            () => {
-                this.buildLexicographerView();
-            }
-        )
-    }
-    
-    setConcept(sense: Sense) {
-        //TODO: this is a huge problem in a real case scenario where ontolex:LexicalConcept has too much instances
-        this.browsingModals.browseInstanceList({key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}, OntoLex.lexicalConcept).then(
-            lexConc => {
-                this.resourceService.addValue(sense.id, OntoLex.isLexicalizedSenseOf, lexConc).subscribe(
-                    () => {
-                        this.buildLexicographerView();
-                    }
-                )
-            },
-            () => {}
-        )
-    }
-    deleteConcept(sense: Sense, concept: ARTURIResource) {
-        this.resourceService.removeValue(sense.id, OntoLex.isLexicalizedSenseOf, concept).subscribe(
-            () => {
-                this.buildLexicographerView();
-            }
-        )
-    }
-
 
 
     resourceDblClick(resource: ARTResource) {

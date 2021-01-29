@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Form } from 'src/app/models/LexicographerView';
+import { ResourceUtils } from 'src/app/utils/ResourceUtils';
 import { TripleScopes } from '../../models/ARTResources';
 import { BasicModalServices } from '../modal/basicModal/basicModalServices';
 import { AbstractInlineEditable } from './inlineEditable';
@@ -27,7 +28,6 @@ export class InlineEditableForm extends AbstractInlineEditable {
     initRenderingClassStatus() {
         //reset all statuses
         this.ngClassValue = {
-            disabled: this.disabled,
             proposedAddRes: false,
             proposedAddTriple: false,
             proposedRemoveRes: false,
@@ -45,7 +45,18 @@ export class InlineEditableForm extends AbstractInlineEditable {
             this.ngClassValue.proposedRemoveTriple = true;
         }
         //in addition to the status of the Form, also the writtenRep could have the status
-        //TODO
+        if (ResourceUtils.isTripleInStagingAdd(this.value.writtenRep[0])) {
+            this.ngClassValue.proposedAddTriple = true;
+        } else  if (ResourceUtils.isTripleInStagingRemove(this.value.writtenRep[0])) {
+            this.ngClassValue.proposedRemoveTriple = true;
+        }
+
+        if (
+            this.ngClassValue.proposedAddRes || this.ngClassValue.proposedAddTriple || 
+            this.ngClassValue.proposedRemoveRes || this.ngClassValue.proposedRemoveTriple
+        ) {
+            this.disabled = true;
+        }
     }
 
 }

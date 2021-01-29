@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { tickStep } from "d3";
+import { Observable } from "rxjs";
 import { ARTLiteral, ARTURIResource } from "src/app/models/ARTResources";
 import { Form } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
@@ -8,14 +8,14 @@ import { ResourcesServices } from "src/app/services/resourcesServices";
 
 @Component({
     selector: "lexical-form",
-    templateUrl: "./lexicalFormComponent.html"
+    templateUrl: "./lexicalFormComponent.html",
+    host: { class: "d-block" }
 })
 export class LexicalFormComponent {
     @Input() readonly: boolean = false;
+    @Input() entry: ARTURIResource;
     @Input() form: Form;
-    @Input() lemma: boolean;
-    @Output() writtenRepEdited: EventEmitter<ARTLiteral> = new EventEmitter();
-    @Output() delete: EventEmitter<void> = new EventEmitter(); //request to delete the form
+    @Input() lemma: boolean; //tells if the form is a lemma (false if it is an "other form")
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update the lex view
 
     inlineEditStyle: string;
@@ -34,15 +34,30 @@ export class LexicalFormComponent {
         }
     }
 
-    onFormEdited(newValue: string) {
+    onWrittenRepEdited(newValue: string) {
         let oldWrittenRep = this.form[0].writtenRep[0]; //edit enabled only when the form is unique (not in validation)
         if (oldWrittenRep.getShow() == newValue) return;
         let newWrittenRep = new ARTLiteral(newValue, null, oldWrittenRep.getLang());
-        this.writtenRepEdited.emit(newWrittenRep)
+        let updateWrittenRepFn: Observable<void>;
+        if (this.lemma) { //if lemma, simply replace the whole canonical form
+            updateWrittenRepFn = this.ontolexService.setCanonicalForm(this.entry, newWrittenRep);
+        } else { //other form => update the writtenRep of the form
+            updateWrittenRepFn = this.resourceService.updateTriple(this.form.id, OntoLex.writtenRep, oldWrittenRep, newWrittenRep);
+        }
+        updateWrittenRepFn.subscribe(
+            () => {
+                this.update.emit();
+            }
+        )
     }
 
     deleteForm() {
-        this.delete.emit();
+        if (this.lemma) return;
+        this.ontolexService.removeForm(this.entry, OntoLex.otherForm, this.form.id).subscribe(
+            () => {
+                this.update.emit();
+            }
+        )
     }
 
     /**
@@ -70,8 +85,9 @@ export class LexicalFormComponent {
     }
 
 
-
-
+    /**
+     * Propagate the update request from the child component (morphosyntactic-prop and phonetic-rep)
+     */
     onUpdate() {
         this.update.emit();
     }
