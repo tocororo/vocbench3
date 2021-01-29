@@ -21,62 +21,15 @@
 
 <!-- Phonetic rep -->
 <!-- visualization and editing -->
-<div *ngFor="let pr of form.phoneticRep" class="d-flex align-items-center mt-1">
-    <label class="mr-2">Pronunciation:</label>
-    /<inline-editable-value [value]="pr" (edited)="onPhoneticRepEdited(pr, $event)" [disabled]="disabled"></inline-editable-value>/
-    <button class="btn btn-xs btn-faded ml-2" (click)="deletePhoneticRep(pr)" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
-        <span class="fas fa-minus"></span>
-    </button>
-</div>
+<phonetic-rep *ngFor="let pr of form.phoneticRep" class="mt-1" [form]="form" [phoneticRep]="pr" (update)="onUpdate()"></phonetic-rep>
 <!-- addition -->
-<div *ngIf="pendingPhoneticRep" class="mt-1">
-    <inline-editable-value [focusOnInit]="true" (edited)="onPendingPhoneticRepConfirmed($event)" (editCanceled)="onPendingPhoneticRepCanceled()">
-    </inline-editable-value>
-</div>
+<phonetic-rep *ngIf="pendingPhoneticRep" class="mt-1" [form]="form" (cancel)="onPendingPhoneticRepCanceled()" (update)="onUpdate()"></phonetic-rep>
 
 <!-- morphosyntactic properties -->
 <!-- visualization and editing -->
 <ng-container *ngFor="let mp of form.morphosyntacticProps">
-    <div *ngFor="let mv of mp.getObjects()" class="d-flex align-items-center mt-1">
-        <label>{{mp.getPredicate().getLocalName()}}:</label>
-        <div class="d-flex align-items-center ml-1">
-            <ng-container *ngIf="isEditingPropValue(mp.getPredicate(), mv); then editingBlock; else showBlock"></ng-container>
-            <ng-template #showBlock>
-                <span class="clickable form-control form-control-editable" (click)="editMorphosyntacticValue(mp.getPredicate(), mv)">{{mv.getLocalName()}}</span>
-            </ng-template>
-            <ng-template #editingBlock>
-                <select class="form-control" style="width: initial;" [(ngModel)]="selectedEditingMorphoValue">
-                    <option *ngFor="let mv of morphosyntacticValues" [ngValue]="mv">{{mv.getLocalName()}}</option>
-                </select>
-                <div class="btn-toolbar ml-1">
-                    <button class="btn btn-success btn-xs" style="width: 22px;" (click)="confirmEditingMorphValue()">
-                        <span class="fas fa-check"></span>
-                    </button>
-                    <button class="btn btn-danger btn-xs" style="width: 22px;" (click)="cancelEditingMorphValue()">
-                        <span class="fas fa-times"></span>
-                    </button>
-                </div>
-            </ng-template>
-        </div>
-        <button class="btn btn-xs btn-faded ml-2" (click)="deleteMorphosintacticProp(mp, mv)" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
-            <span class="fas fa-minus"></span>
-        </button>
-    </div>
+    <morphosyntactic-prop *ngFor="let mv of mp.getObjects()" [form]="form" [property]="mp.getPredicate()" [value]="mv" [readonly]="readonly" (update)="onUpdate()">
+    </morphosyntactic-prop>
 </ng-container>
 <!-- addition -->
-<div *ngIf="pendingMorphoProp" class="d-flex align-items-center mt-1">
-    <select class="form-control" style="width: initial;" [(ngModel)]="selectedMorphoProp" (ngModelChange)="onMorphoPropChanged()">
-        <option *ngFor="let mp of morphosyntacticProps" [ngValue]="mp">{{mp.getLocalName()}}</option>
-    </select>
-    <select class="form-control ml-1" style="width: initial;" [(ngModel)]="selectedMorphoValue" [disabled]="!selectedMorphoProp">
-        <option *ngFor="let mv of morphosyntacticValues" [ngValue]="mv">{{mv.getLocalName()}}</option>
-    </select>
-    <div class="btn-toolbar ml-1">
-        <button class="btn btn-success btn-xs" style="width: 22px;" (click)="confirmPendingMorphPropValue()" [disabled]="!selectedMorphoValue">
-            <span class="fas fa-check"></span>
-        </button>
-        <button class="btn btn-danger btn-xs" style="width: 22px;" (click)="cancelPendingMorphPropValue()">
-            <span class="fas fa-times"></span>
-        </button>
-    </div>
-</div>
+<morphosyntactic-prop *ngIf="pendingMorphoProp" [form]="form" (update)="onUpdate()"></morphosyntactic-prop>

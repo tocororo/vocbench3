@@ -1,0 +1,48 @@
+<ng-container *ngIf="property && value; then visualizationBlock; else creationBlock"></ng-container>
+<!-- visualization and editing -->
+<ng-template #visualizationBlock>
+    <div class="d-flex align-items-center mt-1">
+        <label>{{property.getLocalName()}}:</label>
+        <div class="d-flex align-items-center ml-1">
+            <ng-container *ngIf="editing; then editingBlock; else showBlock"></ng-container>
+            <ng-template #showBlock>
+                <span class="clickable form-control form-control-editable" [ngClass]="ngClassValue" (click)="editValue()">{{value.getLocalName()}}</span>
+            </ng-template>
+            <ng-template #editingBlock>
+                <select class="form-control" style="width: initial;" [(ngModel)]="selectedValue">
+                    <option *ngFor="let v of values" [ngValue]="v">{{v.getLocalName()}}</option>
+                </select>
+                <div class="btn-toolbar ml-1">
+                    <button class="btn btn-success btn-xs" style="width: 22px;" (click)="confirmEdit()">
+                        <span class="fas fa-check"></span>
+                    </button>
+                    <button class="btn btn-danger btn-xs" style="width: 22px;" (click)="cancelEdit()">
+                        <span class="fas fa-times"></span>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+        <button *ngIf="!readonly" class="btn btn-xs btn-faded ml-2" (click)="deleteValue()" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
+            <span class="fas fa-minus"></span>
+        </button>
+    </div>
+</ng-template>
+<!-- creation -->
+<ng-template #creationBlock>
+    <div class="d-flex align-items-center mt-1">
+        <select class="form-control" style="width: initial;" [(ngModel)]="selectedProp" (ngModelChange)="onPropChanged()">
+            <option *ngFor="let p of properties" [ngValue]="p">{{p.getLocalName()}}</option>
+        </select>
+        <select class="form-control ml-1" style="width: initial;" [(ngModel)]="selectedValue" [disabled]="!selectedProp">
+            <option *ngFor="let v of values" [ngValue]="v">{{v.getLocalName()}}</option>
+        </select>
+        <div class="btn-toolbar ml-1">
+            <button class="btn btn-success btn-xs" style="width: 22px;" (click)="confirmCreation()" [disabled]="!selectedValue">
+                <span class="fas fa-check"></span>
+            </button>
+            <button class="btn btn-danger btn-xs" style="width: 22px;" (click)="cancelCreation()">
+                <span class="fas fa-times"></span>
+            </button>
+        </div>
+    </div>
+</ng-template>

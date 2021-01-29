@@ -5,6 +5,8 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { LexicalFormComponent } from '../resourceView/lexicographerView/lexicalForm/lexicalFormComponent';
 import { MorphosyntacticCache } from '../resourceView/lexicographerView/lexicalForm/MorphosyntacticPropChache';
+import { MorphosyntacticPropComponent } from '../resourceView/lexicographerView/lexicalForm/morphosyntacticPropComponent';
+import { PhoneticRepComponent } from '../resourceView/lexicographerView/lexicalForm/phoneticRepComponent';
 import { LexicographerViewComponent } from '../resourceView/lexicographerView/lexicographerViewComponent';
 import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
 import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
@@ -85,11 +87,14 @@ import { TreeAndListModule } from "./treeAndListModule";
     declarations: [
         EditableResourceComponent,
         LanguageBoxComponent,
+        LanguageDefinitionComponent,
+        LanguageTermComponent,
         LexicalFormComponent,
         LexicographerViewComponent,
+        MorphosyntacticPropComponent,
+        PhoneticRepComponent,
         ReifiedResourceComponent,
         ResourceRenameComponent,
-        TermViewComponent,
         ResourceTripleEditorComponent,
         ResourceViewEditorComponent, 
         ResourceViewContextMenu,
@@ -99,8 +104,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResourceViewTabbedComponent,
         ResourceViewValueRenderer,
         ResourceViewTabContainer,
-        LanguageDefinitionComponent,
-        LanguageTermComponent,
+        TermViewComponent,
         //renderers
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 

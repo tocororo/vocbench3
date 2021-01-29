@@ -114,10 +114,12 @@ export abstract class AbstractInlineEditable {
     private clickInside: boolean = false;
     @HostListener("click")
     onComponentClick() {
+        if (this.disabled || this.preventEdit) return;
         this.clickInside = true;
     }
     @HostListener("document:click")
     onDocumentClick() {
+        if (this.disabled || this.preventEdit) return;
         /* 
         Edit: 
         - if flagged as click inside
