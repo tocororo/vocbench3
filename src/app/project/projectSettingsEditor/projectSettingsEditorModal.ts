@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from "rxjs";
-import { map } from "rxjs/operators";
+import { flatMap, map } from "rxjs/operators";
 import { ExtensionPointID, Settings, Plugin, PluginSpecification } from "src/app/models/Plugins";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "src/app/models/Vocabulary";
 import { PluginsServices } from "src/app/services/pluginsServices";
@@ -42,8 +42,10 @@ export class ProjSettingsEditorModal {
 
     ngOnInit() {
         this.initBlacklisting();
-        this.initRenderingEngine();
-        this.initUriGenerator();
+        //these two initializations needed to be executed sequentially in order to prevent issues related to project locked status
+        this.initRenderingEngine().subscribe(() => {
+            this.initUriGenerator().subscribe();    
+        });
         this.openAtStartup = this.project.getOpenAtStartup();
     }
 
@@ -72,30 +74,30 @@ export class ProjSettingsEditorModal {
 
     //================== RENDERING ENGINE ==================
 
-    private initRenderingEngine() {
-        this.pluginService.getAvailablePlugins(ExtensionPointID.RENDERING_ENGINE_ID).subscribe(
-            (plugins: Plugin[]) => {
+    private initRenderingEngine(): Observable<void> {
+        return this.pluginService.getAvailablePlugins(ExtensionPointID.RENDERING_ENGINE_ID).pipe(
+            flatMap((plugins: Plugin[]) => {
                 this.rendEngPluginList = plugins;
-                this.projectService.getRenderingEngineConfiguration(this.project.getName()).subscribe(
-                    config => {
+                return this.projectService.getRenderingEngineConfiguration(this.project.getName()).pipe(
+                    flatMap(config => {
                         let pluginToRestore = config.factoryID;
                         let configToRestore = config.settings;
                         //select the plugin among the available
                         this.selectedRendEngPlugin = this.rendEngPluginList.find(p => p.factoryID == pluginToRestore);
                         //restore the configuration
-                        this.ensureRenderingEngineConfigLoaded().subscribe(
-                            () => {
+                        return this.ensureRenderingEngineConfigLoaded().pipe(
+                            map(() => {
                                 //update the list of plugin configurations (according the selected plugin)
                                 this.selectedRendEngPluginConfList = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
                                 //search the configuration to restore among these configuration list, then replace it and set it as selected
                                 let targetConfigIdx = this.selectedRendEngPluginConfList.findIndex(c => c.type == configToRestore.type);
                                 this.selectedRendEngPluginConfList[targetConfigIdx] = configToRestore;
                                 this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[targetConfigIdx];
-                            }
+                            })
                         )
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -159,30 +161,30 @@ export class ProjSettingsEditorModal {
 
     //================== URI GENERATOR ==================
 
-    private initUriGenerator() {
-        this.pluginService.getAvailablePlugins(ExtensionPointID.URI_GENERATOR_ID).subscribe(
-            (plugins: Plugin[]) => {
+    private initUriGenerator(): Observable<void> {
+        return this.pluginService.getAvailablePlugins(ExtensionPointID.URI_GENERATOR_ID).pipe(
+            flatMap((plugins: Plugin[]) => {
                 this.uriGenPluginList = plugins;
-                this.projectService.getURIGeneratorConfiguration(this.project.getName()).subscribe(
-                    config => {
+                return this.projectService.getURIGeneratorConfiguration(this.project.getName()).pipe(
+                    flatMap(config => {
                         let pluginToRestore = config.factoryID;
                         let configToRestore = config.settings;
                         //select the plugin among the available
                         this.selectedUriGenPlugin = this.uriGenPluginList.find(p => p.factoryID == pluginToRestore);
                         //restore the configuration
-                        this.ensureUriGeneratorConfigLoaded().subscribe(
-                            () => {
+                        return this.ensureUriGeneratorConfigLoaded().pipe(
+                            map(() => {
                                 //update the list of plugin configurations (according the selected plugin)
                                 this.selectedUriGenPluginConfList = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
                                 //search the configuration to restore among these configuration list, then replace it and set it as selected
                                 let targetConfigIdx = this.selectedUriGenPluginConfList.findIndex(c => c.type == configToRestore.type);
                                 this.selectedUriGenPluginConfList[targetConfigIdx] = configToRestore;
                                 this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[targetConfigIdx];
-                            }
+                            })
                         )
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
