@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { from, Observable, of } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { ARTURIResource } from "src/app/models/ARTResources";
 import { ClassesServices } from "src/app/services/classesServices";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { PropertyServices } from "src/app/services/propertyServices";
 import { ResourceUtils, SortAttribute } from "src/app/utils/ResourceUtils";
+import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 
 @Injectable()
 export class MorphosyntacticCache {
@@ -13,7 +14,8 @@ export class MorphosyntacticCache {
     private propCache: ARTURIResource[];
     private propValueCache: MorphosyntacticCacheEntry[] = [];
 
-    constructor(private lexicographerViewService: LexicographerViewServices, private propertyService: PropertyServices, private classService: ClassesServices) {
+    constructor(private lexicographerViewService: LexicographerViewServices, private propertyService: PropertyServices, private classService: ClassesServices,
+        private sharedModals: SharedModalServices) {
         this.propValueCache = [];
     }
 
@@ -36,26 +38,64 @@ export class MorphosyntacticCache {
         if (entry != null) {
             return of(entry.values);
         } else {
-            return this.propertyService.getRange(property).pipe(
-                mergeMap(range => {
-                    if (range.ranges != null && range.ranges.rangeCollection != null && range.ranges.rangeCollection.resources != null) {
-                        let rangeColl = range.ranges.rangeCollection.resources;
-                        if (rangeColl.length == 1) {
-                            let rangeCls = rangeColl[0];
-                            return this.classService.getInstances(rangeCls).pipe(
-                                map(instances => {
-                                    ResourceUtils.sortResources(instances, SortAttribute.value);
-                                    let values = <ARTURIResource[]>instances;
+            return this.getRangeClass(property).pipe(
+                mergeMap(data => {
+                    if (data != null) { //range class selection completed/not canceled
+                        return this.classService.getInstances(data.cls).pipe(
+                            map(instances => {
+                                ResourceUtils.sortResources(instances, SortAttribute.value);
+                                let values = <ARTURIResource[]>instances;
+                                if (data.storeInCache) {
                                     this.propValueCache.push({ prop: property, values: values }); //store in cache
-                                    return values;
-                                })
-                            )
-                        }
+                                }
+                                return values;
+                            })
+                        )
+                    } else { //range selection canceled
+                        return of([]);
                     }
                 })
-            )
+            );
         }
     }
+
+    /**
+     * Returns the range class of the morphosyntactic property; null if no range is found 
+     * or if the selection of the range class (in case of multiple range) has been canceled.
+     * In addition returns also a boolean telling if the values should be cached 
+     * (false in case the property has multiple range class, so it cannot be assumed that the values will be always chosen among that class instances)
+     * @param property 
+     */
+    private getRangeClass(property: ARTURIResource): Observable<{ cls: ARTURIResource, storeInCache: boolean }> {
+        return this.propertyService.getRange(property).pipe(
+            mergeMap(range => {
+                if (range.ranges != null && range.ranges.rangeCollection != null && range.ranges.rangeCollection.resources != null) {
+                    let rangeColl = range.ranges.rangeCollection.resources;
+                    if (rangeColl.length == 0) {
+                        return of(null); //no classes in range collection
+                    } else if (rangeColl.length == 1) {
+                        return of({ cls: rangeColl[0], storeInCache: true });
+                    } else {
+                        //in case multiple range class are specified, ask user to select the range
+                        //TODO what if simply retrieve the instances of all the classes?
+                        return from(
+                            this.sharedModals.selectResource({key:"DATA.ACTIONS.SELECT_RANGE"}, null, rangeColl).then(
+                                (selectedRange: ARTURIResource) => {
+                                    return { cls: selectedRange, storeInCache: false };
+                                },
+                                () => {
+                                    return null;
+                                }
+                            )
+                        )
+                    }
+                } else {
+                    return of(null); //no range collection
+                }
+            })
+        );
+    }
+
 }
 
 export interface MorphosyntacticCacheEntry {

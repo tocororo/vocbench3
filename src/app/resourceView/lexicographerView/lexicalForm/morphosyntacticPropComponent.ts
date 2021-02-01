@@ -111,6 +111,7 @@ export class MorphosyntacticPropComponent {
     }
 
     onPropChanged() {
+        this.values = []; //reset values
         this.getCachedMorphosyntacticValue(this.selectedProp).subscribe(
             values => {
                 this.values = values;
