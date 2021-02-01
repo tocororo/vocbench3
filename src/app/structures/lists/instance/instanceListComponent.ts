@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
-import { TranslateService } from "@ngx-translate/core";
 import { Observable, of } from "rxjs";
 import { flatMap } from "rxjs/operators";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
@@ -13,8 +12,6 @@ import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBProperties } from "../../../utils/VBProperties";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../abstractList";
 import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 
@@ -25,7 +22,7 @@ import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 })
 export class InstanceListComponent extends AbstractList {
     @Input() cls: ARTURIResource;
-    @Output() requireSettings = new EventEmitter<void>(); //requires to the parent panel to open/change settings
+    @Output() switchMode = new EventEmitter<InstanceListVisualizationMode>(); //requires to the parent panel to switch mode
 
     //InstanceListNodeComponent children of this Component (useful to select the instance during the search)
     @ViewChildren(InstanceListNodeComponent) viewChildrenNode: QueryList<InstanceListNodeComponent>;
@@ -43,8 +40,7 @@ export class InstanceListComponent extends AbstractList {
 
     translationParam: { count: number, safeToGoLimit: number };
 
-    constructor(private clsService: ClassesServices, private vbProp: VBProperties, private basicModals: BasicModalServices, eventHandler: VBEventHandler,
-        private translateService: TranslateService) {
+    constructor(private clsService: ClassesServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: {instance: ARTResource, cls: ARTResource}) => { 
@@ -93,7 +89,8 @@ export class InstanceListComponent extends AbstractList {
                     }
                 )
             } else { //search based
-                //don't do nothing, just check for pending search
+                //reset to empty list and check for pending search
+                this.forceList(null);
                 this.resumePendingSearch();
             }
         } else { //class not provided, reset the instance list
@@ -147,6 +144,7 @@ export class InstanceListComponent extends AbstractList {
         let safeness: SafeToGo = safeToGoMap[checksum];
         if (safeness != null) { //found safeness in cache
             this.safeToGo = safeness;
+            this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
             return of(null)
         } else { //never initialized => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);

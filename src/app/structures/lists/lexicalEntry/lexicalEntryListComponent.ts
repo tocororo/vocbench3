@@ -26,9 +26,12 @@ export class LexicalEntryListComponent extends AbstractList {
 
     @Input() index: string; //initial letter of the entries to show
     @Input() lexicon: ARTURIResource;
-    @Output() requireSettings = new EventEmitter<void>(); //requires to the parent panel to open/change settings
+    @Output() switchMode = new EventEmitter<LexEntryVisualizationMode>(); //requires to the parent panel to switch mode
+    @Output() changeIndexLenght = new EventEmitter<number>(); //requires to the parent to change the index lenght
 
     structRole = RDFResourceRolesEnum.ontolexLexicalEntry;
+
+    visualizationMode: LexEntryVisualizationMode; //this could be changed dynamically, so each time it is used, get it again from preferences
 
     private safeToGoLimit: number;
     safeToGo: SafeToGo = { safe: true };
@@ -63,8 +66,8 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     initImpl() {
-        let visualization: LexEntryVisualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
-        if (visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
+        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
+        if (this.visualizationMode == LexEntryVisualizationMode.indexBased && this.index != undefined) {
             this.checkInitializationSafe().subscribe(
                 () => {
                     if (this.safeToGo.safe) {
@@ -83,8 +86,9 @@ export class LexicalEntryListComponent extends AbstractList {
                     }
                 }
             );
-        } else if (visualization == LexEntryVisualizationMode.searchBased) {
-            //don't do nothing
+        } else if (this.visualizationMode == LexEntryVisualizationMode.searchBased) {
+            //reset list to empty
+            this.forceList(null);
         }
     }
 
@@ -115,6 +119,7 @@ export class LexicalEntryListComponent extends AbstractList {
         let safeness: SafeToGo = safeToGoMap[checksum];
         if (safeness != null) { //found safeness in cache
             this.safeToGo = safeness;
+            this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
             return of(null)
         } else { //never initialized/cahced => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);

@@ -460,9 +460,9 @@
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "This Concept tree has an amount of top concepts ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
                 "PERFORMANCE_ISSUE": "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.",
-                "SWITCH_MODE": "It is recommended to switch from 'Hierarchy based' to 'Search based' visualization mode from the",
-                "SETTINGS": "settings",
-                "SELECT_SCHEME": "You can also reduce the amount of top concepts by selecting a scheme from the 'Scheme' panel.",
+                "IT_IS_RECOMMENDED": "It is recommended to",
+                "SWITCH_MODE": "switch to 'Search based' visualization mode",
+                "SELECT_SCHEME": "You can also reduce the amount of top concepts by selecting a scheme.",
                 "FORCE_INIT": "If you want to force the Concept tree initialization at your own risk, click",
                 "HERE": "here"
             }
@@ -483,8 +483,8 @@
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "This instance list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
                 "PERFORMANCE_ISSUE": "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.",
-                "SWITCH_MODE": "It is recommended to switch the visualization to search-based mode from the",
-                "SETTINGS": "settings",
+                "IT_IS_RECOMMENDED": "It is recommended to",
+                "SWITCH_MODE": "switch to 'Search based' visualization mode",
                 "FORCE_INIT": "If you want to force the instance list initialization at your own risk, click",
                 "HERE": "here"
             }
@@ -507,11 +507,11 @@
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "This LexicalEntry list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
                 "PERFORMANCE_ISSUE": "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system.",
-                "IT_IS_RECOMMENDED": "It is recommended",
-                "CHANGE_INDEX_LENGHT": "to change the index lenght from 1-char to 2-char or",
-                "SWITCH_MODE": "to switch from 'Index based' to 'Search based' visualization mode from the",
-                "SETTINGS": "settings",
-                "SELECT_LEXICON": "You can also reduce the amount of lexical entries by selecting a lexicon from the 'Lexicon' panel.",
+                "IT_IS_RECOMMENDED": "It is recommended to",
+                "SWITCH_MODE": "switch to 'Search based' visualization mode",
+                "OR": "or",
+                "CHANGE_INDEX_LENGHT": "change the index lenght to 2-char",
+                "SELECT_LEXICON": "You can also reduce the amount of lexical entries by selecting a lexicon.",
                 "FORCE_INIT": "If you want to force the lexical entry list initialization at your own risk, click",
                 "HERE": "here"
             }

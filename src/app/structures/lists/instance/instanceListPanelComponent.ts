@@ -211,6 +211,11 @@ export class InstanceListPanelComponent extends AbstractListPanel {
         );
     }
 
+    onSwitchMode(mode: InstanceListVisualizationMode) {
+        this.vbProp.setInstanceListVisualization(mode);
+        this.viewChildList.init();
+    }
+
     settings() {
         const modalRef: NgbModalRef = this.modalService.open(InstanceListSettingsModal, new ModalOptions());
         return modalRef.result.then(

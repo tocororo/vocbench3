@@ -25,13 +25,15 @@ import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
 export class ConceptTreeComponent extends AbstractTree {
     @Input() schemes: ARTURIResource[];
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme only when the scheme is the one used in the current concept tree
-    @Output() requireSettings = new EventEmitter<void>(); //requires to the parent panel to open/change settings
+    @Output() switchMode = new EventEmitter<ConceptTreeVisualizationMode>(); //requires to the parent panel to switch mode
     
 
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
     structRole = RDFResourceRolesEnum.concept;
+
+    visualizationMode: ConceptTreeVisualizationMode; //this could be changed dynamically, so each time it is used, get it again from preferences
 
     private safeToGoLimit: number;
     safeToGo: SafeToGo = { safe: true };
@@ -77,8 +79,9 @@ export class ConceptTreeComponent extends AbstractTree {
         }
 
         let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
+        this.visualizationMode = conceptTreePreference.visualization;
         
-        if (conceptTreePreference.visualization == ConceptTreeVisualizationMode.hierarchyBased) {
+        if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
             this.lastInitTimestamp = new Date().getTime();
             this.checkInitializationSafe().subscribe(
                 () => {
@@ -107,8 +110,9 @@ export class ConceptTreeComponent extends AbstractTree {
                     }
                 }   
             )
-        } else if (conceptTreePreference.visualization == ConceptTreeVisualizationMode.searchBased) {
-            //don't do nothing
+        } else if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased) {
+            //reset list to empty
+            this.forceList(null);
         }
     }
 
@@ -142,6 +146,7 @@ export class ConceptTreeComponent extends AbstractTree {
         let safeness: SafeToGo = safeToGoMap[checksum];
         if (safeness != null) { //found safeness in cache
             this.safeToGo = safeness;
+            this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
             return of(null)
         } else { //never initialized => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);

@@ -460,8 +460,8 @@
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "Questo albero dei concetti ha una quantità di top concept ({{count}}) che supera il limite impostato ({{safeToGoLimit}}).",
                 "PERFORMANCE_ISSUE": "Recuperarli tutti potrebbe essere un processo lungo, si potrebbero riscontrare rallentamenti delle prestazioni o si potrebbe addirittura bloccare il sistema.",
-                "SWITCH_MODE": "Si consiglia di passare dalla visualizzazione gerarchica a quella basata sulla ricerca tramite le",
-                "SETTINGS": "impostazioni",
+                "IT_IS_RECOMMENDED": "Si consiglia di",
+                "SWITCH_MODE": "passare alla visualizzazione basata su ricerca",
                 "SELECT_SCHEME": "E' inoltre possibile ridurre la quantità di top concept selezionando uno schema dal pannello dedicato.",
                 "FORCE_INIT": "Se si desidera forzare l'inizializzazione dell'albero a proprio rischio, cliccare",
                 "HERE": "qui"
@@ -483,8 +483,8 @@
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "Questa lista di istanze contiene un numero di elementi ({{count}}) che eccede il limite impostato ({{safeToGoLimit}}).",
                 "PERFORMANCE_ISSUE": "Recuperarle tutte potrebbe essere un processo lungo, si potrebbero riscontrare rallentamenti delle prestazioni o si potrebbe addirittura bloccare il sistema.",
-                "SWITCH_MODE": "Si consiglia di passare alla visualizzazione basata su ricerca dalle",
-                "SETTINGS": "impostazioni",
+                "IT_IS_RECOMMENDED": "Si consiglia di",
+                "SWITCH_MODE": "passare alla visualizzazione basata su ricerca",
                 "FORCE_INIT": "Se si desidera forzare l'inizializzazione della lista a proprio rischio, cliccare",
                 "HERE": "qui"
             }
@@ -508,9 +508,9 @@
                 "ELEMENT_COUNT": "Questa lista di LexicalEntry ha una quantità di elementi ({{count}}) che supera il limite impostato ({{safeToGoLimit}}).",
                 "PERFORMANCE_ISSUE": "Recuperarli tutti potrebbe essere un processo lungo, si potrebbero riscontrare rallentamenti delle prestazioni o si potrebbe addirittura bloccare il sistema.",
                 "IT_IS_RECOMMENDED": "Si consiglia di",
-                "CHANGE_INDEX_LENGHT": "cambiare la dimensione dell'indice da 1 a 2 caratteri o",
-                "SWITCH_MODE": "passare dalla modialità di visualizzazione basata su indice a quella basata su ricerca tramite le",
-                "SETTINGS": "impostazioni",
+                "SWITCH_MODE": "passare alla visualizzazione basata su ricerca",
+                "OR": "o",
+                "CHANGE_INDEX_LENGHT": "portare la dimensione dell'indice a 2 caratteri.",
                 "SELECT_LEXICON": "E' inoltre possibile ridurre la quantità di LexicalEntry selezionando un lessico dal pannello dedicato.",
                 "FORCE_INIT": "Se si desidera forzare l'inizializzazione della lista a proprio rischio, cliccare",
                 "HERE": "qui"

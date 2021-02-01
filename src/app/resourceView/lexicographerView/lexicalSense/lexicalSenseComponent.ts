@@ -64,8 +64,7 @@ export class LexicalSenseComponent {
     //CONCEPT
     
     setConcept() {
-        //TODO: this is a huge problem in a real case scenario where ontolex:LexicalConcept has too much instances
-        this.browsingModals.browseInstanceList({key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}, OntoLex.lexicalConcept).then(
+        this.browsingModals.browseConceptTree({key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}, null, true).then(
             lexConc => {
                 this.resourceService.addValue(this.sense.id, OntoLex.isLexicalizedSenseOf, lexConc).subscribe(
                     () => {

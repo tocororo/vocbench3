@@ -288,17 +288,28 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
             () => {
                 let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
                 this.visualizationMode = lexEntryListPref.visualization;
-                if (this.visualizationMode == LexEntryVisualizationMode.searchBased) {
-                    this.viewChildList.forceList([]);
-                    this.lastSearch = null;
-                } else {
+                if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
                     this.indexLenght = lexEntryListPref.indexLength;
                     this.onDigitChange();
-                    //should not be necessary to refresh since the index change triggers a re-init on the child list
                 }
+                this.viewChildList.init();
             },
             () => {}
         );
+    }
+
+    onSwitchMode(mode: LexEntryVisualizationMode) {
+        this.vbProp.setLexicalEntryListVisualization(mode);
+        let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
+        this.visualizationMode = lexEntryListPref.visualization;
+        this.viewChildList.init();
+    }
+
+    onChangeIndexLenght(lenght: number) {
+        this.vbProp.setLexicalEntryListIndexLenght(lenght);
+        let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
+        this.indexLenght = lexEntryListPref.indexLength;
+        this.onDigitChange();
     }
 
     private onDigitChange() {
@@ -312,8 +323,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         this.initLexiconLang();
         //in case of visualization search based reset the list
         if (this.visualizationMode == LexEntryVisualizationMode.searchBased && this.lastSearch != null) {
-            this.viewChildList.forceList([]);
-            this.lastSearch = null;
+            this.viewChildList.init();
         }
     }
 

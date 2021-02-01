@@ -316,16 +316,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         const modalRef: NgbModalRef = this.modalService.open(ConceptTreeSettingsModal, new ModalOptions());
         return modalRef.result.then(
             () => {
-                this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
-                if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased) {
-                    this.viewChildTree.forceList([]);
-                    this.lastSearch = null;
-                } else {
-                    this.refresh();
-                }
+                this.viewChildTree.init();
             },
             () => {}
         );
+    }
+
+    onSwitchMode(mode: ConceptTreeVisualizationMode) {
+        this.vbProp.setConceptTreeVisualization(mode);
+        this.viewChildTree.init();
     }
 
     isAddToSchemeEnabled() {
@@ -358,8 +357,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         //in case of visualization search based reset the list
         this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
         if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased && this.lastSearch != null) {
-            this.viewChildTree.forceList([]);
-            this.lastSearch = null;
+            this.viewChildTree.init();
         }
     }
 

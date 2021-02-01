@@ -74,12 +74,9 @@
             </ng-container>
         </div>
 
-        <div *ngIf="visualizationMode == 'searchBased' && !lastSearch" class="alert alert-warning" style="margin-bottom: 4px;">
-            {{'DATA.LEX_ENTRY.USE_SEARCH_MSG'|translate}}
-        </div>
-
         <lexical-entry-list [lexicon]="workingLexicon" [index]="index" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
-            [context]="context" [projectCtx]="projectCtx" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (requireSettings)="settings()">
+            [context]="context" [projectCtx]="projectCtx" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)"
+            (switchMode)="onSwitchMode($event)"  (changeIndexLenght)="onChangeIndexLenght($event)">
         </lexical-entry-list>
     </div>
 

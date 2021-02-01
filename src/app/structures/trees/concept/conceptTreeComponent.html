@@ -2,22 +2,28 @@
     <div class="card-body vbox">
 
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
+
+            <div *ngIf="visualizationMode == 'searchBased' && !roots" class="alert alert-warning mb-1">
+                {{'DATA.CONCEPT.USE_SEARCH_MSG'|translate}}
+            </div>
             
-            <ng-container *ngIf="safeToGo.safe; else unsafetyBlock">
+            <ng-container *ngIf="safeToGo.safe; then safetyBlock else unsafetyBlock"></ng-container>
+            
+            <ng-template #safetyBlock>
                 <ng-container *ngFor="let r of roots; let idx = index">
                     <concept-tree-node *ngIf="idx < rootLimit && (!r.isDeprecated() || showDeprecated && r.isDeprecated())"
                         [node]="r" [projectCtx]="projectCtx" [schemes]="schemes" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
                         (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
                     </concept-tree-node>
                 </ng-container>
-            </ng-container>
+            </ng-template>
 
             <ng-template #unsafetyBlock>
                 <div class="alert alert-warning">
                     {{'DATA.CONCEPT.UNSAFE_WARN.ELEMENT_COUNT'|translate:translationParam}}
                     {{'DATA.CONCEPT.UNSAFE_WARN.PERFORMANCE_ISSUE'|translate}}<br>
-                    {{'DATA.CONCEPT.UNSAFE_WARN.SWITCH_MODE'|translate}}
-                    <a href="javascript:void(0)" (click)="requireSettings.emit()">{{'DATA.CONCEPT.UNSAFE_WARN.SETTINGS'|translate}}</a>.<br>
+                    {{'DATA.CONCEPT.UNSAFE_WARN.IT_IS_RECOMMENDED'|translate}}
+                    <a href="javascript:void(0)" (click)="switchMode.emit('searchBased')">{{'DATA.CONCEPT.UNSAFE_WARN.SWITCH_MODE'|translate}}</a>.<br>
                     <ng-container *ngIf="!schemes || schemes.length == 0">
                         {{'DATA.CONCEPT.UNSAFE_WARN.SELECT_SCHEME'|translate}}<br>
                     </ng-container>

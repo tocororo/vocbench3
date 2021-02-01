@@ -3,6 +3,10 @@
 
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
 
+            <div *ngIf="visualizationMode == 'searchBased' && !list" class="alert alert-warning mb-1">
+                {{'DATA.INSTANCE.USE_SEARCH_MSG'|translate}}
+            </div>
+
             <ng-container *ngIf="!safeToGo.safe && visualizationMode == 'standard'; then unsafetyBlock else safetyBlock"></ng-container>
 
             <ng-template #safetyBlock>
@@ -13,12 +17,13 @@
                     </instance-list-node>
                 </ng-container>
             </ng-template>
+            
             <ng-template #unsafetyBlock>
                 <div class="alert alert-warning">
                     {{'DATA.INSTANCE.UNSAFE_WARN.ELEMENT_COUNT'|translate:translationParam}}
                     {{'DATA.INSTANCE.UNSAFE_WARN.PERFORMANCE_ISSUE'|translate}}
-                    {{'DATA.INSTANCE.UNSAFE_WARN.SWITCH_MODE'|translate}}
-                    <a href="javascript:void(0)" (click)="requireSettings.emit()">{{'DATA.INSTANCE.UNSAFE_WARN.SETTINGS'|translate}}</a>.<br>
+                    {{'DATA.CONCEPT.UNSAFE_WARN.IT_IS_RECOMMENDED'|translate}}
+                    <a href="javascript:void(0)" (click)="switchMode.emit('searchBased')">{{'DATA.INSTANCE.UNSAFE_WARN.SWITCH_MODE'|translate}}</a>.<br>
                     {{'DATA.INSTANCE.UNSAFE_WARN.FORCE_INIT'|translate}}
                     <a href="javascript:void(0)" (click)="forceSafeness()">{{'DATA.INSTANCE.UNSAFE_WARN.HERE'|translate}}</a>.
                 </div>
