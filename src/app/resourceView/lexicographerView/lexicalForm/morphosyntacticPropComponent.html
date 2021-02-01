@@ -2,11 +2,11 @@
 <!-- visualization and editing -->
 <ng-template #visualizationBlock>
     <div class="d-flex align-items-center mt-1">
-        <label>{{property.getLocalName()}}:</label>
+        <label [title]="property.toNT()">{{property.getLocalName()}}:</label>
         <div class="d-flex align-items-center ml-1">
             <ng-container *ngIf="editing; then editingBlock; else showBlock"></ng-container>
             <ng-template #showBlock>
-                <span class="clickable form-control form-control-editable" [ngClass]="ngClassValue" (click)="editValue()">{{value.getLocalName()}}</span>
+                <span class="clickable form-control form-control-editable" [ngClass]="ngClassValue" [title]="value.toNT()" (click)="editValue()">{{value.getLocalName()}}</span>
             </ng-template>
             <ng-template #editingBlock>
                 <select class="form-control" style="width: initial;" [(ngModel)]="selectedValue">

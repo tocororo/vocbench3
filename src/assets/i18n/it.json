@@ -1404,6 +1404,7 @@
             "DISABLED_UNDER_VALIDATION": "Il tab Code è stato disabilitato in quanto questa risorsa - o parte della sua descrizione - è sotto validazione"
         },
         "LEX_VIEW": {
+            "PRONUNCIATION": "Pronuncia",
             "SEMANTIC_REFERENCE": "Riferimento semantico"
         },
         "TERM_VIEW": {

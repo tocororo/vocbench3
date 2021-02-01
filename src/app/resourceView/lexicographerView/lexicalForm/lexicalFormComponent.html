@@ -20,16 +20,20 @@
 </div>
 
 <!-- Phonetic rep -->
-<!-- visualization and editing -->
-<phonetic-rep *ngFor="let pr of form.phoneticRep" class="mt-1" [form]="form" [phoneticRep]="pr" (update)="onUpdate()"></phonetic-rep>
-<!-- addition -->
-<phonetic-rep *ngIf="pendingPhoneticRep" class="mt-1" [form]="form" (cancel)="onPendingPhoneticRepCanceled()" (update)="onUpdate()"></phonetic-rep>
+<div class="ml-3">
+    <!-- visualization and editing -->
+    <phonetic-rep *ngFor="let pr of form.phoneticRep" class="mt-1" [form]="form" [phoneticRep]="pr" (update)="onUpdate()"></phonetic-rep>
+    <!-- addition -->
+    <phonetic-rep *ngIf="pendingPhoneticRep" class="mt-1" [form]="form" (cancel)="onPendingPhoneticRepCanceled()" (update)="onUpdate()"></phonetic-rep>
+</div>
 
 <!-- morphosyntactic properties -->
-<!-- visualization and editing -->
-<ng-container *ngFor="let mp of form.morphosyntacticProps">
-    <morphosyntactic-prop *ngFor="let mv of mp.getObjects()" [form]="form" [property]="mp.getPredicate()" [value]="mv" [readonly]="readonly" (update)="onUpdate()">
-    </morphosyntactic-prop>
-</ng-container>
-<!-- addition -->
-<morphosyntactic-prop *ngIf="pendingMorphoProp" [form]="form" (update)="onUpdate()"></morphosyntactic-prop>
+<div class="ml-3">
+    <!-- visualization and editing -->
+    <ng-container *ngFor="let mp of form.morphosyntacticProps">
+        <morphosyntactic-prop *ngFor="let mv of mp.getObjects()" [form]="form" [property]="mp.getPredicate()" [value]="mv" [readonly]="readonly" (update)="onUpdate()">
+        </morphosyntactic-prop>
+    </ng-container>
+    <!-- addition -->
+    <morphosyntactic-prop *ngIf="pendingMorphoProp" [form]="form" (update)="onUpdate()"></morphosyntactic-prop>
+</div>

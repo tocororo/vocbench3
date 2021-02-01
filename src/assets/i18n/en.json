@@ -1404,6 +1404,7 @@
             "DISABLED_UNDER_VALIDATION": "The Code view tab has been disabled as this resource - or part of its description - is under validation"
         },
         "LEX_VIEW": {
+            "PRONUNCIATION": "Pronunciation",
             "SEMANTIC_REFERENCE": "Semantic reference"
         },
         "TERM_VIEW": {
