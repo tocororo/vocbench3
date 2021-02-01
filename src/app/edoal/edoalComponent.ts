@@ -1,7 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Observable, of } from 'rxjs';
-import { finalize, flatMap, map } from 'rxjs/operators';
+import { finalize, map, mergeMap } from 'rxjs/operators';
 import { AlignmentRelationSymbol, Correspondence } from "../models/Alignment";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { Project } from "../models/Project";
@@ -151,13 +151,13 @@ export class EdoalComponent {
 
     private ensureExistingAlignment(): Observable<void> {
         return this.edoalService.getAlignments().pipe(
-            flatMap(alignments => {
+            mergeMap(alignments => {
                 if (alignments.length > 0) {
                     this.alignemnts = alignments
                     return of(null);
                 } else {
                     return this.edoalService.createAlignment().pipe(
-                        flatMap(alignmentNode => {
+                        mergeMap(() => {
                             return this.edoalService.getAlignments().pipe(
                                 map(alignments => {
                                     this.alignemnts = alignments;

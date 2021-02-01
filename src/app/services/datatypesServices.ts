@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { ARTBNode, ARTLiteral, ARTURIResource, ResAttribute } from '../models/ARTResources';
 import { DatatypeRestrictionDescription, DatatypeRestrictionsMap, FacetsRestriction } from '../models/Datatypes';
 import { OWL, XmlSchema } from '../models/Vocabulary';
@@ -63,7 +63,7 @@ export class DatatypesServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(datatype => {
+            mergeMap(datatype => {
                 return this.resourceService.getResourceDescription(datatype).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);

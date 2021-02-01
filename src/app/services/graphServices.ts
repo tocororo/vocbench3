@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { ARTURIResource } from '../models/ARTResources';
 import { GraphModelRecord } from '../models/Graphs';
 import { HttpManager } from "../utils/HttpManager";
@@ -16,7 +16,7 @@ export class GraphServices {
     getGraphModel(): Observable<GraphModelRecord[]> {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getGraphModel", params).pipe(
-            flatMap((plainModel: PlainGraphModelRecord[]) => {
+            mergeMap((plainModel: PlainGraphModelRecord[]) => {
                 return this.enrichGraphModelRecords(plainModel);
             })
         )
@@ -27,7 +27,7 @@ export class GraphServices {
             resource: resource
         };
         return this.httpMgr.doGet(this.serviceName, "expandGraphModelNode", params).pipe(
-            flatMap((plainModel: PlainGraphModelRecord[]) => {
+            mergeMap((plainModel: PlainGraphModelRecord[]) => {
                 return this.enrichGraphModelRecords(plainModel);
             })
         );
@@ -39,7 +39,7 @@ export class GraphServices {
             role: resource.getRole()
         };
         return this.httpMgr.doGet(this.serviceName, "expandSubResources", params).pipe(
-            flatMap((plainModel: PlainGraphModelRecord[]) => {
+            mergeMap((plainModel: PlainGraphModelRecord[]) => {
                 return this.enrichGraphModelRecords(plainModel);
             })
         );
@@ -51,7 +51,7 @@ export class GraphServices {
             role: resource.getRole()
         };
         return this.httpMgr.doGet(this.serviceName, "expandSuperResources", params).pipe(
-            flatMap((plainModel: PlainGraphModelRecord[]) => {
+            mergeMap((plainModel: PlainGraphModelRecord[]) => {
                 return this.enrichGraphModelRecords(plainModel);
             })
         );

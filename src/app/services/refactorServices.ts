@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { flatMap, map } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { ResourcesServices } from "../services/resourcesServices";
@@ -57,7 +57,7 @@ export class RefactorServices {
             newResource: newResource
         };
         return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params).pipe(
-            flatMap(stResp => {
+            mergeMap(stResp => {
                 return this.resourceService.getResourceDescription(newResource).pipe(
                     map(newRes => {
                         /**
@@ -143,7 +143,7 @@ export class RefactorServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(concept => {
+            mergeMap(concept => {
                 return this.resourceService.getResourceDescription(concept).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);

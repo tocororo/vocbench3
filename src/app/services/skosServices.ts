@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { MultischemeMode } from '../models/Properties';
@@ -172,7 +172,7 @@ export class SkosServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(concept => {
+            mergeMap(concept => {
                 return this.resourceService.getResourceDescription(concept).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
@@ -396,7 +396,7 @@ export class SkosServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(scheme => {
+            mergeMap(scheme => {
                 return this.resourceService.getResourceDescription(scheme).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
@@ -670,7 +670,7 @@ export class SkosServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(collection => {
+            mergeMap(collection => {
                 return this.resourceService.getResourceDescription(collection).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);

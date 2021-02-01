@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable, of } from 'rxjs';
-import { finalize, flatMap, map } from 'rxjs/operators';
+import { finalize, map, mergeMap } from 'rxjs/operators';
 import { ServiceMetadataDTO } from 'src/app/models/Maple';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { AlignmentOverview } from '../../models/Alignment';
@@ -111,7 +111,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
     private ensureDatasetProfiled(project: Project, datasetPosition: DatasetPosition): Observable<boolean> {
         if (project != null) {
             return this.checkDatasetProfiled(project).pipe(
-                flatMap(profiled => {
+                mergeMap(profiled => {
                     if (profiled) {
                         return of(true);
                     } else {
@@ -165,7 +165,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
                 }
             )
         ).pipe(
-            flatMap(profiled => profiled)
+            mergeMap(profiled => profiled)
         );
     }
 

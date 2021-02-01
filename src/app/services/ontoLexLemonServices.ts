@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { ARTLiteral, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from '../models/CustomForms';
 import { Deserializer } from '../utils/Deserializer';
@@ -41,7 +41,7 @@ export class OntoLexLemonServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(lexicon => {
+            mergeMap(lexicon => {
                 return this.resourceService.getResourceDescription(lexicon).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
@@ -122,7 +122,7 @@ export class OntoLexLemonServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(entry => {
+            mergeMap(entry => {
                 return this.resourceService.getResourceDescription(entry).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);

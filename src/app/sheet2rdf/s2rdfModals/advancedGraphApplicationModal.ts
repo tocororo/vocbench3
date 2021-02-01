@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
 import { forkJoin, Observable, of } from "rxjs";
-import { flatMap, map } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
@@ -456,7 +456,7 @@ export class AdvancedGraphApplicationModal {
      */
     private getAdaptedNodeId(nodeId: string): Observable<string> {
         return this.s2rdfService.isNodeIdAlreadyUsed(nodeId).pipe(
-            flatMap(used => {
+            mergeMap(used => {
                 if (used) {
                     let newId = nodeId + "_1";
                     //invoke itself recursively

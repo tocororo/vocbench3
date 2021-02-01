@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { from, Observable, of } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { mergeMap } from "rxjs/operators";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
@@ -104,7 +104,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
         return this.propService.getRange(predicate).pipe(
-            flatMap(range => {
+            mergeMap(range => {
                 return of(RangeResponse.isRangeCompliant(range, value));
             })
         )

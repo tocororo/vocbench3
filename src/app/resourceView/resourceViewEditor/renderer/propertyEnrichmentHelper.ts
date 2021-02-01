@@ -1,5 +1,5 @@
 import { from, Observable, of } from "rxjs";
-import { flatMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTURIResource, RDFTypesEnum } from "../../../models/ARTResources";
 import { CustomForm } from "../../../models/CustomForms";
@@ -36,7 +36,7 @@ export class PropertyEnrichmentHelper {
      */
     public static getPropertyEnrichmentInfo(predicate: ARTURIResource, propService: PropertyServices, basicModals: BasicModalServices): Observable<PropertyEnrichmentInfo> {
         return propService.getRange(predicate).pipe(
-            flatMap(range => {
+            mergeMap(range => {
                 var ranges = range.ranges;
                 let customForms: CustomForm[];
                 if (range.formCollection != null) {

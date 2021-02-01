@@ -1,9 +1,8 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
-import { ExtensionPointID, Settings, Plugin, PluginSpecification } from "src/app/models/Plugins";
-import { OntoLex, RDFS, SKOS, SKOSXL } from "src/app/models/Vocabulary";
+import { map, mergeMap } from "rxjs/operators";
+import { ExtensionPointID, Plugin, PluginSpecification, Settings } from "src/app/models/Plugins";
 import { PluginsServices } from "src/app/services/pluginsServices";
 import { ProjectServices } from "src/app/services/projectServices";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
@@ -76,10 +75,10 @@ export class ProjSettingsEditorModal {
 
     private initRenderingEngine(): Observable<void> {
         return this.pluginService.getAvailablePlugins(ExtensionPointID.RENDERING_ENGINE_ID).pipe(
-            flatMap((plugins: Plugin[]) => {
+            mergeMap((plugins: Plugin[]) => {
                 this.rendEngPluginList = plugins;
                 return this.projectService.getRenderingEngineConfiguration(this.project.getName()).pipe(
-                    flatMap(config => {
+                    mergeMap(config => {
                         let pluginToRestore = config.factoryID;
                         let configToRestore = config.settings;
                         //select the plugin among the available
@@ -163,10 +162,10 @@ export class ProjSettingsEditorModal {
 
     private initUriGenerator(): Observable<void> {
         return this.pluginService.getAvailablePlugins(ExtensionPointID.URI_GENERATOR_ID).pipe(
-            flatMap((plugins: Plugin[]) => {
+            mergeMap((plugins: Plugin[]) => {
                 this.uriGenPluginList = plugins;
                 return this.projectService.getURIGeneratorConfiguration(this.project.getName()).pipe(
-                    flatMap(config => {
+                    mergeMap(config => {
                         let pluginToRestore = config.factoryID;
                         let configToRestore = config.settings;
                         //select the plugin among the available

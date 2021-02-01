@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { flatMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { LexEntryVisualizationMode, LexicalEntryListPreference, SafeToGo, SafeToGoMap } from "../../../models/Properties";
 import { SemanticTurkey } from "../../../models/Vocabulary";
@@ -124,7 +124,7 @@ export class LexicalEntryListComponent extends AbstractList {
         } else { //never initialized/cahced => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             return this.ontolexService.countLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
-                flatMap(count => {
+                mergeMap(count => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     safeness = { safe: count < this.safeToGoLimit, count: count };
                     safeToGoMap[checksum] = safeness; //cache the safeness

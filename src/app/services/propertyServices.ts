@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomForm, CustomFormValue, FormCollection } from "../models/CustomForms";
 import { RDFS } from "../models/Vocabulary";
@@ -252,7 +252,7 @@ export class PropertyServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(property => {
+            mergeMap(property => {
                 return this.resourceService.getResourceDescription(property).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);

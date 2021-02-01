@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { flatMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ConceptTreePreference, ConceptTreeVisualizationMode, MultischemeMode, SafeToGo, SafeToGoMap } from "../../../models/Properties";
 import { SearchServices } from "../../../services/searchServices";
@@ -151,7 +151,7 @@ export class ConceptTreeComponent extends AbstractTree {
         } else { //never initialized => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             return this.skosService.countTopConcepts(this.lastInitTimestamp, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
-                flatMap(data => {
+                mergeMap(data => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     let safeness = { safe: data.count < this.safeToGoLimit, count: data.count }; 
                     safeToGoMap[checksum] = safeness; //cache the safeness

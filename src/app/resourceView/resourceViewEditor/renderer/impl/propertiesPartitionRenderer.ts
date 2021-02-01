@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { from, Observable, of } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { Language } from "../../../../models/LanguagesCountries";
@@ -155,7 +155,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
         return this.propService.getRange(predicate).pipe(
-            flatMap(range => {
+            mergeMap(range => {
                 return of(RangeResponse.isRangeCompliant(range, value));
             })
         )

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { flatMap } from "rxjs/operators";
+import { mergeMap } from "rxjs/operators";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { InstanceListPreference, InstanceListVisualizationMode, SafeToGo, SafeToGoMap } from "../../../models/Properties";
 import { SemanticTurkey } from "../../../models/Vocabulary";
@@ -149,7 +149,7 @@ export class InstanceListComponent extends AbstractList {
         } else { //never initialized => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             return this.getNumberOfInstances(this.cls).pipe(
-                flatMap(count => {
+                mergeMap(count => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     safeness = { safe: count < this.safeToGoLimit, count: count }; 
                     safeToGoMap[checksum] = safeness; //cache the safeness

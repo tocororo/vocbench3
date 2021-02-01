@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { ARTBNode, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { Deserializer } from "../utils/Deserializer";
@@ -97,7 +97,7 @@ export class ClassesServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(cls => {
+            mergeMap(cls => {
                 return this.resourceService.getResourceDescription(cls).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NUM_INST, 0);
@@ -145,7 +145,7 @@ export class ClassesServices {
                 return Deserializer.createURI(stResp);
             })
         ).pipe(
-            flatMap(instance => {
+            mergeMap(instance => {
                 return this.resourceService.getResourceDescription(instance).pipe(
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);

@@ -1,5 +1,5 @@
 import { from, Observable, of } from "rxjs";
-import { flatMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { RDFTypesEnum } from "../../models/ARTResources";
 import { CustomForm } from "../../models/CustomForms";
 import { SKOS } from "../../models/Vocabulary";
@@ -34,7 +34,7 @@ export class DefinitionEnrichmentHelper {
         let predicate = SKOS.definition;
 
         return this.fillDefinitionCustomRangeConfig(propService, crConfig).pipe(
-            flatMap(() => {
+            mergeMap(() => {
                 /* 
                 handle 2 cases: 
                 - both Custom and standard range; 
@@ -94,7 +94,7 @@ export class DefinitionEnrichmentHelper {
             return of(null);
         } else { //CFs are not provided (probably it was initialized with the "hasCustomRange" attr) => fill the configuration by invoking getRange
             return propService.getRange(SKOS.definition).pipe(
-                flatMap((range: RangeResponse) => {
+                mergeMap((range: RangeResponse) => {
                     let ranges = range.ranges;
                     let customForms: CustomForm[] = range.formCollection.getForms();
                     crConfig.hasLiteralRange = ranges != null;

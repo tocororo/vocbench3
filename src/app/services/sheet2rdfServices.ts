@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { RDFCapabilityType } from "../models/Coda";
 import { Configuration, Reference } from '../models/Configuration';
@@ -36,7 +36,7 @@ export class Sheet2RDFServices {
     getHeaders(): Observable<{subject: SubjectHeader, headers: SimpleHeader[]}> {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getHeaders", params).pipe(
-            flatMap(stResp => {
+            mergeMap(stResp => {
                 let subject: SubjectHeader = Sheet2RdfDeserializer.parseSubjectHeader(stResp.subject);
                 let headers: SimpleHeader[] = [];
                 let headersJson = stResp.headers;
@@ -63,7 +63,7 @@ export class Sheet2RDFServices {
             headerId: headerId
         };
         return this.httpMgr.doGet(this.serviceName, "getHeaderFromId", params).pipe(
-            flatMap(stResp => {
+            mergeMap(stResp => {
                 let header: SimpleHeader = Sheet2RdfDeserializer.parseSimpleHeader(stResp);
                 //collect the URI resources: properties and types
                 let resources: ARTURIResource[] = [];

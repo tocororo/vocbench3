@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
 import { ARTURIResource } from "src/app/models/ARTResources";
 import { ClassesServices } from "src/app/services/classesServices";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
@@ -37,7 +37,7 @@ export class MorphosyntacticCache {
             return of(entry.values);
         } else {
             return this.propertyService.getRange(property).pipe(
-                flatMap(range => {
+                mergeMap(range => {
                     if (range.ranges != null && range.ranges.rangeCollection != null && range.ranges.rangeCollection.resources != null) {
                         let rangeColl = range.ranges.rangeCollection.resources;
                         if (rangeColl.length == 1) {

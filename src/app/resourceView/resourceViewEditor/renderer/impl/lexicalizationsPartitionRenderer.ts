@@ -1,7 +1,7 @@
 import { Component, SimpleChanges } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { from, Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { CustomForm, CustomFormValue } from "../../../../models/CustomForms";
@@ -105,7 +105,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return this.ensureInitializedRootProperties().pipe(
-            flatMap(res => {
+            mergeMap(() => {
                 if (this.rootProperties.length == 1) { //just one property => return it
                     return of(this.rootProperties[0]);
                 } else { //multiple properties => ask user to select
