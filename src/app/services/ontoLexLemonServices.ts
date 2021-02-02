@@ -23,7 +23,7 @@ export class OntoLexLemonServices {
      * @param customFormValue 
      */
     createLexicon(language: string, newLexicon?: ARTURIResource, title?: ARTLiteral, customFormValue?: CustomFormValue): Observable<ARTURIResource> {
-        var params: any = {
+        let params: any = {
             language: language
         };
         if (newLexicon != null) {
@@ -57,10 +57,10 @@ export class OntoLexLemonServices {
      * Returns lexicons
      */
     getLexicons(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getLexicons", params, options).pipe(
             map(stResp => {
-                var lexicons = Deserializer.createURIArray(stResp);
+                let lexicons = Deserializer.createURIArray(stResp);
                 return lexicons;
             })
         );
@@ -71,7 +71,7 @@ export class OntoLexLemonServices {
      * @param lexicon 
      */
     deleteLexicon(lexicon: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             lexicon: lexicon
         };
         return this.httpMgr.doPost(this.serviceName, "deleteLexicon", params).pipe(
@@ -87,7 +87,7 @@ export class OntoLexLemonServices {
      * @param lexicon 
      */
     getLexiconLanguage(lexicon: ARTURIResource, options?: VBRequestOptions) {
-        var params: any = {
+        let params: any = {
             lexicon: lexicon
         };
         return this.httpMgr.doGet(this.serviceName, "getLexiconLanguage", params, options);
@@ -104,7 +104,7 @@ export class OntoLexLemonServices {
     createLexicalEntry(canonicalForm: ARTLiteral, lexicon: ARTURIResource, newLexicalEntry?: ARTURIResource, lexicalEntryCls?: ARTURIResource,
         customFormValue?: CustomFormValue): Observable<ARTURIResource> {
         
-        var params: any = {
+        let params: any = {
             canonicalForm: canonicalForm,
             lexicon: lexicon
         };
@@ -140,7 +140,7 @@ export class OntoLexLemonServices {
      * @param lexicon 
      */
     getLexicalEntriesByAlphabeticIndex(index: string, lexicon?: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             index: index,
             lexicon: lexicon
         };
@@ -158,7 +158,7 @@ export class OntoLexLemonServices {
      * @param options 
      */
     countLexicalEntriesByAlphabeticIndex(index: string, lexicon?: ARTURIResource, options?: VBRequestOptions): Observable<number> {
-        var params: any = {
+        let params: any = {
             index: index,
             lexicon: lexicon
         };
@@ -170,7 +170,7 @@ export class OntoLexLemonServices {
      * @param lexicalEntry 
      */
     getLexicalEntryLexicons(lexicalEntry: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry
         };
         return this.httpMgr.doGet(this.serviceName, "getLexicalEntryLexicons", params, options).pipe(
@@ -185,7 +185,7 @@ export class OntoLexLemonServices {
      * @param lexicalEntry 
      */
     getLexicalEntrySenses(lexicalEntry: ARTURIResource): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry
         };
         return this.httpMgr.doGet(this.serviceName, "getLexicalEntrySenses", params).pipe(
@@ -200,7 +200,7 @@ export class OntoLexLemonServices {
      * @param lexicalEntry 
      */
     getLexicalEntryIndex(lexicalEntry: ARTURIResource, options?: VBRequestOptions): Observable<string> {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry
         };
         return this.httpMgr.doGet(this.serviceName, "getLexicalEntryIndex", params, options);
@@ -211,7 +211,7 @@ export class OntoLexLemonServices {
      * @param lexicalEntry 
      */
     getLexicalEntryLanguage(lexicalEntry: ARTURIResource): Observable<string> {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry
         };
         return this.httpMgr.doGet(this.serviceName, "getLexicalEntryLanguage", params);
@@ -224,7 +224,7 @@ export class OntoLexLemonServices {
      * @param ordered 
      */
     setLexicalEntryConstituents(lexicalEntry: ARTURIResource, constituentLexicalEntries: ARTURIResource[], ordered: boolean) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry,
             constituentLexicalEntries: constituentLexicalEntries,
             ordered: ordered
@@ -237,7 +237,7 @@ export class OntoLexLemonServices {
      * @param lexicalEntry 
      */
 	clearLexicalEntryConstituents(lexicalEntry: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry
         };
         return this.httpMgr.doPost(this.serviceName, "clearLexicalEntryConstituents", params);
@@ -252,7 +252,7 @@ export class OntoLexLemonServices {
      * @param customFormValue 
      */
     setCanonicalForm(lexicalEntry: ARTURIResource, writtenRep: ARTLiteral, newForm?: ARTURIResource, customFormValue?: CustomFormValue) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry,
             writtenRep: writtenRep
         };
@@ -273,7 +273,7 @@ export class OntoLexLemonServices {
      * @param customFormValue 
      */
     addOtherForm(lexicalEntry: ARTURIResource, writtenRep: ARTLiteral, newForm?: ARTURIResource, customFormValue?: CustomFormValue) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry,
             writtenRep: writtenRep,
             newForm: newForm,
@@ -287,7 +287,7 @@ export class OntoLexLemonServices {
      * @param form 
      */
     getFormLanguage(form: ARTResource): Observable<string> {
-        var params: any = {
+        let params: any = {
             form: form
         };
         return this.httpMgr.doGet(this.serviceName, "getFormLanguage", params);
@@ -300,7 +300,7 @@ export class OntoLexLemonServices {
      * @param form 
      */
     removeForm(lexicalEntry: ARTResource, property: ARTURIResource, form: ARTResource) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry,
             property: property,
             form: form
@@ -313,7 +313,7 @@ export class OntoLexLemonServices {
      * @param lexicalEntry 
      */
     deleteLexicalEntry(lexicalEntry: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry
         };
         return this.httpMgr.doPost(this.serviceName, "deleteLexicalEntry", params).pipe(
@@ -335,7 +335,7 @@ export class OntoLexLemonServices {
      */
     addLexicalization(lexicalEntry: ARTResource, reference: ARTResource, createPlain: boolean, createSense: boolean, 
         lexicalSenseCls?: ARTURIResource, customFormValue?: CustomFormValue) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry,
             reference: reference,
             createPlain: createPlain,
@@ -357,7 +357,7 @@ export class OntoLexLemonServices {
      * @param reference 
      */
     removePlainLexicalization(lexicalEntry: ARTResource, reference: ARTResource) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry,
             reference: reference,
         };
@@ -371,7 +371,7 @@ export class OntoLexLemonServices {
      * @param removePlain 
      */
     removeReifiedLexicalization(lexicalSense: ARTResource, removePlain: boolean) {
-        var params: any = {
+        let params: any = {
             lexicalSense: lexicalSense,
             removePlain: removePlain,
         };
@@ -385,7 +385,7 @@ export class OntoLexLemonServices {
      * @param property 
      */
     addFormRepresentation(form: ARTResource, representation: ARTLiteral, property: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             form: form,
             representation: representation,
             property: property
@@ -400,7 +400,7 @@ export class OntoLexLemonServices {
      * @param property 
      */
     removeFormRepresentation(form: ARTResource, representation: ARTLiteral, property: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             form: form,
             representation: representation,
             property: property
@@ -415,7 +415,7 @@ export class OntoLexLemonServices {
      * @param property 
      */
     addSubterm(lexicalEntry: ARTURIResource, sublexicalEntry: ARTURIResource, property?: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry,
             sublexicalEntry: sublexicalEntry
         };
@@ -432,7 +432,7 @@ export class OntoLexLemonServices {
      * @param property 
      */
     removeSubterm(lexicalEntry: ARTURIResource, sublexicalEntry: ARTURIResource, property?: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             lexicalEntry: lexicalEntry,
             sublexicalEntry: sublexicalEntry
         };
@@ -440,6 +440,35 @@ export class OntoLexLemonServices {
             params.property = property
         }
         return this.httpMgr.doPost(this.serviceName, "removeSubterm", params);
+    }
+
+    addConceptualization(lexicalEntry: ARTResource, concept: ARTResource, createPlain: boolean, createSense: boolean,
+        lexicalSenseCls?: ARTURIResource, customFormValue?: CustomFormValue) {
+        let params = {
+            lexicalEntry: lexicalEntry,
+            concept: concept,
+            createPlain: createPlain,
+            createSense: createSense,
+            lexicalSenseCls: lexicalSenseCls,
+            customFormValue: customFormValue
+        }
+        return this.httpMgr.doPost(this.serviceName, "addConceptualization", params);
+    }
+
+    removePlainConceptualization(lexicalEntry: ARTResource, concept: ARTResource) {
+        let params = {
+            lexicalEntry: lexicalEntry,
+            concept: concept,
+        }
+        return this.httpMgr.doPost(this.serviceName, "removePlainConceptualization", params);
+    }
+
+    removeSense(lexicalSense: ARTResource, removePlain: boolean) {
+        let params = {
+            lexicalSense: lexicalSense,
+            removePlain: removePlain,
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeSense", params);
     }
 
 }

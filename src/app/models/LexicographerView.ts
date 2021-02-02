@@ -1,9 +1,9 @@
 import { Deserializer } from "../utils/Deserializer";
-import { ARTLiteral, ARTPredicateObjects, ARTResource, ARTURIResource, ResourceNature, TripleScopes } from "./ARTResources";
+import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResourceNature, TripleScopes } from "./ARTResources";
 import { SemanticTurkey } from "./Vocabulary";
 
 export class LexicographerView {
-    id: ARTURIResource;
+    id: ARTResource;
     nature: ResourceNature[];
     morphosyntacticProps: ARTPredicateObjects[];
     lemma: Form[];
@@ -61,7 +61,7 @@ export class LexicographerView {
 }
 
 export class Form {
-    id: ARTURIResource;
+    id: ARTResource;
     morphosyntacticProps: ARTPredicateObjects[];
     phoneticRep: ARTLiteral[];
     writtenRep: ARTLiteral[];
@@ -102,19 +102,40 @@ export class Form {
 }
 
 export class Sense {
-    id: ARTURIResource;
-    definition: ARTLiteral[] = [];
+    id: ARTResource;
+    definition: ARTNode[] = [];
     reference: ARTResource[] = [];
-    concept: ARTResource[] = [];
+    concept: ConceptReference[] = [];
 
     public static parse(sJson: any): Sense {
         let s: Sense = new Sense();
         s.id = new ARTURIResource(sJson.id);
         if (sJson.definition) {
-            s.definition = Deserializer.createLiteralArray(sJson.definition);
+            s.definition = Deserializer.createRDFNodeArray(sJson.definition);
         }
         s.reference = Deserializer.createResourceArray(sJson.reference);
-        s.concept = Deserializer.createResourceArray(sJson.concept);
+        s.concept = [];
+        for (let cJson of sJson.concept) {
+            s.concept.push(ConceptReference.parse(cJson));
+        }
         return s;
+    }
+}
+
+export class ConceptReference {
+    id: ARTResource;
+    nature: ResourceNature[];
+    scope: TripleScopes;
+    definition: ARTNode[];
+
+    public static parse(cJson: any): ConceptReference {
+        let c: ConceptReference = new ConceptReference();
+        c.id = new ARTURIResource(cJson.id);
+        c.nature = ResourceNature.parse(cJson.nature);
+        c.scope = cJson.scope;
+        if (cJson.definition) {
+            c.definition = Deserializer.createRDFNodeArray(cJson.definition);
+        }
+        return c;
     }
 }

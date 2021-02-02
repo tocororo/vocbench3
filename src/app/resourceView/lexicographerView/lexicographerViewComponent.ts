@@ -1,11 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Form, LexicographerView, Sense } from "src/app/models/LexicographerView";
-import { OntoLex, SKOS } from "src/app/models/Vocabulary";
+import { OntoLex } from "src/app/models/Vocabulary";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
-import { ResourcesServices } from "src/app/services/resourcesServices";
-import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { NewOntoLexicalizationCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
 import { ModalOptions } from "src/app/widget/modal/Modals";
@@ -32,7 +30,7 @@ export class LexicographerViewComponent {
     @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
     private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
-    private formStyle = "font-family: serif; font-style: italic;";
+    formStyle = "font-family: serif; font-style: italic;";
 
     lemma: Form[]; //in case of validation the staging-add is at pos.0, staging-remove at 1 (TODO verify and force it when it will be supported)
     otherForms: Form[];
@@ -117,7 +115,7 @@ export class LexicographerViewComponent {
             } else if (s1.reference.length == 0 && s2.reference.length != 0) {
                 return -1
             } else {
-                return s1.id.getURI().localeCompare(s2.id.getURI());
+                return s1.id.getNominalValue().localeCompare(s2.id.getNominalValue());
             }
         });
     }

@@ -35,7 +35,7 @@
     <div *ngIf="sense.concept.length > 0" class="mt-2">
         <div *ngFor="let c of sense.concept" class="d-flex align-items-center mb-2">
             <label class="mr-2">{{'DATA.CONCEPT.CONCEPT'|translate}}:</label>
-            <rdf-resource class="clickable" [resource]="c" (dblclick)="resourceDblClick(c)"></rdf-resource>
+            <rdf-resource class="clickable" [resource]="c.id" (dblclick)="resourceDblClick(c.id)"></rdf-resource>
             <button class="btn btn-faded btn-xs ml-1" (click)="deleteConcept(c)" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
                 <span class="fas fa-minus"></span>
             </button>

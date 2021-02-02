@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ARTLiteral, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { Form, Sense } from "src/app/models/LexicographerView";
+import { ConceptReference, Form, Sense } from "src/app/models/LexicographerView";
 import { OntoLex, SKOS } from "src/app/models/Vocabulary";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
@@ -44,7 +44,7 @@ export class LexicalSenseComponent {
 
     onDefinitionEdited(def: ARTLiteral, newValue: string) {
         let newDefinition = new ARTLiteral(newValue, null, def.getLang())
-        this.resourceService.updateTriple(this.sense.concept[0], SKOS.definition, def, newDefinition).subscribe(
+        this.resourceService.updateTriple(this.sense.concept[0].id, SKOS.definition, def, newDefinition).subscribe(
             () => {
                 this.update.emit();
             }
@@ -54,7 +54,7 @@ export class LexicalSenseComponent {
     deleteDefinition(def: ARTLiteral) {
         //TODO wait for clarification
         //definition is attached to the lexical concept (which must be unique)
-        this.resourceService.removeValue(this.sense.concept[0], SKOS.definition, def).subscribe(
+        this.resourceService.removeValue(this.sense.concept[0].id, SKOS.definition, def).subscribe(
             () => {
                 this.update.emit();
             }
@@ -75,8 +75,8 @@ export class LexicalSenseComponent {
             () => {}
         )
     }
-    deleteConcept(concept: ARTURIResource) {
-        this.resourceService.removeValue(this.sense.id, OntoLex.isLexicalizedSenseOf, concept).subscribe(
+    deleteConcept(concept: ConceptReference) {
+        this.resourceService.removeValue(this.sense.id, OntoLex.isLexicalizedSenseOf, concept.id).subscribe(
             () => {
                 this.update.emit();
             }
