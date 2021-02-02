@@ -52,21 +52,24 @@ export abstract class AbstractProjectComponent {
             this.visualizationMode = <ProjectViewMode>viewModeCookie;
         }
 
-        if (this.visualizationMode == ProjectViewMode.list) {
-            //init project list
-            this.projectService.listProjects().subscribe(
-                projectList => {
-                    this.projectList = projectList;
-                }
-            );
-        } else { //facets based
+        //init projects
+        if (this.visualizationMode == ProjectViewMode.list) { //as list
+            this.initProjectList();
+        } else { //as bagOf facets based
             this.initProjectDirectories();
         }
     }
 
-    abstract initProjectList(): void;
-
+    abstract getListProjectsFn(): Observable<Project[]>;
     abstract getRetrieveProjectsBagsFn(bagOfFacet: string): Observable<Multimap<Project>>;
+
+    private initProjectList() {
+        this.getListProjectsFn().subscribe(
+            projects => {
+                this.projectList = projects;
+            }
+        )
+    }
 
     /**
      * Retrieve projects grouped by the given facet

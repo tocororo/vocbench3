@@ -24,12 +24,8 @@ export class ProjectListModal extends AbstractProjectComponent {
         super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService);
     }
 
-    initProjectList() {
-        this.projectService.listProjects(null, true, true).subscribe(
-            projectList => {
-                this.projectList = projectList;
-            }
-        );
+    getListProjectsFn() {
+        return this.projectService.listProjects(null, true, true);
     }
 
     getRetrieveProjectsBagsFn(bagOfFacet: string) {

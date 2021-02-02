@@ -46,6 +46,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService);
     }
 
+    //@Override the one in the abstract parent since it needs to initialize the column order first
     initProjects() {
         //init column order
         this.columnOrder = {};
@@ -59,12 +60,8 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         super.initProjects();
     }
 
-    initProjectList() {
-        this.projectService.listProjects().subscribe(
-            projectList => {
-                this.projectList = projectList;
-            }
-        );
+    getListProjectsFn() {
+        return this.projectService.listProjects();
     }
 
     getRetrieveProjectsBagsFn(bagOfFacet: string) {

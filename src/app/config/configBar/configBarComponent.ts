@@ -35,14 +35,14 @@ export class ConfigBarComponent {
     translateLangs: string[];
     translateLang: string;
 
-    private loadDataAuthorized: boolean;
-    private exportDataAuthorized: boolean;
-    private clearDataAuthorized: boolean;
-    private versioningAuthorized: boolean;
-    private wgraphAuthorized: boolean;
-    private loadShapesAuthorized: boolean;
-    private exportShapesAuthorized: boolean;
-    private clearShapesAuthorized: boolean;
+    loadDataAuthorized: boolean;
+    exportDataAuthorized: boolean;
+    clearDataAuthorized: boolean;
+    versioningAuthorized: boolean;
+    wgraphAuthorized: boolean;
+    loadShapesAuthorized: boolean;
+    exportShapesAuthorized: boolean;
+    clearShapesAuthorized: boolean;
 
     constructor(private exportServices: ExportServices, private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
         private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
@@ -119,7 +119,7 @@ export class ConfigBarComponent {
      * Invoke the initialization of the authorizations of the global data management menu items.
      * This is performed each time the menu is open in order to prevent repeated checks even when not necessary
      */
-    private onGlobalDataManagementMenuOpen() {
+    onGlobalDataManagementMenuOpen() {
         this.initAuth();
         this.shaclEnabled = VBContext.getWorkingProject().isShaclEnabled();
     }
@@ -208,7 +208,7 @@ export class ConfigBarComponent {
         this.exportDataAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.exportExport);
         this.clearDataAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.inputOutputClearData);
         this.versioningAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.versionsGetVersions);
-        this.wgraphAuthorized = true; // TODO: replace with proper capability check
+        this.wgraphAuthorized = AuthorizationEvaluator.isGaolAuthorized('auth(rdf(graph), "U").'); //goal written directly since this has no corresponding action, just changes wgraph in VBContext
         this.loadShapesAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclLoadShapes);
         this.exportShapesAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclExportShapes);
         this.clearShapesAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclClearShapes);

@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ARTLiteral, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { ARTLiteral, ARTResource } from "src/app/models/ARTResources";
 import { ConceptReference, Form, Sense } from "src/app/models/LexicographerView";
 import { OntoLex, SKOS } from "src/app/models/Vocabulary";
-import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
@@ -24,19 +22,24 @@ export class LexicalSenseComponent {
 
     pendingDef: boolean;
 
-    constructor(private lexicographerViewService: LexicographerViewServices, private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices,
-        private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices, private modalService: NgbModal) {}
+    constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices,
+        private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices) {}
 
     //DEFINITION
 
     addDefinition() {
         this.pendingDef = true;
     }
-    onPendingDefConfirmed(newDef: string) {
-        //TODO wait for clarification
-        alert("this view is still under development; the addition of definition is not yet working, so the added definition is only visualized temporarly and not stored permanently server side")
-        this.sense.definition.push(new ARTLiteral(newDef, this.lemma[0].writtenRep[0].getLang()));
-        this.pendingDef = false;
+    onPendingDefConfirmed(value: string) {
+        let def: ARTLiteral = new ARTLiteral(value, null, this.lemma.writtenRep[0].getLang());
+        this.resourceService.addValue(this.sense.id, SKOS.definition, def).subscribe(
+            () => {
+                this.update.emit();        
+            }
+        )
+        // alert("this view is still under development; the addition of definition is not yet working, so the added definition is only visualized temporarly and not stored permanently server side")
+        // this.sense.definition.push();
+        // this.pendingDef = false;
     }
     onPendingDefCanceled() {
         this.pendingDef = false;
@@ -52,9 +55,7 @@ export class LexicalSenseComponent {
     }
 
     deleteDefinition(def: ARTLiteral) {
-        //TODO wait for clarification
-        //definition is attached to the lexical concept (which must be unique)
-        this.resourceService.removeValue(this.sense.concept[0].id, SKOS.definition, def).subscribe(
+        this.resourceService.removeValue(this.sense.id, SKOS.definition, def).subscribe(
             () => {
                 this.update.emit();
             }

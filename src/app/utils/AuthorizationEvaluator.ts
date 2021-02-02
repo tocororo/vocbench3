@@ -218,11 +218,23 @@ export class AuthorizationEvaluator {
 
 
     /**
+     * Check if a VBAction is authorized
      * @param action 
      * @param resource If provided, is used to get its role 
      * @param langValue If provided, check if it is a language tagged resource and the user has the permission
      */
     public static isAuthorized(action: VBActionsEnum, resource?: ARTResource, langValue?: ARTNode): boolean {
+        let goal: string = this.actionAuthGoalMap[action]; //retrieves the action goal and call isGaolAuthorized
+        return AuthorizationEvaluator.isGaolAuthorized(goal, resource, langValue);
+    }
+
+    /**
+     * Check if a goal is authorized
+     * @param goal 
+     * @param resource 
+     * @param langValue 
+     */
+    public static isGaolAuthorized(goal: string, resource?: ARTResource, langValue?: ARTNode): boolean {
         var user: User = VBContext.getLoggedUser();
         if (user == null) {
             return false;
@@ -230,7 +242,6 @@ export class AuthorizationEvaluator {
         if (user.isAdmin()) {
             return true;
         } else {
-
             //check language authorization
             if (langValue != null && langValue.getAdditionalProperty(ResAttribute.LANG)) {
                 let userLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
@@ -243,7 +254,6 @@ export class AuthorizationEvaluator {
                 return false;
             }
             //evaluate if the user capabilities satisfy the authorization requirement
-            let goal: string = this.actionAuthGoalMap[action];
             if (goal.includes(AuthorizationEvaluator.resRole)) {//dynamic goal (depending on resource role)
                 if (resource != null) {
                     goal = goal.replace(AuthorizationEvaluator.resRole, resource.getRole());
@@ -251,25 +261,22 @@ export class AuthorizationEvaluator {
                     throw new Error("Cannot resolve the authorization goal: goal depends on resource role, but resource is undefined");
                 }
             }
-            let cachedAuth: boolean = this.authCache[goal];
-            if (cachedAuth != null) { //if it was chached => return it
-                // console.log("authorization cached", cachedAuth);
-                return cachedAuth;
-            } else { //...otherwise compute authorization
-                let authorized: boolean = this.evaulatePrologGoal(goal); //cache the result of the evaluation for the given goal
-                this.authCache[goal] = authorized;
-                return authorized;
-            }
+            return this.evaulateGoal(goal);
         }
     }
 
-    private static evaulatePrologGoal(goal: string): boolean {
-        let query = Prolog.Parser.parseQuery(goal);
-        let iter = Prolog.Solver.query(AuthorizationEvaluator.prologEngine, query);
-        let next: boolean = iter.next();
-        // console.log("evaluating goal", goal);
-        // console.log("next", next);
-        return next;
+    private static evaulateGoal(goal: string): boolean {
+        let cachedAuth: boolean = this.authCache[goal];
+        if (cachedAuth != null) { //if it was chached => return it
+            return cachedAuth;
+        } else { //...otherwise compute authorization
+            let query = Prolog.Parser.parseQuery(goal);
+            let iter = Prolog.Solver.query(AuthorizationEvaluator.prologEngine, query);
+            let authorized: boolean = iter.next();
+            //cache the result of the evaluation for the given goal
+            this.authCache[goal] = authorized;
+            return authorized;
+        }
     }
 
 

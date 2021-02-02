@@ -771,11 +771,11 @@ textarea {
 }
 
 .form-control-editable {
-    background-color: #fdfdfd66; /* ending 2 digits represent the opacity */
+    background-color: #fdfdfd22; /* ending two digits represent the opacity */
     border: 1px solid #fbfbfb;
 }
 .form-control-editable:hover {
-    background-color: #f7f7f7;
+    background-color: #f7f7f799;
     border: 1px solid #f4f4f4 !important;
 }
 .form-control-editable:disabled {
