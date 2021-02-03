@@ -7,6 +7,7 @@ import { LexicalFormComponent } from '../resourceView/lexicographerView/lexicalF
 import { MorphosyntacticCache } from '../resourceView/lexicographerView/lexicalForm/MorphosyntacticPropChache';
 import { MorphosyntacticPropComponent } from '../resourceView/lexicographerView/lexicalForm/morphosyntacticPropComponent';
 import { PhoneticRepComponent } from '../resourceView/lexicographerView/lexicalForm/phoneticRepComponent';
+import { ConceptReferenceComponent } from '../resourceView/lexicographerView/lexicalSense/conceptReferenceComponent';
 import { LexicalSenseComponent } from '../resourceView/lexicographerView/lexicalSense/lexicalSenseComponent';
 import { LexicographerViewComponent } from '../resourceView/lexicographerView/lexicographerViewComponent';
 import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
@@ -86,6 +87,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         TreeAndListModule, 
     ],
     declarations: [
+        ConceptReferenceComponent,
         EditableResourceComponent,
         LanguageBoxComponent,
         LanguageDefinitionComponent,

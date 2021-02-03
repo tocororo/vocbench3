@@ -1,51 +1,53 @@
-<div class="sense">
+<div class="d-flex">
+    <div class="sense">
 
-    <div class="dropdown" style="position: absolute; top: -1px; right: -1px;" ngbDropdown>
-        <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
-            <span class="fas fa-plus"></span>
-        </button>
-        <div class="dropdown-menu" ngbDropdownMenu>
-            <a class="dropdown-item" (click)="addDefinition()" [ngClass]="{ disabled: sense.concept.length == 0 }">
-                {{'DATA.ACTIONS.ADD_DEFINITION'|translate}}
-            </a>
-            <a class="dropdown-item" (click)="setConcept()" [ngClass]="{ disabled: sense.concept.length != 0 }">
-                {{'DATA.ACTIONS.SET_LEX_CONCEPT'|translate}}
-            </a>
-        </div>
-    </div>
-
-    <div *ngIf="sense.definition.length > 0 || pendingDef" class="d-flex">
-        <label class="mt-2 mr-2">{{'COMMONS.DEFINITION'|translate}}:</label>
-        <div class="vbox">
-            <div *ngFor="let def of sense.definition; let last=last" class="d-flex align-items-center mr-2" [ngClass]="{ 'mb-2': !last }">
-                <inline-editable-value style="flex: 1" [value]="def" (edited)="onDefinitionEdited(def, $event)" [disabled]="readonly">
+        <div *ngIf="sense.definition.length > 0 || pendingDef" class="d-flex">
+            <label class="mt-2 mr-2">{{'COMMONS.DEFINITION'|translate}}:</label>
+            <div class="vbox">
+                <div *ngFor="let def of sense.definition; let last=last" class="d-flex align-items-center mr-2" [ngClass]="{ 'mb-1': !last }">
+                    <inline-editable-value style="flex: 1" [value]="def" (edited)="onDefinitionEdited(def, $event)" [disabled]="readonly">
+                    </inline-editable-value>
+                    <button class="btn btn-faded btn-xs ml-1" (click)="deleteDefinition(def)"  [disabled]="readonly" [title]="'ACTIONS.DELETE'|translate">
+                        <span class="fas fa-minus"></span>
+                    </button>
+                    <button *ngIf="last && !pendingDef" class="btn btn-faded btn-xs ml-1" (click)="addDefinition()" [disabled]="readonly" [title]="'ACTIONS.ADD'|translate">
+                        <span class="fas fa-plus"></span>
+                    </button>
+                </div>
+                <inline-editable-value *ngIf="pendingDef" [focusOnInit]="true" (edited)="onPendingDefConfirmed($event)" (editCanceled)="onPendingDefCanceled()">
                 </inline-editable-value>
-                <button class="btn btn-faded btn-xs ml-1" (click)="deleteDefinition(def)"  [disabled]="readonly" [title]="'ACTIONS.DELETE'|translate">
-                    <span class="fas fa-minus"></span>
-                </button>
-                <button *ngIf="last && !pendingDef" class="btn btn-faded btn-xs ml-1" (click)="addDefinition()" [disabled]="readonly" [title]="'ACTIONS.ADD'|translate">
-                    <span class="fas fa-plus"></span>
-                </button>
             </div>
-            <inline-editable-value *ngIf="pendingDef" [focusOnInit]="true" (edited)="onPendingDefConfirmed($event)" (editCanceled)="onPendingDefCanceled()">
-            </inline-editable-value>
+        </div>
+
+        <div *ngIf="sense.concept.length > 0" class="mt-3">
+            <concept-ref *ngFor="let c of sense.concept" [concept]="c" [sense]="sense" [lemma]="lemma" (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)"></concept-ref>
+        </div>
+
+        <div *ngIf="sense.reference.length > 0" class="mt-3">
+            <div *ngFor="let ref of sense.reference" class="d-flex align-items-center mb-2">
+                <label class="mr-2">{{'RESOURCE_VIEW.LEX_VIEW.SEMANTIC_REFERENCE'|translate}}:</label>
+                <rdf-resource class="clickable" [resource]="ref" (dblclick)="resourceDblClick(ref)"></rdf-resource>
+            </div>
         </div>
     </div>
 
-    <div *ngIf="sense.concept.length > 0" class="mt-2">
-        <div *ngFor="let c of sense.concept" class="d-flex align-items-center mb-2">
-            <label class="mr-2">{{'DATA.CONCEPT.CONCEPT'|translate}}:</label>
-            <rdf-resource class="clickable" [resource]="c.id" (dblclick)="resourceDblClick(c.id)"></rdf-resource>
-            <button class="btn btn-faded btn-xs ml-1" (click)="deleteConcept(c)" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
-                <span class="fas fa-minus"></span>
+    <div class="d-flex ml-1" style="align-self: flex-start;">
+        <div class="dropdown" ngbDropdown>
+            <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
+                <span class="fas fa-pencil-alt"></span>
             </button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <a class="dropdown-item" (click)="addDefinition()" [ngClass]="{ disabled: sense.concept.length == 0 }">
+                    {{'RESOURCE_VIEW.ACTIONS.ADD_DEF_TO_LEX_SENSE'|translate}}
+                </a>
+                <a class="dropdown-item" (click)="setConcept()" [ngClass]="{ disabled: sense.concept.length != 0 }">
+                    {{'DATA.ACTIONS.SET_LEX_CONCEPT'|translate}}
+                </a>
+            </div>
         </div>
+        <button class="btn btn-faded btn-xs ml-1" (click)="deleteSense()" [disabled]="readonly" [title]="'ACTIONS.DELETE'|translate">
+            <span class="fas fa-minus"></span>
+        </button>
     </div>
-
-    <div *ngIf="sense.reference.length > 0" class="mt-2">
-        <div *ngFor="let ref of sense.reference" class="d-flex align-items-center mb-2">
-            <label class="mr-2">{{'RESOURCE_VIEW.LEX_VIEW.SEMANTIC_REFERENCE'|translate}}:</label>
-            <rdf-resource class="clickable" [resource]="ref" (dblclick)="resourceDblClick(ref)"></rdf-resource>
-        </div>
-    </div>
+    
 </div>

@@ -1,4 +1,5 @@
 .sense {
+    flex: 1;
     position: relative;
     padding: .75rem 1.25rem;
     background-color: #fff3cd;

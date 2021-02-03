@@ -1325,6 +1325,8 @@
             }
         },
         "ACTIONS": {
+            "ADD_DEF_TO_LEX_SENSE": "Add definition to lexical sense",
+            "ADD_DEF_TO_LEX_CONCEPT": "Add definition to lexical concept",
             "ADD_PHONETIC_REPRESENTATION": "Add phonetic representation",
             "ADD_MORPHOSYNTACTIC_PROP": "Add morphosyntactic property",
             "ADD_VALUE_FROM_ANOTHER_PROJ": "Add value from another project",

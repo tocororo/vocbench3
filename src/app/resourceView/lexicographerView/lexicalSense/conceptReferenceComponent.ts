@@ -1,44 +1,44 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTLiteral, ARTResource } from "src/app/models/ARTResources";
-import { Form, Sense } from "src/app/models/LexicographerView";
+import { ConceptReference, Form, Sense } from "src/app/models/LexicographerView";
 import { OntoLex, SKOS } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
+import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 
 @Component({
-    selector: "lexical-sense",
-    templateUrl: "./lexicalSenseComponent.html",
-    styleUrls: ["./lexicalSenseComponent.css"],
+    selector: "concept-ref",
+    templateUrl: "./conceptReferenceComponent.html",
     host: { class: "d-block" }
 })
-export class LexicalSenseComponent {
+export class ConceptReferenceComponent {
     @Input() readonly: boolean = false;
-    @Input() lemma: Form;
+    @Input() concept: ConceptReference;
     @Input() sense: Sense;
+    @Input() lemma: Form;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
     pendingDef: boolean;
 
-    constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices) {}
+    constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices,
+        private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices) {}
 
-    deleteSense() {
-        this.ontolexService.removeSense(this.sense.id, true).subscribe(
+    deleteConcept() {
+        this.resourceService.removeValue(this.sense.id, OntoLex.isLexicalizedSenseOf, this.concept.id).subscribe(
             () => {
                 this.update.emit();
             }
-        );
+        )
     }
-
-    //DEFINITION
 
     addDefinition() {
         this.pendingDef = true;
     }
     onPendingDefConfirmed(value: string) {
         let def: ARTLiteral = new ARTLiteral(value, null, this.lemma.writtenRep[0].getLang());
-        this.resourceService.addValue(this.sense.id, SKOS.definition, def).subscribe(
+        this.resourceService.addValue(this.concept.id, SKOS.definition, def).subscribe(
             () => {
                 this.update.emit();        
             }
@@ -50,7 +50,7 @@ export class LexicalSenseComponent {
 
     onDefinitionEdited(def: ARTLiteral, newValue: string) {
         let newDefinition = new ARTLiteral(newValue, null, def.getLang())
-        this.resourceService.updateTriple(this.sense.concept[0].id, SKOS.definition, def, newDefinition).subscribe(
+        this.resourceService.updateTriple(this.concept.id, SKOS.definition, def, newDefinition).subscribe(
             () => {
                 this.update.emit();
             }
@@ -58,37 +58,15 @@ export class LexicalSenseComponent {
     }
 
     deleteDefinition(def: ARTLiteral) {
-        this.resourceService.removeValue(this.sense.id, SKOS.definition, def).subscribe(
+        this.resourceService.removeValue(this.concept.id, SKOS.definition, def).subscribe(
             () => {
                 this.update.emit();
             }
         )
     }
 
-    //CONCEPT
-    
-    setConcept() {
-        this.browsingModals.browseConceptTree({key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}, null, true).then(
-            lexConc => {
-                this.resourceService.addValue(this.sense.id, OntoLex.isLexicalizedSenseOf, lexConc).subscribe(
-                    () => {
-                        this.update.emit();
-                    }
-                )
-            },
-            () => {}
-        )
-    }
-
-    /**
-     * Propagate the update request from the child component (morphosyntactic-prop and phonetic-rep)
-     */
-    onUpdate() {
-        this.update.emit();
-    }
-
-    resourceDblClick(resource: ARTResource) {
-        this.dblclickObj.emit(resource);
+    resourceDblClick() {
+        this.dblclickObj.emit(this.concept.id);
     }
 
 }
