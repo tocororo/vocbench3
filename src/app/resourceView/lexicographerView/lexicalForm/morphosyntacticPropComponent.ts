@@ -3,7 +3,9 @@ import { Observable } from "rxjs";
 import { ARTURIResource } from "src/app/models/ARTResources";
 import { Form } from "src/app/models/LexicographerView";
 import { ResourcesServices } from "src/app/services/resourcesServices";
+import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
+import { VBActionsEnum } from "src/app/utils/VBActions";
 import { LexViewCache } from "../LexViewChache";
 
 @Component({
@@ -28,18 +30,25 @@ export class MorphosyntacticPropComponent {
 
     ngClassValue: CssClass;
 
+    //auth
+    editAuthorized: boolean;
+    deleteAuthorized: boolean;
+
     constructor(private resourceService: ResourcesServices) {}
 
     ngOnInit() {
         if (this.property != null && this.value != null) {
             this.initRenderingClassStatus();
-        } else {
+        } else { //in creation initialize properties
             this.getCachedMorphosyntacticProperties().subscribe(
                 props => {
                     this.properties = props;
                 }
             )
         }
+
+        this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.form.id) && !this.readonly;
     }
 
     initRenderingClassStatus() {
@@ -72,7 +81,7 @@ export class MorphosyntacticPropComponent {
     //EDITING
 
     editValue() {
-        if (this.readonly) return;
+        if (!this.editAuthorized) return;
         this.getCachedMorphosyntacticValue(this.property).subscribe(
             values => {
                 this.editing = true;

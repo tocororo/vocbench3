@@ -124,6 +124,7 @@ export enum VBActionsEnum {
     ontolexAddFormRepresentation = "ontolexAddFormRepresentation",
     ontolexAddLexicalForm = "ontolexAddLexicalForm",
     ontolexAddLexicalization = "ontolexAddLexicalization",
+    ontolexAddOtherForm = "ontolexAddOtherForm",
     ontolexAddSubterm = "ontolexAddSubterm",
     ontolexClearLexicalEntryConstituent = "ontolexClearLexicalEntryConstituent",
     ontolexCreateLexicalEntry = "ontolexCreateLexicalEntry",
@@ -136,11 +137,13 @@ export enum VBActionsEnum {
     ontolexReadLexicaliForm = "ontolexReadLexicaliForm",
     ontolexReadLexicalEntryConstituents = "ontolexReadLexicalEntryConstituents",
     ontolexReadSubterm = "ontolexReadSubterm",
+    ontolexRemoveForm = "ontolexRemoveForm",
     ontolexRemoveFormRepresentation = "ontolexRemoveFormRepresentation",
     ontolexRemoveLexicalForm = "ontolexRemoveLexicalForm",
     ontolexRemovePlainLexicalization = "ontolexRemovePlainLexicalization",
     ontolexRemoveReifiedLexicalization = "ontolexRemoveReifiedLexicalization",
     ontolexRemoveSubterm = "ontolexRemoveSubterm",
+    ontolexSetCanonicalForm = "ontolexSetCanonicalForm",
     ontolexSetLexicalEntryConstituent = "ontolexSetLexicalEntryConstituent",
     //Plugins
     pluginsGetPlugins = "pluginsGetPlugins", //valid for getAvailablePlugins and getPluginConfiguration

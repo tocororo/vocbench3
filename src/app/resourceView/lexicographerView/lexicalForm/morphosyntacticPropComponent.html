@@ -22,7 +22,7 @@
                 </div>
             </ng-template>
         </div>
-        <button *ngIf="!readonly" class="btn btn-xs btn-faded ml-2" (click)="deleteValue()" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
+        <button *ngIf="!readonly" class="btn btn-xs btn-faded ml-2" (click)="deleteValue()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized">
             <span class="fas fa-minus"></span>
         </button>
     </div>

@@ -4,7 +4,9 @@ import { Form } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
+import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
+import { VBActionsEnum } from "src/app/utils/VBActions";
 
 @Component({
     selector: "phonetic-rep",
@@ -17,12 +19,18 @@ export class PhoneticRepComponent {
     @Output() cancel: EventEmitter<void> = new EventEmitter(); //request to cancel the creation
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update
 
+    //auth
+    editAuthorized: boolean;
+    deleteAuthorized: boolean;
+
     constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices) {}
 
     ngOnInit() {
         if (ResourceUtils.isTripleInStaging(this.phoneticRep)) {
             this.readonly = true;
         }
+        this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.form.id) && !this.readonly;
     }
 
     onEdited(newValue: string) {

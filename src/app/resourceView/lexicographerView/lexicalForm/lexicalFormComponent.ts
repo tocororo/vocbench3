@@ -5,6 +5,8 @@ import { Form } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
+import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "src/app/utils/VBActions";
 import { LexViewCache } from "../LexViewChache";
 
 @Component({
@@ -25,15 +27,26 @@ export class LexicalFormComponent {
     pendingPhoneticRep: boolean;
     pendingMorphoProp: boolean;
 
+    //auth
+    editWrittenRepFormAuthorized: boolean;
+    addMorphoPropAuthorized: boolean;
+    addPhoneticRepAuthorized: boolean;
+    removeFormAuthorized: boolean;
+
     constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices) {}
 
     ngOnInit() {
         this.inlineEditStyle = "font-family: serif;"
         if (this.lemma) {
             this.inlineEditStyle += " font-weight: bold; font-size: 2rem;";
+            this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetCanonicalForm) && !this.readonly;
         } else {
             this.inlineEditStyle += " font-style: italic;";
+            this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
         }
+        this.addMorphoPropAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.form.id) && !this.readonly;
+        this.addPhoneticRepAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddFormRepresentation) && !this.readonly;
+        this.removeFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveForm) && !this.readonly;
     }
 
     onWrittenRepEdited(newValue: string) {

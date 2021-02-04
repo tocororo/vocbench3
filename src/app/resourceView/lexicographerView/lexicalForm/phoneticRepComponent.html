@@ -4,8 +4,8 @@
     <ng-container *ngIf="phoneticRep; then visualizationBlock; else creationBlock"></ng-container>
     <!-- visualization and editing -->
     <ng-template #visualizationBlock>
-        /<inline-editable-value [value]="phoneticRep" (edited)="onEdited($event)" [disabled]="readonly"></inline-editable-value>/
-        <button *ngIf="!readonly" class="btn btn-xs btn-faded ml-2" (click)="deleteRep()" [title]="'ACTIONS.DELETE'|translate">
+        /<inline-editable-value [value]="phoneticRep" (edited)="onEdited($event)" [disabled]="!editAuthorized"></inline-editable-value>/
+        <button *ngIf="!deleteAuthorized" class="btn btn-xs btn-faded ml-2" (click)="deleteRep()" [title]="'ACTIONS.DELETE'|translate">
             <span class="fas fa-minus"></span>
         </button>
     </ng-template>

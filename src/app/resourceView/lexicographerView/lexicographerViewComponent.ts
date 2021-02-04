@@ -6,6 +6,8 @@ import { ClassesServices } from "src/app/services/classesServices";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { PropertyServices } from "src/app/services/propertyServices";
+import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "src/app/utils/VBActions";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { NewOntoLexicalizationCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
 import { ModalOptions } from "src/app/widget/modal/Modals";
@@ -46,6 +48,10 @@ export class LexicographerViewComponent {
 
     lexViewCache: LexViewCache; //cache of lex view, provided to the child components
 
+    //auth
+    addOtherFormAuthorized: boolean;
+    addLexSenseAuthorized: boolean;
+
     constructor(private lexicographerViewService: LexicographerViewServices, private ontolexService: OntoLexLemonServices, 
         private propertyService: PropertyServices, private classService: ClassesServices,
         private creationModals: CreationModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
@@ -77,13 +83,15 @@ export class LexicographerViewComponent {
     }
 
     buildLexicographerView() {
+        this.addOtherFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddOtherForm);
+        this.addLexSenseAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization);
+
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.lexicographerViewService.getLexicalEntryView(this.resource).subscribe(
             resp => {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
 
                 let lv = LexicographerView.parse(resp);
-                console.log("lv", lv);
                 this.lemma = lv.lemma;
                 this.sortForms(this.lemma);
                 this.otherForms = lv.otherForms;

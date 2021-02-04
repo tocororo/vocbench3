@@ -41,10 +41,10 @@
                 <span class="fas fa-plus"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="addOtherForm()">
+                <a class="dropdown-item" (click)="addOtherForm()" [ngClass]="{ disabled: !addOtherFormAuthorized }">
                     {{'DATA.ACTIONS.ADD_OTHER_FORM'|translate}}
                 </a>
-                <a class="dropdown-item" (click)="addSense()">
+                <a class="dropdown-item" (click)="addSense()" [ngClass]="{ disabled: !addLexSenseAuthorized }">
                     {{'DATA.ACTIONS.ADD_LEXICAL_SENSE'|translate}}
                 </a>
             </div>

@@ -1,20 +1,21 @@
 <div class="d-flex align-items-center">
-    <inline-editable-form style="flex: 1" [value]="form" [disabled]="readonly" [textStyle]="inlineEditStyle" [title]="form.id.toNT()" (edited)="onWrittenRepEdited($event)">
+    <inline-editable-form style="flex: 1" [value]="form" [disabled]="!editWrittenRepFormAuthorized" [textStyle]="inlineEditStyle" [title]="form.id.toNT()"
+        (edited)="onWrittenRepEdited($event)">
     </inline-editable-form>
     <div class="dropdown ml-1" ngbDropdown>
         <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
             <span class="fas fa-pencil-alt"></span>
         </button>
         <div class="dropdown-menu" ngbDropdownMenu>
-            <a class="dropdown-item" (click)="addMorphosintacticProp()">
+            <a class="dropdown-item" (click)="addMorphosintacticProp()" [ngClass]="{ disabled: !addMorphoPropAuthorized }">
                 {{'RESOURCE_VIEW.ACTIONS.ADD_MORPHOSYNTACTIC_PROP'|translate}}
             </a>
-            <a class="dropdown-item" (click)="addPhoneticRep()">
+            <a class="dropdown-item" (click)="addPhoneticRep()"  [ngClass]="{ disabled: !addPhoneticRepAuthorized }">
                 {{'RESOURCE_VIEW.ACTIONS.ADD_PHONETIC_REPRESENTATION'|translate}}
             </a>
         </div>
     </div>
-    <button *ngIf="!readonly && !lemma" class="btn btn-xs btn-faded ml-1" (click)="deleteForm()" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
+    <button *ngIf="!readonly && !lemma" class="btn btn-xs btn-faded ml-1" (click)="deleteForm()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!removeFormAuthorized">
         <span class="fas fa-minus"></span>
     </button>
 </div>
