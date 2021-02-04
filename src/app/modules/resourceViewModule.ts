@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { LexicalFormComponent } from '../resourceView/lexicographerView/lexicalForm/lexicalFormComponent';
-import { MorphosyntacticCache } from '../resourceView/lexicographerView/lexicalForm/MorphosyntacticPropChache';
 import { MorphosyntacticPropComponent } from '../resourceView/lexicographerView/lexicalForm/morphosyntacticPropComponent';
 import { PhoneticRepComponent } from '../resourceView/lexicographerView/lexicalForm/phoneticRepComponent';
 import { ConceptReferenceComponent } from '../resourceView/lexicographerView/lexicalSense/conceptReferenceComponent';
@@ -160,7 +159,10 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResourceViewEditorComponent,
         ResourceViewModeDispatcher,
     ],
-    providers: [ResViewModalServices, LexicalizationEnrichmentHelper, MorphosyntacticCache],
+    providers: [
+        LexicalizationEnrichmentHelper,
+        ResViewModalServices,
+    ],
     entryComponents: [
         AddManuallyValueModal,
         AddPropertyValueModal,

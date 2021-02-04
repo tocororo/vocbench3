@@ -4,7 +4,7 @@ import { ARTURIResource } from "src/app/models/ARTResources";
 import { Form } from "src/app/models/LexicographerView";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
-import { MorphosyntacticCache } from "./MorphosyntacticPropChache";
+import { LexViewCache } from "../LexViewChache";
 
 @Component({
     selector: "morphosyntactic-prop",
@@ -15,6 +15,7 @@ export class MorphosyntacticPropComponent {
     @Input() form: Form;
     @Input() property: ARTURIResource;
     @Input() value: ARTURIResource;
+    @Input() lexViewCache: LexViewCache;
     @Output() cancel: EventEmitter<void> = new EventEmitter(); //request to cancel the creation
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update
 
@@ -27,7 +28,7 @@ export class MorphosyntacticPropComponent {
 
     ngClassValue: CssClass;
 
-    constructor(private resourceService: ResourcesServices, private morphosyntacticCache: MorphosyntacticCache) {}
+    constructor(private resourceService: ResourcesServices) {}
 
     ngOnInit() {
         if (this.property != null && this.value != null) {
@@ -132,10 +133,10 @@ export class MorphosyntacticPropComponent {
     //CACHE UTILS
 
     getCachedMorphosyntacticProperties(): Observable<ARTURIResource[]> {
-        return this.morphosyntacticCache.getProperties();
+        return this.lexViewCache.getMorphosyntacticProperties();
     }
     getCachedMorphosyntacticValue(property: ARTURIResource): Observable<ARTURIResource[]> {
-        return this.morphosyntacticCache.getValues(property);
+        return this.lexViewCache.getMorphosyntacticValues(property);
     }
 
 }

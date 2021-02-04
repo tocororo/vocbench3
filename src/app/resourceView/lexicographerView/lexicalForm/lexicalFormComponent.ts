@@ -5,6 +5,7 @@ import { Form } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
+import { LexViewCache } from "../LexViewChache";
 
 @Component({
     selector: "lexical-form",
@@ -16,6 +17,7 @@ export class LexicalFormComponent {
     @Input() entry: ARTURIResource;
     @Input() form: Form;
     @Input() lemma: boolean; //tells if the form is a lemma (false if it is an "other form")
+    @Input() lexViewCache: LexViewCache;
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update the lex view
 
     inlineEditStyle: string;

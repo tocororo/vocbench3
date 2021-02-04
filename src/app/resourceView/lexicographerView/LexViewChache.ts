@@ -1,25 +1,30 @@
-import { Injectable } from "@angular/core";
 import { from, Observable, of } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { ARTURIResource } from "src/app/models/ARTResources";
+import { CustomForm } from "src/app/models/CustomForms";
+import { SKOS } from "src/app/models/Vocabulary";
 import { ClassesServices } from "src/app/services/classesServices";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { PropertyServices } from "src/app/services/propertyServices";
 import { ResourceUtils, SortAttribute } from "src/app/utils/ResourceUtils";
 import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
+import { DefinitionCustomRangeConfig } from "../termView/definitionEnrichmentHelper";
 
-@Injectable()
-export class MorphosyntacticCache {
+export class LexViewCache {
 
+    //cache about morphosyntactic properties
     private propCache: ARTURIResource[];
     private propValueCache: MorphosyntacticCacheEntry[] = [];
+
+    //cache about definition range
+    private defRangeConfigCache: DefinitionCustomRangeConfig;
 
     constructor(private lexicographerViewService: LexicographerViewServices, private propertyService: PropertyServices, private classService: ClassesServices,
         private sharedModals: SharedModalServices) {
         this.propValueCache = [];
     }
 
-    getProperties(): Observable<ARTURIResource[]> {
+    getMorphosyntacticProperties(): Observable<ARTURIResource[]> {
         if (this.propCache == null) {
             return this.lexicographerViewService.getMorphosyntacticProperties().pipe(
                 map(props => {
@@ -33,7 +38,7 @@ export class MorphosyntacticCache {
         }
     }
 
-    getValues(property: ARTURIResource): Observable<ARTURIResource[]> {
+    getMorphosyntacticValues(property: ARTURIResource): Observable<ARTURIResource[]> {
         let entry = this.propValueCache.find(c => c.prop.equals(property));
         if (entry != null) {
             return of(entry.values);
@@ -91,6 +96,36 @@ export class MorphosyntacticCache {
                     }
                 } else {
                     return of(null); //no range collection
+                }
+            })
+        );
+    }
+
+    getDefinitionRangeConfig(): Observable<DefinitionCustomRangeConfig> {
+        if (this.defRangeConfigCache == null) {
+            return this.initDefinitionRangeCache().pipe(
+                map(() => {
+                    return this.defRangeConfigCache;
+                })
+            );
+        } else {
+            return of(this.defRangeConfigCache);
+        }
+    }
+
+    private initDefinitionRangeCache(): Observable<void> {
+        return this.propertyService.getRange(SKOS.definition).pipe(
+            map(range => {
+                this.defRangeConfigCache = new DefinitionCustomRangeConfig();
+                if (range.formCollection != null) {
+                    let cForms: CustomForm[] = range.formCollection.getForms();
+                    if (cForms.length > 0) {
+                        this.defRangeConfigCache.hasCustomRange = true;
+                        this.defRangeConfigCache.customForms = cForms;
+                    }
+                    if (range.ranges == null) { //standard range replaced by the custom one
+                        this.defRangeConfigCache.hasLiteralRange = false;
+                    }
                 }
             })
         );

@@ -2,17 +2,21 @@ import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, View
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Form, LexicographerView, Sense } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
+import { ClassesServices } from "src/app/services/classesServices";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
+import { PropertyServices } from "src/app/services/propertyServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { NewOntoLexicalizationCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
 import { ModalOptions } from "src/app/widget/modal/Modals";
+import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { ARTLiteral, ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { ResourceViewCtx } from "../../models/ResourceView";
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { UIUtils } from "../../utils/UIUtils";
 import { ProjectContext } from "../../utils/VBContext";
 import { ResViewSettingsModal } from "../resViewSettingsModal";
+import { LexViewCache } from "./LexViewChache";
 
 @Component({
     selector: "lexicographer-view",
@@ -36,10 +40,15 @@ export class LexicographerViewComponent {
     otherForms: Form[];
     senses: Sense[];
 
+    lang: string; //language of the writtenRep of the lemma
+
     pendingOtherForm: boolean;
 
+    lexViewCache: LexViewCache; //cache of lex view, provided to the child components
+
     constructor(private lexicographerViewService: LexicographerViewServices, private ontolexService: OntoLexLemonServices, 
-        private creationModals: CreationModalServices, private modalService: NgbModal) {}
+        private propertyService: PropertyServices, private classService: ClassesServices,
+        private creationModals: CreationModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
@@ -58,6 +67,8 @@ export class LexicographerViewComponent {
 
     ngOnInit() {
         this.readonly = this.readonly || HttpServiceContext.getContextVersion() != null; //if it is working on an old dump version, disable the updates
+
+        this.lexViewCache = new LexViewCache(this.lexicographerViewService, this.propertyService, this.classService, this.sharedModals);
     }
 
     ngAfterViewInit() {
@@ -69,6 +80,8 @@ export class LexicographerViewComponent {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.lexicographerViewService.getLexicalEntryView(this.resource).subscribe(
             resp => {
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+
                 let lv = LexicographerView.parse(resp);
                 console.log("lv", lv);
                 this.lemma = lv.lemma;
@@ -77,7 +90,8 @@ export class LexicographerViewComponent {
                 this.sortForms(this.otherForms);
                 this.senses = lv.senses;
                 this.sortSenses(this.senses);
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+
+                this.lang = this.lemma[0].writtenRep[0].getLang();
 
                 if (lv.isInStaging()) {
                     this.readonly = true;
@@ -130,7 +144,7 @@ export class LexicographerViewComponent {
     }
 
     onPendingOtherFormConfirmed(value: string) {
-        let writtenRep: ARTLiteral = new ARTLiteral(value, null, this.lemma[0].writtenRep[0].getLang());
+        let writtenRep: ARTLiteral = new ARTLiteral(value, null, this.lang);
         this.ontolexService.addOtherForm(this.resource, writtenRep).subscribe(
             () => {
                 this.pendingOtherForm = null;

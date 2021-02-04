@@ -6,7 +6,6 @@ import { Language, Languages } from '../../../models/LanguagesCountries';
 import { OntoLex, SKOS, SKOSXL } from '../../../models/Vocabulary';
 import { CustomFormsServices } from '../../../services/customFormsServices';
 import { PropertyServices } from '../../../services/propertyServices';
-import { ResourcesServices } from '../../../services/resourcesServices';
 import { SkosServices } from '../../../services/skosServices';
 import { SkosxlServices } from '../../../services/skosxlServices';
 import { AuthorizationEvaluator } from '../../../utils/AuthorizationEvaluator';
@@ -15,7 +14,7 @@ import { VBContext } from '../../../utils/VBContext';
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { CreationModalServices } from '../../../widget/modal/creationModal/creationModalServices';
 import { ResViewModalServices } from '../../resourceViewEditor/resViewModals/resViewModalServices';
-import { DefEnrichmentType, DefinitionEnrichmentHelper, DefinitionEnrichmentInfo } from '../definitionEnrichmentHelper';
+import { DefEnrichmentType, DefinitionCustomRangeConfig, DefinitionEnrichmentHelper, DefinitionEnrichmentInfo } from '../definitionEnrichmentHelper';
 
 
 @Component({
@@ -49,8 +48,7 @@ export class LanguageBoxComponent {
     addLabelAuthorized: boolean;
 
     constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private resourcesService: ResourcesServices, private customFormsServices: CustomFormsServices,
-        private propService: PropertyServices, private resViewModals: ResViewModalServices, 
+        private customFormsServices: CustomFormsServices, private propService: PropertyServices, private resViewModals: ResViewModalServices, 
         private basicModals: BasicModalServices, private creationModals: CreationModalServices) { }
 
     ngOnInit() {
@@ -72,8 +70,8 @@ export class LanguageBoxComponent {
             */
             this.addLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddLexicalization, this.resource) && langAuthorized && !this.readonly;
             this.addDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddNote, this.resource) && langAuthorized && !this.readonly;
-            this.editDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.resource) && langAuthorized && !this.readonly;
-            this.deleteDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.resource) && langAuthorized && !this.readonly;
+            this.editDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosUpdateNote, this.resource) && langAuthorized && !this.readonly;
+            this.deleteDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveNote, this.resource) && langAuthorized && !this.readonly;
         }
     }
 
@@ -136,7 +134,7 @@ export class LanguageBoxComponent {
         } else {
             let serviceInvocation: Observable<any>;
             if (defToDelete.isLiteral()) { // if standard
-                serviceInvocation = this.resourcesService.removeValue(<ARTURIResource>this.resource, SKOS.definition, defToDelete);
+                serviceInvocation = this.skosService.removeNote(<ARTURIResource>this.resource, SKOS.definition, defToDelete);
             } else if (defToDelete.isResource() && this.defCrConfig.hasCustomRange) { // if reified
                 serviceInvocation = this.customFormsServices.removeReifiedResource(this.resource, SKOS.definition, defToDelete);
             } //other cases not handled but should not happen
@@ -380,10 +378,4 @@ export interface TermStructView {
     predicate?: ARTURIResource;
     isPrefLabel?: boolean;
     lang?: string
-}
-
-export interface DefinitionCustomRangeConfig {
-    hasLiteralRange: boolean; //tells if the "standard" range is available (not replaced by the CR)
-    hasCustomRange: boolean; //tells if CustomRange is available
-    customForms?: CustomForm[]; //list of the available CFs
 }

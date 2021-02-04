@@ -16,7 +16,8 @@ import { ResourceUtils, SortAttribute } from '../../utils/ResourceUtils';
 import { UIUtils } from "../../utils/UIUtils";
 import { ProjectContext, VBContext } from '../../utils/VBContext';
 import { AbstractResourceView } from "../resourceViewEditor/abstractResourceView";
-import { DefinitionCustomRangeConfig, LanguageBoxComponent } from "./languageBox/languageBoxComponent";
+import { DefinitionCustomRangeConfig } from "./definitionEnrichmentHelper";
+import { LanguageBoxComponent } from "./languageBox/languageBoxComponent";
 
 @Component({
     selector: "term-view",
@@ -277,10 +278,7 @@ export class TermViewComponent extends AbstractResourceView {
      * only when enriching a skos:definition.
      */
     private initSkosDefinitionCustomRange(definitionPredObj: ARTPredicateObjects): Observable<void> {
-        this.defCustomRangeConfig = {
-            hasCustomRange: false,
-            hasLiteralRange: true
-        }
+        this.defCustomRangeConfig = new DefinitionCustomRangeConfig();
         if (definitionPredObj != null) {
             this.defCustomRangeConfig.hasCustomRange = definitionPredObj.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE);
             return of(null);

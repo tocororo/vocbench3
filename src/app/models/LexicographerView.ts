@@ -1,5 +1,5 @@
 import { Deserializer } from "../utils/Deserializer";
-import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResourceNature, TripleScopes } from "./ARTResources";
+import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceNature, TripleScopes } from "./ARTResources";
 import { SemanticTurkey } from "./Vocabulary";
 
 export class LexicographerView {
@@ -91,6 +91,7 @@ export class Form {
     public static parse(fJson: any): Form {
         let f: Form = new Form();
         f.id = new ARTURIResource(fJson.id);
+        f.id.setRole(RDFResourceRolesEnum.ontolexForm); //role needed to authorization evaluator
         f.nature = ResourceNature.parse(fJson.nature);
         f.morphosyntacticProps = Deserializer.createPredicateObjectsList(fJson.morphosyntacticProps);
         f.phoneticRep = Deserializer.createLiteralArray(fJson.phoneticRep);
@@ -110,6 +111,7 @@ export class Sense {
     public static parse(sJson: any): Sense {
         let s: Sense = new Sense();
         s.id = new ARTURIResource(sJson.id);
+        s.id.setRole(RDFResourceRolesEnum.ontolexLexicalSense); //role needed to authorization evaluator
         if (sJson.definition) {
             s.definition = Deserializer.createRDFNodeArray(sJson.definition);
         }
@@ -131,6 +133,7 @@ export class ConceptReference {
     public static parse(cJson: any): ConceptReference {
         let c: ConceptReference = new ConceptReference();
         c.id = new ARTURIResource(cJson.id);
+        c.id.setRole(RDFResourceRolesEnum.concept); //role needed to authorization evaluator
         c.nature = ResourceNature.parse(cJson.nature);
         c.scope = cJson.scope;
         if (cJson.definition) {

@@ -5,7 +5,6 @@ import { CustomForm } from "../../models/CustomForms";
 import { SKOS } from "../../models/Vocabulary";
 import { PropertyServices, RangeResponse } from "../../services/propertyServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { DefinitionCustomRangeConfig } from "./languageBox/languageBoxComponent";
 
 export class DefinitionEnrichmentHelper {
 
@@ -31,8 +30,6 @@ export class DefinitionEnrichmentHelper {
      * @param basicModals used to prompt the user some decisions or to show error messages
      */
     public static getDefinitionEnrichmentInfo(propService: PropertyServices, basicModals: BasicModalServices, crConfig: DefinitionCustomRangeConfig): Observable<DefinitionEnrichmentInfo> {
-        let predicate = SKOS.definition;
-
         return this.fillDefinitionCustomRangeConfig(propService, crConfig).pipe(
             mergeMap(() => {
                 /* 
@@ -115,4 +112,10 @@ export class DefinitionEnrichmentInfo {
 export enum DefEnrichmentType {
     literal = "literal",
     customForm = "customForm"
+}
+
+export class DefinitionCustomRangeConfig {
+    hasLiteralRange: boolean = true; //tells if the "standard" range is available (not replaced by the CR)
+    hasCustomRange: boolean; //tells if CustomRange is available
+    customForms?: CustomForm[]; //list of the available CFs
 }

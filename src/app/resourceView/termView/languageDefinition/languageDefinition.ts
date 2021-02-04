@@ -1,12 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { ARTLiteral, ARTNode, ARTResource, ARTURIResource } from '../../../models/ARTResources';
+import { ARTLiteral, ARTNode, ARTResource } from '../../../models/ARTResources';
 import { CustomForm, CustomFormValue } from '../../../models/CustomForms';
 import { SKOS } from '../../../models/Vocabulary';
 import { CustomFormsServices } from '../../../services/customFormsServices';
 import { PropertyServices } from '../../../services/propertyServices';
-import { ResourcesServices } from '../../../services/resourcesServices';
 import { SkosServices } from '../../../services/skosServices';
-import { SkosxlServices } from '../../../services/skosxlServices';
 import { AuthorizationEvaluator } from '../../../utils/AuthorizationEvaluator';
 import { ResourceUtils } from '../../../utils/ResourceUtils';
 import { VBActionsEnum } from '../../../utils/VBActions';
@@ -14,8 +12,7 @@ import { VBContext } from '../../../utils/VBContext';
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { CreationModalServices } from '../../../widget/modal/creationModal/creationModalServices';
 import { ResViewModalServices } from '../../resourceViewEditor/resViewModals/resViewModalServices';
-import { DefEnrichmentType, DefinitionEnrichmentHelper, DefinitionEnrichmentInfo } from '../definitionEnrichmentHelper';
-import { DefinitionCustomRangeConfig } from '../languageBox/languageBoxComponent';
+import { DefEnrichmentType, DefinitionCustomRangeConfig, DefinitionEnrichmentHelper, DefinitionEnrichmentInfo } from '../definitionEnrichmentHelper';
 
 @Component({
     selector: "lang-def",
@@ -38,8 +35,7 @@ export class LanguageDefinitionComponent {
     editDefAuthorized: boolean;
     deleteDefAuthorized: boolean;
 
-    constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private resourcesService: ResourcesServices, private customFormsServices: CustomFormsServices,
+    constructor(public el: ElementRef, private skosService: SkosServices, private customFormsServices: CustomFormsServices,
         private propService: PropertyServices, private resViewModals: ResViewModalServices, 
         private basicModals: BasicModalServices, private creationModals: CreationModalServices) { }
 
@@ -49,8 +45,8 @@ export class LanguageDefinitionComponent {
             let tripleInStaging = (this.def != null) ? ResourceUtils.isTripleInStaging(this.def) : false;
             let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
             this.addDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddNote, this.resource) && langAuthorized && !tripleInStaging;
-            this.editDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.resource) && langAuthorized && !tripleInStaging;
-            this.deleteDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.resource) && langAuthorized && !tripleInStaging;
+            this.editDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosUpdateNote, this.resource) && langAuthorized && !tripleInStaging;
+            this.deleteDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveNote, this.resource) && langAuthorized && !tripleInStaging;
         }
     }
 
@@ -63,18 +59,18 @@ export class LanguageDefinitionComponent {
         if (oldDefValue != null && oldDefValue.getShow() != newDefValue) { // update case 
             let newLitForm: ARTLiteral = new ARTLiteral(newDefValue, null, this.lang);
             if (oldDefValue.isLiteral()) { // if standard
-                this.resourcesService.updateTriple(this.resource, SKOS.definition, oldDefValue, newLitForm).subscribe(
-                    stResp => this.update.emit()
+                this.skosService.updateNote(this.resource, SKOS.definition, oldDefValue, newLitForm).subscribe(
+                    () => this.update.emit()
                 )
             } else if (oldDefValue.isResource() && this.defCrConfig.hasCustomRange) { // if reified
                 this.customFormsServices.updateReifiedResourceShow(this.resource, SKOS.definition, <ARTResource>oldDefValue, newLitForm).subscribe(
-                    stResp => this.update.emit()
+                    () => this.update.emit()
                 )
             }
-        } else if (newDefValue != null) { // new case
+        } else if (newDefValue != null) { // new case (for sure a plain def since reified is added through modal)
             let newLitForm: ARTLiteral = new ARTLiteral(newDefValue, null, this.lang);
-            this.resourcesService.addValue(this.resource, SKOS.definition, newLitForm).subscribe(
-                stResp => this.update.emit()
+            this.skosService.addNote(this.resource, SKOS.definition, newLitForm).subscribe(
+                () => this.update.emit()
             )
         }
     }
