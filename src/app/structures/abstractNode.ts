@@ -1,9 +1,10 @@
-import { Directive, EventEmitter, Input, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { TreeListContext } from "../utils/UIUtils";
 import { ProjectContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { RdfResourceComponent } from "../widget/rdfResource/rdfResourceComponent";
 
 @Directive()
 export abstract class AbstractNode {
@@ -20,6 +21,7 @@ export abstract class AbstractNode {
     @Input() projectCtx: ProjectContext;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeChecked = new EventEmitter<{ node: ARTURIResource, checked: boolean }>();
+    @ViewChild("rdfRes") rdfResource: RdfResourceComponent;
 
     eventSubscriptions: Subscription[] = [];
 
@@ -70,6 +72,8 @@ export abstract class AbstractNode {
             this.node.setURI(newResource.getURI());
             this.node.setAdditionalProperty(ResAttribute.QNAME, newResource.getAdditionalProperty(ResAttribute.QNAME));
             this.node.setShow(newResource.getShow());
+            //changes made to resource attributes do not trigger init of rdf-resource component (@Input object remains the same). Force init
+            this.rdfResource.init();
         }
     }
 

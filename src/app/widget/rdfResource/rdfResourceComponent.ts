@@ -41,20 +41,21 @@ export class RdfResourceComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
-            this.initRenderingLabel();
-            this.initImgSrc();
-
-            this.initLang();
-
-            this.initDatatype();
-
-            this.initLiteralWithLink();
-            this.initRenderingClass();
-            this.initNatureTooltip();
-            this.initManchExpr();
+            this.init();
         } else if (changes['rendering']) {
             this.initRenderingLabel();
         }
+    }
+
+    init() {
+        this.initRenderingLabel();
+        this.initImgSrc();
+        this.initLang();
+        this.initDatatype();
+        this.initLiteralWithLink();
+        this.initRenderingClass();
+        this.initNatureTooltip();
+        this.initManchExpr();
     }
 
     private initRenderingLabel() {

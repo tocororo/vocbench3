@@ -5,7 +5,7 @@
             <img *ngIf="open" src="./assets/images/icons/arrow.png" (click)="collapseNode()">
         </ng-container>
 	</div>
-    <rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
+    <rdf-resource #rdfRes [resource]="node" [rendering]="rendering" (click)="selectNode()" 
         [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
     <input *ngIf="multiselection" type="checkbox" style="margin-left: 5px;" [(ngModel)]="checked" (ngModelChange)="onNodeCheckChange()">        
 </div>

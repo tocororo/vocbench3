@@ -1,5 +1,5 @@
 <div class="treeNode" #listNodeElement>
-    <rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
+    <rdf-resource #rdfRes [resource]="node" [rendering]="rendering" (click)="selectNode()" 
         [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
     <input *ngIf="multiselection" type="checkbox" style="margin-left: 5px;" [(ngModel)]="checked" (ngModelChange)="onNodeCheckChange()">
 </div>
