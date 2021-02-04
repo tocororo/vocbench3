@@ -264,12 +264,13 @@ export abstract class AbstractTreeNode extends AbstractNode {
     }
 
     onParentAdded(parent: ARTResource, child: ARTResource) {
-        if (this.node.getNominalValue() == parent.getNominalValue()) {//if the parent is the current node
+        if (this.node.equals(parent)) {//if the parent is the current node
             this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
             //if it was open add the child to the visible children (if not laready among them)
             if (this.open && !this.children.some(c => c.equals(child))) {
                 this.children.push(<ARTURIResource>child);
             }
+            this.initShowExpandCollapseBtn();
         }
     }
 
