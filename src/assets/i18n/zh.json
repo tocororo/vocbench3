@@ -1407,7 +1407,8 @@
         },
         "LEX_VIEW": {
             "PRONUNCIATION": "Pronunciation",
-            "SEMANTIC_REFERENCE": "Semantic reference"
+            "SEMANTIC_REFERENCE": "Semantic reference",
+            "TRANSLATION": "Translation"
         },
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Broader Concepts",

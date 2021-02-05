@@ -3,7 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { NTriplesUtil } from "../../utils/ResourceUtils";
 import { QueryParameterizerModal } from "./queryParameterizerModal";
 
 @Component({
@@ -45,10 +45,10 @@ export class QueryParameterForm {
                     bindingType: this.bindings[varName].bindingType
                 }
                 if (this.bindings[varName].bindingType == BindingTypeEnum.assignment) {
-                    bs.value = ResourceUtils.parseNode(this.bindings[varName].value);
+                    bs.value = NTriplesUtil.parseNode(this.bindings[varName].value);
                 } else if (this.bindings[varName].bindingType == BindingTypeEnum.constraint) {
                     if (this.bindings[varName].datatype != null) {
-                        bs.datatype = ResourceUtils.parseURI(this.bindings[varName].datatype);
+                        bs.datatype = NTriplesUtil.parseURI(this.bindings[varName].datatype);
                     } else if (this.bindings[varName].resourceRole != null) {
                         bs.resourceRole = this.bindings[varName].resourceRole;
                     }

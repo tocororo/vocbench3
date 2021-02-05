@@ -1,14 +1,14 @@
 import { Component, Input } from "@angular/core";
-import { RDFResourceRolesEnum, ARTResource, ARTURIResource } from "../../models/ARTResources";
+import { Observable } from "rxjs";
+import { map } from 'rxjs/operators';
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { Action, NotificationPreferences } from "../../models/Notifications";
 import { NotificationStatus } from "../../models/Properties";
 import { NotificationServices } from "../../services/notificationServices";
-import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
+import { ResourcesServices } from "../../services/resourcesServices";
+import { NTriplesUtil, ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
-import { ResourcesServices } from "../../services/resourcesServices";
-import { Observable } from "rxjs";
-import { map } from 'rxjs/operators';
 
 @Component({
     selector: "notifications-pref",
@@ -86,7 +86,7 @@ export class NotificationsPreferencesComponent {
             map(watchingResources => {
                 let resources: ARTURIResource[] = [];
                 watchingResources.forEach(r => {
-                    let res = ResourceUtils.parseNode(r);
+                    let res = NTriplesUtil.parseNode(r);
                     if (res instanceof ARTURIResource) {
                         resources.push(res);
                     }

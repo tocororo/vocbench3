@@ -12,7 +12,7 @@ import { ResourcesServices } from "../../../services/resourcesServices";
 import { SkosServices } from "../../../services/skosServices";
 import { AuthorizationEvaluator, CRUDEnum, ResourceViewAuthEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { DatatypeValidator } from "../../../utils/DatatypeValidator";
-import { ResourceUtils } from "../../../utils/ResourceUtils";
+import { NTriplesUtil, ResourceUtils } from "../../../utils/ResourceUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -415,11 +415,11 @@ export class EditableResourceComponent extends AbstractResViewResource {
         let newValue: ARTNode;
         //parse the string typed by the user
         if (this.resourceStringValue.startsWith("<") && this.resourceStringValue.endsWith(">")) { //uri
-            newValue = ResourceUtils.parseURI(this.resourceStringValue);
+            newValue = NTriplesUtil.parseURI(this.resourceStringValue);
         } else if (this.resourceStringValue.startsWith("_:")) { //bnode
-            newValue = ResourceUtils.parseBNode(this.resourceStringValue);
+            newValue = NTriplesUtil.parseBNode(this.resourceStringValue);
         } else if (this.resourceStringValue.startsWith("\"")) { //literal
-            newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
+            newValue = NTriplesUtil.parseLiteral(this.resourceStringValue);
             let litValue: ARTLiteral = <ARTLiteral>newValue;
             if (litValue.getDatatype() != null && !this.isTypedLiteralValid(litValue)) {
                 throw new Error(litValue.getValue() + " is not a valid value for the given datatype: " + litValue.getDatatype());

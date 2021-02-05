@@ -1,4 +1,4 @@
-import { ResourceUtils } from "../utils/ResourceUtils";
+import { NTriplesUtil } from "../utils/ResourceUtils";
 import { ARTURIResource } from "./ARTResources";
 import { Settings } from "./Plugins";
 import { EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "./Vocabulary";
@@ -321,8 +321,8 @@ export class PreloadedDataSummary {
     public static parse(json: any): PreloadedDataSummary {
         return {
             baseURI: json.baseURI,
-            model: (json.model != null) ? ResourceUtils.parseURI(json.model) : null,
-            lexicalizationModel: (json.lexicalizationModel != null) ? ResourceUtils.parseURI(json.lexicalizationModel) : null,
+            model: (json.model != null) ? NTriplesUtil.parseURI(json.model) : null,
+            lexicalizationModel: (json.lexicalizationModel != null) ? NTriplesUtil.parseURI(json.lexicalizationModel) : null,
             preloadedDataFile: json.preloadedDataFile,
             preloadedDataFormat: json.preloadedDataFormat,
             warnings: json.warnings

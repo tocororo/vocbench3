@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from '../../../models/ARTResources';
-import { ResourceUtils } from '../../../utils/ResourceUtils';
+import { NTriplesUtil } from '../../../utils/ResourceUtils';
 
 @Component({
     selector: 'value-picker',
@@ -35,9 +35,9 @@ export class ValuePickerComponent {
         if (this.value) {
             if (typeof this.value == 'string') { //input si the NT serialization of the value => restore the ARTNode
                 if ((<string>this.value).startsWith("<") && (<string>this.value).endsWith(">")) { //uri
-                    this.value = ResourceUtils.parseURI(this.value);
+                    this.value = NTriplesUtil.parseURI(this.value);
                 } else if ((<string>this.value).startsWith("\"")) { //literal
-                    this.value = ResourceUtils.parseLiteral(this.value);
+                    this.value = NTriplesUtil.parseLiteral(this.value);
                 }
             }
             //set the res type

@@ -6,7 +6,7 @@ import { DatatypeRestrictionDescription, DatatypeRestrictionsMap, FacetsRestrict
 import { OWL, XmlSchema } from '../models/Vocabulary';
 import { Deserializer } from '../utils/Deserializer';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { ResourceUtils } from '../utils/ResourceUtils';
+import { NTriplesUtil } from '../utils/ResourceUtils';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { ResourcesServices } from './resourcesServices';
 
@@ -161,17 +161,17 @@ export class DatatypesServices {
                  * see https://stackoverflow.com/a/14668510/5805661
                  */
                 if (key == OWL.onDatatype.getURI()) {
-                    facetsDescription.base = ResourceUtils.parseURI(value);
+                    facetsDescription.base = NTriplesUtil.parseURI(value);
                 } else if (key == XmlSchema.maxExclusive.getURI()) {
-                    facetsDescription.facets.maxExclusive = +ResourceUtils.parseLiteral(value).getValue(); 
+                    facetsDescription.facets.maxExclusive = +NTriplesUtil.parseLiteral(value).getValue(); 
                 } else if (key == XmlSchema.maxInclusive.getURI()) {
-                    facetsDescription.facets.maxInclusive = +ResourceUtils.parseLiteral(value).getValue(); 
+                    facetsDescription.facets.maxInclusive = +NTriplesUtil.parseLiteral(value).getValue(); 
                 } else if (key == XmlSchema.minExclusive.getURI()) {
-                    facetsDescription.facets.minExclusive = +ResourceUtils.parseLiteral(value).getValue();
+                    facetsDescription.facets.minExclusive = +NTriplesUtil.parseLiteral(value).getValue();
                 } else if (key == XmlSchema.minInclusive.getURI()) {
-                    facetsDescription.facets.minInclusive = +ResourceUtils.parseLiteral(value).getValue();
+                    facetsDescription.facets.minInclusive = +NTriplesUtil.parseLiteral(value).getValue();
                 } else if (key == XmlSchema.pattern.getURI()) {
-                    facetsDescription.facets.pattern = ResourceUtils.parseLiteral(value).getValue();
+                    facetsDescription.facets.pattern = NTriplesUtil.parseLiteral(value).getValue();
                 }
             }
             description.facets = facetsDescription;

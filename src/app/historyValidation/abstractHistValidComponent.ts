@@ -2,7 +2,7 @@ import { Directive } from "@angular/core";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { CommitInfo, SortingDirection } from "../models/History";
 import { User } from "../models/User";
-import { ResourceUtils } from "../utils/ResourceUtils";
+import { NTriplesUtil } from "../utils/ResourceUtils";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { HistoryValidationModalServices } from "./modals/historyValidationModalServices";
 
@@ -137,9 +137,9 @@ export abstract class AbstractHistValidComponent {
         try {
             let res: ARTResource;
             if (value.startsWith("<") && value.endsWith(">")) { //uri
-                res = ResourceUtils.parseURI(value);
+                res = NTriplesUtil.parseURI(value);
             } else if (value.startsWith("_:")) { //bnode
-                res = ResourceUtils.parseBNode(value);
+                res = NTriplesUtil.parseBNode(value);
             }
             if (res != null) {
                 this.sharedModals.openResourceView(res, true);

@@ -8,6 +8,7 @@ import { MorphosyntacticPropComponent } from '../resourceView/lexicographerView/
 import { PhoneticRepComponent } from '../resourceView/lexicographerView/lexicalForm/phoneticRepComponent';
 import { ConceptReferenceComponent } from '../resourceView/lexicographerView/lexicalSense/conceptReferenceComponent';
 import { LexicalSenseComponent } from '../resourceView/lexicographerView/lexicalSense/lexicalSenseComponent';
+import { TranslationComponent } from '../resourceView/lexicographerView/lexicalSense/translationComponent';
 import { LexicographerViewComponent } from '../resourceView/lexicographerView/lexicographerViewComponent';
 import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
 import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
@@ -108,6 +109,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResourceViewValueRenderer,
         ResourceViewTabContainer,
         TermViewComponent,
+        TranslationComponent,
         //renderers
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 

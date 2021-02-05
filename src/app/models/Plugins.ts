@@ -1,5 +1,5 @@
-import { ResourceUtils } from "../utils/ResourceUtils";
-import { ARTLiteral, ARTNode, ARTURIResource } from "./ARTResources";
+import { NTriplesUtil } from "../utils/ResourceUtils";
+import { ARTLiteral, ARTNode } from "./ARTResources";
 
 /**
  * in the future this could have also a description field
@@ -213,8 +213,8 @@ export class STProperties {
         let displayName = stProp.displayName;
         let description = stProp.description;
         if (displayName instanceof Array) { //properties are DynamicSettingProp
-            let displayNames: ARTLiteral[] = displayName.map(dn => ResourceUtils.parseLiteral(dn));
-            let descriptions: ARTLiteral[] = description.map(dn => ResourceUtils.parseLiteral(dn));
+            let displayNames: ARTLiteral[] = displayName.map(dn => NTriplesUtil.parseLiteral(dn));
+            let descriptions: ARTLiteral[] = description.map(dn => NTriplesUtil.parseLiteral(dn));
             return new DynamicSettingProp(name, displayNames, descriptions, required, type, enumeration, value);
         } else {
             return new SettingsProp(name, displayName, description, required, type, enumeration, value)

@@ -5,7 +5,7 @@ import { Notification } from "../models/Notifications";
 import { NotificationServices } from "../services/notificationServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { Deserializer } from "../utils/Deserializer";
-import { ResourceUtils } from "../utils/ResourceUtils";
+import { NTriplesUtil, ResourceUtils } from "../utils/ResourceUtils";
 import { ModalOptions } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { NotificationSettingsModal } from "./notificationSettingsModal";
@@ -33,7 +33,7 @@ export class NotificationsComponent {
                 //collect resources to annotate
                 let resources: ARTURIResource[] = <ARTURIResource[]> notifications.map(n => n.resource) //get only resource id
                     .filter((r, pos, list) => list.indexOf(r) == pos) //filter out duplicates
-                    .map(r => ResourceUtils.parseNode(r)) //convert id to ARTResource
+                    .map(r => NTriplesUtil.parseNode(r)) //convert id to ARTResource
                     .filter(r => r instanceof ARTURIResource); //filter out BNode
 
                 this.resourceService.getResourcesInfo(resources).subscribe(

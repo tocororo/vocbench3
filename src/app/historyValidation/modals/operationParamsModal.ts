@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTResource } from "../../models/ARTResources";
 import { CommitInfo } from "../../models/History";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { NTriplesUtil } from "../../utils/ResourceUtils";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
@@ -19,9 +19,9 @@ export class OperationParamsModal {
         try {
             let res: ARTResource;
             if (value.startsWith("<") && value.endsWith(">")) { //uri
-                res = ResourceUtils.parseURI(value);
+                res = NTriplesUtil.parseURI(value);
             } else if (value.startsWith("_:")) { //bnode
-                res = ResourceUtils.parseBNode(value);
+                res = NTriplesUtil.parseBNode(value);
             }
             if (res != null) {
                 this.sharedModals.openResourceView(res, true);

@@ -2,7 +2,7 @@ import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../../models/ARTResources';
-import { ResourceUtils } from "../../../utils/ResourceUtils";
+import { NTriplesUtil, ResourceUtils } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
@@ -48,7 +48,7 @@ export class PropertyChainCreatorModal {
                     if (ResourceUtils.isQName(propShow, VBContext.getPrefixMappings())) {
                         property = ResourceUtils.parseQName(propShow, VBContext.getPrefixMappings());
                     } else {
-                        property = ResourceUtils.parseURI(propShow);
+                        property = NTriplesUtil.parseURI(propShow);
                     }
                     property.setShow(this.inversePrefix + propShow);
                     property.setRole(RDFResourceRolesEnum.objectProperty);

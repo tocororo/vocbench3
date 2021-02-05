@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
-import { ResourceUtils } from "../../../utils/ResourceUtils";
+import { NTriplesUtil, ResourceUtils } from "../../../utils/ResourceUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
@@ -41,11 +41,11 @@ export class AddManuallyValueModal {
         let value: ARTNode;
         try {
             if (this.inputTxt.startsWith("<") && this.inputTxt.endsWith(">")) { //uri
-                value = ResourceUtils.parseURI(this.inputTxt);
+                value = NTriplesUtil.parseURI(this.inputTxt);
             } else if (this.inputTxt.startsWith("_:")) { //bnode
-                value = ResourceUtils.parseBNode(this.inputTxt);
+                value = NTriplesUtil.parseBNode(this.inputTxt);
             } else if (this.inputTxt.startsWith("\"")) { //literal
-                value = ResourceUtils.parseLiteral(this.inputTxt);
+                value = NTriplesUtil.parseLiteral(this.inputTxt);
             } else if (ResourceUtils.isQName(this.inputTxt, VBContext.getPrefixMappings())) { //qname
                 value = ResourceUtils.parseQName(this.inputTxt, VBContext.getPrefixMappings());
             } else {

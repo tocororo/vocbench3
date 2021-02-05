@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTLiteral } from "../../models/ARTResources";
 import { Language, Languages } from "../../models/LanguagesCountries";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { NTriplesUtil } from "../../utils/ResourceUtils";
 import { VBProperties } from "../../utils/VBProperties";
 import { SharedModalServices } from "../modal/sharedModal/sharedModalServices";
 
@@ -69,7 +69,7 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
             if (obj instanceof ARTLiteral) {
                 this.literalValue = obj;
             } else {
-                this.literalValue = ResourceUtils.parseLiteral(obj);
+                this.literalValue = NTriplesUtil.parseLiteral(obj);
             }
         } else {
             this.literalValue = null;

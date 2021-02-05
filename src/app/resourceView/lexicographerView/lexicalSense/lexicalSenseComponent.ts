@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTLiteral, ARTNode, ARTResource } from "src/app/models/ARTResources";
 import { CustomForm, CustomFormValue } from "src/app/models/CustomForms";
-import { ConceptReference, Sense } from "src/app/models/LexicographerView";
+import { Sense } from "src/app/models/LexicographerView";
 import { OntoLex, SKOS } from "src/app/models/Vocabulary";
 import { DefEnrichmentType, DefinitionEnrichmentHelper, DefinitionEnrichmentInfo } from "src/app/resourceView/termView/definitionEnrichmentHelper";
 import { CustomFormsServices } from "src/app/services/customFormsServices";

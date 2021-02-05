@@ -1,4 +1,4 @@
-import { ResourceUtils } from "../utils/ResourceUtils";
+import { NTriplesUtil } from "../utils/ResourceUtils";
 import { ARTLiteral, ARTURIResource } from "./ARTResources";
 
 export class PrefixMapping {
@@ -104,7 +104,7 @@ export class SparqlEndpointMetadata {
     public static deserialize(metadataJson: any): SparqlEndpointMetadata {
         if (metadataJson) {
             return {
-                id: ResourceUtils.parseURI(metadataJson['@id']).getURI(),
+                id: NTriplesUtil.parseURI(metadataJson['@id']).getURI(),
                 limitations: metadataJson.limitations
             }
         } else {
@@ -196,13 +196,13 @@ export class DownloadDescription implements Descriptable {
         let titles: ARTLiteral[] = [];
         if (descrJson.titles != null) {
             descrJson.titles.forEach((t: string) => {
-                titles.push(ResourceUtils.parseLiteral(t));
+                titles.push(NTriplesUtil.parseLiteral(t));
             });
         }
         let descriptions: ARTLiteral[] = [];
         if (descrJson.descriptions != null) {
             descrJson.descriptions.forEach((d: string) => {
-                descriptions.push(ResourceUtils.parseLiteral(d));
+                descriptions.push(NTriplesUtil.parseLiteral(d));
             });
         }
         let desc: DownloadDescription = new DownloadDescription(descrJson.accessURL);

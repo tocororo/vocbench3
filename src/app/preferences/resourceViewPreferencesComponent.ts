@@ -45,7 +45,7 @@ export class ResourceViewPreferencesComponent {
         this.selectedRvConceptType = this.rvConceptTypes.find(t => t.type == rvPrefs.defaultConceptType);
         this.selectedRvLexEntryType = this.rvLexEntryTypes.find(t => t.type == rvPrefs.defaultLexEntryType);
         //selection of RV type for concept available only in skos and ontolex projects
-        this.rvConceptTypeSelectorAvailable = VBContext.getWorkingProject().getModelType() == SKOS.uri || VBContext.getWorkingProject().getModelType() == OntoLex.uri;
+        this.rvConceptTypeSelectorAvailable = VBContext.getWorkingProject().getModelType() == SKOS.uri;
         //selection of RV type for lex entry available only in ontolex projects
         this.rvLexEntryTypeSelectorAvailable = VBContext.getWorkingProject().getModelType() == OntoLex.uri;
     }

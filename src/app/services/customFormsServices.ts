@@ -6,7 +6,7 @@ import { PearlValidationResult } from '../models/Coda';
 import { AnnotationName, BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldAnnotation, FormFieldType } from "../models/CustomForms";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
+import { NTriplesUtil, ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
 
 @Injectable()
 export class CustomFormsServices {
@@ -149,19 +149,19 @@ export class CustomFormsServices {
                             //arg: "value" that is a list of Literal
                             let annValue: ARTLiteral[] = [];
                             ann.value.forEach((av: string) => {
-                                annValue.push(ResourceUtils.parseLiteral(av));
+                                annValue.push(NTriplesUtil.parseLiteral(av));
                             })
                             ffa = { name: annName, value: annValue }
                         } else if (annName == AnnotationName.ObjectOneOf || annName == AnnotationName.RangeList) {
                             //arg: "value" that is a list of IRI
                             let annValue: ARTURIResource[] = [];
                             ann.value.forEach((av: string) => {
-                                annValue.push(ResourceUtils.parseURI(av));
+                                annValue.push(NTriplesUtil.parseURI(av));
                             })
                             ffa = { name: annName, value: annValue }
                         } else if (annName == AnnotationName.Range) {
                             //arg: "value" that is an IRI
-                            let annValue: ARTURIResource = ResourceUtils.parseURI(ann.value[0]);
+                            let annValue: ARTURIResource = NTriplesUtil.parseURI(ann.value[0]);
                             ffa = { name: annName, value: annValue }
                         } else if (annName == AnnotationName.Foreign) {
                             //arg: "value" that is a String

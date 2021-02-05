@@ -5,7 +5,7 @@ import { ARTLiteral } from '../models/ARTResources';
 import { DatasetDescription, DatasetSearchFacets, DatasetSearchResult, DownloadDescription, SearchResultsPage } from '../models/Metadata';
 import { PluginSpecification } from '../models/Plugins';
 import { HttpManager } from "../utils/HttpManager";
-import { ResourceUtils } from '../utils/ResourceUtils';
+import { NTriplesUtil, ResourceUtils } from '../utils/ResourceUtils';
 
 @Injectable()
 export class DatasetCatalogsServices {
@@ -34,17 +34,17 @@ export class DatasetCatalogsServices {
                 resp.content.forEach((c: any) => {
                     let titles: ARTLiteral[] = [];
                     c.titles.forEach((t: string) => {
-                        titles.push(ResourceUtils.parseLiteral(t));
+                        titles.push(NTriplesUtil.parseLiteral(t));
                     });
                     let descriptions: ARTLiteral[] = [];
                     c.descriptions.forEach((d: string) => {
-                        descriptions.push(ResourceUtils.parseLiteral(d));
+                        descriptions.push(NTriplesUtil.parseLiteral(d));
                     });
                     let dsr: DatasetSearchResult = new DatasetSearchResult(c.id);
                     dsr.datasetPage = c.datasetPage;
                     dsr.descriptions = descriptions;
                     dsr.facets = c.facets;
-                    dsr.ontologyIRI = (c.ontologyIRI != null) ? ResourceUtils.parseURI(c.ontologyIRI) : null;
+                    dsr.ontologyIRI = (c.ontologyIRI != null) ? NTriplesUtil.parseURI(c.ontologyIRI) : null;
                     dsr.score = c.score;
                     dsr.titles = titles;
                     content.push(dsr);
@@ -76,11 +76,11 @@ export class DatasetCatalogsServices {
             map(resp => {
                 let titles: ARTLiteral[] = [];
                 resp.titles.forEach((t: string) => {
-                    titles.push(ResourceUtils.parseLiteral(t));
+                    titles.push(NTriplesUtil.parseLiteral(t));
                 });
                 let descriptions: ARTLiteral[] = [];
                 resp.descriptions.forEach((d: string) => {
-                    descriptions.push(ResourceUtils.parseLiteral(d));
+                    descriptions.push(NTriplesUtil.parseLiteral(d));
                 });
                 let dataDumps: DownloadDescription[] = [];
                 resp.dataDumps.forEach((d: any) => {
@@ -94,7 +94,7 @@ export class DatasetCatalogsServices {
                 description.id = resp.id;
                 description.lexicalizationModel = resp.lexicalizationModel;
                 description.model = resp.model;
-                description.ontologyIRI = (resp.ontologyIRI != null) ? ResourceUtils.parseURI(resp.ontologyIRI) : null;
+                description.ontologyIRI = (resp.ontologyIRI != null) ? NTriplesUtil.parseURI(resp.ontologyIRI) : null;
                 description.sparqlEndpoint = resp.sparqlEndpoint;
                 description.titles = titles;
                 description.uriPrefix = resp.uriPrefix;

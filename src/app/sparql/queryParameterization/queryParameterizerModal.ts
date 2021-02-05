@@ -6,7 +6,7 @@ import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from "../../models/ARTResources";
 import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
 import { DatatypesServices } from "../../services/datatypesServices";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { NTriplesUtil, ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
@@ -101,7 +101,7 @@ export class QueryParameterizerModal {
                     //init datatypes
                     this.initDatatypes().subscribe(
                         () => {
-                            datatype = this.datatypes[ResourceUtils.indexOfNode(this.datatypes, ResourceUtils.parseURI(varBinds[varName].datatype))]
+                            datatype = this.datatypes[ResourceUtils.indexOfNode(this.datatypes, NTriplesUtil.parseURI(varBinds[varName].datatype))]
                             bs.datatype = datatype
                             this.bindings.push(bs);
                         }

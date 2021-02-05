@@ -1,4 +1,4 @@
-import { ResourceUtils } from "../utils/ResourceUtils";
+import { NTriplesUtil } from "../utils/ResourceUtils";
 import { ARTNode, ARTURIResource } from "./ARTResources";
 import { RDFCapabilityType } from "./Coda";
 
@@ -160,8 +160,8 @@ export class Sheet2RdfDeserializer {
         g.id = gJson.id;
         g.nodeId = gJson.nodeId;
         g.property = (gJson.property) ? new ARTURIResource(gJson.property) : null;
-        g.type = (gJson.type) ? ResourceUtils.parseURI(gJson.type) : null;
-        g.value = (gJson.value) ? ResourceUtils.parseNode(gJson.value) : null;
+        g.type = (gJson.type) ? NTriplesUtil.parseURI(gJson.type) : null;
+        g.value = (gJson.value) ? NTriplesUtil.parseNode(gJson.value) : null;
         return g;
     }
 

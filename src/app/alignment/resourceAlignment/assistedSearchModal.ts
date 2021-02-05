@@ -14,7 +14,7 @@ import { MetadataRegistryServices } from "../../services/metadataRegistryService
 import { ProjectServices } from "../../services/projectServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { HttpServiceContext } from "../../utils/HttpManager";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { NTriplesUtil } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
@@ -304,7 +304,7 @@ export class AssistedSearchModal {
         let langsToLexModel: Map<string, ARTURIResource> = new Map();
         this.languagesToCheck.forEach(l => {
             if (l.checked) {
-                langsToLexModel.set(l.lang, ResourceUtils.parseURI(l.lexModel));
+                langsToLexModel.set(l.lang, NTriplesUtil.parseURI(l.lexModel));
             }
         });
 
