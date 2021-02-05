@@ -83,9 +83,6 @@ export class LexicographerViewComponent {
     }
 
     buildLexicographerView() {
-        this.addOtherFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddOtherForm);
-        this.addLexSenseAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization);
-
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.lexicographerViewService.getLexicalEntryView(this.resource).subscribe(
             resp => {
@@ -101,9 +98,12 @@ export class LexicographerViewComponent {
 
                 this.lang = this.lemma[0].writtenRep[0].getLang();
 
-                if (lv.isInStaging()) {
+                if (lv.isInStagingRemove()) {
                     this.readonly = true;
                 }
+
+                this.addOtherFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddOtherForm) && !this.readonly;
+                this.addLexSenseAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization) && !this.readonly;
             }
         );
     }

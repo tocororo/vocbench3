@@ -41,8 +41,11 @@ export class LexicalFormComponent {
             this.inlineEditStyle += " font-weight: bold; font-size: 2rem;";
             this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetCanonicalForm) && !this.readonly;
         } else {
-            this.inlineEditStyle += " font-style: italic;";
+            this.inlineEditStyle += "  font-size: 1.5rem;";
             this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
+        }
+        if (this.form.isInStagingRemove()) {
+            this.readonly = true;
         }
         this.addMorphoPropAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.form.id) && !this.readonly;
         this.addPhoneticRepAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddFormRepresentation) && !this.readonly;

@@ -1,6 +1,6 @@
 <div *ngIf="tabs.length > 0" class="vbox">
     <!--Tabs navigation-->
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs" style="padding-bottom: 1px;">
         <li *ngFor="let t of tabs" class="nav-item" [ngClass]="{active : t.active}">
             <a (click)="selectTab(t, 'true')" class="nav-link" style="display: flex; align-items: center;">
                 <rdf-resource [resource]="t.resource"></rdf-resource>

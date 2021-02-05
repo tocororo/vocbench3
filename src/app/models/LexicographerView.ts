@@ -114,6 +114,7 @@ export class Sense {
         s.id.setRole(RDFResourceRolesEnum.ontolexLexicalSense); //role needed to authorization evaluator
         if (sJson.definition) {
             s.definition = Deserializer.createRDFNodeArray(sJson.definition);
+            s.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()))
         }
         s.reference = Deserializer.createResourceArray(sJson.reference);
         s.concept = [];
@@ -138,6 +139,7 @@ export class ConceptReference {
         c.scope = cJson.scope;
         if (cJson.definition) {
             c.definition = Deserializer.createRDFNodeArray(cJson.definition);
+            c.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()))
         }
         return c;
     }

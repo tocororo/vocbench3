@@ -21,7 +21,7 @@
 </div>
 
 <!-- Phonetic rep -->
-<div class="ml-3">
+<div class="ml-4">
     <!-- visualization and editing -->
     <phonetic-rep *ngFor="let pr of form.phoneticRep" class="mt-1" [form]="form" [phoneticRep]="pr" (update)="onUpdate()"></phonetic-rep>
     <!-- addition -->
@@ -29,7 +29,7 @@
 </div>
 
 <!-- morphosyntactic properties -->
-<div class="ml-3">
+<div class="ml-4">
     <!-- visualization and editing -->
     <ng-container *ngFor="let mp of form.morphosyntacticProps">
         <morphosyntactic-prop *ngFor="let mv of mp.getObjects()" [form]="form" [property]="mp.getPredicate()" [value]="mv" 
