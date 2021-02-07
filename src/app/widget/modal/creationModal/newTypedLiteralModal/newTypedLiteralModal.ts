@@ -52,7 +52,7 @@ export class NewTypedLiteralModal {
 
     private addValue() {
         if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
-            if (!this.validate || this.validate && this.dtValidator.isValid(this.value, this.datatype)) {
+            if (this.validate && this.dtValidator.isValid(this.value, this.datatype)) {
                 this.values.push(this.value);
                 this.value = null;
             } else {
@@ -126,7 +126,7 @@ export class NewTypedLiteralModal {
             } else { //no multiple values => return the input value
                 if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                     //first validate
-                    if (!this.validate || this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
+                    if (this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
                         this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_VALUE_FOR_DATATYPE", params:{value: this.value.getValue(), datatype: this.datatype.getShow()}},
                             ModalType.warning);
                         return;
@@ -139,7 +139,7 @@ export class NewTypedLiteralModal {
         } else {
             if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                 //first validate
-                if (!this.validate || this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
+                if (this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
                     this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_VALUE_FOR_DATATYPE", params:{value: this.value.getValue(), datatype: this.datatype.getShow()}},
                         ModalType.warning);
                     return;

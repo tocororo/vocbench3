@@ -14,7 +14,7 @@
     <div class="card-body vbox table-responsive">
         <table class="table table-sm table-borderless">
             <colgroup>
-                <col>
+                <col style="width: 1%">
                 <col>
                 <col style="width: 1%">
             </colgroup>
@@ -22,7 +22,7 @@
                 <tr *ngFor="let b of bindingStructs">
                     <!-- In search mode the assignment should not be shown -->
                     <ng-container *ngIf="mode=='sparql' || mode=='search' && b.bindingType != 'assignment'">
-                        <td class="text-right" style="margin-right: 2px;">
+                        <td class="text-right" style="margin-right: 2px;" nowrap>
                             <div *ngIf="mode == 'sparql'; then sparqlModeBlock; else searchModeBlock"></div>
                             <ng-template #sparqlModeBlock>
                                 <ng-container *ngIf="showDisplayName">

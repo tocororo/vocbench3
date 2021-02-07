@@ -44,11 +44,13 @@ export class LoadCustomSearchModal {
                 this.settings.properties.forEach(p => {
                     if (p.name == "searchSPARQLParameterizationReferences") {
                         let refs: string[] = p.value;
-                        refs.forEach(r => {
-                            let scope: Scope = Reference.getRelativeReferenceScope(r.substring(0, r.indexOf(":")));
-                            let id = r.substring(r.indexOf(":")+1);
-                            this.references.push(new Reference(null, null, id, r)); //project and user null, they are not necessary
-                        });
+                        if (refs != null) {
+                            refs.forEach(r => {
+                                let scope: Scope = Reference.getRelativeReferenceScope(r.substring(0, r.indexOf(":")));
+                                let id = r.substring(r.indexOf(":")+1);
+                                this.references.push(new Reference(null, null, id, r)); //project and user null, they are not necessary
+                            });
+                        }
                     }
                 })
             }
