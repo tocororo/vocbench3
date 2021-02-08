@@ -32,12 +32,12 @@
 <div class="ml-4">
     <!-- visualization and editing -->
     <ng-container *ngFor="let mp of form.morphosyntacticProps">
-        <morphosyntactic-prop *ngFor="let mv of mp.getObjects()" [form]="form" [property]="mp.getPredicate()" [value]="mv" 
+        <morphosyntactic-prop *ngFor="let mv of mp.getObjects()" [resource]="form.id" [property]="mp.getPredicate()" [value]="mv" 
             [lexViewCache]="lexViewCache" [readonly]="readonly" (update)="onUpdate()">
         </morphosyntactic-prop>
     </ng-container>
     <!-- addition -->
-    <morphosyntactic-prop *ngIf="pendingMorphoProp" [form]="form" [lexViewCache]="lexViewCache"
+    <morphosyntactic-prop *ngIf="pendingMorphoProp" [resource]="form.id" [lexViewCache]="lexViewCache"
         (update)="onUpdate()" (cancel)="onPendingMorphPropCanceled()">
     </morphosyntactic-prop>
 </div>

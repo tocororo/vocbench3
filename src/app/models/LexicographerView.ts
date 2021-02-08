@@ -32,30 +32,13 @@ export class LexicographerView {
 
     public static parse(json: any): LexicographerView {
         let lv: LexicographerView = new LexicographerView();
-
         lv.id = ParsingUtils.parseResourceId(json.id);
         lv.nature = ResourceNature.parse(json.nature);
-        
+        lv.id.setRole(lv.nature[0].role); //role needed to authorization evaluator
         lv.morphosyntacticProps = Deserializer.createPredicateObjectsList(json.morphosyntacticProps);
-
-        let lemma: Form[] = [];
-        for (let f of json.lemma) {
-            lemma.push(Form.parse(f));
-        }
-        lv.lemma = lemma;
-
-        let otherForms: Form[] = [];
-        for (let f of json.otherForms) {
-            otherForms.push(Form.parse(f));
-        }
-        lv.otherForms = otherForms;
-
-        let senses: Sense[] = [];
-        for (let s of json.senses) {
-            senses.push(Sense.parse(s));
-        }
-        lv.senses = senses;
-
+        lv.lemma = json.lemma.map((l: any) => Form.parse(l));
+        lv.otherForms = json.otherForms.map((f: any) => Form.parse(f));
+        lv.senses = json.senses.map((s: any) => Sense.parse(s));
         return lv;
     }
 }

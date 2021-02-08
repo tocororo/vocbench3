@@ -1,0 +1,32 @@
+<div class="d-flex align-items-center">
+    <div class="d-flex align-items-center" style="flex: 1;">
+        <span *ngIf="title" style="font-family: serif; font-weight: bold; font-size: 2rem;">{{title.getValue()}}</span>
+        <!-- inline morphoprop -->
+        <div class="d-flex flex-wrap ml-2">
+            <ng-container *ngFor="let mp of lv.morphosyntacticProps">
+                <morphosyntactic-prop *ngFor="let mv of mp.getObjects()" class="ml-2"
+                    [resource]="lv.id" [property]="mp.getPredicate()" [value]="mv" [lexViewCache]="lexViewCache" [readonly]="readonly"
+                    hideProp="true" (update)="onUpdate()">
+                </morphosyntactic-prop>
+            </ng-container>
+        </div>
+    </div>
+
+    <div class="dropdown ml-1" ngbDropdown>
+        <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
+            <span class="fas fa-pencil-alt"></span>
+        </button>
+        <div class="dropdown-menu" ngbDropdownMenu>
+            <a class="dropdown-item" (click)="addMorphosintacticProp()" [ngClass]="{ disabled: !addMorphoPropAuthorized }">
+                {{'RESOURCE_VIEW.ACTIONS.ADD_MORPHOSYNTACTIC_PROP'|translate}}
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- morphosyntactic properties addition -->
+<div class="ml-4">
+    <morphosyntactic-prop *ngIf="pendingMorphoProp" [resource]="lv.id" [lexViewCache]="lexViewCache"
+        (update)="onUpdate()" (cancel)="onPendingMorphPropCanceled()">
+    </morphosyntactic-prop>
+</div>

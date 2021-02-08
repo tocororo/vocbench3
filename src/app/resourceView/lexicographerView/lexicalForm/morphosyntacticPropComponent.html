@@ -2,21 +2,22 @@
 <!-- visualization and editing -->
 <ng-template #visualizationBlock>
     <div class="d-flex align-items-center mt-1">
-        <label [title]="property.toNT()">{{property.getLocalName()}}:</label>
+        <label *ngIf="!hideProp" [title]="property.toNT()">{{property.getLocalName()}}:</label>
         <div class="d-flex align-items-center ml-1">
             <ng-container *ngIf="editing; then editingBlock; else showBlock"></ng-container>
             <ng-template #showBlock>
                 <span class="clickable form-control form-control-editable" [ngClass]="ngClassValue" [title]="value.toNT()" (click)="editValue()">{{value.getLocalName()}}</span>
             </ng-template>
             <ng-template #editingBlock>
-                <select class="form-control" style="width: initial;" [(ngModel)]="selectedValue">
+                <resource-picker *ngIf="values?.length == 0" [resource]="selectedValue" (resourceChanged)="selectedValue = $event" editable="true"></resource-picker>
+                <select *ngIf="values?.length > 0" class="form-control" style="width: initial;" [(ngModel)]="selectedValue">
                     <option *ngFor="let v of values" [ngValue]="v">{{v.getLocalName()}}</option>
                 </select>
-                <div class="btn-toolbar ml-1">
-                    <button class="btn btn-success btn-xs" style="width: 22px;" (click)="confirmEdit()">
+                <div class="text-nowrap ml-1">
+                    <button class="btn btn-success btn-xs" style="width: 22px;" (click)="confirmEdit()" [disabled]="!selectedValue">
                         <span class="fas fa-check"></span>
                     </button>
-                    <button class="btn btn-danger btn-xs" style="width: 22px;" (click)="cancelEdit()">
+                    <button class="btn btn-danger btn-xs ml-1" style="width: 22px;" (click)="cancelEdit()">
                         <span class="fas fa-times"></span>
                     </button>
                 </div>
@@ -33,14 +34,17 @@
         <select class="form-control" style="width: initial;" [(ngModel)]="selectedProp" (ngModelChange)="onPropChanged()">
             <option *ngFor="let p of properties" [ngValue]="p">{{p.getLocalName()}}</option>
         </select>
-        <select class="form-control ml-1" style="width: initial;" [(ngModel)]="selectedValue" [disabled]="!selectedProp">
-            <option *ngFor="let v of values" [ngValue]="v">{{v.getLocalName()}}</option>
-        </select>
-        <div class="btn-toolbar ml-1">
+        <div *ngIf="values" class="ml-1">
+            <resource-picker *ngIf="values.length == 0" [resource]="selectedValue" (resourceChanged)="selectedValue = $event" editable="true" [disabled]="!selectedProp"></resource-picker>
+            <select *ngIf="values.length > 0" class="form-control" style="width: initial;" [(ngModel)]="selectedValue" [disabled]="!selectedProp">
+                <option *ngFor="let v of values" [ngValue]="v">{{v.getLocalName()}}</option>
+            </select>
+        </div>
+        <div class="text-nowrap ml-1">
             <button class="btn btn-success btn-xs" style="width: 22px;" (click)="confirmCreation()" [disabled]="!selectedValue">
                 <span class="fas fa-check"></span>
             </button>
-            <button class="btn btn-danger btn-xs" style="width: 22px;" (click)="cancelCreation()">
+            <button class="btn btn-danger btn-xs ml-1" style="width: 22px;" (click)="cancelCreation()">
                 <span class="fas fa-times"></span>
             </button>
         </div>

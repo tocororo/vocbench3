@@ -259,6 +259,7 @@ export class Deserializer {
         for (var i = 0; i < poList.length; i++) {
             let predicate = this.createURI(poList[i].predicate, additionalAttr);
             let objects = this.createRDFNodeArray(poList[i].objects, additionalAttr);
+            objects.sort((o1, o2) => o1.getNominalValue().toLocaleLowerCase().localeCompare(o2.getNominalValue().toLocaleLowerCase()));
             let predicateObjects = new ARTPredicateObjects(predicate, objects);
             poLists.push(predicateObjects);
         }

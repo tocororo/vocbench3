@@ -26,7 +26,7 @@ export class LexViewCache {
 
     getMorphosyntacticProperties(): Observable<ARTURIResource[]> {
         if (this.propCache == null) {
-            return this.lexicographerViewService.getMorphosyntacticProperties().pipe(
+            return this.lexicographerViewService.getMorphosyntacticProperties(null, true).pipe(
                 map(props => {
                     ResourceUtils.sortResources(props, SortAttribute.value);
                     this.propCache = props;

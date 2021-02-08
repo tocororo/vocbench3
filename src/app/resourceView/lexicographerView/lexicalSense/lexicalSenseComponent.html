@@ -1,8 +1,6 @@
 <div class="d-flex">
     <div class="sense">
 
-        <!-- <rdf-resource class="clickable" [resource]="sense.id" (dblclick)="resourceDblClick(sense.id)"></rdf-resource> -->
-
         <div *ngIf="sense.definition.length > 0 || pendingDef" class="d-flex my-2">
             <label class="mt-2 mr-2">{{'COMMONS.DEFINITION'|translate}}:</label>
             <div class="vbox">

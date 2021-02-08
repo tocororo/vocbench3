@@ -36,9 +36,9 @@ export class LexicographerViewComponent {
     @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
     private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
-    formStyle = "font-family: serif; font-style: italic;";
+    lv: LexicographerView;
 
-    lemma: Form[]; //in case of validation the staging-add is at pos.0, staging-remove at 1 (TODO verify and force it when it will be supported)
+    lemma: Form[];
     otherForms: Form[];
     senses: Sense[];
 
@@ -88,18 +88,21 @@ export class LexicographerViewComponent {
             resp => {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
 
-                let lv = LexicographerView.parse(resp);
-                console.log(lv);
-                this.lemma = lv.lemma;
+                this.lv = LexicographerView.parse(resp);
+                console.log(this.lv);
+                
+                this.lemma = this.lv.lemma;
                 this.sortForms(this.lemma);
-                this.otherForms = lv.otherForms;
-                this.sortForms(this.otherForms);
-                this.senses = lv.senses;
-                this.sortSenses(this.senses);
 
                 this.lang = this.lemma[0].writtenRep[0].getLang();
 
-                if (lv.isInStagingRemove()) {
+                this.otherForms = this.lv.otherForms;
+                this.sortForms(this.otherForms);
+
+                this.senses = this.lv.senses;
+                this.sortSenses(this.senses);
+
+                if (this.lv.isInStagingRemove()) {
                     this.readonly = true;
                 }
 

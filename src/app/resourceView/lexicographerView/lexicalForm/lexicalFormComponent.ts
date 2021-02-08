@@ -22,7 +22,7 @@ export class LexicalFormComponent {
     @Input() lexViewCache: LexViewCache;
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update the lex view
 
-    inlineEditStyle: string;
+    inlineEditStyle: string = "font-family: serif; font-size: 1.5rem;";
 
     pendingPhoneticRep: boolean;
     pendingMorphoProp: boolean;
@@ -36,12 +36,9 @@ export class LexicalFormComponent {
     constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices) {}
 
     ngOnInit() {
-        this.inlineEditStyle = "font-family: serif;"
         if (this.lemma) {
-            this.inlineEditStyle += " font-weight: bold; font-size: 2rem;";
             this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetCanonicalForm) && !this.readonly;
         } else {
-            this.inlineEditStyle += "  font-size: 1.5rem;";
             this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
         }
         if (this.form.isInStagingRemove()) {

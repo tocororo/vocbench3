@@ -13,15 +13,19 @@
 
     <div class="card-body vbox scrollableContainer">
 
+        <div *ngIf="lv" class="d-flex align-items-center">
+            <lex-entry class="ml-3" style="flex: 1" [lv]="lv" [lexViewCache]="lexViewCache" [readonly]="readonly" (update)="buildLexicographerView()"></lex-entry>
+        </div>
+
         <!-- Lemma -->
-        <div>
+        <div class="mt-3">
             <lexical-form *ngFor="let l of lemma" style="flex: 1" [entry]="resource" [form]="l" [lexViewCache]="lexViewCache" lemma="true" [readonly]="readonly"
                 (update)="buildLexicographerView()">
             </lexical-form>
         </div>
 
         <div class="dropdown mt-1" style="align-self: flex-end;" ngbDropdown>
-            <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
+            <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" [title]="'ACTIONS.ADD'|translate" ngbDropdownToggle>
                 <span class="fas fa-plus"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
@@ -35,7 +39,7 @@
         </div>
 
         <!-- Other forms -->
-        <div class="mt-3">
+        <div class="mt-4">
             <lexical-form *ngFor="let f of otherForms;" class="mb-2" style="flex: 1" [entry]="resource" [form]="f" [lexViewCache]="lexViewCache" [readonly]="readonly" 
                 (update)="buildLexicographerView()">
             </lexical-form>

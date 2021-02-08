@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { LexEntryComponent } from '../resourceView/lexicographerView/lexEntryComponent';
 import { LexicalFormComponent } from '../resourceView/lexicographerView/lexicalForm/lexicalFormComponent';
 import { MorphosyntacticPropComponent } from '../resourceView/lexicographerView/lexicalForm/morphosyntacticPropComponent';
 import { PhoneticRepComponent } from '../resourceView/lexicographerView/lexicalForm/phoneticRepComponent';
@@ -92,6 +93,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         LanguageBoxComponent,
         LanguageDefinitionComponent,
         LanguageTermComponent,
+        LexEntryComponent,
         LexicalFormComponent,
         LexicalSenseComponent,
         LexicographerViewComponent,

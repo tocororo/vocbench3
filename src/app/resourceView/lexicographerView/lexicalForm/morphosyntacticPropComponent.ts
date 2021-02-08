@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Observable } from "rxjs";
-import { ARTURIResource } from "src/app/models/ARTResources";
-import { Form } from "src/app/models/LexicographerView";
+import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
@@ -14,10 +13,11 @@ import { LexViewCache } from "../LexViewChache";
 })
 export class MorphosyntacticPropComponent {
     @Input() readonly: boolean = false;
-    @Input() form: Form;
+    @Input() resource: ARTResource; //resource to which the morphoProp belongs
     @Input() property: ARTURIResource;
     @Input() value: ARTURIResource;
     @Input() lexViewCache: LexViewCache;
+    @Input() hideProp: boolean; //used only in visualization, useful for inline visualization in <lex-entry>
     @Output() cancel: EventEmitter<void> = new EventEmitter(); //request to cancel the creation
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update
 
@@ -39,6 +39,7 @@ export class MorphosyntacticPropComponent {
     ngOnInit() {
         if (this.property != null && this.value != null) {
             this.initRenderingClassStatus();
+            this.selectedValue = this.value;
         } else { //in creation initialize properties
             this.getCachedMorphosyntacticProperties().subscribe(
                 props => {
@@ -47,8 +48,8 @@ export class MorphosyntacticPropComponent {
             )
         }
 
-        this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
-        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.form.id) && !this.readonly;
+        this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.resource) && !this.readonly;
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.resource) && !this.readonly;
     }
 
     initRenderingClassStatus() {
@@ -86,14 +87,16 @@ export class MorphosyntacticPropComponent {
             values => {
                 this.editing = true;
                 this.values = values;
-                this.selectedValue = this.values.find(v => v.equals(this.value));
+                if (this.values.length > 0) {
+                    this.selectedValue = this.values.find(v => v.equals(this.value));
+                }
             }
         );
     }
 
     confirmEdit() {
         if (!this.selectedValue.equals(this.value)) {
-            this.resourceService.updateTriple(this.form.id, this.property, this.value, this.selectedValue).subscribe(
+            this.resourceService.updateTriple(this.resource, this.property, this.value, this.selectedValue).subscribe(
                 () => {
                     this.update.emit();
                 }
@@ -103,13 +106,13 @@ export class MorphosyntacticPropComponent {
 
     cancelEdit() {
         this.editing = false;
-        this.selectedValue = this.values.find(v => v.equals(this.value));
+        this.selectedValue = this.value;
     }
 
     //CREATION
 
     confirmCreation() {
-        this.resourceService.addValue(this.form.id, this.selectedProp, this.selectedValue).subscribe(
+        this.resourceService.addValue(this.resource, this.selectedProp, this.selectedValue).subscribe(
             () => {
                 this.update.emit();
             }
@@ -125,6 +128,7 @@ export class MorphosyntacticPropComponent {
         this.getCachedMorphosyntacticValue(this.selectedProp).subscribe(
             values => {
                 this.values = values;
+                this.selectedValue = this.values.find(v => v.equals(this.value));
             }
         );
     }
@@ -132,7 +136,7 @@ export class MorphosyntacticPropComponent {
     //DELETION
 
     deleteValue() {
-        this.resourceService.removeValue(this.form.id, this.property, this.value).subscribe(
+        this.resourceService.removeValue(this.resource, this.property, this.value).subscribe(
             () => {
                 this.update.emit();
             }
