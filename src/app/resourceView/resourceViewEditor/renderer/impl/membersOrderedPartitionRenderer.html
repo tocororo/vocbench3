@@ -33,7 +33,7 @@
                         <resview-value-renderer
                             [subject]="resource" [predicate]="po.getPredicate()" [object]="obj" [rendering]="rendering" 
                             [readonly]="readonly" [partition]="partition"
-                            (dblClick)="objectDblClick(obj)" (link)="onDblClick($event)"
+                            (dblClick)="objectDblClick($event)" (link)="onDblClick($event)"
                             (delete)="removePredicateObject(po.getPredicate(), obj)"
                             (edit)="editHandler(po.getPredicate(), obj)" (update)="onObjectUpdate()">
                         </resview-value-renderer>
@@ -59,7 +59,7 @@
                                     [ngClass]="{active: memb == selectedMember}">
                                     <editable-resource style="flex: 1" [resource]="memb" [rendering]="rendering"
                                         [subject]="obj" [predicate]="membersProperty" [readonly]="readonly" [partition]="partition" 
-                                        (dblClick)="objectDblClick(memb)" (delete)="removeMember(memb)" (update)="onObjectUpdate()">
+                                        (dblClick)="objectDblClick($event)" (delete)="removeMember(memb)" (update)="onObjectUpdate()">
                                     </editable-resource>
                                 </div>
                             </div>
