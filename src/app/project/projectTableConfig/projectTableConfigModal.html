@@ -11,10 +11,14 @@
         <tbody>
             <tr>
                 <td class="text-right" nowrap><label>{{'COMMONS.VISUALIZATION_MODE'|translate}}:</label></td>
-                <td>
+                <td class="d-flex align-items-center">
                     <select class="form-control" [(ngModel)]="selectedVisualizationMode">
                         <option *ngFor="let m of visualizationModes" [ngValue]="m">{{m.translationKey|translate}}</option>
                     </select>
+                    <button *ngIf="isAdmin && selectedVisualizationMode?.mode == 'facet'" class="btn btn-xs btn-light ml-2" (click)="recreateFacetsIndex()" 
+                        [title]="'PROJECTS.ACTIONS.RECREATE_FACETS_INDEX'|translate">
+                        <span class="fas fa-redo"></span>
+                    </button>
                 </td>
             </tr>
             <tr *ngIf="selectedVisualizationMode?.mode == 'facet'">

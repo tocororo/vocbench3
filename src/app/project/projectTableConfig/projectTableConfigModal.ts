@@ -4,6 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { STProperties } from "src/app/models/Plugins";
 import { ProjectServices } from "src/app/services/projectServices";
 import { VBContext } from "src/app/utils/VBContext";
+import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode } from "../../models/Project";
 import { Cookie } from "../../utils/Cookie";
 
@@ -27,7 +28,7 @@ export class ProjectTableConfigModal {
     columns: ProjectTableColumnStruct[] = [];
     selectedColumn: ProjectTableColumnStruct;
 
-    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private translateService: TranslateService) { }
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private basicModals: BasicModalServices, private translateService: TranslateService) { }
 
     ngOnInit() {
         this.isAdmin = VBContext.getLoggedUser().isAdmin();
@@ -46,59 +47,46 @@ export class ProjectTableConfigModal {
     }
 
     private initFacets() {
-        this.projectService.getFacetsAndValue().subscribe(
-            facetsAndValues => {
-                Object.keys(facetsAndValues).forEach(facetName => {
-                    this.facets.push({ name: facetName, displayName: null });
-                });
-                //compute the display name:
-                //- translate the built-in project facets (e.g. lex model, history, ...)
-                this.facets.forEach(f => {
-                    let translationStruct = ProjectUtils.projectFacetsTranslationStruct.find(fts => fts.facet == f.name);
-                    if (translationStruct != null) {
-                        f.displayName = this.translateService.instant(translationStruct.translationKey);
+        //- collect the custom facets
+        this.projectService.getProjectFacetsForm().subscribe(
+            facetsForm => {
+                facetsForm.properties.forEach(p => {
+                    if (p.name == "customFacets") {
+                        let customFacetsProps: STProperties[] = p.type.schema.properties;
+                        customFacetsProps.forEach(cf => {
+                            this.facets.push({ name: cf.name, displayName: cf.displayName })
+                        })
+                    } else {
+                        this.facets.push({ name: p.name, displayName: p.displayName })
                     }
-                });
-                //- get the display name of other facets
-                this.projectService.getProjectFacetsForm().subscribe(
-                    facetsForm => {
-                        this.facets.forEach(f => {
-                            if (f.displayName != null) return; //display name already computed
-                            //search between factory provided facets
-                            let prop = facetsForm.getProperty(f.name);
-                            if (prop != null) {
-                                f.displayName = prop.displayName;
-                                return;
-                            }
-                            //if facet not found among the factory provided search among the custom ones
-                            let customFacets: STProperties  = facetsForm.getProperty("customFacets");
-                            let customFacetsProps: STProperties[] = customFacets.type.schema.properties;
-                            for (let cf of customFacetsProps) {
-                                if (cf.name == f.name) {
-                                    f.displayName = cf.displayName;
-                                    return;
+                })
+                //now the built-in (e.g. lex model, history, ...)
+                this.projectService.getFacetsAndValue().subscribe(
+                    facetsAndValues => {
+                        Object.keys(facetsAndValues).forEach(facetName => {
+                            //check if the facets is not yet added (getFacetsAndValue returns all the facets which have at least a value in the projects)
+                            if (!this.facets.some(f => f.name == facetName)) {
+                                //retrieve and translate the display name
+                                let displayName = facetName; //as fallback the displayName is the same facet name
+                                let translationStruct = ProjectUtils.projectFacetsTranslationStruct.find(fts => fts.facet == facetName);
+                                if (translationStruct != null) {
+                                    displayName = this.translateService.instant(translationStruct.translationKey);
                                 }
+                                this.facets.push({ name: facetName, displayName: displayName });
                             }
                         });
-
-                        //for those facets which display name has not been computed, set the same facet name
-                        this.facets.forEach(f => {
-                            if (f.displayName == null) {
-                                f.displayName = f.name;
-                            }
-                        })
-                        
-                        //sort facets according display name
-                        this.facets.sort((f1, f2) => f1.displayName.localeCompare(f2.displayName));
-
-                        //check if the selected facet exists
-                        if (!this.facets.some(f => f.name == this.selectedFacet)) { //no facet with the stored facet cookie => select the first one
-                            this.selectedFacet = this.facets[0].name;
-                        }
                     }
-                );
+                )
             }
-        )
+        );
+    }
+
+    recreateFacetsIndex() {
+        this.projectService.createFacetIndex().subscribe(
+            () => {
+                this.basicModals.alert({key: "STATUS.OPERATION_DONE"}, {key: "MESSAGES.FACETS_INDEX_RECREATED"});
+            }
+        );
     }
 
     private initColumnTable() {

@@ -38,8 +38,8 @@ export class SharedModalServices {
      * Returns a new PluginConfiguration, the input configuration doesn't mutate.
      * @param configuration
      */
-    configurePlugin(configuration: Settings, handler?: PluginSettingsHandler) {
-        const modalRef: NgbModalRef = this.modalService.open(PluginConfigModal, new ModalOptions());
+    configurePlugin(configuration: Settings, handler?: PluginSettingsHandler, size?: 'sm' | 'lg' | 'xl' | 'full') {
+        const modalRef: NgbModalRef = this.modalService.open(PluginConfigModal, new ModalOptions(size));
         modalRef.componentInstance.configuration = configuration;
         modalRef.componentInstance.handler = handler;
         return modalRef.result;
