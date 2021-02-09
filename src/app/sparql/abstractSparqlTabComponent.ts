@@ -45,9 +45,9 @@ export abstract class AbstractSparqlTabComponent {
 
     ngOnInit() {
         //collect the prefix namespace mappings
-        var mappings: PrefixMapping[] = VBContext.getPrefixMappings();
-        var prefixImports: string = "";
-        for (var i = 0; i < mappings.length; i++) {
+        let mappings: PrefixMapping[] = VBContext.getPrefixMappings();
+        let prefixImports: string = "";
+        for (let i = 0; i < mappings.length; i++) {
             prefixImports += "PREFIX " + mappings[i].prefix + ": <" + mappings[i].namespace + ">\n";
         }
         //set them as suffix of sampleQuery
@@ -57,7 +57,8 @@ export abstract class AbstractSparqlTabComponent {
     }
 
     doQuery() {
-        var initTime = new Date().getTime();
+        this.queryTime = null;
+        let initTime = new Date().getTime();
         this.queryCache = this.query; //stored the submitted query
 
         if (this.queryMode == QueryMode.query) {
@@ -93,8 +94,8 @@ export abstract class AbstractSparqlTabComponent {
     private sparqlResponseHandler(stResp: any, initTime: number) {
         this.queryResultResp = stResp;
         //calculates the time spent in query
-        var finishTime = new Date().getTime();
-        var diffTime = finishTime - initTime;
+        let finishTime = new Date().getTime();
+        let diffTime = finishTime - initTime;
         this.queryTime = this.getPrettyPrintTime(diffTime);
     }
 
@@ -121,8 +122,8 @@ export abstract class AbstractSparqlTabComponent {
         if (time < 1000) {
             return time + " millisec";
         } else {
-            var sec = Math.floor(time / 1000);
-            var millisec: any = time % 1000;
+            let sec = Math.floor(time / 1000);
+            let millisec: any = time % 1000;
             if (millisec < 10) {
                 millisec = "00" + millisec;
             } else if (millisec < 100) {
@@ -151,7 +152,7 @@ export abstract class AbstractSparqlTabComponent {
         let query: string;
         let includeInferred: boolean = false;
         let confProps: ConfigurationProperty[] = conf.properties;
-        for (var i = 0; i < confProps.length; i++) {
+        for (let i = 0; i < confProps.length; i++) {
             if (confProps[i].name == "sparql") {
                 query = confProps[i].value;
             } else if (confProps[i].name == "includeInferred") {

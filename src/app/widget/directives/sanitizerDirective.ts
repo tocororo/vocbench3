@@ -1,6 +1,5 @@
-import { Directive, ElementRef, Input, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { NgModel } from '@angular/forms';
-
 
 /**
  * Directive to sanitize a text in an input text element
@@ -22,6 +21,7 @@ import { NgModel } from '@angular/forms';
 export class SanitizerDirective {
 
     @Input('sanitized') active: boolean;
+    @Output() ngModelChange = new EventEmitter();
 
     private sourceChar = " ";
     private targetChar = "_";
@@ -41,60 +41,62 @@ export class SanitizerDirective {
 	 */
     sanitize(text: string) {
         //'g' = global match (find all matches, doesn't stop after 1st match)
-        var text = text.replace(new RegExp(this.sourceChar, 'g'), this.targetChar);
+        text = text.replace(new RegExp(this.sourceChar, 'g'), this.targetChar);
         return text;
     }
 
     /**
      * Sanitized pasted text
      */
-    onPasteListener = function (event: ClipboardEvent) {
+    onPasteListener(event: ClipboardEvent) {
         if (this.active) {
-            var inputElement = this.el.nativeElement;
-            var txtContent = inputElement.value;
+            let inputElement = this.el.nativeElement;
+            let txtContent = inputElement.value;
 
-            var start = inputElement.selectionStart;
-            var end = inputElement.selectionEnd;
+            let start = inputElement.selectionStart;
+            let end = inputElement.selectionEnd;
 
-            var textToPaste = event.clipboardData.getData("text/plain");
-            var transformedText = this.sanitize(textToPaste);
+            let textToPaste = event.clipboardData.getData("text/plain");
+            let transformedText = this.sanitize(textToPaste);
 
             // Set the new textbox content
-            var contentBeforeSpace = txtContent.slice(0, start);
-            var contentAfterSpace = txtContent.slice(end);
-            var updatedText = contentBeforeSpace + transformedText + contentAfterSpace
+            let contentBeforeSpace = txtContent.slice(0, start);
+            let contentAfterSpace = txtContent.slice(end);
+            let updatedText = contentBeforeSpace + transformedText + contentAfterSpace
             inputElement.value = updatedText;
             // Move the cursor
             inputElement.selectionStart = inputElement.selectionEnd = start + transformedText.length;
 
             event.preventDefault();//prevent the default ctrl+v keypress listener
 
-            //To fix missing ngModel update after paste http://stackoverflow.com/a/41240843/5805661
-            this.model.control.setValue(updatedText);
+            this.ngModelChange.emit(updatedText);
         }
     }
 
     /**
      * Sanitizes typed text
      */
-    onKeypressListener = function (event: KeyboardEvent) {
+    onKeypressListener(event: KeyboardEvent) {
         if (this.active) {
-            var inputElement = this.el.nativeElement;
-            var txtContent = inputElement.value;
+            let inputElement = this.el.nativeElement;
+            let txtContent = inputElement.value;
 
-            var charPressed = String.fromCharCode(event.which);
+            let charPressed = String.fromCharCode(event.which);
 
             if (charPressed == this.sourceChar) {
-                var transformedChar = this.sanitize(charPressed);
-                var start = inputElement.selectionStart;
-                var end = inputElement.selectionEnd;
+                let transformedChar = this.sanitize(charPressed);
+                let start = inputElement.selectionStart;
+                let end = inputElement.selectionEnd;
                 // Set the new textbox content
-                var contentBeforeSpace = txtContent.slice(0, start);
-                var contentAfterSpace = txtContent.slice(end);
-                inputElement.value = contentBeforeSpace + transformedChar + contentAfterSpace;
+                let contentBeforeSpace = txtContent.slice(0, start);
+                let contentAfterSpace = txtContent.slice(end);
+                let updatedText = contentBeforeSpace + transformedChar + contentAfterSpace;
+                inputElement.value = updatedText;
                 // Move the cursor
                 inputElement.selectionStart = inputElement.selectionEnd = start + 1;
                 event.preventDefault();//prevent the default keypress listener
+
+                this.ngModelChange.emit(updatedText);
             }
         }
     }
