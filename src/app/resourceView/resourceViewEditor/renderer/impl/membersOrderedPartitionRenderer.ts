@@ -144,13 +144,6 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
         );
     }
 
-    /**
-     * Returns the title of the "-" button placed near an object in a subPanel body.
-     */
-    private getRemovePropImgTitle(predicate: ARTURIResource): string {
-        return "Remove " + predicate.getShow();
-    }
-
     // private isDeleteDisabled() {
     //     return (
     //         (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isTripleInStaging(this.resource)) ||

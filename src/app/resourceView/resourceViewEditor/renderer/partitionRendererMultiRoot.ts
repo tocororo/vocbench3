@@ -1,4 +1,4 @@
-import { Component, Directive } from "@angular/core";
+import { Directive } from "@angular/core";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ResViewUtils } from "../../../models/ResourceView";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -52,19 +52,4 @@ export abstract class PartitionRendererMultiRoot extends PartitionRenderer  {
         return false;
     }
     
-    /**
-     * Returns the title of the "+" button placed in a subPanel heading.
-     * This is specific of a predicate of a partition, so it depends from a predicate.
-     */
-    private getAddPropImgTitle(predicate: ARTURIResource): string {
-        return "Add a " + predicate.getShow();
-    }
-    /**
-     * Returns the title of the "-" button placed near an object in a subPanel body.
-     * This is specific of a predicate of a partition, so it depends from a predicate.
-     */
-    private getRemovePropImgTitle(predicate: ARTURIResource): string {
-        return "Remove " + predicate.getShow();
-    }
-
 }

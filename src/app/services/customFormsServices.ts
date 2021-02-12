@@ -48,8 +48,16 @@ export class CustomFormsServices {
             map(stResp => {
                 let tables: CustomFormValueTable[] = [];
                 stResp.forEach(tJson => {
-                    tables.push(CustomFormValueTable.parse(tJson));
-                })
+                    let t = CustomFormValueTable.parse(tJson);
+                    //replace the describedObj in the table rows with the annotated version taken from values
+                    t.rows.forEach(r => {
+                        let annotated = values.find(v => v.equals(r.describedObject));
+                        if (annotated != null) {
+                            r.describedObject = annotated;
+                        }
+                    })
+                    tables.push(t);
+                });
                 return tables;
             })
         );

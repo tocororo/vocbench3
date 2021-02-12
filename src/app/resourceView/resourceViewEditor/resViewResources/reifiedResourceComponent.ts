@@ -14,7 +14,6 @@ export class ReifiedResourceComponent extends AbstractResViewResource {
     
     private predicateObjectList: ARTPredicateObjects[];
 
-    actionRemoveTitle: string;
     deleteDisabled: boolean = false;
     open: boolean = false;
 	
@@ -33,8 +32,6 @@ export class ReifiedResourceComponent extends AbstractResViewResource {
         this.deleteDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
             ResourceUtils.isResourceInStaging(this.subject) ||
             this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject, this.resource);
-
-        this.actionRemoveTitle = "Remove " + this.predicate.getShow();
     }
     
     toggle() {

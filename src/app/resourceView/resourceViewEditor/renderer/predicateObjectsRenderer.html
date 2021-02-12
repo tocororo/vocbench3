@@ -29,7 +29,10 @@
             </resview-value-renderer>
         </ng-container>
 
-        <cf-value-table *ngFor="let t of cfValueTables" class="my-1" [table]="t" [rendering]="rendering" (dblClick)="onDblClick($event)"></cf-value-table>
+        <cf-value-table *ngFor="let t of cfValueTables" class="my-1" 
+            [subject]="resource" [predicate]="predicate" [table]="t" [rendering]="rendering" [readonly]="readonly" [partition]="partition"
+            (update)="onUpdate()" (delete)="removeValue($event)" (dblClick)="onDblClick($event)">
+        </cf-value-table>
 
         <ng-container *ngIf="showAllButton()">
             <button class="btn btn-xs btn-light" style="width: 100%; color: #888; border-color: #ddd;" (click)="showAll()">

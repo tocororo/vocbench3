@@ -1,0 +1,13 @@
+<div class="d-flex align-items-center">
+    <rdf-resource *ngIf="cell.value" [resource]="cell.value" [rendering]="rendering" [ngClass]="{ clickable: cell.value.isResource() }" (dblclick)="valueDblClick(cell.value)">
+    </rdf-resource>
+    <div class="btn-group" ngbDropdown>
+        <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle>
+            <span class="fas fa-caret-down fa-sm"></span>
+        </button>
+        <div class="dropdown-menu" ngbDropdownMenu>
+            <a class="dropdown-item" [ngClass]="{ disabled: !editAllowed }" (click)="edit()">{{'ACTIONS.EDIT'|translate}}</a>
+            <a  class="dropdown-item" [ngClass]="{ disabled: !deleteAllowed }" (click)="delete()">{{'ACTIONS.DELETE'|translate}}</a>
+        </div>
+    </div>
+</div>

@@ -12,7 +12,8 @@ import { LexicalSenseComponent } from '../resourceView/lexicographerView/lexical
 import { TranslationComponent } from '../resourceView/lexicographerView/lexicalSense/translationComponent';
 import { LexicographerViewComponent } from '../resourceView/lexicographerView/lexicographerViewComponent';
 import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
-import { CustomFormValueTableComponent } from '../resourceView/resourceViewEditor/renderer/customFormValueTableComponent';
+import { CustomFormTableCellComponent } from '../resourceView/resourceViewEditor/resViewResources/cfValueTablePreview/customFormTableCellComponent';
+import { CustomFormValueTableComponent } from '../resourceView/resourceViewEditor/resViewResources/cfValueTablePreview/customFormValueTableComponent';
 import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/classAxiomPartitionRenderer';
 import { ConstituentsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/constituentsPartitionRenderer';
@@ -44,7 +45,7 @@ import { TopConceptsPartitionRenderer } from '../resourceView/resourceViewEditor
 import { TypesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/typesPartitionRenderer';
 import { LexicalizationEnrichmentHelper } from '../resourceView/resourceViewEditor/renderer/lexicalizationEnrichmentHelper';
 import { PredicateObjectsRenderer } from '../resourceView/resourceViewEditor/renderer/predicateObjectsRenderer';
-import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/renderer/resourceViewValueRenderer';
+import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/resViewResources/resourceViewValueRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceViewEditor/resourceRenameComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewEditor/resourceViewCtxMenu';
 import { ResourceViewEditorComponent } from '../resourceView/resourceViewEditor/resourceViewEditorComponent';
@@ -90,6 +91,7 @@ import { TreeAndListModule } from "./treeAndListModule";
     ],
     declarations: [
         ConceptReferenceComponent,
+        CustomFormTableCellComponent,
         CustomFormValueTableComponent,
         EditableResourceComponent,
         LanguageBoxComponent,
