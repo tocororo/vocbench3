@@ -3,10 +3,12 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { PearlValidationResult } from '../models/Coda';
-import { AnnotationName, BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldAnnotation, FormFieldType } from "../models/CustomForms";
+import { AnnotationName, BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldAnnotation, FormFieldType, CustomFormValueTable } from "../models/CustomForms";
+import { Pair } from '../models/Shared';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { NTriplesUtil, ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
+import { STResponseUtils } from '../utils/STResponseUtils';
 
 @Injectable()
 export class CustomFormsServices {
@@ -22,17 +24,33 @@ export class CustomFormsServices {
      * @return 
      */
     getGraphObjectDescription(predicate: ARTURIResource, resource: ARTNode): Observable<ARTPredicateObjects[]> {
-        var params: any = {
+        let params: any = {
             predicate: predicate,
             resource: resource
         };
         return this.httpMgr.doGet(this.serviceName, "getGraphObjectDescription", params).pipe(
             map(stResp => {
-                var predicateObjectList: ARTPredicateObjects[];
+                let predicateObjectList: ARTPredicateObjects[];
                 if (stResp.properties != null) { //only if resource has a reified description
                     predicateObjectList = Deserializer.createPredicateObjectsList(stResp.properties);
                 }
                 return predicateObjectList;
+            })
+        );
+    }
+
+    getCustomFormValueTables(predicate: ARTURIResource, values: ARTResource[]): Observable<CustomFormValueTable[]> {
+        let params = {
+            predicate: predicate,
+            values: values
+        };
+        return this.httpMgr.doPost(this.serviceName, "getCustomFormValueTables", params).pipe(
+            map(stResp => {
+                let tables: CustomFormValueTable[] = [];
+                stResp.forEach(tJson => {
+                    tables.push(CustomFormValueTable.parse(tJson));
+                })
+                return tables;
             })
         );
     }
@@ -44,7 +62,7 @@ export class CustomFormsServices {
      * @return 
      */
     removeReifiedResource(subject: ARTResource, predicate: ARTURIResource, resource: ARTNode) {
-        var params: any = {
+        let params: any = {
             subject: subject,
             predicate: predicate,
             resource: resource
@@ -90,10 +108,10 @@ export class CustomFormsServices {
      * @return an array of FormField
      */
     getCustomFormRepresentation(customFormId: string): Observable<FormField[]> {
-        var params: any = {
+        let params: any = {
             id: customFormId
         };
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: ['it.uniroma2.art.coda.exception.parserexception.PRParserException'] 
@@ -212,11 +230,11 @@ export class CustomFormsServices {
      * Returns the mapping between FormCollection and resources.
      */
     getCustomFormConfigMap(): Observable<FormCollectionMapping[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getCustomFormConfigMap", params).pipe(
             map(stResp => {
-                var fcMappings: Array<FormCollectionMapping> = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let fcMappings: Array<FormCollectionMapping> = [];
+                for (let i = 0; i < stResp.length; i++) {
                     let mappingNode = stResp[i];
                     let resource = new ARTURIResource(mappingNode.resource, mappingNode.resource, RDFResourceRolesEnum.individual);
                     let formCollection: FormCollection = new FormCollection(mappingNode.formCollection.id);
@@ -244,7 +262,7 @@ export class CustomFormsServices {
      * Currently if it's true it could cause error since the getRange response handler expects <ranges> element.
      */
     addFormsMapping(formCollId: string, resource: ARTURIResource, replace?: boolean) {
-        var params: any = {
+        let params: any = {
             formCollId: formCollId,
             resource: resource
         };
@@ -259,7 +277,7 @@ export class CustomFormsServices {
      * @param resource
      */
     removeFormCollectionOfResource(resource: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             resource: resource
         };
         return this.httpMgr.doGet(this.serviceName, "removeFormCollectionOfResource", params);
@@ -271,7 +289,7 @@ export class CustomFormsServices {
 	 * @param replaceRanges
      */
     updateReplace(resource: ARTURIResource, replace: boolean) {
-        var params: any = {
+        let params: any = {
             resource: resource,
             replace: replace
         };
@@ -286,11 +304,11 @@ export class CustomFormsServices {
      * Returns the IDs of FormCollection available
      */
     getAllFormCollections(): Observable<FormCollection[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getAllFormCollections", params).pipe(
             map(stResp => {
-                var formCollections: Array<FormCollection> = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let formCollections: Array<FormCollection> = [];
+                for (let i = 0; i < stResp.length; i++) {
                     let fc: FormCollection = new FormCollection(stResp[i].id);
                     fc.setLevel(stResp[i].level);
                     formCollections.push(fc);
@@ -312,16 +330,16 @@ export class CustomFormsServices {
      * @param id
      */
     getFormCollection(id: string): Observable<FormCollection> {
-        var params: any = {
+        let params: any = {
             id: id
         };
         return this.httpMgr.doGet(this.serviceName, "getFormCollection", params).pipe(
             map(stResp => {
-                var formColl: FormCollection;
-                var fcId = stResp.id;
+                let formColl: FormCollection;
+                let fcId = stResp.id;
                 formColl = new FormCollection(fcId);
-                var forms: CustomForm[] = [];
-                for (var i = 0; i < stResp.forms.length; i++) {
+                let forms: CustomForm[] = [];
+                for (let i = 0; i < stResp.forms.length; i++) {
                     let cf: CustomForm = new CustomForm(stResp.forms[i].id);
                     cf.setLevel(stResp.forms[i].level);
                     forms.push(cf);
@@ -335,7 +353,7 @@ export class CustomFormsServices {
                 );
                 formColl.setForms(forms);
 
-                var suggestions: ARTURIResource[] = Deserializer.createURIArray(stResp.suggestions);
+                let suggestions: ARTURIResource[] = Deserializer.createURIArray(stResp.suggestions);
                 ResourceUtils.sortResources(suggestions, SortAttribute.value);
                 formColl.setSuggestions(suggestions);
                 
@@ -349,7 +367,7 @@ export class CustomFormsServices {
      * @param id
      */
     createFormCollection(id: string) {
-        var params: any = {
+        let params: any = {
             id: id
         };
         return this.httpMgr.doGet(this.serviceName, "createFormCollection", params);
@@ -360,7 +378,7 @@ export class CustomFormsServices {
      * @param id the ID of the FormCollection to delete
      */
     deleteFormCollection(id: string) {
-        var params: any = {
+        let params: any = {
             id: id
         };
         return this.httpMgr.doGet(this.serviceName, "deleteFormCollection", params);
@@ -372,7 +390,7 @@ export class CustomFormsServices {
      * @param targetId id of the FC to create
      */
     cloneFormCollection(sourceId: string, targetId: string) {
-        var params: any = {
+        let params: any = {
             sourceId: sourceId,
             targetId: targetId
         };
@@ -384,7 +402,7 @@ export class CustomFormsServices {
      * @param id id of the FC to export
      */
     exportFormCollection(id: string) {
-        var params = {
+        let params = {
             id: id
         };
         return this.httpMgr.downloadFile(this.serviceName, "exportFormCollection", params);
@@ -396,7 +414,7 @@ export class CustomFormsServices {
      * @param newId ID of the new FC (Optional, if not provided it will have the ID of the input FC)
      */
     importFormCollection(inputFile: File, newId?: string) {
-        var data: any = {
+        let data: any = {
             inputFile: inputFile
         };
         if (newId != null) {
@@ -412,7 +430,7 @@ export class CustomFormsServices {
      * @param suggestions 
      */
     updateFromCollection(formCollectionId: string, customFormIds: string[], suggestions: ARTURIResource[]) {
-        var params: any = {
+        let params: any = {
             formCollectionId: formCollectionId,
             customFormIds: customFormIds,
             suggestions: suggestions
@@ -428,11 +446,11 @@ export class CustomFormsServices {
      * Returns the IDs of all the CustomForm available
      */
     getAllCustomForms(): Observable<CustomForm[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getAllCustomForms", params).pipe(
             map(stResp => {
-                var customForms: Array<CustomForm> = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let customForms: Array<CustomForm> = [];
+                for (let i = 0; i < stResp.length; i++) {
                     let cf: CustomForm = new CustomForm(stResp[i].id);
                     cf.setLevel(stResp[i].level);
                     customForms.push(cf);
@@ -454,14 +472,14 @@ export class CustomFormsServices {
      * Returns the FormCollection linked with the given  available CustomForm to use as constructor for the given resource
      */
     getCustomConstructors(resource: ARTURIResource): Observable<CustomForm[]> {
-        var params: any = {
+        let params: any = {
             resource: resource
         };
         return this.httpMgr.doGet(this.serviceName, "getCustomConstructors", params).pipe(
             map(stResp => {
-                var forms: CustomForm[] = [];
+                let forms: CustomForm[] = [];
                 if (stResp.forms) {
-                    for (var i = 0; i < stResp.forms.length; i++) {
+                    for (let i = 0; i < stResp.forms.length; i++) {
                         let cf: CustomForm = new CustomForm(stResp.forms[i].id);
                         cf.setName(stResp.forms[i].name);
                         cf.setType(stResp.forms[i].type);
@@ -486,7 +504,7 @@ export class CustomFormsServices {
      * @param id
      */
     getCustomForm(id: string): Observable<CustomForm> {
-        var params: any = {
+        let params: any = {
             id: id
         };
         return this.httpMgr.doGet(this.serviceName, "getCustomForm", params).pipe(
@@ -506,17 +524,16 @@ export class CustomFormsServices {
      * @param showPropChain to provide only if type is "graph", tells the property chain which value should show in place of the
      * generated graph by means of this CRE
      */
-    createCustomForm(type: CustomFormType, id: string, name: string, description: string, ref: string, showPropChain?: ARTURIResource[]) {
-        var params: any = {
+    createCustomForm(type: CustomFormType, id: string, name: string, description: string, ref: string, showPropChain?: ARTURIResource[], previewTableProps?: ARTURIResource[]) {
+        let params: any = {
             type: type,
             id: id,
             name: name,
             description: description,
             ref: ref,
+            showPropChain: showPropChain,
+            previewTableProps: previewTableProps
         };
-        if (showPropChain != undefined) {
-            params.showPropChain = showPropChain;
-        }
         return this.httpMgr.doPost(this.serviceName, "createCustomForm", params);
     }
 
@@ -526,7 +543,7 @@ export class CustomFormsServices {
      * @param targetId id of the CF to create
      */
     cloneCustomForm(sourceId: string, targetId: string) {
-        var params: any = {
+        let params: any = {
             sourceId: sourceId,
             targetId: targetId
         };
@@ -538,7 +555,7 @@ export class CustomFormsServices {
      * @param id id of the CF to export
      */
     exportCustomForm(id: string) {
-        var params = {
+        let params = {
             id: id
         };
         return this.httpMgr.downloadFile(this.serviceName, "exportCustomForm", params);
@@ -550,7 +567,7 @@ export class CustomFormsServices {
      * @param newId ID of the new CF (Optional, if not provided it will have the ID of the input CF)
      */
     importCustomForm(inputFile: File, newId?: string) {
-        var data: any = {
+        let data: any = {
             inputFile: inputFile
         };
         if (newId != null) {
@@ -564,7 +581,7 @@ export class CustomFormsServices {
      * @param id the ID of the CustomForm to delete
      */
     deleteCustomForm(id: string, deleteEmptyColl?: boolean) {
-        var params: any = {
+        let params: any = {
             id: id
         };
         if (deleteEmptyColl != undefined) {
@@ -578,7 +595,7 @@ export class CustomFormsServices {
      * @param id the ID of the CustomForm to check
      */
     isFormLinkedToCollection(id: string): Observable<boolean> {
-        var params: any = {
+        let params: any = {
             id: id
         };
         return this.httpMgr.doGet(this.serviceName, "isFormLinkedToCollection", params);
@@ -592,16 +609,15 @@ export class CustomFormsServices {
      * @param ref
      * @param showPropChain
      */
-    updateCustomForm(id: string, name: string, description: string, ref: string, showPropChain?: ARTURIResource[]) {
-        var params: any = {
+    updateCustomForm(id: string, name: string, description: string, ref: string, showPropChain?: ARTURIResource[], previewTableProps?: ARTURIResource[]) {
+        let params: any = {
             id: id,
             name: name,
             description: description,
             ref: ref,
+            showPropChain: showPropChain,
+            previewTableProps: previewTableProps
         };
-        if (showPropChain != undefined) {
-            params.showPropChain = showPropChain;
-        }
         return this.httpMgr.doPost(this.serviceName, "updateCustomForm", params);
     }
 
@@ -613,7 +629,7 @@ export class CustomFormsServices {
      * @param save 
      */
     updateCustomFormWithAnnotations(cfId: string, prId?: string, save?: boolean): Observable<CustomForm> {
-        var params: any = {
+        let params: any = {
             cfId: cfId,
             prId: prId,
             save: save
@@ -630,7 +646,7 @@ export class CustomFormsServices {
      * @param cfPearl 
      */
     inferPearlAnnotations(cfPearl: string): Observable<string> {
-        var params: any = {
+        let params: any = {
             cfPearl: cfPearl,
         };
         return this.httpMgr.doPost(this.serviceName, "inferPearlAnnotations", params);
@@ -643,7 +659,7 @@ export class CustomFormsServices {
 	 * @return
 	 */
     validateShowPropertyChain(propChain: string): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             propChain: propChain
         };
         return this.httpMgr.doGet(this.serviceName, "validateShowPropertyChain", params).pipe(
@@ -661,7 +677,7 @@ export class CustomFormsServices {
      * Determines also the nature of the pearl parameter
      */
     validatePearl(pearl: string, formType: CustomFormType): Observable<PearlValidationResult> {
-        var params: any = {
+        let params: any = {
             pearl: pearl,
             formType: formType
         };
@@ -672,11 +688,11 @@ export class CustomFormsServices {
      * Returns a list of BrokenCFStructure that represents the broken FormsMapping, FormCollection and CustomForm
      */
     getBrokenCustomForms(): Observable<BrokenCFStructure[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getBrokenCustomForms", params).pipe(
             map(stResp => {
                 let brokenCFS: BrokenCFStructure[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                for (let i = 0; i < stResp.length; i++) {
                     brokenCFS.push({
                         id: stResp[i].id,
                         type: stResp[i].type,
@@ -770,6 +786,16 @@ export class CustomFormsServices {
                 })
             }
             customForm.setShowPropertyChain(propChain);
+
+            let previewTablePropsAttr: string = cfJson.previewTableProperties;
+            let previewTableProperties: ARTURIResource[] = [];
+            if (previewTablePropsAttr != null && previewTablePropsAttr != "") {
+                let splitted = previewTablePropsAttr.split(",");
+                splitted.forEach(s => {
+                    previewTableProperties.push(new ARTURIResource(s, s, RDFResourceRolesEnum.property));
+                })
+            }
+            customForm.setPreviewTableProperties(previewTableProperties);
         }
         return customForm;
     }

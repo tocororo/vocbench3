@@ -731,9 +731,11 @@ textarea {
 }
 
 .tile { 
+    display: flex;
+    align-items: center;
     border: 1px solid #ccc;
     border-radius: 3px;
-    padding: 3px;
+    padding: 2px 4px;
     background: #fff;
     margin: 2px; 
     white-space: nowrap;

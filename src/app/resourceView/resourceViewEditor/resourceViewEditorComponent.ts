@@ -590,7 +590,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                             this.resourcesService.getResourcesInfo(resources).pipe(
                                 finalize(() => HttpServiceContext.removeContextProject()),
                                 map(resources => {
-                                    resolvedResources = resolvedResources.concat(resources);
+                                    resolvedResources = resolvedResources.concat(<ARTURIResource[]>resources);
                                 })
                             )
                         );

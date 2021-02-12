@@ -241,9 +241,9 @@
             "CURRENT_PROJECT": "Progetto corrente",
             "GLOBAL_DATA_MENU": {
                 "GLOBAL_DATA_MANAGEMENT": "Gestione dei dati globali",
-                "WGRAPH": "Cambia grafo di lavoro",
+                "REFACTOR": "Refactoring",
                 "VERSIONING": "Versioning",
-                "REFACTOR": "Refactoring"
+                "WGRAPH": "Cambia grafo di lavoro"
             }
         }
     },
@@ -290,14 +290,20 @@
             "INFER_ANNOTATIONS_INFO": "Inferisce annotazioni dalla definizione del CF",
             "FROM_SHACLE": "Da SHACL",
             "FROM_SHACLE_INFO": "Estrae il PEARL da una shape SHACL",
-            "SHOW_PROP_CHAIN": "Show property chain",
-            "SHOW_PROP_CHAIN_INFO": "Una property chain da seguire per recuperare il valore da mostrare per rappresentare il grafo generato da questo Form",
             "SHAPE_SOURCE": "Shape sorgente",
             "PEARL_INFERENCE_VALIDATION": {
                 "PEARL_ANNOTATIONS_INFERENCE": "Pearl annotations inference",
                 "WARNING_MSG": "Nota: qualora nessuna annotazione venga inferita, i due PEARL potrebbero non differire. Nonostante ciò, il processo di inferenza potrebbe applicare delle modifiche, come il riordinamento dei prefissi definiti e la rimozione di commenti.<br> E' possibile inoltre modificare il PEARL risultante prima di applicare le modifiche.",
                 "ORIGINAL_PEARL": "PEARL originale",
                 "INFERRED_PEARL": "PEARL inferito"
+            },
+            "PREVIEW_FORM": {
+                "PREVIEW_FORM": "Anteprima",
+                "PREVIEW_FORM_INFO": "Specifica come visualizzare l'anteprima degli oggetti generati tramite questo CF",
+                "PROP_CHAIN": "Property chain",
+                "PROP_CHAIN_INFO": "L'anteprima è un singolor valore recuperato seguendo una property chain partendo dall'entry point del grafo generato",
+                "TABLE": "Tabella",
+                "TABLE_INFO": "Una anteprima a tabella le cui intestazioni sono determinate da una lista di proprietà"
             }
         },
         "COLLECTIONS": {
@@ -1822,8 +1828,8 @@
         "LOAD_TEMPLATE": "Carica template",
         "LOCK_UNLOCK_NAMESPACE": "Blocca/sblocca namespace",
         "MIGRATE_DATA_TO_BASEURI_GRAPH": "Migra i dati nel grafo baseURI",
-        "MOVE_AFTER": "Sposta prima",
-        "MOVE_BEFORE": "Sposta dopo",
+        "MOVE_AFTER": "Sposta dopo",
+        "MOVE_BEFORE": "Sposta prima",
         "MOVE_DOWN": "Sposta giù",
         "MOVE_UP": "Sposta su",
         "PICK_CONVERTER": "Seleziona converter",
@@ -1997,6 +2003,7 @@
         "INCONSISTENT_MIN_MAX_FACETS": "Le facets minimo e massimo sono inconsistenti.",
         "INCONSISTENT_PROPERTY_ERROR": "Il range della proprietà {{property}} è inconsistente",
         "INVALID_ALIGNMENT_MEASURE": "La misura inserita non è valida, deve essere compresa tra 0 e 1.",
+        "INVALID_CUSTOM_FORM_ID": "L'ID del CustomForm non è valido (potrebbe essere vuoto o contenere caratteri non ammessi).",
         "INVALID_FROM_TIME_FORMAT": "Il parametro 'Da' non rispetta il formato datetime yyyy-MM-ddThh:mm",
         "INVALID_GRAPH_PATTERN": "Il graph pattern fornito non è valido",
         "INVALID_IRI": "{{iri}} non è un IRI valido",

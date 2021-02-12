@@ -1,4 +1,5 @@
-import { ARTLiteral, ARTURIResource } from "./ARTResources";
+import { Deserializer } from "../utils/Deserializer";
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "./ARTResources";
 
 export class FormCollectionMapping {
 
@@ -79,6 +80,7 @@ export class CustomForm {
     private description: string;
     private ref: string;
     private showPropertyChain: ARTURIResource[];
+    private previewTableProperties: ARTURIResource[];
     private level: CustomFormLevel;
 
     constructor(id: string, name?: string, description?: string) {
@@ -135,6 +137,14 @@ export class CustomForm {
         this.showPropertyChain = showPropertyChain;
     }
 
+    public getPreviewTableProperties(): ARTURIResource[] {
+        return this.previewTableProperties;
+    }
+
+    public setPreviewTableProperties(properties: ARTURIResource[]) {
+        this.previewTableProperties = properties;
+    }
+
     public getLevel(): CustomFormLevel {
         return this.level;
     }
@@ -143,6 +153,11 @@ export class CustomForm {
         this.level = level;
     }
 
+}
+
+export enum PreviewForm {
+    propertyChain = "propertyChain",
+    table = "table"
 }
 
 export class FormField {
@@ -365,4 +380,34 @@ export class CustomFormUtils {
         return null; //if this code is reached, none constraint has been violated
     }
 
+}
+
+
+export class CustomFormValueTable {
+    rows: CustomFormValueTableRow[] = [];
+
+    public static parse(json: any): CustomFormValueTable {
+        let table: CustomFormValueTable = new CustomFormValueTable();
+        for (let reifiedObjId in json) {
+            let row: CustomFormValueTableRow = new CustomFormValueTableRow();
+            row.describedObject = reifiedObjId.startsWith("_:") ? new ARTBNode(reifiedObjId) : new ARTURIResource(reifiedObjId);
+            row.cells = [];
+            let predObjPairList: any[][] = json[reifiedObjId];
+            predObjPairList.forEach((poPair: any[]) => {
+                let pred: ARTURIResource = Deserializer.createURI(poPair[0]);
+                let obj: ARTNode = poPair[1] ? Deserializer.createRDFNode(poPair[1]) : null;
+                row.cells.push({ pred: pred, value: obj });
+            })
+            table.rows.push(row);
+        }
+        return table;
+    }
+}
+export class CustomFormValueTableRow {
+    describedObject: ARTResource;
+    cells: CustomFormValueTableCell[];
+}
+export class CustomFormValueTableCell {
+    pred: ARTURIResource;
+    value: ARTNode;
 }

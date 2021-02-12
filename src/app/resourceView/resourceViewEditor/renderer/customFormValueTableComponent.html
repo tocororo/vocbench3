@@ -1,0 +1,25 @@
+<div class="cf-table">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th *ngFor="let h of headers" [title]="h.toNT()">
+                    {{h.getLocalName()}}
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of rows">
+                <td *ngFor="let cell of row.cells">
+                    <rdf-resource *ngIf="cell.value" [resource]="cell.value" [rendering]="rendering" [ngClass]="{ clickable: cell.value.isResource() }" (dblclick)="valueDblClick(cell.value)">
+                    </rdf-resource>
+                </td>
+                <td style="width: 1%;">
+                    <button class="btn btn-transparent btn-xs ml-2" (click)="valueDblClick(row.describedObject)" [title]="row.describedObject.toNT()">
+                        <i class="fas fa-arrow-alt-circle-right"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

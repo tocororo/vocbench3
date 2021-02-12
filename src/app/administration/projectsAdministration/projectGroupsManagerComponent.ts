@@ -110,7 +110,7 @@ export class ProjectGroupsManagerComponent {
                 if (broaderPropsTemp.length > 0) {
                     let describeBroadersFn = this.resourceService.getResourcesInfo(broaderPropsTemp).pipe(
                         map(resources => {
-                            this.broaderProps = resources;
+                            this.broaderProps = <ARTURIResource[]>resources;
                         })
                     );
                     describeFunctions.push(describeBroadersFn);
@@ -128,7 +128,7 @@ export class ProjectGroupsManagerComponent {
                 if (narrowerPropsTemp.length > 0) {
                     let describeNarrowersFn = this.resourceService.getResourcesInfo(narrowerPropsTemp).pipe(
                         map(resources => {
-                            this.narrowerProps = resources;
+                            this.narrowerProps = <ARTURIResource[]>resources;
                         })
                     );
                     describeFunctions.push(describeNarrowersFn);
@@ -152,7 +152,7 @@ export class ProjectGroupsManagerComponent {
                 if (ownedSchemesTemp.length > 0) {
                     let describeOwnedSchemesFn = this.resourceService.getResourcesInfo(ownedSchemesTemp).pipe(
                         map(resources => {
-                            this.ownedSchemes = resources;
+                            this.ownedSchemes = <ARTURIResource[]>resources;
                         })
                     );
                     describeFunctions.push(describeOwnedSchemesFn);

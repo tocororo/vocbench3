@@ -62,7 +62,7 @@
                 <tbody>
                     <tr *ngFor="let item of commits">
                         <td class="text-center" nowrap>
-                            <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getLocalName()}}</a>
+                            <a href="javascript:void(0)" (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getLocalName()}}</a>
                         </td>
                         <td class="text-center">
                             <span *ngIf="item.operation" [title]="item.operation.getURI()">

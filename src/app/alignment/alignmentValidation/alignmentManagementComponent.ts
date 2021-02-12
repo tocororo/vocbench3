@@ -144,11 +144,11 @@ export class AlignmentManagementComponent {
             map(renderedResources => {
                 this.alignmentCellList.forEach(cell => {
                     for (let i = 0; i < renderedResources.length; i++) {
-                        if (dataset == "left" && cell.getEntity1().getURI() == renderedResources[i].getURI()) {
-                            cell.setEntity1(renderedResources[i]);
+                        if (dataset == "left" && cell.getEntity1().equals(renderedResources[i])) {
+                            cell.setEntity1(<ARTURIResource>renderedResources[i]);
                             break; //go to the next entity
-                        } else if (dataset == "right" &&  cell.getEntity2().getURI() == renderedResources[i].getURI()) {
-                            cell.setEntity2(renderedResources[i]);
+                        } else if (dataset == "right" &&  cell.getEntity2().equals(renderedResources[i])) {
+                            cell.setEntity2(<ARTURIResource>renderedResources[i]);
                             break; //go to the next entity
                         }
                     }           

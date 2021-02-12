@@ -4,7 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { PearlValidationResult } from "../../models/Coda";
-import { CustomForm, CustomFormType, EditorMode } from "../../models/CustomForms";
+import { CustomForm, CustomFormType, EditorMode, PreviewForm } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -23,7 +23,7 @@ import { PearlInferenceValidationModal } from "./pearlInferenceValidationModal";
     styles: [`
         .entryRow { margin-bottom: 4px; }
         .entryLabel { min-width: 130px; width: 130px; margin-right: 4px; white-space: nowrap; }
-        .optionalCell { min-width: 10px; width: 10px; margin-left: 4px; }
+        .optionalCell { min-width: 10px; width: 10px; margin-left: 4px; },
     `]
 })
 export class CustomFormEditorModal {
@@ -45,14 +45,18 @@ export class CustomFormEditorModal {
     descriptionTextareaRows: number = 3; //3 by default, dynamically computed in edit mode
     type: CustomFormType = "graph";
     ref: string;
-    showPropertyChain: ARTURIResource[] = [];
+    
+    previewForms: PreviewFormStruct[] = [
+        { value: null, labelTranslationKey: "----", infoTranslationKey: "" },
+        { value: PreviewForm.propertyChain, labelTranslationKey: "CUSTOM_FORMS.FORMS.PREVIEW_FORM.PROP_CHAIN", infoTranslationKey: "CUSTOM_FORMS.FORMS.PREVIEW_FORM.PROP_CHAIN_INFO" },
+        { value: PreviewForm.table, labelTranslationKey: "CUSTOM_FORMS.FORMS.PREVIEW_FORM.TABLE", infoTranslationKey: "CUSTOM_FORMS.FORMS.PREVIEW_FORM.TABLE_INFO"},
+    ]
+    selectedPreviewForm: PreviewFormStruct = this.previewForms[0];
 
-    selectedPropInChain: ARTURIResource; //used in showPropertyChain field    
+    previewProps: ARTURIResource[] = []; //list of property that can be used both as property chain or table preview, according the dedicated selector
+    selectedPreviewProp: ARTURIResource;
 
-    submitted: boolean = false;
-    private errorMsg: string;
-
-    private extractFromShaclAuthorized: boolean;
+    extractFromShaclAuthorized: boolean;
 
     constructor(public activeModal: NgbActiveModal, private modalService: NgbModal,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
@@ -73,10 +77,16 @@ export class CustomFormEditorModal {
                     this.description = cf.getDescription();
                     this.ref = cf.getRef();
                     if (this.type == "graph") {
-                        this.showPropertyChain = cf.getShowPropertyChain();
-                        if (this.showPropertyChain.length > 0) {
-                            this.initShowPropChain();
+                        let propChain = cf.getShowPropertyChain();
+                        let tablePreview = cf.getPreviewTableProperties();
+                        if (propChain.length > 0) {
+                            this.previewProps = propChain;
+                            this.selectedPreviewForm = this.previewForms.find(pf => pf.value == PreviewForm.propertyChain);
+                        } else if (tablePreview.length > 0) {
+                            this.previewProps = tablePreview;
+                            this.selectedPreviewForm = this.previewForms.find(pf => pf.value == PreviewForm.table);
                         }
+                        this.initPreviewProperties();
                     }
 
                     let lineBreakCount = (this.description.match(/\n/g)||[]).length;
@@ -95,21 +105,22 @@ export class CustomFormEditorModal {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    private initShowPropChain() {
-        this.resourceService.getResourcesInfo(this.showPropertyChain).subscribe(
-            chain => {
+    private initPreviewProperties() {
+        if (this.previewProps.length == 0) return;
+        this.resourceService.getResourcesInfo(this.previewProps).subscribe(
+            annotatedRes => {
                 /**
-                 * Here I don't assign chain to showPropertyChain
-                 * (this.showPropertyChain = chain)
+                 * Here I don't assign chain to previewProps
+                 * (this.previewProps = chain)
                  * since getResourcesInfo() returns a list without duplicate
                  */
-                for (var i = 0; i < this.showPropertyChain.length; i++) {
-                    chain.forEach((el: ARTURIResource) => {
-                        if (this.showPropertyChain[i].getURI() == el.getURI()) {
-                            this.showPropertyChain[i] = el;
+                annotatedRes.forEach(r => {
+                    this.previewProps.forEach((p, i, list) => {
+                        if (p.equals(r)) {
+                            list[i] = <ARTURIResource>r;
                         }
-                    });
-                }
+                    })
+                });
             }
         );
     }
@@ -186,68 +197,69 @@ export class CustomFormEditorModal {
         }
     }
 
-    //========= PROPERTY CHAIN HANDLERS ============
-    selectPropInChain(prop: ARTURIResource) {
+    //========= PREVIEW PROPERTIES HANDLERS ============
+
+    selectPreviewProp(prop: ARTURIResource) {
         if (this.readOnly) {
             return;
         }
-        if (this.selectedPropInChain == prop) {
-            this.selectedPropInChain = null;
+        if (this.selectedPreviewProp == prop) {
+            this.selectedPreviewProp = null;
         } else {
-            this.selectedPropInChain = prop;
+            this.selectedPreviewProp = prop;
         }
     }
-    addPropToChain(where?: "before" | "after") {
+    addPropToPreview(where?: "before" | "after") {
         this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.ADD_PROPERTY"}).then(
             (prop: any) => {
                 if (where == null) {
-                    this.showPropertyChain.push(prop);
+                    this.previewProps.push(prop);
                 } else if (where == "before") {
-                    this.showPropertyChain.splice(this.showPropertyChain.indexOf(this.selectedPropInChain), 0, prop);
+                    this.previewProps.splice(this.previewProps.indexOf(this.selectedPreviewProp), 0, prop);
                 } else if (where == "after") {
-                    this.showPropertyChain.splice(this.showPropertyChain.indexOf(this.selectedPropInChain) + 1, 0, prop);
+                    this.previewProps.splice(this.previewProps.indexOf(this.selectedPreviewProp) + 1, 0, prop);
                 }
             },
             () => { }
         );
     }
     disableMove(where: "before" | "after") {
-        if (this.selectedPropInChain == null || this.showPropertyChain.length == 1) {
+        if (this.selectedPreviewProp == null || this.previewProps.length == 1) {
             return true;
         }
-        if (where == "after" && this.showPropertyChain.indexOf(this.selectedPropInChain) == this.showPropertyChain.length) {
+        if (where == "after" && this.previewProps.indexOf(this.selectedPreviewProp) == this.previewProps.length) {
             return true; //selected prop was the last in the list
         }
-        if (where == "before" && this.showPropertyChain.indexOf(this.selectedPropInChain) == 0) {
+        if (where == "before" && this.previewProps.indexOf(this.selectedPreviewProp) == 0) {
             return true; //selected prop was the first in the list
         }
         return false;
     }
-    movePropInChain(where: "before" | "after") {
-        var prevIndex = this.showPropertyChain.indexOf(this.selectedPropInChain);
-        this.showPropertyChain.splice(prevIndex, 1); //remove from current position
+    movePropInPreview(where: "before" | "after") {
+        var prevIndex = this.previewProps.indexOf(this.selectedPreviewProp);
+        this.previewProps.splice(prevIndex, 1); //remove from current position
         if (where == "before") {
-            this.showPropertyChain.splice(prevIndex - 1, 0, this.selectedPropInChain);
+            this.previewProps.splice(prevIndex - 1, 0, this.selectedPreviewProp);
         } else { //after
-            this.showPropertyChain.splice(prevIndex + 1, 0, this.selectedPropInChain);
+            this.previewProps.splice(prevIndex + 1, 0, this.selectedPreviewProp);
         }
     }
-    removePropFromChain(prop: ARTURIResource) {
+    removePropFromPreview(prop: ARTURIResource) {
         if (this.readOnly) {
             return;
         }
-        this.showPropertyChain.splice(this.showPropertyChain.indexOf(prop), 1);
-        if (this.selectedPropInChain == prop) {
-            this.selectedPropInChain = null;
+        this.previewProps.splice(this.previewProps.indexOf(prop), 1);
+        if (this.selectedPreviewProp == prop) {
+            this.selectedPreviewProp = null;
         }
     }
     /**
      * Allow to edit manually the property chain
      */
-    editPropChain() {
+    editPreviewProps() {
         var serializedPropChain: string = "";
-        for (var i = 0; i < this.showPropertyChain.length; i++) {
-            serializedPropChain += this.showPropertyChain[i].getURI() + ",";
+        for (var i = 0; i < this.previewProps.length; i++) {
+            serializedPropChain += this.previewProps[i].getURI() + ",";
         }
         if (serializedPropChain.length > 0) {
             serializedPropChain = serializedPropChain.slice(0, -1);//delete last ","
@@ -259,12 +271,12 @@ export class CustomFormEditorModal {
                 if (chain.length != 0) {
                     this.cfService.validateShowPropertyChain(chain).subscribe(
                         chainIRIs => {
-                            this.showPropertyChain = chainIRIs;
-                            this.initShowPropChain();
+                            this.previewProps = chainIRIs;
+                            this.initPreviewProperties();
                         }
                     )
                 } else {
-                    this.showPropertyChain = [];
+                    this.previewProps = [];
                 }
             },
             () => {}
@@ -272,31 +284,23 @@ export class CustomFormEditorModal {
     }
     //=======================================
 
-    isDataValid() {
-        var valid = true;
-        //name and ref are mandatory
+
+    ok() {
+        //check if input data is valid
         if (this.name == null || this.name.trim() == "" || this.ref == null || this.ref.trim() == "") {
-            this.errorMsg = "You need to fill all the mandatory field.";
-            valid = false;
+            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key: "MESSAGES.FILL_ALL_REQUIRED_FIELDS"}, ModalType.warning);
+            return;
         }
 
         if (this.cfId == null) { //check only in create mode
             if (this.cfShortId == null || !this.cfShortId.match(/^[a-zA-Z0-9.-_]+$/i)) { //invalid character
-                this.errorMsg = "The CustomForm ID is not valid (it may be empty or contain invalid characters). Please fix it."
-                valid = false;
+                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key: "MESSAGES.INVALID_CUSTOM_FORM_ID"}, ModalType.warning);
+                return;
             }
             if (this.existingForms.indexOf(this.cfPrefix + this.cfShortId) != -1) { //CRE with the same id already exists
-                this.errorMsg = "A CustomForm with the same ID already exists";
-                valid = false;
+                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key: "MESSAGES.ALREADY_EXISTING_CUSTOM_FORM_ID"}, ModalType.warning);
+                return;
             }
-        }
-        return valid;
-    }
-
-    ok() {
-        this.submitted = true;
-        if (!this.isDataValid()) {
-            return;
         }
 
         //update CRE only if ref is valid
@@ -309,24 +313,24 @@ export class CustomFormEditorModal {
                 if (this.description == null) { //set empty definition if it is not provided (prevent setting "undefined" as definition of CRE)
                     this.description = "";
                 }
-                //I don't distinguish between node and graph since if type is node showPropertyChain is ignored server-side
+
+                let propChainParam: ARTURIResource[];
+                let tablePreviewParam: ARTURIResource[];
+                if (this.selectedPreviewForm.value == PreviewForm.propertyChain) {
+                    propChainParam = this.previewProps;
+                } else if (this.selectedPreviewForm.value == PreviewForm.table) {
+                    tablePreviewParam = this.previewProps;
+                }
+                //I don't distinguish between node and graph since if type is node previewProps is ignored server-side
                 if (this.mode == EditorMode.edit) {
-                    if (this.type == "node") {
-                        this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref).subscribe(
-                            stResp => {
-                                this.activeModal.close();
-                            }
-                        );
-                    } else { //graph
-                        this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
-                            stResp => {
-                                this.activeModal.close();
-                            }
-                        );
-                    }
+                    this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref, propChainParam, tablePreviewParam).subscribe(
+                        () => {
+                            this.activeModal.close();
+                        }
+                    );
                 } else { //create mode
-                    this.cfService.createCustomForm(this.type, this.cfPrefix + this.cfShortId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
-                        stResp => {
+                    this.cfService.createCustomForm(this.type, this.cfPrefix + this.cfShortId, this.name, this.description, this.ref, propChainParam, tablePreviewParam).subscribe(
+                        () => {
                             this.activeModal.close();
                         }
                     );
@@ -338,4 +342,10 @@ export class CustomFormEditorModal {
     cancel() {
         this.activeModal.dismiss();
     }
+}
+
+interface PreviewFormStruct {
+    value: PreviewForm;
+    labelTranslationKey: string;
+    infoTranslationKey?: string;
 }

@@ -191,7 +191,7 @@ export class SimpleGraphApplicationModal {
             let rangeColl: ARTURIResource[] = rangeResp.ranges.rangeCollection.resources;
             return this.resourceService.getResourcesInfo(rangeColl).pipe(
                 map(annotated => {
-                    this.rangeCollection = annotated;
+                    this.rangeCollection = <ARTURIResource[]>annotated;
                 })
             )
         } else {
@@ -392,7 +392,7 @@ export class SimpleGraphApplicationModal {
         return this.resourceService.getResourcesInfo(resources).pipe(
             map(annotated => {
                 for (let i = 0; i < resources.length; i++) {
-                    resources[i] = annotated[ResourceUtils.indexOfNode(annotated, resources[i])];
+                    resources[i] = <ARTURIResource>annotated[ResourceUtils.indexOfNode(annotated, resources[i])];
                 }
             })
         )

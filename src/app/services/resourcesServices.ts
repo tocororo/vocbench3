@@ -187,14 +187,14 @@ export class ResourcesServices {
      * Returns the description of a set of resources
      * @param resources 
      */
-    getResourcesInfo(resources: ARTURIResource[]): Observable<ARTURIResource[]> {
+    getResourcesInfo(resources: ARTResource[]): Observable<ARTResource[]> {
         let resourcesIri: string[] = resources.map(r => r.toNT());
         let params: any = {
             resources: JSON.stringify(resourcesIri)
         };
         return this.httpMgr.doPost(this.serviceName, "getResourcesInfo", params).pipe(
             map(stResp => {
-                return Deserializer.createURIArray(stResp);
+                return Deserializer.createResourceArray(stResp);
             })
         );
     }

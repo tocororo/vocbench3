@@ -59,8 +59,8 @@ export class GraphModalServices {
         this.resourceService.getResourcesInfo(annotatedRes).subscribe(
             resources => {
                 resources.forEach(r => {
-                    GraphUtils.getLinksWithPredicate(links, r).forEach(l => {
-                        l.res = r;
+                    GraphUtils.getLinksWithPredicate(links, <ARTURIResource>r).forEach(l => {
+                        l.res = <ARTURIResource>r;
                     })
                     let n = GraphUtils.getNodeOfValue(nodes, r);
                     if (n != null) {

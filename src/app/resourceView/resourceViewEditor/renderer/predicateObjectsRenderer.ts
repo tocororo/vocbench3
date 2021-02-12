@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { ARTNode, ARTPredicateObjects, ARTResource, ResAttribute } from "../../../models/ARTResources";
+import { CustomFormValueTable } from "src/app/models/CustomForms";
+import { CustomFormsServices } from "src/app/services/customFormsServices";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { Language } from "../../../models/LanguagesCountries";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../../models/ResourceView";
 import { CRUDEnum, ResourceViewAuthEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -44,6 +46,10 @@ export class PredicateObjectsRenderer {
      * ATTRIBUTES
      */
 
+    predicate: ARTURIResource;
+    objects: ARTNode[];
+    cfValueTables: CustomFormValueTable[];
+
     addDisabled: boolean = false;
     deleteAllDisabled: boolean = false;
     actionMenuDisabled: boolean = false;
@@ -53,6 +59,8 @@ export class PredicateObjectsRenderer {
 
     actionAddTitle: string;
 
+    constructor(private cfService: CustomFormsServices) {}
+
     ngOnInit() {
         this.actionAddTitle = "Add a " + this.predicateObjects.getPredicate().getShow();
     }
@@ -60,6 +68,27 @@ export class PredicateObjectsRenderer {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] || changes['readonly']) {
             this.initActionsStatus();
+        }
+        if (changes['predicateObjects']) {
+            this.predicate = this.predicateObjects.getPredicate();
+            this.objects = this.predicateObjects.getObjects();
+
+            if (this.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)) {
+                let objs: ARTResource[] = <ARTResource[]>this.objects.filter(o => o instanceof ARTResource);
+                if (objs.length > 0) {
+                    this.cfService.getCustomFormValueTables(this.predicate, objs).subscribe(
+                        tables => {
+                            this.cfValueTables = tables;
+                            // here I need to filter out from objects those values covered in any table
+                            this.objects = this.objects.filter(o => //keep object if
+                                !tables.some(t => //there is no table
+                                    t.rows.some(r => r.describedObject.equals(o)) //containing the object
+                                )
+                            );
+                        }
+                    );
+                }
+            }
         }
     }
 

@@ -146,7 +146,7 @@ class SortOrder {
 }
 
 class EnrichedNotification extends Notification {
-    annotatedRes: ARTURIResource;
+    annotatedRes: ARTResource;
     roleShow: string;
     timestampShow: string;
 }

@@ -85,7 +85,7 @@ export class Sheet2RDFServices {
                                 header.graph.forEach(g => {
                                     if (g instanceof SimpleGraphApplication) {
                                         if (g.property != null && g.property.equals(ar)) {
-                                            g.property = ar;
+                                            g.property = <ARTURIResource>ar;
                                         }
                                         if (g.value != null && g.value.equals(ar)) {
                                             g.value = ar;

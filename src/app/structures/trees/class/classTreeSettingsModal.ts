@@ -56,7 +56,7 @@ export class ClassTreeSettingsModal {
             this.resourceService.getResourcesInfo(filteredClss).subscribe(
                 resources => {
                     resources.forEach(r => {
-                        this.filterMapRes.push({ cls: r, subClasses: null });
+                        this.filterMapRes.push({ cls: <ARTURIResource>r, subClasses: null });
                     })
                 }
             )

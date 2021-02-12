@@ -1,7 +1,7 @@
 <div class="card card-alt">
     
     <div class="card-header">
-        <label style="flex: 1">{{predicateObjects.getPredicate().getShow()}}</label>
+        <label style="flex: 1">{{predicate.getShow()}}</label>
         <div class="btn-group" ngbDropdown>
             <button class="btn btn-xs btn-light predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()" [title]="actionAddTitle" [disabled]="addDisabled">
                 <span class="fas fa-plus fa-sm"></span>
@@ -20,14 +20,16 @@
     
     <div class="card-body">
 
-        <ng-container *ngFor="let obj of predicateObjects.getObjects(); let i = index">
+        <ng-container *ngFor="let obj of objects; let i = index">
             <resview-value-renderer *ngIf="showObject(i)"
-                [subject]="resource" [predicate]="predicateObjects.getPredicate()" [object]="obj" [rendering]="rendering" 
+                [subject]="resource" [predicate]="predicate" [object]="obj" [rendering]="rendering" 
                 [readonly]="readonly" [partition]="partition"
                 (dblClick)="onDblClick($event)" (link)="onDblClick($event)" (delete)="removeValue(obj)" (edit)="onEdit(obj)" 
                 (update)="onUpdate()" (copyLocale)="onCopyLocale($event, obj)">
             </resview-value-renderer>
         </ng-container>
+
+        <cf-value-table *ngFor="let t of cfValueTables" class="my-1" [table]="t" [rendering]="rendering" (dblClick)="onDblClick($event)"></cf-value-table>
 
         <ng-container *ngIf="showAllButton()">
             <button class="btn btn-xs btn-light" style="width: 100%; color: #888; border-color: #ddd;" (click)="showAll()">

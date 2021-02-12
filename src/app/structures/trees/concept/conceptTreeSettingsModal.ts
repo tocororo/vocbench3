@@ -86,7 +86,7 @@ export class ConceptTreeSettingsModal {
             });
             this.resourceService.getResourcesInfo(broadersTemp).subscribe(
                 resources => {
-                    this.broaderProps = resources;
+                    this.broaderProps = <ARTURIResource[]>resources;
                 }
             );
         }
@@ -100,7 +100,7 @@ export class ConceptTreeSettingsModal {
             });
             this.resourceService.getResourcesInfo(narrowersTemp).subscribe(
                 resources => {
-                    this.narrowerProps = resources;
+                    this.narrowerProps = <ARTURIResource[]>resources;
                 }
             );
         }

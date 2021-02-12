@@ -95,38 +95,47 @@
         </div>
     </div>
     <div class="entryRow">
-        <div class="hbox" style="align-items: center;">
+        <div class="hbox align-items-center">
             <label class="entryLabel">
-                {{'CUSTOM_FORMS.FORMS.SHOW_PROP_CHAIN'|translate}}
-                <span class="fas fa-info-circle" 
-                    [title]="'CUSTOM_FORMS.FORMS.SHOW_PROP_CHAIN_INFO'|translate">
-                </span>
+                {{'CUSTOM_FORMS.FORMS.PREVIEW_FORM.PREVIEW_FORM'|translate}}
+                <span class="fas fa-info-circle" [title]="'CUSTOM_FORMS.FORMS.PREVIEW_FORM.PREVIEW_FORM_INFO'|translate"></span>
             </label>
-            <div class="hbox" style="align-items: center;">
-                <div class="hbox tile-group">
-                    <span *ngFor="let prop of showPropertyChain" (click)="selectPropInChain(prop)" 
-                        class="tile" [ngClass]="{selectedResource : selectedPropInChain == prop}">
-                        <rdf-resource [resource]="prop"></rdf-resource>
-                        <span *ngIf="!readOnly" class="far fa-times-circle" (click)="removePropFromChain(prop)"
-                            style="cursor: pointer" onmouseover="this.className='fas fa-times-circle';"
-                            onmouseout="this.className='far fa-times-circle';">
+            <div class="hbox align-items-center">
+
+                <select class="form-control select-fa" style="width: initial;" [(ngModel)]="selectedPreviewForm" [disabled]="readOnly">
+                    <option *ngFor="let pf of previewForms" [ngValue]="pf" [title]="pf.infoTranslationKey|translate">
+                        {{pf.labelTranslationKey|translate}}
+                    </option>
+                </select>
+                <span *ngIf="selectedPreviewForm.value" class="fas fa-info-circle ml-1" [title]="selectedPreviewForm.infoTranslationKey|translate"></span>
+                
+
+                <ng-container *ngIf="selectedPreviewForm.value">
+                    <div class="hbox tile-group ml-2">
+                        <span *ngFor="let prop of previewProps" (click)="selectPreviewProp(prop)" 
+                            class="tile" [ngClass]="{selectedResource : selectedPreviewProp == prop}">
+                            <rdf-resource [resource]="prop"></rdf-resource>
+                            <span *ngIf="!readOnly" class="far fa-times-circle" (click)="removePropFromPreview(prop)"
+                                style="cursor: pointer" onmouseover="this.className='fas fa-times-circle';"
+                                onmouseout="this.className='far fa-times-circle';">
+                            </span>
+                            <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
                         </span>
-                        <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
-                    </span>
-                </div>
-                <div class="btn-group dropup ml-2" ngbDropdown>
-                    <button class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown" [disabled]="readOnly" ngbDropdownToggle>
-                        <span class="fas fa-pencil-alt"></span>
-                    </button>
-                    <div class="dropdown-menu float-right" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="addPropToChain()">{{'ACTIONS.ADD'|translate}}</a>
-                        <a class="dropdown-item" (click)="editPropChain()">{{'ACTIONS.EDIT_MANUALLY'|translate}}</a>
-                        <a class="dropdown-item" [ngClass]="{disabled : !selectedPropInChain}" (click)="addPropToChain('before')">{{'ACTIONS.ADD_BEFORE'|translate}}</a>
-                        <a class="dropdown-item" [ngClass]="{disabled : !selectedPropInChain}" (click)="addPropToChain('after')">{{'ACTIONS.ADD_AFTER'|translate}}</a>
-                        <a class="dropdown-item" [ngClass]="{disabled : disableMove('before')}" (click)="movePropInChain('before')">{{'ACTIONS.MOVE_BEFORE'|translate}}</a>
-                        <a class="dropdown-item" [ngClass]="{disabled : disableMove('after')}" (click)="movePropInChain('after')">{{'ACTIONS.MOVE_AFTER'|translate}}</a>
                     </div>
-                </div>
+                    <div class="btn-group dropup ml-2" ngbDropdown>
+                        <button class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown" [disabled]="readOnly" ngbDropdownToggle>
+                            <span class="fas fa-pencil-alt"></span>
+                        </button>
+                        <div class="dropdown-menu float-right" ngbDropdownMenu>
+                            <a class="dropdown-item" (click)="addPropToPreview()">{{'ACTIONS.ADD'|translate}}</a>
+                            <a class="dropdown-item" (click)="editPreviewProps()">{{'ACTIONS.EDIT_MANUALLY'|translate}}</a>
+                            <a class="dropdown-item" [ngClass]="{disabled : !selectedPreviewProp}" (click)="addPropToPreview('before')">{{'ACTIONS.ADD_BEFORE'|translate}}</a>
+                            <a class="dropdown-item" [ngClass]="{disabled : !selectedPreviewProp}" (click)="addPropToPreview('after')">{{'ACTIONS.ADD_AFTER'|translate}}</a>
+                            <a class="dropdown-item" [ngClass]="{disabled : disableMove('before')}" (click)="movePropInPreview('before')">{{'ACTIONS.MOVE_BEFORE'|translate}}</a>
+                            <a class="dropdown-item" [ngClass]="{disabled : disableMove('after')}" (click)="movePropInPreview('after')">{{'ACTIONS.MOVE_AFTER'|translate}}</a>
+                        </div>
+                    </div>
+                </ng-container>
             </div>
             <span class="optionalCell"></span>
         </div>
@@ -134,14 +143,7 @@
 
 </div>
 <div class="modal-footer">
-    <div class="hbox">
-        <div class="hbox" style="align-items: center; margin-right: 10px;">
-            <span style="margin-right: 6px">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
-            <div *ngIf="submitted && !isDataValid()" class="alert alert-danger" style="flex: 1; text-align: left; padding: 5px">
-                {{errorMsg}}
-            </div>
-        </div>
-        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="readOnly">Ok</button>
-        <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
-    </div>
+    <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="readOnly">Ok</button>
+    <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

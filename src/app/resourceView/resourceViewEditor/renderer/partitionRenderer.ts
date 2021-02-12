@@ -1,4 +1,4 @@
-import { Component, Directive, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Directive, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Observable } from 'rxjs';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
