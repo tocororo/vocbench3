@@ -84,7 +84,7 @@ export class ResViewModalServices {
      * require to disable the multiselection, like the addFirst/After...() in oreded collection).
      */
     addPropertyValue(title: TextOrTranslation, resource: ARTResource, property: ARTURIResource, propChangeable?: boolean, rootProperty?: ARTURIResource, allowMultiselection?: boolean) {
-        const modalRef: NgbModalRef = this.modalService.open(AddPropertyValueModal, new ModalOptions());
+        const modalRef: NgbModalRef = this.modalService.open(AddPropertyValueModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.resource = resource;
         modalRef.componentInstance.property = property;
