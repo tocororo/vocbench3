@@ -48,7 +48,7 @@ import { UserModule } from './userModule';
 import { VBModalModule } from './vbModalModule';
 
 export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, "./assets/i18n/");
+	return new TranslateHttpLoader(http, "./assets/l10n/");
 }
 
 @NgModule({

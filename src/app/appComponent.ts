@@ -30,10 +30,10 @@ export class AppComponent {
             }
         });
 
-        //set the available factory-provided i18n languages
+        //set the available factory-provided l10n languages
         translate.addLangs(['en', 'it']);
-        //add additional supported i18n languages
-        let additionalLangs: string[] = window['additional_i18n_langs'];
+        //add additional supported l10n languages
+        let additionalLangs: string[] = window['additional_l10n_langs'];
         if (additionalLangs && additionalLangs.length > 0) {
             translate.addLangs(additionalLangs);
         }
