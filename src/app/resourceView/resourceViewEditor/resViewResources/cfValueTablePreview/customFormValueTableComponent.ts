@@ -42,9 +42,6 @@ export class CustomFormValueTableComponent {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['table']) {
             this.initTable();
-
-            // this.deleteDisabled = this.readonly || !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.subject);
-
             this.deleteRowDisabled = this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject);
         }
     }
@@ -81,9 +78,13 @@ export class CustomFormValueTableComponent {
                 })
                 this.rows.forEach(r => {
                     for (let c of r.cells) {
-                        let annotated = annValues.find(a => a.equals(c.value));
-                        if (annotated != null) {
-                            c.value = annotated;
+                        let annotatedValue = annValues.find(a => a.equals(c.value));
+                        if (annotatedValue != null) {
+                            c.value = annotatedValue;
+                        }
+                        let annotatedPred = annValues.find(a => a.equals(c.pred));
+                        if (annotatedPred != null) {
+                            c.pred = <ARTURIResource>annotatedPred;
                         }
                     }
                 })
