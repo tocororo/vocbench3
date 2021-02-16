@@ -1,0 +1,6 @@
+<div class="d-flex align-items-center">
+    <label>{{'RESOURCE_VIEW.LEX_VIEW.RELATED'|translate}}:</label>
+    <lexical-relation *ngFor="let r of relations" class="ml-2" [entry]="entry" [relation]="r"
+        (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
+    </lexical-relation>
+</div>

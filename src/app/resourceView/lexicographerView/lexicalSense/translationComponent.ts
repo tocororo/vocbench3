@@ -31,6 +31,11 @@ export class TranslationComponent {
         }
         this.sourceTranslation = this.sourceSense.entry[0].lemma[0].writtenRep[0];
         this.targetTranslation = this.targetSense.entry[0].lemma[0].writtenRep[0];
+        /*
+         * TODO handle validation: I have not idea on how to do it, it seems quite tricky:
+         * in validation each sense reference could have multiple entry, 
+         * each entry could have multiple lemma and each lemma could have multiple writtenRep
+         */
     }
 
     targetSenseDblClick() {

@@ -9,9 +9,9 @@ export class Deserializer {
      * Creates an ARTURIResource from a Json Object {"@id": string, "show": string, "role": string, ...other optional attributes}
      */
     public static createURI(uri: any, additionalAttr?: string[]): ARTURIResource {
-        var id: string = uri['@id'];
-        var show: string = uri[ResAttribute.SHOW];
-        var uriRes: ARTURIResource = new ARTURIResource(id, show);
+        let id: string = uri['@id'];
+        let show: string = uri[ResAttribute.SHOW];
+        let uriRes: ARTURIResource = new ARTURIResource(id, show);
         //other properties
         this.parseNodeOptionalProperties(uri, uriRes, additionalAttr);
 
@@ -19,10 +19,10 @@ export class Deserializer {
     }
 
     public static createBlankNode(bnode: any, additionalAttr?: string[]): ARTBNode {
-        var id = bnode['@id'];
-        var show = bnode[ResAttribute.SHOW];
-        var role: RDFResourceRolesEnum = RDFResourceRolesEnum[<string>bnode[ResAttribute.ROLE]];
-        var bNodeRes = new ARTBNode(id, show, role);
+        let id = bnode['@id'];
+        let show = bnode[ResAttribute.SHOW];
+        let role: RDFResourceRolesEnum = RDFResourceRolesEnum[<string>bnode[ResAttribute.ROLE]];
+        let bNodeRes = new ARTBNode(id, show, role);
         //other properties
         this.parseNodeOptionalProperties(bnode, bNodeRes, additionalAttr);
 
@@ -36,75 +36,75 @@ export class Deserializer {
      * @param additionalAttr list of non common attributes to parse
      */
     private static parseNodeOptionalProperties(resJson: any, node: ARTNode, additionalAttr?: string[]) {
-        var qname: string = resJson[ResAttribute.QNAME];
+        let qname: string = resJson[ResAttribute.QNAME];
         if (qname != undefined) {
             node.setAdditionalProperty(ResAttribute.QNAME, qname);
         }
-        var explicit: boolean = resJson[ResAttribute.EXPLICIT];
+        let explicit: boolean = resJson[ResAttribute.EXPLICIT];
         if (explicit != undefined) {
             node.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
         }
-        var more: boolean = resJson[ResAttribute.MORE];
+        let more: boolean = resJson[ResAttribute.MORE];
         if (more != undefined) {
             node.setAdditionalProperty(ResAttribute.MORE, more);
         }
-        var numInst: number = resJson[ResAttribute.NUM_INST];
+        let numInst: number = resJson[ResAttribute.NUM_INST];
         if (numInst != undefined) {
             node.setAdditionalProperty(ResAttribute.NUM_INST, numInst);
         }
-        var hasCustomRange: boolean = resJson[ResAttribute.HAS_CUSTOM_RANGE];
+        let hasCustomRange: boolean = resJson[ResAttribute.HAS_CUSTOM_RANGE];
         if (hasCustomRange != undefined) {
             node.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, hasCustomRange);
         }
-        var resourcePosition: string = resJson[ResAttribute.RESOURCE_POSITION];
+        let resourcePosition: string = resJson[ResAttribute.RESOURCE_POSITION];
         if (resourcePosition != undefined) {
             node.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
         }
-        var accessMethod: string = resJson[ResAttribute.ACCESS_METHOD];
+        let accessMethod: string = resJson[ResAttribute.ACCESS_METHOD];
         if (accessMethod != undefined) {
             node.setAdditionalProperty(ResAttribute.ACCESS_METHOD, accessMethod);
         }
-        var lang: string = resJson[ResAttribute.LANG];
+        let lang: string = resJson[ResAttribute.LANG];
         if (lang != undefined) {
             node.setAdditionalProperty(ResAttribute.LANG, lang);
         }
-        var dataType: string = resJson[ResAttribute.DATA_TYPE];
+        let dataType: string = resJson[ResAttribute.DATA_TYPE];
         if (dataType != undefined) {
             node.setAdditionalProperty(ResAttribute.DATA_TYPE, dataType);
         }
-        var graphsAttr: string = resJson[ResAttribute.GRAPHS];
+        let graphsAttr: string = resJson[ResAttribute.GRAPHS];
         if (graphsAttr != undefined) {
             let splittedGraph: string[] = graphsAttr.split(",");
-            for (var i = 0; i < splittedGraph.length; i++) {
+            for (let i = 0; i < splittedGraph.length; i++) {
                 node.addTripleGraph(new ARTURIResource(splittedGraph[i].trim()));
             }
         }
-        var members: any[] = resJson[ResAttribute.MEMBERS];
+        let members: any[] = resJson[ResAttribute.MEMBERS];
         if (members != undefined) {
             node.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArray(members, additionalAttr));
         }
-        var index: any = resJson[ResAttribute.INDEX];
+        let index: any = resJson[ResAttribute.INDEX];
         if (index != undefined) {
             node.setAdditionalProperty(ResAttribute.INDEX, this.createLiteral(index, additionalAttr));
         }
-        var inScheme: string = resJson[ResAttribute.IN_SCHEME];
+        let inScheme: string = resJson[ResAttribute.IN_SCHEME];
         if (inScheme != undefined) {
             node.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
         }
-        var schemesAttr: string = resJson[ResAttribute.SCHEMES];
+        let schemesAttr: string = resJson[ResAttribute.SCHEMES];
         if (schemesAttr != undefined) {
             let schemes: ARTURIResource[] = []
             if (schemesAttr != "") {
                 let splittedSchemes: string[] = schemesAttr.split(",");
-                for (var i = 0; i < splittedSchemes.length; i++) {
-                    schemes.push(new ARTURIResource(splittedSchemes[i].trim()));
+                for (let s of splittedSchemes) {
+                    schemes.push(new ARTURIResource(s.trim()));
                 }
             }
             node.setAdditionalProperty(ResAttribute.SCHEMES, schemes);
         }
 
         if (node instanceof ARTResource) {
-            var role: RDFResourceRolesEnum = <RDFResourceRolesEnum>resJson[ResAttribute.ROLE];
+            let role: RDFResourceRolesEnum = <RDFResourceRolesEnum>resJson[ResAttribute.ROLE];
             if (role != undefined) {
                 node.setRole(role);
             }
@@ -112,8 +112,8 @@ export class Deserializer {
             let natureAttr: string = resJson[ResAttribute.NATURE];
             if (natureAttr != undefined && natureAttr != "") {
                 let splitted: string[] = natureAttr.split("|_|");
-                for (var i = 0; i < splitted.length; i++) {
-                    let roleGraphDeprecatedTriple: string[] = splitted[i].split(",");
+                for (let s of splitted) {
+                    let roleGraphDeprecatedTriple: string[] = s.split(",");
                     let roleInNature: RDFResourceRolesEnum = <RDFResourceRolesEnum>roleGraphDeprecatedTriple[0];
                     let graphInNature: ARTURIResource = new ARTURIResource(roleGraphDeprecatedTriple[1]);
                     let deprecatedInNature: boolean = roleGraphDeprecatedTriple[2] == "true";
@@ -129,14 +129,14 @@ export class Deserializer {
                  * explicit is true if the resource is defined in the main graph (but not in the remove-staging)
                  */
                 if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
-                    var baseURI = VBContext.getActualWorkingGraphString();
+                    let baseURI = VBContext.getActualWorkingGraphString();
                     let resGraphs: ARTURIResource[] = node.getGraphs();
                     let inWorkingGraph: boolean = false;
                     let inRemoveStagingGraph: boolean = false;
-                    for (var i = 0; i < resGraphs.length; i++) {
-                        if (resGraphs[i].getURI() == baseURI) {
+                    for (let g of resGraphs) {
+                        if (g.getURI() == baseURI) {
                             inWorkingGraph = true;
-                        } else if (resGraphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
+                        } else if (g.getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
                             inRemoveStagingGraph = true;
                         }
                     }
@@ -151,7 +151,7 @@ export class Deserializer {
             }
         }
 
-        var tripleScope: string = resJson[ResAttribute.TRIPLE_SCOPE];
+        let tripleScope: string = resJson[ResAttribute.TRIPLE_SCOPE];
         if (tripleScope != undefined) {
             node.setAdditionalProperty(ResAttribute.TRIPLE_SCOPE, tripleScope);
         }
@@ -162,27 +162,25 @@ export class Deserializer {
         }
 
         if (additionalAttr != undefined) {
-            for (var i = 0; i < additionalAttr.length; i++) {
-                let attrValue: string = resJson[additionalAttr[i]];
+            for (let attr of additionalAttr) {
+                let attrValue: string = resJson[attr];
                 if (attrValue != undefined) {
-                    node.setAdditionalProperty(additionalAttr[i], attrValue);
+                    node.setAdditionalProperty(attr, attrValue);
                 }
             }
         }
     }
 
     public static createLiteral(literal: any, additionalAttr?: string[]): ARTLiteral {
-        var isTypedLiteral: boolean;
-
-        var value = literal['@value'];
-        var artLiteralRes: ARTLiteral = new ARTLiteral(value);
-        var datatype = literal['@type'];
+        let value = literal['@value'];
+        let artLiteralRes: ARTLiteral = new ARTLiteral(value);
+        let datatype = literal['@type'];
         if (datatype != undefined) {
             artLiteralRes.setDatatype(datatype);
         }
-        var lang = literal[ResAttribute.LANG];
+        let lang = literal[ResAttribute.LANG];
         if (lang == undefined) {
-            var lang = literal["@language"];
+            lang = literal["@language"];
         }
         if (lang != undefined) {
             artLiteralRes.setLang(lang);
@@ -195,7 +193,7 @@ export class Deserializer {
     }
 
     public static createRDFResource(resource: any, additionalAttr?: string[]): ARTResource {
-        var resId = resource['@id'];
+        let resId = resource['@id'];
         if (resource['@id'] != undefined) {
             if (resId.startsWith('_:')) {
                 return this.createBlankNode(resource, additionalAttr);
@@ -208,8 +206,8 @@ export class Deserializer {
     }
 
     public static createRDFNode(node: any, additionalAttr?: string[]): ARTNode {
-        var nodeId: string = node['@id']; //resource
-        var nodeValue: string = node['@value']; //literal
+        let nodeId: string = node['@id']; //resource
+        let nodeValue: string = node['@value']; //literal
         if (nodeId != undefined) {
             return this.createRDFResource(node, additionalAttr);
         } else if (nodeValue != undefined) {
@@ -223,43 +221,43 @@ export class Deserializer {
      * creates an array of only ARTURIResource from a json result
      */
     public static createURIArray(result: Array<any>, additionalAttr?: string[]): ARTURIResource[] {
-        var uriResourceArray: ARTURIResource[] = new Array();
-        for (var i = 0; i < result.length; i++) {
-            uriResourceArray.push(this.createURI(result[i], additionalAttr));
+        let uriResourceArray: ARTURIResource[] = new Array();
+        for (let r of result) {
+            uriResourceArray.push(this.createURI(r, additionalAttr));
         }
         return uriResourceArray;
     }
 
     public static createResourceArray(resArray: any[], additionalAttr?: string[]): ARTResource[] {
-        var resourceArray: ARTResource[] = new Array();
-        for (var i = 0; i < resArray.length; i++) {
-            resourceArray.push(this.createRDFResource(resArray[i], additionalAttr));
+        let resourceArray: ARTResource[] = [];
+        for (let r of resArray) {
+            resourceArray.push(this.createRDFResource(r, additionalAttr));
         }
         return resourceArray;
     }
 
-    public static createLiteralArray(result: Array<any>, additionalAttr?: string[]): ARTLiteral[] {
-        var literalArray: ARTLiteral[] = new Array();
-        for (var i = 0; i < result.length; i++) {
-            literalArray.push(this.createLiteral(result[i], additionalAttr));
+    public static createLiteralArray(result: any[], additionalAttr?: string[]): ARTLiteral[] {
+        let literalArray: ARTLiteral[] = [];
+        for (let l of result) {
+            literalArray.push(this.createLiteral(l, additionalAttr));
         }
         return literalArray;
     }
 
     public static createRDFNodeArray(nodeArray: any, additionalAttr?: string[]) {
-        var collectionArray: ARTNode[] = new Array();
-        for (var i = 0; i < nodeArray.length; i++) {
-            collectionArray.push(this.createRDFNode(nodeArray[i], additionalAttr));
+        let collectionArray: ARTNode[] = new Array();
+        for (let node of nodeArray) {
+            collectionArray.push(this.createRDFNode(node, additionalAttr));
         }
         return collectionArray;
     }
 
     public static createPredicateObjectsList(poList: any, additionalAttr?: string[]): ARTPredicateObjects[] {
         let poLists: ARTPredicateObjects[] = [];
-        for (var i = 0; i < poList.length; i++) {
-            let predicate = this.createURI(poList[i].predicate, additionalAttr);
-            let objects = this.createRDFNodeArray(poList[i].objects, additionalAttr);
-            objects.sort((o1, o2) => o1.getNominalValue().toLocaleLowerCase().localeCompare(o2.getNominalValue().toLocaleLowerCase()));
+        for (let po of poList) {
+            //note: objects must not be ordered since in some cases they are already ordered server side (e.g. constituents in RV)
+            let predicate = this.createURI(po.predicate, additionalAttr);
+            let objects = this.createRDFNodeArray(po.objects, additionalAttr);
             let predicateObjects = new ARTPredicateObjects(predicate, objects);
             poLists.push(predicateObjects);
         }
@@ -283,9 +281,9 @@ export class Deserializer {
      * @param resp json response containing {"user"" : [{givenName: string, familyName: string, ...}, {...}]}
      */
     static createUsersArray(resp: any): User[] {
-        var users: User[] = [];
-        for (var i = 0; i < resp.length; i++) {
-            users.push(this.createUser(resp[i]));
+        let users: User[] = [];
+        for (let u of resp) {
+            users.push(this.createUser(u));
         }
         return users;
     }
@@ -299,7 +297,7 @@ export class Deserializer {
         if (userJson.email == null) { //user object is empty (scenario: getUser with no logged user)
             return null;
         }
-        var user = new User(userJson.email, userJson.givenName, userJson.familyName, userJson.iri);
+        let user = new User(userJson.email, userJson.givenName, userJson.familyName, userJson.iri);
         user.setRegistrationDate(userJson.registrationDate);
         user.setStatus(userJson.status);
         user.setAdmin(userJson.admin);

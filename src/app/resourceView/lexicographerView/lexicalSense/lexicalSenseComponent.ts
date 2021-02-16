@@ -44,9 +44,10 @@ export class LexicalSenseComponent {
 
     ngOnInit() {
         let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
-        this.addDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddNote, this.sense.id) && langAuthorized && !this.readonly;
-        this.editDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosUpdateNote, this.sense.id) && langAuthorized && !this.readonly;
-        this.deleteDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveNote, this.sense.id) && langAuthorized && !this.readonly;
+        //the following are authorized only for reified senses (this.sense.id not null)and not for plain
+        this.addDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddNote, this.sense.id) && langAuthorized && !this.readonly;
+        this.editDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosUpdateNote, this.sense.id) && langAuthorized && !this.readonly;
+        this.deleteDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveNote, this.sense.id) && langAuthorized && !this.readonly;
     }
 
     deleteSense() {

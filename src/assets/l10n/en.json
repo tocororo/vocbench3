@@ -1414,6 +1414,7 @@
         },
         "LEX_VIEW": {
             "PRONUNCIATION": "Pronunciation",
+            "RELATED": "Related",
             "SEMANTIC_REFERENCE": "Semantic reference",
             "TRANSLATION": "Translation"
         },

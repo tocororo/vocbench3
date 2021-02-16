@@ -3,7 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { LexEntryComponent } from '../resourceView/lexicographerView/lexEntryComponent';
+import { LexEntryComponent } from '../resourceView/lexicographerView/lexicalEntry/lexEntryComponent';
+import { LexicalRelationComponent } from '../resourceView/lexicographerView/lexicalRelation/lexicalRelationComponent';
+import { RelatedGroupComponent } from '../resourceView/lexicographerView/lexicalRelation/relatedComponent';
+import { TranslatableAsComponent } from '../resourceView/lexicographerView/lexicalRelation/translatableAsComponent';
 import { LexicalFormComponent } from '../resourceView/lexicographerView/lexicalForm/lexicalFormComponent';
 import { MorphosyntacticPropComponent } from '../resourceView/lexicographerView/lexicalForm/morphosyntacticPropComponent';
 import { PhoneticRepComponent } from '../resourceView/lexicographerView/lexicalForm/phoneticRepComponent';
@@ -12,8 +15,6 @@ import { LexicalSenseComponent } from '../resourceView/lexicographerView/lexical
 import { TranslationComponent } from '../resourceView/lexicographerView/lexicalSense/translationComponent';
 import { LexicographerViewComponent } from '../resourceView/lexicographerView/lexicographerViewComponent';
 import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
-import { CustomFormTableCellComponent } from '../resourceView/resourceViewEditor/resViewResources/cfValueTablePreview/customFormTableCellComponent';
-import { CustomFormValueTableComponent } from '../resourceView/resourceViewEditor/resViewResources/cfValueTablePreview/customFormValueTableComponent';
 import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/classAxiomPartitionRenderer';
 import { ConstituentsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/constituentsPartitionRenderer';
@@ -45,7 +46,6 @@ import { TopConceptsPartitionRenderer } from '../resourceView/resourceViewEditor
 import { TypesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/typesPartitionRenderer';
 import { LexicalizationEnrichmentHelper } from '../resourceView/resourceViewEditor/renderer/lexicalizationEnrichmentHelper';
 import { PredicateObjectsRenderer } from '../resourceView/resourceViewEditor/renderer/predicateObjectsRenderer';
-import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/resViewResources/resourceViewValueRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceViewEditor/resourceRenameComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewEditor/resourceViewCtxMenu';
 import { ResourceViewEditorComponent } from '../resourceView/resourceViewEditor/resourceViewEditorComponent';
@@ -63,8 +63,11 @@ import { InstanceListCreatorModal } from '../resourceView/resourceViewEditor/res
 import { PropertyChainCreatorModal } from '../resourceView/resourceViewEditor/resViewModals/propertyChainCreatorModal';
 import { RdfsMembersModal } from '../resourceView/resourceViewEditor/resViewModals/rdfsMembersModal';
 import { ResViewModalServices } from '../resourceView/resourceViewEditor/resViewModals/resViewModalServices';
+import { CustomFormTableCellComponent } from '../resourceView/resourceViewEditor/resViewResources/cfValueTablePreview/customFormTableCellComponent';
+import { CustomFormValueTableComponent } from '../resourceView/resourceViewEditor/resViewResources/cfValueTablePreview/customFormValueTableComponent';
 import { EditableResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/editableResourceComponent';
 import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/reifiedResourceComponent';
+import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/resViewResources/resourceViewValueRenderer';
 import { ResourceViewModal } from '../resourceView/resourceViewModal';
 import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
 import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
@@ -90,40 +93,31 @@ import { TreeAndListModule } from "./treeAndListModule";
         TreeAndListModule, 
     ],
     declarations: [
+        //CodeView
+        ResourceTripleEditorComponent,
+        //LexView
         ConceptReferenceComponent,
-        CustomFormTableCellComponent,
-        CustomFormValueTableComponent,
-        EditableResourceComponent,
-        LanguageBoxComponent,
-        LanguageDefinitionComponent,
-        LanguageTermComponent,
         LexEntryComponent,
         LexicalFormComponent,
+        LexicalRelationComponent,
         LexicalSenseComponent,
         LexicographerViewComponent,
         MorphosyntacticPropComponent,
         PhoneticRepComponent,
-        ReifiedResourceComponent,
-        ResourceRenameComponent,
-        ResourceTripleEditorComponent,
-        ResourceViewEditorComponent, 
-        ResourceViewContextMenu,
-        ResourceViewModal,
-        ResourceViewModeDispatcher, 
-        ResourceViewSplittedComponent,
-        ResourceViewTabbedComponent,
-        ResourceViewValueRenderer,
-        ResourceViewTabContainer,
-        TermViewComponent,
+        RelatedGroupComponent,
+        TranslatableAsComponent,
         TranslationComponent,
-        //renderers
+        //ResourceView
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 
         ConstituentsPartitionRenderer,
+        CustomFormTableCellComponent,
+        CustomFormValueTableComponent,
         DatatypeDefinitionPartitionRenderer,
         DenotationsPartitionRenderer,
         DisjointPropertiesPartitionRenderer,
         DomainsPartitionRenderer,
+        EditableResourceComponent,
         EquivalentPropertiesPartitionRenderer, 
         EvokedLexicalConceptsPartitionRenderer,
         FormBasedPreviewRenderer,
@@ -142,11 +136,29 @@ import { TreeAndListModule } from "./treeAndListModule";
         PropertyFacetsPartitionRenderer,
         RangesPartitionRenderer,
         RdfsMembersPartitionRenderer,
+        ReifiedResourceComponent,
+        ResourceRenameComponent,
+        ResourceViewEditorComponent, 
+        ResourceViewContextMenu,
+        ResourceViewModal,
+        ResourceViewValueRenderer,
         SchemesPartitionRenderer,
         SubtermsPartitionRenderer,
         SuperPropertiesPartitionRenderer,
         TopConceptsPartitionRenderer,
         TypesPartitionRenderer,
+        //TermView
+        LanguageBoxComponent,
+        LanguageDefinitionComponent,
+        LanguageTermComponent,
+        TermViewComponent,
+
+        //misc
+        ResourceViewModeDispatcher, 
+        ResourceViewSplittedComponent,
+        ResourceViewTabbedComponent,
+        ResourceViewTabContainer,
+        
         //modals
         AddManuallyValueModal,
         AddPropertyValueModal,

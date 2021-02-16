@@ -3,9 +3,9 @@
         <span *ngIf="title" style="font-family: serif; font-weight: bold; font-size: 2rem;">{{title.getValue()}}</span>
         <!-- inline morphoprop -->
         <div class="d-flex flex-wrap ml-2">
-            <ng-container *ngFor="let mp of lv.morphosyntacticProps">
+            <ng-container *ngFor="let mp of entry.morphosyntacticProps">
                 <morphosyntactic-prop *ngFor="let mv of mp.getObjects()" class="ml-2"
-                    [resource]="lv.id" [property]="mp.getPredicate()" [value]="mv" [lexViewCache]="lexViewCache" [readonly]="readonly"
+                    [resource]="entry.id" [property]="mp.getPredicate()" [value]="mv" [lexViewCache]="lexViewCache" [readonly]="readonly"
                     hideProp="true" (update)="onUpdate()">
                 </morphosyntactic-prop>
             </ng-container>
@@ -26,7 +26,7 @@
 
 <!-- morphosyntactic properties addition -->
 <div class="ml-4">
-    <morphosyntactic-prop *ngIf="pendingMorphoProp" [resource]="lv.id" [lexViewCache]="lexViewCache"
+    <morphosyntactic-prop *ngIf="pendingMorphoProp" [resource]="entry.id" [lexViewCache]="lexViewCache"
         (update)="onUpdate()" (cancel)="onPendingMorphPropCanceled()">
     </morphosyntactic-prop>
 </div>

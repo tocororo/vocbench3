@@ -289,3 +289,11 @@ export class SemanticTurkey {
 
     public static noAggregation = "http://semanticturkey.uniroma2.it/ns/mdr#noAggregation";
 }
+
+export class Vartrans {
+    public static uri = "http://www.w3.org/ns/lemon/vartrans";
+    public static namespace = Vartrans.uri + "#";
+    
+    public static translatableAs = new ARTURIResource(Vartrans.namespace + "translatableAs", "vartrans:translatableAs", RDFResourceRolesEnum.objectProperty);
+    public static lexicalRel = new ARTURIResource(Vartrans.namespace + "lexicalRel", "vartrans:lexicalRel", RDFResourceRolesEnum.objectProperty);
+}

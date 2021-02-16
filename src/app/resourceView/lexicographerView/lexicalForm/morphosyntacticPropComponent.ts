@@ -13,7 +13,7 @@ import { LexViewCache } from "../LexViewChache";
 })
 export class MorphosyntacticPropComponent {
     @Input() readonly: boolean = false;
-    @Input() resource: ARTResource; //resource to which the morphoProp belongs
+    @Input() resource: ARTResource; //resource to which the morphoProp belongs (lexical entry or form)
     @Input() property: ARTURIResource;
     @Input() value: ARTURIResource;
     @Input() lexViewCache: LexViewCache;

@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
-import { Form, LexicographerView, Sense } from "src/app/models/LexicographerView";
+import { Form, LexicalEntry, Sense } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
 import { ClassesServices } from "src/app/services/classesServices";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
@@ -36,7 +36,7 @@ export class LexicographerViewComponent {
     @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
     private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
-    lv: LexicographerView;
+    lexEntry: LexicalEntry;
 
     lemma: Form[];
     otherForms: Form[];
@@ -50,6 +50,8 @@ export class LexicographerViewComponent {
 
     //auth
     addOtherFormAuthorized: boolean;
+    addRelatedAuthorized: boolean;
+    addTranslationAuthorized: boolean;
     addLexSenseAuthorized: boolean;
 
     constructor(private lexicographerViewService: LexicographerViewServices, private ontolexService: OntoLexLemonServices, 
@@ -88,26 +90,28 @@ export class LexicographerViewComponent {
             resp => {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
 
-                this.lv = LexicographerView.parse(resp);
-                console.log(this.lv);
+                this.lexEntry = LexicalEntry.parse(resp);
+                console.log(this.lexEntry);
                 
-                this.lemma = this.lv.lemma;
+                this.lemma = this.lexEntry.lemma;
                 this.sortForms(this.lemma);
 
                 this.lang = this.lemma[0].writtenRep[0].getLang();
 
-                this.otherForms = this.lv.otherForms;
+                this.otherForms = this.lexEntry.otherForms;
                 this.sortForms(this.otherForms);
 
-                this.senses = this.lv.senses;
+                this.senses = this.lexEntry.senses;
                 this.sortSenses(this.senses);
 
-                if (this.lv.isInStagingRemove()) {
+                if (this.lexEntry.isInStagingRemove()) {
                     this.readonly = true;
                 }
 
                 this.addOtherFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddOtherForm) && !this.readonly;
                 this.addLexSenseAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization) && !this.readonly;
+                this.addRelatedAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue) && !this.readonly; //TODO update when proper services will be provided
+                this.addTranslationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue) && !this.readonly; //TODO update when proper services will be provided
             }
         );
     }
@@ -163,6 +167,18 @@ export class LexicographerViewComponent {
                 this.buildLexicographerView();
             }
         )
+    }
+
+    //=== Related ===
+
+    addRelated() {
+        alert("TODO")
+    }
+
+    //=== Translation ===
+
+    addTranslation() {
+        alert("TODO")
     }
     
     //=== Senses ===

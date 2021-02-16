@@ -2,13 +2,15 @@ import { Deserializer } from "../utils/Deserializer";
 import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceNature, TripleScopes } from "./ARTResources";
 import { SemanticTurkey } from "./Vocabulary";
 
-export class LexicographerView {
+export class LexicalEntry {
     id: ARTResource;
     nature: ResourceNature[];
     morphosyntacticProps: ARTPredicateObjects[];
     lemma: Form[];
     otherForms: Form[];
     senses: Sense[];
+    related: LexicalRelation[];
+    translatableAs: LexicalRelation[];
 
     isInStaging(): boolean {
         return this.isInStagingAdd() || this.isInStagingRemove();
@@ -30,8 +32,8 @@ export class LexicographerView {
         return false;
     }
 
-    public static parse(json: any): LexicographerView {
-        let lv: LexicographerView = new LexicographerView();
+    public static parse(json: any): LexicalEntry {
+        let lv: LexicalEntry = new LexicalEntry();
         lv.id = ParsingUtils.parseResourceId(json.id);
         lv.nature = ResourceNature.parse(json.nature);
         lv.id.setRole(lv.nature[0].role); //role needed to authorization evaluator
@@ -39,6 +41,8 @@ export class LexicographerView {
         lv.lemma = json.lemma.map((l: any) => Form.parse(l));
         lv.otherForms = json.otherForms.map((f: any) => Form.parse(f));
         lv.senses = json.senses.map((s: any) => Sense.parse(s));
+        lv.related = json.related.map((r: any) => LexicalRelation.parse(r));
+        lv.translatableAs = json.translatableAs.map((r: any) => LexicalRelation.parse(r));
         return lv;
     }
 }
@@ -97,13 +101,19 @@ export class Sense {
     public static parse(json: any): Sense {
         let s: Sense = new Sense();
         s.id = ParsingUtils.parseResourceId(json.id);
-        s.id.setRole(RDFResourceRolesEnum.ontolexLexicalSense); //role needed to authorization evaluator
+        if (s.id != null) { //sense not plain
+            s.id.setRole(RDFResourceRolesEnum.ontolexLexicalSense); //role needed to authorization evaluator
+        }
         if (json.definition) {
             s.definition = Deserializer.createRDFNodeArray(json.definition);
             s.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()))
         }
-        s.reference = Deserializer.createResourceArray(json.reference);
-        s.concept = json.concept.map((c: any) => ConceptReference.parse(c));
+        if (json.reference != null) { //might be null in plain sense
+            s.reference = Deserializer.createResourceArray(json.reference);
+        }
+        if (json.concept != null) { //might be null in plain sense
+            s.concept = json.concept.map((c: any) => ConceptReference.parse(c));
+        }
         s.related = json.related.map((r: any) => SenseRelation.parse(r));
         s.translations = json.translations.map((t: any) => SenseRelation.parse(t));
         s.terminologicallyRelated = json.terminologicallyRelated.map((tr: any) => SenseRelation.parse(tr));
@@ -111,45 +121,44 @@ export class Sense {
     }
 }
 
-export class ConceptReference {
+export abstract class LexicoSemanticRelation<T> {
     id: ARTResource;
     nature: ResourceNature[];
     scope: TripleScopes;
-    definition: ARTNode[];
-
-    public static parse(json: any): ConceptReference {
-        let c: ConceptReference = new ConceptReference();
-        c.id = ParsingUtils.parseResourceId(json.id);
-        c.nature = ResourceNature.parse(json.nature);
-        c.id.setRole(c.nature[0].role); //role needed to authorization evaluator
-        c.scope = json.scope;
-        if (json.definition) {
-            c.definition = Deserializer.createRDFNodeArray(json.definition);
-            c.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()))
-        }
-        return c;
-    }
+    category: ARTURIResource[];
+    source: T[];
+    target: T[];
+    related: T[];
 }
 
-export class SenseRelation {
-    id: ARTResource;
-    nature: ResourceNature[];
-    scope: TripleScopes;
-    category: ARTResource[];
-    source: SenseReference[];
-    target: SenseReference[];
-    related: SenseReference[];
-
+export class SenseRelation extends LexicoSemanticRelation<SenseReference> {
     public static parse(json: any): SenseRelation {
         let r: SenseRelation = new SenseRelation();
         r.id = ParsingUtils.parseResourceId(json.id);
         r.nature = ResourceNature.parse(json.nature);
         r.id.setRole(r.nature[0].role);
         r.scope = json.scope;
-        r.category = Deserializer.createResourceArray(json.category);
+        r.category = Deserializer.createURIArray(json.category);
         r.source = json.source.map((s: any) => SenseReference.parse(s));
         r.target = json.target.map((t: any) => SenseReference.parse(t));
         r.related = json.related.map((rel: any) => SenseReference.parse(rel));
+        return r;
+    }
+}
+
+export class LexicalRelation extends LexicoSemanticRelation<EntryReference> {
+    public static parse(json: any): LexicalRelation {
+        let r: LexicalRelation = new LexicalRelation();
+        r.id = ParsingUtils.parseResourceId(json.id);
+        r.nature = ResourceNature.parse(json.nature);
+        if (r.id != null) {
+            r.id.setRole(r.nature[0].role);
+        }
+        r.scope = json.scope;
+        r.category = Deserializer.createURIArray(json.category);
+        r.source = json.source.map((s: any) => EntryReference.parse(s));
+        r.target = json.target.map((t: any) => EntryReference.parse(t));
+        r.related = json.related.map((rel: any) => EntryReference.parse(rel));
         return r;
     }
 }
@@ -188,6 +197,26 @@ export class EntryReference {
     }
 }
 
+export class ConceptReference {
+    id: ARTResource;
+    nature: ResourceNature[];
+    scope: TripleScopes;
+    definition: ARTNode[];
+
+    public static parse(json: any): ConceptReference {
+        let c: ConceptReference = new ConceptReference();
+        c.id = ParsingUtils.parseResourceId(json.id);
+        c.nature = ResourceNature.parse(json.nature);
+        c.id.setRole(c.nature[0].role); //role needed to authorization evaluator
+        c.scope = json.scope;
+        if (json.definition) {
+            c.definition = Deserializer.createRDFNodeArray(json.definition);
+            c.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()))
+        }
+        return c;
+    }
+}
+
 /**
  * This is a utilities class just for parsing the id of the above classes (Form, Sense, ...).
  * Such IDs are represented as resource nominal value, not in NT format, so I cannot use NTripleUtils.
@@ -195,10 +224,38 @@ export class EntryReference {
  */
 class ParsingUtils {
     static parseResourceId(id: string): ARTResource {
+        if (id == null) return null;
         if (id.startsWith("_:")) {
             return new ARTBNode(id);
         } else {
             return new ARTURIResource(id);
         }
     }
+}
+
+export class LexicalResourceUtils {
+    
+    static isInStaging(resourceWithNature: ResourceWithNature): boolean {
+        return this.isInStagingAdd(resourceWithNature) || this.isInStagingRemove(resourceWithNature);
+    }
+    static isInStagingAdd(resourceWithNature: ResourceWithNature): boolean {
+        for (let n of resourceWithNature.nature) {
+            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingAddGraph))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    static isInStagingRemove(resourceWithNature: ResourceWithNature): boolean {
+        for (let n of resourceWithNature.nature) {
+            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingRemoveGraph))) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+interface ResourceWithNature {
+    nature: ResourceNature[];
 }

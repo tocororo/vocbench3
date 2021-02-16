@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { Form, LexicographerView } from "src/app/models/LexicographerView";
+import { Form, LexicalEntry } from "src/app/models/LexicographerView";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { VBActionsEnum } from "src/app/utils/VBActions";
-import { ARTLiteral, ARTResource } from "../../models/ARTResources";
-import { ResourceViewCtx } from "../../models/ResourceView";
-import { ProjectContext } from "../../utils/VBContext";
-import { LexViewCache } from "./LexViewChache";
+import { ARTLiteral, ARTResource } from "../../../models/ARTResources";
+import { ResourceViewCtx } from "../../../models/ResourceView";
+import { ProjectContext } from "../../../utils/VBContext";
+import { LexViewCache } from "../LexViewChache";
 
 @Component({
     selector: "lex-entry",
@@ -14,7 +14,7 @@ import { LexViewCache } from "./LexViewChache";
     host: { class: "d-block" }
 })
 export class LexEntryComponent {
-    @Input() lv: LexicographerView;
+    @Input() entry: LexicalEntry;
     @Input() lexViewCache: LexViewCache;
     @Input() readonly: boolean = false;
     @Input() context: ResourceViewCtx;
@@ -31,11 +31,11 @@ export class LexEntryComponent {
     constructor() {}
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['lv'] && changes['lv'].currentValue) {
+        if (changes['entry'] && changes['entry'].currentValue) {
             this.initTitle();
         }
 
-        this.addMorphoPropAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.lv.id) && !this.readonly;
+        this.addMorphoPropAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.entry.id) && !this.readonly;
     }
 
     /**
@@ -44,12 +44,12 @@ export class LexEntryComponent {
     private initTitle() {
         //get the canonical form
         let l: Form;
-        if (this.lv.lemma.length == 1) {
-            l = this.lv.lemma[0]
-        } else if (this.lv.lemma.length > 1) { //probably in validation
-            l = this.lv.lemma.find(lem => lem.isInStagingAdd());
+        if (this.entry.lemma.length == 1) {
+            l = this.entry.lemma[0]
+        } else if (this.entry.lemma.length > 1) { //probably in validation
+            l = this.entry.lemma.find(lem => lem.isInStagingAdd());
             if (l == null) { //no lemma in addition => get the first one
-                l = this.lv.lemma[0]
+                l = this.entry.lemma[0]
             }
         }
         if (l != null) {
