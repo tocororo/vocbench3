@@ -8,6 +8,7 @@ export class LexicalEntry {
     morphosyntacticProps: ARTPredicateObjects[];
     lemma: Form[];
     otherForms: Form[];
+    subterms: EntryReference[];
     senses: Sense[];
     related: LexicalRelation[];
     translatableAs: LexicalRelation[];
@@ -40,6 +41,7 @@ export class LexicalEntry {
         lv.morphosyntacticProps = Deserializer.createPredicateObjectsList(json.morphosyntacticProps);
         lv.lemma = json.lemma.map((l: any) => Form.parse(l));
         lv.otherForms = json.otherForms.map((f: any) => Form.parse(f));
+        lv.subterms = json.subterms.map((s: any) => EntryReference.parse(s));
         lv.senses = json.senses.map((s: any) => Sense.parse(s));
         lv.related = json.related.map((r: any) => LexicalRelation.parse(r));
         lv.translatableAs = json.translatableAs.map((r: any) => LexicalRelation.parse(r));

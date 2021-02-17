@@ -34,8 +34,8 @@ export class RelatedGroupComponent {
         this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [Vartrans.lexicalRel]).then(
             (prop: ARTURIResource) => {
                 this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
-                    (entry: ARTURIResource) => {
-                        this.resourceService.addValue(this.entry.id, prop, entry).subscribe(
+                    (relatedEntry: ARTURIResource) => {
+                        this.resourceService.addValue(this.entry.id, prop, relatedEntry).subscribe(
                             () => {
                                 this.update.emit();
                             }

@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Form, LexicalEntry } from "src/app/models/LexicographerView";
+import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { VBActionsEnum } from "src/app/utils/VBActions";
-import { ARTLiteral, ARTResource } from "../../../models/ARTResources";
+import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
+import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { ResourceViewCtx } from "../../../models/ResourceView";
 import { ProjectContext } from "../../../utils/VBContext";
 import { LexViewCache } from "../LexViewChache";
@@ -28,7 +30,7 @@ export class LexEntryComponent {
     //auth
     addMorphoPropAuthorized: boolean;
 
-    constructor() {}
+    constructor(private browsingModals: BrowsingModalServices, private ontolexService: OntoLexLemonServices) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['entry'] && changes['entry'].currentValue) {
@@ -75,6 +77,20 @@ export class LexEntryComponent {
 
     onPendingMorphPropCanceled() {
         this.pendingMorphoProp = false;
+    }
+
+
+    addSubterm() {
+        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.ADD_SUBTERM"}).then(
+            (entry: ARTURIResource) => {
+                this.ontolexService.addSubterm(<ARTURIResource>this.entry.id, entry).subscribe(
+                    () => {
+                        this.update.emit();
+                    }
+                )
+            },
+            () => {}
+        )
     }
 
     /**

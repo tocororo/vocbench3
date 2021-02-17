@@ -46,12 +46,17 @@
                 <span class="fas fa-pencil-alt"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="addDefinition()" [ngClass]="{ disabled: !addDefAuthorized }">
-                    {{'RESOURCE_VIEW.ACTIONS.ADD_DEF_TO_LEX_SENSE'|translate}}
+                <a *ngIf="!sense.id" class="dropdown-item" (click)="reifyPlainSense()">
+                    {{'RESOURCE_VIEW.ACTIONS.REIFY_PLAIN_SENSE'|translate}}
                 </a>
-                <a class="dropdown-item" (click)="setConcept()" [ngClass]="{ disabled: sense.concept.length != 0 }">
-                    {{'DATA.ACTIONS.SET_LEX_CONCEPT'|translate}}
-                </a>
+                <ng-container *ngIf="sense.id">
+                    <a class="dropdown-item" (click)="addDefinition()" [ngClass]="{ disabled: !addDefAuthorized }">
+                        {{'RESOURCE_VIEW.ACTIONS.ADD_DEF_TO_LEX_SENSE'|translate}}
+                    </a>
+                    <a class="dropdown-item" (click)="setConcept()" [ngClass]="{ disabled: sense.concept.length != 0 }">
+                        {{'DATA.ACTIONS.SET_LEX_CONCEPT'|translate}}
+                    </a>
+                </ng-container>
             </div>
         </div>
         <button class="btn btn-faded btn-xs ml-1" (click)="deleteSense()" [disabled]="readonly" [title]="'ACTIONS.DELETE'|translate">

@@ -113,6 +113,10 @@
                 [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </property-chain-renderer>
+            <constituents-renderer *ngIf="resViewSections['constituents']" [pred-obj-list]="resViewSections['constituents']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </constituents-renderer>
             <subterms-renderer *ngIf="resViewSections['subterms']" [pred-obj-list]="resViewSections['subterms']" 
                 [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
@@ -181,10 +185,6 @@
                 [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </imports-renderer>
-            <constituents-renderer *ngIf="resViewSections['constituents']" [pred-obj-list]="resViewSections['constituents']" 
-                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
-                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-            </constituents-renderer>
             <rdfs-members-renderer *ngIf="resViewSections['rdfsMembers']" [pred-obj-list]="resViewSections['rdfsMembers']" 
                 [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">

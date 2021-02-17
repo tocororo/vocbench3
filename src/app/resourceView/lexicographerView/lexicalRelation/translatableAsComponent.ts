@@ -17,12 +17,11 @@ export class TranslatableAsComponent{
     @Input() entry: LexicalEntry;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update
-
+    
     relations: LexicalRelation[];
     addAuthorized: boolean;
 
-    constructor(private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices) {
-    }
+    constructor(private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['entry']) {
@@ -33,8 +32,8 @@ export class TranslatableAsComponent{
 
     add() {
         this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
-            (entry: ARTURIResource) => {
-                this.resourceService.addValue(this.entry.id, Vartrans.translatableAs, entry).subscribe(
+            (targetEntry: ARTURIResource) => {
+                this.resourceService.addValue(this.entry.id, Vartrans.translatableAs, targetEntry).subscribe(
                     () => {
                         this.update.emit();
                     }

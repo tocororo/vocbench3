@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Observable } from "rxjs";
 import { ARTLiteral, ARTURIResource } from "src/app/models/ARTResources";
-import { Form } from "src/app/models/LexicographerView";
+import { Form, LexicalEntry } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
@@ -16,7 +16,7 @@ import { LexViewCache } from "../LexViewChache";
 })
 export class LexicalFormComponent {
     @Input() readonly: boolean = false;
-    @Input() entry: ARTURIResource;
+    @Input() entry: LexicalEntry;
     @Input() form: Form;
     @Input() lemma: boolean; //tells if the form is a lemma (false if it is an "other form")
     @Input() lexViewCache: LexViewCache;
@@ -55,7 +55,7 @@ export class LexicalFormComponent {
         let newWrittenRep = new ARTLiteral(newValue, null, oldWrittenRep.getLang());
         let updateWrittenRepFn: Observable<void>;
         if (this.lemma) { //if lemma, simply replace the whole canonical form
-            updateWrittenRepFn = this.ontolexService.setCanonicalForm(this.entry, newWrittenRep);
+            updateWrittenRepFn = this.ontolexService.setCanonicalForm(<ARTURIResource>this.entry.id, newWrittenRep);
         } else { //other form => update the writtenRep of the form
             updateWrittenRepFn = this.resourceService.updateTriple(this.form.id, OntoLex.writtenRep, oldWrittenRep, newWrittenRep);
         }
@@ -68,7 +68,7 @@ export class LexicalFormComponent {
 
     deleteForm() {
         if (this.lemma) return;
-        this.ontolexService.removeForm(this.entry, OntoLex.otherForm, this.form.id).subscribe(
+        this.ontolexService.removeForm(<ARTURIResource>this.entry.id, OntoLex.otherForm, this.form.id).subscribe(
             () => {
                 this.update.emit();
             }

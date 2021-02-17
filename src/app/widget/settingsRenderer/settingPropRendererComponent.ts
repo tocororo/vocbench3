@@ -23,7 +23,6 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
     constructor() { }
 
     ngOnInit() {
-        // this.radioName = "radio_" + new Date().getTime();
         this.radioName = "radio_" + Math.random();
     }
 

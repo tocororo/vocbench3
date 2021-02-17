@@ -294,6 +294,7 @@ export class Vartrans {
     public static uri = "http://www.w3.org/ns/lemon/vartrans";
     public static namespace = Vartrans.uri + "#";
     
-    public static translatableAs = new ARTURIResource(Vartrans.namespace + "translatableAs", "vartrans:translatableAs", RDFResourceRolesEnum.objectProperty);
     public static lexicalRel = new ARTURIResource(Vartrans.namespace + "lexicalRel", "vartrans:lexicalRel", RDFResourceRolesEnum.objectProperty);
+    public static translatableAs = new ARTURIResource(Vartrans.namespace + "translatableAs", "vartrans:translatableAs", RDFResourceRolesEnum.objectProperty);
+    
 }

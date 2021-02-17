@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTLiteral, ARTNode, ARTResource } from "src/app/models/ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { CustomForm, CustomFormValue } from "src/app/models/CustomForms";
-import { Sense } from "src/app/models/LexicographerView";
+import { LexicalEntry, Sense } from "src/app/models/LexicographerView";
 import { OntoLex, SKOS } from "src/app/models/Vocabulary";
 import { DefEnrichmentType, DefinitionEnrichmentHelper, DefinitionEnrichmentInfo } from "src/app/resourceView/termView/definitionEnrichmentHelper";
 import { CustomFormsServices } from "src/app/services/customFormsServices";
@@ -25,6 +25,7 @@ import { LexViewCache } from "../LexViewChache";
 })
 export class LexicalSenseComponent {
     @Input() readonly: boolean = false;
+    @Input() entry: LexicalEntry;
     @Input() sense: Sense;
     @Input() lexViewCache: LexViewCache;
     @Input() lang: string;
@@ -37,6 +38,7 @@ export class LexicalSenseComponent {
     addDefAuthorized: boolean;
     editDefAuthorized: boolean;
     deleteDefAuthorized: boolean;
+    addConceptAuthorized: boolean;
 
     constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices, private skosService: SkosServices,
         private propService: PropertyServices, private customFormsServices: CustomFormsServices,
@@ -44,18 +46,57 @@ export class LexicalSenseComponent {
 
     ngOnInit() {
         let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
-        //the following are authorized only for reified senses (this.sense.id not null)and not for plain
+        //the following are authorized only for reified senses (this.sense.id not null) and not for plain
         this.addDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddNote, this.sense.id) && langAuthorized && !this.readonly;
         this.editDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosUpdateNote, this.sense.id) && langAuthorized && !this.readonly;
         this.deleteDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveNote, this.sense.id) && langAuthorized && !this.readonly;
+
+        this.addConceptAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.sense.id) && !this.readonly;
     }
 
     deleteSense() {
-        this.ontolexService.removeSense(this.sense.id, true).subscribe(
-            () => {
-                this.update.emit();
+        if (this.sense.id != null) { //reified
+            this.ontolexService.removeSense(this.sense.id, true).subscribe(
+                () => {
+                    this.update.emit();
+                }
+            );
+        } else { //plain
+            if (this.sense.concept != null) {
+                this.ontolexService.removePlainConceptualization(this.entry.id, this.sense.concept[0].id).subscribe(
+                    () => {
+                        this.update.emit();
+                    }
+                )
+            } else if (this.sense.reference != null) {
+                this.ontolexService.removePlainLexicalization(this.entry.id, this.sense.reference[0]).subscribe(
+                    () => {
+                        this.update.emit();
+                    }
+                )
             }
-        );
+        }
+    }
+
+    reifyPlainSense() {
+        if (this.sense.concept != null) {
+            this.browsingModals.browseConceptTree({key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}, null, true).then(
+                lexConc => {
+                    this.ontolexService.addConceptualization(this.entry.id, lexConc, false, true).subscribe(
+                        () => {
+                            this.update.emit();
+                        }
+                    )
+                },
+                () => {}
+            );
+        } else if (this.sense.reference != null) {
+            this.ontolexService.addLexicalization(this.entry.id, this.sense.reference[0], false, true).subscribe(
+                () => {
+                    this.update.emit();
+                }
+            )
+        }
     }
 
     //CONCEPT

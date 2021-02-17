@@ -1352,6 +1352,7 @@
             "DELETE_ALL_VALUES": "Delete all values",
             "EDIT_LITERAL_CONTENT": "Edit literal content",
             "MOVE_XLABEL_TO_CONCEPT": "Move xLabel to another concept",
+            "REIFY_PLAIN_SENSE": "Reify plain sense",
             "SET_AS_DEPRECATED": "Set as deprecated",
             "SHOW_HIDE_INFERRED": "Show/hide inferred information",
             "SHOW_IN_DATA_GRAPH": "Show in data-oriented graph",

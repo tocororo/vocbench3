@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { EntryReference, LexicalEntry, LexicalRelation, LexicalResourceUtils } from "src/app/models/LexicographerView";
+import { Vartrans } from "src/app/models/Vocabulary";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
@@ -18,6 +19,7 @@ export class LexicalRelationComponent {
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update
 
     category: ARTURIResource;
+    showCategory: boolean;
     targetRef: EntryReference[];
 
     deleteAuthorized: boolean;
@@ -37,6 +39,7 @@ export class LexicalRelationComponent {
             this.targetRef = this.relation.source;
         }
         this.category = this.relation.category[0];
+        this.showCategory = this.category != null && !this.category.equals(Vartrans.translatableAs);
 
         this.readonly = LexicalResourceUtils.isInStaging(this.relation);
         this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.entry.id) && !this.readonly;
@@ -55,6 +58,10 @@ export class LexicalRelationComponent {
             alert("Removal of reified relation still not handled")
         }
 
+    }
+
+    categoryDblClick() {
+        this.dblclickObj.emit(this.category);
     }
 
     targetDblClick(ref: EntryReference) {

@@ -33,7 +33,6 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
         super.ngOnInit();
     }
 
-    //add as top concept
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.ADD_SUBTERM"}, null, true, true, false, true).then(
             (values: ARTURIResource[]|ARTURIResource) => { //array if multiple selected, one value otherwise

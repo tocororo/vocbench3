@@ -19,7 +19,7 @@
 
         <!-- Lemma -->
         <div class="mt-3">
-            <lexical-form *ngFor="let l of lemma" style="flex: 1" [entry]="resource" [form]="l" [lexViewCache]="lexViewCache" lemma="true" [readonly]="readonly"
+            <lexical-form *ngFor="let l of lemma" style="flex: 1" [entry]="lexEntry" [form]="l" [lexViewCache]="lexViewCache" lemma="true" [readonly]="readonly"
                 (update)="buildLexicographerView()">
             </lexical-form>
         </div>
@@ -48,7 +48,7 @@
 
         <!-- Other forms -->
         <div class="mt-4">
-            <lexical-form *ngFor="let f of otherForms;" class="mb-2" style="flex: 1" [entry]="resource" [form]="f" [lexViewCache]="lexViewCache" [readonly]="readonly" 
+            <lexical-form *ngFor="let f of otherForms;" class="mb-2" style="flex: 1" [entry]="lexEntry" [form]="f" [lexViewCache]="lexViewCache" [readonly]="readonly" 
                 (update)="buildLexicographerView()">
             </lexical-form>
             <inline-editable-value *ngIf="pendingOtherForm" class="mb-2" [textStyle]="formStyle" [focusOnInit]="true" 
@@ -68,7 +68,7 @@
 
         <!-- Senses -->
         <div class="mt-3">
-            <lexical-sense *ngFor="let s of senses" class="mb-2" [sense]="s" [lang]="lang" [readonly]="readonly" [lexViewCache]="lexViewCache" 
+            <lexical-sense *ngFor="let s of senses" class="mb-2" [sense]="s" [entry]="lexEntry" [lang]="lang" [readonly]="readonly" [lexViewCache]="lexViewCache" 
                 (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
             </lexical-sense>
         </div>
