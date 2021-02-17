@@ -11,17 +11,20 @@
             <span class="far fa-trash-alt"></span>
         </button>
 
-        <div class="dropdown ml-1" ngbDropdown>
-            <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" [disabled]="!isDumpAuthorized" ngbDropdownToggle>
-                {{'DATA_MANAGEMENT.VERSIONING.DUMP'|translate}}...
-                <span class="fas fa-caret-down fa-sm"></span>
+        <div class="btn-group btn-group-xs ml-1">
+            <button class="btn btn-light" (click)="dump()">
+                {{'DATA_MANAGEMENT.VERSIONING.DUMP'|translate}}
             </button>
-            <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="dump()">{{'ACTIONS.DUMP_NEW_VERSION'|translate}}</a>
-                <a class="dropdown-item" (click)="dumpWithLocation()">{{'ACTIONS.DUMP_NEW_VERSION_DIFFERENT_LOCATION'|translate}}</a>
+            <div *ngIf="isAdmin" class="btn-group" ngbDropdown>
+                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-caret-down fa-sm"></span>
+                </button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <a class="dropdown-item" (click)="dump()">{{'ACTIONS.DUMP_NEW_VERSION'|translate}}</a>
+                    <a class="dropdown-item" (click)="dumpWithLocation()">{{'ACTIONS.DUMP_NEW_VERSION_DIFFERENT_LOCATION'|translate}}</a>
+                </div>
             </div>
         </div>
-
     </div>
 
     <div class="card-body scrollableContainer" style="flex: 1;">

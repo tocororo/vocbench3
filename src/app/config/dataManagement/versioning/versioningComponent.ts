@@ -23,9 +23,12 @@ export class VersioningComponent {
     isDumpAuthorized: boolean;
     isDeleteAuthorized: boolean;
 
+    isAdmin: boolean; //in order to allow dump to a different location
+
     constructor(private versionsService: VersionsServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
+        this.isAdmin = VBContext.getLoggedUser().isAdmin();
         this.initVersions();
         this.isDumpAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.versionsCreateVersionDump);
         this.isDeleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.versionsDeleteVersions);
