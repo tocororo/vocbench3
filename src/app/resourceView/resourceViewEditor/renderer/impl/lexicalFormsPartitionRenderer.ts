@@ -21,7 +21,6 @@ import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
     partition = ResViewPartition.lexicalForms;
-    addBtnImgTitle = "Add a lexical form";
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
     private lexiconLang: string; //cache the language of the lexicon

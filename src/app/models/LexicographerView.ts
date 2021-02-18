@@ -9,29 +9,10 @@ export class LexicalEntry {
     lemma: Form[];
     otherForms: Form[];
     subterms: EntryReference[];
+    constituents: Constituent[];
     senses: Sense[];
     related: LexicalRelation[];
     translatableAs: LexicalRelation[];
-
-    isInStaging(): boolean {
-        return this.isInStagingAdd() || this.isInStagingRemove();
-    }
-    isInStagingAdd(): boolean {
-        for (let n of this.nature) {
-            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingAddGraph))) {
-                return true;
-            }
-        }
-        return false;
-    }
-    isInStagingRemove(): boolean {
-        for (let n of this.nature) {
-            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingRemoveGraph))) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public static parse(json: any): LexicalEntry {
         let lv: LexicalEntry = new LexicalEntry();
@@ -42,6 +23,7 @@ export class LexicalEntry {
         lv.lemma = json.lemma.map((l: any) => Form.parse(l));
         lv.otherForms = json.otherForms.map((f: any) => Form.parse(f));
         lv.subterms = json.subterms.map((s: any) => EntryReference.parse(s));
+        lv.constituents = json.constituents.map((c: any) => Constituent.parse(c));
         lv.senses = json.senses.map((s: any) => Sense.parse(s));
         lv.related = json.related.map((r: any) => LexicalRelation.parse(r));
         lv.translatableAs = json.translatableAs.map((r: any) => LexicalRelation.parse(r));
@@ -56,26 +38,6 @@ export class Form {
     writtenRep: ARTLiteral[];
     nature: ResourceNature[];
     scope: TripleScopes;
-
-    isInStaging(): boolean {
-        return this.isInStagingAdd() || this.isInStagingRemove();
-    }
-    isInStagingAdd(): boolean {
-        for (let n of this.nature) {
-            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingAddGraph))) {
-                return true;
-            }
-        }
-        return false;
-    }
-    isInStagingRemove(): boolean {
-        for (let n of this.nature) {
-            if (n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingRemoveGraph))) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public static parse(json: any): Form {
         let f: Form = new Form();
@@ -93,9 +55,9 @@ export class Form {
 
 export class Sense {
     id: ARTResource;
-    definition: ARTNode[] = [];
-    reference: ARTResource[] = [];
-    concept: ConceptReference[] = [];
+    definition: ARTNode[];
+    reference: ARTResource[];
+    concept: ConceptReference[];
     related: SenseRelation[];
 	translations: SenseRelation[];
 	terminologicallyRelated: SenseRelation[];
@@ -219,6 +181,20 @@ export class ConceptReference {
     }
 }
 
+export class Constituent {
+    id: ARTResource;
+    correspondingLexicalEntry: EntryReference[];
+	features: ARTPredicateObjects[];
+
+    public static parse(json: any): Constituent {
+        let c: Constituent = new Constituent();
+        c.id = ParsingUtils.parseResourceId(json.id);
+        c.correspondingLexicalEntry = json.correspondingLexicalEntry.map((e: any) => EntryReference.parse(e));
+        c.features = Deserializer.createPredicateObjectsList(json.features);
+        return c;
+    }
+}
+
 /**
  * This is a utilities class just for parsing the id of the above classes (Form, Sense, ...).
  * Such IDs are represented as resource nominal value, not in NT format, so I cannot use NTripleUtils.
@@ -256,8 +232,22 @@ export class LexicalResourceUtils {
         }
         return false;
     }
+
+    static isStagedTriple(resourceWithScope: ResourceWithScope): boolean {
+        return this.isStagedAddTriple(resourceWithScope) || this.isStagedRemoveTriple(resourceWithScope)
+    }
+    static isStagedAddTriple(resourceWithScope: ResourceWithScope): boolean {
+        return resourceWithScope.scope == TripleScopes.del_staged;
+    }
+    static isStagedRemoveTriple(resourceWithScope: ResourceWithScope): boolean {
+        return resourceWithScope.scope == TripleScopes.staged;
+    }
 }
 
 interface ResourceWithNature {
     nature: ResourceNature[];
+}
+
+interface ResourceWithScope {
+    scope: TripleScopes;
 }

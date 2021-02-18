@@ -19,7 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class DatatypeDefinitionPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.datatypeDefinitions;
-    addBtnImgTitle = "Set restrictions";
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

@@ -20,7 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.ranges;
-    addBtnImgTitle = "Add a range";
     addBtnImgSrc = "./assets/images/icons/actions/cls_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

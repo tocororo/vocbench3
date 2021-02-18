@@ -23,7 +23,6 @@ import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMultiRoot {
 
     partition = ResViewPartition.classaxioms;
-    addBtnImgTitle = "Add a class axiom";
     addBtnImgSrc = "./assets/images/icons/actions/cls_create.png";
 
     constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices, 

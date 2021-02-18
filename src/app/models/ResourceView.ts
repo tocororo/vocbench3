@@ -124,7 +124,7 @@ export class ResViewUtils {
             case ResViewPartition.classaxioms:
                 return "RESOURCE_VIEW.PARTITIONS.CLASS_AXIOMS";
             case ResViewPartition.constituents:
-                return "RESOURCE_VIEW.PARTITIONS.CONSTRITUENST";
+                return "RESOURCE_VIEW.PARTITIONS.CONSTITUENTS";
             case ResViewPartition.datatypeDefinitions:
                 return "RESOURCE_VIEW.PARTITIONS.DATATYPE_DEFINITIONS";
             case ResViewPartition.denotations:
@@ -177,6 +177,69 @@ export class ResViewUtils {
                 return "RESOURCE_VIEW.PARTITIONS.TOP_CONCEPT_OF";
             case ResViewPartition.types:
                 return "RESOURCE_VIEW.PARTITIONS.TYPES";
+        }
+    }
+
+    public static getResourceViewPartitionAddBtnTranslationKey(partition: ResViewPartition): string {
+        switch (partition) {
+            case ResViewPartition.broaders:
+                return "DATA.ACTIONS.ADD_BROADER";
+            case ResViewPartition.classaxioms:
+                return "DATA.ACTIONS.ADD_CLASS_AXIOM";
+            case ResViewPartition.constituents:
+                return "DATA.ACTIONS.SET_CONSTITUENTS";
+            case ResViewPartition.datatypeDefinitions:
+                return "DATA.ACTIONS.SET_DATATYPE_RESTRICTIONS";
+            case ResViewPartition.denotations:
+                return "DATA.ACTIONS.ADD_DENOTATION";
+            case ResViewPartition.disjointProperties:
+                return "DATA.ACTIONS.ADD_DISJOINT_PROPERTY";
+            case ResViewPartition.domains:
+                return "DATA.ACTIONS.ADD_DOMAIN";
+            case ResViewPartition.equivalentProperties:
+                return "DATA.ACTIONS.ADD_EQUIVALENT_PROPERTY";
+            case ResViewPartition.evokedLexicalConcepts:
+                return "DATA.ACTIONS.ADD_EVOKED_LEXICAL_CONCEPT";
+            case ResViewPartition.facets:
+                return "DATA.ACTIONS.ADD_INVERSE_PROPERTY";
+            case ResViewPartition.formBasedPreview:
+                return ""; //add not available
+            case ResViewPartition.formRepresentations:
+                return "DATA.ACTIONS.ADD_FORM_REPRESENTATION";
+            case ResViewPartition.imports:
+                return "DATA.ACTIONS.ADD_IMPORT";
+            case ResViewPartition.labelRelations:
+                return "DATA.ACTIONS.ADD_LABEL_RELATION";
+            case ResViewPartition.lexicalForms:
+                return "DATA.ACTIONS.ADD_LEX_FORM";
+            case ResViewPartition.lexicalSenses:
+                return "DATA.ACTIONS.ADD_LEXICAL_SENSE";
+            case ResViewPartition.lexicalizations:
+                return "DATA.ACTIONS.ADD_LEXICALIZATION";
+            case ResViewPartition.members:
+                return "DATA.ACTIONS.ADD_MEMBER";
+            case ResViewPartition.membersOrdered:
+                return "DATA.ACTIONS.ADD_MEMBER";
+            case ResViewPartition.notes:
+                return "DATA.ACTIONS.ADD_NOTE";
+            case ResViewPartition.properties:
+                return "DATA.ACTIONS.ADD_PROPERTY";
+            case ResViewPartition.ranges:
+                return "DATA.ACTIONS.ADD_RANGE";
+            case ResViewPartition.rdfsMembers:
+                return "DATA.ACTIONS.ADD_MEMBER";
+            case ResViewPartition.schemes:
+                return "DATA.ACTIONS.ADD_SCHEME";
+            case ResViewPartition.subPropertyChains:
+                return "DATA.ACTIONS.ADD_PROPERTY_CHAIN_AXIOM";
+            case ResViewPartition.subterms:
+                return "DATA.ACTIONS.ADD_SUBTERM";
+            case ResViewPartition.superproperties:
+                return "DATA.ACTIONS.ADD_SUPERPROPERTY";
+            case ResViewPartition.topconceptof:
+                return "DATA.ACTIONS.ADD_SCHEME";
+            case ResViewPartition.types:
+                return "DATA.ACTIONS.ADD_TYPE";
         }
     }
 

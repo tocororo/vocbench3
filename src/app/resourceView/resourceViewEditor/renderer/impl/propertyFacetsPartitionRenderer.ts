@@ -27,7 +27,6 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     AddAction = AddAction; //workaround for using enum in template
 
     partition = ResViewPartition.facets;
-    addBtnImgTitle = "Add a inverse property";
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

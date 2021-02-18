@@ -1,0 +1,11 @@
+<div class="d-flex align-items-center">
+    <entry-ref *ngFor="let ref of constituent.correspondingLexicalEntry" [ref]="ref" class="clickable"></entry-ref>
+    <ng-container *ngFor="let feature of constituent.features">
+        [
+        <ng-container *ngFor="let obj of f.getObjects(); let last=last">
+            {{f.getPredicate().getLocalName()}}={{obj.getShow()}}
+            <span *ngIf="!last">;</span>
+        </ng-container>
+        ]
+    </ng-container>
+</div>

@@ -21,7 +21,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.schemes;
-    addBtnImgTitle = "Add to a ConceptScheme";
     addBtnImgSrc = "./assets/images/icons/actions/conceptScheme_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

@@ -22,7 +22,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.rdfsMembers;
-    addBtnImgTitle = "Add member";
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
@@ -37,7 +36,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.basicModals.confirm({key:"ACTIONS.ADD_MEMBER"}, {key:"MESSAGES.EDIT_RDF_MEMBER_WARN_CONFIRM"}, ModalType.warning).then(
+            this.basicModals.confirm({key:"DATA.ACTIONS.ADD_MEMBER"}, {key:"MESSAGES.EDIT_RDF_MEMBER_WARN_CONFIRM"}, ModalType.warning).then(
                 confirm => {
                     this.resViewModals.addRdfsMembers(predicate, propChangeable).then(
                         (data: RdfsMembersModalReturnData) => {

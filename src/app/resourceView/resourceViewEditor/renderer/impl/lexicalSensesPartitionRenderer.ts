@@ -20,7 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class LexicalSensesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.lexicalSenses;
-    addBtnImgTitle = "Add lexical sense";
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

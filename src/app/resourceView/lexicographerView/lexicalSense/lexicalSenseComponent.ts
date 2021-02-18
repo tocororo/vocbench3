@@ -114,6 +114,12 @@ export class LexicalSenseComponent {
         )
     }
 
+    //REFERENCE
+
+    setReference() {
+        alert("TODO");
+    }
+
     //DEFINITION
 
     addDefinition() {

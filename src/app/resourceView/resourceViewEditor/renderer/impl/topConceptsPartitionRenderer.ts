@@ -22,7 +22,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.topconceptof;
-    addBtnImgTitle = "Add to a skos:ConceptScheme as topConcept";
     addBtnImgSrc = "./assets/images/icons/actions/conceptScheme_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

@@ -20,7 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.formRepresentations;
-    addBtnImgTitle = "Add a representation";
     addBtnImgSrc = "./assets/images/icons/actions/datatypeProperty_create.png";
 
     private lexiconLang: string; //cache the language of the lexicon

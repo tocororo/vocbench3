@@ -18,7 +18,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class FormBasedPreviewRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.formBasedPreview;
-    addBtnImgTitle = "";
     addBtnImgSrc: any = null; //do not show the add icon
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

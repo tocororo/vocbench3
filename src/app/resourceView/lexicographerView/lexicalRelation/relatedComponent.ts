@@ -1,11 +1,9 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { ARTResource } from "src/app/models/ARTResources";
 import { LexicalEntry, LexicalRelation } from "src/app/models/LexicographerView";
-import { Vartrans } from "src/app/models/Vocabulary";
-import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
-import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
+import { LexViewHelper } from "../LexViewHelper";
 
 @Component({
     selector: "related",
@@ -21,7 +19,7 @@ export class RelatedGroupComponent {
     relations: LexicalRelation[];
     addAuthorized: boolean;
 
-    constructor(private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices) {}
+    constructor(private lexViewHelper: LexViewHelper) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['entry']) {
@@ -31,20 +29,12 @@ export class RelatedGroupComponent {
     }
 
     add() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [Vartrans.lexicalRel]).then(
-            (prop: ARTURIResource) => {
-                this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
-                    (relatedEntry: ARTURIResource) => {
-                        this.resourceService.addValue(this.entry.id, prop, relatedEntry).subscribe(
-                            () => {
-                                this.update.emit();
-                            }
-                        )
-                    },
-                    () => {}
-                )
-            },
-            () => {}
+        this.lexViewHelper.addRelated(this.entry.id).subscribe(
+            (done: boolean) => {
+                if (done) {
+                    this.update.emit();
+                }
+            }
         )
     }
 

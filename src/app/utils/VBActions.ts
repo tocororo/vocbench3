@@ -121,6 +121,7 @@ export enum VBActionsEnum {
     ontManagerDeleteOntologyMirror = "ontManagerDeleteOntologyMirror",
     ontManagerUpdateOntologyMirror = "ontManagerUpdateOntologyMirror",
     //Ontolex
+    ontolexAddConceptualization = "ontolexAddConceptualization",
     ontolexAddFormRepresentation = "ontolexAddFormRepresentation",
     ontolexAddLexicalForm = "ontolexAddLexicalForm",
     ontolexAddLexicalization = "ontolexAddLexicalization",

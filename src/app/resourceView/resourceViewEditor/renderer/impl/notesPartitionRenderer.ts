@@ -22,7 +22,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.notes;
-    addBtnImgTitle = "Add a note";
     addBtnImgSrc = "./assets/images/icons/actions/annotationProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

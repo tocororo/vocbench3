@@ -20,14 +20,7 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from partitionRendererSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
-
     partition = ResViewPartition.denotations;
-    addBtnImgTitle = "Add denotation";
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

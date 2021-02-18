@@ -33,7 +33,6 @@ import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from
 export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot {
 
     partition = ResViewPartition.lexicalizations;
-    addBtnImgTitle = "Add a lexicalization";
     addBtnImgSrc = "./assets/images/icons/actions/annotationProperty_create.png";
 
     private predicateOrder: string[] = [

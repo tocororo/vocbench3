@@ -26,7 +26,7 @@ export class PhoneticRepComponent {
     constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices) {}
 
     ngOnInit() {
-        if (ResourceUtils.isTripleInStaging(this.phoneticRep)) {
+        if (this.phoneticRep && ResourceUtils.isTripleInStaging(this.phoneticRep)) { //check only in visualization (not in creation where phoneticRep is not provided)
             this.readonly = true;
         }
         this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;

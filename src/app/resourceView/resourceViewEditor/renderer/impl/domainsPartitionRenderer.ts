@@ -20,7 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.domains;
-    addBtnImgTitle = "Add a domain";
     addBtnImgSrc = "./assets/images/icons/actions/cls_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

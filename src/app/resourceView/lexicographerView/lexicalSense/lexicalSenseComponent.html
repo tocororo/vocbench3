@@ -1,7 +1,7 @@
 <div class="d-flex">
     <div class="sense">
 
-        <div *ngIf="sense.definition.length > 0 || pendingDef" class="d-flex my-2">
+        <div *ngIf="sense.definition?.length > 0 || pendingDef" class="d-flex my-2">
             <label class="mt-2 mr-2">{{'COMMONS.DEFINITION'|translate}}:</label>
             <div class="vbox">
                 <div *ngFor="let def of sense.definition; let last=last" class="d-flex align-items-center mr-2" [ngClass]="{ 'mb-1': !last }">
@@ -19,13 +19,13 @@
             </div>
         </div>
 
-        <div *ngIf="sense.concept.length > 0" class=" my-2">
+        <div *ngIf="sense.concept?.length > 0" class=" my-2">
             <concept-ref *ngFor="let c of sense.concept" [concept]="c" [lang]="lang" [lexViewCache]="lexViewCache"
                 (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
             </concept-ref>
         </div>
 
-        <div *ngIf="sense.reference.length > 0" class=" my-2">
+        <div *ngIf="sense.reference?.length > 0" class=" my-2">
             <div *ngFor="let ref of sense.reference" class="d-flex align-items-center mb-2">
                 <label class="mr-2">{{'RESOURCE_VIEW.LEX_VIEW.SEMANTIC_REFERENCE'|translate}}:</label>
                 <rdf-resource class="clickable" [resource]="ref" (dblclick)="resourceDblClick(ref)"></rdf-resource>
@@ -47,14 +47,17 @@
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
                 <a *ngIf="!sense.id" class="dropdown-item" (click)="reifyPlainSense()">
-                    {{'RESOURCE_VIEW.ACTIONS.REIFY_PLAIN_SENSE'|translate}}
+                    {{'DATA.ACTIONS.REIFY_PLAIN_SENSE'|translate}}
                 </a>
                 <ng-container *ngIf="sense.id">
-                    <a class="dropdown-item" (click)="addDefinition()" [ngClass]="{ disabled: !addDefAuthorized }">
-                        {{'RESOURCE_VIEW.ACTIONS.ADD_DEF_TO_LEX_SENSE'|translate}}
+                    <a class="dropdown-item" (click)="setReference()">
+                        {{'DATA.ACTIONS.SET_REFERENCE'|translate}}
                     </a>
                     <a class="dropdown-item" (click)="setConcept()" [ngClass]="{ disabled: sense.concept.length != 0 }">
                         {{'DATA.ACTIONS.SET_LEX_CONCEPT'|translate}}
+                    </a>
+                    <a class="dropdown-item" (click)="addDefinition()" [ngClass]="{ disabled: !addDefAuthorized }">
+                        {{'DATA.ACTIONS.ADD_DEF_TO_LEX_SENSE'|translate}}
                     </a>
                 </ng-container>
             </div>

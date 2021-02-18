@@ -8,7 +8,7 @@
             <label class="groupPanel-heading-content">{{labelTranslationKey|translate}}:</label>
         </span>
         <span *ngIf="addBtnImgSrc" class="groupPanel-heading-content groupPanel-add-btn">
-            <button class="resViewPartitionAddBtn" [title]="addBtnImgTitle" (click)="addHandler(null, 'default')" [disabled]="addDisabled">
+            <button class="resViewPartitionAddBtn" [title]="addTitleTranslationKey|translate" (click)="addHandler(null, 'default')" [disabled]="addDisabled">
                 <img [src]="addBtnImgSrc"/>
             </button>
         </span>

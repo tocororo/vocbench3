@@ -3,4 +3,7 @@
     <lexical-relation *ngFor="let r of relations" class="ml-2" [entry]="entry" [relation]="r"
         (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
     </lexical-relation>
+    <button class="btn btn-xs btn-faded ml-2" (click)="add()" [title]="'ACTIONS.ADD'|translate">
+        <span class="fas fa-plus"></span>
+    </button>
 </div>

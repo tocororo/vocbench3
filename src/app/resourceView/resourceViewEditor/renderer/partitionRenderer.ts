@@ -68,7 +68,7 @@ export abstract class PartitionRenderer {
      * Title show on mouseover on the "add" icon placed on the groupPanel outline.
      * This is specific of a partition.
      */
-    abstract addBtnImgTitle: string;
+    addTitleTranslationKey: string;
 
     /**
      * Action authorization
@@ -83,6 +83,7 @@ export abstract class PartitionRenderer {
 
     ngOnInit() {
         this.labelTranslationKey = ResViewUtils.getResourceViewPartitionLabelTranslationKey(this.partition);
+        this.addTitleTranslationKey = ResViewUtils.getResourceViewPartitionAddBtnTranslationKey(this.partition);
     }
 
     ngOnChanges(changes: SimpleChanges) {

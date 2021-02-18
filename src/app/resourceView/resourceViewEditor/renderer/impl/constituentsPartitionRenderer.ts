@@ -21,7 +21,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class ConstituentsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.constituents;
-    addBtnImgTitle = "Add constituent";
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

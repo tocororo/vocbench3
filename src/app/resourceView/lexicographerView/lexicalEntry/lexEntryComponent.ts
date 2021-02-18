@@ -1,11 +1,9 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { Form, LexicalEntry } from "src/app/models/LexicographerView";
-import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
+import { Form, LexicalEntry, LexicalResourceUtils } from "src/app/models/LexicographerView";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { VBActionsEnum } from "src/app/utils/VBActions";
-import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
-import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
+import { ARTLiteral, ARTResource } from "../../../models/ARTResources";
 import { ResourceViewCtx } from "../../../models/ResourceView";
 import { ProjectContext } from "../../../utils/VBContext";
 import { LexViewCache } from "../LexViewChache";
@@ -30,14 +28,14 @@ export class LexEntryComponent {
     //auth
     addMorphoPropAuthorized: boolean;
 
-    constructor(private browsingModals: BrowsingModalServices, private ontolexService: OntoLexLemonServices) {}
+    constructor() {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['entry'] && changes['entry'].currentValue) {
+            this.pendingMorphoProp = false;
+            this.addMorphoPropAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.entry.id) && !this.readonly;
             this.initTitle();
         }
-
-        this.addMorphoPropAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.entry.id) && !this.readonly;
     }
 
     /**
@@ -49,7 +47,7 @@ export class LexEntryComponent {
         if (this.entry.lemma.length == 1) {
             l = this.entry.lemma[0]
         } else if (this.entry.lemma.length > 1) { //probably in validation
-            l = this.entry.lemma.find(lem => lem.isInStagingAdd());
+            l = this.entry.lemma.find(lem => LexicalResourceUtils.isInStagingAdd(lem));
             if (l == null) { //no lemma in addition => get the first one
                 l = this.entry.lemma[0]
             }
@@ -77,20 +75,6 @@ export class LexEntryComponent {
 
     onPendingMorphPropCanceled() {
         this.pendingMorphoProp = false;
-    }
-
-
-    addSubterm() {
-        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.ADD_SUBTERM"}).then(
-            (entry: ARTURIResource) => {
-                this.ontolexService.addSubterm(<ARTURIResource>this.entry.id, entry).subscribe(
-                    () => {
-                        this.update.emit();
-                    }
-                )
-            },
-            () => {}
-        )
     }
 
     /**

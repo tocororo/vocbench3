@@ -19,7 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.labelRelations;
-    addBtnImgTitle = "Add a label relation";
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

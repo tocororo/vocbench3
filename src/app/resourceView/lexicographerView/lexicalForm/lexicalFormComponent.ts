@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Observable } from "rxjs";
 import { ARTLiteral, ARTURIResource } from "src/app/models/ARTResources";
-import { Form, LexicalEntry } from "src/app/models/LexicographerView";
+import { Form, LexicalEntry, LexicalResourceUtils } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
@@ -41,7 +41,7 @@ export class LexicalFormComponent {
         } else {
             this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
         }
-        if (this.form.isInStagingRemove()) {
+        if (LexicalResourceUtils.isInStagingRemove(this.form)) {
             this.readonly = true;
         }
         this.addMorphoPropAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.form.id) && !this.readonly;

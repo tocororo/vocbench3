@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Form } from 'src/app/models/LexicographerView';
+import { Form, LexicalResourceUtils } from 'src/app/models/LexicographerView';
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
 import { TripleScopes } from '../../models/ARTResources';
 import { BasicModalServices } from '../modal/basicModal/basicModalServices';
@@ -34,9 +34,9 @@ export class InlineEditableForm extends AbstractInlineEditable {
             proposedRemoveTriple: false
         }
         //init statuses
-        if (this.value.isInStagingAdd()) {
+        if (LexicalResourceUtils.isInStagingAdd(this.value)) {
             this.ngClassValue.proposedAddRes = true;
-        } else if (this.value.isInStagingRemove()) {
+        } else if (LexicalResourceUtils.isInStagingRemove(this.value)) {
             this.ngClassValue.proposedRemoveRes = true;
         }
         if (this.value.scope == TripleScopes.staged) {

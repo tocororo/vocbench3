@@ -19,7 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class PropertyChainRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.subPropertyChains;
-    addBtnImgTitle = "Add a property chain axion";
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

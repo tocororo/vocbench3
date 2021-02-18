@@ -31,7 +31,7 @@
                             <button class="btn btn-xs btn-light" (click)="selectBroader(concept, selectedScheme)">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.SELECT_BROADER'|translate}}</button>
                             <button class="btn btn-xs btn-light ml-1" (click)="setAsTopConcept(concept, selectedScheme)">{{'DATA.ACTIONS.SET_AS_TOP_CONCEPT'|translate}}</button>
                             <button class="btn btn-xs btn-light ml-1" (click)="removeFromScheme(concept, selectedScheme)">{{'DATA.ACTIONS.REMOVE_FROM_SCHEME'|translate}}</button>
-                            <button class="btn btn-xs btn-light ml-1" (click)="deleteConcept(concept)">{{'DATA.CONCEPT.DELETE_CONCEPT'|translate}}</button>
+                            <button class="btn btn-xs btn-light ml-1" (click)="deleteConcept(concept)">{{'DATA.ACTIONS.DELETE_CONCEPT'|translate}}</button>
                         </td>
                     </tr>
                 </tbody>
@@ -60,7 +60,7 @@
                                 <button class="btn btn-xs btn-light" (click)="selectBroader(concept, entry.scheme)">{{'ICV.STRUCTURAL.DANGLING_CONCEPTS.SELECT_BROADER'|translate}}</button>
                                 <button class="btn btn-xs btn-light ml-1" (click)="setAsTopConcept(concept, entry.scheme)">{{'DATA.ACTIONS.SET_AS_TOP_CONCEPT'|translate}}</button>
                                 <button class="btn btn-xs btn-light ml-1" (click)="removeFromScheme(concept, entry.scheme)">{{'DATA.ACTIONS.REMOVE_FROM_SCHEME'|translate}}</button>
-                                <button class="btn btn-xs btn-light ml-1" (click)="deleteConcept(concept)">{{'DATA.CONCEPT.DELETE_CONCEPT'|translate}}</button>
+                                <button class="btn btn-xs btn-light ml-1" (click)="deleteConcept(concept)">{{'DATA.ACTIONS.DELETE_CONCEPT'|translate}}</button>
                             </td>
                         </tr>
                     </ng-container>

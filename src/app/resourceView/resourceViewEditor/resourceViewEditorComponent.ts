@@ -39,6 +39,7 @@ import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./re
         .todo-issues { color: #337ab7 }
         .in-progress-issues { color: #f0ad4e }
         .done-issues { color: #5cb85c }
+        .generic-issues { color: #ff3300 }
         .card-header .btn.active .fas, .card-header .btn.active .far  { color: #4285f4; } `
     ]
 })
@@ -107,7 +108,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     valueFilterLangEnabled: boolean;
 
     collaborationAvailable: boolean = false;
-    private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues" | "in-progress-issues"; issues: Issue[] } = { 
+    private issuesStruct: { btnClass: string; issues: Issue[] } = { 
         btnClass: "", issues: null
     };
 
@@ -767,21 +768,26 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 }
                 if (issues.length > 0) {
                     /* Iterate over the issues and add the classes for styling the button of the collaboration system menu
-                     * - black (no class applied) if there is no issue
+                     * - black (no class applied) if there are no issues
                      * - green (.done-issues) if there are only closed issues
-                     * - blue (.todo-issues) if there are at least one open issue
+                     * - blue (.todo-issues) if there is at least one open issue
+                     * - orange (.in-progress-issues) if there is at least in-progress issues and no todo
+                     * - red (.generic-issues) if there are at least one issue but no status is known
                      */
-                    for (var i = 0; i < issues.length; i++) {
-                        if (issues[i].getStatusId() == '10000') {
+                    for (let i of issues) {
+                        if (i.getStatusId() == '10000') {
                             this.issuesStruct.btnClass = "todo-issues";
                             break;
-                        } else if (issues[i].getStatusId() == '3') {
+                        } else if (i.getStatusId() == '3') {
                             this.issuesStruct.btnClass = "in-progress-issues";
-                        } else if (issues[i].getStatusId() == '10001') {
+                        } else if (i.getStatusId() == '10001') {
                             if (this.issuesStruct.btnClass != "in-progress-issues") {
                                 this.issuesStruct.btnClass = "done-issues";
                             }
                         }
+                    }
+                    if (this.issuesStruct.btnClass == "") { //there are issue but with statusId not known
+                        this.issuesStruct.btnClass = "generic-issues";
                     }
                     this.issuesStruct.issues = issues;
                 }

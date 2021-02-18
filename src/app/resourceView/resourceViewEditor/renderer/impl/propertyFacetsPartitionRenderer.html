@@ -9,7 +9,7 @@
             <label class="groupPanel-heading-content">{{labelTranslationKey|translate}}:</label>
         </span>
         <span class="groupPanel-heading-content groupPanel-add-btn">
-            <button class="resViewPartitionAddBtn" (click)="addHandler(null, AddAction.default)" [title]="addBtnImgTitle" [disabled]="addDisabled">
+            <button class="resViewPartitionAddBtn" (click)="addHandler(null, AddAction.default)" [title]="addTitleTranslationKey|translate" [disabled]="addDisabled">
                 <img [src]="addBtnImgSrc"/>
             </button>
             <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;" ngbDropdown>

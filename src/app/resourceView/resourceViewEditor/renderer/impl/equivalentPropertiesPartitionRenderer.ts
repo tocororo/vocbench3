@@ -19,7 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class EquivalentPropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.equivalentProperties;
-    addBtnImgTitle = "Add an equivalent property";
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

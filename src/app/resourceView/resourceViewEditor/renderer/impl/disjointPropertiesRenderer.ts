@@ -19,7 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.disjointProperties;
-    addBtnImgTitle = "Add a disjoint property";
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

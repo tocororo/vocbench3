@@ -1,0 +1,7 @@
+<div class="d-flex align-items-center">
+    <label>{{'RESOURCE_VIEW.PARTITIONS.SUBTERMS'|translate}}:</label>
+    <subterm *ngFor="let s of subterms" class="ml-3" [subterm]="s" (dblclickObj)="resourceDblClick($event)" (update)="onUpdate()"></subterm>
+    <button *ngIf="!readonly" class="btn btn-xs btn-faded ml-3" (click)="add()" [title]="'ACTIONS.ADD'|translate">
+        <span class="fas fa-plus"></span>
+    </button>
+</div>

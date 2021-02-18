@@ -9,7 +9,7 @@
             <label class="groupPanel-heading-content">{{labelTranslationKey|translate}}:</label>
         </span>
         <span class="groupPanel-heading-content groupPanel-add-btn dropdown float-right">
-            <button class="dropdown-toggle resViewPartitionAddBtn" data-toggle="dropdown" ngbDropdownToggle [title]="addBtnImgTitle" [disabled]="addDisabled">
+            <button class="dropdown-toggle resViewPartitionAddBtn" data-toggle="dropdown" ngbDropdownToggle [title]="addTitleTranslationKey|translate" [disabled]="addDisabled">
                 <img [src]="addBtnImgSrc"/>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
@@ -43,7 +43,7 @@
                                 <label style="flex: 1">Members</label>
                                 <div class="btn-group float-right" ngbDropdown>
                                     <button class="btn btn-xs btn-light dropdown-toggle predObjRenderPanelBtn" style="padding: 3px 6px;"
-                                        data-toggle="dropdown" ngbDropdownToggle [title]="addBtnImgTitle" [disabled]="addDisabled">
+                                        data-toggle="dropdown" ngbDropdownToggle [title]="addTitleTranslationKey|translate" [disabled]="addDisabled">
                                         <span class="fas fa-plus" style="font-size: 9px;"></span>
                                     </button>
                                     <div class="dropdown-menu" ngbDropdownMenu>

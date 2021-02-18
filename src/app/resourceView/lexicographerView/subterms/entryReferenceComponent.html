@@ -1,0 +1,5 @@
+<div class="d-flex align-items-center" [title]="ref.id.toNT()">
+    <span *ngFor="let lemma of ref.lemma" [class]="renderingClass">
+        {{lemma.writtenRep[0].getShow()}}
+    </span>
+</div>

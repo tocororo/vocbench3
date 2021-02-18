@@ -5,6 +5,7 @@ import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTReso
 import { LanguageConstraint } from '../../../models/LanguagesCountries';
 import { ModalOptions, TextOrTranslation } from '../Modals';
 import { NewPlainLiteralModal } from "./newPlainLiteralModal/newPlainLiteralModal";
+import { NewConceptualizationCfModal } from './newResourceModal/ontolex/newConceptualizationCfModal';
 import { NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
 import { NewOntoLexicalizationCfModal } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
 import { NewResourceCfModal } from "./newResourceModal/shared/newResourceCfModal";
@@ -106,6 +107,14 @@ export class CreationModalServices {
         const modalRef: NgbModalRef = this.modalService.open(NewOntoLexicalizationCfModal, _options);
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.lexicalizationProp = lexicalizationProp;
+        if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
+        return modalRef.result;
+    }
+
+    newConceptualizationCf(title: TextOrTranslation, clsChangeable?: boolean) {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewConceptualizationCfModal, _options);
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
     }

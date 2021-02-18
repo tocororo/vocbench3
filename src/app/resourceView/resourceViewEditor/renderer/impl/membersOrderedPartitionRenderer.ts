@@ -22,7 +22,6 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.membersOrdered;
     membersProperty = SKOS.member;
-    addBtnImgTitle = "Add member";
     addBtnImgSrc = "./assets/images/icons/actions/skosCollection_create.png";
 
     selectedMember: ARTResource;
@@ -60,7 +59,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a first member to an ordered collection 
      */
     addFirst(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_MEMBER"}, this.resource, this.membersProperty, false, null, false).then(
+        this.resViewModals.addPropertyValue({key: "DATA.ACTIONS.ADD_MEMBER"}, this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
                 let addFunctions: MultiActionFunction[] = [{
@@ -77,7 +76,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a last member to an ordered collection 
      */
     addLast(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_MEMBER"}, this.resource, this.membersProperty, false, null, false).then(
+        this.resViewModals.addPropertyValue({key: "DATA.ACTIONS.ADD_MEMBER"}, this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
                 let addFunctions: MultiActionFunction[] = [{
@@ -94,7 +93,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a member in a given position to an ordered collection 
      */
     addBefore(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_MEMBER"}, this.resource, this.membersProperty, false, null, false).then(
+        this.resViewModals.addPropertyValue({key: "DATA.ACTIONS.ADD_MEMBER"}, this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue());
                 let values: ARTResource[] = data.value;
@@ -112,7 +111,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a member in a given position to an ordered collection 
      */
     addAfter(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_MEMBER"}, this.resource, this.membersProperty, false, null, false).then(
+        this.resViewModals.addPropertyValue({key: "DATA.ACTIONS.ADD_MEMBER"}, this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue()) + 1;
                 let values: ARTResource[] = data.value;

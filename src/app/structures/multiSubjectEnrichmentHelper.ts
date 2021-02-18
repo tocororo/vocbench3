@@ -507,7 +507,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private membersHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_MEMBER"}, subjects[0], predicate, false, null, false).then(
+        this.resViewModals.addPropertyValue({key: "DATA.ACTIONS.ADD_MEMBER"}, subjects[0], predicate, false, null, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let value: ARTURIResource = data.value[0];
                 let addFunctions: MultiSubjectAddFunction[] = [];

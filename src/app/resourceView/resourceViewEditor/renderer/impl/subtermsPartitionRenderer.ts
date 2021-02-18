@@ -20,7 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.subterms;
-    addBtnImgTitle = "Add a Subterm";
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,

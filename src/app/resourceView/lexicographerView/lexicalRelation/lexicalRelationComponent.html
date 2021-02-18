@@ -1,10 +1,6 @@
 <div class="d-flex align-items-center">
-    <span *ngFor="let ref of targetRef" class="clickable ml-2" (dblclick)="targetDblClick(ref)" [title]="ref.id.toNT()">
-        {{ref.lemma[0].writtenRep[0].getShow()}}
-    </span>
-    <!-- <rdf-resource *ngFor="let ref of targetRef" class="clickable ml-2" [resource]="ref.lemma[0].writtenRep[0]" (dblclick)="targetDblClick(ref)" [title]="ref.id.toNT()">
-    </rdf-resource> -->
-    <span *ngIf="showCategory" class="clickable ml-2" (dblclick)="categoryDblClick()" [title]="category.toNT()">({{category.getLocalName()}})</span>
+    <entry-ref *ngFor="let ref of targetRef" class="clickable" [ref]="ref" (dblclick)="targetDblClick(ref)"></entry-ref>
+    <span *ngIf="showCategory" class="clickable ml-1" (dblclick)="categoryDblClick()" [title]="category.toNT()">({{category.getLocalName()}})</span>
     <button *ngIf="!readonly" class="btn btn-xs btn-faded ml-2" (click)="delete()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized">
         <span class="fas fa-minus"></span>
     </button>

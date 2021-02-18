@@ -3,17 +3,23 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConstituentComponent } from '../resourceView/lexicographerView/constituents/constituentComponent';
+import { ConstituentListComponent } from '../resourceView/lexicographerView/constituents/constituentListComponent';
 import { LexEntryComponent } from '../resourceView/lexicographerView/lexicalEntry/lexEntryComponent';
-import { LexicalRelationComponent } from '../resourceView/lexicographerView/lexicalRelation/lexicalRelationComponent';
-import { RelatedGroupComponent } from '../resourceView/lexicographerView/lexicalRelation/relatedComponent';
-import { TranslatableAsComponent } from '../resourceView/lexicographerView/lexicalRelation/translatableAsComponent';
 import { LexicalFormComponent } from '../resourceView/lexicographerView/lexicalForm/lexicalFormComponent';
 import { MorphosyntacticPropComponent } from '../resourceView/lexicographerView/lexicalForm/morphosyntacticPropComponent';
 import { PhoneticRepComponent } from '../resourceView/lexicographerView/lexicalForm/phoneticRepComponent';
+import { LexicalRelationComponent } from '../resourceView/lexicographerView/lexicalRelation/lexicalRelationComponent';
+import { RelatedGroupComponent } from '../resourceView/lexicographerView/lexicalRelation/relatedComponent';
+import { TranslatableAsComponent } from '../resourceView/lexicographerView/lexicalRelation/translatableAsComponent';
 import { ConceptReferenceComponent } from '../resourceView/lexicographerView/lexicalSense/conceptReferenceComponent';
 import { LexicalSenseComponent } from '../resourceView/lexicographerView/lexicalSense/lexicalSenseComponent';
 import { TranslationComponent } from '../resourceView/lexicographerView/lexicalSense/translationComponent';
 import { LexicographerViewComponent } from '../resourceView/lexicographerView/lexicographerViewComponent';
+import { LexViewHelper } from '../resourceView/lexicographerView/LexViewHelper';
+import { EntryReferenceComponent } from '../resourceView/lexicographerView/subterms/entryReferenceComponent';
+import { SubtermComponent } from '../resourceView/lexicographerView/subterms/subtermComponent';
+import { SubtermListComponent } from '../resourceView/lexicographerView/subterms/subtermListComponent';
 import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
 import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/classAxiomPartitionRenderer';
@@ -97,6 +103,9 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResourceTripleEditorComponent,
         //LexView
         ConceptReferenceComponent,
+        ConstituentComponent,
+        ConstituentListComponent,
+        EntryReferenceComponent,
         LexEntryComponent,
         LexicalFormComponent,
         LexicalRelationComponent,
@@ -105,6 +114,8 @@ import { TreeAndListModule } from "./treeAndListModule";
         MorphosyntacticPropComponent,
         PhoneticRepComponent,
         RelatedGroupComponent,
+        SubtermComponent,
+        SubtermListComponent,
         TranslatableAsComponent,
         TranslationComponent,
         //ResourceView
@@ -181,6 +192,7 @@ import { TreeAndListModule } from "./treeAndListModule";
     ],
     providers: [
         LexicalizationEnrichmentHelper,
+        LexViewHelper,
         ResViewModalServices,
     ],
     entryComponents: [
