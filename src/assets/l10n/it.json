@@ -566,6 +566,7 @@
             "ADD_IMPORT": "Aggiungi import",
             "ADD_INVERSE_PROPERTY": "Aggiungi proprietà inversa",
             "ADD_LABEL_RELATION": "Aggiungi relazione tra label",
+            "ADD_LEX_CONCEPT": "Assegna lexical concept",
             "ADD_LEX_ENTRY": "Aggiungi Lexical Entry",
             "ADD_LEX_FORM": "Aggiungi forma lessicale",
             "ADD_LEXICAL_SENSE": "Aggiungi lexical sense",
@@ -638,7 +639,6 @@
             "SET_CONSTITUENTS": "Assegna costituenti",
             "SET_DATATYPE_RESTRICTIONS": "Setta restrizioni datatype",
             "SET_INVERSE_PROPERTY": "Setta proprietà inversa",
-            "SET_LEX_CONCEPT": "Assegna lexical concept",
             "SET_REFERENCE": "Assegna reference"
         }
     },

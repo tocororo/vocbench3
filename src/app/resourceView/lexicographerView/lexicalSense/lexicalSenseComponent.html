@@ -20,7 +20,7 @@
         </div>
 
         <div *ngIf="sense.concept?.length > 0" class=" my-2">
-            <concept-ref *ngFor="let c of sense.concept" [concept]="c" [lang]="lang" [lexViewCache]="lexViewCache"
+            <concept-ref *ngFor="let c of sense.concept" [concept]="c" [sense]="sense" [lang]="lang" [lexViewCache]="lexViewCache"
                 (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
             </concept-ref>
         </div>
@@ -46,15 +46,15 @@
                 <span class="fas fa-pencil-alt"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a *ngIf="!sense.id" class="dropdown-item" (click)="reifyPlainSense()">
+                <a *ngIf="!sense.id" class="dropdown-item" (click)="reifyPlainSense()" [ngClass]="{ disabled: !reifySenseAuthorized }">
                     {{'DATA.ACTIONS.REIFY_PLAIN_SENSE'|translate}}
                 </a>
                 <ng-container *ngIf="sense.id">
-                    <a class="dropdown-item" (click)="setReference()">
+                    <a class="dropdown-item" (click)="setReference()" [ngClass]="{ disabled: !setReferenceAuthorized }">
                         {{'DATA.ACTIONS.SET_REFERENCE'|translate}}
                     </a>
-                    <a class="dropdown-item" (click)="setConcept()" [ngClass]="{ disabled: sense.concept.length != 0 }">
-                        {{'DATA.ACTIONS.SET_LEX_CONCEPT'|translate}}
+                    <a class="dropdown-item" (click)="setConcept()" [ngClass]="{ disabled: !addConceptAuthorized }">
+                        {{'DATA.ACTIONS.ADD_LEX_CONCEPT'|translate}}
                     </a>
                     <a class="dropdown-item" (click)="addDefinition()" [ngClass]="{ disabled: !addDefAuthorized }">
                         {{'DATA.ACTIONS.ADD_DEF_TO_LEX_SENSE'|translate}}

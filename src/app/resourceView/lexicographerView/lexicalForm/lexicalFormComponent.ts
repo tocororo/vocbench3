@@ -4,7 +4,6 @@ import { ARTLiteral, ARTURIResource } from "src/app/models/ARTResources";
 import { Form, LexicalEntry, LexicalResourceUtils } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
-import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
 import { LexViewCache } from "../LexViewChache";
@@ -33,7 +32,7 @@ export class LexicalFormComponent {
     addPhoneticRepAuthorized: boolean;
     removeFormAuthorized: boolean;
 
-    constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices) {}
+    constructor(private ontolexService: OntoLexLemonServices) {}
 
     ngOnInit() {
         if (this.lemma) {
@@ -57,7 +56,7 @@ export class LexicalFormComponent {
         if (this.lemma) { //if lemma, simply replace the whole canonical form
             updateWrittenRepFn = this.ontolexService.setCanonicalForm(<ARTURIResource>this.entry.id, newWrittenRep);
         } else { //other form => update the writtenRep of the form
-            updateWrittenRepFn = this.resourceService.updateTriple(this.form.id, OntoLex.writtenRep, oldWrittenRep, newWrittenRep);
+            updateWrittenRepFn = this.ontolexService.updateFormRepresentation(this.form.id, oldWrittenRep, newWrittenRep, OntoLex.writtenRep);
         }
         updateWrittenRepFn.subscribe(
             () => {

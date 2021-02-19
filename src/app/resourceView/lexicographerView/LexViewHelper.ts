@@ -5,7 +5,9 @@ import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
+import { VBContext } from "src/app/utils/VBContext";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
+import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { ConstituentListCreatorModalReturnData } from "../resourceViewEditor/resViewModals/constituentListCreatorModal";
 import { ResViewModalServices } from "../resourceViewEditor/resViewModals/resViewModalServices";
 
@@ -16,7 +18,7 @@ import { ResViewModalServices } from "../resourceViewEditor/resViewModals/resVie
 export class LexViewHelper {
 
     constructor(private resourceService: ResourcesServices, private ontolexService: OntoLexLemonServices, 
-        private browsingModals: BrowsingModalServices, private resViewModals: ResViewModalServices) { }
+        private browsingModals: BrowsingModalServices, private resViewModals: ResViewModalServices, private sharedModals: SharedModalServices) { }
 
     addSubterm(sourceEntry: ARTResource): Observable<boolean> {
         return this.selectLexicalEntry().pipe(
@@ -92,16 +94,21 @@ export class LexViewHelper {
     }
 
     private selectLexicalRelProp(): Observable<ARTURIResource> {
-        return from(
-            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [Vartrans.lexicalRel]).then(
-                (prop: ARTURIResource) => {
-                    return prop;
-                },
-                () => {
-                    return null;
-                }
-            )
-        )
+        let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
+        return this.ontolexService.getLexicalRelationCategories(lexicon).pipe(
+            mergeMap((props: ARTURIResource[]) => {
+                return from(
+                    this.sharedModals.selectResource({key:"DATA.ACTIONS.SELECT_PROPERTY"}, null, props, false).then(
+                        (prop: ARTURIResource) => {
+                            return prop;
+                        },
+                        () => {
+                            return null;
+                        }
+                    )
+                )
+            })
+        );
     }
 
     private selectLexicalEntry(): Observable<ARTURIResource> {

@@ -21,7 +21,7 @@
                             </a>
                         </div>
                     </div>
-                    <button class="btn btn-faded btn-xs ml-1" (click)="deleteConcept()" [title]="'ACTIONS.DELETE'|translate" [disabled]="readonly">
+                    <button class="btn btn-faded btn-xs ml-1" (click)="deleteConcept()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteConceptAuthorized">
                         <span class="fas fa-minus"></span>
                     </button>
                 </div>

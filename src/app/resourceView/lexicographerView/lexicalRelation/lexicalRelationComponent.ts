@@ -68,10 +68,4 @@ export class LexicalRelationComponent {
         this.dblclickObj.emit(ref.id);
     }
 
-    relationDblClick() {
-        if (this.relation.id) { //only in case of reified relation
-            this.dblclickObj.emit(this.relation.id);
-        }
-    }
-
 }

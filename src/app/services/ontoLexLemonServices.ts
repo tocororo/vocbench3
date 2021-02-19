@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
-import { ARTLiteral, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from '../models/CustomForms';
 import { Deserializer } from '../utils/Deserializer';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
@@ -408,6 +408,16 @@ export class OntoLexLemonServices {
         return this.httpMgr.doPost(this.serviceName, "removeFormRepresentation", params);
     }
 
+    updateFormRepresentation(form: ARTResource, representation: ARTLiteral, newRepresentation: ARTLiteral, property: ARTURIResource) {
+        let params: any = {
+            form: form,
+            representation: representation,
+            newRepresentation: newRepresentation,
+            property: property
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeFormRepresentation", params);
+    }
+
     /**
      * Adds a subterm to an ontolex:LexicalEntry.
      * @param lexicalEntry 
@@ -470,5 +480,109 @@ export class OntoLexLemonServices {
         }
         return this.httpMgr.doPost(this.serviceName, "removeSense", params);
     }
+
+    addDefinition(resource: ARTResource, value: ARTLiteral, lexicon?: ARTResource) {
+        let params = {
+            resource: resource,
+            value: value,
+            lexicon: lexicon
+        }
+        return this.httpMgr.doPost(this.serviceName, "addDefinition", params);
+    }
+
+    removeDefinition(resource: ARTResource, value: ARTNode, lexicon?: ARTResource) {
+        let params = {
+            resource: resource,
+            value: value,
+            lexicon: lexicon
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeDefinition", params);
+    }
+
+    updateDefinition(resource: ARTResource, value: ARTNode, newValue: ARTLiteral, lexicon?: ARTResource) {
+        let params = {
+            resource: resource,
+            value: value,
+            newValue: newValue,
+            lexicon: lexicon
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateDefinition", params);
+    }
+
+
+    setReference(lexicalSense: ARTResource, newReference: ARTResource, deletePlain: boolean, createPlain: boolean) {
+        let params = {
+            lexicalSense: lexicalSense,
+            newReference: newReference,
+            deletePlain: deletePlain,
+            createPlain: createPlain
+        }
+        return this.httpMgr.doPost(this.serviceName, "setReference", params);
+    }
+
+    addConcept(lexicalSense: ARTResource, newConcept: ARTResource, createPlain: boolean) {
+        let params = {
+            lexicalSense: lexicalSense,
+            newConcept: newConcept,
+            createPlain: createPlain
+        }
+        return this.httpMgr.doPost(this.serviceName, "addConcept", params);
+    }
+
+    removeConcept(lexicalSense: ARTResource, concept: ARTResource, deletePlain: boolean) {
+        let params = {
+            lexicalSense: lexicalSense,
+            concept: concept,
+            deletePlain: deletePlain
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeConcept", params);
+    }
+
+    getLexicalRelationCategories(lexicon?: ARTResource): Observable<ARTURIResource[]> {
+        let params = {
+            lexicon: lexicon,
+        }
+        return this.httpMgr.doGet(this.serviceName, "getLexicalRelationCategories", params).pipe(
+            map(resp => {
+                return Deserializer.createURIArray(resp);
+            })
+        );
+    }
+
+    getSenseRelationCategories(lexicon?: ARTResource): Observable<ARTURIResource[]> {
+        let params = {
+            lexicon: lexicon,
+        }
+        return this.httpMgr.doGet(this.serviceName, "getSenseRelationCategories", params).pipe(
+            map(resp => {
+                return Deserializer.createURIArray(resp);
+            })
+        );
+    }
+
+    getConceptualRelationCategories(lexicon?: ARTResource): Observable<ARTURIResource[]> {
+        let params = {
+            lexicon: lexicon,
+        }
+        return this.httpMgr.doGet(this.serviceName, "getConceptualRelationCategories", params).pipe(
+            map(resp => {
+                return Deserializer.createURIArray(resp);
+            })
+        );
+    }
+
+    createLexicoSemanticRelation(source: ARTResource, target: ARTResource, undirectional: boolean, relationClass: ARTURIResource,
+        category?: ARTURIResource, translationSet?: ARTResource): Observable<void> {
+        let params = {
+            source: source,
+            target: target,
+            undirectional: undirectional,
+            relationClass: relationClass,
+            category: category,
+            translationSet: translationSet,
+        }
+        return this.httpMgr.doPost(this.serviceName, "createLexicoSemanticRelation", params);
+    }
+
 
 }

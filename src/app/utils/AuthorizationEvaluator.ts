@@ -89,7 +89,9 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.metadataRegistryUpdate]: 'auth(sys(metadataRegistry), "U").',
         [VBActionsEnum.ontManagerDeleteOntologyMirror]: 'auth(sys(ontologyMirror), "D").',
         [VBActionsEnum.ontManagerUpdateOntologyMirror]: 'auth(sys(ontologyMirror), "CU").',
+        [VBActionsEnum.ontolexAddConcept]: 'auth(rdf(ontolexLexicalEntry, conceptualization), "C").',
         [VBActionsEnum.ontolexAddConceptualization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', conceptualization), "C").',
+        [VBActionsEnum.ontolexAddDefinition]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', definitions), "C").',
         [VBActionsEnum.ontolexAddFormRepresentation]: 'auth(rdf(ontolexForm, formRepresentations), "C").',
         [VBActionsEnum.ontolexAddLexicalForm]: 'auth(rdf(ontolexLexicalEntry), "U").',
         [VBActionsEnum.ontolexAddLexicalization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "C").',
@@ -106,6 +108,8 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.ontolexReadLexicalEntryConstituents]: 'auth(rdf(ontolexLexicalEntry, constituents), "R").',
         [VBActionsEnum.ontolexReadLexicaliForm]: 'auth(rdf(ontolexLexicalEntry, lexicalForms), "R").',
         [VBActionsEnum.ontolexReadSubterm]: 'auth(rdf(ontolexLexicalEntry, subterms), "R").',
+        [VBActionsEnum.ontolexRemoveConcept]: 'auth(rdf(ontolexLexicalEntry, conceptualization), "D").',
+        [VBActionsEnum.ontolexRemoveDefinition]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', definitions), "D").',
         [VBActionsEnum.ontolexRemoveForm]: 'auth(rdf(ontolexLexicalEntry, lexicalForms), "D").',
         [VBActionsEnum.ontolexRemoveFormRepresentation]: 'auth(rdf(ontolexForm, formRepresentations), "D").',
         [VBActionsEnum.ontolexRemoveLexicalForm]: 'auth(rdf(ontolexLexicalEntry, lexicalForms), "D").',
@@ -114,6 +118,9 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.ontolexRemoveSubterm]: 'auth(rdf(ontolexLexicalEntry, subterms), "D").',
         [VBActionsEnum.ontolexSetCanonicalForm]: 'auth(rdf(ontolexLexicalEntry, lexicalForms), "C").',
         [VBActionsEnum.ontolexSetLexicalEntryConstituent]: 'auth(rdf(ontolexLexicalEntry, constituents), "C").',
+        [VBActionsEnum.ontolexSetReference]: 'auth(rdf(resource, sense), "U").',
+        [VBActionsEnum.ontolexUpdateDefinition]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', definitions), "U").',
+        [VBActionsEnum.ontolexUpdateFormRepresentation]: 'auth(rdf(ontolexForm, formRepresentations), "U").',
         [VBActionsEnum.pluginsGetPlugins]: 'auth(sys(plugins), "R").',
         [VBActionsEnum.propertiesAddPropertyChainAxiom]: 'auth(rdf(property, taxonomy), "C").',
         [VBActionsEnum.propertiesAddPropertyDomain]: 'auth(rdf(property), "C").',
@@ -428,6 +435,7 @@ export class AuthorizationEvaluator {
         role(ontolexForm).
         role(ontolexLexicalEntry).
         role(limeLexicon).
+        role(decompComponent).
 
         vocabulary(concept, skos).
         vocabulary(conceptScheme, skos).
@@ -436,6 +444,7 @@ export class AuthorizationEvaluator {
         vocabulary(ontolexForm, ontolex).
         vocabulary(ontolexLexicalEntry, ontolex).
         vocabulary(limeLexicon, ontolex).
+        vocabulary(decompComponent, ontolex).
         
         getCapabilities(FACTLIST) :- findall(capability(A,CRUD),capability(A,CRUD),FACTLIST).    
         `;

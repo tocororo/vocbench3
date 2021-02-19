@@ -121,7 +121,9 @@ export enum VBActionsEnum {
     ontManagerDeleteOntologyMirror = "ontManagerDeleteOntologyMirror",
     ontManagerUpdateOntologyMirror = "ontManagerUpdateOntologyMirror",
     //Ontolex
+    ontolexAddConcept = "ontolexAddConcept",
     ontolexAddConceptualization = "ontolexAddConceptualization",
+    ontolexAddDefinition = "ontolexAddDefinition",
     ontolexAddFormRepresentation = "ontolexAddFormRepresentation",
     ontolexAddLexicalForm = "ontolexAddLexicalForm",
     ontolexAddLexicalization = "ontolexAddLexicalization",
@@ -138,6 +140,8 @@ export enum VBActionsEnum {
     ontolexReadLexicaliForm = "ontolexReadLexicaliForm",
     ontolexReadLexicalEntryConstituents = "ontolexReadLexicalEntryConstituents",
     ontolexReadSubterm = "ontolexReadSubterm",
+    ontolexRemoveConcept = "ontolexRemoveConcept",
+    ontolexRemoveDefinition = "ontolexRemoveDefinition",
     ontolexRemoveForm = "ontolexRemoveForm",
     ontolexRemoveFormRepresentation = "ontolexRemoveFormRepresentation",
     ontolexRemoveLexicalForm = "ontolexRemoveLexicalForm",
@@ -146,6 +150,9 @@ export enum VBActionsEnum {
     ontolexRemoveSubterm = "ontolexRemoveSubterm",
     ontolexSetCanonicalForm = "ontolexSetCanonicalForm",
     ontolexSetLexicalEntryConstituent = "ontolexSetLexicalEntryConstituent",
+    ontolexSetReference = "ontolexSetReference",
+    ontolexUpdateDefinition = "ontolexUpdateDefinition",
+    ontolexUpdateFormRepresentation = "ontolexUpdateFormRepresentation",
     //Plugins
     pluginsGetPlugins = "pluginsGetPlugins", //valid for getAvailablePlugins and getPluginConfiguration
     //Properties

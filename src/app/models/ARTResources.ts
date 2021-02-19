@@ -366,6 +366,7 @@ export enum RDFResourceRolesEnum {
     conceptScheme = "conceptScheme",
     dataRange = "dataRange",
     datatypeProperty = "datatypeProperty",
+    decompComponent = "decompComponent",
     individual = "individual",
     mention = "mention",
     objectProperty = "objectProperty",

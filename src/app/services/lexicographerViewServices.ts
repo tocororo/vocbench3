@@ -20,8 +20,9 @@ export class LexicographerViewServices {
         return this.httpMgr.doGet(this.serviceName, "getLexicalEntryView", params);
     }
 
-    getMorphosyntacticProperties(role?: RDFResourceRolesEnum, rootsIncluded?: boolean): Observable<ARTURIResource[]> {
+    getMorphosyntacticProperties(lexicon?: ARTResource, role?: RDFResourceRolesEnum, rootsIncluded?: boolean): Observable<ARTURIResource[]> {
         let params = {
+            lexicon: lexicon,
             role: role,
             rootsIncluded: rootsIncluded
         };

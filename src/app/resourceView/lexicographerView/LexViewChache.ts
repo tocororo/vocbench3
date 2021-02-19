@@ -1,12 +1,11 @@
 import { from, Observable, of } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { ARTURIResource } from "src/app/models/ARTResources";
-import { CustomForm } from "src/app/models/CustomForms";
-import { SKOS } from "src/app/models/Vocabulary";
 import { ClassesServices } from "src/app/services/classesServices";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { PropertyServices } from "src/app/services/propertyServices";
 import { ResourceUtils, SortAttribute } from "src/app/utils/ResourceUtils";
+import { VBContext } from "src/app/utils/VBContext";
 import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { DefinitionCustomRangeConfig } from "../termView/definitionEnrichmentHelper";
 
@@ -26,7 +25,7 @@ export class LexViewCache {
 
     getMorphosyntacticProperties(): Observable<ARTURIResource[]> {
         if (this.propCache == null) {
-            return this.lexicographerViewService.getMorphosyntacticProperties(null, true).pipe(
+            return this.lexicographerViewService.getMorphosyntacticProperties(VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon, null, true).pipe(
                 map(props => {
                     ResourceUtils.sortResources(props, SortAttribute.value);
                     this.propCache = props;
@@ -96,36 +95,6 @@ export class LexViewCache {
                     }
                 } else {
                     return of(null); //no range collection
-                }
-            })
-        );
-    }
-
-    getDefinitionRangeConfig(): Observable<DefinitionCustomRangeConfig> {
-        if (this.defRangeConfigCache == null) {
-            return this.initDefinitionRangeCache().pipe(
-                map(() => {
-                    return this.defRangeConfigCache;
-                })
-            );
-        } else {
-            return of(this.defRangeConfigCache);
-        }
-    }
-
-    private initDefinitionRangeCache(): Observable<void> {
-        return this.propertyService.getRange(SKOS.definition).pipe(
-            map(range => {
-                this.defRangeConfigCache = new DefinitionCustomRangeConfig();
-                if (range.formCollection != null) {
-                    let cForms: CustomForm[] = range.formCollection.getForms();
-                    if (cForms.length > 0) {
-                        this.defRangeConfigCache.hasCustomRange = true;
-                        this.defRangeConfigCache.customForms = cForms;
-                    }
-                    if (range.ranges == null) { //standard range replaced by the custom one
-                        this.defRangeConfigCache.hasLiteralRange = false;
-                    }
                 }
             })
         );

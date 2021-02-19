@@ -3,7 +3,6 @@ import { ARTLiteral } from "src/app/models/ARTResources";
 import { Form } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
-import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { VBActionsEnum } from "src/app/utils/VBActions";
@@ -23,19 +22,19 @@ export class PhoneticRepComponent {
     editAuthorized: boolean;
     deleteAuthorized: boolean;
 
-    constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices) {}
+    constructor(private ontolexService: OntoLexLemonServices) {}
 
     ngOnInit() {
         if (this.phoneticRep && ResourceUtils.isTripleInStaging(this.phoneticRep)) { //check only in visualization (not in creation where phoneticRep is not provided)
             this.readonly = true;
         }
-        this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
-        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.form.id) && !this.readonly;
+        this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexUpdateFormRepresentation) && !this.readonly;
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveFormRepresentation) && !this.readonly;
     }
 
     onEdited(newValue: string) {
         let newPhoneticRep: ARTLiteral = new ARTLiteral(newValue, null, this.phoneticRep.getLang());
-        this.resourceService.updateTriple(this.form.id, OntoLex.phoneticRep, this.phoneticRep, newPhoneticRep).subscribe(
+        this.ontolexService.updateFormRepresentation(this.form.id, this.phoneticRep, newPhoneticRep, OntoLex.phoneticRep).subscribe(
             () => {
                 this.update.emit();
             }
@@ -43,7 +42,7 @@ export class PhoneticRepComponent {
     }
 
     deleteRep() {
-        this.resourceService.removeValue(this.form.id, OntoLex.phoneticRep, this.phoneticRep).subscribe(
+        this.ontolexService.removeFormRepresentation(this.form.id, this.phoneticRep, OntoLex.phoneticRep).subscribe(
             () => {
                 this.update.emit();
             }
