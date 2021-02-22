@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable } from "rxjs";
-import { map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { Settings } from "../models/Plugins";
 import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
@@ -20,6 +20,7 @@ import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { PluginSettingsHandler } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractProjectComponent } from "./abstractProjectComponent";
+import { OpenAllProjReportModal } from "./openAllProjReportModal";
 import { ACLEditorModal } from "./projectACL/aclEditorModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectPropertiesModal } from "./projectPropertiesModal";
@@ -79,7 +80,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     private openProject(project: Project) {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.accessProject(project).subscribe(
-            stResp => {
+            () => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 project.setOpen(true);
                 this.accessProject(project).subscribe();
@@ -90,7 +91,48 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         );
     }
 
-    private activateProject(project: Project) {
+    openAll() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.projectService.accessAllProjects().subscribe(
+            (report: {[key: string]: ExceptionDAO }) => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                if (Object.keys(report).length != 0) {
+                    const modalRef: NgbModalRef = this.modalService.open(OpenAllProjReportModal, new ModalOptions('lg'));
+                    modalRef.componentInstance.report = report;
+                    modalRef.result.then(() => {
+                        this.initProjects()
+                    })
+                } else {
+                    this.initProjects()
+                }
+            }
+        );
+    }
+
+    /**
+     * Calls the proper service in order to disconnect from the given project.
+     */
+    private closeProject(project: Project) {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.projectService.disconnectFromProject(project).subscribe(
+            () => {
+                project.setOpen(false);
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+            }
+        );
+    }
+
+    closeAll() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.projectService.disconnectFromAllProjects().subscribe(
+            () => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.initProjects();
+            }
+        );
+    }
+
+    activateProject(project: Project) {
         var workingProj = VBContext.getWorkingProject();
         if (workingProj == undefined || workingProj.getName() != project.getName()) {
             this.accessProject(project).subscribe();
@@ -104,7 +146,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         this.router.navigate(["/Projects/CreateProject"]);
     }
 
-    private deleteProject(project: Project) {
+    deleteProject(project: Project) {
         if (project.isOpen()) {
             this.basicModals.alert({key:"ACTIONS.DELETE_PROJECT"}, {key:"MESSAGES.PROJECT_OPEN_CLOSE_AND_RETRY"}, ModalType.warning);
             return;
@@ -167,19 +209,6 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                     return repos;
                 }
             )
-        );
-    }
-
-    /**
-     * Calls the proper service in order to disconnect from the given project.
-     */
-    private closeProject(project: Project) {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.projectService.disconnectFromProject(project).subscribe(
-            stResp => {
-                project.setOpen(false);
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-            }
         );
     }
 

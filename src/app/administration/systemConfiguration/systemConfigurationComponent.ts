@@ -446,8 +446,8 @@ export class SystemConfigurationComponent {
     private initProjCreation() {
         this.prefService.getSystemSettings([Properties.setting_proj_creation_default_acl_set_universal_access, Properties.setting_proj_creation_default_open_at_startup]).subscribe(
             stResp => {
-                this.defaultAclUniversalAccess = stResp[Properties.setting_proj_creation_default_acl_set_universal_access];
-                this.defaultOpenAtStartup = stResp[Properties.setting_proj_creation_default_open_at_startup];
+                this.defaultAclUniversalAccess = stResp[Properties.setting_proj_creation_default_acl_set_universal_access] == "true";
+                this.defaultOpenAtStartup = stResp[Properties.setting_proj_creation_default_open_at_startup] == "true";
             }
         )
     }

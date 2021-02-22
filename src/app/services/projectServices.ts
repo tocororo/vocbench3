@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { TransitiveImportMethodAllowance } from '../models/Metadata';
 import { PluginSpecification, Settings } from '../models/Plugins';
-import { AccessLevel, AccessStatus, BackendTypesEnum, ConsumerACL, LockLevel, LockStatus, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
+import { AccessLevel, AccessStatus, BackendTypesEnum, ConsumerACL, ExceptionDAO, LockLevel, LockStatus, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
 import { Multimap, Pair } from '../models/Shared';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
@@ -95,11 +95,40 @@ export class ProjectServices {
         
 
     /**
+     * Accesses to the given project
+     * @param project the project to access
+     */
+    accessProject(project: Project) {
+        let params = {
+            consumer: "SYSTEM",
+            projectName: project.getName(),
+            requestedAccessLevel: "RW",
+            requestedLockLevel: "NO"
+        };
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "accessProject", params, options);
+    }
+
+    accessAllProjects(consumer?: Project, requestedAccessLevel?: AccessLevel, requestedLockLevel?: LockLevel, onlyProjectsAtStartup?: boolean): Observable<{[key: string]: ExceptionDAO }> {
+        let params = {
+            consumer: consumer != null ? consumer.getName() : null,
+            requestedAccessLevel: requestedAccessLevel,
+            requestedLockLevel: requestedLockLevel,
+            onlyProjectsAtStartup: onlyProjectsAtStartup
+        };
+        return this.httpMgr.doPost(this.serviceName, "accessAllProjects", params);
+    }
+
+    /**
      * Disconnects from the given project.
      * @param project the project to disconnect
      */
     disconnectFromProject(project: Project) {
-
         //if the closing project is the working, remove it from context
         //this could be a temporary warkaround to avoid the problem described here https://art-uniroma2.atlassian.net/browse/ST-289
         //but is not a "perfect" solution, since it remove the working project from the ctx before it is effectively closed
@@ -119,24 +148,18 @@ export class ProjectServices {
         );
     }
 
-    /**
-     * Accesses to the given project
-     * @param project the project to access
-     */
-    accessProject(project: Project) {
+    disconnectFromAllProjects(consumer?: Project) {
         let params = {
-            consumer: "SYSTEM",
-            projectName: project.getName(),
-            requestedAccessLevel: "RW",
-            requestedLockLevel: "NO"
+            consumer: consumer != null ? consumer.getName() : null,
         };
-        let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException'] 
-            } 
-        });
-        return this.httpMgr.doPost(this.serviceName, "accessProject", params, options);
+        return this.httpMgr.doPost(this.serviceName, "disconnectFromAllProjects", params).pipe(
+            map(() => {
+                if (VBContext.getWorkingProject() != undefined) {
+                    VBContext.removeWorkingProject();
+                    this.eventHandler.themeChangedEvent.emit(); //when quitting current project, reset the style to the default
+                }
+            })
+        );
     }
 
     /**

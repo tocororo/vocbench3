@@ -341,11 +341,13 @@ export class ExceptionDAO {
     public stacktrace: string;
 }
 
-// export enum ProjectFacets {
-//     dir = "dir"
-// }
+export interface FailReport {
+    offensiveElemId: string; //e.g. repo ID, project name, ...
+    exception: ExceptionDAO;
+}
+
 export enum ProjectFacets {
-        dir = "dir",
+    dir = "dir",
     prjHistoryEnabled = "prjHistoryEnabled",
     prjLexModel = "prjLexModel",
     prjModel = "prjModel",

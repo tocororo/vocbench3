@@ -7,6 +7,14 @@
             </button>
             <span style="flex: 1;"></span>
             <div class="btn-toolbar">
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-light" (click)="openAll()" [title]="'PROJECTS.ACTIONS.OPEN_ALL'|translate">
+                        <span class="fas fa-folder-open"></span>
+                    </button>
+                    <button class="btn btn-light" (click)="closeAll()" [title]="'PROJECTS.ACTIONS.CLOSE_ALL'|translate">
+                        <span class="fas fa-folder"></span>
+                    </button>
+                </div>
                 <button class="btn btn-xs btn-light" (click)="initProjects()" [title]="'ACTIONS.REFRESH'|translate">
                     <span class="fas fa-redo"></span>
                 </button>

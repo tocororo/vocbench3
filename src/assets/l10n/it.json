@@ -1220,6 +1220,7 @@
         "INFERENCE_DISCOURAGED_INFO": "E' raccomandabile non usare l'inferenza",
         "LEFT_RIGHT": "Sinistro/Destro",
         "LEFT_RIGHT_INFO": "A causa di limitazioni tecnologiche, i due dataset devo essere remoti",
+        "OPEN_ALL_REPORT_INFO": "L'apertura del/i seguente/i progetto/i è fallita",
         "OPEN_CLOSE": "Aperto/Chiuso",
         "OPEN_AT_STARTUP": "Apri all'avvio",
         "OPEN_AT_STARTUP_INFO": "Se abilitato, il progetto verrà automaticamente aperto all'avvio del server SemanticTurkey",
@@ -1279,6 +1280,7 @@
             "BATCH_MODIFY_INFO": "Modifica, tutte in blocco, le credenziali di accesso di (potenzialmente) più  repository con lo stesso URL server",
             "DELETE_REMOTE_REPO": "Elimina repository remoti",
             "DELETE_REMOTE_REPO_INFO": "I seguenti repository erano referenziati dal progetto eliminato. Seleziona i repository che desideri eliminare.",
+            "DELETE_REMOTE_REPO_REPORT_INFO": "La cancellazione del/i seguente/i repository è fallita ",
             "MATCH_USERNAME": "Match username",
             "MATCH_USERNAME_INFO": "Se selezionato, modifica le credenziali dei repository con gli stessi URL server e username (il campo useername lasciato vuoto indica che il repository non ha un username associato)"
         },
@@ -1755,6 +1757,7 @@
         "OPTIONAL": "Opzionale",
         "OPTIONAL_FIELD": "Campo opzionale",
         "POSITION": "Posizione",
+        "REASON": "Motivo",
         "ROLE": "Ruolo",
         "ROLES": "Ruoli",
         "SCOPE": "Scope",

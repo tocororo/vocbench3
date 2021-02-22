@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
+import { OpenAllProjReportModal } from '../project/openAllProjReportModal';
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
 import { ProjectACLModal } from '../project/projectACL/projectACLModal';
 import { ProjectComponent } from "../project/projectComponent";
@@ -31,6 +32,7 @@ import { SharedModule } from './sharedModule';
         ACLEditorModal, 
         DeleteRemoteRepoModal,
         DeleteRepositoryReportModal,
+        OpenAllProjReportModal,
         ProjectACLModal,
         ProjectListModal, 
         ProjectPropertiesModal, 
@@ -44,6 +46,7 @@ import { SharedModule } from './sharedModule';
         ACLEditorModal, 
         DeleteRemoteRepoModal,
         DeleteRepositoryReportModal,
+        OpenAllProjReportModal,
         ProjectACLModal,
         ProjectListModal, 
         ProjectPropertiesModal, 

@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ExceptionDAO, RemoteRepositorySummary } from '../../models/Project';
+import { ExceptionDAO, FailReport, RemoteRepositorySummary } from '../../models/Project';
 
 @Component({
     selector: "delete-repo-report-modal",
@@ -11,7 +11,6 @@ export class DeleteRepositoryReportModal {
     @Input() deletingRepositories: RemoteRepositorySummary[];
     @Input() exceptions: ExceptionDAO[];
 
-    message: string;
     failReports: FailReport[];
 
     constructor(public activeModal: NgbActiveModal) {}
@@ -21,21 +20,15 @@ export class DeleteRepositoryReportModal {
         this.exceptions.forEach((e: ExceptionDAO, i: number) => {
             if (e != null) { //exception not null, it means that the corresponding repository deletion has failed
                 this.failReports.push({
-                    repositoryID: this.deletingRepositories[i].repositoryId,
+                    offensiveElemId: this.deletingRepositories[i].repositoryId,
                     exception: e,
                 });
             }
         });
-        this.message = "The deletion of the following remote " + ((this.failReports.length > 1) ? "repositories" : "repository") + " has failed:";
     }
 
     ok() {
         this.activeModal.close();
     }
 
-}
-
-class FailReport {
-    repositoryID: string;
-    exception: ExceptionDAO;
 }

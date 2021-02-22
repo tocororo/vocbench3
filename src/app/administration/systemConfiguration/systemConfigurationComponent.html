@@ -326,48 +326,34 @@
                     <div class="alert alert-info mb-2">
                         {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.PROJ_CREATION_INFO'|translate}}
                     </div>
-                    <div class="d-flex align-items-center mt-2">
-                        <span>
+                    <div class="d-flex align-items-center mt-3">
+                        <label>
                             {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.DEFAULT_FOR'|translate}}
-                            "{{'PROJECTS.ACL_UNIVERSAL_ACCESS'|translate}}"
-                        </span>
-                        <div class="form-check form-check-inline">
+                            "{{'PROJECTS.ACL_UNIVERSAL_ACCESS'|translate}}":
+                        </label>
+                        <div class="form-check form-check-inline ml-3">
                             <input class="form-check-input" id="aclRadioTrue" type="radio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="onDefaultAclChanged()" [value]="true">
-                            <label class="form-check-label" for="aclRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</label>
+                            <span class="form-check-label" for="aclRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" id="aclRadioFalse" type="radio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="onDefaultAclChanged()" [value]="false">
-                            <label class="form-check-label" for="aclRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</label>
+                            <span class="form-check-label" for="aclRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center mt-2">
-                        <span>
+                    <div class="d-flex align-items-center mt-3">
+                        <label>
                             {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.DEFAULT_FOR'|translate}}
-                            "{{'PROJECTS.OPEN_AT_STARTUP'|translate}}"
-                        </span>
-                        <div class="form-check form-check-inline">
+                            "{{'PROJECTS.OPEN_AT_STARTUP'|translate}}":
+                        </label>
+                        <div class="form-check form-check-inline ml-3">
                             <input class="form-check-input" id="startupRadioTrue" type="radio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="onDefaultOpenAtStartupChanged()" [value]="true">
-                            <label class="form-check-label" for="startupRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</label>
+                            <span class="form-check-label" for="startupRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" id="startupRadioFalse" type="radio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="onDefaultOpenAtStartupChanged()" [value]="false">
-                            <label class="form-check-label" for="startupRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</label>
+                            <span class="form-check-label" for="startupRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
                         </div>
                     </div>
-                    <!-- <div class="form-check mt-2">
-                        <input class="form-check-input" id="defaultAclCheck" type="checkbox" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="onDefaultAclChanged()">
-                        <span class="form-check-label" for="defaultAclCheck">
-                            {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.DEFAULT_FOR'|translate}}
-                            "{{'PROJECTS.ACL_UNIVERSAL_ACCESS'|translate}}"
-                        </span>
-                    </div>
-                    <div class="form-check mt-2">
-                        <input class="form-check-input" id="defaultOpenAtStartupCheck" type="checkbox" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="onDefaultOpenAtStartupChanged()">
-                        <span class="form-check-label" for="defaultOpenAtStartupCheck">
-                            {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.DEFAULT_FOR'|translate}}
-                            "{{'PROJECTS.OPEN_AT_STARTUP'|translate}}"
-                        </span>
-                    </div> -->
                 </div>
             </div>
 
