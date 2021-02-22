@@ -13,10 +13,13 @@ import { LexicalRelationComponent } from '../resourceView/lexicographerView/lexi
 import { RelatedGroupComponent } from '../resourceView/lexicographerView/lexicalRelation/relatedComponent';
 import { TranslatableAsComponent } from '../resourceView/lexicographerView/lexicalRelation/translatableAsComponent';
 import { ConceptReferenceComponent } from '../resourceView/lexicographerView/lexicalSense/conceptReferenceComponent';
+import { InlineDefinitionComponent } from '../resourceView/lexicographerView/lexicalSense/inlineDefinitionComponent';
 import { LexicalSenseComponent } from '../resourceView/lexicographerView/lexicalSense/lexicalSenseComponent';
+import { LexicoRelationModal } from '../resourceView/lexicographerView/lexicalSense/lexicoRelationModal';
 import { TranslationComponent } from '../resourceView/lexicographerView/lexicalSense/translationComponent';
 import { LexicographerViewComponent } from '../resourceView/lexicographerView/lexicographerViewComponent';
 import { LexViewHelper } from '../resourceView/lexicographerView/LexViewHelper';
+import { LexViewModalService } from '../resourceView/lexicographerView/lexViewModalService';
 import { EntryReferenceComponent } from '../resourceView/lexicographerView/subterms/entryReferenceComponent';
 import { SubtermComponent } from '../resourceView/lexicographerView/subterms/subtermComponent';
 import { SubtermListComponent } from '../resourceView/lexicographerView/subterms/subtermListComponent';
@@ -106,11 +109,13 @@ import { TreeAndListModule } from "./treeAndListModule";
         ConstituentComponent,
         ConstituentListComponent,
         EntryReferenceComponent,
+        InlineDefinitionComponent,
         LexEntryComponent,
         LexicalFormComponent,
         LexicalRelationComponent,
         LexicalSenseComponent,
         LexicographerViewComponent,
+        LexicoRelationModal,
         MorphosyntacticPropComponent,
         PhoneticRepComponent,
         RelatedGroupComponent,
@@ -193,6 +198,7 @@ import { TreeAndListModule } from "./treeAndListModule";
     providers: [
         LexicalizationEnrichmentHelper,
         LexViewHelper,
+        LexViewModalService,
         ResViewModalServices,
     ],
     entryComponents: [
@@ -206,6 +212,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         DataRangeEditorModal,
         DataRangeEditor,
         InstanceListCreatorModal,
+        LexicoRelationModal,
         PropertyChainCreatorModal,
         RdfsMembersModal,
         ResourceViewModal,

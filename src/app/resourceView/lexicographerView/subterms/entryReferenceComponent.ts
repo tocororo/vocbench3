@@ -4,12 +4,13 @@ import { EntryReference, LexicalResourceUtils } from "src/app/models/Lexicograph
 @Component({
     selector: "entry-ref",
     templateUrl: "./entryReferenceComponent.html",
-    host: { class: "d-block" }
+    host: { class: "d-block" },
+    styles: [`.entryRef { padding: 1px 2px; border-radius: 3px; }`]
 })
 export class EntryReferenceComponent {
     @Input() ref: EntryReference;
 
-    renderingClass: string = "";
+    renderingClass: string = "entryRef";
 
     constructor() { }
 
@@ -19,9 +20,14 @@ export class EntryReferenceComponent {
 
     private initRenderingClass() {
         if (LexicalResourceUtils.isInStagingAdd(this.ref)) {
-            this.renderingClass = "proposedAddRes";
+            this.renderingClass += " proposedAddRes";
         } else if (LexicalResourceUtils.isInStagingRemove(this.ref)) {
-            this.renderingClass = "proposedRemoveRes";
+            this.renderingClass += " proposedRemoveRes";
+        }
+        if (LexicalResourceUtils.isTripleInStagingAdd(this.ref)) {
+            this.renderingClass += " proposedAddTriple";
+        } else if (LexicalResourceUtils.isTripleInStagingRemove(this.ref)) {
+            this.renderingClass += " proposedRemoveTriple";
         }
     }
 

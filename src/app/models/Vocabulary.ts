@@ -294,7 +294,10 @@ export class Vartrans {
     public static uri = "http://www.w3.org/ns/lemon/vartrans";
     public static namespace = Vartrans.uri + "#";
     
+    public static conceptualRelation = new ARTURIResource(Vartrans.namespace + "ConceptualRelation", "vartrans:ConceptualRelation", RDFResourceRolesEnum.cls);
+    public static lexicalRelation = new ARTURIResource(Vartrans.namespace + "LexicalRelation", "vartrans:LexicalRelation", RDFResourceRolesEnum.cls);
     public static lexicalRel = new ARTURIResource(Vartrans.namespace + "lexicalRel", "vartrans:lexicalRel", RDFResourceRolesEnum.objectProperty);
+    public static senseRelation = new ARTURIResource(Vartrans.namespace + "SenseRelation", "vartrans:SenseRelation", RDFResourceRolesEnum.cls);
+    public static terminologicalRelation = new ARTURIResource(Vartrans.namespace + "TerminologicalRelation", "vartrans:TerminologicalRelation", RDFResourceRolesEnum.cls);
     public static translatableAs = new ARTURIResource(Vartrans.namespace + "translatableAs", "vartrans:translatableAs", RDFResourceRolesEnum.objectProperty);
-    
 }

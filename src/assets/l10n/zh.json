@@ -587,6 +587,7 @@
             "ADD_RANGE": "Add range",
             "ADD_RELATED": "Add related",
             "ADD_SCHEME": "Add scheme",
+            "ADD_SENSE_RELATION": "Add sense relation",
             "ADD_SUBTERM": "Add subterm",
             "ADD_SUPERPROPERTY": "Add superproperty",
             "ADD_TO_SCHEME": "Add to scheme",
@@ -633,6 +634,7 @@
             "SELECT_INSTANCE": "Select instance",
             "SELECT_LEXICAL_CONCEPT": "Select Lexical Concept",
             "SELECT_LEXICAL_ENTRY": "Select Lexical Entry",
+            "SELECT_LEXICAL_SENSE": "Select Lexical Sense",
             "SELECT_LEXICALIZATION_PROPERTY": "Select lexicalization property",
             "SELECT_LEXICON": "Select Lexicon",
             "SELECT_PROPERTY": "Select property",
@@ -1437,10 +1439,12 @@
             "DISABLED_UNDER_VALIDATION": "The Code view tab has been disabled as this resource - or part of its description - is under validation"
         },
         "LEX_VIEW": {
+            "CATEGORY": "Category",
             "PRONUNCIATION": "Pronunciation",
             "RELATED": "Related",
             "SEMANTIC_REFERENCE": "Semantic reference",
-            "TRANSLATION": "Translation"
+            "TRANSLATION": "Translation",
+            "UNIDIRECTIONAL": "Unidirectional"
         },
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Broader Concepts",

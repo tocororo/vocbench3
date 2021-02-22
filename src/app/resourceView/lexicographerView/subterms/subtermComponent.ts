@@ -22,7 +22,7 @@ export class SubtermComponent{
     constructor(private ontolexService: OntoLexLemonServices) {}
 
     ngOnInit() {
-        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveSubterm) && !this.readonly && !LexicalResourceUtils.isStagedTriple(this.subterm);
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveSubterm) && !this.readonly && !LexicalResourceUtils.isTripleInStaging(this.subterm);
     }
 
     delete() {

@@ -95,8 +95,8 @@ export class ResourceUtils {
                 return false;
             }
             let prefix: string = nTripleQName.substring(0, colonIdx);
-            for (var i = 0; i < prefixMapping.length; i++) {
-                if (prefixMapping[i].prefix == prefix) {
+            for (let mapping of prefixMapping) {
+                if (mapping.prefix == prefix) {
                     return true;
                 }
             }
@@ -110,10 +110,9 @@ export class ResourceUtils {
             let prefix: string = nTripleQName.substring(0, colonIdx);
             let localName: string = nTripleQName.substring(colonIdx + 1);
             //resolve prefix
-            let namespace: string;
-            for (var i = 0; i < prefixMapping.length; i++) {
-                if (prefixMapping[i].prefix == prefix) {
-                    return new ARTURIResource(prefixMapping[i].namespace + localName);
+            for (let mapping of prefixMapping) {
+                if (mapping.prefix == prefix) {
+                    return new ARTURIResource(mapping.namespace + localName);
                 }
             }
         } else {
@@ -127,9 +126,9 @@ export class ResourceUtils {
      * @param prefixMapping 
      */
     static getQName(iri: string, prefixMapping: PrefixMapping[]): string {
-        for (var i = 0; i < prefixMapping.length; i++) {
-            if (iri.startsWith(prefixMapping[i].namespace)) {
-                return iri.replace(prefixMapping[i].namespace, prefixMapping[i].prefix + ":");
+        for (let mapping of prefixMapping) {
+            if (iri.startsWith(mapping.namespace)) {
+                return iri.replace(mapping.namespace, mapping.prefix + ":");
             }
         }
         return iri;
@@ -143,20 +142,24 @@ export class ResourceUtils {
         return this.isResourceInStagingAdd(resource) || this.isResourceInStagingRemove(resource);
     }
     static isResourceInStagingAdd(resource: ARTResource): boolean {
-        let graphs: ARTURIResource[] = resource.getGraphs();
-        for (var i = 0; i < graphs.length; i++) {
-            if (graphs[i].getURI().startsWith(SemanticTurkey.stagingAddGraph)) {
-                return true;
-            }
+        //look among the resource graphs
+        if (resource.getGraphs().some(g => g.getURI().startsWith(SemanticTurkey.stagingAddGraph))) {
+            return true;
+        }
+        //look also in the graphs of the nature
+        if (resource.getNature().some(n => n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingAddGraph)))) {
+            return true;
         }
         return false;
     }
     static isResourceInStagingRemove(resource: ARTResource): boolean {
-        let graphs: ARTURIResource[] = resource.getGraphs();
-        for (var i = 0; i < graphs.length; i++) {
-            if (graphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
-                return true;
-            }
+        //look among the resource graphs
+        if (resource.getGraphs().some(g => g.getURI().startsWith(SemanticTurkey.stagingRemoveGraph))) {
+            return true;
+        }
+        //look also in the graphs of the nature
+        if (resource.getNature().some(n => n.graphs.some(g => g.getURI().startsWith(SemanticTurkey.stagingRemoveGraph)))) {
+            return true;
         }
         return false;
     }
@@ -169,24 +172,22 @@ export class ResourceUtils {
         return this.isTripleInStagingAdd(resource) || this.isTripleInStagingRemove(resource);
     }
     static isTripleInStagingAdd(resource: ARTNode): boolean {
-        let graphs: ARTURIResource[] = resource.getTripleGraphs();
-        for (var i = 0; i < graphs.length; i++) {
-            if (graphs[i].getURI().startsWith(SemanticTurkey.stagingAddGraph)) {
-                return true;
-            }
+        //look among the triple graphs
+        if (resource.getTripleGraphs().some(g => g.getURI().startsWith(SemanticTurkey.stagingAddGraph))) {
+            return true;
         }
+        //look to the tripleScopes attr
         if (resource.getAdditionalProperty(ResAttribute.TRIPLE_SCOPE) == TripleScopes.staged) {
             return true;
         }
         return false;
     }
     static isTripleInStagingRemove(resource: ARTNode): boolean {
-        let graphs: ARTURIResource[] = resource.getTripleGraphs();
-        for (var i = 0; i < graphs.length; i++) {
-            if (graphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
-                return true;
-            }
+        //look among the triple graphs
+        if (resource.getTripleGraphs().some(g => g.getURI().startsWith(SemanticTurkey.stagingRemoveGraph))) {
+            return true;
         }
+        //look to the tripleScopes attr
         if (resource.getAdditionalProperty(ResAttribute.TRIPLE_SCOPE) == TripleScopes.del_staged) {
             return true;
         }

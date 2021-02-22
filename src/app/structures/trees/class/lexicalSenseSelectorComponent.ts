@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ProjectContext } from "src/app/utils/VBContext";
 import { ARTURIResource } from "../../../models/ARTResources";
-import { SKOS } from '../../../models/Vocabulary';
-import { VBProperties } from '../../../utils/VBProperties';
 import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
 
 @Component({
@@ -10,7 +9,7 @@ import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
     host: { class: "vbox" }
 })
 export class LexicalSenseSelectorComponent {
-
+    @Input() projectCtx: ProjectContext;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     private selectedLexicalEntry: ARTURIResource;

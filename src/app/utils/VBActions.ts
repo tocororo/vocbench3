@@ -132,6 +132,7 @@ export enum VBActionsEnum {
     ontolexClearLexicalEntryConstituent = "ontolexClearLexicalEntryConstituent",
     ontolexCreateLexicalEntry = "ontolexCreateLexicalEntry",
     ontolexCreateLexicon = "ontolexCreateLexicon",
+    ontolexCreateLexicoSemRelation = "ontolexCreateLexicoSemRelation",
     ontolexDeleteLexicalEntry = "ontolexDeleteLexicalEntry",
     ontolexDeleteLexicon = "ontolexDeleteLexicon",
     ontolexGetLexicalEntry = "ontolexGetLexicalEntry",

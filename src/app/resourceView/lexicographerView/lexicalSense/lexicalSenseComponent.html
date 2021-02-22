@@ -5,11 +5,7 @@
             <label class="mt-2 mr-2">{{'COMMONS.DEFINITION'|translate}}:</label>
             <div class="vbox">
                 <div *ngFor="let def of sense.definition; let last=last" class="d-flex align-items-center mr-2" [ngClass]="{ 'mb-1': !last }">
-                    <inline-editable-value style="flex: 1" [value]="def" (edited)="onDefinitionEdited(def, $event)" [disabled]="!editDefAuthorized">
-                    </inline-editable-value>
-                    <button class="btn btn-faded btn-xs ml-1" (click)="deleteDefinition(def)"  [disabled]="!deleteDefAuthorized" [title]="'ACTIONS.DELETE'|translate">
-                        <span class="fas fa-minus"></span>
-                    </button>
+                    <inline-def style="flex: 1" [resource]="sense.id" [definition]="def" (update)="onUpdate()"></inline-def>
                     <button *ngIf="last && !pendingDef" class="btn btn-faded btn-xs ml-1" (click)="addDefinition()" [disabled]="!addDefAuthorized" [title]="'ACTIONS.ADD'|translate">
                         <span class="fas fa-plus"></span>
                     </button>
@@ -50,6 +46,9 @@
                     {{'DATA.ACTIONS.REIFY_PLAIN_SENSE'|translate}}
                 </a>
                 <ng-container *ngIf="sense.id">
+                    <a class="dropdown-item" (click)="addRelation()" [ngClass]="{ disabled: !addRelationAuthorized }">
+                        {{'DATA.ACTIONS.ADD_SENSE_RELATION'|translate}}
+                    </a>
                     <a class="dropdown-item" (click)="setReference()" [ngClass]="{ disabled: !setReferenceAuthorized }">
                         {{'DATA.ACTIONS.SET_REFERENCE'|translate}}
                     </a>

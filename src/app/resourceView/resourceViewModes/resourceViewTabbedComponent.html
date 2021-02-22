@@ -11,7 +11,7 @@
             </a>
         </li>
         <!-- style top necessary to align the bottom of this tab with the others (since this is smaller) -->
-        <li *ngIf="tabs.length > 1" class="nav-item" style="position:relative; top: 2px;">
+        <li *ngIf="tabs.length > 1" class="nav-item" style="position:relative; top: 4px;">
             <a (click)="closeAllTabs()" class="nav-link" style="font-weight: bold; padding: 3px 6px;" [title]="'RESOURCE_VIEW.MISC.CLOSE_ALL_TABS'|translate"
                 onmouseover="this.style.color='#555'" onmouseout="this.style.color='#337ab7'">
                 <span class="fas fa-times"></span>

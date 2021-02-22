@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTLiteral, ARTNode, ARTResource } from "src/app/models/ARTResources";
-import { ConceptReference, Sense } from "src/app/models/LexicographerView";
+import { ConceptReference, LexicalResourceUtils, Sense } from "src/app/models/LexicographerView";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
@@ -35,11 +35,17 @@ export class ConceptReferenceComponent {
     ngOnInit() {
         let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
 
-        this.addDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddDefinition, this.concept.id) && langAuthorized && !this.readonly;
-        this.editDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexUpdateDefinition, this.concept.id) && langAuthorized && !this.readonly;
-        this.deleteDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveDefinition, this.concept.id) && langAuthorized && !this.readonly;
+        if (LexicalResourceUtils.isInStagingRemove(this.concept)) {
+            this.readonly = true;
+        }
 
-        this.deleteConceptAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveConcept) && !this.readonly;
+        this.addDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddDefinition, this.concept.id) && langAuthorized && !this.readonly;
+        this.editDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexUpdateDefinition, this.concept.id) 
+            && langAuthorized && !this.readonly && !LexicalResourceUtils.isInStaging(this.concept);
+        this.deleteDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveDefinition, this.concept.id) 
+            && langAuthorized && !this.readonly && !LexicalResourceUtils.isInStaging(this.concept);
+
+        this.deleteConceptAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveConcept) && !this.readonly && !LexicalResourceUtils.isInStaging(this.concept);
     }
 
     deleteConcept() {
@@ -66,21 +72,9 @@ export class ConceptReferenceComponent {
         this.pendingDef = false;
     }
 
-    onDefinitionEdited(oldDef: ARTNode, newValue: string) {
-        let newDef: ARTLiteral = new ARTLiteral(newValue, null, this.lang);
-        let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
-        this.ontolexService.updateDefinition(this.concept.id, oldDef, newDef, lexicon).subscribe(
-            () => this.update.emit()
-        )
+    onUpdate() {
+        this.update.emit();
     }
-
-    deleteDefinition(def: ARTNode) {
-        let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
-        this.ontolexService.removeDefinition(this.concept.id, def, lexicon).subscribe(
-            () => this.update.emit()
-        )
-    }
-
 
     resourceDblClick() {
         this.dblclickObj.emit(this.concept.id);

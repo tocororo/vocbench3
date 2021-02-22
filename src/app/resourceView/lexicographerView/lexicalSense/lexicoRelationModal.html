@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">
+    
+    <table class="table table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td nowrap><label>{{'RESOURCE_VIEW.LEX_VIEW.CATEGORY'|translate}}:</label></td>
+                <td>
+                    <select class="form-control" [(ngModel)]="selectedCategory" [title]="selectedCategory?.toNT()">
+                        <option *ngFor="let c of categories" [ngValue]="c" [title]="c.toNT()">{{c.getLocalName()}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label>{{'ALIGNMENT.CREATION.TARGET_RESOURCE'|translate}}:</label></td>
+                <td>
+                    <resource-picker [config]="{ roles: 'ontolexLexicalSense' }" (resourceChanged)="targetEntity = $event"></resource-picker>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>{{'RESOURCE_VIEW.LEX_VIEW.UNIDIRECTIONAL'|translate}}:</label></td>
+                <td>
+                    <input type="checkbox" [(ngModel)]="unidirectional">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+</div>

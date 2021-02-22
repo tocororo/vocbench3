@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Observable } from "rxjs";
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { LexicalResourceUtils } from "src/app/models/LexicographerView";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
@@ -48,6 +49,9 @@ export class MorphosyntacticPropComponent {
             )
         }
 
+        if (!ResourceUtils.isTripleInStaging(this.value)) {
+            this.readonly = true;
+        }
         this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.resource) && !this.readonly;
         this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.resource) && !this.readonly;
     }

@@ -1,7 +1,7 @@
 <div class="d-flex align-items-center">
     <entry-ref *ngFor="let ref of targetRef" class="clickable" [ref]="ref" (dblclick)="targetDblClick(ref)"></entry-ref>
     <span *ngIf="showCategory" class="clickable ml-1" (dblclick)="categoryDblClick()" [title]="category.toNT()">({{category.getLocalName()}})</span>
-    <button *ngIf="!readonly" class="btn btn-xs btn-faded ml-2" (click)="delete()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized">
+    <button class="btn btn-xs btn-faded ml-2" (click)="delete()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized">
         <span class="fas fa-minus"></span>
     </button>
 </div>

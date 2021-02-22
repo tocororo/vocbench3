@@ -15,7 +15,7 @@
             </a>
         </div>
     </div>
-    <button *ngIf="!readonly && !lemma" class="btn btn-xs btn-faded ml-1" (click)="deleteForm()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!removeFormAuthorized">
+    <button *ngIf="!lemma" class="btn btn-xs btn-faded ml-1" (click)="deleteForm()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!removeFormAuthorized">
         <span class="fas fa-minus"></span>
     </button>
 </div>

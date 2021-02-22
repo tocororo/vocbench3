@@ -35,17 +35,17 @@ export class LexicalFormComponent {
     constructor(private ontolexService: OntoLexLemonServices) {}
 
     ngOnInit() {
+        if (LexicalResourceUtils.isInStagingRemove(this.form)) {
+            this.readonly = true;
+        }
         if (this.lemma) {
             this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetCanonicalForm) && !this.readonly;
         } else {
             this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
         }
-        if (LexicalResourceUtils.isInStagingRemove(this.form)) {
-            this.readonly = true;
-        }
         this.addMorphoPropAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.form.id) && !this.readonly;
         this.addPhoneticRepAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddFormRepresentation) && !this.readonly;
-        this.removeFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveForm) && !this.readonly;
+        this.removeFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveForm) && !this.readonly && !LexicalResourceUtils.isInStaging(this.form);
     }
 
     onWrittenRepEdited(newValue: string) {

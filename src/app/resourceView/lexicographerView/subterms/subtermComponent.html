@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center">
     <entry-ref [ref]="subterm" class="clickable" (dblclick)="onDblClick()"></entry-ref>
-    <button *ngIf="!readonly" class="btn btn-xs btn-faded ml-2" (click)="delete()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized">
+    <button class="btn btn-xs btn-faded ml-2" (click)="delete()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized">
         <span class="fas fa-minus"></span>
     </button>
 </div>

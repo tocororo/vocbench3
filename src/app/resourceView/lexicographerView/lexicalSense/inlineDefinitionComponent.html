@@ -1,0 +1,5 @@
+<inline-editable-value style="flex: 1" [value]="definition" (edited)="onDefinitionEdited($event)" [disabled]="!editDefAuthorized">
+</inline-editable-value>
+<button class="btn btn-faded btn-xs ml-1" (click)="deleteDefinition()"  [disabled]="!deleteDefAuthorized" [title]="'ACTIONS.DELETE'|translate">
+    <span class="fas fa-minus"></span>
+</button>

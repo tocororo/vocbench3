@@ -1,5 +1,5 @@
 import { Deserializer } from "../utils/Deserializer";
-import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceNature, TripleScopes } from "./ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceNature, TripleScopes } from "./ARTResources";
 import { SemanticTurkey } from "./Vocabulary";
 
 export class LexicalEntry {
@@ -136,9 +136,11 @@ export class SenseReference {
     public static parse(json: any): SenseReference {
         let r: SenseReference = new SenseReference();
         r.id = ParsingUtils.parseResourceId(json.id);
+        r.scope = json.scope;
         r.nature = ResourceNature.parse(json.nature);
         r.id.setRole(r.nature[0].role);
-        r.scope = json.scope;
+        r.id.setNature(r.nature); //this and the following line are useful to render validation status of the rdf-resource of the concept
+        r.id.setAdditionalProperty(ResAttribute.TRIPLE_SCOPE, r.scope);
         r.entry = json.entry.map((e: any) => EntryReference.parse(e));
         return r;
     }
@@ -171,8 +173,10 @@ export class ConceptReference {
         let c: ConceptReference = new ConceptReference();
         c.id = ParsingUtils.parseResourceId(json.id);
         c.nature = ResourceNature.parse(json.nature);
-        c.id.setRole(c.nature[0].role); //role needed to authorization evaluator
         c.scope = json.scope;
+        c.id.setRole(c.nature[0].role); //role needed to authorization evaluator
+        c.id.setNature(c.nature); //this and the following line are useful to render validation status of the rdf-resource of the concept
+        c.id.setAdditionalProperty(ResAttribute.TRIPLE_SCOPE, c.scope);
         if (json.definition) {
             c.definition = Deserializer.createRDFNodeArray(json.definition);
             c.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()))
@@ -233,14 +237,14 @@ export class LexicalResourceUtils {
         return false;
     }
 
-    static isStagedTriple(resourceWithScope: ResourceWithScope): boolean {
-        return this.isStagedAddTriple(resourceWithScope) || this.isStagedRemoveTriple(resourceWithScope)
+    static isTripleInStaging(resourceWithScope: ResourceWithScope): boolean {
+        return this.isTripleInStagingAdd(resourceWithScope) || this.isTripleInStagingRemove(resourceWithScope)
     }
-    static isStagedAddTriple(resourceWithScope: ResourceWithScope): boolean {
-        return resourceWithScope.scope == TripleScopes.del_staged;
-    }
-    static isStagedRemoveTriple(resourceWithScope: ResourceWithScope): boolean {
+    static isTripleInStagingAdd(resourceWithScope: ResourceWithScope): boolean {
         return resourceWithScope.scope == TripleScopes.staged;
+    }
+    static isTripleInStagingRemove(resourceWithScope: ResourceWithScope): boolean {
+        return resourceWithScope.scope == TripleScopes.del_staged;
     }
 }
 

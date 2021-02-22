@@ -146,7 +146,8 @@ export class ResourcePickerComponent {
             "ObjectProperty": RDFResourceRolesEnum.objectProperty,
             "OntologyProperty": RDFResourceRolesEnum.ontologyProperty,
             "Lexicon": RDFResourceRolesEnum.limeLexicon,
-            "LexicalEntry": RDFResourceRolesEnum.ontolexLexicalEntry
+            "LexicalEntry": RDFResourceRolesEnum.ontolexLexicalEntry,
+            "LexicalSense": RDFResourceRolesEnum.ontolexLexicalSense
         };
         let options: string[] = [];
         for (let key in resourceTypes) {
@@ -230,7 +231,15 @@ export class ResourcePickerComponent {
                 },
                 () => { }
             );
+        } else if (role == RDFResourceRolesEnum.ontolexLexicalSense) {
+            this.browsingModals.browseLexicalSense({key:"DATA.ACTIONS.SELECT_LEXICAL_SENSE"}, projectCtx).then(
+                (selectedResource: ARTURIResource) => {
+                    this.updatePickedResource(selectedResource);
+                },
+                () => { }
+            );
         }
+        
         //Other type of resource will be added when necessary
     }
 

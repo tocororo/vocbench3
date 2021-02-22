@@ -100,6 +100,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.ontolexClearLexicalEntryConstituent]: 'auth(rdf(ontolexLexicalEntry, constituents), "D").',
         [VBActionsEnum.ontolexCreateLexicalEntry]: 'auth(rdf(ontolexLexicalEntry), "C").',
         [VBActionsEnum.ontolexCreateLexicon]: 'auth(rdf(limeLexicon), "C").',
+        [VBActionsEnum.ontolexCreateLexicoSemRelation]: 'auth(rdf, "C").',
         [VBActionsEnum.ontolexDeleteLexicalEntry]: 'auth(rdf(ontolexLexicalEntry), "D").',
         [VBActionsEnum.ontolexDeleteLexicon]: 'auth(rdf(limeLexicon), "D").',
         [VBActionsEnum.ontolexGetLexicalEntry]: 'auth(rdf(ontolexLexicalEntry), "R").',

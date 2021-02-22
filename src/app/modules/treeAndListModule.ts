@@ -48,6 +48,7 @@ import { ConceptTreeSettingsModal } from '../structures/trees/concept/conceptTre
 import { PropertyTreeComponent } from '../structures/trees/property/propertyTreeComponent';
 import { PropertyTreeNodeComponent } from '../structures/trees/property/propertyTreeNodeComponent';
 import { PropertyTreePanelComponent } from '../structures/trees/property/propertyTreePanelComponent';
+import { LexicalSenseListModal } from '../widget/modal/browsingModal/lexicalSenseListModal/lexicalSenseListModal';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
@@ -88,6 +89,7 @@ import { SharedModule } from './sharedModule';
         LexicalEntryListNodeComponent,
         LexicalEntryListPanelComponent,
         LexicalEntryListSettingsModal,
+        LexicalSenseListModal,
         LexicalSenseSelectorComponent,
         LexiconListComponent,
         LexiconListNodeComponent,
@@ -137,6 +139,7 @@ import { SharedModule } from './sharedModule';
         CustomSearchModal,
         InstanceListSettingsModal,
         LexicalEntryListSettingsModal,
+        LexicalSenseListModal,
         LoadCustomSearchModal,
         SearchSettingsModal,
         TreeListSettingsModal,

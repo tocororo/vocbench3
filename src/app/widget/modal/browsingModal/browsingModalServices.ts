@@ -11,6 +11,7 @@ import { ConceptTreeModal } from "./conceptTreeModal/conceptTreeModal";
 import { DatatypeListModal } from './datatypeListModal/datatypeListModal';
 import { InstanceListModal } from "./instanceListModal/instanceListModal";
 import { LexicalEntryListModal } from './lexicalEntryListModal/lexicalEntryListModal';
+import { LexicalSenseListModal } from './lexicalSenseListModal/lexicalSenseListModal';
 import { LexiconListModal } from './lexiconListModal/lexiconListModal';
 import { PropertyTreeModal } from "./propertyTreeModal/propertyTreeModal";
 import { SchemeListModal } from "./schemeListModal/schemeListModal";
@@ -157,6 +158,14 @@ export class BrowsingModalServices {
     browseLexiconList(title: TextOrTranslation, projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(LexiconListModal, _options);
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
+    }
+
+    browseLexicalSense(title: TextOrTranslation, projectCtx?: ProjectContext): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(LexicalSenseListModal, _options);
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;

@@ -5,7 +5,7 @@
     <!-- visualization and editing -->
     <ng-template #visualizationBlock>
         /<inline-editable-value [value]="phoneticRep" (edited)="onEdited($event)" [disabled]="!editAuthorized"></inline-editable-value>/
-        <button *ngIf="deleteAuthorized" class="btn btn-xs btn-faded ml-2" (click)="deleteRep()" [title]="'ACTIONS.DELETE'|translate">
+        <button class="btn btn-xs btn-faded ml-2" (click)="deleteRep()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized">
             <span class="fas fa-minus"></span>
         </button>
     </ng-template>

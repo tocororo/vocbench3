@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTLiteral, ARTNode, ARTResource } from "src/app/models/ARTResources";
+import { ARTLiteral, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { LexicalEntry, Sense } from "src/app/models/LexicographerView";
-import { OntoLex } from "src/app/models/Vocabulary";
+import { OntoLex, Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
@@ -9,7 +9,10 @@ import { VBContext } from "src/app/utils/VBContext";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { NewOntoLexicalizationCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
+import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { LexViewCache } from "../LexViewChache";
+import { LexViewModalService } from "../lexViewModalService";
+import { LexicoRelationModalReturnData } from "./lexicoRelationModal";
 
 @Component({
     selector: "lexical-sense",
@@ -30,20 +33,26 @@ export class LexicalSenseComponent {
 
     //actions auth
     addDefAuthorized: boolean;
+    addRelationAuthorized: boolean;
     editDefAuthorized: boolean;
     deleteDefAuthorized: boolean;
     addConceptAuthorized: boolean;
     setReferenceAuthorized: boolean;
     reifySenseAuthorized: boolean;
 
-    constructor(private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices) {}
+    constructor(private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices, 
+        private creationModals: CreationModalServices, private sharedModals: SharedModalServices, private lexViewModals: LexViewModalService) {}
 
     ngOnInit() {
         let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
+
         //the following are authorized only for reified senses (this.sense.id not null) and not for plain
         this.addDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddDefinition, this.sense.id) && langAuthorized && !this.readonly;
         this.editDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexUpdateDefinition, this.sense.id) && langAuthorized && !this.readonly;
         this.deleteDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveDefinition, this.sense.id) && langAuthorized && !this.readonly;
+
+         //TODO server side this service has a temp preauthorized, keep it updated when it will be changed
+        this.addRelationAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
 
         this.addConceptAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddConcept) && !this.readonly;
         this.setReferenceAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetReference) && !this.readonly;
@@ -97,6 +106,38 @@ export class LexicalSenseComponent {
         }
     }
 
+    addRelation() {
+        this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_SENSE_RELATION'}, this.sense.id).then(
+            (data: LexicoRelationModalReturnData) => {
+                this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.unidirectional, Vartrans.senseRelation, data.category).subscribe(
+                    () => {
+                        this.update.emit();
+                    }
+                )
+            }
+        )
+        // let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
+        // this.ontolexService.getSenseRelationCategories(lexicon).subscribe(
+        //     categories => {
+        //         this.sharedModals.selectResource({key:"DATA.ACTIONS.SELECT_PROPERTY"}, null, categories, false).then(
+        //             (category: ARTURIResource) => {
+        //                 this.browsingModals.browseLexicalSense({key:"DATA.ACTIONS.SELECT_LEXICAL_SENSE"}).then(
+        //                     (targetSense: ARTURIResource) => {
+        //                         this.ontolexService.createLexicoSemanticRelation(this.sense.id, targetSense, false, Vartrans.senseRelation, category).subscribe(
+        //                             () => {
+        //                                 this.update.emit();
+        //                             }
+        //                         )
+        //                     },
+        //                     () => {}
+        //                 )
+        //             }
+        //         ),
+        //         () => {}
+        //     }
+        // )
+    }
+
     //CONCEPT
     
     setConcept() {
@@ -132,7 +173,6 @@ export class LexicalSenseComponent {
     addDefinition() {
         this.pendingDef = true;
     }
-    
     onPendingDefConfirmed(value: string) {
         let def: ARTLiteral = new ARTLiteral(value, null, this.lang);
         let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
@@ -144,21 +184,6 @@ export class LexicalSenseComponent {
     }
     onPendingDefCanceled() {
         this.pendingDef = false;
-    }
-
-    onDefinitionEdited(oldDef: ARTNode, newValue: string) {
-        let newDef: ARTLiteral = new ARTLiteral(newValue, null, this.lang);
-        let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
-        this.ontolexService.updateDefinition(this.sense.id, oldDef, newDef, lexicon).subscribe(
-            () => this.update.emit()
-        )
-    }
-
-    deleteDefinition(def: ARTNode) {
-        let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
-        this.ontolexService.removeDefinition(this.sense.id, def, lexicon).subscribe(
-            () => this.update.emit()
-        )
     }
 
     /**

@@ -4,7 +4,7 @@
         <constituent class="ml-3" [constituent]="c" (dblclickObj)="resourceDblClick($event)" (update)="onUpdate()"></constituent>
         <ng-container *ngIf="!last">;</ng-container>
     </div>
-    <button *ngIf="!readonly" class="btn btn-xs btn-faded ml-3" (click)="edit()" [title]="'ACTIONS.EDIT'|translate">
+    <button class="btn btn-xs btn-faded ml-3" (click)="edit()" [title]="'ACTIONS.EDIT'|translate" [disabled]="!editAuthorized">
         <span class="fas fa-pencil-alt"></span>
     </button>
 </div>

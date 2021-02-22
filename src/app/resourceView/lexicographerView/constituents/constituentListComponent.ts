@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource } from "src/app/models/ARTResources";
 import { Constituent, LexicalEntry } from "src/app/models/LexicographerView";
+import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "src/app/utils/VBActions";
 import { LexViewHelper } from "../LexViewHelper";
 
 @Component({
@@ -16,11 +18,15 @@ export class ConstituentListComponent {
     
     constituents: Constituent[];
 
+    editAuthorized: boolean;
+
     constructor(private lexViewHelper: LexViewHelper) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['entry']) {
             this.constituents = this.entry.constituents;
+
+            this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetLexicalEntryConstituent) && !this.readonly;
         }
     }
 

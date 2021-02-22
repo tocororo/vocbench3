@@ -587,6 +587,7 @@
             "ADD_RANGE": "Aggiungi range",
             "ADD_RELATED": "Aggiungi correlato",
             "ADD_SCHEME": "Aggiungi schema",
+            "ADD_SENSE_RELATION": "Agiungi relazioni tra sensi",
             "ADD_SUBTERM": "Aggiungi sotto-termine",
             "ADD_SUPERPROPERTY": "Aggiungi super-proprietà",
             "ADD_TO_SCHEME": "Aggiungi a schema",
@@ -633,6 +634,7 @@
             "SELECT_INSTANCE": "Seleziona istanza",
             "SELECT_LEXICAL_CONCEPT": "Seleziona Lexical Concept",
             "SELECT_LEXICAL_ENTRY": "Seleziona Lexical Entry",
+            "SELECT_LEXICAL_SENSE": "Seleziona Lexical Sense",
             "SELECT_LEXICALIZATION_PROPERTY": "Seleziona proprietà di lessicalizzazione",
             "SELECT_LEXICON": "Seleziona lessico",
             "SELECT_PROPERTY": "Seleziona proprietà",
@@ -1437,10 +1439,12 @@
             "DISABLED_UNDER_VALIDATION": "Il tab Code è stato disabilitato in quanto questa risorsa - o parte della sua descrizione - è sotto validazione"
         },
         "LEX_VIEW": {
+            "CATEGORY": "Categoria",
             "PRONUNCIATION": "Pronuncia",
             "RELATED": "Correlati",
             "SEMANTIC_REFERENCE": "Riferimento semantico",
-            "TRANSLATION": "Traduzione"
+            "TRANSLATION": "Traduzione",
+            "UNIDIRECTIONAL": "Unidirezionale"
         },
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Concetti broader",

@@ -35,11 +35,7 @@
                 <div class="d-flex align-items-center">
                     <div class="vbox">
                         <div *ngFor="let def of concept.definition; let last=last" class="d-flex align-items-center mr-2" [ngClass]="{ 'mb-1': !last }">
-                            <inline-editable-value style="flex: 1" [value]="def" (edited)="onDefinitionEdited(def, $event)" [disabled]="!editDefAuthorized">
-                            </inline-editable-value>
-                            <button class="btn btn-faded btn-xs ml-1" (click)="deleteDefinition(def)"  [disabled]="!deleteDefAuthorized" [title]="'ACTIONS.DELETE'|translate">
-                                <span class="fas fa-minus"></span>
-                            </button>
+                            <inline-def style="flex: 1" [resource]="concept.id" [definition]="def" (update)="onUpdate()"></inline-def>
                             <button *ngIf="last && !pendingDef" class="btn btn-faded btn-xs ml-1" (click)="addDefinition()" [disabled]="!addDefAuthorized" [title]="'ACTIONS.ADD'|translate">
                                 <span class="fas fa-plus"></span>
                             </button>

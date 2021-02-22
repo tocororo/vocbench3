@@ -326,34 +326,50 @@
                     <div class="alert alert-info mb-2">
                         {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.PROJ_CREATION_INFO'|translate}}
                     </div>
-                    <div class="d-flex align-items-center mt-3">
-                        <label>
-                            {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.DEFAULT_FOR'|translate}}
-                            "{{'PROJECTS.ACL_UNIVERSAL_ACCESS'|translate}}":
-                        </label>
-                        <div class="form-check form-check-inline ml-3">
-                            <input class="form-check-input" id="aclRadioTrue" type="radio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="onDefaultAclChanged()" [value]="true">
-                            <span class="form-check-label" for="aclRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" id="aclRadioFalse" type="radio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="onDefaultAclChanged()" [value]="false">
-                            <span class="form-check-label" for="aclRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center mt-3">
-                        <label>
-                            {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.DEFAULT_FOR'|translate}}
-                            "{{'PROJECTS.OPEN_AT_STARTUP'|translate}}":
-                        </label>
-                        <div class="form-check form-check-inline ml-3">
-                            <input class="form-check-input" id="startupRadioTrue" type="radio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="onDefaultOpenAtStartupChanged()" [value]="true">
-                            <span class="form-check-label" for="startupRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" id="startupRadioFalse" type="radio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="onDefaultOpenAtStartupChanged()" [value]="false">
-                            <span class="form-check-label" for="startupRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
-                        </div>
-                    </div>
+                    <table class="table table-sm table-borderless">
+                        <colgroup>
+                            <col style="width: 1%;">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td nowrap>
+                                    <label>
+                                        {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.DEFAULT_FOR'|translate}}
+                                        "{{'PROJECTS.ACL_UNIVERSAL_ACCESS'|translate}}":
+                                    </label>
+                                </td>
+                                <td class="text-center">
+                                    <div class="form-check form-check-inline ml-3">
+                                        <input class="form-check-input" id="aclRadioTrue" type="radio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="onDefaultAclChanged()" [value]="true">
+                                        <span class="form-check-label" for="aclRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" id="aclRadioFalse" type="radio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="onDefaultAclChanged()" [value]="false">
+                                        <span class="form-check-label" for="aclRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap>
+                                    <label>
+                                        {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.DEFAULT_FOR'|translate}}
+                                        "{{'PROJECTS.OPEN_AT_STARTUP'|translate}}":
+                                    </label>
+                                </td>
+                                <td class="text-center">
+                                    <div class="form-check form-check-inline ml-3">
+                                        <input class="form-check-input" id="startupRadioTrue" type="radio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="onDefaultOpenAtStartupChanged()" [value]="true">
+                                        <span class="form-check-label" for="startupRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" id="startupRadioFalse" type="radio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="onDefaultOpenAtStartupChanged()" [value]="false">
+                                        <span class="form-check-label" for="startupRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
