@@ -213,6 +213,14 @@ export class CreateProjectComponent {
             }
         );
 
+        //init optional settings default values
+        this.prefService.getSystemSettings([Properties.setting_proj_creation_default_acl_set_universal_access, Properties.setting_proj_creation_default_open_at_startup]).subscribe(
+            stResp => {
+                this.globallyAccessible = stResp[Properties.setting_proj_creation_default_acl_set_universal_access];
+                this.openAtStartup = stResp[Properties.setting_proj_creation_default_open_at_startup];
+            }
+        );
+
         //init project list for EDOAL
         this.initProjectList();
 

@@ -78,6 +78,11 @@
                 "DETECT_INFO": "Rileva la timezone del browser",
                 "DISABLE_INFO": "Disabilita la sintesi giornaliera delle notifiche"
             },
+            "PROJ_CREATION": {
+                "PROJ_CREATION": "Creazione progetti",
+                "PROJ_CREATION_INFO": "Configurazione dei valori di default di alcune opzioni fornite nel form di creazione di un progetto",
+                "DEFAULT_FOR": "Default per"
+            },
             "REGISTRATION_FORM": {
                 "FORM_FIELDS": "Campi del form di registrazione",
                 "OPTIONAL_FIELDS": "Campi opzionali",
@@ -1206,11 +1211,11 @@
     },
     "PROJECTS": {
         "ACCESSED": "Acceduto",
+        "ACL_UNIVERSAL_ACCESS": "ACL impostato su accesso universale",
+        "ACL_UNIVERSAL_ACCESS_INFO": "Abilita questa opzione per rendere il progetto accedibile da tutti gli altri progetti (questa opzioni può essere cambiata in seguito dall'editor ACL)",
         "BLACKLIST": "Lista nera",
         "BLACKLIST_INFO": "Abilita questa opzione per mettere in lista nera i termini che sono stati respinti tramite la validazione",
         "ENABLE_TRIVIAL_INFERENCE": "Abilita trivial inference",
-        "GLOBALLY_ACCESSIBLE": "Accedibile globalmente",
-        "GLOBALLY_ACCESSIBLE_INFO": "Abilita questa opzione per rendere il progetto accedibile da tutti gli altri progetti (questa opzioni può essere cambiata in seguito dall'editor ACL)",
         "HISTORY_INFO": "Abilita questa opzione per tenere traccia delle modifiche effettuate sul grafo di lavoro",
         "INFERENCE_DISCOURAGED_INFO": "E' raccomandabile non usare l'inferenza",
         "LEFT_RIGHT": "Sinistro/Destro",
@@ -1239,12 +1244,14 @@
             "LOCKABLE": "Lockabile"
         },
         "ACTIONS": {
+            "CLOSE_ALL": "Chiudi tutti i progetti",
             "EDIT_ACL": "Modifica ACL",
             "EDIT_DESCRIPTION": "Modifica descrizione",
             "EDIT_FACETS": "Modifica facets",
             "EDIT_PROJECT_ACL": "Modifica ACL progetto",
             "EDIT_REMOTE_REPO_CONFIG": "Modifica configurazione repository remoto",
             "EDIT_SETTINGS": "Modifica impostazioni progetto",
+            "OPEN_ALL": "Apri tutti i progetti",
             "RECREATE_FACETS_INDEX": "Ricrea indice facets",
             "SHOW_ACL_MATRIX": "Mostra matrice ACL",
             "SHOW_PROPERTIES": "Proprietà",

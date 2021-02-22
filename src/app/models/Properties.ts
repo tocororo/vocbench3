@@ -57,8 +57,10 @@ export class Properties {
     //system
     static setting_remote_configs = "remote_configs";
     static setting_experimental_features_enabled = "experimental_features_enabled";
-    static setting_home_content = "home_content"
-    static privacy_statement_available = "privacy_statement_available"
+    static setting_home_content = "home_content";
+    static privacy_statement_available = "privacy_statement_available";
+    static setting_proj_creation_default_acl_set_universal_access = "proj_creation_default_acl_set_universal_access";
+    static setting_proj_creation_default_open_at_startup = "proj_creation_default_open_at_startup";
     
 }
 

@@ -78,6 +78,11 @@
                 "DETECT_INFO": "Detect the browser timezone",
                 "DISABLE_INFO": "Disable the notifications daily digest"
             },
+            "PROJ_CREATION": {
+                "PROJ_CREATION": "Project creation",
+                "PROJ_CREATION_INFO": "Configuration of the default values of some options prompted in the project creation form",
+                "DEFAULT_FOR": "Default for"
+            },
             "REGISTRATION_FORM": {
                 "FORM_FIELDS": "Registration form fields",
                 "OPTIONAL_FIELDS": "Optional fields",
@@ -1206,11 +1211,11 @@
     },
     "PROJECTS": {
         "ACCESSED": "已访问",
+        "ACL_UNIVERSAL_ACCESS": "ACL set to universal access",
+        "ACL_UNIVERSAL_ACCESS_INFO": "Enable this in order to set this project accessible by all the other projects (this option can be changed later from the ACL editor)",
         "BLACKLIST": "Blacklisting",
         "BLACKLIST_INFO": "Enable this to blacklist terms that have been rejected through validation",
         "ENABLE_TRIVIAL_INFERENCE": "Enable trivial inference",
-        "GLOBALLY_ACCESSIBLE": "Globally accessible",
-        "GLOBALLY_ACCESSIBLE_INFO": "Enable this in order to set this project accessible by all the other projects (this option can be changed later from the ACL editor)",
         "HISTORY_INFO": "Enable this to keep track of the changes made on the working graph",
         "INFERENCE_DISCOURAGED_INFO": "It is highly recommended not to use inference",
         "LEFT_RIGHT": "Left/Right",
@@ -1239,12 +1244,14 @@
             "LOCKABLE": "Lockable"
         },
         "ACTIONS": {
+            "CLOSE_ALL": "Close all projects",
             "EDIT_ACL": "Edit ACL",
             "EDIT_DESCRIPTION": "Edit description",
             "EDIT_FACETS": "Edit facets",
             "EDIT_PROJECT_ACL": "Edit project ACL",
             "EDIT_REMOTE_REPO_CONFIG": "Edit Remote Repo configuration",
             "EDIT_SETTINGS": "Edit project settings",
+            "OPEN_ALL": "Open all projects",
             "RECREATE_FACETS_INDEX": "Recreate facets index",
             "SHOW_ACL_MATRIX": "Show ACL matrix",
             "SHOW_PROPERTIES": "Properties",

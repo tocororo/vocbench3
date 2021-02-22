@@ -2,6 +2,8 @@ import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
+import { Properties } from "src/app/models/Properties";
+import { PreferencesSettingsServices } from "src/app/services/preferencesSettingsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
@@ -72,12 +74,16 @@ export class SystemConfigurationComponent {
     private homeContentPristine: string;
     safeHomeContent: SafeHtml;
 
+    /* Project creation */
+    defaultAclUniversalAccess: boolean;
+    defaultOpenAtStartup: boolean;
+
     /* Experimental features */
     expFeatEnabled: boolean = false;
 
 
     constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties, 
-        private settingsService: SettingsServices, private notificationsService: NotificationServices,
+        private settingsService: SettingsServices, private notificationsService: NotificationServices, private prefService: PreferencesSettingsServices,
         private basicModals: BasicModalServices, private translateService: TranslateService, public sanitizer: DomSanitizer, private router: Router) { }
 
     ngOnInit() {
@@ -87,6 +93,7 @@ export class SystemConfigurationComponent {
         this.initNotificationsConfig();
         this.initFields();
         this.initHomeContent();
+        this.initProjCreation();
     }
 
     private initAdminConfig() {
@@ -430,6 +437,27 @@ export class SystemConfigurationComponent {
 
     isHomeContentChanged(): boolean {
         return this.homeContent != this.homeContentPristine;
+    }
+
+    /* ============================
+     * project creation
+     * ============================ */
+
+    private initProjCreation() {
+        this.prefService.getSystemSettings([Properties.setting_proj_creation_default_acl_set_universal_access, Properties.setting_proj_creation_default_open_at_startup]).subscribe(
+            stResp => {
+                this.defaultAclUniversalAccess = stResp[Properties.setting_proj_creation_default_acl_set_universal_access];
+                this.defaultOpenAtStartup = stResp[Properties.setting_proj_creation_default_open_at_startup];
+            }
+        )
+    }
+
+    onDefaultAclChanged() {
+        this.prefService.setSystemSetting(Properties.setting_proj_creation_default_acl_set_universal_access, this.defaultAclUniversalAccess+"").subscribe();
+    }
+
+    onDefaultOpenAtStartupChanged() {
+        this.prefService.setSystemSetting(Properties.setting_proj_creation_default_open_at_startup, this.defaultOpenAtStartup+"").subscribe();
     }
 
     /* ============================
