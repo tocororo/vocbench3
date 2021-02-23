@@ -33,7 +33,7 @@ export class LexicalSenseComponent {
 
     //actions auth
     addDefAuthorized: boolean;
-    addRelationAuthorized: boolean;
+    addRelatedAuthorized: boolean;
     editDefAuthorized: boolean;
     deleteDefAuthorized: boolean;
     addConceptAuthorized: boolean;
@@ -51,8 +51,8 @@ export class LexicalSenseComponent {
         this.editDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexUpdateDefinition, this.sense.id) && langAuthorized && !this.readonly;
         this.deleteDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveDefinition, this.sense.id) && langAuthorized && !this.readonly;
 
-         //TODO server side this service has a temp preauthorized, keep it updated when it will be changed
-        this.addRelationAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
+        //TODO server side this service has a temp preauthorized, keep it updated when it will be changed
+        this.addRelatedAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
 
         this.addConceptAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddConcept) && !this.readonly;
         this.setReferenceAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetReference) && !this.readonly;
@@ -107,35 +107,16 @@ export class LexicalSenseComponent {
     }
 
     addRelation() {
-        this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_SENSE_RELATION'}, this.sense.id).then(
+        this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_RELATED_SENSE'}, this.sense.id).then(
             (data: LexicoRelationModalReturnData) => {
                 this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.unidirectional, Vartrans.senseRelation, data.category).subscribe(
                     () => {
                         this.update.emit();
                     }
                 )
-            }
+            },
+            () => {}
         )
-        // let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
-        // this.ontolexService.getSenseRelationCategories(lexicon).subscribe(
-        //     categories => {
-        //         this.sharedModals.selectResource({key:"DATA.ACTIONS.SELECT_PROPERTY"}, null, categories, false).then(
-        //             (category: ARTURIResource) => {
-        //                 this.browsingModals.browseLexicalSense({key:"DATA.ACTIONS.SELECT_LEXICAL_SENSE"}).then(
-        //                     (targetSense: ARTURIResource) => {
-        //                         this.ontolexService.createLexicoSemanticRelation(this.sense.id, targetSense, false, Vartrans.senseRelation, category).subscribe(
-        //                             () => {
-        //                                 this.update.emit();
-        //                             }
-        //                         )
-        //                     },
-        //                     () => {}
-        //                 )
-        //             }
-        //         ),
-        //         () => {}
-        //     }
-        // )
     }
 
     //CONCEPT

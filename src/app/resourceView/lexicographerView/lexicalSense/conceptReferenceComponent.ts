@@ -1,11 +1,14 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTLiteral, ARTNode, ARTResource } from "src/app/models/ARTResources";
+import { ARTLiteral, ARTResource } from "src/app/models/ARTResources";
 import { ConceptReference, LexicalResourceUtils, Sense } from "src/app/models/LexicographerView";
+import { Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
 import { VBContext } from "src/app/utils/VBContext";
 import { LexViewCache } from "../LexViewChache";
+import { LexViewModalService } from "../lexViewModalService";
+import { LexicoRelationModalReturnData } from "./lexicoRelationModal";
 
 @Component({
     selector: "concept-ref",
@@ -30,7 +33,9 @@ export class ConceptReferenceComponent {
 
     deleteConceptAuthorized: boolean;
 
-    constructor(private ontolexService: OntoLexLemonServices) {}
+    addRelatedAuthorized: boolean;
+
+    constructor(private ontolexService: OntoLexLemonServices, private lexViewModals: LexViewModalService) {}
 
     ngOnInit() {
         let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
@@ -46,6 +51,22 @@ export class ConceptReferenceComponent {
             && langAuthorized && !this.readonly && !LexicalResourceUtils.isInStaging(this.concept);
 
         this.deleteConceptAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveConcept) && !this.readonly && !LexicalResourceUtils.isInStaging(this.concept);
+
+        //TODO server side this service has a temp preauthorized, keep it updated when it will be changed
+        this.addRelatedAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
+    }
+
+    addRelation() {
+        this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_RELATED_CONCEPT'}, this.concept.id).then(
+            (data: LexicoRelationModalReturnData) => {
+                this.ontolexService.createLexicoSemanticRelation(this.concept.id, data.target, data.unidirectional, Vartrans.conceptualRelation, data.category).subscribe(
+                    () => {
+                        this.update.emit();
+                    }
+                )
+            },
+            () => {}
+        )
     }
 
     deleteConcept() {

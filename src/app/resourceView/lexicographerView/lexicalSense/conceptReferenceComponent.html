@@ -16,6 +16,9 @@
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                         <div class="dropdown-menu" ngbDropdownMenu>
+                            <a class="dropdown-item" (click)="addRelation()" [ngClass]="{ disabled: !addRelatedAuthorized }">
+                                {{'DATA.ACTIONS.ADD_RELATED_CONCEPT'|translate}}
+                            </a>
                             <a class="dropdown-item" (click)="addDefinition()" [ngClass]="{ disabled: !addDefAuthorized }">
                                 {{'DATA.ACTIONS.ADD_DEF_TO_LEX_CONCEPT'|translate}}
                             </a>

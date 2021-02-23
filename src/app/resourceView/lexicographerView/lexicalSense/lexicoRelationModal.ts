@@ -1,8 +1,10 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { Observable } from "rxjs";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "src/app/models/ARTResources";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { VBContext } from "src/app/utils/VBContext";
+import { ResourcePickerConfig } from "src/app/widget/pickers/valuePicker/resourcePickerComponent";
 
 @Component({
     selector: "lexico-relation-modal",
@@ -10,22 +12,33 @@ import { VBContext } from "src/app/utils/VBContext";
 })
 export class LexicoRelationModal {
     @Input() title: string;
-    @Input() sourceEntity: ARTResource;
+    @Input() sourceEntity: ARTResource; //sense, entry or concept
 
     categories: ARTURIResource[];
     selectedCategory: ARTURIResource;
     targetEntity: ARTURIResource;
     unidirectional: boolean = true;
+
+    resourcePickerConfig: ResourcePickerConfig = {};
     
     constructor(private activeModal: NgbActiveModal, private ontolexService: OntoLexLemonServices) {}
     
     ngOnInit() {
-        this.initPropList();
-    }
-    
-    initPropList() {
         let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
-        this.ontolexService.getSenseRelationCategories(lexicon).subscribe(
+
+        let role: RDFResourceRolesEnum = this.sourceEntity.getRole();
+        this.resourcePickerConfig = { roles: [role] }
+
+        let getCategoriesFn: Observable<ARTURIResource[]>;
+        if (role == RDFResourceRolesEnum.ontolexLexicalSense) {
+            getCategoriesFn = this.ontolexService.getSenseRelationCategories(lexicon);
+        } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
+            getCategoriesFn = this.ontolexService.getLexicalRelationCategories(lexicon);
+        } else if (role == RDFResourceRolesEnum.concept) {
+            getCategoriesFn = this.ontolexService.getConceptualRelationCategories(lexicon);
+        }
+
+        getCategoriesFn.subscribe(
             categories => {
                 this.categories = categories;
             }

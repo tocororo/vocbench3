@@ -5,11 +5,11 @@ import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
-import { VBContext } from "src/app/utils/VBContext";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
-import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { ConstituentListCreatorModalReturnData } from "../resourceViewEditor/resViewModals/constituentListCreatorModal";
 import { ResViewModalServices } from "../resourceViewEditor/resViewModals/resViewModalServices";
+import { LexicoRelationModalReturnData } from "./lexicalSense/lexicoRelationModal";
+import { LexViewModalService } from "./lexViewModalService";
 
 /**
  * Contains methods shared in the lex view
@@ -18,7 +18,7 @@ import { ResViewModalServices } from "../resourceViewEditor/resViewModals/resVie
 export class LexViewHelper {
 
     constructor(private resourceService: ResourcesServices, private ontolexService: OntoLexLemonServices, 
-        private browsingModals: BrowsingModalServices, private resViewModals: ResViewModalServices, private sharedModals: SharedModalServices) { }
+        private browsingModals: BrowsingModalServices, private resViewModals: ResViewModalServices, private lexViewModals: LexViewModalService) { }
 
     addSubterm(sourceEntry: ARTResource): Observable<boolean> {
         return this.selectLexicalEntry().pipe(
@@ -39,24 +39,17 @@ export class LexViewHelper {
      * @param sourceEntry 
      */
     addRelated(sourceEntry: ARTResource): Observable<boolean> {
-        return this.selectLexicalRelProp().pipe(
-            mergeMap((prop: ARTURIResource) => {
-                if (prop != null) {
-                    return this.selectLexicalEntry().pipe(
-                        mergeMap(targetEntry => {
-                            if (targetEntry) {
-                                return this.resourceService.addValue(sourceEntry, prop, targetEntry).pipe(
-                                    map(() => true)
-                                );
-                            } else {
-                                return of(false);
-                            }
-                        })
-                    );
-                } else {
-                    return of(false);
-                }
-            })
+        return from(
+            this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_RELATED_LEX_ENTRY"}, sourceEntry).then(
+                (data: LexicoRelationModalReturnData) => {
+                    return this.ontolexService.createLexicoSemanticRelation(sourceEntry, data.target, data.unidirectional, Vartrans.lexicalRelation, data.category).pipe(
+                        map(() => true)
+                    )
+                },
+                () => of(false)
+            )
+        ).pipe( //for flattening Observable<Observable<boolean>> returned above
+            mergeMap(done => done)
         )
     }
 
@@ -91,24 +84,6 @@ export class LexViewHelper {
         ).pipe( //for flattening Observable<Observable<boolean>> returned above
             mergeMap(done => done)
         )
-    }
-
-    private selectLexicalRelProp(): Observable<ARTURIResource> {
-        let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
-        return this.ontolexService.getLexicalRelationCategories(lexicon).pipe(
-            mergeMap((props: ARTURIResource[]) => {
-                return from(
-                    this.sharedModals.selectResource({key:"DATA.ACTIONS.SELECT_PROPERTY"}, null, props, false).then(
-                        (prop: ARTURIResource) => {
-                            return prop;
-                        },
-                        () => {
-                            return null;
-                        }
-                    )
-                )
-            })
-        );
     }
 
     private selectLexicalEntry(): Observable<ARTURIResource> {

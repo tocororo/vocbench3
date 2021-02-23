@@ -46,8 +46,8 @@
                     {{'DATA.ACTIONS.REIFY_PLAIN_SENSE'|translate}}
                 </a>
                 <ng-container *ngIf="sense.id">
-                    <a class="dropdown-item" (click)="addRelation()" [ngClass]="{ disabled: !addRelationAuthorized }">
-                        {{'DATA.ACTIONS.ADD_SENSE_RELATION'|translate}}
+                    <a class="dropdown-item" (click)="addRelation()" [ngClass]="{ disabled: !addRelatedAuthorized }">
+                        {{'DATA.ACTIONS.ADD_RELATED_SENSE'|translate}}
                     </a>
                     <a class="dropdown-item" (click)="setReference()" [ngClass]="{ disabled: !setReferenceAuthorized }">
                         {{'DATA.ACTIONS.SET_REFERENCE'|translate}}
