@@ -214,6 +214,23 @@ export class RoleActionResolver {
             resAction: ResAction.delete,
             editType: "D"
         },
+        //dataRange
+        {
+            actionId: VBActionsEnum.ontolexCreateTranslationSet,
+            roles: [RDFResourceRolesEnum.vartransTranslationSet],
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
+            actionTranslationKey: "DATA.ACTIONS.CREATE_TRANSLATION_SET",
+            resAction: ResAction.create,
+            editType: "C",
+        },
+        {
+            actionId: VBActionsEnum.ontolexDeleteTranslationSet,
+            roles: [RDFResourceRolesEnum.vartransTranslationSet],
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
+            actionTranslationKey: "DATA.ACTIONS.DELETE_TRANSLATION_SET",
+            resAction: ResAction.delete,
+            editType: "D"
+        },
         //common
         {
             actionId: VBActionsEnum.resourcesSetDeprecated,
@@ -252,8 +269,7 @@ export class RoleActionResolver {
                 this.translateService.get(s.actionTranslationKey).subscribe(translation => a.title = translation);
                 actions.push(a);
             }
-        })
-
+        });
         return actions;
     }
 

@@ -2,7 +2,7 @@ import { ElementRef } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { Observable, Observer } from "rxjs";
 import { ARTURIResource } from "../models/ARTResources";
-import { OntoLex, OWL, RDFS, SKOS } from "../models/Vocabulary";
+import { OntoLex, OWL, RDFS, SKOS, Vartrans } from "../models/Vocabulary";
 import { ClassesServices } from "../services/classesServices";
 import { DatatypesServices } from "../services/datatypesServices";
 import { OntoLexLemonServices } from '../services/ontoLexLemonServices';
@@ -12,6 +12,7 @@ import { SkosServices } from '../services/skosServices';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from '../widget/modal/creationModal/creationModalServices';
 import { NewLexiconCfModalReturnData } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal';
+import { NewResourceCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/shared/newResourceCfModal";
 import { NewResourceWithLiteralCfModalReturnData } from '../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal';
 import { NewConceptCfModalReturnData } from '../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal';
 import { ModalType } from '../widget/modal/Modals';
@@ -306,6 +307,9 @@ export class VBActionFunctions {
             [ VBActionsEnum.skosCreateCollection, this.skosCreateCollection ],
             [ VBActionsEnum.skosCreateSubCollection, this.skosCreateSubCollection ],
             [ VBActionsEnum.skosDeleteCollection, this.skosDeleteCollection ],
+            //translationSet
+            [ VBActionsEnum.ontolexCreateTranslationSet, this.ontolexCreateTranslationSet ],
+            [ VBActionsEnum.ontolexDeleteTranslationSet, this.ontolexDeleteTranslationSet ],
             //commons
             [ VBActionsEnum.resourcesSetDeprecated, this.resourcesSetDeprecated ]
         ]);
@@ -322,7 +326,7 @@ export class VBActionFunctions {
     private classesCreateClass = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_CLASS"}, ctx.metaClass).then(
-                (data: any) => {
+                (data: NewResourceCfModalReturnData) => {
                     let superClass: ARTURIResource = OWL.thing;
                     if (data.cls.getURI() == RDFS.class.getURI()) {
                         superClass = RDFS.resource;
@@ -343,7 +347,7 @@ export class VBActionFunctions {
     private classesCreateSubClass = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_SUBCLASS"}, ctx.metaClass).then(
-                (data: any) => {
+                (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.classesService.createClass(data.uriResource, parent, data.cls, data.cfValue).subscribe(
                         stResp => {
@@ -551,7 +555,7 @@ export class VBActionFunctions {
     private datatypesCreateDatatype = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_DATATYPE"}, RDFS.datatype, false).then(
-                (data: any) => {
+                (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.datatypeService.createDatatype(data.uriResource).subscribe(
                         stResp => {
@@ -584,7 +588,7 @@ export class VBActionFunctions {
     private classesCreateIndividual = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf({key:"DATA.ACTIONS.CREATE_INSTANCE"}, ctx.metaClass, false).then(
-                (data: any) => {
+                (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.classesService.createInstance(data.uriResource, ctx.metaClass, data.cfValue).subscribe(
                         stResp => {
@@ -683,7 +687,7 @@ export class VBActionFunctions {
     private propertiesCreateProperty = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf({key:"DATA.ACTIONS.CREATE_PROPERTY"}, ctx.metaClass, false).then(
-                (data: any) => {
+                (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.propertyService.createProperty(data.cls, data.uriResource, null, data.cfValue).subscribe(
                         stResp => {
@@ -699,7 +703,7 @@ export class VBActionFunctions {
     private propertiesCreateSubProperty = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf({key:"DATA.ACTIONS.CREATE_SUBPROPERTY"}, ctx.metaClass, false).then(
-                (data: any) => {
+                (data: NewResourceCfModalReturnData) => {
                     this.propertyService.createProperty(data.cls, data.uriResource, parent, data.cfValue).subscribe(
                         stResp => {
                             UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -810,6 +814,39 @@ export class VBActionFunctions {
                     }
                 );
             }
+        });
+    }
+
+    /**
+     * TranslationSet
+     */
+
+    private ontolexCreateTranslationSet = (ctx: VBActionFunctionCtx) => {
+        return new Observable((observer: Observer<void>) => {
+            this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_TRANSLATION_SET"}, Vartrans.TranslationSet, false).then(
+                (data: NewResourceCfModalReturnData) => {
+                    UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
+                    this.ontolexService.createTranslationSet(data.uriResource, data.cfValue).subscribe(
+                        () => {
+                            UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
+                            observer.next(null);
+                        }
+                    );
+                },
+                () => { observer.error(null); }
+            );
+        });
+    }
+
+    private ontolexDeleteTranslationSet = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
+        return new Observable((observer: Observer<void>) => {
+            UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
+            this.ontolexService.deleteTranslationSet(deletingResource).subscribe(
+                () => {
+                    UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
+                    observer.next(null);
+                }
+            )
         });
     }
 

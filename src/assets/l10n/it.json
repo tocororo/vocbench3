@@ -614,6 +614,7 @@
             "CREATE_SCHEME": "Crea schema",
             "CREATE_SUBCLASS": "Crea sotto-classe",
             "CREATE_SUBPROPERTY": "Crea sotto-proprietà",
+            "CREATE_TRANSLATION_SET": "Crea TranslationSet",
             "DELETE_CLASS": "Cancella classe",
             "DELETE_COLLECTION": "Cancella collezione",
             "DELETE_CONCEPT": "Cancella concetto",
@@ -624,6 +625,7 @@
             "DELETE_LEXICON": "Cancella lessico",
             "DELETE_PROPERTY": "Cancella proprietà",
             "DELETE_SCHEME": "Cancella schema",
+            "DELETE_TRANSLATION_SET": "Cancella TranslationSet",
             "EDIT_DATATYPE_RESTRICTIONS": "Modifica restrizioni datatype",
             "EDIT_MANCHESTER_EXPRESSION": "Modifica espressione Manchester",
             "EDIT_PROPERTY_CHAIN": "Modifica property chain",
@@ -643,6 +645,7 @@
             "SELECT_RANGE_TYPE": "Seleziona tipo di range",
             "SELECT_ROOT_CLASS": "Seleziona classe root",
             "SELECT_SCHEME": "Seleziona schema",
+            "SELECT_TRANSLATION_SET": "Seleziona TranslationSet",
             "SET_AS_TOP_CONCEPT": "Setta come top concept",
             "SET_CONSTITUENTS": "Assegna costituenti",
             "SET_DATATYPE_RESTRICTIONS": "Setta restrizioni datatype",
@@ -1445,6 +1448,7 @@
             "RELATED": "Correlati",
             "SEMANTIC_REFERENCE": "Riferimento semantico",
             "TRANSLATION": "Traduzione",
+            "TRANSLATION_SET": "TranslationSet",
             "UNDIRECTIONAL": "Indirezionale"
         },
         "TERM_VIEW": {

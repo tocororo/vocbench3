@@ -1,33 +1,30 @@
-import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { Component, QueryList, ViewChildren } from "@angular/core";
+import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
-import { DatatypesServices } from "../../../services/datatypesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
-import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AbstractList } from "../abstractList";
-import { DatatypeListNodeComponent } from "./datatypeListNodeComponent";
+import { TranslationSetListNodeComponent } from "./translationSetListNodeComponent";
 
 @Component({
-    selector: "datatype-list",
-    templateUrl: "./datatypeListComponent.html",
+    selector: "translationset-list",
+    templateUrl: "./translationSetListComponent.html",
     host: { class: "treeListComponent" }
 })
-export class DatatypeListComponent extends AbstractList {
+export class TranslationSetListComponent extends AbstractList {
 
-    @Input() full: boolean = false; //if true show all the datatypes (also the owl2 that are not declared as rdfs:Datatype)
+    @ViewChildren(TranslationSetListNodeComponent) viewChildrenNode: QueryList<TranslationSetListNodeComponent>;
 
-    @ViewChildren(DatatypeListNodeComponent) viewChildrenNode: QueryList<DatatypeListNodeComponent>;
-
-    structRole = RDFResourceRolesEnum.dataRange;
+    structRole = RDFResourceRolesEnum.vartransTranslationSet;
 
     list: ARTURIResource[];
 
-    constructor(private datatypeService: DatatypesServices, eventHandler: VBEventHandler) {
+    constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.datatypeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.datatypeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
@@ -42,26 +39,13 @@ export class DatatypeListComponent extends AbstractList {
 
     initImpl() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        if (this.full) {
-            this.datatypeService.getDatatypes(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                datatypes => {
-                    this.getDatatyepsRespHandler(datatypes);
-                }
-            );
-        } else {
-            this.datatypeService.getDeclaredDatatypes(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                datatypes => {
-                    this.getDatatyepsRespHandler(datatypes);
-                }
-            );
-        }
-    }
-
-    private getDatatyepsRespHandler(datatypes: ARTURIResource[]) {
-        //sort by show if rendering is active, uri otherwise
-        ResourceUtils.sortResources(datatypes, this.rendering ? SortAttribute.show : SortAttribute.value);
-        this.list = datatypes
-        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+        this.ontolexService.getTranslationSets().subscribe(
+            sets => {
+                ResourceUtils.sortResources(sets, this.rendering ? SortAttribute.show : SortAttribute.value);
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                this.list = <ARTURIResource[]>sets;
+            }
+        );
     }
 
     onListNodeCreated(node: ARTURIResource) {
@@ -72,7 +56,7 @@ export class DatatypeListComponent extends AbstractList {
     }
 
     onListNodeDeleted(node: ARTURIResource) {
-        for (var i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].getURI() == node.getURI()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change

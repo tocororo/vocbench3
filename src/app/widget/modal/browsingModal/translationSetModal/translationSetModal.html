@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body vbox">
+    <translationset-list-panel [editable]="editable" [deletable]="deletable" [projectCtx]="projectCtx" (nodeSelected)="onResourceSelected($event)">
+    </translationset-list-panel>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedResource">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+</div>

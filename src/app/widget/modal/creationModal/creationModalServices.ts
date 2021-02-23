@@ -8,7 +8,7 @@ import { NewPlainLiteralModal } from "./newPlainLiteralModal/newPlainLiteralModa
 import { NewConceptualizationCfModal } from './newResourceModal/ontolex/newConceptualizationCfModal';
 import { NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
 import { NewOntoLexicalizationCfModal } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
-import { NewResourceCfModal } from "./newResourceModal/shared/newResourceCfModal";
+import { NewResourceCfModal, NewResourceCfModalReturnData } from "./newResourceModal/shared/newResourceCfModal";
 import { NewResourceWithLiteralCfModal } from './newResourceModal/shared/newResourceWithLiteralCfModal';
 import { NewConceptCfModal } from './newResourceModal/skos/newConceptCfModal';
 import { NewConceptFromLabelModal } from "./newResourceModal/skos/newConceptFromLabelModal";
@@ -28,7 +28,7 @@ export class CreationModalServices {
      * @param cfId the custom form id
      * @return
      */
-    newResourceCf(title: TextOrTranslation, cls: ARTURIResource, clsChangeable?: boolean) {
+    newResourceCf(title: TextOrTranslation, cls: ARTURIResource, clsChangeable?: boolean): Promise<NewResourceCfModalReturnData> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewResourceCfModal, _options);
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);

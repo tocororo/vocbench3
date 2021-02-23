@@ -596,7 +596,6 @@ export class OntoLexLemonServices {
         );
     }
 
-
 	getTranslationSets(): Observable<ARTResource[]> {
         let params = {}
         return this.httpMgr.doGet(this.serviceName, "getTranslationSets", params).pipe(

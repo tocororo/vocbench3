@@ -213,7 +213,7 @@ export class LexicographerViewComponent {
     addRelated() {
         this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_RELATED_LEX_ENTRY"}, this.lexEntry.id).then(
             (data: LexicoRelationModalReturnData) => {
-                return this.ontolexService.createLexicoSemanticRelation(this.lexEntry.id, data.target, data.undirectional, Vartrans.lexicalRelation, data.category).subscribe(
+                this.ontolexService.createLexicoSemanticRelation(this.lexEntry.id, data.target, data.undirectional, Vartrans.LexicalRelation, data.category).subscribe(
                     () => {
                         this.buildLexicographerView();
                     }
@@ -224,9 +224,9 @@ export class LexicographerViewComponent {
     }
 
     addTranslation() {
-        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
-            (targetEntry: ARTURIResource) => {
-                this.resourceService.addValue(this.lexEntry.id, Vartrans.translatableAs, targetEntry).subscribe(
+        this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_TRANSLATION"}, this.lexEntry.id, true).then(
+            (data: LexicoRelationModalReturnData) => {
+                this.ontolexService.createLexicoSemanticRelation(this.lexEntry.id, data.target, data.undirectional, Vartrans.Translation, data.category, data.tranlsationSet).subscribe(
                     () => {
                         this.buildLexicographerView();
                     }
@@ -234,6 +234,16 @@ export class LexicographerViewComponent {
             },
             () => {}
         )
+        // this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
+        //     (targetEntry: ARTURIResource) => {
+        //         this.resourceService.addValue(this.lexEntry.id, Vartrans.translatableAs, targetEntry).subscribe(
+        //             () => {
+        //                 this.buildLexicographerView();
+        //             }
+        //         )
+        //     },
+        //     () => {}
+        // )
     }
 
     //==== Senses ====

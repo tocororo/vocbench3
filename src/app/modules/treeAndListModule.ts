@@ -22,6 +22,9 @@ import { LexiconListPanelComponent } from '../structures/lists/lexicon/lexiconLi
 import { SchemeListComponent } from '../structures/lists/scheme/schemeListComponent';
 import { SchemeListNodeComponent } from '../structures/lists/scheme/schemeListNodeComponent';
 import { SchemeListPanelComponent } from '../structures/lists/scheme/schemeListPanelComponent';
+import { TranslationSetListComponent } from '../structures/lists/translationSet/translationSetListComponent';
+import { TranslationSetListNodeComponent } from '../structures/lists/translationSet/translationSetListNodeComponent';
+import { TranslationSetListPanelComponent } from '../structures/lists/translationSet/translationSetListPanelComponent';
 import { MultiSubjectEnrichmentHelper } from '../structures/multiSubjectEnrichmentHelper';
 import { AdvancedSearchModal } from '../structures/searchBar/advancedSearchModal';
 import { CustomSearchModal } from '../structures/searchBar/customSearchModal';
@@ -49,6 +52,7 @@ import { PropertyTreeComponent } from '../structures/trees/property/propertyTree
 import { PropertyTreeNodeComponent } from '../structures/trees/property/propertyTreeNodeComponent';
 import { PropertyTreePanelComponent } from '../structures/trees/property/propertyTreePanelComponent';
 import { LexicalSenseListModal } from '../widget/modal/browsingModal/lexicalSenseListModal/lexicalSenseListModal';
+import { TranslationSetModal } from '../widget/modal/browsingModal/translationSetModal/translationSetModal';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
@@ -104,6 +108,10 @@ import { SharedModule } from './sharedModule';
         SearchBarComponent,
         SearchSettingsModal,
         TabsetPanelComponent,
+        TranslationSetListComponent,
+        TranslationSetListNodeComponent,
+        TranslationSetListPanelComponent,
+        TranslationSetModal,
         TreeListSettingsModal,
     ],
     exports: [
@@ -129,6 +137,7 @@ import { SharedModule } from './sharedModule';
         SchemeListComponent,
         SchemeListPanelComponent,
         TabsetPanelComponent,
+        TranslationSetListPanelComponent,
     ],
     providers: [MultiSubjectEnrichmentHelper],
     entryComponents: [
@@ -142,6 +151,7 @@ import { SharedModule } from './sharedModule';
         LexicalSenseListModal,
         LoadCustomSearchModal,
         SearchSettingsModal,
+        TranslationSetModal,
         TreeListSettingsModal,
     ]
 })

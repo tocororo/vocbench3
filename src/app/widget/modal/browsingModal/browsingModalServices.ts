@@ -15,6 +15,7 @@ import { LexicalSenseListModal } from './lexicalSenseListModal/lexicalSenseListM
 import { LexiconListModal } from './lexiconListModal/lexiconListModal';
 import { PropertyTreeModal } from "./propertyTreeModal/propertyTreeModal";
 import { SchemeListModal } from "./schemeListModal/schemeListModal";
+import { TranslationSetModal } from './translationSetModal/translationSetModal';
 
 /**
  * Service to open browsing modals, namely the modal that contains trees (concept, class, property) or list (instances).
@@ -167,6 +168,17 @@ export class BrowsingModalServices {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(LexicalSenseListModal, _options);
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
+    }
+
+    browseTranslationSet(title: TextOrTranslation, editable?: boolean, deletable?: boolean, allowMultiselection?: boolean, projectCtx?: ProjectContext): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(TranslationSetModal, _options);
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        if (editable != null) modalRef.componentInstance.editable = editable;
+        if (deletable != null) modalRef.componentInstance.deletable = deletable;
+        if (allowMultiselection != null) modalRef.componentInstance.allowMultiselection = allowMultiselection;
         if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }

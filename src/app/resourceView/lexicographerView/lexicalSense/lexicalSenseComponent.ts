@@ -162,7 +162,7 @@ export class LexicalSenseComponent {
     addRelation() {
         this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_RELATED_SENSE'}, this.sense.id).then(
             (data: LexicoRelationModalReturnData) => {
-                this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.undirectional, Vartrans.senseRelation, data.category).subscribe(
+                this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.undirectional, Vartrans.SenseRelation, data.category).subscribe(
                     () => {
                         this.update.emit();
                     }
@@ -173,7 +173,7 @@ export class LexicalSenseComponent {
     }
 
     addTranslation() {
-        
+
     }
 
     /**

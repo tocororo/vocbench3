@@ -43,9 +43,9 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal {
     }
 
     okImpl() {
-        var entryMap: any = this.collectCustomFormData();
+        let entryMap: any = this.collectCustomFormData();
 
-        var returnedData: { uriResource: ARTURIResource, cls: ARTURIResource, cfValue: CustomFormValue } = {
+        let returnedData: NewResourceCfModalReturnData = {
             uriResource: new ARTURIResource(this.uri),
             cls: this.resourceClass,
             cfValue: null
@@ -61,4 +61,10 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal {
         this.activeModal.dismiss();
     }
 
+}
+
+export interface NewResourceCfModalReturnData {
+    uriResource: ARTURIResource;
+    cls: ARTURIResource;
+    cfValue?: CustomFormValue
 }

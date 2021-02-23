@@ -59,7 +59,7 @@ export class ConceptReferenceComponent {
     addRelation() {
         this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_RELATED_CONCEPT'}, this.concept.id).then(
             (data: LexicoRelationModalReturnData) => {
-                this.ontolexService.createLexicoSemanticRelation(this.concept.id, data.target, data.undirectional, Vartrans.conceptualRelation, data.category).subscribe(
+                this.ontolexService.createLexicoSemanticRelation(this.concept.id, data.target, data.undirectional, Vartrans.ConceptualRelation, data.category).subscribe(
                     () => {
                         this.update.emit();
                     }

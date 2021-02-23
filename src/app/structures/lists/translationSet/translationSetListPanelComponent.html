@@ -1,0 +1,60 @@
+<div class="card card-default vbox">
+    <!-- Commands -->
+    <div class="card-header">
+        <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
+            <ng-container *ngFor="let action of panelActions">
+                <button *ngIf="isActionVisible(action)" class="btn btn-light" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
+                    <img [src]="action.icon" class="panelButtonImg"/>
+                </button>
+            </ng-container>
+        </div>
+        <div style="flex: 1"></div>
+        <div class="btn-toolbar" role="toolbar">
+            <button class="btn btn-light btn-xs" title="Rendering" (click)="rendering=!rendering" [ngClass]="{ active: rendering }">
+                <span class="fas fa-font"></span>
+            </button>
+            <button class="btn btn-light btn-xs" [title]="'ACTIONS.REFRESH'|translate" (click)="refresh()">
+                <span class="fas fa-redo"></span>
+            </button>
+        </div>
+
+        <div class="dropdown float-right" ngbDropdown>
+            <button class="dropdown-toggle transparentBtn ml-1" data-toggle="dropdown" ngbDropdownToggle [disabled]="!allowMultiselection && !isOpenGraphEnabled(GraphModeEnum.dataOriented)">
+                <span class="fas fa-caret-down"></span>
+            </button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <ng-container *ngIf="allowMultiselection">
+                    <a class="dropdown-item" (click)="toggleMultiselection()">
+                        <span style="flex: 1;">
+                            <span class="far fa-check-square" style="margin-right: 4px;"></span>
+                            {{'DATA.COMMONS.MULTISELECTION'|translate}}
+                        </span>
+                        <span *ngIf="multiselection" class="fas fa-check float-right"></span>
+                    </a>
+                    <a *ngIf="context=='dataPanel' && multiselection" class="dropdown-item" [ngClass]="{ disabled: checkedNodes.length == 0 }" (click)="enrichMultiSubject()">
+                        <span class="far fa-check-square" style="margin-right: 4px; margin-left: 16px;"></span>
+                        {{'DATA.COMMONS.ADD_PROP_VALUE_TO_SELECTION'|translate}}
+                    </a>
+                </ng-container>
+                <a *ngIf="isOpenGraphEnabled(GraphModeEnum.dataOriented)" class="dropdown-item" (click)="openDataGraph()">
+                    <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
+                    {{'GRAPHS.ACTIONS.SHOW_DATA_ORIENTED_GRAPH'|translate}}
+                </a>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Tree -->
+    <div class="card-body vbox">
+        <translationset-list [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" [projectCtx]="projectCtx"
+            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
+        </translationset-list>
+    </div>
+
+    <!-- Search -->
+    <div class="card-footer">
+        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [role]="panelRole" [context]="context" [projectCtx]="projectCtx"></search-bar>
+    </div>
+    
+</div>

@@ -20,7 +20,7 @@
             <tr>
                 <td nowrap><label>{{'RESOURCE_VIEW.LEX_VIEW.CATEGORY'|translate}}:</label></td>
                 <td>
-                    <select class="form-control" [(ngModel)]="selectedCategory" [title]="selectedCategory?.toNT()">
+                    <select class="form-control" [(ngModel)]="selectedCategory" [title]="selectedCategory?.toNT()" [disabled]="translation">
                         <option *ngFor="let c of categories" [ngValue]="c" [title]="c.toNT()">{{c.getLocalName()}}</option>
                     </select>
                 </td>
@@ -29,6 +29,23 @@
                 <td><label>{{'ALIGNMENT.CREATION.TARGET_RESOURCE'|translate}}:</label></td>
                 <td>
                     <resource-picker [config]="resourcePickerConfig" (resourceChanged)="targetEntity = $event"></resource-picker>
+                </td>
+            </tr>
+            <tr *ngIf="translation">
+                <td nowrap><label>{{'RESOURCE_VIEW.LEX_VIEW.TRANSLATION_SET'|translate}}:</label></td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="input-group">
+                            <div class="form-control input-resource">
+                                <rdf-resource *ngIf="translationSet" [resource]="translationSet"></rdf-resource>
+                            </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-light" (click)="pickTranslationSet()" [title]="'ACTIONS.SELECT'|translate">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
             <tr>

@@ -61,18 +61,20 @@
                     {{'DATA.ACTIONS.REIFY_PLAIN_SENSE'|translate}}
                 </a>
                 <ng-container *ngIf="sense.id">
-                    <a class="dropdown-item" (click)="addRelation()" [ngClass]="{ disabled: !addRelatedAuthorized }">
-                        {{'DATA.ACTIONS.ADD_RELATED_SENSE'|translate}}
-                    </a>
-                    <a class="dropdown-item" (click)="addTranslation()" [ngClass]="{ disabled: !addTranslationAuthorized }">
-                        {{'DATA.ACTIONS.ADD_TRANSLATION'|translate}}
-                    </a>
                     <a class="dropdown-item" (click)="setReference()" [ngClass]="{ disabled: !setReferenceAuthorized }">
                         {{'DATA.ACTIONS.SET_REFERENCE'|translate}}
                     </a>
                     <a class="dropdown-item" (click)="setConcept()" [ngClass]="{ disabled: !addConceptAuthorized }">
                         {{'DATA.ACTIONS.ADD_LEX_CONCEPT'|translate}}
                     </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="addRelation()" [ngClass]="{ disabled: !addRelatedAuthorized }">
+                        {{'DATA.ACTIONS.ADD_RELATED_SENSE'|translate}}
+                    </a>
+                    <a class="dropdown-item" (click)="addTranslation()" [ngClass]="{ disabled: !addTranslationAuthorized }">
+                        {{'DATA.ACTIONS.ADD_TRANSLATION'|translate}}
+                    </a>
+                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" (click)="addDefinition()" [ngClass]="{ disabled: !addDefAuthorized }">
                         {{'DATA.ACTIONS.ADD_DEF_TO_LEX_SENSE'|translate}}
                     </a>
