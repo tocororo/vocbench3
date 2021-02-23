@@ -380,7 +380,8 @@ export enum RDFResourceRolesEnum {
     limeLexicon = "limeLexicon",
     ontolexLexicalEntry = "ontolexLexicalEntry",
     ontolexLexicalSense = "ontolexLexicalSense",
-    ontolexForm = "ontolexForm"
+    ontolexForm = "ontolexForm",
+    vartransTranslationSet = "vartransTranslationSet"
 }
 
 export enum RDFTypesEnum {

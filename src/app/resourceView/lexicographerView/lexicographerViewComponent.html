@@ -57,7 +57,7 @@
         </div>
 
         <!-- Other forms -->
-        <div class="mt-4">
+        <div class="mt-3">
             <lexical-form *ngFor="let f of otherForms;" class="mb-2" style="flex: 1" [entry]="lexEntry" [form]="f" [lexViewCache]="lexViewCache" [readonly]="readonly" 
                 (update)="buildLexicographerView()">
             </lexical-form>
@@ -72,16 +72,31 @@
                 (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
             </constituent-list>
             <!-- Subterms -->
-            <subterm-list *ngIf="lexEntry.subterms.length > 0" class="mt-3" [entry]="lexEntry"
-                (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
-            </subterm-list>
+            <div *ngIf="lexEntry.subterms.length > 0" class="d-flex align-items-center mt-3">
+                <label>{{'RESOURCE_VIEW.PARTITIONS.SUBTERMS'|translate}}:</label>
+                <subterm *ngFor="let s of lexEntry.subterms" class="ml-3" [entry]="lexEntry" [subterm]="s" (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
+                </subterm>
+                <button class="btn btn-xs btn-faded ml-3" (click)="addSubterm()" [title]="'ACTIONS.ADD'|translate" [disabled]="!addSubtermAuthorized">
+                    <span class="fas fa-plus"></span>
+                </button>
+            </div>
             <!-- lexical relations -->
-            <related *ngIf="lexEntry.related.length > 0" class="mt-3" [entry]="lexEntry"
-                (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
-            </related>
-            <translatable-as *ngIf="lexEntry.translatableAs.length > 0" class="mt-3" [entry]="lexEntry"
-                (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
-            </translatable-as>
+            <div *ngIf="lexEntry.related.length > 0" class="d-flex align-items-center mt-3">
+                <label>{{'RESOURCE_VIEW.LEX_VIEW.RELATED'|translate}}:</label>
+                <entry-relation *ngFor="let r of lexEntry.related" class="ml-3" [entry]="lexEntry" [relation]="r" (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
+                </entry-relation>
+                <button class="btn btn-xs btn-faded ml-3" (click)="addRelated()" [title]="'ACTIONS.ADD'|translate" [disabled]="!addRelatedAuthorized">
+                    <span class="fas fa-plus"></span>
+                </button>
+            </div>
+            <div *ngIf="lexEntry.translatableAs.length > 0" class="d-flex align-items-center mt-3">
+                <label>{{'RESOURCE_VIEW.LEX_VIEW.TRANSLATION'|translate}}:</label>
+                <entry-relation *ngFor="let r of lexEntry.translatableAs" class="ml-3" [entry]="lexEntry" [relation]="r" (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
+                </entry-relation>
+                <button class="btn btn-xs btn-faded ml-3" (click)="addTranslation()" [title]="'ACTIONS.ADD'|translate" [disabled]="!addTranslationAuthorized">
+                    <span class="fas fa-plus"></span>
+                </button>
+            </div>
         </div>
 
 

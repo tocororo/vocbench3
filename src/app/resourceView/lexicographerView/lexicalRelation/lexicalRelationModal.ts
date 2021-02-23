@@ -7,17 +7,17 @@ import { VBContext } from "src/app/utils/VBContext";
 import { ResourcePickerConfig } from "src/app/widget/pickers/valuePicker/resourcePickerComponent";
 
 @Component({
-    selector: "lexico-relation-modal",
-    templateUrl: "./lexicoRelationModal.html",
+    selector: "lexical-relation-modal",
+    templateUrl: "./lexicalRelationModal.html",
 })
-export class LexicoRelationModal {
+export class LexicalRelationModal {
     @Input() title: string;
     @Input() sourceEntity: ARTResource; //sense, entry or concept
 
     categories: ARTURIResource[];
     selectedCategory: ARTURIResource;
     targetEntity: ARTURIResource;
-    unidirectional: boolean = true;
+    undirectional: boolean = false;
 
     resourcePickerConfig: ResourcePickerConfig = {};
     
@@ -53,7 +53,7 @@ export class LexicoRelationModal {
         let returnData: LexicoRelationModalReturnData = {
             category: this.selectedCategory,
             target: this.targetEntity,
-            unidirectional: this.unidirectional
+            undirectional: this.undirectional
         };
         this.activeModal.close(returnData);
     }
@@ -67,5 +67,5 @@ export class LexicoRelationModal {
 export interface LexicoRelationModalReturnData {
     category: ARTURIResource;
     target: ARTResource;
-    unidirectional: boolean;
+    undirectional: boolean;
 }

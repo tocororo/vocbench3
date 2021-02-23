@@ -1,7 +1,16 @@
 <div class="d-flex">
     <div class="sense">
 
-        <div *ngIf="sense.definition?.length > 0 || pendingDef" class="d-flex my-2">
+        <!-- Reference -->
+        <div *ngIf="sense.reference?.length > 0" class="my-3">
+            <div *ngFor="let ref of sense.reference" class="d-flex align-items-center mb-2">
+                <label class="mr-2">{{'RESOURCE_VIEW.LEX_VIEW.SEMANTIC_REFERENCE'|translate}}:</label>
+                <rdf-resource class="clickable" [resource]="ref" (dblclick)="resourceDblClick(ref)"></rdf-resource>
+            </div>
+        </div>
+
+        <!-- Definitions -->
+        <div *ngIf="sense.definition?.length > 0 || pendingDef" class="d-flex my-3">
             <label class="mt-2 mr-2">{{'COMMONS.DEFINITION'|translate}}:</label>
             <div class="vbox">
                 <div *ngFor="let def of sense.definition; let last=last" class="d-flex align-items-center mr-2" [ngClass]="{ 'mb-1': !last }">
@@ -15,25 +24,31 @@
             </div>
         </div>
 
-        <div *ngIf="sense.concept?.length > 0" class=" my-2">
-            <concept-ref *ngFor="let c of sense.concept" [concept]="c" [sense]="sense" [lang]="lang" [lexViewCache]="lexViewCache"
+        <!-- Concepts -->
+        <div *ngIf="sense.concept?.length > 0" class="my-3">
+            <concept-ref *ngFor="let c of sense.concept" class="my-2" [concept]="c" [sense]="sense" [lang]="lang" [lexViewCache]="lexViewCache"
                 (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
             </concept-ref>
         </div>
 
-        <div *ngIf="sense.reference?.length > 0" class=" my-2">
-            <div *ngFor="let ref of sense.reference" class="d-flex align-items-center mb-2">
-                <label class="mr-2">{{'RESOURCE_VIEW.LEX_VIEW.SEMANTIC_REFERENCE'|translate}}:</label>
-                <rdf-resource class="clickable" [resource]="ref" (dblclick)="resourceDblClick(ref)"></rdf-resource>
-            </div>
+        <!-- Relations -->
+        <div *ngIf="sense.related.length > 0" class="d-flex align-items-center my-3">
+            <label>{{'RESOURCE_VIEW.LEX_VIEW.RELATED'|translate}}:</label>
+            <sense-relation *ngFor="let r of sense.related" class="ml-3" [sense]="sense" [relation]="r" (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
+            </sense-relation>
+            <button class="btn btn-xs btn-faded ml-3" (click)="addRelation()" [title]="'ACTIONS.ADD'|translate" [disabled]="!addRelatedAuthorized">
+                <span class="fas fa-plus"></span>
+            </button>
+        </div>
+        <div *ngIf="sense.translations.length > 0" class="d-flex align-items-center my-3">
+            <label>{{'RESOURCE_VIEW.LEX_VIEW.RELATED'|translate}}:</label>
+            <sense-relation *ngFor="let r of sense.related" class="ml-3" [sense]="sense" [relation]="r" (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
+            </sense-relation>
+            <button class="btn btn-xs btn-faded ml-3" (click)="addRelation()" [title]="'ACTIONS.ADD'|translate" [disabled]="!addRelatedAuthorized">
+                <span class="fas fa-plus"></span>
+            </button>
         </div>
 
-        <div *ngIf="sense.translations.length > 0" class=" my-2">
-            <div class="d-flex">
-                <label class="mr-2">{{'RESOURCE_VIEW.LEX_VIEW.TRANSLATION'|translate}}:</label>
-                <translation *ngFor="let t of sense.translations" [sense]="sense" [relation]="t" (dblclickObj)="resourceDblClick($event)"></translation>
-            </div>
-        </div>
     </div>
 
     <div class="d-flex ml-1" style="align-self: flex-start;">
@@ -48,6 +63,9 @@
                 <ng-container *ngIf="sense.id">
                     <a class="dropdown-item" (click)="addRelation()" [ngClass]="{ disabled: !addRelatedAuthorized }">
                         {{'DATA.ACTIONS.ADD_RELATED_SENSE'|translate}}
+                    </a>
+                    <a class="dropdown-item" (click)="addTranslation()" [ngClass]="{ disabled: !addTranslationAuthorized }">
+                        {{'DATA.ACTIONS.ADD_TRANSLATION'|translate}}
                     </a>
                     <a class="dropdown-item" (click)="setReference()" [ngClass]="{ disabled: !setReferenceAuthorized }">
                         {{'DATA.ACTIONS.SET_REFERENCE'|translate}}

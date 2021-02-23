@@ -8,7 +8,7 @@ import { VBActionsEnum } from "src/app/utils/VBActions";
 import { VBContext } from "src/app/utils/VBContext";
 import { LexViewCache } from "../LexViewChache";
 import { LexViewModalService } from "../lexViewModalService";
-import { LexicoRelationModalReturnData } from "./lexicoRelationModal";
+import { LexicoRelationModalReturnData } from "../lexicalRelation/lexicalRelationModal";
 
 @Component({
     selector: "concept-ref",
@@ -59,7 +59,7 @@ export class ConceptReferenceComponent {
     addRelation() {
         this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_RELATED_CONCEPT'}, this.concept.id).then(
             (data: LexicoRelationModalReturnData) => {
-                this.ontolexService.createLexicoSemanticRelation(this.concept.id, data.target, data.unidirectional, Vartrans.conceptualRelation, data.category).subscribe(
+                this.ontolexService.createLexicoSemanticRelation(this.concept.id, data.target, data.undirectional, Vartrans.conceptualRelation, data.category).subscribe(
                     () => {
                         this.update.emit();
                     }

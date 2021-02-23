@@ -1445,7 +1445,7 @@
             "RELATED": "Correlati",
             "SEMANTIC_REFERENCE": "Riferimento semantico",
             "TRANSLATION": "Traduzione",
-            "UNIDIRECTIONAL": "Unidirezionale"
+            "UNDIRECTIONAL": "Indirezionale"
         },
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Concetti broader",

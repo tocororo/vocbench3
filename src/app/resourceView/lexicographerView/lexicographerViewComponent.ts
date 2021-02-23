@@ -1,13 +1,15 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Form, LexicalEntry, LexicalResourceUtils, Sense } from "src/app/models/LexicographerView";
-import { OntoLex } from "src/app/models/Vocabulary";
+import { OntoLex, Vartrans } from "src/app/models/Vocabulary";
 import { ClassesServices } from "src/app/services/classesServices";
 import { LexicographerViewServices } from "src/app/services/lexicographerViewServices";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { PropertyServices } from "src/app/services/propertyServices";
+import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
+import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { NewConceptualizationCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newConceptualizationCfModal";
 import { NewOntoLexicalizationCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
@@ -19,8 +21,10 @@ import { HttpServiceContext } from "../../utils/HttpManager";
 import { UIUtils } from "../../utils/UIUtils";
 import { ProjectContext } from "../../utils/VBContext";
 import { ResViewSettingsModal } from "../resViewSettingsModal";
+import { LexicoRelationModalReturnData } from "./lexicalRelation/lexicalRelationModal";
 import { LexViewCache } from "./LexViewChache";
 import { LexViewHelper } from "./LexViewHelper";
+import { LexViewModalService } from "./lexViewModalService";
 
 @Component({
     selector: "lexicographer-view",
@@ -59,9 +63,10 @@ export class LexicographerViewComponent {
     addSubtermAuthorized: boolean;
     addConstituentAuthorized: boolean;
 
-    constructor(private lexicographerViewService: LexicographerViewServices, private lexViewHelper: LexViewHelper,
+    constructor(private lexicographerViewService: LexicographerViewServices, private lexViewHelper: LexViewHelper, private resourceService: ResourcesServices,
         private ontolexService: OntoLexLemonServices, private propertyService: PropertyServices, private classService: ClassesServices,
-        private creationModals: CreationModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
+        private creationModals: CreationModalServices, private sharedModals: SharedModalServices, private lexViewModals: LexViewModalService,
+        private browsingModals: BrowsingModalServices, private modalService: NgbModal) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
@@ -116,12 +121,12 @@ export class LexicographerViewComponent {
                 this.addOtherFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddOtherForm) && !this.readonly;
                 this.addLexicalizationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization, this.lexEntry.id) && !this.readonly;
                 this.addConceptualizationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddConceptualization, this.lexEntry.id) && !this.readonly;
-                this.addTranslationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.lexEntry.id) && !this.readonly; //TODO update when proper services will be provided
                 this.addSubtermAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddSubterm) && !this.readonly;
                 this.addConstituentAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetLexicalEntryConstituent) && !this.readonly;
 
                 //TODO server side this service has a temp preauthorized, keep it updated when it will be changed
                 this.addRelatedAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
+                this.addTranslationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
             }
         );
     }
@@ -160,6 +165,8 @@ export class LexicographerViewComponent {
         });
     }
 
+    //==== Forms ====
+
     addOtherForm() {
         this.pendingOtherForm = true;
     }
@@ -176,13 +183,18 @@ export class LexicographerViewComponent {
         )
     }
 
+    //==== Subterm and constituents ====
+
     addSubterm() {
-        this.lexViewHelper.addSubterm(this.resource).subscribe(
-            (done: boolean) => {
-                if (done) {
-                    this.buildLexicographerView();
-                }
-            }
+        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
+            (targetEntry: ARTURIResource) => {
+                this.ontolexService.addSubterm(<ARTURIResource>this.lexEntry.id, targetEntry).subscribe(
+                    () => {
+                        this.buildLexicographerView();
+                    }
+                )
+            },
+            () => {}
         )
     }
 
@@ -196,25 +208,35 @@ export class LexicographerViewComponent {
         )
     }
 
+    //==== Relations ====
+
     addRelated() {
-        this.lexViewHelper.addRelated(this.resource).subscribe(
-            (done: boolean) => {
-                if (done) {
-                    this.buildLexicographerView();
-                }
-            }
+        this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_RELATED_LEX_ENTRY"}, this.lexEntry.id).then(
+            (data: LexicoRelationModalReturnData) => {
+                return this.ontolexService.createLexicoSemanticRelation(this.lexEntry.id, data.target, data.undirectional, Vartrans.lexicalRelation, data.category).subscribe(
+                    () => {
+                        this.buildLexicographerView();
+                    }
+                )
+            },
+            () => {}
         )
     }
 
     addTranslation() {
-        this.lexViewHelper.addTranslation(this.resource).subscribe(
-            (done: boolean) => {
-                if (done) {
-                    this.buildLexicographerView();
-                }
-            }
+        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
+            (targetEntry: ARTURIResource) => {
+                this.resourceService.addValue(this.lexEntry.id, Vartrans.translatableAs, targetEntry).subscribe(
+                    () => {
+                        this.buildLexicographerView();
+                    }
+                )
+            },
+            () => {}
         )
     }
+
+    //==== Senses ====
     
     addLexicalization() {
         this.creationModals.newOntoLexicalizationCf({key:"DATA.ACTIONS.ADD_LEXICAL_SENSE"}, OntoLex.sense, false).then(

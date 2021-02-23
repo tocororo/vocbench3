@@ -1,0 +1,7 @@
+<div class="d-flex align-items-center">
+    <sense-ref *ngFor="let ref of targetRef" class="clickable" [ref]="ref" (dblclick)="targetDblClick(ref)"></sense-ref>
+    <span *ngIf="showCategory" class="clickable ml-1" (dblclick)="categoryDblClick()" [title]="category.toNT()">({{category.getLocalName()}})</span>
+    <button class="btn btn-xs btn-faded ml-2" (click)="delete()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized">
+        <span class="fas fa-minus"></span>
+    </button>
+</div>

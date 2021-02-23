@@ -1445,7 +1445,7 @@
             "RELATED": "Related",
             "SEMANTIC_REFERENCE": "Semantic reference",
             "TRANSLATION": "Translation",
-            "UNIDIRECTIONAL": "Unidirectional"
+            "UNDIRECTIONAL": "Undirectional"
         },
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Broader Concepts",

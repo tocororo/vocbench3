@@ -584,5 +584,33 @@ export class OntoLexLemonServices {
         return this.httpMgr.doPost(this.serviceName, "createLexicoSemanticRelation", params);
     }
 
+	createTranslationSet(newTranslationSet?: ARTURIResource, customFormValue?: CustomFormValue): Observable<ARTURIResource> {
+        let params = {
+            newTranslationSet: newTranslationSet,
+            customFormValue: customFormValue
+        }
+        return this.httpMgr.doPost(this.serviceName, "createTranslationSet", params).pipe(
+            map(stResp => {
+                return Deserializer.createURI(stResp);
+            })
+        );
+    }
+
+
+	getTranslationSets(): Observable<ARTResource[]> {
+        let params = {}
+        return this.httpMgr.doGet(this.serviceName, "getTranslationSets", params).pipe(
+            map(stResp => {
+                return Deserializer.createResourceArray(stResp);
+            })
+        );
+    }
+
+	deleteTranslationSet(vartransTranslationSet: ARTURIResource): Observable<void> {
+        let params = {
+            vartransTranslationSet: vartransTranslationSet,
+        }
+        return this.httpMgr.doPost(this.serviceName, "deleteTranslationSet", params);
+    }
 
 }
