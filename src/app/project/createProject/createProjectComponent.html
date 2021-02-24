@@ -292,31 +292,9 @@
                         </div>
                         <div class="card-body">
                             <ng-container *ngIf="!uriGenUseDefaultSetting">
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">Plugin</label>
-                                    <div class="col-sm-11">
-                                        <select class="form-control" [(ngModel)]="selectedUriGenPlugin" (ngModelChange)="onUriGenPluginChanged()">
-                                            <option *ngFor="let ugp of uriGenPluginList" [ngValue]="ugp">
-                                                {{ugp.factoryID.substring(ugp.factoryID.lastIndexOf('.')+1)}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-form-label col-sm-1">{{'COMMONS.CONFIG.CONFIGURATION'|translate}}</label>
-                                    <div class="col-sm-11">
-                                        <div class="input-group">
-                                            <select class="form-control" [(ngModel)]="selectedUriGenPluginConf">
-                                                <option *ngFor="let ugpConf of selectedUriGenPluginConfList" [ngValue]="ugpConf">
-                                                    {{ugpConf.shortName}}
-                                                </option>
-                                            </select>
-                                            <span class="input-group-append">
-                                                <button class="btn btn-light" (click)="configureUriGenConf()">{{'COMMONS.CONFIG.CONFIGURE'|translate}}</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <extension-configurator [extensions]="uriGenExtensions" (extensionUpdated)="selectedUriGenExtension = $event; selectedUriGenExtensionConf = null"
+                                    (configurationUpdated)="selectedUriGenExtensionConf = $event" [storeable]="false" style="flex: 1;">
+                                </extension-configurator>
                             </ng-container>
                         </div>
                     </div>

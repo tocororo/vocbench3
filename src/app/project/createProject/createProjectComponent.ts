@@ -6,7 +6,7 @@ import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
-import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
+import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
 import { Properties } from "../../models/Properties";
 import { RDFFormat } from "../../models/RDFFormat";
@@ -137,11 +137,9 @@ export class CreateProjectComponent {
 
     //URI GENERATOR PLUGIN
     private uriGenUseDefaultSetting: boolean = true;
-    private uriGenPluginList: Plugin[]; //available plugins for uri generator (retrieved through getAvailablePlugins)
-    private selectedUriGenPlugin: Plugin; //chosen plugin for uri generator (the one selected through a <select> element)
-    private uriGenPluginConfMap: Map<string, Settings[]> = new Map(); //map of <factoryID, pluginConf> used to store the configurations for the plugins
-    private selectedUriGenPluginConfList: Settings[]; //plugin configurations for the selected plugin (represent the choices of the <select> element of configurations)
-    private selectedUriGenPluginConf: Settings; //chosen configuration for the chosen uri generator plugin (selected through a <select> element)
+    private uriGenExtensions: ConfigurableExtensionFactory[]; //available extensions for uri generator (retrieved through getExtensions)
+    private selectedUriGenExtension: ConfigurableExtensionFactory; //chosen extension for uri generator (the one selected through a <select> element)
+    private selectedUriGenExtensionConf: Settings; //chosen configuration for the chosen uri generator extension (selected through a <select> element)
 
     //RENDERING GENERATOR PLUGIN
     private rendEngUseDefaultSetting: boolean = true;
@@ -196,11 +194,9 @@ export class CreateProjectComponent {
         );
 
         //init uri generator plugin
-        this.pluginService.getAvailablePlugins(ExtensionPointID.URI_GENERATOR_ID).subscribe(
-            (plugins: Plugin[]) => {
-                this.uriGenPluginList = plugins;
-                this.selectedUriGenPlugin = this.uriGenPluginList[0];
-                this.onUriGenPluginChanged(); //init configuration for the default selected uri generator plugin
+        this.extensionService.getExtensions(ExtensionPointID.URI_GENERATOR_ID).subscribe(
+            (extensions: ExtensionFactory[]) => {
+                this.uriGenExtensions = <ConfigurableExtensionFactory[]>extensions;
             }
         );
 
@@ -551,42 +547,6 @@ export class CreateProjectComponent {
 
     //=============== DATA STORE MANAGEMENT - END ===================
 
-    /** =============================================================
-     * ===================== OPTIONAL SETTINGS  =====================
-     * ============================================================= */
-
-    /**
-     * URI GENERATOR PLUGIN
-     */
-
-    private onUriGenPluginChanged() {
-        //check if the selected plugin configuration has already the configuration list
-        let uriGenConfs: Settings[] = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
-        if (uriGenConfs != null) {
-            this.selectedUriGenPluginConfList = uriGenConfs;
-            this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[0];
-            return; //selected plugin is already in uriGenPluginConfMap, so there's no need to get the configurations
-        }
-        //configurations for selected plugin doesn't found => get the configurations
-        this.pluginService.getPluginConfigurations(this.selectedUriGenPlugin.factoryID).subscribe(
-            configs => {
-                this.uriGenPluginConfMap.set(configs.factoryID, configs.configurations);
-                this.selectedUriGenPluginConfList = configs.configurations;
-                //set the first configuration as default
-                this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[0];
-            }
-        )
-    }
-
-    private configureUriGenConf() {
-        this.sharedModals.configurePlugin(this.selectedUriGenPluginConf).then(
-            (config: any) => {
-                this.selectedUriGenPluginConf.properties = (<Settings>config).properties;
-            },
-            () => { }
-        )
-    }
-
     /**
      * RENDERING ENGINE PLUGIN
      */
@@ -775,15 +735,14 @@ export class CreateProjectComponent {
         let uriGeneratorSpecification: PluginSpecification;
         if (!this.uriGenUseDefaultSetting) {
             //check if uriGenerator plugin needs to be configured
-            if (this.selectedUriGenPluginConf.requireConfiguration()) {
+            if (this.selectedUriGenExtensionConf?.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
                 this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_URI_GENERATOR_CONFIG"}, ModalType.warning);
                 return;
             }
             uriGeneratorSpecification = {
-                factoryId: this.selectedUriGenPlugin.factoryID,
-                configType: this.selectedUriGenPluginConf.type,
-                properties: this.selectedUriGenPluginConf.getPropertiesAsMap()
+                factoryId: this.selectedUriGenExtension.id,
+                configuration: this.selectedUriGenExtensionConf?.getPropertiesAsMap(true)
             }
         }
 
