@@ -9,6 +9,7 @@ import { LexEntryComponent } from '../resourceView/lexicographerView/lexicalEntr
 import { LexicalFormComponent } from '../resourceView/lexicographerView/lexicalForm/lexicalFormComponent';
 import { MorphosyntacticPropComponent } from '../resourceView/lexicographerView/lexicalForm/morphosyntacticPropComponent';
 import { PhoneticRepComponent } from '../resourceView/lexicographerView/lexicalForm/phoneticRepComponent';
+import { CategoryComponent } from '../resourceView/lexicographerView/lexicalRelation/categoryComponent';
 import { EntryRelationComponent } from '../resourceView/lexicographerView/lexicalRelation/entryRelationComponent';
 import { LexicalRelationModal } from '../resourceView/lexicographerView/lexicalRelation/lexicalRelationModal';
 import { SenseRelationComponent } from '../resourceView/lexicographerView/lexicalRelation/senseRelationComponent';
@@ -103,6 +104,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         //CodeView
         ResourceTripleEditorComponent,
         //LexView
+        CategoryComponent,
         ConceptReferenceComponent,
         ConstituentComponent,
         ConstituentListComponent,

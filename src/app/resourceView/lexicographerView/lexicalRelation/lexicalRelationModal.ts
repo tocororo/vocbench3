@@ -71,7 +71,13 @@ export class LexicalRelationModal {
     }
     
     isOkClickable(): boolean {
-        return (this.selectedCategory != null && this.targetEntity != null);
+        if (this.reified) {
+            return this.selectedCategory != null && this.targetEntity != null && 
+                (!this.translation || this.translationSet != null); //if not in translation OR in translation but translationSet not null
+        } else {
+            return (this.selectedCategory != null && this.targetEntity != null);
+        }
+        
     }
 
     ok() {

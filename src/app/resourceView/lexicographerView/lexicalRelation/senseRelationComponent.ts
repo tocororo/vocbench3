@@ -20,12 +20,11 @@ export class SenseRelationComponent {
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update
 
     showCategory: boolean;
-    category: ARTURIResource;
     targetRef: SenseReference[];
 
     deleteAuthorized: boolean;
 
-    constructor(private resourceService: ResourcesServices) {}
+    constructor(private resourceService: ResourcesServices) { }
 
     ngOnChanges(change: SimpleChanges) {
         if (change['relation']) {
@@ -39,34 +38,28 @@ export class SenseRelationComponent {
         } else { //current entry is not among the source entries => inverse relation
             this.targetRef = this.relation.source;
         }
-        this.category = this.relation.category[0];
-        /* category must be shown if:
-         * - not null
-         * - relation doesn't represent a translation
-         * - relation representa a translation but the property used is not the standard vartrans:translatableAs
-         */
-        this.showCategory = this.category != null && (!this.translation || !this.category.equals(Vartrans.translatableAs));
+        // category must be hidden only if is only one and it isvartrans:translatableAs in a translation relation
+        this.showCategory = !(this.relation.category.length == 1 && this.relation.category[0].equals(Vartrans.translatableAs));
 
         this.readonly = LexicalResourceUtils.isInStaging(this.relation);
         this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.sense.id) && !this.readonly;
     }
 
     delete() {
-        //delete allowed only when not in validation, so just get the first of category and target EntryRerference
+        //delete allowed only when not in validation, so just get the first of category and target reference
         if (this.relation.id == null) { //plain relation
-            this.resourceService.removeValue(this.sense.id, this.category, this.targetRef[0].id).subscribe(
+            this.resourceService.removeValue(this.sense.id, this.relation.category[0], this.targetRef[0].id).subscribe(
                 () => {
                     this.update.emit();
                 }
             )
         } else { //reified
-            //TODO how?
             alert("Removal of reified relation still not handled")
         }
     }
 
-    categoryDblClick() {
-        this.dblclickObj.emit(this.category);
+    categoryDblClick(category: ARTURIResource) {
+        this.dblclickObj.emit(category);
     }
 
     targetDblClick(ref: SenseReference) {

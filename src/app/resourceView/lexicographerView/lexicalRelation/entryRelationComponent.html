@@ -1,6 +1,12 @@
 <div class="d-flex align-items-center">
     <entry-ref *ngFor="let ref of targetRef" class="clickable" [ref]="ref" (dblclick)="targetDblClick(ref)"></entry-ref>
-    <span *ngIf="showCategory" class="clickable ml-1" (dblclick)="categoryDblClick()" [title]="category.toNT()">({{category.getLocalName()}})</span>
+    <ng-container *ngIf="showCategory">
+        (
+            <category *ngFor="let c of relation.category; let last=last" class="clickable" [ngClass]="{ 'ml-1': !last }" [category]="c" 
+                (dblclick)="categoryDblClick(c)">
+            </category>
+        )
+    </ng-container>
     <button class="btn btn-xs btn-faded ml-2" (click)="delete()" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized">
         <span class="fas fa-minus"></span>
     </button>
