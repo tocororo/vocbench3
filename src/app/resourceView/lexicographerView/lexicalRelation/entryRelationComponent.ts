@@ -13,6 +13,7 @@ import { VBActionsEnum } from "src/app/utils/VBActions";
 })
 export class EntryRelationComponent {
     @Input() readonly: boolean = false;
+    @Input() translation: boolean = false; //tells if this relation is about translation
     @Input() entry: LexicalEntry;
     @Input() relation: LexicalRelation;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
@@ -39,7 +40,12 @@ export class EntryRelationComponent {
             this.targetRef = this.relation.source;
         }
         this.category = this.relation.category[0];
-        this.showCategory = this.category != null && !this.category.equals(Vartrans.translatableAs);
+        /* category must be shown if:
+         * - not null
+         * - relation doesn't represent a translation
+         * - relation representa a translation but the property used is not the standard vartrans:translatableAs
+         */
+        this.showCategory = this.category != null && (!this.translation || !this.category.equals(Vartrans.translatableAs));
 
         this.readonly = LexicalResourceUtils.isInStaging(this.relation);
         this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.entry.id) && !this.readonly;

@@ -823,7 +823,7 @@ export class VBActionFunctions {
 
     private ontolexCreateTranslationSet = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_TRANSLATION_SET"}, Vartrans.TranslationSet, false).then(
+            this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_TRANSLATION_SET"}, Vartrans.TranslationSet, false, true).then(
                 (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.ontolexService.createTranslationSet(data.uriResource, data.cfValue).subscribe(

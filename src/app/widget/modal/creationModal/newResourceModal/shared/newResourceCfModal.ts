@@ -16,6 +16,7 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal {
     @Input() title: string;
     @Input() cls: ARTURIResource; //class that this modal is creating
     @Input() clsChangeable: boolean = true;
+    @Input() uriOptional: boolean; //if true the URI is optional and the resource URI will be generated randomically
 
     //standard form
     uri: string;
@@ -39,16 +40,21 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal {
     }
 
     isStandardFormDataValid(): boolean {
-        return (this.uri != null && this.uri.trim() != "");
+        //valid uri provided or no check in case uri is optional
+        return (this.uri != null && this.uri.trim() != "") || this.uriOptional;
     }
 
     okImpl() {
         let entryMap: any = this.collectCustomFormData();
 
         let returnedData: NewResourceCfModalReturnData = {
-            uriResource: new ARTURIResource(this.uri),
+            uriResource: null,
             cls: this.resourceClass,
             cfValue: null
+        }
+        //Set URI only if localName is not empty (this case is possible only if uriOptional is false)
+        if (this.uri != null && this.uri.trim() != "") {
+            returnedData.uriResource = new ARTURIResource(this.uri);
         }
         //set cfValue only if not null
         if (this.customFormId != null && entryMap != null) {

@@ -91,7 +91,7 @@
             </div>
             <div *ngIf="lexEntry.translatableAs.length > 0" class="d-flex align-items-center mt-3">
                 <label>{{'RESOURCE_VIEW.LEX_VIEW.TRANSLATION'|translate}}:</label>
-                <entry-relation *ngFor="let r of lexEntry.translatableAs" class="ml-3" [entry]="lexEntry" [relation]="r" (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
+                <entry-relation *ngFor="let r of lexEntry.translatableAs" class="ml-3" [entry]="lexEntry" [relation]="r" translation="true" (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
                 </entry-relation>
                 <button class="btn btn-xs btn-faded ml-3" (click)="addTranslation()" [title]="'ACTIONS.ADD'|translate" [disabled]="!addTranslationAuthorized">
                     <span class="fas fa-plus"></span>

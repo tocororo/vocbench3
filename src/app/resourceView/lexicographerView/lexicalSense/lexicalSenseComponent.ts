@@ -12,6 +12,8 @@ import { NewOntoLexicalizationCfModalReturnData } from "src/app/widget/modal/cre
 import { LexViewCache } from "../LexViewChache";
 import { LexViewModalService } from "../lexViewModalService";
 import { LexicoRelationModalReturnData } from "../lexicalRelation/lexicalRelationModal";
+import { Observable } from "rxjs";
+import { ResourcesServices } from "src/app/services/resourcesServices";
 
 @Component({
     selector: "lexical-sense",
@@ -42,8 +44,8 @@ export class LexicalSenseComponent {
     addRelatedAuthorized: boolean;
     addTranslationAuthorized: boolean;
 
-    constructor(private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices, 
-        private creationModals: CreationModalServices, private lexViewModals: LexViewModalService) {}
+    constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices,
+        private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices, private lexViewModals: LexViewModalService) {}
 
     ngOnInit() {
         let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
@@ -162,18 +164,39 @@ export class LexicalSenseComponent {
     addRelation() {
         this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_RELATED_SENSE'}, this.sense.id).then(
             (data: LexicoRelationModalReturnData) => {
-                this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.undirectional, Vartrans.SenseRelation, data.category).subscribe(
+                let addRelationFn: Observable<void>;
+                if (data.reified) {
+                    addRelationFn = this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.undirectional, Vartrans.SenseRelation, data.category);
+                } else {
+                    addRelationFn = this.resourceService.addValue(this.sense.id, data.category, data.target);
+                }
+                addRelationFn.subscribe(
                     () => {
                         this.update.emit();
                     }
-                )
+                );
             },
             () => {}
         )
     }
 
     addTranslation() {
-
+        this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_TRANSLATION"}, this.sense.id, true).then(
+            (data: LexicoRelationModalReturnData) => {
+                let addRelationFn: Observable<void>;
+                if (data.reified) {
+                    addRelationFn = this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.undirectional, Vartrans.Translation, data.category, data.tranlsationSet);
+                } else {
+                    addRelationFn = this.resourceService.addValue(this.sense.id, Vartrans.translatableAs, data.target);
+                }
+                addRelationFn.subscribe(
+                    () => {
+                        this.update.emit();
+                    }
+                );
+            },
+            () => {}
+        )
     }
 
     /**

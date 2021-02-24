@@ -91,7 +91,11 @@ export class EditableNsInput implements ControlValueAccessor {
 
     onModelChanged() {
         if (this.namespaceLocked) {
-            this.propagateChange(this.namespace + this.localName);
+            if (this.localName != null && this.localName.trim() != "") {
+                this.propagateChange(this.namespace + this.localName);
+            } else {
+                this.propagateChange(null);
+            }
         } else {
             this.propagateChange(this.uri);
         }

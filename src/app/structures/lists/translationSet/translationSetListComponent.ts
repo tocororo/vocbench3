@@ -26,8 +26,8 @@ export class TranslationSetListComponent extends AbstractList {
 
     constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
         super(eventHandler);
-        this.eventSubscriptions.push(eventHandler.datatypeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
-        this.eventSubscriptions.push(eventHandler.datatypeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
+        this.eventSubscriptions.push(eventHandler.translationSetCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
+        this.eventSubscriptions.push(eventHandler.translationSetDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
     }
 
     ngOnInit() {

@@ -593,7 +593,17 @@ export class OntoLexLemonServices {
             map(stResp => {
                 return Deserializer.createURI(stResp);
             })
-        );
+        ).pipe(
+            mergeMap(translationSet => {
+                return this.resourceService.getResourceDescription(translationSet).pipe(
+                    map(resource => {
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
+                        this.eventHandler.translationSetCreatedEvent.emit(<ARTURIResource>resource);
+                        return <ARTURIResource>resource;
+                    })
+                );
+            })
+        );;
     }
 
 	getTranslationSets(): Observable<ARTResource[]> {
@@ -609,7 +619,12 @@ export class OntoLexLemonServices {
         let params = {
             vartransTranslationSet: vartransTranslationSet,
         }
-        return this.httpMgr.doPost(this.serviceName, "deleteTranslationSet", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteTranslationSet", params).pipe(
+            map(stResp => {
+                this.eventHandler.translationSetDeletedEvent.emit(vartransTranslationSet);
+                return stResp;
+            })
+        );
     }
 
 }

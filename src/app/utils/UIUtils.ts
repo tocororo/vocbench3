@@ -53,12 +53,10 @@ export class UIUtils {
     }
 
 
-
-
+    //languages for which exists the flag icon
     private static availableFlagLang = ["ar", "be", "bg", "bn", "cs", "da", "de", "el", "en", "en-gb", "en-us", "es", "et", "fa", "fr", "fi", "ga", 
         "hi", "hr", "hu", "hy", "id", "is", "it", "ja", "ka", "km", "ko", "kz", "lt", "lv", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv",
         "th", "tr", "uk", "vi", "zh"];
-
 
     private static classImgSrc = "./assets/images/icons/res/class.png";
     private static classImportedImgSrc = "./assets/images/icons/res/class_imported.png";
@@ -409,6 +407,9 @@ export class UIUtils {
     }
 
     static getActionImageSrc(role: RDFResourceRolesEnum, action: ResAction): string {
+        if (role == RDFResourceRolesEnum.vartransTranslationSet) { //translationSet has no actions icon => fallback to individual icons
+            role = RDFResourceRolesEnum.individual
+        }
         return "./assets/images/icons/actions/" + role + "_" + action + ".png";
     }
 

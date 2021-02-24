@@ -28,12 +28,13 @@ export class CreationModalServices {
      * @param cfId the custom form id
      * @return
      */
-    newResourceCf(title: TextOrTranslation, cls: ARTURIResource, clsChangeable?: boolean): Promise<NewResourceCfModalReturnData> {
+    newResourceCf(title: TextOrTranslation, cls: ARTURIResource, clsChangeable?: boolean, uriOptional?: boolean): Promise<NewResourceCfModalReturnData> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewResourceCfModal, _options);
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.cls = cls;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
+        if (uriOptional != null) modalRef.componentInstance.uriOptional = uriOptional;
         return modalRef.result;
     }
 

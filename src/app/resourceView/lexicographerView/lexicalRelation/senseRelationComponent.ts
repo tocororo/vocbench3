@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { LexicalResourceUtils, Sense, SenseReference, SenseRelation } from "src/app/models/LexicographerView";
+import { Vartrans } from "src/app/models/Vocabulary";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
@@ -12,6 +13,7 @@ import { VBActionsEnum } from "src/app/utils/VBActions";
 })
 export class SenseRelationComponent {
     @Input() readonly: boolean = false;
+    @Input() translation: boolean = false; //tells if this relation is about translation
     @Input() sense: Sense;
     @Input() relation: SenseRelation;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
@@ -38,7 +40,12 @@ export class SenseRelationComponent {
             this.targetRef = this.relation.source;
         }
         this.category = this.relation.category[0];
-        this.showCategory = this.category != null;
+        /* category must be shown if:
+         * - not null
+         * - relation doesn't represent a translation
+         * - relation representa a translation but the property used is not the standard vartrans:translatableAs
+         */
+        this.showCategory = this.category != null && (!this.translation || !this.category.equals(Vartrans.translatableAs));
 
         this.readonly = LexicalResourceUtils.isInStaging(this.relation);
         this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.sense.id) && !this.readonly;

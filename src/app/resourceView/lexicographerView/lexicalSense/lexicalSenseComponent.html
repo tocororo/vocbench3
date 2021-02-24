@@ -42,7 +42,7 @@
         </div>
         <div *ngIf="sense.translations.length > 0" class="d-flex align-items-center my-3">
             <label>{{'RESOURCE_VIEW.LEX_VIEW.RELATED'|translate}}:</label>
-            <sense-relation *ngFor="let r of sense.related" class="ml-3" [sense]="sense" [relation]="r" (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
+            <sense-relation *ngFor="let r of sense.related" class="ml-3" [sense]="sense" [relation]="r" translation="true" (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
             </sense-relation>
             <button class="btn btn-xs btn-faded ml-3" (click)="addRelation()" [title]="'ACTIONS.ADD'|translate" [disabled]="!addRelatedAuthorized">
                 <span class="fas fa-plus"></span>

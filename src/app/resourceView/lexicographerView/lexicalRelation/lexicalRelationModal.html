@@ -9,6 +9,14 @@
             <col>
         </colgroup>
         <tbody>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td nowrap><label>{{'COMMONS.TYPE'|translate}}:</label></td>
+                <td>
+                    <select class="form-control" [(ngModel)]="reified">
+                        <option *ngFor="let rt of relationTypes" [ngValue]="rt.reified">{{rt.translationKey|translate}}</option>
+                    </select>
+                </td>
+            </tr>
             <tr>
                 <td nowrap><label>{{'ALIGNMENT.CREATION.SOURCE_RESOURCE'|translate}}:</label></td>
                 <td>
@@ -31,29 +39,31 @@
                     <resource-picker [config]="resourcePickerConfig" (resourceChanged)="targetEntity = $event"></resource-picker>
                 </td>
             </tr>
-            <tr *ngIf="translation">
-                <td nowrap><label>{{'RESOURCE_VIEW.LEX_VIEW.TRANSLATION_SET'|translate}}:</label></td>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <div class="input-group">
-                            <div class="form-control input-resource">
-                                <rdf-resource *ngIf="translationSet" [resource]="translationSet"></rdf-resource>
-                            </div>
-                            <div class="input-group-append">
-                                <button class="btn btn-light" (click)="pickTranslationSet()" [title]="'ACTIONS.SELECT'|translate">
-                                    <span class="fas fa-pencil-alt"></span>
-                                </button>
+            <ng-container *ngIf="reified">
+                <tr *ngIf="translation">
+                    <td nowrap><label>{{'RESOURCE_VIEW.LEX_VIEW.TRANSLATION_SET'|translate}}:</label></td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="input-group">
+                                <div class="form-control input-resource">
+                                    <rdf-resource *ngIf="translationSet" [resource]="translationSet"></rdf-resource>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-light" (click)="pickTranslationSet()" [title]="'ACTIONS.SELECT'|translate">
+                                        <span class="fas fa-pencil-alt"></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'RESOURCE_VIEW.LEX_VIEW.UNDIRECTIONAL'|translate}}:</label></td>
-                <td>
-                    <input type="checkbox" [(ngModel)]="undirectional">
-                </td>
-            </tr>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'RESOURCE_VIEW.LEX_VIEW.UNDIRECTIONAL'|translate}}:</label></td>
+                    <td>
+                        <input type="checkbox" [(ngModel)]="undirectional">
+                    </td>
+                </tr>
+            </ng-container>
         </tbody>
     </table>
 </div>

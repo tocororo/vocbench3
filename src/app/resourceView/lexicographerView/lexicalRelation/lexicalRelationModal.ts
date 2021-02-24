@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from "rxjs";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "src/app/models/ARTResources";
-import { Vartrans } from "src/app/models/Vocabulary";
+import { Lexinfo, Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
@@ -23,6 +23,12 @@ export class LexicalRelationModal {
     undirectional: boolean = false;
     translationSet: ARTResource;
 
+    relationTypes: { reified: boolean, translationKey: string }[] = [
+        { reified: true, translationKey: "COMMONS.REIFIED" },
+        { reified: false, translationKey: "COMMONS.PLAIN" }
+    ];
+    reified: boolean = true;
+
     resourcePickerConfig: ResourcePickerConfig = {};
     
     constructor(private activeModal: NgbActiveModal, private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices) {}
@@ -32,7 +38,11 @@ export class LexicalRelationModal {
         this.resourcePickerConfig = { roles: [role] }
 
         if (this.translation) {
-            this.categories = [Vartrans.translatableAs];
+            if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                this.categories = [Vartrans.translatableAs];
+            } else if (role == RDFResourceRolesEnum.ontolexLexicalSense) {
+                this.categories = [Lexinfo.translation];
+            }
             this.selectedCategory = this.categories[0];
         } else {
             let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
@@ -68,9 +78,12 @@ export class LexicalRelationModal {
         let returnData: LexicoRelationModalReturnData = {
             category: this.selectedCategory,
             target: this.targetEntity,
-            undirectional: this.undirectional,
-            tranlsationSet: this.translation ? this.translationSet: null
+            reified: this.reified,
         };
+        if (this.reified) {
+            returnData.undirectional = this.undirectional;
+            returnData.tranlsationSet = this.translation ? this.translationSet: null;
+        }
         this.activeModal.close(returnData);
     }
     
@@ -83,6 +96,8 @@ export class LexicalRelationModal {
 export interface LexicoRelationModalReturnData {
     category: ARTURIResource;
     target: ARTResource;
-    undirectional: boolean;
+    reified: boolean;
+    //following to be provided only if not plain
+    undirectional?: boolean;
     tranlsationSet?: ARTResource; //in case of tranlsation
 }

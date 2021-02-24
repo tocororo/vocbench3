@@ -6,3 +6,12 @@
     border: 1px solid #fcbd01;
     border-radius: .25rem;
 }
+
+concept-ref {
+    flex: 1;
+    position: relative;
+    padding: .75rem 1.25rem;
+    background-color: transparent;
+    border: 1px solid #fede81;
+    border-radius: .25rem;
+}

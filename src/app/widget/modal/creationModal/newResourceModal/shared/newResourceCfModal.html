@@ -19,8 +19,15 @@
             <tr>
                 <td class="text-right"><label>URI:</label></td>
                 <td>
-                    <editable-ns-input [(ngModel)]="uri"  [toFocus]="true">
-                    </editable-ns-input>
+                    <ng-container *ngIf="uriOptional; then uriOptionalBlock; else uriMandatoryBlock"></ng-container>
+                    <ng-template #uriMandatoryBlock>
+                        <editable-ns-input [(ngModel)]="uri"  [toFocus]="true">
+                        </editable-ns-input>
+                    </ng-template>
+                    <ng-template #uriOptionalBlock>
+                        <editable-ns-input [(ngModel)]="uri"  [toFocus]="true" [placeholder]="'DATA.COMMONS.LEAVE_EMPTY_FOR_RANDOM_URI'|translate">
+                        </editable-ns-input>
+                    </ng-template>
                 </td>
             </tr>
         </tbody>

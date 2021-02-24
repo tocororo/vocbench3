@@ -74,6 +74,10 @@ export class VBEventHandler {
     public datatypeCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeCreatedEvent");
     public datatypeDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeDeletedEvent");
 
+    //TRANSLATION_SET EVENTS
+    public translationSetCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetCreatedEvent");
+    public translationSetDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetDeletedEvent");
+
     //PREFERENCES EVENTS
 
     /**

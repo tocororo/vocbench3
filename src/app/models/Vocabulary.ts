@@ -257,6 +257,7 @@ export class Lexinfo {
     public static namespace = Lexinfo.uri + "#";
     
     public static morphosyntacticProperty = new ARTURIResource(Lexinfo.namespace + "morphosyntacticProperty", "lexinfo:morphosyntacticProperty", RDFResourceRolesEnum.objectProperty);
+    public static translation = new ARTURIResource(Lexinfo.namespace + "translation", "lexinfo:translation", RDFResourceRolesEnum.objectProperty);
 }
 
 export class Lime {

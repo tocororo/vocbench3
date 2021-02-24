@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { Observable } from "rxjs";
 import { Form, LexicalEntry, LexicalResourceUtils, Sense } from "src/app/models/LexicographerView";
 import { OntoLex, Vartrans } from "src/app/models/Vocabulary";
 import { ClassesServices } from "src/app/services/classesServices";
@@ -213,11 +214,17 @@ export class LexicographerViewComponent {
     addRelated() {
         this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_RELATED_LEX_ENTRY"}, this.lexEntry.id).then(
             (data: LexicoRelationModalReturnData) => {
-                this.ontolexService.createLexicoSemanticRelation(this.lexEntry.id, data.target, data.undirectional, Vartrans.LexicalRelation, data.category).subscribe(
+                let addRelationFn: Observable<void>;
+                if (data.reified) {
+                    addRelationFn = this.ontolexService.createLexicoSemanticRelation(this.lexEntry.id, data.target, data.undirectional, Vartrans.LexicalRelation, data.category);
+                } else {
+                    addRelationFn = this.resourceService.addValue(this.lexEntry.id, data.category, data.target);
+                }
+                addRelationFn.subscribe(
                     () => {
                         this.buildLexicographerView();
                     }
-                )
+                );
             },
             () => {}
         )
@@ -226,24 +233,20 @@ export class LexicographerViewComponent {
     addTranslation() {
         this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_TRANSLATION"}, this.lexEntry.id, true).then(
             (data: LexicoRelationModalReturnData) => {
-                this.ontolexService.createLexicoSemanticRelation(this.lexEntry.id, data.target, data.undirectional, Vartrans.Translation, data.category, data.tranlsationSet).subscribe(
+                let addRelationFn: Observable<void>;
+                if (data.reified) {
+                    addRelationFn = this.ontolexService.createLexicoSemanticRelation(this.lexEntry.id, data.target, data.undirectional, Vartrans.Translation, data.category, data.tranlsationSet);
+                } else {
+                    addRelationFn = this.resourceService.addValue(this.lexEntry.id, Vartrans.translatableAs, data.target);
+                }
+                addRelationFn.subscribe(
                     () => {
                         this.buildLexicographerView();
                     }
-                )
+                );
             },
             () => {}
         )
-        // this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
-        //     (targetEntry: ARTURIResource) => {
-        //         this.resourceService.addValue(this.lexEntry.id, Vartrans.translatableAs, targetEntry).subscribe(
-        //             () => {
-        //                 this.buildLexicographerView();
-        //             }
-        //         )
-        //     },
-        //     () => {}
-        // )
     }
 
     //==== Senses ====
