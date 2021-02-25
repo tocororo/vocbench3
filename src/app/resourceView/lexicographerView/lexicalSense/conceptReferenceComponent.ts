@@ -33,8 +33,6 @@ export class ConceptReferenceComponent {
 
     deleteConceptAuthorized: boolean;
 
-    addRelatedAuthorized: boolean;
-
     constructor(private ontolexService: OntoLexLemonServices, private lexViewModals: LexViewModalService) {}
 
     ngOnInit() {
@@ -51,22 +49,6 @@ export class ConceptReferenceComponent {
             && langAuthorized && !this.readonly && !LexicalResourceUtils.isInStaging(this.concept);
 
         this.deleteConceptAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveConcept) && !this.readonly && !LexicalResourceUtils.isInStaging(this.concept);
-
-        //TODO server side this service has a temp preauthorized, keep it updated when it will be changed
-        this.addRelatedAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
-    }
-
-    addRelation() {
-        this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_RELATED_CONCEPT'}, this.concept.id).then(
-            (data: LexicoRelationModalReturnData) => {
-                this.ontolexService.createLexicoSemanticRelation(this.concept.id, data.target, data.undirectional, Vartrans.ConceptualRelation, data.category).subscribe(
-                    () => {
-                        this.update.emit();
-                    }
-                )
-            },
-            () => {}
-        )
     }
 
     deleteConcept() {

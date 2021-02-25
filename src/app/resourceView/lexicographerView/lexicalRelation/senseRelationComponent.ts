@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { LexicalResourceUtils, Sense, SenseReference, SenseRelation } from "src/app/models/LexicographerView";
-import { Vartrans } from "src/app/models/Vocabulary";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
@@ -38,8 +37,8 @@ export class SenseRelationComponent {
         } else { //current entry is not among the source entries => inverse relation
             this.targetRef = this.relation.source;
         }
-        // category must be hidden only if is only one and it isvartrans:translatableAs in a translation relation
-        this.showCategory = !(this.relation.category.length == 1 && this.relation.category[0].equals(Vartrans.translatableAs));
+        // category must be shown only if there are multiple categories (validation) or the relation doesn't rapresents a translation
+        this.showCategory = this.relation.category.length != 1 || !this.translation;
 
         this.readonly = LexicalResourceUtils.isInStaging(this.relation);
         this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.sense.id) && !this.readonly;

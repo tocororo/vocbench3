@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "src/app/models/ARTResources";
 import { Lexinfo, Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
+import { ResourceUtils, SortAttribute } from "src/app/utils/ResourceUtils";
 import { VBContext } from "src/app/utils/VBContext";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { ResourcePickerConfig } from "src/app/widget/pickers/valuePicker/resourcePickerComponent";
@@ -14,8 +15,8 @@ import { ResourcePickerConfig } from "src/app/widget/pickers/valuePicker/resourc
 })
 export class LexicalRelationModal {
     @Input() title: string;
-    @Input() sourceEntity: ARTResource; //entry, sense or concept
-    @Input() translation: boolean; //if true this modal is used to add a translation (only for entry and sense)
+    @Input() sourceEntity: ARTResource; //entry or sense
+    @Input() translation: boolean; //if true this modal is used to add a translation
 
     categories: ARTURIResource[];
     selectedCategory: ARTURIResource;
@@ -51,12 +52,11 @@ export class LexicalRelationModal {
                 getCategoriesFn = this.ontolexService.getSenseRelationCategories(lexicon);
             } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
                 getCategoriesFn = this.ontolexService.getLexicalRelationCategories(lexicon);
-            } else if (role == RDFResourceRolesEnum.concept) {
-                getCategoriesFn = this.ontolexService.getConceptualRelationCategories(lexicon);
             }
             getCategoriesFn.subscribe(
                 categories => {
                     this.categories = categories;
+                    this.categories.sort((c1, c2) => c1.getLocalName().toLocaleLowerCase().localeCompare(c2.getLocalName().toLocaleLowerCase()));
                 }
             );
         }
@@ -71,13 +71,7 @@ export class LexicalRelationModal {
     }
     
     isOkClickable(): boolean {
-        if (this.reified) {
-            return this.selectedCategory != null && this.targetEntity != null && 
-                (!this.translation || this.translationSet != null); //if not in translation OR in translation but translationSet not null
-        } else {
-            return (this.selectedCategory != null && this.targetEntity != null);
-        }
-        
+        return this.selectedCategory != null && this.targetEntity != null;
     }
 
     ok() {
