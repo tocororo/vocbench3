@@ -35,6 +35,10 @@
             <span *ngIf="showFilterBox">{{'ACTIONS.HIDE_FILTERS'|translate}}</span>
             <span class="fas fa-filter ml-2"></span>
         </button>
+
+        <button class="btn btn-xs btn-light ml-2" (click)="init()" [title]="'ACTIONS.REFRESH'|translate">
+            <span class="fas fa-redo"></span>
+        </button>
     </div>
     
     <div class="card-body vbox">
