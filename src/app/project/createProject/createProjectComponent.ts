@@ -143,11 +143,9 @@ export class CreateProjectComponent {
 
     //RENDERING GENERATOR PLUGIN
     private rendEngUseDefaultSetting: boolean = true;
-    private rendEngPluginList: Plugin[]; //available plugins for rendering engine
-    private selectedRendEngPlugin: Plugin; //chosen plugin for rendering engine
-    private rendEngPluginConfMap: Map<string, Settings[]> = new Map(); //map of <factoryID, pluginConf> (plugin - available configs)
-    private selectedRendEngPluginConfList: Settings[]; //plugin configurations for the selected plugin
-    private selectedRendEngPluginConf: Settings; //chosen configuration for the chosen rendering engine plugin
+    private rendEngExtensions: ConfigurableExtensionFactory[]; //available extensions for rendering engine
+    private selectedRendEngExtension: ConfigurableExtensionFactory; //chosen extension for rendering engine
+    private selectedRendEngExtensionConf: Settings; //chosen configuration for the chosen rendering engine extension
 
     //RESOURCE METADATA
     private useResourceMetadata: boolean = false;
@@ -201,11 +199,9 @@ export class CreateProjectComponent {
         );
 
         //init rendering engine plugin
-        this.pluginService.getAvailablePlugins(ExtensionPointID.RENDERING_ENGINE_ID).subscribe(
-            (plugins: Plugin[]) => {
-                this.rendEngPluginList = plugins;
-                this.selectedRendEngPlugin = this.rendEngPluginList[0];
-                this.onRendEnginePluginChanged(); //init configuration for the default selected rendering engine plugin
+        this.extensionService.getExtensions(ExtensionPointID.RENDERING_ENGINE_ID).subscribe(
+            (extensions: ExtensionFactory[]) => {
+                this.rendEngExtensions = <ConfigurableExtensionFactory[]>extensions;
             }
         );
 
@@ -548,38 +544,6 @@ export class CreateProjectComponent {
     //=============== DATA STORE MANAGEMENT - END ===================
 
     /**
-     * RENDERING ENGINE PLUGIN
-     */
-
-    private onRendEnginePluginChanged() {
-        //check if the selected plugin configuration has already the configuration list
-        let rendEngConfs: Settings[] = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
-        if (rendEngConfs != null) {
-            this.selectedRendEngPluginConfList = rendEngConfs;
-            this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[0];
-            return; //selected plugin is already in rendEngPluginConfMap, so there's no need to get the configurations
-        }
-        //configurations for selected plugin doesn't found => get the configurations
-        this.pluginService.getPluginConfigurations(this.selectedRendEngPlugin.factoryID).subscribe(
-            configs => {
-                this.rendEngPluginConfMap.set(configs.factoryID, configs.configurations);
-                this.selectedRendEngPluginConfList = configs.configurations;
-                //set the first configuration as default
-                this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[0];
-            }
-        )
-    }
-
-    private configureRendEngConf() {
-        this.sharedModals.configurePlugin(this.selectedRendEngPluginConf).then(
-            (config: Settings) => {
-                this.selectedRendEngPluginConf.properties = config.properties;
-            },
-            () => { }
-        )
-    }
-
-    /**
      * RESOURCE METADATA
      */
 
@@ -752,16 +716,15 @@ export class CreateProjectComponent {
         let renderingEngineSpecification: PluginSpecification;
         if (!this.rendEngUseDefaultSetting) {
             //check if uriGenerator plugin needs to be configured
-            if (this.selectedRendEngPluginConf.requireConfiguration()) {
+            if (this.selectedRendEngExtensionConf?.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
                 this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_RENDERING_ENGINE_CONFIG"}, ModalType.warning);
                 return;
             }
 
             renderingEngineSpecification = {
-                factoryId: this.selectedRendEngPlugin.factoryID,
-                configType: this.selectedRendEngPluginConf.type,
-                properties: this.selectedRendEngPluginConf.getPropertiesAsMap()
+                factoryId: this.selectedRendEngExtension.id,
+                configuration: this.selectedRendEngExtensionConf.getPropertiesAsMap(true)
             }
         }
 
