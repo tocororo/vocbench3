@@ -615,13 +615,13 @@ export class OntoLexLemonServices {
         );
     }
 
-	deleteTranslationSet(vartransTranslationSet: ARTURIResource): Observable<void> {
+	deleteTranslationSet(translationSet: ARTURIResource): Observable<void> {
         let params = {
-            vartransTranslationSet: vartransTranslationSet,
+            translationSet: translationSet,
         }
         return this.httpMgr.doPost(this.serviceName, "deleteTranslationSet", params).pipe(
             map(stResp => {
-                this.eventHandler.translationSetDeletedEvent.emit(vartransTranslationSet);
+                this.eventHandler.translationSetDeletedEvent.emit(translationSet);
                 return stResp;
             })
         );
