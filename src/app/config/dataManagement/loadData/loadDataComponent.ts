@@ -356,7 +356,7 @@ export class LoadDataComponent {
                             });
                             //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
                             chain.forEach((extConf : {extensionID: string, configRef: string}, index: number) => {
-                                tranformerConfigurators[index].forceConfiguration(extConf.extensionID, extConf.configRef);
+                                tranformerConfigurators[index].forceConfigurationByRef(extConf.extensionID, extConf.configRef);
                             });
                         });
                     } else if (configurations[i].name == "loaderSpec") {
@@ -386,7 +386,7 @@ export class LoadDataComponent {
                             }
                             
                             setTimeout(() => {
-                                this.loaderConfigurator.forceConfiguration(loaderSpec.extensionID, loaderSpec.configRef);
+                                this.loaderConfigurator.forceConfigurationByRef(loaderSpec.extensionID, loaderSpec.configRef);
                             });
                         } else { //loader not specified
                             //select the no-loader option in the menu (from file)

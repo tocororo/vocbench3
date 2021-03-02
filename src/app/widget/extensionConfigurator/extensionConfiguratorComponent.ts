@@ -113,26 +113,51 @@ export class ExtensionConfiguratorComponent {
 
     //useful to change the selected extension and configuration from a parent component
     public selectExtensionAndConfiguration(extensionID: string, configurationType: string) {
-        for (var i = 0; i < this.extensions.length; i++) {
-            if (this.extensions[i].id == extensionID) {
-                this.selectedExtension = this.extensions[i];
+        //select extension
+        for (let ext of this.extensions) {
+            if (ext.id == extensionID) {
+                this.selectedExtension = ext;
                 this.extensionUpdated.emit(this.selectedExtension);
                 break;
             }
         }
-        for (var i = 0; i < this.selectedExtension.configurations.length; i++) {
-            if (this.selectedExtension.configurations[i].type == configurationType) {
-                this.selectedConfiguration = this.selectedExtension.configurations[i];
+        for (let conf of this.selectedExtension.configurations) {
+            if (conf.type == configurationType) {
+                this.selectedConfiguration = conf;
             }
         }
     }
 
-    //useful only for the filter chain, in order to force the load of a single filter
-    public forceConfiguration(extensionID: string, configRef: string) {
-        //select the extension
-        for (var i = 0; i < this.extensions.length; i++) {
-            if (this.extensions[i].id == extensionID) {
-                this.selectedExtension = this.extensions[i];
+    /**
+     * Select the given extension and configuration
+     * @param extensionID 
+     * @param config 
+     */
+    public forceConfiguration(extensionID: string, config: Settings) {
+        //select extension
+        for (let ext of this.extensions) {
+            if (ext.id == extensionID) {
+                this.selectedExtension = ext;
+                this.extensionUpdated.emit(this.selectedExtension);
+                break;
+            }
+        }
+        //force configuration
+        for (let conf of this.selectedExtension.configurations) {
+            if (conf.type == config.type) { //same type => replace config and then select it
+                conf = config;
+                this.selectedConfiguration = conf;
+                this.configurationUpdated.emit(this.selectedConfiguration);
+            }
+        }
+    }
+
+    //useful for forcing a configuration through its reference (e.g. for the filter chain of load/export data)
+    public forceConfigurationByRef(extensionID: string, configRef: string) {
+        //select extension
+        for (let ext of this.extensions) {
+            if (ext.id == extensionID) {
+                this.selectedExtension = ext;
                 this.extensionUpdated.emit(this.selectedExtension);
                 break;
             }
@@ -140,13 +165,12 @@ export class ExtensionConfiguratorComponent {
         //load the configuration
         this.configurationService.getConfiguration(this.selectedExtension.id, configRef).subscribe(
             (conf: Configuration) => {
-                for (var i = 0; i < this.selectedExtension.configurations.length; i++) {
+                for (let i = 0; i < this.selectedExtension.configurations.length; i++) {
                     if (this.selectedExtension.configurations[i].type == conf.type) {
                         this.selectedExtension.configurations[i] = conf;
                         this.selectedConfiguration = this.selectedExtension.configurations[i];
                     }
                 }
-
                 this.configurationUpdated.emit(this.selectedConfiguration);
 
                 this.status = ExtensionConfigurationStatus.saved;

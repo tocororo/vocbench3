@@ -443,7 +443,7 @@ export class ExportDataComponent {
                                 //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
                                 chain.forEach((c : [{extensionID: string, configRef: string}, string[]], index: number) => {
                                     let extConfPair = c[0];
-                                    tranformerConfigurators[index].forceConfiguration(extConfPair.extensionID, extConfPair.configRef);
+                                    tranformerConfigurators[index].forceConfigurationByRef(extConfPair.extensionID, extConfPair.configRef);
 
                                     let graphs = c[1];
                                     //check all the graphs in the graphs parameter
@@ -478,8 +478,8 @@ export class ExportDataComponent {
                     });
                     //restore the reformatter configuration and the (stream-sourced) deployer configuration
                     setTimeout(() => { //timeout needed in order to let the UI update after the selection of the deployment
-                        this.reformatterConfigurator.forceConfiguration(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
-                        this.deployerConfigurator.forceConfiguration(deployerSpec.extensionID, deployerSpec.configRef);
+                        this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
+                        this.deployerConfigurator.forceConfigurationByRef(deployerSpec.extensionID, deployerSpec.configRef);
                     });
                 } else if (deployerSpec != null) {  //only deployer specified => repository-sourced deployment
                     this.deploymentOptions.forEach(opt => {
@@ -489,7 +489,7 @@ export class ExportDataComponent {
                     });
                     //restore the (repository-sourced) deployer configuration
                     setTimeout(() => {
-                        this.deployerConfigurator.forceConfiguration(deployerSpec.extensionID, deployerSpec.configRef);
+                        this.deployerConfigurator.forceConfigurationByRef(deployerSpec.extensionID, deployerSpec.configRef);
                     });
                 } else if (reformattingExporterSpec != null) { //only reformatter specified => no source for deployment
                     this.deploymentOptions.forEach(opt => {
@@ -498,7 +498,7 @@ export class ExportDataComponent {
                         }
                     });
                     setTimeout(() => { //timeout needed in order to let the UI update after the selection of the deployment
-                        this.reformatterConfigurator.forceConfiguration(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
+                        this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
                     });
                 }
 
@@ -520,7 +520,7 @@ export class ExportDataComponent {
         });
         
         setTimeout(() => {
-            this.reformatterConfigurator.forceConfiguration(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
+            this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
         });
     }
 
