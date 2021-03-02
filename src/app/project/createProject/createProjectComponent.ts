@@ -6,7 +6,7 @@ import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
-import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
+import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
 import { Properties } from "../../models/Properties";
 import { RDFFormat } from "../../models/RDFFormat";
@@ -16,7 +16,6 @@ import { EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary
 import { MetadataFactoryPatternSelectionModal } from "../../resourceMetadata/modals/metadataFactoryPatternSelectionModal";
 import { ExtensionsServices } from "../../services/extensionsServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
-import { PluginsServices } from "../../services/pluginsServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { ProjectServices } from "../../services/projectServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -160,7 +159,7 @@ export class CreateProjectComponent {
     private openAtStartup: boolean = false;
     private globallyAccessible: boolean = false;
 
-    constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
+    constructor(private projectService: ProjectServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
         private translateService: TranslateService, private router: Router, 
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {

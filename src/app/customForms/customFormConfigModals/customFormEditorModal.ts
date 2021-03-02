@@ -314,6 +314,7 @@ export class CustomFormEditorModal {
                     this.description = "";
                 }
 
+                //I don't distinguish between node and graph since if type is node previewProps is ignored server-side
                 let propChainParam: ARTURIResource[];
                 let tablePreviewParam: ARTURIResource[];
                 if (this.selectedPreviewForm.value == PreviewForm.propertyChain) {
@@ -321,7 +322,6 @@ export class CustomFormEditorModal {
                 } else if (this.selectedPreviewForm.value == PreviewForm.table) {
                     tablePreviewParam = this.previewProps;
                 }
-                //I don't distinguish between node and graph since if type is node previewProps is ignored server-side
                 if (this.mode == EditorMode.edit) {
                     this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref, propChainParam, tablePreviewParam).subscribe(
                         () => {

@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings } from "src/app/models/Plugins";
 import { ExtensionsServices } from "src/app/services/extensionsServices";
-import { PluginsServices } from "src/app/services/pluginsServices";
 import { ProjectServices } from "src/app/services/projectServices";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ModalType } from "src/app/widget/modal/Modals";
@@ -38,8 +37,8 @@ export class ProjSettingsEditorModal {
     selectedUriGenExtensionConf: Settings; //chosen configuration for the chosen uri generator extension (selected through a <select> element)
 
 
-    constructor(public activeModal: NgbActiveModal, private pluginService: PluginsServices, private projectService: ProjectServices, private extensionService: ExtensionsServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private extensionService: ExtensionsServices,
+        private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.initBlacklisting();

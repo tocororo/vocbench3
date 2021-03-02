@@ -2,16 +2,6 @@ import { NTriplesUtil } from "../utils/ResourceUtils";
 import { ARTLiteral, ARTNode } from "./ARTResources";
 
 /**
- * in the future this could have also a description field
- */
-export class Plugin {
-    public factoryID: string;
-    constructor(factoryID: string) {
-        this.factoryID = factoryID;
-    }
-}
-
-/**
  * Soon I will rename this class in STProperties (like server side) and Settings will extends STProperties
  */
 export class Settings {
