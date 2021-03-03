@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Observable } from "rxjs";
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { LexicalResourceUtils, Sense, SenseReference, SenseRelation } from "src/app/models/LexicographerView";
+import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
@@ -23,7 +25,7 @@ export class SenseRelationComponent {
 
     deleteAuthorized: boolean;
 
-    constructor(private resourceService: ResourcesServices) { }
+    constructor(private resourceService: ResourcesServices, private ontolexService: OntoLexLemonServices) { }
 
     ngOnChanges(change: SimpleChanges) {
         if (change['relation']) {
@@ -45,16 +47,18 @@ export class SenseRelationComponent {
     }
 
     delete() {
-        //delete allowed only when not in validation, so just get the first of category and target reference
+        let deleteFn: Observable<void>;
         if (this.relation.id == null) { //plain relation
-            this.resourceService.removeValue(this.sense.id, this.relation.category[0], this.targetRef[0].id).subscribe(
-                () => {
-                    this.update.emit();
-                }
-            )
+            //delete allowed only when not in validation, so just get the first of category and target reference
+            deleteFn = this.resourceService.removeValue(this.sense.id, this.relation.category[0], this.targetRef[0].id);
         } else { //reified
-            alert("Removal of reified relation still not handled")
+            deleteFn = this.ontolexService.deleteLexicoSemanticRelation(this.relation.id)    ;
         }
+        deleteFn.subscribe(
+            () => {
+                this.update.emit();
+            }
+        );
     }
 
     categoryDblClick(category: ARTURIResource) {

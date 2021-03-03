@@ -584,6 +584,13 @@ export class OntoLexLemonServices {
         return this.httpMgr.doPost(this.serviceName, "createLexicoSemanticRelation", params);
     }
 
+    deleteLexicoSemanticRelation(relation: ARTResource) {
+        let params = {
+            relation: relation,
+        }
+        return this.httpMgr.doPost(this.serviceName, "deleteLexicoSemanticRelation", params);
+    }
+
 	createTranslationSet(newTranslationSet?: ARTURIResource, customFormValue?: CustomFormValue): Observable<ARTURIResource> {
         let params = {
             newTranslationSet: newTranslationSet,

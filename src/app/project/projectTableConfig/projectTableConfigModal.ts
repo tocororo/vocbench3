@@ -75,6 +75,8 @@ export class ProjectTableConfigModal {
                                 this.facets.push({ name: facetName, displayName: displayName });
                             }
                         });
+
+                        this.facets.sort((f1, f2) => f1.displayName.localeCompare(f2.displayName));
                     }
                 )
             }
