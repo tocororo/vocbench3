@@ -181,10 +181,10 @@ export class RdfResourceComponent {
         this.literalWithLink = false;
         if (this.resource instanceof ARTLiteral) {
             let value = this.resource.getValue();
-            let regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
+            let regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-][_.\w-!#$%&'*+-/=?^_`.{|}~]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
             let urlArray: string[] = [];
 
-            let matchArray;
+            let matchArray: RegExpExecArray;
             while ((matchArray = regexToken.exec(value)) !== null) {
                 urlArray.push(matchArray[0]);
             }
@@ -192,7 +192,7 @@ export class RdfResourceComponent {
             if (urlArray.length > 0) {
                 this.literalWithLink = true;
                 this.splittedLiteral = [];
-                for (var i = 0; i < urlArray.length; i++) {
+                for (let i = 0; i < urlArray.length; i++) {
                     let idx: number = 0;
                     let urlStartIdx: number = value.indexOf(urlArray[i]);
                     let urlEndIdx: number = value.indexOf(urlArray[i]) + urlArray[i].length;
