@@ -1,7 +1,11 @@
 <div class="d-flex align-items-center">
-    <inline-editable-form style="flex: 1" [value]="form" [disabled]="!editWrittenRepFormAuthorized" [textStyle]="inlineEditStyle" [title]="form.id.toNT()"
-        (edited)="onWrittenRepEdited($event)">
-    </inline-editable-form>
+
+    <div style="flex: 1;">
+        <inline-editable-value *ngFor="let wr of form.writtenRep" [value]="wr" [textStyle]="inlineEditStyle" [disabled]="!editWrittenRepFormAuthorized"
+            (edited)="onWrittenRepEdited($event)">
+        </inline-editable-value>
+    </div>
+
     <div class="dropdown ml-1" ngbDropdown>
         <button class="btn btn-faded btn-xs dropdown-toggle" data-toggle="dropdown" [disabled]="readonly" ngbDropdownToggle>
             <span class="fas fa-pencil-alt"></span>

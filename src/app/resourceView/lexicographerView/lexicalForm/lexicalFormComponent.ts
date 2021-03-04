@@ -38,27 +38,17 @@ export class LexicalFormComponent {
         if (LexicalResourceUtils.isInStagingRemove(this.form)) {
             this.readonly = true;
         }
-        if (this.lemma) {
-            this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetCanonicalForm) && !this.readonly;
-        } else {
-            this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.form.id) && !this.readonly;
-        }
+        this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexUpdateFormRepresentation) && !this.readonly;
         this.addMorphoPropAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.form.id) && !this.readonly;
         this.addPhoneticRepAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddFormRepresentation) && !this.readonly;
         this.removeFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveForm) && !this.readonly && !LexicalResourceUtils.isInStaging(this.form);
     }
 
     onWrittenRepEdited(newValue: string) {
-        let oldWrittenRep = this.form[0].writtenRep[0]; //edit enabled only when the form is unique (not in validation)
+        let oldWrittenRep = this.form.writtenRep[0]; //here I can get the first writtenRep since edit is enabled only when the form is unique (not in validation)
         if (oldWrittenRep.getShow() == newValue) return;
         let newWrittenRep = new ARTLiteral(newValue, null, oldWrittenRep.getLang());
-        let updateWrittenRepFn: Observable<void>;
-        if (this.lemma) { //if lemma, simply replace the whole canonical form
-            updateWrittenRepFn = this.ontolexService.setCanonicalForm(<ARTURIResource>this.entry.id, newWrittenRep);
-        } else { //other form => update the writtenRep of the form
-            updateWrittenRepFn = this.ontolexService.updateFormRepresentation(this.form.id, oldWrittenRep, newWrittenRep, OntoLex.writtenRep);
-        }
-        updateWrittenRepFn.subscribe(
+        this.ontolexService.updateFormRepresentation(this.form.id, oldWrittenRep, newWrittenRep, OntoLex.writtenRep).subscribe(
             () => {
                 this.update.emit();
             }

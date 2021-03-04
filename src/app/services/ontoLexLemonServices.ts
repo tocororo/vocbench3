@@ -415,7 +415,7 @@ export class OntoLexLemonServices {
             newRepresentation: newRepresentation,
             property: property
         };
-        return this.httpMgr.doPost(this.serviceName, "removeFormRepresentation", params);
+        return this.httpMgr.doPost(this.serviceName, "updateFormRepresentation", params);
     }
 
     /**
@@ -584,11 +584,18 @@ export class OntoLexLemonServices {
         return this.httpMgr.doPost(this.serviceName, "createLexicoSemanticRelation", params);
     }
 
-    deleteLexicoSemanticRelation(relation: ARTResource) {
+    deleteLexicalRelation(relation: ARTResource) {
         let params = {
             relation: relation,
         }
-        return this.httpMgr.doPost(this.serviceName, "deleteLexicoSemanticRelation", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteLexicalRelation", params);
+    }
+
+    deleteSenseRelation(relation: ARTResource) {
+        let params = {
+            relation: relation,
+        }
+        return this.httpMgr.doPost(this.serviceName, "deleteSenseRelation", params);
     }
 
 	createTranslationSet(newTranslationSet?: ARTURIResource, customFormValue?: CustomFormValue): Observable<ARTURIResource> {

@@ -102,7 +102,7 @@ export class LexicographerViewComponent {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
 
                 this.lexEntry = LexicalEntry.parse(resp);
-                console.log(this.lexEntry);
+                this.update.emit(this.lexEntry.id);
                 
                 this.lemma = this.lexEntry.lemma;
                 this.sortForms(this.lemma);

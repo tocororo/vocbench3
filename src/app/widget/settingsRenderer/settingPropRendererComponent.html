@@ -58,14 +58,11 @@
 
             <ng-container *ngSwitchCase="'Properties'">
                 <ng-container *ngIf="prop.required || prop.value; else collapsedNestedSettings">
-                    <div style="display: flex;">
-                        <nested-settings-renderer style="flex:auto" [(ngModel)]="prop.value" [schema]="prop.type.schema" [disabled]="disabled" (ngModelChange)="updatePropertiesValue($event)"></nested-settings-renderer>
-                        <ng-container *ngIf="!prop.required">
-                            <div style="width: 1%"></div>
-                            <button class="btn btn-sm btn-light" [title]="'WIDGETS.SETTINGS_RENDERER.DELETE_OPTIONAL_VALUE'|translate" style="align-self: center; margin-left: 3px" (click)="deleteOptionalSettingsValue(prop)">
-                                <span class="far fa-trash-alt"></span>
-                            </button>  
-                        </ng-container>
+                    <div class="d-flex align-items-center">
+                        <nested-settings-renderer style="flex: 1;" [(ngModel)]="prop.value" [schema]="prop.type.schema" [disabled]="disabled" (ngModelChange)="updatePropertiesValue($event)"></nested-settings-renderer>
+                        <button *ngIf="!prop.required" class="btn btn-sm btn-light ml-1" [title]="'WIDGETS.SETTINGS_RENDERER.DELETE_OPTIONAL_VALUE'|translate" (click)="deleteOptionalSettingsValue(prop)">
+                            <span class="far fa-trash-alt"></span>
+                        </button>  
                     </div>    
                 </ng-container>
                 <ng-template #collapsedNestedSettings>

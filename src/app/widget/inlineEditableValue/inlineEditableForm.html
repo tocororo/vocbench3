@@ -1,7 +1,0 @@
-<textarea #editBlock *ngIf="editInProgress; else notEditBlock" [(ngModel)]="stringValue" class="form-control common" [style]="textStyle"
-    [rows]="textareaRows" spellcheck="false" (keydown)="onKeydown($event)">
-</textarea>
-
-<ng-template #notEditBlock>
-    <div class="form-control common form-control-editable" [style]="textStyle" [ngClass]="ngClassValue">{{stringValue}}</div>
-</ng-template>

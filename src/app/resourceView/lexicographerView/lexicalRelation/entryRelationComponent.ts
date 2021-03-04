@@ -43,7 +43,12 @@ export class EntryRelationComponent {
         this.showCategory = this.relation.category.length != 1 || !this.translation;
 
         this.readonly = LexicalResourceUtils.isInStaging(this.relation);
-        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.entry.id) && !this.readonly;
+        if (this.relation.id) { //plain
+            this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.entry.id) && !this.readonly;
+        } else { //reified
+            this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexDeleteLexicalRelation) && !this.readonly;
+        }
+        
     }
 
     delete() {
@@ -52,7 +57,7 @@ export class EntryRelationComponent {
             //delete allowed only when not in validation, so just get the first of category and target reference
             deleteFn = this.resourceService.removeValue(this.entry.id, this.relation.category[0], this.targetRef[0].id);
         } else { //reified
-            deleteFn = this.ontolexService.deleteLexicoSemanticRelation(this.relation.id)    ;
+            deleteFn = this.ontolexService.deleteLexicalRelation(this.relation.id);
         }
         deleteFn.subscribe(
             () => {
