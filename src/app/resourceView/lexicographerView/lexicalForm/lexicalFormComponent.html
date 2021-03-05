@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center">
 
-    <div style="flex: 1;">
+    <div style="flex: 1; border-radius: 3px;" [ngClass]="{ proposedAddRes: proposedAdd, proposedRemoveRes: proposedRemove }">
         <inline-editable-value *ngFor="let wr of form.writtenRep" [value]="wr" [textStyle]="inlineEditStyle" [disabled]="!editWrittenRepFormAuthorized"
             (edited)="onWrittenRepEdited($event)">
         </inline-editable-value>

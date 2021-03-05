@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { Observable } from "rxjs";
 import { ARTLiteral, ARTURIResource } from "src/app/models/ARTResources";
 import { Form, LexicalEntry, LexicalResourceUtils } from "src/app/models/LexicographerView";
 import { OntoLex } from "src/app/models/Vocabulary";
@@ -22,6 +21,8 @@ export class LexicalFormComponent {
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update the lex view
 
     inlineEditStyle: string = "font-family: serif; font-size: 1.5rem;";
+    proposedAdd: boolean;
+    proposedRemove: boolean;
 
     pendingPhoneticRep: boolean;
     pendingMorphoProp: boolean;
@@ -35,7 +36,10 @@ export class LexicalFormComponent {
     constructor(private ontolexService: OntoLexLemonServices) {}
 
     ngOnInit() {
-        if (LexicalResourceUtils.isInStagingRemove(this.form)) {
+        if (LexicalResourceUtils.isInStagingAdd(this.form)) {
+            this.proposedAdd = true;
+        } else if (LexicalResourceUtils.isInStagingRemove(this.form)) {
+            this.proposedRemove = true;
             this.readonly = true;
         }
         this.editWrittenRepFormAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexUpdateFormRepresentation) && !this.readonly;

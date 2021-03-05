@@ -19,6 +19,7 @@ export class LexicalEntry {
         lv.id = ParsingUtils.parseResourceId(json.id);
         lv.nature = ResourceNature.parse(json.nature);
         lv.id.setRole(lv.nature[0].role); //role needed to authorization evaluator
+        lv.id.setNature(lv.nature);
         lv.id.setShow(json.show);
         lv.morphosyntacticProps = Deserializer.createPredicateObjectsList(json.morphosyntacticProps);
         lv.lemma = json.lemma.map((l: any) => Form.parse(l));
