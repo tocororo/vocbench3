@@ -1,6 +1,6 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
 import { map } from 'rxjs/operators';
-import { ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SkosServices } from "../../../services/skosServices";
 import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
@@ -44,8 +44,10 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     expandNodeImpl() {
         return this.skosService.getNestedCollections(this.node, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
             map(nestedColl => {
-                //sort by show if rendering is active, uri otherwise
-                ResourceUtils.sortResources(nestedColl, this.rendering ? SortAttribute.show : SortAttribute.value);
+                if (this.node.getRole() != RDFResourceRolesEnum.skosOrderedCollection) { //orderedCollection sorted server-side
+                    //sort by show if rendering is active, uri otherwise
+                    ResourceUtils.sortResources(nestedColl, this.rendering ? SortAttribute.show : SortAttribute.value);
+                }
                 this.children = nestedColl;
                 this.open = true;
                 if (this.children.length == 0) {
