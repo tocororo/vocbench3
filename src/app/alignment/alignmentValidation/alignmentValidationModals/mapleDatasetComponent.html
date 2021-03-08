@@ -21,7 +21,7 @@
                 </tr>
                 <tr *ngIf="dataset.sparqlEndpoint">
                     <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.SPARQL_ENDPOINT'|translate}}:</label></td>
-                    <td><input class="form-control form-control-sm" [ngModel]="dataset.sparqlEndpoint" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset.sparqlEndpoint.endpointURL" readonly></td>
                 </tr>
                 <tr *ngIf="dataset['avgAmbiguity']">
                     <td class="text-right" nowrap><label>{{'MODELS.MAPLE.DATASET.AVG_AMBIGUITY'|translate}}:</label></td>

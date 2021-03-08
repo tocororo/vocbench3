@@ -56,9 +56,15 @@ export class Dataset {
     '@id': string;
     '@type': string;
     uriSpace: string;
-    sparqlEndpoint?: string;
+    sparqlEndpoint?: DataService;
     conformsTo?: string;
     title: string[];
+}
+
+export class DataService {
+    endpointURL: string;
+    username?: string;
+    password?: string;
 }
 
 export class Pairing {
