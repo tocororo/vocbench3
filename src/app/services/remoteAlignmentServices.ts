@@ -193,14 +193,16 @@ export class RemoteAlignmentServices {
      * @param serverURL 
      * @param username 
      * @param password 
+     * @param forwardCredentials
      * @param defaultIfFirst 
      */
-    addRemoteAlignmentService(id: string, serverURL: string, username?: string, password?: string, asDefault?: boolean): Observable<void> {
+    addRemoteAlignmentService(id: string, serverURL: string, username?: string, password?: string, forwardCredentials: boolean = false, asDefault?: boolean): Observable<void> {
         let params = {
             id: id,
             serverURL: serverURL,
             username: username,
             password: password,
+            forwardCredentials: forwardCredentials,
             asDefault: asDefault,
         };
         return this.httpMgr.doPost(this.serviceName, "addRemoteAlignmentService", params);
@@ -212,13 +214,16 @@ export class RemoteAlignmentServices {
      * @param serverURL 
      * @param username 
      * @param password 
+     * @param forwardCredenialsCheck
+     * @param asDefault
      */
-    updateRemoteAlignmentService(id: string, serverURL: string, username?: string, password?: string, asDefault?: boolean): Observable<void> {
+    updateRemoteAlignmentService(id: string, serverURL: string, username?: string, password?: string, forwardCredentials: boolean = false, asDefault?: boolean): Observable<void> {
         let params = {
             id: id,
             serverURL: serverURL,
             username: username,
             password: password,
+            forwardCredentials: forwardCredentials,
             asDefault: asDefault
         };
         return this.httpMgr.doPost(this.serviceName, "updateRemoteAlignmentService", params);

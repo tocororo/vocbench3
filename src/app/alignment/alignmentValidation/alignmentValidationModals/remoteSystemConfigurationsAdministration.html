@@ -13,6 +13,7 @@
                         <th class="text-center">{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
                         <th class="text-center">{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
                         <th class="text-center">{{'COMMONS.CONFIG.PASSWORD'|translate}}</th>
+                        <th class="text-center">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -35,6 +36,9 @@
                         </td>
                         <td class="text-center">
                             <input-editable [value]="conf.password" allowEmpty="true" (valueEdited)="updateConfPassword(conf, $event)"></input-editable>
+                        </td>
+                        <td class="text-center">
+                            <input class="form-check form-check-inline" type="checkbox" [(ngModel)]="conf.forwardCredentials" (ngModelChange)="updateConfForwardCredentials(conf, $event)" />
                         </td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-light" (click)="deleteConfig(conf)">
@@ -65,6 +69,12 @@
                         </td>
                         <td>
                             <input class="form-control form-control-sm" [(ngModel)]="newConfig.password" [placeholder]="'COMMONS.CONFIG.PASSWORD'|translate">
+                        </td>
+                        <td class="text-center">
+                            <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS_INFO'|translate">
+                                <input class="form-check-input" id="forwardCredenialsCheck" type="checkbox" [(ngModel)]="newConfig.default">
+                                <label class="form-check-label" for="forwardCredenialsCheck">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</label>
+                            </div>
                         </td>
                         <td class="text-center">
                             <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.DEFAULT_CHECK_INFO'|translate">

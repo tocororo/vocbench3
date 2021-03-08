@@ -146,7 +146,9 @@
                 "CONFIG": {
                     "REMOTE_ALIGN_SYS_CONFIG": "Remote Alignment System configurations",
                     "DEFAULT_CHECK_INFO": "If checked the new configuration is automatically set as default",
-                    "ID_INFO": "Configuration ID"
+                    "ID_INFO": "Configuration ID",
+                    "FORWARD_CREDENTIALS": "Forward credentials",
+                    "FORWARD_CREDENTIALS_INFO": "If checked the credentials for accessing relevant datasets are forwarded to the remote alignment service"
                 },
                 "MAIN": {
                     "REMOTE_ALIGN_SYS": "Remote Alignment System",

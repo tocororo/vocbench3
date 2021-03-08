@@ -128,4 +128,5 @@ export class RemoteAlignmentServiceConfigurationDef {
     serverURL: string;
     username?: string;
     password?: string;
+    forwardCredentials: boolean;
 }

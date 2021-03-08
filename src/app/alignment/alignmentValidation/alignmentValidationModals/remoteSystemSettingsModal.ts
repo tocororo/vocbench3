@@ -45,7 +45,8 @@ export class RemoteSystemSettingsModal {
                         id: id,
                         serverURL: servConf.getPropertyValue("serverURL"),
                         username: servConf.getPropertyValue("username"),
-                        password: servConf.getPropertyValue("password")
+                        password: servConf.getPropertyValue("password"),
+                        forwardCredentials: (servConf.getPropertyValue("forwardCredentials") === true)
                     }
                     this.savedConfigs.push(servConfDef);
                 }

@@ -146,7 +146,9 @@
                 "CONFIG": {
                     "REMOTE_ALIGN_SYS_CONFIG": "Configurazione del sistema remoto d'allineamentio",
                     "DEFAULT_CHECK_INFO": "Se spuntato, la nuova configurazione sarà automaticamente settada di default",
-                    "ID_INFO": "ID configurazione"
+                    "ID_INFO": "ID configurazione",
+                    "FORWARD_CREDENTIALS": "Inoltro delle credenziali",
+                    "FORWARD_CREDENTIALS_INFO": "Se spuntato, le credenziali per l'accesso ai dataset rilevanti sono inoltrate al servizio di allineamento remoto"
                 },
                 "MAIN": {
                     "REMOTE_ALIGN_SYS": "Sistema remoto di allineamento",

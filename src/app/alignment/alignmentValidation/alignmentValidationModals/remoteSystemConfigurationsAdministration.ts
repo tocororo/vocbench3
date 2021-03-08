@@ -33,7 +33,8 @@ export class RemoteSystemConfigurationsAdministration {
                         id: id,
                         serverURL: servConf.getPropertyValue("serverURL"),
                         username: servConf.getPropertyValue("username"),
-                        password: servConf.getPropertyValue("password")
+                        password: servConf.getPropertyValue("password"),
+                        forwardCredentials: (servConf.getPropertyValue("forwardCredentials") === true)
                     }
                     this.savedConfigs.push(servConfDef);
                 }
@@ -55,7 +56,7 @@ export class RemoteSystemConfigurationsAdministration {
             this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_CONFIG_ID"}, ModalType.warning);
             return;
         }
-        this.remoteAlignmentService.addRemoteAlignmentService(this.newConfig.id, this.newConfig.serverURL, this.newConfig.username, this.newConfig.password, this.newConfig['default']).subscribe(
+        this.remoteAlignmentService.addRemoteAlignmentService(this.newConfig.id, this.newConfig.serverURL, this.newConfig.username, this.newConfig.password, this.newConfig.forwardCredentials, this.newConfig['default']).subscribe(
             () => {
                 this.newConfig = new NewRemoteAlignmentServiceConfigurationDef(); //reset the new config
                 this.initConfigs();
@@ -92,8 +93,12 @@ export class RemoteSystemConfigurationsAdministration {
         config.password = password;
         this.updateConfig(config)
     }
+    updateConfForwardCredentials(config: RemoteAlignmentServiceConfigurationDef, forwardCredentials: boolean) {
+        config.forwardCredentials = forwardCredentials;
+        this.updateConfig(config)
+    }
     private updateConfig(config: RemoteAlignmentServiceConfigurationDef, asDefault?: boolean) {
-        this.remoteAlignmentService.updateRemoteAlignmentService(config.id, config.serverURL, config.username, config.password, asDefault).subscribe();
+        this.remoteAlignmentService.updateRemoteAlignmentService(config.id, config.serverURL, config.username, config.password, config.forwardCredentials, asDefault).subscribe();
     }
 
 

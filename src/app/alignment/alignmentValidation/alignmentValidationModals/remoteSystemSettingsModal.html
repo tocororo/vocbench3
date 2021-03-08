@@ -19,6 +19,7 @@
                         <th class="text-center">{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
                         <th class="text-center">{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
                         <th class="text-center">{{'COMMONS.CONFIG.PASSWORD'|translate}}</th>
+                        <th class="text-center">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,6 +42,9 @@
                         </td>
                         <td class="text-center">
                             <ng-container *ngIf="conf.password">*******</ng-container>
+                        </td>
+                        <td class="text-center">
+                            <ng-container *ngIf="conf.forwardCredentials"><span class="fas fa-check"></span></ng-container>
                         </td>
                     </tr>
 
