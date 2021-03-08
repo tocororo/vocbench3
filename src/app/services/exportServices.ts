@@ -18,7 +18,7 @@ export class ExportServices {
      * Returns the list of named graphs
      */
     getNamedGraphs(): Observable<ARTURIResource[]> {
-        var params = {};
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getNamedGraphs", params).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -30,11 +30,11 @@ export class ExportServices {
      * Returns the list of available output formats
      */
     getOutputFormats(): Observable<RDFFormat[]> {
-        var params = {};
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getOutputFormats", params).pipe(
             map(stResp => {
-                var formats: RDFFormat[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let formats: RDFFormat[] = [];
+                for (let i = 0; i < stResp.length; i++) {
                     let name = stResp[i].name;
                     let charset = stResp[i].charset;
                     let fileExtensions = stResp[i].fileExtensions;
@@ -62,7 +62,7 @@ export class ExportServices {
      * @param reformattingExporterID 
      */
     getExportFormats(reformattingExporterID: string): Observable<DataFormat[]> {
-        var params = {
+        let params = {
             reformattingExporterID: reformattingExporterID
         };
         return this.httpMgr.doGet(this.serviceName, "getExportFormats", params).pipe(
@@ -102,7 +102,7 @@ export class ExportServices {
      */
     export(graphs: ARTURIResource[], filteringPipeline: string, reformattingExporterSpec?: PluginSpecification, 
         deployerSpec?: PluginSpecification, includeInferred?: boolean, outputFormat?: string, force?: boolean): Observable<Blob | any> {
-        var params: any = {
+        let params: any = {
             graphs: graphs,
             filteringPipeline: filteringPipeline,
         };
@@ -121,10 +121,14 @@ export class ExportServices {
         if (force != null) {
             params.force = force;
         }
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.ExportPreconditionViolationException'] 
+                exceptionsToSkip: [
+                    "it.uniroma2.art.semanticturkey.services.core.ExportPreconditionViolationException",
+                    "it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongModelException",
+                    "it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongLexModelException"
+                ]
             } 
         });
         if (deployerSpec == null) {

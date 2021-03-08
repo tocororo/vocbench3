@@ -92,6 +92,15 @@ export class ExportDataComponent {
         this.extensionService.getExtensions(ExtensionPointID.REFORMATTING_EXPORTER_ID).subscribe(
             extensions => {
                 this.reformatters = extensions;
+                //select rdf exporter as default
+                setTimeout(() => {
+                    if (this.reformatterConfigurator != null) {
+                        this.reformatterConfigurator.selectExtensionAndConfiguration(
+                            "it.uniroma2.art.semanticturkey.extension.impl.reformattingexporter.rdfserializer.RDFSerializingExporter",
+                            "it.uniroma2.art.semanticturkey.extension.impl.reformattingexporter.rdfserializer.RDFSerializingExporterConfiguration"
+                        );
+                    }
+                })
             }
         );
 
@@ -613,6 +622,8 @@ export class ExportDataComponent {
                         },
                         no => {}
                     );
+                } else if (err.name.endsWith("ReformattingWrongModelException") || err.name.endsWith("ReformattingWrongModelException")) {
+                    this.basicModals.alert({key:"STATUS.WARNING"}, err.message, ModalType.warning);
                 }
             }
         );
