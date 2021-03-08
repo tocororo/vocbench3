@@ -68,7 +68,7 @@
 
         <div *ngIf="lexEntry" class="ml-3">
             <!-- Constituents -->
-            <constituent-list *ngIf="lexEntry.constituents.length > 0" class="mt-3" [entry]="lexEntry"
+            <constituent-list *ngIf="lexEntry.constituents.length > 0" class="mt-3" [entry]="lexEntry" [lexViewCache]="lexViewCache"
                 (update)="buildLexicographerView()" (dblclickObj)="resourceDblClick($event)">
             </constituent-list>
             <!-- Subterms -->

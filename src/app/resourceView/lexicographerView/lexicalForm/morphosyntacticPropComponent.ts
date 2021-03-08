@@ -41,6 +41,9 @@ export class MorphosyntacticPropComponent {
         if (this.property != null && this.value != null) {
             this.initRenderingClassStatus();
             this.selectedValue = this.value;
+            if (!ResourceUtils.isTripleInStaging(this.value)) {
+                this.readonly = true;
+            }
         } else { //in creation initialize properties
             this.getCachedMorphosyntacticProperties().subscribe(
                 props => {
@@ -49,9 +52,6 @@ export class MorphosyntacticPropComponent {
             )
         }
 
-        if (!ResourceUtils.isTripleInStaging(this.value)) {
-            this.readonly = true;
-        }
         this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.resource) && !this.readonly;
         this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.resource) && !this.readonly;
     }

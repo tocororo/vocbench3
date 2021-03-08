@@ -567,6 +567,7 @@
             "ADD_DOMAIN": "Add domain",
             "ADD_EQUIVALENT_PROPERTY": "Add equivalent property",
             "ADD_EVOKED_LEXICAL_CONCEPT": "Add evoked lexical concept",
+            "ADD_FACET": "Add facet",
             "ADD_FORM_REPRESENTATION": "Add form representation",
             "ADD_IMPORT": "Add import",
             "ADD_INVERSE_PROPERTY": "Add inverse property",

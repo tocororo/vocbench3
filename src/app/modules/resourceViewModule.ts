@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConstituentComponent } from '../resourceView/lexicographerView/constituents/constituentComponent';
+import { constituentFeatureRenderer } from '../resourceView/lexicographerView/constituents/constituentFeatureRenderer';
 import { ConstituentListComponent } from '../resourceView/lexicographerView/constituents/constituentListComponent';
 import { LexEntryComponent } from '../resourceView/lexicographerView/lexicalEntry/lexEntryComponent';
 import { LexicalFormComponent } from '../resourceView/lexicographerView/lexicalForm/lexicalFormComponent';
@@ -107,6 +108,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         CategoryComponent,
         ConceptReferenceComponent,
         ConstituentComponent,
+        constituentFeatureRenderer,
         ConstituentListComponent,
         EntryReferenceComponent,
         EntryRelationComponent,

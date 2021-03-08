@@ -1,11 +1,23 @@
 <div class="d-flex align-items-center">
-    <entry-ref *ngFor="let ref of constituent.correspondingLexicalEntry" [ref]="ref" class="clickable"></entry-ref>
-    <ng-container *ngFor="let feature of constituent.features">
+    <entry-ref *ngFor="let ref of constituent.correspondingLexicalEntry" [ref]="ref"></entry-ref>
+    <ng-container *ngIf="constituent.features.length != 0 || pendingFacet">
         [
-        <ng-container *ngFor="let obj of f.getObjects(); let last=last">
-            {{f.getPredicate().getLocalName()}}={{obj.getShow()}}
-            <span *ngIf="!last">;</span>
+        <ng-container *ngFor="let feature of constituent.features; let first=first; let last=last">
+            <div *ngFor="let obj of feature.getObjects();" class="d-flex align-items-center" [ngClass]="{ 'ml-2': !first }">
+                <constituent-feature [constituent]="constituent" [predicate]="feature.getPredicate()" [value]="obj" [readonly]="readonly" (update)="onUpdate()">
+                </constituent-feature>
+                <span *ngIf="!last">;</span>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="pendingFacet">
+            ;
+            <morphosyntactic-prop class="ml-2" [resource]="constituent.id" [lexViewCache]="lexViewCache"
+                (update)="onUpdate()" (cancel)="onPendingFacetCanceled()">
+            </morphosyntactic-prop>
         </ng-container>
         ]
     </ng-container>
+    <button class="btn btn-xs btn-faded ml-1" (click)="addFacet()" [title]="'DATA.ACTIONS.ADD_FACET'|translate" [disabled]="!addFacetAuthorized">
+        <span class="fas fa-plus"></span>
+    </button>
 </div>

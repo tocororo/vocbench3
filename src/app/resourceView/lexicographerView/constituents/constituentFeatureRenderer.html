@@ -1,0 +1,8 @@
+<div class="d-flex align-items-center">
+    <div style="border-radius: 2px; padding: 0px 3px;" [ngClass]="{ proposedAddTriple: proposedAdd, proposedRemoveTriple: proposedRemove }">
+        {{predicate.getLocalName()}}={{value.getLocalName()}}
+    </div>
+    <button class="btn btn-xs btn-faded ml-1" (click)="removeFacet()" [title]="'ACTIONS.REMOVE'|translate" [disabled]="!removeFacetAuthorized">
+        <span class="fas fa-minus"></span>
+    </button>
+</div>

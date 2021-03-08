@@ -1,10 +1,9 @@
 <div class="d-flex align-items-center">
     <label>{{'RESOURCE_VIEW.PARTITIONS.CONSTITUENTS'|translate}}:</label>
-    <div *ngFor="let c of constituents; let last=last" class="clickable d-flex align-items-center" (dblclick)="resourceDblClick(c.id)">
-        <constituent class="ml-3" [constituent]="c" (dblclickObj)="resourceDblClick($event)" (update)="onUpdate()"></constituent>
-        <ng-container *ngIf="!last">;</ng-container>
+    <div *ngFor="let c of constituents;" class="clickable d-flex align-items-center" (dblclick)="resourceDblClick(c.id)">
+        <constituent class="ml-2 clickable" [constituent]="c" [lexViewCache]="lexViewCache" (update)="onUpdate()"></constituent>
     </div>
-    <button class="btn btn-xs btn-faded ml-3" (click)="edit()" [title]="'ACTIONS.EDIT'|translate" [disabled]="!editAuthorized">
+    <button class="btn btn-xs btn-faded ml-4" (click)="edit()" [title]="'ACTIONS.EDIT'|translate" [disabled]="!editAuthorized">
         <span class="fas fa-pencil-alt"></span>
     </button>
 </div>

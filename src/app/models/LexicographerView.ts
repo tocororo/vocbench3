@@ -195,6 +195,7 @@ export class Constituent {
     public static parse(json: any): Constituent {
         let c: Constituent = new Constituent();
         c.id = ParsingUtils.parseResourceId(json.id);
+        c.id.setRole(RDFResourceRolesEnum.decompComponent); //useful for auth checks
         c.correspondingLexicalEntry = json.correspondingLexicalEntry.map((e: any) => EntryReference.parse(e));
         c.features = Deserializer.createPredicateObjectsList(json.features);
         return c;

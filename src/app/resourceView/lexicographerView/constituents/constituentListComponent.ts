@@ -3,6 +3,7 @@ import { ARTResource } from "src/app/models/ARTResources";
 import { Constituent, LexicalEntry } from "src/app/models/LexicographerView";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
+import { LexViewCache } from "../LexViewChache";
 import { LexViewHelper } from "../LexViewHelper";
 
 @Component({
@@ -13,6 +14,7 @@ import { LexViewHelper } from "../LexViewHelper";
 export class ConstituentListComponent {
     @Input() readonly: boolean = false;
     @Input() entry: LexicalEntry;
+    @Input() lexViewCache: LexViewCache;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update
     

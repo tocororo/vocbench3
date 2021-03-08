@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTResource } from "src/app/models/ARTResources";
 import { Constituent } from "src/app/models/LexicographerView";
+import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "src/app/utils/VBActions";
+import { LexViewCache } from "../LexViewChache";
 
 @Component({
     selector: "constituent",
@@ -10,11 +12,28 @@ import { Constituent } from "src/app/models/LexicographerView";
 export class ConstituentComponent{
     @Input() readonly: boolean = false;
     @Input() constituent: Constituent;
-    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+    @Input() lexViewCache: LexViewCache;
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update
+
+    pendingFacet: boolean;
+
+    addFacetAuthorized: boolean;
     
     constructor() {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.addFacetAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.constituent.id) && !this.readonly;
+    }
+
+    addFacet() {
+        this.pendingFacet = true;
+    }
+    onPendingFacetCanceled() {
+        this.pendingFacet = false;
+    }
+
+    onUpdate() {
+        this.update.emit();
+    }
 
 }
