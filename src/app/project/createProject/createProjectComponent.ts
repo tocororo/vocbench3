@@ -155,7 +155,7 @@ export class CreateProjectComponent {
     private enableSHACL: boolean = false;
     private shaclSettings: Settings;
 
-    private enableTrivialInference: boolean = false;
+    enableTrivialInference: boolean = false;
     private openAtStartup: boolean = false;
     private globallyAccessible: boolean = false;
 

@@ -103,7 +103,7 @@
                 </div>
                 <ng-container *ngIf="!isEdoalProject(); else edoalBlock">
                     <label class="col-form-label col-sm-1">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="hbox" style="align-items: center">
                             <select class="form-control" [(ngModel)]="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
                                 <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
@@ -123,7 +123,7 @@
                         {{'PROJECTS.LEFT_RIGHT'|translate}}
                         <span class="fas fa-info-circle" [title]="'PROJECTS.LEFT_RIGHT_INFO'|translate"></span>
                     </label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="hbox" style="align-items: center">
                             <select class="form-control" [(ngModel)]="leftProject" (ngModelChange)="updateRightProjectList()">
                                 <option *ngFor="let p of leftProjectList" [ngValue]="p">{{p.getName()}}</option>
@@ -135,26 +135,33 @@
                         </div>
                     </div>
                 </ng-template>
-                <div class="col-sm-3 d-flex align-items-center justify-items-center">
-                    <div class="form-check form-check-inline">
+                <div class="col-sm-4 d-flex align-items-center justify-items-center">
+                    <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
                         <input class="form-check-input" id="historyCheck" type="checkbox" [(ngModel)]="history">
-                        <label class="form-check-label" for="historyCheck">
+                        <label class="form-check-label text-nowrap" for="historyCheck">
                             {{'MODELS.PROJECT.HISTORY'|translate}}
                             <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.HISTORY_INFO'|translate"></span>
                         </label>
                     </div>
-                    <div class="form-check form-check-inline ml-3">
+                    <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
                         <input class="form-check-input" id="validationCheck" type="checkbox" [(ngModel)]="validation" (input)="blacklisting=false">
-                        <label class="form-check-label" for="validationCheck">
+                        <label class="form-check-label text-nowrap" for="validationCheck">
                             {{'MODELS.PROJECT.VALIDATION'|translate}}
                             <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.VALIDATION_INFO'|translate"></span>
                         </label>
                     </div>
-                    <div class="form-check form-check-inline ml-3">
+                    <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
                         <input class="form-check-input" id="blacklistCheck" type="checkbox" [(ngModel)]="blacklisting" [disabled]="!validation">
-                        <label class="form-check-label" for="blacklistCheck">
+                        <label class="form-check-label text-nowrap" for="blacklistCheck">
                             {{'PROJECTS.BLACKLIST'|translate}}
                             <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.BLACKLIST_INFO'|translate"></span>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
+                        <input class="form-check-input" id="trivialInferCheck" type="checkbox" [(ngModel)]="enableTrivialInference">
+                        <label class="form-check-label text-nowrap" for="trivialInferCheck">
+                            {{'PROJECTS.TRIVIAL_INFERENCE'|translate}}
+                            <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.TRIVIAL_INFERENCE_INFO'|translate"></span>
                         </label>
                     </div>
                 </div>
@@ -398,16 +405,11 @@
                         </div>
                     </div>
 
-                    <div class="card">
+                    <div class="card card-alt">
+                        <div class="card-header">
+                            <label>{{'PROJECTS.OTHER_OPTIONS'|translate}}</label>
+                        </div>
                         <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input" id="trivialInferCheck" type="checkbox" [(ngModel)]="enableTrivialInference">
-                                <span class="form-check-label" for="trivialInferCheck">
-                                    {{'PROJECTS.TRIVIAL_INFERENCE_ENGINE'|translate}}
-                                    <span class="fas fa-info-circle" [title]="'PROJECTS.ENABLE_TRIVIAL_INFERENCE'|translate"></span>
-                                </span>
-                            </div>
-
                             <div class="form-check mt-1">
                                 <input class="form-check-input" id="openAtStartupCheck" type="checkbox" [(ngModel)]="openAtStartup">
                                 <span class="form-check-label" for="openAtStartupCheck">
@@ -415,7 +417,6 @@
                                     <span class="fas fa-info-circle" [title]="'PROJECTS.OPEN_AT_STARTUP_INFO'|translate"></span>
                                 </span>
                             </div>
-
                             <div class="form-check mt-1">
                                 <input class="form-check-input" id="globallyReadableCheck" type="checkbox" [(ngModel)]="globallyAccessible">
                                 <span class="form-check-label" for="globallyReadableCheck">
@@ -423,8 +424,6 @@
                                     <span class="fas fa-info-circle" [title]="'PROJECTS.ACL_UNIVERSAL_ACCESS_INFO'|translate"></span>
                                 </span>
                             </div>
-
-
                         </div>
                     </div>
 
