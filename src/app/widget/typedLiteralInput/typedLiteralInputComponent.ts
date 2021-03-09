@@ -143,12 +143,12 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         }
     }
 
-    private onLangChanged() {
+    onLangChanged() {
         this.langChange.emit(this.lang);
         this.onValueChanged();
     }
 
-    private onValueChanged() {
+    onValueChanged() {
         if (this.stringValue == null) {
             this.propagateChange(null);
         } else {
@@ -159,7 +159,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         }
     }
 
-    private onEnumerationChange() {
+    onEnumerationChange() {
         this.propagateChange(this.selectedEnumeration);
     }
 

@@ -6,7 +6,10 @@
 
     <ng-container *ngIf="enumerations">
         <select class="form-control" [(ngModel)]="selectedEnumeration" (ngModelChange)="onEnumerationChange()">
-            <option *ngFor="let e of enumerations" [ngValue]="e">{{e.toNT()}}</option>
+            <option *ngFor="let e of enumerations" [ngValue]="e">
+                <ng-container *ngIf="e.getDatatype() != 'http://www.w3.org/2001/XMLSchema#string'; else stringValueBlock">{{e.toNT()}}</ng-container>
+                <ng-template #stringValueBlock>{{e.getValue()|json}}</ng-template>
+            </option>
         </select>
     </ng-container>
 
