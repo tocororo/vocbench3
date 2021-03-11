@@ -24,7 +24,7 @@
             <resview-value-renderer *ngIf="showObject(i)"
                 [subject]="resource" [predicate]="predicate" [object]="obj" [rendering]="rendering" 
                 [readonly]="readonly" [partition]="partition"
-                (dblClick)="onDblClick($event)" (link)="onDblClick($event)" (delete)="removeValue(obj)" (edit)="onEdit(obj)" 
+                (dblClick)="onDblClick($event)" (delete)="removeValue(obj)" (edit)="onEdit(obj)" 
                 (update)="onUpdate()" (copyLocale)="onCopyLocale($event, obj)">
             </resview-value-renderer>
         </ng-container>

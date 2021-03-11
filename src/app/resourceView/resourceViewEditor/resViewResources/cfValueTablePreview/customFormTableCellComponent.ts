@@ -118,4 +118,8 @@ export class CustomFormTableCellComponent {
         }
     }
 
+    linkClick(linkRes: ARTURIResource) {
+        this.dblClick.emit(linkRes);
+    }
+
 }

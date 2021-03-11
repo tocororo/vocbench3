@@ -1,5 +1,6 @@
 <div class="d-flex align-items-center">
-    <rdf-resource *ngIf="cell.value" [resource]="cell.value" [rendering]="rendering" [ngClass]="{ clickable: cell.value.isResource() }" (dblclick)="valueDblClick(cell.value)">
+    <rdf-resource *ngIf="cell.value" [resource]="cell.value" [rendering]="rendering" [ngClass]="{ clickable: cell.value.isResource() }" 
+        (dblclick)="valueDblClick(cell.value)" (link)="linkClick($event)">
     </rdf-resource>
     <div class="btn-group" ngbDropdown>
         <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle>

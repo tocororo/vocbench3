@@ -30,7 +30,6 @@ export class ResourceViewValueRenderer {
     @Output() edit = new EventEmitter(); //request to edit the object ("edit" action of the editable-resource)
     @Output() copyLocale = new EventEmitter<Language[]>(); //request for to copy the value to different locales ("copy to locale" action of the editable-resource)
     @Output() dblClick: EventEmitter<ARTResource> = new EventEmitter(); //object dbl clicked
-    @Output() link: EventEmitter<ARTURIResource> = new EventEmitter(); //resource in link clicked
 
     @HostBinding("class.imported") importedClass: boolean = false;
     @HostBinding("class.inferred") inferredClass: boolean = false;
@@ -88,9 +87,6 @@ export class ResourceViewValueRenderer {
     }
     private onDblClick(obj: ARTResource) {
         this.dblClick.emit(obj);
-    }
-    private onLinkClick(linkRes: ARTURIResource) {
-        this.link.emit(linkRes);
     }
     private onCopyLocale(locales: Language[]) {
         this.copyLocale.emit(locales);
