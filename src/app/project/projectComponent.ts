@@ -96,17 +96,31 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         this.projectService.accessAllProjects().subscribe(
             (report: {[key: string]: ExceptionDAO }) => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                if (Object.keys(report).length != 0) {
-                    const modalRef: NgbModalRef = this.modalService.open(OpenAllProjReportModal, new ModalOptions('lg'));
-                    modalRef.componentInstance.report = report;
-                    modalRef.result.then(() => {
-                        this.initProjects()
-                    })
-                } else {
-                    this.initProjects()
-                }
+                this.openAllRespHandler(report);
             }
         );
+    }
+
+    openAllStartup() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.projectService.accessAllProjects(null, null, null, true).subscribe(
+            (report: {[key: string]: ExceptionDAO }) => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.openAllRespHandler(report);
+            }
+        );
+    }
+
+    openAllRespHandler(report: {[key: string]: ExceptionDAO }) {
+        if (Object.keys(report).length != 0) {
+            const modalRef: NgbModalRef = this.modalService.open(OpenAllProjReportModal, new ModalOptions('lg'));
+            modalRef.componentInstance.report = report;
+            modalRef.result.then(() => {
+                this.initProjects()
+            })
+        } else {
+            this.initProjects()
+        }
     }
 
     /**

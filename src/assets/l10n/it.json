@@ -1262,6 +1262,7 @@
             "EDIT_REMOTE_REPO_CONFIG": "Modifica configurazione repository remoto",
             "EDIT_SETTINGS": "Modifica impostazioni progetto",
             "OPEN_ALL": "Apri tutti i progetti",
+            "OPEN_ALL_STARTUP": "Apri tutti i progetti configurati per essere aperti all'avvio del sistema",
             "RECREATE_FACETS_INDEX": "Ricrea indice facets",
             "SHOW_ACL_MATRIX": "Mostra matrice ACL",
             "SHOW_PROPERTIES": "Proprietà",
