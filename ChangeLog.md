@@ -18,7 +18,8 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Improved scalability checks of the instances list
   * Introduced an alternative ResourceView ('LexicographerView') tailored for Ontolex lexicographers
   * Added a badge for showing the datatype of typed values in ResourceView
-  * Added data type information in the single-value custom form preview
+  * Added data type information in the single-value Custom Form preview
+  * Enabled Custom Form table-preview
   * Enabled bulk edit operation for literal values in some partitions of the ResourceView
   * Improvements to Sheet2Rdf
     * Added possibility to rename nodes

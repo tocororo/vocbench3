@@ -51,21 +51,24 @@ export class VBCollaboration {
         return this.working;
     }
     public setWorking(working: boolean) {
-        this.working = working;
-        this.eventHandler.collaborationSystemStatusChanged.emit();
+        if (this.working != working) { //this check prevent to emit collaborationSystemStatusChanged if nothing changed
+            this.working = working;
+            this.eventHandler.collaborationSystemStatusChanged.emit();
+        }
     }
 
     public isActive(): boolean {
         return this.active;
     }
     public setActive(active: boolean) {
-        this.active = active;
-        this.collaborationService.setCollaborationSystemActive(active).subscribe(
-            () => {
-                this.eventHandler.collaborationSystemStatusChanged.emit();
-            }
-        )
-        
+        if (this.active != active) { //this check prevent to emit collaborationSystemStatusChanged if nothing changed
+            this.active = active;
+            this.collaborationService.setCollaborationSystemActive(active).subscribe(
+                () => {
+                    this.eventHandler.collaborationSystemStatusChanged.emit();
+                }
+            )
+        }
     }
 
     public isLinked(): boolean {
