@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 9.0.0 (dd-mm-yyyy)
+# 9.0.0 (dd-03-2021)
   * Widely changed the code after project changes:
     * Dropped webpack build structure in favor of angular-cli
     * Updated Angular version to ^10.2.2
@@ -32,7 +32,9 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Updates to the OntoPortal deployer, allowing for a specific configuration dedicated to EcoPortal
   * Enabled possibility to edit some project core settings
   * Added an option for automatically open projects at SemanticTurkey server startup
-  * Improved the directory based projects organization exploiting the project facets
+  * Added button for open or close all projects
+  * Replaced the directory based projects view with virtual directories that exploit the project facets
+  * Added possibility to provide a description to the registration custom fields
   * Enabled nesting of settings
   * Enabled open enumerations in settings
   * Added an editor for rdf:langString literals
