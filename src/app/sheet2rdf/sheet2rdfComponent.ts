@@ -38,7 +38,6 @@ import { SubjectHeaderEditorModal } from "./s2rdfModals/subjectHeaderEditorModal
             white-space: nowrap;
         }
         .spreadsheetCell {
-            background: #fff;
             border: 1px solid #d6d7dc;
             padding: 2px 6px;
             cursor: pointer;
