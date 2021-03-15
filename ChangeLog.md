@@ -5,22 +5,26 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 9.0.0 (dd-03-2021)
-  * Widely changed the code after project changes:
+  * Major and pervasive code changes:
     * Dropped webpack build structure in favor of angular-cli
     * Updated Angular version to ^10.2.2
     * Dropped dependency from ngx-modialog in favor of ng-bootstrap
     * Updated Bootstrap dependency to version 4.5.3
-  * Enabled changing the working graph
-  * Implemented support for l10n
+  * Introduced support for i10n
+  * Introduced project facets
+  * Replaced the directory based projects view with virtual directories that exploit the project facets
+  * Introduced management of multiple named graphs, by enabling selection of the working graph  
+  * Introduced the 'LexicographerView', a streamlined resource view for Ontolex
   * Improved alignment management in EDOAL project
     * Enabled the storing of validated alignment in the EDOAL linkset
     * Added possibility to specify the mapping property of a correspondence
+  * introduced global access in the ACL for a given project, allowing users from all other 
+    projects to access its content
   * Improved scalability checks of the instances list
-  * Introduced an alternative ResourceView ('LexicographerView') tailored for Ontolex lexicographers
   * Added a badge for showing the datatype of typed values in ResourceView
   * Added data type information in the single-value Custom Form preview
   * Enabled Custom Form table-preview
-  * Enabled bulk edit operation for literal values in some partitions of the ResourceView
+  * Enabled bulk edit operation for literal values in some partitions of the ResourceView  
   * Improvements to Sheet2Rdf
     * Added possibility to rename nodes
     * Enabled creation of nodes independently from their usage in graph applications
@@ -28,12 +32,11 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Improvements to Collaboration System
     * Added connector to Freedcamp
     * Enabled unassign task option
-    * Added possibility to the admin or project manager to deactivate CS
+    * Added possibility for the admin or project manager to deactivate the collaboration system
   * Updates to the OntoPortal deployer, allowing for a specific configuration dedicated to EcoPortal
   * Enabled possibility to edit some project core settings
   * Added an option for automatically open projects at SemanticTurkey server startup
   * Added button for open or close all projects
-  * Replaced the directory based projects view with virtual directories that exploit the project facets
   * Added possibility to provide a description to the registration custom fields
   * Enabled nesting of settings
   * Enabled open enumerations in settings
@@ -42,7 +45,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Fixed issues and other extensions in settings management related to typed literals and set-typed properties
   * Fixed issues in the plugin configuration modal which retained (in some cases) edits after canceling
   * Added support for List-typed configuration properties
-  * Implemented project facets
+
 
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag
