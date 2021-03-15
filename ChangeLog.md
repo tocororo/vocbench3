@@ -10,7 +10,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
     * Updated Angular version to ^10.2.2
     * Dropped dependency from ngx-modialog in favor of ng-bootstrap
     * Updated Bootstrap dependency to version 4.5.3
-  * Introduced support for i10n
+  * Introduced support for internationalization (i18n)
   * Introduced project facets
   * Replaced the directory based projects view with virtual directories that exploit the project facets
   * Introduced management of multiple named graphs, by enabling selection of the working graph  
