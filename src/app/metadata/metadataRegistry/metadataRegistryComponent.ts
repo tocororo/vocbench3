@@ -25,9 +25,9 @@ export class MetadataRegistryComponent {
 
     @ViewChild('blockDiv', { static: false }) lexSetBlockDivElement: ElementRef;
 
-    catalogs: CatalogRecord[];
-    selectedCatalog: CatalogRecord;
-    catalogDataset: DatasetMetadata;
+    catalogs: CatalogRecord[]; //list of catalog (shown to the left)
+    selectedCatalog: CatalogRecord; //selected catalog. Contains the dataset metadata (which is also retrieved and stored in catalogDataset var) and the other versions
+    catalogDataset: DatasetMetadata; //metadata of the selected catalog
     selectedDataset: { dataset: DatasetMetadata, isVersion?: boolean }; //can be the catalogDataset itself or one of its version
 
     lexicalizationSets: LexicalizationSetMetadata[] = []; //lex set of the selected dataset
@@ -125,7 +125,8 @@ export class MetadataRegistryComponent {
 
     deleteCatalogRecord() {
         this.metadataRegistryService.deleteCatalogRecord(new ARTURIResource(this.selectedCatalog.identity)).subscribe(
-            stResp => {
+            () => {
+                this.catalogDataset = null;
                 this.initCatalogRecords();
             }
         );
