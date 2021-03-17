@@ -639,7 +639,11 @@ export class ExportDataComponent {
     private exportSuccessHandler(data: any | Blob, downloadExpected: boolean) {
         if (downloadExpected) {
             var exportLink = window.URL.createObjectURL(data);
-            this.basicModals.downloadLink({key: "ACTIONS.EXPORT_DATA" }, null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
+            let ext = this.selectedExportFormat.defaultFileExtension;
+            if (this.selectedExportFormat.name == "XLSX") {
+                ext = "xlsx";
+            }
+            this.basicModals.downloadLink({key: "ACTIONS.EXPORT_DATA" }, null, exportLink, "export." + ext);
         } else {
             this.basicModals.alert({key: "ACTIONS.EXPORT_DATA" }, {key:"MESSAGES.EXPORT_RESULT_DEPLOYED"});
         }
