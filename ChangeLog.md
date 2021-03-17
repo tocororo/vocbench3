@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 9.0.0 (dd-03-2021)
+# 9.0.0 (18-03-2021)
   * Major and pervasive code changes:
     * Dropped webpack build structure in favor of angular-cli
     * Updated Angular version to ^10.2.2
