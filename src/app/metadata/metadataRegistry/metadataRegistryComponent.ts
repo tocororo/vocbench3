@@ -79,12 +79,10 @@ export class MetadataRegistryComponent {
         this.metadataRegistryService.getDatasetMetadata(new ARTURIResource(this.selectedCatalog.abstractDataset.identity)).subscribe(
             dataset => {
                 this.catalogDataset = dataset;
-                //in initEmbeddedLexicalizationSets there's a reference to a loading div visible only when activeDatasetMetadata is not null
-                //timeout gives time to init that div
-                // setTimeout(() => {
-                //     this.initEmbeddedLexicalizationSets();
-                // });
-                
+                //automatically select its abstract dataset
+                setTimeout(() => {
+                    this.selectCatalogDataset();
+                })
             }
         )
     }
