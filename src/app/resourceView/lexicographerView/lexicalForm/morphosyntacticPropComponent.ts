@@ -41,7 +41,7 @@ export class MorphosyntacticPropComponent {
         if (this.property != null && this.value != null) {
             this.initRenderingClassStatus();
             this.selectedValue = this.value;
-            if (!ResourceUtils.isTripleInStaging(this.value)) {
+            if (ResourceUtils.isTripleInStaging(this.value)) {
                 this.readonly = true;
             }
         } else { //in creation initialize properties
