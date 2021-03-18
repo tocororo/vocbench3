@@ -102,7 +102,9 @@ export class SenseRelation extends LexicoSemanticRelation<SenseReference> {
         let r: SenseRelation = new SenseRelation();
         r.id = ParsingUtils.parseResourceId(json.id);
         r.nature = ResourceNature.parse(json.nature);
-        r.id.setRole(r.nature[0].role);
+        if (r.id != null) {
+            r.id.setRole(r.nature[0].role);
+        }
         r.scope = json.scope;
         r.category = Deserializer.createURIArray(json.category);
         r.source = json.source.map((s: any) => SenseReference.parse(s));
