@@ -91,16 +91,17 @@ export class ExportDataComponent {
 
         this.extensionService.getExtensions(ExtensionPointID.REFORMATTING_EXPORTER_ID).subscribe(
             extensions => {
-                this.reformatters = extensions;
-                //select rdf exporter as default
-                setTimeout(() => {
-                    if (this.reformatterConfigurator != null) {
-                        this.reformatterConfigurator.selectExtensionAndConfiguration(
-                            "it.uniroma2.art.semanticturkey.extension.impl.reformattingexporter.rdfserializer.RDFSerializingExporter",
-                            "it.uniroma2.art.semanticturkey.extension.impl.reformattingexporter.rdfserializer.RDFSerializingExporterConfiguration"
-                        );
+                //sort extensions in order to force RDFSerializingExporter in 1st position, so selected as default
+                extensions.sort((e1, e2) => { 
+                    if (e1.id.includes("RDFSerializingExporter")) {
+                        return -1
+                    } else if (e2.id.includes("RDFSerializingExporter")) {
+                        return 1
+                    } else {
+                        return 0
                     }
                 })
+                this.reformatters = extensions;
             }
         );
 
@@ -251,13 +252,13 @@ export class ExportDataComponent {
         return !this.selectedDeployment.source || this.selectedDeployment.source == DeploySource.stream;
     }
 
-    private onReformatterConfigUpdated(config: Settings) {
+    onReformatterConfigUpdated(config: Settings) {
         setTimeout(() => { //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
             this.selectedReformatterConfig = config;
         });
     }
 
-    private onReformatterExtensionUpdated(ext: ExtensionFactory) {
+    onReformatterExtensionUpdated(ext: ExtensionFactory) {
         /**
          * extensionUpdated event is emitted from the ExtensionConfigurator even when changes only its configuration.
          * Here I check if the selected extension is effectively changed
