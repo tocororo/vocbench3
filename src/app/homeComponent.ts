@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
-import { TranslateService } from '@ngx-translate/core';
 import { User } from "./models/User";
 import { AdministrationServices } from "./services/administrationServices";
 import { VBContext } from "./utils/VBContext";

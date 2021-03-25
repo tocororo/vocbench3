@@ -1,315 +1,317 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'SEARCH.ADV_SEARCH.ADVANCED_SEARCH'|translate}}</h3>
-</div>
-<div class="modal-body scrollableContainer blockingDivHost">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'SEARCH.ADV_SEARCH.ADVANCED_SEARCH'|translate}}</h3>
+    </div>
+    <div class="modal-body scrollableContainer blockingDivHost">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td nowrap><label>{{'SEARCH.ADV_SEARCH.SEARCH_STRING'|translate}}:</label></td>
-                <td><input class="form-control" [(ngModel)]="searchString"></td>
-            </tr>
-            <tr>
-                <td><label>{{'STATUS.STATUS'|translate}}:</label></td>
-                <td>
-                    <select class="form-control" [(ngModel)]="selectedStatus">
-                        <option *ngFor="let s of statuses" [value]="s.value">{{s.show}}</option>
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td nowrap><label>{{'SEARCH.ADV_SEARCH.SEARCH_STRING'|translate}}:</label></td>
+                    <td><input class="form-control" [(ngModel)]="searchString"></td>
+                </tr>
+                <tr>
+                    <td><label>{{'STATUS.STATUS'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="selectedStatus">
+                            <option *ngFor="let s of statuses" [value]="s.value">{{s.show}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="card card-default mt-2">
+            <div class="card-header">
+                <label>{{'SEARCH.SETTINGS.SEARCH_MODE'|translate}}</label>
+            </div>
+            <div class="card-body">
+                <div class="hbox" style="align-items: center;">
+                    <label style="white-space: nowrap; margin-right: 4px;">{{'SEARCH.SETTINGS.STRING_MATCH_MODE'|translate}}:</label>
+                    <select class="form-control" [(ngModel)]="activeStringMatchMode">
+                        <option *ngFor="let sm of stringMatchModes" [value]="sm.value">{{sm.labelTranslationKey|translate}}</option>
                     </select>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="card card-default mt-2">
-        <div class="card-header">
-            <label>{{'SEARCH.SETTINGS.SEARCH_MODE'|translate}}</label>
-        </div>
-        <div class="card-body">
-            <div class="hbox" style="align-items: center;">
-                <label style="white-space: nowrap; margin-right: 4px;">{{'SEARCH.SETTINGS.STRING_MATCH_MODE'|translate}}:</label>
-                <select class="form-control" [(ngModel)]="activeStringMatchMode">
-                    <option *ngFor="let sm of stringMatchModes" [value]="sm.value">{{sm.labelTranslationKey|translate}}</option>
-                </select>
-            </div>
-            <div class="mt-2">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="uriCheck" type="checkbox" [(ngModel)]="useURI">
-                    <label class="form-check-label" for="uriCheck">{{'SEARCH.SETTINGS.SEARCH_IN_URI'|translate}}</label>
                 </div>
-                <div class="form-check form-check-inline ml-2">
-                    <input class="form-check-input" id="localNameCheck" type="checkbox" [(ngModel)]="useLocalName">
-                    <label class="form-check-label" for="localNameCheck">{{'SEARCH.SETTINGS.SEARCH_IN_LOCAL_NAME'|translate}}</label>
-                </div>
-                <div class="form-check form-check-inline ml-2">
-                    <input class="form-check-input" id="notesCheck" type="checkbox" [(ngModel)]="useNotes">
-                    <label class="form-check-label" for="notesCheck">{{'SEARCH.SETTINGS.SEARCH_IN_NOTES'|translate}}</label>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card card-default mt-2">
-        <div class="card-header">
-            <label>{{'SEARCH.SETTINGS.LEXICALIZATIONS_SEARCH'|translate}}</label>
-        </div>
-        <div class="card-body">
-            <div class="d-flex align-items-center">
-                <div class="form-check">
-                    <input class="form-check-input" id="langCheck" type="checkbox" [(ngModel)]="restrictLang">
-                    <label class="form-check-label" for="langCheck">{{'SEARCH.SETTINGS.RESTRICT_TO_LANGUAGES'|translate}}</label>
-                </div>
-                <div class="hbox" style="align-items: center; margin-left: 8px;">
-                    <div class="input-group">
-                        <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
-                        <span class="input-group-append">
-                            <button class="btn btn-light" (click)="selectRestrictionLanguages()" [title]="'ACTIONS.SELECT_LANGUAGES'|translate" [disabled]="!restrictLang">
-                                <span class="fas fa-pencil-alt"></span>
-                            </button>
-                        </span>
+                <div class="mt-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="uriCheck" type="checkbox" [(ngModel)]="useURI">
+                        <label class="form-check-label" for="uriCheck">{{'SEARCH.SETTINGS.SEARCH_IN_URI'|translate}}</label>
+                    </div>
+                    <div class="form-check form-check-inline ml-2">
+                        <input class="form-check-input" id="localNameCheck" type="checkbox" [(ngModel)]="useLocalName">
+                        <label class="form-check-label" for="localNameCheck">{{'SEARCH.SETTINGS.SEARCH_IN_LOCAL_NAME'|translate}}</label>
+                    </div>
+                    <div class="form-check form-check-inline ml-2">
+                        <input class="form-check-input" id="notesCheck" type="checkbox" [(ngModel)]="useNotes">
+                        <label class="form-check-label" for="notesCheck">{{'SEARCH.SETTINGS.SEARCH_IN_NOTES'|translate}}</label>
                     </div>
                 </div>
             </div>
-            <div class="form-check mt-2">
-                <input class="form-check-input" id="localeCheck" type="checkbox" [(ngModel)]="includeLocales" [disabled]="!restrictLang">
-                <label class="form-check-label" for="localeCheck">{{'SEARCH.SETTINGS.INCLUDE_LOCALES'|translate}}</label>
-            </div>
         </div>
-    </div>
 
-    <!-- Types -->
-    <div class="card card-default mt-2" >
-        <div class="card-header">
-            <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.TYPES'|translate}}</label>
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="addTypesGroup()" [title]="'ACTIONS.ADD'|translate">
-                    <span class="fas fa-plus"></span>
-                </button>
+        <div class="card card-default mt-2">
+            <div class="card-header">
+                <label>{{'SEARCH.SETTINGS.LEXICALIZATIONS_SEARCH'|translate}}</label>
             </div>
-        </div>
-        <div class="card-body">
-            <div *ngFor="let group of typesGroups; let lastGroup = last; let indexGroup = index">
-                <div class="hbox" style="align-items: center; margin: 2px 0;">
-                    <div class="hbox tile-group">
-                        <div *ngFor="let t of group; let indexType=index; let lastType = last" class="hbox" style="align-items: center; flex: initial">
-                            <span class="tile">
-                                <rdf-resource [resource]="t"></rdf-resource>
-                                <span class="far fa-times-circle" (click)="deleteType(group, indexType)" style="cursor: pointer"
-                                    onmouseover="this.className='fas fa-times-circle';"
-                                    onmouseout="this.className='far fa-times-circle';">
-                                </span>
-                                <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" id="langCheck" type="checkbox" [(ngModel)]="restrictLang">
+                        <label class="form-check-label" for="langCheck">{{'SEARCH.SETTINGS.RESTRICT_TO_LANGUAGES'|translate}}</label>
+                    </div>
+                    <div class="hbox" style="align-items: center; margin-left: 8px;">
+                        <div class="input-group">
+                            <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
+                            <span class="input-group-append">
+                                <button class="btn btn-light" (click)="selectRestrictionLanguages()" [title]="'ACTIONS.SELECT_LANGUAGES'|translate" [disabled]="!restrictLang">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
                             </span>
-                            <span *ngIf="!lastType">AND</span>
-                        </div>
-                        <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
-                            <button class="btn btn-light btn-xs" (click)="addType(group)">
-                                <span class="fas fa-plus"></span>
-                            </button>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-light" (click)="deleteTypesGroup(indexGroup)" style="margin-left: 4px;">
-                        <span class="far fa-trash-alt"></span>
+                </div>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="localeCheck" type="checkbox" [(ngModel)]="includeLocales" [disabled]="!restrictLang">
+                    <label class="form-check-label" for="localeCheck">{{'SEARCH.SETTINGS.INCLUDE_LOCALES'|translate}}</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Types -->
+        <div class="card card-default mt-2" >
+            <div class="card-header">
+                <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.TYPES'|translate}}</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-light" (click)="addTypesGroup()" [title]="'ACTIONS.ADD'|translate">
+                        <span class="fas fa-plus"></span>
                     </button>
                 </div>
-                <span *ngIf="!lastGroup">OR</span>
             </div>
-        </div>
-    </div>
-
-    <!-- Schemes -->
-    <div *ngIf="showSchemeSelector" class="card card-default mt-2">
-        <div class="card-header">
-            <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.SCHEMES'|translate}}</label>
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="addSchemesGroup()" [title]="'ACTIONS.ADD'|translate">
-                    <span class="fas fa-plus"></span>
-                </button>
-            </div>
-        </div>
-        <div class="card-body">
-            <div *ngFor="let group of schemesGroups; let lastGroup = last; let indexGroup = index">
-                <div class="hbox" style="align-items: center; margin: 2px 0;">
-                    <div class="hbox tile-group">
-                        <div *ngFor="let s of group; let indexScheme=index; let lastScheme = last" class="hbox" style="align-items: center; flex: initial">
-                            <span class="tile">
-                                <rdf-resource [resource]="s"></rdf-resource>
-                                <span class="far fa-times-circle" (click)="deleteScheme(group, indexScheme)" 
-                                    style="cursor: pointer" onmouseover="this.className='fas fa-times-circle';"
-                                    onmouseout="this.className='far fa-times-circle';">
+            <div class="card-body">
+                <div *ngFor="let group of typesGroups; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 2px 0;">
+                        <div class="hbox tile-group">
+                            <div *ngFor="let t of group; let indexType=index; let lastType = last" class="hbox" style="align-items: center; flex: initial">
+                                <span class="tile">
+                                    <rdf-resource [resource]="t"></rdf-resource>
+                                    <span class="far fa-times-circle" (click)="deleteType(group, indexType)" style="cursor: pointer"
+                                        onmouseover="this.className='fas fa-times-circle';"
+                                        onmouseout="this.className='far fa-times-circle';">
+                                    </span>
+                                    <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
                                 </span>
-                                <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
-                            </span>
-                            <span *ngIf="!lastScheme">AND</span>
+                                <span *ngIf="!lastType">AND</span>
+                            </div>
+                            <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
+                                <button class="btn btn-light btn-xs" (click)="addType(group)">
+                                    <span class="fas fa-plus"></span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
-                            <button class="btn btn-light btn-xs" (click)="addScheme(group)">
-                                <span class="fas fa-plus"></span>
-                            </button>
-                        </div>
+                        <button class="btn btn-sm btn-light" (click)="deleteTypesGroup(indexGroup)" style="margin-left: 4px;">
+                            <span class="far fa-trash-alt"></span>
+                        </button>
                     </div>
-                    <button class="btn btn-sm btn-light" (click)="deleteSchemesGroup(indexGroup)" style="margin-left: 4px;">
-                        <span class="far fa-trash-alt"></span>
+                    <span *ngIf="!lastGroup">OR</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schemes -->
+        <div *ngIf="showSchemeSelector" class="card card-default mt-2">
+            <div class="card-header">
+                <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.SCHEMES'|translate}}</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-light" (click)="addSchemesGroup()" [title]="'ACTIONS.ADD'|translate">
+                        <span class="fas fa-plus"></span>
                     </button>
                 </div>
-                <span *ngIf="!lastGroup">OR</span>
             </div>
-        </div>
-    </div>
-
-    <!-- Ingoing links -->
-    <div class="card card-default mt-2">
-        <div class="card-header">
-            <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.INGOING_LINKS'|translate}}</label>
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="addIngoingGroup()" [title]="'ACTIONS.ADD'|translate">
-                    <span class="fas fa-plus"></span>
-                </button>
-            </div>
-        </div>
-        <div class="card-body">
-            <div *ngFor="let group of ingoingLinks; let lastGroup = last; let indexGroup = index">
-                <div class="hbox" style="align-items: center; margin: 3px 0;">
-                    <div class="card card-default" style="flex: 1;">
-                        <div class="card-body">
-                            <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
-                                <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true"
-                                    (resourceChanged)="updatePropIngoing(group, $event)">
-                                </resource-picker>
-                            </div>
-                            <div class="hbox tile-group">
-                                <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
-                                    <span class="tile">
-                                        <rdf-resource [resource]="v"></rdf-resource>
-                                        <span class="far fa-times-circle" (click)="deleteIngoingValue(group, indexValue)"
-                                            style="cursor: pointer"
-                                            onmouseover="this.className='fas fa-times-circle';"
-                                            onmouseout="this.className='far fa-times-circle';">
-                                        </span>
+            <div class="card-body">
+                <div *ngFor="let group of schemesGroups; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 2px 0;">
+                        <div class="hbox tile-group">
+                            <div *ngFor="let s of group; let indexScheme=index; let lastScheme = last" class="hbox" style="align-items: center; flex: initial">
+                                <span class="tile">
+                                    <rdf-resource [resource]="s"></rdf-resource>
+                                    <span class="far fa-times-circle" (click)="deleteScheme(group, indexScheme)" 
+                                        style="cursor: pointer" onmouseover="this.className='fas fa-times-circle';"
+                                        onmouseout="this.className='far fa-times-circle';">
                                     </span>
-                                    <span *ngIf="!lastValue">OR</span>
-                                </div>
-                                <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
-                                    <button class="btn btn-light btn-xs" (click)="addIngoingValue(group)">
-                                        <span class="fas fa-plus"></span>
-                                    </button>
-                                </div>
+                                    <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
+                                </span>
+                                <span *ngIf="!lastScheme">AND</span>
+                            </div>
+                            <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
+                                <button class="btn btn-light btn-xs" (click)="addScheme(group)">
+                                    <span class="fas fa-plus"></span>
+                                </button>
                             </div>
                         </div>
+                        <button class="btn btn-sm btn-light" (click)="deleteSchemesGroup(indexGroup)" style="margin-left: 4px;">
+                            <span class="far fa-trash-alt"></span>
+                        </button>
                     </div>
-                    <button class="btn btn-sm btn-light" (click)="deleteIngoingGroup(indexGroup)" style="margin-left: 4px;">
-                        <span class="far fa-trash-alt"></span>
+                    <span *ngIf="!lastGroup">OR</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ingoing links -->
+        <div class="card card-default mt-2">
+            <div class="card-header">
+                <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.INGOING_LINKS'|translate}}</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-light" (click)="addIngoingGroup()" [title]="'ACTIONS.ADD'|translate">
+                        <span class="fas fa-plus"></span>
                     </button>
                 </div>
-                <span *ngIf="!lastGroup">AND</span>
             </div>
-        </div>
-    </div>
-
-
-    <!-- Outgoing links -->
-    <div class="card card-default mt-2">
-        <div class="card-header">
-            <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.OUTGOING_LINKS'|translate}}</label>
-            <div class="btn-group btn-group-xs dropup" ngbDropdown container="body">
-                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-                    <span class="fas fa-plus"></span>
-                </button>
-                <div class="dropdown-menu float-right" ngbDropdownMenu>
-                    <a class="dropdown-item" (click)="addOutgoingGroupValue()">{{'SEARCH.ADV_SEARCH.ADD_SET_OF_VALUES'|translate}}</a>
-                    <a class="dropdown-item" (click)="addOutgoingGroupFreeText()">{{'SEARCH.ADV_SEARCH.ADD_FREE_TEXT'|translate}}</a>
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-
-            <div *ngFor="let group of outgoingLinksValue; let lastGroup = last; let indexGroup = index">
-                <div class="hbox" style="align-items: center; margin: 3px 0;">
-                    <div class="card card-default" style="flex: 1;">
-                        <div class="card-body">
-                            <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
-                                <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true" 
-                                    (resourceChanged)="updatePropOutgoingValue(group, $event)">
-                                </resource-picker>
-                            </div>
-                            <div class="hbox tile-group">
-                                <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
-                                    <span class="tile">
-                                        <rdf-resource [resource]="v"></rdf-resource>
-                                        <span class="far fa-times-circle" (click)="deleteOutgoingValue(group, indexValue)"
-                                            style="cursor: pointer"
-                                            onmouseover="this.className='fas fa-times-circle';"
-                                            onmouseout="this.className='far fa-times-circle';">
-                                        </span>
-                                    </span>
-                                    <span *ngIf="!lastValue">OR</span>
+            <div class="card-body">
+                <div *ngFor="let group of ingoingLinks; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 3px 0;">
+                        <div class="card card-default" style="flex: 1;">
+                            <div class="card-body">
+                                <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                                    <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
+                                    <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true"
+                                        (resourceChanged)="updatePropIngoing(group, $event)">
+                                    </resource-picker>
                                 </div>
-                                <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
-                                    <div class="btn-group btn-group-xs dropup" ngbDropdown container="body">
-                                        <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                                <div class="hbox tile-group">
+                                    <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
+                                        <span class="tile">
+                                            <rdf-resource [resource]="v"></rdf-resource>
+                                            <span class="far fa-times-circle" (click)="deleteIngoingValue(group, indexValue)"
+                                                style="cursor: pointer"
+                                                onmouseover="this.className='fas fa-times-circle';"
+                                                onmouseout="this.className='far fa-times-circle';">
+                                            </span>
+                                        </span>
+                                        <span *ngIf="!lastValue">OR</span>
+                                    </div>
+                                    <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
+                                        <button class="btn btn-light btn-xs" (click)="addIngoingValue(group)">
                                             <span class="fas fa-plus"></span>
                                         </button>
-                                        <div class="dropdown-menu" ngbDropdownMenu>
-                                            <a class="dropdown-item" (click)="addOutgoingValue(group, 'resource')">{{'SEARCH.ADV_SEARCH.ADD_RESOURCE'|translate}}</a>
-                                            <a class="dropdown-item" (click)="addOutgoingValue(group, 'literal')">{{'SEARCH.ADV_SEARCH.ADD_LITERAL'|translate}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-light" (click)="deleteIngoingGroup(indexGroup)" style="margin-left: 4px;">
+                            <span class="far fa-trash-alt"></span>
+                        </button>
+                    </div>
+                    <span *ngIf="!lastGroup">AND</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Outgoing links -->
+        <div class="card card-default mt-2">
+            <div class="card-header">
+                <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.OUTGOING_LINKS'|translate}}</label>
+                <div class="btn-group btn-group-xs dropup" ngbDropdown container="body">
+                    <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                        <span class="fas fa-plus"></span>
+                    </button>
+                    <div class="dropdown-menu float-right" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="addOutgoingGroupValue()">{{'SEARCH.ADV_SEARCH.ADD_SET_OF_VALUES'|translate}}</a>
+                        <a class="dropdown-item" (click)="addOutgoingGroupFreeText()">{{'SEARCH.ADV_SEARCH.ADD_FREE_TEXT'|translate}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div *ngFor="let group of outgoingLinksValue; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 3px 0;">
+                        <div class="card card-default" style="flex: 1;">
+                            <div class="card-body">
+                                <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                                    <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
+                                    <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true" 
+                                        (resourceChanged)="updatePropOutgoingValue(group, $event)">
+                                    </resource-picker>
+                                </div>
+                                <div class="hbox tile-group">
+                                    <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
+                                        <span class="tile">
+                                            <rdf-resource [resource]="v"></rdf-resource>
+                                            <span class="far fa-times-circle" (click)="deleteOutgoingValue(group, indexValue)"
+                                                style="cursor: pointer"
+                                                onmouseover="this.className='fas fa-times-circle';"
+                                                onmouseout="this.className='far fa-times-circle';">
+                                            </span>
+                                        </span>
+                                        <span *ngIf="!lastValue">OR</span>
+                                    </div>
+                                    <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
+                                        <div class="btn-group btn-group-xs dropup" ngbDropdown container="body">
+                                            <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                                                <span class="fas fa-plus"></span>
+                                            </button>
+                                            <div class="dropdown-menu" ngbDropdownMenu>
+                                                <a class="dropdown-item" (click)="addOutgoingValue(group, 'resource')">{{'SEARCH.ADV_SEARCH.ADD_RESOURCE'|translate}}</a>
+                                                <a class="dropdown-item" (click)="addOutgoingValue(group, 'literal')">{{'SEARCH.ADV_SEARCH.ADD_LITERAL'|translate}}</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <button class="btn btn-sm btn-light" (click)="deleteOutgoingGroupValue(indexGroup)" style="margin-left: 4px;">
+                            <span class="far fa-trash-alt"></span>
+                        </button>
                     </div>
-                    <button class="btn btn-sm btn-light" (click)="deleteOutgoingGroupValue(indexGroup)" style="margin-left: 4px;">
-                        <span class="far fa-trash-alt"></span>
-                    </button>
+                    <span *ngIf="!lastGroup">AND</span>
                 </div>
-                <span *ngIf="!lastGroup">AND</span>
-            </div>
 
-            <span *ngIf="outgoingLinksValue.length > 0 && outgoingLinksFreeText.length > 0">AND</span>
+                <span *ngIf="outgoingLinksValue.length > 0 && outgoingLinksFreeText.length > 0">AND</span>
 
-            <div *ngFor="let group of outgoingLinksFreeText; let lastGroup = last; let indexGroup = index">
-                <div class="hbox" style="align-items: center; margin: 3px 0;">
-                    <div class="card card-default" style="flex: 1;">
-                        <div class="card-body">
-                            <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
-                                <resource-picker style="flex: 1;" [resource]="group.predicate" [config]="{ roles: ['property'] }" [editable]="true" 
-                                    (resourceChanged)="updatePropOutgoingFreeText(group, $event)">
-                                </resource-picker>
-                            </div>
-                            <div class="hbox">
-                                <select class="form-control" style="width: initial; margin-right: 4px;" [(ngModel)]="group.mode">
-                                    <option *ngFor="let sm of searchModes" [value]="sm.value">{{sm.show}}</option>
-                                </select>
-                                <input class="form-control" [(ngModel)]="group.searchString">
+                <div *ngFor="let group of outgoingLinksFreeText; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 3px 0;">
+                        <div class="card card-default" style="flex: 1;">
+                            <div class="card-body">
+                                <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                                    <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
+                                    <resource-picker style="flex: 1;" [resource]="group.predicate" [config]="{ roles: ['property'] }" [editable]="true" 
+                                        (resourceChanged)="updatePropOutgoingFreeText(group, $event)">
+                                    </resource-picker>
+                                </div>
+                                <div class="hbox">
+                                    <select class="form-control" style="width: initial; margin-right: 4px;" [(ngModel)]="group.mode">
+                                        <option *ngFor="let sm of searchModes" [value]="sm.value">{{sm.show}}</option>
+                                    </select>
+                                    <input class="form-control" [(ngModel)]="group.searchString">
+                                </div>
                             </div>
                         </div>
+                        <button class="btn btn-sm btn-light" (click)="deleteOutgoingGroupFreeText(indexGroup)" style="margin-left: 4px;">
+                            <span class="far fa-trash-alt"></span>
+                        </button>
                     </div>
-                    <button class="btn btn-sm btn-light" (click)="deleteOutgoingGroupFreeText(indexGroup)" style="margin-left: 4px;">
-                        <span class="far fa-trash-alt"></span>
-                    </button>
+                    <span *ngIf="!lastGroup">AND</span>
                 </div>
-                <span *ngIf="!lastGroup">AND</span>
-            </div>
 
-        </div>
-    </div>
-
-    <div #blockingDiv class="blockingDiv" style="display:none">
-        <div class="loadingDiv">
-            <div>
-                <p>Loading...</p><img src="./assets/images/loading.gif" />
             </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">{{'ACTIONS.SEARCH'|translate}}</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+        <div #blockingDiv class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="./assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">{{'ACTIONS.SEARCH'|translate}}</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

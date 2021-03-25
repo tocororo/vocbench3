@@ -1,126 +1,128 @@
-<div class="modal-header">
-    <h3 class="modal-title">
-        {{'WIDGETS.EDITORS.MANCHESTER.MANCHESTER_SYNTAX_HELPER'|translate}}
-    </h3>
-</div>
-<div class="modal-body vbox scrollableContainer" style="min-height: 350px;">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">
+            {{'WIDGETS.EDITORS.MANCHESTER.MANCHESTER_SYNTAX_HELPER'|translate}}
+        </h3>
+    </div>
+    <div class="modal-body vbox scrollableContainer" style="min-height: 350px;">
 
-    <p>{{'WIDGETS.EDITORS.MANCHESTER.TABLE_CONSTRUCTORS_INFO'|translate}}:</p>
-    <table class="helper-table" style="align-self: center;">
-        <tr>
-            <th>{{'WIDGETS.EDITORS.MANCHESTER.CONSTRUCTOR'|translate}}</th>
-            <th>{{'WIDGETS.EDITORS.MANCHESTER.DL_SYNTAX'|translate}}</th>
-            <th style="border-right: 0px;">{{'WIDGETS.EDITORS.MANCHESTER.MANCHESTER_SYNTAX'|translate}}</th>
-        </tr>
-        <tr>
-            <td>Bottom</td>
-            <td>⊥</td>
-            <td style="border-right: 0px;">Nothing</td>
-        </tr>
-        <tr>
-            <td>Top</td>
-            <td>⊤</td>
-            <td style="border-right: 0px;">Thing</td>
-        </tr>
-        <tr>
-            <td>Intersection</td>
-            <td>C ⊓ D</td>
-            <td style="border-right: 0px;">C <span class="conjuction">AND</span> D</td>
-        </tr>
-        <tr>
-            <td>Union</td>
-            <td>C ⊔ D</td>
-            <td style="border-right: 0px;">C <span class="conjuction">OR</span> D</td>
-        </tr>
-        <tr>
-            <td>Complement</td>
-            <td>¬C</td>
-            <td style="border-right: 0px;"><span class="conjuction">NOT</span> C</td>
-        </tr>
-        <tr>
-            <td>Existential restriction</td>
-            <td>∃R.C</td>
-            <td style="border-right: 0px;">R <span class="quantifier">SOME</span> C</td>
-        </tr>
-        <tr>
-            <td>Universal restriction</td>
-            <td>∀R.C</td>
-            <td style="border-right: 0px;">R <span class="quantifier">ONLY</span> C</td>
-        </tr>
-        <tr>
-            <td>Min. cardinality restriction</td>
-            <td>≥ n R.C</td>
-            <td style="border-right: 0px;">R <span class="quantifier">MIN</span> nC</td>
-        </tr>
-        <tr>
-            <td>Max. cardinality restriction</td>
-            <td>≤ n R.C</td>
-            <td style="border-right: 0px;">R <span class="quantifier">MAX</span> nC</td>
-        </tr>
-        <tr>
-            <td>Eq. cardinality restriction</td>
-            <td>= n R.C</td>
-            <td style="border-right: 0px;">R <span class="quantifier">EXACTLY</span> nC</td>
-        </tr>
-        <tr>
-            <td>Self restriction</td>
-            <td>∃R.Self</td>
-            <td style="border-right: 0px;">R <span class="quantifier">SELF</span></td>
-        </tr>
-        <tr>
-            <td>Value restriction</td>
-            <td>∃R &#123;a&#125;</td>
-            <td style="border-right: 0px;">R <span class="quantifier">VALUE</span> &#123;a&#125;</td>
-        </tr>
-        
-        <tr>
-            <td>Property chain</td>
-            <td>R ∘ P</td>
-            <td style="border-right: 0px;">R O P</td>
-        </tr>
-        <tr>
-            <td>Inverse property</td>
-            <td>R⁻</td>
-            <td style="border-right: 0px;">INVERSE R</td>
-        </tr>
-        <tr>
-            <td>Property complement</td>
-            <td>¬R</td>
-            <td style="border-right: 0px;"><span class="conjuction">NOT</span> R</td>
-        </tr>
-    </table>
+        <p>{{'WIDGETS.EDITORS.MANCHESTER.TABLE_CONSTRUCTORS_INFO'|translate}}:</p>
+        <table class="helper-table" style="align-self: center;">
+            <tr>
+                <th>{{'WIDGETS.EDITORS.MANCHESTER.CONSTRUCTOR'|translate}}</th>
+                <th>{{'WIDGETS.EDITORS.MANCHESTER.DL_SYNTAX'|translate}}</th>
+                <th style="border-right: 0px;">{{'WIDGETS.EDITORS.MANCHESTER.MANCHESTER_SYNTAX'|translate}}</th>
+            </tr>
+            <tr>
+                <td>Bottom</td>
+                <td>⊥</td>
+                <td style="border-right: 0px;">Nothing</td>
+            </tr>
+            <tr>
+                <td>Top</td>
+                <td>⊤</td>
+                <td style="border-right: 0px;">Thing</td>
+            </tr>
+            <tr>
+                <td>Intersection</td>
+                <td>C ⊓ D</td>
+                <td style="border-right: 0px;">C <span class="conjuction">AND</span> D</td>
+            </tr>
+            <tr>
+                <td>Union</td>
+                <td>C ⊔ D</td>
+                <td style="border-right: 0px;">C <span class="conjuction">OR</span> D</td>
+            </tr>
+            <tr>
+                <td>Complement</td>
+                <td>¬C</td>
+                <td style="border-right: 0px;"><span class="conjuction">NOT</span> C</td>
+            </tr>
+            <tr>
+                <td>Existential restriction</td>
+                <td>∃R.C</td>
+                <td style="border-right: 0px;">R <span class="quantifier">SOME</span> C</td>
+            </tr>
+            <tr>
+                <td>Universal restriction</td>
+                <td>∀R.C</td>
+                <td style="border-right: 0px;">R <span class="quantifier">ONLY</span> C</td>
+            </tr>
+            <tr>
+                <td>Min. cardinality restriction</td>
+                <td>≥ n R.C</td>
+                <td style="border-right: 0px;">R <span class="quantifier">MIN</span> nC</td>
+            </tr>
+            <tr>
+                <td>Max. cardinality restriction</td>
+                <td>≤ n R.C</td>
+                <td style="border-right: 0px;">R <span class="quantifier">MAX</span> nC</td>
+            </tr>
+            <tr>
+                <td>Eq. cardinality restriction</td>
+                <td>= n R.C</td>
+                <td style="border-right: 0px;">R <span class="quantifier">EXACTLY</span> nC</td>
+            </tr>
+            <tr>
+                <td>Self restriction</td>
+                <td>∃R.Self</td>
+                <td style="border-right: 0px;">R <span class="quantifier">SELF</span></td>
+            </tr>
+            <tr>
+                <td>Value restriction</td>
+                <td>∃R &#123;a&#125;</td>
+                <td style="border-right: 0px;">R <span class="quantifier">VALUE</span> &#123;a&#125;</td>
+            </tr>
+            
+            <tr>
+                <td>Property chain</td>
+                <td>R ∘ P</td>
+                <td style="border-right: 0px;">R O P</td>
+            </tr>
+            <tr>
+                <td>Inverse property</td>
+                <td>R⁻</td>
+                <td style="border-right: 0px;">INVERSE R</td>
+            </tr>
+            <tr>
+                <td>Property complement</td>
+                <td>¬R</td>
+                <td style="border-right: 0px;"><span class="conjuction">NOT</span> R</td>
+            </tr>
+        </table>
 
-    <p>{{'WIDGETS.EDITORS.MANCHESTER.TABLE_AXIOMS_INFO'|translate}}:</p>
-    <table class="helper-table" style="align-self: center;">
-        <tr>
-            <th>{{'WIDGETS.EDITORS.MANCHESTER.AXIOM'|translate}}</th>
-            <th>{{'WIDGETS.EDITORS.MANCHESTER.DL_SYNTAX'|translate}}</th>
-            <th style="border-right: 0px;">{{'WIDGETS.EDITORS.MANCHESTER.MANCHESTER_SYNTAX'|translate}}</th>
-        </tr>
-        <tr>
-            <td>Subclass of</td>
-            <td> C ⊑ D</td>
-            <td style="border-right: 0px;">C SubClassOf D</td>
-        </tr>
-        <tr>
-            <td>Equivalent Class</td>
-            <td>C ≡ D </td>
-            <td style="border-right: 0px;">C EquivalentTo D</td>
-        </tr>
-        <tr>
-            <td>SubPropertyOf</td>
-            <td>R ⊑ P</td>
-            <td style="border-right: 0px;">C SubPropertyOf D</td>
-        </tr>
-        <tr>
-            <td>Equivalent property</td>
-            <td>R ≡ P</td>
-            <td style="border-right: 0px;">R EquivalentTo P</td>
-        </tr>
+        <p>{{'WIDGETS.EDITORS.MANCHESTER.TABLE_AXIOMS_INFO'|translate}}:</p>
+        <table class="helper-table" style="align-self: center;">
+            <tr>
+                <th>{{'WIDGETS.EDITORS.MANCHESTER.AXIOM'|translate}}</th>
+                <th>{{'WIDGETS.EDITORS.MANCHESTER.DL_SYNTAX'|translate}}</th>
+                <th style="border-right: 0px;">{{'WIDGETS.EDITORS.MANCHESTER.MANCHESTER_SYNTAX'|translate}}</th>
+            </tr>
+            <tr>
+                <td>Subclass of</td>
+                <td> C ⊑ D</td>
+                <td style="border-right: 0px;">C SubClassOf D</td>
+            </tr>
+            <tr>
+                <td>Equivalent Class</td>
+                <td>C ≡ D </td>
+                <td style="border-right: 0px;">C EquivalentTo D</td>
+            </tr>
+            <tr>
+                <td>SubPropertyOf</td>
+                <td>R ⊑ P</td>
+                <td style="border-right: 0px;">C SubPropertyOf D</td>
+            </tr>
+            <tr>
+                <td>Equivalent property</td>
+                <td>R ≡ P</td>
+                <td style="border-right: 0px;">R EquivalentTo P</td>
+            </tr>
 
-    </table>
+        </table>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

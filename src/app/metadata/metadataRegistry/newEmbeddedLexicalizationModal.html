@@ -1,86 +1,88 @@
-<div class="modal-header">
-    <h3 class="modal-title">New Lexicalization Set</h3>
-</div>
-<div class="modal-body">
-    
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-            <col style="width: 1%;">
-        </colgroup>
-        <tbody>
-            <tr>
-                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICALIZATION_SET'|translate}}:</label></td>
-                <td>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="lexicalizationSet">
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICON_DATASET'|translate}}:</label></td>
-                <td>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="lexiconDataset">
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'MODELS.PROJECT.LEXICALIZATION_MODEL'|translate}}:</label></td>
-                <td>
-                    <select class="form-control form-control-sm" [(ngModel)]="lexicalizationModel">
-                        <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
-                    </select>
-                </td>
-                <td>*</td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}:</label></td>
-                <td>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="language">
-                </td>
-                <td>*</td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.REFERENCES'|translate}}:</label></td>
-                <td>
-                    <input type="number" class="form-control form-control-sm" [(ngModel)]="references" min="0" step="1">
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICAL_ENTRIES'|translate}}:</label></td>
-                <td>
-                    <input type="number" class="form-control form-control-sm" [(ngModel)]="lexicalEntries" min="0" step="1">
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICALIZATIONS'|translate}}:</label></td>
-                <td>
-                    <input type="number" class="form-control form-control-sm" [(ngModel)]="lexicalizations" min="0" step="1">
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.PERCENTAGE'|translate}}:</label></td>
-                <td>
-                    <input type="number" class="form-control form-control-sm" [(ngModel)]="percentage" min="0" max="1" step="0.01">
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.AVG_OF_LEXICALIZATIONS'|translate}}:</label></td>
-                <td>
-                    <input type="number" class="form-control form-control-sm" [(ngModel)]="avgNumOfLexicalizations" min="0">
-                </td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    
-</div>
-<div class="modal-footer">
-    <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">New Lexicalization Set</h3>
+    </div>
+    <div class="modal-body">
+        
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+                <col style="width: 1%;">
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICALIZATION_SET'|translate}}:</label></td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="lexicalizationSet">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICON_DATASET'|translate}}:</label></td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="lexiconDataset">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'MODELS.PROJECT.LEXICALIZATION_MODEL'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control form-control-sm" [(ngModel)]="lexicalizationModel">
+                            <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
+                        </select>
+                    </td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}:</label></td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="language">
+                    </td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.REFERENCES'|translate}}:</label></td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm" [(ngModel)]="references" min="0" step="1">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICAL_ENTRIES'|translate}}:</label></td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm" [(ngModel)]="lexicalEntries" min="0" step="1">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICALIZATIONS'|translate}}:</label></td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm" [(ngModel)]="lexicalizations" min="0" step="1">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.PERCENTAGE'|translate}}:</label></td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm" [(ngModel)]="percentage" min="0" max="1" step="0.01">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.AVG_OF_LEXICALIZATIONS'|translate}}:</label></td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm" [(ngModel)]="avgNumOfLexicalizations" min="0">
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    <div class="modal-footer">
+        <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

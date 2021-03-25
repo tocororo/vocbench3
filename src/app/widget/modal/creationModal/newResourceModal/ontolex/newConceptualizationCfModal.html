@@ -1,42 +1,44 @@
-<div class="modal-header">
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
-        <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_CLASS'|translate" (click)="changeClass()" [disabled]="!clsChangeable">
-            <rdf-resource [resource]="resourceClass"></rdf-resource>
-        </button>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{title}}</h3>
+            <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_CLASS'|translate" (click)="changeClass()" [disabled]="!clsChangeable">
+                <rdf-resource [resource]="resourceClass"></rdf-resource>
+            </button>
+        </div>
     </div>
-</div>
-<div class="modal-body vbox" (keydown.enter)="onEnter()">
+    <div class="modal-body vbox" (keydown.enter)="onEnter()">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td class="text-right"><label>Lexical Concept:</label></td>
-                <td>
-                    <resource-picker [config]="{ roles: pickerRoles }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="form-check">
-                        <input class="form-check-input" id="plainCheck" type="checkbox" [(ngModel)]="createPlainCheck">
-                        <label class="form-check-label" for="plainCheck">Create Plain</label>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right"><label>Lexical Concept:</label></td>
+                    <td>
+                        <resource-picker [config]="{ roles: pickerRoles }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" id="plainCheck" type="checkbox" [(ngModel)]="createPlainCheck">
+                            <label class="form-check-label" for="plainCheck">Create Plain</label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
-        [(ngModel)]="formFields"></custom-form>
+        <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+            [(ngModel)]="formFields"></custom-form>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

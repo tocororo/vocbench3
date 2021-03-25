@@ -1,37 +1,39 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body">
-
-    <div class="hbox" style="align-items: center; margin-bottom: 8px;">
-        <label style="white-space: nowrap;">
-            {{'COMMONS.NAME'|translate}}
-            <span class="fas fa-info-circle" [title]="nameTooltip"></span>
-        </label>
-        <input class="form-control-sm form-control ml-2" [(ngModel)]="name">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
     </div>
+    <div class="modal-body">
 
-    <div class="card card-alt vbox">
-        <div class="card-header">
-            <label style="flex: 1">{{'RESOURCE_METADATA.SHARED_PATTERNS'|translate}}:</label>
-            <div class="btn-toolbar">
-                <div class="btn-group btn-group-xs">
-                    <button class="btn btn-light" [title]="'ACTIONS.DELETE'|translate" (click)="deletePattern()"
-                        [disabled]="!selectedPattern || !deletePatternAuthorized">
-                        <span class="fas fa-minus"></span>
-                    </button>
+        <div class="hbox" style="align-items: center; margin-bottom: 8px;">
+            <label style="white-space: nowrap;">
+                {{'COMMONS.NAME'|translate}}
+                <span class="fas fa-info-circle" [title]="nameTooltip"></span>
+            </label>
+            <input class="form-control-sm form-control ml-2" [(ngModel)]="name">
+        </div>
+
+        <div class="card card-alt vbox">
+            <div class="card-header">
+                <label style="flex: 1">{{'RESOURCE_METADATA.SHARED_PATTERNS'|translate}}:</label>
+                <div class="btn-toolbar">
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-light" [title]="'ACTIONS.DELETE'|translate" (click)="deletePattern()"
+                            [disabled]="!selectedPattern || !deletePatternAuthorized">
+                            <span class="fas fa-minus"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body vbox scrollableContainer" style="min-height: 100px;">
+                <div *ngFor="let p of patterns" (click)="selectedPattern = p" class="listItem" [ngClass]="{ active: p == selectedPattern }">
+                    {{p.name}}
                 </div>
             </div>
         </div>
-        <div class="card-body vbox scrollableContainer" style="min-height: 100px;">
-            <div *ngFor="let p of patterns" (click)="selectedPattern = p" class="listItem" [ngClass]="{ active: p == selectedPattern }">
-                {{p.name}}
-            </div>
-        </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

@@ -1,154 +1,154 @@
-<div class="modal-header">
-
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.ADV_GRAPH_APPL'|translate}}</h3>
-        <div class="btn-toolbar" role="toolbar">
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" [title]="'ACTIONS.SAVE'|translate" (click)="saveGraph()">
-                    <span class="fas fa-download"></span>
-                </button>
-                <button class="btn btn-light" [title]="'ACTIONS.LOAD'|translate" (click)="loadGraph()">
-                    <span class="fas fa-upload"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-</div>
-<div class="modal-body vbox scrollableContainer">
-    <div class="card card-default" style="margin-top: 4px;">
-        <div class="card-header">
-            <label style="flex: 1">{{'SHEET2RDF.HEADER_EDITOR.NODES'|translate}}</label>
-            <div class="btn-toolbar">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.ADV_GRAPH_APPL'|translate}}</h3>
+            <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-light" (click)="addNode()">
-                        <span class="fas fa-plus"></span>
+                    <button class="btn btn-light" [title]="'ACTIONS.SAVE'|translate" (click)="saveGraph()">
+                        <span class="fas fa-download"></span>
                     </button>
-                    <button class="btn btn-light" (click)="removeNode()" [disabled]="!selectedNode">
-                        <span class="fas fa-minus"></span>
+                    <button class="btn btn-light" [title]="'ACTIONS.LOAD'|translate" (click)="loadGraph()">
+                        <span class="fas fa-upload"></span>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="card-body table-responsive" style="min-height: 60px; max-height: 100px;">
-            <table class="table table-sm">
-                <thead>
-                    <tr>
-                        <th>{{'SHEET2RDF.HEADER_EDITOR.NODE_ID'|translate}}</th>
-                        <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_TYPE'|translate}}</th>
-                        <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_URI'|translate}}</th>
-                        <th>{{'COMMONS.DETAILS'|translate}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let n of alreadyDefinedNodes" (click)="selectNode(n)" [ngClass]="{ 'table-primary': n == selectedNode }">
-                        <td class="grayText">{{n.nodeId}}</td>
-                        <td class="grayText">{{n.converter?.type}}</td>
-                        <td class="grayText">{{n.converter?.contractUri}}</td>
-                        <td class="grayText">
-                            <span *ngIf="n.converter?.language; else dtBlock">
-                                <label style="white-space: pre">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}: </label>{{n.converter.language}}
-                            </span>
-                            <span #dtBlock *ngIf="n.converter?.datatypeUri">
-                                <label style="white-space: pre">{{'DATA.DATATYPE.DATATYPE'|translate}}: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
-                            </span>
-                        </td>
-                    </tr>
-                    <tr *ngFor="let n of newDefinedNodes" (click)="selectNode(n)" [ngClass]="{ 'table-primary': n == selectedNode }">
-                        <td>{{n.nodeId}}</td>
-                        <td>{{n.converter?.type}}</td>
-                        <td nowrap>
-                            {{n.converter?.contractUri}}
-                            <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-light" (click)="changeUriConverter(n)">
-                                <span class="fas fa-pencil-alt"></span>
-                            </button>
-                        </td>
-                        <td nowrap>
-                            <span *ngIf="n.converter?.language; else dtBlock">
-                                <label style="white-space: pre">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}: </label>
-                                {{n.converter.language}}
-                                <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-light" (click)="changeLiteralConverter(n)">
+    </div>
+    <div class="modal-body vbox scrollableContainer">
+        <div class="card card-default" style="margin-top: 4px;">
+            <div class="card-header">
+                <label style="flex: 1">{{'SHEET2RDF.HEADER_EDITOR.NODES'|translate}}</label>
+                <div class="btn-toolbar">
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-light" (click)="addNode()">
+                            <span class="fas fa-plus"></span>
+                        </button>
+                        <button class="btn btn-light" (click)="removeNode()" [disabled]="!selectedNode">
+                            <span class="fas fa-minus"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body table-responsive" style="min-height: 60px; max-height: 100px;">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>{{'SHEET2RDF.HEADER_EDITOR.NODE_ID'|translate}}</th>
+                            <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_TYPE'|translate}}</th>
+                            <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_URI'|translate}}</th>
+                            <th>{{'COMMONS.DETAILS'|translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let n of alreadyDefinedNodes" (click)="selectNode(n)" [ngClass]="{ 'table-primary': n == selectedNode }">
+                            <td class="grayText">{{n.nodeId}}</td>
+                            <td class="grayText">{{n.converter?.type}}</td>
+                            <td class="grayText">{{n.converter?.contractUri}}</td>
+                            <td class="grayText">
+                                <span *ngIf="n.converter?.language; else dtBlock">
+                                    <label style="white-space: pre">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}: </label>{{n.converter.language}}
+                                </span>
+                                <span #dtBlock *ngIf="n.converter?.datatypeUri">
+                                    <label style="white-space: pre">{{'DATA.DATATYPE.DATATYPE'|translate}}: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let n of newDefinedNodes" (click)="selectNode(n)" [ngClass]="{ 'table-primary': n == selectedNode }">
+                            <td>{{n.nodeId}}</td>
+                            <td>{{n.converter?.type}}</td>
+                            <td nowrap>
+                                {{n.converter?.contractUri}}
+                                <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-light" (click)="changeUriConverter(n)">
                                     <span class="fas fa-pencil-alt"></span>
                                 </button>
-                            </span>
-                            <span #dtBlock *ngIf="n.converter?.datatypeUri">
-                                <label style="white-space: pre">{{'DATA.DATATYPE.DATATYPE'|translate}}: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                            <td nowrap>
+                                <span *ngIf="n.converter?.language; else dtBlock">
+                                    <label style="white-space: pre">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}: </label>
+                                    {{n.converter.language}}
+                                    <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-light" (click)="changeLiteralConverter(n)">
+                                        <span class="fas fa-pencil-alt"></span>
+                                    </button>
+                                </span>
+                                <span #dtBlock *ngIf="n.converter?.datatypeUri">
+                                    <label style="white-space: pre">{{'DATA.DATATYPE.DATATYPE'|translate}}: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <div class="card card-default" style="margin-top: 4px;">
-        <div class="card-header">
-            <label style="flex: 1">Graph</label>
-        </div>
-        <div class="card-body vbox">
+        <div class="card card-default" style="margin-top: 4px;">
+            <div class="card-header">
+                <label style="flex: 1">Graph</label>
+            </div>
+            <div class="card-body vbox">
 
-            <div class="card card-alt" style="margin-top: 4px;">
-                <div class="card-header">
-                    <label style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.PREFIX_NS_MAPPINGS'|translate}}</label>
-                    <div class="btn-toolbar">
-                        <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" (click)="addMapping()">
-                                <span class="fas fa-plus"></span>
-                            </button>
-                            <button class="btn btn-light" (click)="removeMapping()" [disabled]="!selectedMapping">
-                                <span class="fas fa-minus"></span>
-                            </button>
+                <div class="card card-alt" style="margin-top: 4px;">
+                    <div class="card-header">
+                        <label style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.PREFIX_NS_MAPPINGS'|translate}}</label>
+                        <div class="btn-toolbar">
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-light" (click)="addMapping()">
+                                    <span class="fas fa-plus"></span>
+                                </button>
+                                <button class="btn btn-light" (click)="removeMapping()" [disabled]="!selectedMapping">
+                                    <span class="fas fa-minus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div #prefixnstable class="card-body table-responsive" style="min-height: 60px; max-height: 100px;">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>{{'METADATA.NAMESPACES_AND_IMPORTS.PREFIX'|translate}}</th>
+                                    <th>{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let m of globalPrefixMappings" class="" class="grayText" style="cursor: not-allowed">
+                                    <td>{{m.prefix}}</td>
+                                    <td>{{m.namespace}}</td>
+                                </tr>
+                                <tr *ngFor="let m of localPrefixMappings" (click)="selectMapping(m)" style="cursor: pointer" [ngClass]="{ 'table-primary': m == selectedMapping }">
+                                    <td>{{m.prefix}}</td>
+                                    <td>{{m.namespace}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card card-alt vbox" style="margin-top: 4px;">
+                    <div class="card-header">
+                        <label style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.GRAPH_PATTERN'|translate}}</label>
+                    </div>
+                    <div class="card-body vbox">
+                        <div class="alert alert-info mb-2" [innerHTML]="'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.GRAPH_PATTERN_INFO'|translate"></div>
+                        <textarea class="form-control form-control-sm" style="resize: vertical" rows="5" [(ngModel)]="graphPattern"></textarea>
+                    </div>
+                    <div class="card-footer">
+                        <div class="hbox" style="align-items: center">
+                            <label style="margin-right: 4px;">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.DEFAULT_PREDICATE'|translate}}:</label>
+                            <resource-picker [resource]="defaultPredicate" size="sm" [config]="{ roles: ['property']}"
+                                (resourceChanged)="updateDefaultPredicate($event)" style="flex: 1">
+                            </resource-picker>
+                            <span class="fas fa-info-circle" style="margin-left: 4px" 
+                                [title]="'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.DEFAULT_PREDICATE_INFO'|translate">
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div #prefixnstable class="card-body table-responsive" style="min-height: 60px; max-height: 100px;">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>{{'METADATA.NAMESPACES_AND_IMPORTS.PREFIX'|translate}}</th>
-                                <th>{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let m of globalPrefixMappings" class="" class="grayText" style="cursor: not-allowed">
-                                <td>{{m.prefix}}</td>
-                                <td>{{m.namespace}}</td>
-                            </tr>
-                            <tr *ngFor="let m of localPrefixMappings" (click)="selectMapping(m)" style="cursor: pointer" [ngClass]="{ 'table-primary': m == selectedMapping }">
-                                <td>{{m.prefix}}</td>
-                                <td>{{m.namespace}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
-            <div class="card card-alt vbox" style="margin-top: 4px;">
-                <div class="card-header">
-                    <label style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.GRAPH_PATTERN'|translate}}</label>
-                </div>
-                <div class="card-body vbox">
-                    <div class="alert alert-info mb-2" [innerHTML]="'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.GRAPH_PATTERN_INFO'|translate"></div>
-                    <textarea class="form-control form-control-sm" style="resize: vertical" rows="5" [(ngModel)]="graphPattern"></textarea>
-                </div>
-                <div class="card-footer">
-                    <div class="hbox" style="align-items: center">
-                        <label style="margin-right: 4px;">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.DEFAULT_PREDICATE'|translate}}:</label>
-                        <resource-picker [resource]="defaultPredicate" size="sm" [config]="{ roles: ['property']}"
-                            (resourceChanged)="updateDefaultPredicate($event)" style="flex: 1">
-                        </resource-picker>
-                        <span class="fas fa-info-circle" style="margin-left: 4px" 
-                            [title]="'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.DEFAULT_PREDICATE_INFO'|translate">
-                        </span>
-                    </div>
-                </div>
             </div>
-
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

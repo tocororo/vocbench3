@@ -1,56 +1,58 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'ACTIONS.EXTRACT_FROM_SHACL'|translate}}</h3>
-</div>
-<div class="modal-body">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'ACTIONS.EXTRACT_FROM_SHACL'|translate}}</h3>
+    </div>
+    <div class="modal-body">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td><label>{{'DATA.CLASS.CLASS'|translate}}</label></td>
-                <td>
-                    <resource-picker [resource]="cls" [config]="{ roles: ['cls'] }" [editable]="true" (resourceChanged)="cls = $event">
-                    </resource-picker>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'CUSTOM_FORMS.FORMS.SHAPE_SOURCE'|translate}}</label></td>
-                <td>
-                    <select class="form-control" [(ngModel)]="selectedSource">
-                        <option *ngFor="let s of sources">{{s}}</option>
-                    </select>
-                </td>
-            </tr>
-            <tr *ngIf="selectedSource == sourceFile">
-                <td><label>File</label></td>
-                <td>
-                    <div class="hbox">
-                        <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker>
-                        <select class="form-control" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
-                            <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td><label>{{'DATA.CLASS.CLASS'|translate}}</label></td>
+                    <td>
+                        <resource-picker [resource]="cls" [config]="{ roles: ['cls'] }" [editable]="true" (resourceChanged)="cls = $event">
+                        </resource-picker>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'CUSTOM_FORMS.FORMS.SHAPE_SOURCE'|translate}}</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="selectedSource">
+                            <option *ngFor="let s of sources">{{s}}</option>
                         </select>
-                    </div>
-                </td>
-            </tr>
-            <tr *ngIf="selectedSource == sourceUrl">
-                <td><label>URL</label></td>
-                <td>
-                    <div class="hbox">
-                        <input class="form-control" [(ngModel)]="shapeUrl">
-                        <select class="form-control" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
-                            <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
-                        </select>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+                <tr *ngIf="selectedSource == sourceFile">
+                    <td><label>File</label></td>
+                    <td>
+                        <div class="hbox">
+                            <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker>
+                            <select class="form-control" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
+                                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="selectedSource == sourceUrl">
+                    <td><label>URL</label></td>
+                    <td>
+                        <div class="hbox">
+                            <input class="form-control" [(ngModel)]="shapeUrl">
+                            <select class="form-control" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
+                                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

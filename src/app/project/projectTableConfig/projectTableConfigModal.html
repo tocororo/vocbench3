@@ -1,78 +1,80 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'PROJECTS.CONFIG.PROJ_VIEW_SETTINGS'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'PROJECTS.CONFIG.PROJ_VIEW_SETTINGS'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td class="text-right" nowrap><label>{{'COMMONS.VISUALIZATION_MODE'|translate}}:</label></td>
-                <td class="d-flex align-items-center">
-                    <select class="form-control" [(ngModel)]="selectedVisualizationMode">
-                        <option *ngFor="let m of visualizationModes" [ngValue]="m">{{m.translationKey|translate}}</option>
-                    </select>
-                    <button *ngIf="isAdmin && selectedVisualizationMode?.mode == 'facet'" class="btn btn-xs btn-light ml-2" (click)="recreateFacetsIndex()" 
-                        [title]="'PROJECTS.ACTIONS.RECREATE_FACETS_INDEX'|translate">
-                        <span class="fas fa-redo"></span>
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right" nowrap><label>{{'COMMONS.VISUALIZATION_MODE'|translate}}:</label></td>
+                    <td class="d-flex align-items-center">
+                        <select class="form-control" [(ngModel)]="selectedVisualizationMode">
+                            <option *ngFor="let m of visualizationModes" [ngValue]="m">{{m.translationKey|translate}}</option>
+                        </select>
+                        <button *ngIf="isAdmin && selectedVisualizationMode?.mode == 'facet'" class="btn btn-xs btn-light ml-2" (click)="recreateFacetsIndex()" 
+                            [title]="'PROJECTS.ACTIONS.RECREATE_FACETS_INDEX'|translate">
+                            <span class="fas fa-redo"></span>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="selectedVisualizationMode?.mode == 'facet'">
+                    <td class="text-right" nowrap><label>{{'PROJECTS.CONFIG.FACET'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="selectedFacet">
+                            <option *ngFor="let f of facets" [ngValue]="f.name">{{f.displayName}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div *ngIf="isAdmin" class="card card-default mt-3">
+            <div class="card-header">
+                <label>{{'PROJECTS.CONFIG.PROJ_INFO'|translate}}</label>
+                <label style="flex: 1"></label>
+                <div class="btn-group btn-group-xs" style="margin-right: 4px;">
+                    <button class="btn btn-light" (click)="moveUp()" [title]="'ACTIONS.MOVE_UP'|translate"
+                        [disabled]="!selectedColumn || columns.indexOf(selectedColumn) == 0">
+                        <span class="fas fa-chevron-up"></span>
                     </button>
-                </td>
-            </tr>
-            <tr *ngIf="selectedVisualizationMode?.mode == 'facet'">
-                <td class="text-right" nowrap><label>{{'PROJECTS.CONFIG.FACET'|translate}}:</label></td>
-                <td>
-                    <select class="form-control" [(ngModel)]="selectedFacet">
-                        <option *ngFor="let f of facets" [ngValue]="f.name">{{f.displayName}}</option>
-                    </select>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div *ngIf="isAdmin" class="card card-default mt-3">
-        <div class="card-header">
-            <label>{{'PROJECTS.CONFIG.PROJ_INFO'|translate}}</label>
-            <label style="flex: 1"></label>
-            <div class="btn-group btn-group-xs" style="margin-right: 4px;">
-                <button class="btn btn-light" (click)="moveUp()" [title]="'ACTIONS.MOVE_UP'|translate"
-                    [disabled]="!selectedColumn || columns.indexOf(selectedColumn) == 0">
-                    <span class="fas fa-chevron-up"></span>
-                </button>
-                <button class="btn btn-light" (click)="moveDown()" [title]="'ACTIONS.MOVE_DOWN'|translate"
-                    [disabled]="!selectedColumn || columns[columns.length-1] == selectedColumn">
-                    <span class="fas fa-chevron-down"></span>
+                    <button class="btn btn-light" (click)="moveDown()" [title]="'ACTIONS.MOVE_DOWN'|translate"
+                        [disabled]="!selectedColumn || columns[columns.length-1] == selectedColumn">
+                        <span class="fas fa-chevron-down"></span>
+                    </button>
+                </div>
+                <button class="btn btn-xs btn-light" (click)="reset()" [title]="'ACTIONS.RESTORE_DEFAULT'|translate">
+                    <span class="fas fa-redo"></span>
                 </button>
             </div>
-            <button class="btn btn-xs btn-light" (click)="reset()" [title]="'ACTIONS.RESTORE_DEFAULT'|translate">
-                <span class="fas fa-redo"></span>
-            </button>
-        </div>
-        <div class="card-body">
+            <div class="card-body">
 
-            <div class="alert alert-info" style="margin-bottom: 8px;">
-                {{'PROJECTS.CONFIG.PROJ_INFO_INFO'|translate}}
+                <div class="alert alert-info" style="margin-bottom: 8px;">
+                    {{'PROJECTS.CONFIG.PROJ_INFO_INFO'|translate}}
+                </div>
+                
+                <table class="table table-hoverable table-sm table-borderless">
+                    <thead>
+                        <th class="text-center">{{'PROJECTS.CONFIG.COL_NAME'|translate}}</th>
+                        <th class="text-center">{{'ACTIONS.SHOW'|translate}}</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let c of columns" [ngClass]="{ 'table-primary': c == selectedColumn }" (click)="selectColumn(c)">
+                            <td class="text-center" [ngClass]="{ grayText : !c.show }">{{c.translationKey|translate}}</td>
+                            <td class="text-center">
+                                <input type="checkbox" [(ngModel)]="c.show" [disabled]="c.mandatory">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            
-            <table class="table table-hoverable table-sm table-borderless">
-                <thead>
-                    <th class="text-center">{{'PROJECTS.CONFIG.COL_NAME'|translate}}</th>
-                    <th class="text-center">{{'ACTIONS.SHOW'|translate}}</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let c of columns" [ngClass]="{ 'table-primary': c == selectedColumn }" (click)="selectColumn(c)">
-                        <td class="text-center" [ngClass]="{ grayText : !c.show }">{{c.translationKey|translate}}</td>
-                        <td class="text-center">
-                            <input type="checkbox" [(ngModel)]="c.show" [disabled]="c.mandatory">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

@@ -1,25 +1,27 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body">
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td class="text-right"><label>File</label></td>
-                <td><file-picker (fileChanged)="fileChangeEvent($event)" accept=".cfg"></file-picker></td>
-            </tr>
-            <tr>
-                <td class="text-right"><label>{{'COMMONS.NAME'|translate}}</label></td>
-                <td><input type="text" class="form-control" [(ngModel)]="name"></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body">
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right"><label>File</label></td>
+                    <td><file-picker (fileChanged)="fileChangeEvent($event)" accept=".cfg"></file-picker></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><label>{{'COMMONS.NAME'|translate}}</label></td>
+                    <td><input type="text" class="form-control" [(ngModel)]="name"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

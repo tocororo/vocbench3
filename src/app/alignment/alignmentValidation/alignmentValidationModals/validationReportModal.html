@@ -1,28 +1,30 @@
-<div class="modal-header">
-    <h3 class="modal-title text-info">{{'ALIGNMENT.VALIDATION.REPORT.ALIGN_REPORT'|translate}}</h3>
-</div>
-<div class="modal-body vbox" style="min-height: 60vh">
-    <div class="scrollableContainer" style="border: 1px solid #ddd">
-        <table class="table table-sm table-hoverable">
-            <thead>
-                <tr>
-                    <th class="text-center">{{'ALIGNMENT.VALIDATION.MANAGEMENT.SOURCE_ENTITY'|translate}}</th>
-                    <th class="text-center">{{'ALIGNMENT.VALIDATION.MANAGEMENT.MAPPING_PROP'|translate}}</th>
-                    <th class="text-center">{{'ALIGNMENT.VALIDATION.MANAGEMENT.TARGET_ENTITY'|translate}}</th>
-                    <th class="text-center">{{'ALIGNMENT.VALIDATION.REPORT.ACTION_PERFORMED'|translate}}</th>
-                </tr>
-            </thead>
-            <tbody class="text-center">
-                <tr *ngFor="let r of report">
-                    <td>{{r.entity1}}</td>
-                    <td>{{r.property}}</td>
-                    <td>{{r.entity2}}</td>
-                    <td>{{r.action}}</td>
-                </tr>
-            </tbody>
-        </table>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title text-info">{{'ALIGNMENT.VALIDATION.REPORT.ALIGN_REPORT'|translate}}</h3>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <div class="modal-body vbox" style="min-height: 60vh">
+        <div class="scrollableContainer" style="border: 1px solid #ddd">
+            <table class="table table-sm table-hoverable">
+                <thead>
+                    <tr>
+                        <th class="text-center">{{'ALIGNMENT.VALIDATION.MANAGEMENT.SOURCE_ENTITY'|translate}}</th>
+                        <th class="text-center">{{'ALIGNMENT.VALIDATION.MANAGEMENT.MAPPING_PROP'|translate}}</th>
+                        <th class="text-center">{{'ALIGNMENT.VALIDATION.MANAGEMENT.TARGET_ENTITY'|translate}}</th>
+                        <th class="text-center">{{'ALIGNMENT.VALIDATION.REPORT.ACTION_PERFORMED'|translate}}</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr *ngFor="let r of report">
+                        <td>{{r.entity1}}</td>
+                        <td>{{r.property}}</td>
+                        <td>{{r.entity2}}</td>
+                        <td>{{r.action}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

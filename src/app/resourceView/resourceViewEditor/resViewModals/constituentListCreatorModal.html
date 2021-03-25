@@ -1,52 +1,54 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body vbox">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body vbox">
 
-    <div class="hbox">
-        <lexical-entry-list-panel 
-            [lexiconChangeable]="true" [editable]="false" [deletable]="false" (nodeSelected)="selectedConstituentSource = $event"
-            (lexiconChanged)="selectedConstituentSource = null" (indexChanged)="selectedConstituentSource = null">
-        </lexical-entry-list-panel>
-        
-        <div style="align-self: center; margin: 5px;">
-            <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="addConstituentToList()" [disabled]="!selectedConstituentSource">
-                {{'ACTIONS.ADD'|translate}}<span class="fas fa-chevron-right ml-1"></span>
-            </button>
-            <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="removeConstituentFromList()" [disabled]="!selectedConstituentTarget">
-                <span class="fas fa-chevron-left mr-1"></span>{{'ACTIONS.REMOVE'|translate}}
-            </button>
-        </div>
-        
-        <div class="card card-default vbox">
-            <div class="card-header">
-                <div style="flex: 1;"></div>
-                <div class="btn-toolbar">
-                    <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light btn-xs" (click)="moveDown()" [disabled]="!ordered || !selectedConstituentTarget || isLastInList()">
-                            <span class="fas fa-chevron-down"></span>
-                        </button>
-                        <button class="btn btn-light btn-xs" (click)="moveUp()" [disabled]="!ordered || !selectedConstituentTarget || isFirstInList()">
-                            <span class="fas fa-chevron-up"></span>
-                        </button>
+        <div class="hbox">
+            <lexical-entry-list-panel 
+                [lexiconChangeable]="true" [editable]="false" [deletable]="false" (nodeSelected)="selectedConstituentSource = $event"
+                (lexiconChanged)="selectedConstituentSource = null" (indexChanged)="selectedConstituentSource = null">
+            </lexical-entry-list-panel>
+            
+            <div style="align-self: center; margin: 5px;">
+                <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="addConstituentToList()" [disabled]="!selectedConstituentSource">
+                    {{'ACTIONS.ADD'|translate}}<span class="fas fa-chevron-right ml-1"></span>
+                </button>
+                <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="removeConstituentFromList()" [disabled]="!selectedConstituentTarget">
+                    <span class="fas fa-chevron-left mr-1"></span>{{'ACTIONS.REMOVE'|translate}}
+                </button>
+            </div>
+            
+            <div class="card card-default vbox">
+                <div class="card-header">
+                    <div style="flex: 1;"></div>
+                    <div class="btn-toolbar">
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-light btn-xs" (click)="moveDown()" [disabled]="!ordered || !selectedConstituentTarget || isLastInList()">
+                                <span class="fas fa-chevron-down"></span>
+                            </button>
+                            <button class="btn btn-light btn-xs" (click)="moveUp()" [disabled]="!ordered || !selectedConstituentTarget || isFirstInList()">
+                                <span class="fas fa-chevron-up"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body vbox">
+                    <resource-list [resources]="list" (nodeSelected)="selectedConstituentTarget = $event"></resource-list>
+                </div>
+                <div class="card-footer float-right">
+                    <div class="form-check">
+                        <input class="form-check-input" id="orderedCheck" type="checkbox" [(ngModel)]="ordered">
+                        <label class="form-check-label" for="orderedCheck">{{'RESOURCE_VIEW.MISC.ORDERED'|translate}}</label>
                     </div>
                 </div>
             </div>
-            <div class="card-body vbox">
-                <resource-list [resources]="list" (nodeSelected)="selectedConstituentTarget = $event"></resource-list>
-            </div>
-            <div class="card-footer float-right">
-                <div class="form-check">
-                    <input class="form-check-input" id="orderedCheck" type="checkbox" [(ngModel)]="ordered">
-                    <label class="form-check-label" for="orderedCheck">{{'RESOURCE_VIEW.MISC.ORDERED'|translate}}</label>
-                </div>
-            </div>
         </div>
+
     </div>
 
-</div>
-
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="list.length == 0">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="list.length == 0">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

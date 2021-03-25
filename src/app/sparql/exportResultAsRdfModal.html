@@ -1,71 +1,73 @@
-<div class="modal-header">
-    <h3 class="modal-title text-info">{{'SPARQL.EXPORT.EXPORT_AS_RDF'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
-    
-    <select class="form-control" [(ngModel)]="selectedExportFormat">
-        <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
-    </select>
-
-    <div class="form-check my-2 mx-1">
-        <input class="form-check-input" id="filterCheck" type="checkbox" [(ngModel)]="applyFilter">
-        <label class="form-check-label" for="filterCheck">{{'SPARQL.EXPORT.APPLY_EXPORT_FILTERS'|translate}}</label>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title text-info">{{'SPARQL.EXPORT.EXPORT_AS_RDF'|translate}}</h3>
     </div>
+    <div class="modal-body vbox">
+        
+        <select class="form-control" [(ngModel)]="selectedExportFormat">
+            <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
+        </select>
 
-    <div *ngIf="applyFilter" class="card card-alt vbox">
-        <div class="card-header">
-            <label style="flex: 1">{{'SPARQL.EXPORT.EXPORT_TRANSFORMATIONS'|translate}}:</label>
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" [title]="'ACTIONS.ADD'|translate" (click)="appendFilter()">
-                    <span class="fas fa-plus"></span>
-                </button>
-                <button class="btn btn-light" [title]="'ACTIONS.REMOVE'|translate" (click)="removeFilter()"
-                    [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
-                    <span class="fas fa-minus"></span>
-                </button>
-                <button class="btn btn-light" [title]="'ACTIONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
-                    [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
-                    <span class="fas fa-chevron-down"></span>
-                </button>
-                <button class="btn btn-light" [title]="'ACTIONS.MOVE_UP'|translate" (click)="moveFilterUp()"
-                    [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
-                    <span class="fas fa-chevron-up"></span>
-                </button>
+        <div class="form-check my-2 mx-1">
+            <input class="form-check-input" id="filterCheck" type="checkbox" [(ngModel)]="applyFilter">
+            <label class="form-check-label" for="filterCheck">{{'SPARQL.EXPORT.APPLY_EXPORT_FILTERS'|translate}}</label>
+        </div>
+
+        <div *ngIf="applyFilter" class="card card-alt vbox">
+            <div class="card-header">
+                <label style="flex: 1">{{'SPARQL.EXPORT.EXPORT_TRANSFORMATIONS'|translate}}:</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-light" [title]="'ACTIONS.ADD'|translate" (click)="appendFilter()">
+                        <span class="fas fa-plus"></span>
+                    </button>
+                    <button class="btn btn-light" [title]="'ACTIONS.REMOVE'|translate" (click)="removeFilter()"
+                        [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
+                        <span class="fas fa-minus"></span>
+                    </button>
+                    <button class="btn btn-light" [title]="'ACTIONS.MOVE_DOWN'|translate"  (click)="moveFilterDown()"
+                        [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
+                        <span class="fas fa-chevron-down"></span>
+                    </button>
+                    <button class="btn btn-light" [title]="'ACTIONS.MOVE_UP'|translate" (click)="moveFilterUp()"
+                        [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
+                        <span class="fas fa-chevron-up"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body scrollableContainer" style="min-height: 60px;">
+                <div class="alert alert-info mb-2">
+                    {{'SPARQL.EXPORT.TRANSFORMATION_INFO'|translate}}
+                </div>
+                <table class="table table-sm table-hoverable">
+                    <colgroup>
+                        <col style="width: 2%">
+                        <col>
+                        <col style="width: 5%">
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let filterChainEl of filtersChain; let l = last; let f = first; let idx = index" 
+                            [ngClass]="{ 'table-primary': filterChainEl == selectedFilterChainElement }" (click)="selectFilterChainElement(filterChainEl)">
+                            <td class="text-center" style="font-size: 11px; font-weight: 700;">{{idx+1}}</td>
+                            <td class="hbox">
+                                <extension-configurator [extensions]="filterChainEl.availableFactories"
+                                    (extensionUpdated)="onExtensionUpdated(filterChainEl, $event)"
+                                    (configurationUpdated)="onConfigurationUpdated(filterChainEl, $event)" style="flex: 1;">
+                                </extension-configurator>
+                            </td>
+                            <td class="text-center" style="font-size: 14px; font-weight: 700;">
+                                <span *ngIf="requireConfiguration(filterChainEl)" class="fas fa-exclamation-triangle"
+                                    [title]="'SPARQL.EXPORT.UNCONFIGURED_FILTER'|translate"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="card-body scrollableContainer" style="min-height: 60px;">
-            <div class="alert alert-info mb-2">
-                {{'SPARQL.EXPORT.TRANSFORMATION_INFO'|translate}}
-            </div>
-            <table class="table table-sm table-hoverable">
-                <colgroup>
-                    <col style="width: 2%">
-                    <col>
-                    <col style="width: 5%">
-                </colgroup>
-                <tbody>
-                    <tr *ngFor="let filterChainEl of filtersChain; let l = last; let f = first; let idx = index" 
-                        [ngClass]="{ 'table-primary': filterChainEl == selectedFilterChainElement }" (click)="selectFilterChainElement(filterChainEl)">
-                        <td class="text-center" style="font-size: 11px; font-weight: 700;">{{idx+1}}</td>
-                        <td class="hbox">
-                            <extension-configurator [extensions]="filterChainEl.availableFactories"
-                                (extensionUpdated)="onExtensionUpdated(filterChainEl, $event)"
-                                (configurationUpdated)="onConfigurationUpdated(filterChainEl, $event)" style="flex: 1;">
-                            </extension-configurator>
-                        </td>
-                        <td class="text-center" style="font-size: 14px; font-weight: 700;">
-                            <span *ngIf="requireConfiguration(filterChainEl)" class="fas fa-exclamation-triangle"
-                                [title]="'SPARQL.EXPORT.UNCONFIGURED_FILTER'|translate"></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
+
     </div>
-
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

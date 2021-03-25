@@ -1,28 +1,30 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'SHEET2RDF.HEADER_EDITOR.NODE_EDITOR'|translate}}</h3>
-</div>
-<div class="modal-body vbox scrollableContainer">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'SHEET2RDF.HEADER_EDITOR.NODE_EDITOR'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox scrollableContainer">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td class="text-right"><label>ID:</label></td>
-                <td><input id="toFocus" class="form-control form-control-sm" [(ngModel)]="nodeId" sanitized [disabled]="editingNode"></td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right"><label>ID:</label></td>
+                    <td><input id="toFocus" class="form-control form-control-sm" [(ngModel)]="nodeId" sanitized [disabled]="editingNode"></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <converter-config style="margin-top: 4px;" [converter]="editingNode?.converter" [memoize]="editingNode?.memoize" 
-        [rangeType]="constrainedRangeType" [language]="constrainedLanguage" [datatype]="constrainedDatatype" 
-        (update)="onConverterUpdate($event)">
-    </converter-config>
+        <converter-config style="margin-top: 4px;" [converter]="editingNode?.converter" [memoize]="editingNode?.memoize" 
+            [rangeType]="constrainedRangeType" [language]="constrainedLanguage" [datatype]="constrainedDatatype" 
+            (update)="onConverterUpdate($event)">
+        </converter-config>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

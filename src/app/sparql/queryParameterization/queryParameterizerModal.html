@@ -1,73 +1,75 @@
-<div class="modal-header">
-    <h3 class="modal-title text-info">{{'SPARQL.PARAMETERIZATION.QUERY_PARAMETERIZATION'|translate}}</h3>
-</div>
-<div class="modal-body vbox" style="min-height: 30vh;">
-
-    <div class="card card-default vbox">
-        <div class="card-header">
-            <label style="flex: 1">{{'SPARQL.PARAMETERIZATION.QUERY_PARAMETERS'|translate}}</label>
-            <button class="btn btn-xs btn-light" (click)="addBinding()" [title]="'ACTIONS.ADD'|translate">
-                <span class="fas fa-plus"></span>
-            </button>
-        </div>
-        <div class="card-body table-responsive" style="flex: 1;">
-            <table class="table table-sm table-borderless">
-                <colgroup>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col>
-                    <col style="width: 1%">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th nowrap>{{'SPARQL.PARAMETERIZATION.VARIABLE_BINDING'|translate}}</th>
-                        <th nowrap>{{'SPARQL.PARAMETERIZATION.DISPLAY_NAME'|translate}}</th>
-                        <th>{{'COMMONS.DESCRIPTION'|translate}}</th>
-                        <th nowrap>{{'SPARQL.PARAMETERIZATION.BINDING_TYPE'|translate}}</th>
-                        <th>{{'COMMONS.VALUE'|translate}}</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let b of bindings">
-                        <td><input class="form-control" [(ngModel)]="b.varName"></td>
-                        <td><input class="form-control" [(ngModel)]="b.displayName"></td>
-                        <td><textarea class="form-control" style="resize: vertical" rows="1" [(ngModel)]="b.description"></textarea></td>
-                        <td>
-                            <select class="form-control" [(ngModel)]="b.bindingType" (ngModelChange)="onBindingTypeChange()">
-                                <option *ngFor="let t of bindingTypes" [ngValue]="t">{{t.show}}</option>
-                            </select>
-                        </td>
-                        <td>
-                            <div *ngIf="b.bindingType?.value=='assignment'; else constraintBlock" class="input-group input-group-sm">
-                                <value-picker [value]="b.value" (valueChanged)="updateValue(b, $event)"></value-picker>
-                            </div>
-                            <ng-template #constraintBlock>
-                                <select *ngIf="b.bindingType?.specialization=='datatype'; else roleBlock" class="form-control" [(ngModel)]="b.datatype">
-                                    <option *ngFor="let d of datatypes" [ngValue]="d">{{d.getShow()}}</option>
-                                </select>
-                                <ng-template #roleBlock>
-                                    <select class="form-control" [(ngModel)]="b.resourceRole">
-                                        <option *ngFor="let r of roles" [value]="r.value">{{r.show}}</option>
-                                    </select>
-                                </ng-template>
-                            </ng-template>
-                        </td>
-                        <td>
-                            <button class="btn btn-light btn-sm" (click)="removeBinding(b)">
-                                <span class="far fa-trash-alt"></span>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title text-info">{{'SPARQL.PARAMETERIZATION.QUERY_PARAMETERIZATION'|translate}}</h3>
     </div>
+    <div class="modal-body vbox" style="min-height: 30vh;">
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="bindings.length == 0">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+        <div class="card card-default vbox">
+            <div class="card-header">
+                <label style="flex: 1">{{'SPARQL.PARAMETERIZATION.QUERY_PARAMETERS'|translate}}</label>
+                <button class="btn btn-xs btn-light" (click)="addBinding()" [title]="'ACTIONS.ADD'|translate">
+                    <span class="fas fa-plus"></span>
+                </button>
+            </div>
+            <div class="card-body table-responsive" style="flex: 1;">
+                <table class="table table-sm table-borderless">
+                    <colgroup>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col style="width: 1%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th nowrap>{{'SPARQL.PARAMETERIZATION.VARIABLE_BINDING'|translate}}</th>
+                            <th nowrap>{{'SPARQL.PARAMETERIZATION.DISPLAY_NAME'|translate}}</th>
+                            <th>{{'COMMONS.DESCRIPTION'|translate}}</th>
+                            <th nowrap>{{'SPARQL.PARAMETERIZATION.BINDING_TYPE'|translate}}</th>
+                            <th>{{'COMMONS.VALUE'|translate}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let b of bindings">
+                            <td><input class="form-control" [(ngModel)]="b.varName"></td>
+                            <td><input class="form-control" [(ngModel)]="b.displayName"></td>
+                            <td><textarea class="form-control" style="resize: vertical" rows="1" [(ngModel)]="b.description"></textarea></td>
+                            <td>
+                                <select class="form-control" [(ngModel)]="b.bindingType" (ngModelChange)="onBindingTypeChange()">
+                                    <option *ngFor="let t of bindingTypes" [ngValue]="t">{{t.show}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div *ngIf="b.bindingType?.value=='assignment'; else constraintBlock" class="input-group input-group-sm">
+                                    <value-picker [value]="b.value" (valueChanged)="updateValue(b, $event)"></value-picker>
+                                </div>
+                                <ng-template #constraintBlock>
+                                    <select *ngIf="b.bindingType?.specialization=='datatype'; else roleBlock" class="form-control" [(ngModel)]="b.datatype">
+                                        <option *ngFor="let d of datatypes" [ngValue]="d">{{d.getShow()}}</option>
+                                    </select>
+                                    <ng-template #roleBlock>
+                                        <select class="form-control" [(ngModel)]="b.resourceRole">
+                                            <option *ngFor="let r of roles" [value]="r.value">{{r.show}}</option>
+                                        </select>
+                                    </ng-template>
+                                </ng-template>
+                            </td>
+                            <td>
+                                <button class="btn btn-light btn-sm" (click)="removeBinding(b)">
+                                    <span class="far fa-trash-alt"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="bindings.length == 0">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

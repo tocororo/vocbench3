@@ -1,23 +1,25 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body vbox">
-
-    <div class="hbox" style="flex: initial; align-items: center; margin-bottom: 5px;">
-        <label style="margin-right: 4px;">{{'DATA.LEXICON.LEXICON'|translate}}:</label>
-        <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_LEXICON'|translate" (click)="changeLexicon()" [disabled]="!lexiconChangeable">
-            <rdf-resource *ngIf="activeLexicon" [resource]="activeLexicon"></rdf-resource>
-            <span *ngIf="!activeLexicon">{{'DATA.ACTIONS.SELECT_LEXICON'|translate}}</span>
-        </button>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
     </div>
+    <div class="modal-body vbox">
 
-    <lexical-entry-list-panel [editable]="editable" [deletable]="deletable" [lexicon]="activeLexicon"
-        [allowMultiselection]="allowMultiselection" [projectCtx]="projectCtx"
-        (nodeSelected)="onLexiconSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="multiselection = $event">
-    </lexical-entry-list-panel>
-    
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+        <div class="hbox" style="flex: initial; align-items: center; margin-bottom: 5px;">
+            <label style="margin-right: 4px;">{{'DATA.LEXICON.LEXICON'|translate}}:</label>
+            <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_LEXICON'|translate" (click)="changeLexicon()" [disabled]="!lexiconChangeable">
+                <rdf-resource *ngIf="activeLexicon" [resource]="activeLexicon"></rdf-resource>
+                <span *ngIf="!activeLexicon">{{'DATA.ACTIONS.SELECT_LEXICON'|translate}}</span>
+            </button>
+        </div>
+
+        <lexical-entry-list-panel [editable]="editable" [deletable]="deletable" [lexicon]="activeLexicon"
+            [allowMultiselection]="allowMultiselection" [projectCtx]="projectCtx"
+            (nodeSelected)="onLexiconSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="multiselection = $event">
+        </lexical-entry-list-panel>
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

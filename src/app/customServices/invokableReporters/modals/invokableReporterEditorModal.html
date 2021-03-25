@@ -1,79 +1,81 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body vbox table-responsive">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body vbox table-responsive">
 
-    <table *ngIf="form" class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%">
-            <col>
-            <col style="width: 1%">
-        </colgroup>
-        <tbody>
-            <ng-container *ngIf="!reporterRef">
+        <table *ngIf="form" class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+                <col style="width: 1%">
+            </colgroup>
+            <tbody>
+                <ng-container *ngIf="!reporterRef">
+                    <tr>
+                        <td class="text-right" nowrap>
+                            <label>ID</label>
+                        </td>
+                        <td>
+                            <input class="form-control form-control-sm" [(ngModel)]="id">
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td class="text-right" nowrap>
+                            <label>{{'COMMONS.SCOPE'|translate}}</label>
+                        </td>
+                        <td>
+                            <select class="form-control form-control-sm" style="display: inline-block" [(ngModel)]="selectedScope">
+                                <option *ngFor="let s of scopes">{{s}}</option>
+                            </select>
+                        </td>
+                        <td></td>
+                    </tr>
+                </ng-container>
                 <tr>
                     <td class="text-right" nowrap>
-                        <label>ID</label>
+                        <label>{{form.label.displayName}}</label>
+                        <span class="fas fa-info-circle ml-1" [title]="form.label.description"></span>
                     </td>
-                    <td>
-                        <input class="form-control form-control-sm" [(ngModel)]="id">
-                    </td>
-                    <td></td>
+                    <td><input class="form-control form-control-sm" [(ngModel)]="form.label.value"></td>
+                    <td><ng-container *ngIf="form.label.required">*</ng-container></td>
                 </tr>
-                <tr style="border-bottom: 1px solid #ddd;">
+                <tr>
                     <td class="text-right" nowrap>
-                        <label>{{'COMMONS.SCOPE'|translate}}</label>
+                        <label>{{form.description.displayName}}</label>
+                        <span class="fas fa-info-circle ml-1" [title]="form.description.description"></span>
+                    </td>
+                    <td><textarea class="form-control form-control-sm" style="resize: vertical" [(ngModel)]="form.description.value"></textarea></td>
+                    <td><ng-container *ngIf="form.description.required">*</ng-container></td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>{{form.template.displayName}}</label>
+                        <span class="fas fa-info-circle ml-1" [title]="form.template.description"></span>
                     </td>
                     <td>
-                        <select class="form-control form-control-sm" style="display: inline-block" [(ngModel)]="selectedScope">
-                            <option *ngFor="let s of scopes">{{s}}</option>
-                        </select>
+                        <mustache-editor [(ngModel)]="form.template.value"></mustache-editor>
                     </td>
-                    <td></td>
+                    <td><ng-container *ngIf="form.template.required">*</ng-container></td>
                 </tr>
-            </ng-container>
-            <tr>
-                <td class="text-right" nowrap>
-                    <label>{{form.label.displayName}}</label>
-                    <span class="fas fa-info-circle ml-1" [title]="form.label.description"></span>
-                </td>
-                <td><input class="form-control form-control-sm" [(ngModel)]="form.label.value"></td>
-                <td><ng-container *ngIf="form.label.required">*</ng-container></td>
-            </tr>
-            <tr>
-                <td class="text-right" nowrap>
-                    <label>{{form.description.displayName}}</label>
-                    <span class="fas fa-info-circle ml-1" [title]="form.description.description"></span>
-                </td>
-                <td><textarea class="form-control form-control-sm" style="resize: vertical" [(ngModel)]="form.description.value"></textarea></td>
-                <td><ng-container *ngIf="form.description.required">*</ng-container></td>
-            </tr>
-            <tr>
-                <td class="text-right" nowrap>
-                    <label>{{form.template.displayName}}</label>
-                    <span class="fas fa-info-circle ml-1" [title]="form.template.description"></span>
-                </td>
-                <td>
-                    <mustache-editor [(ngModel)]="form.template.value"></mustache-editor>
-                </td>
-                <td><ng-container *ngIf="form.template.required">*</ng-container></td>
-            </tr>
-            <tr>
-                <td class="text-right" nowrap>
-                    <label>{{form.mimeType.displayName}}</label>
-                    <span class="fas fa-info-circle ml-1" [title]="form.mimeType.description"></span>
-                </td>
-                <td><input class="form-control form-control-sm" [(ngModel)]="form.mimeType.value"></td>
-                <td><ng-container *ngIf="form.mimeType.required">*</ng-container></td>
-            </tr>
-        </tbody>
-    </table>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>{{form.mimeType.displayName}}</label>
+                        <span class="fas fa-info-circle ml-1" [title]="form.mimeType.description"></span>
+                    </td>
+                    <td><input class="form-control form-control-sm" [(ngModel)]="form.mimeType.value"></td>
+                    <td><ng-container *ngIf="form.mimeType.required">*</ng-container></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="modal-footer">
+        <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 
 </div>
-
-<div class="modal-footer">
-    <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
-</div>
-

@@ -1,72 +1,74 @@
-<div class="modal-header">
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
-        <span *ngIf="enrichingProperty">
-            <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
-                <rdf-resource [resource]="enrichingProperty"></rdf-resource>
-            </button>
-        </span>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{title}}</h3>
+            <span *ngIf="enrichingProperty">
+                <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
+                    <rdf-resource [resource]="enrichingProperty"></rdf-resource>
+                </button>
+            </span>
+        </div>
     </div>
-</div>
-<div class="modal-body vbox" style="min-height:70vh;">
+    <div class="modal-body vbox" style="min-height:70vh;">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td><label>{{'MODELS.PROJECT.PROJECT'|translate}}:</label></td>
-                <td>
-                    <select class="form-control form-control-sm " [(ngModel)]="project" (ngModelChange)="onProjectChange()">
-                        <option *ngFor="let p of projectList" [ngValue]="p">{{p.getName()}}</option>
-                    </select>
-                </td>
-            </tr>
-            <tr *ngIf="project">
-                <td><label>{{'COMMONS.TYPE'|translate}}:</label></td>
-                <td>
-                    <select class="form-control form-control-sm " [(ngModel)]="activeView" (ngModelChange)="onAlignTypeChanged()">
-                        <option value="cls">{{'DATA.CLASS.CLASS'|translate}}</option>
-                        <option value="individual">{{'DATA.INSTANCE.INSTANCE'|translate}}</option>
-                        <option value="property">{{'DATA.PROPERTY.PROPERTY'|translate}}</option>
-                        <option *ngIf="isProjectSKOS()" value="concept">{{'DATA.CONCEPT.CONCEPT'|translate}}</option>
-                        <option *ngIf="isProjectSKOS()" value="conceptScheme">{{'DATA.SCHEME.SCHEME'|translate}}</option>
-                        <option *ngIf="isProjectSKOS()" value="skosCollection">{{'DATA.COLLECTION.COLLECTION'|translate}}</option>
-                    </select>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    
-    <div *ngIf="project" class="vbox">
-
-        <!-- following components allow to browse external projects classes, concepts, schemes, propertyes
-        or individuals, and they are rendered based on the resource role -->
-        <class-tree-panel *ngIf="activeView=='cls'" (nodeSelected)="onResourceSelected($event)" [editable]="false" [projectCtx]="remoteProjCtx">
-        </class-tree-panel>
-                
-        <concept-tree-panel *ngIf="activeView=='concept'" [schemeChangeable]="true" [schemes]="schemes" [editable]="false" [projectCtx]="remoteProjCtx"
-            (nodeSelected)="onResourceSelected($event)" (schemeChanged)="onSchemeChanged()">
-        </concept-tree-panel>
-                
-        <property-tree-panel *ngIf="activeView=='property'" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
-        </property-tree-panel>
-            
-        <scheme-list-panel *ngIf="activeView=='conceptScheme'" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
-        </scheme-list-panel>
-
-        <collection-tree-panel *ngIf="activeView=='skosCollection'"  [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
-        </collection-tree-panel>
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td><label>{{'MODELS.PROJECT.PROJECT'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control form-control-sm " [(ngModel)]="project" (ngModelChange)="onProjectChange()">
+                            <option *ngFor="let p of projectList" [ngValue]="p">{{p.getName()}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr *ngIf="project">
+                    <td><label>{{'COMMONS.TYPE'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control form-control-sm " [(ngModel)]="activeView" (ngModelChange)="onAlignTypeChanged()">
+                            <option value="cls">{{'DATA.CLASS.CLASS'|translate}}</option>
+                            <option value="individual">{{'DATA.INSTANCE.INSTANCE'|translate}}</option>
+                            <option value="property">{{'DATA.PROPERTY.PROPERTY'|translate}}</option>
+                            <option *ngIf="isProjectSKOS()" value="concept">{{'DATA.CONCEPT.CONCEPT'|translate}}</option>
+                            <option *ngIf="isProjectSKOS()" value="conceptScheme">{{'DATA.SCHEME.SCHEME'|translate}}</option>
+                            <option *ngIf="isProjectSKOS()" value="skosCollection">{{'DATA.COLLECTION.COLLECTION'|translate}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         
-        <class-individual-tree *ngIf="activeView=='individual'" [schemes]="schemes" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
-        </class-individual-tree>
+        <div *ngIf="project" class="vbox">
 
+            <!-- following components allow to browse external projects classes, concepts, schemes, propertyes
+            or individuals, and they are rendered based on the resource role -->
+            <class-tree-panel *ngIf="activeView=='cls'" (nodeSelected)="onResourceSelected($event)" [editable]="false" [projectCtx]="remoteProjCtx">
+            </class-tree-panel>
+                    
+            <concept-tree-panel *ngIf="activeView=='concept'" [schemeChangeable]="true" [schemes]="schemes" [editable]="false" [projectCtx]="remoteProjCtx"
+                (nodeSelected)="onResourceSelected($event)" (schemeChanged)="onSchemeChanged()">
+            </concept-tree-panel>
+                    
+            <property-tree-panel *ngIf="activeView=='property'" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
+            </property-tree-panel>
+                
+            <scheme-list-panel *ngIf="activeView=='conceptScheme'" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
+            </scheme-list-panel>
+
+            <collection-tree-panel *ngIf="activeView=='skosCollection'"  [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
+            </collection-tree-panel>
+            
+            <class-individual-tree *ngIf="activeView=='individual'" [schemes]="schemes" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
+            </class-individual-tree>
+
+        </div>
+        
     </div>
-    
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

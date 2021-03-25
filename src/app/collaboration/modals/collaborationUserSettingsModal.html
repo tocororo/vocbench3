@@ -1,29 +1,31 @@
-<div class="modal-header">
-    <h3 class="modal-title">
-        {{'COLLABORATION.COLLABORATION_SYSTEM_CONFIG'|translate}}
-    </h3>
-</div>
-<div class="modal-body scrollableContainer blockingDivHost">
-
-    <div *ngIf="!collSysBackendId" style="margin-bottom: 4px;">
-        <div class="alert alert-warning">
-            {{'COLLABORATION.UNCONFIGURED_FOR_PROJECT'|translate}}
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">
+            {{'COLLABORATION.COLLABORATION_SYSTEM_CONFIG'|translate}}
+        </h3>
     </div>
+    <div class="modal-body scrollableContainer blockingDivHost">
 
-    <settings-renderer-panel *ngIf="collSysBackendId" [(ngModel)]="userSettings"></settings-renderer-panel>
-
-    <div #blockingDiv class="blockingDiv" style="display:none">
-        <div class="loadingDiv">
-            <div>
-                <p>Loading...</p><img src="./assets/images/loading.gif" />
+        <div *ngIf="!collSysBackendId" style="margin-bottom: 4px;">
+            <div class="alert alert-warning">
+                {{'COLLABORATION.UNCONFIGURED_FOR_PROJECT'|translate}}
             </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+        <settings-renderer-panel *ngIf="collSysBackendId" [(ngModel)]="userSettings"></settings-renderer-panel>
+
+        <div #blockingDiv class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="./assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

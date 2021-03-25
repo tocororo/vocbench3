@@ -1,51 +1,53 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'CUSTOM_FORMS.ACTIONS.CREATE_RESOURCE_FORM_COLL_MAPPING'|translate}}</h3>
-</div>
-<div class="modal-body vbox" style="min-height: 40vh;">
-    
-    <div style="display: flex; margin-bottom: 4px; align-items: center;">
-        <label>{{'MODELS.RESOURCE.RESOURCE'|translate}}:</label>
-        <input class="form-control form-control-sm" style="margin: 0px 4px;" [(ngModel)]="selectedResourceIri" placeholder="http://example#resource">
-        <div class="dropdown" ngbDropdown>
-            <button class="btn btn-light dropdown-toggle btn-sm" ngbDropdownToggle>
-                {{'ACTIONS.SELECT'|translate}}
-                <span class="fas fa-caret-down"></span>
-            </button>
-            <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" (click)="selectClass()">
-                    <img src="./assets/images/icons/res/class.png" /> {{'DATA.ACTIONS.SELECT_CLASS'|translate}}
-                </a>
-                <a class="dropdown-item" (click)="selectProperty()">
-                    <img src="./assets/images/icons/res/prop.png" /> {{'DATA.ACTIONS.SELECT_PROPERTY'|translate}}
-                </a>
-                <a *ngIf="selectedFormColl" class="dropdown-item" (click)="selectSuggested()">
-                    <span class="fas fa-star" style="width: 16px; padding-left: 3px;"></span>
-                    {{'CUSTOM_FORMS.ACTIONS.SELECT_SUGGESTION_FOR_FORM_COLL'|translate}}
-                </a>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'CUSTOM_FORMS.ACTIONS.CREATE_RESOURCE_FORM_COLL_MAPPING'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox" style="min-height: 40vh;">
+        
+        <div style="display: flex; margin-bottom: 4px; align-items: center;">
+            <label>{{'MODELS.RESOURCE.RESOURCE'|translate}}:</label>
+            <input class="form-control form-control-sm" style="margin: 0px 4px;" [(ngModel)]="selectedResourceIri" placeholder="http://example#resource">
+            <div class="dropdown" ngbDropdown>
+                <button class="btn btn-light dropdown-toggle btn-sm" ngbDropdownToggle>
+                    {{'ACTIONS.SELECT'|translate}}
+                    <span class="fas fa-caret-down"></span>
+                </button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <a class="dropdown-item" (click)="selectClass()">
+                        <img src="./assets/images/icons/res/class.png" /> {{'DATA.ACTIONS.SELECT_CLASS'|translate}}
+                    </a>
+                    <a class="dropdown-item" (click)="selectProperty()">
+                        <img src="./assets/images/icons/res/prop.png" /> {{'DATA.ACTIONS.SELECT_PROPERTY'|translate}}
+                    </a>
+                    <a *ngIf="selectedFormColl" class="dropdown-item" (click)="selectSuggested()">
+                        <span class="fas fa-star" style="width: 16px; padding-left: 3px;"></span>
+                        {{'CUSTOM_FORMS.ACTIONS.SELECT_SUGGESTION_FOR_FORM_COLL'|translate}}
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="card card-default vbox">
-        <div class="card-header">
-            <label style="flex: 1">{{'CUSTOM_FORMS.COLLECTIONS.FORM_COLLECTION'|translate}}:</label>
-        </div>
-        <div class="card-body vbox">
-            <div class="scrollableContainer">
-                <table class="table table-sm table-borderless table-hoverable">
-                    <tbody>
-                        <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)"
-                            [ngClass]="{ 'table-primary': fc == selectedFormColl, grayText: fc.getLevel() == 'system' }">
-                            <td>{{fc.getId()}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+        
+        <div class="card card-default vbox">
+            <div class="card-header">
+                <label style="flex: 1">{{'CUSTOM_FORMS.COLLECTIONS.FORM_COLLECTION'|translate}}:</label>
+            </div>
+            <div class="card-body vbox">
+                <div class="scrollableContainer">
+                    <table class="table table-sm table-borderless table-hoverable">
+                        <tbody>
+                            <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)"
+                                [ngClass]="{ 'table-primary': fc == selectedFormColl, grayText: fc.getLevel() == 'system' }">
+                                <td>{{fc.getId()}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        
     </div>
-    
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedResourceIri || !selectedFormColl">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedResourceIri || !selectedFormColl">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

@@ -1,22 +1,24 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-    <button *ngIf="!hideNo" class="close" (click)="close()">
-        <span>&times;</span>
-    </button>
-</div>
-<div class="modal-body">
-    <div *ngIf="message" class="alert alert-info mb-2">
-        {{message}}
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+        <button *ngIf="!hideNo" class="close" (click)="close()">
+            <span>&times;</span>
+        </button>
     </div>
-	<div class="hbox" style="align-items: center;">
-        <div *ngIf="label" class="mr-2">
-            <label>{{label.value}}:</label>
-            <span *ngIf="label.tooltip" class="fas fa-info-circle" [title]="label.tooltip"></span>
+    <div class="modal-body">
+        <div *ngIf="message" class="alert alert-info mb-2">
+            {{message}}
         </div>
-        <textarea ngbAutofocus class="form-control" style="flex: 1; resize: vertical" [(ngModel)]="value" rows="1" (keydown.enter)="ok()" [sanitized]="inputSanitized"></textarea>
+        <div class="hbox" style="align-items: center;">
+            <div *ngIf="label" class="mr-2">
+                <label>{{label.value}}:</label>
+                <span *ngIf="label.tooltip" class="fas fa-info-circle" [title]="label.tooltip"></span>
+            </div>
+            <textarea ngbAutofocus class="form-control" style="flex: 1; resize: vertical" [(ngModel)]="value" rows="1" (keydown.enter)="ok()" [sanitized]="inputSanitized"></textarea>
+        </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-sm btn-primary" (click)="ok()" [disabled]="!inputOptional && !isInputValid()">Ok</button>
-    <button *ngIf="!hideNo" class="btn btn-sm btn-secondary" (click)="close()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" (click)="ok()" [disabled]="!inputOptional && !isInputValid()">Ok</button>
+        <button *ngIf="!hideNo" class="btn btn-sm btn-secondary" (click)="close()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

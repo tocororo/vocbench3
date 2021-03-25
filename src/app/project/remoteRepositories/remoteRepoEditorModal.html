@@ -1,67 +1,69 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'PROJECTS.REMOTE_REPO.REMOTE_REPOSITORIES'|translate}}</h3>
-</div>
-<div class="modal-body vbox scrollableContainer">
-
-    <div *ngIf="!repoSummaries || repoSummaries.length == 0" class="alert alert-info m-2">
-        {{'PROJECTS.REMOTE_REPO.NO_REMOTE_REPO_WARN'|translate}}
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'PROJECTS.REMOTE_REPO.REMOTE_REPOSITORIES'|translate}}</h3>
     </div>
+    <div class="modal-body vbox scrollableContainer">
 
-    <div *ngFor="let repo of repoSummaries" class="card card-default mb-2">
-        <div class="card-header">
-            <label>{{repo.id}}:</label>
-            <span style="margin-left: 4px;">{{repo.description}}</span>
+        <div *ngIf="!repoSummaries || repoSummaries.length == 0" class="alert alert-info m-2">
+            {{'PROJECTS.REMOTE_REPO.NO_REMOTE_REPO_WARN'|translate}}
         </div>
-        <div class="card-body">
-            <table *ngIf="repo.remoteRepoSummary" class="table table-sm table-borderless"> 
-                <colgroup>
-                    <col style="width: 10%;">
-                    <col style="width: 40%;">
-                    <col style="width: 10%;">
-                    <col style="width: 40%;">
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <td nowrap><label>{{'MODELS.PROJECT.REPOSITORY_ID'|translate}}:</label></td>
-                        <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.repositoryId" readonly></td>
-                        <td nowrap><label>{{'COMMONS.CONFIG.SERVER_URL'|translate}}:</label></td>
-                        <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.serverURL" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label>{{'COMMONS.CONFIG.USERNAME'|translate}}:</label></td>
-                        <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.username" placeholder="username"></td>
-                        <td><label>{{'COMMONS.CONFIG.PASSWORD'|translate}}:</label></td>
-                        <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.password" placeholder="password"></td>
-                    </tr>
-                </tbody>
-            </table>
+
+        <div *ngFor="let repo of repoSummaries" class="card card-default mb-2">
+            <div class="card-header">
+                <label>{{repo.id}}:</label>
+                <span style="margin-left: 4px;">{{repo.description}}</span>
+            </div>
+            <div class="card-body">
+                <table *ngIf="repo.remoteRepoSummary" class="table table-sm table-borderless"> 
+                    <colgroup>
+                        <col style="width: 10%;">
+                        <col style="width: 40%;">
+                        <col style="width: 10%;">
+                        <col style="width: 40%;">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td nowrap><label>{{'MODELS.PROJECT.REPOSITORY_ID'|translate}}:</label></td>
+                            <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.repositoryId" readonly></td>
+                            <td nowrap><label>{{'COMMONS.CONFIG.SERVER_URL'|translate}}:</label></td>
+                            <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.serverURL" readonly></td>
+                        </tr>
+                        <tr>
+                            <td><label>{{'COMMONS.CONFIG.USERNAME'|translate}}:</label></td>
+                            <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.username" placeholder="username"></td>
+                            <td><label>{{'COMMONS.CONFIG.PASSWORD'|translate}}:</label></td>
+                            <td><input class="form-control" [(ngModel)]="repo.remoteRepoSummary.password" placeholder="password"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer d-flex align-items-center">
+                <ng-container *ngIf="allowBatchModify">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="batchCheck" type="checkbox" [(ngModel)]="repo.batch">
+                        <label class="form-check-label" for="batchCheck">
+                            {{'PROJECTS.REMOTE_REPO.BATCH_MODIFY'|translate}}
+                            <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.REMOTE_REPO.BATCH_MODIFY_INFO'|translate">
+                            </span>
+                        </label>
+                    </div>
+                    <div *ngIf="repo.batch" class="form-check form-check-inline">
+                        <input class="form-check-input" id="matchCheck" type="checkbox" [(ngModel)]="repo.matchUsername">
+                        <label class="form-check-label" for="matchCheck">
+                            {{'PROJECTS.REMOTE_REPO.MATCH_USERNAME'|translate}}
+                            <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.REMOTE_REPO.MATCH_USERNAME_INFO'|translate">
+                            </span>
+                        </label>
+                    </div>
+                </ng-container>
+                <span style="flex: 1"></span>
+                <button class="btn btn-light btn-sm" (click)="applyChange(repo)">{{'ACTIONS.UPDATE'|translate}}</button>
+            </div>
         </div>
-        <div class="card-footer d-flex align-items-center">
-            <ng-container *ngIf="allowBatchModify">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="batchCheck" type="checkbox" [(ngModel)]="repo.batch">
-                    <label class="form-check-label" for="batchCheck">
-                        {{'PROJECTS.REMOTE_REPO.BATCH_MODIFY'|translate}}
-                        <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.REMOTE_REPO.BATCH_MODIFY_INFO'|translate">
-                        </span>
-                    </label>
-                </div>
-                <div *ngIf="repo.batch" class="form-check form-check-inline">
-                    <input class="form-check-input" id="matchCheck" type="checkbox" [(ngModel)]="repo.matchUsername">
-                    <label class="form-check-label" for="matchCheck">
-                        {{'PROJECTS.REMOTE_REPO.MATCH_USERNAME'|translate}}
-                        <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.REMOTE_REPO.MATCH_USERNAME_INFO'|translate">
-                        </span>
-                    </label>
-                </div>
-            </ng-container>
-            <span style="flex: 1"></span>
-            <button class="btn btn-light btn-sm" (click)="applyChange(repo)">{{'ACTIONS.UPDATE'|translate}}</button>
-        </div>
+
+        
     </div>
-
-    
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

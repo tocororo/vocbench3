@@ -1,12 +1,14 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'RESOURCE_VIEW.MISC.EDIT_DATARANGE'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
-    <div class="hbox">
-        <data-range-editor [(ngModel)]="datarange"></data-range-editor>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'RESOURCE_VIEW.MISC.EDIT_DATARANGE'|translate}}</h3>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="datarange.length == 0">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-body vbox">
+        <div class="hbox">
+            <data-range-editor [(ngModel)]="datarange"></data-range-editor>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="datarange.length == 0">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

@@ -1,31 +1,33 @@
-<div class="modal-header">
-    <h3 class="modal-title">Graph selection</h3>
-</div>
-<div class="modal-body vbox">
-
-    <div class="alert alert-info">
-        Choose the graphs (among those exported) to which the filter will be applied
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">Graph selection</h3>
     </div>
+    <div class="modal-body vbox">
 
-    <div class="card card-alt vbox" style="margin-top: 5px;">
-        <div class="card-header">
-            <label style="flex: 1">
-                Graphs
-            </label>
-            <span *ngIf="areAllGraphDeselected()" class="grayText">
-                <span class="fas fa-exclamation-triangle"></span>
-                If no graph is selected, the filter will be applied to all of them
-            </span>
+        <div class="alert alert-info">
+            Choose the graphs (among those exported) to which the filter will be applied
         </div>
-        <div class="card-body scrollableContainer">
-            <div *ngFor="let g of graphs" class="listItem" style="align-items: center">
-                <input type="checkbox" [(ngModel)]="g.checked">
-                <span style="margin-left: 5px;">{{g.graph.getURI()}}</span>
+
+        <div class="card card-alt vbox" style="margin-top: 5px;">
+            <div class="card-header">
+                <label style="flex: 1">
+                    Graphs
+                </label>
+                <span *ngIf="areAllGraphDeselected()" class="grayText">
+                    <span class="fas fa-exclamation-triangle"></span>
+                    If no graph is selected, the filter will be applied to all of them
+                </span>
+            </div>
+            <div class="card-body scrollableContainer">
+                <div *ngFor="let g of graphs" class="listItem" style="align-items: center">
+                    <input type="checkbox" [(ngModel)]="g.checked">
+                    <span style="margin-left: 5px;">{{g.graph.getURI()}}</span>
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

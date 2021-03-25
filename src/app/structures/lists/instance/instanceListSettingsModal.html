@@ -1,40 +1,42 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'DATA.INSTANCE.SETTINGS.INSTANCE_LIST_SETTINGS'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'DATA.INSTANCE.SETTINGS.INSTANCE_LIST_SETTINGS'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td nowrap><label>{{'COMMONS.VISUALIZATION_MODE'|translate}}</label></td>
-                <td>
-                    <select class="form-control form-control-sm" [(ngModel)]="visualization">
-                        <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.labelTranslationKey|translate}}</option>
-                    </select>
-                </td>
-            </tr>
-            <ng-container *ngIf="visualization == 'standard'">
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
                 <tr>
-                    <td nowrap>
-                        <label>
-                            {{'DATA.INSTANCE.SETTINGS.INSTANCES_LIMIT'|translate}}
-                            <span class="fas fa-info-circle ml-1" [title]="'DATA.INSTANCE.SETTINGS.INSTANCES_LIMIT_INFO'|translate"></span>
-                        </label>
-                    </td>
+                    <td nowrap><label>{{'COMMONS.VISUALIZATION_MODE'|translate}}</label></td>
                     <td>
-                        <input class="form-control form-control-sm" type="number" min="1" [(ngModel)]="safeToGoLimit">
+                        <select class="form-control form-control-sm" [(ngModel)]="visualization">
+                            <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.labelTranslationKey|translate}}</option>
+                        </select>
                     </td>
                 </tr>
-            </ng-container>
-        </tbody>
-    </table>
+                <ng-container *ngIf="visualization == 'standard'">
+                    <tr>
+                        <td nowrap>
+                            <label>
+                                {{'DATA.INSTANCE.SETTINGS.INSTANCES_LIMIT'|translate}}
+                                <span class="fas fa-info-circle ml-1" [title]="'DATA.INSTANCE.SETTINGS.INSTANCES_LIMIT_INFO'|translate"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <input class="form-control form-control-sm" type="number" min="1" [(ngModel)]="safeToGoLimit">
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

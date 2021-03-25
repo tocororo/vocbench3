@@ -1,18 +1,20 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-    <button class="close" (click)="close()">
-        <span>&times;</span>
-    </button>
-</div>
-<div class="modal-body">
-
-    <div *ngIf="message" class="alert alert-info mb-2">
-        {{message}}
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+        <button class="close" (click)="close()">
+            <span>&times;</span>
+        </button>
     </div>
+    <div class="modal-body">
 
-    <a [href]="safeDownloadLink" [download]="fileName">Download</a>
+        <div *ngIf="message" class="alert alert-info mb-2">
+            {{message}}
+        </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-sm btn-primary" (click)="ok()">Ok</button>
+        <a [href]="safeDownloadLink" [download]="fileName">Download</a>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" (click)="ok()">Ok</button>
+    </div>
 </div>

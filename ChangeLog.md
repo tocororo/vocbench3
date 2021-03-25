@@ -4,6 +4,9 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
+# 9.0.1 (dd-mm-yyyy)
+  * Made dialog draggable
+
 # 9.0.0 (18-03-2021)
   * Major and pervasive code changes:
     * Dropped webpack build structure in favor of angular-cli

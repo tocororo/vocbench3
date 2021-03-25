@@ -1,41 +1,43 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body vbox">
-    <div class="scrollableContainer">
-        <table class="table table-sm table-hoverable">
-            <colgroup>
-                <col style="width: 1%">
-                <col style="width: 1%">
-                <col>
-            </colgroup>
-            <thead>
-                <tr>
-                    <th class="text-center" style="padding: 0px 8px;">Selected</th>
-                    <th class="text-center" style="padding: 0px 8px;" nowrap>{{'COMMONS.LANGUAGE.ISO_CODE'|translate}}</th>
-                    <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let l of languageItems" (click)="selectLang(l)">
-                    <td class="text-center">
-                        <ng-container *ngIf="radio; else checkboxItem">
-                            <input type="radio" name="langRadio" [checked]="l.selected" (click)="selectLang(l)">
-                        </ng-container>
-                        <ng-template #checkboxItem>
-                            <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.selected">
-                        </ng-template>
-                    </td>
-                    <td class="text-center" nowrap>{{l.lang.tag}}</td>
-                    <td class="text-center">
-                        <lang-item [language]="l.lang"></lang-item>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="okDisabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-body vbox">
+        <div class="scrollableContainer">
+            <table class="table table-sm table-hoverable">
+                <colgroup>
+                    <col style="width: 1%">
+                    <col style="width: 1%">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center" style="padding: 0px 8px;">Selected</th>
+                        <th class="text-center" style="padding: 0px 8px;" nowrap>{{'COMMONS.LANGUAGE.ISO_CODE'|translate}}</th>
+                        <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let l of languageItems" (click)="selectLang(l)">
+                        <td class="text-center">
+                            <ng-container *ngIf="radio; else checkboxItem">
+                                <input type="radio" name="langRadio" [checked]="l.selected" (click)="selectLang(l)">
+                            </ng-container>
+                            <ng-template #checkboxItem>
+                                <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.selected">
+                            </ng-template>
+                        </td>
+                        <td class="text-center" nowrap>{{l.lang.tag}}</td>
+                        <td class="text-center">
+                            <lang-item [language]="l.lang"></lang-item>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="okDisabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

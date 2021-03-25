@@ -1,120 +1,122 @@
-<div class="modal-header">
-    <h3 *ngIf="!id" class="modal-title">{{'CUSTOM_FORMS.ACTIONS.CREATE_FORM_COLLECTION'|translate}}</h3>
-    <h3 *ngIf="id" class="modal-title">{{'CUSTOM_FORMS.ACTIONS.EDIT_FORM_COLLECTION'|translate}}</h3>
-</div>
-<div class="modal-body vbox" style="min-height: 50vh;">
-    
-    <div class="hbox" style="align-items: center; flex: initial;">
-        <label style="white-space: nowrap; margin: 0px 3px;">ID:</label>
-        <div class="input-group" style="flex: 1">
-            <ng-container *ngIf="namespaceLocked">
-                <span class="input-group-prepend">
-                    <span class="input-group-text">{{fcPrefix}}</span>
-                </span>
-                <input type="text" class="form-control" [(ngModel)]="fcShortId" [disabled]="mode == 'edit'" sanitized>
-            </ng-container>
-            
-            <ng-container *ngIf="!namespaceLocked">
-                <input type="text" class="form-control" [(ngModel)]="fcId" [disabled]="mode == 'edit'" sanitized>
-            </ng-container>
-            
-            <div class="input-group-append">
-                <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
-                    [title]="'ACTIONS.LOCK_UNLOCK_NAMESPACE'|translate" [ngClass]="{active: namespaceLocked}" 
-                    [disabled]="mode == 'edit'">
-                    <span class="fas fa-lock" style="font-size: 10px;"></span>
-                </button>
-            </div>
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 *ngIf="!id" class="modal-title">{{'CUSTOM_FORMS.ACTIONS.CREATE_FORM_COLLECTION'|translate}}</h3>
+        <h3 *ngIf="id" class="modal-title">{{'CUSTOM_FORMS.ACTIONS.EDIT_FORM_COLLECTION'|translate}}</h3>
     </div>
-    
-    <div class="hbox" style="margin: 10px 0 10px;">
-        <div class="card card-default vbox">
-            <div class="card-header">
-                <label style="flex: 1">{{'CUSTOM_FORMS.FORMS.CUSTOM_FORMS'|translate}}:</label>
-            </div>
-            <div class="card-body vbox">
-                <div class="scrollableContainer">
-                    <table class="table table-sm table-borderless table-hoverable" style="table-layout: fixed">
-                        <tbody>
-                            <tr *ngFor="let cForm of forms" (click)="selectForm(cForm)"
-                                [ngClass]="{ 'table-primary': cForm == selectedForm, grayText: cForm.getLevel() == 'system' }">
-                                <td>{{cForm.getId()}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="modal-body vbox" style="min-height: 50vh;">
         
-        <div style="align-self: center; margin: 5px;">
-            <button class="btn btn-light btn-sm btn-block" (click)="addForm()" [disabled]="!selectedFormAvailable || readOnly">
-                <span class="fas fa-chevron-left"></span> {{'ACTIONS.ADD'|translate}}
-            </button>
-            <button class="btn btn-light btn-sm btn-block" (click)="removeForm()" [disabled]="!selectedForm || readOnly">
-                {{'ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
-            </button>
-        </div>
-        
-        <div class="card card-default vbox">
-            <div class="card-header">
-                <label style="flex: 1">{{'CUSTOM_FORMS.COLLECTIONS.AVAILABLE_CUSTOM_FORMS'|translate}}:</label>
-            </div>
-            <div class="card-body vbox">
-                <div class="scrollableContainer">
-                    <table class="table table-sm table-borderless table-hoverable" style="table-layout: fixed">
-                        <tbody>
-                            <tr *ngFor="let cForm of formsAvailable" (click)="selectFormAvailable(cForm)"
-                                [ngClass]="{ 'table-primary': cForm == selectedFormAvailable, grayText: cForm.getLevel() == 'system' }">
-                                <td>{{cForm.getId()}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card card-default vbox" style="min-height: 100px;">
-        <div class="card-header">
-            <label style="flex: 1">
-                {{'CUSTOM_FORMS.COLLECTIONS.SUGGESTIONS'|translate}}
-                <span [title]="'CUSTOM_FORMS.COLLECTIONS.SUGGESTIONS_INFO'|translate"></span>
-            </label>
-            <div class="btn-group btn-group-xs">
-                <div class="btn-group btn-group-xs" [title]="'ACTIONS.ADD'|translate" ngbDropdown>
-                    <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" [disabled]="readOnly" ngbDropdownToggle>
-                        <span class="fas fa-plus"></span>
+        <div class="hbox" style="align-items: center; flex: initial;">
+            <label style="white-space: nowrap; margin: 0px 3px;">ID:</label>
+            <div class="input-group" style="flex: 1">
+                <ng-container *ngIf="namespaceLocked">
+                    <span class="input-group-prepend">
+                        <span class="input-group-text">{{fcPrefix}}</span>
+                    </span>
+                    <input type="text" class="form-control" [(ngModel)]="fcShortId" [disabled]="mode == 'edit'" sanitized>
+                </ng-container>
+                
+                <ng-container *ngIf="!namespaceLocked">
+                    <input type="text" class="form-control" [(ngModel)]="fcId" [disabled]="mode == 'edit'" sanitized>
+                </ng-container>
+                
+                <div class="input-group-append">
+                    <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
+                        [title]="'ACTIONS.LOCK_UNLOCK_NAMESPACE'|translate" [ngClass]="{active: namespaceLocked}" 
+                        [disabled]="mode == 'edit'">
+                        <span class="fas fa-lock" style="font-size: 10px;"></span>
                     </button>
-                    <div class="dropdown-menu" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="addSuggestionClass()">
-                            <img src="./assets/images/icons/actions/cls_create.png" /> {{'DATA.ACTIONS.SELECT_CLASS'|translate}}
-                        </a>
-                        <a class="dropdown-item" (click)="addSuggestionProperty()">
-                            <img src="./assets/images/icons/actions/property_create.png" /> {{'DATA.ACTIONS.SELECT_PROPERTY'|translate}}
-                        </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hbox" style="margin: 10px 0 10px;">
+            <div class="card card-default vbox">
+                <div class="card-header">
+                    <label style="flex: 1">{{'CUSTOM_FORMS.FORMS.CUSTOM_FORMS'|translate}}:</label>
+                </div>
+                <div class="card-body vbox">
+                    <div class="scrollableContainer">
+                        <table class="table table-sm table-borderless table-hoverable" style="table-layout: fixed">
+                            <tbody>
+                                <tr *ngFor="let cForm of forms" (click)="selectForm(cForm)"
+                                    [ngClass]="{ 'table-primary': cForm == selectedForm, grayText: cForm.getLevel() == 'system' }">
+                                    <td>{{cForm.getId()}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <button class="btn btn-light" [title]="'ACTIONS.REMOVE'|translate" (click)="removeSuggestion()"
-                    [disabled]="!selectedSuggestion || readOnly">
-                    <span class="fas fa-minus"></span>
+            </div>
+            
+            <div style="align-self: center; margin: 5px;">
+                <button class="btn btn-light btn-sm btn-block" (click)="addForm()" [disabled]="!selectedFormAvailable || readOnly">
+                    <span class="fas fa-chevron-left"></span> {{'ACTIONS.ADD'|translate}}
+                </button>
+                <button class="btn btn-light btn-sm btn-block" (click)="removeForm()" [disabled]="!selectedForm || readOnly">
+                    {{'ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                 </button>
             </div>
-        </div>
-        <div class="card-body vbox">
-            <resource-list [resources]="suggestions" (nodeSelected)="selectSuggestion($event)"></resource-list>
-        </div>
-    </div>
-    
-</div>
-<div class="modal-footer">
-    <div class="hbox">
-        <div class="hbox" style="align-items: center; margin-right: 10px;">
-            <div *ngIf="submitted && !isDataValid()" class="alert alert-danger" style="flex: 1; text-align: left; padding: 5px">
-                {{errorMsg}}
+            
+            <div class="card card-default vbox">
+                <div class="card-header">
+                    <label style="flex: 1">{{'CUSTOM_FORMS.COLLECTIONS.AVAILABLE_CUSTOM_FORMS'|translate}}:</label>
+                </div>
+                <div class="card-body vbox">
+                    <div class="scrollableContainer">
+                        <table class="table table-sm table-borderless table-hoverable" style="table-layout: fixed">
+                            <tbody>
+                                <tr *ngFor="let cForm of formsAvailable" (click)="selectFormAvailable(cForm)"
+                                    [ngClass]="{ 'table-primary': cForm == selectedFormAvailable, grayText: cForm.getLevel() == 'system' }">
+                                    <td>{{cForm.getId()}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="readOnly">Ok</button>
-        <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+
+        <div class="card card-default vbox" style="min-height: 100px;">
+            <div class="card-header">
+                <label style="flex: 1">
+                    {{'CUSTOM_FORMS.COLLECTIONS.SUGGESTIONS'|translate}}
+                    <span [title]="'CUSTOM_FORMS.COLLECTIONS.SUGGESTIONS_INFO'|translate"></span>
+                </label>
+                <div class="btn-group btn-group-xs">
+                    <div class="btn-group btn-group-xs" [title]="'ACTIONS.ADD'|translate" ngbDropdown>
+                        <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" [disabled]="readOnly" ngbDropdownToggle>
+                            <span class="fas fa-plus"></span>
+                        </button>
+                        <div class="dropdown-menu" ngbDropdownMenu>
+                            <a class="dropdown-item" (click)="addSuggestionClass()">
+                                <img src="./assets/images/icons/actions/cls_create.png" /> {{'DATA.ACTIONS.SELECT_CLASS'|translate}}
+                            </a>
+                            <a class="dropdown-item" (click)="addSuggestionProperty()">
+                                <img src="./assets/images/icons/actions/property_create.png" /> {{'DATA.ACTIONS.SELECT_PROPERTY'|translate}}
+                            </a>
+                        </div>
+                    </div>
+                    <button class="btn btn-light" [title]="'ACTIONS.REMOVE'|translate" (click)="removeSuggestion()"
+                        [disabled]="!selectedSuggestion || readOnly">
+                        <span class="fas fa-minus"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body vbox">
+                <resource-list [resources]="suggestions" (nodeSelected)="selectSuggestion($event)"></resource-list>
+            </div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+        <div class="hbox">
+            <div class="hbox" style="align-items: center; margin-right: 10px;">
+                <div *ngIf="submitted && !isDataValid()" class="alert alert-danger" style="flex: 1; text-align: left; padding: 5px">
+                    {{errorMsg}}
+                </div>
+            </div>
+            <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="readOnly">Ok</button>
+            <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+        </div>
     </div>
 </div>

@@ -1,59 +1,61 @@
-<div class="modal-header">
-    <h3 class="modal-title text-info">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.REMOTE_ALIGN_SYS_CONFIG'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
-    
-    <div class="card card-default">
-        <div class="card-header">
-            <span style="flex: 1"></span>
-            <button *ngIf="isAdmin" class="btn btn-xs btn-light" (click)="administration()" [title]="'COMMONS.CONFIG.CONFIGURATION'|translate">
-                <span class="fas fa-wrench"></span>
-            </button>
-        </div>
-        <div class="card-body table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="text-center">{{'STATUS.ACTIVE'|translate}}</th>
-                        <th class="text-center">ID</th>
-                        <th class="text-center">{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
-                        <th class="text-center">{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
-                        <th class="text-center">{{'COMMONS.CONFIG.PASSWORD'|translate}}</th>
-                        <th class="text-center">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngIf="savedConfigs?.length == 0">
-                        <td colspan="4">{{'COMMONS.CONFIG.NO_CONFIG_FOUND'|translate}}</td>
-                    </tr>
-                    <tr *ngFor="let conf of savedConfigs">
-                        <td class="text-center">
-                            <!-- <input type="radio" (click)="toggleConfig(conf)" [checked]="conf == activeConfig"> -->
-                            <input type="radio" (click)="activateConfig(conf)" [checked]="conf == activeConfig" [disabled]="!isSetServiceAuthorized">
-                        </td>
-                        <td class="text-center">
-                            {{conf.id}}
-                        </td>
-                        <td class="text-center">
-                            {{conf.serverURL}}
-                        </td>
-                        <td class="text-center">
-                            {{conf.username}}
-                        </td>
-                        <td class="text-center">
-                            <ng-container *ngIf="conf.password">*******</ng-container>
-                        </td>
-                        <td class="text-center">
-                            <ng-container *ngIf="conf.forwardCredentials"><span class="fas fa-check"></span></ng-container>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title text-info">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.REMOTE_ALIGN_SYS_CONFIG'|translate}}</h3>
     </div>
+    <div class="modal-body vbox">
+        
+        <div class="card card-default">
+            <div class="card-header">
+                <span style="flex: 1"></span>
+                <button *ngIf="isAdmin" class="btn btn-xs btn-light" (click)="administration()" [title]="'COMMONS.CONFIG.CONFIGURATION'|translate">
+                    <span class="fas fa-wrench"></span>
+                </button>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">{{'STATUS.ACTIVE'|translate}}</th>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
+                            <th class="text-center">{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
+                            <th class="text-center">{{'COMMONS.CONFIG.PASSWORD'|translate}}</th>
+                            <th class="text-center">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="savedConfigs?.length == 0">
+                            <td colspan="4">{{'COMMONS.CONFIG.NO_CONFIG_FOUND'|translate}}</td>
+                        </tr>
+                        <tr *ngFor="let conf of savedConfigs">
+                            <td class="text-center">
+                                <!-- <input type="radio" (click)="toggleConfig(conf)" [checked]="conf == activeConfig"> -->
+                                <input type="radio" (click)="activateConfig(conf)" [checked]="conf == activeConfig" [disabled]="!isSetServiceAuthorized">
+                            </td>
+                            <td class="text-center">
+                                {{conf.id}}
+                            </td>
+                            <td class="text-center">
+                                {{conf.serverURL}}
+                            </td>
+                            <td class="text-center">
+                                {{conf.username}}
+                            </td>
+                            <td class="text-center">
+                                <ng-container *ngIf="conf.password">*******</ng-container>
+                            </td>
+                            <td class="text-center">
+                                <ng-container *ngIf="conf.forwardCredentials"><span class="fas fa-check"></span></ng-container>
+                            </td>
+                        </tr>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
+    </div>
 </div>

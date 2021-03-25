@@ -1,151 +1,153 @@
-<div class="modal-header">
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{'SHEET2RDF.HEADER_EDITOR.HEADER_EDITOR'|translate}}</h3>
-        <div *ngIf="header" class="form-check ml-1 text-nowrap">
-            <input class="form-check-input" id="ignoreCheck" type="checkbox" [(ngModel)]="header.ignore" (ngModelChange)="onIgnoreChange()">
-            <label class="form-check-label" for="ignoreCheck">
-                {{'SHEET2RDF.HEADER_EDITOR.IGNORE_HEADER'|translate}}
-                <span class="fas fa-info-circle ml-1" [title]="'SHEET2RDF.HEADER_EDITOR.IGNORE_HEADER_INFO'|translate">
-                </span>
-            </label>
-        </div>
-    </div>
-</div>
-<div class="modal-body vbox scrollableContainer">
-
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td class="text-right"><label>{{'SHEET2RDF.HEADER_EDITOR.HEADER'|translate}}:</label></td>
-                <td>
-                    <input type="text" class="form-control" [ngModel]="header?.nameStruct.fullName" readonly>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-right" nowrap><label>{{'SHEET2RDF.HEADER_EDITOR.PEARL_FEATURE'|translate}}:</label></td>
-                <td>
-                    <input type="text" class="form-control" [ngModel]="header?.pearlFeature" readonly>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-
-    <div class="card card-default vbox" style="margin-top: 4px; min-height: 100px">
-        <div class="card-header">
-            <label style="flex: 1">
-                {{'SHEET2RDF.HEADER_EDITOR.NODES'|translate}}
-                <span class="fas fa-info-circle" [title]="'SHEET2RDF.HEADER_EDITOR.NODES_INFO'|translate"></span>
-            </label>
-            <div class="btn-toolbar">
-                <div class="btn-group btn-group-xs">
-                    <button class="btn btn-light" (click)="addNode()" [disabled]="header?.ignore">
-                        <span class="fas fa-plus"></span>
-                    </button>
-                    <button class="btn btn-light" (click)="removeNode()" [disabled]="!selectedNode || header?.ignore">
-                        <span class="fas fa-minus"></span>
-                    </button>
-                </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{'SHEET2RDF.HEADER_EDITOR.HEADER_EDITOR'|translate}}</h3>
+            <div *ngIf="header" class="form-check ml-1 text-nowrap">
+                <input class="form-check-input" id="ignoreCheck" type="checkbox" [(ngModel)]="header.ignore" (ngModelChange)="onIgnoreChange()">
+                <label class="form-check-label" for="ignoreCheck">
+                    {{'SHEET2RDF.HEADER_EDITOR.IGNORE_HEADER'|translate}}
+                    <span class="fas fa-info-circle ml-1" [title]="'SHEET2RDF.HEADER_EDITOR.IGNORE_HEADER_INFO'|translate">
+                    </span>
+                </label>
             </div>
         </div>
-        <div class="card-body vbox table-responsive">
-            <table class="table table-sm">
-                <thead>
-                    <tr>
-                        <th>{{'SHEET2RDF.HEADER_EDITOR.NODE_ID'|translate}}</th>
-                        <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_TYPE'|translate}}</th>
-                        <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_URI'|translate}}</th>
-                        <th>{{'COMMONS.DETAILS'|translate}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let n of header?.nodes" (click)="selectNode(n)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
-                        [ngClass]="{ 'table-primary': n == selectedNode }">
-                        <td [ngClass]="{ grayText : header?.ignore }">
-                            {{n.nodeId}}
-                            <button class="btn btn-xs btn-light" (click)="renameNode(n)">
-                                <span class="fas fa-pencil-alt"></span>
-                            </button>
-                        </td>
-                        <td [ngClass]="{ grayText : header?.ignore }">{{n.converter?.type}}</td>
-                        <td [ngClass]="{ grayText : header?.ignore }" nowrap>
-                            {{n.converter?.contractUri}}
-                            <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-light" (click)="changeUriConverter(n)">
-                                <span class="fas fa-pencil-alt"></span>
-                            </button>
-                        </td>
-                        <td [ngClass]="{ grayText : header?.ignore }" nowrap>
-                            <span *ngIf="n.converter?.language; else dtBlock">
-                                <label style="white-space: pre">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}: </label>{{n.converter.language}}
-                                <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-light" (click)="changeLiteralConverter(n)">
-                                    <span class="fas fa-pencil-alt"></span>
-                                </button>
-                            </span>
-                            <span #dtBlock *ngIf="n.converter?.datatypeUri">
-                                <label style="white-space: pre">{{'DATA.DATATYPE.DATATYPE'|translate}}: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
+    <div class="modal-body vbox scrollableContainer">
 
-    <div class="card card-default vbox" style="margin-top: 4px; min-height: 100px">
-        <div class="card-header">
-            <label style="flex: 1">
-                {{'SHEET2RDF.HEADER_EDITOR.GRAPH_APPLICATIONS'|translate}}
-                <span class="fas fa-info-circle" [title]="'SHEET2RDF.HEADER_EDITOR.GRAPH_APPLICATIONS_INFO'|translate"></span>
-            </label>
-            <div class="btn-toolbar" role="toolbar">
-                <button class="btn btn-xs btn-light" (click)="editGraph()" [disabled]="!selectedGraph || header?.ignore">
-                    <span class="fas fa-pencil-alt"></span>
-                </button>
-                <div class="btn-group btn-group-xs">
-                    <div class="btn-group btn-group-xs" ngbDropdown placement="bottom-right">
-                        <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="header?.ignore">
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right"><label>{{'SHEET2RDF.HEADER_EDITOR.HEADER'|translate}}:</label></td>
+                    <td>
+                        <input type="text" class="form-control" [ngModel]="header?.nameStruct.fullName" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap><label>{{'SHEET2RDF.HEADER_EDITOR.PEARL_FEATURE'|translate}}:</label></td>
+                    <td>
+                        <input type="text" class="form-control" [ngModel]="header?.pearlFeature" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div class="card card-default vbox" style="margin-top: 4px; min-height: 100px">
+            <div class="card-header">
+                <label style="flex: 1">
+                    {{'SHEET2RDF.HEADER_EDITOR.NODES'|translate}}
+                    <span class="fas fa-info-circle" [title]="'SHEET2RDF.HEADER_EDITOR.NODES_INFO'|translate"></span>
+                </label>
+                <div class="btn-toolbar">
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-light" (click)="addNode()" [disabled]="header?.ignore">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <div class="dropdown-menu" ngbDropdownMenu>
-                            <a class="dropdown-item" (click)="addSimpleGraphApplication()">{{'SHEET2RDF.HEADER_EDITOR.ADD_SIMPLE_GRAPH_APPL'|translate}}</a>
-                            <a class="dropdown-item" (click)="addAdvancedGraphApplication()">{{'SHEET2RDF.HEADER_EDITOR.ADD_ADV_GRAPH_APPL'|translate}}</a>
-                        </div>
+                        <button class="btn btn-light" (click)="removeNode()" [disabled]="!selectedNode || header?.ignore">
+                            <span class="fas fa-minus"></span>
+                        </button>
                     </div>
-                    <button class="btn btn-light" (click)="removeGraph()" [disabled]="!selectedGraph || header?.ignore">
-                        <span class="fas fa-minus"></span>
-                    </button>
                 </div>
             </div>
+            <div class="card-body vbox table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>{{'SHEET2RDF.HEADER_EDITOR.NODE_ID'|translate}}</th>
+                            <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_TYPE'|translate}}</th>
+                            <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_URI'|translate}}</th>
+                            <th>{{'COMMONS.DETAILS'|translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let n of header?.nodes" (click)="selectNode(n)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
+                            [ngClass]="{ 'table-primary': n == selectedNode }">
+                            <td [ngClass]="{ grayText : header?.ignore }">
+                                {{n.nodeId}}
+                                <button class="btn btn-xs btn-light" (click)="renameNode(n)">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
+                            </td>
+                            <td [ngClass]="{ grayText : header?.ignore }">{{n.converter?.type}}</td>
+                            <td [ngClass]="{ grayText : header?.ignore }" nowrap>
+                                {{n.converter?.contractUri}}
+                                <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-light" (click)="changeUriConverter(n)">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
+                            </td>
+                            <td [ngClass]="{ grayText : header?.ignore }" nowrap>
+                                <span *ngIf="n.converter?.language; else dtBlock">
+                                    <label style="white-space: pre">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}: </label>{{n.converter.language}}
+                                    <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-light" (click)="changeLiteralConverter(n)">
+                                        <span class="fas fa-pencil-alt"></span>
+                                    </button>
+                                </span>
+                                <span #dtBlock *ngIf="n.converter?.datatypeUri">
+                                    <label style="white-space: pre">{{'DATA.DATATYPE.DATATYPE'|translate}}: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="card-body vbox scrollableContainer" style="min-height: 80px">
-            <table class="table table-sm">
-                <colgroup>
-                    <col style="width: 1%">
-                    <col>
-                </colgroup>
-                <tbody>
-                    <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
-                        [ngClass]="{ 'table-primary': g == selectedGraph }">
-                        <ng-container *ngIf="isSimpleGraphApplication(g); else advancedGraphBlock">
-                            <td [ngClass]="{ grayText : header?.ignore }" nowrap><label>{{'SHEET2RDF.GRAPH_APPLICATIONS.SIMPLE.SIMPLE_GRAPH_APPL'|translate}}:</label></td>
-                            <td [ngClass]="{ grayText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">$subject {{g.property.getShow()}} ${{g.nodeId}}</td>
-                        </ng-container>
-                        <ng-template #advancedGraphBlock>
-                            <td [ngClass]="{ grayText : header?.ignore }" nowrap><label>{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.ADV_GRAPH_APPL'|translate}}:</label></td>
-                            <td [ngClass]="{ grayText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">{{g.pattern}}</td>
-                        </ng-template>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 
-    
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <div class="card card-default vbox" style="margin-top: 4px; min-height: 100px">
+            <div class="card-header">
+                <label style="flex: 1">
+                    {{'SHEET2RDF.HEADER_EDITOR.GRAPH_APPLICATIONS'|translate}}
+                    <span class="fas fa-info-circle" [title]="'SHEET2RDF.HEADER_EDITOR.GRAPH_APPLICATIONS_INFO'|translate"></span>
+                </label>
+                <div class="btn-toolbar" role="toolbar">
+                    <button class="btn btn-xs btn-light" (click)="editGraph()" [disabled]="!selectedGraph || header?.ignore">
+                        <span class="fas fa-pencil-alt"></span>
+                    </button>
+                    <div class="btn-group btn-group-xs">
+                        <div class="btn-group btn-group-xs" ngbDropdown placement="bottom-right">
+                            <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="header?.ignore">
+                                <span class="fas fa-plus"></span>
+                            </button>
+                            <div class="dropdown-menu" ngbDropdownMenu>
+                                <a class="dropdown-item" (click)="addSimpleGraphApplication()">{{'SHEET2RDF.HEADER_EDITOR.ADD_SIMPLE_GRAPH_APPL'|translate}}</a>
+                                <a class="dropdown-item" (click)="addAdvancedGraphApplication()">{{'SHEET2RDF.HEADER_EDITOR.ADD_ADV_GRAPH_APPL'|translate}}</a>
+                            </div>
+                        </div>
+                        <button class="btn btn-light" (click)="removeGraph()" [disabled]="!selectedGraph || header?.ignore">
+                            <span class="fas fa-minus"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body vbox scrollableContainer" style="min-height: 80px">
+                <table class="table table-sm">
+                    <colgroup>
+                        <col style="width: 1%">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
+                            [ngClass]="{ 'table-primary': g == selectedGraph }">
+                            <ng-container *ngIf="isSimpleGraphApplication(g); else advancedGraphBlock">
+                                <td [ngClass]="{ grayText : header?.ignore }" nowrap><label>{{'SHEET2RDF.GRAPH_APPLICATIONS.SIMPLE.SIMPLE_GRAPH_APPL'|translate}}:</label></td>
+                                <td [ngClass]="{ grayText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">$subject {{g.property.getShow()}} ${{g.nodeId}}</td>
+                            </ng-container>
+                            <ng-template #advancedGraphBlock>
+                                <td [ngClass]="{ grayText : header?.ignore }" nowrap><label>{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.ADV_GRAPH_APPL'|translate}}:</label></td>
+                                <td [ngClass]="{ grayText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">{{g.pattern}}</td>
+                            </ng-template>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

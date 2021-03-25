@@ -1,14 +1,16 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'ADMINISTRATION.ACTIONS.CREATE_USER'|translate}}</h3>
-</div>
-<div class="modal-body">
-    <user-create [(ngModel)]="userForm"></user-create>
-</div>
-<div class="modal-footer">
-    <div class="float-left">
-        <div class="mb-2" style="text-align: left"><span style="color: red; margin-right: 2px;">* </span>{{'COMMONS.MANDATORY_FIELD'|translate}}</div>
-        <div style="text-align: left"><span style="color: red; margin-right: 2px;">** </span>{{'USER.REGISTRATION.OPTIONAL_RECOMMENDED_FIELD'|translate}}</div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'ADMINISTRATION.ACTIONS.CREATE_USER'|translate}}</h3>
     </div>
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-body">
+        <user-create [(ngModel)]="userForm"></user-create>
+    </div>
+    <div class="modal-footer">
+        <div class="float-left">
+            <div class="mb-2" style="text-align: left"><span style="color: red; margin-right: 2px;">* </span>{{'COMMONS.MANDATORY_FIELD'|translate}}</div>
+            <div style="text-align: left"><span style="color: red; margin-right: 2px;">** </span>{{'USER.REGISTRATION.OPTIONAL_RECOMMENDED_FIELD'|translate}}</div>
+        </div>
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

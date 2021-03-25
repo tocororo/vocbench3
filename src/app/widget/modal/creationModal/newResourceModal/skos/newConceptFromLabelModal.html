@@ -1,100 +1,102 @@
-<div class="modal-header">
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
-        <span>
-            <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_CLASS'|translate" (click)="changeClass()" [disabled]="!clsChangeable">
-                <rdf-resource [resource]="resourceClass"></rdf-resource>
-            </button>
-        </span>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{title}}</h3>
+            <span>
+                <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_CLASS'|translate" (click)="changeClass()" [disabled]="!clsChangeable">
+                    <rdf-resource [resource]="resourceClass"></rdf-resource>
+                </button>
+            </span>
+        </div>
     </div>
-</div>
-<div class="modal-body vbox" (keydown.enter)="onEnter()">
+    <div class="modal-body vbox" (keydown.enter)="onEnter()">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td class="text-right"><label>{{'MODELS.RESOURCE.LABEL'|translate}}:</label></td>
-                <td>
-                    <div class="form-control">
-                        <rdf-resource [resource]="xLabel"></rdf-resource>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-right"><label>URI:</label></td>
-                <td>
-                    <editable-ns-input [(ngModel)]="uri" [placeholder]="'DATA.COMMONS.LEAVE_EMPTY_FOR_RANDOM_URI'|translate">
-                    </editable-ns-input>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-right"><label>{{'COMMONS.POSITION'|translate}}:</label></td>
-                <td>
-                    <select class="form-control" [(ngModel)]="position" (ngModelChange)="onPositionChange()">
-                        <option *ngFor="let p of positionList">{{p}}</option>
-                    </select>
-                </td>
-            </tr>
-            <tr *ngIf="isPositionNarrower()">
-                <td class="text-right"><label>Broader:</label></td>
-                <td>
-                    <div class="input-group">
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right"><label>{{'MODELS.RESOURCE.LABEL'|translate}}:</label></td>
+                    <td>
                         <div class="form-control">
-                            <rdf-resource *ngIf="broader" [resource]="broader"></rdf-resource>
+                            <rdf-resource [resource]="xLabel"></rdf-resource>
                         </div>
-                        <span class="input-group-append">
-                            <button class="btn btn-light" style="padding: 3px;" (click)="selectBroader()">
-                                <img src="./assets/images/icons/actions/concept_create.png"/>
-                            </button>
-                        </span>
-                    </div>
-                </td>
-            </tr>
-            <tr *ngIf="isPositionSibling()">
-                <td class="text-right"><label>{{'DATA.CONCEPT.SPAWN_FROM_LABEL.SIBLING'|translate}}:</label></td>
-                <td>
-                    <div class="input-group">
-                        <div class="form-control">
-                            <rdf-resource *ngIf="sibling" [resource]="sibling"></rdf-resource>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><label>URI:</label></td>
+                    <td>
+                        <editable-ns-input [(ngModel)]="uri" [placeholder]="'DATA.COMMONS.LEAVE_EMPTY_FOR_RANDOM_URI'|translate">
+                        </editable-ns-input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><label>{{'COMMONS.POSITION'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="position" (ngModelChange)="onPositionChange()">
+                            <option *ngFor="let p of positionList">{{p}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr *ngIf="isPositionNarrower()">
+                    <td class="text-right"><label>Broader:</label></td>
+                    <td>
+                        <div class="input-group">
+                            <div class="form-control">
+                                <rdf-resource *ngIf="broader" [resource]="broader"></rdf-resource>
+                            </div>
+                            <span class="input-group-append">
+                                <button class="btn btn-light" style="padding: 3px;" (click)="selectBroader()">
+                                    <img src="./assets/images/icons/actions/concept_create.png"/>
+                                </button>
+                            </span>
                         </div>
-                        <span class="input-group-append">
-                            <button class="btn btn-light" style="padding: 3px;" (click)="selectSibling()">
-                                <img src="./assets/images/icons/actions/concept_create.png"/>
-                            </button>
-                        </span>
-                    </div>
-                </td>
-            </tr>
-            <tr *ngIf="isPositionSibling() && multipleSiblingBroaders">
-                <td class="text-right" style="white-space: nowrap">
-                    <span class="fas fa-info-circle" [title]="'DATA.CONCEPT.SPAWN_FROM_LABEL.MULTIPLE_SIBLING_WARN'|translate"></span>
-                    <label>Broader:</label>
-                </td>
-                <td>
-                    <div class="card card-default">
-                        <div class="card-body scrollableContainer">
-                            <rdf-resource *ngFor="let b of siblingBroaders" [resource]="b" (click)="selectedSiblingBroader = b"
-                                class="listItem" [ngClass]="{active : b == selectedSiblingBroader}"></rdf-resource>
+                    </td>
+                </tr>
+                <tr *ngIf="isPositionSibling()">
+                    <td class="text-right"><label>{{'DATA.CONCEPT.SPAWN_FROM_LABEL.SIBLING'|translate}}:</label></td>
+                    <td>
+                        <div class="input-group">
+                            <div class="form-control">
+                                <rdf-resource *ngIf="sibling" [resource]="sibling"></rdf-resource>
+                            </div>
+                            <span class="input-group-append">
+                                <button class="btn btn-light" style="padding: 3px;" (click)="selectSibling()">
+                                    <img src="./assets/images/icons/actions/concept_create.png"/>
+                                </button>
+                            </span>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+                <tr *ngIf="isPositionSibling() && multipleSiblingBroaders">
+                    <td class="text-right" style="white-space: nowrap">
+                        <span class="fas fa-info-circle" [title]="'DATA.CONCEPT.SPAWN_FROM_LABEL.MULTIPLE_SIBLING_WARN'|translate"></span>
+                        <label>Broader:</label>
+                    </td>
+                    <td>
+                        <div class="card card-default">
+                            <div class="card-body scrollableContainer">
+                                <rdf-resource *ngFor="let b of siblingBroaders" [resource]="b" (click)="selectedSiblingBroader = b"
+                                    class="listItem" [ngClass]="{active : b == selectedSiblingBroader}"></rdf-resource>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div class="vbox" style="max-height: 20vh; margin-top: 2px;">
-        <scheme-selection (update)="onSchemesChanged($event)" [concept]="broader"></scheme-selection>
+        <div class="vbox" style="max-height: 20vh; margin-top: 2px;">
+            <scheme-selection (update)="onSchemesChanged($event)" [concept]="broader"></scheme-selection>
+        </div>
+
+        <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+            [(ngModel)]="formFields"></custom-form>
+
     </div>
-
-    <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
-        [(ngModel)]="formFields"></custom-form>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

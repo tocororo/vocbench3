@@ -1,59 +1,61 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body vbox">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body vbox">
 
-    <div class="card card-default mb-3">
-        <div class="card-header">
-            <label>{{'ADMINISTRATION.ROLES.TOPIC'|translate}}</label>
-        </div>
-        <div class="card-body vbox">
+        <div class="card card-default mb-3">
+            <div class="card-header">
+                <label>{{'ADMINISTRATION.ROLES.TOPIC'|translate}}</label>
+            </div>
+            <div class="card-body vbox">
 
-            <div class="form-group row">
-                <label class="col-form-label col-sm-3">{{'ADMINISTRATION.ROLES.AREA'|translate}}:</label>
-                <div class="col-sm-9">
-                    <select class="form-control" [(ngModel)]="area" (ngModelChange)="updateExtendedCapability()">
-                        <option *ngFor="let a of areaStruct" [ngValue]="a.value">{{a.value}} - {{a.description}}</option>
-                    </select>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3">{{'ADMINISTRATION.ROLES.AREA'|translate}}:</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" [(ngModel)]="area" (ngModelChange)="updateExtendedCapability()">
+                            <option *ngFor="let a of areaStruct" [ngValue]="a.value">{{a.value}} - {{a.description}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3">{{'ADMINISTRATION.ROLES.SUBJECT_AND_SCOPE'|translate}}:</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" [(ngModel)]="subjectScope" (ngModelChange)="updateExtendedCapability()">
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-form-label col-sm-3">{{'ADMINISTRATION.ROLES.SUBJECT_AND_SCOPE'|translate}}:</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" [(ngModel)]="subjectScope" (ngModelChange)="updateExtendedCapability()">
+        </div>
+
+
+        <div class="card card-default mb-3">
+            <div class="card-header">
+                <label style="flex: 1">CRUDV</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-light" (click)="changeAllCrudvStatus(true)" [title]="'ACTIONS.CHECK_ALL'|translate">
+                        <span class="far fa-check-square"></span>
+                    </button>
+                    <button class="btn btn-light" (click)="changeAllCrudvStatus(false)" [title]="'ACTIONS.UNCHECK_ALL'|translate">
+                        <span class="far fa-square"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body hbox">
+                <div *ngFor="let cs of crudvStruct; let i=index"  style="flex: 1">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" [id]="'check'+i" type="checkbox" [(ngModel)]="cs.checked" (ngModelChange)="updateExtendedCapability()">
+                        <label class="form-check-label" [for]="'check'+i">{{cs.label}}</label>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <input type="text" class="form-control" [ngModel]="extendedCapability" readonly>
+
     </div>
 
-
-    <div class="card card-default mb-3">
-        <div class="card-header">
-            <label style="flex: 1">CRUDV</label>
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="changeAllCrudvStatus(true)" [title]="'ACTIONS.CHECK_ALL'|translate">
-                    <span class="far fa-check-square"></span>
-                </button>
-                <button class="btn btn-light" (click)="changeAllCrudvStatus(false)" [title]="'ACTIONS.UNCHECK_ALL'|translate">
-                    <span class="far fa-square"></span>
-                </button>
-            </div>
-        </div>
-        <div class="card-body hbox">
-            <div *ngFor="let cs of crudvStruct; let i=index"  style="flex: 1">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" [id]="'check'+i" type="checkbox" [(ngModel)]="cs.checked" (ngModelChange)="updateExtendedCapability()">
-                    <label class="form-check-label" [for]="'check'+i">{{cs.label}}</label>
-                </div>
-            </div>
-        </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
-
-    <input type="text" class="form-control" [ngModel]="extendedCapability" readonly>
-
-</div>
-
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

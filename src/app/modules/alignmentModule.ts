@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +19,7 @@ import { SharedModule } from './sharedModule';
 @NgModule({
     imports: [
         CommonModule,
+        DragDropModule,
         FormsModule,
         NgbDropdownModule,
         SharedModule,

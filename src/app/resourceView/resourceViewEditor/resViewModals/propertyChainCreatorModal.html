@@ -1,61 +1,63 @@
-<div class="modal-header">
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
-        <span>
-            <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
-                <rdf-resource [resource]="enrichingProperty"></rdf-resource>
-            </button>
-        </span>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{title}}</h3>
+            <span>
+                <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
+                    <rdf-resource [resource]="enrichingProperty"></rdf-resource>
+                </button>
+            </span>
+        </div>
     </div>
-</div>
-<div class="modal-body vbox">
+    <div class="modal-body vbox">
 
-    <div class="hbox">
+        <div class="hbox">
 
-        <div class="vbox">
-            <property-tree-panel [deletable]="false" [type]="'objectProperty'" (nodeSelected)="onPropertySelected($event)"></property-tree-panel>
-            <div class="form-check mt-2">
-                <input class="form-check-input" id="inverseCheck" type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedTreeProperty?.getRole() != 'objectProperty'">
-                <label class="form-check-label" for="inverseCheck">
-                    {{'RESOURCE_VIEW.MISC.INVERSE_PROPERTY'|translate}}
-                </label>
+            <div class="vbox">
+                <property-tree-panel [deletable]="false" [type]="'objectProperty'" (nodeSelected)="onPropertySelected($event)"></property-tree-panel>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="inverseCheck" type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedTreeProperty?.getRole() != 'objectProperty'">
+                    <label class="form-check-label" for="inverseCheck">
+                        {{'RESOURCE_VIEW.MISC.INVERSE_PROPERTY'|translate}}
+                    </label>
+                </div>
             </div>
-        </div>
 
-        <div style="align-self: center; margin: 5px;">
-            <button class="btn btn-light btn-sm btn-block" (click)="addPropertyToChain()" [disabled]="!selectedTreeProperty">
-                {{'ACTIONS.ADD'|translate}} <span class="fas fa-chevron-right"></span>
-            </button>
-            <button class="btn btn-light btn-sm btn-block"  (click)="removePropertyFromChain()" [disabled]="!selectedChainProperty">
-                <span class="fas fa-chevron-left"></span> {{'ACTIONS.REMOVE'|translate}}
-            </button>
-        </div>
+            <div style="align-self: center; margin: 5px;">
+                <button class="btn btn-light btn-sm btn-block" (click)="addPropertyToChain()" [disabled]="!selectedTreeProperty">
+                    {{'ACTIONS.ADD'|translate}} <span class="fas fa-chevron-right"></span>
+                </button>
+                <button class="btn btn-light btn-sm btn-block"  (click)="removePropertyFromChain()" [disabled]="!selectedChainProperty">
+                    <span class="fas fa-chevron-left"></span> {{'ACTIONS.REMOVE'|translate}}
+                </button>
+            </div>
 
-        <div class="card card-default vbox">
-            <div class="card-header">
-                <label style="flex: 1">{{'RESOURCE_VIEW.MISC.PROPERTY_CHAIN'|translate}}</label>
-                <div class="btn-toolbar" role="toolbar">
-                    <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" (click)="moveDown()" [disabled]="!selectedChainProperty || isSelectedPropLast()">
-                            <span class="fas fa-chevron-down"></span>
-                        </button>
-                        <button class="btn btn-light" (click)="moveUp()" [disabled]="!selectedChainProperty || isSelectedPropFirst()">
-                            <span class="fas fa-chevron-up"></span>
-                        </button>
+            <div class="card card-default vbox">
+                <div class="card-header">
+                    <label style="flex: 1">{{'RESOURCE_VIEW.MISC.PROPERTY_CHAIN'|translate}}</label>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-light" (click)="moveDown()" [disabled]="!selectedChainProperty || isSelectedPropLast()">
+                                <span class="fas fa-chevron-down"></span>
+                            </button>
+                            <button class="btn btn-light" (click)="moveUp()" [disabled]="!selectedChainProperty || isSelectedPropFirst()">
+                                <span class="fas fa-chevron-up"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div *ngFor="let p of propChain" class="listItem" (click)="onChainPropertySelected(p)" [ngClass]="{active: selectedChainProperty == p}">
+                        <rdf-resource [resource]="p.property"></rdf-resource>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div *ngFor="let p of propChain" class="listItem" (click)="onChainPropertySelected(p)" [ngClass]="{active: selectedChainProperty == p}">
-                    <rdf-resource [resource]="p.property"></rdf-resource>
-                </div>
-            </div>
+
         </div>
 
     </div>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

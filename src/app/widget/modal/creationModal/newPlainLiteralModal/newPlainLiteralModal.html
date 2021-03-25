@@ -1,51 +1,53 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body">
-    <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-        <div style="flex: 1;" (keydown)="onKeydown($event)">
-            <div class="hbox" style="align-items: center;">
-                <label style="width: 50px;">{{'COMMONS.VALUE'|translate}}:</label>
-                <textarea ngbAutofocus type="text" class="form-control form-control-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
-                    [(ngModel)]="value" [disabled]="valueReadonly"></textarea>
-                <lang-picker [(ngModel)]="lang" [disabled]="langReadonly" 
-                    [config]="{ constrain: langConstraints?.constrain, locale: langConstraints?.locale }">
-                </lang-picker>
-            </div>
-        </div>
-        <div *ngIf="multiLabelOpt.enabled" class="hbox" style="flex: initial; align-items: center; margin-left: 6px;">
-            <button *ngIf="multiLabelOpt.enabled" class="btn btn-light btn-xs" (click)="addValue()" [disabled]="!isAddValueEnabled()">
-                <span class="fas fa-plus"></span>
-            </button>
-            <div style="width: 14px; margin-left: 2px;">
-                <span *ngIf="isDuplicateLangViolated()" class="fas fa-exclamation-circle" [title]="'DATA.COMMONS.DUPLICATED_VALUES_WARN'|translate"></span>
-            </div>
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
     </div>
-    <div class="card card-default" *ngIf="values.length > 0">
-        <div class="card-body vbox scrollableContainer" style="max-height: 300px;">
-            <div *ngFor="let v of values" class="listItem">
-                <rdf-resource style="flex: 1;" [resource]="v"></rdf-resource>
-                <button class="btn btn-light btn-xs" (click)="removeValue(v)">
-                    <span class="far fa-trash-alt" [title]="'ACTIONS.REMOVE'|translate"></span>
+    <div class="modal-body">
+        <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+            <div style="flex: 1;" (keydown)="onKeydown($event)">
+                <div class="hbox" style="align-items: center;">
+                    <label style="width: 50px;">{{'COMMONS.VALUE'|translate}}:</label>
+                    <textarea ngbAutofocus type="text" class="form-control form-control-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
+                        [(ngModel)]="value" [disabled]="valueReadonly"></textarea>
+                    <lang-picker [(ngModel)]="lang" [disabled]="langReadonly" 
+                        [config]="{ constrain: langConstraints?.constrain, locale: langConstraints?.locale }">
+                    </lang-picker>
+                </div>
+            </div>
+            <div *ngIf="multiLabelOpt.enabled" class="hbox" style="flex: initial; align-items: center; margin-left: 6px;">
+                <button *ngIf="multiLabelOpt.enabled" class="btn btn-light btn-xs" (click)="addValue()" [disabled]="!isAddValueEnabled()">
+                    <span class="fas fa-plus"></span>
                 </button>
+                <div style="width: 14px; margin-left: 2px;">
+                    <span *ngIf="isDuplicateLangViolated()" class="fas fa-exclamation-circle" [title]="'DATA.COMMONS.DUPLICATED_VALUES_WARN'|translate"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card card-default" *ngIf="values.length > 0">
+            <div class="card-body vbox scrollableContainer" style="max-height: 300px;">
+                <div *ngFor="let v of values" class="listItem">
+                    <rdf-resource style="flex: 1;" [resource]="v"></rdf-resource>
+                    <button class="btn btn-light btn-xs" (click)="removeValue(v)">
+                        <span class="far fa-trash-alt" [title]="'ACTIONS.REMOVE'|translate"></span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <div class="hbox" style="align-items: center;">
-        <div style="flex: 1; margin-right: 14px; text-align: initial;">
-            <div *ngIf="!lang && viewInitialized" class="alert alert-danger" style="padding: 7px;">
-                You cannot create values. You have no language assigned for the current project.
+    <div class="modal-footer">
+        <div class="hbox" style="align-items: center;">
+            <div style="flex: 1; margin-right: 14px; text-align: initial;">
+                <div *ngIf="!lang && viewInitialized" class="alert alert-danger" style="padding: 7px;">
+                    You cannot create values. You have no language assigned for the current project.
+                </div>
             </div>
-        </div>
-        <div>
-            <span *ngIf="isOkWarningActive()" class="fas fa-exclamation-triangle" style="margin-right: 2px;"
-                [title]="'DATA.COMMONS.MULTIVALUE_WARN'|translate">
-            </span>
-            <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-            <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+            <div>
+                <span *ngIf="isOkWarningActive()" class="fas fa-exclamation-triangle" style="margin-right: 2px;"
+                    [title]="'DATA.COMMONS.MULTIVALUE_WARN'|translate">
+                </span>
+                <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+                <button class="btn btn-light btn-sm ml-2" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+            </div>
         </div>
     </div>
 </div>

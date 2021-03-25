@@ -1,70 +1,72 @@
-<div class="modal-header">
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
-        <span *ngIf="createSense">
-            <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_CLASS'|translate" (click)="changeClass()" [disabled]="!clsChangeable">
-                <rdf-resource [resource]="resourceClass"></rdf-resource>
-            </button>
-        </span>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{title}}</h3>
+            <span *ngIf="createSense">
+                <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_CLASS'|translate" (click)="changeClass()" [disabled]="!clsChangeable">
+                    <rdf-resource [resource]="resourceClass"></rdf-resource>
+                </button>
+            </span>
+        </div>
     </div>
-</div>
-<div class="modal-body vbox" (keydown.enter)="onEnter()">
+    <div class="modal-body vbox" (keydown.enter)="onEnter()">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr *ngIf="linkToReference; else linkToLexEntry">
-                <td class="text-right"><label>Reference:</label></td>
-                <td>
-                    <resource-picker [config]="{ roles: pickerRoles }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
-                </td>
-            </tr>
-            <ng-template #linkToLexEntry>
-                <tr>
-                    <td class="text-right" nowrap><label>Lexical Entry:</label></td>
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr *ngIf="linkToReference; else linkToLexEntry">
+                    <td class="text-right"><label>Reference:</label></td>
                     <td>
-                        <div class="hbox">
-                            <editable-ns-input style="flex: 1" [(ngModel)]="linkedResource"></editable-ns-input>
-                            <button class="btn btn-light btn-sm" style="margin-left: 4px;" (click)="pickLexicalEntry()">
-                                <span class="fas fa-pencil-alt"></span>
-                            </button>
-                        </div>
+                        <resource-picker [config]="{ roles: pickerRoles }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
                     </td>
                 </tr>
-            </ng-template>
+                <ng-template #linkToLexEntry>
+                    <tr>
+                        <td class="text-right" nowrap><label>Lexical Entry:</label></td>
+                        <td>
+                            <div class="hbox">
+                                <editable-ns-input style="flex: 1" [(ngModel)]="linkedResource"></editable-ns-input>
+                                <button class="btn btn-light btn-sm" style="margin-left: 4px;" (click)="pickLexicalEntry()">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
 
-            <tr *ngIf="createSense; else createPlain">
-                <td></td>
-                <td>
-                    <div class="form-check">
-                        <input class="form-check-input" id="plainCheck" type="checkbox" [(ngModel)]="createPlainCheck">
-                        <label class="form-check-label" for="plainCheck">Create Plain</label>
-                    </div>
-                </td>
-            </tr>
-            <ng-template #createPlain>
-                <tr>
+                <tr *ngIf="createSense; else createPlain">
                     <td></td>
                     <td>
                         <div class="form-check">
-                            <input class="form-check-input" id="senseCheck" type="checkbox" [(ngModel)]="createSenseCheck">
-                            <label class="form-check-label" for="senseCheck">Create Sense</label>
+                            <input class="form-check-input" id="plainCheck" type="checkbox" [(ngModel)]="createPlainCheck">
+                            <label class="form-check-label" for="plainCheck">Create Plain</label>
                         </div>
                     </td>
                 </tr>
-            </ng-template>
+                <ng-template #createPlain>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" id="senseCheck" type="checkbox" [(ngModel)]="createSenseCheck">
+                                <label class="form-check-label" for="senseCheck">Create Sense</label>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    <custom-form *ngIf="customFormId && createSense" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
-        [(ngModel)]="formFields"></custom-form>
+        <custom-form *ngIf="customFormId && createSense" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+            [(ngModel)]="formFields"></custom-form>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

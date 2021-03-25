@@ -1,69 +1,71 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'PROJECTS.ACTIONS.EDIT_SETTINGS'|translate}}</h3>
-</div>
-<div class="modal-body vbox scrollableContainer">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'PROJECTS.ACTIONS.EDIT_SETTINGS'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox scrollableContainer">
 
-    <div class="card mb-2">
-        <div class="card-body" style="margin-bottom: -1rem;">
-            <!-- OPEN AT STARTUP -->        
-            <div class="form-group row">
-                <label class="col-form-label col-sm-2">{{'PROJECTS.OPEN_AT_STARTUP'|translate}}:</label>
-                <div class="col-sm-10 d-flex align-items-center">
-                    <button class="btn btn-light btn-sm" [ngClass]="{ active: openAtStartup }" (click)="changeOpenAtStartup()">
-                        <b *ngIf="openAtStartup" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
-                        <b *ngIf="!openAtStartup" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
-                    </button>
+        <div class="card mb-2">
+            <div class="card-body" style="margin-bottom: -1rem;">
+                <!-- OPEN AT STARTUP -->        
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2">{{'PROJECTS.OPEN_AT_STARTUP'|translate}}:</label>
+                    <div class="col-sm-10 d-flex align-items-center">
+                        <button class="btn btn-light btn-sm" [ngClass]="{ active: openAtStartup }" (click)="changeOpenAtStartup()">
+                            <b *ngIf="openAtStartup" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
+                            <b *ngIf="!openAtStartup" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
+                        </button>
+                    </div>
+                </div>
+                <!-- BLACKLISTING -->        
+                <div *ngIf="validationEnabled" class="form-group row">
+                    <label class="col-form-label col-sm-2">{{'PROJECTS.BLACKLIST'|translate}}:</label>
+                    <div class="col-sm-10 d-flex align-items-center">
+                        <button class="btn btn-light btn-sm" [ngClass]="{ active: blacklisting }" (click)="changeBlacklisting()">
+                            <b *ngIf="blacklisting" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
+                            <b *ngIf="!blacklisting" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <!-- BLACKLISTING -->        
-            <div *ngIf="validationEnabled" class="form-group row">
-                <label class="col-form-label col-sm-2">{{'PROJECTS.BLACKLIST'|translate}}:</label>
-                <div class="col-sm-10 d-flex align-items-center">
-                    <button class="btn btn-light btn-sm" [ngClass]="{ active: blacklisting }" (click)="changeBlacklisting()">
-                        <b *ngIf="blacklisting" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
-                        <b *ngIf="!blacklisting" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
-                    </button>
-                </div>
+        </div>
+
+        <!-- RENDERING ENGINE -->
+        <div class="card mb-2">
+            <div class="card-header">
+                <label>{{'PROJECTS.RENDERING_ENGINE'|translate}}</label>
+            </div>
+            <div class="card-body">
+                <extension-configurator #rendEngConfigurator *ngIf="rendEngExtensions"
+                    [extensions]="rendEngExtensions" [storeable]="false" style="flex: 1;"
+                    (extensionUpdated)="selectedRendEngExtension = $event; selectedRendEngExtensionConf = null"
+                    (configurationUpdated)="selectedRendEngExtensionConf = $event">
+                </extension-configurator>
+            </div>
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-info btn-sm" (click)="updateRenderingEngine()">{{'ACTIONS.SUBMIT'|translate}}</button>
             </div>
         </div>
+
+        <!-- URI GENERATOR-->
+
+        <div class="card mb-2">
+            <div class="card-header">
+                <label>{{'PROJECTS.URI_GENERATOR'|translate}}</label>
+            </div>
+            <div class="card-body">
+                <extension-configurator #uriGenConfigurator *ngIf="uriGenExtensions"
+                    [extensions]="uriGenExtensions" [storeable]="false" style="flex: 1;"
+                    (extensionUpdated)="selectedUriGenExtension = $event; selectedUriGenExtensionConf = null"
+                    (configurationUpdated)="selectedUriGenExtensionConf = $event">
+                </extension-configurator>
+            </div>
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-info btn-sm" (click)="updateUriGenerator()">{{'ACTIONS.SUBMIT'|translate}}</button>
+            </div>
+        </div>
+
     </div>
-
-    <!-- RENDERING ENGINE -->
-    <div class="card mb-2">
-        <div class="card-header">
-            <label>{{'PROJECTS.RENDERING_ENGINE'|translate}}</label>
-        </div>
-        <div class="card-body">
-            <extension-configurator #rendEngConfigurator *ngIf="rendEngExtensions"
-                [extensions]="rendEngExtensions" [storeable]="false" style="flex: 1;"
-                (extensionUpdated)="selectedRendEngExtension = $event; selectedRendEngExtensionConf = null"
-                (configurationUpdated)="selectedRendEngExtensionConf = $event">
-            </extension-configurator>
-        </div>
-        <div class="card-footer text-right">
-            <button type="submit" class="btn btn-info btn-sm" (click)="updateRenderingEngine()">{{'ACTIONS.SUBMIT'|translate}}</button>
-        </div>
+    <div class="modal-footer">
+        <button class="btn btn-light btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
     </div>
-
-    <!-- URI GENERATOR-->
-
-    <div class="card mb-2">
-        <div class="card-header">
-            <label>{{'PROJECTS.URI_GENERATOR'|translate}}</label>
-        </div>
-        <div class="card-body">
-            <extension-configurator #uriGenConfigurator *ngIf="uriGenExtensions"
-                [extensions]="uriGenExtensions" [storeable]="false" style="flex: 1;"
-                (extensionUpdated)="selectedUriGenExtension = $event; selectedUriGenExtensionConf = null"
-                (configurationUpdated)="selectedUriGenExtensionConf = $event">
-            </extension-configurator>
-        </div>
-        <div class="card-footer text-right">
-            <button type="submit" class="btn btn-info btn-sm" (click)="updateUriGenerator()">{{'ACTIONS.SUBMIT'|translate}}</button>
-        </div>
-    </div>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-light btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
 </div>

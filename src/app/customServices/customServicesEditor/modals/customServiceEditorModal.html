@@ -1,47 +1,49 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body vbox table-responsive">
+
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+                <col style="width: 1%">
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>ID</label>
+                        <span class="fas fa-info-circle ml-1" [title]="'CUSTOM_SERVICES.SERVICE.ID_INFO'|translate"></span>
+                    </td>
+                    <td><input class="form-control form-control-sm" [(ngModel)]="id" [readonly]="service"></td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>{{'CUSTOM_SERVICES.SERVICE.SERVICE_NAME'|translate}}</label>
+                        <span class="fas fa-info-circle ml-1" [title]="'CUSTOM_SERVICES.SERVICE.SERVICE_NAME_INFO'|translate"></span>
+                    </td>
+                    <td><input class="form-control form-control-sm" [(ngModel)]="name" sanitized></td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>{{'COMMONS.DESCRIPTION'|translate}}</label>
+                        <span class="fas fa-info-circle ml-1" [title]="'CUSTOM_SERVICES.SERVICE.DESCRIPTION_INFO'|translate"></span>
+                    </td>
+                    <td><textarea class="form-control form-control-sm" style="resize: vertical" [(ngModel)]="description"></textarea></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="modal-footer">
+        <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+
 </div>
-<div class="modal-body vbox table-responsive">
-
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%">
-            <col>
-            <col style="width: 1%">
-        </colgroup>
-        <tbody>
-            <tr>
-                <td class="text-right" nowrap>
-                    <label>ID</label>
-                    <span class="fas fa-info-circle ml-1" [title]="'CUSTOM_SERVICES.SERVICE.ID_INFO'|translate"></span>
-                </td>
-                <td><input class="form-control form-control-sm" [(ngModel)]="id" [readonly]="service"></td>
-                <td>*</td>
-            </tr>
-            <tr>
-                <td class="text-right" nowrap>
-                    <label>{{'CUSTOM_SERVICES.SERVICE.SERVICE_NAME'|translate}}</label>
-                    <span class="fas fa-info-circle ml-1" [title]="'CUSTOM_SERVICES.SERVICE.SERVICE_NAME_INFO'|translate"></span>
-                </td>
-                <td><input class="form-control form-control-sm" [(ngModel)]="name" sanitized></td>
-                <td>*</td>
-            </tr>
-            <tr>
-                <td class="text-right" nowrap>
-                    <label>{{'COMMONS.DESCRIPTION'|translate}}</label>
-                    <span class="fas fa-info-circle ml-1" [title]="'CUSTOM_SERVICES.SERVICE.DESCRIPTION_INFO'|translate"></span>
-                </td>
-                <td><textarea class="form-control form-control-sm" style="resize: vertical" [(ngModel)]="description"></textarea></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-
-</div>
-
-<div class="modal-footer">
-    <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
-</div>
-

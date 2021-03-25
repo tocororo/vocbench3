@@ -1,42 +1,44 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body vbox">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body vbox">
 
-    <div class="hbox">
+        <div class="hbox">
 
-        <div class="card card-default vbox">
-            <div class="card-header">
-                <label>{{'COMMONS.USERS'|translate}}</label>
-            </div>
-            <div class="card-body vbox" style="padding: 0px;">
-                <div class="scrollableContainer">
-                    <div *ngFor="let u of userList" class="listItem" [ngClass]="{active: u == selectedUser, disabled: isUserAlreadyBound(u)}"
-                        (click)="selectUser(u)">
-                        {{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span>
+            <div class="card card-default vbox">
+                <div class="card-header">
+                    <label>{{'COMMONS.USERS'|translate}}</label>
+                </div>
+                <div class="card-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+                        <div *ngFor="let u of userList" class="listItem" [ngClass]="{active: u == selectedUser, disabled: isUserAlreadyBound(u)}"
+                            (click)="selectUser(u)">
+                            {{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card card-default vbox" style="margin-left: 5px;">
-            <div class="card-header">
-                <label>{{'COMMONS.ROLES'|translate}}</label>
-            </div>
-            <div class="card-body vbox" style="padding: 0px;">
-                <div class="scrollableContainer">
-                    <div *ngFor="let r of roleList" class="listItem" [ngClass]="{active: isRoleSelected(r)}" (click)="selectRole(r)">
-                        {{r.getName()}}
+            <div class="card card-default vbox" style="margin-left: 5px;">
+                <div class="card-header">
+                    <label>{{'COMMONS.ROLES'|translate}}</label>
+                </div>
+                <div class="card-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+                        <div *ngFor="let r of roleList" class="listItem" [ngClass]="{active: isRoleSelected(r)}" (click)="selectRole(r)">
+                            {{r.getName()}}
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
     </div>
 
-</div>
-
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedUser || selectedRoles.length == 0">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedUser || selectedRoles.length == 0">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

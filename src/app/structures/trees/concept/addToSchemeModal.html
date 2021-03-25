@@ -1,57 +1,59 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'DATA.ACTIONS.ADD_CONCEPT_TO_SCHEME'|translate}}</h3>
-</div>
-<div class="modal-body vbox blockingDivHost">
-
-    <div class="alert alert-warning">
-        {{'DATA.CONCEPT.ADD_TO_SCHEME.CONFIRM_MSG'|translate:translationParam}}
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'DATA.ACTIONS.ADD_CONCEPT_TO_SCHEME'|translate}}</h3>
     </div>
+    <div class="modal-body vbox blockingDivHost">
 
-    <div class="form-check mt-3 mb-1 mr-2" style="align-self: flex-end;">
-        <input class="form-check-input" id="topCheck" type="checkbox" [(ngModel)]="setTopConcept">
-        <label class="form-check-label" for="topCheck">
-            {{'DATA.CONCEPT.ADD_TO_SCHEME.SET_TOP_CONCEPT'|translate}}
-            <span class="fas fa-info-circle ml-1" [title]="'DATA.CONCEPT.ADD_TO_SCHEME.SET_TOP_CONCEPT_INFO'|translate"></span>
-        </label>
-    </div>
-    
-    <div *ngIf="schemeList.length > 0" class="groupPanel vbox">
-        <div class="groupPanel-heading">
-            <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
-                <img src="./assets/images/icons/arrow.png" (click)="collapsed = !collapsed" [ngClass]="{'arrow-right': collapsed}">
-            </div>
-            <span style="flex: 1">
-                <label class="groupPanel-heading-content">{{'DATA.CONCEPT.ADD_TO_SCHEME.SCHEMES_FILTER'|translate}}:</label>
-            </span>
+        <div class="alert alert-warning">
+            {{'DATA.CONCEPT.ADD_TO_SCHEME.CONFIRM_MSG'|translate:translationParam}}
         </div>
-        <div class="groupPanel-body vbox">
-            <ng-container *ngIf="!collapsed">
 
-                <div class="alert alert-info">
-                    {{'DATA.CONCEPT.ADD_TO_SCHEME.SCHEMES_FILTER_INFO'|translate:translationParam}}
+        <div class="form-check mt-3 mb-1 mr-2" style="align-self: flex-end;">
+            <input class="form-check-input" id="topCheck" type="checkbox" [(ngModel)]="setTopConcept">
+            <label class="form-check-label" for="topCheck">
+                {{'DATA.CONCEPT.ADD_TO_SCHEME.SET_TOP_CONCEPT'|translate}}
+                <span class="fas fa-info-circle ml-1" [title]="'DATA.CONCEPT.ADD_TO_SCHEME.SET_TOP_CONCEPT_INFO'|translate"></span>
+            </label>
+        </div>
+        
+        <div *ngIf="schemeList.length > 0" class="groupPanel vbox">
+            <div class="groupPanel-heading">
+                <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
+                    <img src="./assets/images/icons/arrow.png" (click)="collapsed = !collapsed" [ngClass]="{'arrow-right': collapsed}">
                 </div>
+                <span style="flex: 1">
+                    <label class="groupPanel-heading-content">{{'DATA.CONCEPT.ADD_TO_SCHEME.SCHEMES_FILTER'|translate}}:</label>
+                </span>
+            </div>
+            <div class="groupPanel-body vbox">
+                <ng-container *ngIf="!collapsed">
 
-                <div class="scrollableContainer" style="margin-top: 6px; border: 1px solid #ccc; border-radius: 3px;">
-                    <div *ngFor="let s of schemeList" class="listItem hbox" [ngClass]="{active : s == selectedScheme}">
-                        <rdf-resource [resource]="s.scheme" style="flex: 1;"></rdf-resource>
-                        <input type="checkbox" [(ngModel)]="s.checked">
+                    <div class="alert alert-info">
+                        {{'DATA.CONCEPT.ADD_TO_SCHEME.SCHEMES_FILTER_INFO'|translate:translationParam}}
                     </div>
-                </div>
-            </ng-container>
-        </div>
-    </div>
 
-
-    <div #blockingDiv class="blockingDiv" style="display:none">
-        <div class="loadingDiv">
-            <div>
-                <p>Loading...</p><img src="./assets/images/loading.gif" />
+                    <div class="scrollableContainer" style="margin-top: 6px; border: 1px solid #ccc; border-radius: 3px;">
+                        <div *ngFor="let s of schemeList" class="listItem hbox" [ngClass]="{active : s == selectedScheme}">
+                            <rdf-resource [resource]="s.scheme" style="flex: 1;"></rdf-resource>
+                            <input type="checkbox" [(ngModel)]="s.checked">
+                        </div>
+                    </div>
+                </ng-container>
             </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+
+        <div #blockingDiv class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="./assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

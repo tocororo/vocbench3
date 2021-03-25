@@ -1,16 +1,18 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body vbox">
-    <div *ngIf="resource" class="form-check mb-2">
-        <input class="form-check-input" id="allCheck" type="checkbox" [(ngModel)]="showAll" (ngModelChange)="onShowAllChanged()">
-        <label class="form-check-label" for="allCheck">{{'ACTIONS.SHOW_ALL'|translate}}</label>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
     </div>
-    <property-tree-panel [editable]="false" [roots]="rootProperties" [resource]="domainRes" [type]="type" [projectCtx]="projectCtx"
-        (nodeSelected)="onPropertySelected($event)">
-    </property-tree-panel>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProperty">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-body vbox">
+        <div *ngIf="resource" class="form-check mb-2">
+            <input class="form-check-input" id="allCheck" type="checkbox" [(ngModel)]="showAll" (ngModelChange)="onShowAllChanged()">
+            <label class="form-check-label" for="allCheck">{{'ACTIONS.SHOW_ALL'|translate}}</label>
+        </div>
+        <property-tree-panel [editable]="false" [roots]="rootProperties" [resource]="domainRes" [type]="type" [projectCtx]="projectCtx"
+            (nodeSelected)="onPropertySelected($event)">
+        </property-tree-panel>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProperty">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

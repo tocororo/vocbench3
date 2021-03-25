@@ -1,110 +1,112 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'SEARCH.SETTINGS.SEARCH_SETTINGS'|translate}}</h3>
-</div>
-<div class="modal-body scrollableContainer">
-
-    <div class="card card-default">
-        <div class="card-header">
-            <label>{{'SEARCH.SETTINGS.STRING_MATCH_MODE'|translate}}</label>
-        </div>
-        <div class="card-body">
-            <div *ngFor="let mode of stringMatchModes; let i=index" class="form-check mt-2">
-                <input class="form-check-input" [id]="'modeCheck'+1" type="radio" name="searchMode" [value]="mode.value" [(ngModel)]="activeStringMatchMode" 
-                (ngModelChange)="updateSettings()">
-                <label class="form-check-label" [for]="'modeCheck'+1">{{mode.labelTranslationKey|translate}}</label>
-            </div>
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'SEARCH.SETTINGS.SEARCH_SETTINGS'|translate}}</h3>
     </div>
+    <div class="modal-body scrollableContainer">
 
-    <div class="card card-default mt-2">
-        <div class="card-header">
-            <label style="margin-right: 5px;">{{'SEARCH.SETTINGS.SEARCH_MODE'|translate}}</label>
-            <span class="fas fa-info-circle" [title]="'SEARCH.SETTINGS.SEARCH_MODE_INFO'|translate"></span>
-        </div>
-        <div class="card-body">
-            <div class="form-check mt-2">
-                <input class="form-check-input" id="uriCheck" type="checkbox" [(ngModel)]="useURI" (ngModelChange)="updateSettings()">
-                <label class="form-check-label" for="uriCheck">{{'SEARCH.SETTINGS.SEARCH_IN_URI'|translate}}</label>
+        <div class="card card-default">
+            <div class="card-header">
+                <label>{{'SEARCH.SETTINGS.STRING_MATCH_MODE'|translate}}</label>
             </div>
-            <div class="form-check mt-2">
-                <input class="form-check-input" id="localNameCheck" type="checkbox" [(ngModel)]="useLocalName" (ngModelChange)="updateSettings()">
-                <label class="form-check-label" for="localNameCheck">{{'SEARCH.SETTINGS.SEARCH_IN_LOCAL_NAME'|translate}}</label>
-            </div>
-            <div class="form-check mt-2">
-                <input class="form-check-input" id="noteCheck" type="checkbox" [(ngModel)]="useNotes" (ngModelChange)="updateSettings()">
-                <label class="form-check-label" for="noteCheck">{{'SEARCH.SETTINGS.SEARCH_IN_NOTES'|translate}}</label>
-            </div>
-        </div>
-    </div>
-
-    <div class="card card-default mt-2">
-        <div class="card-header">
-            <label>{{'SEARCH.SETTINGS.LEXICALIZATIONS_SEARCH'|translate}}</label>
-        </div>
-        <div class="card-body">
-            <div class="hbox">
-                <div class="form-check mt-2">
-                    <input class="form-check-input" id="langCheck" type="checkbox" [(ngModel)]="restrictLang" (ngModelChange)="updateSettings()">
-                    <label class="form-check-label" for="langCheck">{{'SEARCH.SETTINGS.RESTRICT_TO_LANGUAGES'|translate}}</label>
+            <div class="card-body">
+                <div *ngFor="let mode of stringMatchModes; let i=index" class="form-check mt-2">
+                    <input class="form-check-input" [id]="'modeCheck'+1" type="radio" name="searchMode" [value]="mode.value" [(ngModel)]="activeStringMatchMode" 
+                    (ngModelChange)="updateSettings()">
+                    <label class="form-check-label" [for]="'modeCheck'+1">{{mode.labelTranslationKey|translate}}</label>
                 </div>
-                <div class="hbox" style="align-items: center; margin-left: 8px;">
-                    <div class="input-group">
-                        <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
-                        <span class="input-group-append">
-                            <button class="btn btn-light" (click)="selectRestrictionLanguages()" [title]="'ACTIONS.SELECT_LANGUAGES'|translate"
-                                [disabled]="!restrictLang">
-                                <span class="fas fa-pencil-alt"></span>
-                            </button>
-                        </span>
+            </div>
+        </div>
+
+        <div class="card card-default mt-2">
+            <div class="card-header">
+                <label style="margin-right: 5px;">{{'SEARCH.SETTINGS.SEARCH_MODE'|translate}}</label>
+                <span class="fas fa-info-circle" [title]="'SEARCH.SETTINGS.SEARCH_MODE_INFO'|translate"></span>
+            </div>
+            <div class="card-body">
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="uriCheck" type="checkbox" [(ngModel)]="useURI" (ngModelChange)="updateSettings()">
+                    <label class="form-check-label" for="uriCheck">{{'SEARCH.SETTINGS.SEARCH_IN_URI'|translate}}</label>
+                </div>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="localNameCheck" type="checkbox" [(ngModel)]="useLocalName" (ngModelChange)="updateSettings()">
+                    <label class="form-check-label" for="localNameCheck">{{'SEARCH.SETTINGS.SEARCH_IN_LOCAL_NAME'|translate}}</label>
+                </div>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="noteCheck" type="checkbox" [(ngModel)]="useNotes" (ngModelChange)="updateSettings()">
+                    <label class="form-check-label" for="noteCheck">{{'SEARCH.SETTINGS.SEARCH_IN_NOTES'|translate}}</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-default mt-2">
+            <div class="card-header">
+                <label>{{'SEARCH.SETTINGS.LEXICALIZATIONS_SEARCH'|translate}}</label>
+            </div>
+            <div class="card-body">
+                <div class="hbox">
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" id="langCheck" type="checkbox" [(ngModel)]="restrictLang" (ngModelChange)="updateSettings()">
+                        <label class="form-check-label" for="langCheck">{{'SEARCH.SETTINGS.RESTRICT_TO_LANGUAGES'|translate}}</label>
+                    </div>
+                    <div class="hbox" style="align-items: center; margin-left: 8px;">
+                        <div class="input-group">
+                            <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
+                            <span class="input-group-append">
+                                <button class="btn btn-light" (click)="selectRestrictionLanguages()" [title]="'ACTIONS.SELECT_LANGUAGES'|translate"
+                                    [disabled]="!restrictLang">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-check mt-2">
-                <input class="form-check-input" id="localeCheck" type="checkbox" [(ngModel)]="includeLocales" (ngModelChange)="updateSettings()">
-                <label class="form-check-label" for="localeCheck">{{'SEARCH.SETTINGS.INCLUDE_LOCALES'|translate}}</label>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="localeCheck" type="checkbox" [(ngModel)]="includeLocales" (ngModelChange)="updateSettings()">
+                    <label class="form-check-label" for="localeCheck">{{'SEARCH.SETTINGS.INCLUDE_LOCALES'|translate}}</label>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="card card-default mt-2">
-        <div class="card-header">
-            <label style="margin-right: 5px;">{{'SEARCH.SETTINGS.AUTOCOMPLETION'|translate}}Autocompletion</label>
-            <span class="fas fa-info-circle" 
-                [title]="'SEARCH.SETTINGS.AUTOCOMPLETION_INFO'|translate"></span>
-        </div>
-        <div class="card-body">
-            <div class="form-check mt-2">
-                <input class="form-check-input" id="autocomplCheck" type="checkbox" [(ngModel)]="useAutocompletion" (ngModelChange)="updateSettings()">
-                <label class="form-check-label" for="autocomplCheck">{{'SEARCH.SETTINGS.ENABLE_AUTOCOMPLETION'|translate}}</label>
+        <div class="card card-default mt-2">
+            <div class="card-header">
+                <label style="margin-right: 5px;">{{'SEARCH.SETTINGS.AUTOCOMPLETION'|translate}}Autocompletion</label>
+                <span class="fas fa-info-circle" 
+                    [title]="'SEARCH.SETTINGS.AUTOCOMPLETION_INFO'|translate"></span>
+            </div>
+            <div class="card-body">
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="autocomplCheck" type="checkbox" [(ngModel)]="useAutocompletion" (ngModelChange)="updateSettings()">
+                    <label class="form-check-label" for="autocomplCheck">{{'SEARCH.SETTINGS.ENABLE_AUTOCOMPLETION'|translate}}</label>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div *ngIf="settingsForConceptPanel" class="card card-default mt-2">
-        <div class="card-header">
-            <label>{{'SEARCH.SETTINGS.CONCEPTS_SEARCH'|translate}}</label>
-        </div>
-        <div class="card-body">
-            <div class="form-check mt-2">
-                <input class="form-check-input" id="schemeCheck" type="checkbox" [(ngModel)]="restrictConceptSchemes" (ngModelChange)="updateSettings()">
-                <label class="form-check-label" for="schemeCheck">{{'SEARCH.SETTINGS.RESTRICT_TO_SCHEME'|translate}}</label>
+        <div *ngIf="settingsForConceptPanel" class="card card-default mt-2">
+            <div class="card-header">
+                <label>{{'SEARCH.SETTINGS.CONCEPTS_SEARCH'|translate}}</label>
+            </div>
+            <div class="card-body">
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="schemeCheck" type="checkbox" [(ngModel)]="restrictConceptSchemes" (ngModelChange)="updateSettings()">
+                    <label class="form-check-label" for="schemeCheck">{{'SEARCH.SETTINGS.RESTRICT_TO_SCHEME'|translate}}</label>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div *ngIf="settingsForInstancePanel" class="card card-default mt-2">
-        <div class="card-header">
-            <label>{{'SEARCH.SETTINGS.INSTANCES_SEARCH'|translate}}</label>
-        </div>
-        <div class="card-body">
-            <div class="form-check mt-2">
-                <input class="form-check-input" id="individualCheck" type="checkbox" [(ngModel)]="extendsToAllIndividuals" (ngModelChange)="updateSettings()">
-                <label class="form-check-label" for="individualCheck">{{'SEARCH.SETTINGS.EXTEND_TO_ALL'|translate}}</label>
+        <div *ngIf="settingsForInstancePanel" class="card card-default mt-2">
+            <div class="card-header">
+                <label>{{'SEARCH.SETTINGS.INSTANCES_SEARCH'|translate}}</label>
+            </div>
+            <div class="card-body">
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="individualCheck" type="checkbox" [(ngModel)]="extendsToAllIndividuals" (ngModelChange)="updateSettings()">
+                    <label class="form-check-label" for="individualCheck">{{'SEARCH.SETTINGS.EXTEND_TO_ALL'|translate}}</label>
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

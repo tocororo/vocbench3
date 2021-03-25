@@ -1,37 +1,39 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'GRAPHS.SETTINGS.DATA_GRAPH_SETTINGS'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'GRAPHS.SETTINGS.DATA_GRAPH_SETTINGS'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox">
 
-    <div class="hbox">
-        <lang-value-filter-pref class="vbox"></lang-value-filter-pref>
+        <div class="hbox">
+            <lang-value-filter-pref class="vbox"></lang-value-filter-pref>
 
-        <div class="card card-default vbox ml-2">
-            <div class="card-header">
-                <label>{{'GRAPHS.SETTINGS.GRAPH_FILTER'|translate}}</label>
-            </div>
-            <div class="card-body vbox">
-                <div class="alert alert-info mb-2">
-                    {{'GRAPHS.SETTINGS.PARTITION_FILTER_INFO'|translate}}
+            <div class="card card-default vbox ml-2">
+                <div class="card-header">
+                    <label>{{'GRAPHS.SETTINGS.GRAPH_FILTER'|translate}}</label>
                 </div>
-                <partition-filter-editor [(ngModel)]="graphFilter" (ngModelChange)="updateFilter()"></partition-filter-editor>
+                <div class="card-body vbox">
+                    <div class="alert alert-info mb-2">
+                        {{'GRAPHS.SETTINGS.PARTITION_FILTER_INFO'|translate}}
+                    </div>
+                    <partition-filter-editor [(ngModel)]="graphFilter" (ngModelChange)="updateFilter()"></partition-filter-editor>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="card card-default mt-2">
-        <div class="card-body">
-            <div class="form-check">
-                <input class="form-check-input" id="literalCheck" type="checkbox" [(ngModel)]="hideLiteralNodes" (ngModelChange)="onHideLiteralChange()">
-                <label class="form-check-label" for="literalCheck">
-                    {{'GRAPHS.SETTINGS.HIDE_LITERAL_NODES'|translate}}
-                    <span class="fas fa-info-circle ml-2" [title]="'GRAPHS.SETTINGS.HIDE_LITERAL_NODES_INFO'|translate"></span>
-                </label>
+        
+        <div class="card card-default mt-2">
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input" id="literalCheck" type="checkbox" [(ngModel)]="hideLiteralNodes" (ngModelChange)="onHideLiteralChange()">
+                    <label class="form-check-label" for="literalCheck">
+                        {{'GRAPHS.SETTINGS.HIDE_LITERAL_NODES'|translate}}
+                        <span class="fas fa-info-circle ml-2" [title]="'GRAPHS.SETTINGS.HIDE_LITERAL_NODES_INFO'|translate"></span>
+                    </label>
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

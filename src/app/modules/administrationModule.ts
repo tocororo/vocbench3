@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -28,6 +29,7 @@ import { UserModule } from './userModule';
     imports: [
         adminRouting,
         CommonModule,
+        DragDropModule,
         FormsModule,
         NgbDropdownModule,
         SharedModule,

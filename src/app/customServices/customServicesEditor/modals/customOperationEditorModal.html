@@ -1,210 +1,212 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body vbox">
-
-    <div class="hbox" style="align-items: center; flex: initial;">
-        <label>{{'COMMONS.TYPE'|translate}}:</label>
-        <select class="form-control" style="margin-left: 4px;" [(ngModel)]="selectedCustomOperation" (ngModelChange)="onOperationChanged()">
-            <option *ngFor="let c of customOperations" [ngValue]="c">{{c.shortName}}</option>
-        </select>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
     </div>
+    <div class="modal-body vbox">
 
-    <div *ngIf="form" class="card card-default vbox" style="margin-top: 6px;">
-        <div class="card-body vbox scrollableContainer">
-            
-            <!-- Name -->
-            <div *ngIf="form.name" class="gridRow">
-                <div class="gridEntry">
-                    <label class="entryLabel">
-                        {{form.name.displayName}}
-                        <span class="fas fa-info-circle" [title]="form.name.description"></span>
-                    </label>
-                    <input class="form-control" style="flex: 1" [(ngModel)]="form.name.value" sanitized>
-                    <div class="entryRequired">
-                        <ng-container *ngIf="form.name.required">*</ng-container>
+        <div class="hbox" style="align-items: center; flex: initial;">
+            <label>{{'COMMONS.TYPE'|translate}}:</label>
+            <select class="form-control" style="margin-left: 4px;" [(ngModel)]="selectedCustomOperation" (ngModelChange)="onOperationChanged()">
+                <option *ngFor="let c of customOperations" [ngValue]="c">{{c.shortName}}</option>
+            </select>
+        </div>
+
+        <div *ngIf="form" class="card card-default vbox" style="margin-top: 6px;">
+            <div class="card-body vbox scrollableContainer">
+                
+                <!-- Name -->
+                <div *ngIf="form.name" class="gridRow">
+                    <div class="gridEntry">
+                        <label class="entryLabel">
+                            {{form.name.displayName}}
+                            <span class="fas fa-info-circle" [title]="form.name.description"></span>
+                        </label>
+                        <input class="form-control" style="flex: 1" [(ngModel)]="form.name.value" sanitized>
+                        <div class="entryRequired">
+                            <ng-container *ngIf="form.name.required">*</ng-container>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Parameters -->
-            <div *ngIf="form.parameters" class="gridRow">
-                <div class="gridEntry">
-                    <label class="entryLabel">
-                        {{form.parameters.displayName}}
-                        <span class="fas fa-info-circle" [title]="form.parameters.description"></span>
-                    </label>
-                    <div class="card card-default" style="flex: 1;">
-                        <div class="card-body">
-                            <table class="table table-sm table-borderless">
-                                <colgroup>
-                                    <col style="width: 1%;">
-                                    <col>
-                                    <col style="width: 1%;">
-                                    <col>
-                                    <col style="width: 1%;">
-                                    <col style="width: 1%;">
-                                </colgroup>
-                                <tbody>
-                                    <tr *ngFor="let p of form.parameters.value; let i=index; let last=last">
-                                        <td><label>{{'COMMONS.NAME'|translate}}:</label></td>
-                                        <td><input class="form-control" style="font-family: monospace;" [(ngModel)]="p.name" sanitized></td>
-                                        <td><label>{{'COMMONS.TYPE'|translate}}:</label></td>
-                                        <td>
-                                            <type-editor [(ngModel)]="p.type" parameter="true"></type-editor>
-                                        </td>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input" [id]="'requiredCheck'+i" type="checkbox" [(ngModel)]="p.required">
-                                                <label class="form-check-label" [for]="'requiredCheck'+i">Required</label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="hbox">
-                                                <button class="btn btn-sm btn-light" (click)="removeParameter(p)">
-                                                    <span class="far fa-trash-alt"></span>
-                                                </button>
-                                                <button *ngIf="last" class="btn btn-sm btn-light" (click)="addParameter()" style="margin-left: 2px;">
+                <!-- Parameters -->
+                <div *ngIf="form.parameters" class="gridRow">
+                    <div class="gridEntry">
+                        <label class="entryLabel">
+                            {{form.parameters.displayName}}
+                            <span class="fas fa-info-circle" [title]="form.parameters.description"></span>
+                        </label>
+                        <div class="card card-default" style="flex: 1;">
+                            <div class="card-body">
+                                <table class="table table-sm table-borderless">
+                                    <colgroup>
+                                        <col style="width: 1%;">
+                                        <col>
+                                        <col style="width: 1%;">
+                                        <col>
+                                        <col style="width: 1%;">
+                                        <col style="width: 1%;">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr *ngFor="let p of form.parameters.value; let i=index; let last=last">
+                                            <td><label>{{'COMMONS.NAME'|translate}}:</label></td>
+                                            <td><input class="form-control" style="font-family: monospace;" [(ngModel)]="p.name" sanitized></td>
+                                            <td><label>{{'COMMONS.TYPE'|translate}}:</label></td>
+                                            <td>
+                                                <type-editor [(ngModel)]="p.type" parameter="true"></type-editor>
+                                            </td>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" [id]="'requiredCheck'+i" type="checkbox" [(ngModel)]="p.required">
+                                                    <label class="form-check-label" [for]="'requiredCheck'+i">Required</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="hbox">
+                                                    <button class="btn btn-sm btn-light" (click)="removeParameter(p)">
+                                                        <span class="far fa-trash-alt"></span>
+                                                    </button>
+                                                    <button *ngIf="last" class="btn btn-sm btn-light" (click)="addParameter()" style="margin-left: 2px;">
+                                                        <span class="fas fa-plus"></span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="!form.parameters.value || form.parameters.value.length == 0">
+                                            <td colspan="6" class="text-right">
+                                                <button class="btn btn-sm btn-light" (click)="addParameter()">
                                                     <span class="fas fa-plus"></span>
                                                 </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr *ngIf="!form.parameters.value || form.parameters.value.length == 0">
-                                        <td colspan="6" class="text-right">
-                                            <button class="btn btn-sm btn-light" (click)="addParameter()">
-                                                <span class="fas fa-plus"></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="entryRequired">
+                            <ng-container *ngIf="form.parameters.required">*</ng-container>
                         </div>
                     </div>
-                    <div class="entryRequired">
-                        <ng-container *ngIf="form.parameters.required">*</ng-container>
-                    </div>
                 </div>
-            </div>
 
-            <!-- Authorization -->
-            <div *ngIf="form.authorization" class="gridRow">
-                <div class="gridEntry">
-                    <label class="entryLabel">
-                        {{form.authorization.displayName}}
-                        <span class="fas fa-info-circle" [title]="form.authorization.description"></span>
-                    </label>
-                    <div class="hbox" style="align-items: center;">
-                        <input class="form-control" [(ngModel)]="form.authorization.value">
-                        <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  [title]="'ACTIONS.EDIT'|translate">
-                            <span class="fas fa-pencil-alt"></span>
-                        </button>
-                    </div>
-                    <div class="entryRequired">
-                        <ng-container *ngIf="form.authorization.required">*</ng-container>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Returns -->
-            <div *ngIf="form.returns" class="gridRow">
-                <div class="gridEntry">
-                    <label class="entryLabel">
-                        {{form.returns.displayName}}
-                        <span class="fas fa-info-circle" [title]="form.returns.description"></span>
-                    </label>
-                    <div class="card card-default" style="flex: 1;">
-                        <div class="card-body">
-                            <type-editor [(ngModel)]="form.returns.value" (ngModelChange)="updateReturnsPrettyPrint()"></type-editor>
-                        </div>
-                        <div class="card-footer">
-                            <input class="form-control" style="font-family: monospace;" [ngModel]="returnsPrettyPrint" readonly>
-                        </div>
-                    </div>
-                    <div class="entryRequired">
-                        <ng-container *ngIf="form.returns.required">*</ng-container>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sparql -->
-            <div *ngIf="form.sparql" class="gridRow">
-                <div class="gridEntry">
-                    <label class="entryLabel">
-                        {{form.sparql.displayName}}
-                        <span class="fas fa-info-circle" [title]="form.sparql.description"></span>
-                    </label>
-                    <div class="card card-default vbox">
-                        <div class="card-body vbox" style="position: relative;">
-                            <button class="btn btn-xs btn-light" style="position: absolute; top: 3px; right: 6px; z-index: 1;" 
-                                [ngbPopover]="popContent" popoverTitle="SPQARL Custom Service istructions" placement="left">
-                                <span class="fas fa-question-circle"></span>
+                <!-- Authorization -->
+                <div *ngIf="form.authorization" class="gridRow">
+                    <div class="gridEntry">
+                        <label class="entryLabel">
+                            {{form.authorization.displayName}}
+                            <span class="fas fa-info-circle" [title]="form.authorization.description"></span>
+                        </label>
+                        <div class="hbox" style="align-items: center;">
+                            <input class="form-control" [(ngModel)]="form.authorization.value">
+                            <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  [title]="'ACTIONS.EDIT'|translate">
+                                <span class="fas fa-pencil-alt"></span>
                             </button>
-                            <yasgui [query]="form.sparql.value" (querychange)="onQueryChange($event)" hideButtons="true"></yasgui>
+                        </div>
+                        <div class="entryRequired">
+                            <ng-container *ngIf="form.authorization.required">*</ng-container>
                         </div>
                     </div>
-                    <div class="entryRequired">
-                        <ng-container *ngIf="form.sparql.required">*</ng-container>
+                </div>
+
+                <!-- Returns -->
+                <div *ngIf="form.returns" class="gridRow">
+                    <div class="gridEntry">
+                        <label class="entryLabel">
+                            {{form.returns.displayName}}
+                            <span class="fas fa-info-circle" [title]="form.returns.description"></span>
+                        </label>
+                        <div class="card card-default" style="flex: 1;">
+                            <div class="card-body">
+                                <type-editor [(ngModel)]="form.returns.value" (ngModelChange)="updateReturnsPrettyPrint()"></type-editor>
+                            </div>
+                            <div class="card-footer">
+                                <input class="form-control" style="font-family: monospace;" [ngModel]="returnsPrettyPrint" readonly>
+                            </div>
+                        </div>
+                        <div class="entryRequired">
+                            <ng-container *ngIf="form.returns.required">*</ng-container>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sparql -->
+                <div *ngIf="form.sparql" class="gridRow">
+                    <div class="gridEntry">
+                        <label class="entryLabel">
+                            {{form.sparql.displayName}}
+                            <span class="fas fa-info-circle" [title]="form.sparql.description"></span>
+                        </label>
+                        <div class="card card-default vbox">
+                            <div class="card-body vbox" style="position: relative;">
+                                <button class="btn btn-xs btn-light" style="position: absolute; top: 3px; right: 6px; z-index: 1;" 
+                                    [ngbPopover]="popContent" popoverTitle="SPQARL Custom Service istructions" placement="left">
+                                    <span class="fas fa-question-circle"></span>
+                                </button>
+                                <yasgui [query]="form.sparql.value" (querychange)="onQueryChange($event)" hideButtons="true"></yasgui>
+                            </div>
+                        </div>
+                        <div class="entryRequired">
+                            <ng-container *ngIf="form.sparql.required">*</ng-container>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+    </div>
+    <div class="modal-footer">
+        <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
 
+    <ng-template #popContent>
+        <p>
+            {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.INTRO.0'|translate}}
+            <span style="font-family: monospace">workingGraph</span>,
+            {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.INTRO.1'|translate}}
+        </p>
+        <p>{{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.ALLOWED_PARAM_TYPES_ARE'|translate}}:</p>
+        <ul>
+            <li><span style="font-family: monospace">boolean</span></li>
+            <li><span style="font-family: monospace">integer</span></li>
+            <li><span style="font-family: monospace">short</span></li>
+            <li><span style="font-family: monospace">long</span></li>
+            <li><span style="font-family: monospace">float</span></li>
+            <li><span style="font-family: monospace">double</span></li>
+            <li><span style="font-family: monospace">java.lang.String</span></li>
+            <li><span style="font-family: monospace">BNode</span></li>
+            <li><span style="font-family: monospace">IRI</span></li>
+            <li><span style="font-family: monospace">Literal</span></li>
+            <li><span style="font-family: monospace">Resource</span></li>
+            <li><span style="font-family: monospace">Value</span></li>
+        </ul>
+        <p>{{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.ALLOWED_RETURN_TYPE'|translate}}:</p>
+        <ul>
+            <li>Udpate => <span style="font-family: monospace;">void</span></li>
+            <li>ASK => <span style="font-family: monospace;">boolean</span></li>
+            <li>SELECT => 
+                <span style="font-family: monospace;">List&lt;T&gt;</span> {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.LIST_T_WHERE'|translate}} <span style="font-family: monospace;">T</span>:
+                <ul>
+                    <li>{{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OTP1'|translate}}</li>
+                    <li>
+                        {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2.BE'|translate}}
+                        <span style="font-family: monospace;">AnnotatedValue&lt;S&gt;</span>,
+                        {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2.WHERE'|translate}}
+                        <span style="font-family: monospace;">S</span>
+                        {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2.MIGHT_BE'|translate}}:
+                        <ul>
+                            <li><span style="font-family: monospace;">BNode</span></li>
+                            <li><span style="font-family: monospace;">IRI</span></li>
+                            <li><span style="font-family: monospace;">Resource</span></li>
+                        </ul>
+                        <span>
+                            ({{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2_ADDENDA.0'|translate}}
+                            <span style="font-family: monospace;">?attr...</span>
+                            {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2_ADDENDA.1'|translate}})
+                        </span>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </ng-template>
 </div>
-<div class="modal-footer">
-    <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
-</div>
-
-<ng-template #popContent>
-    <p>
-        {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.INTRO.0'|translate}}
-        <span style="font-family: monospace">workingGraph</span>,
-        {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.INTRO.1'|translate}}
-    </p>
-    <p>{{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.ALLOWED_PARAM_TYPES_ARE'|translate}}:</p>
-    <ul>
-        <li><span style="font-family: monospace">boolean</span></li>
-        <li><span style="font-family: monospace">integer</span></li>
-        <li><span style="font-family: monospace">short</span></li>
-        <li><span style="font-family: monospace">long</span></li>
-        <li><span style="font-family: monospace">float</span></li>
-        <li><span style="font-family: monospace">double</span></li>
-        <li><span style="font-family: monospace">java.lang.String</span></li>
-        <li><span style="font-family: monospace">BNode</span></li>
-        <li><span style="font-family: monospace">IRI</span></li>
-        <li><span style="font-family: monospace">Literal</span></li>
-        <li><span style="font-family: monospace">Resource</span></li>
-        <li><span style="font-family: monospace">Value</span></li>
-    </ul>
-    <p>{{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.ALLOWED_RETURN_TYPE'|translate}}:</p>
-    <ul>
-        <li>Udpate => <span style="font-family: monospace;">void</span></li>
-        <li>ASK => <span style="font-family: monospace;">boolean</span></li>
-        <li>SELECT => 
-            <span style="font-family: monospace;">List&lt;T&gt;</span> {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.LIST_T_WHERE'|translate}} <span style="font-family: monospace;">T</span>:
-            <ul>
-                <li>{{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OTP1'|translate}}</li>
-                <li>
-                    {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2.BE'|translate}}
-                    <span style="font-family: monospace;">AnnotatedValue&lt;S&gt;</span>,
-                    {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2.WHERE'|translate}}
-                    <span style="font-family: monospace;">S</span>
-                    {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2.MIGHT_BE'|translate}}:
-                    <ul>
-                        <li><span style="font-family: monospace;">BNode</span></li>
-                        <li><span style="font-family: monospace;">IRI</span></li>
-                        <li><span style="font-family: monospace;">Resource</span></li>
-                    </ul>
-                    <span>
-                        ({{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2_ADDENDA.0'|translate}}
-                        <span style="font-family: monospace;">?attr...</span>
-                        {{'CUSTOM_SERVICES.OPERATION.PARAM_HELPER.T_TYPE_OPT2_ADDENDA.1'|translate}})
-                    </span>
-                </li>
-            </ul>
-        </li>
-    </ul>
-</ng-template>

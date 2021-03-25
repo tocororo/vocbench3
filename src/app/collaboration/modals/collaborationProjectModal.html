@@ -1,43 +1,45 @@
-<div class="modal-header">
-    <h3 class="modal-title">
-        {{'COLLABORATION.COLLABORATION_SYSTEM_PROJECTS'|translate}}
-    </h3>
-</div>
-<div class="modal-body blockingDivHost">
-
-    <div class="card card-default">
-        <div class="card-header">
-            <label style="flex: 1">{{'MODELS.PROJECT.PROJECTS'|translate}}:</label>
-            <button class="btn btn-xs btn-light" (click)="createProject()">
-                <span class="fas fa-plus"></span>
-            </button>
-        </div>
-        <div class="card-body scrollableContainer" style="min-height: 70px;">
-            <table class="table table-sm table-borderless table-hoverable">
-                <thead>
-                    <tr>
-                        <th *ngFor="let h of headers" class="text-center">{{h}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{ 'table-primary': p == selectedProject }">
-                        <td *ngFor="let h of headers" class="text-center">{{p[h]}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">
+            {{'COLLABORATION.COLLABORATION_SYSTEM_PROJECTS'|translate}}
+        </h3>
     </div>
+    <div class="modal-body blockingDivHost">
 
-    <div #blockDiv class="blockingDiv" style="display:none">
-        <div class="loadingDiv">
-            <div>
-                <p>Loading...</p><img src="./assets/images/loading.gif" />
+        <div class="card card-default">
+            <div class="card-header">
+                <label style="flex: 1">{{'MODELS.PROJECT.PROJECTS'|translate}}:</label>
+                <button class="btn btn-xs btn-light" (click)="createProject()">
+                    <span class="fas fa-plus"></span>
+                </button>
+            </div>
+            <div class="card-body scrollableContainer" style="min-height: 70px;">
+                <table class="table table-sm table-borderless table-hoverable">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let h of headers" class="text-center">{{h}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{ 'table-primary': p == selectedProject }">
+                            <td *ngFor="let h of headers" class="text-center">{{p[h]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProject">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+        <div #blockDiv class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="./assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProject">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

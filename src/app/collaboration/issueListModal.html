@@ -1,14 +1,16 @@
-<div class="modal-header">
-    <h3 class="modal-title">
-        {{'COLLABORATION.ACTIONS.ASSIGN_ISSUE'|translate}}
-    </h3>
-</div>
-<div class="modal-body vbox" style="min-height: 20vh">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">
+            {{'COLLABORATION.ACTIONS.ASSIGN_ISSUE'|translate}}
+        </h3>
+    </div>
+    <div class="modal-body vbox" style="min-height: 20vh">
 
-    <issue-list (issueSelected)="selectIssue($event)" [context]="issueCtx"></issue-list>
+        <issue-list (issueSelected)="selectIssue($event)" [context]="issueCtx"></issue-list>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedIssue">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedIssue">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

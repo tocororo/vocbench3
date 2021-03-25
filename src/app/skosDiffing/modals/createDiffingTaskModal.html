@@ -1,60 +1,62 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'ACTIONS.CREATE_TASK'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
-
-    <div class="hbox" style="flex: initial; align-items: center;">
-        <label>{{'COMMONS.MODE'|translate}}:</label>
-        <select class="form-control ml-2" [(ngModel)]="mode" (ngModelChange)="onModeChange()">
-            <option *ngFor="let m of modes" [ngValue]="m.mode">{{m.show}}</option>
-        </select>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'ACTIONS.CREATE_TASK'|translate}}</h3>
     </div>
+    <div class="modal-body vbox">
 
-    <div *ngIf="mode" class="card card-default vbox mt-3">
-        <div class="card-body">
-            <div class="hbox">
-                <div class="vbox">
-                    <label class="text-center mb-2 p-2">{{'SKOS_DIFF.LEFT_DATASET'|translate}}</label>
-                    <div *ngIf="mode == 'projects'" class="form-group row">
-                        <label class="col-form-label col-sm-3">{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
-                        <div class="col-sm-9">
-                            <input class="form-control" [ngModel]="leftDataset.project.getName()" disabled>
+        <div class="hbox" style="flex: initial; align-items: center;">
+            <label>{{'COMMONS.MODE'|translate}}:</label>
+            <select class="form-control ml-2" [(ngModel)]="mode" (ngModelChange)="onModeChange()">
+                <option *ngFor="let m of modes" [ngValue]="m.mode">{{m.show}}</option>
+            </select>
+        </div>
+
+        <div *ngIf="mode" class="card card-default vbox mt-3">
+            <div class="card-body">
+                <div class="hbox">
+                    <div class="vbox">
+                        <label class="text-center mb-2 p-2">{{'SKOS_DIFF.LEFT_DATASET'|translate}}</label>
+                        <div *ngIf="mode == 'projects'" class="form-group row">
+                            <label class="col-form-label col-sm-3">{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" [ngModel]="leftDataset.project.getName()" disabled>
+                            </div>
+                        </div>
+                        <div *ngIf="mode == 'versions'" class="form-group row">
+                            <label class="col-form-label col-sm-3">{{'SKOS_DIFF.VERSION'|translate}}:</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" [(ngModel)]="leftDataset.version">
+                                    <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div *ngIf="mode == 'versions'" class="form-group row">
-                        <label class="col-form-label col-sm-3">{{'SKOS_DIFF.VERSION'|translate}}:</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" [(ngModel)]="leftDataset.version">
-                                <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>
-                            </select>
+                    <div class="vbox">
+                        <label class="text-center mb-2 p-2">{{'SKOS_DIFF.RIGHT_DATASET'|translate}}</label>   
+                        <div *ngIf="mode == 'projects'" class="form-group row">
+                            <label class="col-form-label col-sm-3">{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" [(ngModel)]="rightDataset.project">
+                                    <option *ngFor="let p of projects" [ngValue]="p">{{p.getName()}}</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="vbox">
-                    <label class="text-center mb-2 p-2">{{'SKOS_DIFF.RIGHT_DATASET'|translate}}</label>   
-                    <div *ngIf="mode == 'projects'" class="form-group row">
-                        <label class="col-form-label col-sm-3">{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" [(ngModel)]="rightDataset.project">
-                                <option *ngFor="let p of projects" [ngValue]="p">{{p.getName()}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div *ngIf="mode == 'versions'" class="form-group row">
-                        <label class="col-form-label col-sm-3">{{'SKOS_DIFF.VERSION'|translate}}:</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" [(ngModel)]="rightDataset.version">
-                                <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>
-                            </select>
+                        <div *ngIf="mode == 'versions'" class="form-group row">
+                            <label class="col-form-label col-sm-3">{{'SKOS_DIFF.VERSION'|translate}}:</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" [(ngModel)]="rightDataset.version">
+                                    <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

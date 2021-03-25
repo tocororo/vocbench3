@@ -1,26 +1,28 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'RESOURCE_VIEW.ACTIONS.COPY_VALUE_TO_LOCALES'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
-
-    <div style="padding: 6px;">
-        <label>{{'RESOURCE_VIEW.MISC.VALLUE_TO_COPY'|translate}}:</label>
-        <rdf-resource [resource]="value"></rdf-resource>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'RESOURCE_VIEW.ACTIONS.COPY_VALUE_TO_LOCALES'|translate}}</h3>
     </div>
+    <div class="modal-body vbox">
 
-    <div class="card card-default vbox">
-        <div class="card-header">
-            <label>{{'RESOURCE_VIEW.MISC.TARGET_LANGS'|translate}}:</label>
+        <div style="padding: 6px;">
+            <label>{{'RESOURCE_VIEW.MISC.VALLUE_TO_COPY'|translate}}:</label>
+            <rdf-resource [resource]="value"></rdf-resource>
         </div>
-        <div class="card-body scrollableContainer">
-            <div *ngFor="let l of locales" class="listNodeItem">
-                <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="l.checked">
-                <lang-item [language]="l.locale" showTag="true"></lang-item>
+
+        <div class="card card-default vbox">
+            <div class="card-header">
+                <label>{{'RESOURCE_VIEW.MISC.TARGET_LANGS'|translate}}:</label>
+            </div>
+            <div class="card-body scrollableContainer">
+                <div *ngFor="let l of locales" class="listNodeItem">
+                    <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="l.checked">
+                    <lang-item [language]="l.locale" showTag="true"></lang-item>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="isOkDisabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="isOkDisabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

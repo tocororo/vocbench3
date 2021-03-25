@@ -1,43 +1,45 @@
-<div class="modal-header">
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{'ACTIONS.ADD'|translate}} {{property.getShow()}}</h3>
-        <div class="btn-group">
-            <button class="btn btn-xs btn-light" (click)="changeProperty()" [disabled]="!propChangeable || enrichingProperty != rootProperty">
-                <rdf-resource [resource]="enrichingProperty"></rdf-resource>
-            </button>
-            <div class="btn-group" ngbDropdown>
-                <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!propChangeable">
-                    <span class="fas fa-caret-down fa-sm"></span>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{'ACTIONS.ADD'|translate}} {{property.getShow()}}</h3>
+            <div class="btn-group">
+                <button class="btn btn-xs btn-light" (click)="changeProperty()" [disabled]="!propChangeable || enrichingProperty != rootProperty">
+                    <rdf-resource [resource]="enrichingProperty"></rdf-resource>
                 </button>
-                <div class="dropdown-menu float-right" ngbDropdownMenu>
-                    <a class="dropdown-item" (click)="enrichingProperty = rootProperty"><rdf-resource [resource]="rootProperty"></rdf-resource></a>
-                    <a class="dropdown-item" (click)="enrichingProperty = rdfN"><rdf-resource [resource]="rdfN"></rdf-resource></a>
+                <div class="btn-group" ngbDropdown>
+                    <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!propChangeable">
+                        <span class="fas fa-caret-down fa-sm"></span>
+                    </button>
+                    <div class="dropdown-menu float-right" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="enrichingProperty = rootProperty"><rdf-resource [resource]="rootProperty"></rdf-resource></a>
+                        <a class="dropdown-item" (click)="enrichingProperty = rdfN"><rdf-resource [resource]="rdfN"></rdf-resource></a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal-body vbox">
-    <div *ngIf="enrichingProperty != rootProperty && propChangeable" class="hbox" style="flex: initial; margin-bottom: 4px;">
-        <div class="hbox" style="margin-right: 6px; align-items: center;">
-            <label style="margin-right: 4px;">{{'DATA.PROPERTY.PROPERTY'|translate}}:</label>
-            <div class="form-control-sm input-resource" style="flex: 1;">
-                <rdf-resource [resource]="rdfN"></rdf-resource>
+    <div class="modal-body vbox">
+        <div *ngIf="enrichingProperty != rootProperty && propChangeable" class="hbox" style="flex: initial; margin-bottom: 4px;">
+            <div class="hbox" style="margin-right: 6px; align-items: center;">
+                <label style="margin-right: 4px;">{{'DATA.PROPERTY.PROPERTY'|translate}}:</label>
+                <div class="form-control-sm input-resource" style="flex: 1;">
+                    <rdf-resource [resource]="rdfN"></rdf-resource>
+                </div>
+            </div>
+            <div class="hbox" style="flex: initial; align-items: center;">
+                <label style="margin-right: 4px;">n:</label>
+                <input type="number" class="form-control form-control-sm" [(ngModel)]="memberN" min="0" step="1" (ngModelChange)="updateRdfNProp()">
             </div>
         </div>
-        <div class="hbox" style="flex: initial; align-items: center;">
-            <label style="margin-right: 4px;">n:</label>
-            <input type="number" class="form-control form-control-sm" [(ngModel)]="memberN" min="0" step="1" (ngModelChange)="updateRdfNProp()">
-        </div>
+
+        <lexical-entry-list-panel 
+            [lexiconChangeable]="true" [editable]="false" [deletable]="false" (nodeSelected)="selectedConstituent = $event"
+            (lexiconChanged)="selectedConstituent = null" (indexChanged)="selectedConstituent = null">
+        </lexical-entry-list-panel>
+
     </div>
-
-    <lexical-entry-list-panel 
-        [lexiconChangeable]="true" [editable]="false" [deletable]="false" (nodeSelected)="selectedConstituent = $event"
-        (lexiconChanged)="selectedConstituent = null" (indexChanged)="selectedConstituent = null">
-    </lexical-entry-list-panel>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedConstituent">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedConstituent">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

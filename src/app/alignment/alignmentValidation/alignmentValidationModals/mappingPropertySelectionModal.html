@@ -1,26 +1,28 @@
-<div class="modal-header">
-    <h3 class="modal-title text-info">{{title}}</h3>
-</div>
-<div class="modal-body vbox">
-    <div class="alert alert-warning">
-        {{message}}
-        <div>{{'ALIGNMENT.VALIDATION.MANAGEMENT.YOU_CAN_FORCE_PROP'|translate}}</div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title text-info">{{title}}</h3>
     </div>
+    <div class="modal-body vbox">
+        <div class="alert alert-warning">
+            {{message}}
+            <div>{{'ALIGNMENT.VALIDATION.MANAGEMENT.YOU_CAN_FORCE_PROP'|translate}}</div>
+        </div>
 
-    <div class="hbox" style="align-items: center; margin-top: 4px;">
-        <label style="margin-right: 4px; white-space: nowrap">{{'ALIGNMENT.VALIDATION.MANAGEMENT.MAPPING_PROP'|translate}}: </label>
-        <select class="form-control form-control-sm" [(ngModel)]="selectedProperty">
-            <option *ngFor="let p of mappingPropList" [title]="p.getURI()" [ngValue]="p">{{p.getShow()}}</option>
-        </select>
+        <div class="hbox" style="align-items: center; margin-top: 4px;">
+            <label style="margin-right: 4px; white-space: nowrap">{{'ALIGNMENT.VALIDATION.MANAGEMENT.MAPPING_PROP'|translate}}: </label>
+            <select class="form-control form-control-sm" [(ngModel)]="selectedProperty">
+                <option *ngFor="let p of mappingPropList" [title]="p.getURI()" [ngValue]="p">{{p.getShow()}}</option>
+            </select>
+        </div>
+
+        <div class="form-check mt-2">
+            <input class="form-check-input" id="defaultCheck" type="checkbox" [(ngModel)]="setAsDefault">
+            <label class="form-check-label" for="defaultCheck">{{'ALIGNMENT.VALIDATION.MANAGEMENT.SET_DEFAULT_FOR_RELATION'|translate}}</label>
+        </div>
+
     </div>
-
-    <div class="form-check mt-2">
-        <input class="form-check-input" id="defaultCheck" type="checkbox" [(ngModel)]="setAsDefault">
-        <label class="form-check-label" for="defaultCheck">{{'ALIGNMENT.VALIDATION.MANAGEMENT.SET_DEFAULT_FOR_RELATION'|translate}}</label>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProperty">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProperty">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

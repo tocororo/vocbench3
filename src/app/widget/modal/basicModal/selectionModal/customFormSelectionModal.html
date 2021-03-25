@@ -1,19 +1,21 @@
-<div class="modal-header">
-    <h3 class="modal-title text-info">{{title}}</h3>
-</div>
-<div class="modal-body">
-    <div class="card card-default vbox">
-        <div class="card-body vbox scrollableContainer">
-            <div *ngFor="let cf of cfList" class="listItem" [ngClass]="{ active: selectedCF == cf }" (click)="selectedCF = cf">
-                <span style="white-space: nowrap;">
-                    <span style="font-size: 13px;">{{cf.getName()}}</span>
-                    <span *ngIf="cf.getDescription()" class="fas fa-info-circle" style="margin-left: 4px;" [title]="cf.getDescription()"></span>
-                </span>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title text-info">{{title}}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="card card-default vbox">
+            <div class="card-body vbox scrollableContainer">
+                <div *ngFor="let cf of cfList" class="listItem" [ngClass]="{ active: selectedCF == cf }" (click)="selectedCF = cf">
+                    <span style="white-space: nowrap;">
+                        <span style="font-size: 13px;">{{cf.getName()}}</span>
+                        <span *ngIf="cf.getDescription()" class="fas fa-info-circle" style="margin-left: 4px;" [title]="cf.getDescription()"></span>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedCF">Ok</button>
-    <button *ngIf="!hideNo" class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedCF">Ok</button>
+        <button *ngIf="!hideNo" class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

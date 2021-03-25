@@ -1,111 +1,113 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'DATA_MANAGEMENT.DATASET_CATALOG.DATASET_CATALOG'|translate}}</h3>
-</div>
-<div class="modal-body vbox blockingDivHost" style="min-height: 75vh;">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'DATA_MANAGEMENT.DATASET_CATALOG.DATASET_CATALOG'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox blockingDivHost" style="min-height: 75vh;">
 
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td nowrap><label>{{'DATA_MANAGEMENT.DATASET_CATALOG.CATALOG'|translate}}:</label></td>
-                <td>
-                   <extension-configurator *ngIf="extensions" [extensions]="extensions"
-                    (extensionUpdated)="onExtensionChange($event)"
-                    (configurationUpdated)="onExtensionConfigUpdated($event)"></extension-configurator>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'ACTIONS.SEARCH'|translate}}:</label></td>
-                <td>
-                    <div class="input-group">
-                        <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
-                        <div class="input-group-append">
-                            <button class="btn btn-light" (click)="searchDataset()" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
-                                <span class="fas fa-search"></span>
-                            </button>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="hbox" style="margin-top: 4px;">
-        <div class="card card-default vbox" style="flex: 1;">
-            <div class="card-header">
-                <label>{{'DATA_MANAGEMENT.DATASET_CATALOG.SEARCH_RESULTS'|translate}}:</label>
-            </div>
-            <div class="card-body hbox">
-                <div class="vbox scrollableContainer">
-                    <div *ngIf="searchDatasetResult?.totalResults == 0" class="searchDatasetResult">{{'MESSAGES.NO_RESULTS_FOUND'|translate}}</div>
-                    <div *ngFor="let d of searchDatasetResult?.content">
-                        <div class="listItem searchDatasetResult" [ngClass]="{active: d == selectedDataset}" (click)="selectDataset(d)">
-                            <div style="font-size: 13px">
-                                <label>{{d.id}}</label>
-                                <span> - {{d.getPreferredTitle().getValue()}} <span style="color: green">@{{d.getPreferredTitle().getLang()}}</span></span>
-                            </div>
-                            <a *ngIf="d.ontologyIRI" [href]="d.ontologyIRI.getURI()" target="_blank" style="color: gray; align-self: start">{{d.ontologyIRI.getURI()}}</a>
-                            <div *ngIf="d.descriptions.length > 0">
-                                <div style="height: 1px; margin: 2px 0; overflow: hidden; background-color: #e5e5e5;"></div>
-                                <span style="font-size: 12px">{{d.getPreferredDescription().toNT()}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="searchDatasetResult?.facetAggregations" class="vbox scrollableContainer" style="flex: initial;">
-                    <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="card card-alt" style="margin-bottom: 4px;">
-                        <div class="card-header"><label>{{facetAggregation.displayName||facetAggregation.name}}</label></div>
-                        <div class="card-body">
-                            <div *ngFor="let bucket of facetAggregation.buckets" style="margin-bottom: 3px;">
-                                <button class="btn btn-light" [ngClass]="{ active: lastSearchFacets[facetAggregation.name]?.items[bucket.name] }"
-                                    (click)="toggleFacet(facetAggregation, bucket)">
-                                    {{bucket.displayName||bucket.name}}
-                                    <span class="badge badge-secondary">{{bucket.count}}</span>
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td nowrap><label>{{'DATA_MANAGEMENT.DATASET_CATALOG.CATALOG'|translate}}:</label></td>
+                    <td>
+                    <extension-configurator *ngIf="extensions" [extensions]="extensions"
+                        (extensionUpdated)="onExtensionChange($event)"
+                        (configurationUpdated)="onExtensionConfigUpdated($event)"></extension-configurator>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'ACTIONS.SEARCH'|translate}}:</label></td>
+                    <td>
+                        <div class="input-group">
+                            <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
+                            <div class="input-group-append">
+                                <button class="btn btn-light" (click)="searchDataset()" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
+                                    <span class="fas fa-search"></span>
                                 </button>
                             </div>
                         </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="hbox" style="margin-top: 4px;">
+            <div class="card card-default vbox" style="flex: 1;">
+                <div class="card-header">
+                    <label>{{'DATA_MANAGEMENT.DATASET_CATALOG.SEARCH_RESULTS'|translate}}:</label>
+                </div>
+                <div class="card-body hbox">
+                    <div class="vbox scrollableContainer">
+                        <div *ngIf="searchDatasetResult?.totalResults == 0" class="searchDatasetResult">{{'MESSAGES.NO_RESULTS_FOUND'|translate}}</div>
+                        <div *ngFor="let d of searchDatasetResult?.content">
+                            <div class="listItem searchDatasetResult" [ngClass]="{active: d == selectedDataset}" (click)="selectDataset(d)">
+                                <div style="font-size: 13px">
+                                    <label>{{d.id}}</label>
+                                    <span> - {{d.getPreferredTitle().getValue()}} <span style="color: green">@{{d.getPreferredTitle().getLang()}}</span></span>
+                                </div>
+                                <a *ngIf="d.ontologyIRI" [href]="d.ontologyIRI.getURI()" target="_blank" style="color: gray; align-self: start">{{d.ontologyIRI.getURI()}}</a>
+                                <div *ngIf="d.descriptions.length > 0">
+                                    <div style="height: 1px; margin: 2px 0; overflow: hidden; background-color: #e5e5e5;"></div>
+                                    <span style="font-size: 12px">{{d.getPreferredDescription().toNT()}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <div *ngIf="searchDatasetResult?.facetAggregations" class="vbox scrollableContainer" style="flex: initial;">
+                        <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="card card-alt" style="margin-bottom: 4px;">
+                            <div class="card-header"><label>{{facetAggregation.displayName||facetAggregation.name}}</label></div>
+                            <div class="card-body">
+                                <div *ngFor="let bucket of facetAggregation.buckets" style="margin-bottom: 3px;">
+                                    <button class="btn btn-light" [ngClass]="{ active: lastSearchFacets[facetAggregation.name]?.items[bucket.name] }"
+                                        (click)="toggleFacet(facetAggregation, bucket)">
+                                        {{bucket.displayName||bucket.name}}
+                                        <span class="badge badge-secondary">{{bucket.count}}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div *ngIf="searchDatasetResult" class="hbox float-right" style="align-items: center;">
+                        <span style="margin-right: 4px;">{{searchDatasetResult.totalResults}} {{'DATA_MANAGEMENT.DATASET_CATALOG.TOT_RESULTS'|translate}}</span>
+                        <div *ngIf="searchDatasetResult.totalResults > 0" class="btn-group btn-group-xs">
+                            <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="prevPage()" [disabled]="page==0">
+                                <span class="fas fa-caret-left"></span>
+                            </button>
+                            <button class="btn btn-light" style="cursor: auto" disabled>
+                                <span>{{page+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totPage}}</span>
+                            </button>
+                            <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="nextPage()" [disabled]="searchDatasetResult.tail">
+                                <span class="fas fa-caret-right"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
             </div>
-            <div class="card-footer">
-                <div *ngIf="searchDatasetResult" class="hbox float-right" style="align-items: center;">
-                    <span style="margin-right: 4px;">{{searchDatasetResult.totalResults}} {{'DATA_MANAGEMENT.DATASET_CATALOG.TOT_RESULTS'|translate}}</span>
-                    <div *ngIf="searchDatasetResult.totalResults > 0" class="btn-group btn-group-xs">
-                        <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="prevPage()" [disabled]="page==0">
-                            <span class="fas fa-caret-left"></span>
-                        </button>
-                        <button class="btn btn-light" style="cursor: auto" disabled>
-                            <span>{{page+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totPage}}</span>
-                        </button>
-                        <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="nextPage()" [disabled]="searchDatasetResult.tail">
-                            <span class="fas fa-caret-right"></span>
-                        </button>
-                    </div>
+
+            <dataset-description *ngIf="selectedDatasetDescription" [dataset]="selectedDatasetDescription" [extension]="selectedExtension"
+                style="margin-left: 4px;">
+            </dataset-description>
+
+        </div>
+
+
+        <div #blockingDiv class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="./assets/images/loading.gif" />
                 </div>
-                <div class="clearfix"></div>
             </div>
         </div>
 
-        <dataset-description *ngIf="selectedDatasetDescription" [dataset]="selectedDatasetDescription" [extension]="selectedExtension"
-            style="margin-left: 4px;">
-        </dataset-description>
-
     </div>
-
-
-    <div #blockingDiv class="blockingDiv" style="display:none">
-        <div class="loadingDiv">
-            <div>
-                <p>Loading...</p><img src="./assets/images/loading.gif" />
-            </div>
-        </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedDatasetDescription">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedDatasetDescription">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

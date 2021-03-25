@@ -1,103 +1,105 @@
-<div class="modal-header">
-    <h3 class="modal-title">Projects list</h3>
-</div>
-<div class="modal-body vbox" style="min-height: 100px;">
-    <div class="card card-default vbox" style="margin-left: 5px;">
-        <div class="card-header">
-            <label style="flex: 1;">{{'MODELS.PROJECT.PROJECTS'|translate}}</label>
-            <button class="btn btn-xs btn-light" (click)="settings()">
-                <span class="fas fa-cog"></span>
-            </button>
-        </div>
-        <div class="card-body scrollableContainer">
-            
-            <table *ngIf="visualizationMode == ProjectViewMode.list" class="table table-sm table-hoverable table-borderless">
-                <thead>
-                    <tr>
-                        <th class="text-center">{{'COMMONS.NAME'|translate}}</th>
-                        <th class="text-center">{{'MODELS.PROJECT.MODEL'|translate}}</th>
-                        <th class="text-center">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</th>
-                        <th class="text-center">{{'MODELS.PROJECT.HISTORY'|translate}}</th>
-                        <th class="text-center">{{'MODELS.PROJECT.VALIDATION'|translate}}</th>
-                        <th class="text-center">{{'MODELS.PROJECT.REPO_LOCATION'|translate}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let p of projectList" [ngClass]="{ 'table-primary': selectedProject == p }" (click)="selectedProject = p">
-                        <td class="text-center ellipsable">{{p.getName()}}</td>
-                        <td class="text-center">{{p.getModelType(true)}}</td>
-                        <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
-                        <td class="text-center">
-                            <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green"></span>
-                            <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred"></span>
-                        </td>
-                        <td class="text-center">
-                            <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green"></span>
-                            <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred"></span>
-                        </td>
-                        <td class="text-center">{{p.getRepositoryLocation().location}}</td>
-                    </tr>
-                </tbody>
-            </table>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">Projects list</h3>
+    </div>
+    <div class="modal-body vbox" style="min-height: 100px;">
+        <div class="card card-default vbox" style="margin-left: 5px;">
+            <div class="card-header">
+                <label style="flex: 1;">{{'MODELS.PROJECT.PROJECTS'|translate}}</label>
+                <button class="btn btn-xs btn-light" (click)="settings()">
+                    <span class="fas fa-cog"></span>
+                </button>
+            </div>
+            <div class="card-body scrollableContainer">
+                
+                <table *ngIf="visualizationMode == ProjectViewMode.list" class="table table-sm table-hoverable table-borderless">
+                    <thead>
+                        <tr>
+                            <th class="text-center">{{'COMMONS.NAME'|translate}}</th>
+                            <th class="text-center">{{'MODELS.PROJECT.MODEL'|translate}}</th>
+                            <th class="text-center">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</th>
+                            <th class="text-center">{{'MODELS.PROJECT.HISTORY'|translate}}</th>
+                            <th class="text-center">{{'MODELS.PROJECT.VALIDATION'|translate}}</th>
+                            <th class="text-center">{{'MODELS.PROJECT.REPO_LOCATION'|translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of projectList" [ngClass]="{ 'table-primary': selectedProject == p }" (click)="selectedProject = p">
+                            <td class="text-center ellipsable">{{p.getName()}}</td>
+                            <td class="text-center">{{p.getModelType(true)}}</td>
+                            <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
+                            <td class="text-center">
+                                <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green"></span>
+                                <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred"></span>
+                            </td>
+                            <td class="text-center">
+                                <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green"></span>
+                                <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred"></span>
+                            </td>
+                            <td class="text-center">{{p.getRepositoryLocation().location}}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
 
-            <ng-container *ngIf="visualizationMode == ProjectViewMode.facet">
-                <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
-                <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
-                    <label class="text-center" style="flex: 3">{{'COMMONS.NAME'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.MODEL'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.HISTORY'|translate}}</label>
-                    <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.VALIDATION'|translate}}</label>
-                    <label class="text-center" style="flex: 2">{{'MODELS.PROJECT.REPO_LOCATION'|translate}}</label>
-                </div>
-                <ng-container *ngFor="let pd of projectDirs">
-                    <div class="groupPanel">
-                        <div class="groupPanel-heading">
-                            <div class="groupPanel-heading-content clickable" (click)="toggleDirectory(pd)">
-                                <span [class]="'fas fa-chevron-' + (pd.open ? 'down' : 'right')"></span>
-                                <span [class]="'fas fa-folder' + (pd.open ? '-open' : '')" style="margin-left: 4px;"></span>
-                                <label class="clickable" style="margin-left: 4px;">
-                                    <ng-container *ngIf="pd.dir">{{pd.dirDisplayName}}</ng-container>
-                                    <ng-container *ngIf="!pd.dir">Unclassified</ng-container>
-                                </label>
+                <ng-container *ngIf="visualizationMode == ProjectViewMode.facet">
+                    <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
+                    <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
+                        <label class="text-center" style="flex: 3">{{'COMMONS.NAME'|translate}}</label>
+                        <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.MODEL'|translate}}</label>
+                        <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.LEXICALIZATION'|translate}}</label>
+                        <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.HISTORY'|translate}}</label>
+                        <label class="text-center" style="flex: 1">{{'MODELS.PROJECT.VALIDATION'|translate}}</label>
+                        <label class="text-center" style="flex: 2">{{'MODELS.PROJECT.REPO_LOCATION'|translate}}</label>
+                    </div>
+                    <ng-container *ngFor="let pd of projectDirs">
+                        <div class="groupPanel">
+                            <div class="groupPanel-heading">
+                                <div class="groupPanel-heading-content clickable" (click)="toggleDirectory(pd)">
+                                    <span [class]="'fas fa-chevron-' + (pd.open ? 'down' : 'right')"></span>
+                                    <span [class]="'fas fa-folder' + (pd.open ? '-open' : '')" style="margin-left: 4px;"></span>
+                                    <label class="clickable" style="margin-left: 4px;">
+                                        <ng-container *ngIf="pd.dir">{{pd.dirDisplayName}}</ng-container>
+                                        <ng-container *ngIf="!pd.dir">Unclassified</ng-container>
+                                    </label>
+                                </div>
+                            </div>
+                        
+                            <div class="groupPanel-body">
+                                <ng-container *ngIf="pd.open">
+                                    <div *ngFor="let p of pd.projects" class="listItem project-row" [ngClass]="{ active : selectedProject == p }" (click)="selectedProject = p">
+                                        <div class="text-center ellipsable" style="flex: 3">
+                                            {{p.getName()}}
+                                        </div>
+                                        <div class="text-center" style="flex: 1">
+                                            {{p.getModelType(true)}}
+                                        </div>
+                                        <div class="text-center" style="flex: 1">
+                                            {{p.getLexicalizationModelType(true)}}
+                                        </div>
+                                        <div class="text-center" style="flex: 1">
+                                            <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green"></span>
+                                            <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred"></span>
+                                        </div>
+                                        <div class="text-center" style="flex: 1">
+                                            <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green"></span>
+                                            <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred"></span>
+                                        </div>
+                                        <div class="text-center" style="flex: 2">
+                                            {{p.getRepositoryLocation().location}}
+                                        </div>
+                                    </div>
+                                </ng-container>
                             </div>
                         </div>
-                    
-                        <div class="groupPanel-body">
-                            <ng-container *ngIf="pd.open">
-                                <div *ngFor="let p of pd.projects" class="listItem project-row" [ngClass]="{ active : selectedProject == p }" (click)="selectedProject = p">
-                                    <div class="text-center ellipsable" style="flex: 3">
-                                        {{p.getName()}}
-                                    </div>
-                                    <div class="text-center" style="flex: 1">
-                                        {{p.getModelType(true)}}
-                                    </div>
-                                    <div class="text-center" style="flex: 1">
-                                        {{p.getLexicalizationModelType(true)}}
-                                    </div>
-                                    <div class="text-center" style="flex: 1">
-                                        <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green"></span>
-                                        <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred"></span>
-                                    </div>
-                                    <div class="text-center" style="flex: 1">
-                                        <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green"></span>
-                                        <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred"></span>
-                                    </div>
-                                    <div class="text-center" style="flex: 2">
-                                        {{p.getRepositoryLocation().location}}
-                                    </div>
-                                </div>
-                            </ng-container>
-                        </div>
-                    </div>
+                    </ng-container>
                 </ng-container>
-            </ng-container>
 
+            </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProject">{{'ACTIONS.ACCESS'|translate}}</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CLOSE'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProject">{{'ACTIONS.ACCESS'|translate}}</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CLOSE'|translate}}</button>
+    </div>
 </div>

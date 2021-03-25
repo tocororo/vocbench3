@@ -1,80 +1,82 @@
-<div class="modal-header">
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
-        <span>
-            <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
-                <rdf-resource [resource]="enrichingProperty"></rdf-resource>
-            </button>
-        </span>
-    </div>
-</div>
-<div class="modal-body vbox" style="min-height: 400px;">
-
-    <div style="margin-bottom: 4px;">
-        <div *ngIf="showAspectSelector" class="btn-group btn-group-xs float-right">
-            <button *ngFor="let selector of aspectSelectors" class="btn btn-light" [ngClass]="{active: selectedAspectSelector == selector}"
-                (click)="changeAspectSelector(selector)">{{selector.show}}</button>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{title}}</h3>
+            <span>
+                <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
+                    <rdf-resource [resource]="enrichingProperty"></rdf-resource>
+                </button>
+            </span>
         </div>
     </div>
+    <div class="modal-body vbox" style="min-height: 400px;">
 
-    <!--Alternative views-->
-    <div *ngIf="selectedAspectSelector == treeListAspectSelector" class="vbox">
-        <div  *ngIf="viewType == 'classTree'" class="vbox">
-            <div *ngIf="rootsForClsTree" class="form-check mb-2">
-                <input class="form-check-input" id="classesCheck" type="checkbox" [(ngModel)]="showAllClass">
-                <label class="form-check-label" for="classesCheck">{{'RESOURCE_VIEW.MISC.SHOW_ALL_CLASSES'|translate}}</label>
+        <div style="margin-bottom: 4px;">
+            <div *ngIf="showAspectSelector" class="btn-group btn-group-xs float-right">
+                <button *ngFor="let selector of aspectSelectors" class="btn btn-light" [ngClass]="{active: selectedAspectSelector == selector}"
+                    (click)="changeAspectSelector(selector)">{{selector.show}}</button>
             </div>
-            <class-tree-panel [context]="treeListCtx" [roots]="showAllClass? defaultRootClass : rootsForClsIndList" [deletable]="false" [allowMultiselection]="allowMultiselection"
+        </div>
+
+        <!--Alternative views-->
+        <div *ngIf="selectedAspectSelector == treeListAspectSelector" class="vbox">
+            <div  *ngIf="viewType == 'classTree'" class="vbox">
+                <div *ngIf="rootsForClsTree" class="form-check mb-2">
+                    <input class="form-check-input" id="classesCheck" type="checkbox" [(ngModel)]="showAllClass">
+                    <label class="form-check-label" for="classesCheck">{{'RESOURCE_VIEW.MISC.SHOW_ALL_CLASSES'|translate}}</label>
+                </div>
+                <class-tree-panel [context]="treeListCtx" [roots]="showAllClass? defaultRootClass : rootsForClsIndList" [deletable]="false" [allowMultiselection]="allowMultiselection"
+                    (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
+                </class-tree-panel>
+            </div>
+
+            <concept-tree-panel *ngIf="viewType == 'conceptTree'" [context]="treeListCtx" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes" [allowMultiselection]="allowMultiselection"
+                (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (schemeChanged)="onConceptTreeSchemeChange($event)"
+                (multiselectionStatus)="onMultiselectionChange($event)">
+            </concept-tree-panel>
+            
+            <ng-container *ngIf="viewType == 'propertyTree'">
+                <property-tree-panel *ngIf="viewType == 'propertyTree'" [context]="treeListCtx" [deletable]="false" [type]="propertyType" [allowMultiselection]="allowMultiselection"
+                    (nodeSelected)="onPropertySelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
+                </property-tree-panel>
+                <div *ngIf="showInversePropertyCheckbox" class="form-check mt-2">
+                    <input class="form-check-input" id="inverseCheck" type="checkbox" [(ngModel)]="inverseProp" [disabled]="!isInversePropertyCheckboxEnabled()">
+                    <label class="form-check-label" for="inverseCheck">
+                        {{'RESOURCE_VIEW.MISC.INVERSE_PROPERTY'|translate}}
+                        <span *ngIf="multiselection" class="fas fa-exclamation-circle ml-1" [title]="'RESOURCE_VIEW.MISC.INVERSE_PROPERTY_MULTIVALUE_WARN'|translate">
+                        </span>
+                    </label>
+                </div>
+            </ng-container>
+            
+            <scheme-list-panel *ngIf="viewType == 'schemeList'" [context]="treeListCtx" [deletable]="false" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
-            </class-tree-panel>
-        </div>
-
-        <concept-tree-panel *ngIf="viewType == 'conceptTree'" [context]="treeListCtx" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes" [allowMultiselection]="allowMultiselection"
-            (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (schemeChanged)="onConceptTreeSchemeChange($event)"
-            (multiselectionStatus)="onMultiselectionChange($event)">
-        </concept-tree-panel>
-        
-        <ng-container *ngIf="viewType == 'propertyTree'">
-            <property-tree-panel *ngIf="viewType == 'propertyTree'" [context]="treeListCtx" [deletable]="false" [type]="propertyType" [allowMultiselection]="allowMultiselection"
-                (nodeSelected)="onPropertySelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
-            </property-tree-panel>
-            <div *ngIf="showInversePropertyCheckbox" class="form-check mt-2">
-                <input class="form-check-input" id="inverseCheck" type="checkbox" [(ngModel)]="inverseProp" [disabled]="!isInversePropertyCheckboxEnabled()">
-                <label class="form-check-label" for="inverseCheck">
-                    {{'RESOURCE_VIEW.MISC.INVERSE_PROPERTY'|translate}}
-                    <span *ngIf="multiselection" class="fas fa-exclamation-circle ml-1" [title]="'RESOURCE_VIEW.MISC.INVERSE_PROPERTY_MULTIVALUE_WARN'|translate">
-                    </span>
-                </label>
-            </div>
-        </ng-container>
-        
-        <scheme-list-panel *ngIf="viewType == 'schemeList'" [context]="treeListCtx" [deletable]="false" [allowMultiselection]="allowMultiselection"
-            (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
-        </scheme-list-panel>
-        
-        <datatype-list-panel *ngIf="viewType == 'datatypeList'" [context]="treeListCtx" [full]="true" [deletable]="false"  [allowMultiselection]="allowMultiselection"
-            (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
-        </datatype-list-panel>
-        
-        <div *ngIf="viewType == 'classAndIndividual'" class="vbox">
-            <div *ngIf="rootsForClsIndList" class="form-check mb-2">
-                <input class="form-check-input" id="allClsIndCheck" type="checkbox" [(ngModel)]="showAllClass">
-                <label class="form-check-label" for="allClsIndCheck">{{'RESOURCE_VIEW.MISC.SHOW_ALL_CLASSES'|translate}}</label>
-            </div>
-            <class-individual-tree [context]="treeListCtx" [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList" [allowMultiselection]="allowMultiselection"
+            </scheme-list-panel>
+            
+            <datatype-list-panel *ngIf="viewType == 'datatypeList'" [context]="treeListCtx" [full]="true" [deletable]="false"  [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
-            </class-individual-tree>
+            </datatype-list-panel>
+            
+            <div *ngIf="viewType == 'classAndIndividual'" class="vbox">
+                <div *ngIf="rootsForClsIndList" class="form-check mb-2">
+                    <input class="form-check-input" id="allClsIndCheck" type="checkbox" [(ngModel)]="showAllClass">
+                    <label class="form-check-label" for="allClsIndCheck">{{'RESOURCE_VIEW.MISC.SHOW_ALL_CLASSES'|translate}}</label>
+                </div>
+                <class-individual-tree [context]="treeListCtx" [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList" [allowMultiselection]="allowMultiselection"
+                    (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
+                </class-individual-tree>
+            </div>
         </div>
+
+        <manchester-editor *ngIf="selectedAspectSelector == manchExprAspectSelector" [(ngModel)]="manchExpr" style="flex: 1; margin-top: 5px;">
+        </manchester-editor>
+
+        <data-range-editor *ngIf="selectedAspectSelector == dataRangeAspectSelector" [(ngModel)]="datarange">
+        </data-range-editor>
+
     </div>
-
-    <manchester-editor *ngIf="selectedAspectSelector == manchExprAspectSelector" [(ngModel)]="manchExpr" style="flex: 1; margin-top: 5px;">
-    </manchester-editor>
-
-    <data-range-editor *ngIf="selectedAspectSelector == dataRangeAspectSelector" [(ngModel)]="datarange">
-    </data-range-editor>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

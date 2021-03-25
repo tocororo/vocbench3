@@ -1,92 +1,94 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'DATA.CLASS.SETTINGS.CLASS_TREE_SETTINGS'|translate}}</h3>
-</div>
-<div class="modal-body vbox" style="min-height: 40vh;">
-
-    <div class="hbox" style="align-items: center; flex: initial;">
-        <label style="white-space: nowrap; margin-right: 4px;">
-            {{'DATA.CLASS.SETTINGS.ROOT_CLASS'|translate}}:
-        </label>
-        <input-editable *ngIf="rootClass" [value]="rootClass.getURI()" (valueEdited)="updateRootClass($event)" style="flex: 1;"></input-editable>
-        <button class="btn btn-light btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeClass()">
-            <img src="./assets/images/icons/res/class.png"/>
-        </button>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'DATA.CLASS.SETTINGS.CLASS_TREE_SETTINGS'|translate}}</h3>
     </div>
+    <div class="modal-body vbox" style="min-height: 40vh;">
 
-    <div class="card card-default vbox" style="margin-top: 8px;">
-        <div class="card-header">
-            <label>
-                {{'DATA.CLASS.SETTINGS.SUBCLASS_FILTER'|translate}}
-                <span class="fas fa-info-circle" [title]="'DATA.CLASS.SETTINGS.SUBCLASS_FILTER_INFO'|translate"></span>
+        <div class="hbox" style="align-items: center; flex: initial;">
+            <label style="white-space: nowrap; margin-right: 4px;">
+                {{'DATA.CLASS.SETTINGS.ROOT_CLASS'|translate}}:
             </label>
-            <div style="flex: 1"></div>
-            <label>{{'STATUS.ENABLED'|translate}}</label>
-            <input type="checkbox" style="margin-left: 6px;" [(ngModel)]="filterEnabled">
+            <input-editable *ngIf="rootClass" [value]="rootClass.getURI()" (valueEdited)="updateRootClass($event)" style="flex: 1;"></input-editable>
+            <button class="btn btn-light btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeClass()">
+                <img src="./assets/images/icons/res/class.png"/>
+            </button>
         </div>
-        <div class="card-body hbox">
-            <div class="card card-alt vbox">
-                <div class="card-header">
-                    <label style="flex: 1">{{'DATA.CLASS.CLASSES'|translate}}</label>
-                    <div class="btn-toolbar">
-                        <button class="btn btn-light btn-xs" title="Rendering" (click)="renderingClasses = !renderingClasses"
-                            [ngClass]="{active: renderingClasses}">
-                            <span class="fas fa-font"></span>
-                        </button>
-                        <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" (click)="addFilter()" [title]="'ACTIONS.ADD'|translate">
-                                <span class="fas fa-plus"></span>
+
+        <div class="card card-default vbox" style="margin-top: 8px;">
+            <div class="card-header">
+                <label>
+                    {{'DATA.CLASS.SETTINGS.SUBCLASS_FILTER'|translate}}
+                    <span class="fas fa-info-circle" [title]="'DATA.CLASS.SETTINGS.SUBCLASS_FILTER_INFO'|translate"></span>
+                </label>
+                <div style="flex: 1"></div>
+                <label>{{'STATUS.ENABLED'|translate}}</label>
+                <input type="checkbox" style="margin-left: 6px;" [(ngModel)]="filterEnabled">
+            </div>
+            <div class="card-body hbox">
+                <div class="card card-alt vbox">
+                    <div class="card-header">
+                        <label style="flex: 1">{{'DATA.CLASS.CLASSES'|translate}}</label>
+                        <div class="btn-toolbar">
+                            <button class="btn btn-light btn-xs" title="Rendering" (click)="renderingClasses = !renderingClasses"
+                                [ngClass]="{active: renderingClasses}">
+                                <span class="fas fa-font"></span>
                             </button>
-                            <button class="btn btn-light" (click)="removeFilter()" [title]="'ACTIONS.REMOVE'|translate" [disabled]="!selectedFilteredClass">
-                                <span class="fas fa-minus"></span>
-                            </button>
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-light" (click)="addFilter()" [title]="'ACTIONS.ADD'|translate">
+                                    <span class="fas fa-plus"></span>
+                                </button>
+                                <button class="btn btn-light" (click)="removeFilter()" [title]="'ACTIONS.REMOVE'|translate" [disabled]="!selectedFilteredClass">
+                                    <span class="fas fa-minus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body scrollableContainer">
+                        <div *ngFor="let f of filterMapRes" class="listItem" (click)="selectFilteredClass(f.cls)"
+                            [ngClass]="{ active: f.cls == selectedFilteredClass }">
+                            <rdf-resource [resource]="f.cls" [rendering]="renderingClasses"></rdf-resource>
                         </div>
                     </div>
                 </div>
-                <div class="card-body scrollableContainer">
-                    <div *ngFor="let f of filterMapRes" class="listItem" (click)="selectFilteredClass(f.cls)"
-                        [ngClass]="{ active: f.cls == selectedFilteredClass }">
-                        <rdf-resource [resource]="f.cls" [rendering]="renderingClasses"></rdf-resource>
-                    </div>
-                </div>
-            </div>
 
-            <div class="card card-alt vbox" style="margin-left: 4px;">
-                <div class="card-header">
-                    <label style="flex: 1">{{'DATA.CLASS.SETTINGS.FILTERED_SUBCLASSES'|translate}}</label>
-                    <div class="btn-toolbar">
-                        <button class="btn btn-light btn-xs" title="Rendering" (click)="renderingFilter = !renderingFilter" [ngClass]="{active: renderingFilter}">
-                            <span class="fas fa-font"></span>
-                        </button>
-                        <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" (click)="checkAllClasses(true)" [title]="'ACTIONS.CHECK_ALL'|translate" [disabled]="!selectedFilteredClass">
-                                <span class="far fa-check-square"></span>
+                <div class="card card-alt vbox" style="margin-left: 4px;">
+                    <div class="card-header">
+                        <label style="flex: 1">{{'DATA.CLASS.SETTINGS.FILTERED_SUBCLASSES'|translate}}</label>
+                        <div class="btn-toolbar">
+                            <button class="btn btn-light btn-xs" title="Rendering" (click)="renderingFilter = !renderingFilter" [ngClass]="{active: renderingFilter}">
+                                <span class="fas fa-font"></span>
                             </button>
-                            <button class="btn btn-light" (click)="checkAllClasses(false)" [title]="'ACTIONS.UNCHECK_ALL'|translate" [disabled]="!selectedFilteredClass">
-                                <span class="far fa-square"></span>
-                            </button>
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-light" (click)="checkAllClasses(true)" [title]="'ACTIONS.CHECK_ALL'|translate" [disabled]="!selectedFilteredClass">
+                                    <span class="far fa-check-square"></span>
+                                </button>
+                                <button class="btn btn-light" (click)="checkAllClasses(false)" [title]="'ACTIONS.UNCHECK_ALL'|translate" [disabled]="!selectedFilteredClass">
+                                    <span class="far fa-square"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body scrollableContainer">
+                        <div *ngFor="let f of getFilterSubClasses()" class="listItem">
+                            <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="f.checked" [disabled]="f.disabled">
+                            <rdf-resource [resource]="f.resource" [rendering]="renderingFilter" style="flex: 1;"></rdf-resource>
+                            <span *ngIf="f.checked" class="fas fa-eye"></span>
+                            <span *ngIf="!f.checked" class="fas fa-eye-slash"></span>
                         </div>
                     </div>
                 </div>
-                <div class="card-body scrollableContainer">
-                    <div *ngFor="let f of getFilterSubClasses()" class="listItem">
-                        <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="f.checked" [disabled]="f.disabled">
-                        <rdf-resource [resource]="f.resource" [rendering]="renderingFilter" style="flex: 1;"></rdf-resource>
-                        <span *ngIf="f.checked" class="fas fa-eye"></span>
-                        <span *ngIf="!f.checked" class="fas fa-eye-slash"></span>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
-    <div class="mt-2">
-        <div class="form-check">
-            <input class="form-check-input" id="instanceCheck" type="checkbox" [(ngModel)]="showInstNumb">
-            <label class="form-check-label" for="instanceCheck">{{'DATA.CLASS.SETTINGS.SHOW_INSTANCES_NUMBER'|translate}}</label>
+        <div class="mt-2">
+            <div class="form-check">
+                <input class="form-check-input" id="instanceCheck" type="checkbox" [(ngModel)]="showInstNumb">
+                <label class="form-check-label" for="instanceCheck">{{'DATA.CLASS.SETTINGS.SHOW_INSTANCES_NUMBER'|translate}}</label>
+            </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

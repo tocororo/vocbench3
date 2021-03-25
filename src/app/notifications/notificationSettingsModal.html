@@ -1,11 +1,13 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'NOTIFICATIONS.NOTIFICATION_SETTINGS'|translate}}</h3>
-</div>
-<div class="modal-body scrollableContainer">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'NOTIFICATIONS.NOTIFICATION_SETTINGS'|translate}}</h3>
+    </div>
+    <div class="modal-body scrollableContainer">
 
-    <notifications-pref [hideModeChange]="true"></notifications-pref>
-    
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <notifications-pref [hideModeChange]="true"></notifications-pref>
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

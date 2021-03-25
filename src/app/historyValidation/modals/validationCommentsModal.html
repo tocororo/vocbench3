@@ -1,51 +1,53 @@
-<div class="modal-header">
-    <h3 class="modal-title">
-        {{'HISTORY_VALIDATION.VALIDATION_COMMENT.VALIDATION_COMMENTS'|translate}}
-    </h3>
-</div>
-<div class="modal-body vbox">
-
-    <div class="alert alert-warning mb-2">
-        {{'HISTORY_VALIDATION.VALIDATION_COMMENT.COMMENT_INFO'|translate}}
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">
+            {{'HISTORY_VALIDATION.VALIDATION_COMMENT.VALIDATION_COMMENTS'|translate}}
+        </h3>
     </div>
+    <div class="modal-body vbox">
 
-    <div class="scrollableContainer">
-        <table class="table table-sm table-hoverable">
-            <colgroup>
-                <col style="width: 1%">
-                <col style="width: 1%">
-                <col>
-            </colgroup>
-            <thead>
-                <tr>
-                    <th class="text-center">{{'HISTORY_VALIDATION.COMMIT.COMMIT_ID'|translate}}</th>
-                    <th class="text-center">{{'ACTIONS.ACTION'|translate}}</th>
-                    <th class="text-center">{{'HISTORY_VALIDATION.VALIDATION_COMMENT.COMMENT'|translate}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of commits">
-                    <td class="text-center" nowrap>
-                        <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getLocalName()}}</a>
-                    </td>
-                    <td class="text-center" nowrap>
-                        <span *ngIf="item.operation" [title]="item.operation.getURI()">
-                            {{item.operation.getShow()}}
-                            <button class="btn btn-xs btn-light" (click)="inspectParams(commit)" [title]="'HISTORY_VALIDATION.VALIDATION_COMMENT.SHOW_PARAMS'|translate">
-                                <span class="fas fa-ellipsis-h"></span>
-                            </button>
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <input class="form-control" [(ngModel)]="item.comment">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="alert alert-warning mb-2">
+            {{'HISTORY_VALIDATION.VALIDATION_COMMENT.COMMENT_INFO'|translate}}
+        </div>
+
+        <div class="scrollableContainer">
+            <table class="table table-sm table-hoverable">
+                <colgroup>
+                    <col style="width: 1%">
+                    <col style="width: 1%">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center">{{'HISTORY_VALIDATION.COMMIT.COMMIT_ID'|translate}}</th>
+                        <th class="text-center">{{'ACTIONS.ACTION'|translate}}</th>
+                        <th class="text-center">{{'HISTORY_VALIDATION.VALIDATION_COMMENT.COMMENT'|translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of commits">
+                        <td class="text-center" nowrap>
+                            <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getLocalName()}}</a>
+                        </td>
+                        <td class="text-center" nowrap>
+                            <span *ngIf="item.operation" [title]="item.operation.getURI()">
+                                {{item.operation.getShow()}}
+                                <button class="btn btn-xs btn-light" (click)="inspectParams(commit)" [title]="'HISTORY_VALIDATION.VALIDATION_COMMENT.SHOW_PARAMS'|translate">
+                                    <span class="fas fa-ellipsis-h"></span>
+                                </button>
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <input class="form-control" [(ngModel)]="item.comment">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

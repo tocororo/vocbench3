@@ -1,25 +1,27 @@
-<div class="modal-header">
-    <h3 class="modal-title">Load SHACL shapes</h3>
-</div>
-<div class="modal-body vbox">
-    <div class="form-group row m-0">
-        <label class="col-form-label col-sm-1">File:</label>
-        <div class="col-sm-7">
-            <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker>
-        </div>
-        <label class="col-form-label col-sm-1">{{'COMMONS.FORMA'|translate}}:</label>
-        <div class="col-sm-3">
-            <select class="form-control" [(ngModel)]="selectedInputFormat">
-                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
-            </select>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">Load SHACL shapes</h3>
+    </div>
+    <div class="modal-body vbox">
+        <div class="form-group row m-0">
+            <label class="col-form-label col-sm-1">File:</label>
+            <div class="col-sm-7">
+                <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker>
+            </div>
+            <label class="col-form-label col-sm-1">{{'COMMONS.FORMA'|translate}}:</label>
+            <div class="col-sm-3">
+                <select class="form-control" [(ngModel)]="selectedInputFormat">
+                    <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+                </select>
+            </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <div class="form-check float-left">
-        <input class="form-check-input" id="clearCheck" type="checkbox" [(ngModel)]="clearExisting">
-        <label class="form-check-label" for="clearCheck">Clear existing</label>
+    <div class="modal-footer">
+        <div class="form-check float-left">
+            <input class="form-check-input" id="clearCheck" type="checkbox" [(ngModel)]="clearExisting">
+            <label class="form-check-label" for="clearCheck">Clear existing</label>
+        </div>
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!file || !selectedInputFormat">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!file || !selectedInputFormat">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

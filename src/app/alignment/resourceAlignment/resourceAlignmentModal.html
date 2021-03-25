@@ -1,70 +1,72 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'ALIGNMENT.ACTIONS.CREATE_ALIGNMENT'|translate}}</h3>
-</div>
-<div class="modal-body blockingDivHost">
-    
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-            <col style="width: 1%;">
-        </colgroup>
-        <tbody>
-            <tr>
-                <td nowrap><label>{{'ALIGNMENT.CREATION.SOURCE_RESOURCE'|translate}}:</label></td>
-                <td>
-                    <div class="form-control input-resource">
-                        <rdf-resource [resource]="resource"></rdf-resource>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'ALIGNMENT.CREATION.TARGET_RESOURCE'|translate}}:</label></td>
-                <td>
-                    <div class="form-control input-resource">
-                        <rdf-resource *ngIf="alignedObject" [resource]="alignedObject"></rdf-resource>
-                    </div>
-                </td>
-                <td>
-                    <div class="btn-group" [title]="'ACTIONS.SELECT_EXTERNAL_RESOURCE'|translate" ngbDropdown>
-                        <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-                            <span class="fas fa-pencil-alt"></span>
-                        </button>
-                        <div class="dropdown-menu" ngbDropdownMenu>
-                            <a class="dropdown-item" (click)="browseLocalProjects()">{{'ACTIONS.BROWSE_LOCAL_PROJ'|translate}}</a>
-                            <a class="dropdown-item" (click)="assistedSearch()">{{'SEARCH.ASSISTED_SEARCH.ASSISTED_SEARCH'|translate}}</a>
-                            <a class="dropdown-item" (click)="enterManually()">{{'ACTIONS.ENTER_VALUE_MANUALLY'|translate}}</a>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'ALIGNMENT.ACTIONS.CREATE_ALIGNMENT'|translate}}</h3>
+    </div>
+    <div class="modal-body blockingDivHost">
+        
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+                <col style="width: 1%;">
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td nowrap><label>{{'ALIGNMENT.CREATION.SOURCE_RESOURCE'|translate}}:</label></td>
+                    <td>
+                        <div class="form-control input-resource">
+                            <rdf-resource [resource]="resource"></rdf-resource>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><label>{{'DATA.PROPERTY.PROPERTY'|translate}}:</label></td>
-                <td>
-                    <select class="form-control" [(ngModel)]="mappingProperty">
-                        <option *ngFor="let p of mappingPropList" [ngValue]="p">{{p.getShow()}}</option>
-                    </select>
-                </td>
-                <td>
-                    <div class="form-check form-check-inline" [title]="'ALIGNMENT.CREATION.ALL_PROP_INFO'|translate">
-                        <input class="form-check-input" id="allPropCheck" type="checkbox" [(ngModel)]="allPropCheck" (ngModelChange)="initPropList()">
-                        <label class="form-check-label text-nowrap" for="allPropCheck">{{'ALIGNMENT.CREATION.ALL_PROP'|translate}}</label>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'ALIGNMENT.CREATION.TARGET_RESOURCE'|translate}}:</label></td>
+                    <td>
+                        <div class="form-control input-resource">
+                            <rdf-resource *ngIf="alignedObject" [resource]="alignedObject"></rdf-resource>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group" [title]="'ACTIONS.SELECT_EXTERNAL_RESOURCE'|translate" ngbDropdown>
+                            <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                                <span class="fas fa-pencil-alt"></span>
+                            </button>
+                            <div class="dropdown-menu" ngbDropdownMenu>
+                                <a class="dropdown-item" (click)="browseLocalProjects()">{{'ACTIONS.BROWSE_LOCAL_PROJ'|translate}}</a>
+                                <a class="dropdown-item" (click)="assistedSearch()">{{'SEARCH.ASSISTED_SEARCH.ASSISTED_SEARCH'|translate}}</a>
+                                <a class="dropdown-item" (click)="enterManually()">{{'ACTIONS.ENTER_VALUE_MANUALLY'|translate}}</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>{{'DATA.PROPERTY.PROPERTY'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="mappingProperty">
+                            <option *ngFor="let p of mappingPropList" [ngValue]="p">{{p.getShow()}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="form-check form-check-inline" [title]="'ALIGNMENT.CREATION.ALL_PROP_INFO'|translate">
+                            <input class="form-check-input" id="allPropCheck" type="checkbox" [(ngModel)]="allPropCheck" (ngModelChange)="initPropList()">
+                            <label class="form-check-label text-nowrap" for="allPropCheck">{{'ALIGNMENT.CREATION.ALL_PROP'|translate}}</label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div #blockingDiv class="blockingDiv" style="display:none">
-        <div class="loadingDiv">
-            <div>
-                <p>Loading...</p><img src="./assets/images/loading.gif" />
+        <div #blockingDiv class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="./assets/images/loading.gif" />
+                </div>
             </div>
         </div>
+        
     </div>
-    
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

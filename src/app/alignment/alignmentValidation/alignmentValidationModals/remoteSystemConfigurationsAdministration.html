@@ -1,100 +1,102 @@
-<div class="modal-header">
-    <h3 class="modal-title text-info">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.REMOTE_ALIGN_SYS_CONFIG'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
-    
-    <div class="card card-default">
-        <div class="card-body table-responsive">
-            <table class="table table-sm">
-                <thead>
-                    <tr>
-                        <th class="text-center">{{'STATUS.DEFAULT'|translate}}</th>
-                        <th class="text-center">ID</th>
-                        <th class="text-center">{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
-                        <th class="text-center">{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
-                        <th class="text-center">{{'COMMONS.CONFIG.PASSWORD'|translate}}</th>
-                        <th class="text-center">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngIf="savedConfigs?.length == 0">
-                        <td colspan="4">{{'COMMONS.CONFIG.NO_CONFIG_FOUND'|translate}}</td>
-                    </tr>
-                    <tr *ngFor="let conf of savedConfigs">
-                        <td class="text-center">
-                            <input type="radio" (click)="setDefaultConfig(conf)" [checked]="conf == defaultConfig">
-                        </td>
-                        <td class="text-center">
-                            {{conf.id}}
-                        </td>
-                        <td class="text-center">
-                            <input-editable [value]="conf.serverURL" (valueEdited)="updateConfServerURL(conf, $event)"></input-editable>
-                        </td>
-                        <td class="text-center">
-                            <input-editable [value]="conf.username" allowEmpty="true" (valueEdited)="updateConfUsername(conf, $event)"></input-editable>
-                        </td>
-                        <td class="text-center">
-                            <input-editable [value]="conf.password" allowEmpty="true" (valueEdited)="updateConfPassword(conf, $event)"></input-editable>
-                        </td>
-                        <td class="text-center">
-                            <input class="form-check form-check-inline" type="checkbox" [(ngModel)]="conf.forwardCredentials" (ngModelChange)="updateConfForwardCredentials(conf, $event)" />
-                        </td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-light" (click)="deleteConfig(conf)">
-                                <span class="far fa-trash-alt"></span>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title text-info">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.REMOTE_ALIGN_SYS_CONFIG'|translate}}</h3>
     </div>
-
-
-    <div class="card card-default" style="margin-top: 5px">
-        <div class="card-body">
-            <table class="table table-sm table-borderless">
-                <tbody>
-                    <tr>
-                        <td><label>{{'STATUS.NEW'|translate}}:</label></td>
-                        <td>
-                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.id" [placeholder]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.ID_INFO'|translate">
-                        </td>
-                        <td>
-                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl:8080">
-                        </td>
-                        <td>
-                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.username" [placeholder]="'COMMONS.CONFIG.USERNAME'|translate">
-                        </td>
-                        <td>
-                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.password" [placeholder]="'COMMONS.CONFIG.PASSWORD'|translate">
-                        </td>
-                        <td class="text-center">
-                            <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS_INFO'|translate">
-                                <input class="form-check-input" id="forwardCredenialsCheck" type="checkbox" [(ngModel)]="newConfig.forwardCredentials">
-                                <label class="form-check-label" for="forwardCredenialsCheck">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</label>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.DEFAULT_CHECK_INFO'|translate">
-                                <input class="form-check-input" id="defaultCheck" type="checkbox" [(ngModel)]="newConfig.default">
-                                <label class="form-check-label" for="defaultCheck">{{'STATUS.DEFAULT'|translate}}</label>
-                            </div>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-light" (click)="createConfig()" [disabled]="!newConfig.serverURL || !newConfig.id">
-                                <span class="fas fa-plus"></span>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
+    <div class="modal-body vbox">
+        
+        <div class="card card-default">
+            <div class="card-body table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th class="text-center">{{'STATUS.DEFAULT'|translate}}</th>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
+                            <th class="text-center">{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
+                            <th class="text-center">{{'COMMONS.CONFIG.PASSWORD'|translate}}</th>
+                            <th class="text-center">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="savedConfigs?.length == 0">
+                            <td colspan="4">{{'COMMONS.CONFIG.NO_CONFIG_FOUND'|translate}}</td>
+                        </tr>
+                        <tr *ngFor="let conf of savedConfigs">
+                            <td class="text-center">
+                                <input type="radio" (click)="setDefaultConfig(conf)" [checked]="conf == defaultConfig">
+                            </td>
+                            <td class="text-center">
+                                {{conf.id}}
+                            </td>
+                            <td class="text-center">
+                                <input-editable [value]="conf.serverURL" (valueEdited)="updateConfServerURL(conf, $event)"></input-editable>
+                            </td>
+                            <td class="text-center">
+                                <input-editable [value]="conf.username" allowEmpty="true" (valueEdited)="updateConfUsername(conf, $event)"></input-editable>
+                            </td>
+                            <td class="text-center">
+                                <input-editable [value]="conf.password" allowEmpty="true" (valueEdited)="updateConfPassword(conf, $event)"></input-editable>
+                            </td>
+                            <td class="text-center">
+                                <input class="form-check form-check-inline" type="checkbox" [(ngModel)]="conf.forwardCredentials" (ngModelChange)="updateConfForwardCredentials(conf, $event)" />
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-light" (click)="deleteConfig(conf)">
+                                    <span class="far fa-trash-alt"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
+
+        <div class="card card-default" style="margin-top: 5px">
+            <div class="card-body">
+                <table class="table table-sm table-borderless">
+                    <tbody>
+                        <tr>
+                            <td><label>{{'STATUS.NEW'|translate}}:</label></td>
+                            <td>
+                                <input class="form-control form-control-sm" [(ngModel)]="newConfig.id" [placeholder]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.ID_INFO'|translate">
+                            </td>
+                            <td>
+                                <input class="form-control form-control-sm" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl:8080">
+                            </td>
+                            <td>
+                                <input class="form-control form-control-sm" [(ngModel)]="newConfig.username" [placeholder]="'COMMONS.CONFIG.USERNAME'|translate">
+                            </td>
+                            <td>
+                                <input class="form-control form-control-sm" [(ngModel)]="newConfig.password" [placeholder]="'COMMONS.CONFIG.PASSWORD'|translate">
+                            </td>
+                            <td class="text-center">
+                                <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS_INFO'|translate">
+                                    <input class="form-check-input" id="forwardCredenialsCheck" type="checkbox" [(ngModel)]="newConfig.forwardCredentials">
+                                    <label class="form-check-label" for="forwardCredenialsCheck">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.DEFAULT_CHECK_INFO'|translate">
+                                    <input class="form-check-input" id="defaultCheck" type="checkbox" [(ngModel)]="newConfig.default">
+                                    <label class="form-check-label" for="defaultCheck">{{'STATUS.DEFAULT'|translate}}</label>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-light" (click)="createConfig()" [disabled]="!newConfig.serverURL || !newConfig.id">
+                                    <span class="fas fa-plus"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
+    </div>
 </div>

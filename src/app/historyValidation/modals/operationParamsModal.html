@@ -1,36 +1,38 @@
-<div class="modal-header">
-    <h3 class="modal-title">
-        {{commit.operation.getShow()}} parameters
-    </h3>
-</div>
-<div class="modal-body vbox">
-
-    <div class="scrollableContainer">
-        <table class="table table-sm table-hoverable">
-            <colgroup>
-                <col style="width: 1%">
-                <col>
-            </colgroup>
-            <thead>
-                <tr>
-                    <th class="text-center">{{'COMMONS.NAME'|translate}}</th>
-                    <th class="text-center">{{'COMMONS.VALUE'|translate}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let param of commit.operationParameters">
-                    <td class="text-center">
-                        <label>{{param.name}}</label>
-                    </td>
-                    <td class="text-center">
-                        <span (click)="openValueResourceView(param.value)" class="clickable">{{param.value}}</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">
+            {{commit.operation.getShow()}} parameters
+        </h3>
     </div>
+    <div class="modal-body vbox">
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <div class="scrollableContainer">
+            <table class="table table-sm table-hoverable">
+                <colgroup>
+                    <col style="width: 1%">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center">{{'COMMONS.NAME'|translate}}</th>
+                        <th class="text-center">{{'COMMONS.VALUE'|translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let param of commit.operationParameters">
+                        <td class="text-center">
+                            <label>{{param.name}}</label>
+                        </td>
+                        <td class="text-center">
+                            <span (click)="openValueResourceView(param.value)" class="clickable">{{param.value}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

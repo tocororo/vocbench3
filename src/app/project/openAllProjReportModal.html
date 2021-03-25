@@ -1,54 +1,56 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'PROJECTS.ACTIONS.OPEN_ALL'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
-
-    <div class="alert alert-danger mb-2">
-        {{'PROJECTS.OPEN_ALL_REPORT_INFO'|translate}}
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'PROJECTS.ACTIONS.OPEN_ALL'|translate}}</h3>
     </div>
+    <div class="modal-body vbox">
 
-    <div class="card card-default vbox">
-        <div class="card-body vbox scrollableContainer">
-
-            <div *ngFor="let report of failReports" class="card card-default" style="margin-bottom: 10px;">
-                <div class="card-body">
-                    <table class="table table-sm" style="table-layout: fixed;">
-                        <colgroup>
-                            <col style="width: 90px">
-                            <col>
-                        </colgroup>
-                        <tbody>
-                            <tr>
-                                <td nowrap><label>{{'PROJECTS.PROJECT_NAME'|translate}}:</label></td>
-                                <td>{{report.offensiveElemId}}</td>
-                            </tr>
-                            <tr>
-                                <td nowrap><label>{{'COMMONS.REASON'|translate}}:</label></td>
-                                <td>
-                                    {{report.exception.type}}:<br>
-                                    {{report.exception.message}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label>Stacktrace:</label></td>
-                                <td>
-                                    <div class="card card-default vbox">
-                                        <div class="card-body">
-                                            <div class="stacktrace">{{report.exception.stacktrace}}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+        <div class="alert alert-danger mb-2">
+            {{'PROJECTS.OPEN_ALL_REPORT_INFO'|translate}}
         </div>
+
+        <div class="card card-default vbox">
+            <div class="card-body vbox scrollableContainer">
+
+                <div *ngFor="let report of failReports" class="card card-default" style="margin-bottom: 10px;">
+                    <div class="card-body">
+                        <table class="table table-sm" style="table-layout: fixed;">
+                            <colgroup>
+                                <col style="width: 90px">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td nowrap><label>{{'PROJECTS.PROJECT_NAME'|translate}}:</label></td>
+                                    <td>{{report.offensiveElemId}}</td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><label>{{'COMMONS.REASON'|translate}}:</label></td>
+                                    <td>
+                                        {{report.exception.type}}:<br>
+                                        {{report.exception.message}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label>Stacktrace:</label></td>
+                                    <td>
+                                        <div class="card card-default vbox">
+                                            <div class="card-body">
+                                                <div class="stacktrace">{{report.exception.stacktrace}}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
     </div>
-
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    </div>
 </div>

@@ -1,63 +1,65 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'INVOKABLE_REPORTERS.REPORT'|translate}}</h3>
-</div>
-<div class="modal-body scrollableContainer">
-
-    <div *ngFor="let s of sections" class="card card-default" style="margin-bottom: 5px;">
-        <div class="card-header">
-            <label *ngIf="s.label">{{s.label}}</label>
-            <label *ngIf="!s.label">{{s.service}}.{{s.operation}}</label>
-        </div>
-        <div class="card-body">
-            <table class="table table-sm table-borderless">
-                <colgroup>
-                    <col style="width: 80px;">
-                    <col>
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <td><label>{{'INVOKABLE_REPORTERS.INVOCATION.REPORT'|translate}}</label></td>
-                        <td>{{s.service}}</td>
-                    </tr>
-                    <tr>
-                        <td><label>{{'INVOKABLE_REPORTERS.INVOCATION.OPERATION'|translate}}</label></td>
-                        <td>{{s.operation}}</td>
-                    </tr>
-                    <tr *ngIf="s.arguments && objectKeys(s.arguments).length > 0">
-                        <td><label>{{'INVOKABLE_REPORTERS.INVOCATION.ARGUMENTS'|translate}}</label></td>
-                        <td>
-                            <div class="card card-default">
-                                <div class="card-body">
-                                    <table class="table table-borderless table-sm" style="font-family: monospace;">
-                                        <colgroup>
-                                            <col style="width: 1%;">
-                                            <col>
-                                        </colgroup>
-                                        <tbody>
-                                            <tr *ngFor="let argName of objectKeys(s.arguments)">
-                                                <td><label>{{argName}}</label></td>
-                                                <td>
-                                                    <input class="form-control form-control-sm" [ngModel]="s.arguments[argName]" readonly>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>{{'INVOKABLE_REPORTERS.RESULT'|translate}}</label></td>
-                        <td>
-                            <json-editor class="CodeMirror-md" [ngModel]="jsonStringify(s.result, null, 2)" [disabled]="true"></json-editor>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'INVOKABLE_REPORTERS.REPORT'|translate}}</h3>
     </div>
+    <div class="modal-body scrollableContainer">
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-light btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
+        <div *ngFor="let s of sections" class="card card-default" style="margin-bottom: 5px;">
+            <div class="card-header">
+                <label *ngIf="s.label">{{s.label}}</label>
+                <label *ngIf="!s.label">{{s.service}}.{{s.operation}}</label>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-borderless">
+                    <colgroup>
+                        <col style="width: 80px;">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td><label>{{'INVOKABLE_REPORTERS.INVOCATION.REPORT'|translate}}</label></td>
+                            <td>{{s.service}}</td>
+                        </tr>
+                        <tr>
+                            <td><label>{{'INVOKABLE_REPORTERS.INVOCATION.OPERATION'|translate}}</label></td>
+                            <td>{{s.operation}}</td>
+                        </tr>
+                        <tr *ngIf="s.arguments && objectKeys(s.arguments).length > 0">
+                            <td><label>{{'INVOKABLE_REPORTERS.INVOCATION.ARGUMENTS'|translate}}</label></td>
+                            <td>
+                                <div class="card card-default">
+                                    <div class="card-body">
+                                        <table class="table table-borderless table-sm" style="font-family: monospace;">
+                                            <colgroup>
+                                                <col style="width: 1%;">
+                                                <col>
+                                            </colgroup>
+                                            <tbody>
+                                                <tr *ngFor="let argName of objectKeys(s.arguments)">
+                                                    <td><label>{{argName}}</label></td>
+                                                    <td>
+                                                        <input class="form-control form-control-sm" [ngModel]="s.arguments[argName]" readonly>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>{{'INVOKABLE_REPORTERS.RESULT'|translate}}</label></td>
+                            <td>
+                                <json-editor class="CodeMirror-md" [ngModel]="jsonStringify(s.result, null, 2)" [disabled]="true"></json-editor>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-light btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
+    </div>
 </div>

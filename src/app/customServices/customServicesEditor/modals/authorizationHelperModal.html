@@ -1,143 +1,145 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'CUSTOM_SERVICES.AUTH_HELPER.OPERATION_AUTH'|translate}}</h3>
-</div>
-<div class="modal-body vbox">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'CUSTOM_SERVICES.AUTH_HELPER.OPERATION_AUTH'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox">
 
-    <div class="scrollableContainer">
+        <div class="scrollableContainer">
 
-        <!-- Type -->
+            <!-- Type -->
 
-        <div class="card card-default">
-            <div class="card-header">
-                <label>{{'CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.TYPE_RESTRICTION'|translate}}</label>
-            </div>
-            <div class="card-body">
-                <p [innerHTML]="'CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.TYPE_RESTRICTION_INFO'|translate"></p>
-                   
-                <div class="form-group row">
-                    <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.RESTRICTION'|translate}}</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" [(ngModel)]="selectedTypeRestriction" (ngModelChange)="update()">
-                            <option *ngFor="let r of typeRestrictions">{{r|translate}}</option>
-                        </select>
+            <div class="card card-default">
+                <div class="card-header">
+                    <label>{{'CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.TYPE_RESTRICTION'|translate}}</label>
+                </div>
+                <div class="card-body">
+                    <p [innerHTML]="'CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.TYPE_RESTRICTION_INFO'|translate"></p>
+                    
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.RESTRICTION'|translate}}</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" [(ngModel)]="selectedTypeRestriction" (ngModelChange)="update()">
+                                <option *ngFor="let r of typeRestrictions">{{r|translate}}</option>
+                            </select>
+                        </div>
+                    </div>
+            
+                    <div *ngIf="selectedTypeRestriction==typeRestrictionType" class="form-group row">
+                        <label class="col-form-label col-sm-2">{{'COMMONS.TYPE'|translate}}</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" [(ngModel)]="selectedType" (ngModelChange)="update()">
+                                <option *ngFor="let r of roles">{{r}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedTypeRestriction==typeRestrictionParam" class="form-group row">
+                        <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.PARAMETER'|translate}}</label>
+                        <div class="col-sm-10">
+                            <select *ngIf="parameters?.length > 0; else noParamTypeBlock" class="form-control" style="font-family: monospace;"
+                                [(ngModel)]="selectedParamType" (ngModelChange)="update()">
+                                <option *ngFor="let p of parameters">{{p}}</option>
+                            </select>
+                            <ng-template #noParamTypeBlock>
+                                <div class="form-control" style="background-color: #eee;">
+                                    <span class="fas fa-exclamation-triangle"></span> {{'CUSTOM_SERVICES.AUTH_HELPER.NO_PARAM_OPERATION'|translate}}
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedTypeRestriction!=typeRestrictionNone && (selectedType || selectedParamType)" class="form-group row">
+                        <label class="col-form-label col-sm-2">
+                            {{'COMMONS.SCOPE'|translate}}
+                            <span class="fas fa-info-circle" [title]="'CUSTOM_SERVICES.AUTH_HELPER.SCOPE_INFO'|translate"></span>
+                        </label>
+                        <div class="col-sm-10 hbox" style="align-items: center;">
+                            <input class="form-control" [(ngModel)]="scope" (ngModelChange)="update()">
+                            <span style="margin: 0px 4px;">*</span>
+                        </div>
                     </div>
                 </div>
+                <div class="card-footer">
+                    <span [innerHTML]="'CUSTOM_SERVICES.AUTH_HELPER.CAPABILITIES_DOCUMENTATION_REF'|translate"></span>
+                </div>
+            </div>
+
+            <!-- Language -->
+
+            <div class="card card-default" style="margin-top: 6px;">
+                <div class="card-header">
+                    <label>{{'CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.LANGUAGE_REQUIREMENT'|translate}}</label>
+                </div>
+                <div class="card-body">
+                    <p>
+                        {{'CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.LANGUAGE_REQUIREMENT_INFO'|translate}}
+                    </p>
+                    
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.RESTRICTION'|translate}}</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" [(ngModel)]="selectedLangRequirement" (ngModelChange)="update()">
+                                <option *ngFor="let r of langRequirements" [value]="r">{{r|translate}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedLangRequirement==langRequirementLang" class="form-group row">
+                        <label class="col-form-label col-sm-2">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" [(ngModel)]="selectedLang" (ngModelChange)="update()">
+                                <option *ngFor="let l of languages" [ngValue]="l">{{l.name}} ({{l.tag}})</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedLangRequirement==langRequirementParam" class="form-group row">
+                        <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.PARAMETER'|translate}}</label>
+                        <div class="col-sm-10">
+                            <select *ngIf="parameters?.length > 0; else noParamLangBlock" class="form-control" style="font-family: monospace;"
+                                [(ngModel)]="selectedParamLang" (ngModelChange)="update()">
+                                <option *ngFor="let p of parameters">{{p}}</option>
+                            </select>
+                            <ng-template #noParamLangBlock>
+                                <div class="form-control" style="background-color: #eee;">
+                                    <span class="fas fa-exclamation-triangle"></span> {{'CUSTOM_SERVICES.AUTH_HELPER.NO_PARAM_OPERATION'|translate}}
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- CRUDV -->
+
+            <div class="card card-default" style="margin-top: 6px;">
+                <div class="card-header">
+                    <label>CRUDV</label>
+                </div>
+                <div class="card-body hbox">
+                    <div *ngFor="let cs of crudvStruct; let i=index" class="text-center" style="flex: 1;">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" [id]="'crudCheck'+i" type="checkbox" [(ngModel)]="cs.checked" (ngModelChange)="update()">
+                            <label class="form-check-label" [for]="'crudCheck'+i">{{cs.label}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         
-                <div *ngIf="selectedTypeRestriction==typeRestrictionType" class="form-group row">
-                    <label class="col-form-label col-sm-2">{{'COMMONS.TYPE'|translate}}</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" [(ngModel)]="selectedType" (ngModelChange)="update()">
-                            <option *ngFor="let r of roles">{{r}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div *ngIf="selectedTypeRestriction==typeRestrictionParam" class="form-group row">
-                    <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.PARAMETER'|translate}}</label>
-                    <div class="col-sm-10">
-                        <select *ngIf="parameters?.length > 0; else noParamTypeBlock" class="form-control" style="font-family: monospace;"
-                            [(ngModel)]="selectedParamType" (ngModelChange)="update()">
-                            <option *ngFor="let p of parameters">{{p}}</option>
-                        </select>
-                        <ng-template #noParamTypeBlock>
-                            <div class="form-control" style="background-color: #eee;">
-                                <span class="fas fa-exclamation-triangle"></span> {{'CUSTOM_SERVICES.AUTH_HELPER.NO_PARAM_OPERATION'|translate}}
-                            </div>
-                        </ng-template>
-                    </div>
-                </div>
-                <div *ngIf="selectedTypeRestriction!=typeRestrictionNone && (selectedType || selectedParamType)" class="form-group row">
-                    <label class="col-form-label col-sm-2">
-                        {{'COMMONS.SCOPE'|translate}}
-                        <span class="fas fa-info-circle" [title]="'CUSTOM_SERVICES.AUTH_HELPER.SCOPE_INFO'|translate"></span>
-                    </label>
-                    <div class="col-sm-10 hbox" style="align-items: center;">
-                        <input class="form-control" [(ngModel)]="scope" (ngModelChange)="update()">
-                        <span style="margin: 0px 4px;">*</span>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <span [innerHTML]="'CUSTOM_SERVICES.AUTH_HELPER.CAPABILITIES_DOCUMENTATION_REF'|translate"></span>
-            </div>
-        </div>
+        <!-- Auth -->
 
-        <!-- Language -->
-
-        <div class="card card-default" style="margin-top: 6px;">
-            <div class="card-header">
-                <label>{{'CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.LANGUAGE_REQUIREMENT'|translate}}</label>
-            </div>
-            <div class="card-body">
-                <p>
-                    {{'CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.LANGUAGE_REQUIREMENT_INFO'|translate}}
-                </p>
-                
-                <div class="form-group row">
-                    <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.RESTRICTION'|translate}}</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" [(ngModel)]="selectedLangRequirement" (ngModelChange)="update()">
-                            <option *ngFor="let r of langRequirements" [value]="r">{{r|translate}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div *ngIf="selectedLangRequirement==langRequirementLang" class="form-group row">
-                    <label class="col-form-label col-sm-2">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" [(ngModel)]="selectedLang" (ngModelChange)="update()">
-                            <option *ngFor="let l of languages" [ngValue]="l">{{l.name}} ({{l.tag}})</option>
-                        </select>
-                    </div>
-                </div>
-                <div *ngIf="selectedLangRequirement==langRequirementParam" class="form-group row">
-                    <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.PARAMETER'|translate}}</label>
-                    <div class="col-sm-10">
-                        <select *ngIf="parameters?.length > 0; else noParamLangBlock" class="form-control" style="font-family: monospace;"
-                            [(ngModel)]="selectedParamLang" (ngModelChange)="update()">
-                            <option *ngFor="let p of parameters">{{p}}</option>
-                        </select>
-                        <ng-template #noParamLangBlock>
-                            <div class="form-control" style="background-color: #eee;">
-                                <span class="fas fa-exclamation-triangle"></span> {{'CUSTOM_SERVICES.AUTH_HELPER.NO_PARAM_OPERATION'|translate}}
-                            </div>
-                        </ng-template>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-
-        <!-- CRUDV -->
-
-        <div class="card card-default" style="margin-top: 6px;">
-            <div class="card-header">
-                <label>CRUDV</label>
-            </div>
-            <div class="card-body hbox">
-                <div *ngFor="let cs of crudvStruct; let i=index" class="text-center" style="flex: 1;">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" [id]="'crudCheck'+i" type="checkbox" [(ngModel)]="cs.checked" (ngModelChange)="update()">
-                        <label class="form-check-label" [for]="'crudCheck'+i">{{cs.label}}</label>
-                    </div>
-                </div>
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <div class="hbox" style="align-items: center;">
+                <label>Authorization:</label>
+                <input class="form-control" style="margin-left: 4px;" [ngModel]="authSerialization" readonly>
+                <span *ngIf="!authValidStruct.valid" class="fas fa-exclamation-triangle" style="margin-left: 4px;"
+                    [title]="authValidStruct.errors">
+                </span>
             </div>
         </div>
 
     </div>
-    
-    <!-- Auth -->
-
-    <div class="col-sm-12" style="margin-top: 10px;">
-        <div class="hbox" style="align-items: center;">
-            <label>Authorization:</label>
-            <input class="form-control" style="margin-left: 4px;" [ngModel]="authSerialization" readonly>
-            <span *ngIf="!authValidStruct.valid" class="fas fa-exclamation-triangle" style="margin-left: 4px;"
-                [title]="authValidStruct.errors">
-            </span>
-        </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!authValidStruct.valid">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
-
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!authValidStruct.valid">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
 </div>

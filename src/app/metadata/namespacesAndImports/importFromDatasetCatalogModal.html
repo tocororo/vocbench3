@@ -1,75 +1,77 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body">
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td><label>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label></td>
-                <td>
-                    <div class="input-group">
-                        <input type="text" class="form-control" [ngModel]="preloadCatalog" readonly>
-                        <div class="input-group-append">
-                            <button class="btn btn-light" (click)="openDatasetCatalog()">
-                                <span class="fas fa-pencil-alt"></span>
-                            </button>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td><label>{{'COMMONS.ONTOLOGY_IRI'|translate}}:</label></td>
-                <td>
-                    <input type="text" class="form-control" [ngModel]="ontologyIRI" readonly>
-                </td>
-            </tr>
-            <ng-container *ngIf="dataDump">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body">
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
                 <tr>
-                    <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.DATA_DUMP'|translate}}:</label></td>
+                    <td><label>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label></td>
                     <td>
-                        <div style="display: flex; align-items: center">
-                            <input type="text" class="form-control" [ngModel]="dataDump" readonly>
-                            <div class="form-check ml-2">
-                                <input class="form-check-input" id="useDumpCheck" type="checkbox" [(ngModel)]="useDataDump">
-                                <label class="form-check-label text-nowrap" for="useDumpCheck">
-                                    {{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.USE_DATA_DUMP'|translate}}
-                                    <span class="fas fa-info-circle ml-1" [title]="'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.DATA_DUMP_CHECK'|translate">
-                                    </span>
-                                </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" [ngModel]="preloadCatalog" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-light" (click)="openDatasetCatalog()">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr *ngIf="useDataDump">
-                    <td nowrap><label>{{'COMMONS.FORMAT'|translate}}:</label></td>
+                <tr>
+                    <td><label>{{'COMMONS.ONTOLOGY_IRI'|translate}}:</label></td>
                     <td>
-                        <div class="hbox">
-                            <select class="form-control" [(ngModel)]="rdfFormat" [disabled]="lockFormat">
-                                <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
-                            </select>
-                            <button class="btn btn-light" style="margin-left: 4px;" [ngClass]="{ active : lockFormat }" (click)="lockFormat = !lockFormat">
-                                <span class="fas fa-lock"></span>
-                            </button>
-                        </div>
+                        <input type="text" class="form-control" [ngModel]="ontologyIRI" readonly>
                     </td>
                 </tr>
-            </ng-container>
-            <tr>
-                <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.TRANSITIVE_IMPORTS'|translate}}:</label></td>
-                <td>
-                    <select class="form-control" [(ngModel)]="selectedImportAllowance">
-                        <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.showTranslationKey|translate}}</option>
-                    </select>                    
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!preloadCatalog">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+                <ng-container *ngIf="dataDump">
+                    <tr>
+                        <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.DATA_DUMP'|translate}}:</label></td>
+                        <td>
+                            <div style="display: flex; align-items: center">
+                                <input type="text" class="form-control" [ngModel]="dataDump" readonly>
+                                <div class="form-check ml-2">
+                                    <input class="form-check-input" id="useDumpCheck" type="checkbox" [(ngModel)]="useDataDump">
+                                    <label class="form-check-label text-nowrap" for="useDumpCheck">
+                                        {{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.USE_DATA_DUMP'|translate}}
+                                        <span class="fas fa-info-circle ml-1" [title]="'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.DATA_DUMP_CHECK'|translate">
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="useDataDump">
+                        <td nowrap><label>{{'COMMONS.FORMAT'|translate}}:</label></td>
+                        <td>
+                            <div class="hbox">
+                                <select class="form-control" [(ngModel)]="rdfFormat" [disabled]="lockFormat">
+                                    <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
+                                </select>
+                                <button class="btn btn-light" style="margin-left: 4px;" [ngClass]="{ active : lockFormat }" (click)="lockFormat = !lockFormat">
+                                    <span class="fas fa-lock"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+                <tr>
+                    <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.TRANSITIVE_IMPORTS'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="selectedImportAllowance">
+                            <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.showTranslationKey|translate}}</option>
+                        </select>                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!preloadCatalog">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

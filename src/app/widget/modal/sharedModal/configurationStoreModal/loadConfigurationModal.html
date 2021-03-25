@@ -1,46 +1,48 @@
-<div class="modal-header">
-    <h3 class="modal-title text-info">{{title}}</h3>
-</div>
-<div class="modal-body vbox">
-    
-    <div class="card card-default vbox">
-        <div class="card-body table-responsive" style="min-height: 80px;">
-            <table class="table table-sm table-hoverable">
-                <colgroup>
-                    <col>
-                    <col>
-                    <col style="width: 1%">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>{{'COMMONS.SCOPE'|translate}}</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{ 'table-primary': selectedRef == ref }">
-                        <td>{{ref.identifier}}</td>
-                        <td>{{ref.getReferenceScope()}}</td>
-                        <td>
-                            <button *ngIf="allowDelete" class="btn btn-xs btn-light" (click)="deleteReference(ref)" [title]="'ACTIONS.DELETE'|translate">
-                                <span class="far fa-trash-alt"></span>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr *ngFor="let ref of additionalReferences" (click)="selectReference(ref)" [ngClass]="{ 'table-primary': selectedRef == ref }">
-                        <td>{{ref.identifier}}</td>
-                        <td>APPLICATION</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title text-info">{{title}}</h3>
     </div>
+    <div class="modal-body vbox">
+        
+        <div class="card card-default vbox">
+            <div class="card-body table-responsive" style="min-height: 80px;">
+                <table class="table table-sm table-hoverable">
+                    <colgroup>
+                        <col>
+                        <col>
+                        <col style="width: 1%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>{{'COMMONS.SCOPE'|translate}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{ 'table-primary': selectedRef == ref }">
+                            <td>{{ref.identifier}}</td>
+                            <td>{{ref.getReferenceScope()}}</td>
+                            <td>
+                                <button *ngIf="allowDelete" class="btn btn-xs btn-light" (click)="deleteReference(ref)" [title]="'ACTIONS.DELETE'|translate">
+                                    <span class="far fa-trash-alt"></span>
+                                </button>
+                            </td>
+                        </tr>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedRef">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+                        <tr *ngFor="let ref of additionalReferences" (click)="selectReference(ref)" [ngClass]="{ 'table-primary': selectedRef == ref }">
+                            <td>{{ref.identifier}}</td>
+                            <td>APPLICATION</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedRef">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

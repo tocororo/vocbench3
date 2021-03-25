@@ -1,69 +1,71 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{'ACTIONS.ADD_OPERATION'|translate}}</h3>
-</div>
-<div class="modal-body vbox" style="min-height:75vh;">
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'ACTIONS.ADD_OPERATION'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox" style="min-height:75vh;">
 
-    <table class="table table-sm table-borderless">
-        <tbody>
-            <tr>
-                <td nowrap><label>{{'HISTORY_VALIDATION.FILTERS.OPERATION_PICKER.EXTENSION_PATH'|translate}}:</label></td>
-                <td style="padding: 3px;">
-                    <select class="form-control" [(ngModel)]="selectedExtensionPath" (ngModelChange)="onExtPathChange()">
-                        <option *ngFor="let path of extensionPaths">{{path}}</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'HISTORY_VALIDATION.FILTERS.OPERATION_PICKER.SERVICE_CLASS'|translate}}:</label></td>
-                <td style="padding: 3px;">
-                    <select class="form-control" [(ngModel)]="selectedServiceClasses" (ngModelChange)="onServClassChange()">
-                        <option *ngFor="let sc of serviceClasses">{{sc}}</option>
-                    </select>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table table-sm table-borderless">
+            <tbody>
+                <tr>
+                    <td nowrap><label>{{'HISTORY_VALIDATION.FILTERS.OPERATION_PICKER.EXTENSION_PATH'|translate}}:</label></td>
+                    <td style="padding: 3px;">
+                        <select class="form-control" [(ngModel)]="selectedExtensionPath" (ngModelChange)="onExtPathChange()">
+                            <option *ngFor="let path of extensionPaths">{{path}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'HISTORY_VALIDATION.FILTERS.OPERATION_PICKER.SERVICE_CLASS'|translate}}:</label></td>
+                    <td style="padding: 3px;">
+                        <select class="form-control" [(ngModel)]="selectedServiceClasses" (ngModelChange)="onServClassChange()">
+                            <option *ngFor="let sc of serviceClasses">{{sc}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div class="card card-default vbox" style="margin-bottom: 3px;">
-        <div class="card-header">
-            <label style="flex:1;">{{'HISTORY_VALIDATION.FILTERS.OPERATION_PICKER.OPERATIONS'|translate}}:</label>
-            <div class="input-group input-group-sm" style="width: initial;">
-                <input type="text" class="form-control" [placeholder]="'HISTORY_VALIDATION.FILTERS.OPERATION_PICKER.OPERATION_FILTER'|translate" [(ngModel)]="filterKey" 
-                    (ngModelChange)="onFilterChanged()" [disabled]="operations.length == 0">
-                <span class="input-group-append">
-                    <span class="input-group-text">
-                        <span class="fas fa-filter"></span>
+        <div class="card card-default vbox" style="margin-bottom: 3px;">
+            <div class="card-header">
+                <label style="flex:1;">{{'HISTORY_VALIDATION.FILTERS.OPERATION_PICKER.OPERATIONS'|translate}}:</label>
+                <div class="input-group input-group-sm" style="width: initial;">
+                    <input type="text" class="form-control" [placeholder]="'HISTORY_VALIDATION.FILTERS.OPERATION_PICKER.OPERATION_FILTER'|translate" [(ngModel)]="filterKey" 
+                        (ngModelChange)="onFilterChanged()" [disabled]="operations.length == 0">
+                    <span class="input-group-append">
+                        <span class="input-group-text">
+                            <span class="fas fa-filter"></span>
+                        </span>
                     </span>
-                </span>
-            </div>
-        </div>
-        <div class="card-body scrollableContainer">
-            <ng-container *ngFor="let op of operations; let i=index">
-                <div *ngIf="!op.filtered" class="form-check ml-2 mb-2">
-                    <input class="form-check-input" [id]="'opCheck'+i" type="checkbox" [(ngModel)]="op.checked">
-                    <label class="form-check-label" [for]="'opCheck'+i">{{getOperationShow(op.service)}}</label>
                 </div>
-            </ng-container>
-        </div>
-    </div>
-
-    <button class="btn btn-xs btn-light" style="margin-bottom: 3px; align-self: center" (click)="addOperations()">
-        {{'ACTIONS.ADD'|translate}} <span class="fas fa-chevron-down"></span>
-    </button>
-
-    <div class="card card-default vbox">
-        <div class="card-body scrollableContainer">
-            <div *ngFor="let op of operationsToAdd" class="listItem">
-                <span style="flex: 1;">{{getOperationShow(op, true)}}</span>
-                <button class="btn btn-xs btn-light" (click)="removeOperation(op)">
-                    <span class="fas fa-minus"></span>
-                </button>
+            </div>
+            <div class="card-body scrollableContainer">
+                <ng-container *ngFor="let op of operations; let i=index">
+                    <div *ngIf="!op.filtered" class="form-check ml-2 mb-2">
+                        <input class="form-check-input" [id]="'opCheck'+i" type="checkbox" [(ngModel)]="op.checked">
+                        <label class="form-check-label" [for]="'opCheck'+i">{{getOperationShow(op.service)}}</label>
+                    </div>
+                </ng-container>
             </div>
         </div>
-    </div>
 
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="operationsToAdd.length == 0">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+        <button class="btn btn-xs btn-light" style="margin-bottom: 3px; align-self: center" (click)="addOperations()">
+            {{'ACTIONS.ADD'|translate}} <span class="fas fa-chevron-down"></span>
+        </button>
+
+        <div class="card card-default vbox">
+            <div class="card-body scrollableContainer">
+                <div *ngFor="let op of operationsToAdd" class="listItem">
+                    <span style="flex: 1;">{{getOperationShow(op, true)}}</span>
+                    <button class="btn btn-xs btn-light" (click)="removeOperation(op)">
+                        <span class="fas fa-minus"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="operationsToAdd.length == 0">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

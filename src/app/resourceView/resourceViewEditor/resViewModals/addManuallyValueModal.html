@@ -1,19 +1,21 @@
-<div class="modal-header">
-    <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{'ACTIONS.ADD'|translate}} {{property.getShow()}}</h3>
-        <span>
-            <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
-                <rdf-resource [resource]="enrichingProperty"></rdf-resource>
-            </button>
-        </span>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{'ACTIONS.ADD'|translate}} {{property.getShow()}}</h3>
+            <span>
+                <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_PROPERTY'|translate" (click)="changeProperty()" [disabled]="!propChangeable">
+                    <rdf-resource [resource]="enrichingProperty"></rdf-resource>
+                </button>
+            </span>
+        </div>
     </div>
-</div>
-<div class="modal-body">
-    <div class="hbox" style="align-items: center;">
-        <input ngbAutofocus type="text" class="form-control form-control-sm" style="flex: 1;" [(ngModel)]="inputTxt" (keydown.enter)="onEnter()">
+    <div class="modal-body">
+        <div class="hbox" style="align-items: center;">
+            <input ngbAutofocus type="text" class="form-control form-control-sm" style="flex: 1;" [(ngModel)]="inputTxt" (keydown.enter)="onEnter()">
+        </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>

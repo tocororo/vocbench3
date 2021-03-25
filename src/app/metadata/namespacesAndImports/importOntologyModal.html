@@ -1,96 +1,98 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body">
-    
-    <!--
-        This modal is used for add import from
-        - Web) field to show: baseURI, alernative URL, format
-        - Web to mirror) field to show: baseURI, mirror file, alernative URL, format
-        - Local file) field to show: baseURI, local file, mirror file
-        - Ontology mirror) field to show:
-        Based on the input parameter "importType" this modal shows/hides the proper fields
-    -->
-    
-    <table class="table table-sm table-borderless">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td><label>{{'MODELS.PROJECT.BASE_URI'|translate}}:</label></td>
-                <td *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror' || importType == 'fromLocalFile'">
-                    <div *ngIf="baseURIOptional" class="hbox" style="align-items: center">
-                        <input class="form-control" [(ngModel)]="baseURI" [disabled]="!baseURICheck">
-                        <input *ngIf="baseURIOptional" type="checkbox" style="margin-left: 3px;" [(ngModel)]="baseURICheck">
-                    </div>
-                    <input *ngIf="!baseURIOptional" class="form-control" [(ngModel)]="baseURI" [disabled]="editorMode == 'repair'">
-                </td>
-                <td *ngIf="importType == 'fromOntologyMirror'">
-                    <select *ngIf="mirrorList" class="form-control" [(ngModel)]="selectedMirror">
-                        <option *ngFor="let m of mirrorList" [ngValue]="m">{{m.baseURI}}</option>
-                    </select>
-                    <select *ngIf="!mirrorList" class="form-control" disabled>
-                        <option>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.NO_ONTOLOGIES_MIRRORED'|translate}}</option>
-                    </select>
-                </td>
-            </tr>
-            <tr *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror'">
-                <td nowrap>
-                    <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.ALTERNATIVE_URL'|translate}}:</label>
-                </td>
-                <td>
-                    <div class="hbox" style="align-items: center">
-                        <input type="text" class="form-control" [(ngModel)]="altURL" [disabled]="!altURLCheck">
-                        <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="altURLCheck">
-                    </div>
-                </td>
-            </tr>
-            <tr *ngIf="importType == 'fromLocalFile'">
-                <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.LOCAL_FILE'|translate}}:</label></td>
-                <td>
-                    <file-picker (fileChanged)="fileChangeEvent($event)"></file-picker>
-                </td>
-            </tr>
-            <tr *ngIf="importType == 'fromWebToMirror' || importType == 'fromLocalFile'">
-                <td nowrap>
-                    <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.MIRROR_FILE_NAME'|translate}}:</label>
-                </td>
-                <td>
-                    <input *ngIf="importType == 'fromWebToMirror'" type="text" class="form-control" [(ngModel)]="mirrorFile">
-                    <div *ngIf="importType == 'fromLocalFile'" class="hbox" style="align-items: center">
-                        <input class="form-control" [(ngModel)]="mirrorFile" [disabled]="!mirrorFileCheck">
-                        <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="mirrorFileCheck">
-                    </div>
-                </td>
-            </tr>
-            <tr *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror'">
-                <td nowrap>
-                    <label>{{'COMMONS.FORCE_FORMAT'|translate}}:</label>
-                </td>
-                <td>
-                    <div class="hbox" style="align-items: center">
-                        <select class="form-control" [(ngModel)]="rdfFormat" [disabled]="!forceFormatCheck">
-                            <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
+<div cdkDrag cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body">
+        
+        <!--
+            This modal is used for add import from
+            - Web) field to show: baseURI, alernative URL, format
+            - Web to mirror) field to show: baseURI, mirror file, alernative URL, format
+            - Local file) field to show: baseURI, local file, mirror file
+            - Ontology mirror) field to show:
+            Based on the input parameter "importType" this modal shows/hides the proper fields
+        -->
+        
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td><label>{{'MODELS.PROJECT.BASE_URI'|translate}}:</label></td>
+                    <td *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror' || importType == 'fromLocalFile'">
+                        <div *ngIf="baseURIOptional" class="hbox" style="align-items: center">
+                            <input class="form-control" [(ngModel)]="baseURI" [disabled]="!baseURICheck">
+                            <input *ngIf="baseURIOptional" type="checkbox" style="margin-left: 3px;" [(ngModel)]="baseURICheck">
+                        </div>
+                        <input *ngIf="!baseURIOptional" class="form-control" [(ngModel)]="baseURI" [disabled]="editorMode == 'repair'">
+                    </td>
+                    <td *ngIf="importType == 'fromOntologyMirror'">
+                        <select *ngIf="mirrorList" class="form-control" [(ngModel)]="selectedMirror">
+                            <option *ngFor="let m of mirrorList" [ngValue]="m">{{m.baseURI}}</option>
                         </select>
-                        <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="forceFormatCheck">
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.TRANSITIVE_IMPORTS'|translate}}:</label></td>
-                <td>
-                    <select class="form-control" [(ngModel)]="selectedImportAllowance">
-                        <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.showTranslationKey|translate}}</option>
-                    </select>                    
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
-    <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+                        <select *ngIf="!mirrorList" class="form-control" disabled>
+                            <option>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.NO_ONTOLOGIES_MIRRORED'|translate}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror'">
+                    <td nowrap>
+                        <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.ALTERNATIVE_URL'|translate}}:</label>
+                    </td>
+                    <td>
+                        <div class="hbox" style="align-items: center">
+                            <input type="text" class="form-control" [(ngModel)]="altURL" [disabled]="!altURLCheck">
+                            <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="altURLCheck">
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="importType == 'fromLocalFile'">
+                    <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.LOCAL_FILE'|translate}}:</label></td>
+                    <td>
+                        <file-picker (fileChanged)="fileChangeEvent($event)"></file-picker>
+                    </td>
+                </tr>
+                <tr *ngIf="importType == 'fromWebToMirror' || importType == 'fromLocalFile'">
+                    <td nowrap>
+                        <label>{{'METADATA.NAMESPACES_AND_IMPORTS.ONTOLOGY_IMPORT.MIRROR_FILE_NAME'|translate}}:</label>
+                    </td>
+                    <td>
+                        <input *ngIf="importType == 'fromWebToMirror'" type="text" class="form-control" [(ngModel)]="mirrorFile">
+                        <div *ngIf="importType == 'fromLocalFile'" class="hbox" style="align-items: center">
+                            <input class="form-control" [(ngModel)]="mirrorFile" [disabled]="!mirrorFileCheck">
+                            <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="mirrorFileCheck">
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="importType == 'fromWeb' || importType == 'fromWebToMirror'">
+                    <td nowrap>
+                        <label>{{'COMMONS.FORCE_FORMAT'|translate}}:</label>
+                    </td>
+                    <td>
+                        <div class="hbox" style="align-items: center">
+                            <select class="form-control" [(ngModel)]="rdfFormat" [disabled]="!forceFormatCheck">
+                                <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
+                            </select>
+                            <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="forceFormatCheck">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'METADATA.NAMESPACES_AND_IMPORTS.TRANSITIVE_IMPORTS.TRANSITIVE_IMPORTS'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="selectedImportAllowance">
+                            <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.showTranslationKey|translate}}</option>
+                        </select>                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
 </div>
