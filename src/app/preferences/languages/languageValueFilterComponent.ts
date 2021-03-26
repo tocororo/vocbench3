@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Language } from "../../models/LanguagesCountries";
+import { Language, Languages } from "../../models/LanguagesCountries";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 
@@ -22,7 +22,7 @@ export class LanguageValueFilterComponent {
 
         let preferenceLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.languages;
 
-        if (preferenceLangs.length == 1 && preferenceLangs[0] == "*") { //"*" stands for all languages
+        if (preferenceLangs.length == 1 && preferenceLangs[0] == Languages.ALL_LANG) {
             //set as active all the available langs
             for (var i = 0; i < projectLanguages.length; i++) {
                 this.filterLanguages.push({

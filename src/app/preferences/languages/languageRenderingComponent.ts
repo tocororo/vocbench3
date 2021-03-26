@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Language } from "../../models/LanguagesCountries";
+import { Language, Languages } from "../../models/LanguagesCountries";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 
@@ -14,43 +14,48 @@ export class LanguageRenderingComponent {
     renderingLanguages: LanguageItem[] = [];
     activeLangs: number = 0;
 
+    noLangItem: LanguageItem = { lang: { name: "None", tag: Languages.NO_LANG_TAG }, active: false, position: null };
+
     constructor(private properties: VBProperties) { }
 
     ngOnInit() {
-        var projectLanguages: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
-        let renderingLanguages: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference;
-        if (renderingLanguages.length == 1 && renderingLanguages[0] == "*") { //"*" stands for all languages
+        let projectLanguages: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
+        let renderingLanguagesPref: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference;
+
+        this.renderingLanguages.push(this.noLangItem);
+
+        if (renderingLanguagesPref.length == 1 && renderingLanguagesPref[0] == Languages.ALL_LANG) {
             //set as selected renderingLangs all the available langs
-            for (var i = 0; i < projectLanguages.length; i++) {
+            projectLanguages.forEach(pl => {
                 this.renderingLanguages.push({
-                    lang: projectLanguages[i],
+                    lang: pl,
                     active: false,
                     position: null
-                });
-            }
+                })
+            })
         } else {
             //set as selected renderingLangs only the listed by the preference
-            for (var i = 0; i < projectLanguages.length; i++) {
+            this.noLangItem.active = renderingLanguagesPref.includes(Languages.NO_LANG_TAG);
+            projectLanguages.forEach(pl => {
                 this.renderingLanguages.push({
-                    lang: projectLanguages[i],
-                    active: (renderingLanguages.indexOf(projectLanguages[i].tag) != -1), //active if the language is among the listed in preferences
+                    lang: pl,
+                    active: (renderingLanguagesPref.indexOf(pl.tag) != -1), //active if the language is among the listed in preferences
                     position: null
-                });
-            }
+                })
+            })
             //set the positions according to the preference order
-            let position: number = 1; //here I didn't exploit index i since a lang in preferences could be not in the project langs
-            for (var i = 0; i < renderingLanguages.length; i++) {
-                let langTag: string = renderingLanguages[i];
-                this.renderingLanguages.forEach((lang: LanguageItem) => {
-                    if (lang.lang.tag == langTag) {
-                        lang.position = position;
+            let position: number = 1;
+            renderingLanguagesPref.forEach(langPref => {
+                this.renderingLanguages.forEach((langItem: LanguageItem) => {
+                    if (langItem.lang.tag == langPref) {
+                        langItem.position = position;
                         return;
                     }
                 })
                 position++;
-            }
+            })
         }
-
+        
     }
 
     //languages handlers

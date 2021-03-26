@@ -65,10 +65,14 @@ export class LanguageItemComponent {
     }
 
     private initFlagImgSrc() {
-        if (this.preferences.getShowFlags()) {
-            this.flagImgSrc = UIUtils.getFlagImgSrc(this.language.tag);
+        if (this.language.tag == "--") {
+            this.flagImgSrc = "./assets/images/icons/res/string.png";
         } else {
-            this.flagImgSrc = UIUtils.getFlagImgSrc(null); //null makes return unknown flag => do not show flag
+            if (this.preferences.getShowFlags()) {
+                this.flagImgSrc = UIUtils.getFlagImgSrc(this.language.tag);
+            } else {
+                this.flagImgSrc = UIUtils.getFlagImgSrc(null); //null makes return unknown flag => do not show flag
+            }
         }
     }
 

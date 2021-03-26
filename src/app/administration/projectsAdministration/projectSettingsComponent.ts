@@ -1,5 +1,4 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { TranslateService } from "@ngx-translate/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";

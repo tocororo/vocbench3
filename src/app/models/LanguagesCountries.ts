@@ -35,6 +35,9 @@ export class Countries {
 
 export class Languages {
 
+    public static readonly ALL_LANG = "*";
+    public static readonly NO_LANG_TAG = "--";
+
     private static systemLanguages: Language[] = [];
     static priorityLangs = ["en", "fr", "it", "es", "de"];
     

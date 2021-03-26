@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Languages } from "src/app/models/LanguagesCountries";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { RepositoryLocation, RepositoryStatus, VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
@@ -89,7 +90,7 @@ export class CreateDiffingTaskModal {
         //get as language list those set as rendering by the user
         let langs: string[] = [];
         let renderingLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference;
-        if (renderingLangs != null && !(renderingLangs.length == 1 && renderingLangs[0] == "*")) {
+        if (renderingLangs != null && !(renderingLangs.length == 1 && renderingLangs[0] == Languages.ALL_LANG)) {
             langs = renderingLangs;
         }
         if (this.mode == DiffingMode.projects) {
