@@ -12,6 +12,7 @@ import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor
 import { MustacheEditorComponent } from '../widget/codemirror/mustacheEditor/mustacheEditorComponent';
 import { NTripleEditorComponent } from '../widget/codemirror/nTripleEditor/nTripleEditorComponent';
 import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
+import { ResizableDirective } from "../widget/directives/resizableDirective";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
 import { InlineEditableValue } from '../widget/inlineEditableValue/inlineEditableValue';
@@ -63,6 +64,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         PearlEditorComponent,
         QueryParameterForm,
         RdfResourceComponent,
+        ResizableDirective,
         ResourceListComponent,
         ResourcePickerComponent,
         SanitizerDirective,
@@ -95,6 +97,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         PearlEditorComponent,
         QueryParameterForm,
         RdfResourceComponent,
+        ResizableDirective,
         ResourceListComponent,
         ResourcePickerComponent,
         SanitizerDirective,
