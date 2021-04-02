@@ -58,7 +58,7 @@
             "ENABLE_EXPERIMENTAL_FEATURES_INFO": "Check this option in order to enable experimental (very unstable) features",
             "EMAIL": {
                 "VB_EMAIL_CONFIG": "Vocbench Email Configuration",
-                "VB_EMAIL_CONFIG_INFO": "Configuration of the VocBench e-mail service. This service will be used to send notifications to the system administrator and to the users",
+                "VB_EMAIL_CONFIG_INFO": "Configuration of the VocBench e-mail service. This service will be used to send notifications to the system administrator and to the users. <b>Note</b>: if this service is not correctly configured it will be not possible to send emails needed for completing the user registration or password reset procedures.",
                 "MAIL_SERVER_URL_INFO": "SMTP Mail Server IP/URL",
                 "MAIL_SERVER_PORT_INFO": "Mail Server Port",
                 "CRYPTOGRAPHIC_PROTOCOL": "Cryptographic protocol",
@@ -2193,7 +2193,8 @@
         "URI_GENERATOR_CONFIG_UPDATED": "The configuration of the Uri Generator has been updated",
         "USER_ADMINISTRATOR_CREATED": "The administrator account has been created. Now you will be automatically logged in with the credentials you provided",
         "USER_CREATED": "User succesfully created",
-        "USER_CREATED_PENDING_ACTIVATION": "Your account has been created and is now pending activation. After the system administrator accepts your request, it will be possible to login with the credentials you provided",
+        "USER_CREATED_VERIFY_EMAIL": "Your account has been created. In order to complete the registration, a verification link has been sent to the email address you provided.",
+        "USER_EMAIL_VERIFIED": "Your email has been verified and the administrator has been notified about your registration. Please wait for the system administrator to activate your account, then it will be possible to login with the credentials you provided",
         "USER_IRI_PERSONAL_URL_INCONSISTENT": "You checked the option to use the personal URL as user IRI, but the URL is not provided. Please enter a valid URL or uncheck the above option",
         "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "The type of value is not compliant with the range of the property {{property}}. The operation may cause inconsistencies and malfunction. Do you want to force the operation?"
     },

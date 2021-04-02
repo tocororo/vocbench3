@@ -82,7 +82,7 @@ export class RegistrationComponent {
                 if (this.firstAccess) {
                     message = {key:"MESSAGES.USER_ADMINISTRATOR_CREATED"};
                 } else {
-                    message = {key:"MESSAGES.USER_CREATED_PENDING_ACTIVATION"};
+                    message = {key:"MESSAGES.USER_CREATED_VERIFY_EMAIL"};
                 }
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, message).then(
                     result => {

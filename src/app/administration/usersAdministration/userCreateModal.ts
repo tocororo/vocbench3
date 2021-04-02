@@ -56,10 +56,10 @@ export class UserCreateModal {
         }
 
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.userService.registerUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName, userIri,
+        this.userService.createUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName, userIri,
             this.userForm.address, this.userForm.affiliation, this.userForm.url, this.userForm.avatarUrl, this.userForm.phone,
             this.userForm.languageProficiencies, this.userForm.customProperties).subscribe(
-            stResp => {
+            () => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.USER_CREATED"});
                 this.activeModal.close();

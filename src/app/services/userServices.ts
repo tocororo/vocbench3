@@ -6,7 +6,7 @@ import { ARTURIResource } from "../models/ARTResources";
 import { User, UserFormFields } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
 
 @Injectable()
@@ -134,7 +134,47 @@ export class UserServices {
         for (let prop in customProperties) {
             convertedCustomProps["<"+prop+">"] = customProperties[prop];
         }
-        var params: any = {
+        let params: any = {
+            email: email,
+            password: password,
+            givenName: givenName,
+            familyName: familyName,
+            iri: iri,
+            address: address,
+            affiliation: affiliation,
+            url: url,
+            avatarUrl: avatarUrl,
+            phone: phone,
+            languageProficiencies: languageProficiencies,
+            customProperties: JSON.stringify(convertedCustomProps),
+            vbHostAddress: location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname
+        }
+        return this.httpMgr.doPost(this.serviceName, "registerUser", params);
+    }
+
+    verifyUserEmail(email: string, token: string) {
+        let params = {
+            email: email,
+            token: token,
+        }
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.user.EmailVerificationExpiredException']
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "verifyUserEmail", params, options);
+    }
+
+    createUser(email: string, password: string, givenName: string, familyName: string, iri?: ARTURIResource,
+        address?: string, affiliation?: string, url?: string, avatarUrl?: string, phone?: string, 
+        languageProficiencies?: string[], customProperties?: {[iri: string]: string}) {
+        //customProperties server side is a Map<IRI, String>, so the keys of the customProperties should be serialized as NT IRIs
+        let convertedCustomProps: {[iri: string]: string} = {};
+        for (let prop in customProperties) {
+            convertedCustomProps["<"+prop+">"] = customProperties[prop];
+        }
+        let params: any = {
             email: email,
             password: password,
             givenName: givenName,
@@ -148,7 +188,7 @@ export class UserServices {
             languageProficiencies: languageProficiencies,
             customProperties: JSON.stringify(convertedCustomProps)
         }
-        return this.httpMgr.doPost(this.serviceName, "registerUser", params);
+        return this.httpMgr.doPost(this.serviceName, "createUser", params);
     }
 
     /**

@@ -28,6 +28,7 @@ import { SparqlComponent } from './sparql/sparqlComponent';
 import { RegistrationComponent } from './user/registrationComponent';
 import { ResetPasswordComponent } from './user/resetPasswordComponent';
 import { UserProfileComponent } from './user/userProfileComponent';
+import { VerifyEmailComponent } from './user/verifyEmailComponent';
 import { AdminGuard, AuthGuard, ProjectGuard } from './utils/CanActivateGuards';
 import { UserResolver } from './utils/UserResolver';
 
@@ -55,6 +56,7 @@ const routes: Routes = [
 	{ path: "ResourceMetadata", component: ResourceMetadataComponent, canActivate: [AuthGuard, ProjectGuard] },
 	{ path: "Registration/:firstAccess", component: RegistrationComponent }, //param firstAccess 1 to indicate that there's no user registered
 	{ path: "ResetPassword/:token", component: ResetPasswordComponent },
+	{ path: "VerifyEmail", component: VerifyEmailComponent },
 	{ path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard] },
 	{ path: "Preferences", component: VocbenchPreferencesComponent, canActivate: [AuthGuard, ProjectGuard] },
 	//lazy loading of module with child route

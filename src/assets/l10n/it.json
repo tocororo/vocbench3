@@ -58,7 +58,7 @@
             "ENABLE_EXPERIMENTAL_FEATURES_INFO": "Spunta questa opzione per abilitare funzionalità sperimentali (molto instabili)",
             "EMAIL": {
                 "VB_EMAIL_CONFIG": "Configurazione Email di Vocbench",
-                "VB_EMAIL_CONFIG_INFO": "Configurazione del servizio email di VocBench. Questo servizio sarà usato per inviare notifiche all'amministratore di sistema e agli utenti",
+                "VB_EMAIL_CONFIG_INFO": "Configurazione del servizio email di VocBench. Questo servizio sarà usato per inviare notifiche all'amministratore di sistema e agli utenti: <b>Nota</b>: se questo servizio non è configurato correttamente non sarà possibile inviare le email necessarie per completare le procedure di registrazione utente o reimpostazione password.",
                 "MAIL_SERVER_URL_INFO": "IP/URL del server di posta SMTP",
                 "MAIL_SERVER_PORT_INFO": "Porta del server di posta",
                 "CRYPTOGRAPHIC_PROTOCOL": "Protocollo di crittografia",
@@ -2193,7 +2193,8 @@
         "URI_GENERATOR_CONFIG_UPDATED": "La configurazione del Uri Generator è stata aggiornata",
         "USER_ADMINISTRATOR_CREATED": "L'account amministratore è stato creato. Verrai ora loggato automaticamente con le credenziali fornite",
         "USER_CREATED": "Utente creato correttamente",
-        "USER_CREATED_PENDING_ACTIVATION": "Il tuo account è stato creato ed è ora in attesa di attivazione. Dopo che l'amministratore avrà accettato la tua richiesta, ti sarà possibile accedere con le credenziali fornite",
+        "USER_CREATED_VERIFY_EMAIL": "Il tuo account è stato creato. Per completare la registrazione, un link di verifica è stato inviato all'indirizzo email fornito.",
+        "USER_EMAIL_VERIFIED": "La tua email è stata verificata e l'amministratore è stato notificato della tua registrazione. Attendi che l'amministratore di sistema attivi il tuo account, dopodichè sarà possibile effettuare il login con le credenziali fornite.",
         "USER_IRI_PERSONAL_URL_INCONSISTENT": "Hai selezionato l'opzione per usare l'URL personale come IRI utente, ma l'URL non è fornito. Inserisci un URL valido o deseleziona la suddetta opzione",
         "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "Il tipo del valore non è compatibile con il range della proprietà {{property}}. L'operazione potrebbe causare inconsistenze e malfunzionamenti. Vuoi forzare l'operazione?"
     },

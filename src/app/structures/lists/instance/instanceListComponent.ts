@@ -169,7 +169,7 @@ export class InstanceListComponent extends AbstractList {
     /**
      * Forces the safeness of the structure even if it was reported as not safe, then re initialize it
      */
-    private forceSafeness() {
+    forceSafeness() {
         this.safeToGo = { safe: true };
         let instListPreference: InstanceListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences;
         let safeToGoMap: SafeToGoMap = instListPreference.safeToGoMap;
