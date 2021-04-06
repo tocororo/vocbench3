@@ -147,7 +147,7 @@ export class UserServices {
             phone: phone,
             languageProficiencies: languageProficiencies,
             customProperties: JSON.stringify(convertedCustomProps),
-            vbHostAddress: location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname
+            vbHostAddress: this.getVbHostAddress()
         }
         return this.httpMgr.doPost(this.serviceName, "registerUser", params);
     }
@@ -156,6 +156,7 @@ export class UserServices {
         let params = {
             email: email,
             token: token,
+            vbHostAddress: this.getVbHostAddress()
         }
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
@@ -164,6 +165,20 @@ export class UserServices {
             } 
         });
         return this.httpMgr.doPost(this.serviceName, "verifyUserEmail", params, options);
+    }
+
+    activateRegisteredUser(email: string, token: string) {
+        let params = {
+            email: email,
+            token: token,
+        }
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.user.UserActivationExpiredException']
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "activateRegisteredUser", params, options);
     }
 
     createUser(email: string, password: string, givenName: string, familyName: string, iri?: ARTURIResource,
@@ -435,8 +450,7 @@ export class UserServices {
     forgotPassword(email: string) {
         var params: any = {
             email: email,
-            vbHostAddress: location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname
-
+            vbHostAddress: this.getVbHostAddress()
         }
         return this.httpMgr.doPost(this.serviceName, "forgotPassword", params);
     }
@@ -503,4 +517,7 @@ export class UserServices {
     }
 
 
+    private getVbHostAddress(): string {
+        return location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname
+    }
 }

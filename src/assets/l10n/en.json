@@ -2196,6 +2196,7 @@
         "USER_CREATED_VERIFY_EMAIL": "Your account has been created. In order to complete the registration, a verification link has been sent to the email address you provided.",
         "USER_EMAIL_VERIFIED": "Your email has been verified and the administrator has been notified about your registration. Please wait for the system administrator to activate your account, then it will be possible to login with the credentials you provided",
         "USER_IRI_PERSONAL_URL_INCONSISTENT": "You checked the option to use the personal URL as user IRI, but the URL is not provided. Please enter a valid URL or uncheck the above option",
+        "USER_REGISTERED_ACTIVATED": "User {{email}} has been succesfully activated",
         "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "The type of value is not compliant with the range of the property {{property}}. The operation may cause inconsistencies and malfunction. Do you want to force the operation?"
     },
     "STATUS": {

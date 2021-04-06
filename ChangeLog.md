@@ -8,6 +8,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Enabled selection of "no language tagged" labels in rendering preferences
   * Made dialogs draggable
   * Implemented a directive for making dialogs resizable and adopted it on some dialogs.
+  * Added email verification in the registration procedure
 
 # 9.0.0 (18-03-2021)
   * Major and pervasive code changes:

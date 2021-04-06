@@ -2196,6 +2196,7 @@
         "USER_CREATED_VERIFY_EMAIL": "Il tuo account è stato creato. Per completare la registrazione, un link di verifica è stato inviato all'indirizzo email fornito.",
         "USER_EMAIL_VERIFIED": "La tua email è stata verificata e l'amministratore è stato notificato della tua registrazione. Attendi che l'amministratore di sistema attivi il tuo account, dopodichè sarà possibile effettuare il login con le credenziali fornite.",
         "USER_IRI_PERSONAL_URL_INCONSISTENT": "Hai selezionato l'opzione per usare l'URL personale come IRI utente, ma l'URL non è fornito. Inserisci un URL valido o deseleziona la suddetta opzione",
+        "USER_REGISTERED_ACTIVATED": "L'utente {{email}} è stato attivato",
         "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "Il tipo del valore non è compatibile con il range della proprietà {{property}}. L'operazione potrebbe causare inconsistenze e malfunzionamenti. Vuoi forzare l'operazione?"
     },
     "STATUS": {
