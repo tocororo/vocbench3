@@ -50,7 +50,7 @@ export class QueryResultsComponent {
     ngOnChanges() {
         this.headers = null;
         this.resultsPage = 0;
-        this.resultsTotPage = 0;
+        this.resultsTotPage = 1;
         
         this.respSparqlJSON = this.queryResultResp.sparql;
         this.resultType = this.queryResultResp.resultType;
@@ -58,9 +58,8 @@ export class QueryResultsComponent {
             this.headers = this.queryResultResp.sparql.head.vars;
             this.queryResult = this.queryResultResp.sparql.results.bindings;
             //paging handler
-            this.resultsTotPage = Math.floor((<QueryResultBinding[]>this.queryResult).length / this.resultsLimit);
-            if ((<QueryResultBinding[]>this.queryResult).length % this.resultsLimit > 0) {
-                this.resultsTotPage++;
+            if ((<QueryResultBinding[]>this.queryResult).length > 0) {
+                this.resultsTotPage = Math.ceil((<QueryResultBinding[]>this.queryResult).length / this.resultsLimit);
             }
         } else if (this.queryResultResp.resultType == ResultType.boolean) {
             this.headers = ["boolean"];
