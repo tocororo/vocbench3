@@ -218,7 +218,8 @@ export class LanguageBoxComponent {
 
     // it needs to add ontolex part
     addTermBox() {
-        if (this.terms.some(term => term.predicate.equals(SKOSXL.prefLabel) || term.predicate.equals(SKOS.prefLabel))) { // it means that already there is a prefLabel predicate => so add an altLabel (with SKOS and SKOSXL)
+        if (this.terms.some(term => term.predicate.equals(SKOSXL.prefLabel) || term.predicate.equals(SKOS.prefLabel))) { 
+            // it means that already there is a prefLabel predicate => so add an altLabel (with SKOS and SKOSXL)
             if (this.lexicalizationModelType == SKOSXL.uri) {
                 this.terms.push({ predicate: SKOSXL.altLabel, lang: this.lang })
                 this.updateEmptyTerm();
@@ -283,7 +284,8 @@ export class LanguageBoxComponent {
 
     private deleteTerm(termToDelete: TermStructView) {
         if (termToDelete.object == null) { // case in which a box is deleted and it never be modified 
-            this.terms.pop();
+            let idx = this.terms.findIndex(t => t == termToDelete);
+            this.terms.splice(idx, 1);
             this.updateEmptyTerm();
         } else { // case in which a box is deleted and conteins a term with value
             this.terms.forEach(term => {

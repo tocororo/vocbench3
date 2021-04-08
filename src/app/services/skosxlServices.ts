@@ -38,24 +38,22 @@ export class SkosxlServices {
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new created
      * @param mode available values: uri or bnode
      */
-    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, checkExistingAltLabel?: boolean, 
+    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, checkExistingAltLabel?: boolean, checkExistingPrefLabel?: boolean,
             mode: string = RDFTypesEnum.uri) {
         var params: any = {
             concept: concept,
             literal: literal,
             mode: mode,
+            labelCls: labelCls,
+            checkExistingAltLabel: checkExistingAltLabel,
+            checkExistingPrefLabel: checkExistingPrefLabel
         };
-        if (labelCls != null) {
-            params.labelCls = labelCls;
-        }
-        if (checkExistingAltLabel != null) {
-            params.checkExistingAltLabel = checkExistingAltLabel;
-        }
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: [
                     'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
+                    'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException',
                     'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
                 ] 
             } 
@@ -112,7 +110,10 @@ export class SkosxlServices {
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'] 
+                exceptionsToSkip: [
+                    'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException',
+                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
+                ] 
             } 
         });
         return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, options);

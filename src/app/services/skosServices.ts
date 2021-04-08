@@ -135,34 +135,26 @@ export class SkosServices {
      * @return 
      */
     createConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
-        conceptCls?: ARTURIResource, broaderProp?: ARTURIResource, customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean) {
+        conceptCls?: ARTURIResource, broaderProp?: ARTURIResource, customFormValue?: CustomFormValue, 
+        checkExistingAltLabel?: boolean, checkExistingPrefLabel?: boolean) {
         let params: any = {
             label: label,
             conceptSchemes: conceptSchemes,
+            newConcept: newConcept,
+            broaderConcept: broaderConcept,
+            conceptCls: conceptCls,
+            broaderProp: broaderProp,
+            checkExistingAltLabel: checkExistingAltLabel,
+            checkExistingPrefLabel: checkExistingPrefLabel,
+            customFormValue: customFormValue
+
         };
-        if (newConcept != null) {
-            params.newConcept = newConcept
-        }
-        if (broaderConcept != null) {
-            params.broaderConcept = broaderConcept
-        }
-        if (conceptCls != null) {
-            params.conceptCls = conceptCls;
-        }
-        if (broaderProp != null) {
-            params.broaderProp = broaderProp;
-        }
-        if (checkExistingAltLabel != null) {
-            params.checkExistingAltLabel = checkExistingAltLabel;
-        }
-        if (customFormValue != null) {
-            params.customFormValue = customFormValue;
-        }
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: [
                     'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
+                    'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException',
                     'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
                 ] 
             } 
@@ -444,19 +436,19 @@ export class SkosServices {
      * @param literal label
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new created (default true)
      */
-    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, checkExistingAltLabel?: boolean) {
+    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, checkExistingAltLabel?: boolean, checkExistingPrefLabel?: boolean,) {
         let params: any = {
             concept: concept,
-            literal: literal
+            literal: literal,
+            checkExistingAltLabel: checkExistingAltLabel,
+            checkExistingPrefLabel: checkExistingPrefLabel
         };
-        if (checkExistingAltLabel != null) {
-            params.checkExistingAltLabel = checkExistingAltLabel;
-        }
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: [
                     'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
+                    'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException',
                     'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
                 ] 
             } 
@@ -508,7 +500,10 @@ export class SkosServices {
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'] 
+                exceptionsToSkip: [
+                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
+                    'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
+                ] 
             } 
         });
         return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, options);
@@ -662,7 +657,10 @@ export class SkosServices {
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
+                exceptionsToSkip: [
+                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
+                    'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException'
+                ] 
             } 
         });
         return this.httpMgr.doPost(this.serviceName, "createCollection", params, options).pipe(

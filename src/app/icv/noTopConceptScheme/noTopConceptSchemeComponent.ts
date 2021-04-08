@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { forkJoin } from 'rxjs';
-import { ModalType } from 'src/app/widget/modal/Modals';
+import { SKOS } from "src/app/models/Vocabulary";
+import { VBActionFunctionCtx, VBActionFunctions, VBActionsEnum } from "src/app/utils/VBActions";
 import { ARTURIResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
@@ -9,7 +10,6 @@ import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { NewConceptCfModalReturnData } from "../../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
@@ -18,6 +18,8 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
     host: { class: "pageComponent" }
 })
 export class NoTopConceptSchemeComponent {
+
+    @ViewChild('blockDivIcv', { static: true }) public blockingDivElement: ElementRef;
 
     brokenSchemeList: Array<ARTURIResource>;
 
@@ -31,11 +33,11 @@ export class NoTopConceptSchemeComponent {
      */
     runIcv() {
         //TODO check when service will be refactored
-        UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.icvService.listConceptSchemesWithNoTopConcept().subscribe(
             schemes => {
                 this.brokenSchemeList = schemes;
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
             }
         );
     }
@@ -44,10 +46,10 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by selecting a top concept 
      */
     selectTopConcept(scheme: ARTURIResource) {
-        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, [scheme], true).then(
+        this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_CONCEPT" }, [scheme], true).then(
             (concept: any) => {
                 this.skosService.addTopConcept(concept, scheme).subscribe(
-                    (stResp: any) => {
+                    () => {
                         this.runIcv();
                     }
                 );
@@ -60,28 +62,12 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        this.creationModals.newConceptCf({key:"DATA.ACTIONS.CREATE_CONCEPT"}, null, null, null, true).then(
-            (data: NewConceptCfModalReturnData) => {
-                this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
-                    stResp => {
-                        this.runIcv();
-                    },
-                    (err: Error) => {
-                        if (err.name.endsWith('PrefAltLabelClashException')) {
-                            let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                            this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
-                                confirm => {
-                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
-                                        stResp => {
-                                            this.runIcv();
-                                        },
-                                    );
-                                },
-                                reject => {}
-                            )
-                        }
-                    }
-                );
+        let vbActions = new VBActionFunctions(this.skosService, null, null, null, null, null, this.basicModals, this.creationModals, this.translateService);
+        let createTopFn = vbActions.getFunction(VBActionsEnum.skosCreateTopConcept);
+        let fnCtx: VBActionFunctionCtx = { metaClass: SKOS.concept, loadingDivRef: this.blockingDivElement, schemes: [scheme] }
+        createTopFn(fnCtx).subscribe(
+            () => {
+                this.runIcv();
             },
             () => { }
         );
@@ -91,7 +77,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by deleting it 
      */
     deleteScheme(scheme: ARTURIResource) {
-        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.DELETE_SCHEME_WITHOUT_TOP_WARN_CONFIRM"}).then(
+        this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.DELETE_SCHEME_WITHOUT_TOP_WARN_CONFIRM" }).then(
             result => {
                 this.skosService.deleteConceptScheme(scheme).subscribe(
                     stResp => {
@@ -100,14 +86,14 @@ export class NoTopConceptSchemeComponent {
                 );
             },
             () => { }
-            );
+        );
     }
 
     /**
      * Fixes schemes by deleting them all 
      */
     deleteAllScheme() {
-        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.DELETE_SCHEMES_WITHOUT_TOP_WARN_CONFIRM"}).then(
+        this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.DELETE_SCHEMES_WITHOUT_TOP_WARN_CONFIRM" }).then(
             confirm => {
                 var deleteSchemeFnArray: any[] = [];
                 deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteConceptScheme(sc));

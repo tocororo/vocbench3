@@ -9,6 +9,16 @@
         "PROJECTS": {
             "MANDATORY_LANGS": "Obbligatorie",
             "MANDATORY_LANGS_INFO": " Le lingue obbligatorie dovrebbero essere utilizzate largamente nel dataset. Alcune funzionalità del sistema (es. ICV) supportano la verifica di tale vincolo",
+            "PREF_LABEL_CLASH": {
+                "PREF_LABEL_CLASH_MODE": "Gestione PrefLabel duplicate",
+                "PREF_LABEL_CLASH_MODE_INFO": "Determina il modo in cui il sistema deve gestire l'unicità delle preferred label all'interno di un concept scheme",
+                "ALLOW": "Permetti",
+                "ALLOW_INFO": "Permette sempre la creazione di concetti con la stessa prefLabel senza avvisare l'utente",
+                "FORBID": "Vieta",
+                "FORBID_INFO": "Vieta sempre la presenza di più concetti con la stessa prefLabel nello stesso schema",
+                "WARNING": "Permetti con avviso",
+                "WARNING_INFO": "Avvisa l'utente che vi è già un altro concetto con la stessa prefLabel, l'utente può scegliere di forzare cancellare l'operazione"
+            },
             "PROJ_GROUP": {
                 "PROJ_GROUP_SETTINGS": "Impostazioni progetto-gruppo",
                 "PROJ_CLOSED_WARNING": "Il progetto {{projName}} è chiuso. E' possibile modificare le impostazioni di un gruppo solo per progetti aperti.",

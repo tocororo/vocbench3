@@ -10,9 +10,9 @@
             </div>
             <div class="card-body">
                 <div *ngFor="let mode of stringMatchModes; let i=index" class="form-check mt-2">
-                    <input class="form-check-input" [id]="'modeCheck'+1" type="radio" name="searchMode" [value]="mode.value" [(ngModel)]="activeStringMatchMode" 
+                    <input class="form-check-input" [id]="'modeCheck'+i" type="radio" name="searchMode" [value]="mode.value" [(ngModel)]="activeStringMatchMode" 
                     (ngModelChange)="updateSettings()">
-                    <label class="form-check-label" [for]="'modeCheck'+1">{{mode.labelTranslationKey|translate}}</label>
+                    <label class="form-check-label" [for]="'modeCheck'+i">{{mode.labelTranslationKey|translate}}</label>
                 </div>
             </div>
         </div>

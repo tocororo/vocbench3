@@ -23,8 +23,8 @@
                         </td>
                         <td style="white-space: nowrap">
                             <button class="btn btn-xs btn-light" (click)="selectTopConcept(scheme)">{{'ICV.STRUCTURAL.OMITTED_TOP_CONCEPT.SELECT_TOP_CONCEPT'|translate}}</button>
-                            <button class="btn btn-xs btn-light" (click)="createTopConcept(scheme)">{{'ICV.STRUCTURAL.OMITTED_TOP_CONCEPT.CREATE_TOP_CONCEPT'|translate}}</button>
-                            <button class="btn btn-xs btn-light" (click)="deleteScheme(scheme)">{{'DATA.ACTIONS.DELETE_SCHEME'|translate}}</button>
+                            <button class="btn btn-xs btn-light ml-1" (click)="createTopConcept(scheme)">{{'ICV.STRUCTURAL.OMITTED_TOP_CONCEPT.CREATE_TOP_CONCEPT'|translate}}</button>
+                            <button class="btn btn-xs btn-light ml-1" (click)="deleteScheme(scheme)">{{'DATA.ACTIONS.DELETE_SCHEME'|translate}}</button>
                         </td>
                     </tr>
                 </tbody>
@@ -40,7 +40,7 @@
         </div>
     </div>
     
-    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+    <div #blockDivIcv class="blockingDiv" style="display:none">
         <div class="loadingDiv">
             <div>
                 <p>Loading...</p><img src="./assets/images/loading.gif" />

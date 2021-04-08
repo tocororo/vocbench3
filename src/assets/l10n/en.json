@@ -9,6 +9,16 @@
         "PROJECTS": {
             "MANDATORY_LANGS": "Mandatory",
             "MANDATORY_LANGS_INFO": "Mandatory languages are expected to be covered extensively in the dataset. Some features of the platform (e.g. ICV) support verification of this constraint",
+            "PREF_LABEL_CLASH": {
+                "PREF_LABEL_CLASH_MODE": "PrefLabel clash mode",
+                "PREF_LABEL_CLASH_MODE_INFO": "Determines how the system should handle the unicity of preferred labels within concept schemes",
+                "ALLOW": "Allow",
+                "ALLOW_INFO": "The user is not prompted and the duplicated prefLabel is allowed",
+                "FORBID": "Forbid",
+                "FORBID_INFO": "Always forbids multiple concepts to have the same preferred label in the same scheme",
+                "WARNING": "Allow with warning",
+                "WARNING_INFO": "The user is warned that there's already another concept with a same prefLabel, the user can choose to force the new entry or cancel the operation"
+            },
             "PROJ_GROUP": {
                 "PROJ_GROUP_SETTINGS": "Project-Group settings",
                 "PROJ_CLOSED_WARNING": "Project {{projName}} is closed. It is possible to edit group settings only for open projects.",

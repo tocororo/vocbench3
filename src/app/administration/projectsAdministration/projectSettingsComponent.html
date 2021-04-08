@@ -1,7 +1,7 @@
-<div class="hbox">
+<div class="vbox">
     <div class="card card-alt vbox">
         <div class="card-header">
-            <label style="flex: 1;">{{'COMMONS.LANGUAGE.LANGUAGES'|translate}}:</label>
+            <label style="flex: 1;">{{'COMMONS.LANGUAGE.LANGUAGES'|translate}}</label>
             <span *ngIf="noLangActive" class="grayText" style="margin-right: 5px;">
                 <span class="fas fa-exclamation-triangle"></span> {{'COMMONS.LANGUAGE.NO_LANG_INFO'|translate}}
             </span>
@@ -50,6 +50,25 @@
                     </tr>
                 </tbody>
             </table>
+
+        </div>
+    </div>
+
+    <div *ngIf="isSkos" class="card card-alt mt-2">
+        <div class="card-header">
+            <label>
+                {{'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE'|translate}}
+                <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE_INFO'|translate"></span>
+            </label>
+        </div>
+        <div class="card-body">
+            <div *ngFor="let opt of labelClashOpts; let i=index" class="form-check mt-2">
+                <input class="form-check-input" [id]="'labelClashRadio'+i" type="radio" name="labelClashRadio" [value]="opt.mode" [checked]="opt == labelClashOptSelected" (click)="setLabelClashSetting(opt)">
+                <label class="form-check-label" [for]="'labelClashRadio'+i">
+                    {{opt.modeTranslationKey|translate}}
+                    <i class="text-secondary font-weight-normal ml-2">{{opt.infoTranslationKey|translate}}</i>
+                </label>
+            </div>
         </div>
     </div>
 </div>

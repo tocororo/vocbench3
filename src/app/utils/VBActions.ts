@@ -2,6 +2,7 @@ import { ElementRef } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { Observable, Observer } from "rxjs";
 import { ARTURIResource } from "../models/ARTResources";
+import { PrefLabelClashMode } from "../models/Properties";
 import { OntoLex, OWL, RDFS, SKOS, Vartrans } from "../models/Vocabulary";
 import { ClassesServices } from "../services/classesServices";
 import { DatatypesServices } from "../services/datatypesServices";
@@ -18,6 +19,7 @@ import { NewConceptCfModalReturnData } from '../widget/modal/creationModal/newRe
 import { ModalType } from '../widget/modal/Modals';
 import { HttpServiceContext } from "./HttpManager";
 import { UIUtils } from "./UIUtils";
+import { VBContext } from "./VBContext";
 
 /**
  * The following represents a list of action available in ST-VB.
@@ -306,7 +308,7 @@ export class VBActionFunctions {
             [ VBActionsEnum.propertiesCreateSubProperty, this.propertiesCreateSubProperty ],
             [ VBActionsEnum.propertiesDeleteProperty, this.propertiesDeleteProperty ],
             //skosCollection
-            [ VBActionsEnum.skosCreateCollection, this.skosCreateCollection ],
+            [ VBActionsEnum.skosCreateCollection, this.skosCreateTopCollection ],
             [ VBActionsEnum.skosCreateSubCollection, this.skosCreateSubCollection ],
             [ VBActionsEnum.skosDeleteCollection, this.skosDeleteCollection ],
             //translationSet
@@ -380,12 +382,28 @@ export class VBActionFunctions {
      */
 
     private skosCreateTopConcept = (ctx: VBActionFunctionCtx) => {
+        return this.createConcept(ctx, true);
+    }
+
+    private skosCreateNarrowerConcept = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
+        return this.createConcept(ctx, false, parent);
+    }
+
+    private createConcept(ctx: VBActionFunctionCtx, top: boolean, parent?: ARTURIResource) {
+        let clashLabelMode: PrefLabelClashMode = VBContext.getWorkingProjectCtx().getProjectSettings().prefLabelClashMode;
+        let checkExistingPrefLabel: boolean = clashLabelMode != PrefLabelClashMode.allow; //if not "allow" (forbid or warning) enable the check
+
+        let creationModalTitleKey: string = top ? "DATA.ACTIONS.CREATE_CONCEPT" : "DATA.ACTIONS.CREATE_NARROWER_CONCEPT";
+
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newConceptCf({key:"DATA.ACTIONS.CREATE_CONCEPT"}, null, ctx.schemes, ctx.metaClass, true).then(
+            this.creationModals.newConceptCf({key:creationModalTitleKey}, parent, ctx.schemes, ctx.metaClass, true).then(
                 (data: NewConceptCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
-                        stResp => { 
+
+                    let broaderProp: ARTURIResource = top ? null : data.broaderProp;
+
+                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue, null, checkExistingPrefLabel).subscribe(
+                        () => { 
                             UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                             observer.next(null);
                         },
@@ -395,8 +413,8 @@ export class VBActionFunctions {
                                 this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                                        this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
-                                            stResp => {
+                                        this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue, false).subscribe(
+                                            () => {
                                                 UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                                                 observer.next(null);
                                             }
@@ -406,14 +424,36 @@ export class VBActionFunctions {
                                         observer.error(null);
                                     }
                                 );
+                            } else if (err.name.endsWith('PrefPrefLabelClashException')) {
+                                let msg = err.message;
+                                if (clashLabelMode == PrefLabelClashMode.warning) { //mode warning => ask user if he wants to force the operation
+                                    msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                                        confirm => {
+                                            UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
+                                            this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue, null, false).subscribe(
+                                                () => {
+                                                    UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
+                                                    observer.next(null);
+                                                }
+                                            );
+                                        },
+                                        reject => {
+                                            observer.error(null);
+                                        }
+                                    );
+                                } else { //mode forbid => just show the error message
+                                    this.basicModals.alert({key:"STATUS.WARNING"}, msg, ModalType.warning)
+                                    observer.error(null);
+                                }
                             } else if (err.name.endsWith('BlacklistForbiddendException')) {
                                 let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
                                 this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         HttpServiceContext.setContextForce(true);
-                                        this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
-                                            stResp => {
+                                        this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue).subscribe(
+                                            () => {
                                                 UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                                                 HttpServiceContext.setContextForce(false);
                                                 observer.next(null);
@@ -431,40 +471,6 @@ export class VBActionFunctions {
                 () => {
                     observer.error(null);
                 }
-            );
-        });
-    }
-
-    private skosCreateNarrowerConcept = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
-        return new Observable((observer: Observer<void>) => {
-            this.creationModals.newConceptCf({key:"DATA.ACTIONS.CREATE_NARROWER_CONCEPT"}, parent, null, ctx.metaClass, true).then(
-                (data: NewConceptCfModalReturnData) => {
-                    UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, data.broaderProp, data.cfValue).subscribe(
-                        stResp => {
-                            UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
-                            observer.next(null);
-                        },
-                        (err: Error) => {
-                            if (err.name.endsWith('PrefAltLabelClashException')) {
-                                let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
-                                    confirm => {
-                                        UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                                        this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, data.broaderProp, data.cfValue, false).subscribe(
-                                            stResp => {
-                                                UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
-                                                observer.next(null);
-                                            }
-                                        );
-                                    },
-                                    reject => { observer.error(null); }
-                                )
-                            }
-                        }
-                    );
-                },
-                cancel => { observer.error(null); }
             );
         });
     }
@@ -732,13 +738,22 @@ export class VBActionFunctions {
     /**
      * SkosCollection
      */
-    private skosCreateCollection = (ctx: VBActionFunctionCtx) => {
+    private skosCreateTopCollection = (ctx: VBActionFunctionCtx) => {
+        return this.skosCreateCollection(ctx);
+    }
+
+    private skosCreateSubCollection = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
+        return this.skosCreateCollection(ctx, parent);
+    }
+
+    private skosCreateCollection(ctx: VBActionFunctionCtx, parent?: ARTURIResource) {
+        let creationModalTitleKey: string = parent == null ? "DATA.ACTIONS.CREATE_COLLECTION" : "DATA.ACTIONS.CREATE_NESTED_COLLECTION";
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf({key:"DATA.ACTIONS.CREATE_COLLECTION"}, ctx.metaClass, true).then(
+            this.creationModals.newResourceWithLiteralCf({key: creationModalTitleKey}, ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                    this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, null, data.cls, data.cfValue).subscribe(
-                        stResp => {
+                    this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue).subscribe(
+                        () => {
                             UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement),
                             observer.next(null);
                         },
@@ -747,7 +762,7 @@ export class VBActionFunctions {
                                 let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
                                 this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                                     confirm => {
-                                        this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
+                                        this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue, false).subscribe(
                                             stResp => {
                                                 UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement),
                                                 observer.next(null);
@@ -756,42 +771,12 @@ export class VBActionFunctions {
                                     },
                                     cancel => { observer.error(null); }
                                 );
+                            } else if (err.name.endsWith("PrefPrefLabelClashException")) {
+                                this.basicModals.alert({key:"STATUS.WARNING"}, err.message, ModalType.warning);
+                                observer.error(null);
                             }
                         }
                     );
-                },
-                cancel => { observer.error(null); }
-            );
-        });
-    }
-
-    private skosCreateSubCollection = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
-        return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf({key:"DATA.ACTIONS.CREATE_NESTED_COLLECTION"}, ctx.metaClass, true).then(
-                (data: NewResourceWithLiteralCfModalReturnData) => {
-                    UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                        this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue).subscribe(
-                            stResp => {
-                                UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement),
-                                observer.next(null);
-                            },
-                            (err: Error) => {
-                                if (err.name.endsWith('PrefAltLabelClashException')) {
-                                    let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
-                                        confirm => {
-                                            this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue, false).subscribe(
-                                                stResp => {
-                                                    UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement),
-                                                    observer.next(null);
-                                                }
-                                            );
-                                        },
-                                        cancel => { observer.error(null); }
-                                    );
-                                }
-                            }
-                        );
                 },
                 cancel => { observer.error(null); }
             );
