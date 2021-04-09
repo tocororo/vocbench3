@@ -112,7 +112,6 @@ export class SkosxlServices {
                 show: true, 
                 exceptionsToSkip: [
                     'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException',
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
                 ] 
             } 
         });

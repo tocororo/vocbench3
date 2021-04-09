@@ -501,7 +501,6 @@ export class SkosServices {
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: [
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
                     'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
                 ] 
             } 
