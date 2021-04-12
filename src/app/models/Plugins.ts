@@ -21,8 +21,8 @@ export class Settings {
     }
 
     public clone(): Settings {
-        var properties: STProperties[] = [];
-        for (var i = 0; i < this.properties.length; i++) {
+        let properties: STProperties[] = [];
+        for (let i = 0; i < this.properties.length; i++) {
             let p: STProperties = this.properties[i];
             properties.push(p.clone());
         }
@@ -75,7 +75,7 @@ export class Settings {
         if (includeType) {
             map["@type"] = this.type;
         }
-        for (var i = 0; i < this.properties.length; i++) {
+        for (let i = 0; i < this.properties.length; i++) {
             let value = this.properties[i].value;
 
             if (value != null && typeof value === "string" && value == "") { //if user write then delete a value, the value is "", in this case "clear" the value
@@ -84,7 +84,7 @@ export class Settings {
                 value = value.toNT();
             } else if (value instanceof Array) {
                 let serializedValues: any[] = [];
-                for (var j = 0; j < value.length; j++) {
+                for (let j = 0; j < value.length; j++) {
                     let v: any = value[j];
                     if (v instanceof ARTNode) {
                         serializedValues.push(v.toNT())
@@ -102,9 +102,11 @@ export class Settings {
             } else if (value instanceof Settings) {
                 value = value.getPropertiesAsMap();
             } else if (typeof value == "object") { //object => probably a map (associative array object)
-                //don't do nothing
+                //don't do nothing except for empty map (clear the value)
+                if (Object.keys(value).length === 0) {
+                    value = undefined;
+                }
             }
-
             map[this.properties[i].name] = value;
         }
         return map;
@@ -276,7 +278,7 @@ export class SettingsPropType {
         let constraintsJson = jsonObject.constraints;
         if (constraintsJson) {
             constraints = [];
-            for (var i = 0; i < constraintsJson.length; i++) {
+            for (let i = 0; i < constraintsJson.length; i++) {
                 constraints.push({ type: constraintsJson[i]["@type"], value: constraintsJson[i].value });
             }
         }
@@ -285,7 +287,7 @@ export class SettingsPropType {
         let typeArgumentsJson = jsonObject.typeArguments;
         if (typeArgumentsJson) {
             typeArguments = [];
-            for (var i = 0; i < typeArgumentsJson.length; i++) {
+            for (let i = 0; i < typeArgumentsJson.length; i++) {
                 typeArguments.push(SettingsPropType.parse(typeArgumentsJson[i]));
             }
         }
@@ -302,14 +304,14 @@ export class SettingsPropType {
         let constraints: SettingsPropTypeConstraint[];
         if (this.constraints) {
             constraints = [];
-            for (var i = 0; i < this.constraints.length; i++) {
+            for (let i = 0; i < this.constraints.length; i++) {
                 constraints.push({ type: this.constraints[i].type, value: this.constraints[i].value });
             }
         }
         let typeArguments: SettingsPropType[];
         if (this.typeArguments) {
             typeArguments = [];
-            for (var i = 0; i < this.typeArguments.length; i++) {
+            for (let i = 0; i < this.typeArguments.length; i++) {
                 typeArguments.push(this.typeArguments[i].clone());
             }
         }
@@ -401,11 +403,25 @@ export class NonConfigurableExtensionFactory extends ExtensionFactory {
 }
 
 export class ExtensionPoint {
-    scope: Scope;
-    interface: string;
     id: string;
+    interface: string;
+    scope: Scope;
     settingsScopes?: Scope[];
     configurationScopes?: Scope[];
+
+    getShortId(): string {
+        return this.id.substring(this.id.lastIndexOf(".")+1);
+    }
+
+    static parse(json: any): ExtensionPoint {
+        let ep: ExtensionPoint = new ExtensionPoint();
+        ep.id = json.id;
+        ep.interface = json.interface;
+        ep.scope = json.scope;
+        ep.settingsScopes = json.settingsScopes;
+        ep.configurationScopes = json.configurationScopes;
+        return ep;
+    }
 }
 
 export enum Scope {

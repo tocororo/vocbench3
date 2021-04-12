@@ -8,50 +8,7 @@
         <!-- Why index and track by? https://stackoverflow.com/q/40314732/5805661 -->
         <tr *ngFor="let v of value; let index = index; let last = last; trackBy: trackByIndex">
             <td style="padding: 2px 0px;">
-                <div [ngSwitch]="types[0].name">
-                    <resource-picker *ngSwitchCase="'IRI'" [resource]="value[index]" [config]="{ roles: getIRIRoleConstraints() }" [editable]="true"
-                        (resourceChanged)="updateValue(index, $event)" [disabled]="disabled">
-                    </resource-picker>
-
-                    <resource-picker *ngSwitchCase="'Resource'" [resource]="value[index]" [config]="{ roles: getIRIRoleConstraints() }" [editable]="true"
-                        (resourceChanged)="updateValue(index, $event)" [disabled]="disabled">
-                    </resource-picker>
-
-                    <value-picker *ngSwitchCase="'RDFValue'" [value]="value[index]" [editable]="true" (valueChanged)="updateValue(index, $event)"
-                        [disabled]="disabled">
-                    </value-picker>
-
-                    <ng-container *ngSwitchCase="'Literal'">
-                        <ng-container *ngIf="isLanguageTaggedString() else notLanguageTaggedString">
-                            <lang-string-editor [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled"></lang-string-editor>
-                        </ng-container>
-                        <ng-template #notLanguageTaggedString>
-                            <literal-picker [literal]="value[index]" (literalChanged)="updateValue(index, $event)" [disabled]="disabled">
-                            </literal-picker>
-                        </ng-template>
-                    </ng-container>
-
-                    <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="value[index]" [schema]="types[0].schema" (ngModelChange)="updatePropertiesValue(index, $event)" [disabled]="disabled"></nested-settings-renderer>
-
-                    <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control form-control-sm" style="resize: vertical"
-                        [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                    </textarea>
-
-                    <input *ngSwitchCase="'int'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                    <input *ngSwitchCase="'integer'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                    <input *ngSwitchCase="'long'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                    <input *ngSwitchCase="'float'" type="number" class="form-control form-control-sm" step="0.01" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                    <input *ngSwitchCase="'double'" type="number" class="form-control form-control-sm" step="0.01" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-
-                    <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
-                        <textarea *ngSwitchDefault type="text" rows="1" class="form-control form-control-sm" 
-                            style="resize: vertical;" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                        </textarea>
-                        <span class="fas fa-exclamation-triangle" style="position: absolute; top: 8px; right: 8px;"
-                            [title]="'This parameter has an unknown type (' + types[0].name + '). The entered value will be interpreted as a low-level JSON value.'">
-                        </span>
-                    </div>
-                </div>
+                <setting-value [value]="value[index]" [type]="types[0]" [disabled]="disabled" (valueChanged)="onValueChange(index, $event)"></setting-value>
             </td>
             <td style="padding: 0px;">
                 <button *ngIf="value.length > 1 || collapsable" class="btn btn-sm btn-light" (click)="delete(index)" style="margin-left: 3px;" [disabled]="disabled">

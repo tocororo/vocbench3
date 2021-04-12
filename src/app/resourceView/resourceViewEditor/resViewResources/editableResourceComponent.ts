@@ -579,7 +579,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                                 this.update.emit();
                             },
                             (err: Error) => {
-                                if (err.name.endsWith("AlreadyExistingLiteralFormForResourceException")) {
+                                if (err.name.endsWith("PrefPrefLabelClashException")) {
                                     let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
                                     this.basicModals.confirm({key:"STATUS.OPERATION_DENIED"}, msg, ModalType.warning).then(
                                         confirm => {

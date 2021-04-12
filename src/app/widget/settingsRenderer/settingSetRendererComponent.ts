@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ARTNode, RDFResourceRolesEnum } from '../../models/ARTResources';
-import { Settings, SettingsProp, SettingsPropType, SettingsPropTypeConstraint } from '../../models/Plugins';
+import { SettingsPropType } from '../../models/Plugins';
 
 @Component({
     selector: 'setting-set',
@@ -26,73 +25,18 @@ export class SettingSetRendererComponent {
         }
     }
 
-    private add() {
+    add() {
         this.value.push(null);
         this.onModelChange();
     }
 
-    private delete(index: number) {
+    delete(index: number) {
         this.value.splice(index, 1);        
         this.onModelChange();
     }
 
-    private isLanguageTaggedString(): boolean {
-        /**
-         * use a cache mechanism to avoid to recreate a languageTaggedString field each time isLanguageTaggedString is called
-         */
-        if (this.types[0]['languageTaggedString'] != null) { //cached?
-            return this.types[0]['languageTaggedString'];
-        }
-        let constr: SettingsPropTypeConstraint[] = this.types[0].constraints;
-        let isLanguageTaggedString: boolean = false;
-        if (constr != null) {
-            for (var i = 0; i < constr.length; i++) {
-                if (constr[i].type.endsWith("LanguageTaggedString")) {
-                    isLanguageTaggedString = true;
-                    break;
-                }
-            }
-        }
-        this.types[0]['languageTaggedString'] = isLanguageTaggedString;
-        return isLanguageTaggedString;
-    }
-
-    private getIRIRoleConstraints(): RDFResourceRolesEnum[] {
-        /**
-         * use a cache mechanism to avoid to recreate a roles array each time getIRIRoleConstraints is called
-         * (so prevent firing change detection in resource-picker)
-         */
-        if (this.types[0]['roles'] != null) { //cached?
-            return this.types[0]['roles'];
-        }
-        let roles: RDFResourceRolesEnum[] = [];
-        let constr: SettingsPropTypeConstraint[] = this.types[0].constraints;
-        if (constr != null) {
-            for (var i = 0; i < constr.length; i++) {
-                if (constr[i].type.endsWith("HasRole")) {
-                    roles.push(<RDFResourceRolesEnum>constr[i].value);
-                }
-            }
-        }
-        this.types[0]['roles'] = roles; //cache it
-        return roles;
-    }
-
-    private updateValue(index: number, value: ARTNode) {
-        if (value == null) {
-            this.value[index] = null;
-        } else {
-            this.value[index] = value.toNT();
-        }
-        this.onModelChange();
-    }
-
-    private updatePropertiesValue(index: number, value: Settings) {
-        if (value == null) {
-            this.value[index] = null;
-        } else {
-            this.value[index] =  value;
-        }
+    onValueChange(index: number, value: any) {
+        this.value[index] = value;
         this.onModelChange();
     }
 
@@ -103,7 +47,6 @@ export class SettingSetRendererComponent {
     private onModelChange() {
         this.valueChanged.emit(this.value);
     }
-
 
     /**
      * To prevent the view is re-created at every change and the focus on the input field get lost

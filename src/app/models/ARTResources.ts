@@ -144,6 +144,7 @@ export class ARTURIResource extends ARTResource {
 
     constructor(uri: string, show?: string, role?: RDFResourceRolesEnum) {
         super(show, role);
+        uri = uri.trim();
         if (uri.startsWith("<") && uri.endsWith(">")) {
             uri = uri.substring(1, uri.length-1);
         }

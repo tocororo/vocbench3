@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ConfigurableExtensionFactory, ExtensionFactory, NonConfigurableExtensionFactory, Scope, Settings } from '../models/Plugins';
+import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPoint, NonConfigurableExtensionFactory, Scope, Settings } from '../models/Plugins';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -11,12 +11,20 @@ export class ExtensionsServices {
 
     constructor(private httpMgr: HttpManager) { }
 
-    getExtensionPoints(scopes?: Scope) {
+    getExtensionPoints(scopes?: Scope): Observable<ExtensionPoint[]> {
         var params: any = {};
         if (scopes != null) {
             params.scopes = scopes;
         }
-        return this.httpMgr.doGet(this.serviceName, "getExtensionPoints", params)
+        return this.httpMgr.doGet(this.serviceName, "getExtensionPoints", params).pipe(
+            map(stResp => {
+                let extPts: ExtensionPoint[] = [];
+                for (let epJson of stResp) {
+                    extPts.push(ExtensionPoint.parse(epJson));
+                }
+                return extPts;
+            })
+        )
     }
 
     getExtensionPoint(identifier: string) {

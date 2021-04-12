@@ -183,7 +183,7 @@ export class RefactorServices {
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.AlreadyExistingLiteralFormForResourceException'] 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException'] 
             } 
         });
         return this.httpMgr.doPost(this.serviceName, "moveXLabelToResource", params, options);

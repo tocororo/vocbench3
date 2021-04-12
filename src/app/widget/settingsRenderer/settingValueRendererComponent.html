@@ -1,0 +1,44 @@
+<div [ngSwitch]="type.name">
+    <resource-picker *ngSwitchCase="'IRI'" [resource]="value" [config]="{ roles: getIRIRoleConstraints() }" [editable]="true"
+        (resourceChanged)="updateValue($event)" [disabled]="disabled">
+    </resource-picker>
+
+    <resource-picker *ngSwitchCase="'Resource'" [resource]="value" [config]="{ roles: getIRIRoleConstraints() }" [editable]="true"
+        (resourceChanged)="updateValue($event)" [disabled]="disabled">
+    </resource-picker>
+
+    <value-picker *ngSwitchCase="'RDFValue'" [value]="value" [editable]="true" (valueChanged)="updateValue($event)"
+        [disabled]="disabled">
+    </value-picker>
+
+    <ng-container *ngSwitchCase="'Literal'">
+        <ng-container *ngIf="isLanguageTaggedString() else notLanguageTaggedString">
+            <lang-string-editor [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled"></lang-string-editor>
+        </ng-container>
+        <ng-template #notLanguageTaggedString>
+            <literal-picker [literal]="value" (literalChanged)="updateValue($event)" [disabled]="disabled">
+            </literal-picker>
+        </ng-template>
+    </ng-container>
+
+    <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="value" [schema]="type.schema" (ngModelChange)="updatePropertiesValue($event)" [disabled]="disabled"></nested-settings-renderer>
+
+    <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control form-control-sm" style="resize: vertical"
+        [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">
+    </textarea>
+
+    <input *ngSwitchCase="'int'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">
+    <input *ngSwitchCase="'integer'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">
+    <input *ngSwitchCase="'long'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">
+    <input *ngSwitchCase="'float'" type="number" class="form-control form-control-sm" step="0.01" [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">
+    <input *ngSwitchCase="'double'" type="number" class="form-control form-control-sm" step="0.01" [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">
+
+    <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
+        <textarea *ngSwitchDefault type="text" rows="1" class="form-control form-control-sm" 
+            style="resize: vertical;" [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">
+        </textarea>
+        <span class="fas fa-exclamation-triangle" style="position: absolute; top: 8px; right: 8px;"
+            [title]="'This parameter has an unknown type (' + type.name + '). The entered value will be interpreted as a low-level JSON value.'">
+        </span>
+    </div>
+</div>

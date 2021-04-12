@@ -31,6 +31,7 @@ import { ResourceListComponent } from '../widget/rdfResource/resourceListCompone
 import { NestedSettingSetRendererComponent } from '../widget/settingsRenderer/nestedSettingsRendererComponent';
 import { SettingMapRendererComponent } from '../widget/settingsRenderer/settingMapRendererComponent';
 import { SettingPropRendererComponent } from '../widget/settingsRenderer/settingPropRendererComponent';
+import { SettingValueRendererComponent } from '../widget/settingsRenderer/settingValueRendererComponent';
 import { SettingSetRendererComponent } from '../widget/settingsRenderer/settingSetRendererComponent';
 import { SettingsRendererComponent } from '../widget/settingsRenderer/settingsRendererComponent';
 import { SettingsRendererPanelComponent } from '../widget/settingsRenderer/settingsRendererPanelComponent';
@@ -70,6 +71,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         SanitizerDirective,
         SettingMapRendererComponent,
         SettingPropRendererComponent,
+        SettingValueRendererComponent,
         SettingSetRendererComponent,
         SettingsRendererComponent,
         NestedSettingSetRendererComponent,
@@ -103,6 +105,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         SanitizerDirective,
         SettingMapRendererComponent,
         SettingPropRendererComponent,
+        SettingValueRendererComponent,
         SettingSetRendererComponent,
         SettingsRendererComponent,
         SettingsRendererPanelComponent,
