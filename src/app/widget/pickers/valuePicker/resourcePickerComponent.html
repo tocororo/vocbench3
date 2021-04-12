@@ -2,16 +2,16 @@
     <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()" placeholder="http://example.org" [readonly]="!editable" [disabled]="disabled">
     <div class="input-group-append" ngbDropdown>
         <!-- Allowed only local -->
-        <button *ngIf="config.allowLocal && !config.allowRemote" class="btn btn-light" (click)="pickLocalResource()" [title]="'ACTIONS.SELECT_EXISTING_RESOURCE'|translate" [disabled]="disabled">
+        <button *ngIf="config.allowLocal && !config.allowRemote" class="btn btn-light" (click)="pickLocalResource()" [title]="'ACTIONS.SELECT_EXISTING_RESOURCE'|translate" [disabled]="disabled || !projectAccessed">
             <span class="fas fa-pencil-alt"></span>
         </button>
         <!-- Allowed only remote -->
-        <button *ngIf="!config.allowLocal && config.allowRemote" class="btn btn-light" (click)="pickExternalResource()" [title]="'ACTIONS.SELECT_EXTERNAL_RESOURCE'|translate" [disabled]="disabled">
+        <button *ngIf="!config.allowLocal && config.allowRemote" class="btn btn-light" (click)="pickExternalResource()" [title]="'ACTIONS.SELECT_EXTERNAL_RESOURCE'|translate" [disabled]="disabled || !projectAccessed">
             <span class=" fas fa-share"></span>
         </button>
         <!-- Allowed both local and remote -->
         <ng-container *ngIf="config.allowLocal && config.allowRemote">
-            <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+            <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle  [disabled]="disabled || !projectAccessed">
                 <span class="fas fa-pencil-alt"></span>
             </button>
             <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>

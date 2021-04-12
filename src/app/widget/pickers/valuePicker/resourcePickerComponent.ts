@@ -28,6 +28,8 @@ export class ResourcePickerComponent {
     inputGroupClass: string = "input-group";
     resourceIRI: string;
 
+    projectAccessed: boolean; //useful in order to disable picker (and just fill manually the field) from outside project
+
     constructor(private projectService: ProjectServices, private vbProp: VBProperties,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
 
@@ -56,6 +58,7 @@ export class ResourcePickerComponent {
     }
 
     private init() {
+        this.projectAccessed = VBContext.getWorkingProject() != null;
         if (this.resource) {
             if (typeof this.resource == 'string') {
                 this.resource = new ARTURIResource(this.resource);
