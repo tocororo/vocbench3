@@ -46,7 +46,7 @@ export class LanguageTermComponent {
 
     ngOnChanges() {
         let tripleInStaging = (this.term.object != null) ? ResourceUtils.isTripleInStaging(this.term.object) : false;
-        let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
+        let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().some(l => l.toLocaleLowerCase() == this.lang.toLocaleLowerCase());
         this.editTermAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateLexicalization, this.resource) && langAuthorized && !tripleInStaging;
         this.deleteTermAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveLexicalization, this.resource) && langAuthorized && !tripleInStaging;
     }

@@ -1,14 +1,11 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTLiteral, ARTResource } from "src/app/models/ARTResources";
 import { ConceptReference, LexicalResourceUtils, Sense } from "src/app/models/LexicographerView";
-import { Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
 import { VBContext } from "src/app/utils/VBContext";
 import { LexViewCache } from "../LexViewChache";
-import { LexViewModalService } from "../lexViewModalService";
-import { LexicoRelationModalReturnData } from "../lexicalRelation/lexicalRelationModal";
 
 @Component({
     selector: "concept-ref",
@@ -33,10 +30,10 @@ export class ConceptReferenceComponent {
 
     deleteConceptAuthorized: boolean;
 
-    constructor(private ontolexService: OntoLexLemonServices, private lexViewModals: LexViewModalService) {}
+    constructor(private ontolexService: OntoLexLemonServices) {}
 
     ngOnInit() {
-        let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
+        let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().find(l => l.toLocaleLowerCase() == this.lang.toLocaleLowerCase());
 
         if (LexicalResourceUtils.isInStagingRemove(this.concept)) {
             this.readonly = true;

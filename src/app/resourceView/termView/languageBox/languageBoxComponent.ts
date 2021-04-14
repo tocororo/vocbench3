@@ -61,7 +61,7 @@ export class LanguageBoxComponent {
         this.initializeTerms();
 
         if (changes['resource']) {
-            let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
+            let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().some(l => l.toLocaleLowerCase() == this.lang.toLocaleLowerCase());
             /* 
             all the actions are authorized if:
             - user has authorization on the action itself

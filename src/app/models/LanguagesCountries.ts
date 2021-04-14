@@ -60,8 +60,8 @@ export class Languages {
     }
 
     static containsLanguage(languages: Language[], lang: Language): boolean {
-        for (var i = 0; i < languages.length; i++) {
-            if (languages[i].tag == lang.tag) {
+        for (let i = 0; i < languages.length; i++) {
+            if (languages[i].tag.toLocaleLowerCase() == lang.tag.toLocaleLowerCase()) {
                 return true;
             }
         }
@@ -81,7 +81,7 @@ export class Languages {
             localePrefix = lang.substring(0, lang.indexOf("-"));
         }
         languages.forEach(l => {
-            if (l.tag.startsWith(localePrefix) && l.tag != lang) {
+            if (l.tag.toLocaleLowerCase().startsWith(localePrefix.toLocaleLowerCase()) && l.tag.toLocaleLowerCase() != lang.toLocaleLowerCase()) {
                 locales.push(l);
             }
         });
@@ -89,8 +89,8 @@ export class Languages {
     }
 
     static indexOf(languages: Language[], lang: Language): number {
-        for (var i = 0; i < languages.length; i++) {
-            if (languages[i].tag == lang.tag) {
+        for (let i = 0; i < languages.length; i++) {
+            if (languages[i].tag.toLocaleLowerCase() == lang.tag.toLocaleLowerCase()) {
                 return i;
             }
         }
@@ -99,7 +99,7 @@ export class Languages {
 
     static fromTagsToLanguages(tags: string[]): Language[] {
         let languages: Language[] = [];
-        for (var i = 0; i < tags.length; i++) {
+        for (let i = 0; i < tags.length; i++) {
             let lang: Language = Languages.getLanguageFromTag(tags[i]);
             if (lang != null) {
                 languages.push(lang)
@@ -110,14 +110,14 @@ export class Languages {
 
     static fromLanguagesToTags(languages: Language[]) {
         let tags: string[] = [];
-        for (var i = 0; i < languages.length; i++) {
+        for (let i = 0; i < languages.length; i++) {
             tags.push(languages[i].tag);
         }
         return tags;
     }
 
     static getLanguageFromTag(tag: string): Language {
-        let l: Language = Languages.systemLanguages.find(l => l.tag == tag);
+        let l: Language = Languages.systemLanguages.find(l => l.tag.toLocaleLowerCase() == tag.toLocaleLowerCase());
         if (l == null) { //no language with the give tag found among the available
             l = { name: tag, tag: tag };
         }

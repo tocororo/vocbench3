@@ -43,7 +43,7 @@ export class LanguageDefinitionComponent {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['def'] || changes['resource'] || changes['lang']) {
             let tripleInStaging = (this.def != null) ? ResourceUtils.isTripleInStaging(this.def) : false;
-            let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
+            let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().some(l => l.toLocaleLowerCase() == this.lang.toLocaleLowerCase());
             this.addDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddNote, this.resource) && langAuthorized && !tripleInStaging;
             this.editDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosUpdateNote, this.resource) && langAuthorized && !tripleInStaging;
             this.deleteDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveNote, this.resource) && langAuthorized && !tripleInStaging;

@@ -391,7 +391,7 @@ export class TermViewComponent extends AbstractResourceView {
                 if (this.userAssignedLangs.length != 0) {
                     this.userAssignedLangs.sort();
                     this.userAssignedLangs.forEach(lang => {
-                        if (!langListFromServer.some(l => l == lang)) {
+                        if (!langListFromServer.some(l => l.toLocaleLowerCase() == lang.toLocaleLowerCase())) {
                             this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: true })
                         }
                     })
@@ -413,7 +413,7 @@ export class TermViewComponent extends AbstractResourceView {
                     l.el.nativeElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
                 }
             })
-        } else if (this.userAssignedLangs.some(l => l == flagClicked.lang.tag) || this.allProjectLangs.some(l => l == flagClicked.lang)) { //(2) 
+        } else if (this.userAssignedLangs.some(l => l.toLocaleLowerCase() == flagClicked.lang.tag.toLocaleLowerCase()) || this.allProjectLangs.some(l => l == flagClicked.lang)) { //(2) 
             for (let i = 0; i < this.languages.length; i++) {
                 if (this.languages[i] == flagClicked) {
                     this.languages[i].disabled = false;

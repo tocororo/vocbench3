@@ -27,7 +27,7 @@ export class InlineDefinitionComponent {
 
     ngOnInit() {
         this.lang = this.definition.getAdditionalProperty(ResAttribute.LANG);
-        let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
+        let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().find(l => l.toLocaleLowerCase() == this.lang.toLocaleLowerCase());
 
         this.editDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexUpdateDefinition, this.resource) && 
             langAuthorized && !this.readonly && !ResourceUtils.isTripleInStaging(this.definition);

@@ -48,7 +48,7 @@ export class LexicalSenseComponent {
         private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices, private lexViewModals: LexViewModalService) {}
 
     ngOnInit() {
-        let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
+        let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().find(l => l.toLocaleLowerCase() == this.lang.toLocaleLowerCase());
 
         //the following are authorized only for reified senses (this.sense.id not null) and not for plain
         this.addDefAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddDefinition, this.sense.id) && langAuthorized && !this.readonly;

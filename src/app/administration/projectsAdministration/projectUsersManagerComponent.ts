@@ -96,7 +96,7 @@ export class ProjectUsersManagerComponent {
             );
             this.prefSettingsServices.getProjectSettings(["languages"], this.project).subscribe(
                 stResp => {
-                    var langsValue = stResp["languages"];
+                    let langsValue = stResp["languages"];
                     try {
                         this.projectLanguages = <Language[]>JSON.parse(langsValue);
                         Languages.sortLanguages(this.projectLanguages);
@@ -150,8 +150,8 @@ export class ProjectUsersManagerComponent {
 		modalRef.componentInstance.usersBound = this.usersBound;
         return modalRef.result.then(
             data => {
-                var user: User = data.user;
-                var roles: string[] = data.roles;
+                let user: User = data.user;
+                let roles: string[] = data.roles;
                 this.adminService.addRolesToUser(this.project.getName(), user.getEmail(), roles).subscribe(
                     stResp => {
                         this.usersBound.push(user);
@@ -168,7 +168,7 @@ export class ProjectUsersManagerComponent {
             () => {
                 this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
                     stResp => {
-                        for (var i = 0; i < this.usersBound.length; i++) {
+                        for (let i = 0; i < this.usersBound.length; i++) {
                             if (this.usersBound[i].getEmail() == this.selectedUser.getEmail()) {
                                 this.usersBound.splice(i, 1);
                             }
@@ -258,8 +258,8 @@ export class ProjectUsersManagerComponent {
         if (this.puBinding == undefined) {
             return true;
         }
-        var pubRoles: string[] = this.puBinding.getRoles();
-        for (var i = 0; i < pubRoles.length; i++) {
+        let pubRoles: string[] = this.puBinding.getRoles();
+        for (let i = 0; i < pubRoles.length; i++) {
             if (pubRoles[i] == role.getName()) {
                 return true;
             }
@@ -347,7 +347,7 @@ export class ProjectUsersManagerComponent {
     private initPULanguages() {
         this.puLanguages = [];
         this.puBinding.getLanguages().forEach(puLangTag => {
-            let lang: Language = this.projectLanguages.find(l => l.tag == puLangTag);
+            let lang: Language = this.projectLanguages.find(l => l.tag.toLocaleLowerCase() == puLangTag.toLocaleLowerCase());
             if (lang != null) {
                 let puLang: Language = { name: lang.name, tag: lang.tag, mandatory: lang.mandatory };
                 puLang['proficiency'] = this.isProficiencyLang(lang.tag);
@@ -421,7 +421,7 @@ export class ProjectUsersManagerComponent {
 
     private isProficiencyLang(lang: string): boolean {
         if (this.selectedUser != null) {
-            return this.selectedUser.getLanguageProficiencies().indexOf(lang) != -1;
+            return this.selectedUser.getLanguageProficiencies().some(l => l.toLocaleLowerCase() == lang.toLocaleLowerCase());
         } else {
             return false;
         }
@@ -431,18 +431,13 @@ export class ProjectUsersManagerComponent {
         if (this.puBinding == undefined) {
             return true;
         }
-        var pubLanguages: string[] = this.puBinding.getLanguages();
-        for (var i = 0; i < pubLanguages.length; i++) {
-            if (pubLanguages[i] == lang.tag) {
-                return true;
-            }
-        }
-        return false;
+        let pubLanguages: string[] = this.puBinding.getLanguages();
+        return pubLanguages.some(l => l.toLocaleLowerCase() == lang.tag.toLocaleLowerCase());
     }
 
     private updateLanguagesOfUserInProject() {
         this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
-            stResp => {
+            () => {
                 this.selectedUserLang = null;
                 this.initPULanguages();
                 //if the updates are applied to the current user in the current project, update project binding in context 

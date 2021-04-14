@@ -207,7 +207,9 @@ export class EditableResourceComponent extends AbstractResViewResource {
             if (userAssignedLangs.length == 0 && VBContext.getLoggedUser().isAdmin()) {
                 intersection = projectLangs; //admin with no lang assigned => assign all project langs
             } else {
-                intersection = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
+                intersection = projectLangs.filter((pl: Language) => { 
+                    return userAssignedLangs.find(ul => ul.toLocaleLowerCase() == pl.tag.toLocaleLowerCase())
+                });
             }
             let locales = Languages.getLocales(intersection, this.resource.getAdditionalProperty(ResAttribute.LANG));
             this.copyLocalesAction = {

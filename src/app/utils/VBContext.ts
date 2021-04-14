@@ -4,7 +4,6 @@ import { PrefixMapping } from '../models/Metadata';
 import { Project } from '../models/Project';
 import { ProjectPreferences, ProjectSettings, SystemSettings } from '../models/Properties';
 import { ProjectUserBinding, User } from '../models/User';
-import { UIUtils } from "./UIUtils";
 
 export class VBContext {
 

@@ -44,16 +44,20 @@ export class LangPickerComponent implements ControlValueAccessor {
 
         //Init languages list considering only languages assigned to user and allowed in project
         this.languageList = []; //intersection between language available in project and language assigned to user.
-        var projectLangs: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
-        var userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
+        let projectLangs: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
+        let userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
         if (userAssignedLangs.length == 0 && VBContext.getLoggedUser().isAdmin()) {
             this.languageList = projectLangs; //in case of admin user with no lang assigned => available langs are all the project langs
         } else {
-            this.languageList = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
+            this.languageList = projectLangs.filter((pl: Language) => { 
+                return userAssignedLangs.some(ul => ul.toLocaleLowerCase() == pl.tag.toLocaleLowerCase());
+            });
         }
         //if configuration provide language limitation, filter also according them
         if (this.config.languages != null) {
-            this.languageList = projectLangs.filter((l: Language) => { return this.config.languages.indexOf(l.tag) != -1 });
+            this.languageList = projectLangs.filter((pl: Language) => { 
+                return this.config.languages.some(l => l.toLocaleLowerCase() == pl.tag.toLocaleLowerCase());
+            });
         }
     }
 
