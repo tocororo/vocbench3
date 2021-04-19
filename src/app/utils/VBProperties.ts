@@ -3,12 +3,13 @@ import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
-import { ExtensionPointID } from '../models/Plugins';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ExtensionPointID, Scope } from '../models/Plugins';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, SettingsEnum, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
+import { SettingsServices } from '../services/settingsServices';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -21,7 +22,7 @@ export class VBProperties {
 
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private prefService: PreferencesSettingsServices, private adminService: AdministrationServices,
+    constructor(private prefService: PreferencesSettingsServices, private adminService: AdministrationServices, private settingsService: SettingsServices,
         private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: { oldResource: ARTResource, newResource: ARTResource }) => this.onResourceRenamed(data.oldResource, data.newResource)
@@ -40,7 +41,7 @@ export class VBProperties {
      * To call each time the user change project
      */
     initUserProjectPreferences(projectCtx: ProjectContext): Observable<any> {
-        var properties: string[] = [
+        let properties: string[] = [
             Properties.pref_active_schemes, Properties.pref_active_lexicon, Properties.pref_show_flags,
             Properties.pref_show_instances_number, Properties.pref_project_theme,
             Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
@@ -57,6 +58,11 @@ export class VBProperties {
             Properties.pref_notifications_status
         ];
         
+        let getPUSettingsCore = this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
+            map(settings => {
+                console.log("PU core", settings)
+            })
+        )
         let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, projectCtx.getProject()).pipe(
             map(prefs => {
                 let projectPreferences: ProjectPreferences = projectCtx.getProjectPreferences();
@@ -65,7 +71,7 @@ export class VBProperties {
                 let activeSchemesPref: string = prefs[Properties.pref_active_schemes];
                 if (activeSchemesPref != null) {
                     let skSplitted: string[] = activeSchemesPref.split(",");
-                    for (var i = 0; i < skSplitted.length; i++) {
+                    for (let i = 0; i < skSplitted.length; i++) {
                         activeSchemes.push(new ARTURIResource(skSplitted[i], null, RDFResourceRolesEnum.conceptScheme));
                     }
                 }
@@ -240,13 +246,17 @@ export class VBProperties {
             })
         );
 
-        // this is called separately since requires the pluginId parameter
-        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], projectCtx.getProject(), ExtensionPointID.RENDERING_ENGINE_ID).pipe(
-            map(prefs => {
-                projectCtx.getProjectPreferences().projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
+        // this is called separately since its about a different plugin
+        let getPUSettingsRenderingEngine = this.settingsService.getSettings(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
+            map(settings => {
+                projectCtx.getProjectPreferences().projectLanguagesPreference = settings.getPropertyValue(SettingsEnum.languages).split(",");
             })
-        );
-        return forkJoin([getPUSettingsNoPlugin, getPUSettingsRenderingEngine]);
+        )
+        return forkJoin([
+            getPUSettingsNoPlugin,
+            getPUSettingsRenderingEngine, 
+            // getPUSettingsCore, 
+        ]);
     }
 
     setActiveSchemes(projectCtx: ProjectContext, schemes: ARTURIResource[]) {
@@ -464,7 +474,7 @@ export class VBProperties {
                 VBContext.getSystemSettings().showFlags = stResp[Properties.pref_show_flags];
                 //languages
                 try {
-                    var systemLanguages = <Language[]>JSON.parse(stResp[Properties.setting_languages]);
+                    let systemLanguages = <Language[]>JSON.parse(stResp[Properties.setting_languages]);
                     Languages.sortLanguages(systemLanguages);
                     Languages.setSystemLanguages(systemLanguages);
                 } catch (err) {
@@ -474,6 +484,26 @@ export class VBProperties {
                 VBContext.getSystemSettings().homeContent = stResp[Properties.setting_home_content];
             }
         )
+        // this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
+        //     settings => {
+
+        //         VBContext.getSystemSettings().experimentalFeaturesEnabled = settings.getPropertyValue(SettingsEnum.experimentalFeaturesEnabled);
+        //         //privacy_statement_available
+        //         VBContext.getSystemSettings().privacyStatementAvailable = settings.getPropertyValue(SettingsEnum.privacyStatementAvailable);
+        //         //show_flags
+        //         VBContext.getSystemSettings().showFlags = settings.getPropertyValue(SettingsEnum.showFlags);
+        //         //home content
+        //         VBContext.getSystemSettings().homeContent = settings.getPropertyValue(SettingsEnum.homeContent);
+        //         /**
+        //          * languages setting was taken from getStartupSystemSettings but it was not into system settings file, it was in the project-settings-defaults
+        //          * so update here when the service for retrieving the default will be available
+        //          */
+        //         //languages
+        //         let systemLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
+        //         Languages.sortLanguages(systemLanguages);
+        //         Languages.setSystemLanguages(systemLanguages);
+        //     }
+        // )
     }
 
     setExperimentalFeaturesEnabled(enabled: boolean) {
@@ -491,28 +521,20 @@ export class VBProperties {
     }
 
     initProjectSettings(projectCtx: ProjectContext): Observable<any> {
-        let properties: string[] = [Properties.setting_languages, Properties.label_clash_mode];
-        let projectSettings: ProjectSettings = projectCtx.getProjectSettings();
-        return this.prefService.getProjectSettings(properties, projectCtx.getProject()).pipe(
-            map(settings => {
-                let langsValue: string = settings[Properties.setting_languages];
-                try {
-                    projectSettings.projectLanguagesSetting = <Language[]>JSON.parse(langsValue);
-                    Languages.sortLanguages(projectSettings.projectLanguagesSetting);
-                } catch (err) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.PROJ_LANGUAGES_PARSING_ERR_SETTING_DEFAULT"}, ModalType.error);
-                    projectSettings.projectLanguagesSetting = [
-                        { name: "German" , tag: "de" }, { name: "English" , tag: "en" }, { name: "Spanish" , tag: "es" },
-                        { name: "French" , tag: "fr" }, { name: "Italian" , tag: "it" }
-                    ];
-                }
 
-                let labelClashModeValue = settings[Properties.label_clash_mode];
+        let projectSettings: ProjectSettings = projectCtx.getProjectSettings();
+        return this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
+            map(settings => {
+                let langsValue: Language[] = settings.getPropertyValue(SettingsEnum.languages);
+                projectSettings.projectLanguagesSetting = langsValue;
+                Languages.sortLanguages(projectSettings.projectLanguagesSetting);
+
+                let labelClashModeValue = settings.getPropertyValue(SettingsEnum.labelClashMode);
                 if (labelClashModeValue != null && labelClashModeValue in PrefLabelClashMode) { //if not null and valid enum
                     projectSettings.prefLabelClashMode = labelClashModeValue;
                 }
             })
-        );
+        )
     }
 
     
@@ -690,7 +712,7 @@ export class VBProperties {
      */
     private onResourceRenamed(oldResource: ARTResource, newResource: ARTResource) {
         let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
-        for (var i = 0; i < activeSchemes.length; i++) {
+        for (let i = 0; i < activeSchemes.length; i++) {
             if (activeSchemes[i].getNominalValue() == oldResource.getNominalValue()) {
                 activeSchemes[i].setURI(newResource.getNominalValue());
                 this.setActiveSchemes(VBContext.getWorkingProjectCtx(), activeSchemes);

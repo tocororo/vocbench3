@@ -64,6 +64,17 @@ export class Properties {
     
 }
 
+export enum SettingsEnum {
+    experimentalFeaturesEnabled = "experimentalFeaturesEnabled",
+    homeContent = "homeContent",
+    labelClashMode = "labelClashMode",
+    languages = "languages",
+    privacyStatementAvailable = "privacyStatementAvailable",
+    projectCreation = "projectCreation",
+    remoteConfigs = "remoteConfigs",
+    showFlags = "showFlags",
+}
+
 export class ResourceViewPreference {
     mode: ResourceViewMode = ResourceViewMode.tabbed; 
     syncTabs: boolean = false; //in tabbed mode allows to keep sync'd the resource in the active tab with the same resource in the tree/list

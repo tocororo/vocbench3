@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ExtensionPointID, Scope } from "src/app/models/Plugins";
+import { SettingsServices } from "src/app/services/settingsServices";
 import { RemoteRepositoryAccessConfig } from "../../../../models/Project";
-import { Properties } from "../../../../models/Properties";
+import { Properties, SettingsEnum } from "../../../../models/Properties";
 import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
 import { BasicModalServices } from "../../basicModal/basicModalServices";
 import { ModalType } from '../../Modals';
@@ -16,16 +18,14 @@ export class RemoteAccessConfigModal {
 
     newConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
-    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private prefService: PreferencesSettingsServices) {}
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private prefService: PreferencesSettingsServices, private settingsService: SettingsServices) {}
 
     ngOnInit() {
-        this.prefService.getSystemSettings([Properties.setting_remote_configs]).subscribe(
-            stResp => {
-                if (stResp[Properties.setting_remote_configs] != null) {
-                    this.savedConfigs = <RemoteRepositoryAccessConfig[]> JSON.parse(stResp[Properties.setting_remote_configs]);
-                }
+        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
+            settings => {
+                this.savedConfigs = settings.getPropertyValue(SettingsEnum.remoteConfigs);
             }
-        );
+        )
     }
 
     createConfiguration() {
