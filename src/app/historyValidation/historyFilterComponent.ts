@@ -53,7 +53,7 @@ export class HistoryFilterComponent {
         this.sharedModals.selectUser({key:"ACTIONS.SELECT_USER"}, true).then(
             (user: User) => {
                 for (let i = 0; i < this.performers.length; i++) {
-                    if (this.performers[i].getIri() == user.getIri()) {
+                    if (this.performers[i].getIri().equals(user.getIri())) {
                         return; //user already in
                     }
                 }

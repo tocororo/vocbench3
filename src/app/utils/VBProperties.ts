@@ -316,7 +316,11 @@ export class VBProperties {
     refreshResourceViewPartitionFilter(): Observable<void> { //refreshed the cached rv partition filter
         return this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER).pipe(
             map(settings => {
-                let filter: PartitionFilterPreference = settings.getPropertyValue(SettingsEnum.resViewPartitionFilter);
+                let resViewSettings: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
+                let filter: PartitionFilterPreference
+                if (resViewSettings != null) {
+                    filter = resViewSettings.resViewPartitionFilter;
+                }
                 VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter = filter;
             })
         );

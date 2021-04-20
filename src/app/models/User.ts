@@ -4,7 +4,7 @@ export class User {
     private email: string;
     private givenName: string;
     private familyName: string
-    private iri: string;
+    private iri: ARTURIResource;
     private phone: string;
     private address: string;
     private registrationDate: Date;
@@ -22,7 +22,7 @@ export class User {
         this.email = email;
         this.givenName = givenName;
         this.familyName = familyName;
-        this.iri = iri;
+        this.iri = new ARTURIResource(iri);
     }
 
     getEmail(): string {
@@ -37,7 +37,7 @@ export class User {
         return this.familyName;
     }
 
-    getIri(): string {
+    getIri(): ARTURIResource {
         return this.iri;
     }
 

@@ -90,7 +90,6 @@ export enum SettingsEnum {
     projectTheme = "projectTheme",
     remoteConfigs = "remoteConfigs",
     resourceView = "resourceView",
-    resViewPartitionFilter = "resViewPartitionFilter",
     searchSettings = "searchSettings",
     sheet2rdfSettings = "sheet2rdfSettings",
     showFlags = "showFlags",
