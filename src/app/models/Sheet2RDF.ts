@@ -182,3 +182,8 @@ export enum FsNamingStrategy {
     columnNumericIndex = "columnNumericIndex",
     normalizedHeaderName = "normalizedHeaderName"
 }
+
+export class Sheet2RdfSettings {
+    useHeaders: boolean = true;
+    namingStrategy: FsNamingStrategy = FsNamingStrategy.columnNumericIndex;
+}

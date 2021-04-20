@@ -1,14 +1,14 @@
 import { ARTURIResource } from "./ARTResources";
 import { Language } from "./LanguagesCountries";
+import { Project } from "./Project";
 import { ResViewPartition } from "./ResourceView";
-import { SKOS } from "./Vocabulary";
+import { OWL, RDFS, SKOS } from "./Vocabulary";
 
 export class Properties {
 
     static pref_languages: string = "languages";
     static pref_editing_language: string = "editing_language";
     static pref_filter_value_languages: string = "filter_value_languages";
-    static pref_active_schemes: string = "active_schemes";
     static pref_active_lexicon: string = "active_lexicon";
     static pref_show_flags: string = "show_flags";
     static pref_project_theme: string = "project_theme";
@@ -64,14 +64,35 @@ export class Properties {
     
 }
 
+/**
+ * Names of the property of the Settings (at every levels: system, project, user, project-user)
+ */
 export enum SettingsEnum {
+    activeLexicon = "activeLexicon",
+    activeSchemes = "activeSchemes",
+    classTree = "classTree",
+    conceptTree = "conceptTree",
+    defaultConceptType = "defaultConceptType",
+    defaultLexEntryType = "defaultLexEntryType",
+    editingLanguage = "editingLanguage",
     experimentalFeaturesEnabled = "experimentalFeaturesEnabled",
+    filterValueLanguages = "filterValueLanguages",
+    graphViewPartitionFilter = "graphViewPartitionFilter",
+    hideLiteralGraphNodes = "hideLiteralGraphNodes",
     homeContent = "homeContent",
+    instanceList = "instanceList",
     labelClashMode = "labelClashMode",
     languages = "languages",
+    lexEntryList = "lexEntryList",
+    notificationsStatus = "notificationsStatus",
     privacyStatementAvailable = "privacyStatementAvailable",
     projectCreation = "projectCreation",
+    projectTheme = "projectTheme",
     remoteConfigs = "remoteConfigs",
+    resourceView = "resourceView",
+    resViewPartitionFilter = "resViewPartitionFilter",
+    searchSettings = "searchSettings",
+    sheet2rdfSettings = "sheet2rdfSettings",
     showFlags = "showFlags",
 }
 
@@ -135,6 +156,12 @@ export class ClassTreePreference {
     rootClassUri: string;
     filter: ClassTreeFilter = { enabled: true, map: {} };
     showInstancesNumber: boolean;
+
+    constructor(project: Project) {
+        let modelType = project.getModelType();
+        this.rootClassUri = modelType == RDFS.uri ? RDFS.resource.getURI() : OWL.thing.getURI();
+        this.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
+    }
 }
 export class ClassTreeFilter {
     enabled: boolean;

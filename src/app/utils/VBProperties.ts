@@ -6,7 +6,6 @@ import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID, Scope } from '../models/Plugins';
 import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, SettingsEnum, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
-import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { SettingsServices } from '../services/settingsServices';
@@ -41,221 +40,113 @@ export class VBProperties {
      * To call each time the user change project
      */
     initUserProjectPreferences(projectCtx: ProjectContext): Observable<any> {
-        let properties: string[] = [
-            Properties.pref_active_schemes, Properties.pref_active_lexicon, Properties.pref_show_flags,
-            Properties.pref_show_instances_number, Properties.pref_project_theme,
-            Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
-            Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
-            Properties.pref_class_tree_filter, Properties.pref_class_tree_root,
-            Properties.pref_instance_list_visualization, Properties.pref_instance_list_safe_to_go_limit,
-            Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
-            Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
-            Properties.pref_concept_tree_multischeme_mode, Properties.pref_concept_tree_safe_to_go_limit,
-            Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght, Properties.pref_lex_entry_list_safe_to_go_limit,
-            Properties.pref_editing_language, Properties.pref_filter_value_languages,
-            Properties.pref_res_view_partition_filter, Properties.pref_res_view_default_concept_type, Properties.pref_res_view_default_lexentry_type,
-            Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes,
-            Properties.pref_notifications_status
-        ];
-        
         let getPUSettingsCore = this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
             map(settings => {
-                console.log("PU core", settings)
-            })
-        )
-        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, projectCtx.getProject()).pipe(
-            map(prefs => {
                 let projectPreferences: ProjectPreferences = projectCtx.getProjectPreferences();
 
                 let activeSchemes: ARTURIResource[] = [];
-                let activeSchemesPref: string = prefs[Properties.pref_active_schemes];
-                if (activeSchemesPref != null) {
-                    let skSplitted: string[] = activeSchemesPref.split(",");
-                    for (let i = 0; i < skSplitted.length; i++) {
-                        activeSchemes.push(new ARTURIResource(skSplitted[i], null, RDFResourceRolesEnum.conceptScheme));
-                    }
+                let schemesStr: string[] = settings.getPropertyValue(SettingsEnum.activeSchemes);
+                if (schemesStr != null) {
+                    schemesStr.forEach(s => activeSchemes.push(new ARTURIResource(s, null, RDFResourceRolesEnum.conceptScheme)));
                 }
                 projectPreferences.activeSchemes = activeSchemes;
 
                 let activeLexicon: ARTURIResource;
-                let activeLexiconPref: string = prefs[Properties.pref_active_lexicon];
-                if (activeLexiconPref != null) {
-                    activeLexicon = new ARTURIResource(activeLexiconPref, null, RDFResourceRolesEnum.limeLexicon);
+                let activeLexiconStr: string = settings.getPropertyValue(SettingsEnum.activeLexicon);
+                if (activeLexiconStr != null) {
+                    activeLexicon = new ARTURIResource(activeLexiconStr, null, RDFResourceRolesEnum.limeLexicon);
                 }
                 projectPreferences.activeLexicon = activeLexicon;
 
-                projectPreferences.showFlags = prefs[Properties.pref_show_flags] == "true";
+                projectPreferences.showFlags = settings.getPropertyValue(SettingsEnum.showFlags);
 
-                let projectThemeId = prefs[Properties.pref_project_theme];
+                let projectThemeId = settings.getPropertyValue(SettingsEnum.projectTheme);
                 projectPreferences.projectThemeId = projectThemeId;
                 this.eventHandler.themeChangedEvent.emit(projectPreferences.projectThemeId);
 
                 //languages 
-                projectPreferences.editingLanguage = prefs[Properties.pref_editing_language];
+                projectPreferences.editingLanguage = settings.getPropertyValue(SettingsEnum.editingLanguage);
 
-                let filterValueLangPref = prefs[Properties.pref_filter_value_languages];
+                let filterValueLangPref = settings.getPropertyValue(SettingsEnum.filterValueLanguages);
                 if (filterValueLangPref == null) {
                     projectPreferences.filterValueLang = { languages: [], enabled: false }; //default
                 } else {
-                    projectPreferences.filterValueLang = JSON.parse(filterValueLangPref);
+                    projectPreferences.filterValueLang = filterValueLangPref;
                 }
 
                 //resource view preferences
-                let resViewPreferences: ResourceViewPreference = new ResourceViewPreference();
-                let resViewConceptTypePref = prefs[Properties.pref_res_view_default_concept_type];
-                if (resViewConceptTypePref in ResourceViewType) {
-                    resViewPreferences.defaultConceptType = resViewConceptTypePref;
+                let resViewPreferences: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
+                if (resViewPreferences == null) {
+                    resViewPreferences = new ResourceViewPreference();
                 }
-                let resViewLexEntryTypePref = prefs[Properties.pref_res_view_default_lexentry_type];
-                if (resViewLexEntryTypePref in ResourceViewType) {
-                    resViewPreferences.defaultLexEntryType = resViewLexEntryTypePref;
-                }
-
-                let resViewPartitionFilter: PartitionFilterPreference = {};
-                let rvPartitionFilterPref = prefs[Properties.pref_res_view_partition_filter];
-                if (rvPartitionFilterPref != null) {
-                    resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
-                }
-                resViewPreferences.resViewPartitionFilter = resViewPartitionFilter;
-
                 projectPreferences.resViewPreferences = resViewPreferences;
 
                 this.initResourceViewPreferenceCookie(projectPreferences); //fill the preferences also with those stored as cookie
 
                 //graph preferences
-                let graphPartitionFilterPref = prefs[Properties.pref_graph_view_partition_filter];
-                if (graphPartitionFilterPref != null) {
-                    projectPreferences.graphViewPartitionFilter = JSON.parse(graphPartitionFilterPref);
-                } else { //initialize with the only lexicalization partition for each role
+                let graphPartitionFilterPref = settings.getPropertyValue(SettingsEnum.graphViewPartitionFilter);
+                if (graphPartitionFilterPref == null) { //initialize with the only lexicalization partition for each role
                     let graphPartitionFilterPref: PartitionFilterPreference = {};
                     for (let role in RDFResourceRolesEnum) { 
                         graphPartitionFilterPref[role] = [ResViewPartition.lexicalizations];
                     }
-                    projectPreferences.graphViewPartitionFilter = graphPartitionFilterPref;
                 }
+                projectPreferences.graphViewPartitionFilter = graphPartitionFilterPref;
 
-                projectPreferences.hideLiteralGraphNodes = prefs[Properties.pref_hide_literal_graph_nodes] != "false";
-
+                projectPreferences.hideLiteralGraphNodes = settings.getPropertyValue(SettingsEnum.hideLiteralGraphNodes);
 
                 //cls tree preferences
-                let classTreePreferences: ClassTreePreference = new ClassTreePreference();
-                //- subclass filter
-                let classTreeFilterPref: any = JSON.parse(prefs[Properties.pref_class_tree_filter]); 
-                if (classTreeFilterPref != null) {
-                    classTreePreferences.filter = classTreeFilterPref;
-                }
-                //- tree root
-                let classTreeRootPref: string = prefs[Properties.pref_class_tree_root]; 
-                if (classTreeRootPref != null) {
-                    classTreePreferences.rootClassUri = classTreeRootPref;
-                } else { //set default: rdfs:Resource if project is RDFS, owl:Thing if it's OWL
-                    classTreePreferences.rootClassUri = (projectCtx.getProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(); //default
+                let classTreePreferences: ClassTreePreference = settings.getPropertyValue(SettingsEnum.classTree);
+                if (classTreePreferences == null) {
+                    classTreePreferences = new ClassTreePreference(projectCtx.getProject());
                 }
                 projectPreferences.classTreePreferences = classTreePreferences;
-                //- show Instances number
-                let showInstPref: string = prefs[Properties.pref_show_instances_number];
-                if (showInstPref != null) {
-                    classTreePreferences.showInstancesNumber = showInstPref == "true";
-                } else { //if not specified, true for RDFS and OWL projects, false otherwise
-                    let modelType: string = projectCtx.getProject().getModelType();
-                    classTreePreferences.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
-                }
 
                 //instance list preferences
-                let instanceListPreferences: InstanceListPreference = new InstanceListPreference();
-                let instanceListVisualizationPref: string = prefs[Properties.pref_instance_list_visualization];
-                if (instanceListVisualizationPref == InstanceListVisualizationMode.searchBased) {
-                    instanceListPreferences.visualization = instanceListVisualizationPref;
-                }
-                let instanceListSafeToGoLimitPref: string = prefs[Properties.pref_instance_list_safe_to_go_limit];
-                if (instanceListSafeToGoLimitPref != null) {
-                    instanceListPreferences.safeToGoLimit = parseInt(instanceListSafeToGoLimitPref);
+                let instanceListPreferences: InstanceListPreference = settings.getPropertyValue(SettingsEnum.instanceList);
+                if (InstanceListPreference == null) {
+                    instanceListPreferences = new InstanceListPreference();
                 }
                 projectPreferences.instanceListPreferences = instanceListPreferences;
 
                 //concept tree preferences
-                let conceptTreePreferences: ConceptTreePreference = new ConceptTreePreference();
-                let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
-                if (conceptTreeBaseBroaderPropPref != null) {
-                    conceptTreePreferences.baseBroaderUri = conceptTreeBaseBroaderPropPref;
+                let conceptTreePreferences: ConceptTreePreference = settings.getPropertyValue(SettingsEnum.conceptTree); new ConceptTreePreference();
+                if (conceptTreePreferences == null) {
+                    conceptTreePreferences = new ConceptTreePreference();
                 }
-                let conceptTreeBroaderPropsPref: string = prefs[Properties.pref_concept_tree_broader_props];
-                if (conceptTreeBroaderPropsPref != null) {
-                    conceptTreePreferences.broaderProps = conceptTreeBroaderPropsPref.split(",");
-                }
-                let conceptTreeNarrowerPropsPref: string = prefs[Properties.pref_concept_tree_narrower_props];
-                if (conceptTreeNarrowerPropsPref != null) {
-                    conceptTreePreferences.narrowerProps = conceptTreeNarrowerPropsPref.split(",");
-                }
-                let conceptTreeVisualizationPref: string = prefs[Properties.pref_concept_tree_visualization];
-                if (conceptTreeVisualizationPref == ConceptTreeVisualizationMode.searchBased) {
-                    conceptTreePreferences.visualization = conceptTreeVisualizationPref;
-                }
-                let conceptTreeMultischemeModePref: string = prefs[Properties.pref_concept_tree_multischeme_mode];
-                if (conceptTreeMultischemeModePref != null && conceptTreeMultischemeModePref == MultischemeMode.and) {
-                    conceptTreePreferences.multischemeMode = conceptTreeMultischemeModePref;
-                }
-                let conceptTreeSafeToGoLimitPref: string = prefs[Properties.pref_concept_tree_safe_to_go_limit];
-                if (conceptTreeSafeToGoLimitPref != null) {
-                    conceptTreePreferences.safeToGoLimit = parseInt(conceptTreeSafeToGoLimitPref);
-                }
-
-                conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
-                conceptTreePreferences.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
-
                 projectPreferences.conceptTreePreferences = conceptTreePreferences;
 
 
                 //lexical entry list preferences
-                let lexEntryListPreferences: LexicalEntryListPreference = new LexicalEntryListPreference();
-                let lexEntryListVisualizationPref: string = prefs[Properties.pref_lex_entry_list_visualization];
-                if (lexEntryListVisualizationPref == LexEntryVisualizationMode.searchBased) {
-                    lexEntryListPreferences.visualization = lexEntryListVisualizationPref;
-                }
-                let lexEntryListSafeToGoLimitPref: string = prefs[Properties.pref_lex_entry_list_safe_to_go_limit];
-                if (lexEntryListSafeToGoLimitPref != null) {
-                    lexEntryListPreferences.safeToGoLimit = parseInt(lexEntryListSafeToGoLimitPref);
-                }
-                let lexEntryListIndexLenghtPref: string = prefs[Properties.pref_lex_entry_list_index_lenght];
-                if (lexEntryListIndexLenghtPref == "2") {
-                    lexEntryListPreferences.indexLength = 2;
+                let lexEntryListPreferences: LexicalEntryListPreference = settings.getPropertyValue(SettingsEnum.lexEntryList);
+                if (lexEntryListPreferences == null) {
+                    lexEntryListPreferences =  new LexicalEntryListPreference();
                 }
                 projectPreferences.lexEntryListPreferences = lexEntryListPreferences;
 
                 //search settings
-                let searchSettings: SearchSettings = new SearchSettings();
-                let searchLangsPref = prefs[Properties.pref_search_languages];
-                if (searchLangsPref == null) {
-                    searchSettings.languages = [];
-                } else {
-                    searchSettings.languages = JSON.parse(searchLangsPref);
+                let searchSettings: SearchSettings = settings.getPropertyValue(SettingsEnum.searchSettings);
+                if (searchSettings == null) {
+                    searchSettings = new SearchSettings();
                 }
-                searchSettings.restrictLang = prefs[Properties.pref_search_restrict_lang] == "true";
-                searchSettings.includeLocales = prefs[Properties.pref_search_include_locales] == "true";
-                searchSettings.useAutocompletion = prefs[Properties.pref_search_use_autocomplete] == "true";
-
                 projectPreferences.searchSettings = searchSettings;
-
                 this.initSearchSettingsCookie(projectPreferences); //other settings stored in cookies
 
                 //notifications
-                let notificationStatusPref = prefs[Properties.pref_notifications_status];
-                if (notificationStatusPref != null && (notificationStatusPref in NotificationStatus)) { //if a valid value
-                    projectPreferences.notificationStatus = notificationStatusPref;
-                }
-            })
-        );
+                projectPreferences.notificationStatus = settings.getPropertyValue(SettingsEnum.notificationsStatus)
 
-        // this is called separately since its about a different plugin
+                console.log("projectPreferences", projectPreferences)
+            })
+        )
+        // this is called separately since it is about a different plugin
         let getPUSettingsRenderingEngine = this.settingsService.getSettings(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
             map(settings => {
                 projectCtx.getProjectPreferences().projectLanguagesPreference = settings.getPropertyValue(SettingsEnum.languages).split(",");
             })
         )
         return forkJoin([
-            getPUSettingsNoPlugin,
             getPUSettingsRenderingEngine, 
-            // getPUSettingsCore, 
+            getPUSettingsCore, 
         ]);
     }
 
@@ -423,13 +314,9 @@ export class VBProperties {
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter = pref;
     }
     refreshResourceViewPartitionFilter(): Observable<void> { //refreshed the cached rv partition filter
-        return this.prefService.getPUSettings([Properties.pref_res_view_partition_filter]).pipe(
-            map(prefs => {
-                let value = prefs[Properties.pref_res_view_partition_filter];
-                let filter: PartitionFilterPreference;
-                if (value != null) {
-                    filter = JSON.parse(value);
-                }
+        return this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER).pipe(
+            map(settings => {
+                let filter: PartitionFilterPreference = settings.getPropertyValue(SettingsEnum.resViewPartitionFilter);
                 VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter = filter;
             })
         );

@@ -46,17 +46,17 @@ export class PreferencesSettingsServices {
         );
     }
 
-    /**
-     * Gets the preferences of the currently logged user for the currently open project
-     */
-    getPUSettings(properties: string[], project?: Project, pluginID?: string) {
-        var params: any = {
-            properties: properties,
-            projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
-            pluginID: pluginID
-        }
-        return this.httpMgr.doGet(this.serviceName, "getPUSettings", params);
-    }
+    // /**
+    //  * Gets the preferences of the currently logged user for the currently open project
+    //  */
+    // getPUSettings(properties: string[], project?: Project, pluginID?: string) {
+    //     var params: any = {
+    //         properties: properties,
+    //         projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
+    //         pluginID: pluginID
+    //     }
+    //     return this.httpMgr.doGet(this.serviceName, "getPUSettings", params);
+    // }
 
     /**
      * 
