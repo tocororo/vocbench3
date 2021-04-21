@@ -96,15 +96,18 @@ export class VBProperties {
                 projectPreferences.hideLiteralGraphNodes = settings.getPropertyValue(SettingsEnum.hideLiteralGraphNodes);
 
                 //cls tree preferences
-                let classTreePreferences: ClassTreePreference = settings.getPropertyValue(SettingsEnum.classTree);
-                if (classTreePreferences == null) {
-                    classTreePreferences = new ClassTreePreference(projectCtx.getProject());
+                let classTreePreferences: ClassTreePreference = new ClassTreePreference(projectCtx.getProject());
+                let clsTreeSettings: ClassTreePreference = settings.getPropertyValue(SettingsEnum.classTree);
+                if (clsTreeSettings != null) { //the following is necessary due to the update to settings introduced in VB > 9.0 and the related update routine
+                    classTreePreferences.showInstancesNumber = clsTreeSettings.showInstancesNumber;
+                    if (clsTreeSettings.filter != null) classTreePreferences.filter = clsTreeSettings.filter;
+                    if (clsTreeSettings.rootClassUri != null) classTreePreferences.rootClassUri = clsTreeSettings.rootClassUri;
                 }
                 projectPreferences.classTreePreferences = classTreePreferences;
 
                 //instance list preferences
                 let instanceListPreferences: InstanceListPreference = settings.getPropertyValue(SettingsEnum.instanceList);
-                if (InstanceListPreference == null) {
+                if (instanceListPreferences == null) {
                     instanceListPreferences = new InstanceListPreference();
                 }
                 projectPreferences.instanceListPreferences = instanceListPreferences;

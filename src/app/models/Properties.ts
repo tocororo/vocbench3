@@ -103,7 +103,7 @@ export class ResourceViewPreference {
     defaultLexEntryType: ResourceViewType = ResourceViewType.resourceView; //tells the RV type to be open by default for lexEntry
     lastLexEntryType: ResourceViewType;
     displayImg: boolean = false;
-    resViewPartitionFilter: PartitionFilterPreference;
+    resViewPartitionFilter: PartitionFilterPreference = {};
     rendering: boolean = true;
     inference: boolean = false;
     showDeprecated: boolean = true;
@@ -163,8 +163,8 @@ export class ClassTreePreference {
     }
 }
 export class ClassTreeFilter {
-    enabled: boolean;
-    map:  { [key: string]: string[] }; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
+    enabled: boolean = true;
+    map:  { [key: string]: string[] } = {}; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
 }
 
 export class ConceptTreePreference {
