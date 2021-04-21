@@ -133,9 +133,10 @@ export class VBProperties {
                 this.initSearchSettingsCookie(projectPreferences); //other settings stored in cookies
 
                 //notifications
-                projectPreferences.notificationStatus = settings.getPropertyValue(SettingsEnum.notificationsStatus)
-
-                console.log("projectPreferences", projectPreferences)
+                let notificationStatusSetting = settings.getPropertyValue(SettingsEnum.notificationsStatus);
+                if (notificationStatusSetting != null) {
+                    projectPreferences.notificationStatus = notificationStatusSetting;
+                }
             })
         )
         // this is called separately since it is about a different plugin
