@@ -1,11 +1,11 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { ConfigurableExtensionFactory, ExtensionPointID, PluginSpecification, Settings } from "../../../models/Plugins";
+import { ConfigurableExtensionFactory, ExtensionPointID, PluginSpecification, Scope, Settings } from "../../../models/Plugins";
 import { BackendTypesEnum, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../../models/Project";
-import { Properties } from "../../../models/Properties";
+import { SettingsEnum } from "../../../models/Properties";
 import { ExtensionsServices } from "../../../services/extensionsServices";
-import { PreferencesSettingsServices } from "../../../services/preferencesSettingsServices";
 import { ExtensionConfiguratorComponent } from "../../../widget/extensionConfigurator/extensionConfiguratorComponent";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
@@ -43,8 +43,8 @@ export class DumpCreationModal {
     private backendTypes: BackendTypesEnum[] = [BackendTypesEnum.openrdf_NativeStore, BackendTypesEnum.openrdf_MemoryStore, BackendTypesEnum.graphdb_FreeSail];
     private selectedRepoBackendType: BackendTypesEnum = this.backendTypes[0];
 
-    constructor(public activeModal: NgbActiveModal, private extensionService: ExtensionsServices, 
-        private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
+    constructor(public activeModal: NgbActiveModal, private extensionService: ExtensionsServices, private settingsService: SettingsServices,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
     }
 
     ngOnInit() {
@@ -62,10 +62,11 @@ export class DumpCreationModal {
     }
 
     private initRemoteRepoAccessConfigurations() {
-        this.prefService.getSystemSettings([Properties.setting_remote_configs]).subscribe(
-            stResp => {
-                if (stResp[Properties.setting_remote_configs] != null) {
-                    this.remoteRepoConfigs = <RemoteRepositoryAccessConfig[]> JSON.parse(stResp[Properties.setting_remote_configs]);
+        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
+            settings => {
+                let remoteConfSetting = settings.getPropertyValue(SettingsEnum.remoteConfigs);
+                if (remoteConfSetting != null) {
+                    this.remoteRepoConfigs = remoteConfSetting;
                     //initialize the selected configuration
                     if (this.selectedRemoteRepoConfig != null) {
                         //if previously a config was already selected, select it again (deselected if not found, probably it has been deleted)
@@ -75,7 +76,8 @@ export class DumpCreationModal {
                             this.selectedRemoteRepoConfig = this.remoteRepoConfigs[0];
                         }
                     }
-                } else {
+                } else { 
+                    //the remote config are refreshed when admin changes it, so it might happend that he deleted the previously available configs 
                     this.remoteRepoConfigs = [];
                     this.selectedRemoteRepoConfig = null;
                 }

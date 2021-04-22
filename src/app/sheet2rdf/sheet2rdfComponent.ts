@@ -1,12 +1,14 @@
 import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PearlValidationResult } from "../models/Coda";
-import { Properties } from "../models/Properties";
+import { ExtensionPointID, Scope } from "../models/Plugins";
+import { Properties, SettingsEnum } from "../models/Properties";
 import { RDFFormat } from "../models/RDFFormat";
-import { AdvancedGraphApplication, FsNamingStrategy, GraphApplication, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
+import { AdvancedGraphApplication, FsNamingStrategy, GraphApplication, Sheet2RdfSettings, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { CODAServices } from "../services/codaServices";
 import { ExportServices } from "../services/exportServices";
 import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
+import { SettingsServices } from "../services/settingsServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { UIUtils } from "../utils/UIUtils";
@@ -72,7 +74,7 @@ export class Sheet2RdfComponent {
     private fsNamingStrategy: FsNamingStrategy = FsNamingStrategy.columnNumericIndex;
 
     constructor(private s2rdfService: Sheet2RDFServices, private codaService: CODAServices, private exportService: ExportServices, 
-        private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
+        private settingsService: SettingsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
 
     ngOnInit() {
 
@@ -85,16 +87,14 @@ export class Sheet2RdfComponent {
         );
         
         //init settings
-        this.prefService.getPUSettings([Properties.pref_s2rdf_use_headers, Properties.pref_s2rdf_fs_naming_strategy]).subscribe(
-            prefs => {
-                let useHeaderPref: string = prefs[Properties.pref_s2rdf_use_headers];
-                if (useHeaderPref != null) {
-                    this.useHeader = useHeaderPref != "false";
+        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER).subscribe(
+            settings => {
+                let s2rdfSettings: Sheet2RdfSettings = settings.getPropertyValue(SettingsEnum.sheet2rdfSettings);
+                if (s2rdfSettings == null) {
+                    s2rdfSettings = new Sheet2RdfSettings();
                 }
-                let fsNamingStrategyPref: string = prefs[Properties.pref_s2rdf_fs_naming_strategy];
-                if (fsNamingStrategyPref != null) {
-                    this.fsNamingStrategy = <FsNamingStrategy>fsNamingStrategyPref;
-                }
+                this.useHeader = s2rdfSettings.useHeaders;
+                this.fsNamingStrategy = s2rdfSettings.namingStrategy;
             }
         );
     }
@@ -242,7 +242,7 @@ export class Sheet2RdfComponent {
         }
     }
 
-    private editHeader(header: SimpleHeader) {
+    editHeader(header: SimpleHeader) {
         const modalRef: NgbModalRef = this.modalService.open(HeaderEditorModal, new ModalOptions('xl'));
         modalRef.componentInstance.headerId = header.id;
 		modalRef.componentInstance.headers = this.headers;

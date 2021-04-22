@@ -73,18 +73,18 @@ export class PreferencesSettingsServices {
         return this.httpMgr.doPost(this.serviceName, "setPUSetting", params);
     }
 
-    /**
-     * Gets the preferences of the currently logged user for the currently open project
-     */
-    getPUSettingsOfUser(properties: string[], user: User, project?: Project, pluginID?: string, options?: VBRequestOptions) {
-        var params: any = {
-            properties: properties,
-            projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
-            email: user.getEmail(),
-            pluginID: pluginID
-        }
-        return this.httpMgr.doGet(this.serviceName, "getPUSettingsOfUser", params, options);
-    }
+    // /**
+    //  * Gets the preferences of the currently logged user for the currently open project
+    //  */
+    // getPUSettingsOfUser(properties: string[], user: User, project?: Project, pluginID?: string, options?: VBRequestOptions) {
+    //     var params: any = {
+    //         properties: properties,
+    //         projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
+    //         email: user.getEmail(),
+    //         pluginID: pluginID
+    //     }
+    //     return this.httpMgr.doGet(this.serviceName, "getPUSettingsOfUser", params, options);
+    // }
 
     /**
      * 
@@ -146,15 +146,15 @@ export class PreferencesSettingsServices {
      * @param properties 
      * @param project 
      */
-    getProjectSettings(properties: string[], project?: Project) {
-        var params: any = {
-            properties: properties
-        };
-        if (project != null) {
-            params.projectName = project.getName();
-        }
-        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params);
-    }
+    // getProjectSettings(properties: string[], project?: Project) {
+    //     var params: any = {
+    //         properties: properties
+    //     };
+    //     if (project != null) {
+    //         params.projectName = project.getName();
+    //     }
+    //     return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params);
+    // }
 
     /**
      * @param property 
@@ -269,17 +269,6 @@ export class PreferencesSettingsServices {
             params.value = value;
         }
         return this.httpMgr.doPost(this.serviceName, "setSystemSetting", params);
-    }
-
-    /**
-     * 
-     * @param properties 
-     */
-    getSystemSettings(properties: string[]) {
-        var params = {
-            properties: properties
-        };
-        return this.httpMgr.doGet(this.serviceName, "getSystemSettings", params);
     }
 
 }

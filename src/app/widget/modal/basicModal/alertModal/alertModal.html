@@ -3,17 +3,17 @@
         <h3 [class]="'modal-title ' + titleClass">{{title}}</h3>
     </div>
     <div class="modal-body">
-        <div *ngIf="alertClass" [class]="alertClass + ' vbox'">
+        <div *ngIf="alertClass" [class]="alertClass + ' vbox scrollableContainer'">
             <span style="white-space: pre-line">{{message}}</span>
 
-            <div *ngIf="details" class="vbox mt-1">
+            <div *ngIf="details" class="vbox my-2">
                 <div (click)="detailsCollapsed = !detailsCollapsed">
                     <div class="expandCollapseBtnContainer" style="display: inline">
                         <img src="./assets/images/icons/arrow.png" [ngClass]="{'arrow-right': detailsCollapsed}">
                     </div>
                     <label>{{'COMMONS.DETAILS'|translate}}:</label>
                 </div>
-                <div *ngIf="!detailsCollapsed" class="card vbox">
+                <div *ngIf="!detailsCollapsed" class="card vbox" style="min-height: 200px;">
                     <div class="card-body overflow-auto" style="font-size: .8rem;">
                         {{details}}
                     </div>

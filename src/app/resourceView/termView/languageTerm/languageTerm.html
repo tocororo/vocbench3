@@ -5,7 +5,7 @@
 
     <div class="groupPanel-body">
         <div class="term-wrap">
-            <label [ngClass]="term?.isPrefLabel ? 'prefLabelColor' : 'altLabelcolor'" [title]="term.predicate.getShow()" style="font-size: 13px;">{{'RESOURCE_VIEW.TERM_VIEW.TERM'|translate}}:</label>
+            <label [ngClass]="term?.isPrefLabel ? 'text-primary' : 'text-secondary'" [title]="term.predicate.getShow()" style="font-size: 13px;">{{'RESOURCE_VIEW.TERM_VIEW.TERM'|translate}}:</label>
             <inline-editable-value style="flex: 1; margin-left: 4px;" [focusOnInit]="focus" [value]="term.object" (edited)="onValueEdited($event)" 
                 [disabled]="!editTermAuthorized || readonly">
             </inline-editable-value>

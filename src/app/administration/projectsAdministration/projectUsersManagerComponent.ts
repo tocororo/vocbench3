@@ -1,12 +1,13 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { Language, Languages } from "../../models/LanguagesCountries";
-import { SettingsProp } from "../../models/Plugins";
+import { ExtensionPointID, SettingsProp } from "../../models/Plugins";
 import { Project } from "../../models/Project";
-import { PartitionFilterPreference, Properties } from "../../models/Properties";
+import { PartitionFilterPreference, Properties, ResourceViewPreference, SettingsEnum } from "../../models/Properties";
 import { ProjectUserBinding, Role, User, UsersGroup } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
@@ -41,7 +42,7 @@ export class ProjectUsersManagerComponent {
 
     private projectLanguages: Language[]; //all the languages assigned to the selected project
     private availableLanguages: Language[]; //the languages that are shown in the "Available languages" panel, those who is possible to assign to user
-        //this might be a subset of projectLanguages (if filterProficiencies is active)
+    //this might be a subset of projectLanguages (if filterProficiencies is active)
     private puLanguages: Language[]; //languages assigned to the user in the selected project
     private selectedLang: Language; //role selected in langList (available langs)
     private selectedUserLang: Language; //selected lang in the list of the language assigned to the selectedUser in the selectedProject
@@ -53,9 +54,9 @@ export class ProjectUsersManagerComponent {
 
     private puTemplate: PartitionFilterPreference;
 
-    constructor(private userService: UserServices, private projectService: ProjectServices, private adminService: AdministrationServices, 
-        private groupsService: UsersGroupsServices, private prefSettingsServices: PreferencesSettingsServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
+    constructor(private userService: UserServices, private projectService: ProjectServices, private adminService: AdministrationServices,
+        private groupsService: UsersGroupsServices, private prefSettingsServices: PreferencesSettingsServices, private settingsService: SettingsServices,
+        private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
 
     ngOnChanges(changes: SimpleChanges) {
@@ -94,19 +95,13 @@ export class ProjectUsersManagerComponent {
                     this.groupList = groups;
                 }
             );
-            this.prefSettingsServices.getProjectSettings(["languages"], this.project).subscribe(
-                stResp => {
-                    let langsValue = stResp["languages"];
-                    try {
-                        this.projectLanguages = <Language[]>JSON.parse(langsValue);
-                        Languages.sortLanguages(this.projectLanguages);
-                        this.initAvailableLanguages();
-                    } catch (err) {
-                        this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.PROJ_LANGUAGES_PARSING_ERR", params: {projName: this.project.getName(), propName: Properties.setting_languages}},
-                            ModalType.error);
-                    }
+            this.settingsService.getProjectSettings(ExtensionPointID.ST_CORE_ID, this.project).subscribe(
+                settings => {
+                    this.projectLanguages = settings.getPropertyValue(SettingsEnum.languages);
+                    Languages.sortLanguages(this.projectLanguages);
+                    this.initAvailableLanguages();
                 }
-            );
+            )
         }
     }
 
@@ -130,12 +125,12 @@ export class ProjectUsersManagerComponent {
          * Init template; only if admin (required in order to allow to read/edit settings of other users)
          */
         if (this.isLoggedUserAdmin()) {
-            this.prefSettingsServices.getPUSettingsOfUser([Properties.pref_res_view_partition_filter], this.selectedUser, this.project).subscribe(
-                prefs => {
+            this.settingsService.getPUSettingsOfUser(ExtensionPointID.ST_CORE_ID, this.project, this.selectedUser).subscribe(
+                settings => {
+                    let resViewSettings: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
                     let partitionFilter: PartitionFilterPreference;
-                    let value = prefs[Properties.pref_res_view_partition_filter];
-                    if (value != null) {
-                        partitionFilter = JSON.parse(value);
+                    if (resViewSettings != null) {
+                        partitionFilter = resViewSettings.resViewPartitionFilter;
                     }
                     this.puTemplate = partitionFilter;
                 }
@@ -146,8 +141,8 @@ export class ProjectUsersManagerComponent {
     addUserToProject() {
         const modalRef: NgbModalRef = this.modalService.open(UserProjBindingModal, new ModalOptions());
         modalRef.componentInstance.title = "Add user to " + this.project.getName();
-		modalRef.componentInstance.project = this.project;
-		modalRef.componentInstance.usersBound = this.usersBound;
+        modalRef.componentInstance.project = this.project;
+        modalRef.componentInstance.usersBound = this.usersBound;
         return modalRef.result.then(
             data => {
                 let user: User = data.user;
@@ -163,24 +158,24 @@ export class ProjectUsersManagerComponent {
     }
 
     removeUserFromProject() {
-        this.basicModals.confirm({key:"ADMINISTRATION.ACTIONS.REMOVE_USER"}, {key:"MESSAGES.REMOVE_USER_FROM_PROJ_CONFIRM", params:{user: this.selectedUser.getShow(), project: this.project.getName()}},
+        this.basicModals.confirm({ key: "ADMINISTRATION.ACTIONS.REMOVE_USER" }, { key: "MESSAGES.REMOVE_USER_FROM_PROJ_CONFIRM", params: { user: this.selectedUser.getShow(), project: this.project.getName() } },
             ModalType.warning).then(
-            () => {
-                this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
-                    stResp => {
-                        for (let i = 0; i < this.usersBound.length; i++) {
-                            if (this.usersBound[i].getEmail() == this.selectedUser.getEmail()) {
-                                this.usersBound.splice(i, 1);
+                () => {
+                    this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
+                        stResp => {
+                            for (let i = 0; i < this.usersBound.length; i++) {
+                                if (this.usersBound[i].getEmail() == this.selectedUser.getEmail()) {
+                                    this.usersBound.splice(i, 1);
+                                }
                             }
+                            this.puBinding.setRoles([]);
+                            this.selectedUser = null;
+                            this.selectedRole = null;
                         }
-                        this.puBinding.setRoles([]);
-                        this.selectedUser = null;
-                        this.selectedRole = null;
-                    }
-                );
-            }, 
-            () => {}
-        );
+                    );
+                },
+                () => { }
+            );
     }
 
     /** ==========================
@@ -190,24 +185,24 @@ export class ProjectUsersManagerComponent {
     private cloneSettings() {
         this.projectService.listProjects().subscribe(
             projects => {
-                this.basicModals.select({key:"ACTIONS.DUPLICATE_SETTINGS"}, {key:"ACTIONS.SELECT_TARGET_PROJECT"}, projects.map(p => p.getName())).then(
+                this.basicModals.select({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "ACTIONS.SELECT_TARGET_PROJECT" }, projects.map(p => p.getName())).then(
                     targetProj => {
-                        this.basicModals.confirm({key:"ACTIONS.DUPLICATE_SETTINGS"}, {key:"MESSAGES.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM", params:{user: this.selectedUser.getShow(), project: targetProj}},
+                        this.basicModals.confirm({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "MESSAGES.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM", params: { user: this.selectedUser.getShow(), project: targetProj } },
                             ModalType.warning).then(
-                            () => {
-                                //clone binding-related settings (roles, group, language)
-                                let userIri: ARTURIResource = new ARTURIResource(this.selectedUser.getIri());
-                                this.adminService.clonePUBinding(userIri, this.project.getName(), userIri, targetProj).subscribe(
-                                    () => {
-                                        this.basicModals.alert({key:"ACTIONS.DUPLICATE_SETTINGS"}, {key: "MESSAGES.SETTINGS_DUPLICATED_SUCCESSFULLY"});
-                                    }
-                                );
-                                //clone template
-                                this.updateTemplate(new Project(targetProj));
-                            }
-                        )
+                                () => {
+                                    //clone binding-related settings (roles, group, language)
+                                    let userIri: ARTURIResource = this.selectedUser.getIri();
+                                    this.adminService.clonePUBinding(userIri, this.project.getName(), userIri, targetProj).subscribe(
+                                        () => {
+                                            this.basicModals.alert({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "MESSAGES.SETTINGS_DUPLICATED_SUCCESSFULLY" });
+                                        }
+                                    );
+                                    //clone template
+                                    this.updateTemplate(new Project(targetProj));
+                                }
+                            )
                     },
-                    () => {}
+                    () => { }
                 )
             }
         );
@@ -217,7 +212,7 @@ export class ProjectUsersManagerComponent {
 
     private selectUserRole(role: string) {
         if (this.selectedUserRole == role) {
-            this.selectedUserRole = null;    
+            this.selectedUserRole = null;
         } else {
             this.selectedUserRole = role;
         }
@@ -267,12 +262,12 @@ export class ProjectUsersManagerComponent {
         return false;
     }
 
-    
+
     //=========== GROUPS ===========
 
     private selectUserGroup(group: UsersGroup) {
         if (this.selectedUserGroup == group) {
-            this.selectedUserGroup = null;    
+            this.selectedUserGroup = null;
         } else {
             this.selectedUserGroup = group;
         }
@@ -324,8 +319,8 @@ export class ProjectUsersManagerComponent {
         }
         return false;
     }
-    
-   
+
+
     //=========== LANGUAGES ===========
 
     private toggleFilterProficencies() {
@@ -359,7 +354,7 @@ export class ProjectUsersManagerComponent {
 
     private selectUserLang(lang: Language) {
         if (this.selectedUserLang == lang) {
-            this.selectedUserLang = null;    
+            this.selectedUserLang = null;
         } else {
             this.selectedUserLang = lang;
         }
@@ -442,7 +437,7 @@ export class ProjectUsersManagerComponent {
                 this.initPULanguages();
                 //if the updates are applied to the current user in the current project, update project binding in context 
                 if (
-                    VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() && 
+                    VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() &&
                     VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()
                 ) {
                     VBContext.setProjectUserBinding(this.puBinding);
@@ -454,7 +449,7 @@ export class ProjectUsersManagerComponent {
     //=========== TEMPLATES ===========
 
     private loadTemplate() {
-        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE).then(
+        this.sharedModals.loadConfiguration({ key: "ACTIONS.LOAD_TEMPLATE" }, ConfigurationComponents.TEMPLATE_STORE).then(
             (conf: LoadConfigurationModalReturnData) => {
                 let templateProp: SettingsProp = conf.configuration.properties.find(p => p.name == "template");
                 if (templateProp != null) {
@@ -469,7 +464,7 @@ export class ProjectUsersManagerComponent {
         let config: { [key: string]: any } = {
             template: this.puTemplate
         }
-        this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE, config);
+        this.sharedModals.storeConfiguration({ key: "ACTIONS.SAVE_TEMPLATE" }, ConfigurationComponents.TEMPLATE_STORE, config);
     }
 
     private updateTemplate(project?: Project) {

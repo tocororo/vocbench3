@@ -336,6 +336,9 @@ export class PluginSpecification {
 //Extension Point
 
 export class ExtensionPointID {
+
+    public static ST_CORE_ID: string = "it.uniroma2.art.semanticturkey.settings.core.SemanticTurkeyCoreSettingsManager";
+
     public static COLLABORATION_BACKEND_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.collaboration.CollaborationBackend";
     public static DATASET_CATALOG_CONNECTOR_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.datasetcatalog.DatasetCatalogConnector";
     public static DATASET_METADATA_EXPORTER_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.datasetmetadata.DatasetMetadataExporter";
@@ -404,7 +407,8 @@ export class NonConfigurableExtensionFactory extends ExtensionFactory {
 
 export class ExtensionPoint {
     id: string;
-    interface: string;
+    interface?: string;
+    interfaces?: string[];
     scope: Scope;
     settingsScopes?: Scope[];
     configurationScopes?: Scope[];
@@ -417,6 +421,7 @@ export class ExtensionPoint {
         let ep: ExtensionPoint = new ExtensionPoint();
         ep.id = json.id;
         ep.interface = json.interface;
+        ep.interfaces = json.interfaces;
         ep.scope = json.scope;
         ep.settingsScopes = json.settingsScopes;
         ep.configurationScopes = json.configurationScopes;

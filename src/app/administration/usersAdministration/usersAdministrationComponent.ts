@@ -69,7 +69,7 @@ export class UsersAdministrationComponent {
             this.initTemplate();
             //init project assigned to user user
             if (!this.selectedUser.isAdmin()) {
-                this.userService.listProjectsBoundToUser(new ARTURIResource(this.selectedUser.getIri())).subscribe(
+                this.userService.listProjectsBoundToUser(this.selectedUser.getIri()).subscribe(
                     projects => {
                         this.userProjects = projects;
                     }

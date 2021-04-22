@@ -89,7 +89,7 @@ export class CreateDiffingTaskModal {
     ok() {
         //get as language list those set as rendering by the user
         let langs: string[] = [];
-        let renderingLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference;
+        let renderingLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference;
         if (renderingLangs != null && !(renderingLangs.length == 1 && renderingLangs[0] == Languages.ALL_LANG)) {
             langs = renderingLangs;
         }

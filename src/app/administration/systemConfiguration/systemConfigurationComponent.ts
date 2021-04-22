@@ -2,13 +2,13 @@ import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
-import { Properties } from "src/app/models/Properties";
+import { Properties, SettingsEnum } from "src/app/models/Properties";
 import { PreferencesSettingsServices } from "src/app/services/preferencesSettingsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { CronDefinition } from "../../models/Notifications";
-import { Scope } from "../../models/Plugins";
+import { ExtensionPointID, Scope } from "../../models/Plugins";
 import { UserForm, UserFormCustomField, UserFormOptionalField } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { NotificationServices } from "../../services/notificationServices";
@@ -444,12 +444,13 @@ export class SystemConfigurationComponent {
      * ============================ */
 
     private initProjCreation() {
-        this.prefService.getSystemSettings([Properties.setting_proj_creation_default_acl_set_universal_access, Properties.setting_proj_creation_default_open_at_startup]).subscribe(
-            stResp => {
-                this.defaultAclUniversalAccess = stResp[Properties.setting_proj_creation_default_acl_set_universal_access] == "true";
-                this.defaultOpenAtStartup = stResp[Properties.setting_proj_creation_default_open_at_startup] == "true";
+        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
+            settings => {
+                let projCreationSettings: any = settings.getPropertyValue(SettingsEnum.projectCreation);
+                this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault;
+                this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault;
             }
-        )
+        );
     }
 
     onDefaultAclChanged() {

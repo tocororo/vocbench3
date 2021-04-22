@@ -114,7 +114,7 @@ export abstract class AbstractHistValidComponent {
         if (this.performers.length > 0) {
             performersIRI = [];
             this.performers.forEach((p: User) => {
-                performersIRI.push(new ARTURIResource(p.getIri()));
+                performersIRI.push(p.getIri());
             })
         }
         return performersIRI;

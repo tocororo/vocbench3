@@ -1,11 +1,13 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { ExtensionPointID } from "src/app/models/Plugins";
 import { SKOS } from "src/app/models/Vocabulary";
+import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
-import { PrefLabelClashMode, Properties } from "../../models/Properties";
+import { PrefLabelClashMode, Properties, SettingsEnum } from "../../models/Properties";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
@@ -30,7 +32,7 @@ export class ProjectSettingsComponent {
     ];
     labelClashOptSelected: LabelClashItem;
 
-    constructor(private prefService: PreferencesSettingsServices, private vbProperties: VBProperties, private basicModals: BasicModalServices) { }
+    constructor(private prefService: PreferencesSettingsServices, private settingsService: SettingsServices, private vbProperties: VBProperties, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.initSystemLanguages().subscribe(
@@ -69,43 +71,33 @@ export class ProjectSettingsComponent {
     }
 
     private initProjectSettings() {
-        let properties = [Properties.setting_languages];
-
         this.isSkos = this.project.getModelType() == SKOS.uri;
-        if (this.isSkos) { //in SKOS project init also label clash mode setting
-            properties.push(Properties.label_clash_mode);
-        }
-        this.prefService.getProjectSettings(properties, this.project).subscribe(
-            stResp => {
+        this.settingsService.getProjectSettings(ExtensionPointID.ST_CORE_ID, this.project).subscribe(
+            settings => {
                 //init active languages
-                let langsValue = stResp[Properties.setting_languages];
-                try {
-                    let projectLanguages = <Language[]>JSON.parse(langsValue);
-                    Languages.sortLanguages(projectLanguages);
-                    for (let i = 0; i < this.languageItems.length; i++) {
-                        let idx = Languages.indexOf(projectLanguages, this.languageItems[i].lang);
-                        if (idx != -1) {
-                            this.languageItems[i].active = true;
-                            this.languageItems[i].lang.mandatory = projectLanguages[idx].mandatory;
-                            this.noLangActive = false;
-                        } else {
-                            this.languageItems[i].active = false;
-                        }
+                let projectLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
+                Languages.sortLanguages(projectLanguages);
+                for (let i = 0; i < this.languageItems.length; i++) {
+                    let idx = Languages.indexOf(projectLanguages, this.languageItems[i].lang);
+                    if (idx != -1) {
+                        this.languageItems[i].active = true;
+                        this.languageItems[i].lang.mandatory = projectLanguages[idx].mandatory;
+                        this.noLangActive = false;
+                    } else {
+                        this.languageItems[i].active = false;
                     }
-                } catch (err) {
-                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.PROJ_LANGUAGES_PARSING_ERR", params: { projName: this.project.getName(), propName: Properties.setting_languages } },
-                        ModalType.error);
                 }
                 //init label clash mode
                 if (this.isSkos) {
-                    if (stResp[Properties.label_clash_mode] != null) {
-                        this.labelClashOptSelected = this.labelClashOpts.find(opt => opt.mode == stResp[Properties.label_clash_mode]);
+                    let labelClashMode: string = settings.getPropertyValue(SettingsEnum.labelClashMode);
+                    if (labelClashMode != null) {
+                        this.labelClashOptSelected = this.labelClashOpts.find(opt => opt.mode == labelClashMode);
                     } else {
                         this.labelClashOptSelected = this.labelClashOpts.find(opt => opt.mode == PrefLabelClashMode.forbid);
                     }
                 }
             }
-        );
+        )
     }
 
     changeAllLangStatus(checked: boolean) {

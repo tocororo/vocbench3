@@ -15,14 +15,21 @@
             <!-- first-->
             <div class="card card-default"> 
                 <div class="card-body">
-                    <h2 class="qname"><span>{{resource.qname}}</span></h2>
+                    <h2 class="text-primary">{{resource.getShow()}}</h2>
+
+                    <div class="lined-header"><span>{{'COMMONS.DEFINITION'|translate}}</span></div>
                     <div>
-                        <p>{{resource.getShow()}}</p>
                         <p *ngFor="let def of definitions">{{def.getShow()}} ({{def.getAdditionalProperty('lang')}})</p>
                     </div>
-                    <h2 class="concept"><span>{{'RESOURCE_VIEW.TERM_VIEW.BROADER_CONCEPTS'|translate}}</span></h2>
+
+                    <div class="lined-header"><span>{{'RESOURCE_VIEW.TERM_VIEW.CONCEPT_SCHEMES'|translate}}</span></div>
                     <div>
-                        <p *ngFor="let broader of broaders">{{broader.getShow()}}</p>
+                        <p *ngFor="let s of schemes">{{s.getShow()}}</p>
+                    </div>
+
+                    <div class="lined-header"><span>{{'RESOURCE_VIEW.TERM_VIEW.BROADER_CONCEPTS'|translate}}</span></div>
+                    <div>
+                        <p *ngFor="let b of broaders">{{b.getShow()}}</p>
                     </div>
                 </div>
             </div>

@@ -2,13 +2,14 @@ import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
+import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
-import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings } from "../../models/Plugins";
+import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, PluginSpecification, Scope, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
-import { Properties } from "../../models/Properties";
+import { SettingsEnum } from "../../models/Properties";
 import { RDFFormat } from "../../models/RDFFormat";
 import { PatternStruct } from "../../models/ResourceMetadata";
 import { Pair } from "../../models/Shared";
@@ -16,7 +17,6 @@ import { EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary
 import { MetadataFactoryPatternSelectionModal } from "../../resourceMetadata/modals/metadataFactoryPatternSelectionModal";
 import { ExtensionsServices } from "../../services/extensionsServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { ProjectServices } from "../../services/projectServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
@@ -160,7 +160,7 @@ export class CreateProjectComponent {
     private globallyAccessible: boolean = false;
 
     constructor(private projectService: ProjectServices, private extensionService: ExtensionsServices,
-        private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
+        private inOutService: InputOutputServices, private settingsService: SettingsServices,
         private translateService: TranslateService, private router: Router, 
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {
     }
@@ -204,11 +204,13 @@ export class CreateProjectComponent {
             }
         );
 
-        //init optional settings default values
-        this.prefService.getSystemSettings([Properties.setting_proj_creation_default_acl_set_universal_access, Properties.setting_proj_creation_default_open_at_startup]).subscribe(
-            stResp => {
-                this.globallyAccessible = stResp[Properties.setting_proj_creation_default_acl_set_universal_access] == "true";
-                this.openAtStartup = stResp[Properties.setting_proj_creation_default_open_at_startup] == "true";
+        //init system settings
+        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
+            settings => {
+                //globally accessible and open at startup
+                let projCreationSettings: any = settings.getPropertyValue(SettingsEnum.projectCreation);
+                this.globallyAccessible = projCreationSettings.aclUniversalAccessDefault;
+                this.openAtStartup = projCreationSettings.openAtStartUpDefault;
             }
         );
 
@@ -468,10 +470,11 @@ export class CreateProjectComponent {
      * ============================================================= */
 
     private initRemoteRepoAccessConfigurations() {
-        this.prefService.getSystemSettings([Properties.setting_remote_configs]).subscribe(
-            stResp => {
-                if (stResp[Properties.setting_remote_configs] != null) {
-                    this.remoteRepoConfigs = <RemoteRepositoryAccessConfig[]> JSON.parse(stResp[Properties.setting_remote_configs]);
+        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
+            settings => {
+                let remoteConfSetting = settings.getPropertyValue(SettingsEnum.remoteConfigs);
+                if (remoteConfSetting != null) {
+                    this.remoteRepoConfigs = remoteConfSetting;
                     //initialize the selected configuration
                     if (this.selectedRemoteRepoConfig != null) {
                         //if previously a config was already selected, select it again (deselected if not found, probably it has been deleted)
@@ -481,7 +484,8 @@ export class CreateProjectComponent {
                             this.selectedRemoteRepoConfig = this.remoteRepoConfigs[0];
                         }
                     }
-                } else {
+                } else { 
+                    //the remote config are refreshed when admin changes it, so it might happend that he deleted the previously available configs 
                     this.remoteRepoConfigs = [];
                     this.selectedRemoteRepoConfig = null;
                 }

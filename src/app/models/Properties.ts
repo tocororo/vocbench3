@@ -1,14 +1,14 @@
 import { ARTURIResource } from "./ARTResources";
 import { Language } from "./LanguagesCountries";
+import { Project } from "./Project";
 import { ResViewPartition } from "./ResourceView";
-import { SKOS } from "./Vocabulary";
+import { OWL, RDFS, SKOS } from "./Vocabulary";
 
 export class Properties {
 
     static pref_languages: string = "languages";
     static pref_editing_language: string = "editing_language";
     static pref_filter_value_languages: string = "filter_value_languages";
-    static pref_active_schemes: string = "active_schemes";
     static pref_active_lexicon: string = "active_lexicon";
     static pref_show_flags: string = "show_flags";
     static pref_project_theme: string = "project_theme";
@@ -64,6 +64,37 @@ export class Properties {
     
 }
 
+/**
+ * Names of the property of the Settings (at every levels: system, project, user, project-user)
+ */
+export enum SettingsEnum {
+    activeLexicon = "activeLexicon",
+    activeSchemes = "activeSchemes",
+    classTree = "classTree",
+    conceptTree = "conceptTree",
+    defaultConceptType = "defaultConceptType",
+    defaultLexEntryType = "defaultLexEntryType",
+    editingLanguage = "editingLanguage",
+    experimentalFeaturesEnabled = "experimentalFeaturesEnabled",
+    filterValueLanguages = "filterValueLanguages",
+    graphViewPartitionFilter = "graphViewPartitionFilter",
+    hideLiteralGraphNodes = "hideLiteralGraphNodes",
+    homeContent = "homeContent",
+    instanceList = "instanceList",
+    labelClashMode = "labelClashMode",
+    languages = "languages",
+    lexEntryList = "lexEntryList",
+    notificationsStatus = "notificationsStatus",
+    privacyStatementAvailable = "privacyStatementAvailable",
+    projectCreation = "projectCreation",
+    projectTheme = "projectTheme",
+    remoteConfigs = "remoteConfigs",
+    resourceView = "resourceView",
+    searchSettings = "searchSettings",
+    sheet2rdfSettings = "sheet2rdfSettings",
+    showFlags = "showFlags",
+}
+
 export class ResourceViewPreference {
     mode: ResourceViewMode = ResourceViewMode.tabbed; 
     syncTabs: boolean = false; //in tabbed mode allows to keep sync'd the resource in the active tab with the same resource in the tree/list
@@ -72,7 +103,7 @@ export class ResourceViewPreference {
     defaultLexEntryType: ResourceViewType = ResourceViewType.resourceView; //tells the RV type to be open by default for lexEntry
     lastLexEntryType: ResourceViewType;
     displayImg: boolean = false;
-    resViewPartitionFilter: PartitionFilterPreference;
+    resViewPartitionFilter: PartitionFilterPreference = {};
     rendering: boolean = true;
     inference: boolean = false;
     showDeprecated: boolean = true;
@@ -124,10 +155,16 @@ export class ClassTreePreference {
     rootClassUri: string;
     filter: ClassTreeFilter = { enabled: true, map: {} };
     showInstancesNumber: boolean;
+
+    constructor(project: Project) {
+        let modelType = project.getModelType();
+        this.rootClassUri = modelType == RDFS.uri ? RDFS.resource.getURI() : OWL.thing.getURI();
+        this.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
+    }
 }
 export class ClassTreeFilter {
-    enabled: boolean;
-    map:  { [key: string]: string[] }; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
+    enabled: boolean = true;
+    map:  { [key: string]: string[] } = {}; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
 }
 
 export class ConceptTreePreference {
@@ -208,7 +245,7 @@ export enum NotificationStatus {
  * Class that represents the user settings (preferences) of a Project 
  */
 export class ProjectPreferences {
-    projectLanguagesPreference: string[] = []; //languages that user has assigned for project (and ordered according his preferences)
+    renderingLanguagesPreference: string[] = []; //languages that user has assigned for project (and ordered according his preferences)
 
     editingLanguage: string; //default editing language
     filterValueLang: ValueFilterLanguages; //languages visible in resource description (e.g. in ResourceView, Graph,...)
