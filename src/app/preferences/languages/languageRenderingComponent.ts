@@ -20,7 +20,7 @@ export class LanguageRenderingComponent {
 
     ngOnInit() {
         let projectLanguages: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
-        let renderingLanguagesPref: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference;
+        let renderingLanguagesPref: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference;
 
         this.renderingLanguages.push(this.noLangItem);
 
@@ -94,7 +94,7 @@ export class LanguageRenderingComponent {
         activeLangs.forEach(l => {
             preferenceLangs.push(l.lang.tag);
         })
-        this.properties.setLanguagesPreference(preferenceLangs);
+        this.properties.setRenderingLanguagesPreference(preferenceLangs);
     }
     
     changePositionOrder() {

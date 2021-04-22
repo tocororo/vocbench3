@@ -245,7 +245,7 @@ export enum NotificationStatus {
  * Class that represents the user settings (preferences) of a Project 
  */
 export class ProjectPreferences {
-    projectLanguagesPreference: string[] = []; //languages that user has assigned for project (and ordered according his preferences)
+    renderingLanguagesPreference: string[] = []; //languages that user has assigned for project (and ordered according his preferences)
 
     editingLanguage: string; //default editing language
     filterValueLang: ValueFilterLanguages; //languages visible in resource description (e.g. in ResourceView, Graph,...)

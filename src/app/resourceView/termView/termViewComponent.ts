@@ -47,8 +47,9 @@ export class TermViewComponent extends AbstractResourceView {
     private userAssignedLangs: string[];
     private allProjectLangs: Language[]; // all language to manage case in which user is admin without flags assigned
 
-    private broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
-    private definitions: ARTNode[] = [];  // contains object with definitions predicate (skos:definition) and its lang
+    broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
+    definitions: ARTNode[] = [];  // contains object with definitions predicate (skos:definition) and its lang
+    schemes: ARTNode[] = [];  // schemes where the concept belongs to
     private languages: LangStructView[] = []; // it is used to assign flag status(active/disabled) to flags list (top page under first box)
 
     private defCustomRangeConfig: DefinitionCustomRangeConfig; //tells if skos:definition is mapped to CustomRange
@@ -174,21 +175,37 @@ export class TermViewComponent extends AbstractResourceView {
             })
         }
 
+        //definitions
         this.definitions = []
+        let renderingLangs = VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference;
         let notesColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.notes, true);
 
         //no need to check if notesColl != null since for concept the partition notes is always returned by getResourceView()
-        let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition)); //  here takes only objects with skos:definition predicate
+        let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition)); //get only skos:definition
         if (definitionPredObj) { //if there are definitions
-            definitionPredObj.getObjects().forEach(def => {
-                this.definitions.push(def);
-                this.definitions.sort((a: ARTNode, b: ARTNode) => { //sort by lang
-                    let langA: string = a.getAdditionalProperty(ResAttribute.LANG);
-                    let langB: string = b.getAdditionalProperty(ResAttribute.LANG);
-                    return langA.localeCompare(langB);
-                });
+            definitionPredObj.getObjects().forEach(def => { //collect those with language among the the rendering ones
+                if (renderingLangs[0] == "*" || renderingLangs.some(l => l.toLocaleLowerCase() == def.getAdditionalProperty(ResAttribute.LANG).toLocaleLowerCase())) {
+                    this.definitions.push(def);
+                }
             });
         }
+        this.definitions.sort((a: ARTNode, b: ARTNode) => { //sort by lang
+            let langA: string = a.getAdditionalProperty(ResAttribute.LANG);
+            let langB: string = b.getAdditionalProperty(ResAttribute.LANG);
+            return langA.localeCompare(langB);
+        });
+
+        //schemes
+        this.schemes = [];
+        let schemesPredObjLists: ARTPredicateObjects[] = this.initPartition(ResViewPartition.schemes, true);
+        schemesPredObjLists.forEach(po => {
+            po.getObjects().forEach(scheme => {
+                if (!this.schemes.some(s => s.equals(scheme))) { //prevent duplicate in case a scheme is linked multiple time with the concept through subProp of skos:inScheme
+                    this.schemes.push(scheme);
+                }
+            })
+        })
+
         //init info about skos:definition custom range
         this.initSkosDefinitionCustomRange(definitionPredObj).subscribe(
             () => {

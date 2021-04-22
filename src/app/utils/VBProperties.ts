@@ -143,9 +143,16 @@ export class VBProperties {
             })
         )
         // this is called separately since it is about a different plugin
-        let getPUSettingsRenderingEngine = this.settingsService.getSettings(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
-            map(settings => {
-                projectCtx.getProjectPreferences().projectLanguagesPreference = settings.getPropertyValue(SettingsEnum.languages).split(",");
+        //new YAML settings (to restore when server will support this)
+        // let getPUSettingsRenderingEngine = this.settingsService.getSettings(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
+        //     map(settings => {
+        //         projectCtx.getProjectPreferences().renderingLanguagesPreference = settings.getPropertyValue(SettingsEnum.languages).split(",");
+        //     })
+        // )
+        //old JSON settings
+        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], projectCtx.getProject(), ExtensionPointID.RENDERING_ENGINE_ID).pipe(
+            map(prefs => {
+                projectCtx.getProjectPreferences().renderingLanguagesPreference = prefs[Properties.pref_languages].split(",");
             })
         )
         return forkJoin([
@@ -191,10 +198,10 @@ export class VBProperties {
         this.prefService.setPUSetting(Properties.pref_project_theme, value).subscribe();
     }
 
-    setLanguagesPreference(languages: string[]) {
+    setRenderingLanguagesPreference(languages: string[]) {
         let value: string = (languages.length == 0) ? null : languages.join(",");
         this.prefService.setPUSetting(Properties.pref_languages, value, null, ExtensionPointID.RENDERING_ENGINE_ID).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference = languages;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference = languages;
     }
 
     setEditingLanguage(lang: string) {

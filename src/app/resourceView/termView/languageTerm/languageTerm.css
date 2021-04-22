@@ -1,11 +1,3 @@
-.prefLabelColor {
-  color: #337ab7;
-}
-
-.altLabelcolor {
-  color: #686969;
-}
-
 .term-wrap {
   display: flex;
   flex-direction: row;
