@@ -55,7 +55,6 @@ export class LanguageRenderingComponent {
                 position++;
             })
         }
-        
     }
 
     //languages handlers
@@ -64,7 +63,7 @@ export class LanguageRenderingComponent {
         if (checked) {
             //if it's activating all the languages, position the new activated langs after the already active
             let lastPosition: number = this.countActiveLangs();
-            for (var i = 0; i < this.renderingLanguages.length; i++) {
+            for (let i = 0; i < this.renderingLanguages.length; i++) {
                 if (!this.renderingLanguages[i].active) { //only if not yet active update active and position
                     this.renderingLanguages[i].active = checked;
                     this.renderingLanguages[i].position = lastPosition+1;
@@ -72,7 +71,7 @@ export class LanguageRenderingComponent {
                 }
             }
         } else {
-            for (var i = 0; i < this.renderingLanguages.length; i++) {
+            for (let i = 0; i < this.renderingLanguages.length; i++) {
                 this.renderingLanguages[i].active = checked;
                 this.renderingLanguages[i].position = null;
             }
@@ -82,8 +81,8 @@ export class LanguageRenderingComponent {
 
     private updateLanguagesPref() {
         //collect the active languages to set in the preference
-        var preferenceLangs: string[] = [];
-        var activeLangs: LanguageItem[] = this.getActiveLanguageItems();
+        let preferenceLangs: string[] = [];
+        let activeLangs: LanguageItem[] = this.getActiveLanguageItems();
         //sort active langs by position
         activeLangs.sort((l1: LanguageItem, l2: LanguageItem) => {
             if (l1.position > l2.position) return 1;
@@ -94,6 +93,9 @@ export class LanguageRenderingComponent {
         activeLangs.forEach(l => {
             preferenceLangs.push(l.lang.tag);
         })
+        if (preferenceLangs.length == 0) {
+            preferenceLangs.push(Languages.ALL_LANG);
+        }
         this.properties.setRenderingLanguagesPreference(preferenceLangs);
     }
     
@@ -159,7 +161,7 @@ export class LanguageRenderingComponent {
 
     private onPositionChange(langItem: LanguageItem, newPositionValue: string) {
         let newPosition: number = parseInt(newPositionValue);
-        for (var i = 0; i < this.renderingLanguages.length; i++) {
+        for (let i = 0; i < this.renderingLanguages.length; i++) {
             //swap the position between the changed language and the language that was in the "newPosition"
             if (this.renderingLanguages[i].position == newPosition) {
                 this.renderingLanguages[i].position = langItem.position;
@@ -179,7 +181,7 @@ export class LanguageRenderingComponent {
             let deactivatedPosition: number = langItem.position;
             langItem.position = null;
             //...and shift the position of the languages that follow the deactivated
-            for (var i = 0; i < this.renderingLanguages.length; i++) {
+            for (let i = 0; i < this.renderingLanguages.length; i++) {
                 if (this.renderingLanguages[i].position > deactivatedPosition) {
                     this.renderingLanguages[i].position = this.renderingLanguages[i].position-1;
                 }
@@ -192,8 +194,8 @@ export class LanguageRenderingComponent {
     //Utils 
 
     getActiveLanguageItems(): LanguageItem[] {
-        var activeLangs: LanguageItem[] = [];
-        for (var i = 0; i < this.renderingLanguages.length; i++) {
+        let activeLangs: LanguageItem[] = [];
+        for (let i = 0; i < this.renderingLanguages.length; i++) {
             if (this.renderingLanguages[i].active) {
                 activeLangs.push(this.renderingLanguages[i]);
             }
@@ -203,7 +205,7 @@ export class LanguageRenderingComponent {
 
     private countActiveLangs(): number {
         let activeLangs: number = 0
-        for (var i = 0; i < this.renderingLanguages.length; i++) {
+        for (let i = 0; i < this.renderingLanguages.length; i++) {
             if (this.renderingLanguages[i].active) {
                 activeLangs++;
             }

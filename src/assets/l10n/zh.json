@@ -1467,6 +1467,7 @@
         },
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Broader Concepts",
+            "CONCEPT_SCHEMES": "Concept schemes",
             "TERM": "Term",
             "REMOVE_BOX": "Remove box"
         }

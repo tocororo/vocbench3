@@ -184,7 +184,7 @@ export class TermViewComponent extends AbstractResourceView {
         let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition)); //get only skos:definition
         if (definitionPredObj) { //if there are definitions
             definitionPredObj.getObjects().forEach(def => { //collect those with language among the the rendering ones
-                if (renderingLangs[0] == "*" || renderingLangs.some(l => l.toLocaleLowerCase() == def.getAdditionalProperty(ResAttribute.LANG).toLocaleLowerCase())) {
+                if (renderingLangs[0] == Languages.ALL_LANG || renderingLangs.some(l => l.toLocaleLowerCase() == def.getAdditionalProperty(ResAttribute.LANG).toLocaleLowerCase())) {
                     this.definitions.push(def);
                 }
             });
@@ -423,7 +423,7 @@ export class TermViewComponent extends AbstractResourceView {
      * 2) click on flag(not in server but user assigned) adds new lang definition and term because this flag is not present in server but is present or in userAssignedLang or in allProjectLangs(particular case)
      * @param flagClicked 
      */
-    private onLanguageClicked(flagClicked: LangStructView) {
+    onLanguageClicked(flagClicked: LangStructView) {
         if (this.langsWithValue.some(l => l == flagClicked.lang.tag)) { //(1)
             this.langBoxViews.forEach(l => {
                 if (l.lang == flagClicked.lang.tag) {

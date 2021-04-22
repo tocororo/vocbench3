@@ -1467,6 +1467,7 @@
         },
         "TERM_VIEW": {
             "BROADER_CONCEPTS": "Concetti broader",
+            "CONCEPT_SCHEMES": "Schemi",
             "TERM": "Termine",
             "REMOVE_BOX": "Rimuovi box"
         }
