@@ -32,7 +32,7 @@ export class Properties {
     static pref_concept_tree_safe_to_go_limit: string = "concept_tree_safe_to_go_limit";
 
     static pref_instance_list_visualization: string = "instance_list_visualization";
-    static pref_instance_list_safe_to_go_limit: string = "instance_list_safe_to_go_limit";s
+    static pref_instance_list_safe_to_go_limit: string = "instance_list_safe_to_go_limit";
 
     static pref_lex_entry_list_visualization: string = "lex_entry_list_visualization";
     static pref_lex_entry_list_index_lenght: string = "lex_entry_list_index_lenght";
