@@ -54,7 +54,7 @@ export class UIUtils {
 
 
     //languages for which exists the flag icon
-    private static availableFlagLang = ["ar", "be", "bg", "bn", "cs", "da", "de", "el", "en", "en-gb", "en-us", "es", "et", "fa", "fr", "fi", "ga", 
+    private static availableFlagLang = ["ar", "be", "bg", "bn", "cs", "cy", "da", "de", "el", "en", "en-gb", "en-us", "es", "et", "fa", "fr", "fi", "ga", "gd",
         "hi", "hr", "hu", "hy", "id", "is", "it", "ja", "ka", "km", "ko", "kz", "lt", "lv", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv",
         "th", "tr", "uk", "vi", "zh"];
 
