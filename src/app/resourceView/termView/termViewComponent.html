@@ -15,7 +15,14 @@
             <!-- first-->
             <div class="card card-default"> 
                 <div class="card-body">
-                    <h2 class="text-primary">{{resource.getShow()}}</h2>
+                    <div class="d-flex align-items-center" style="position: relative;">
+                        <h2 id="resShowEl" class="text-primary clamp pr-4 mb-0">
+                            {{resource.getShow()}}
+                        </h2>
+                        <span *ngIf="ellipsedResShow" style="position: absolute; right: 0; font-size: 1.2em;" class="fas fa-exclamation-circle text-primary"
+                            [title]="'MESSAGES.LONG_RESOURCE_RENDERING_WARNING'|translate">
+                        </span>
+                    </div>
 
                     <div class="lined-header"><span>{{'COMMONS.DEFINITION'|translate}}</span></div>
                     <div>

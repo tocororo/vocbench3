@@ -2080,6 +2080,7 @@
         "LOADER_NOT_CONFIGURED": "The Loader needs to be configured",
         "LOADER_NOT_SAVED": "Loader configuration is not saved. In order to save the importer configuration all its sub-configurations need to be saved.",
         "LONG_PROCESS_WARN_CONFIRM": "This could be a long process. Are you sure to continue?",
+        "LONG_RESOURCE_RENDERING_WARNING": "The rendering of the resource is too long: you may check the list of languages to be used for rendering in the preferences, or you may change the configuration of your Rendering Engine in case a custom one has been used",
         "METADATA_PATTERN_REQUIRED": "You need to provide at least one pattern (Construction, Update or Destruction)",
         "MISSING_BINDING_NAME": "Missing binding name at position {{position}}, please insert a name",
         "MISSING_DATA_REPO_CONFIG": "Data Repository requires to be configured",

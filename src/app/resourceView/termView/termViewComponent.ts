@@ -23,7 +23,14 @@ import { LanguageBoxComponent } from "./languageBox/languageBoxComponent";
     selector: "term-view",
     templateUrl: "./termViewComponent.html",
     styleUrls: ["./termViewComponent.css"],
-    host: { class: "vbox" }
+    host: { class: "vbox" },
+    styles: [`
+    .clamp {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    `]
 })
 export class TermViewComponent extends AbstractResourceView {
 
@@ -47,6 +54,7 @@ export class TermViewComponent extends AbstractResourceView {
     private userAssignedLangs: string[];
     private allProjectLangs: Language[]; // all language to manage case in which user is admin without flags assigned
 
+    ellipsedResShow: boolean; //tells if the show of the resource has been truncated since it was too long
     broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
     definitions: ARTNode[] = [];  // contains object with definitions predicate (skos:definition) and its lang
     schemes: ARTNode[] = [];  // schemes where the concept belongs to
@@ -120,6 +128,9 @@ export class TermViewComponent extends AbstractResourceView {
         let resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
         this.update.emit(this.resource);
+
+        let resShowEl = document.getElementById('resShowEl');
+        this.ellipsedResShow = resShowEl.scrollWidth > resShowEl.clientWidth;
 
         if (VBContext.getWorkingProject().isValidationEnabled()) {
             this.pendingValidation.emit(ResourceUtils.isResourceInStaging(this.resource));
