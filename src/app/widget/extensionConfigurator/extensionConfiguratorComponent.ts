@@ -39,7 +39,7 @@ export class ExtensionConfiguratorComponent {
         this.configStatusUpdated.emit({ status: this.status });
     }
 
-    private onChangeExtension() {
+    onChangeExtension() {
         this.extensionUpdated.emit(this.selectedExtension);
         if (this.selectedExtension.configurations != null) { //if extension has configurations
             this.selectedConfiguration = this.selectedExtension.configurations[0];
@@ -50,14 +50,14 @@ export class ExtensionConfiguratorComponent {
         }
     }
 
-    private onChangeConfig() {
+    onChangeConfig() {
         this.configurationUpdated.emit(this.selectedConfiguration);
 
         this.status = ExtensionConfigurationStatus.unsaved;
         this.configStatusUpdated.emit({ status: this.status });
     }
 
-    private configure() {
+    configure() {
         this.sharedModals.configurePlugin(this.selectedConfiguration).then(
             (cfg: Settings) => {
                 //update the selected configuration...
@@ -80,7 +80,7 @@ export class ExtensionConfiguratorComponent {
         );
     }
 
-    private saveConfig() {
+    saveConfig() {
         let config: { [key: string]: any } = this.selectedConfiguration.getPropertiesAsMap(true);
         this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_CONFIGURATION"}, this.selectedExtension.id, config).then(
             (relativeRef: string) => {
@@ -93,7 +93,7 @@ export class ExtensionConfiguratorComponent {
         );
     }
 
-    private loadConfig() {
+    loadConfig() {
         this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_CONFIGURATION"}, this.selectedExtension.id).then(
             (config: LoadConfigurationModalReturnData) => {
                 for (var i = 0; i < this.selectedExtension.configurations.length; i++) {
@@ -143,13 +143,7 @@ export class ExtensionConfiguratorComponent {
             }
         }
         //force configuration
-        for (let conf of this.selectedExtension.configurations) {
-            if (conf.type == config.type) { //same type => replace config and then select it
-                conf = config;
-                this.selectedConfiguration = conf;
-                this.configurationUpdated.emit(this.selectedConfiguration);
-            }
-        }
+        this.selectConfigOfSelectedExtension(config);
     }
 
     //useful for forcing a configuration through its reference (e.g. for the filter chain of load/export data)
@@ -165,18 +159,23 @@ export class ExtensionConfiguratorComponent {
         //load the configuration
         this.configurationService.getConfiguration(this.selectedExtension.id, configRef).subscribe(
             (conf: Configuration) => {
-                for (let i = 0; i < this.selectedExtension.configurations.length; i++) {
-                    if (this.selectedExtension.configurations[i].type == conf.type) {
-                        this.selectedExtension.configurations[i] = conf;
-                        this.selectedConfiguration = this.selectedExtension.configurations[i];
-                    }
-                }
-                this.configurationUpdated.emit(this.selectedConfiguration);
+                this.selectConfigOfSelectedExtension(conf);
 
                 this.status = ExtensionConfigurationStatus.saved;
                 this.configStatusUpdated.emit({ status: this.status, relativeReference: configRef });
             }
         )
+    }
+
+    private selectConfigOfSelectedExtension(config: Settings) {
+        for (let i = 0; i < this.selectedExtension.configurations.length; i++) {
+            if (this.selectedExtension.configurations[i].type == config.type) {
+                this.selectedExtension.configurations[i] = config;
+                this.selectedConfiguration = this.selectedExtension.configurations[i];
+                break;
+            }
+        }
+        this.configurationUpdated.emit(this.selectedConfiguration);
     }
 
 
