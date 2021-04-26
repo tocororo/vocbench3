@@ -4,7 +4,7 @@
     </div>
     <div class="modal-body">
         <div *ngIf="alertClass" [class]="alertClass + ' vbox scrollableContainer'">
-            <span style="white-space: pre-line">{{message}}</span>
+            <span style="white-space: pre-wrap">{{message}}</span>
 
             <div *ngIf="details" class="vbox my-2">
                 <div (click)="detailsCollapsed = !detailsCollapsed">
@@ -14,9 +14,7 @@
                     <label>{{'COMMONS.DETAILS'|translate}}:</label>
                 </div>
                 <div *ngIf="!detailsCollapsed" class="card vbox" style="min-height: 200px;">
-                    <div class="card-body overflow-auto" style="font-size: .8rem;">
-                        {{details}}
-                    </div>
+                    <div class="card-body overflow-auto" style="font-size: .9rem; white-space: pre-wrap">{{details}}</div>
                 </div>
             </div>
             

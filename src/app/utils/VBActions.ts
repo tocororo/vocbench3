@@ -605,7 +605,7 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('TransactionSystemException') && err.stack.includes("ShaclSailValidationException")) {
-                                this.basicModals.alert({key:"STATUS.WARNING"}, {key: "MESSAGES.SHACL_VIOLATION_ERROR"}, ModalType.warning, err.stack);
+                                this.basicModals.alert({key:"STATUS.WARNING"}, {key: "MESSAGES.SHACL_VIOLATION_ERROR"}, ModalType.warning, err.message);
                                 observer.error(null);
                             } else {
                                 this.basicModals.alert({key:"STATUS.ERROR"}, err.message, ModalType.error, err.stack);
