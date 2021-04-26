@@ -21,7 +21,7 @@ export class ClassesServices {
      * @param classList
      */
     getClassesInfo(classList: ARTURIResource[], options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             classList: classList
         };
         return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params, options).pipe(
@@ -36,7 +36,7 @@ export class ClassesServices {
      * @param superClass class of which retrieve its subClasses
 	 */
     getSubClasses(superClass: ARTURIResource, numInst: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             superClass: superClass,
             numInst: numInst
         };
@@ -52,12 +52,12 @@ export class ClassesServices {
 	 * @param cls
      */
     getInstances(cls: ARTURIResource, options?: VBRequestOptions): Observable<ARTResource[]> {
-        var params: any = {
+        let params: any = {
             cls: cls
         };
         return this.httpMgr.doGet(this.serviceName, "getInstances", params, options).pipe(
             map(stResp => {
-                var instances = Deserializer.createResourceArray(stResp);
+                let instances = Deserializer.createResourceArray(stResp);
                 return instances;
             })
         );
@@ -68,7 +68,7 @@ export class ClassesServices {
      * @param cls 
      */
     getNumberOfInstances(cls: ARTURIResource, options?: VBRequestOptions): Observable<number> {
-        var params: any = {
+        let params: any = {
             cls: cls
         };
         return this.httpMgr.doGet(this.serviceName, "getNumberOfInstances", params, options);
@@ -82,7 +82,7 @@ export class ClassesServices {
      * @param customFormValue custom form that set additional info to the concept
      */
     createClass(newClass: ARTURIResource, superClass: ARTURIResource, classType?: ARTURIResource, customFormValue?: CustomFormValue) {
-        var params: any = {
+        let params: any = {
             newClass: newClass,
             superClass: superClass
         };
@@ -115,7 +115,7 @@ export class ClassesServices {
      * @param cls 
      */
     deleteClass(cls: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             cls: cls
         };
         return this.httpMgr.doPost(this.serviceName, "deleteClass", params).pipe(
@@ -133,14 +133,18 @@ export class ClassesServices {
      * @param customFormValue custom form that set additional info to the concept
      */
     createInstance(newInstance: ARTURIResource, cls: ARTURIResource, customFormValue?: CustomFormValue) {
-        var params: any = {
+        let params = {
             newInstance: newInstance,
-            cls: cls
+            cls: cls,
+            customFormValue: customFormValue
         };
-        if (customFormValue != null) {
-            params.customFormValue = customFormValue;
-        }
-        return this.httpMgr.doPost(this.serviceName, "createInstance", params).pipe(
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['org.springframework.transaction.TransactionSystemException'] //for shacl violations
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "createInstance", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURI(stResp);
             })
@@ -164,7 +168,7 @@ export class ClassesServices {
      * @param cls the type of the instance. This parameter is not necessary for the request, but is needed for the event
      */
     deleteInstance(instance: ARTResource, cls: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             instance: instance
         };
         return this.httpMgr.doPost(this.serviceName, "deleteInstance", params).pipe(
@@ -182,7 +186,7 @@ export class ClassesServices {
      * @param supercls class to add as superClass
      */
     addSuperCls(cls: ARTURIResource, supercls: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             cls: cls,
             supercls: supercls,
         };
@@ -202,7 +206,7 @@ export class ClassesServices {
      * @param superClass superClass to be removed
      */
     removeSuperCls(cls: ARTURIResource, supercls: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             cls: cls,
             supercls: supercls,
         };
@@ -220,8 +224,8 @@ export class ClassesServices {
      * @param clsDescriptions collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
      */
     addIntersectionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
-        var collNodeArray = new Array<string>();
-        for (var i=0; i<collectionNode.length; i++) {
+        let collNodeArray = new Array<string>();
+        for (let i=0; i<collectionNode.length; i++) {
             if (collectionNode[i] instanceof ARTBNode) {
                 //getShow because getNominalValue returns "_:"+id and in this case, since the ARTBNode is
                 //created manually, the id is the expression (something like :A and :B) so the nominal value
@@ -231,7 +235,7 @@ export class ClassesServices {
                 collNodeArray.push(collectionNode[i].toNT());
             }
         }
-        var params: any = {
+        let params: any = {
             cls: cls,
             clsDescriptions: collNodeArray.join(","),
         };
@@ -244,7 +248,7 @@ export class ClassesServices {
      * @param collectionNode the node representing the intersectionOf expression
      */
     removeIntersectionOf(cls: ARTURIResource, collectionBNode: ARTNode) {
-        var params: any = {
+        let params: any = {
             cls: cls,
             collectionBNode: collectionBNode,
         };
@@ -257,8 +261,8 @@ export class ClassesServices {
      * @param collectionNode collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
      */
     addUnionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
-        var collNodeArray = new Array<string>();
-        for (var i=0; i<collectionNode.length; i++) {
+        let collNodeArray = new Array<string>();
+        for (let i=0; i<collectionNode.length; i++) {
             if (collectionNode[i] instanceof ARTBNode) {
                 //getShow because getNominalValue returns "_:"+id and in this case, since the ARTBNode is
                 //created manually, the id is the expression (something like :A and :B) so the nominal value
@@ -268,7 +272,7 @@ export class ClassesServices {
                 collNodeArray.push(collectionNode[i].toNT());
             }
         }
-        var params: any = {
+        let params: any = {
             cls: cls,
             clsDescriptions: collNodeArray.join(","),
         };
@@ -281,7 +285,7 @@ export class ClassesServices {
      * @param collectionNode the node representing the unionOf expression
      */
     removeUnionOf(cls: ARTURIResource, collectionBNode: ARTBNode) {
-        var params: any = {
+        let params: any = {
             cls: cls,
             collectionBNode: collectionBNode,
         };
@@ -294,7 +298,7 @@ export class ClassesServices {
      * @param individuals collection of individuals
      */
     addOneOf(cls: ARTURIResource, individuals: ARTURIResource[]) {
-        var params: any = {
+        let params: any = {
             cls: cls,
             individuals: individuals,
         };
@@ -307,7 +311,7 @@ export class ClassesServices {
      * @param collectionNode the node representing the oneOf expression
      */
     removeOneOf(cls: ARTURIResource, collectionBNode: ARTBNode) {
-        var params: any = {
+        let params: any = {
             cls: cls,
             collectionBNode: collectionBNode,
         };

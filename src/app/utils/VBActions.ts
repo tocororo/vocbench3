@@ -599,10 +599,19 @@ export class VBActionFunctions {
                 (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.classesService.createInstance(data.uriResource, ctx.metaClass, data.cfValue).subscribe(
-                        stResp => {
+                        () => {
                             UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                             observer.next(null);
                         },
+                        (err: Error) => {
+                            if (err.name.endsWith('TransactionSystemException') && err.stack.includes("ShaclSailValidationException")) {
+                                this.basicModals.alert({key:"STATUS.WARNING"}, {key: "MESSAGES.SHACL_VIOLATION_ERROR"}, ModalType.warning, err.stack);
+                                observer.error(null);
+                            } else {
+                                this.basicModals.alert({key:"STATUS.ERROR"}, err.message, ModalType.error, err.stack);
+                                observer.error(null);
+                            }
+                        }
                     );
                 },
                 cancel => { observer.error(null); }

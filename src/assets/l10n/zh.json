@@ -2175,6 +2175,7 @@
         "SETTINGS_DUPLICATED_SUCCESSFULLY": "Settings duplicated successfully",
         "SHACL_SHAPES_CLEARED": "All SHACL shapes cleared successfully.",
         "SHACL_SHAPES_LOADED": "SHACL shapes loaded succesfully",
+        "SHACL_VIOLATION_ERROR": "Fail in validating SHACL shape",
         "SKOS_DIFFING_SERVER_NOT_RESPONDING": "The SKOS diffing server didn't respond, make sure it is up and running.",
         "ST_DATA_FOLDER_UPDATED": "SemanticTurkey data folder updated",
         "STORED_PARAMETERIZED_QUERY_ALREADY_ADDED": "The stored parameterized SPARQL query '{{ref}}' is already in the Stored Custom Search list. It will not be added",
