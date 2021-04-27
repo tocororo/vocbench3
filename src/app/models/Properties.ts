@@ -95,6 +95,22 @@ export enum SettingsEnum {
     showFlags = "showFlags",
 }
 
+export class PreferencesUtils {
+    /**
+     * Merge the default preferences object with the one returned by the Settings.getSettings() service
+     * Useful to keep the default values to those properties not set and thus not returned by the above service.
+     * @param localPref 
+     * @param settingsProperty 
+     */
+    public static mergePreference(localPref: any, settingsProperty: any) {
+        Object.keys(localPref).forEach(prop => {
+            if (settingsProperty[prop] != null) {
+                localPref[prop] = settingsProperty[prop];
+            }
+        })
+    }
+}
+
 export class ResourceViewPreference {
     mode: ResourceViewMode = ResourceViewMode.tabbed; 
     syncTabs: boolean = false; //in tabbed mode allows to keep sync'd the resource in the active tab with the same resource in the tree/list

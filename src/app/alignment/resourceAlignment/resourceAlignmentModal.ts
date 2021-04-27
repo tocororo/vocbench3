@@ -5,7 +5,6 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { BrowseExternalResourceModalReturnData } from "../../resourceView/resourceViewEditor/resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../../resourceView/resourceViewEditor/resViewModals/resViewModalServices";
 import { AlignmentServices } from "../../services/alignmentServices";
-import { MapleServices } from "../../services/mapleServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AssistedSearchModal } from "./assistedSearchModal";
@@ -25,7 +24,7 @@ export class ResourceAlignmentModal {
     alignedObject: ARTURIResource;
     
     constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private alignService: AlignmentServices,
-        private mapleService: MapleServices, private resViewModals: ResViewModalServices, private basicModals: BasicModalServices) {
+        private resViewModals: ResViewModalServices, private basicModals: BasicModalServices) {
     }
     
     ngOnInit() {

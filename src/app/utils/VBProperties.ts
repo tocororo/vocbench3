@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID, Scope } from '../models/Plugins';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, SettingsEnum, ValueFilterLanguages } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, SettingsEnum, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { AdministrationServices } from '../services/administrationServices';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
@@ -75,12 +75,11 @@ export class VBProperties {
                 }
 
                 //resource view preferences
-                let resViewPreferences: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
-                if (resViewPreferences == null) {
-                    resViewPreferences = new ResourceViewPreference();
+                projectPreferences.resViewPreferences = new ResourceViewPreference();
+                let resViewSetting: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
+                if (resViewSetting != null) {
+                    PreferencesUtils.mergePreference(projectPreferences.resViewPreferences, resViewSetting);
                 }
-                projectPreferences.resViewPreferences = resViewPreferences;
-
                 this.initResourceViewPreferenceCookie(projectPreferences); //fill the preferences also with those stored as cookie
 
                 //graph preferences
@@ -96,36 +95,34 @@ export class VBProperties {
                 projectPreferences.hideLiteralGraphNodes = settings.getPropertyValue(SettingsEnum.hideLiteralGraphNodes);
 
                 //cls tree preferences
-                let classTreePreferences: ClassTreePreference = new ClassTreePreference(projectCtx.getProject());
+                projectPreferences.classTreePreferences = new ClassTreePreference(projectCtx.getProject());
                 let clsTreeSettings: ClassTreePreference = settings.getPropertyValue(SettingsEnum.classTree);
-                if (clsTreeSettings != null) { //the following is necessary due to the update to settings introduced in VB > 9.0 and the related update routine
-                    classTreePreferences.showInstancesNumber = clsTreeSettings.showInstancesNumber;
-                    if (clsTreeSettings.filter != null) classTreePreferences.filter = clsTreeSettings.filter;
-                    if (clsTreeSettings.rootClassUri != null) classTreePreferences.rootClassUri = clsTreeSettings.rootClassUri;
+                if (clsTreeSettings != null) {
+                    PreferencesUtils.mergePreference(projectPreferences.classTreePreferences, clsTreeSettings);
                 }
-                projectPreferences.classTreePreferences = classTreePreferences;
 
                 //instance list preferences
-                let instanceListPreferences: InstanceListPreference = settings.getPropertyValue(SettingsEnum.instanceList);
-                if (instanceListPreferences == null) {
-                    instanceListPreferences = new InstanceListPreference();
+                projectPreferences.instanceListPreferences = new InstanceListPreference();
+                let instListSetting: InstanceListPreference = settings.getPropertyValue(SettingsEnum.instanceList);
+                if (instListSetting != null) {
+                    PreferencesUtils.mergePreference(projectPreferences.instanceListPreferences, instListSetting);
                 }
-                projectPreferences.instanceListPreferences = instanceListPreferences;
+
 
                 //concept tree preferences
-                let conceptTreePreferences: ConceptTreePreference = settings.getPropertyValue(SettingsEnum.conceptTree); new ConceptTreePreference();
-                if (conceptTreePreferences == null) {
-                    conceptTreePreferences = new ConceptTreePreference();
+                projectPreferences.conceptTreePreferences = new ConceptTreePreference();
+                let concTreeSetting: ConceptTreePreference = settings.getPropertyValue(SettingsEnum.conceptTree);
+                if (concTreeSetting != null) {
+                    PreferencesUtils.mergePreference(projectPreferences.conceptTreePreferences, concTreeSetting);
                 }
-                projectPreferences.conceptTreePreferences = conceptTreePreferences;
 
 
                 //lexical entry list preferences
-                let lexEntryListPreferences: LexicalEntryListPreference = settings.getPropertyValue(SettingsEnum.lexEntryList);
-                if (lexEntryListPreferences == null) {
-                    lexEntryListPreferences =  new LexicalEntryListPreference();
+                projectPreferences.lexEntryListPreferences = new LexicalEntryListPreference();
+                let lexEntrySetting: LexicalEntryListPreference = settings.getPropertyValue(SettingsEnum.lexEntryList);
+                if (lexEntrySetting != null) {
+                    PreferencesUtils.mergePreference(projectPreferences.lexEntryListPreferences, lexEntrySetting);
                 }
-                projectPreferences.lexEntryListPreferences = lexEntryListPreferences;
 
                 //search settings
                 let searchSettings: SearchSettings = settings.getPropertyValue(SettingsEnum.searchSettings);
