@@ -1,0 +1,22 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'ADMINISTRATION.ROLES.ROLE_CAPABILITIES'|translate}}</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="card card-default vbox">
+            <div class="card-header">
+                <label>{{role.getName()}}</label>
+            </div>
+            <div class="card-body vbox scrollableContainer">
+                <div *ngFor="let c of capabilityList" class="listItem">
+                    {{c}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-light btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
+    </div>
+</div>

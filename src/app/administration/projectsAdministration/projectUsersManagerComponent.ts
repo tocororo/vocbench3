@@ -21,6 +21,7 @@ import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { RoleDescriptionModal } from "../rolesAdministration/roleDescriptionModal";
 import { UserProjBindingModal } from "./userProjBindingModal";
 
 @Component({
@@ -140,7 +141,6 @@ export class ProjectUsersManagerComponent {
 
     addUserToProject() {
         const modalRef: NgbModalRef = this.modalService.open(UserProjBindingModal, new ModalOptions());
-        modalRef.componentInstance.title = "Add user to " + this.project.getName();
         modalRef.componentInstance.project = this.project;
         modalRef.componentInstance.usersBound = this.usersBound;
         return modalRef.result.then(
@@ -262,6 +262,11 @@ export class ProjectUsersManagerComponent {
         return false;
     }
 
+    showRoleDescription(role: Role) {
+        const modalRef: NgbModalRef = this.modalService.open(RoleDescriptionModal, new ModalOptions());
+        modalRef.componentInstance.role = role;
+        modalRef.componentInstance.project = this.project;
+    }
 
     //=========== GROUPS ===========
 

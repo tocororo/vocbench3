@@ -15,6 +15,7 @@ import { ProjectUsersManagerComponent } from "../administration/projectsAdminist
 import { UserProjBindingModal } from "../administration/projectsAdministration/userProjBindingModal";
 import { CapabilityEditorModal } from "../administration/rolesAdministration/capabilityEditorModal";
 import { ImportRoleModal } from "../administration/rolesAdministration/importRoleModal";
+import { RoleDescriptionModal } from '../administration/rolesAdministration/roleDescriptionModal';
 import { RolesAdministrationComponent } from "../administration/rolesAdministration/rolesAdministrationComponent";
 import { SystemConfigurationComponent } from '../administration/systemConfiguration/systemConfigurationComponent';
 import { ForcePasswordModal } from '../administration/usersAdministration/forcePasswordModal';
@@ -52,6 +53,7 @@ import { UserModule } from './userModule';
         ForcePasswordModal,
         GroupEditorModal,
         ImportRoleModal,
+        RoleDescriptionModal,
         UserCreateModal,
         UserProjBindingModal,
     ],
@@ -62,6 +64,7 @@ import { UserModule } from './userModule';
         ForcePasswordModal,
         GroupEditorModal,
         ImportRoleModal,
+        RoleDescriptionModal,
         UserCreateModal,
         UserProjBindingModal,
     ]

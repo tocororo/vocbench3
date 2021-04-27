@@ -27,7 +27,7 @@
     <div class="groupPanel-body">
         <ng-container *ngIf="!partitionCollapsed">
             <div class="d-flex align-items-center pt-2 pb-3">
-                <div *ngFor="let f of facets; let i=index" class="form-check form-check-inline">
+                <div *ngFor="let f of facets; let i=index" class="form-check form-check-inline" style="flex: 1;">
                     <input class="form-check-input" [id]="'facetCheck'+i" type="checkbox" [(ngModel)]="f.value" [disabled]="isChangeFacetDisabled(f)" (change)="changeFacet(f)">
                     <label class="form-check-label" [for]="'facetCheck'+i" style="font-weight: initial;">{{f.name}}</label>
                 </div>

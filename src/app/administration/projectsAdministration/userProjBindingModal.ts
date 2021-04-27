@@ -10,7 +10,6 @@ import { UserServices } from "../../services/userServices";
     templateUrl: "./userProjBindingModal.html",
 })
 export class UserProjBindingModal {
-    @Input() title: string;
     @Input() project: Project;
     @Input() usersBound: User[];
 
