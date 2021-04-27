@@ -196,7 +196,7 @@ export class AlignmentManagementComponent {
      * Listener to the "Accept" button. Accepts the alignment and updates the UI
      */
     private acceptAlignment(cell: AlignmentCell) {
-        this.alignmentService.acceptAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation()).subscribe(
+        this.alignmentService.acceptAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), cell.getEntity1().getRole()).subscribe(
             resultCell => {
                 //replace the accepted alignment cell with the returned one (keeping the "rendered" entities)
                 let cellToUpdateIdx = this.getIndexOfCell(cell);

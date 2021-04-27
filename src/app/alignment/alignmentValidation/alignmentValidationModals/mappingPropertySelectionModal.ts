@@ -15,14 +15,22 @@ export class MappingPropertySelectionModal {
     mappingPropList: ARTURIResource[];
     selectedProperty: ARTURIResource;
     setAsDefault: boolean = true;
+    allPropCheck: boolean = false;
 
     constructor(public activeModal: NgbActiveModal, private alignmentService: AlignmentServices) {}
 
     ngOnInit() {
+        this.initMappingProperties();
+    }
+
+    initMappingProperties() {
         //get from server list of mapping properties
-        this.alignmentService.getMappingProperties(this.resource.getRole(), false).subscribe(
+        this.alignmentService.getMappingProperties(this.resource.getRole(), this.allPropCheck).subscribe(
             props => {
                 this.mappingPropList = props;
+                if (this.selectedProperty != null) {
+                    this.selectedProperty = this.mappingPropList.find(p => p.equals(this.selectedProperty));
+                }
             }
         );
     }

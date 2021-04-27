@@ -114,11 +114,12 @@ export class AlignmentServices {
      * @param setAsDefault if true, set the given property as default for the relation
      * @return a cell resulting from the action
      */
-    acceptAlignment(entity1: ARTURIResource, entity2: ARTURIResource, relation: string, forcedProperty?: ARTURIResource, setAsDefault?: boolean) {
+    acceptAlignment(entity1: ARTURIResource, entity2: ARTURIResource, relation: string, entity1Role?: RDFResourceRolesEnum, forcedProperty?: ARTURIResource, setAsDefault?: boolean) {
         let params: any = {
             entity1: entity1,
             entity2: entity2,
-            relation: relation
+            relation: relation,
+            entity1Role: entity1Role,
         };
         if (forcedProperty != null) {
             params.forcedProperty = forcedProperty;

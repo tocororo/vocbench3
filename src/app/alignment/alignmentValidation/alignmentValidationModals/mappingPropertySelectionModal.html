@@ -8,11 +8,15 @@
             <div>{{'ALIGNMENT.VALIDATION.MANAGEMENT.YOU_CAN_FORCE_PROP'|translate}}</div>
         </div>
 
-        <div class="hbox" style="align-items: center; margin-top: 4px;">
+        <div class="d-flex align-items-center mt-2">
             <label style="margin-right: 4px; white-space: nowrap">{{'ALIGNMENT.VALIDATION.MANAGEMENT.MAPPING_PROP'|translate}}: </label>
-            <select class="form-control form-control-sm" [(ngModel)]="selectedProperty">
+            <select class="form-control" [(ngModel)]="selectedProperty">
                 <option *ngFor="let p of mappingPropList" [title]="p.getURI()" [ngValue]="p">{{p.getShow()}}</option>
             </select>
+            <div class="form-check ml-3">
+                <input class="form-check-input" id="allPropCheck" type="checkbox" [(ngModel)]="allPropCheck" (ngModelChange)="initMappingProperties()">
+                <label class="form-check-label text-nowrap" for="allPropCheck">{{'ALIGNMENT.CREATION.ALL_PROP'|translate}}</label>
+            </div>
         </div>
 
         <div class="form-check mt-2">
