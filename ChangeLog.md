@@ -4,13 +4,17 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 9.0.1 (dd-mm-yyyy)
-  * Enabled selection of "no language tagged" labels in rendering preferences
-  * Made dialogs draggable
-  * Implemented a directive for making dialogs resizable and adopted it on some dialogs.
+# 10.0.0 (dd-mm-yyyy)
   * Added email verification in the registration procedure
   * Improved the management of the unicity of preferred labels for concepts in the same scheme
   * Added flags for Scottish Gaelic and Welsh languages
+
+# 9.1.0 (28-04-2021)
+  * Enabled selection of "no language tagged" labels in rendering preferences
+  * Made dialogs draggable
+  * Implemented a directive for making dialogs resizable and adopted it on some dialogs.
+  * Fixed wrong translations
+  * Minor bugfixes
 
 # 9.0.0 (18-03-2021)
   * Major and pervasive code changes:
