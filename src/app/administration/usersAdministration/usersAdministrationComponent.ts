@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalOptions } from 'src/app/widget/modal/Modals';
-import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
-import { SettingsProp } from "../../models/Plugins";
-import { PartitionFilterPreference, Properties } from "../../models/Properties";
+import { ExtensionPointID, SettingsProp } from "../../models/Plugins";
+import { PartitionFilterPreference, Properties, ResourceViewPreference, SettingsEnum } from "../../models/Properties";
 import { User, UserStatusEnum } from "../../models/User";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { UserServices } from "../../services/userServices";
@@ -42,7 +42,7 @@ export class UsersAdministrationComponent {
 
     private userTemplate: PartitionFilterPreference;
 
-    constructor(private userService: UserServices, private prefService: PreferencesSettingsServices, 
+    constructor(private userService: UserServices, private prefService: PreferencesSettingsServices, private settingsService: SettingsServices,
         private vbProp: VBProperties, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
@@ -104,14 +104,12 @@ export class UsersAdministrationComponent {
      * ============================ */
 
     private initTemplate() {
-        this.prefService.getPUSettingsUserDefault([Properties.pref_res_view_partition_filter], this.selectedUser.getEmail()).subscribe(
-            prefs => {
-                let partitionFilter: PartitionFilterPreference;
-                let value = prefs[Properties.pref_res_view_partition_filter];
-                if (value != null) {
-                    partitionFilter = JSON.parse(value);
+        this.settingsService.getPUSettingsUserDefault(ExtensionPointID.ST_CORE_ID, this.selectedUser).subscribe(
+            settings => {
+                let rvSettings: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
+                if (rvSettings != null) {
+                    this.userTemplate = rvSettings.resViewPartitionFilter;
                 }
-                this.userTemplate = partitionFilter;
             }
         )
     }

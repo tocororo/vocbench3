@@ -1,5 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin } from "rxjs";
+import { map } from "rxjs/operators";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ImportType, OntologyImport, PrefixMapping } from "../../models/Metadata";
@@ -157,21 +159,26 @@ export class NamespacesAndImportsComponent {
     applyNamespaceBaseURI() {
         this.nsBaseURISubmitted = true;
         if (this.isBaseURIValid() && this.isNamespaceValid()) {
+            let updateNsFn = this.metadataService.setDefaultNamespace(this.namespace).pipe(
+                map(() => {
+                    this.refreshDefaultNamespace();
+                })
+            )
+            let updateBaseUriFn = this.refactorService.replaceBaseURI(this.baseURI).pipe(
+                map(() => {
+                    this.refreshBaseURI();
+                })
+            )
+
             if (this.baseURI != this.pristineBaseURI && this.namespace != this.pristineNamespace) {//changed both baseURI and namespace
                 this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.SAVE_BASEURI_NS_CHANGE_CONFIRM"}, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.metadataService.setDefaultNamespace(this.namespace).subscribe(
-                            stResp => {
-                                this.refactorService.replaceBaseURI(this.baseURI).subscribe(
-                                    stResp => {
-                                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                        this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.BASEURI_AND_NAMESPACE_UPDATED"});
-                                        this.refreshBaseURI();
-                                        this.refreshDefaultNamespace();
-                                        this.nsBaseURISubmitted = true;
-                                    }
-                                )
+                        forkJoin([updateNsFn, updateBaseUriFn]).subscribe(
+                            () => {
+                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.BASEURI_AND_NAMESPACE_UPDATED"});
+                                this.nsBaseURISubmitted = true;
                             }
                         )
                     },
@@ -186,11 +193,10 @@ export class NamespacesAndImportsComponent {
                 this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.SAVE_BASEURI_CHANGE_CONFIRM"}, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.refactorService.replaceBaseURI(this.baseURI).subscribe(
-                            stResp => {
+                        updateBaseUriFn.subscribe(
+                            () => {
                                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                                 this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.BASEURI_UPDATED"});
-                                this.refreshBaseURI();
                                 this.nsBaseURISubmitted = true;
                             }
                         )
@@ -204,10 +210,9 @@ export class NamespacesAndImportsComponent {
             } else if (this.namespace != this.pristineNamespace) {//changed only namespace
                 this.basicModals.confirm({key:"ACTIONS.SAVE_CHANGES"}, {key:"MESSAGES.SAVE_NS_CHANGE_CONFIRM"}, ModalType.warning).then(
                     confirm => {
-                        this.metadataService.setDefaultNamespace(this.namespace).subscribe(
-                            stResp => {
+                        updateNsFn.subscribe(
+                            () => {
                                 this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.NAMESPACE_UPDATED"});
-                                this.refreshDefaultNamespace();
                                 this.nsBaseURISubmitted = true;
                             }
                         );

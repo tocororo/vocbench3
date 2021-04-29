@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { VBEventHandler } from "src/app/utils/VBEventHandler";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ClassTreePreference } from "../../../models/Properties";
@@ -33,7 +34,8 @@ export class ClassTreeSettingsModal {
     showInstNumb: boolean;
 
     constructor(public activeModal: NgbActiveModal, private clsService: ClassesServices, private resourceService: ResourcesServices, 
-        private vbProp: VBProperties, private basicModals: BasicModalServices , private browsingModals: BrowsingModalServices) {}
+        private vbProp: VBProperties, private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices,
+        private eventHandler: VBEventHandler) {}
 
     ngOnInit() {
         let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
@@ -208,28 +210,14 @@ export class ClassTreeSettingsModal {
             filterMap[f.cls.getURI()] = filteredSubClasses;
         })
         
-        //update the settings only if changed
-        if (
-            JSON.stringify(this.pristineClassPref.filter.map) != JSON.stringify(filterMap) ||
-            this.pristineClassPref.filter.enabled != this.filterEnabled
-        ) {
-            this.vbProp.setClassTreeFilter({ map: filterMap, enabled: this.filterEnabled })
-        }
-
-        if (this.pristineClassPref.rootClassUri != this.rootClass.getURI()) {
-            this.vbProp.setClassTreeRoot(this.rootClass.getURI());
-        }
-
-        if (this.pristineClassPref.showInstancesNumber != this.showInstNumb) {
-            this.vbProp.setShowInstancesNumber(this.showInstNumb);
-        }
-
-        //only if the root class changed close the dialog (so that the class tree refresh)
-        if (this.pristineClassPref.rootClassUri != this.rootClass.getURI()) {
-            this.activeModal.close();
-        } else {//for other changes simply dismiss the modal
-            this.cancel();
-        }
+        
+        let clsTreePrefs: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
+        clsTreePrefs.filter = { map: filterMap, enabled: this.filterEnabled };
+        clsTreePrefs.rootClassUri = this.rootClass.getURI();
+        clsTreePrefs.showInstancesNumber = this.showInstNumb;
+        
+        this.vbProp.setClassTreePreferences(clsTreePrefs);
+        this.activeModal.close();
     }
 
     cancel() {

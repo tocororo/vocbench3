@@ -10,7 +10,6 @@ import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
 import { AdministrationServices } from "../../services/administrationServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { ShaclServices } from "../../services/shaclServices";
 import { LoadShapesModal } from "../../shacl/loadShapesModal";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -44,7 +43,7 @@ export class ConfigBarComponent {
     exportShapesAuthorized: boolean;
     clearShapesAuthorized: boolean;
 
-    constructor(private exportServices: ExportServices, private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
+    constructor(private exportServices: ExportServices, private inOutService: InputOutputServices,
         private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
         private translate: TranslateService, private route: Router) {
@@ -133,8 +132,7 @@ export class ConfigBarComponent {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.basicModals.alert({key:"ACTIONS.CLEAR_DATA"}, {key:"MESSAGES.DATA_CLEARED"});
                         //reset scheme in order to prevent error when re-init the concept tree
-                        VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes = [];
-                        this.prefService.setActiveSchemes().subscribe();
+                        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(), []);
                         //simulate the project change in order to force the destroy of all the Route
                         VBContext.setProjectChanged(true);
                         //redirect to the home in order to prevent any kind of error related to not existing resource

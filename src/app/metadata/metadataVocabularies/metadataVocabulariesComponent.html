@@ -13,7 +13,7 @@
                         <label>{{'METADATA.METADATA_VOCABULARIES.METADATA_VOCABULARY'|translate}}:</label>
                     </td>
                     <td>
-                        <select class="form-control form-control-sm" [(ngModel)]="selectedExporter" (change)="onExtensionChange()">
+                        <select class="form-control" [(ngModel)]="selectedExporter" (change)="onExtensionChange()">
                             <option *ngFor="let e of exporters" [ngValue]="e">{{e.name}}</option>
                         </select>
                     </td>

@@ -2,15 +2,17 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Observable } from "rxjs";
 import { map } from 'rxjs/operators';
+import { ExtensionPointID, Scope } from "src/app/models/Plugins";
+import { SettingsEnum } from "src/app/models/Properties";
+import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { Project } from "../../../models/Project";
 import { RDFS, SKOS } from "../../../models/Vocabulary";
-import { PreferencesSettingsServices } from "../../../services/preferencesSettingsServices";
 import { ProjectServices } from "../../../services/projectServices";
 import { PropertyServices, RangeType } from "../../../services/propertyServices";
 import { Cookie } from "../../../utils/Cookie";
-import { HttpServiceContext } from "../../../utils/HttpManager";
+import { HttpServiceContext, VBRequestOptions } from "../../../utils/HttpManager";
 import { ProjectContext, VBContext } from "../../../utils/VBContext";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -43,7 +45,7 @@ export class BrowseExternalResourceModal {
     private activeView: RDFResourceRolesEnum;
 
     constructor(public activeModal: NgbActiveModal, public projService: ProjectServices,
-        private preferenceService: PreferencesSettingsServices, private propService: PropertyServices, private vbProp: VBProperties,
+        private settingsService: SettingsServices, private propService: PropertyServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
     }
 
@@ -112,14 +114,15 @@ export class BrowseExternalResourceModal {
             () => {
                 this.activeView = null;
                 this.remoteResource = null;
-
                 if (this.isProjectSKOS()) {
-                    this.preferenceService.getActiveSchemes(this.project.getName()).subscribe(
-                        schemes => {
-                            this.schemes = schemes;
+                    let reqOptions: VBRequestOptions = new VBRequestOptions({ ctxProject: this.project });
+                    this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, reqOptions).subscribe(
+                        settings => {
+                            let activeSchemes: string[] = settings.getPropertyValue(SettingsEnum.activeSchemes);
+                            this.schemes = (activeSchemes != null) ? activeSchemes.map(s => new ARTURIResource(s)) : null;
                             this.restoreLastType();
                         }
-                    );
+                    )
                 } else {
                     this.restoreLastType();
                 }

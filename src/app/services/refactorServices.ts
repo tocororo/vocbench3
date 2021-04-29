@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { mergeMap, map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { ResourcesServices } from "../services/resourcesServices";
@@ -14,14 +14,14 @@ export class RefactorServices {
 
     private serviceName = "Refactor";
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private preferences: VBProperties, 
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private vbProp: VBProperties,
         private resourceService: ResourcesServices) { }
 
     /**
      * Refactors SKOS data (labels and notes) into SKOSXL
      */
     SKOStoSKOSXL(reifyNotes: boolean) {
-        var params: any = {
+        let params: any = {
             reifyNotes: reifyNotes
         };
         return this.httpMgr.doGet(this.serviceName, "SKOStoSKOSXL", params).pipe(
@@ -35,7 +35,7 @@ export class RefactorServices {
      * Refactors SKOSXL data (labels and notes) into SKOS
      */
     SKOSXLtoSKOS(flattenNotes: boolean) {
-        var params: any = {
+        let params: any = {
             flattenNotes: flattenNotes
         };
         return this.httpMgr.doGet(this.serviceName, "SKOSXLtoSKOS", params).pipe(
@@ -52,7 +52,7 @@ export class RefactorServices {
      * @return the resource with the changed URI
      */
     changeResourceURI(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             oldResource: oldResource,
             newResource: newResource
         };
@@ -80,31 +80,31 @@ export class RefactorServices {
      * If not provided the service replace the default baseURI of the repository
      */
     replaceBaseURI(targetBaseURI: string, sourceBaseURI?: string) {
-        var params: any = {
+        let params: any = {
             targetBaseURI: new ARTURIResource(targetBaseURI)
         }
         if (sourceBaseURI != undefined) {
             params.sourceBaseURI = new ARTURIResource(sourceBaseURI);
         }
         return this.httpMgr.doPost(this.serviceName, "replaceBaseURI", params).pipe(
-            map(stResp => {
+            map(() => {
                 //if the project baseURI was replaced, update it
                 if (sourceBaseURI == null || sourceBaseURI == VBContext.getWorkingProject().getBaseURI()) {
                     VBContext.getWorkingProject().setBaseURI(targetBaseURI);
-                    this.preferences.setActiveSchemes(VBContext.getWorkingProjectCtx(), []);
+                    this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(), []);
+                    this.eventHandler.refreshDataBroadcastEvent.emit(null);
                 }
-                this.eventHandler.refreshDataBroadcastEvent.emit(null);
             })
         );
     }
 
     migrateDefaultGraphToBaseURIGraph(clearDestinationGraph?: boolean) {
-        var params: any = {}
+        let params: any = {}
         if (clearDestinationGraph != undefined) {
             params.clearDestinationGraph = clearDestinationGraph;
         }
         return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params).pipe(
-            map(stResp => {
+            map(() => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             })
         );
@@ -122,7 +122,7 @@ export class RefactorServices {
         newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
 		customFormValue?: CustomFormValue) {
 
-        var params: any = {
+        let params: any = {
             xLabel: xLabel,
             conceptSchemes: conceptSchemes,
         }
@@ -171,7 +171,7 @@ export class RefactorServices {
      */
     moveXLabelToResource(sourceResource: ARTResource, predicate: ARTURIResource, xLabel: ARTResource, 
         targetResource: ARTResource, force?: boolean) {
-        var params: any = {
+        let params: any = {
             sourceResource: sourceResource,
             predicate: predicate,
             xLabel: xLabel,
@@ -180,7 +180,7 @@ export class RefactorServices {
         if (force != undefined) {
             params.force = force;
         }
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException'] 

@@ -434,6 +434,7 @@ export enum Scope {
     PROJECT = "PROJECT",
     USER = "USER",
     PROJECT_USER = "PROJECT_USER",
+    PROJECT_GROUP = "PROJECT_GROUP",
     FACTORY = "FACTORY"
 }
 
@@ -447,6 +448,8 @@ export class ScopeUtils {
             return "usr";
         } else if (scope == Scope.PROJECT_USER) {
             return "pu";
+        } else if (scope == Scope.PROJECT_GROUP) {
+            return "pg";
         }
     }
 

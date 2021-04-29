@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigurationComponents } from "../models/Configuration";
-import { SettingsProp, STProperties } from "../models/Plugins";
-import { PartitionFilterPreference, Properties } from "../models/Properties";
+import { ExtensionPointID, Scope, Settings, SettingsProp, STProperties } from "../models/Plugins";
+import { PartitionFilterPreference, Properties, ResourceViewPreference, SettingsEnum } from "../models/Properties";
 import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
+import { SettingsServices } from "../services/settingsServices";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -19,7 +20,7 @@ export class ResViewSettingsModal {
 
     template: PartitionFilterPreference;
 
-    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private prefService: PreferencesSettingsServices,
+    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private settingsService: SettingsServices, private prefService: PreferencesSettingsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
 
     ngOnInit() {
@@ -66,14 +67,11 @@ export class ResViewSettingsModal {
     restoreDefault() {
         this.basicModals.confirm({key:"ACTIONS.RESTORE_DEFAULT"}, {key:"MESSAGES.RESTORE_DEFAULT_TEMPLATE_CONFIRM"}, ModalType.warning).then(
             () => {
-                this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, null).subscribe(
+                let resViewPrefs: ResourceViewPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences;
+                resViewPrefs.resViewPartitionFilter = null;
+                this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.resourceView, resViewPrefs).subscribe(
                     () => {
-                        //refreshes the template cached in the project preferences
-                        this.vbProp.refreshResourceViewPartitionFilter().subscribe(
-                            () => {
-                                this.initTemplate();
-                            }
-                        );
+                        this.initTemplate();
                     }
                 );
             },

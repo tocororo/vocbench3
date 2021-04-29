@@ -354,7 +354,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     private onSchemeChanged(schemes: ARTURIResource[]) {
         this.workingSchemes = schemes;
-        //in case of visualization search based reset the list
+        //in case of visualization search based reset the list (in case of hierarchy the tree is refreshed following ngOnChanges on @Input schemes)
         this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
         if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased && this.lastSearch != null) {
             this.viewChildTree.init();

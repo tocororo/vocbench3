@@ -53,10 +53,6 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onInstanceDeleted(data.type)));
         this.eventSubscriptions.push(eventHandler.typeAddedEvent.subscribe(
             (data: any) => this.onInstanceCreated(data.type)));
-
-        this.eventSubscriptions.push(eventHandler.classFilterChangedEvent.subscribe(
-            () => this.initShowExpandCollapseBtn()
-        ));
     }
 
     ngOnInit() {

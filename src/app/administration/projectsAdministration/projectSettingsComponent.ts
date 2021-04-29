@@ -1,17 +1,13 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
 import { ExtensionPointID } from "src/app/models/Plugins";
 import { SKOS } from "src/app/models/Vocabulary";
 import { SettingsServices } from "src/app/services/settingsServices";
-import { ModalType } from 'src/app/widget/modal/Modals';
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
 import { PrefLabelClashMode, Properties, SettingsEnum } from "../../models/Properties";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "project-settings",
@@ -32,16 +28,18 @@ export class ProjectSettingsComponent {
     ];
     labelClashOptSelected: LabelClashItem;
 
-    constructor(private prefService: PreferencesSettingsServices, private settingsService: SettingsServices, private vbProperties: VBProperties, private basicModals: BasicModalServices) { }
+    constructor(private prefService: PreferencesSettingsServices, private settingsService: SettingsServices, private vbProperties: VBProperties) { }
 
     ngOnInit() {
-        this.initSystemLanguages().subscribe(
-            () => {
-                if (this.project != null) { //if project was already set
-                    this.initProjectSettings();
-                }
-            }
-        );
+        //init all available system languages
+        let systemLanguages: Language[] = Languages.getSystemLanguages()
+        this.languageItems = systemLanguages.map(l => {
+            return { lang: l, active: false }
+        });
+        //if project was already set
+        if (this.project != null) { 
+            this.initProjectSettings();
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -50,24 +48,6 @@ export class ProjectSettingsComponent {
                 this.initProjectSettings();
             }
         }
-    }
-
-    private initSystemLanguages(): Observable<void> {
-        return this.prefService.getDefaultProjectSettings([Properties.setting_languages]).pipe(
-            map(stResp => {
-                let langsValue = stResp[Properties.setting_languages];
-                try {
-                    let systemLanguages = <Language[]>JSON.parse(langsValue);
-                    Languages.sortLanguages(systemLanguages);
-                    this.languageItems = [];
-                    for (let i = 0; i < systemLanguages.length; i++) {
-                        this.languageItems.push({ lang: systemLanguages[i], active: false });
-                    }
-                } catch (err) {
-                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.SYS_LANGUAGES_PROP_PARSING_ERR", params: { propName: Properties.setting_languages } }, ModalType.error);
-                }
-            })
-        );
     }
 
     private initProjectSettings() {

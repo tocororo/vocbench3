@@ -4,15 +4,13 @@ import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID, Scope } from '../models/Plugins';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, SettingsEnum, ValueFilterLanguages } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { AdministrationServices } from '../services/administrationServices';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { SettingsServices } from '../services/settingsServices';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
-import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { ModalType } from '../widget/modal/Modals';
 import { VBRequestOptions } from './HttpManager';
 import { ProjectContext, VBContext } from './VBContext';
 
@@ -22,7 +20,7 @@ export class VBProperties {
     private eventSubscriptions: Subscription[] = [];
 
     constructor(private prefService: PreferencesSettingsServices, private adminService: AdministrationServices, private settingsService: SettingsServices,
-        private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
+        private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: { oldResource: ARTResource, newResource: ARTResource }) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -158,14 +156,15 @@ export class VBProperties {
             projectCtx.getProjectPreferences().activeSchemes = schemes;
         }
         this.eventHandler.schemeChangedEvent.emit({schemes: schemes, project: projectCtx.getProject() });
-        this.prefService.setActiveSchemes(schemes, new VBRequestOptions({ctxProject: projectCtx.getProject()})).subscribe();
+        let schemesPropValue: string[] = schemes.map(s => s.toNT());
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeSchemes, schemesPropValue, new VBRequestOptions({ctxProject: projectCtx.getProject()})).subscribe();
     }
 
     setActiveLexicon(projectCtx: ProjectContext, lexicon: ARTURIResource) {
         projectCtx.getProjectPreferences().activeLexicon = lexicon;
         this.eventHandler.lexiconChangedEvent.emit({ lexicon: lexicon, project: projectCtx.getProject() });
-        let lexiconUri: string = lexicon != null ? lexicon.getURI() : null;
-        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexiconUri, projectCtx.getProject()).subscribe();
+        let lexiconUri: string = lexicon != null ? lexicon.toNT() : null;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeLexicon, lexiconUri, new VBRequestOptions({ctxProject: projectCtx.getProject()})).subscribe();
     }
 
     getShowFlags(): boolean {
@@ -178,52 +177,43 @@ export class VBProperties {
     setShowFlags(show: boolean) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().showFlags = show;
         this.eventHandler.showFlagChangedEvent.emit(show);
-        this.prefService.setPUSetting(Properties.pref_show_flags, show+"").subscribe()
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.showFlags, show).subscribe();
     }
 
     setProjectTheme(theme: number) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId = theme;
         this.eventHandler.themeChangedEvent.emit(theme);
         let value = (theme == 0) ? null : theme+""; //theme 0 is the default one, so remove the preference
-        this.prefService.setPUSetting(Properties.pref_project_theme, value).subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.projectTheme, value).subscribe();
     }
 
     setRenderingLanguagesPreference(languages: string[]) {
         let value: string = (languages.length == 0) ? null : languages.join(",");
-        this.prefService.setPUSetting(Properties.pref_languages, value, null, ExtensionPointID.RENDERING_ENGINE_ID).subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, SettingsEnum.languages, value).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference = languages;
     }
 
     setEditingLanguage(lang: string) {
-        this.prefService.setPUSetting(Properties.pref_editing_language, lang).subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.editingLanguage, lang).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().editingLanguage = lang;
     }
 
     setValueFilterLanguages(filter: ValueFilterLanguages) {
-        this.prefService.setPUSetting(Properties.pref_filter_value_languages, JSON.stringify(filter)).subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.filterValueLanguages, filter).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang = filter;
     }
 
     setNotificationStatus(status: NotificationStatus) {
-        this.prefService.setPUSetting(Properties.pref_notifications_status, status).subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.notificationsStatus, status).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus = status;
         this.eventHandler.notificationStatusChangedEvent.emit();
     }
 
     //class tree settings
-    setClassTreeFilter(filter: ClassTreeFilter) {
-        this.prefService.setPUSetting(Properties.pref_class_tree_filter, JSON.stringify(filter)).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter = filter;
-        this.eventHandler.classFilterChangedEvent.emit();
-    }
-    setClassTreeRoot(rootUri: string) {
-        this.prefService.setPUSetting(Properties.pref_class_tree_root, rootUri).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.rootClassUri = rootUri;
-    }
-    setShowInstancesNumber(show: boolean) {
-        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.showInstancesNumber = show;
-        let value = show ? "true" : null;
-        this.prefService.setPUSetting(Properties.pref_show_instances_number, value).subscribe()
+    setClassTreePreferences(clsTreePref: ClassTreePreference) {
+        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences = clsTreePref;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.classTree, clsTreePref).subscribe();
+
     }
 
     //instance list settings
@@ -356,46 +346,22 @@ export class VBProperties {
     ============================= */
 
     initStartupSystemSettings() {
-        this.prefService.getStartupSystemSettings().subscribe(
-            stResp => {
-                //experimental_features_enabled
-                VBContext.getSystemSettings().experimentalFeaturesEnabled = stResp[Properties.setting_experimental_features_enabled]
-                //privacy_statement_available
-                VBContext.getSystemSettings().privacyStatementAvailable = stResp[Properties.privacy_statement_available]
-                //show_flags
-                VBContext.getSystemSettings().showFlags = stResp[Properties.pref_show_flags];
-                //languages
-                try {
-                    let systemLanguages = <Language[]>JSON.parse(stResp[Properties.setting_languages]);
-                    Languages.sortLanguages(systemLanguages);
-                    Languages.setSystemLanguages(systemLanguages);
-                } catch (err) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.SYS_LANGUAGES_PROP_PARSING_ERR", params:{propName:Properties.setting_languages}}, ModalType.error);
-                }
-                //home content
-                VBContext.getSystemSettings().homeContent = stResp[Properties.setting_home_content];
+        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
+            settings => {
+                let systemSettings: SystemSettings = VBContext.getSystemSettings();
+                systemSettings.experimentalFeaturesEnabled = settings.getPropertyValue(SettingsEnum.experimentalFeaturesEnabled);
+                systemSettings.privacyStatementAvailable = settings.getPropertyValue(SettingsEnum.privacyStatementAvailable);
+                systemSettings.showFlags = settings.getPropertyValue(SettingsEnum.showFlags);
+                systemSettings.homeContent = settings.getPropertyValue(SettingsEnum.homeContent);
             }
-        )
-        // this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
-        //     settings => {
-
-        //         VBContext.getSystemSettings().experimentalFeaturesEnabled = settings.getPropertyValue(SettingsEnum.experimentalFeaturesEnabled);
-        //         //privacy_statement_available
-        //         VBContext.getSystemSettings().privacyStatementAvailable = settings.getPropertyValue(SettingsEnum.privacyStatementAvailable);
-        //         //show_flags
-        //         VBContext.getSystemSettings().showFlags = settings.getPropertyValue(SettingsEnum.showFlags);
-        //         //home content
-        //         VBContext.getSystemSettings().homeContent = settings.getPropertyValue(SettingsEnum.homeContent);
-        //         /**
-        //          * languages setting was taken from getStartupSystemSettings but it was not into system settings file, it was in the project-settings-defaults
-        //          * so update here when the service for retrieving the default will be available
-        //          */
-        //         //languages
-        //         let systemLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
-        //         Languages.sortLanguages(systemLanguages);
-        //         Languages.setSystemLanguages(systemLanguages);
-        //     }
-        // )
+        );
+        this.settingsService.getSettingsDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT).subscribe(
+            settings => {
+                let systemLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
+                Languages.sortLanguages(systemLanguages);
+                Languages.setSystemLanguages(systemLanguages);
+            }
+        );
     }
 
     setExperimentalFeaturesEnabled(enabled: boolean) {
