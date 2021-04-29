@@ -140,16 +140,9 @@ export class VBProperties {
             })
         )
         // this is called separately since it is about a different plugin
-        //new YAML settings (to restore when server will support this)
-        // let getPUSettingsRenderingEngine = this.settingsService.getSettings(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
-        //     map(settings => {
-        //         projectCtx.getProjectPreferences().renderingLanguagesPreference = settings.getPropertyValue(SettingsEnum.languages).split(",");
-        //     })
-        // )
-        //old JSON settings
-        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], projectCtx.getProject(), ExtensionPointID.RENDERING_ENGINE_ID).pipe(
-            map(prefs => {
-                projectCtx.getProjectPreferences().renderingLanguagesPreference = prefs[Properties.pref_languages].split(",");
+        let getPUSettingsRenderingEngine = this.settingsService.getSettings(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
+            map(settings => {
+                projectCtx.getProjectPreferences().renderingLanguagesPreference = settings.getPropertyValue(SettingsEnum.languages).split(",");
             })
         )
         return forkJoin([
