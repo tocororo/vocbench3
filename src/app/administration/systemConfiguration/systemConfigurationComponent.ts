@@ -2,8 +2,7 @@ import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
-import { Properties, SettingsEnum } from "src/app/models/Properties";
-import { PreferencesSettingsServices } from "src/app/services/preferencesSettingsServices";
+import { ProjectCreationPreferences, SettingsEnum } from "src/app/models/Properties";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
@@ -83,7 +82,7 @@ export class SystemConfigurationComponent {
 
 
     constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties, 
-        private settingsService: SettingsServices, private notificationsService: NotificationServices, private prefService: PreferencesSettingsServices,
+        private settingsService: SettingsServices, private notificationsService: NotificationServices,
         private basicModals: BasicModalServices, private translateService: TranslateService, public sanitizer: DomSanitizer, private router: Router) { }
 
     ngOnInit() {
@@ -447,18 +446,17 @@ export class SystemConfigurationComponent {
         this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
             settings => {
                 let projCreationSettings: any = settings.getPropertyValue(SettingsEnum.projectCreation);
-                this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault;
-                this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault;
+                this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault == true;
+                this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault == true;
             }
         );
     }
 
-    onDefaultAclChanged() {
-        this.prefService.setSystemSetting(Properties.setting_proj_creation_default_acl_set_universal_access, this.defaultAclUniversalAccess+"").subscribe();
-    }
-
-    onDefaultOpenAtStartupChanged() {
-        this.prefService.setSystemSetting(Properties.setting_proj_creation_default_open_at_startup, this.defaultOpenAtStartup+"").subscribe();
+    updateProjectCreationSettings() {
+        let projCreationPref: ProjectCreationPreferences = new ProjectCreationPreferences();
+        projCreationPref.aclUniversalAccessDefault = this.defaultAclUniversalAccess;
+        projCreationPref.openAtStartUpDefault = this.defaultOpenAtStartup;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.projectCreation, projCreationPref).subscribe();
     }
 
     /* ============================

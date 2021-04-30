@@ -3,8 +3,8 @@ import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
-import { ExtensionPointID, Scope, Settings } from '../models/Plugins';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
+import { ExtensionPointID, Scope } from '../models/Plugins';
+import { ClassTreePreference, ConceptTreePreference, InstanceListPreference, LexicalEntryListPreference, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, ResourceViewMode, ResourceViewPreference, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { AdministrationServices } from '../services/administrationServices';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
@@ -313,12 +313,12 @@ export class VBProperties {
     }
 
     setExperimentalFeaturesEnabled(enabled: boolean) {
-        this.prefService.setSystemSetting(Properties.setting_experimental_features_enabled, enabled+"").subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.experimentalFeaturesEnabled, enabled).subscribe();
         VBContext.getSystemSettings().experimentalFeaturesEnabled = enabled;
     }
 
     setHomeContent(homeContent: string) {
-        this.prefService.setSystemSetting(Properties.setting_home_content, homeContent).subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.homeContent, homeContent).subscribe();
         VBContext.getSystemSettings().homeContent = homeContent;
     }
 

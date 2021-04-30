@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { ExtensionPointID } from "src/app/models/Plugins";
+import { ExtensionPointID, Scope } from "src/app/models/Plugins";
 import { SKOS } from "src/app/models/Vocabulary";
 import { SettingsServices } from "src/app/services/settingsServices";
 import { Language, Languages } from "../../models/LanguagesCountries";
@@ -51,7 +51,7 @@ export class ProjectSettingsComponent {
 
     private initProjectSettings() {
         this.isSkos = this.project.getModelType() == SKOS.uri;
-        this.settingsService.getProjectSettings(ExtensionPointID.ST_CORE_ID, this.project).subscribe(
+        this.settingsService.getSettingsForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, this.project).subscribe(
             settings => {
                 //init active languages
                 let projectLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
@@ -103,7 +103,8 @@ export class ProjectSettingsComponent {
 
         this.noLangActive = activeLangs.length == 0;
         let langSettingValue = (this.noLangActive) ? null : activeLangs;
-        this.settingsService.storeProjectSetting(ExtensionPointID.ST_CORE_ID, this.project, SettingsEnum.languages, langSettingValue).subscribe(
+        
+        this.settingsService.storeSettingForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, SettingsEnum.languages, langSettingValue, this.project).subscribe(
             () => {
                 //in case the edited project is the active one, update the settings stored in VBContext
                 if (VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()) {
@@ -121,7 +122,7 @@ export class ProjectSettingsComponent {
 
     setLabelClashSetting(opt: LabelClashItem) {
         this.labelClashOptSelected = opt;
-        this.settingsService.storeProjectSetting(ExtensionPointID.ST_CORE_ID, this.project, SettingsEnum.labelClashMode, this.labelClashOptSelected.mode).subscribe(
+        this.settingsService.storeSettingForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, SettingsEnum.labelClashMode, this.labelClashOptSelected.mode, this.project).subscribe(
             () => {
                 //in case the edited project is the active one, update the settings stored in VBContext
                 if (VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()) {

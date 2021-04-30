@@ -63,13 +63,7 @@ export class RemoteAccessConfigModal {
         this.updateConfigurations();
     }
     private updateConfigurations() {
-        let conf: string;
-        if (this.savedConfigs.length == 0) {
-            conf = null;
-        } else {
-            conf = JSON.stringify(this.savedConfigs);
-        }
-        this.prefService.setSystemSetting(Properties.setting_remote_configs, conf).subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.remoteConfigs, this.savedConfigs).subscribe();
     }
 
     ok() {

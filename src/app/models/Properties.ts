@@ -305,6 +305,11 @@ export class SystemSettings {
     homeContent: string;
 }
 
+export class ProjectCreationPreferences {
+    aclUniversalAccessDefault: boolean = false;
+    openAtStartUpDefault: boolean = false;
+}
+
 export class VisualizationModeTranslation {
     static translationMap: {[key: string]: string} = {
         [ConceptTreeVisualizationMode.hierarchyBased]: "DATA.COMMONS.VISUALIZATION_MODE.HIERARCHY_BASED",

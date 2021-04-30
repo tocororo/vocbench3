@@ -5,12 +5,11 @@ import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { Language, Languages } from "../../models/LanguagesCountries";
-import { ExtensionPointID, SettingsProp } from "../../models/Plugins";
+import { ExtensionPointID, Scope, SettingsProp } from "../../models/Plugins";
 import { Project } from "../../models/Project";
-import { PartitionFilterPreference, Properties, ResourceViewPreference, SettingsEnum } from "../../models/Properties";
+import { PartitionFilterPreference, ResourceViewPreference, SettingsEnum } from "../../models/Properties";
 import { ProjectUserBinding, Role, User, UsersGroup } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { ProjectServices } from "../../services/projectServices";
 import { UserServices } from "../../services/userServices";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
@@ -53,10 +52,11 @@ export class ProjectUsersManagerComponent {
     private selectedGroup: UsersGroup;
     private selectedUserGroup: UsersGroup;
 
+    private resViewPref: ResourceViewPreference;
     private puTemplate: PartitionFilterPreference;
 
     constructor(private userService: UserServices, private projectService: ProjectServices, private adminService: AdministrationServices,
-        private groupsService: UsersGroupsServices, private prefSettingsServices: PreferencesSettingsServices, private settingsService: SettingsServices,
+        private groupsService: UsersGroupsServices, private settingsService: SettingsServices,
         private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
 
@@ -96,7 +96,7 @@ export class ProjectUsersManagerComponent {
                     this.groupList = groups;
                 }
             );
-            this.settingsService.getProjectSettings(ExtensionPointID.ST_CORE_ID, this.project).subscribe(
+            this.settingsService.getSettingsForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, this.project).subscribe(
                 settings => {
                     this.projectLanguages = settings.getPropertyValue(SettingsEnum.languages);
                     Languages.sortLanguages(this.projectLanguages);
@@ -126,12 +126,12 @@ export class ProjectUsersManagerComponent {
          * Init template; only if admin (required in order to allow to read/edit settings of other users)
          */
         if (this.isLoggedUserAdmin()) {
-            this.settingsService.getPUSettingsOfUser(ExtensionPointID.ST_CORE_ID, this.project, this.selectedUser).subscribe(
+            this.settingsService.getSettingsForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, this.project, this.selectedUser).subscribe(
                 settings => {
-                    let resViewSettings: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
+                    this.resViewPref = settings.getPropertyValue(SettingsEnum.resourceView);
                     let partitionFilter: PartitionFilterPreference;
-                    if (resViewSettings != null) {
-                        partitionFilter = resViewSettings.resViewPartitionFilter;
+                    if (this.resViewPref != null) {
+                        partitionFilter = this.resViewPref.resViewPartitionFilter;
                     }
                     this.puTemplate = partitionFilter;
                 }
@@ -476,7 +476,9 @@ export class ProjectUsersManagerComponent {
         if (project == null) {
             project = this.project;
         }
-        this.prefSettingsServices.setPUSettingOfUser(Properties.pref_res_view_partition_filter, this.selectedUser, JSON.stringify(this.puTemplate), project).subscribe(
+        
+        this.resViewPref.resViewPartitionFilter = this.puTemplate;
+        this.settingsService.storeSettingForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.resourceView, this.resViewPref, project, this.selectedUser).subscribe(
             () => {
                 //in case the setting has been changed for the logged user and the project currently accessed => update its cached PU-settings
                 if (
@@ -486,7 +488,7 @@ export class ProjectUsersManagerComponent {
                     this.vbProp.refreshResourceViewPartitionFilter().subscribe();
                 }
             }
-        );
+        )
     }
 
 

@@ -83,21 +83,21 @@ export class PreferencesSettingsServices {
     //     return this.httpMgr.doGet(this.serviceName, "getPUSettingsOfUser", params, options);
     // }
 
-    /**
-     * 
-     * @param property 
-     * @param value 
-     */
-    setPUSettingOfUser(property: string, user: User, value?: string, project?: Project, pluginID?: string, options?: VBRequestOptions) {
-        var params: any = {
-            property: property,
-            value: value,
-            projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
-            email: user.getEmail(),
-            pluginID: pluginID
-        };
-        return this.httpMgr.doPost(this.serviceName, "setPUSettingOfUser", params, options);
-    }
+    // /**
+    //  * 
+    //  * @param property 
+    //  * @param value 
+    //  */
+    // setPUSettingOfUser(property: string, user: User, value?: string, project?: Project, pluginID?: string, options?: VBRequestOptions) {
+    //     var params: any = {
+    //         property: property,
+    //         value: value,
+    //         projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
+    //         email: user.getEmail(),
+    //         pluginID: pluginID
+    //     };
+    //     return this.httpMgr.doPost(this.serviceName, "setPUSettingOfUser", params, options);
+    // }
 
     /**
      * Gets the preferences of the currently logged user for the currently open project
@@ -253,19 +253,19 @@ export class PreferencesSettingsServices {
     //     return this.httpMgr.doGet(this.serviceName, "getStartupSystemSettings", params);
     // }
 
-    /**
-     * 
-     * @param property 
-     * @param value 
-     */
-    setSystemSetting(property: string, value?: string) {
-        var params: any = {
-            property: property,
-        };
-        if (value != null) {
-            params.value = value;
-        }
-        return this.httpMgr.doPost(this.serviceName, "setSystemSetting", params);
-    }
+    // /**
+    //  * 
+    //  * @param property 
+    //  * @param value 
+    //  */
+    // setSystemSetting(property: string, value?: string) {
+    //     var params: any = {
+    //         property: property,
+    //     };
+    //     if (value != null) {
+    //         params.value = value;
+    //     }
+    //     return this.httpMgr.doPost(this.serviceName, "setSystemSetting", params);
+    // }
 
 }

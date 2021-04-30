@@ -74,29 +74,33 @@ export class SettingsServices {
         );
     }
 
-    getProjectSettings(componentID: string, project: Project): Observable<Settings> {
+    getSettingsForProjectAdministration(componentID: string, scope: Scope, project: Project, user?: User) {
         let params = {
             componentID: componentID,
-            projectName: project.getName()
+            scope: scope,
+            projectName: project.getName(),
+            userIri: user != null ? user.getIri() : null,
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params).pipe(
+        return this.httpMgr.doGet(this.serviceName, "getSettingsForProjectAdministration", params).pipe(
             map(stResp => {
                 return Settings.parse(stResp);
             })
-        );
+        )
     }
 
-    getPUSettingsOfUser(componentID: string, project: Project, user: User): Observable<Settings> {
+    getSettingsDefaultForProjectAdministration(componentID: string, scope: Scope, defaultScope: Scope, project: Project, user?: User) {
         let params = {
             componentID: componentID,
+            scope: scope,
+            defaultScope: defaultScope,
             projectName: project.getName(),
-            userIri: user.getIri()
+            userIri: user != null ? user.getIri() : null,
         };
-        return this.httpMgr.doGet(this.serviceName, "getPUSettingsOfUser", params).pipe(
+        return this.httpMgr.doGet(this.serviceName, "getSettingsDefaultForProjectAdministration", params).pipe(
             map(stResp => {
                 return Settings.parse(stResp);
             })
-        );
+        )
     }
 
     getPUSettingsUserDefault(componentID: string, user: User): Observable<Settings> {
@@ -182,14 +186,16 @@ export class SettingsServices {
         return this.httpMgr.doPost(this.serviceName, "storeSettingDefault", params);
     }
 
-    storeProjectSetting(componentID: string, project: Project, propertyName: string, propertyValue: any) {
+    storeSettingForProjectAdministration(componentID: string, scope: Scope, propertyName: string, propertyValue: any, project: Project, user?: User) {
         let params = {
             componentID: componentID,
-            projectName: project.getName(),
+            scope: scope,
             propertyName: propertyName,
-            propertyValue: JSON.stringify(propertyValue)
+            propertyValue: JSON.stringify(propertyValue),
+            projectName: project.getName(),
+            userIri: user != null ? user.getIri() : null,
         };
-        return this.httpMgr.doPost(this.serviceName, "storeProjectSetting", params);
+        return this.httpMgr.doPost(this.serviceName, "storeSettingForProjectAdministration", params);
     }
 
 }

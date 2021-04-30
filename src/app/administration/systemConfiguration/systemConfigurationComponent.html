@@ -117,11 +117,11 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" id="authRadioTrue" type="radio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="true">
+                                        <input class="form-check-input" id="authRadioTrue" type="radio" name="emailAuthRadio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="true">
                                         <label class="form-check-label" for="authRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" id="authRadioFalse" type="radio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="false">
+                                        <input class="form-check-input" id="authRadioFalse" type="radio" name="emailAuthRadio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="false">
                                         <label class="form-check-label" for="authRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</label>
                                     </div>
                                 </td>
@@ -340,11 +340,11 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="form-check form-check-inline ml-3">
-                                        <input class="form-check-input" id="aclRadioTrue" type="radio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="onDefaultAclChanged()" [value]="true">
+                                        <input class="form-check-input" id="aclRadioTrue" type="radio" name="aclRadio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="updateProjectCreationSettings()" [value]="true">
                                         <span class="form-check-label" for="aclRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" id="aclRadioFalse" type="radio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="onDefaultAclChanged()" [value]="false">
+                                        <input class="form-check-input" id="aclRadioFalse" type="radio" name="aclRadio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="updateProjectCreationSettings()" [value]="false">
                                         <span class="form-check-label" for="aclRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
                                     </div>
                                 </td>
@@ -358,11 +358,11 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="form-check form-check-inline ml-3">
-                                        <input class="form-check-input" id="startupRadioTrue" type="radio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="onDefaultOpenAtStartupChanged()" [value]="true">
+                                        <input class="form-check-input" id="startupRadioTrue" type="radio" name="startupRadio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="updateProjectCreationSettings()" [value]="true">
                                         <span class="form-check-label" for="startupRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" id="startupRadioFalse" type="radio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="onDefaultOpenAtStartupChanged()" [value]="false">
+                                        <input class="form-check-input" id="startupRadioFalse" type="radio" name="startupRadio" [(ngModel)]="defaultOpenAtStartup" (ngModelChange)="updateProjectCreationSettings()" [value]="false">
                                         <span class="form-check-label" for="startupRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
                                     </div>
                                 </td>
