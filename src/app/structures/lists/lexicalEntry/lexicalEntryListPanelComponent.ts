@@ -299,15 +299,17 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     }
 
     onSwitchMode(mode: LexEntryVisualizationMode) {
-        this.vbProp.setLexicalEntryListVisualization(mode);
         let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
+        lexEntryListPref.visualization = mode;
+        this.vbProp.setLexicalEntryListPreferences(lexEntryListPref);
         this.visualizationMode = lexEntryListPref.visualization;
         this.viewChildList.init();
     }
 
     onChangeIndexLenght(lenght: number) {
-        this.vbProp.setLexicalEntryListIndexLenght(lenght);
         let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
+        lexEntryListPref.indexLength = lenght;
+        this.vbProp.setLexicalEntryListPreferences(lexEntryListPref);
         this.indexLenght = lexEntryListPref.indexLength;
         this.onDigitChange();
     }

@@ -34,20 +34,20 @@ export class LexicalEntryListSettingsModal {
     }
 
     ok() {
-        if (this.pristineLexEntryPref.visualization != this.visualization) {
-            this.vbProp.setLexicalEntryListVisualization(this.visualization);
+        let changed: boolean = this.pristineLexEntryPref.visualization != this.visualization ||
+            this.pristineLexEntryPref.safeToGoLimit != this.safeToGoLimit || 
+            this.pristineLexEntryPref.indexLength != this.indexLenght;
+        //if something changed store the settings and close the dialog, otherwise cancel
+        if (changed) {
+            let lexEntryListPrefs: LexicalEntryListPreference = new LexicalEntryListPreference();
+            lexEntryListPrefs.indexLength = this.indexLenght;
+            lexEntryListPrefs.safeToGoLimit = this.safeToGoLimit;
+            lexEntryListPrefs.visualization = this.visualization;
+            this.vbProp.setLexicalEntryListPreferences(lexEntryListPrefs);
+            this.activeModal.close();
+        } else {
+            this.cancel();
         }
-        
-        if (this.visualization == LexEntryVisualizationMode.indexBased) {
-            if (this.pristineLexEntryPref.safeToGoLimit != this.safeToGoLimit) {
-                this.vbProp.setLexicalEntryListSafeToGoLimit(this.safeToGoLimit);
-            }
-            if (this.pristineLexEntryPref.indexLength != this.indexLenght) {
-                this.vbProp.setLexicalEntryListIndexLenght(this.indexLenght);
-            }
-        }
-        
-        this.activeModal.close();
     }
 
     cancel() {

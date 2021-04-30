@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
 import { Project } from "../models/Project";
 import { User } from '../models/User';
-import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
 
@@ -19,59 +16,59 @@ export class PreferencesSettingsServices {
      * Sets the default active skos concept schemes
      * @param scheme s
      */
-    setActiveSchemes(schemes?: ARTURIResource[], options?: VBRequestOptions) {
-        var params: any = {}
-        if (schemes != null) {
-            params.schemes = schemes;
-        }
-        return this.httpMgr.doPost(this.serviceName, "setActiveSchemes", params, options);
-    }
+    // setActiveSchemes(schemes?: ARTURIResource[], options?: VBRequestOptions) {
+    //     var params: any = {}
+    //     if (schemes != null) {
+    //         params.schemes = schemes;
+    //     }
+    //     return this.httpMgr.doPost(this.serviceName, "setActiveSchemes", params, options);
+    // }
 
     /**
      * Returns the active schemes for the given project
      * @param projectName 
      */
-    getActiveSchemes(projectName: string): Observable<ARTURIResource[]> {
-        var params: any = {
-            projectName: projectName
-        }
-        return this.httpMgr.doGet(this.serviceName, "getActiveSchemes", params).pipe(
-            map(stResp => {
-                if (stResp == null) {
-                    return null;
-                } else {
-                    return Deserializer.createURIArray(stResp);
-                }
-            })
-        );
-    }
+    // getActiveSchemes(projectName: string): Observable<ARTURIResource[]> {
+    //     var params: any = {
+    //         projectName: projectName
+    //     }
+    //     return this.httpMgr.doGet(this.serviceName, "getActiveSchemes", params).pipe(
+    //         map(stResp => {
+    //             if (stResp == null) {
+    //                 return null;
+    //             } else {
+    //                 return Deserializer.createURIArray(stResp);
+    //             }
+    //         })
+    //     );
+    // }
 
     /**
      * Gets the preferences of the currently logged user for the currently open project
      */
-    getPUSettings(properties: string[], project?: Project, pluginID?: string) {
-        var params: any = {
-            properties: properties,
-            projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
-            pluginID: pluginID
-        }
-        return this.httpMgr.doGet(this.serviceName, "getPUSettings", params);
-    }
+    // getPUSettings(properties: string[], project?: Project, pluginID?: string) {
+    //     var params: any = {
+    //         properties: properties,
+    //         projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
+    //         pluginID: pluginID
+    //     }
+    //     return this.httpMgr.doGet(this.serviceName, "getPUSettings", params);
+    // }
 
     /**
      * 
      * @param property 
      * @param value 
      */
-    setPUSetting(property: string, value?: string, project?: Project, pluginID?: string) {
-        var params: any = {
-            property: property,
-            value: value,
-            projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
-            pluginID: pluginID
-        };
-        return this.httpMgr.doPost(this.serviceName, "setPUSetting", params);
-    }
+    // setPUSetting(property: string, value?: string, project?: Project, pluginID?: string) {
+    //     var params: any = {
+    //         property: property,
+    //         value: value,
+    //         projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
+    //         pluginID: pluginID
+    //     };
+    //     return this.httpMgr.doPost(this.serviceName, "setPUSetting", params);
+    // }
 
     // /**
     //  * Gets the preferences of the currently logged user for the currently open project
@@ -160,18 +157,18 @@ export class PreferencesSettingsServices {
      * @param property 
      * @param project 
      */
-    setProjectSetting(property: string, value?: string, project?: Project) {
-        var params: any = {
-            property: property,
-        };
-        if (value != null) {
-            params.value = value;
-        }
-        if (project != null) {
-            params.projectName = project.getName();
-        }
-        return this.httpMgr.doPost(this.serviceName, "setProjectSetting", params);
-    }
+    // setProjectSetting(property: string, value?: string, project?: Project) {
+    //     var params: any = {
+    //         property: property,
+    //     };
+    //     if (value != null) {
+    //         params.value = value;
+    //     }
+    //     if (project != null) {
+    //         params.projectName = project.getName();
+    //     }
+    //     return this.httpMgr.doPost(this.serviceName, "setProjectSetting", params);
+    // }
 
     /**
      * 
@@ -179,14 +176,14 @@ export class PreferencesSettingsServices {
      * @param email 
      * @param pluginID 
      */
-    getPUSettingsUserDefault(properties: string[], email: string, pluginID?: string) {
-        let params: any = {
-            properties: properties,
-            email: email,
-            pluginID: pluginID
-        };
-        return this.httpMgr.doGet(this.serviceName, "getPUSettingsUserDefault", params);
-    }
+    // getPUSettingsUserDefault(properties: string[], email: string, pluginID?: string) {
+    //     let params: any = {
+    //         properties: properties,
+    //         email: email,
+    //         pluginID: pluginID
+    //     };
+    //     return this.httpMgr.doGet(this.serviceName, "getPUSettingsUserDefault", params);
+    // }
 
     /**
      * 
@@ -205,20 +202,20 @@ export class PreferencesSettingsServices {
         return this.httpMgr.doPost(this.serviceName, "setPUSettingUserDefault", params);
     }
 
-    /**
-     * 
-     * @param properties 
-     * @param email 
-     * @param pluginID 
-     */
-    getPUSettingsProjectDefault(properties: string[], project: Project, pluginID?: string) {
-        let params: any = {
-            properties: properties,
-            project: project.getName(),
-            pluginID: pluginID
-        };
-        return this.httpMgr.doGet(this.serviceName, "getPUSettingsProjectDefault", params);
-    }
+    // /**
+    //  * 
+    //  * @param properties 
+    //  * @param email 
+    //  * @param pluginID 
+    //  */
+    // getPUSettingsProjectDefault(properties: string[], project: Project, pluginID?: string) {
+    //     let params: any = {
+    //         properties: properties,
+    //         project: project.getName(),
+    //         pluginID: pluginID
+    //     };
+    //     return this.httpMgr.doGet(this.serviceName, "getPUSettingsProjectDefault", params);
+    // }
 
     /**
      * 
@@ -241,20 +238,20 @@ export class PreferencesSettingsServices {
      * Gets the default project settings
      * @param properties 
      */
-    getDefaultProjectSettings(properties: string[]) {
-        var params = {
-            properties: properties
-        };
-        return this.httpMgr.doGet(this.serviceName, "getDefaultProjectSettings", params);
-    }
+    // getDefaultProjectSettings(properties: string[]) {
+    //     var params = {
+    //         properties: properties
+    //     };
+    //     return this.httpMgr.doGet(this.serviceName, "getDefaultProjectSettings", params);
+    // }
 
     /**
      * Gets the project settings needed during system startup
      */
-    getStartupSystemSettings() {
-        var params = {};
-        return this.httpMgr.doGet(this.serviceName, "getStartupSystemSettings", params);
-    }
+    // getStartupSystemSettings() {
+    //     var params = {};
+    //     return this.httpMgr.doGet(this.serviceName, "getStartupSystemSettings", params);
+    // }
 
     /**
      * 

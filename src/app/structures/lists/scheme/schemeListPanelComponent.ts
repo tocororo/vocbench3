@@ -100,7 +100,9 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
     private switchMultischemeMode() {
         this.multischemeMode = (this.multischemeMode == MultischemeMode.and) ? MultischemeMode.or : MultischemeMode.and;
-        this.vbProp.setMultischemeMode(this.multischemeMode);
+        let concTreePrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
+        concTreePrefs.multischemeMode = this.multischemeMode;
+        this.vbProp.setConceptTreePreferences(concTreePrefs);
         this.eventHandler.multischemeModeChangedEvent.emit();
     }
 

@@ -4,8 +4,7 @@ import { SKOS } from "src/app/models/Vocabulary";
 import { SettingsServices } from "src/app/services/settingsServices";
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
-import { PrefLabelClashMode, Properties, SettingsEnum } from "../../models/Properties";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
+import { PrefLabelClashMode, SettingsEnum } from "../../models/Properties";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 
@@ -28,7 +27,7 @@ export class ProjectSettingsComponent {
     ];
     labelClashOptSelected: LabelClashItem;
 
-    constructor(private prefService: PreferencesSettingsServices, private settingsService: SettingsServices, private vbProperties: VBProperties) { }
+    constructor(private settingsService: SettingsServices, private vbProperties: VBProperties) { }
 
     ngOnInit() {
         //init all available system languages
@@ -103,27 +102,26 @@ export class ProjectSettingsComponent {
         });
 
         this.noLangActive = activeLangs.length == 0;
-        let activeLangSettingValue = activeLangs.length == 0 ? null : JSON.stringify(activeLangs);
-        this.prefService.setProjectSetting(Properties.setting_languages, activeLangSettingValue, this.project).subscribe(
+        let langSettingValue = (this.noLangActive) ? null : activeLangs;
+        this.settingsService.storeProjectSetting(ExtensionPointID.ST_CORE_ID, this.project, SettingsEnum.languages, langSettingValue).subscribe(
             () => {
                 //in case the edited project is the active one, update the settings stored in VBContext
                 if (VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()) {
-                    if (activeLangSettingValue == null) {
+                    if (langSettingValue == null) {
                         /** if no lang is active, reinit the setting because in such case (null activeLangs)
                          * the project languages should be inherit from system setting. */
                         this.vbProperties.initProjectSettings(VBContext.getWorkingProjectCtx()).subscribe();
                     } else {
                         VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting = activeLangs;
                     }
-                    
                 }
             }
-        );
+        )
     }
 
     setLabelClashSetting(opt: LabelClashItem) {
         this.labelClashOptSelected = opt;
-        this.prefService.setProjectSetting(Properties.label_clash_mode, this.labelClashOptSelected.mode, this.project).subscribe(
+        this.settingsService.storeProjectSetting(ExtensionPointID.ST_CORE_ID, this.project, SettingsEnum.labelClashMode, this.labelClashOptSelected.mode).subscribe(
             () => {
                 //in case the edited project is the active one, update the settings stored in VBContext
                 if (VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()) {

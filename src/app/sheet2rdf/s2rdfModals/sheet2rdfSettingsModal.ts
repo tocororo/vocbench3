@@ -1,10 +1,10 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin, Observable } from "rxjs";
+import { ExtensionPointID, Scope } from "src/app/models/Plugins";
+import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { Properties } from "../../models/Properties";
-import { FsNamingStrategy } from "../../models/Sheet2RDF";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
+import { SettingsEnum } from "../../models/Properties";
+import { FsNamingStrategy, Sheet2RdfSettings } from "../../models/Sheet2RDF";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
@@ -21,7 +21,7 @@ export class Sheet2RdfSettingsModal {
     ];
     fsNamingStrategy: FsNsStruct;
 
-    constructor(public activeModal: NgbActiveModal, private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices) {}
+    constructor(public activeModal: NgbActiveModal, private settingsService: SettingsServices, private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         this.fsNamingStrategies.forEach(ns => {
@@ -39,19 +39,14 @@ export class Sheet2RdfSettingsModal {
         ) {
             this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.CHANGE_S2RDF_SETTINGS_CONFIRM"}, ModalType.warning).then(
                 confirm => {
-                    let updateSettingsFn: Observable<any>[] = [];
-                    if (this.fsNamingStrategy.strategy != this.fsNamingStrategyInput) {
-                        updateSettingsFn.push(this.prefService.setPUSetting(Properties.pref_s2rdf_fs_naming_strategy, this.fsNamingStrategy.strategy));
-                    }
-                    // if (this.useHeader != this.context.useHeader) {
-                    //     updateSettingsFn.push(this.prefService.setPUSetting(Properties.pref_s2rdf_use_headers, this.useHeader+""));
-                    // }
-
-                    forkJoin(updateSettingsFn).subscribe(
-                        resp => {
+                    let sheet2RdfSettings: Sheet2RdfSettings = new Sheet2RdfSettings();
+                    sheet2RdfSettings.namingStrategy = this.fsNamingStrategy.strategy;
+                    // sheet2RdfSettings.useHeaders = this.useHeader;
+                    this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.sheet2rdfSettings, sheet2RdfSettings).subscribe(
+                        () => {
                             this.activeModal.close(this.fsNamingStrategy.strategy);
                         }
-                    );
+                    )
                 },
                 cancel => {
                     this.cancel();

@@ -266,111 +266,78 @@ export class ConceptTreeSettingsModal {
 
 
     ok() {
-        if (this.pristineConcPref.visualization != this.visualization) {
-            this.vbProp.setConceptTreeVisualization(this.visualization);
-        }
 
-        let broaderPropsChanged: boolean = false;
-        let narrowerPropsChanged: boolean = false;
+        let changedVisualization = this.pristineConcPref.visualization != this.visualization;
+        let changedMultischemeMode: boolean;
+        let changedSafeToGoLimit: boolean;
+        let changedBaseBroaderUri: boolean;
+        let changedIncludeSubProps: boolean;
+        let changedSyncInverse: boolean;
+        let changedBroaderProps: boolean;
+        let changedNarrowerProps: boolean;
 
         if (this.visualization == ConceptTreeVisualizationMode.hierarchyBased) {
-            if (this.pristineConcPref.multischemeMode != this.selectedMultischemeMode) {
-                this.vbProp.setMultischemeMode(this.selectedMultischemeMode);
-            }
-
-            if (this.pristineConcPref.safeToGoLimit != this.safeToGoLimit) {
-                this.vbProp.setConceptTreeSafeToGoLimit(this.safeToGoLimit);
-            }
-
-            if (this.pristineConcPref.baseBroaderUri != this.baseBroaderProp) {
-                this.vbProp.setConceptTreeBaseBroaderProp(this.baseBroaderProp);
-            }
-
-            if (this.pristineConcPref.includeSubProps != this.includeSubProps) {
-                this.vbProp.setConceptTreeIncludeSubProps(this.includeSubProps);
-            }
-
-            if (this.pristineConcPref.syncInverse != this.syncInverse) {
-                this.vbProp.setConceptTreeSyncInverse(this.syncInverse);
-            }
+            changedMultischemeMode = this.pristineConcPref.multischemeMode != this.selectedMultischemeMode;
+            changedSafeToGoLimit = this.pristineConcPref.safeToGoLimit != this.safeToGoLimit;
+            changedBaseBroaderUri = this.pristineConcPref.baseBroaderUri != this.baseBroaderProp;
+            changedIncludeSubProps = this.pristineConcPref.includeSubProps != this.includeSubProps;
+            changedSyncInverse = this.pristineConcPref.syncInverse != this.syncInverse;
 
             //look for changes in broaderProps:
             //first compare lenght
-            if (this.pristineConcPref.broaderProps.length != this.broaderProps.length) {
-                broaderPropsChanged = true;
-            }
+            changedBroaderProps = this.pristineConcPref.broaderProps.length != this.broaderProps.length;
             //eventually check if every property in the pristine collection is still in the current collection (properties removed?)...
-            if (!broaderPropsChanged) {
-                for (var i = 0; i < this.pristineConcPref.broaderProps.length; i++) {
-                    let propUri: string = this.pristineConcPref.broaderProps[i];
-                    if (!ResourceUtils.containsNode(this.broaderProps, new ARTURIResource(propUri))) {
-                        broaderPropsChanged = true; //current properties collection doesn't contain a property of the pristine collection
-                        break;
-                    }
-                }
+            if (!changedBroaderProps) {
+                //there is some property in the pristine broaderProps that is not in the new broaderProps list
+                changedBroaderProps = this.pristineConcPref.broaderProps.some(bp => !ResourceUtils.containsNode(this.broaderProps, new ARTURIResource(bp)));
             }
             //...and finally check if every property in the current was in the pristine (properties added?)
-            if (!broaderPropsChanged) {
-                for (var i = 0; i < this.broaderProps.length; i++) {
-                    if (this.pristineConcPref.broaderProps.indexOf(this.broaderProps[i].getURI()) == -1) {
-                        broaderPropsChanged = true; //pristine properties collection doesn't contain a property of the current collection
-                        break;
-                    }
-                }
-            }
-            if (broaderPropsChanged) {
-                let broaderPropsPref: string[] = [];
-                this.broaderProps.forEach((prop: ARTURIResource) => broaderPropsPref.push(prop.getURI()));
-                this.vbProp.setConceptTreeBroaderProps(broaderPropsPref);
+            if (!changedBroaderProps) {
+                changedBroaderProps = this.broaderProps.some(bp => this.pristineConcPref.broaderProps.indexOf(bp.toNT()) == -1);
             }
 
             //look for changes in narrowerProps:
             //first compare lenght
-            if (this.pristineConcPref.narrowerProps.length != this.narrowerProps.length) {
-                narrowerPropsChanged = true;
-            }
+            changedNarrowerProps = this.pristineConcPref.narrowerProps.length != this.narrowerProps.length;
             //eventually check if every property in the pristine collection is still in the current collection (properties removed?)...
-            if (!narrowerPropsChanged) {
-                for (var i = 0; i < this.pristineConcPref.narrowerProps.length; i++) {
-                    let propUri: string = this.pristineConcPref.narrowerProps[i];
-                    if (!ResourceUtils.containsNode(this.narrowerProps, new ARTURIResource(propUri))) {
-                        narrowerPropsChanged = true; //current properties collection doesn't contain a property of the pristine collection
-                        break;
-                    }
-                }
+            if (!changedNarrowerProps) {
+                //there is some property in the pristine narrowerProps that is not in the new narrowerProps list
+                changedNarrowerProps = this.pristineConcPref.narrowerProps.some(np => !ResourceUtils.containsNode(this.narrowerProps, new ARTURIResource(np)))
             }
             //...and finally check if every property in the current was in the pristine (properties added?)
-            if (!narrowerPropsChanged) {
-                for (var i = 0; i < this.narrowerProps.length; i++) {
-                    if (this.pristineConcPref.narrowerProps.indexOf(this.narrowerProps[i].getURI()) == -1) {
-                        narrowerPropsChanged = true; //pristine properties collection doesn't contain a property of the current collection
-                        break;
-                    }
-                }
-            }
-            if (narrowerPropsChanged) {
-                let narrowerPropsPref: string[] = [];
-                this.narrowerProps.forEach((prop: ARTURIResource) => narrowerPropsPref.push(prop.getURI()));
-                this.vbProp.setConceptTreeNarrowerProps(narrowerPropsPref);
+            if (!changedNarrowerProps) {
+                //there is some property in the new narrowerProps that is not in the pristine narrowerProps
+                changedNarrowerProps = this.narrowerProps.some(np => this.pristineConcPref.narrowerProps.indexOf(np.toNT()) == -1);
             }
         }
 
         /**
-         * the following settings, if changed, required the refresh of the tree, so close the dialog only if one is changed
+         * If settings are changed, store them and close the dialog so that the tree refreshes, otherwise cancel.
+         * Actually the only changes that requires the refresh are:
          * - the broader/narrower props
          * - includeSubProps 
          * - visualization
+         * but, in order to make it easy, just check if just one setting has changed
          */
         if (
-            broaderPropsChanged || narrowerPropsChanged || 
-            this.pristineConcPref.includeSubProps != this.includeSubProps ||
-            this.pristineConcPref.visualization != this.visualization ||
-            this.pristineConcPref.multischemeMode != this.selectedMultischemeMode
+            changedBaseBroaderUri || changedBroaderProps || changedIncludeSubProps || changedMultischemeMode ||
+            changedNarrowerProps || changedSafeToGoLimit || changedSyncInverse || changedVisualization
         ) {
+            let concTreePrefs: ConceptTreePreference = new ConceptTreePreference();
+            concTreePrefs.baseBroaderUri = this.baseBroaderProp;
+            concTreePrefs.broaderProps = this.broaderProps.map((prop: ARTURIResource) => prop.toNT());
+            concTreePrefs.includeSubProps = this.includeSubProps;
+            concTreePrefs.multischemeMode = this.selectedMultischemeMode;
+            concTreePrefs.narrowerProps = this.narrowerProps.map((prop: ARTURIResource) => prop.toNT());
+            concTreePrefs.safeToGoLimit = this.safeToGoLimit;
+            concTreePrefs.syncInverse = this.syncInverse;
+            concTreePrefs.visualization = this.visualization;
+            this.vbProp.setConceptTreePreferences(concTreePrefs);
             this.activeModal.close();
-        } else {//for other changes simply dismiss the modal
+        } else {
             this.cancel();
         }
+
     }
 
     cancel() {

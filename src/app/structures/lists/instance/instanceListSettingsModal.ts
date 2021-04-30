@@ -30,15 +30,18 @@ export class InstanceListSettingsModal {
     }
 
     ok() {
-        if (this.pristineInstancePref.visualization != this.visualization) {
-            this.vbProp.setInstanceListVisualization(this.visualization);
+        let changed: boolean = this.pristineInstancePref.visualization != this.visualization ||
+            this.pristineInstancePref.safeToGoLimit != this.safeToGoLimit;
+
+        if (changed) {
+            let instListPrefs: InstanceListPreference = new InstanceListPreference();
+            instListPrefs.visualization = this.visualization;
+            instListPrefs.safeToGoLimit = this.safeToGoLimit;
+            this.vbProp.setInstanceListPreferences(instListPrefs);
+            this.activeModal.close();
+        } else {
+            this.activeModal.close();
         }
-        if (this.visualization == InstanceListVisualizationMode.standard) {
-            if (this.pristineInstancePref.safeToGoLimit != this.safeToGoLimit) {
-                this.vbProp.setInstanceLisSafeToGoLimit(this.safeToGoLimit);
-            }
-        }
-        this.activeModal.close();
     }
 
     cancel() {

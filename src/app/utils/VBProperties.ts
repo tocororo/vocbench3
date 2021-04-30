@@ -3,7 +3,7 @@ import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
-import { ExtensionPointID, Scope } from '../models/Plugins';
+import { ExtensionPointID, Scope, Settings } from '../models/Plugins';
 import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { AdministrationServices } from '../services/administrationServices';
@@ -217,99 +217,52 @@ export class VBProperties {
     }
 
     //instance list settings
-    setInstanceListVisualization(mode: InstanceListVisualizationMode) {
-        this.prefService.setPUSetting(Properties.pref_instance_list_visualization, mode).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences.visualization = mode;
-    }
-    setInstanceLisSafeToGoLimit(limit: number) {
-        this.prefService.setPUSetting(Properties.pref_instance_list_safe_to_go_limit, limit+"").subscribe();
-        let instanceListPref = VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences;
-        instanceListPref.safeToGoLimit = limit;
-        instanceListPref.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
+    setInstanceListPreferences(instListPref: InstanceListPreference) {
+        let oldInstListPref = VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences;
+        if (oldInstListPref.safeToGoLimit != instListPref.safeToGoLimit) {
+            instListPref.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
+        }
+        VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences = instListPref;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.instanceList, instListPref).subscribe();
     }
 
     //concept tree settings
-    setMultischemeMode(mode: MultischemeMode) {
-        this.prefService.setPUSetting(Properties.pref_concept_tree_multischeme_mode, mode).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.multischemeMode = mode;
-    }
-    setConceptTreeSafeToGoLimit(limit: number) {
-        this.prefService.setPUSetting(Properties.pref_concept_tree_safe_to_go_limit, limit+"").subscribe();
-        let conceptTreePref = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences; 
-        conceptTreePref.safeToGoLimit = limit;
-        conceptTreePref.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
-    }
-    setConceptTreeBaseBroaderProp(propUri: string) {
-        this.prefService.setPUSetting(Properties.pref_concept_tree_base_broader_prop, propUri).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri = propUri;
-    }
-    setConceptTreeBroaderProps(props: string[]) {
-        let prefValue: string;
-        if (props.length > 0) {
-            prefValue = props.join(",")
+    setConceptTreePreferences(concTreePrefs: ConceptTreePreference) {
+        let oldConcTreePrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
+        if (oldConcTreePrefs.safeToGoLimit != concTreePrefs.safeToGoLimit) {
+            concTreePrefs.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
         }
-        this.prefService.setPUSetting(Properties.pref_concept_tree_broader_props, prefValue).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.broaderProps = props;
-    }
-    setConceptTreeNarrowerProps(props: string[]) {
-        let prefValue: string;
-        if (props.length > 0) {
-            prefValue = props.join(",")
-        }
-        this.prefService.setPUSetting(Properties.pref_concept_tree_narrower_props, prefValue).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.narrowerProps = props;
-    }
-    setConceptTreeIncludeSubProps(include: boolean) {
-        this.prefService.setPUSetting(Properties.pref_concept_tree_include_subprops, include+"").subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.includeSubProps = include;
-    }
-    setConceptTreeSyncInverse(sync: boolean) {
-        this.prefService.setPUSetting(Properties.pref_concept_tree_sync_inverse, sync+"").subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.syncInverse = sync;
-    }
-    setConceptTreeVisualization(mode: ConceptTreeVisualizationMode) {
-        this.prefService.setPUSetting(Properties.pref_concept_tree_visualization, mode).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.visualization = mode;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences = concTreePrefs;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.conceptTree, concTreePrefs).subscribe();
     }
 
     //lex entry list settings
-    setLexicalEntryListVisualization(mode: LexEntryVisualizationMode) {
-        this.prefService.setPUSetting(Properties.pref_lex_entry_list_visualization, mode).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization = mode;
-    }
-    setLexicalEntryListSafeToGoLimit(limit: number) {
-        this.prefService.setPUSetting(Properties.pref_lex_entry_list_safe_to_go_limit, limit+"").subscribe();
-        let lexEntryListPref = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
-        lexEntryListPref.safeToGoLimit = limit;
-        lexEntryListPref.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
-    }
-    setLexicalEntryListIndexLenght(lenght: number) {
-        this.prefService.setPUSetting(Properties.pref_lex_entry_list_index_lenght, lenght+"").subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.indexLength = lenght;
+    setLexicalEntryListPreferences(lexEntryListPrefs: LexicalEntryListPreference) {
+        let oldLexEntryListPrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
+        if (oldLexEntryListPrefs.safeToGoLimit != lexEntryListPrefs.safeToGoLimit) {
+            lexEntryListPrefs.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
+        }
+        VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences = lexEntryListPrefs;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.lexEntryList, lexEntryListPrefs).subscribe();
     }
 
     //Res view settings
-    setResourceViewConceptType(type: ResourceViewType) {
-        this.prefService.setPUSetting(Properties.pref_res_view_default_concept_type, type).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.defaultConceptType = type;
+    setResourceViewPreferences(resViewPrefs: ResourceViewPreference) {
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences = resViewPrefs;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.resourceView, resViewPrefs).subscribe();
+        /* an empty resViewPartitionFilter should always be {}, anyway in order to write a null value and exploit the fallback-to-defaults mechanism, 
+        it can be set to null serverside. In such case once the setting has been stored, the preference is re-initialized to {} */
+        if (resViewPrefs.resViewPartitionFilter == null) {
+            resViewPrefs.resViewPartitionFilter = {};
+        }
     }
 
-    setResourceViewLexEntryType(type: ResourceViewType) {
-        this.prefService.setPUSetting(Properties.pref_res_view_default_lexentry_type, type).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.defaultLexEntryType = type;
-    }
-
-    setResourceViewPartitionFilter(pref: PartitionFilterPreference) {
-        let value = (pref != null) ? JSON.stringify(pref) : null;
-        this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, value).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter = pref;
-    }
     refreshResourceViewPartitionFilter(): Observable<void> { //refreshed the cached rv partition filter
         return this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER).pipe(
             map(settings => {
                 let resViewSettings: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
-                let filter: PartitionFilterPreference
-                if (resViewSettings != null) {
+                let filter: PartitionFilterPreference = {}
+                if (resViewSettings != null && resViewSettings.resViewPartitionFilter != null) {
                     filter = resViewSettings.resViewPartitionFilter;
                 }
                 VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter = filter;
@@ -319,13 +272,12 @@ export class VBProperties {
 
     //Graph settings
     setGraphViewPartitionFilter(pref: PartitionFilterPreference) {
-        let value = (pref != null) ? JSON.stringify(pref) : null;
-        this.prefService.setPUSetting(Properties.pref_graph_view_partition_filter, value).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().graphViewPartitionFilter = pref;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.graphViewPartitionFilter, pref).subscribe();
     }
-    setHideLiteralGraphNodes(show: boolean) {
-        VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes = show;
-        this.prefService.setPUSetting(Properties.pref_hide_literal_graph_nodes, show+"").subscribe();
+    setHideLiteralGraphNodes(hide: boolean) {
+        VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes = hide;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.hideLiteralGraphNodes, hide).subscribe();
     }
 
     /* =============================
@@ -346,22 +298,18 @@ export class VBProperties {
     ============================= */
 
     initStartupSystemSettings() {
-        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
+        this.settingsService.getStartupSettings().subscribe(
             settings => {
                 let systemSettings: SystemSettings = VBContext.getSystemSettings();
                 systemSettings.experimentalFeaturesEnabled = settings.getPropertyValue(SettingsEnum.experimentalFeaturesEnabled);
                 systemSettings.privacyStatementAvailable = settings.getPropertyValue(SettingsEnum.privacyStatementAvailable);
                 systemSettings.showFlags = settings.getPropertyValue(SettingsEnum.showFlags);
                 systemSettings.homeContent = settings.getPropertyValue(SettingsEnum.homeContent);
-            }
-        );
-        this.settingsService.getSettingsDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT).subscribe(
-            settings => {
                 let systemLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
                 Languages.sortLanguages(systemLanguages);
                 Languages.setSystemLanguages(systemLanguages);
             }
-        );
+        )
     }
 
     setExperimentalFeaturesEnabled(enabled: boolean) {
@@ -536,7 +484,7 @@ export class VBProperties {
     }
 
     setSearchSettings(projectCtx: ProjectContext, settings: SearchSettings) {
-        let projectPreferences: ProjectPreferences = projectCtx.getProjectPreferences();
+        let oldSearchSettings: SearchSettings = projectCtx.getProjectPreferences().searchSettings;
 
         Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, settings.stringMatchMode, 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_URI, settings.useURI+"", 365*10);
@@ -545,22 +493,20 @@ export class VBProperties {
         Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_EXTEND_ALL_INDIVIDUALS, settings.extendToAllIndividuals+"", 365*10);
 
-        if (projectPreferences.searchSettings.languages != settings.languages) {
-            this.prefService.setPUSetting(Properties.pref_search_languages, JSON.stringify(settings.languages), projectCtx.getProject()).subscribe();
+        let changed: boolean = oldSearchSettings.languages != settings.languages ||
+            oldSearchSettings.languages != settings.languages ||
+            oldSearchSettings.restrictLang != settings.restrictLang ||
+            oldSearchSettings.includeLocales != settings.includeLocales ||
+            oldSearchSettings.useAutocompletion != settings.useAutocompletion;
+
+        if (changed) {
+            projectCtx.getProjectPreferences().searchSettings = settings;
+            //the properties stored as cookie (e.g. useURI, useLocalName, ...) will be simply ignored server side, so I can pass here the whole searchSettings object
+            this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.searchSettings, settings, 
+                new VBRequestOptions({ ctxProject: projectCtx.getProject() })).subscribe();
         }
-        if (projectPreferences.searchSettings.restrictLang != settings.restrictLang) {
-            this.prefService.setPUSetting(Properties.pref_search_restrict_lang, settings.restrictLang+"", projectCtx.getProject()).subscribe();
-        }
-        if (projectPreferences.searchSettings.includeLocales != settings.includeLocales) {
-            this.prefService.setPUSetting(Properties.pref_search_include_locales, settings.includeLocales+"", projectCtx.getProject()).subscribe();
-        }
-        if (projectPreferences.searchSettings.useAutocompletion != settings.useAutocompletion) {
-            this.prefService.setPUSetting(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"", projectCtx.getProject()).subscribe();
-        }
-        projectPreferences.searchSettings = settings;
         this.eventHandler.searchPrefsUpdatedEvent.emit(projectCtx.getProject());
     }
-
 
     //EVENT HANDLER
     /**

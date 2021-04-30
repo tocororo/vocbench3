@@ -323,7 +323,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     onSwitchMode(mode: ConceptTreeVisualizationMode) {
-        this.vbProp.setConceptTreeVisualization(mode);
+        let concTreePrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
+        concTreePrefs.visualization = mode;
+        this.vbProp.setConceptTreePreferences(concTreePrefs);
         this.viewChildTree.init();
     }
 

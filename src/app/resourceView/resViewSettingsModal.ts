@@ -69,9 +69,15 @@ export class ResViewSettingsModal {
             () => {
                 let resViewPrefs: ResourceViewPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences;
                 resViewPrefs.resViewPartitionFilter = null;
+                //store the preference directly using storeSetting and not VBProperties.setResourceViewPreferences so that it waits
+                //for the settings to be stored and then refreshing the template
                 this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.resourceView, resViewPrefs).subscribe(
                     () => {
-                        this.initTemplate();
+                        this.vbProp.refreshResourceViewPartitionFilter().subscribe(
+                            () => {
+                                this.initTemplate();
+                            }
+                        )
                     }
                 );
             },
@@ -80,7 +86,9 @@ export class ResViewSettingsModal {
     }
 
     updateTemplate() {
-        this.vbProp.setResourceViewPartitionFilter(this.template);
+        let rvPrefs: ResourceViewPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences;
+        rvPrefs.resViewPartitionFilter = this.template;
+        this.vbProp.setResourceViewPreferences(rvPrefs);
     }
 
     ok() {

@@ -212,7 +212,9 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     }
 
     onSwitchMode(mode: InstanceListVisualizationMode) {
-        this.vbProp.setInstanceListVisualization(mode);
+        let instListPrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences;
+        instListPrefs.visualization = mode;
+        this.vbProp.setInstanceListPreferences(instListPrefs);
         this.viewChildList.init();
     }
 

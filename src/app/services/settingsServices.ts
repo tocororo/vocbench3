@@ -111,6 +111,15 @@ export class SettingsServices {
         );
     }
 
+    getStartupSettings(): Observable<Settings> {
+        let params = {};
+        return this.httpMgr.doGet(this.serviceName, "getStartupSettings", params).pipe(
+            map(stResp => {
+                return Settings.parse(stResp);
+            })
+        );
+    }
+
     /**
      * 
      * @param componentID 
@@ -171,6 +180,16 @@ export class SettingsServices {
             propertyValue: JSON.stringify(propertyValue)
         };
         return this.httpMgr.doPost(this.serviceName, "storeSettingDefault", params);
+    }
+
+    storeProjectSetting(componentID: string, project: Project, propertyName: string, propertyValue: any) {
+        let params = {
+            componentID: componentID,
+            projectName: project.getName(),
+            propertyName: propertyName,
+            propertyValue: JSON.stringify(propertyValue)
+        };
+        return this.httpMgr.doPost(this.serviceName, "storeProjectSetting", params);
     }
 
 }

@@ -8,7 +8,7 @@ import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourc
 import { Issue } from "../../models/Collaboration";
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
-import { NotificationStatus, ProjectPreferences } from "../../models/Properties";
+import { NotificationStatus, PartitionFilterPreference, ProjectPreferences } from "../../models/Properties";
 import { PropertyFacet, ResourceViewCtx, ResViewPartition } from "../../models/ResourceView";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { CollaborationServices } from "../../services/collaborationServices";
