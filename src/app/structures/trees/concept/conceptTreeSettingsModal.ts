@@ -1,10 +1,11 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ExtensionPointID, Scope } from "src/app/models/Plugins";
+import { SettingsServices } from "src/app/services/settingsServices";
 import { ARTURIResource } from "../../../models/ARTResources";
-import { ConceptTreePreference, ConceptTreeVisualizationMode, MultischemeMode, Properties, VisualizationModeTranslation } from "../../../models/Properties";
+import { ConceptTreePreference, ConceptTreeVisualizationMode, MultischemeMode, SettingsEnum, VisualizationModeTranslation } from "../../../models/Properties";
 import { UsersGroup } from "../../../models/User";
 import { SKOS } from "../../../models/Vocabulary";
-import { PreferencesSettingsServices } from "../../../services/preferencesSettingsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
@@ -44,7 +45,7 @@ export class ConceptTreeSettingsModal {
     private selectedMultischemeMode: MultischemeMode;
 
     constructor(public activeModal: NgbActiveModal, private resourceService: ResourcesServices, private propService: PropertyServices,
-        private prefService: PreferencesSettingsServices, private vbProp: VBProperties, private browsingModals: BrowsingModalServices) {}
+        private settingsService: SettingsServices, private vbProp: VBProperties, private browsingModals: BrowsingModalServices) {}
 
     ngOnInit() {
         let conceptTreePref: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
@@ -54,7 +55,7 @@ export class ConceptTreeSettingsModal {
 
         this.safeToGoLimit = conceptTreePref.safeToGoLimit;
         
-        this.baseBroaderProp = conceptTreePref.baseBroaderUri;
+        this.baseBroaderProp = conceptTreePref.baseBroaderProp;
 
         //init broader properties
         this.initBroaderProps(conceptTreePref.broaderProps);
@@ -70,11 +71,13 @@ export class ConceptTreeSettingsModal {
         this.userGroup = VBContext.getProjectUserBinding().getGroup();
         //in case of userGroup get the baseBroaderProp of the group
         if (this.userGroup != null) { 
-            this.prefService.getPGSettings([Properties.pref_concept_tree_base_broader_prop], this.userGroup.iri, VBContext.getWorkingProject()).subscribe(
-                prefs => {
-                    this.userGroupBaseBroaderProp = prefs[Properties.pref_concept_tree_base_broader_prop];
+
+            this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_GROUP).subscribe(
+                settings => {
+                    let concTreePref: ConceptTreePreference = settings.getPropertyValue(SettingsEnum.conceptTree);
+                    this.userGroupBaseBroaderProp = (concTreePref != null) ? conceptTreePref.baseBroaderProp : null;
                 }
-            );
+            )
         }
     }
 
@@ -110,7 +113,7 @@ export class ConceptTreeSettingsModal {
      * BASE BROADER HANDLERS
      */
 
-    private changeBaseBroaderProperty() {
+    changeBaseBroaderProperty() {
         let rootBroader: ARTURIResource = SKOS.broader;
         if (this.userGroup != null) {
             rootBroader = new ARTURIResource(this.userGroupBaseBroaderProp);
@@ -127,7 +130,7 @@ export class ConceptTreeSettingsModal {
      * BROADER/NARROWER PROPRETIES
      */
 
-    private addBroader() {
+    addBroader() {
         this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.broader]).then(
             (prop: ARTURIResource) => {
                 if (!ResourceUtils.containsNode(this.broaderProps, prop)) {
@@ -142,7 +145,7 @@ export class ConceptTreeSettingsModal {
         )
     }
 
-    private addNarrower() {
+    addNarrower() {
         this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.narrower]).then(
             (prop: ARTURIResource) => {
                 if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {
@@ -157,7 +160,7 @@ export class ConceptTreeSettingsModal {
         )
     }
 
-    private removeBroader() {
+    removeBroader() {
         this.broaderProps.splice(this.broaderProps.indexOf(this.selectedBroader), 1);
         //if synchronization is active sync the lists
         if (this.syncInverse) {
@@ -175,7 +178,7 @@ export class ConceptTreeSettingsModal {
         this.selectedBroader = null;
     }
 
-    private removeNarrower() {
+    removeNarrower() {
         this.narrowerProps.splice(this.narrowerProps.indexOf(this.selectedNarrower), 1);
         //if synchronization is active sync the lists
         if (this.syncInverse) {
@@ -193,7 +196,7 @@ export class ConceptTreeSettingsModal {
         this.selectedNarrower = null;
     }
 
-    private onSyncChange() {
+    onSyncChange() {
         //if sync inverse properties change from false to true perform a sync
         if (this.syncInverse) {
             this.syncProps();
@@ -233,35 +236,32 @@ export class ConceptTreeSettingsModal {
 
     //=======================
 
-    private applyGroupSettings() {
-        var properties: string[] = [
-            Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
-            Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse
-        ];
-        this.prefService.getPGSettings(properties, this.userGroup.iri, VBContext.getWorkingProject()).subscribe(
-            prefs => {
-                let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
-                if (conceptTreeBaseBroaderPropPref != null) {
-                    this.baseBroaderProp = conceptTreeBaseBroaderPropPref;
-                } else {
-                    this.baseBroaderProp = SKOS.broader.getURI();
+    applyGroupSettings() {
+        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_GROUP).subscribe(
+            settings => {
+                //init default
+                this.baseBroaderProp = SKOS.broader.getURI();
+                this.broaderProps = [];
+                this.narrowerProps = [];
+                this.includeSubProps = true;
+                this.syncInverse = true;
+                //get settings of group
+                let concTreePref: ConceptTreePreference = settings.getPropertyValue(SettingsEnum.conceptTree);
+                if (concTreePref != null) {
+                    if (concTreePref.baseBroaderProp != null) {
+                        this.baseBroaderProp = concTreePref.baseBroaderProp;
+                    }
+                    if (concTreePref.broaderProps != null) {
+                        this.initBroaderProps(concTreePref.broaderProps);
+                    }
+                    if (concTreePref.narrowerProps != null) {
+                        this.initNarrowerProps(concTreePref.narrowerProps);
+                    }
+                    this.includeSubProps = concTreePref.includeSubProps != false;
+                    this.syncInverse = concTreePref.syncInverse != false;
                 }
-                let conceptTreeBroaderPropsPref: string = prefs[Properties.pref_concept_tree_broader_props];
-                if (conceptTreeBroaderPropsPref != null) {
-                    this.initBroaderProps(conceptTreeBroaderPropsPref.split(","));
-                } else {
-                    this.broaderProps = [];
-                }
-                let conceptTreeNarrowerPropsPref: string = prefs[Properties.pref_concept_tree_narrower_props];
-                if (conceptTreeNarrowerPropsPref != null) {
-                    this.initNarrowerProps(conceptTreeNarrowerPropsPref.split(","));
-                } else {
-                    this.narrowerProps = [];
-                }
-                this.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
-                this.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
             }
-        );
+        )
     }
 
 
@@ -279,7 +279,7 @@ export class ConceptTreeSettingsModal {
         if (this.visualization == ConceptTreeVisualizationMode.hierarchyBased) {
             changedMultischemeMode = this.pristineConcPref.multischemeMode != this.selectedMultischemeMode;
             changedSafeToGoLimit = this.pristineConcPref.safeToGoLimit != this.safeToGoLimit;
-            changedBaseBroaderUri = this.pristineConcPref.baseBroaderUri != this.baseBroaderProp;
+            changedBaseBroaderUri = this.pristineConcPref.baseBroaderProp != this.baseBroaderProp;
             changedIncludeSubProps = this.pristineConcPref.includeSubProps != this.includeSubProps;
             changedSyncInverse = this.pristineConcPref.syncInverse != this.syncInverse;
 
@@ -324,7 +324,7 @@ export class ConceptTreeSettingsModal {
             changedNarrowerProps || changedSafeToGoLimit || changedSyncInverse || changedVisualization
         ) {
             let concTreePrefs: ConceptTreePreference = new ConceptTreePreference();
-            concTreePrefs.baseBroaderUri = this.baseBroaderProp;
+            concTreePrefs.baseBroaderProp = this.baseBroaderProp;
             concTreePrefs.broaderProps = this.broaderProps.map((prop: ARTURIResource) => prop.toNT());
             concTreePrefs.includeSubProps = this.includeSubProps;
             concTreePrefs.multischemeMode = this.selectedMultischemeMode;

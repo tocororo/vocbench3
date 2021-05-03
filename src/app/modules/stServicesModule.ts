@@ -30,7 +30,6 @@ import { MetadataServices } from "../services/metadataServices";
 import { NotificationServices } from '../services/notificationServices';
 import { OntoLexLemonServices } from "../services/ontoLexLemonServices";
 import { OntoManagerServices } from "../services/ontoManagerServices";
-import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 import { ProjectServices } from "../services/projectServices";
 import { PropertyServices } from "../services/propertyServices";
 import { RefactorServices } from "../services/refactorServices";
@@ -89,7 +88,6 @@ import { LexicographerViewServices } from '../services/lexicographerViewServices
         NotificationServices,
         OntoLexLemonServices,
         OntoManagerServices,
-        PreferencesSettingsServices,
         ProjectServices,
         PropertyServices,
         RefactorServices,

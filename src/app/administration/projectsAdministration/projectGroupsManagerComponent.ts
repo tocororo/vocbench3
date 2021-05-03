@@ -1,12 +1,13 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { forkJoin, Observable, of } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
+import { ExtensionPointID, Scope } from "src/app/models/Plugins";
+import { SettingsServices } from "src/app/services/settingsServices";
 import { ARTURIResource } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
-import { Properties } from "../../models/Properties";
+import { ConceptTreePreference, SettingsEnum } from "../../models/Properties";
 import { UsersGroup } from "../../models/User";
 import { OntoLex, SKOS } from "../../models/Vocabulary";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
@@ -29,7 +30,8 @@ export class ProjectGroupsManagerComponent {
     groups: UsersGroup[]; //list of groups
     selectedGroup: UsersGroup; //group selected in the list of groups
 
-    private baseBroaderProp: string = SKOS.broader.getURI();
+    private concTreePref: ConceptTreePreference;
+    private baseBroaderProp: string;
     private broaderProps: ARTURIResource[] = [];
     private narrowerProps: ARTURIResource[] = [];
     private includeSubProps: boolean;
@@ -43,9 +45,9 @@ export class ProjectGroupsManagerComponent {
 
     translationParam: { projName: string } = { projName: "" };
 
-    constructor(private groupsService: UsersGroupsServices, private prefService: PreferencesSettingsServices,
-        private resourceService: ResourcesServices, private propService: PropertyServices, private browsingModals: BrowsingModalServices,
-        private vbProp: VBProperties) { }
+    constructor(private groupsService: UsersGroupsServices, private settingsService: SettingsServices,
+        private resourceService: ResourcesServices, private propService: PropertyServices, 
+        private browsingModals: BrowsingModalServices, private vbProp: VBProperties) { }
 
     ngOnInit() {
         this.groupsService.listGroups().subscribe(
@@ -64,7 +66,7 @@ export class ProjectGroupsManagerComponent {
         }
     }
 
-    private isProjectSkosCompliant() {
+    isProjectSkosCompliant() {
         if (this.project != null) {
             let modelType = this.project.getModelType();
             return modelType == SKOS.uri || modelType == OntoLex.uri;
@@ -80,62 +82,55 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess(); //so that all the getResourcesInfo functions will have the current selected project as ctx_project
 
         /**
-         * array of getResourcesInfo functions collected in the handlers of getPGSettings (for pref_concept_tree_broader_props 
-         * and pref_concept_tree_narrower_props) and getProjectGroupBinding (for ownedSchemes) responses.
+         * array of getResourcesInfo functions collected in the handlers of getSettingsForProjectAdministration (for broader and narrower props)
+         * and getProjectGroupBinding (for ownedSchemes) responses.
          */
         let describeFunctions: any[] = [];
 
-        var properties: string[] = [
-            Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props,
-            Properties.pref_concept_tree_narrower_props, Properties.pref_concept_tree_include_subprops, 
-            Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization
-        ];
-
-        let getPGSettingsFn = this.prefService.getPGSettings(properties, this.selectedGroup.iri, this.project).pipe(
-            map(prefs => {
-                let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
-                if (conceptTreeBaseBroaderPropPref != null) {
-                    this.baseBroaderProp = conceptTreeBaseBroaderPropPref;
-                }
-
-                let broaderPropsTemp: ARTURIResource[] = [];
-                let conceptTreeBroaderPropsPref: string = prefs[Properties.pref_concept_tree_broader_props];
-                if (conceptTreeBroaderPropsPref != null) {
-                    let broaderPropsIri: string[] = conceptTreeBroaderPropsPref.split(",");
-                    broaderPropsIri.forEach((propUri: string) => {
-                        broaderPropsTemp.push(new ARTURIResource(propUri));
-                    });
-                }
+        let getPGSettingsFn = this.settingsService.getSettingsForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_GROUP, this.project, null, this.selectedGroup).pipe(
+            map(settings => {
                 this.broaderProps = [];
-                if (broaderPropsTemp.length > 0) {
-                    let describeBroadersFn = this.resourceService.getResourcesInfo(broaderPropsTemp).pipe(
-                        map(resources => {
-                            this.broaderProps = <ARTURIResource[]>resources;
-                        })
-                    );
-                    describeFunctions.push(describeBroadersFn);
-                }
-
-                let narrowerPropsTemp: ARTURIResource[] = [];
-                let conceptTreeNarrowerPropsPref: string = prefs[Properties.pref_concept_tree_narrower_props];
-                if (conceptTreeNarrowerPropsPref != null) {
-                    let narrowerPropsIri: string[] = conceptTreeNarrowerPropsPref.split(",");
-                    narrowerPropsIri.forEach((propUri: string) => {
-                        narrowerPropsTemp.push(new ARTURIResource(propUri));
-                    });
-                }
                 this.narrowerProps = [];
-                if (narrowerPropsTemp.length > 0) {
-                    let describeNarrowersFn = this.resourceService.getResourcesInfo(narrowerPropsTemp).pipe(
-                        map(resources => {
-                            this.narrowerProps = <ARTURIResource[]>resources;
-                        })
-                    );
-                    describeFunctions.push(describeNarrowersFn);
-                }
+                
+                this.concTreePref = settings.getPropertyValue(SettingsEnum.conceptTree);
+                
+                if (this.concTreePref != null) {
+                    this.baseBroaderProp = this.concTreePref.baseBroaderProp;
+                    if (this.baseBroaderProp == null) {
+                        this.baseBroaderProp = SKOS.broader.getURI();
+                    }
 
-                this.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
-                this.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
+                    let broaderPropsPref: string[] = this.concTreePref.broaderProps;
+                    if (broaderPropsPref != null) {
+                        let broaderPropsTemp: ARTURIResource[] = broaderPropsPref.map(b => new ARTURIResource(b));
+                        if (broaderPropsTemp.length > 0) {
+                            let describeBroadersFn = this.resourceService.getResourcesInfo(broaderPropsTemp).pipe(
+                                map(resources => {
+                                    this.broaderProps = <ARTURIResource[]>resources;
+                                })
+                            );
+                            describeFunctions.push(describeBroadersFn);
+                        }
+                    }
+
+                    let narrowerPropsPref: string[] = this.concTreePref.narrowerProps;
+                    if (narrowerPropsPref != null) {
+                        let narrowerPropsTemp: ARTURIResource[] = narrowerPropsPref.map(n => new ARTURIResource(n));
+                        if (narrowerPropsTemp.length > 0) {
+                            let describeNarrowersFn = this.resourceService.getResourcesInfo(narrowerPropsTemp).pipe(
+                                map(resources => {
+                                    this.narrowerProps = <ARTURIResource[]>resources;
+                                })
+                            );
+                            describeFunctions.push(describeNarrowersFn);
+                        }
+                    }
+
+                    this.includeSubProps = this.concTreePref.includeSubProps != false; //so that default is true
+                    this.syncInverse = this.concTreePref.syncInverse != false; //so that default is true
+                } else {
+                    this.concTreePref = new ConceptTreePreference();
+                }
                 
             })
         );
@@ -174,7 +169,7 @@ export class ProjectGroupsManagerComponent {
         
     }
 
-    private selectGroup(group: UsersGroup) {
+    selectGroup(group: UsersGroup) {
         this.selectedGroup = group;
         if (this.project != null) {
             this.initSettings();
@@ -186,7 +181,7 @@ export class ProjectGroupsManagerComponent {
      * BASE BROADER HANDLERS
      */
 
-    private changeBaseBroaderProperty() {
+    changeBaseBroaderProperty() {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
@@ -194,7 +189,7 @@ export class ProjectGroupsManagerComponent {
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         this.baseBroaderProp = prop.getURI();
-                        this.updateGroupSetting(Properties.pref_concept_tree_base_broader_prop, this.baseBroaderProp);
+                        this.updateGroupSetting();
                     },
                     () => {}
                 );
@@ -206,7 +201,7 @@ export class ProjectGroupsManagerComponent {
      * BROADER/NARROWER PROPRETIES
      */
 
-    private addBroader() {
+    addBroader() {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
@@ -215,17 +210,14 @@ export class ProjectGroupsManagerComponent {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.broaderProps, prop)) {
                             this.broaderProps.push(prop);
-                            this.updateBroadersSetting();
+                            this.updateGroupSetting();
                             //if synchronization is active sync the lists
                             if (this.syncInverse) {
                                 this.syncInverseOfBroader().subscribe(
                                     () => {
-                                        this.updateBroadersSetting();
-                                        this.updateNarrowersSetting();
+                                        this.updateGroupSetting();
                                     }
                                 )
-                            } else {
-                                this.updateBroadersSetting();
                             }
                         }
                     },
@@ -235,7 +227,7 @@ export class ProjectGroupsManagerComponent {
         );
     }
 
-    private addNarrower() {
+    addNarrower() {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
@@ -244,16 +236,14 @@ export class ProjectGroupsManagerComponent {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {
                             this.narrowerProps.push(prop);
+                            this.updateGroupSetting();
                             //if synchronization is active sync the lists
                             if (this.syncInverse) {
                                 this.syncInverseOfNarrower().subscribe(
-                                    () => { 
-                                        this.updateNarrowersSetting();
-                                        this.updateBroadersSetting();
+                                    () => {
+                                        this.updateGroupSetting();
                                     }
                                 )
-                            } else {
-                                this.updateNarrowersSetting();
                             }
                         }
                     },
@@ -263,9 +253,8 @@ export class ProjectGroupsManagerComponent {
         );
     }
 
-    private removeBroader() {
+    removeBroader() {
         this.broaderProps.splice(this.broaderProps.indexOf(this.selectedBroader), 1);
-        this.updateBroadersSetting();
         //if synchronization is active sync the lists
         if (this.syncInverse) {
             this.prepareProjectAccess();
@@ -281,17 +270,19 @@ export class ProjectGroupsManagerComponent {
                         }
                     });
                     if (inverseUpdated) {
-                        this.updateNarrowersSetting();
+                        this.updateGroupSetting();
                     }
                 }
             );
+        } else {
+            this.updateGroupSetting();
         }
         this.selectedBroader = null;
     }
 
-    private removeNarrower() {
+    removeNarrower() {
         this.narrowerProps.splice(this.narrowerProps.indexOf(this.selectedNarrower), 1);
-        this.updateNarrowersSetting();
+        this.updateGroupSetting();
         //if synchronization is active sync the lists
         if (this.syncInverse) {
             this.prepareProjectAccess();
@@ -307,23 +298,25 @@ export class ProjectGroupsManagerComponent {
                         }
                     });
                     if (inverseUpdated) {
-                        this.updateBroadersSetting();
+                        this.updateGroupSetting();
                     }
                 }
             );
+        } else {
+            this.updateGroupSetting();
         }
         this.selectedNarrower = null;
     }
 
-    private onSyncChange() {
+    onSyncChange() {
+        console.log("onSyncChange", this.syncInverse);
         //if sync inverse properties change from false to true perform a sync
         if (this.syncInverse) {
             this.syncInverseOfBroader().subscribe(
                 () => {
-                    this.updateNarrowersSetting();
                     this.syncInverseOfNarrower().subscribe(
                         () => {
-                            this.updateBroadersSetting();
+                            this.updateGroupSetting();
                         }
                     ); 
                 }
@@ -348,7 +341,7 @@ export class ProjectGroupsManagerComponent {
                 })
             );
         } else {
-            return of();
+            return of(null);
         }
     }
 
@@ -369,40 +362,20 @@ export class ProjectGroupsManagerComponent {
                 })
             );
         } else {
-            return of();
+            return of(null);
         }
     }
 
-    private onIncludeSubPropsChange() {
-        this.updateGroupSetting(Properties.pref_concept_tree_include_subprops, this.includeSubProps+"");
+    onIncludeSubPropsChange() {
+        this.updateGroupSetting();
     }
 
-
-    private updateBroadersSetting() {
-        let broaderPropsPref: string[] = [];
-        this.broaderProps.forEach((prop: ARTURIResource) => broaderPropsPref.push(prop.getURI()));
-        let prefValue: string;
-        if (broaderPropsPref.length > 0) {
-            prefValue = broaderPropsPref.join(",");
-        }
-        this.updateGroupSetting(Properties.pref_concept_tree_broader_props, prefValue);
-    }
-
-    private updateNarrowersSetting() {
-        let narrowerPropsPref: string[] = [];
-        this.narrowerProps.forEach((prop: ARTURIResource) => narrowerPropsPref.push(prop.getURI()));
-        let prefValue: string;
-        if (narrowerPropsPref.length > 0) {
-            prefValue = narrowerPropsPref.join(",");
-        }
-        this.updateGroupSetting(Properties.pref_concept_tree_narrower_props, prefValue);
-    }
 
     /**
      * OWNED SCHEMES PROPRETIES
      */
 
-    private addScheme() {
+    addScheme() {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
@@ -420,7 +393,7 @@ export class ProjectGroupsManagerComponent {
         );
     }
 
-    private removeScheme() {
+    removeScheme() {
         this.ownedSchemes.splice(this.ownedSchemes.indexOf(this.selectedScheme), 1);
         this.groupsService.removeOwnedSchemeFromGroup(this.project.getName(), this.selectedGroup.iri, this.selectedScheme).subscribe();
         this.selectedScheme = null;
@@ -429,8 +402,13 @@ export class ProjectGroupsManagerComponent {
 
     //--------------------------------------
 
-    private updateGroupSetting(property: string, value: string, pluginID?: string) {
-        this.prefService.setPGSetting(property, this.selectedGroup.iri, value, this.project, pluginID).subscribe();
+    private updateGroupSetting() {
+        this.concTreePref.baseBroaderProp = this.baseBroaderProp;
+        this.concTreePref.broaderProps = this.broaderProps.map(b => b.toNT());
+        this.concTreePref.narrowerProps = this.narrowerProps.map(n => n.toNT());
+        this.concTreePref.includeSubProps = this.includeSubProps;
+        this.concTreePref.syncInverse = this.syncInverse;
+        this.settingsService.storeSettingForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_GROUP, SettingsEnum.conceptTree, this.concTreePref, this.project, null, this.selectedGroup).subscribe();
     }
 
 

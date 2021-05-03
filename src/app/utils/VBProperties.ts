@@ -7,7 +7,6 @@ import { ExtensionPointID, Scope } from '../models/Plugins';
 import { ClassTreePreference, ConceptTreePreference, InstanceListPreference, LexicalEntryListPreference, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, ResourceViewMode, ResourceViewPreference, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { AdministrationServices } from '../services/administrationServices';
-import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { SettingsServices } from '../services/settingsServices';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
@@ -19,7 +18,7 @@ export class VBProperties {
 
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private prefService: PreferencesSettingsServices, private adminService: AdministrationServices, private settingsService: SettingsServices,
+    constructor(private adminService: AdministrationServices, private settingsService: SettingsServices,
         private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: { oldResource: ARTResource, newResource: ARTResource }) => this.onResourceRenamed(data.oldResource, data.newResource)

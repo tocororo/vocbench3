@@ -41,7 +41,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
         this.selectCustomForm();
 
         if (this.broader) {
-            let broaderPropUri = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri;
+            let broaderPropUri = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderProp;
             if (broaderPropUri != SKOS.broader.getURI()) {
                 this.resourceService.getResourceDescription(new ARTURIResource(broaderPropUri)).subscribe(
                     res => {

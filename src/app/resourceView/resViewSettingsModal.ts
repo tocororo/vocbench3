@@ -1,9 +1,8 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigurationComponents } from "../models/Configuration";
-import { ExtensionPointID, Scope, Settings, SettingsProp, STProperties } from "../models/Plugins";
-import { PartitionFilterPreference, Properties, ResourceViewPreference, SettingsEnum } from "../models/Properties";
-import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
+import { ExtensionPointID, Scope, STProperties } from "../models/Plugins";
+import { PartitionFilterPreference, ResourceViewPreference, SettingsEnum } from "../models/Properties";
 import { SettingsServices } from "../services/settingsServices";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
@@ -20,7 +19,7 @@ export class ResViewSettingsModal {
 
     template: PartitionFilterPreference;
 
-    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private settingsService: SettingsServices, private prefService: PreferencesSettingsServices,
+    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private settingsService: SettingsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
 
     ngOnInit() {
@@ -53,8 +52,16 @@ export class ResViewSettingsModal {
     setUserDefault() {
         this.basicModals.confirm({key: "ACTIONS.SET_AS_DEFAULT"}, {key:"MESSAGES.SET_DEFAULT_TEMPLATE_FOR_ALL_PROJ_CONFIRM"}, ModalType.warning).then(
             () => {
-                this.prefService.setPUSettingUserDefault(Properties.pref_res_view_partition_filter, VBContext.getLoggedUser().getEmail(),
-                    JSON.stringify(this.template)).subscribe();
+                this.settingsService.getSettingsDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, Scope.USER).subscribe(
+                    settings => {
+                        let resViewPref: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
+                        if (resViewPref == null) {
+                            resViewPref = new ResourceViewPreference();
+                        }
+                        resViewPref.resViewPartitionFilter = this.template;
+                        this.settingsService.storeSettingDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, Scope.USER, SettingsEnum.resourceView, resViewPref).subscribe();
+                    }
+                )
             },
             () => {}
         )

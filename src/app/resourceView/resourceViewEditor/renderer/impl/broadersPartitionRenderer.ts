@@ -37,7 +37,7 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
 
     //@Override
     getPredicateToEnrich(): Observable<ARTURIResource> {
-        let broaderPropUri = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri;
+        let broaderPropUri = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderProp;
         if (broaderPropUri != this.rootProperty.getURI()) {
             return this.resourcesService.getResourceDescription(new ARTURIResource(broaderPropUri)).pipe(
                 map(res => {

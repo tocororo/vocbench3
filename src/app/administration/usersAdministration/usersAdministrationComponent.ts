@@ -4,9 +4,8 @@ import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ConfigurationComponents } from "../../models/Configuration";
 import { ExtensionPointID, SettingsProp } from "../../models/Plugins";
-import { PartitionFilterPreference, Properties, ResourceViewPreference, SettingsEnum } from "../../models/Properties";
+import { PartitionFilterPreference, ResourceViewPreference, SettingsEnum } from "../../models/Properties";
 import { User, UserStatusEnum } from "../../models/User";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { UserServices } from "../../services/userServices";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
@@ -36,13 +35,14 @@ export class UsersAdministrationComponent {
     private userDetailsAspect: string = "Details";
     private rvTemplateAspect: string = "Template";
     private aspectSelectors: string[] = [this.userDetailsAspect, this.rvTemplateAspect]
-    private selectedAspectSelector: string = this.aspectSelectors[0];
+    selectedAspectSelector: string = this.aspectSelectors[0];
 
     private userProjects: string[]; //project assigned to the user
 
+    private userResViewPref: ResourceViewPreference;
     private userTemplate: PartitionFilterPreference;
 
-    constructor(private userService: UserServices, private prefService: PreferencesSettingsServices, private settingsService: SettingsServices,
+    constructor(private userService: UserServices, private settingsService: SettingsServices,
         private vbProp: VBProperties, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
@@ -63,7 +63,7 @@ export class UsersAdministrationComponent {
         );
     }
 
-    private selectUser(user: User) {
+    selectUser(user: User) {
         if (this.selectedUser != user) {
             this.selectedUser = user;
             this.initTemplate();
@@ -90,7 +90,7 @@ export class UsersAdministrationComponent {
     /**
      * Based on filters "enabled" "disabled" "new" tells whether the user should be visible.
      */
-    private isUserVisible(user: User): boolean {
+    isUserVisible(user: User): boolean {
         let status = user.getStatus();
         return (
             (this.showActive && status == UserStatusEnum.ACTIVE) ||
@@ -106,15 +106,16 @@ export class UsersAdministrationComponent {
     private initTemplate() {
         this.settingsService.getPUSettingsUserDefault(ExtensionPointID.ST_CORE_ID, this.selectedUser).subscribe(
             settings => {
-                let rvSettings: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
-                if (rvSettings != null) {
-                    this.userTemplate = rvSettings.resViewPartitionFilter;
+                this.userResViewPref = settings.getPropertyValue(SettingsEnum.resourceView);
+                if (this.userResViewPref == null) {
+                    this.userResViewPref = new ResourceViewPreference();
                 }
+                this.userTemplate = this.userResViewPref.resViewPartitionFilter;
             }
         )
     }
 
-    private loadTemplate() {
+    loadTemplate() {
         this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE).then(
             (conf: LoadConfigurationModalReturnData) => {
                 let templateProp: SettingsProp = conf.configuration.properties.find(p => p.name == "template");
@@ -126,7 +127,7 @@ export class UsersAdministrationComponent {
         )
     }
 
-    private storeTemplate() {
+    storeTemplate() {
         let config: { [key: string]: any } = {
             template: this.userTemplate
         }
@@ -134,15 +135,15 @@ export class UsersAdministrationComponent {
     }
 
     private updateTemplate() {
-        let prefValue = (Object.keys(this.userTemplate).length != 0) ? JSON.stringify(this.userTemplate) : null;
-        this.prefService.setPUSettingUserDefault(Properties.pref_res_view_partition_filter, this.selectedUser.getEmail(), prefValue).subscribe(
+        this.userResViewPref.resViewPartitionFilter = this.userTemplate;
+        this.settingsService.storePUSettingUserDefault(ExtensionPointID.ST_CORE_ID, this.selectedUser, SettingsEnum.resourceView, this.userResViewPref).subscribe(
             () => {
                 //in case the setting has been changed for the logged user and a project is currently accessed => update its cached PU-settings
                 if (VBContext.getWorkingProject() != null && VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail()) {
                     this.vbProp.refreshResourceViewPartitionFilter().subscribe();
                 }
             }
-        );
+        )
     }
 
 }

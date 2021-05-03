@@ -4,66 +4,6 @@ import { Project } from "./Project";
 import { ResViewPartition } from "./ResourceView";
 import { OWL, RDFS, SKOS } from "./Vocabulary";
 
-export class Properties {
-
-    static pref_languages: string = "languages";
-    static pref_editing_language: string = "editing_language";
-    static pref_filter_value_languages: string = "filter_value_languages";
-    static pref_active_lexicon: string = "active_lexicon";
-    static pref_show_flags: string = "show_flags";
-    static pref_project_theme: string = "project_theme";
-    static pref_show_instances_number: string = "show_instances_number";
-
-    static pref_search_languages: string = "search_languages";
-    static pref_search_restrict_lang: string = "search_restrict_lang";
-    static pref_search_include_locales: string = "search_include_locales";
-    static pref_search_use_autocomplete: string = "search_use_autocomplete";
-
-    static pref_class_tree_root: string = "class_tree_root";
-    static pref_class_tree_filter: string = "class_tree_filter";
-
-    static pref_concept_tree_base_broader_prop: string = "concept_tree_base_broader_prop";
-    static pref_concept_tree_broader_props: string = "concept_tree_broader_props";
-    static pref_concept_tree_narrower_props: string = "concept_tree_narrower_props";
-    static pref_concept_tree_include_subprops: string = "concept_tree_include_subprops";
-    static pref_concept_tree_sync_inverse: string = "concept_tree_sync_inverse";
-    static pref_concept_tree_visualization: string = "concept_tree_visualization";
-    static pref_concept_tree_multischeme_mode: string = "concept_tree_multischeme_mode";
-    static pref_concept_tree_safe_to_go_limit: string = "concept_tree_safe_to_go_limit";
-
-    static pref_instance_list_visualization: string = "instance_list_visualization";
-    static pref_instance_list_safe_to_go_limit: string = "instance_list_safe_to_go_limit";
-
-    static pref_lex_entry_list_visualization: string = "lex_entry_list_visualization";
-    static pref_lex_entry_list_index_lenght: string = "lex_entry_list_index_lenght";
-    static pref_lex_entry_list_safe_to_go_limit: string = "lex_entry_list_safe_to_go_limit";
-
-    static pref_res_view_partition_filter: string = "rv_partition_filter";
-    static pref_res_view_default_concept_type: string = "res_view_default_concept_type";
-    static pref_res_view_default_lexentry_type: string = "res_view_default_lexentry_type";
-
-    static pref_graph_view_partition_filter: string = "graph_partition_filter";
-    static pref_hide_literal_graph_nodes: string = "hide_literal_graph_nodes";
-
-    static pref_s2rdf_use_headers: string = "s2rdf_use_headers";
-    static pref_s2rdf_fs_naming_strategy: string = "s2rdf_fs_naming_strategy";
-
-    static pref_notifications_status: string = "notifications_status";
-
-    //project
-    static label_clash_mode: string = "label_clash_mode";
-    static setting_languages: string = "languages";
-
-    //system
-    static setting_remote_configs = "remote_configs";
-    static setting_experimental_features_enabled = "experimental_features_enabled";
-    static setting_home_content = "home_content";
-    static privacy_statement_available = "privacy_statement_available";
-    static setting_proj_creation_default_acl_set_universal_access = "proj_creation_default_acl_set_universal_access";
-    static setting_proj_creation_default_open_at_startup = "proj_creation_default_open_at_startup";
-    
-}
-
 /**
  * Names of the property of the Settings (at every levels: system, project, user, project-user)
  */
@@ -184,7 +124,7 @@ export class ClassTreeFilter {
 }
 
 export class ConceptTreePreference {
-    baseBroaderUri: string = SKOS.broader.getURI();
+    baseBroaderProp: string = SKOS.broader.getURI();
     broaderProps: string[] = [];
     narrowerProps: string[] = [];
     includeSubProps: boolean = true; //tells if the hierarchy should consider

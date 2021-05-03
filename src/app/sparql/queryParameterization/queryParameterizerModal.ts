@@ -126,7 +126,7 @@ export class QueryParameterizerModal {
                 })
             );
         } else {
-            return of();
+            return of(null);
         }
     }
 
