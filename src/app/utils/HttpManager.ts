@@ -31,18 +31,17 @@ export class HttpManager {
     constructor(private http: HttpClient, private router: Router, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
         let st_protocol: string = window['st_protocol']; //protocol (http/https)
         let protocol: string = st_protocol ? st_protocol : location.protocol;
-        if (!protocol.endsWith(":")) protocol += ":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
-        this.serverhost = protocol + "//";
+        if (!protocol.endsWith(":")) protocol+":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
 
         let st_host: string = window['st_host'];
         let host: string = st_host ? st_host : location.hostname;
-        this.serverhost += host;
 
         let st_port: string = window['st_port'];
         let port: string = st_port ? st_port : location.port;
-        this.serverhost += ":" + port;
 
         let st_path: string = window['st_path']; //url path (optional)
+        
+        this.serverhost = protocol + "//" + host + ":" + port;
         if (st_path != null) {
             this.serverhost += "/" + st_path;
         }
@@ -63,7 +62,7 @@ export class HttpManager {
     doGet(service: string, request: string, params: STRequestParams, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
 
-        var url: string = this.getRequestBaseUrl(service, request);
+        let url: string = this.getRequestBaseUrl(service, request);
 
         //add parameters
         url += this.getParametersForUrl(params);
@@ -102,13 +101,13 @@ export class HttpManager {
     doPost(service: string, request: string, params: STRequestParams, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
 
-        var url: string = this.getRequestBaseUrl(service, request);
+        let url: string = this.getRequestBaseUrl(service, request);
 
         //add ctx parameters
         url += this.getContextParametersForUrl(options);
 
         //prepare POST data
-        var postData: any = this.getPostData(params);
+        let postData: any = this.getPostData(params);
 
         let httpOptions = {
             headers: new HttpHeaders({
@@ -145,7 +144,7 @@ export class HttpManager {
     uploadFile(service: string, request: string, params: STRequestParams, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
         
-        var url: string = this.getRequestBaseUrl(service, request);
+        let url: string = this.getRequestBaseUrl(service, request);
 
         //add ctx parameters
         url += this.getContextParametersForUrl(options);
@@ -198,7 +197,7 @@ export class HttpManager {
     downloadFile(service: string, request: string, params: STRequestParams, post?: boolean, options?: VBRequestOptions): Observable<Blob> {
         options = this.defaultRequestOptions.merge(options);
         
-        var url: string = this.getRequestBaseUrl(service, request);
+        let url: string = this.getRequestBaseUrl(service, request);
 
         if (post) {
             //add ctx parameters
@@ -250,33 +249,6 @@ export class HttpManager {
     }
 
     /**
-     * Handle the response of downloadFile that returns an array buffer.
-     * This method check if the response is json, in case it could be an json error response.
-     * In case, throws an error containing the error message in the response.
-     */
-    private arrayBufferRespHandler(res: HttpResponse<ArrayBuffer>) {
-        let arrayBuffer = res.body;
-        var respContType = res.headers.get("content-type");
-        if (respContType.includes(STResponseUtils.ContentType.applicationJson+";")) { //could be an error response
-            //convert arrayBuffer to json object
-            var respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
-            let jsonResp = JSON.parse(respContentAsString);
-            if (STResponseUtils.isErrorResponse(jsonResp)) { //is an error
-                let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(jsonResp));
-                err.name = STResponseUtils.getErrorResponseExceptionName(jsonResp);
-                err.stack = STResponseUtils.getErrorResponseExceptionStackTrace(jsonResp);
-                throw err;
-            } else { //not an error => return a blob
-                var blobResp = new Blob([arrayBuffer], { type: respContType });
-                return blobResp;
-            }
-        } else { //not json => return a blob
-            var blobResp = new Blob([arrayBuffer], { type: respContType });
-            return blobResp;
-        }
-    }
-
-    /**
      * Composes and returns the base part of the URL of a request.
      * "http://<serverhost>/<serverpath>/<groupId>/<artifactId>/<service>/<request>?...
      * @param service the service name
@@ -284,7 +256,7 @@ export class HttpManager {
      * 
      */
     private getRequestBaseUrl(service: string, request: string): string {
-        var url: string = this.serverhost + "/" + this.serverpath + "/" + 
+        let url: string = this.serverhost + "/" + this.serverpath + "/" + 
             this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
         return url;
     }
@@ -293,7 +265,7 @@ export class HttpManager {
      * Returns the request context parameters.
      */
     private getContextParametersForUrl(options: VBRequestOptions): string {
-        var params: string = "";
+        let params: string = "";
         /**
          * give priority to ctx_project in the following order:
          * - VBRequestOptions.ctxProject
@@ -366,14 +338,14 @@ export class HttpManager {
     }
 
     private getPostData(params: STRequestParams): string {
-        var postData: any;
-        var strBuilder: string[] = [];
-        for (var paramName in params) {
-            var paramValue = params[paramName];
+        let postData: any;
+        let strBuilder: string[] = [];
+        for (let paramName in params) {
+            let paramValue = params[paramName];
             if (paramValue == null) continue;
             if (Array.isArray(paramValue)) {
                 let stringArray: string[] = [];
-                for (var i = 0; i < paramValue.length; i++) {
+                for (let i = 0; i < paramValue.length; i++) {
                     if (paramValue[i] instanceof ARTURIResource || paramValue[i] instanceof ARTBNode || paramValue[i] instanceof ARTLiteral) {
                         stringArray.push((<ARTNode>paramValue[i]).toNT());
                     } else {
@@ -427,7 +399,7 @@ export class HttpManager {
      * @param error error catched in catch clause (is a Response in case the error is a 401 || 403 response or if the server doesn't respond)
      * @param errorAlertOpt tells wheter to show error alert. Is useful to handle the error from the component that invokes the service.
      */
-    private handleError(err: Response | any, errorAlertOpt: ErrorAlertOptions) {
+    private handleError(err: HttpErrorResponse | Error, errorAlertOpt: ErrorAlertOptions) {
         let error: Error = new Error();
         if (err instanceof HttpErrorResponse) { //error thrown by the angular HttpClient get() or post()
             if (err.error instanceof ErrorEvent) { //A client-side or network error occurred
@@ -486,6 +458,34 @@ export class HttpManager {
         }
         UIUtils.stopAllLoadingDiv();
         return throwError(error);
+    }
+
+
+    /**
+     * Handle the response of downloadFile that returns an array buffer.
+     * This method check if the response is json, in case it could be an json error response.
+     * In case, throws an error containing the error message in the response.
+     */
+     private arrayBufferRespHandler(resp: HttpResponse<ArrayBuffer>) {
+        let arrayBuffer = resp.body;
+        let respContType = resp.headers.get("content-type");
+        if (respContType.includes(STResponseUtils.ContentType.applicationJson+";")) { //could be an error response
+            //convert arrayBuffer to json object
+            let respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
+            let jsonResp = JSON.parse(respContentAsString);
+            if (STResponseUtils.isErrorResponse(jsonResp)) { //is an error
+                let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(jsonResp));
+                err.name = STResponseUtils.getErrorResponseExceptionName(jsonResp);
+                err.stack = STResponseUtils.getErrorResponseExceptionStackTrace(jsonResp);
+                throw err;
+            } else { //not an error => return a blob
+                let blobResp = new Blob([arrayBuffer], { type: respContType });
+                return blobResp;
+            }
+        } else { //not json => return a blob
+            let blobResp = new Blob([arrayBuffer], { type: respContType });
+            return blobResp;
+        }
     }
 
 }
@@ -568,7 +568,7 @@ export class HttpServiceContext {
         if (this.sessionToken == null) {
             let token = '';
             let chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            for (var i = 0; i < 16; i++) {
+            for (let i = 0; i < 16; i++) {
                 let idx = Math.round(Math.random() * (chars.length - 1));
                 token = token + chars[idx];
             }

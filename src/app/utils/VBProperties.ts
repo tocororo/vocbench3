@@ -326,7 +326,6 @@ export class VBProperties {
     }
 
     initProjectSettings(projectCtx: ProjectContext): Observable<any> {
-
         let projectSettings: ProjectSettings = projectCtx.getProjectSettings();
         return this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
             map(settings => {

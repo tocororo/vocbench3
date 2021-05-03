@@ -195,4 +195,26 @@ export class SettingsServices {
         return this.httpMgr.doPost(this.serviceName, "storePUSettingUserDefault", params);
     }
 
+    getPUSettingsProjectDefault(componentID: string, project: Project): Observable<Settings> {
+        let params = {
+            componentID: componentID,
+            projectName: project.getName()
+        };
+        return this.httpMgr.doGet(this.serviceName, "getPUSettingsProjectDefault", params).pipe(
+            map(stResp => {
+                return Settings.parse(stResp);
+            })
+        );
+    }
+
+    storePUSettingProjectDefault(componentID: string, project: Project, propertyName: string, propertyValue: any): Observable<void> {
+        let params = {
+            componentID: componentID,
+            projectName: project.getName(),
+            propertyName: propertyName,
+            propertyValue: JSON.stringify(propertyValue),
+        };
+        return this.httpMgr.doPost(this.serviceName, "storePUSettingProjectDefault", params);
+    }
+
 }
