@@ -5,6 +5,8 @@ import { Lime, OntoLex, OWL, RDF, RDFS, SemanticTurkey, SKOS, SKOSXL } from "../
 
 export class ResourceUtils {
 
+    static iriRegex: RegExp = new RegExp("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]$");
+
     /**
      * Sort an Array of ARTResource by the given attribute.
      * @param list 
@@ -226,8 +228,7 @@ export class ResourceUtils {
     }
 
     static testIRI(iri: string) {
-        let iriRegexp = new RegExp("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
-        return iriRegexp.test(iri);
+        return ResourceUtils.iriRegex.test(iri);
     }
 
 

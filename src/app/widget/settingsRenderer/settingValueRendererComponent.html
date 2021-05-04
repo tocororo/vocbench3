@@ -21,11 +21,15 @@
         </ng-template>
     </ng-container>
 
-    <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="value" [schema]="type.schema" (ngModelChange)="updatePropertiesValue($event)" [disabled]="disabled"></nested-settings-renderer>
+    <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="value" [schema]="type.schema" (ngModelChange)="updatePropertiesValue($event)" [disabled]="disabled">
+    </nested-settings-renderer>
 
     <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control form-control-sm" style="resize: vertical"
         [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">
     </textarea>
+
+    <data-size-renderer *ngSwitchCase="'it.uniroma2.art.semanticturkey.properties.DataSize'" [(ngModel)]="value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+    </data-size-renderer>
 
     <input *ngSwitchCase="'int'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">
     <input *ngSwitchCase="'integer'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value" (ngModelChange)="onModelChange()" [disabled]="disabled">

@@ -17,6 +17,7 @@ import { CapabilityEditorModal } from "../administration/rolesAdministration/cap
 import { ImportRoleModal } from "../administration/rolesAdministration/importRoleModal";
 import { RoleDescriptionModal } from '../administration/rolesAdministration/roleDescriptionModal';
 import { RolesAdministrationComponent } from "../administration/rolesAdministration/rolesAdministrationComponent";
+import { SettingsMgrConfigComponent } from '../administration/systemConfiguration/settingsMgrConfigComponent';
 import { SystemConfigurationComponent } from '../administration/systemConfiguration/systemConfigurationComponent';
 import { ForcePasswordModal } from '../administration/usersAdministration/forcePasswordModal';
 import { UserCreateModal } from "../administration/usersAdministration/userCreateModal";
@@ -45,6 +46,7 @@ import { UserModule } from './userModule';
         ProjectSettingsComponent,
         ProjectUsersManagerComponent,
         RolesAdministrationComponent,
+        SettingsMgrConfigComponent,
         SystemConfigurationComponent,
         UsersAdministrationComponent,
         UserDetailsPanelComponent,

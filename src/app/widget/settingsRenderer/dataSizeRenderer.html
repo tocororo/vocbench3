@@ -1,0 +1,8 @@
+<div class="input-group">
+    <input type="number" class="form-control" style="text-align: right;" [(ngModel)]="size" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+    <span class="input-group-append">
+        <select class="form-control" [(ngModel)]="unit" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+            <option *ngFor="let u of units">{{u}}</option>
+        </select>
+    </span>
+</div>

@@ -8,7 +8,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Added email verification in the registration procedure
   * Improved the management of the unicity of preferred labels for concepts in the same scheme
   * Added flags for Scottish Gaelic and Welsh languages
-  * adopted the new Settings services
+  * Adopted the new Settings services
 
 # 9.1.0 (28-04-2021)
   * Enabled selection of "no language tagged" labels in rendering preferences

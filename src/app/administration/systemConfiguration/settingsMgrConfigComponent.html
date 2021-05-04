@@ -1,0 +1,45 @@
+<div class="vbox">
+
+    <ul class="nav nav-tabs" (click)="$event.preventDefault()">
+        <li *ngFor="let extPt of extPointIds" class="nav-item" [ngClass]="{ active : extPt.id == selectedExtPoint }">
+            <a class="nav-link" (click)="selectExtensionPoint(extPt.id)">{{extPt.shortId}}</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div *ngIf="selectedExtPoint" class="hbox">
+
+            <div class="card card-default vbox">
+                <div class="card-header">
+                    <label>Settings Managers</label>
+                </div>
+                <div class="card-body vbox scrollableContainer">
+                    <div *ngFor="let mgr of extPointMap[selectedExtPoint]" class="listItem" [ngClass]="{active: mgr == selectedSettingsMgr}" (click)="selectSettingsMgr(mgr)">
+                        {{mgr.getShortId()}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-default vbox ml-2" style="flex: 4;">
+                <div class="card-header">
+                    <label>{{selectedSettingsMgr?.getShortId()}}</label>
+                </div>
+                <div class="card-body vbox">
+                    <ng-container *ngIf="selectedSettingsMgr">
+                        <div class="d-flex align-items-center">
+                            <label>Scope:</label>
+                            <select class="form-control ml-2" [(ngModel)]="selectedScope" (ngModelChange)="onSelectedScopeChange()">
+                                <option *ngFor="let s of selectedSettingsMgr.settingsScopes" [ngValue]="s">{{s}}</option>
+                            </select>
+                        </div>
+                        <settings-renderer-panel *ngIf="selectedSettings" class="vbox mt-3" [(ngModel)]="selectedSettings"></settings-renderer-panel>
+                    </ng-container>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-info float-right" (click)="applyChanges()" [disabled]="!selectedSettings">{{'ACTIONS.SUBMIT'|translate}}</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -5,6 +5,7 @@ import { GroupsAdministrationComponent } from './groupsAdministration/groupsAdmi
 import { ProjectsAdministrationComponent } from "./projectsAdministration/projectsAdministrationComponent";
 import { RolesAdministrationComponent } from "./rolesAdministration/rolesAdministrationComponent";
 import { SystemConfigurationComponent } from './systemConfiguration/systemConfigurationComponent';
+import { SettingsMgrConfigComponent } from './systemConfiguration/settingsMgrConfigComponent';
 import { UsersAdministrationComponent } from "./usersAdministration/usersAdministrationComponent";
 
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
             { path: "Groups", component: GroupsAdministrationComponent, canActivate: [AuthGuard] },
             { path: "Projects", component: ProjectsAdministrationComponent, canActivate: [AuthGuard] },
             { path: "Configuration", component: SystemConfigurationComponent, canActivate: [AdminGuard] },
+            { path: "SettingsMgr", component: SettingsMgrConfigComponent, canActivate: [AdminGuard] },
         ]
     },
 ];

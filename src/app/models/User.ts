@@ -1,3 +1,4 @@
+import { ResourceUtils } from "../utils/ResourceUtils";
 import { ARTURIResource } from "./ARTResources";
 
 export class User {
@@ -327,7 +328,6 @@ export class UserForm {
     customProperties: { [iri: string]: string } = {};
 
     static emailRegexp = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    static iriRegexp = new RegExp("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
     static standardFields: string[] = ["E-mail","Password","Confirm password","Given name","Family name","Phone","Office address",
         "Affiliation","Personal URL","User IRI","Avatar URL","Language proficiencies"]
 
@@ -338,7 +338,7 @@ export class UserForm {
     }
 
     static isIriValid(iri: string) {
-        return UserForm.iriRegexp.test(iri);
+        return ResourceUtils.testIRI(iri);
     }
 }
 

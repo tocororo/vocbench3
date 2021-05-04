@@ -100,6 +100,9 @@
                 "CUSTOM_FIELDS": "Campi personalizzati",
                 "CUSTOM_FIELDS_INFO": "Aggiungi (e riordina) fino a {{maxFields}} informazioni personalizzate riguardo l'utente. Queste informazioni saranno mostrate nel riepilogo dell'utente e saranno richieste come campi non obbligatori durante la registrazione/creazione di un utente.<br> Se un campo viene rimosso, valori precedentemente salvati per tale campo per qualsiasi utente verranno persi.<br> Se un campo viene rinominato, valori precedentemente salvati per tale campo saranno mantenuti."
             },
+            "SETTINGS_MGR": {
+                "SETTINGS_MGR": "Settings Mgr"
+            },
             "HOME_PAGE": {
                 "HOME_CONTENT": "Contenuto dell'Home page",
                 "HOME_CONTENT_INFO": "Qui è possibile scrivere del contenuto formattato in HTML che verrà mostrato nella home page",

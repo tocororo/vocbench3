@@ -100,6 +100,9 @@
                 "CUSTOM_FIELDS": "Custom fields",
                 "CUSTOM_FIELDS_INFO": "Add (and reorder) up to {{maxFields}} custom information about the user. These information will be shown in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br> If a field is removed, any values previously stored for that field will be lost for any user.<br> If a field is renamed, any values previously stored for that field will be preserved."
             },
+            "SETTINGS_MGR": {
+                "SETTINGS_MGR": "Settings Mgr"
+            },
             "HOME_PAGE": {
                 "HOME_CONTENT": "Home page content",
                 "HOME_CONTENT_INFO": "Here you can write HTML-formatted text content that will be shown in the home page",

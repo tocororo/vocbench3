@@ -28,13 +28,14 @@ import { ResourcePickerComponent } from '../widget/pickers/valuePicker/resourceP
 import { ValuePickerComponent } from '../widget/pickers/valuePicker/valuePickerComponent';
 import { RdfResourceComponent } from '../widget/rdfResource/rdfResourceComponent';
 import { ResourceListComponent } from '../widget/rdfResource/resourceListComponent';
+import { DataSizeRenderer } from '../widget/settingsRenderer/dataSizeRenderer';
 import { NestedSettingSetRendererComponent } from '../widget/settingsRenderer/nestedSettingsRendererComponent';
 import { SettingMapRendererComponent } from '../widget/settingsRenderer/settingMapRendererComponent';
 import { SettingPropRendererComponent } from '../widget/settingsRenderer/settingPropRendererComponent';
-import { SettingValueRendererComponent } from '../widget/settingsRenderer/settingValueRendererComponent';
 import { SettingSetRendererComponent } from '../widget/settingsRenderer/settingSetRendererComponent';
 import { SettingsRendererComponent } from '../widget/settingsRenderer/settingsRendererComponent';
 import { SettingsRendererPanelComponent } from '../widget/settingsRenderer/settingsRendererPanelComponent';
+import { SettingValueRendererComponent } from '../widget/settingsRenderer/settingValueRendererComponent';
 import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLiteralInputComponent';
 
 
@@ -47,6 +48,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         TranslateModule,
     ],
     declarations: [
+        DataSizeRenderer,
         DatatypePickerComponent,
         ExtensionConfiguratorComponent,
         FilePickerComponent,

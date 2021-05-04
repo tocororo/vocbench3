@@ -373,7 +373,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         );
                     }
                 } catch (err) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, err, ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, err.message, ModalType.warning);
                     this.cancelEdit();
                 }
             } else if (this.editInProgress) {
@@ -404,7 +404,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         }
                     }
                 } catch (err) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, err, ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.WARNING"}, err.message, ModalType.warning);
                     this.cancelEdit();
                 }
             }

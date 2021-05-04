@@ -5,7 +5,7 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { BrowseExternalResourceModalReturnData } from "../../resourceView/resourceViewEditor/resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../../resourceView/resourceViewEditor/resViewModals/resViewModalServices";
 import { AlignmentServices } from "../../services/alignmentServices";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { NTriplesUtil, ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AssistedSearchModal } from "./assistedSearchModal";
 
@@ -68,10 +68,14 @@ export class ResourceAlignmentModal {
     enterManually() {
         this.basicModals.prompt({key:"ACTIONS.INSERT_VALUE_MANUALLY"}, { value: "IRI" }).then(
             valueIRI => {
-                if (ResourceUtils.testIRI(valueIRI)) {
+                if (ResourceUtils.testIRI(valueIRI)) { //valid iri (e.g. "http://test")
                     this.alignedObject = new ARTURIResource(valueIRI);
-                } else {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: valueIRI}}, ModalType.warning);
+                } else { //not an IRI, try to parse as NTriples
+                    try {
+                        this.alignedObject = NTriplesUtil.parseURI(valueIRI)
+                    } catch (error) { //neither a valid ntriple iri (e.g. "<http://test>")
+                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: valueIRI}}, ModalType.warning);
+                    }
                 }
             }
         );
