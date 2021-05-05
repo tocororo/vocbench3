@@ -39,32 +39,6 @@ export class AdministrationServices {
 
     /**
      * 
-     * @param mailSmtpHost 
-     * @param mailSmtpPort 
-     * @param mailSmtpAuth 
-     * @param mailFromAddress 
-     * @param mailFromAlias 
-     * @param mailFromPassword 
-     */
-    updateEmailConfig(mailSmtpHost: string, mailSmtpPort: string, mailSmtpAuth: boolean, mailSmtpSsl: boolean, mailSmtpTls: boolean,
-        mailFromAddress: string, mailFromAlias: string, mailFromPassword?: string) {
-        let params: any = {
-            mailSmtpHost: mailSmtpHost,
-            mailSmtpPort: mailSmtpPort,
-            mailSmtpAuth: mailSmtpAuth,
-            mailSmtpSsl: mailSmtpSsl,
-            mailSmtpTls: mailSmtpTls,
-            mailFromAddress: mailFromAddress,
-            mailFromAlias: mailFromAlias
-        }
-        if (mailFromPassword != null) {
-            params.mailFromPassword = mailFromPassword
-        }
-        return this.httpMgr.doPost(this.serviceName, "updateEmailConfig", params);
-    }
-
-    /**
-     * 
      * @param mailTo 
      */
     testEmailConfig(mailTo: string) {
@@ -331,7 +305,7 @@ export class AdministrationServices {
     /**
      * Gets the data dir path
      */
-     getDataDir() {
+    getDataDir() {
         let params = {};
         return this.httpMgr.doGet(this.serviceName, "getDataDir", params);
     }

@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ExtensionPointID, NonConfigurableExtensionFactory, PluginSpecification, Scope, Settings } from "../../models/Plugins";
 import { RDFFormat } from "../../models/RDFFormat";
 import { DatasetMetadataServices } from "../../services/datasetMetadataServices";
 import { ExportServices } from "../../services/exportServices";
 import { ExtensionsServices } from "../../services/extensionsServices";
-import { SettingsServices } from "../../services/settingsServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
@@ -30,7 +29,7 @@ export class MetadataVocabulariesComponent {
     extensionPointSettings: Settings;
 
     constructor(private metadataExporterService: DatasetMetadataServices, private exportService: ExportServices,
-        private extensionService: ExtensionsServices, private settingsService: SettingsServices, private basicModals: BasicModalServices) { }
+        private extensionService: ExtensionsServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.exportService.getOutputFormats().subscribe(
@@ -59,7 +58,7 @@ export class MetadataVocabulariesComponent {
         //for each scope retrieve the settings
         this.selectedExporter.settingsScopes.forEach(
             (scope: Scope) => {
-                this.settingsService.getSettings(this.selectedExporter.id, scope).subscribe(
+                this.metadataExporterService.getMetadataVocabularySettings(this.selectedExporter.id, scope).subscribe(
                     settings => {
                         this.settingsStructs.push({ settings: settings, scope: scope });
                     }
@@ -67,7 +66,7 @@ export class MetadataVocabulariesComponent {
             }
         );
 
-        this.settingsService.getSettings(ExtensionPointID.DATASET_METADATA_EXPORTER_ID, Scope.PROJECT).subscribe(
+        this.metadataExporterService.getMetadataVocabularySettings(ExtensionPointID.DATASET_METADATA_EXPORTER_ID, Scope.PROJECT).subscribe(
             settings => {
                 this.extensionPointSettings = settings;
             }
@@ -84,7 +83,7 @@ export class MetadataVocabulariesComponent {
         if (this.extensionPointSettings.properties.length > 0) {
             let extensionPointSettingsMap: any = this.extensionPointSettings.getPropertiesAsMap();
             saveSettingsFnArray.push(
-                this.settingsService.storeSettings(ExtensionPointID.DATASET_METADATA_EXPORTER_ID, Scope.PROJECT, extensionPointSettingsMap)
+                this.metadataExporterService.storeMetadataVocabularySettings(ExtensionPointID.DATASET_METADATA_EXPORTER_ID, Scope.PROJECT, extensionPointSettingsMap)
             );
         }
 
@@ -94,7 +93,7 @@ export class MetadataVocabulariesComponent {
             }
             let exporterSettingsMap: any = this.settingsStructs[i].settings.getPropertiesAsMap();
             saveSettingsFnArray.push(
-                this.settingsService.storeSettings(this.selectedExporter.id, this.settingsStructs[i].scope, exporterSettingsMap)
+                this.metadataExporterService.storeMetadataVocabularySettings(this.selectedExporter.id, this.settingsStructs[i].scope, exporterSettingsMap)
             );
         }
 
@@ -119,7 +118,7 @@ export class MetadataVocabulariesComponent {
             }
             let exporterSettingsMap: any = this.settingsStructs[i].settings.getPropertiesAsMap();
             saveSettingsFnArray.push(
-                this.settingsService.storeSettings(this.selectedExporter.id, this.settingsStructs[i].scope, exporterSettingsMap)
+                this.metadataExporterService.storeMetadataVocabularySettings(this.selectedExporter.id, this.settingsStructs[i].scope, exporterSettingsMap)
             );
         }
 
