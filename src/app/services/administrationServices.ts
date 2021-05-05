@@ -319,7 +319,7 @@ export class AdministrationServices {
 
     setPreloadProfilerThreshold(threshold: number) {
         let params: any = {
-            threshold: threshold
+            threshold: threshold + " B"
         };
         return this.httpMgr.doPost(this.serviceName, "setPreloadProfilerThreshold", params);
     }
