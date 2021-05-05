@@ -2,7 +2,7 @@ import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-    selector: 'data-size-renderer',
+    selector: 'datasize-renderer',
     templateUrl: './dataSizeRenderer.html',
     providers: [{
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DataSizeRenderer), multi: true,
@@ -35,8 +35,6 @@ export class DataSizeRenderer implements ControlValueAccessor {
             this.value = obj;
             let regexp = "([0-9]*\\\.?[0-9]+)\\\s?(" + this.units.join("|") + ")"; //digits with optional . separator, followed by an optional space, then the unit
             let valueMatch: RegExpMatchArray = this.value.match(regexp);
-            console.log("regexp", regexp);
-            console.log("valueMatch", valueMatch);
             if (valueMatch != null) {
                 this.size = Number(valueMatch[1]);
                 this.unit = <DataSizeUnits>valueMatch[2];

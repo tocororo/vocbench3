@@ -41,14 +41,9 @@
                                     <label>{{'ADMINISTRATION.SYSTEM.PRELOAD_THRESHOLD'|translate}}:</label>
                                 </td>
                                 <td>
-                                    <div class="hbox" style="align-items: center;">
-                                        <div class="input-group" style="flex: 1; margin-right: 4px;">
-                                            <input type="number" class="form-control" [(ngModel)]="profilerThreshold" min="0" step="1">
-                                            <span class="input-group-append">
-                                                <span class="input-group-text">bytes</span>
-                                            </span>
-                                        </div>
-                                        <button class="btn btn-light btn-sm" (click)="updateProfilerThreshold()" [disabled]="profilerThreshold == profilerThresholdPristine">
+                                    <div class="d-flex align-items-center">
+                                        <datasize-renderer [(ngModel)]="profilerThreshold" style="flex: 1"></datasize-renderer>
+                                        <button class="btn btn-light btn-sm ml-2" (click)="updateProfilerThreshold()" [disabled]="profilerThreshold == profilerThresholdPristine">
                                             {{'ACTIONS.UPDATE'|translate}}
                                         </button>
                                     </div>
@@ -67,7 +62,7 @@
                 <div class="card-body">
                     <div class="alert alert-info mb-2" [innerHTML]="'ADMINISTRATION.SYSTEM.EMAIL.VB_EMAIL_CONFIG_INFO'|translate">
                     </div>
-                    <table class="table table-sm table-borderless">
+                    <table *ngIf="emailSettings" class="table table-sm table-borderless">
                         <colgroup>
                             <col style="width: 1%;">
                             <col style="width: 1%;">
@@ -81,7 +76,7 @@
                                 <td nowrap>
                                     <label>Mail SMTP host:</label>
                                 </td>
-                                <td><input class="form-control" [(ngModel)]="emailConfig.mailSmtpHost"></td>
+                                <td><input class="form-control" [(ngModel)]="emailSettings.smtp.host"></td>
                             </tr>
                             <tr>
                                 <td>
@@ -90,7 +85,7 @@
                                 <td nowrap>
                                     <label>Mail SMTP port:</label>
                                 </td>
-                                <td><input class="form-control" [(ngModel)]="emailConfig.mailSmtpPort"></td>
+                                <td><input class="form-control" type="number" [(ngModel)]="emailSettings.smtp.port"></td>
                             </tr>
 
                             <tr>
@@ -117,11 +112,11 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" id="authRadioTrue" type="radio" name="emailAuthRadio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="true">
+                                        <input class="form-check-input" id="authRadioTrue" type="radio" name="emailAuthRadio" [(ngModel)]="emailSettings.smtp.auth" [value]="true">
                                         <label class="form-check-label" for="authRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" id="authRadioFalse" type="radio" name="emailAuthRadio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="false">
+                                        <input class="form-check-input" id="authRadioFalse" type="radio" name="emailAuthRadio" [(ngModel)]="emailSettings.smtp.auth" [value]="false">
                                         <label class="form-check-label" for="authRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</label>
                                     </div>
                                 </td>
@@ -133,7 +128,7 @@
                                 <td nowrap>
                                     <label>Mail from address:</label>
                                 </td>
-                                <td><input class="form-control" type="email" [(ngModel)]="emailConfig.mailFromAddress"></td>
+                                <td><input class="form-control" type="email" [(ngModel)]="emailSettings.from.address"></td>
                             </tr>
                             <tr>
                                 <td>
@@ -143,11 +138,11 @@
                                     <label>Mail from password:</label>
                                 </td>
                                 <td>
-                                    <input *ngIf="!emailConfig.mailSmtpAuth; else authBlock" class="form-control" disabled>
+                                    <input *ngIf="!emailSettings.smtp.auth; else authBlock" class="form-control" disabled>
                                     <ng-template #authBlock>
                                         <div class="input-group">
-                                            <input *ngIf="!showPwd" type="password" class="form-control" [(ngModel)]="emailConfig.mailFromPassword">
-                                            <input *ngIf="showPwd" class="form-control" [(ngModel)]="emailConfig.mailFromPassword">
+                                            <input *ngIf="!showPwd" type="password" class="form-control" [(ngModel)]="emailSettings.from.password">
+                                            <input *ngIf="showPwd" class="form-control" [(ngModel)]="emailSettings.from.password">
                                             <span class="input-group-append">
                                                 <button class="btn btn-light" [ngClass]="{ active : showPwd }" (click)="showPwd = !showPwd">
                                                     <span *ngIf="!showPwd" class="fas fa-eye-slash"></span>
@@ -165,7 +160,7 @@
                                 <td nowrap>
                                     <label>Mail from alias:</label>
                                 </td>
-                                <td><input class="form-control" [(ngModel)]="emailConfig.mailFromAlias"></td>
+                                <td><input class="form-control" [(ngModel)]="emailSettings.from.alias"></td>
                             </tr>
                         </tbody>
                     </table>

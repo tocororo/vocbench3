@@ -16,19 +16,11 @@ export class AdministrationServices {
     // ADMINISTRATION CONFIGURATION SERVICES 
 
     /**
-     * Gets the administration config: a map with key value of configuration parameters
-     */
-    getAdministrationConfig() {
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAdministrationConfig", params);
-    }
-
-    /**
      * 
      * @param email 
      */
     setAdministrator(email: string) {
-        var params: any = {
+        let params: any = {
             email: email,
         }
         return this.httpMgr.doPost(this.serviceName, "setAdministrator", params);
@@ -39,7 +31,7 @@ export class AdministrationServices {
      * @param email 
      */
     removeAdministrator(email: string) {
-        var params: any = {
+        let params: any = {
             email: email,
         }
         return this.httpMgr.doPost(this.serviceName, "removeAdministrator", params);
@@ -56,7 +48,7 @@ export class AdministrationServices {
      */
     updateEmailConfig(mailSmtpHost: string, mailSmtpPort: string, mailSmtpAuth: boolean, mailSmtpSsl: boolean, mailSmtpTls: boolean,
         mailFromAddress: string, mailFromAlias: string, mailFromPassword?: string) {
-        var params: any = {
+        let params: any = {
             mailSmtpHost: mailSmtpHost,
             mailSmtpPort: mailSmtpPort,
             mailSmtpAuth: mailSmtpAuth,
@@ -76,7 +68,7 @@ export class AdministrationServices {
      * @param mailTo 
      */
     testEmailConfig(mailTo: string) {
-        var params: any = {
+        let params: any = {
             mailTo: mailTo
         }
         return this.httpMgr.doGet(this.serviceName, "testEmailConfig", params);
@@ -92,7 +84,7 @@ export class AdministrationServices {
      * @param role
      */
     getProjectUserBinding(projectName: string, email: string): Observable<ProjectUserBinding> {
-        var params: any = {
+        let params: any = {
             projectName: projectName,
             email: email
         };
@@ -114,7 +106,7 @@ export class AdministrationServices {
      * @param roles
      */
     addRolesToUser(projectName: string, email: string, roles: string[]) {
-        var params: any = {
+        let params: any = {
             projectName: projectName,
             email: email,
             roles: roles
@@ -129,7 +121,7 @@ export class AdministrationServices {
      * @param role
      */
     removeRoleFromUser(projectName: string, email: string, role: string) {
-        var params: any = {
+        let params: any = {
             projectName: projectName,
             email: email,
             role: role
@@ -144,7 +136,7 @@ export class AdministrationServices {
      * @param role
      */
     removeUserFromProject(projectName: string, email: string) {
-        var params: any = {
+        let params: any = {
             projectName: projectName,
             email: email
         };
@@ -158,7 +150,7 @@ export class AdministrationServices {
      * @param language
      */
     updateLanguagesOfUserInProject(projectName: string, email: string, languages: string[]) {
-        var params: any = {
+        let params: any = {
             projectName: projectName,
             email: email,
             languages: languages
@@ -173,16 +165,16 @@ export class AdministrationServices {
      * @param projectName if not provided returns the roles at system level
      */
     listRoles(project?: Project): Observable<Role[]> {
-        var params: any = {};
+        let params: any = {};
         if (project != null) {
             params.projectName = project.getName();
         }
         return this.httpMgr.doGet(this.serviceName, "listRoles", params).pipe(
             map(stResp => {
-                var roles: Role[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let roles: Role[] = [];
+                for (let i = 0; i < stResp.length; i++) {
                     let roleJson = stResp[i];
-                    var role = new Role(roleJson.name, roleJson.level);
+                    let role = new Role(roleJson.name, roleJson.level);
                     roles.push(role);
                 }
                 roles.sort((r1: Role, r2: Role) => r1.getName().localeCompare(r2.getName()));
@@ -196,7 +188,7 @@ export class AdministrationServices {
      * @param roleName
      */
     createRole(roleName: string) {
-        var params: any = {
+        let params: any = {
             roleName: roleName
         };
         return this.httpMgr.doPost(this.serviceName, "createRole", params);
@@ -207,7 +199,7 @@ export class AdministrationServices {
      * @param roleName
      */
     cloneRole(sourceRoleName: string, targetRoleName: string) {
-        var params: any = {
+        let params: any = {
             sourceRoleName: sourceRoleName,
             targetRoleName: targetRoleName
         };
@@ -219,7 +211,7 @@ export class AdministrationServices {
      * @param roleName
      */
     deleteRole(roleName: string) {
-        var params: any = {
+        let params: any = {
             roleName: roleName
         };
         return this.httpMgr.doPost(this.serviceName, "deleteRole", params);
@@ -230,7 +222,7 @@ export class AdministrationServices {
      * @param roleName 
      */
     exportRole(roleName: string) {
-        var params: any = {
+        let params: any = {
             roleName: roleName
         };
         return this.httpMgr.downloadFile(this.serviceName, "exportRole", params);
@@ -242,7 +234,7 @@ export class AdministrationServices {
      * @param newRoleName name of the new role (Optional, if not provided the name will be inferred from the input file)
      */
     importRole(inputFile: File, newRoleName?: string) {
-        var data: any = {
+        let data: any = {
             inputFile: inputFile
         };
         if (newRoleName != null) {
@@ -256,7 +248,7 @@ export class AdministrationServices {
      * @param projectName if not provided returns the roles at system level
      */
     listCapabilities(role: Role, project?: Project): Observable<string[]> {
-        var params: any = {
+        let params: any = {
             role: role.getName()
         };
         if (project != null) {
@@ -271,7 +263,7 @@ export class AdministrationServices {
      * @param capability
      */
     addCapabilityToRole(role: string, capability: string) {
-        var params: any = {
+        let params: any = {
             role: role,
             capability: capability
         };
@@ -284,7 +276,7 @@ export class AdministrationServices {
      * @param capability
      */
     removeCapabilityFromRole(role: string, capability: string) {
-        var params: any = {
+        let params: any = {
             role: role,
             capability: capability
         };
@@ -297,7 +289,7 @@ export class AdministrationServices {
      * @param capability
      */
     updateCapabilityForRole(role: string, oldCapability: string, newCapability: string) {
-        var params: any = {
+        let params: any = {
             role: role,
             oldCapability: oldCapability,
             newCapability: newCapability
@@ -336,16 +328,23 @@ export class AdministrationServices {
         );
     }
 
+    /**
+     * Gets the data dir path
+     */
+     getDataDir() {
+        let params = {};
+        return this.httpMgr.doGet(this.serviceName, "getDataDir", params);
+    }
 
     setDataDir(path: string): Observable<string> {
-        var params: any = {
+        let params: any = {
             path: path
         };
         return this.httpMgr.doPost(this.serviceName, "setDataDir", params);
     }
 
     setPreloadProfilerThreshold(threshold: number) {
-        var params: any = {
+        let params: any = {
             threshold: threshold
         };
         return this.httpMgr.doPost(this.serviceName, "setPreloadProfilerThreshold", params);

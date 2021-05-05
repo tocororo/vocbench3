@@ -7,7 +7,7 @@ import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { CronDefinition } from "../../models/Notifications";
-import { ExtensionPointID, Scope } from "../../models/Plugins";
+import { ExtensionPointID, Scope, STProperties } from "../../models/Plugins";
 import { UserForm, UserFormCustomField, UserFormOptionalField } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { NotificationServices } from "../../services/notificationServices";
@@ -31,24 +31,14 @@ export class SystemConfigurationComponent {
     stDataFolder: string;
     stDataFolderPristine: string;
 
-    profilerThreshold: number;
-    profilerThresholdPristine: number;
-
+    /* Profiler threshold */
+    preloadSettings: PreloadSettings;
+    profilerThreshold: string;
+    profilerThresholdPristine: string;
 
     /* E-mail configuration */
-
-    emailConfig: EmailConfig = {
-        mailFromAddress: null,
-        mailFromPassword: null,
-        mailFromAlias: null,
-        mailSmtpHost: null,
-        mailSmtpPort: null,
-        mailSmtpAuth: null,
-        mailSmtpSslEnable: false,
-        mailSmtpStarttlsEnable: false
-    };
-    private pristineEmailConfig: EmailConfig;
-
+    emailSettings: MailSettings;
+    private emailSettingsPristine: MailSettings;
     cryptoProtocol: string;
 
     /* Notifications configuration */
@@ -88,50 +78,58 @@ export class SystemConfigurationComponent {
     ngOnInit() {
         this.isInitialConfiguration = this.router.url == "/Sysconfig";
 
-        this.initAdminConfig();
+        this.initSystemSettings();
+        this.initDataDir();
         this.initNotificationsConfig();
         this.initFields();
         this.initHomeContent();
-        this.initProjCreation();
+        this.expFeatEnabled = VBContext.getSystemSettings().experimentalFeaturesEnabled;
     }
 
-    private initAdminConfig() {
-        this.adminService.getAdministrationConfig().subscribe(
-            conf => {
-                this.emailConfig = {
-                    mailFromAddress: conf.mailFromAddress,
-                    mailFromPassword: conf.mailFromPassword,
-                    mailFromAlias: conf.mailFromAlias,
-                    mailSmtpHost: conf.mailSmtpHost,
-                    mailSmtpPort: conf.mailSmtpPort,
-                    mailSmtpAuth: conf.mailSmtpAuth == "true",
-                    mailSmtpSslEnable: conf.mailSmtpSslEnable == "true",
-                    mailSmtpStarttlsEnable: conf.mailSmtpStarttlsEnable == "true"
-                }
-                this.pristineEmailConfig = Object.assign({}, this.emailConfig);
+    private initSystemSettings() {
+        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
+            settings => {
+                //mail settings
+                let mailProp: STProperties = settings.getProperty(SettingsEnum.mail);
+                let mailPropCloned = mailProp.clone();
+                this.emailSettings = mailProp.value;
+                this.emailSettingsPristine = mailPropCloned.value;
 
-                //init cryptoProtocol
                 this.cryptoProtocol = "None";
-                if (this.emailConfig.mailSmtpSslEnable) {
+                if (this.emailSettings.smtp.sslEnabled) {
                     this.cryptoProtocol = "SSL";
-                } else if (this.emailConfig.mailSmtpStarttlsEnable) {
+                } else if (this.emailSettings.smtp.starttlsEnabled) {
                     this.cryptoProtocol = "TLS";
                 }
 
-                this.stDataFolder = conf.stDataDir;
-                this.stDataFolderPristine = conf.stDataDir;
+                //preload settings
+                this.preloadSettings = settings.getPropertyValue(SettingsEnum.preload);
+                if (this.preloadSettings == null) {
+                    this.preloadSettings = new PreloadSettings();
+                }
+                this.profilerThreshold = this.preloadSettings.profiler.threshold;
+                this.profilerThresholdPristine = this.profilerThreshold;
 
-                this.profilerThreshold = conf.preloadProfilerTreshold;
-                this.profilerThresholdPristine = conf.preloadProfilerTreshold;
+                //proj creation settings
+                let projCreationSettings: any = settings.getPropertyValue(SettingsEnum.projectCreation);
+                this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault == true;
+                this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault == true;
             }
-        );
-
-        this.expFeatEnabled = VBContext.getSystemSettings().experimentalFeaturesEnabled;
+        )
     }
 
     /* ============================
      * Misc settings management (STData directory, profiler threshold...)
      * ============================ */
+
+    initDataDir() {
+        this.adminService.getDataDir().subscribe(
+            dataDir => {
+                this.stDataFolder = dataDir;
+                this.stDataFolderPristine = dataDir;
+            }
+        );
+    }
 
     updateDataFolder() {
         this.adminService.setDataDir(this.stDataFolder).subscribe(
@@ -143,11 +141,12 @@ export class SystemConfigurationComponent {
     }
 
     updateProfilerThreshold() {
-        this.adminService.setPreloadProfilerThreshold(this.profilerThreshold).subscribe(
+        this.preloadSettings.profiler.threshold = this.profilerThreshold;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.preload, this.preloadSettings).subscribe(
             () => {
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PRELOAD_PROFILER_THRESHOLD_UPDATED"});
                 this.profilerThresholdPristine = this.profilerThreshold;
-            }
+            }    
         )
     }
 
@@ -157,29 +156,23 @@ export class SystemConfigurationComponent {
 
     updateProtocol() {
         if (this.cryptoProtocol == "SSL") {
-            this.emailConfig.mailSmtpSslEnable = true;
-            this.emailConfig.mailSmtpStarttlsEnable = false;
+            this.emailSettings.smtp.sslEnabled = true;
+            this.emailSettings.smtp.starttlsEnabled = false;
         } else if (this.cryptoProtocol == "TLS") {
-            this.emailConfig.mailSmtpSslEnable = false;
-            this.emailConfig.mailSmtpStarttlsEnable = true;
+            this.emailSettings.smtp.sslEnabled = false;
+            this.emailSettings.smtp.starttlsEnabled = true;
         } else {
-            this.emailConfig.mailSmtpSslEnable = false;
-            this.emailConfig.mailSmtpStarttlsEnable = false;
+            this.emailSettings.smtp.sslEnabled = false;
+            this.emailSettings.smtp.starttlsEnabled = false;
         }
     }
 
     updateEmailConfig() {
-        let mailFromPwd: string = null;
-        if (this.emailConfig.mailSmtpAuth) {
-            mailFromPwd = this.emailConfig.mailFromPassword;
-        }
-        this.adminService.updateEmailConfig(this.emailConfig.mailSmtpHost, this.emailConfig.mailSmtpPort, this.emailConfig.mailSmtpAuth,
-            this.emailConfig.mailSmtpSslEnable, this.emailConfig.mailSmtpStarttlsEnable,
-            this.emailConfig.mailFromAddress, this.emailConfig.mailFromAlias, mailFromPwd).subscribe(
-                stResp => {
-                    this.initAdminConfig();
-                }
-            )
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.mail, this.emailSettings).subscribe(
+            () => {
+                this.initSystemSettings();
+            }
+        )
     }
 
     testEmailConfig() {
@@ -204,12 +197,7 @@ export class SystemConfigurationComponent {
     }
 
     isEmailConfigChanged(): boolean {
-        for (var key in this.pristineEmailConfig) {
-            if (this.pristineEmailConfig[key] != this.emailConfig[key]) {
-                return true;
-            }
-        }
-        return false;
+        return JSON.stringify(this.emailSettingsPristine) != JSON.stringify(this.emailSettings);
     }
 
     /* ============================
@@ -263,21 +251,6 @@ export class SystemConfigurationComponent {
             }
         );
     }
-    /**
-     * Just for testing purpose (see also the related section in template)
-     */
-    // private cronExprTest: string;
-    // private testNotificationSchedule() {
-    //     let cronDefinition: CronDefinition = {
-    //         expression: this.cronExprTest,
-    //         zone: this.timezone
-    //     }
-    //     this.notificationsService.scheduleNotificationDigest(cronDefinition).subscribe(
-    //         () => {
-    //             this.initNotificationsConfig();
-    //         }
-    //     );
-    // }
 
     disableNotificationSchedule() {
         this.notificationsService.scheduleNotificationDigest().subscribe(
@@ -294,7 +267,7 @@ export class SystemConfigurationComponent {
         }
     }
 
-    private isCronDefinitionChanged(): boolean {
+    isCronDefinitionChanged(): boolean {
         return this.cronHourOfDay != this.cronHourOfDayPristine || this.timezone != this.timezonePristine;
     }
 
@@ -315,11 +288,11 @@ export class SystemConfigurationComponent {
         )
     }
 
-    private getOptionalFieldLabel(field: UserFormOptionalField): string {
+    getOptionalFieldLabel(field: UserFormOptionalField): string {
         return UserFormOptionalField.getOptionalFieldLabel(field);
     }
 
-    private updateOptionalFieldVisibility(field: UserFormOptionalField) {
+    updateOptionalFieldVisibility(field: UserFormOptionalField) {
         field.visible = !field.visible;
         this.userService.updateUserFormOptionalFieldVisibility(new ARTURIResource(field.iri), field.visible).subscribe(
             () => {
@@ -327,7 +300,6 @@ export class SystemConfigurationComponent {
             }
         )
     }
-
 
     renameCustomField(index: number, newValue: string) {
         let oldField = this.customFormFields[index];
@@ -373,7 +345,7 @@ export class SystemConfigurationComponent {
     }
 
 
-    private selectCustomField(idx: number) {
+    selectCustomField(idx: number) {
         if (idx < this.customFormFields.length) {
             if (this.customFormFields[idx] == this.selectedCustomField) {
                 this.selectedCustomField = null; //deselect
@@ -442,16 +414,6 @@ export class SystemConfigurationComponent {
      * project creation
      * ============================ */
 
-    private initProjCreation() {
-        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
-            settings => {
-                let projCreationSettings: any = settings.getPropertyValue(SettingsEnum.projectCreation);
-                this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault == true;
-                this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault == true;
-            }
-        );
-    }
-
     updateProjectCreationSettings() {
         let projCreationPref: ProjectCreationPreferences = new ProjectCreationPreferences();
         projCreationPref.aclUniversalAccessDefault = this.defaultAclUniversalAccess;
@@ -467,21 +429,32 @@ export class SystemConfigurationComponent {
         this.vbProp.setExperimentalFeaturesEnabled(this.expFeatEnabled);
     }
 
-
-
     ok() {
         this.router.navigate(['/Projects']);
     }
 
 }
 
-class EmailConfig {
-    public mailFromAddress: string;
-    public mailFromPassword: string;
-    public mailFromAlias: string;
-    public mailSmtpAuth: boolean;
-    public mailSmtpSslEnable: boolean;
-    public mailSmtpStarttlsEnable: boolean;
-    public mailSmtpHost: string;
-    public mailSmtpPort: string;
+class MailSettings {
+    smtp: {
+        auth: boolean,
+        host: string,
+        port: number,
+        sslEnabled: boolean,
+        starttlsEnabled: boolean
+    };
+    from: {
+        address: string,
+        password: string,
+        alias: string,
+    }
+}
+
+class PreloadSettings {
+    profiler: {
+        threshold: string
+    }
+    constructor() {
+        this.profiler = { threshold:"0 B" };
+    }
 }

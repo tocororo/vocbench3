@@ -83,6 +83,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         YasguiComponent,
     ],
     exports: [
+        DataSizeRenderer,
         DatatypePickerComponent,
         ExtensionConfiguratorComponent,
         FilePickerComponent,

@@ -76,8 +76,8 @@
                 [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
             </textarea>
 
-            <data-size-renderer *ngSwitchCase="'it.uniroma2.art.semanticturkey.properties.DataSize'" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
-            </data-size-renderer>
+            <datasize-renderer *ngSwitchCase="'it.uniroma2.art.semanticturkey.properties.DataSize'" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+            </datasize-renderer>
 
             <input *ngSwitchCase="'int'" type="number" class="form-control" step="1" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
             <input *ngSwitchCase="'integer'" type="number" class="form-control" step="1" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
