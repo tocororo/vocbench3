@@ -13,7 +13,7 @@
             <button class="btn btn-light btn-xs"  [title]="'GRAPHS.ACTIONS.HIDE_GENERIC_LINKS'|translate" (click)="updateArrows()"  [ngClass]="{ active: isHideArrows }">
                 <span class="fas fa-long-arrow-alt-up"></span>
             </button>
-            <button class="btn btn-light btn-xs" (click)="rendering=!rendering" title="Rendering"  [ngClass]="{ active: rendering }">
+            <button class="btn btn-light btn-xs" (click)="rendering=!rendering" [title]="'COMMONS.RENDERING'|translate"  [ngClass]="{ active: rendering }">
                 <span class="fas fa-font"></span>
             </button>
             <button class="btn btn-light btn-xs" (click)="snapshot()" [title]="'GRAPHS.ACTIONS.EXPORT_GRAPH_SNAPSHOT'|translate">

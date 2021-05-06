@@ -32,7 +32,6 @@ export class SystemConfigurationComponent {
     stDataFolderPristine: string;
 
     /* Profiler threshold */
-    preloadSettings: PreloadSettings;
     profilerThreshold: string;
     profilerThresholdPristine: string;
 
@@ -53,7 +52,6 @@ export class SystemConfigurationComponent {
     optionalFields: UserFormOptionalField[];
 
     customFormFields: UserFormCustomField[];
-    private customFormFieldsPristine: UserFormCustomField[];
     selectedCustomField: UserFormCustomField;
     fieldsIdx: number[] = [0, 1, 2, 3];
     translationParam: { maxFields: number } = { maxFields: this.fieldsIdx.length };
@@ -103,11 +101,13 @@ export class SystemConfigurationComponent {
                 }
 
                 //preload settings
-                this.preloadSettings = settings.getPropertyValue(SettingsEnum.preload);
-                if (this.preloadSettings == null) {
-                    this.preloadSettings = new PreloadSettings();
+                let preloadSettings: PreloadSettings = settings.getPropertyValue(SettingsEnum.preload);
+                if (preloadSettings != null) {
+                    this.profilerThreshold = preloadSettings.profiler.threshold;
+                    if (this.profilerThreshold == null) {
+                        this.profilerThreshold = PreloadSettings.defaultThreshold;
+                    }
                 }
-                this.profilerThreshold = this.preloadSettings.profiler.threshold;
                 this.profilerThresholdPristine = this.profilerThreshold;
 
                 //proj creation settings
@@ -141,13 +141,12 @@ export class SystemConfigurationComponent {
     }
 
     updateProfilerThreshold() {
-        this.preloadSettings.profiler.threshold = this.profilerThreshold;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.preload, this.preloadSettings).subscribe(
+        this.adminService.setPreloadProfilerThreshold(this.profilerThreshold).subscribe(
             () => {
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PRELOAD_PROFILER_THRESHOLD_UPDATED"});
                 this.profilerThresholdPristine = this.profilerThreshold;
-            }    
-        )
+            }
+        );
     }
 
     /* ============================
@@ -280,7 +279,6 @@ export class SystemConfigurationComponent {
             fields => {
                 this.optionalFields = fields.optionalFields;
                 this.customFormFields = fields.customFields;
-                this.customFormFieldsPristine = Object.assign({}, this.customFormFields);
                 if (this.selectedCustomField != null) {
                     this.selectedCustomField = this.customFormFields.find(f => f.iri == this.selectedCustomField.iri);
                 }
@@ -454,7 +452,10 @@ class PreloadSettings {
     profiler: {
         threshold: string
     }
+
+    public static defaultThreshold = "0 B";
+
     constructor() {
-        this.profiler = { threshold:"0 B" };
+        this.profiler = { threshold: PreloadSettings.defaultThreshold };
     }
 }

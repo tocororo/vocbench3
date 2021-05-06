@@ -1,3 +1,5 @@
+import { VBContext } from "../utils/VBContext";
+
 export class Countries {
     
     static countryList = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
@@ -38,17 +40,8 @@ export class Languages {
     public static readonly ALL_LANG = "*";
     public static readonly NO_LANG_TAG = "--";
 
-    private static systemLanguages: Language[] = [];
     static priorityLangs = ["en", "fr", "it", "es", "de"];
     
-    static setSystemLanguages(langs: Language[]) {
-        this.systemLanguages = langs;
-    }
-
-    static getSystemLanguages(): Language[] {
-        return this.systemLanguages;
-    }
-
     static sortLanguages(languages: Language[]) {
         languages.sort(
             function (l1: Language, l2: Language) {
@@ -117,7 +110,7 @@ export class Languages {
     }
 
     static getLanguageFromTag(tag: string): Language {
-        let l: Language = Languages.systemLanguages.find(l => l.tag.toLocaleLowerCase() == tag.toLocaleLowerCase());
+        let l: Language = VBContext.getSystemSettings().languages.find(l => l.tag.toLocaleLowerCase() == tag.toLocaleLowerCase());
         if (l == null) { //no language with the give tag found among the available
             l = { name: tag, tag: tag };
         }

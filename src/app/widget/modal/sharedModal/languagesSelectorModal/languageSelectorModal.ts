@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Language, Languages } from "../../../../models/LanguagesCountries";
+import { Language } from "../../../../models/LanguagesCountries";
 import { ProjectContext, VBContext } from "../../../../utils/VBContext";
 
 @Component({
@@ -24,7 +24,7 @@ export class LanguageSelectorModal {
         if (this.projectAware) {
             languages = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting;
         } else {
-            languages = Languages.getSystemLanguages();
+            languages = VBContext.getSystemSettings().languages;
         }
 
         let initiallySelectedLanguages = this.languages;

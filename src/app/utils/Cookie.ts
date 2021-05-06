@@ -40,6 +40,7 @@ export class Cookie {
     public static PROJECT_COLLAPSED_DIRS = "project.collapsed_dirs"; //comma separated names of collapsed directories
     public static PROJECT_VIEW_MODE = "project.view_mode";
     public static PROJECT_FACET_BAG_OF = "project.facet_bag_of";
+    public static PROJECT_RENDERING = "project.rendering";
 
     public static WARNING_CUSTOM_ROOT = "ui.tree.cls.warnings.customroot";
     public static WARNING_CODE_CHANGE_VALIDATION = "resource_view.warnings.code_change_validation";

@@ -29,7 +29,7 @@ export class CollaborationComponent {
     csActive: boolean;
 
     constructor(private vbCollaboration: VBCollaboration, private collModals: CollaborationModalServices, private eventHandler: VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.collaborationSystemStatusChanged.subscribe(
             () => this.onCollaborationSystemStatusChange()
         ));
     }
@@ -39,7 +39,7 @@ export class CollaborationComponent {
     }
 
     ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+        this.eventSubscriptions.forEach(s => s.unsubscribe);
     }
 
     initIssueList() {

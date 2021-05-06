@@ -3,7 +3,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTLiteral } from "../../models/ARTResources";
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { NTriplesUtil } from "../../utils/ResourceUtils";
-import { VBProperties } from "../../utils/VBProperties";
 import { SharedModalServices } from "../modal/sharedModal/sharedModalServices";
 
 @Component({
@@ -16,17 +15,16 @@ import { SharedModalServices } from "../modal/sharedModal/sharedModalServices";
 export class LangStringEditorComponent implements ControlValueAccessor, OnInit { // based on RdfResourceComponent
 
     @Input() disabled: boolean = false;
-
-    lang: Language;
+    @Input() lang: Language; //language (can be initially set)
     stringValue: string; // string value of the literal
     
     private literalValue: ARTLiteral; // the rdf:langString being edited (the model) 
 
-    public constructor(private sharedModals: SharedModalServices, private preferences: VBProperties) {
+    public constructor(private sharedModals: SharedModalServices) {
     }
 
     ngOnInit(): void {
-        this.initLang();   
+        this.initLang();
     }
 
     initLang() {
@@ -80,9 +78,7 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
             this.lang = Languages.getLanguageFromTag(this.literalValue.getLang());
         } else {
             this.stringValue = null;
-            this.lang = null;
         }
-        this.initLang();
     }
     /**
      * Set the function to be called when the control receives a change event.

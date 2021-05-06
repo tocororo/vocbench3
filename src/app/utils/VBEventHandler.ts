@@ -110,15 +110,6 @@ export class VBEventHandler {
 
     constructor() { }
 
-    /**
-     * utility method to make a component unsubscribe from all the event to which has subscribed
-     */
-    public unsubscribeAll(subscriptions: Subscription[]) {
-        for (var i = 0; i < subscriptions.length; i++) {
-            subscriptions[i].unsubscribe();
-        }
-    }
-
 }
 
 class VBEventEmitter<T> extends EventEmitter<T> {

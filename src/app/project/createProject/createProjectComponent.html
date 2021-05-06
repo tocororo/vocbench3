@@ -289,6 +289,13 @@
                 </div>
                 <div class="card-body" *ngIf="extPointPanelOpen">
 
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-1">{{'COMMONS.LABEL'|translate}}</label>
+                        <div class="col-sm-11">
+                            <lang-string-editor [(ngModel)]="projectLabel" [lang]="projectLabelLang"></lang-string-editor>
+                        </div>
+                    </div>
+
                     <div class="card card-alt mb-2">
                         <div class="card-header">
                             <label style="flex: 1;">{{'PROJECTS.URI_GENERATOR'|translate}}</label>

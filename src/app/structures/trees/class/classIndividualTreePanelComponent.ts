@@ -46,14 +46,14 @@ export class ClassIndividualTreePanelComponent {
     private eventSubscriptions: Subscription[] = [];
 
     constructor(private individualService: IndividualsServices, private eventHandler: VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.classDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onClassDeleted(deletedRes)));
-        this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.instanceDeletedEvent.subscribe(
             (data: { instance: ARTURIResource, cls: ARTURIResource }) => this.onInstanceDeleted(data.instance)));
     }
 
     ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+        this.eventSubscriptions.forEach(s => s.unsubscribe);
     }
 
     /**

@@ -101,6 +101,16 @@ export class LoadDataComponent {
 
         this.extensionService.getExtensions(ExtensionPointID.RDF_LIFTER_ID).subscribe(
             extensions => {
+                //sort extensions in order to force RDFDeserializingLifter in 1st position, so selected as default
+                extensions.sort((e1, e2) => { 
+                    if (e1.id.includes("RDFDeserializingLifter")) {
+                        return -1
+                    } else if (e2.id.includes("RDFDeserializingLifter")) {
+                        return 1
+                    } else {
+                        return 0
+                    }
+                })
                 this.lifters = extensions;
             }
         );

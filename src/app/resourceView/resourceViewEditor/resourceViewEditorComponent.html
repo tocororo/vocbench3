@@ -5,7 +5,7 @@
             <resource-rename [resource]="resource" style="flex: 1;" [readonly]="readonly" (update)="buildResourceView(resource)">
             </resource-rename>
             
-            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: rendering}" title="Rendering" (click)="switchRendering()">
+            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: rendering}" [title]="'COMMONS.RENDERING'|translate" (click)="switchRendering()">
                 <span class="fas fa-font"></span>
             </button>
             <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: showInferred}" [title]="'RESOURCE_VIEW.ACTIONS.SHOW_HIDE_INFERRED'|translate" (click)="switchInferred()">

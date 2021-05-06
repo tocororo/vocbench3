@@ -245,6 +245,7 @@ export class SystemSettings {
     privacyStatementAvailable: boolean = false;
     showFlags: boolean = true;
     homeContent: string;
+    languages: Language[];
 }
 
 export class ProjectCreationPreferences {

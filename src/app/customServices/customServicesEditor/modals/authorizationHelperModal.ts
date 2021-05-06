@@ -1,8 +1,9 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { VBContext } from "src/app/utils/VBContext";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { RDFResourceRolesEnum } from "../../../models/ARTResources";
-import { Language, Languages } from "../../../models/LanguagesCountries";
+import { Language } from "../../../models/LanguagesCountries";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 @Component({
@@ -88,7 +89,7 @@ export class AuthorizationHelperModal {
     constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
-        this.languages = Languages.getSystemLanguages();
+        this.languages = VBContext.getSystemSettings().languages;
 
         if (this.authorization) { //edit => restore the form with the given authorization
             let auth = this.authorization;

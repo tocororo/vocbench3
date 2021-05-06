@@ -1,8 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
 import { from, Observable } from "rxjs";
-import { finalize, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Settings } from "../models/Plugins";
 import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
@@ -24,6 +25,7 @@ import { OpenAllProjReportModal } from "./openAllProjReportModal";
 import { ACLEditorModal } from "./projectACL/aclEditorModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectPropertiesModal } from "./projectPropertiesModal";
+import { ProjectLabelsEditorModal } from "./projectSettingsEditor/projectLabelsEditorModal";
 import { ProjSettingsEditorModal } from "./projectSettingsEditor/projectSettingsEditorModal";
 import { DeleteRemoteRepoModal } from "./remoteRepositories/deleteRemoteRepoModal";
 import { DeleteRepositoryReportModal } from "./remoteRepositories/deleteRepositoryReportModal";
@@ -41,10 +43,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     private columnOrder: { [id: string]: { show: string, flex: number, order: number} };
 
     constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
-        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal,
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal, translateService: TranslateService, 
         private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
         private router: Router) {
-        super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService);
+        super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService, translateService);
     }
 
     //@Override the one in the abstract parent since it needs to initialize the column order first
@@ -275,6 +277,11 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         const modalRef: NgbModalRef = this.modalService.open(RemoteRepoEditorModal, new ModalOptions());
         modalRef.componentInstance.project = project;
         return modalRef.result;
+    }
+
+    editLabels(project: Project) {
+        const modalRef: NgbModalRef = this.modalService.open(ProjectLabelsEditorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.project = project;
     }
 
     editDescription(project: Project) {

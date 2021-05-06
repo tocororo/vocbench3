@@ -25,6 +25,9 @@
                         <span class="fas fa-folder"></span>
                     </button>
                 </div>
+                <button class="btn btn-xs btn-light" [ngClass]="{ active: rendering }" (click)="switchRendering()" [title]="'COMMONS.RENDERING'|translate">
+                    <span class="fas fa-font"></span>
+                </button>
                 <button class="btn btn-xs btn-light" (click)="initProjects()" [title]="'ACTIONS.REFRESH'|translate">
                     <span class="fas fa-redo"></span>
                 </button>
@@ -65,7 +68,7 @@
                             <ng-container *ngIf="pd.open">
                                 <div *ngFor="let p of pd.projects" class="listItem project-row">
                                     <div *ngIf="columnOrder['name']" class="text-center ellipsable" [ngStyle]="{ order: columnOrder['name'].order, flex: columnOrder['name'].flex }">
-                                        {{p.getName()}}
+                                        {{p.getLabel(projLabelLang, rendering)}}
                                     </div>
                                     <div *ngIf="columnOrder['name']" class="text-center" [ngStyle]="{ order: columnOrder['open'].order, flex: columnOrder['open'].flex }">
                                         <button class="btn btn-light" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
@@ -96,25 +99,7 @@
                                         <span *ngIf="p.isRepositoryRemote()" class="fas fa-map-marker-alt" [title]="p.getRepositoryLocation().serverURL"></span>
                                     </div>
                                     <div class="text-center" style="width: 100px; order: 99;">
-                                        <div class="hbox" style="justify-content: center;">
-                                            <button class="btn btn-xs btn-light" (click)="deleteProject(p)" style="margin-left: 10px;">
-                                                <span class="far fa-trash-alt"></span>
-                                            </button>
-                                            <div class="ml-1" ngbDropdown container="body">
-                                                <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle">
-                                                    <span class="fas fa-caret-down"></span>
-                                                </button>
-                                                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                                                    <button class="dropdown-item" (click)="editACL(p)">{{'PROJECTS.ACTIONS.EDIT_ACL'|translate}}</button>
-                                                    <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
-                                                    <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
-                                                    <button class="dropdown-item" (click)="editFacets(p)">{{'PROJECTS.ACTIONS.EDIT_FACETS'|translate}}</button>
-                                                    <button class="dropdown-item" (click)="editSettings(p)" [disabled]="p.isOpen()">{{'PROJECTS.ACTIONS.EDIT_SETTINGS'|translate}}</button>
-                                                    <div class="dropdown-divider"></div>
-                                                    <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.SHOW_PROPERTIES'|translate}}</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <ng-container *ngTemplateOutlet="projectActionsTemplate; context: { project: p }"></ng-container>
                                     </div>
                                 </div>
                             </ng-container>
@@ -131,7 +116,7 @@
                 <div>
                     <div *ngFor="let p of projectList" class="listItem project-row">
                         <div *ngIf="columnOrder['name']" class="text-center ellipsable" [ngStyle]="{ order: columnOrder['name'].order, flex: columnOrder['name'].flex }">
-                            {{p.getName()}}
+                            {{p.getLabel(projLabelLang, rendering)}}
                         </div>
                         <div *ngIf="columnOrder['name']" class="text-center" [ngStyle]="{ order: columnOrder['open'].order, flex: columnOrder['open'].flex }">
                             <button class="btn btn-light" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
@@ -162,25 +147,7 @@
                             <span *ngIf="p.isRepositoryRemote()" class="fas fa-map-marker-alt" [title]="p.getRepositoryLocation().serverURL"></span>
                         </div>
                         <div class="text-center" style="width: 100px; order: 99;">
-                            <div class="hbox" style="justify-content: center;">
-                                <button class="btn btn-xs btn-light" (click)="deleteProject(p)" style="margin-left: 10px;">
-                                    <span class="far fa-trash-alt"></span>
-                                </button>
-                                <div placement="bottom-right" ngbDropdown container="body">
-                                    <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle">
-                                        <span class="fas fa-caret-down"></span>
-                                    </button>
-                                    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                                        <button class="dropdown-item" (click)="editACL(p)">{{'PROJECTS.ACTIONS.EDIT_ACL'|translate}}</button>
-                                        <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
-                                        <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
-                                        <button class="dropdown-item" (click)="editFacets(p)">{{'PROJECTS.ACTIONS.EDIT_FACETS'|translate}}</button>
-                                        <button class="dropdown-item" (click)="editSettings(p)" [disabled]="p.isOpen()">{{'PROJECTS.ACTIONS.EDIT_SETTINGS'|translate}}</button>
-                                        <div class="dropdown-divider"></div>
-                                        <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.SHOW_PROPERTIES'|translate}}</button>
-                                    </div>
-                                </div>
-                            </div>
+                            <ng-container *ngTemplateOutlet="projectActionsTemplate; context: { project: p }"></ng-container>
                         </div>
                     </div>
                 </div>
@@ -201,4 +168,27 @@
     <label class="text-center" style="width: 100px; order: 99;">
         {{'ACTIONS.ACTIONS'|translate}}
     </label>
+</ng-template>
+
+<ng-template #projectActionsTemplate let-p="project">
+    <div class="hbox" style="justify-content: center;">
+        <button class="btn btn-xs btn-light" (click)="deleteProject(p)" style="margin-left: 10px;">
+            <span class="far fa-trash-alt"></span>
+        </button>
+        <div class="ml-1" ngbDropdown container="body">
+            <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle">
+                <span class="fas fa-caret-down"></span>
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <button class="dropdown-item" (click)="editACL(p)">{{'PROJECTS.ACTIONS.EDIT_ACL'|translate}}</button>
+                <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">{{'PROJECTS.ACTIONS.EDIT_REMOTE_REPO_CONFIG'|translate}}</button>
+                <button class="dropdown-item" (click)="editLabels(p)">{{'PROJECTS.ACTIONS.EDIT_LABELS'|translate}}</button>
+                <button class="dropdown-item" (click)="editDescription(p)">{{'PROJECTS.ACTIONS.EDIT_DESCRIPTION'|translate}}</button>
+                <button class="dropdown-item" (click)="editFacets(p)">{{'PROJECTS.ACTIONS.EDIT_FACETS'|translate}}</button>
+                <button class="dropdown-item" (click)="editSettings(p)" [disabled]="p.isOpen()">{{'PROJECTS.ACTIONS.EDIT_SETTINGS'|translate}}</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.SHOW_PROPERTIES'|translate}}</button>
+            </div>
+        </div>
+    </div>
 </ng-template>

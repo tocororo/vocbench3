@@ -58,7 +58,7 @@ export class ResourceViewModeDispatcher {
     }
 
     ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+        this.eventSubscriptions.forEach(s => s.unsubscribe);
     }
 
     selectResource(res: ARTResource) {

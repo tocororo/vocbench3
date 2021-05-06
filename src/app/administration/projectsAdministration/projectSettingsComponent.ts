@@ -31,7 +31,7 @@ export class ProjectSettingsComponent {
 
     ngOnInit() {
         //init all available system languages
-        let systemLanguages: Language[] = Languages.getSystemLanguages()
+        let systemLanguages: Language[] = VBContext.getSystemSettings().languages;
         this.languageItems = systemLanguages.map(l => {
             return { lang: l, active: false }
         });

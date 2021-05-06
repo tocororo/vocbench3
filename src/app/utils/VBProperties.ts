@@ -26,7 +26,7 @@ export class VBProperties {
     }
 
     ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+        this.eventSubscriptions.forEach(s => s.unsubscribe);
     }
 
     /* =============================
@@ -306,7 +306,7 @@ export class VBProperties {
                 systemSettings.homeContent = settings.getPropertyValue(SettingsEnum.homeContent);
                 let systemLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
                 Languages.sortLanguages(systemLanguages);
-                Languages.setSystemLanguages(systemLanguages);
+                systemSettings.languages = systemLanguages;
             }
         )
     }

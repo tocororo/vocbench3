@@ -94,7 +94,7 @@ export abstract class AbstractPanel {
     }
 
     ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+        this.eventSubscriptions.forEach(s => s.unsubscribe);
     }
 
     //actions

@@ -21,6 +21,7 @@ export class Project {
     private description: string;
     private createdAt: string;
     private openAtStartup: boolean;
+    private labels: {[lang: string]: string} = {}; //lang->labels
 
     constructor(name?: string) {
         if (name != undefined) {
@@ -193,6 +194,31 @@ export class Project {
         return this.openAtStartup;
     }
 
+    public setLabels(labels: {[key: string]: string}) {
+        if (labels != null) {
+            this.labels = labels;
+        }        
+    }
+
+    public getLabels(): {[key: string]: string} {
+        return this.labels;
+    }
+
+    /**
+     * Returns the label of the project in the given language.
+     * If none label is available in that language, returns the name
+     * @param lang
+     * @param rendering if true returns the label, false returns the name
+     * @returns 
+     */
+    public getLabel(lang: string, rendering: boolean) {
+        let label: string = this.name;
+        if (rendering && this.labels[lang]) {
+            label = this.labels[lang];
+        }
+        return label;
+    }
+
     public static deserialize(projJson: any): Project {
         let proj = new Project();
         proj.setName(projJson.name);
@@ -212,6 +238,7 @@ export class Project {
         proj.setCreatedAt(projJson.createdAt);
         proj.setFacets(Settings.parse(projJson.facets));
         proj.setOpenAtStartup(projJson.openAtStartup);
+        proj.setLabels(projJson.labels);
         return proj;
     }
 

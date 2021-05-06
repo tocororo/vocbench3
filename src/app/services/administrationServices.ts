@@ -311,15 +311,15 @@ export class AdministrationServices {
     }
 
     setDataDir(path: string): Observable<string> {
-        let params: any = {
+        let params = {
             path: path
         };
         return this.httpMgr.doPost(this.serviceName, "setDataDir", params);
     }
 
-    setPreloadProfilerThreshold(threshold: number) {
-        let params: any = {
-            threshold: threshold + " B"
+    setPreloadProfilerThreshold(threshold: string) {
+        let params = {
+            threshold: threshold
         };
         return this.httpMgr.doPost(this.serviceName, "setPreloadProfilerThreshold", params);
     }

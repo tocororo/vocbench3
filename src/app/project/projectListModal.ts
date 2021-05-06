@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from "@ngx-translate/core";
 import { Project, ProjectViewMode } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
@@ -20,8 +21,8 @@ export class ProjectListModal extends AbstractProjectComponent {
 
     constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
         vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal, 
-        private activeModal: NgbActiveModal, private router: Router) {
-        super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService);
+        translateService: TranslateService, private activeModal: NgbActiveModal, private router: Router) {
+        super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService, translateService);
     }
 
     getListProjectsFn() {

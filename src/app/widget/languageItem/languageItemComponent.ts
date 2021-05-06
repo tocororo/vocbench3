@@ -32,9 +32,9 @@ export class LanguageItemComponent {
     eventSubscriptions: Subscription[] = [];
 
     constructor(private preferences: VBProperties, private eventHandler: VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.showFlagChangedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.showFlagChangedEvent.subscribe(
             (showFlag: boolean) => this.initFlagImgSrc()));
-        this.eventSubscriptions.push(eventHandler.themeChangedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.themeChangedEvent.subscribe(
             (theme: number) => this.initTheme()));
     }
 
@@ -61,7 +61,7 @@ export class LanguageItemComponent {
     }
 
     ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+        this.eventSubscriptions.forEach(s => s.unsubscribe);
     }
 
     private initFlagImgSrc() {

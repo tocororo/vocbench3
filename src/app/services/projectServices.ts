@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
+import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { TransitiveImportMethodAllowance } from '../models/Metadata';
 import { PluginSpecification, Settings } from '../models/Plugins';
 import { AccessLevel, AccessStatus, BackendTypesEnum, ConsumerACL, ExceptionDAO, LockLevel, LockStatus, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
@@ -181,7 +181,7 @@ export class ProjectServices {
         resourceMetadataAssociations?: Pair<RDFResourceRolesEnum, string>[],
         shaclEnabled?: boolean, shaclSettings?: Map<string, any>, trivialInferenceEnabled?: boolean,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance,
-        openAtStartup?: boolean, globallyAccessible?: boolean) {
+        openAtStartup?: boolean, globallyAccessible?: boolean, label?: ARTLiteral) {
         
         let params: any = {
             consumer: "SYSTEM",
@@ -212,6 +212,7 @@ export class ProjectServices {
             transitiveImportAllowance: transitiveImportAllowance,
             openAtStartup: openAtStartup,
             globallyAccessible: globallyAccessible,
+            label: label
         };
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
@@ -750,6 +751,14 @@ export class ProjectServices {
             openAtStartup: openAtStartup
         };
         return this.httpMgr.doPost(this.serviceName, "setOpenAtStartup", params);
+    }
+
+    setProjectLabels(project: Project, labels: {[key: string]: string}) {
+        let params = {
+            projectName: project.getName(),
+            labels: JSON.stringify(labels)
+        };
+        return this.httpMgr.doPost(this.serviceName, "setProjectLabels", params);
     }
 
 }

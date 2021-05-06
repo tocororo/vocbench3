@@ -27,28 +27,28 @@ export class DataComponent {
     private eventSubscriptions: Subscription[] = [];
 
     constructor(private eventHandler: VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.datatypeDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.datatypeDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
-        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.classDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
-        this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.collectionDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
-        this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.conceptDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
-        this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.instanceDeletedEvent.subscribe(
             (data: { instance: ARTURIResource, cls: ARTURIResource }) => this.onNodeDeleted(data.instance)));
-        this.eventSubscriptions.push(eventHandler.lexicalEntryDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.lexicalEntryDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
-        this.eventSubscriptions.push(eventHandler.lexiconDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.lexiconDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
-        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.propertyDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
-        this.eventSubscriptions.push(eventHandler.schemeDeletedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.schemeDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
     }
 
     ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+        this.eventSubscriptions.forEach(s => s.unsubscribe);
     }
 
     onNodeSelected(node: ARTResource) {

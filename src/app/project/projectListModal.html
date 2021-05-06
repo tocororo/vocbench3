@@ -6,9 +6,14 @@
         <div class="card card-default vbox" style="margin-left: 5px;">
             <div class="card-header">
                 <label style="flex: 1;">{{'MODELS.PROJECT.PROJECTS'|translate}}</label>
-                <button class="btn btn-xs btn-light" (click)="settings()">
-                    <span class="fas fa-cog"></span>
-                </button>
+                <div class="btn-toolbar">
+                    <button class="btn btn-xs btn-light" (click)="switchRendering()" [title]="'COMMONS.RENDERING'|translate">
+                        <span class="fas fa-font"></span>
+                    </button>
+                    <button class="btn btn-xs btn-light" (click)="settings()">
+                        <span class="fas fa-cog"></span>
+                    </button>
+                </div>
             </div>
             <div class="card-body scrollableContainer">
                 
@@ -25,7 +30,9 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let p of projectList" [ngClass]="{ 'table-primary': selectedProject == p }" (click)="selectedProject = p">
-                            <td class="text-center ellipsable">{{p.getName()}}</td>
+                            <td class="text-center ellipsable">
+                                {{p.getLabel(projLabelLang, rendering)}}
+                            </td>
                             <td class="text-center">{{p.getModelType(true)}}</td>
                             <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
                             <td class="text-center">
@@ -69,7 +76,7 @@
                                 <ng-container *ngIf="pd.open">
                                     <div *ngFor="let p of pd.projects" class="listItem project-row" [ngClass]="{ active : selectedProject == p }" (click)="selectedProject = p">
                                         <div class="text-center ellipsable" style="flex: 3">
-                                            {{p.getName()}}
+                                            {{p.getLabel(projLabelLang, rendering)}}
                                         </div>
                                         <div class="text-center" style="flex: 1">
                                             {{p.getModelType(true)}}

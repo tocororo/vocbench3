@@ -6,6 +6,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 10.0.0 (dd-mm-yyyy)
   * Added email verification in the registration procedure
+  * Enabled possibility to render project through labels
   * Improved the management of the unicity of preferred labels for concepts in the same scheme
   * Added flags for Scottish Gaelic and Welsh languages
   * Adopted the new Settings services

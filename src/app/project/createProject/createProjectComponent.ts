@@ -1,11 +1,13 @@
 import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from "@ngx-translate/core";
+import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
+import { Subscription } from "rxjs";
+import { Language, Languages } from "src/app/models/LanguagesCountries";
 import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, PluginSpecification, Scope, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
@@ -56,6 +58,9 @@ export class CreateProjectComponent {
 
     importAllowances: { allowance: TransitiveImportMethodAllowance, showTranslationKey: string }[] = TransitiveImportUtils.importAllowancesList;
     selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
+
+    projectLabel: ARTLiteral;
+    projectLabelLang: Language;
 
     //baseURI
     baseUri: string;
@@ -159,9 +164,11 @@ export class CreateProjectComponent {
     private openAtStartup: boolean = false;
     private globallyAccessible: boolean = false;
 
+    private eventSubscriptions: Subscription[] = [];
+
     constructor(private projectService: ProjectServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private settingsService: SettingsServices,
-        private translateService: TranslateService, private router: Router, 
+        private translateService: TranslateService, private router: Router,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {
     }
 
@@ -231,6 +238,22 @@ export class CreateProjectComponent {
 
         //init available remote repo access configurations
         this.initRemoteRepoAccessConfigurations();
+
+        //init language of the project label according the one chosen for the i18n
+        let currentLang: string = this.translateService.currentLang;
+        this.projectLabelLang = Languages.getLanguageFromTag(currentLang);
+
+        this.eventSubscriptions.push(this.translateService.onLangChange.subscribe(
+            (event: LangChangeEvent) => {
+                if (this.projectLabel == null) { //update the lang only if the project label has not been already set
+                    this.projectLabelLang = Languages.getLanguageFromTag(event.lang);
+                }
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.eventSubscriptions.forEach(s => s.unsubscribe);
     }
 
     /**
@@ -782,12 +805,11 @@ export class CreateProjectComponent {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.createProject(this.projectName, this.baseUri,
             this.ontoModelType, this.lexicalModelType, this.history, this.validation, this.blacklisting,
-            repositoryAccess, this.dataRepoId, supportRepoIdPar,
-            coreRepoSailConfigurerSpecification, coreRepoBackendType,
-            supportRepoSailConfigurerSpecification, supportRepoBackendType,
-            leftDataset, rightDataset, uriGeneratorSpecification, renderingEngineSpecification,
-            metadataAssociationsPar, this.enableSHACL, shaclSettingsPar, this.enableTrivialInference,
-            preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance, this.openAtStartup, this.globallyAccessible).subscribe(
+            repositoryAccess, this.dataRepoId, supportRepoIdPar, coreRepoSailConfigurerSpecification, coreRepoBackendType,
+            supportRepoSailConfigurerSpecification, supportRepoBackendType, leftDataset, rightDataset,
+            uriGeneratorSpecification, renderingEngineSpecification, metadataAssociationsPar, this.enableSHACL, shaclSettingsPar,
+            this.enableTrivialInference, preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance,
+            this.openAtStartup, this.globallyAccessible, this.projectLabel).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PROJECT_CREATED"}).then(

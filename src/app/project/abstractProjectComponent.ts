@@ -1,5 +1,6 @@
 import { Directive } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable } from "rxjs";
 import { Project, ProjectFacets, ProjectViewMode } from "../models/Project";
 import { Multimap } from '../models/Shared';
@@ -19,6 +20,9 @@ export abstract class AbstractProjectComponent {
 
     ProjectViewMode = ProjectViewMode;
     visualizationMode: ProjectViewMode;
+    rendering: boolean;
+    projLabelLang: string;
+
     protected projectList: Project[];
     protected projectDirs: ProjectDirEntry[];
 
@@ -29,8 +33,9 @@ export abstract class AbstractProjectComponent {
     protected vbProp: VBProperties;
     protected dtValidator: DatatypeValidator;
     protected modalService: NgbModal;
+    protected translateService: TranslateService;
     constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices, 
-        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal) {
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal, translateService: TranslateService) {
         this.projectService = projectService;
         this.userService = userService;
         this.metadataService = metadataService;
@@ -38,10 +43,17 @@ export abstract class AbstractProjectComponent {
         this.vbProp = vbProp;
         this.dtValidator = dtValidator;
         this.modalService = modalService;
+        this.translateService = translateService;
     }
 
     ngOnInit() {
         this.initProjects();
+
+        this.rendering = Cookie.getCookie(Cookie.PROJECT_RENDERING) == "true";
+        this.projLabelLang = this.translateService.currentLang;
+        this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+            this.projLabelLang = event.lang;
+        })
     }
 
     initProjects() {
@@ -171,6 +183,12 @@ export abstract class AbstractProjectComponent {
 
     protected getCurrentFacetBagOf() {
         return Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
+    }
+
+
+    switchRendering() {
+        this.rendering = !this.rendering;
+        Cookie.setCookie(Cookie.PROJECT_RENDERING, this.rendering+"");
     }
 
     settings() {

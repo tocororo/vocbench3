@@ -1,0 +1,71 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'PROJECTS.ACTIONS.EDIT_LABELS'|translate}}</h3>
+    </div>
+    <div class="modal-body vbox">
+
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-sm table-borderless">
+                    <colgroup>
+                        <col style="width: 150px">
+                        <col>
+                        <col style="width: 1%">
+                        <col style="width: 1%">
+                    </colgroup>
+                    <tr *ngIf="labels.length == 0 && !pendingLabel">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <button class="btn btn-light" (click)="addLabel()" [title]="'ACTIONS.ADD'|translate">
+                                <span class="fas fa-plus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let l of labels; let last=last">
+                        <td>
+                            <lang-picker [ngModel]="l.lang" [config]="{ projectAware: false }" readonly></lang-picker>
+                        </td>
+                        <td>
+                            <input class="form-control" [(ngModel)]="l.label">
+                        </td>
+                        <td>
+                            <button class="btn btn-light" (click)="removeLabel(l)" [title]="'ACTIONS.DELETE'|translate">
+                                <span class="far fa-trash-alt"></span>
+                            </button>
+                        </td>
+                        <td *ngIf="last && !pendingLabel">
+                            <button class="btn btn-light" (click)="addLabel()" [title]="'ACTIONS.ADD'|translate">
+                                <span class="fas fa-plus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="pendingLabel">
+                        <td>
+                            <lang-picker [(ngModel)]="pendingLabel.lang" [config]="{ projectAware: false, languages: pendingLangs }"></lang-picker>
+                        </td>
+                        <td>
+                            <input class="form-control" [(ngModel)]="pendingLabel.label">
+                        </td>
+                        <td>
+                            <button class="btn btn-light" (click)="confirmNewLabel()" [disabled]="!isNewLabelOk()">
+                                <span class="fas fa-check"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-light" (click)="pendingLabel = null">
+                                <span class="fas fa-times"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+</div>

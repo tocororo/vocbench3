@@ -2,7 +2,7 @@
 
     <div class="card-header" style="display: flex;">
         <label style="flex: 1">{{'ALIGNMENT.VALIDATION.MANAGEMENT.ALIGNMENTS'|translate}}:</label>
-        <button class="btn btn-light btn-xs" style="margin-right: 4px;" [ngClass]="{active: rendering}" title="Rendering"
+        <button class="btn btn-light btn-xs" style="margin-right: 4px;" [ngClass]="{active: rendering}" [title]="'COMMONS.RENDERING'|translate"
             (click)="toggleRendering()">
             <span class="fas fa-font"></span>
         </button>

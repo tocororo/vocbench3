@@ -175,7 +175,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     }
 
     ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+        this.eventSubscriptions.forEach(s => s.unsubscribe);
     }
 
     /**
