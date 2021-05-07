@@ -31,24 +31,17 @@ export class ProjectServices {
      */
     listProjects(consumer?: Project, userDependent?: boolean, onlyOpen?: boolean): Observable<Project[]> {
         let params: any = {
-            consumer: "SYSTEM"
-        };
-        if (consumer != undefined) { //if consumer provided override the default (SYSTEM)
-            params.consumer = consumer.getName();
-        };
-        if (userDependent != null) {
-            params.userDependent = userDependent;
-        }
-        if (onlyOpen != null) {
-            params.onlyOpen = onlyOpen;
+            consumer: consumer != null ? consumer.getName() : "SYSTEM",
+            userDependent: userDependent,
+            onlyOpen: onlyOpen
         }
         return this.httpMgr.doGet(this.serviceName, "listProjects", params).pipe(
             map(stResp => {
                 let projCollJson: any[] = stResp;
                 let projectList: Project[] = [];
-                for (let i = 0; i < projCollJson.length; i++) {
-                    projectList.push(Project.deserialize(projCollJson[i]));
-                }
+                projCollJson.forEach(pJson => {
+                    projectList.push(Project.deserialize(pJson));
+                })
                 //sort by name
                 projectList.sort((p1, p2) => p1.getName().toLocaleLowerCase().localeCompare(p2.getName().toLocaleLowerCase()));
                 return projectList;

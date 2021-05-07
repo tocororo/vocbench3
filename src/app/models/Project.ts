@@ -276,6 +276,14 @@ export enum LockLevel {
     NO = "NO",
 }
 
+export class Repository {
+    public id: string;
+    public location: string;
+    public description: string;
+    public readable: boolean;
+    public writable: boolean;
+}
+
 export class RepositorySummary {
     public id: string;
     public description: string;
@@ -326,13 +334,7 @@ export class RemoteRepositoryAccessConfig {
     public password: string;
 }
 
-export class Repository {
-    public id: string;
-    public location: string;
-    public description: string;
-    public readable: boolean;
-    public writable: boolean;
-}
+
 
 export class PreloadedDataSummary {
     public baseURI?: string;
