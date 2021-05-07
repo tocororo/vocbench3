@@ -3,7 +3,6 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { Project } from "../../models/Project";
 import { ACLEditorModal } from "../../project/projectACL/aclEditorModal";
-import { ProjectServices } from "../../services/projectServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
@@ -17,7 +16,6 @@ export class ProjectsAdministrationComponent {
 
     isAdminLogged: boolean;
 
-    private projectList: Project[];
     selectedProject: Project;
 
     projUsersAspect: string = "Project-Users management";
@@ -25,33 +23,34 @@ export class ProjectsAdministrationComponent {
     projSettingsAspect: string = "Project settings";
     selectedAspect: string;
 
-    constructor(private projectService: ProjectServices, private modalService: NgbModal) { }
+    //authorizations
+    isRoleMgmtAuthorized: boolean;
+    isGroupMgmtAuthorized: boolean;
+    isProjectMgmtAuthorized: boolean;
+
+    constructor(private modalService: NgbModal) { }
 
     ngOnInit() {
         this.isAdminLogged = VBContext.getLoggedUser() && VBContext.getLoggedUser().isAdmin();
 
-        if (this.isAdminLogged) { //admin can manage all the project
-            this.projectService.listProjects().subscribe(
-                projects => {
-                    this.projectList = projects;
-                }
-            );
-        }
-        //project manager can manage only the current project
-        else if (AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement) &&
-            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement)) { 
+        this.isRoleMgmtAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement);
+        this.isGroupMgmtAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement);
+        this.isProjectMgmtAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement);
+
+        if (!this.isAdminLogged && this.isProjectMgmtAuthorized && this.isRoleMgmtAuthorized) { 
+            //project manager (non-admin) can manage only the current project
             this.selectedProject = VBContext.getWorkingProject();
         }
-        if (this.isProjUserManagementAuthorized()) {
+        if (this.isRoleMgmtAuthorized && this.isGroupMgmtAuthorized) {
             this.selectedAspect = this.projUsersAspect;
-        } else if (this.isProjGroupManagementAuthorized()) {
+        } else if (this.isGroupMgmtAuthorized) {
             this.selectedAspect = this.projGroupsAspect;
         } else {
             this.selectedAspect = this.projSettingsAspect;
         }
     }
 
-    private selectProject(project: Project) {
+    selectProject(project: Project) {
         if (this.selectedProject != project) {
             this.selectedProject = project;
         }
@@ -60,19 +59,6 @@ export class ProjectsAdministrationComponent {
     editACL() {
         const modalRef: NgbModalRef = this.modalService.open(ACLEditorModal, new ModalOptions('sm'));
         modalRef.componentInstance.project = this.selectedProject;
-    }
-
-    isProjUserManagementAuthorized(): boolean {
-        return (
-            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement) &&
-            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement)
-        );
-    }
-    isProjGroupManagementAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement);
-    }
-    isProjSettingsAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement);
     }
 
 }

@@ -2,26 +2,26 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTURIResource } from '../models/ARTResources';
+import { Project } from '../models/Project';
 import { ProjectGroupBinding, UsersGroup } from "../models/User";
 import { HttpManager } from "../utils/HttpManager";
-import { ResourcesServices } from './resourcesServices';
 
 @Injectable()
 export class UsersGroupsServices {
 
     private serviceName = "UsersGroups";
 
-    constructor(private httpMgr: HttpManager, private resourcesService: ResourcesServices) { }
+    constructor(private httpMgr: HttpManager) { }
 
     /**
      * 
      */
     listGroups(): Observable<UsersGroup[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listGroups", params).pipe(
             map(resp => {
                 let groups: UsersGroup[] = [];
-                for (var i = 0; i < resp.length; i++) {
+                for (let i = 0; i < resp.length; i++) {
                     groups.push(UsersGroup.deserialize(resp[i]));
                 }
 
@@ -39,7 +39,7 @@ export class UsersGroupsServices {
      * @param groupIri 
      */
     getGroup(groupIri: ARTURIResource): Observable<UsersGroup> {
-        var params: any = {
+        let params: any = {
             groupIri: groupIri
         };
         return this.httpMgr.doGet(this.serviceName, "getGroup", params).pipe(
@@ -58,7 +58,7 @@ export class UsersGroupsServices {
      * @param logoUrl 
      */
     createGroup(shortName: string, fullName?: string, description?: string, webPage?: string, logoUrl?: string, iri?: string): Observable<UsersGroup> {
-        var params: any = {
+        let params: any = {
             shortName: shortName
         };
         if (fullName != null) {
@@ -86,7 +86,7 @@ export class UsersGroupsServices {
      * @param shortName 
      */
     updateGroupShortName(groupIri: ARTURIResource, shortName: string): Observable<UsersGroup> {
-        var params: any = {
+        let params: any = {
             groupIri: groupIri,
             shortName: shortName
         };
@@ -103,7 +103,7 @@ export class UsersGroupsServices {
      * @param fullName 
      */
     updateGroupFullName(groupIri: ARTURIResource, fullName: string): Observable<UsersGroup> {
-        var params: any = {
+        let params: any = {
             groupIri: groupIri,
             fullName: fullName
         };
@@ -120,7 +120,7 @@ export class UsersGroupsServices {
      * @param description 
      */
     updateGroupDescription(groupIri: ARTURIResource, description: string): Observable<UsersGroup> {
-        var params: any = {
+        let params: any = {
             groupIri: groupIri,
             description: description
         };
@@ -137,7 +137,7 @@ export class UsersGroupsServices {
      * @param webPage 
      */
     updateGroupWebPage(groupIri: ARTURIResource, webPage: string): Observable<UsersGroup> {
-        var params: any = {
+        let params: any = {
             groupIri: groupIri,
             webPage: webPage
         };
@@ -154,7 +154,7 @@ export class UsersGroupsServices {
      * @param logoUrl 
      */
     updateGroupLogoUrl(groupIri: ARTURIResource, logoUrl: string): Observable<UsersGroup> {
-        var params: any = {
+        let params: any = {
             groupIri: groupIri,
             logoUrl: logoUrl
         };
@@ -170,7 +170,7 @@ export class UsersGroupsServices {
      * @param groupName 
      */
     deleteGroup(groupIri: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             groupIri: groupIri
         };
         return this.httpMgr.doPost(this.serviceName, "deleteGroup", params);
@@ -178,13 +178,13 @@ export class UsersGroupsServices {
 
     /**
      * Assigns group to a user in a project
-     * @param projectName
+     * @param project
      * @param email
      * @param groupName
      */
-    assignGroupToUser(projectName: string, email: string, groupIri: ARTURIResource) {
-        var params: any = {
-            projectName: projectName,
+    assignGroupToUser(project: Project, email: string, groupIri: ARTURIResource) {
+        let params: any = {
+            projectName: project.getName(),
             email: email,
             groupIri: groupIri
         };
@@ -193,14 +193,14 @@ export class UsersGroupsServices {
 
     /**
      * 
-     * @param projectName
+     * @param project
      * @param email
      * @param groupName
      * @param limitations
      */
-    setGroupLimitationsToUser(projectName: string, email: string, groupIri: ARTURIResource, limitations: boolean) {
-        var params: any = {
-            projectName: projectName,
+    setGroupLimitationsToUser(project: Project, email: string, groupIri: ARTURIResource, limitations: boolean) {
+        let params: any = {
+            projectName: project.getName(),
             email: email,
             groupIri: groupIri,
             limitations: limitations
@@ -210,12 +210,12 @@ export class UsersGroupsServices {
 
     /**
      * Removes a role to a user in a project
-     * @param projectName
+     * @param project
      * @param email
      */
-    removeGroupFromUser(projectName: string, email: string) {
-        var params: any = {
-            projectName: projectName,
+    removeGroupFromUser(project: Project, email: string) {
+        let params: any = {
+            projectName: project.getName(),
             email: email
         };
         return this.httpMgr.doPost(this.serviceName, "removeGroupFromUser", params);
@@ -223,13 +223,13 @@ export class UsersGroupsServices {
 
     /**
      * 
-     * @param projectName 
+     * @param project 
      * @param groupIri 
      * @param scheme 
      */
-    addOwnedSchemeToGroup(projectName: string, groupIri: ARTURIResource, scheme: ARTURIResource) {
-        var params: any = {
-            projectName: projectName,
+    addOwnedSchemeToGroup(project: Project, groupIri: ARTURIResource, scheme: ARTURIResource) {
+        let params: any = {
+            projectName: project.getName(),
             groupIri: groupIri,
             scheme: scheme
         };
@@ -242,9 +242,9 @@ export class UsersGroupsServices {
      * @param groupIri 
      * @param scheme 
      */
-    removeOwnedSchemeFromGroup(projectName: string, groupIri: ARTURIResource, scheme: ARTURIResource) {
-        var params: any = {
-            projectName: projectName,
+    removeOwnedSchemeFromGroup(project: Project, groupIri: ARTURIResource, scheme: ARTURIResource) {
+        let params: any = {
+            projectName: project.getName(),
             groupIri: groupIri,
             scheme: scheme
         };
@@ -253,12 +253,12 @@ export class UsersGroupsServices {
 
     /**
      * 
-     * @param projectName 
+     * @param project
      * @param groupIri 
      */
-    getProjectGroupBinding(projectName: string, groupIri: ARTURIResource): Observable<ProjectGroupBinding> {
-        var params: any = {
-            projectName: projectName,
+    getProjectGroupBinding(project: Project, groupIri: ARTURIResource): Observable<ProjectGroupBinding> {
+        let params: any = {
+            projectName: project.getName(),
             groupIri: groupIri
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectGroupBinding", params);

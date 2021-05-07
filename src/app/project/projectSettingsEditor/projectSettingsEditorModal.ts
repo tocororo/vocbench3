@@ -60,7 +60,7 @@ export class ProjSettingsEditorModal {
 
     changeBlacklisting() {
         this.blacklisting = !this.blacklisting;
-        this.projectService.setBlacklistingEnabled(this.project.getName(), this.blacklisting).subscribe();
+        this.projectService.setBlacklistingEnabled(this.project, this.blacklisting).subscribe();
         this.project.setBlacklistingEnabled(this.blacklisting);
     }
 
@@ -68,7 +68,7 @@ export class ProjSettingsEditorModal {
 
     changeOpenAtStartup() {
         this.openAtStartup = !this.openAtStartup;
-        this.projectService.setOpenAtStartup(this.project.getName(), this.openAtStartup).subscribe();
+        this.projectService.setOpenAtStartup(this.project, this.openAtStartup).subscribe();
         this.project.setOpenAtStartup(this.openAtStartup);
     }
 
@@ -78,7 +78,7 @@ export class ProjSettingsEditorModal {
         return this.extensionService.getExtensions(ExtensionPointID.RENDERING_ENGINE_ID).pipe(
             mergeMap((extensions: ExtensionFactory[]) => {
                 this.rendEngExtensions = <ConfigurableExtensionFactory[]>extensions;
-                return this.projectService.getRenderingEngineConfiguration(this.project.getName()).pipe(
+                return this.projectService.getRenderingEngineConfiguration(this.project).pipe(
                     map(config => {
                         return this.rendEngConfigurator.forceConfiguration(config.factoryID, config.settings);
                     })
@@ -98,7 +98,7 @@ export class ProjSettingsEditorModal {
             configType: this.selectedRendEngExtensionConf.type,
             configuration: this.selectedRendEngExtensionConf.getPropertiesAsMap()
         }
-        this.projectService.updateRenderingEngineConfiguration(this.project.getName(), pluginSpec).subscribe(
+        this.projectService.updateRenderingEngineConfiguration(this.project, pluginSpec).subscribe(
             () => {
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.RENDERING_ENGINE_CONFIG_UPDATED"});
             }
@@ -111,7 +111,7 @@ export class ProjSettingsEditorModal {
         return this.extensionService.getExtensions(ExtensionPointID.URI_GENERATOR_ID).pipe(
             mergeMap((extensions: ExtensionFactory[]) => {
                 this.uriGenExtensions = <ConfigurableExtensionFactory[]>extensions;
-                return this.projectService.getURIGeneratorConfiguration(this.project.getName()).pipe(
+                return this.projectService.getURIGeneratorConfiguration(this.project).pipe(
                     map(config => {
                         return this.uriGenConfigurator.forceConfiguration(config.factoryID, config.settings);
                     })
@@ -131,7 +131,7 @@ export class ProjSettingsEditorModal {
             configType: this.selectedUriGenExtensionConf.type,
             configuration: this.selectedUriGenExtensionConf.getPropertiesAsMap()
         }
-        this.projectService.updateURIGeneratorConfiguration(this.project.getName(), pluginSpec).subscribe(
+        this.projectService.updateURIGeneratorConfiguration(this.project, pluginSpec).subscribe(
             () => {
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.URI_GENERATOR_CONFIG_UPDATED"});
             }

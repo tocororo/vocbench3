@@ -37,7 +37,7 @@ export class ACLEditorModal {
 
     initAccessStatus() {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.projectService.getAccessStatus(this.project.getName()).subscribe(
+        this.projectService.getAccessStatus(this.project).subscribe(
             (projACL: AccessStatus) => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.consumers = projACL.consumers;
@@ -47,13 +47,13 @@ export class ACLEditorModal {
         )
     }
 
-    private onAccessLevelChange(consumer: ConsumerACL, newLevel: AccessLevel) {
+    onAccessLevelChange(consumer: ConsumerACL, newLevel: AccessLevel) {
         let oldLevel: AccessLevel = consumer.availableACLLevel;
         let message: Translation;
         if (newLevel == this.nullAccessLevel) {
-            message = {key:"MESSAGES.ACL_REVOKE_ACCESS_CONFIRM", params:{project: this.project.getName(), consumer: consumer.name}};
+            message = {key:"MESSAGES.ACL_REVOKE_ACCESS_CONFIRM", params:{project: this.project.getName(true), consumer: consumer.name}};
         } else {
-            message = {key:"MESSAGES.ACL_CHANGE_ACCESS_CONFIRM", params:{project: this.project.getName(), level: newLevel, consumer: consumer.name}};
+            message = {key:"MESSAGES.ACL_CHANGE_ACCESS_CONFIRM", params:{project: this.project.getName(true), level: newLevel, consumer: consumer.name}};
         }
         this.basicModals.confirm({key:"PROJECTS.ACTIONS.UPDATE_ACCESS_LEVEL"}, message, ModalType.warning).then(
             () => {
@@ -81,9 +81,9 @@ export class ACLEditorModal {
         let oldLevel: AccessLevel = this.universalACLLevel;
         let message: Translation;
         if (newLevel == this.nullAccessLevel) {
-            message = {key:"MESSAGES.ACL_REVOKE_UNIVERSAL_ACCESS_CONFIRM", params:{project: this.project.getName()}};
+            message = {key:"MESSAGES.ACL_REVOKE_UNIVERSAL_ACCESS_CONFIRM", params:{project: this.project.getName(true)}};
         } else {
-            message = {key:"MESSAGES.ACL_CHANGE_UNIVERSAL_ACCESS_CONFIRM", params:{project: this.project.getName(), level: newLevel}};
+            message = {key:"MESSAGES.ACL_CHANGE_UNIVERSAL_ACCESS_CONFIRM", params:{project: this.project.getName(true), level: newLevel}};
         }
         this.basicModals.confirm({key:"PROJECTS.ACTIONS.UPDATE_ACCESS_LEVEL"}, message, ModalType.warning).then(
             () => { //confirmed
@@ -106,7 +106,7 @@ export class ACLEditorModal {
         );
     }
 
-    private onLockLevelChange(newLevel: LockLevel) {
+    onLockLevelChange(newLevel: LockLevel) {
         var oldLevel: LockLevel = this.lock.availableLockLevel;
         this.basicModals.confirm({key:"PROJECTS.ACTIONS.UPDATE_LOCK_LEVEL"}, {key:"MESSAGES.ACL_CHANGE_LOCK_CONFIRM", params:{level: newLevel}}, ModalType.warning).then(
             () => {
@@ -130,7 +130,7 @@ export class ACLEditorModal {
         );
     }
 
-    private showConsumer(consumer: ConsumerACL): boolean {
+    showConsumer(consumer: ConsumerACL): boolean {
         return this.filterProject == null || consumer.name.toLocaleUpperCase().indexOf(this.filterProject.toLocaleUpperCase()) != -1;
     }
     

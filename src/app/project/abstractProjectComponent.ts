@@ -1,8 +1,8 @@
 import { Directive } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import { forkJoin, Observable } from "rxjs";
-import { Project, ProjectFacets, ProjectViewMode } from "../models/Project";
+import { forkJoin, Observable, Subscription } from "rxjs";
+import { Project, ProjectFacets, ProjectLabelCtx, ProjectViewMode } from "../models/Project";
 import { Multimap } from '../models/Shared';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from '../services/projectServices';
@@ -21,7 +21,6 @@ export abstract class AbstractProjectComponent {
     ProjectViewMode = ProjectViewMode;
     visualizationMode: ProjectViewMode;
     rendering: boolean;
-    projLabelLang: string;
 
     protected projectList: Project[];
     protected projectDirs: ProjectDirEntry[];
@@ -50,10 +49,7 @@ export abstract class AbstractProjectComponent {
         this.initProjects();
 
         this.rendering = Cookie.getCookie(Cookie.PROJECT_RENDERING) == "true";
-        this.projLabelLang = this.translateService.currentLang;
-        this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-            this.projLabelLang = event.lang;
-        })
+        ProjectLabelCtx.renderingEnabled = this.rendering;
     }
 
     initProjects() {
@@ -135,7 +131,7 @@ export abstract class AbstractProjectComponent {
     }
 
     protected isWorkingProject(project: Project): boolean {
-        var workingProj = VBContext.getWorkingProject();
+        let workingProj = VBContext.getWorkingProject();
         return (workingProj != undefined && workingProj.getName() == project.getName());
     }
 
@@ -189,6 +185,7 @@ export abstract class AbstractProjectComponent {
     switchRendering() {
         this.rendering = !this.rendering;
         Cookie.setCookie(Cookie.PROJECT_RENDERING, this.rendering+"");
+        ProjectLabelCtx.renderingEnabled = this.rendering;
     }
 
     settings() {

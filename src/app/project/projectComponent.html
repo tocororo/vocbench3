@@ -1,5 +1,5 @@
 <div class="vbox">
-    <div class="card card-default vbox">
+    <div class="card vbox">
         <div class="card-header">
             <button class="btn btn-xs btn-light" (click)="createProject()">
                 {{'ACTIONS.CREATE'|translate}}
@@ -68,7 +68,7 @@
                             <ng-container *ngIf="pd.open">
                                 <div *ngFor="let p of pd.projects" class="listItem project-row">
                                     <div *ngIf="columnOrder['name']" class="text-center ellipsable" [ngStyle]="{ order: columnOrder['name'].order, flex: columnOrder['name'].flex }">
-                                        {{p.getLabel(projLabelLang, rendering)}}
+                                        {{p.getName(true)}}
                                     </div>
                                     <div *ngIf="columnOrder['name']" class="text-center" [ngStyle]="{ order: columnOrder['open'].order, flex: columnOrder['open'].flex }">
                                         <button class="btn btn-light" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
@@ -78,7 +78,7 @@
                                         </button>
                                     </div>
                                     <div *ngIf="columnOrder['accessed']" class="text-center" [ngStyle]="{ order: columnOrder['accessed'].order, flex: columnOrder['accessed'].flex }">
-                                        <input type="radio" name="projRadioGrp" [value]="p.getName()" (click)="activateProject(p)" [checked]="isWorkingProject(p)" [disabled]="!p.isOpen()"/>
+                                        <input type="radio" name="projRadioGrp" (click)="activateProject(p)" [checked]="isWorkingProject(p)" [disabled]="!p.isOpen()"/>
                                     </div>
                                     <div *ngIf="columnOrder['model']" class="text-center" [ngStyle]="{ order: columnOrder['model'].order, flex: columnOrder['model'].flex }">
                                         {{p.getModelType(true)}}
@@ -116,7 +116,7 @@
                 <div>
                     <div *ngFor="let p of projectList" class="listItem project-row">
                         <div *ngIf="columnOrder['name']" class="text-center ellipsable" [ngStyle]="{ order: columnOrder['name'].order, flex: columnOrder['name'].flex }">
-                            {{p.getLabel(projLabelLang, rendering)}}
+                            {{p.getName(true)}}
                         </div>
                         <div *ngIf="columnOrder['name']" class="text-center" [ngStyle]="{ order: columnOrder['open'].order, flex: columnOrder['open'].flex }">
                             <button class="btn btn-light" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
@@ -126,7 +126,7 @@
                             </button>
                         </div>
                         <div *ngIf="columnOrder['accessed']" class="text-center" [ngStyle]="{ order: columnOrder['accessed'].order, flex: columnOrder['accessed'].flex }">
-                            <input type="radio" name="projRadioGrp" [value]="p.getName()" (click)="activateProject(p)" [checked]="isWorkingProject(p)" [disabled]="!p.isOpen()"/>
+                            <input type="radio" name="projRadioGrp" (click)="activateProject(p)" [checked]="isWorkingProject(p)" [disabled]="!p.isOpen()"/>
                         </div>
                         <div *ngIf="columnOrder['model']" class="text-center" [ngStyle]="{ order: columnOrder['model'].order, flex: columnOrder['model'].flex }">
                             {{p.getModelType(true)}}

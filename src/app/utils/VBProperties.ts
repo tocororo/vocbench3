@@ -284,7 +284,7 @@ export class VBProperties {
     ============================= */
 
     initProjectUserBindings(projectCtx: ProjectContext): Observable<void> {
-        return this.adminService.getProjectUserBinding(projectCtx.getProject().getName(), VBContext.getLoggedUser().getEmail()).pipe(
+        return this.adminService.getProjectUserBinding(projectCtx.getProject(), VBContext.getLoggedUser().getEmail()).pipe(
             map(pub => {
                 projectCtx.setProjectUserBinding(pub);
             })

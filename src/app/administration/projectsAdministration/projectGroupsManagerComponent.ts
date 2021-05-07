@@ -59,7 +59,7 @@ export class ProjectGroupsManagerComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['project'] && changes['project'].currentValue) {
-            this.translationParam = { projName: this.project.getName() };
+            this.translationParam = { projName: this.project.getName(true) };
             if (this.selectedGroup) {
                 this.initSettings();
             }
@@ -135,7 +135,7 @@ export class ProjectGroupsManagerComponent {
             })
         );
 
-        let getPGBindingFn = this.groupsService.getProjectGroupBinding(this.project.getName(), this.selectedGroup.iri).pipe(
+        let getPGBindingFn = this.groupsService.getProjectGroupBinding(this.project, this.selectedGroup.iri).pipe(
             map(binding => {
                 let ownedSchemesTemp: ARTURIResource[] = [];
                 if (binding.ownedSchemes != null) {
@@ -384,7 +384,7 @@ export class ProjectGroupsManagerComponent {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.ownedSchemes, scheme)) {
                             this.ownedSchemes.push(scheme);
-                            this.groupsService.addOwnedSchemeToGroup(this.project.getName(), this.selectedGroup.iri, scheme).subscribe();
+                            this.groupsService.addOwnedSchemeToGroup(this.project, this.selectedGroup.iri, scheme).subscribe();
                         }
                     },
                     () => {}
@@ -395,7 +395,7 @@ export class ProjectGroupsManagerComponent {
 
     removeScheme() {
         this.ownedSchemes.splice(this.ownedSchemes.indexOf(this.selectedScheme), 1);
-        this.groupsService.removeOwnedSchemeFromGroup(this.project.getName(), this.selectedGroup.iri, this.selectedScheme).subscribe();
+        this.groupsService.removeOwnedSchemeFromGroup(this.project, this.selectedGroup.iri, this.selectedScheme).subscribe();
         this.selectedScheme = null;
     }
 

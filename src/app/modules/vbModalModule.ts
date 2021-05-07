@@ -11,6 +11,7 @@ import { AssistedSearchModal } from '../alignment/resourceAlignment/assistedSear
 import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assistedSearchResultModal';
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
 import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
+import { ProjectSelectionModal } from '../project/projectListPanel/projectSelectionModal';
 import { LoadShapesModal } from '../shacl/loadShapesModal';
 import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperModal';
 import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
@@ -115,6 +116,7 @@ import { UserModule } from './userModule';
         NewXLabelModal,
         PluginConfigModal,
         PrefixNamespaceModal,
+        ProjectSelectionModal,
         PromptModal,
         PromptPrefixedModal,
         PromptPropertiesModal,
@@ -184,6 +186,7 @@ import { UserModule } from './userModule';
         NewXLabelModal,
         PluginConfigModal,
         PrefixNamespaceModal,
+        ProjectSelectionModal,
         PromptModal,
         PromptPrefixedModal,
         PromptPropertiesModal,

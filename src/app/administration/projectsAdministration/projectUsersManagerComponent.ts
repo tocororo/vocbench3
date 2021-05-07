@@ -55,14 +55,14 @@ export class ProjectUsersManagerComponent {
     private resViewPref: ResourceViewPreference;
     private puTemplate: PartitionFilterPreference;
 
-    constructor(private userService: UserServices, private projectService: ProjectServices, private adminService: AdministrationServices,
+    constructor(private userService: UserServices, private adminService: AdministrationServices,
         private groupsService: UsersGroupsServices, private settingsService: SettingsServices,
         private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['project'] && changes['project'].currentValue) {
-            this.userService.listUsersBoundToProject(this.project.getName()).subscribe(
+            this.userService.listUsersBoundToProject(this.project).subscribe(
                 users => {
                     this.usersBound = users;
                     this.puBinding = null;
@@ -113,7 +113,7 @@ export class ProjectUsersManagerComponent {
     private selectUser(user: User) {
         this.selectedUser = user;
         //init PUBinding
-        this.adminService.getProjectUserBinding(this.project.getName(), this.selectedUser.getEmail()).subscribe(
+        this.adminService.getProjectUserBinding(this.project, this.selectedUser.getEmail()).subscribe(
             puBinding => {
                 this.puBinding = puBinding;
                 this.selectedUserRole = null;
@@ -147,7 +147,7 @@ export class ProjectUsersManagerComponent {
             data => {
                 let user: User = data.user;
                 let roles: string[] = data.roles;
-                this.adminService.addRolesToUser(this.project.getName(), user.getEmail(), roles).subscribe(
+                this.adminService.addRolesToUser(this.project, user.getEmail(), roles).subscribe(
                     stResp => {
                         this.usersBound.push(user);
                     }
@@ -158,10 +158,10 @@ export class ProjectUsersManagerComponent {
     }
 
     removeUserFromProject() {
-        this.basicModals.confirm({ key: "ADMINISTRATION.ACTIONS.REMOVE_USER" }, { key: "MESSAGES.REMOVE_USER_FROM_PROJ_CONFIRM", params: { user: this.selectedUser.getShow(), project: this.project.getName() } },
+        this.basicModals.confirm({ key: "ADMINISTRATION.ACTIONS.REMOVE_USER" }, { key: "MESSAGES.REMOVE_USER_FROM_PROJ_CONFIRM", params: { user: this.selectedUser.getShow(), project: this.project.getName(true) } },
             ModalType.warning).then(
                 () => {
-                    this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
+                    this.adminService.removeUserFromProject(this.project, this.selectedUser.getEmail()).subscribe(
                         stResp => {
                             for (let i = 0; i < this.usersBound.length; i++) {
                                 if (this.usersBound[i].getEmail() == this.selectedUser.getEmail()) {
@@ -182,30 +182,27 @@ export class ProjectUsersManagerComponent {
      * PROJECT-USER SETTINGS PANEL
      * ========================== */
 
-    private cloneSettings() {
-        this.projectService.listProjects().subscribe(
-            projects => {
-                this.basicModals.select({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "ACTIONS.SELECT_TARGET_PROJECT" }, projects.map(p => p.getName())).then(
-                    targetProj => {
-                        this.basicModals.confirm({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "MESSAGES.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM", params: { user: this.selectedUser.getShow(), project: targetProj } },
-                            ModalType.warning).then(
+    cloneSettings() {
+        this.basicModals.selectProject({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "ACTIONS.SELECT_TARGET_PROJECT" }).then(
+            (targetProj: Project) => {
+                this.basicModals.confirm({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "MESSAGES.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM", 
+                    params: { user: this.selectedUser.getShow(), project: targetProj.getName(true) } },
+                    ModalType.warning).then(
+                        () => {
+                            //clone binding-related settings (roles, group, language)
+                            let userIri: ARTURIResource = this.selectedUser.getIri();
+                            this.adminService.clonePUBinding(userIri, this.project, userIri, targetProj).subscribe(
                                 () => {
-                                    //clone binding-related settings (roles, group, language)
-                                    let userIri: ARTURIResource = this.selectedUser.getIri();
-                                    this.adminService.clonePUBinding(userIri, this.project.getName(), userIri, targetProj).subscribe(
-                                        () => {
-                                            this.basicModals.alert({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "MESSAGES.SETTINGS_DUPLICATED_SUCCESSFULLY" });
-                                        }
-                                    );
-                                    //clone template
-                                    this.updateTemplate(new Project(targetProj));
+                                    this.basicModals.alert({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "MESSAGES.SETTINGS_DUPLICATED_SUCCESSFULLY" });
                                 }
-                            )
-                    },
-                    () => { }
-                )
-            }
-        );
+                            );
+                            //clone template
+                            this.updateTemplate(targetProj);
+                        }
+                    )
+            },
+            () => { }
+        )
     }
 
     //=========== ROLES ===========
@@ -229,7 +226,7 @@ export class ProjectUsersManagerComponent {
     }
 
     private addRole() {
-        this.adminService.addRolesToUser(this.project.getName(), this.selectedUser.getEmail(), [this.selectedRole.getName()]).subscribe(
+        this.adminService.addRolesToUser(this.project, this.selectedUser.getEmail(), [this.selectedRole.getName()]).subscribe(
             stResp => {
                 this.puBinding.addRole(this.selectedRole.getName());
                 this.selectedRole = null;
@@ -238,7 +235,7 @@ export class ProjectUsersManagerComponent {
     }
 
     private removeRole() {
-        this.adminService.removeRoleFromUser(this.project.getName(), this.selectedUser.getEmail(), this.selectedUserRole).subscribe(
+        this.adminService.removeRoleFromUser(this.project, this.selectedUser.getEmail(), this.selectedUserRole).subscribe(
             stResp => {
                 this.puBinding.removeRole(this.selectedUserRole);
                 this.selectedUserRole = null;
@@ -289,7 +286,7 @@ export class ProjectUsersManagerComponent {
     }
 
     private assignGroup() {
-        this.groupsService.assignGroupToUser(this.project.getName(), this.selectedUser.getEmail(), this.selectedGroup.iri).subscribe(
+        this.groupsService.assignGroupToUser(this.project, this.selectedUser.getEmail(), this.selectedGroup.iri).subscribe(
             stResp => {
                 this.puBinding.setGroup(this.selectedGroup);
                 this.selectedGroup = null;
@@ -298,7 +295,7 @@ export class ProjectUsersManagerComponent {
     }
 
     private removeGroup() {
-        this.groupsService.removeGroupFromUser(this.project.getName(), this.selectedUser.getEmail()).subscribe(
+        this.groupsService.removeGroupFromUser(this.project, this.selectedUser.getEmail()).subscribe(
             stResp => {
                 this.puBinding.removeGroup();
                 this.selectedUserGroup = null;
@@ -308,7 +305,7 @@ export class ProjectUsersManagerComponent {
 
     private changeGroupLimitations() {
         let limitations: boolean = !this.puBinding.isSubjectToGroupLimitations();
-        this.groupsService.setGroupLimitationsToUser(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getGroup().iri, limitations).subscribe(
+        this.groupsService.setGroupLimitationsToUser(this.project, this.selectedUser.getEmail(), this.puBinding.getGroup().iri, limitations).subscribe(
             stResp => {
                 this.puBinding.setGroupLimitations(limitations);
             }
@@ -436,7 +433,7 @@ export class ProjectUsersManagerComponent {
     }
 
     private updateLanguagesOfUserInProject() {
-        this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
+        this.adminService.updateLanguagesOfUserInProject(this.project, this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
             () => {
                 this.selectedUserLang = null;
                 this.initPULanguages();

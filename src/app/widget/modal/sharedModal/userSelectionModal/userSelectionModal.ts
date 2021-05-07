@@ -21,7 +21,7 @@ export class UserSelectionModal {
 
     ngOnInit() {
         if (this.projectDepending) {
-            this.userService.listUsersBoundToProject(VBContext.getWorkingProject().getName()).subscribe(
+            this.userService.listUsersBoundToProject(VBContext.getWorkingProject()).subscribe(
                 users => {
                     this.userList = users;
                 }

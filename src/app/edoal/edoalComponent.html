@@ -8,15 +8,15 @@
         <div class="hbox" style="flex: initial; align-items: center;padding: 8px">
             <div class="text-center" style="flex: 1; border-right: 1px solid black">
                 <span class="fas fa-chevron-left mr-1"></span>
-                <label>{{leftProjCtx.getProject().getName()}}</label>
+                <label>{{leftProjCtx.getProject().getName(true)}}</label>
             </div>
             <div class="text-center" style="flex: 1;">
-                <label>{{rightProjCtx.getProject().getName()}}</label>
+                <label>{{rightProjCtx.getProject().getName(true)}}</label>
                 <span class="fas fa-chevron-right ml-1"></span>
             </div>
         </div>
 
-        <div class="card card-default" style="margin-bottom: 4px;">
+        <div class="card" style="margin-bottom: 4px;">
             <div class="card-header">
                 <label>{{'EDOAL.NEW_ALIGNMENT'|translate}}</label>
             </div>
@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="card card-default vbox">
+        <div class="card vbox">
             <div class="card-header">
                 <label style="flex: 1;">{{'EDOAL.ALIGNMENTS'|translate}}</label>
                 <div class="btn-toolbar">

@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { CustomForm } from 'src/app/models/CustomForms';
+import { Project } from 'src/app/models/Project';
+import { ProjectSelectionModal } from 'src/app/project/projectListPanel/projectSelectionModal';
 import { Cookie } from 'src/app/utils/Cookie';
 import { VBContext } from 'src/app/utils/VBContext';
-import { ModalOptions, ModalType, TextOrTranslation, SelectionOption } from '../Modals';
+import { ModalOptions, ModalType, SelectionOption, TextOrTranslation } from '../Modals';
 import { AlertModal } from "./alertModal/alertModal";
 import { ConfirmCheckModal, ConfirmCheckOptions } from './confirmModal/confirmCheckModal';
 import { ConfirmModal } from './confirmModal/confirmModal';
@@ -170,6 +172,15 @@ export class BasicModalServices {
         }
         modalRef.componentInstance.options = options;
         if (type != null) modalRef.componentInstance.type = type;
+        return modalRef.result;
+    }
+
+    selectProject(title: TextOrTranslation, msg: TextOrTranslation): Promise<Project> {
+        const modalRef: NgbModalRef = this.modalService.open(ProjectSelectionModal, new ModalOptions());
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        if (msg != null) {
+            modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
+        }
         return modalRef.result;
     }
 

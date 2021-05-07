@@ -33,8 +33,20 @@ export class Project {
         this.name = name;
     }
 
-    public getName(): string {
-        return this.name;
+    /**
+     * Returns the name of the project. 
+     * If labelRequired is true (if not provided is false by default),
+     * returns the rendering label according the rendering status and the language
+     * @param label 
+     * @returns 
+     */
+    public getName(labelRequired: boolean = false): string {
+        let name = this.name;
+        //returns the label only if explicity required through the arg, if rendering is enabled and if label in the given language exists
+        if (labelRequired && ProjectLabelCtx.renderingEnabled && this.labels[ProjectLabelCtx.language]) {
+            name = this.labels[ProjectLabelCtx.language]
+        }
+        return name;
     }
 
     public setBaseURI(baseURI: string) {
@@ -202,21 +214,6 @@ export class Project {
 
     public getLabels(): {[key: string]: string} {
         return this.labels;
-    }
-
-    /**
-     * Returns the label of the project in the given language.
-     * If none label is available in that language, returns the name
-     * @param lang
-     * @param rendering if true returns the label, false returns the name
-     * @returns 
-     */
-    public getLabel(lang: string, rendering: boolean) {
-        let label: string = this.name;
-        if (rendering && this.labels[lang]) {
-            label = this.labels[lang];
-        }
-        return label;
     }
 
     public static deserialize(projJson: any): Project {
@@ -438,4 +435,17 @@ export class ProjectUtils {
         { facet: ProjectFacets.prjValidationEnabled, translationKey: "MODELS.PROJECT.VALIDATION" }
     ];
 
+}
+
+/**
+ * This class keep the rendering status and the language for the rendering of the projects.
+ * I need to declare it here (instead of in VBContext or VBProperties for example) since it
+ * needs to be references in Project#getName() without injecting any service and 
+ * preventing cycling dependencies (e.g. VBContext -> Project -> VBContext).
+ * renderingEnabled needs to be updated each time it is changed from the project list panel (in Project page or modal)
+ * language needs to be updated each time the i18n language is changed
+ */
+export class ProjectLabelCtx {
+    public static renderingEnabled: boolean = false;
+    public static language: string;
 }

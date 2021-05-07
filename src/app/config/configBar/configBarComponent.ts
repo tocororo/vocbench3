@@ -7,7 +7,7 @@ import { ExportServices } from "src/app/services/exportServices";
 import { Cookie } from 'src/app/utils/Cookie';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { VersionInfo } from "../../models/History";
-import { Project } from "../../models/Project";
+import { Project, ProjectLabelCtx } from "../../models/Project";
 import { AdministrationServices } from "../../services/administrationServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { ShaclServices } from "../../services/shaclServices";
@@ -26,10 +26,10 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 })
 export class ConfigBarComponent {
 
-    private currentProject: Project;
+    currentProject: Project;
 
     privacyStatementAvailable: boolean = false;
-    private shaclEnabled: boolean = false;
+    shaclEnabled: boolean = false;
 
     translateLangs: string[];
     translateLang: string;
@@ -123,7 +123,7 @@ export class ConfigBarComponent {
         this.shaclEnabled = VBContext.getWorkingProject().isShaclEnabled();
     }
 
-    private clearData() {
+    clearData() {
         this.basicModals.confirm({key:"ACTIONS.CLEAR_DATA"}, {key: "MESSAGES.CLEAR_DATA_CONFIRM"}, ModalType.warning).then(
             () => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -144,7 +144,7 @@ export class ConfigBarComponent {
         );
     }
 
-    private changeWGraph() {
+    changeWGraph() {
         this.exportServices.getNamedGraphs().subscribe(
             graphs => {
                 this.sharedModals.selectResource({key: "APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH"}, null, graphs, false).then(g => {
@@ -192,6 +192,7 @@ export class ConfigBarComponent {
     onTranslateLangChanged() {
         this.translate.use(this.translateLang);
         Cookie.setCookie(Cookie.TRANSLATE_LANG, this.translateLang);
+        ProjectLabelCtx.language = this.translateLang;
     }
 
     /* ===============================

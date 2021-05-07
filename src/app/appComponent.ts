@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { TranslateService } from '@ngx-translate/core';
-import { Project } from "./models/Project";
+import { Project, ProjectLabelCtx } from "./models/Project";
 import { EDOAL, OntoLex, OWL, RDFS, SKOS } from "./models/Vocabulary";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
 import { Cookie } from './utils/Cookie';
@@ -39,13 +39,14 @@ export class AppComponent {
         }
         //fallback when a translation isn't found in the current language
         translate.setDefaultLang('en');
-        //restore the lang to use, check first the cookies, if not found, set english by default
-        let langCookie: string = Cookie.getCookie(Cookie.TRANSLATE_LANG);
-        if (langCookie != null && translate.getLangs().includes(langCookie)) {
-            translate.use(langCookie);
-        } else {
-            translate.use('en');
+        //restore the lang to use, check first the cookies, if not found or not among the supported, set english by default
+        let transLang: string = Cookie.getCookie(Cookie.TRANSLATE_LANG);
+        if (transLang == null || !translate.getLangs().includes(transLang)) {
+            transLang = "en";
         }
+        translate.use(transLang);
+        ProjectLabelCtx.language = transLang; //init lang for project rendering
+
     }
 
     ngOnInit() {

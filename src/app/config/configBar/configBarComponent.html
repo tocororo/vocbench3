@@ -29,7 +29,7 @@
                 <div class="btn-group btn-group-xs" role="group">
                     <a href="#" class="btn btn-light disabled" style="pointer-events: none; opacity: initial" role="button">
                         <ng-container *ngIf="isProjectAccessed()">
-                            {{currentProject.getName()}}
+                            {{currentProject.getName(true)}}
                         </ng-container>
                         <ng-container *ngIf="!isProjectAccessed()">
                             ------

@@ -303,9 +303,9 @@ export class ProjectServices {
      * 
      * @param projectName 
      */
-    getAccessStatus(projectName: string): Observable<AccessStatus> {
+    getAccessStatus(project: Project): Observable<AccessStatus> {
         let params = {
-            projectName: projectName
+            projectName: project.getName()
         };
         return this.httpMgr.doGet(this.serviceName, "getAccessStatus", params).pipe(
             map(stResp => {
@@ -654,9 +654,9 @@ export class ProjectServices {
         );
     }
 
-    getProjectFacets(projectName: string) {
+    getProjectFacets(project: Project) {
         let params = {
-            projectName: projectName
+            projectName: project.getName()
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectFacets", params);
     }
@@ -666,9 +666,9 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "createFacetIndex", params);
     }
 
-    recreateFacetIndexForProject(projectName: string) {
+    recreateFacetIndexForProject(project: Project) {
         let params = {
-            projectName: projectName
+            projectName: project.getName()
         };
         return this.httpMgr.doPost(this.serviceName, "recreateFacetIndexForProject", params);
     }
@@ -684,17 +684,17 @@ export class ProjectServices {
      * @param projectName 
      * @param projectName 
      */
-    setBlacklistingEnabled(projectName: string, blacklistingEnabled: boolean) {
+    setBlacklistingEnabled(project: Project, blacklistingEnabled: boolean) {
         let params = {
-            projectName: projectName,
+            projectName: project.getName(),
             blacklistingEnabled: blacklistingEnabled
         };
         return this.httpMgr.doPost(this.serviceName, "setBlacklistingEnabled", params);
     }
 
-    getURIGeneratorConfiguration(projectName: string): Observable<{ factoryID: string, settings: Settings }> {
+    getURIGeneratorConfiguration(project: Project): Observable<{ factoryID: string, settings: Settings }> {
         let params = {
-            projectName: projectName
+            projectName: project.getName()
         };
         return this.httpMgr.doGet(this.serviceName, "getURIGeneratorConfiguration", params).pipe(
             map(stResp => {
@@ -707,17 +707,17 @@ export class ProjectServices {
         );
     }
 
-    updateURIGeneratorConfiguration(projectName: string, uriGeneratorSpecification: PluginSpecification) {
+    updateURIGeneratorConfiguration(project: Project, uriGeneratorSpecification: PluginSpecification) {
         let params = {
-            projectName: projectName,
+            projectName: project.getName(),
             uriGeneratorSpecification: JSON.stringify(uriGeneratorSpecification)
         };
         return this.httpMgr.doPost(this.serviceName, "updateURIGeneratorConfiguration", params);
     }
 
-    getRenderingEngineConfiguration(projectName: string): Observable<{ factoryID: string, settings: Settings }> {
+    getRenderingEngineConfiguration(project: Project): Observable<{ factoryID: string, settings: Settings }> {
         let params = {
-            projectName: projectName
+            projectName: project.getName()
         };
         return this.httpMgr.doGet(this.serviceName, "getRenderingEngineConfiguration", params).pipe(
             map(stResp => {
@@ -730,24 +730,24 @@ export class ProjectServices {
         );
     }
 
-    updateRenderingEngineConfiguration(projectName: string, renderingEngineSpecification: PluginSpecification) {
+    updateRenderingEngineConfiguration(project: Project, renderingEngineSpecification: PluginSpecification) {
         let params = {
-            projectName: projectName,
+            projectName: project.getName(),
             renderingEngineSpecification: JSON.stringify(renderingEngineSpecification)
         };
         return this.httpMgr.doPost(this.serviceName, "updateRenderingEngineConfiguration", params);
     }
 
-    getOpenAtStartup(projectName: string) {
+    getOpenAtStartup(project: Project) {
         let params = {
-            projectName: projectName
+            projectName: project.getName()
         };
         return this.httpMgr.doGet(this.serviceName, "getOpenAtStartup", params);
     }
 
-    setOpenAtStartup(projectName: string, openAtStartup: boolean) {
+    setOpenAtStartup(project: Project, openAtStartup: boolean) {
         let params = {
-            projectName: projectName,
+            projectName: project.getName(),
             openAtStartup: openAtStartup
         };
         return this.httpMgr.doPost(this.serviceName, "setOpenAtStartup", params);

@@ -1,32 +1,28 @@
 <div class="vbox">
 
-    <div class="card card-default vbox">
+    <div class="card vbox">
 
         <div class="card-body hbox">
 
-            <div *ngIf="isAdminLogged" class="card card-default vbox">
+            <div *ngIf="isAdminLogged" class="card vbox">
                 <div class="card-header">
                     <label style="flex: 1;">{{'MODELS.PROJECT.PROJECTS'|translate}}:</label>
                 </div>
                 <div class="card-body vbox" style="padding: 0px;">
-                    <div class="scrollableContainer">
-                        <div *ngFor="let p of projectList" class="listItem" [ngClass]="{active: p == selectedProject}" (click)="selectProject(p)">
-                            <span>{{p.getName()}}</span>
-                        </div>
-                    </div>
+                    <project-list (projectSelected)="selectProject($event)"></project-list>
                 </div>
             </div>
 
-            <div class="card card-default vbox" style="margin-left: 5px; flex: 4;">
+            <div class="card vbox" style="margin-left: 5px; flex: 4;">
 
                 <div class="card-header" style="justify-content: flex-end">
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button *ngIf="isProjUserManagementAuthorized()" class="btn btn-light" [ngClass]="{ active: selectedAspect == projUsersAspect }"
+                            <button *ngIf="isRoleMgmtAuthorized && isGroupMgmtAuthorized" class="btn btn-light" [ngClass]="{ active: selectedAspect == projUsersAspect }"
                                 style="padding: 1px 5px;" (click)="selectedAspect = projUsersAspect">{{projUsersAspect}}</button>
-                            <button *ngIf="isProjGroupManagementAuthorized()" class="btn btn-light" [ngClass]="{ active: selectedAspect == projGroupsAspect }"
+                            <button *ngIf="isGroupMgmtAuthorized" class="btn btn-light" [ngClass]="{ active: selectedAspect == projGroupsAspect }"
                                 style="padding: 1px 5px;" (click)="selectedAspect = projGroupsAspect">{{projGroupsAspect}}</button>
-                            <button *ngIf="isProjSettingsAuthorized()" class="btn btn-light" [ngClass]="{ active: selectedAspect == projSettingsAspect }" 
+                            <button *ngIf="isProjectMgmtAuthorized" class="btn btn-light" [ngClass]="{ active: selectedAspect == projSettingsAspect }" 
                                 style="padding: 1px 5px;" (click)="selectedAspect = projSettingsAspect">{{projSettingsAspect}}</button>
                         </div>
                         <button class="btn btn-xs btn-light" (click)="editACL()" [disabled]="!selectedProject" [title]="'PROJECTS.ACTIONS.EDIT_PROJECT_ACL'|translate">ACL</button>

@@ -21,7 +21,7 @@
                     <td><label>{{'MODELS.PROJECT.PROJECT'|translate}}:</label></td>
                     <td>
                         <select class="form-control form-control-sm " [(ngModel)]="project" (ngModelChange)="onProjectChange()">
-                            <option *ngFor="let p of projectList" [ngValue]="p">{{p.getName()}}</option>
+                            <option *ngFor="let p of projectList" [ngValue]="p">{{p.getName(true)}}</option>
                         </select>
                     </td>
                 </tr>

@@ -57,9 +57,9 @@ export class AdministrationServices {
      * @param email
      * @param role
      */
-    getProjectUserBinding(projectName: string, email: string): Observable<ProjectUserBinding> {
+    getProjectUserBinding(project: Project, email: string): Observable<ProjectUserBinding> {
         let params: any = {
-            projectName: projectName,
+            projectName: project.getName(),
             email: email
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectUserBinding", params).pipe(
@@ -79,9 +79,9 @@ export class AdministrationServices {
      * @param email
      * @param roles
      */
-    addRolesToUser(projectName: string, email: string, roles: string[]) {
+    addRolesToUser(project: Project, email: string, roles: string[]) {
         let params: any = {
-            projectName: projectName,
+            projectName: project.getName(),
             email: email,
             roles: roles
         };
@@ -94,9 +94,9 @@ export class AdministrationServices {
      * @param email
      * @param role
      */
-    removeRoleFromUser(projectName: string, email: string, role: string) {
+    removeRoleFromUser(project: Project, email: string, role: string) {
         let params: any = {
-            projectName: projectName,
+            projectName: project.getName(),
             email: email,
             role: role
         };
@@ -109,9 +109,9 @@ export class AdministrationServices {
      * @param email
      * @param role
      */
-    removeUserFromProject(projectName: string, email: string) {
+    removeUserFromProject(project: Project, email: string) {
         let params: any = {
-            projectName: projectName,
+            projectName: project.getName(),
             email: email
         };
         return this.httpMgr.doPost(this.serviceName, "removeUserFromProject", params);
@@ -123,9 +123,9 @@ export class AdministrationServices {
      * @param email
      * @param language
      */
-    updateLanguagesOfUserInProject(projectName: string, email: string, languages: string[]) {
+    updateLanguagesOfUserInProject(project: Project, email: string, languages: string[]) {
         let params: any = {
-            projectName: projectName,
+            projectName: project.getName(),
             email: email,
             languages: languages
         };
@@ -278,12 +278,12 @@ export class AdministrationServices {
      * @param targetUserIri 
      * @param targetProjectName 
      */
-    clonePUBinding(sourceUserIri: ARTURIResource, sourceProjectName: string, targetUserIri: ARTURIResource, targetProjectName: string) {
+    clonePUBinding(sourceUserIri: ARTURIResource, sourceProject: Project, targetUserIri: ARTURIResource, targetProject: Project) {
         let params: any = {
             sourceUserIri: sourceUserIri,
-            sourceProjectName: sourceProjectName,
+            sourceProjectName: sourceProject.getName(),
             targetUserIri: targetUserIri,
-            targetProjectName: targetProjectName
+            targetProjectName: targetProject.getName()
         };
         return this.httpMgr.doPost(this.serviceName, "clonePUBinding", params);
     }

@@ -1,6 +1,6 @@
 <div class="vbox">
 
-    <div class="card card-default vbox">
+    <div class="card vbox">
         <div class="card-header">
             <label>{{'ACTIONS.CREATE_PROJECT'|translate}}</label>
         </div>
@@ -126,11 +126,11 @@
                     <div class="col-sm-3">
                         <div class="hbox" style="align-items: center">
                             <select class="form-control" [(ngModel)]="leftProject" (ngModelChange)="updateRightProjectList()">
-                                <option *ngFor="let p of leftProjectList" [ngValue]="p">{{p.getName()}}</option>
+                                <option *ngFor="let p of leftProjectList" [ngValue]="p">{{p.getName(true)}}</option>
                             </select>
                             <span style="margin: 0px 4px; font-size: 14px;">/</span>
                             <select class="form-control" [(ngModel)]="rightProject" [disabled]="!leftProject">
-                                <option *ngFor="let p of rightProjectList" [ngValue]="p">{{p.getName()}}</option>
+                                <option *ngFor="let p of rightProjectList" [ngValue]="p">{{p.getName(true)}}</option>
                             </select>
                         </div>
                     </div>

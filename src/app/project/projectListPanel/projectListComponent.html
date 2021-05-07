@@ -1,0 +1,5 @@
+<div class="scrollableContainer">
+    <div *ngFor="let p of projects" class="listItem" [ngClass]="{active: p == selectedProject}" (click)="selectProject(p)">
+        <span>{{p.getName(true)}}</span>
+    </div>
+</div>

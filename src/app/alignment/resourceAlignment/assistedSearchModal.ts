@@ -58,24 +58,13 @@ export class AssistedSearchModal {
 
     translationParams: { datasetUriSpace: string, projName: string };
     
-    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private alignmentService: AlignmentServices,
+    constructor(public activeModal: NgbActiveModal, private alignmentService: AlignmentServices,
         private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices,
         private basicModals: BasicModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
         this.sourceProject = VBContext.getWorkingProject();
-        this.projectService.listProjects(this.sourceProject, false, true).subscribe(
-            projects => {
-                //keep only the projects different from the current
-                for (var i = 0; i < projects.length; i++) {
-                    if (projects[i].getName() != this.sourceProject.getName()) {
-                        this.projectList.push(projects[i])
-                    }
-                }
-            }
-        );
-
         this.initRemoteDatasets();
     }
 

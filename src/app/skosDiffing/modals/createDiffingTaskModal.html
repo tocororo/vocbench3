@@ -11,7 +11,7 @@
             </select>
         </div>
 
-        <div *ngIf="mode" class="card card-default vbox mt-3">
+        <div *ngIf="mode" class="card vbox mt-3">
             <div class="card-body">
                 <div class="hbox">
                     <div class="vbox">
@@ -19,7 +19,7 @@
                         <div *ngIf="mode == 'projects'" class="form-group row">
                             <label class="col-form-label col-sm-3">{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
                             <div class="col-sm-9">
-                                <input class="form-control" [ngModel]="leftDataset.project.getName()" disabled>
+                                <input class="form-control" [ngModel]="leftDataset.project.getName(true)" disabled>
                             </div>
                         </div>
                         <div *ngIf="mode == 'versions'" class="form-group row">
@@ -37,7 +37,7 @@
                             <label class="col-form-label col-sm-3">{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
                             <div class="col-sm-9">
                                 <select class="form-control" [(ngModel)]="rightDataset.project">
-                                    <option *ngFor="let p of projects" [ngValue]="p">{{p.getName()}}</option>
+                                    <option *ngFor="let p of projects" [ngValue]="p">{{p.getName(true)}}</option>
                                 </select>
                             </div>
                         </div>

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
+import { Project } from '../models/Project';
 import { User, UserFormFields } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
@@ -89,9 +90,9 @@ export class UserServices {
      * Lists the users that have at least a role assigned in the given project
      * @param projectName
      */
-    listUsersBoundToProject(projectName: string): Observable<User[]> {
+    listUsersBoundToProject(project: Project): Observable<User[]> {
         var params: any = {
-            projectName: projectName
+            projectName: project.getName()
         }
         return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).pipe(
             map(stResp => {
