@@ -141,7 +141,7 @@ export class CustomFormsServices {
 
                 for (let i = 0; i < stResp.length; i++) {
                     let placeholderId = stResp[i].placeholderId;
-                    let type: FormFieldType = stResp[i].type == "literal" ? "literal" : "uri";
+                    let type: FormFieldType = stResp[i].type == "literal" ? FormFieldType.literal : FormFieldType.uri;
                     let mandatory = stResp[i].mandatory;
                     let userPrompt = stResp[i].userPrompt;
                     let converter = stResp[i].converter.uri;

@@ -62,10 +62,21 @@ export class ConverterContractDescription {
 
 export class ConverterUtils {
 
+    /**
+     * 
+     * @param converter 
+     * @param signature chosen signature description of the converter. Contains the parameters
+     * @param capabilityType disambiguate the capability type of those converter which the capability is node (so converter could be uri or literal)
+     * @returns 
+     */
     public static getConverterProjectionOperator(converter: ConverterContractDescription, signature?: SignatureDescription,
             capabilityType?: RDFCapabilityType): string {
         let projectionOperator: string = "";
-        projectionOperator += (converter.getRDFCapability() == RDFCapabilityType.uri) ? RDFTypesEnum.uri : RDFTypesEnum.literal; //'uri' or 'literal'
+        let uriOrLiteral = RDFTypesEnum.literal;
+        if (converter.getRDFCapability() == RDFCapabilityType.uri || converter.getRDFCapability() == RDFCapabilityType.node && capabilityType == RDFCapabilityType.uri) {
+            uriOrLiteral = RDFTypesEnum.uri;
+        }
+        projectionOperator += uriOrLiteral;
         //default converter doesn't need to be specified explicitly
         if (converter.getURI() == ConverterContractDescription.NAMESPACE + "default") {
             return capabilityType;

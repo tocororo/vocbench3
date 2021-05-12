@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { CODAConverter } from "src/app/models/Sheet2RDF";
 import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole } from "../../../models/Coda";
-import { CODAConverter } from "../../../models/Sheet2RDF";
 import { RDF } from "../../../models/Vocabulary";
 import { CODAServices } from "../../../services/codaServices";
 import { RangeType } from "../../../services/propertyServices";
@@ -18,7 +18,7 @@ export class ConverterConfigurationComponent {
     @Input() rangeType: RangeType; //the listed converters capability must be compliant with this rangeType (if not provided, all converter are ok)
     @Input() language: string;
     @Input() datatype: ARTURIResource;
-    @Output() update: EventEmitter<UpdateStatus> = new EventEmitter();
+    @Output() update: EventEmitter<ConverterConfigStatus> = new EventEmitter();
 
     availableConverters: ConverterContractDescription[] = [];
     selectedConverter: ConverterContractDescription;
@@ -217,7 +217,7 @@ export class ConverterConfigurationComponent {
     private emitStatusUpdate() {
         let params: { [key: string]: any } = {};
         this.signatureParams.forEach(p => {
-            let value;
+            let value: any;
             if (p.type == "java.lang.String") {
                 value = p.value;
             } else if (p.type == "org.eclipse.rdf4j.model.Value") {
@@ -249,15 +249,22 @@ export class ConverterConfigurationComponent {
             datatypeCapability: (this.selectedConverter.getDatatypes().length > 0) ? this.selectedConverter.getDatatypes()[0] : null,
             params: params
         }
-        let status: UpdateStatus = { converter: c, memoize: this.isConverterRandom() ? this.memoize : false };
+        let status: ConverterConfigStatus = {
+            converter: c,
+            memoize: this.isConverterRandom() ? this.memoize : false,
+            converterDesc: this.selectedConverter,
+            signatureDesc: this.selectedSignature
+        };
         this.update.emit(status);
     }
 
 }
 
-class UpdateStatus {
+export interface ConverterConfigStatus {
     converter: CODAConverter;
     memoize: boolean;
+    converterDesc: ConverterContractDescription;
+    signatureDesc: SignatureDescription;
 }
 
 class SignatureParam { 

@@ -73,6 +73,7 @@ export class FormCollection {
 export class CustomForm {
 
     public static PREFIX = "it.uniroma2.art.semanticturkey.customform.form.";
+    public static USER_PROMPT_PREFIX = "userPrompt/";
 
     private id: string;
     private name: string;
@@ -272,13 +273,13 @@ export class LangStringConverterArg {
 }
 
 export enum AnnotationName {
-    ObjectOneOf = "ObjectOneOf",
-    DataOneOf = "DataOneOf",
-    Role = "Role",
-    Range = "Range",
-    RangeList = "RangeList",
-    Foreign = "Foreign",
-    Collection = "Collection"
+    ObjectOneOf = "ObjectOneOf", //resource value constrained to a list of Resource
+    DataOneOf = "DataOneOf", //literal value constrained to a list of Literal
+    Role = "Role", //resource value constrained to a given role
+    Range = "Range", //resource value constrained to instance of a given class
+    RangeList = "RangeList", //resource value constrained to instance of one of the given classes
+    Foreign = "Foreign", //resuorce value belonging to an external project
+    Collection = "Collection" //multiple values admitted
 }
 
 export class FormFieldAnnotation {
@@ -316,7 +317,10 @@ export class BrokenCFStructure {
 }
 
 export type CustomFormType = "node" | "graph";
-export type FormFieldType = "literal" | "uri";
+export enum FormFieldType {
+    literal = "literal",
+    uri = "uri"
+}
 
 export enum CustomFormLevel {
     system = "system",

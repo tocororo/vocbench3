@@ -14,6 +14,7 @@ import { PearlEditorComponent } from "../../widget/codemirror/pearlEditor/pearlE
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { CustomFormWizardModal } from "./customFormWizard/customFormWizardModal";
 import { ExtractFromShaclModal } from "./extractFromShaclModal";
 import { PearlInferenceValidationModal } from "./pearlInferenceValidationModal";
 
@@ -174,6 +175,19 @@ export class CustomFormEditorModal {
             },
             () => {}
         )
+    }
+
+    openWizard() {
+        const modalRef: NgbModalRef = this.modalService.open(CustomFormWizardModal, new ModalOptions('full'));
+        if (this.cfShortId != null) {
+            modalRef.componentInstance.formId = this.cfShortId;
+        }
+        modalRef.result.then(
+            pearl => {
+                this.ref = pearl;
+            },
+            () => {}
+        );
     }
 
     //========= ID Namespace-lock HANDLER =========

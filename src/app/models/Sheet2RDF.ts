@@ -75,6 +75,45 @@ export class CODAConverter {
     public datatypeCapability: string; //datatype that the converter can produce (e.g. coda:date produces xsd:date)
     public language: string; //e.g. language in "literal@it"
     public params: { [key: string]: any };
+
+    /**
+     * Tells if all the parameters foreseen by the signature have been provided
+     * @returns 
+     */
+    static isSignatureOk(converter: CODAConverter): boolean {
+        let isSignatureOk: boolean = true;
+        for (let key in converter.params) {
+            let paramValue = converter.params[key];
+            if (paramValue != null) { //param not null, check if it is ok according its type
+                if (typeof paramValue === "string" && paramValue.trim() == "") { //string must not be empty
+                    isSignatureOk = false;
+                } else if (Array.isArray(paramValue)) { //array must not be empty or populated with empty value
+                    if (paramValue.length == 0) {
+                        isSignatureOk = false;
+                    } else {
+                        paramValue.forEach(v => {
+                            if (v == null) {
+                                isSignatureOk = false;
+                            }
+                        });
+                    }
+                } else if (typeof paramValue == "object") { //map must not have empty value
+                    if (JSON.stringify(paramValue) == "{}") { //empty object
+                        isSignatureOk = false;
+                    } else {
+                        for (let key in <any>paramValue) {
+                            if (key == null || paramValue[key] == null) {
+                                isSignatureOk = false;
+                            }
+                        }
+                    }
+                }
+            } else { //param null
+                isSignatureOk = false;
+            }
+        }
+        return isSignatureOk;
+    }
 }
 
 export class TableContent {

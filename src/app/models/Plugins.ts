@@ -59,15 +59,20 @@ export class Settings {
     }
 
     /**
-     * Returns the value (if any) of the given property. Returns null if none property with that name exists.
+     * Returns the value (if any) of the given property.
+     * Returns null, or the defaulValue, if no property with that name is found or if its value is null.
      * @param propName 
      */
-    public getPropertyValue(propName: string): any {
+    public getPropertyValue(propName: string, defaultValue?: any): any {
         let prop: STProperties = this.getProperty(propName);
+        let value: any;
         if (prop != null) {
-            return prop.value;
+            value = prop.value;
         }
-        return null;
+        if (value == null) {
+            value = defaultValue;
+        }
+        return value;
     }
 
     public getPropertiesAsMap(includeType?: boolean): { [key: string]: string } {

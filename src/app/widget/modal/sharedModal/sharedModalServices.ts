@@ -15,6 +15,7 @@ import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { User } from '../../../models/User';
 import { ProjectContext } from '../../../utils/VBContext';
+import { ResourcePickerConfig } from '../../pickers/valuePicker/resourcePickerComponent';
 import { ResourceSelectionModal } from '../basicModal/selectionModal/resourceSelectionModal';
 import { ModalOptions, TextOrTranslation } from '../Modals';
 import { LoadConfigurationModal } from "./configurationStoreModal/loadConfigurationModal";
@@ -159,10 +160,10 @@ export class SharedModalServices {
      * @param roles 
      * @param editable 
      */
-    pickResource(title: TextOrTranslation, roles?: RDFResourceRolesEnum[], editable?: boolean) {
+    pickResource(title: TextOrTranslation, config?: ResourcePickerConfig, editable?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(ResourcePickerModal, new ModalOptions());
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        if (roles != null) modalRef.componentInstance.roles = roles;
+        if (config != null) modalRef.componentInstance.config = config;
         if (editable != null) modalRef.componentInstance.editable = editable;
         return modalRef.result;
     }

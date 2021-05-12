@@ -1,0 +1,14 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">
+            Custom Form Graph Entry Point
+        </h3>
+    </div>
+    <div class="modal-body vbox">
+        <converter-config [rangeType]="'resource'" (update)="onConverterUpdate($event)"></converter-config>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+</div>

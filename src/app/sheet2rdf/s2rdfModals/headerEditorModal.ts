@@ -83,7 +83,8 @@ export class HeaderEditorModal {
                         this.changed = true;
                     }
                 );
-            }
+            },
+            () => {}
         );
     }
 

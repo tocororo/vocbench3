@@ -1,4 +1,4 @@
-<div class="card card-default">
+<div class="card">
     <div class="card-header">
         <label>{{'SHEET2RDF.CONVERTER.CONVERTER'|translate}}</label>
     </div>
@@ -59,7 +59,7 @@
 
 
                 <!-- default literal converter, datatype and language choice -->
-                <div *ngIf="showDefaultLiteralConverterOpt(); else otherConvBlock" class="card card-default" style="flex: 3; margin-left: 4px;">
+                <div *ngIf="showDefaultLiteralConverterOpt(); else otherConvBlock" class="card" style="flex: 3; margin-left: 4px;">
                     <div class="card-body hbox" style="align-items: center;">
                         <select class="form-control form-control-sm" style="max-width: 150px; margin-right: 4px;" [(ngModel)]="selectedLiteralAspect"
                             [disabled]="!literalAspectChangeable" (ngModelChange)="onSignatureParamChange()">

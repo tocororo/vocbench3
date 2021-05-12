@@ -64,7 +64,7 @@ export class DumpCreationModal {
     private initRemoteRepoAccessConfigurations() {
         this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
             settings => {
-                let remoteConfSetting = settings.getPropertyValue(SettingsEnum.remoteConfigs);
+                let remoteConfSetting = settings.getPropertyValue(SettingsEnum.remoteConfigs, []);
                 if (remoteConfSetting != null) {
                     this.remoteRepoConfigs = remoteConfSetting;
                     //initialize the selected configuration

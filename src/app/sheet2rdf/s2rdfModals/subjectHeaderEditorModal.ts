@@ -7,6 +7,7 @@ import { CODAConverter, SimpleHeader, SubjectHeader } from "../../models/Sheet2R
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { ConverterConfigStatus } from "./converterConfig/converterConfigurationComponent";
 
 @Component({
     selector: "subject-header-editor-modal",
@@ -65,7 +66,7 @@ export class SubjectHeaderEditorModal {
         );
     }
 
-    onConverterUpdate(updateStatus: { converter: CODAConverter, memoize: boolean }) {
+    onConverterUpdate(updateStatus: ConverterConfigStatus) {
         this.selectedConverter = updateStatus.converter;
         this.memoize = updateStatus.memoize;
     }
@@ -94,45 +95,15 @@ export class SubjectHeaderEditorModal {
      * - all the parameters (if any) of the converter signature are provided
      */
     isOkEnabled() {
-        let isSignatureOk: boolean = true;
+        let signatureOk: boolean = true;
         if (this.selectedConverter != null) {
-            for (let key in this.selectedConverter.params) {
-                let paramValue = this.selectedConverter.params[key];
-                if (paramValue != null) { //param not null, check if it is ok according its type
-                    if (typeof paramValue === "string" && paramValue.trim() == "") { //string must not be empty
-                        isSignatureOk = false;
-                    } else if (Array.isArray(paramValue)) { //array must not be empty or populated with empty value
-                        if (paramValue.length == 0) {
-                            isSignatureOk = false;
-                        } else {
-                            paramValue.forEach(v => {
-                                if (v == null) {
-                                    isSignatureOk = false;
-                                }
-                            });
-                        }
-                    } else if (typeof paramValue == "object") { //map must not have empty value
-                        if (JSON.stringify(paramValue) == "{}") { //empty object
-                            isSignatureOk = false;
-                        } else {
-                            for (let key in <any>paramValue) {
-                                if (key == null || paramValue[key] == null) {
-                                    isSignatureOk = false;
-                                }
-                            }
-                        }
-                    }
-                } else { //param null
-                    isSignatureOk = false;
-                }
-            }
+            signatureOk = CODAConverter.isSignatureOk(this.selectedConverter);
         }
-        
         return (
             this.selectedHeader != null && 
             (!this.assertType || this.type) &&
             this.selectedConverter != null &&
-            isSignatureOk
+            signatureOk
         );
     }
 

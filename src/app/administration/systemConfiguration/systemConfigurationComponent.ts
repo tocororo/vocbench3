@@ -111,9 +111,9 @@ export class SystemConfigurationComponent {
                 this.profilerThresholdPristine = this.profilerThreshold;
 
                 //proj creation settings
-                let projCreationSettings: any = settings.getPropertyValue(SettingsEnum.projectCreation);
-                this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault == true;
-                this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault == true;
+                let projCreationSettings: ProjectCreationPreferences = settings.getPropertyValue(SettingsEnum.projectCreation, new ProjectCreationPreferences());
+                this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault;
+                this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault;
             }
         )
     }

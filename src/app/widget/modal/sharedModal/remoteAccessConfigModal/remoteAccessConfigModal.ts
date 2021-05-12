@@ -22,7 +22,7 @@ export class RemoteAccessConfigModal {
     ngOnInit() {
         this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
             settings => {
-                this.savedConfigs = settings.getPropertyValue(SettingsEnum.remoteConfigs);
+                this.savedConfigs = settings.getPropertyValue(SettingsEnum.remoteConfigs, []);
             }
         )
     }

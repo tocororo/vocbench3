@@ -3,9 +3,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTNode } from "../../models/ARTResources";
 import { FormField } from "../../models/CustomForms";
 
-/**
- * Modal that allows to choose among a set of rdfResource
- */
 @Component({
     selector: "custom-form-field",
     templateUrl: "./customFormFieldComponent.html",

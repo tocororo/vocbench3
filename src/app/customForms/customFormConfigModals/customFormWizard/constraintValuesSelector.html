@@ -1,0 +1,16 @@
+<div class="card vbox">
+    <div class="card-header">
+        <label style="flex: 1;"></label>
+        <button class="btn btn-xs btn-light" (click)="addValue()">
+            <span class="fas fa-plus"></span>
+        </button>
+    </div>
+    <div class="card-body scrollableContainer" style="min-height: 100px;">
+        <div *ngFor="let v of values" class="listItem">
+            <span style="flex: 1">{{v.toNT()}}</span>
+            <button class="btn btn-light btn-xs" (click)="deleteValue(v)">
+                <span class="far fa-trash-alt"></span>
+            </button>
+        </div>
+    </div>
+</div>

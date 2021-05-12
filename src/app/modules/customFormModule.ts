@@ -11,6 +11,10 @@ import { CustomFormModal } from '../customForms/customForm/customFormModal';
 import { CustomFormConfigComponent } from '../customForms/customFormConfComponent';
 import { BrokenCFStructReportModal } from '../customForms/customFormConfigModals/brokenCFStructReportModal';
 import { CustomFormEditorModal } from '../customForms/customFormConfigModals/customFormEditorModal';
+import { ConstraintValuesSelector } from '../customForms/customFormConfigModals/customFormWizard/constraintValuesSelector';
+import { CustomFormWizardModal } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardModal';
+import { GraphEntryPointModal } from '../customForms/customFormConfigModals/customFormWizard/graphEntryPointModal';
+import { RoleSelector } from '../customForms/customFormConfigModals/customFormWizard/roleSelector';
 import { ExtractFromShaclModal } from '../customForms/customFormConfigModals/extractFromShaclModal';
 import { FormCollEditorModal } from '../customForms/customFormConfigModals/formCollEditorModal';
 import { FormCollMappingModal } from '../customForms/customFormConfigModals/formCollMappingModal';
@@ -19,6 +23,7 @@ import { PearlInferenceValidationModal } from '../customForms/customFormConfigMo
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { SharedModule } from './sharedModule';
+import { Sheet2RdfModule } from './sheet2rdfModule';
 
 @NgModule({
     imports: [
@@ -27,31 +32,38 @@ import { SharedModule } from './sharedModule';
         FormsModule,
         NgbDropdownModule,
         SharedModule,
+        Sheet2RdfModule, //for Converter configurator
         TranslateModule
     ],
     providers: [BasicModalServices, BrowsingModalServices],
     declarations: [
         BrokenCFStructReportModal,
+        ConstraintValuesSelector,
         CustomFormConfigComponent,
         CustomFormComponent,
         CustomFormEditorModal,
         CustomFormField,
         CustomFormFieldList,
         CustomFormModal,
+        CustomFormWizardModal,
         ExtractFromShaclModal,
         FormCollEditorModal,
         FormCollMappingModal,
+        GraphEntryPointModal,
         ImportCfModal,
         PearlInferenceValidationModal,
+        RoleSelector,
     ],
     exports: [CustomFormConfigComponent, CustomFormComponent], //CustomForm exported since is used in vbModalModule as well in newResourceCfModal
     entryComponents: [
         BrokenCFStructReportModal,
         CustomFormEditorModal,
         CustomFormModal,
+        CustomFormWizardModal,
         ExtractFromShaclModal,
         FormCollMappingModal,
         FormCollEditorModal,
+        GraphEntryPointModal,
         ImportCfModal,
         PearlInferenceValidationModal,
     ]

@@ -80,13 +80,16 @@
                             {{'ACTIONS.PICK_CONVERTER'|translate}}
                         </button>
                         <ng-container *ngIf="type == 'graph'">
-                            <button class="btn btn-light btn-sm" (click)="inferAnnotations()" style="margin-top: 4px;" 
+                            <button class="btn btn-light btn-sm mt-2" (click)="inferAnnotations()" 
                                 [title]="'CUSTOM_FORMS.FORMS.INFER_ANNOTATIONS_INFO'|translate" [disabled]="!ref || readOnly">
                                 {{'CUSTOM_FORMS.ACTIONS.INFER_ANNOTATIONS'|translate}}
                             </button>
-                            <button *ngIf="extractFromShaclAuthorized" class="btn btn-light btn-sm" (click)="extractFromShacl()" style="margin-top: 4px;" 
+                            <button *ngIf="extractFromShaclAuthorized" class="btn btn-light btn-sm mt-2" (click)="extractFromShacl()"
                                 [title]="'CUSTOM_FORMS.FORMS.FROM_SHACLE_INFO'|translate" [disabled]="readOnly">
                                 {{'CUSTOM_FORMS.FORMS.FROM_SHACLE'|translate}}
+                            </button>
+                            <button  class="btn btn-light btn-sm mt-2" (click)="openWizard()" [disabled]="readOnly">
+                                Create with wizard
                             </button>
                         </ng-container>
                     </div>

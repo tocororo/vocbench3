@@ -34,7 +34,8 @@ import { SharedModule } from './sharedModule';
         Sheet2RdfSettingsModal
     ],
     exports: [
-        Sheet2RdfComponent
+        ConverterConfigurationComponent,
+        Sheet2RdfComponent,
     ],
     entryComponents: [
         HeaderEditorModal, SubjectHeaderEditorModal, SimpleGraphApplicationModal, AdvancedGraphApplicationModal, NodeCreationModal,
