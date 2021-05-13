@@ -36,7 +36,7 @@
         </table>
 
 
-        <div class="card card-default vbox" style="margin-top: 4px; min-height: 100px">
+        <div class="card vbox" style="margin-top: 4px; min-height: 100px">
             <div class="card-header">
                 <label style="flex: 1">
                     {{'SHEET2RDF.HEADER_EDITOR.NODES'|translate}}
@@ -96,7 +96,7 @@
             </div>
         </div>
 
-        <div class="card card-default vbox" style="margin-top: 4px; min-height: 100px">
+        <div class="card vbox" style="margin-top: 4px; min-height: 100px">
             <div class="card-header">
                 <label style="flex: 1">
                     {{'SHEET2RDF.HEADER_EDITOR.GRAPH_APPLICATIONS'|translate}}
@@ -127,7 +127,16 @@
                     <colgroup>
                         <col style="width: 1%">
                         <col>
+                        <col style="width: 1%">
                     </colgroup>
+                    <thead>
+                        <th></th>
+                        <th></th>
+                        <th nowrap>
+                            {{'ACTIONS.DELETE'|translate}}
+                            <span class="fas fa-info-circle ml-2" [title]="'SHEET2RDF.GRAPH_APPLICATIONS.DELETE_INFO'|translate"></span>
+                        </th>
+                    </thead>
                     <tbody>
                         <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
                             [ngClass]="{ 'table-primary': g == selectedGraph }">
@@ -139,6 +148,9 @@
                                 <td [ngClass]="{ grayText : header?.ignore }" nowrap><label>{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.ADV_GRAPH_APPL'|translate}}:</label></td>
                                 <td [ngClass]="{ grayText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">{{g.pattern}}</td>
                             </ng-template>
+                            <td class="text-center">
+                                <input type="checkbox" [(ngModel)]="g.delete" (ngModelChange)="onDeleteChange(g)">
+                            </td>
                         </tr>
                     </tbody>
                 </table>

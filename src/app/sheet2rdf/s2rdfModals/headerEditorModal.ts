@@ -49,7 +49,7 @@ export class HeaderEditorModal {
         );
     }
 
-    private onIgnoreChange() {
+    onIgnoreChange() {
         this.s2rdfService.ignoreHeader(this.header.id, this.header.ignore).subscribe(
             () => {
                 this.initHeader();
@@ -62,7 +62,7 @@ export class HeaderEditorModal {
      * NODES
      */
 
-    private selectNode(node: NodeConversion) {
+    selectNode(node: NodeConversion) {
         if (this.header.ignore) return;
 
         if (this.selectedNode == node) {
@@ -88,7 +88,7 @@ export class HeaderEditorModal {
         );
     }
 
-    private renameNode(node: NodeConversion) {
+    renameNode(node: NodeConversion) {
         this.basicModals.prompt({key:"ACTIONS.RENAME_NODE"}, { value: "ID" }, null, node.nodeId, false, true).then(
             (newID: string) => {
                 if (newID != node.nodeId) {
@@ -129,7 +129,7 @@ export class HeaderEditorModal {
         );
     }
 
-    private changeUriConverter(node: NodeConversion) {
+    changeUriConverter(node: NodeConversion) {
         this.openNodeEditorModal(this.header, node, RangeType.resource, null, null, null).then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
@@ -146,7 +146,7 @@ export class HeaderEditorModal {
         );
     }
 
-    private changeLiteralConverter(node: NodeConversion) {
+    changeLiteralConverter(node: NodeConversion) {
         this.openNodeEditorModal(this.header, node, RangeType.literal, null, null, null).then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
@@ -178,7 +178,7 @@ export class HeaderEditorModal {
      * GRAPH 
      */
 
-    private selectGraph(graph: GraphApplication) {
+    selectGraph(graph: GraphApplication) {
         if (this.header.ignore) return;
 
         if (this.selectedGraph == graph) {
@@ -188,7 +188,7 @@ export class HeaderEditorModal {
         }
     }
 
-    private isSimpleGraphApplication(graph: GraphApplication): boolean {
+    isSimpleGraphApplication(graph: GraphApplication): boolean {
         return graph instanceof SimpleGraphApplication;
     }
 
@@ -254,6 +254,10 @@ export class HeaderEditorModal {
                 this.changed = true;
             }
         )
+    }
+
+    onDeleteChange(graphApplication: GraphApplication) {
+        this.s2rdfService.updateGraphApplicationDelete(this.header.id, graphApplication.id, graphApplication.delete).subscribe();
     }
 
     ok() {

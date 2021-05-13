@@ -54,6 +54,7 @@ export class NodeConversion {
 
 export abstract class GraphApplication {
     public id: string;
+    public delete: boolean;
 }
 export class SimpleGraphApplication extends GraphApplication {
     public nodeId: string;
@@ -137,6 +138,7 @@ export class TableRow {
  */
 export class TriplePreview {
     public row: number;
+    public delete: boolean;
     public subject: string;
     public predicate: string;
     public object: string;
@@ -197,6 +199,7 @@ export class Sheet2RdfDeserializer {
     private static parseSimpleGraphApplication(gJson: any): SimpleGraphApplication {
         let g = new SimpleGraphApplication();
         g.id = gJson.id;
+        g.delete = gJson.delete;
         g.nodeId = gJson.nodeId;
         g.property = (gJson.property) ? new ARTURIResource(gJson.property) : null;
         g.type = (gJson.type) ? NTriplesUtil.parseURI(gJson.type) : null;
@@ -207,6 +210,7 @@ export class Sheet2RdfDeserializer {
     private static parseAdvancedGraphApplication(gJson: any): AdvancedGraphApplication {
         let g = new AdvancedGraphApplication();
         g.id = gJson.id;
+        g.delete = gJson.delete;
         g.nodeIds = gJson.nodeIds;
         g.pattern = gJson.pattern;
         g.prefixMapping = gJson.prefixMapping;

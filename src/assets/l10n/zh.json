@@ -1611,6 +1611,7 @@
                 "DEFAULT_PREDICATE": "Default predicate",
                 "DEFAULT_PREDICATE_INFO": "If the graph pattern contains the 'pred' placeholder this predicate is mandatory, otherwise it will be ignored"
             },
+            "DELETE_INFO": "Tells if this Graph Application should be inserted in the delete section of the PEARL code",
             "SIMPLE": {
                 "SIMPLE_GRAPH_APPL": "Simple Graph Application",
                 "RANGE": "Range",

@@ -20,7 +20,6 @@ export class CustomFormWizardModal {
 
     /*
     TODO:
-    - ripristinare converter quando si ri-edita
     - dare la possibilità per tutti i field di editare il converter
     - definizione legami tra i field
     - considerare anche i CustomConstructor (quindi con stdForm)
@@ -115,7 +114,7 @@ export class CustomFormWizardModal {
 
     editEntryPointConverter() {
         const modalRef: NgbModalRef = this.modalService.open(GraphEntryPointModal, new ModalOptions('xl'));
-        // modalRef.componentInstance.formId = this.cfShortId;
+        modalRef.componentInstance.converter = this.entryPoint.converterStatus != null ? this.entryPoint.converterStatus.converter : null;
         modalRef.result.then(
             (data: ConverterConfigStatus) => {
                 this.entryPoint.converterStatus = data;

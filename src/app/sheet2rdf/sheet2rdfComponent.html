@@ -1,7 +1,7 @@
 <div class="vbox">
 
     <div class="hbox" style="align-items: center; flex: initial;">
-        <div class="card card-default" style="flex: 1; margin-right: 4px;">
+        <div class="card" style="flex: 1; margin-right: 4px;">
             <div class="card-body">
                 <div class="hbox" style="flex: initial; align-items: center;">
                     <label style="white-space: nowrap; margin-right: 4px;">{{'SHEET2RDF.SPREADSHEET.FILE'|translate}}:</label>
@@ -160,16 +160,28 @@
                 </div>
                 <div class="card-body table-responsive">
                     <table class="table table-sm table-hoverable" style="flex: 1">
+                        <colgroup>
+                            <col style="width: 1%;">
+                            <col>
+                            <col>
+                            <col>
+                        </colgroup>
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>{{'MODELS.RESOURCE.SUBJECT'|translate}}</th>
                                 <th>{{'MODELS.RESOURCE.PREDICATE'|translate}}</th>
                                 <th>{{'MODELS.RESOURCE.OBJECT'|translate}}</th>
                             </tr>
                         </thead>
                         <tbody style="overflow: auto;">
-                            <tr *ngFor="let t of triplesPreview" (click)="selectTriplePreviewRow(t)"
-                                [ngClass]="{ 'oddTablePreviewRow' : t.row%2==0, 'table-primary': t == selectedTriplePreviewRow }">
+                            <tr *ngFor="let t of triplesPreview" (click)="selectTriplePreviewRow(t)" [ngClass]="{ 'oddTablePreviewRow' : t.row%2==0, 'table-primary': t == selectedTriplePreviewRow }">
+                                <td *ngIf="!t.delete" class="text-center" style="background: lightgreen !important; padding: 3px 6px;">
+                                    <span class="fas fa-plus" style="color: green" [title]="'STATUS.ADDED'|translate"></span>
+                                </td>
+                                <td *ngIf="t.delete" class="text-center" style="background: lightpink !important; padding: 3px 6px;">
+                                    <span class="fas fa-minus" style="color: red" [title]="'STATUS.REMOVED'|translate"></span>
+                                </td>
                                 <td>{{t.subject}}</td>
                                 <td>{{t.predicate}}</td>
                                 <td>{{t.object}}</td>

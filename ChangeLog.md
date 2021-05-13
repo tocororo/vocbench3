@@ -8,6 +8,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Added email verification in the registration procedure
   * Enabled possibility to render project through labels
   * Improved the management of the unicity of preferred labels for concepts in the same scheme
+  * In Sheet2RDF added possibility to delete triples
   * Added flags for Scottish Gaelic and Welsh languages
   * Adopted the new Settings services
 

@@ -156,6 +156,15 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateAdvancedGraphApplication", params);
     }
 
+    updateGraphApplicationDelete(headerId: string, graphId: string, deleteEnabled: boolean) {
+        let params: any = {
+            headerId: headerId,
+            graphId: graphId,
+            delete: deleteEnabled,
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateGraphApplicationDelete", params);
+    }
+
     removeGraphApplicationFromHeader(headerId: string, graphId: string) {
         let params: any = {
             headerId: headerId,
