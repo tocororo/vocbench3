@@ -369,17 +369,23 @@
 
             <!-- Experimental feature -->
             
-            <span style="flex: 1"></span>
-            <div class="card card-default" style="margin-top: 8px;">
+            <div class="card card-default mt-2">
+                <div class="card-header">
+                    <label>{{'ADMINISTRATION.SYSTEM.OTHER.OTHER_SETTINGS'|translate}}</label>
+                </div>
                 <div class="card-body">
                     <div class="form-check">
+                        <input class="form-check-input" id="codaProvisioningCheck" type="checkbox" [(ngModel)]="codaProvisioningEnabled" (ngModelChange)="onCodaProvisioningEnabledChanged()">
+                        <span class="form-check-label" for="codaProvisioningCheck">{{'ADMINISTRATION.SYSTEM.OTHER.ENABLE_CODA_PROVISIONING'|translate}}</span>
+                        <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.SYSTEM.OTHER.ENABLE_CODA_PROVISIONING_INFO'|translate"></span>
+                    </div>
+                    <div class="form-check mt-2">
                         <input class="form-check-input" id="expFeatureCheck" type="checkbox" [(ngModel)]="expFeatEnabled" (ngModelChange)="onExpFeatEnabledChanged()">
-                        <span class="form-check-label" for="expFeatureCheck">{{'ADMINISTRATION.SYSTEM.ENABLE_EXPERIMENTAL_FEATURES'|translate}}</span>
-                        <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.SYSTEM.ENABLE_EXPERIMENTAL_FEATURES_INFO'|translate"></span>
+                        <span class="form-check-label" for="expFeatureCheck">{{'ADMINISTRATION.SYSTEM.OTHER.ENABLE_EXPERIMENTAL_FEATURES'|translate}}</span>
+                        <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.SYSTEM.OTHER.ENABLE_EXPERIMENTAL_FEATURES_INFO'|translate"></span>
                     </div>
                 </div>
             </div>
-           
 
         </div>
     </div>

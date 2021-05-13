@@ -64,8 +64,6 @@
             "ST_DATA_FOLDER_INFO": "Indica il path della cartella dati di SemanticTurkey. Può essere assoluto o relativo rispetto alla cartella di installazione di SemanticTurkey.",
             "PRELOAD_THRESHOLD": "Preload profiler threshold",
             "PRELOAD_THRESHOLD_INFO": "Indica il la dimensione massima dei file (in bytes) ammessi dal preload profiler durante la creazione di un progetto. Se non indicato, o 0, la dimensione di default è 1048576 bytes (1 megabyte).",
-            "ENABLE_EXPERIMENTAL_FEATURES": "Abilita funzionalità sperimentali",
-            "ENABLE_EXPERIMENTAL_FEATURES_INFO": "Spunta questa opzione per abilitare funzionalità sperimentali (molto instabili)",
             "EMAIL": {
                 "VB_EMAIL_CONFIG": "Configurazione Email di Vocbench",
                 "VB_EMAIL_CONFIG_INFO": "Configurazione del servizio email di VocBench. Questo servizio sarà usato per inviare notifiche all'amministratore di sistema e agli utenti: <b>Nota</b>: se questo servizio non è configurato correttamente non sarà possibile inviare le email necessarie per completare le procedure di registrazione utente o reimpostazione password.",
@@ -87,6 +85,13 @@
                 "TIMEZONE_ID_INFO": "ID di una timezone",
                 "DETECT_INFO": "Rileva la timezone del browser",
                 "DISABLE_INFO": "Disabilita la sintesi giornaliera delle notifiche"
+            },
+            "OTHER": {
+                "OTHER_SETTINGS": "Altre impostazioni",
+                "ENABLE_CODA_PROVISIONING": "Abilita CODA provisioning",
+                "ENABLE_CODA_PROVISIONING_INFO": "Abilita il download automatico dei componenti CODA",
+                "ENABLE_EXPERIMENTAL_FEATURES": "Abilita funzionalità sperimentali",
+                "ENABLE_EXPERIMENTAL_FEATURES_INFO": "Spunta questa opzione per abilitare funzionalità sperimentali (molto instabili)"
             },
             "PROJ_CREATION": {
                 "PROJ_CREATION": "Creazione progetti",

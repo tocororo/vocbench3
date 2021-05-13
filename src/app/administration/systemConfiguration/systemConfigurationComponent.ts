@@ -3,6 +3,7 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import { ProjectCreationPreferences, SettingsEnum } from "src/app/models/Properties";
+import { CODAServices } from "src/app/services/codaServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
@@ -65,12 +66,13 @@ export class SystemConfigurationComponent {
     defaultAclUniversalAccess: boolean;
     defaultOpenAtStartup: boolean;
 
-    /* Experimental features */
+    /* Other */
     expFeatEnabled: boolean = false;
+    codaProvisioningEnabled: boolean = false;
 
 
     constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties, 
-        private settingsService: SettingsServices, private notificationsService: NotificationServices,
+        private settingsService: SettingsServices, private notificationsService: NotificationServices, private codaService: CODAServices,
         private basicModals: BasicModalServices, private translateService: TranslateService, public sanitizer: DomSanitizer, private router: Router) { }
 
     ngOnInit() {
@@ -82,6 +84,12 @@ export class SystemConfigurationComponent {
         this.initFields();
         this.initHomeContent();
         this.expFeatEnabled = VBContext.getSystemSettings().experimentalFeaturesEnabled;
+
+        this.codaService.isRemoteProvisioningEnabled().subscribe(
+            enabled => {
+                this.codaProvisioningEnabled = enabled;
+            }
+        )
     }
 
     private initSystemSettings() {
@@ -420,11 +428,15 @@ export class SystemConfigurationComponent {
     }
 
     /* ============================
-     * Experimental feature managment
+     * Other
      * ============================ */
 
     onExpFeatEnabledChanged() {
         this.vbProp.setExperimentalFeaturesEnabled(this.expFeatEnabled);
+    }
+
+    onCodaProvisioningEnabledChanged() {
+        this.codaService.setRemoteProvisioningEnabled(this.codaProvisioningEnabled).subscribe();
     }
 
     ok() {

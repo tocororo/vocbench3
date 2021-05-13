@@ -15,21 +15,21 @@ export class CODAServices {
 	 * Returns a list of ConverterContractDescription
 	 */
 	listConverterContracts(): Observable<ConverterContractDescription[]> {
-		var params: any = {};
+		let params: any = {};
 		return this.httpMgr.doGet(this.serviceName, "listConverterContracts", params).pipe(
 			map(stResp => {
 				let converters: ConverterContractDescription[] = [];
-				for (var i = 0; i < stResp.length; i++) {
+				for (let i = 0; i < stResp.length; i++) {
 					let converterObj = stResp[i];
 
 					let signatures: SignatureDescription[] = [];
 					let signaturesArrayObj = converterObj.signatures;
-					for (var j = 0; j < signaturesArrayObj.length; j++) {
+					for (let j = 0; j < signaturesArrayObj.length; j++) {
 						let signatureObj = signaturesArrayObj[j];
 
 						let parameters: ParameterDescription[] = [];
 						let parametersArrayObj = signatureObj.params;
-						for (var k = 0; k < parametersArrayObj.length; k++) {
+						for (let k = 0; k < parametersArrayObj.length; k++) {
 							let paramObj = parametersArrayObj[k];
 							parameters.push(new ParameterDescription(paramObj.name, paramObj.type, paramObj.description));
 						}
@@ -63,11 +63,23 @@ export class CODAServices {
 	}
 
 	validatePearl(pearlCode: string, rulesShouldExists?: boolean): Observable<PearlValidationResult> {
-		var params: any = {
+		let params: any = {
 			pearlCode: pearlCode,
 			rulesShouldExists: rulesShouldExists
 		};
 		return this.httpMgr.doPost(this.serviceName, "validatePearl", params);
+	}
+
+	isRemoteProvisioningEnabled() {
+		let params = {};
+		return this.httpMgr.doGet(this.serviceName, "isRemoteProvisioningEnabled", params);
+	}
+
+	setRemoteProvisioningEnabled(enable: boolean) {
+		let params = {
+			enable: enable
+		};
+		return this.httpMgr.doPost(this.serviceName, "setRemoteProvisioningEnabled", params);
 	}
 
 }
