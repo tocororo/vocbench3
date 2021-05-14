@@ -495,7 +495,7 @@ export class AdvancedGraphApplicationModal {
                     let addNodeFn: Observable<any>[] = [];
                     this.newDefinedNodes.forEach(n => {
                         addNodeFn.push(this.s2rdfService.addNodeToHeader(this.header.id, n.nodeId, n.converter.type,
-                            n.converter.contractUri, n.converter.datatypeUri, n.converter.language, n.converter.params, n.memoize));
+                            n.converter.contractUri, n.converter.datatypeUri, n.converter.language, n.converter.params, n.memoize, n.memoizeId));
                     });
 
                     let prefixMappingMap: {[key: string]: string} = {};

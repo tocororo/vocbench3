@@ -6,10 +6,8 @@ import { RouterModule } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { AdvancedGraphApplicationModal } from '../sheet2rdf/s2rdfModals/advancedGraphApplicationModal';
-import { ConverterConfigurationComponent } from '../sheet2rdf/s2rdfModals/converterConfig/converterConfigurationComponent';
-import { ListParamEditor } from '../sheet2rdf/s2rdfModals/converterConfig/listParamEditor';
-import { MapParamEditor } from '../sheet2rdf/s2rdfModals/converterConfig/mapParamEditor';
 import { HeaderEditorModal } from '../sheet2rdf/s2rdfModals/headerEditorModal';
+import { MemoizationEditor } from '../sheet2rdf/s2rdfModals/memoizationEditor';
 import { NodeCreationModal } from '../sheet2rdf/s2rdfModals/nodeCreationModal';
 import { Sheet2RdfSettingsModal } from '../sheet2rdf/s2rdfModals/sheet2rdfSettingsModal';
 import { SimpleGraphApplicationModal } from '../sheet2rdf/s2rdfModals/simpleGraphApplicationModal';
@@ -28,13 +26,13 @@ import { SharedModule } from './sharedModule';
         TranslateModule,
     ],
     declarations: [
-        Sheet2RdfComponent, ConverterConfigurationComponent, MapParamEditor, ListParamEditor,
+        MemoizationEditor,
+        Sheet2RdfComponent, 
         //modal
         HeaderEditorModal, SubjectHeaderEditorModal, SimpleGraphApplicationModal, AdvancedGraphApplicationModal, NodeCreationModal, 
         Sheet2RdfSettingsModal
     ],
     exports: [
-        ConverterConfigurationComponent,
         Sheet2RdfComponent,
     ],
     entryComponents: [

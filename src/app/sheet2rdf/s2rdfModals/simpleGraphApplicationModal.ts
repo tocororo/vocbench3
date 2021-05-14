@@ -352,7 +352,7 @@ export class SimpleGraphApplicationModal {
         if (!exist) {
             this.s2rdfService.addNodeToHeader(this.header.id, this.selectedNode.nodeId, this.selectedNode.converter.type,
                 this.selectedNode.converter.contractUri, this.selectedNode.converter.datatypeUri, this.selectedNode.converter.language, this.selectedNode.converter.params,
-                this.selectedNode.memoize).subscribe(
+                this.selectedNode.memoize, this.selectedNode.memoizeId).subscribe(
                     resp => {
                         this.createOrUpdateGraphApplication();
                     }

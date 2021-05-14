@@ -4,7 +4,7 @@ import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "src/a
 import { Language } from "src/app/models/LanguagesCountries";
 import { XmlSchema } from "src/app/models/Vocabulary";
 import { DatatypesServices } from "src/app/services/datatypesServices";
-import { ConverterConfigStatus } from "src/app/sheet2rdf/s2rdfModals/converterConfig/converterConfigurationComponent";
+import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
 import { ModalOptions, ModalType } from "src/app/widget/modal/Modals";
 import { ConverterContractDescription, RequirementLevels } from "../../../models/Coda";
 import { AnnotationName, CustomForm, FormFieldType } from "../../../models/CustomForms";

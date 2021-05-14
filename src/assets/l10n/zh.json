@@ -1549,15 +1549,6 @@
         }
     },
     "SHEET2RDF": {
-        "CONVERTER": {
-            "CONVERTER": "Converter",
-            "CONVERTER_PARAMETERIZATION": "Converter parameterization",
-            "RDF_CAPABILITY": "RDF Capability",
-            "PARAMS": "Params",
-            "SIGNATURE": "Signature",
-            "MEMOIZE": "Memoize",
-            "MEMOIZE_INFO": "Apply the memoization: given the same input, the converter will generate the same output"
-        },
         "SPREADSHEET": {
             "FILE": "Spreadsheet file",
             "PREVIEW": "Spreadsheet preview",
@@ -1599,6 +1590,9 @@
             "GRAPH_APPLICATIONS_INFO": "List of applications of the nodes defined in the 'Nodes' panel",
             "ADD_SIMPLE_GRAPH_APPL": "Add simple graph application",
             "ADD_ADV_GRAPH_APPL": "Add advanced graph application",
+            "MEMOIZE": "Memoize",
+            "MEMOIZE_INFO": "Apply the memoization: given the same input, the converter will generate the same output",
+            "ADD_MEMOIZE_MAP": "Add memoization map ID",
             "NODE_EDITOR": "Node editor",
             "SUBJECT_HEADER_EDITOR": "Subject Header editor",
             "SUBJ_HEADER_INFO": "Set the header used for the creation of the subject",
@@ -1717,6 +1711,13 @@
         }
     },
     "WIDGETS": {
+        "CONVERTER": {
+            "CONVERTER": "Converter",
+            "CONVERTER_PARAMETERIZATION": "Converter parameterization",
+            "RDF_CAPABILITY": "RDF Capability",
+            "PARAMS": "Params",
+            "SIGNATURE": "Signature"
+        },
         "EDITORS": {
             "MANCHESTER": {
                 "HELPER": "Helper",

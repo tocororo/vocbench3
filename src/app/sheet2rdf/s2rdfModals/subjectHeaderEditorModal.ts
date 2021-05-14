@@ -1,13 +1,14 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConverterContractDescription } from "src/app/models/Coda";
+import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { Pair } from "../../models/Shared";
-import { CODAConverter, SimpleHeader, SubjectHeader } from "../../models/Sheet2RDF";
+import { CODAConverter, MemoizeData, SimpleHeader, SubjectHeader } from "../../models/Sheet2RDF";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-import { ConverterConfigStatus } from "./converterConfig/converterConfigurationComponent";
 
 @Component({
     selector: "subject-header-editor-modal",
@@ -23,7 +24,7 @@ export class SubjectHeaderEditorModal {
     type: ARTResource;
 
     selectedConverter: CODAConverter;
-    memoize: boolean = false;
+    memoizeData: MemoizeData;
 
     additionalPredObjs: PredObjPair[];
 
@@ -49,7 +50,7 @@ export class SubjectHeaderEditorModal {
         //converter
         if (this.subjectHeader.node.converter != null) {
             this.selectedConverter = this.subjectHeader.node.converter;
-            this.memoize = this.subjectHeader.node.memoize;
+            this.memoizeData = { enabled: this.subjectHeader.node.memoize, id: this.subjectHeader.node.memoizeId }
         }
         //additional po
         this.additionalPredObjs = [];
@@ -68,22 +69,30 @@ export class SubjectHeaderEditorModal {
 
     onConverterUpdate(updateStatus: ConverterConfigStatus) {
         this.selectedConverter = updateStatus.converter;
-        this.memoize = updateStatus.memoize;
     }
+
+    isConverterRandom() {
+        return this.selectedConverter != null && this.selectedConverter.contractUri == ConverterContractDescription.NAMESPACE + "randIdGen";
+    }
+
+
+    /* ============
+    Additional predicate-objects 
+    * ============ */
 
     addAdditionalPredObj() {
         this.additionalPredObjs.push({ predicate: null, object: null });
     }
 
-    private onAdditionalPropChanged(po: PredObjPair, prop: ARTURIResource) {
+    onAdditionalPropChanged(po: PredObjPair, prop: ARTURIResource) {
         po.predicate = prop;
     }
 
-    private onAdditionalObjChanged(po: PredObjPair, obj: ARTNode) {
+    onAdditionalObjChanged(po: PredObjPair, obj: ARTNode) {
         po.object = obj;
     }
 
-    private removeAdditionalPredObj(po: PredObjPair) {
+    removeAdditionalPredObj(po: PredObjPair) {
         this.additionalPredObjs.splice(this.additionalPredObjs.indexOf(po), 1);
     }
 
@@ -122,7 +131,7 @@ export class SubjectHeaderEditorModal {
         });
         //execute the update
         this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contractUri, this.selectedConverter.params,
-            this.type, additionalPOParam, this.memoize).subscribe(
+            this.type, additionalPOParam, this.memoizeData.enabled, this.memoizeData.id).subscribe(
             () => {
                 this.activeModal.close();
             }

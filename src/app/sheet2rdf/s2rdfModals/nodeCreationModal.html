@@ -17,10 +17,11 @@
             </tbody>
         </table>
 
-        <converter-config style="margin-top: 4px;" [converter]="editingNode?.converter" [memoize]="editingNode?.memoize" 
-            [rangeType]="constrainedRangeType" [language]="constrainedLanguage" [datatype]="constrainedDatatype" 
+        <converter-config class="mt-2" [converter]="editingNode?.converter" [rangeType]="constrainedRangeType" [language]="constrainedLanguage" [datatype]="constrainedDatatype" 
             (update)="onConverterUpdate($event)">
         </converter-config>
+
+        <memoization-editor *ngIf="isConverterRandom()" class="mt-2" [(ngModel)]="memoizeData"></memoization-editor>
 
     </div>
     <div class="modal-footer">

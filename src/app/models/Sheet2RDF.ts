@@ -50,6 +50,7 @@ export class NodeConversion {
     public nodeId: string;
     public converter: CODAConverter;
     public memoize: boolean;
+    public memoizeId?: string;
 }
 
 export abstract class GraphApplication {
@@ -115,6 +116,16 @@ export class CODAConverter {
         }
         return isSignatureOk;
     }
+}
+
+export class MemoizeData {
+    enabled: boolean = false;
+    id: string = null;
+}
+
+export class MemoizeContext {
+    //list of ID for the memoization (this is stored only client side for the entire work session of s2rdf and it is retrieved from the header list)
+    static idList: string[] = [];
 }
 
 export class TableContent {

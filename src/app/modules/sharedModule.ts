@@ -13,6 +13,9 @@ import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor
 import { MustacheEditorComponent } from '../widget/codemirror/mustacheEditor/mustacheEditorComponent';
 import { NTripleEditorComponent } from '../widget/codemirror/nTripleEditor/nTripleEditorComponent';
 import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
+import { ConverterConfiguratorComponent } from '../widget/converterConfigurator/converterConfiguratorComponent';
+import { ListParamEditor } from '../widget/converterConfigurator/listParamEditor';
+import { MapParamEditor } from '../widget/converterConfigurator/mapParamEditor';
 import { ResizableDirective } from "../widget/directives/resizableDirective";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
@@ -49,6 +52,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         TranslateModule,
     ],
     declarations: [
+        ConverterConfiguratorComponent,
         DataSizeRenderer,
         DatatypePickerComponent,
         ExtensionConfiguratorComponent,
@@ -60,8 +64,10 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         LangPickerComponent,
         LangStringEditorComponent,
         LanguageItemComponent,
+        ListParamEditor,
         LiteralPickerComponent,
         ManchesterEditorComponent,
+        MapParamEditor,
         MustacheEditorComponent,
         NTripleEditorComponent,
         PartitionFilterEditor,
@@ -85,6 +91,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         YasguiComponent,
     ],
     exports: [
+        ConverterConfiguratorComponent,
         DataSizeRenderer,
         DatatypePickerComponent,
         ExtensionConfiguratorComponent,

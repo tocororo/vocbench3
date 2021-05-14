@@ -67,8 +67,10 @@
             </tbody>
         </table>
 
-        <converter-config [converter]="selectedConverter" [memoize]="memoize" [rangeType]="'resource'" style="margin-top: 4px;" (update)="onConverterUpdate($event)">
+        <converter-config class="mt-2" [converter]="selectedConverter" [rangeType]="'resource'" (update)="onConverterUpdate($event)">
         </converter-config>
+
+        <memoization-editor *ngIf="isConverterRandom()" class="mt-2" [(ngModel)]="memoizeData"></memoization-editor>
 
         <div class="card" style="margin-top: 4px;">
             <div class="card-header">

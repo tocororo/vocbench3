@@ -1,0 +1,30 @@
+<div class="card">
+    <div class="card-body">
+
+        <div class="d-flex align-items-center">
+
+            <div class="form-check">
+                <input class="form-check-input" id="memoizeCheck" type="checkbox" [(ngModel)]="memoizeData.enabled" (ngModelChange)="onModelChange()">
+                <label class="form-check-label text-nowrap" for="memoizeCheck">
+                    {{'SHEET2RDF.HEADER_EDITOR.MEMOIZE'|translate}}
+                    <span class="fas fa-info-circle ml-1" [title]="'SHEET2RDF.HEADER_EDITOR.MEMOIZE_INFO'|translate">
+                    </span>
+                </label>
+            </div>
+        
+            <div *ngIf="memoizeData.enabled" class="input-group ml-4">
+                <select class="form-control" [(ngModel)]="memoizeData.id" (ngModelChange)="onModelChange()">
+                    <option [ngValue]="null">Default</option>
+                    <option *ngFor="let id of memoizeIds">{{id}}</option>
+                </select>
+                <span class="input-group-append">
+                    <button class="btn btn-light" (click)="addMap()">
+                        <span class="fas fa-plus"></span>
+                    </button>
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+</div>

@@ -77,7 +77,7 @@ export class HeaderEditorModal {
             (newNode: NodeConversion) => {
                 this.s2rdfService.addNodeToHeader(this.header.id, newNode.nodeId, newNode.converter.type, 
                     newNode.converter.contractUri, newNode.converter.datatypeUri, newNode.converter.language,
-                    newNode.converter.params, newNode.memoize).subscribe(
+                    newNode.converter.params, newNode.memoize, newNode.memoizeId).subscribe(
                     () => {
                         this.initHeader();
                         this.changed = true;
@@ -122,7 +122,7 @@ export class HeaderEditorModal {
     }
     private removeNodeImpl() {
         this.s2rdfService.removeNodeFromHeader(this.header.id, this.selectedNode.nodeId).subscribe(
-            resp => {
+            () => {
                 this.initHeader();
                 this.changed = true;
             }
@@ -131,12 +131,10 @@ export class HeaderEditorModal {
 
     changeUriConverter(node: NodeConversion) {
         this.openNodeEditorModal(this.header, node, RangeType.resource, null, null, null).then(
-            (n: NodeConversion) => {
-                node.converter = n.converter;
-                node.memoize = n.memoize;
-                this.s2rdfService.updateNodeInHeader(this.header.id, node.nodeId, node.converter.type, node.converter.contractUri, 
-                    node.converter.datatypeUri, node.converter.language, node.converter.params, node.memoize).subscribe(
-                    resp => {
+            (updatedNode: NodeConversion) => {
+                this.s2rdfService.updateNodeInHeader(this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri, 
+                    updatedNode.converter.datatypeUri, updatedNode.converter.language, updatedNode.converter.params, updatedNode.memoize, updatedNode.memoizeId).subscribe(
+                    () => {
                         this.initHeader();
                         this.changed = true;
                     }
@@ -148,11 +146,10 @@ export class HeaderEditorModal {
 
     changeLiteralConverter(node: NodeConversion) {
         this.openNodeEditorModal(this.header, node, RangeType.literal, null, null, null).then(
-            (n: NodeConversion) => {
-                node.converter = n.converter;
-                this.s2rdfService.updateNodeInHeader(this.header.id, node.nodeId, node.converter.type, node.converter.contractUri, 
-                    node.converter.datatypeUri, node.converter.language, node.converter.params, node.memoize).subscribe(
-                    resp => {
+            (updatedNode: NodeConversion) => {
+                this.s2rdfService.updateNodeInHeader(this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri, 
+                    updatedNode.converter.datatypeUri, updatedNode.converter.language, updatedNode.converter.params, updatedNode.memoize, updatedNode.memoizeId).subscribe(
+                    () => {
                         this.initHeader();
                         this.changed = true;
                     }

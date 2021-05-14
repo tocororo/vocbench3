@@ -182,7 +182,7 @@ export class Sheet2RDFServices {
 
     addNodeToHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType, 
         converterContract: string, converterDatatypeUri?: string, converterLanguage?: string, 
-        converterParams?: {[key: string]: any}, memoize?: boolean) {
+        converterParams?: {[key: string]: any}, memoize?: boolean, memoizeId?: string) {
         let params: any = {
             headerId: headerId,
             nodeId: nodeId,
@@ -191,14 +191,15 @@ export class Sheet2RDFServices {
             converterDatatypeUri: converterDatatypeUri,
             converterLanguage: converterLanguage,
             converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
-            memoize: memoize
+            memoize: memoize,
+            memoizeId: memoizeId
         };
         return this.httpMgr.doPost(this.serviceName, "addNodeToHeader", params);
     }
 
     updateNodeInHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType, 
         converterContract: string, converterDatatypeUri?: string, converterLanguage?: string, 
-        converterParams?: {[key: string]: any}, memoize?: boolean) {
+        converterParams?: {[key: string]: any}, memoize?: boolean, memoizeId?: string) {
         let params: any = {
             headerId: headerId,
             nodeId: nodeId,
@@ -207,7 +208,8 @@ export class Sheet2RDFServices {
             converterDatatypeUri: converterDatatypeUri,
             converterLanguage: converterLanguage,
             converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
-            memoize: memoize
+            memoize: memoize,
+            memoizeId: memoizeId
         };
         return this.httpMgr.doPost(this.serviceName, "updateNodeInHeader", params);
     }
@@ -229,13 +231,15 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "removeNodeFromHeader", params);
     }
 
-    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: {[key: string]: any}, type?: ARTResource, additionalPredObjs?: Pair<ARTURIResource, ARTNode>[], memoize?: boolean) {
+    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: {[key: string]: any}, type?: ARTResource, 
+            additionalPredObjs?: Pair<ARTURIResource, ARTNode>[], memoize?: boolean, memoizeId?: string) {
         let params: any = {
             headerId: headerId,
             converterContract: converterContract,
             converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
             type: type,
             memoize: memoize,
+            memoizeId: memoizeId,
             additionalPredObjs: additionalPredObjs != null ? JSON.stringify(additionalPredObjs.map(p => [p.first.toNT(), p.second.toNT()])) : null,
         };
         return this.httpMgr.doPost(this.serviceName, "updateSubjectHeader", params);

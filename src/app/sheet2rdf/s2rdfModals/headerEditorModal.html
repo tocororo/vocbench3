@@ -149,7 +149,7 @@
                                 <td [ngClass]="{ grayText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">{{g.pattern}}</td>
                             </ng-template>
                             <td class="text-center">
-                                <input type="checkbox" [(ngModel)]="g.delete" (ngModelChange)="onDeleteChange(g)">
+                                <input type="checkbox" [(ngModel)]="g.delete" (ngModelChange)="onDeleteChange(g)" [disabled]="header.ignore">
                             </td>
                         </tr>
                     </tbody>

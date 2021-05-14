@@ -1,21 +1,20 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ARTLiteral, ARTURIResource } from "src/app/models/ARTResources";
+import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole } from "src/app/models/Coda";
 import { CODAConverter } from "src/app/models/Sheet2RDF";
-import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources";
-import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole } from "../../../models/Coda";
-import { RDF } from "../../../models/Vocabulary";
-import { CODAServices } from "../../../services/codaServices";
-import { RangeType } from "../../../services/propertyServices";
+import { RDF } from "src/app/models/Vocabulary";
+import { CODAServices } from "src/app/services/codaServices";
+import { RangeType } from "src/app/services/propertyServices";
 
 
 @Component({
     selector: "converter-config",
-    templateUrl: "./converterConfigurationComponent.html"
+    templateUrl: "./converterConfiguratorComponent.html"
 })
-export class ConverterConfigurationComponent {
+export class ConverterConfiguratorComponent {
 
     @Input() converter: CODAConverter;
-    @Input() memoize: boolean;
-    @Input() rangeType: RangeType; //the listed converters capability must be compliant with this rangeType (if not provided, all converter are ok)
+    @Input() rangeType: RangeType; //restrict the converters to those which capability is compliant (if not provided, all converter are listed)
     @Input() language: string;
     @Input() datatype: ARTURIResource;
     @Output() update: EventEmitter<ConverterConfigStatus> = new EventEmitter();
@@ -153,14 +152,6 @@ export class ConverterConfigurationComponent {
         this.emitStatusUpdate();
     }
 
-    isConverterRandom() {
-        return this.selectedConverter != null && this.selectedConverter.getURI() == ConverterContractDescription.NAMESPACE + "randIdGen";
-    }
-
-    private onMemoizeChange() {
-        this.emitStatusUpdate();
-    }
-
     /**
      * ========== Signature customization ==========
      */
@@ -251,7 +242,6 @@ export class ConverterConfigurationComponent {
         }
         let status: ConverterConfigStatus = {
             converter: c,
-            memoize: this.isConverterRandom() ? this.memoize : false,
             converterDesc: this.selectedConverter,
             signatureDesc: this.selectedSignature
         };
@@ -262,7 +252,6 @@ export class ConverterConfigurationComponent {
 
 export interface ConverterConfigStatus {
     converter: CODAConverter;
-    memoize: boolean;
     converterDesc: ConverterContractDescription;
     signatureDesc: SignatureDescription;
 }

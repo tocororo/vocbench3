@@ -1549,15 +1549,6 @@
         }
     },
     "SHEET2RDF": {
-        "CONVERTER": {
-            "CONVERTER": "Converter",
-            "CONVERTER_PARAMETERIZATION": "Parametrizzazione converter",
-            "RDF_CAPABILITY": "RDF Capability",
-            "PARAMS": "Parametri",
-            "SIGNATURE": "Firma",
-            "MEMOIZE": "Memoize",
-            "MEMOIZE_INFO": "Applica la memoizzazione: dato lo stesso input, il converter genera lo stesso output"
-        },
         "SPREADSHEET": {
             "FILE": "File spreadsheet",
             "PREVIEW": "Anteprima spreadsheet",
@@ -1599,6 +1590,9 @@
             "GRAPH_APPLICATIONS_INFO": "Lista delle applications dei nodi definiti nel pannello 'Nodi'",
             "ADD_SIMPLE_GRAPH_APPL": "Aggiungi simple graph application",
             "ADD_ADV_GRAPH_APPL": "Aggiungi advanced graph application",
+            "MEMOIZE": "Memoize",
+            "MEMOIZE_INFO": "Applica la memoizzazione: dato lo stesso input, il converter genera lo stesso output"
+            "ADD_MEMOIZE_MAP": "Aggiungi ID mappa per la memoizzazione",
             "NODE_EDITOR": "Editor nodo",
             "SUBJECT_HEADER_EDITOR": "Editor Header soggetto",
             "SUBJ_HEADER_INFO": "Indica l'header usato per la creazione del soggetto",
@@ -1717,6 +1711,13 @@
         }
     },
     "WIDGETS": {
+        "CONVERTER": {
+            "CONVERTER": "Converter",
+            "CONVERTER_PARAMETERIZATION": "Parametrizzazione converter",
+            "RDF_CAPABILITY": "RDF Capability",
+            "PARAMS": "Parametri",
+            "SIGNATURE": "Firma"
+        },
         "EDITORS": {
             "MANCHESTER": {
                 "HELPER": "Helper",

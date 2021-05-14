@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CODAConverter } from "src/app/models/Sheet2RDF";
-import { ConverterConfigStatus } from "src/app/sheet2rdf/s2rdfModals/converterConfig/converterConfigurationComponent";
+import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
 
 @Component({
     selector: "graph-entry-point-modal",

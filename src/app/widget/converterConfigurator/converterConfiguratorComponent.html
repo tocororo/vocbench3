@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <label>{{'SHEET2RDF.CONVERTER.CONVERTER'|translate}}</label>
+        <label>{{'WIDGETS.CONVERTER.CONVERTER'|translate}}</label>
     </div>
     <div class="card-body scrollableContainer">
 
@@ -9,7 +9,7 @@
                 <tr>
                     <th>{{'COMMONS.NAME'|translate}}</th>
                     <th>{{'COMMONS.DESCRIPTION'|translate}}</th>
-                    <th nowrap>{{'SHEET2RDF.CONVERTER.RDF_CAPABILITY'|translate}}</th>
+                    <th nowrap>{{'WIDGETS.CONVERTER.RDF_CAPABILITY'|translate}}</th>
                     <th>URI</th>
                 </tr>
             </thead>
@@ -25,17 +25,16 @@
             </tbody>
         </table>
 
-
         <div *ngIf="selectedConverter" class="groupPanel vbox" style="margin-top: 12px;">
             <div class="groupPanel-heading">
                 <span style="flex: 1">
-                    <label class="groupPanel-heading-content">{{'SHEET2RDF.CONVERTER.CONVERTER_PARAMETERIZATION'|translate}}:</label>
+                    <label class="groupPanel-heading-content">{{'WIDGETS.CONVERTER.CONVERTER_PARAMETERIZATION'|translate}}:</label>
                 </span>
             </div>
             <div class="groupPanel-body hbox">
                 <div class="card card-alt" style="flex: 1;">
                     <div class="card-header">
-                        <label>{{'SHEET2RDF.CONVERTER.SIGNATURE'|translate}}</label>
+                        <label>{{'WIDGETS.CONVERTER.SIGNATURE'|translate}}</label>
                     </div>
                     <div class="card-body">
                         <div *ngFor="let s of availableSignatures" class="listItem" (click)="selectSignature(s)" [ngClass]="{ active: s == selectedSignature }">
@@ -81,7 +80,7 @@
                 <ng-template #otherConvBlock>
                     <div *ngIf="signatureParams?.length > 0" class="card card-alt" style="flex: 2; margin-left: 4px;">
                         <div class="card-header">
-                            <label>{{'SHEET2RDF.CONVERTER.PARAMS'|translate}}</label>
+                            <label>{{'WIDGETS.CONVERTER.PARAMS'|translate}}</label>
                         </div>
                         <div class="card-body">
                             <table class="table table-sm table-borderless">
@@ -120,17 +119,6 @@
                     </div>
                 </ng-template>
             </div>
-        </div>
-
-    </div>
-    <div *ngIf="isConverterRandom()" class="card-footer">
-        <div class="form-check">
-            <input class="form-check-input" id="memoizeCheck" type="checkbox" [(ngModel)]="memoize" (ngModelChange)="onMemoizeChange()">
-            <label class="form-check-label" for="memoizeCheck">
-                {{'SHEET2RDF.CONVERTER.MEMOIZE'|translate}}
-                <span class="fas fa-info-circle ml-1" [title]="'SHEET2RDF.CONVERTER.MEMOIZE_INFO'|translate">
-                </span>
-            </label>
         </div>
     </div>
     

@@ -4,7 +4,7 @@ import { PearlValidationResult } from "../models/Coda";
 import { ExtensionPointID, Scope } from "../models/Plugins";
 import { SettingsEnum } from "../models/Properties";
 import { RDFFormat } from "../models/RDFFormat";
-import { AdvancedGraphApplication, FsNamingStrategy, GraphApplication, Sheet2RdfSettings, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
+import { AdvancedGraphApplication, FsNamingStrategy, GraphApplication, MemoizeContext, Sheet2RdfSettings, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { CODAServices } from "../services/codaServices";
 import { ExportServices } from "../services/exportServices";
 import { SettingsServices } from "../services/settingsServices";
@@ -18,7 +18,6 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 import { HeaderEditorModal } from "./s2rdfModals/headerEditorModal";
 import { Sheet2RdfSettingsModal } from "./s2rdfModals/sheet2rdfSettingsModal";
 import { SubjectHeaderEditorModal } from "./s2rdfModals/subjectHeaderEditorModal";
-
 
 @Component({
     selector: "s2rdf-component",
@@ -115,7 +114,7 @@ export class Sheet2RdfComponent {
     truncatedRows: number;
     totalRows: number;
     headers: SimpleHeader[];
-    private subjectHeader: SubjectHeader;
+    subjectHeader: SubjectHeader;
     tablePreview: TableRow[];
     private selectedTablePreviewRow: TableRow;
 
@@ -152,9 +151,33 @@ export class Sheet2RdfComponent {
             (headers: { subject: SubjectHeader, headers: SimpleHeader[] }) => {
                 this.subjectHeader = headers.subject;
                 this.headers = headers.headers;
+
+                //init CSS classes of headers
+                this.initSubjHeaderCssClass();
                 this.headers.forEach(h => this.initHeaderCssClass(h));
+
+                this.initMemoizeIdList();
             }
         );
+    }
+
+    /**
+     * initialize IDs for the memoization by retrieving them from the node of the subject and the nodes of the headers
+     */
+    private initMemoizeIdList() {
+        MemoizeContext.idList = []; 
+        //from subject header
+        if (this.subjectHeader.node.memoize && this.subjectHeader.node.memoizeId != null && !MemoizeContext.idList.includes(this.subjectHeader.node.memoizeId)) {
+            MemoizeContext.idList.push(this.subjectHeader.node.memoizeId);
+        }
+        //from other headers
+        this.headers.forEach(h => {
+            h.nodes.forEach(n => {
+                if (n.memoize && n.memoizeId != null && !MemoizeContext.idList.includes(n.memoizeId)) {
+                    MemoizeContext.idList.push(n.memoizeId);
+                }
+            })
+        })
     }
 
     private initTablePreview() {
@@ -229,15 +252,13 @@ export class Sheet2RdfComponent {
         }
     }
 
-    getSubjHeaderCssClass(): string {
+    initSubjHeaderCssClass() {
         if (this.subjectHeader != null) {
             if (this.subjectHeader.id != null && this.subjectHeader.node.converter != null) {
-                return "configuredHeader";
+                this.subjectHeader['cssClass'] = "configuredHeader";
             } else {
-                return "incompleteSubjectHeader";
+                this.subjectHeader['cssClass'] = "incompleteSubjectHeader";
             }
-        } else {
-            return null;
         }
     }
 
