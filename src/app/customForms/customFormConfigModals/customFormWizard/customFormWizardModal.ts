@@ -1,15 +1,20 @@
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "src/app/models/ARTResources";
-import { Language } from "src/app/models/LanguagesCountries";
-import { XmlSchema } from "src/app/models/Vocabulary";
-import { DatatypesServices } from "src/app/services/datatypesServices";
+import { Observable, of } from "rxjs";
+import { map } from "rxjs/operators";
+import { ARTNode, ARTURIResource } from "src/app/models/ARTResources";
+import { PrefixMapping } from "src/app/models/Metadata";
+import { CustomFormsServices } from "src/app/services/customFormsServices";
+import { VBContext } from "src/app/utils/VBContext";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
+import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { ModalOptions, ModalType } from "src/app/widget/modal/Modals";
-import { ConverterContractDescription, RequirementLevels } from "../../../models/Coda";
-import { AnnotationName, CustomForm, FormFieldType } from "../../../models/CustomForms";
+import { ConverterContractDescription, ConverterUtils, PearlValidationResult, RequirementLevels } from "../../../models/Coda";
+import { CustomForm } from "../../../models/CustomForms";
+import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { ConstraintType, LangConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri } from "./CustomFormWizard";
 import { GraphEntryPointModal } from "./graphEntryPointModal";
 
 @Component({
@@ -21,6 +26,7 @@ export class CustomFormWizardModal {
     /*
     TODO:
     - dare la possibilità per tutti i field di editare il converter
+    - dare la possibilità di creare triple più complesse nella parte graph
     - definizione legami tra i field
     - considerare anche i CustomConstructor (quindi con stdForm)
         - entry point non è necessario
@@ -36,77 +42,37 @@ export class CustomFormWizardModal {
 
     @Input() formId: string = "FORM_ID";
 
+    customRange: boolean = true; //tells if the wizard creates a CustomRange or a CustomConstructor
+
+    prefixMappings: PrefixMapping[];
+
     //nodes/fields
     fields: WizardField[];
-    selectedField: WizardField;
-
-    //selectors options
-    constraintTypes: { [key: string]: ConstraintType[] } = { //map the type of the field with the allowed constraint types
-        [FormFieldType.literal]: [ConstraintType.Enumeration, ConstraintType.Datatype, ConstraintType.LangString],
-        [FormFieldType.uri]: [ConstraintType.Enumeration, ConstraintType.Role, ConstraintType.Range],
-    };
-    datatypes: ARTURIResource[];
-    languages: Language[];
 
     //graph
     entryPoint: CustomRangeEntryPoint;
 
+    graphs: GraphEntry[];
+    selectedGraph: GraphEntry;
 
     pearl: string;
 
     constructor(private activeModal: NgbActiveModal, private modalService: NgbModal, private elementRef: ElementRef,
-        private datatypeService: DatatypesServices, private basicModals: BasicModalServices) {
+        private cfService: CustomFormsServices,
+        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
     }
 
     ngOnInit() {
+        this.prefixMappings = VBContext.getWorkingProjectCtx().getPrefixMappings();
         this.fields = [];
         this.entryPoint = new CustomRangeEntryPoint();
-        this.datatypeService.getDatatypes().subscribe(
-            datatypes => {
-                this.datatypes = datatypes;
-            }
-        )
+        this.graphs = [];
     }
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    /* ====================
-    * FIELDS
-    * ==================== */
-
-    selectField(field: WizardField) {
-        this.selectedField = field;
-    }
-
-    addFieldUri() {
-        this.fields.push(new WizardFieldUri())
-        this.updatePearl()
-    }
-    addFieldLiteral() {
-        this.fields.push(new WizardFieldLiteral())
-        this.updatePearl()
-    }
-
-    removeField() {
-        this.fields.splice(this.fields.indexOf(this.selectedField), 1);
-        this.selectedField = null;
-        this.updatePearl()
-    }
-
-    onCollMinChange() {
-        if (this.selectedField.collection.min > this.selectedField.collection.max) {
-            this.selectedField.collection.max = this.selectedField.collection.min
-        }
-        this.updatePearl()
-    }
-    onCollMaxChange() {
-        if (this.selectedField.collection.max < this.selectedField.collection.min) {
-            this.selectedField.collection.min = this.selectedField.collection.max
-        }
-        this.updatePearl()
-    }
 
     /* ====================
     * GRAPH
@@ -126,273 +92,190 @@ export class CustomFormWizardModal {
         );
     }
 
+    addGraph() {
+        let g: GraphEntry = new GraphEntry(this.entryPoint);
+        this.graphs.push(g);
+        this.updatePearl();
+    }
+
+    removeGraph() {
+        this.graphs.splice(this.graphs.indexOf(this.selectedGraph), 1);
+        this.selectedGraph = null;
+        this.updatePearl();
+    }
+
+    selectPredicate(graph: GraphEntry) {
+        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}).then(
+            (property: ARTURIResource) => {
+                graph.predicate = property;
+                this.updatePearl();
+            },
+            () => {}
+        )
+    }
+
 
     //==========================
 
     updatePearl() {
-        this.pearl =
-            "prefix\txsd:\t<" + XmlSchema.namespace + ">\n" +
-            "prefix\tcoda:\t<" + ConverterContractDescription.NAMESPACE + ">\n" +
-            "\n" +
-            "rule it.uniroma2.art.semanticturkey.customform.form." + this.formId + " id:" + this.formId + " {\n";
-        this.pearl += "\tnodes = {\n"; //open nodes
-        this.pearl += "\t\t" + this.entryPoint.getNodeSerialization() + "\n";
+        let indentCount: number = 0;
+        this.pearl = "rule it.uniroma2.art.semanticturkey.customform.form." + this.formId + " id:" + this.formId + " {\n";
+
+        //NODES
+        indentCount++;
+        this.pearl += this.getIndent(indentCount) + "nodes = {\n"; //open nodes
+        indentCount++;
+        this.pearl += this.getIndent(indentCount) + this.entryPoint.getNodeSerialization() + " .\n";
         this.fields.forEach(f => {
             f.getPlaceholderDefinitions().forEach(phDef => {
                 if (phDef.annotations != null) {
                     phDef.annotations.forEach(a => {
-                        this.pearl += "\t\t" + a + "\n";
+                        this.pearl += this.getIndent(indentCount) + a + "\n";
                     })
                 }
-                this.pearl += "\t\t" + phDef.nodeDefinition + " .\n";
+                this.pearl += this.getIndent(indentCount) + phDef.nodeDefinition + " .\n";
             })
         })
-        this.pearl += "\t}\n"; //close nodes
-        this.pearl += "\tgraph = {\n" //open graph
+        indentCount--;
+        this.pearl += this.getIndent(indentCount) + "}\n"; //close nodes
 
-        // this.pearl += "\t\t//todo\n";
-        this.pearl += "\t}\n"; //close graph
+        //GRAPH
+        this.pearl += this.getIndent(indentCount) + "graph = {\n" //open graph
+        indentCount++;
+
+        this.graphs.forEach(g => {
+            let s: GraphEntrySerialization = g.getSerialization(this.prefixMappings);
+            if (s.optional) {
+                this.pearl += this.getIndent(indentCount) + "OPTIONAL {\n"; //open optional
+                indentCount++
+            }
+            s.triples.forEach(t => {
+                this.pearl += this.getIndent(indentCount) + t + " .\n";
+            })
+            if (s.optional) {
+                indentCount--;
+                this.pearl += this.getIndent(indentCount) + "}\n"; //close optional
+            }
+        })
+        indentCount--;
+        this.pearl += this.getIndent(indentCount) + "}\n"; //close graph
         this.pearl += "}"; //close rule
+
+        //PREFIX
+        //collected at the end in order to declare only those used
+        let prefixDeclaration = "";
+        this.prefixMappings.forEach(m => {
+            if (this.pearl.includes(m.prefix + ":")) {
+                prefixDeclaration += "prefix\t" + m.prefix + ":\t<" + m.namespace + ">\n";
+            }
+        })
+        //coda prefix is always declared (if not already in prefixMapping of the project)
+        if (!this.prefixMappings.some(m => m.namespace == ConverterContractDescription.NAMESPACE)) { 
+            prefixDeclaration += "prefix\tcoda:\t<" + ConverterContractDescription.NAMESPACE + ">\n";
+        }
+
+        this.pearl = prefixDeclaration + "\n" + this.pearl;
     }
 
-    private checkData(): boolean {
+    private getIndent(count: number) {
+        let indent: string = "";
+        for (let i = 0; i < count; i++) {
+            indent += "\t";
+        }
+        return indent;
+    }
+
+    private checkData(): Observable<boolean> {
         for (let i = 0; i < this.fields.length; i++) {
             let field = this.fields[i];
             //check on names
             if (field.label.trim() == "") { //invalid name
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field at position " + (i + 1) + " has an invalid name", ModalType.warning);
-                return false;
+                return of(false);
             }
             //look for duplicate
             if (this.fields.filter(f => f.label == field.label).length > 1) { //found more than 1 field with the name of the current one
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Found multiple fields with the same name (" + field.label + ")", ModalType.warning);
-                return false;
+                return of(false);
             }
             //check if all constraints are ok
             if (field.constraint == ConstraintType.Datatype && (<WizardFieldLiteral>field).datatype == null) {
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.Datatype, ModalType.warning);
-                return false;
+                return of(false);
             }
             if (field.constraint == ConstraintType.Enumeration && field.enumeration.length == 0) {
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.Enumeration, ModalType.warning);
-                return false;
+                return of(false);
             }
             if (field.constraint == ConstraintType.LangString) {
                 if ((<WizardFieldLiteral>field).languageConstraint.type == LangConstraintType.Fixed && (<WizardFieldLiteral>field).languageConstraint.language == null) {
                     this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.LangString, ModalType.warning);
-                    return false;
+                    return of(false);
                 }
             }
             if (field.constraint == ConstraintType.Range && (<WizardFieldUri>field).ranges.length == 0) {
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.Range, ModalType.warning);
-                return false;
+                return of(false);
             }
             if (field.constraint == ConstraintType.Role && (<WizardFieldUri>field).roles.length == 0) {
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.Role, ModalType.warning);
-                return false;
+                return of(false);
             }
         }
-        //check on graph
+        //check graph entry point node
         if (this.entryPoint.converterStatus != null) {
             if (this.entryPoint.converterStatus.signatureDesc.getRequirementLevels() == RequirementLevels.REQUIRED && this.entryPoint.feature == null) {
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Entry point converter require an input feature to be specified", ModalType.warning);
-                return false;
+                return of(false);
             }
         } else { //MEMO: this check only if CF is for CustomRange
             this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Entry point converter missing", ModalType.warning);
-            return false;
+            return of(false);
         }
-        return true;
+        //check on graph
+        for (let i = 0; i < this.graphs.length; i++) {
+            let g: GraphEntry = this.graphs[i];
+            if (i == 0 && g.object instanceof WizardField && g.object.optional) { //first usage of graph entry point node cannot be optional
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "The first usage of the " + g.subject.nodeId + " in the graph section cannot use an optional field", ModalType.warning);
+                return of(false);
+            }
+            if (g.predicate == null) {
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Graph entry at position " + (i+1) + " has a missing predicate", ModalType.warning);
+                return of(false);
+            }
+            if (g.object == null) {
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Graph entry at position " + (i+1) + " has a missing object", ModalType.warning);
+                return of(false);
+            }
+        }
+
+        //every check is ok, so returns the validity of the pearl
+        return this.cfService.validatePearl(this.pearl, "graph").pipe(
+            map((result: PearlValidationResult) => {
+                if (result.details) {
+                    this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, result.details, ModalType.warning);
+                }
+                return result.valid;
+            })
+        );
     }
 
 
 
     ok() {
-        if (this.checkData()) {
-            this.updatePearl();
-            this.activeModal.close(this.pearl);
-        }
+        this.checkData().subscribe(
+            valid => {
+                if (valid) {
+                    this.activeModal.close(this.pearl);
+                }
+            }
+        )
     }
 
     cancel() {
         this.activeModal.dismiss();
     }
 
-}
-
-
-
-
-abstract class WizardField {
-    abstract type: FormFieldType;
-    label: string = "my_field";
-    optional: boolean;
-
-    abstract enumeration: ARTNode[] = [];
-
-    //annotation related
-    collection: CollectionConstraint = new CollectionConstraint(); //(annotation @Collection)
-    constraint: ConstraintType = null;
-
-    abstract getPlaceholderDefinitions(): PlaceholderDef[];
-
-    protected getAnnotationSerializations(): string[] {
-        //the only annotation in commons between uri and literal field is @Collection
-        let annotations: string[] = [];
-        if (this.collection.enabled) {
-            let annotation = "@" + AnnotationName.Collection;
-            let min: number = this.collection.minEnabled ? this.collection.min : null;
-            let max: number = this.collection.maxEnabled ? this.collection.max : null;
-            let annParams: string[] = [];
-            if (min != null) {
-                annParams.push("min=" + min);
-            }
-            if (max != null) {
-                annParams.push("max=" + max);
-            }
-            if (annParams.length != 0) {
-                annotation += "(" + annParams.join(",") + ")";
-            }
-            annotations.push(annotation);
-        }
-        return annotations;
-    }
-}
-
-class WizardFieldLiteral extends WizardField {
-    type: FormFieldType = FormFieldType.literal;
-    languageConstraint: LangConstraint = new LangConstraint();
-    datatype: ARTURIResource; //ConstraintType.Datatype
-    enumeration: ARTLiteral[] = []; //ConstraintType.Enumeration => list of Literal (annotation @DataOneOf)
-
-    getPlaceholderDefinitions(): PlaceholderDef[] {
-        let placeholderDefs: PlaceholderDef[] = [];
-        //1st: nodeID
-        let nodeId: string = this.label + "_node";
-        //2nd: converter
-        let converter: string = this.type;
-        if (this.constraint == ConstraintType.Datatype) {
-            let dt: string = this.datatype != null ? this.datatype.getShow() : "%DATATYPE%";
-            converter += "^^" + this.datatype.toNT();
-        } else if (this.constraint == ConstraintType.LangString) {
-            if (this.languageConstraint.type == LangConstraintType.Fixed) {
-                let langTag: string = (this.languageConstraint.language != null) ? this.languageConstraint.language : "%LANG%";
-                converter += "@" + langTag;
-            } else { //UserPrompted
-                //define and add a node definition for the language placeholder
-                let langPhNodeId = this.label + "_lang_node";
-                let langPhDef: PlaceholderDef = new PlaceholderDef(langPhNodeId + " " + FormFieldType.literal + " " + CustomForm.USER_PROMPT_PREFIX + this.label + "_lang");
-                placeholderDefs.unshift(langPhDef);
-                //then use it in the langString converter
-                converter += "(coda:langString($" + langPhNodeId + "))";
-            }
-        }
-        //3rd: feature
-        let feature: string = CustomForm.USER_PROMPT_PREFIX + this.label;
-
-        let phDef = new PlaceholderDef(nodeId + " " + converter + " " + feature, this.getAnnotationSerializations());
-        placeholderDefs.push(phDef);
-        return placeholderDefs;
-    }
-
-    protected getAnnotationSerializations(): string[] {
-        let annotations: string[] = super.getAnnotationSerializations();
-        //in addition to @Collection, Literal nodes accept also @DataOneOf that can be used in combo with @Collection
-        let annotation: string;
-        if (this.constraint == ConstraintType.Enumeration) {
-            annotation = "@" + AnnotationName.DataOneOf;
-            annotation += "(value={" + this.enumeration.map(e => e.toNT()).join(",") + "})";
-        }
-        if (annotation != null) {
-            annotations.push(annotation);
-        }
-        return annotations;
-    }
-}
-class WizardFieldUri extends WizardField {
-    type: FormFieldType = FormFieldType.uri;
-    roles: RDFResourceRolesEnum[] = []; //ConstraintType.Role => role of the value admitted by the field (annotation @Role)
-    ranges: ARTURIResource[] = []; //ConstraintType.Range => class(es) of the value admitted by the field (annotation @Range or @RangeList)
-    enumeration: ARTURIResource[] = []; //ConstraintType.Enumeration => list of Resource (annotation @ObjectOneOf)
-
-    getPlaceholderDefinitions(): PlaceholderDef[] {
-        let placeholderDefs: PlaceholderDef[] = [];
-        //1st: nodeID
-        let nodeId: string = this.label + "_node";
-        //2nd: converter
-        let converter: string = this.type;
-        //TODO: eventually add the customization of the converter
-        //3rd: feature
-        let feature: string = CustomForm.USER_PROMPT_PREFIX + this.label;
-
-        let phDef = new PlaceholderDef(nodeId + " " + converter + " " + feature, this.getAnnotationSerializations());
-        placeholderDefs.push(phDef);
-        return placeholderDefs;
-    }
-
-    getAnnotationSerializations(): string[] {
-        let annotations: string[] = super.getAnnotationSerializations();
-        /* 
-        in addition to @Collection, URI nodes accept also @ObjectOneOf, @Range, @RangeList and @Role.
-        even there is no constraint that prevent to use them together, logically (except for @Collection)
-        they are mutually exclusive
-        */
-        let annotation: string;
-        if (this.constraint == ConstraintType.Enumeration) {
-            annotation = "@" + AnnotationName.ObjectOneOf;
-            annotation += "(value={" + this.enumeration.map(e => e.toNT()).join(",") + "})";
-        } else if (this.constraint == ConstraintType.Range) {
-            if (this.ranges.length == 1) {
-                annotation = "@" + AnnotationName.Range;
-                annotation += "(value=" + this.ranges[0].toNT() + ")";
-            } else if (this.ranges.length > 1) {
-                annotation = "@" + AnnotationName.RangeList;
-                annotation += "(value={" + this.ranges.map(r => r.toNT()).join(",") + "})";
-            }
-        } else if (this.constraint == ConstraintType.Role) {
-            annotation = "@" + AnnotationName.Role;
-            annotation += "(value={" + this.roles.map(r => "'" + r + "'").join(",") + "})";
-        }
-        if (annotation != null) {
-            annotations.push(annotation);
-        }
-        return annotations;
-    }
-}
-
-export enum ConstraintType {
-    Enumeration = "Enumeration", //@ObjectOneOf (uri) or @DataOneOf (literal)
-    Role = "Role", //@Role
-    Range = "Range", //@Range or @RangeList
-    Datatype = "Datatype", //no annotation, just add datatype to literal converter
-    LangString = "LangString", //no annotation, just add language to literal converter
-}
-
-class LangConstraint {
-    type: LangConstraintType = LangConstraintType.Fixed;
-    language: string;
-}
-enum LangConstraintType {
-    Fixed = "Fixed",
-    UserPrompted = "UserPrompted",
-}
-
-class CollectionConstraint {
-    enabled: boolean;
-    minEnabled: boolean;
-    min: number = 0;
-    maxEnabled: boolean;
-    max: number = 0;
-}
-
-class PlaceholderDef {
-    annotations?: string[];
-    nodeDefinition: string;
-
-    constructor(nodeDef: string, annotations?: string[]) {
-        this.nodeDefinition = nodeDef;
-        this.annotations = annotations;
-    }
 }
 
 class CustomRangeEntryPoint {
@@ -405,7 +288,8 @@ class CustomRangeEntryPoint {
         let s: string = this.nodeId + " ";
         let converterSerialization: string = "%CONVERTER%";
         if (this.converterStatus != null) {
-            converterSerialization = this.converterStatus.converterDesc.getSerialization(this.converterStatus.signatureDesc)
+            converterSerialization = ConverterUtils.getConverterProjectionOperator(this.converterStatus.converterDesc, this.converterStatus.signatureDesc, 
+                this.converterStatus.converter.type, this.converterStatus.converter.params);
         }
         s += converterSerialization + " ";
         let feature: string = "%FEATURE%";
@@ -413,9 +297,65 @@ class CustomRangeEntryPoint {
             if (this.feature != null) {
                 feature = CustomForm.USER_PROMPT_PREFIX + this.feature.label;
             }
-            s += feature + " ";
         }
-        s += ".";
         return s;
     }
+}
+
+class GraphEntry {
+    subject: CustomRangeEntryPoint | WizardFieldUri;
+    predicate: ARTURIResource;
+    object: WizardField | ARTNode;
+
+    constructor(subject: CustomRangeEntryPoint | WizardFieldUri) {
+        this.subject = subject;
+    }
+
+    getSerialization(prefixMapping: PrefixMapping[]): GraphEntrySerialization {
+        let triples: string[] = [];
+        let optional: boolean = this.object instanceof WizardField && this.object.optional;
+
+        let subject: string = "$" + this.subject.nodeId;
+
+        let predicate: string;
+        if (this.predicate != null) {
+            predicate = ResourceUtils.getQName(this.predicate.getURI(), prefixMapping);
+            if (predicate == this.predicate.getURI()) {
+                predicate = "<" + predicate + ">"; //failed to get QName, so sorround the URI with <>
+            }
+        } else {
+            predicate = "%PREDICATE%";
+        }
+
+        let object: string;
+        if (this.object != null) {
+            if (this.object instanceof WizardField) {
+                object = "$" + this.object.nodeId;
+            } else if (this.object instanceof ARTNode) {
+                if (this.object instanceof ARTURIResource) {
+                    object = ResourceUtils.getQName(this.predicate.getURI(), prefixMapping);
+                    if (object == this.object.getURI()) {
+                        object = "<" + object + ">"; //failed to get QName, so sorround the URI with <>
+                    }
+                } else {
+                    object = this.object.toNT();
+                }
+            }
+        } else {
+            object = "%OBJECT%";
+        }
+
+        triples.push(subject + " " + predicate + " " + object);
+
+        let ges: GraphEntrySerialization = {
+            triples: triples,
+            optional: optional
+        }
+        return ges;
+    }
+}
+
+interface GraphEntrySerialization {
+    triples: string[];
+    optional: boolean;
 }

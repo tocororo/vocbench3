@@ -1,4 +1,4 @@
-import { RDFTypesEnum } from "./ARTResources";
+import { ARTNode, RDFTypesEnum } from "./ARTResources";
 
 export class ConverterContractDescription {
 
@@ -70,7 +70,7 @@ export class ConverterUtils {
      * @returns 
      */
     public static getConverterProjectionOperator(converter: ConverterContractDescription, signature?: SignatureDescription,
-            capabilityType?: RDFCapabilityType): string {
+            capabilityType?: RDFCapabilityType, paramsValueMap?: {[key: string]: any}): string {
         let projectionOperator: string = "";
         let uriOrLiteral = RDFTypesEnum.literal;
         if (converter.getRDFCapability() == RDFCapabilityType.uri || converter.getRDFCapability() == RDFCapabilityType.node && capabilityType == RDFCapabilityType.uri) {
@@ -85,24 +85,69 @@ export class ConverterUtils {
         projectionOperator += "(" + convQName + "(";
         //converter params
         if (signature != null) {
-            projectionOperator += this.serializeConverterParams(signature);
+            projectionOperator += this.serializeConverterParams(signature, paramsValueMap);
         }
         projectionOperator += "))";
         return projectionOperator;
     }
 
-    private static serializeConverterParams(signature: SignatureDescription): string {
-        var params: string = "";
+    /**
+     * Serializes the parameters of the converter. If paramsValueMap is provided serializes also the values, otherwise
+     * serialize the converter parameters as placeholders
+     * @param signature 
+     * @param paramsValueMap 
+     * @returns 
+     */
+    private static serializeConverterParams(signature: SignatureDescription, paramsValueMap?: {[key: string]: any}): string {
+        let params: string = "";
         if (signature != null) {
-            var signatureParams: ParameterDescription[] = signature.getParameters();
-            for (var i = 0; i < signatureParams.length; i++) {
-                if (signatureParams[i].getType().startsWith("java.util.Map")) {
-                    params += "{ key = \"value\"}, ";    
-                } else { //java.lang.String
-                    params += "\"" + signature.getParameters()[i].getName() + "\", ";
-                }
+            let signatureParams: ParameterDescription[] = signature.getParameters();
+            let paramsSerializations: string[] = [];
+            if (paramsValueMap == null) { //serialize the parameters as placeholder
+                signatureParams.forEach(sp => {
+                    if (sp.getType().startsWith("java.util.Map")) {
+                        paramsSerializations.push("{ key = \"value\"}");
+                    } else if (sp.getType().endsWith("[]")) {
+                        paramsSerializations.push("\"" + sp.getName() + "1\", \"" + sp.getName() + "2\"");
+                    } else {
+                        paramsSerializations.push("\"" + sp.getName() + "\"");
+                    }
+                })
+            } else { //serialize the actual parameters
+                signatureParams.forEach(sp => {
+                    if (sp.getType().startsWith("java.util.Map")) {
+                        let mapValue: {[key: string]:any} = paramsValueMap[sp.getName()];
+                        let mapSerialization: {[key: string]:string} = {};
+                        //transform the map<string,any> to map<string,string>
+                        for (let key in mapValue) {
+                            let v: any = mapValue[key];
+                            //handled types for value of the map are: string, ARTNode
+                            if (v instanceof ARTNode) {
+                                mapSerialization[key] = v.toNT();
+                            } else { //plain string or unhandled type
+                                mapSerialization[key] = JSON.stringify(v);
+                            }
+                        }
+                        paramsSerializations.push(JSON.stringify(mapSerialization));
+                    } else if (sp.getType().endsWith("[]")) {
+                        let listValue: any[] = paramsValueMap[sp.getName()];
+                        let listSerialization: string[] = [];
+                        for (let v of listValue) {
+                            //handled types for value of the list are: string, ARTNode
+                            if (v instanceof ARTNode) {
+                                listSerialization.push(v.toNT());
+                            } else { //plain string or unhandled type
+                                listSerialization.push(JSON.stringify(v));
+                            }
+                        }
+                        paramsSerializations.push(listSerialization.join(", "));
+                    } else {
+                        let value: any = paramsValueMap[sp.getName()];
+                        paramsSerializations.push(JSON.stringify(value));
+                    }
+                })
             }
-            params = params.slice(0, -2); //remove the final ', '
+            params = paramsSerializations.join(", ");
         }
         return params;
     }

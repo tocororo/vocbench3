@@ -15,7 +15,7 @@
                     <ng-container *ngIf="s.getParameters().length > 0">
                         <div *ngFor="let p of s.getParameters()" style="margin-top: 3px;">
                             <span style="color: #101094; font-family: Courier New, Courier, monospace">{{p.type}}</span>
-                            <span style="font-weight: bolder; font-family: Courier New, Courier, monospace">{{p.name}}</span>
+                            <span style="font-weight: bolder; font-family: Courier New, Courier, monospace" class="ml-1">{{p.name}}</span>
                             <span *ngIf="p.getDescription().length > 0" class="grayText"> ({{p.getDescription()}})</span>
                         </div>
                     </ng-container>

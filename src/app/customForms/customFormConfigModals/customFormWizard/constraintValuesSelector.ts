@@ -6,7 +6,7 @@ import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsi
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { ResourcePickerConfig } from "src/app/widget/pickers/valuePicker/resourcePickerComponent";
-import { ConstraintType } from "./customFormWizardModal";
+import { ConstraintType } from "./CustomFormWizard";
 
 @Component({
     selector: "constraint-values-selector",

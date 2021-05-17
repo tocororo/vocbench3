@@ -250,6 +250,12 @@ export class ConverterConfiguratorComponent {
 
 }
 
+/**
+ * An object containing useful stuff about a converter configuration:
+ * - CODAConverter: a simplified representation of the converter, with parameters values, language and datatype (for literal converter)
+ * - ConverterContractDescription: DTO returned by ST for a complete representation of the converter
+ * - SignatureDescription: DTO returned by ST about the chosen signature of the converter (doesn't contains the values, they're in the CODAConverter)
+ */
 export interface ConverterConfigStatus {
     converter: CODAConverter;
     converterDesc: ConverterContractDescription;

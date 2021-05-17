@@ -12,6 +12,7 @@ import { CustomFormConfigComponent } from '../customForms/customFormConfComponen
 import { BrokenCFStructReportModal } from '../customForms/customFormConfigModals/brokenCFStructReportModal';
 import { CustomFormEditorModal } from '../customForms/customFormConfigModals/customFormEditorModal';
 import { ConstraintValuesSelector } from '../customForms/customFormConfigModals/customFormWizard/constraintValuesSelector';
+import { CustomFormWizardFieldsEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardFieldsEditor';
 import { CustomFormWizardModal } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardModal';
 import { GraphEntryPointModal } from '../customForms/customFormConfigModals/customFormWizard/graphEntryPointModal';
 import { RoleSelector } from '../customForms/customFormConfigModals/customFormWizard/roleSelector';
@@ -45,6 +46,7 @@ import { Sheet2RdfModule } from './sheet2rdfModule';
         CustomFormField,
         CustomFormFieldList,
         CustomFormModal,
+        CustomFormWizardFieldsEditor,
         CustomFormWizardModal,
         ExtractFromShaclModal,
         FormCollEditorModal,
