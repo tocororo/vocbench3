@@ -16,7 +16,7 @@ export class NewXLabelModal {
     @Input() lang: string;
     @Input() langReadonly: boolean = false;
     @Input() clsChangeable: boolean = true;
-    @Input() multiLabelOpt: { enabled: boolean, allowSameLang: boolean } = { enabled: false, allowSameLang: true };
+    @Input() multivalueOpt: { enabled: boolean, allowSameLang: boolean } = { enabled: false, allowSameLang: true };
 
     viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
@@ -72,7 +72,7 @@ export class NewXLabelModal {
          * of a label already addded to the values array
          */
         let violated: boolean = false;
-        if (!this.multiLabelOpt.allowSameLang && this.value != null && this.value.length > 0) {
+        if (!this.multivalueOpt.allowSameLang && this.value != null && this.value.length > 0) {
             this.values.forEach((v: ARTLiteral) => {
                 if (v.getLang() == this.lang) {
                     violated = true;
@@ -111,7 +111,7 @@ export class NewXLabelModal {
 
     ok() {
         let labels: ARTLiteral[];
-        if (this.multiLabelOpt.enabled) {
+        if (this.multivalueOpt.enabled) {
             if (this.values.length > 0) { //there are multiple values
                 labels = this.values;
             } else { //no multiple values => return the input label

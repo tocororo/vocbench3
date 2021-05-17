@@ -11,6 +11,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * In Sheet2RDF added possibility to delete triples
   * Added flags for Scottish Gaelic and Welsh languages
   * Adopted the new Settings services
+  * Fixed autocompletion and prefixes resolution in SPARQL editor
 
 # 9.1.0 (28-04-2021)
   * Enabled selection of "no language tagged" labels in rendering preferences

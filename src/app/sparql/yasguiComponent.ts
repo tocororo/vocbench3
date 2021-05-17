@@ -36,15 +36,6 @@ export class YasguiComponent {
         YASQE.defaults.persistent = null; //disable persistency
         YASQE.defaults.autocompleters = ["variables"];
 
-        this.yasqe = YASQE.fromTextArea(
-            this.textareaElement.nativeElement,
-            {
-                persistent: null, //avoid same query for all the tabs
-                createShareLink: null, //disable share button
-                extraKeys: { "Ctrl-7": YASQE.commentLines },
-                readOnly: this.readonly
-            }
-        );
         // register the autocompleters if not yet done (by other instances of YasguiComponent)
         if (YASQE.defaults.autocompleters.indexOf(this.PREFIX_COMPLETER_NAME) == -1) {
             YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
@@ -67,6 +58,15 @@ export class YasguiComponent {
                 }
             );
         }
+        this.yasqe = YASQE.fromTextArea(
+            this.textareaElement.nativeElement,
+            {
+                persistent: null, //avoid same query for all the tabs
+                createShareLink: null, //disable share button
+                extraKeys: { "Ctrl-7": YASQE.commentLines },
+                readOnly: this.readonly
+            }
+        );
 
         this.collapsePrefixDeclaration();
 

@@ -32,7 +32,7 @@
         <div *ngIf="!projSettingsConfigured; else elseBlock1" class="alert alert-warning m-2">
             {{'COLLABORATION.UNCONFIGURED_CS.UNCONFIGURED_CS_WARNING'|translate}}
             <span *ngIf="isCollProjManagementAuthorized()">
-                <a style="cursor: pointer" (click)="openProjectConfig()">{{'COLLABORATION.UNCONFIGURED_CS.CONFIGURE'|translate}}</a>
+                <a style="cursor: pointer" href="javascript:void(0)" (click)="openProjectConfig()">{{'COLLABORATION.UNCONFIGURED_CS.CONFIGURE'|translate}}</a>
                 {{'COLLABORATION.UNCONFIGURED_CS.A_CS'|translate}}.
             </span>
         </div>
@@ -40,7 +40,7 @@
             <!-- Mandatory settings configured, Mandatory preferences not configured (missing credentials) -->
             <div *ngIf="!userSettingsConfigured; else elseBlock2" class="alert alert-warning m-2">
                 {{'COLLABORATION.UNSIGNED_USER.UNSIGNED_USER_WARNING'|translate}}
-                <a style="cursor: pointer" (click)="openUserConfig()">{{'COLLABORATION.UNSIGNED_USER.PROVIDE'|translate}}</a>
+                <a style="cursor: pointer" href="javascript:void(0)" (click)="openUserConfig()">{{'COLLABORATION.UNSIGNED_USER.PROVIDE'|translate}}</a>
                 {{'COLLABORATION.UNSIGNED_USER.YOUR_CREDENTIALS'|translate}}
             </div>
             <ng-template #elseBlock2>
@@ -48,7 +48,7 @@
                 <div *ngIf="!csProjectLinked; else elseBlock3" class="alert alert-warning m-2">
                     {{'COLLABORATION.UNASSIGNED_PROJ.UNASSIGNED_PROJ_WARNING'|translate}}
                     <span *ngIf="isCollProjManagementAuthorized()">
-                        <a style="cursor: pointer" (click)="assignProject()">{{'COLLABORATION.UNASSIGNED_PROJ.CREATE_OR_ASSIGN'|translate}} Create or assign</a>
+                        <a style="cursor: pointer" href="javascript:void(0)" (click)="assignProject()">{{'COLLABORATION.UNASSIGNED_PROJ.CREATE_OR_ASSIGN'|translate}} Create or assign</a>
                         {{'COLLABORATION.UNASSIGNED_PROJ.A_PROJECT'|translate}}
                     </span>
                 </div>

@@ -29,13 +29,13 @@
     "@ngx-translate/http-loader": "6.0.0",
     "angular-ng-autocomplete": "2.0.1",
     "bootstrap": "^4.6.0",
-    "codemirror": "5.58.2",
+    "codemirror": "5.17.0",
     "d3": "5.9.2",
     "jquery": "3.5.1",
     "jsprolog": "^0.2.2",
     "rxjs": "^6.6.6",
     "tslib": "^2.1.0",
-    "yasgui-yasqe": "2.11.22",
+    "yasgui-yasqe": "2.11.21",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
