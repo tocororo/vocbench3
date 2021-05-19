@@ -68,6 +68,16 @@ export class SettingValueRendererComponent {
         this.onModelChange();
     }
 
+    updateSetValue(value: any[]) {
+        this.value = value;
+        this.onModelChange();
+    }
+
+    updateMapValue(value: any[]) {
+        this.value = value;
+        this.onModelChange();
+    }
+
     updatePropertiesValue(value: Settings) {
         if (value == null) {
             this.value = null;

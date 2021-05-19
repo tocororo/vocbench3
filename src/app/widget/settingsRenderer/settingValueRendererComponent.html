@@ -21,6 +21,11 @@
         </ng-template>
     </ng-container>
 
+    <setting-set *ngSwitchCase="'List'" [value]="value" [types]="type.typeArguments" (valueChanged)="updateSetValue($event)" [disabled]="disabled"></setting-set>
+    <setting-set *ngSwitchCase="'Set'" [value]="value" [types]="type.typeArguments" (valueChanged)="updateSetValue($event)" [disabled]="disabled"></setting-set>
+
+    <setting-map *ngSwitchCase="'Map'" [value]="value" [types]="type.typeArguments" (valueChanged)="updateMapValue($event)" [disabled]="disabled"></setting-map>
+
     <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="value" [schema]="type.schema" (ngModelChange)="updatePropertiesValue($event)" [disabled]="disabled">
     </nested-settings-renderer>
 
