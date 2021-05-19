@@ -10,12 +10,12 @@ import { VBContext } from "src/app/utils/VBContext";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { ModalOptions, ModalType } from "src/app/widget/modal/Modals";
-import { ConverterContractDescription, ConverterUtils, PearlValidationResult, RDFCapabilityType, RequirementLevels, SignatureDescription } from "../../../models/Coda";
+import { ConverterContractDescription, PearlValidationResult, RDFCapabilityType, RequirementLevels, SignatureDescription } from "../../../models/Coda";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ConverterConfigModal } from "./converterConfigModal";
-import { ConstraintType, LangConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri } from "./CustomFormWizard";
+import { ConstraintType, LangConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri, WizardNode, WizardNodeEntryPoint, WizardNodeFromField } from "./CustomFormWizard";
 
 @Component({
     selector: "custom-form-wizard-modal",
@@ -48,10 +48,9 @@ export class CustomFormWizardModal {
     fields: WizardField[];
 
     //nodes
-    entryPoint: WizardNode; //entry node of the graph section
+    entryPoint: WizardNodeEntryPoint; //entry node of the graph section
     nodesFromField: WizardNodeFromField[]; //nodes automatically generated through fields, these cannot be edited
-    nodes: WizardNode[]; //nodes that user can add arbitrarly
-
+    userNodes: WizardNode[]; //nodes that user can add arbitrarly
 
     private converters: ConverterContractDescription[];
 
@@ -68,10 +67,13 @@ export class CustomFormWizardModal {
 
     ngOnInit() {
         this.prefixMappings = VBContext.getWorkingProjectCtx().getPrefixMappings();
+
         this.fields = [];
+
+        this.entryPoint = new WizardNodeEntryPoint();
         this.nodesFromField = [];
-        this.nodes = [];
-        this.entryPoint = new WizardNode("entryPointNode");
+        this.userNodes = [];
+        
         this.graphs = [];
 
         this.codaService.listConverterContracts().subscribe(
@@ -90,7 +92,7 @@ export class CustomFormWizardModal {
     * ==================== */
 
     onFieldChange() {
-        //creates the node produced from the user prompt fields
+        // creates the node produced from the user prompt fields
         this.nodesFromField = this.fields.map(f => {
             let node: WizardNodeFromField = new WizardNodeFromField(f);
 
@@ -121,7 +123,7 @@ export class CustomFormWizardModal {
                         converterDesc: langArgConvDesc,
                         signatureDesc: langArgConvSign,
                     }
-                    this.updateConverterSerialization(langArgNode);
+                    langArgNode.updateConverterSerialization(this.prefixMappings);
                     //then add it as param to the current node
                     node.paramNode = langArgNode;
                     //finally set the lang arg node as parameter of the langString converter
@@ -145,18 +147,19 @@ export class CustomFormWizardModal {
                 signatureDesc: convSign
             }
             node.converterStatus = convStatus;
-            this.updateConverterSerialization(node);
+            node.updateConverterSerialization(this.prefixMappings);
             node.feature = f;
             return node;
         })
 
         //since now nodesFromField has changed, restore the selection of the object in the nodes relations panel
         for (let g of this.graphs) {
-            if (g.object instanceof WizardNodeFromField) { //if the selected object was a node (not a resource) generated from a field
-                let gObject: WizardNodeFromField = g.object;
+            //if the selected object was a node (not a resource) generated from a field
+            if (g.object.type == GraphObjectType.node && g.object.node instanceof WizardNodeFromField) {
+                let gObject: WizardNodeFromField = g.object.node;
                 //update the object with the wizard node with the same feature
                 let newObject: WizardNodeFromField = this.nodesFromField.find(n => n.feature == gObject.feature); //the object 
-                g.object = newObject;
+                g.object.node = newObject;
             }
         }
 
@@ -168,12 +171,12 @@ export class CustomFormWizardModal {
     * ==================== */
 
     addNode() {
-        this.nodes.push(new WizardNode("new_node"));
+        this.userNodes.push(new WizardNode("new_node"));
         this.updatePearl();
     }
 
     removeNode(node: WizardNode) {
-        this.nodes.splice(this.nodes.indexOf(node), 1);
+        this.userNodes.splice(this.userNodes.indexOf(node), 1);
         this.updatePearl();
     }
 
@@ -184,20 +187,13 @@ export class CustomFormWizardModal {
         modalRef.result.then(
             (data: ConverterConfigStatus) => {
                 node.converterStatus = data;
-                this.updateConverterSerialization(node);
+                node.updateConverterSerialization(this.prefixMappings);
                 this.updatePearl();
             },
             () => {}
         );
     }
 
-    private updateConverterSerialization(node: WizardNode) {
-        node.converterSerialization = ConverterUtils.getConverterProjectionOperator(node.converterStatus.converterDesc, node.converterStatus.signatureDesc, 
-            node.converterStatus.converter.type, node.converterStatus.converter.params, node.converterStatus.converter.language, node.converterStatus.converter.datatypeUri,
-            this.prefixMappings);
-    }
-
-    
     /* ====================
     * GRAPH
     * ==================== */
@@ -222,6 +218,11 @@ export class CustomFormWizardModal {
             },
             () => {}
         )
+    }
+
+    onGraphObjectValueChange(graph: GraphEntry, value: ARTNode) {
+        graph.object.value = value;
+        this.updatePearl();
     }
 
 
@@ -256,7 +257,7 @@ export class CustomFormWizardModal {
             })
         })
         //- other nodes
-        this.nodes.forEach(n => {
+        this.userNodes.forEach(n => {
             n.getNodeSerializations(this.prefixMappings).forEach(ns => {
                 if (ns.annotations != null) {
                     ns.annotations.forEach(a => {
@@ -360,6 +361,8 @@ export class CustomFormWizardModal {
         }
 
         //check nodes
+        // - TODO duplicates
+        
         // - entry point (MEMO: this check only if CF is for CustomRange)
         if (!this.checkNode(this.entryPoint)) {
             return false;
@@ -371,7 +374,7 @@ export class CustomFormWizardModal {
             }
         }
         // - other nodes
-        for (let n of this.nodes) {
+        for (let n of this.userNodes) {
             if (!this.checkNode(n)) {
                 return false;
             }
@@ -392,12 +395,11 @@ export class CustomFormWizardModal {
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Missing predicate in node relation at position " + (i+1), ModalType.warning);
                 return false;
             }
-            if (g.object == null) {
+            if ((g.object.type == GraphObjectType.node && g.object.node == null) || (g.object.type == GraphObjectType.value && g.object.value == null)) {
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Missing object in node relation at position " + (i+1), ModalType.warning);
                 return false;
             }
         }
-
         //every check passed, data is ok
         return true;
 
@@ -441,74 +443,22 @@ export class CustomFormWizardModal {
 
 }
 
-class WizardNode {
-    nodeId: string;
-    converterStatus: ConverterConfigStatus;
-    converterSerialization: string = "";
-    feature?: WizardField; //feature in input to converter (if required). In case of WizardNodeFromField feature is always provided and by construction it is the one who generated the node
-    paramNode?: WizardNode; //optional node used as parameter of other nodes (ATM the only usage is with field with language user prompted, so with coda:langString converter)
 
-    constructor(nodeId: string) {
-        this.nodeId = nodeId;
-    }
-
-    getNodeSerializations(prefixMapping: PrefixMapping[]): NodeDefinitionSerialization[] {
-        let nodeDefSerializations: NodeDefinitionSerialization[] = [];
-        let nodeDef: string = "";
-        let nodeAnnotations: string[]; //depend on the characteristics of the wizard field used as feature
-
-        //check if a param node is present, in case add its serialization first (a node can be used as param only if defined before its usage)
-        if (this.paramNode != null) {
-            let paramNodeSerializations = this.paramNode.getNodeSerializations(prefixMapping);
-            nodeDefSerializations.push(...paramNodeSerializations);
-        }
-
-        //1st: nodeID
-        nodeDef += this.nodeId;
-        //2nd: converter
-        let converter: string = "%CONVERTER%";
-        if (this.converterStatus != null) {
-            converter = this.converterSerialization;
-        }
-        nodeDef += " " + converter;
-        //3rd: feature
-        let feature: string = "%FEATURE%";
-        if (this.converterStatus != null && this.converterStatus.signatureDesc.getRequirementLevels() == RequirementLevels.REQUIRED) {
-            if (this.feature != null) {
-                feature = this.feature.featureName;
-                nodeAnnotations = this.feature.getAnnotationSerializations();
-            }
-            nodeDef += " " + feature;
-        }
-        nodeDefSerializations.push(new NodeDefinitionSerialization(nodeDef, nodeAnnotations));
-        return nodeDefSerializations;
-    }
-}
-
-class WizardNodeFromField extends WizardNode {
-    constructor(field: WizardField) {
-        super(field.label + "_node");
-        this.feature = field;
-    }
-}
-
-class NodeDefinitionSerialization {
-    nodeDefinition: string;
-    annotations?: string[];
-    constructor(nodeDef: string, annotations?: string[]) {
-        this.nodeDefinition = nodeDef;
-        this.annotations = annotations;
-    }
-}
 
 
 class GraphEntry {
     subject: WizardNode;
     predicate: ARTURIResource;
-    object: WizardNode | ARTNode;
+    // object: WizardNode | ARTNode;
+    object: {
+        type: GraphObjectType,
+        node?: WizardNode,
+        value?: ARTNode
+    }
 
     constructor(subject: WizardNode) {
         this.subject = subject;
+        this.object = { type: GraphObjectType.node }
     }
 
     getSerialization(prefixMapping: PrefixMapping[]): GraphEntrySerialization {
@@ -517,32 +467,32 @@ class GraphEntry {
 
         let subject: string = "$" + this.subject.nodeId;
 
-        let predicate: string;
+        let predicate: string = "%PREDICATE%";
         if (this.predicate != null) {
             predicate = ResourceUtils.getQName(this.predicate.getURI(), prefixMapping);
             if (predicate == this.predicate.getURI()) {
                 predicate = "<" + predicate + ">"; //failed to get QName, so sorround the URI with <>
             }
-        } else {
-            predicate = "%PREDICATE%";
         }
 
-        let object: string;
+        let object: string = "%OBJECT%";
         if (this.object != null) {
-            if (this.object instanceof WizardNode) {
-                object = "$" + this.object.nodeId;
-            } else if (this.object instanceof ARTNode) {
-                if (this.object instanceof ARTURIResource) {
-                    object = ResourceUtils.getQName(this.predicate.getURI(), prefixMapping);
-                    if (object == this.object.getURI()) {
-                        object = "<" + object + ">"; //failed to get QName, so sorround the URI with <>
+            if (this.object.type == GraphObjectType.node) {
+                if (this.object.node != null) {
+                    object = "$" + this.object.node.nodeId;
+                }
+            } else { //value
+                if (this.object.value != null) {
+                    if (this.object.value instanceof ARTURIResource) {
+                        object = ResourceUtils.getQName(this.object.value.getURI(), prefixMapping);
+                        if (object == this.object.value.getURI()) {
+                            object = "<" + object + ">"; //failed to get QName, so sorround the URI with <>
+                        }
+                    } else {
+                        object = this.object.value.toNT();
                     }
-                } else {
-                    object = this.object.toNT();
                 }
             }
-        } else {
-            object = "%OBJECT%";
         }
 
         triples.push(subject + " " + predicate + " " + object);
@@ -553,6 +503,11 @@ class GraphEntry {
         }
         return ges;
     }
+}
+
+enum GraphObjectType {
+    node = "node",
+    value ="value"
 }
 
 interface GraphEntrySerialization {

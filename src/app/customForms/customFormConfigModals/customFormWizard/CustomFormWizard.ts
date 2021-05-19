@@ -1,5 +1,12 @@
 import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "src/app/models/ARTResources";
+import { ConverterUtils, RequirementLevels } from "src/app/models/Coda";
 import { AnnotationName, CustomForm, FormFieldType } from "src/app/models/CustomForms";
+import { PrefixMapping } from "src/app/models/Metadata";
+import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
+
+/**
+ * FIELDS
+ */
 
 export abstract class WizardField {
     abstract type: FormFieldType;
@@ -120,4 +127,82 @@ export class CollectionConstraint {
     min: number = 0;
     maxEnabled: boolean;
     max: number = 0;
+}
+
+/**
+ * NODES
+ */
+
+export class WizardNode {
+    nodeId: string;
+    converterStatus: ConverterConfigStatus;
+    converterSerialization: string = "";
+    feature?: WizardField; //feature in input to converter (if required)
+    paramNode?: WizardNode; //optional node used as parameter of other nodes (ATM the only usage is with field with language user prompted, so with coda:langString converter)
+
+    constructor(nodeId: string) {
+        this.nodeId = nodeId;
+    }
+
+    updateConverterSerialization(prefixMappings?: PrefixMapping[]) {
+        this.converterSerialization = ConverterUtils.getConverterProjectionOperator(this.converterStatus.converterDesc, this.converterStatus.signatureDesc, 
+            this.converterStatus.converter.type, this.converterStatus.converter.params, this.converterStatus.converter.language, this.converterStatus.converter.datatypeUri,
+            prefixMappings);
+    }
+
+    getNodeSerializations(prefixMapping: PrefixMapping[]): NodeDefinitionSerialization[] {
+        let nodeDefSerializations: NodeDefinitionSerialization[] = [];
+        let nodeDef: string = "";
+        let nodeAnnotations: string[]; //depend on the characteristics of the wizard field used as feature
+
+        //check if a param node is present, in case add its serialization first (a node can be used as param only if defined before its usage)
+        if (this.paramNode != null) {
+            let paramNodeSerializations = this.paramNode.getNodeSerializations(prefixMapping);
+            nodeDefSerializations.push(...paramNodeSerializations);
+        }
+
+        //1st: nodeID
+        nodeDef += this.nodeId;
+        //2nd: converter
+        let converter: string = "%CONVERTER%";
+        if (this.converterStatus != null) {
+            converter = this.converterSerialization;
+        }
+        nodeDef += " " + converter;
+        //3rd: feature
+        let feature: string = "%FEATURE%";
+        if (this.converterStatus != null && this.converterStatus.signatureDesc.getRequirementLevels() == RequirementLevels.REQUIRED) {
+            if (this.feature != null) {
+                feature = this.feature.featureName;
+                nodeAnnotations = this.feature.getAnnotationSerializations();
+            }
+            nodeDef += " " + feature;
+        }
+        nodeDefSerializations.push(new NodeDefinitionSerialization(nodeDef, nodeAnnotations));
+        return nodeDefSerializations;
+    }
+}
+
+export class WizardNodeEntryPoint extends WizardNode {
+    constructor() {
+        super("entryPoint_node");
+    }
+}
+
+export class WizardNodeFromField extends WizardNode {
+    fieldSeed: WizardField; //field which generated this node (useful to keep trace of field->node bound in the wizard)
+    constructor(field: WizardField) {
+        super(field.label + "_node");
+        this.feature = field;
+        this.fieldSeed = field;
+    }
+}
+
+class NodeDefinitionSerialization {
+    nodeDefinition: string;
+    annotations?: string[];
+    constructor(nodeDef: string, annotations?: string[]) {
+        this.nodeDefinition = nodeDef;
+        this.annotations = annotations;
+    }
 }

@@ -13,7 +13,10 @@
 
                 <div class="card vbox mt-2">
                     <div class="card-header">
-                        <label style="flex: 1;">Nodes</label>
+                        <label style="flex: 1;">
+                            Nodes
+                            <span class="fas fa-info-circle" title="Here are listed the nodes automatically generated from the fields. You can also define new nodes."></span>
+                        </label>
                         <div class="btn-toolbar">
                             <button class="btn btn-xs btn-light" (click)="addNode()">
                                 <span class="fas fa-plus"></span>
@@ -36,8 +39,10 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>
+                                    <td style="position: relative;">
                                         <input class="form-control mx-1" [ngModel]="entryPoint.nodeId" readonly>
+                                        <span class="fas fa-info-circle" style="position: absolute; right: 6px; top: 11px;"
+                                            title="The entry point of the graph object created by the CustomForm."></span>
                                     </td>
                                     <td>
                                         <div class="input-group mx-1">
@@ -71,8 +76,7 @@
                                     </td>
                                     <td></td>
                                 </tr>
-
-                                <tr *ngFor="let n of nodes">
+                                <tr *ngFor="let n of userNodes">
                                     <td>
                                         <input class="form-control mx-1" [(ngModel)]="n.nodeId" (ngModelChange)="updatePearl()">
                                     </td>
@@ -107,7 +111,9 @@
 
                 <div class="card vbox mt-2">
                     <div class="card-header">
-                        <label style="flex: 1;">Nodes relations</label>
+                        <label style="flex: 1;">
+                            Nodes relations
+                        </label>
                         <div class="btn-toolbar">
                             <div class="btn-group btn-group-xs">
                                 <button class="btn btn-light" (click)="addGraph()">
@@ -119,8 +125,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body vbox">
+                    <div class="card-body scrollableContainer">
                         <table class="table table-sm table-borderless">
+                            <colgroup>
+                                <col>
+                                <col style="width: 30%">
+                                <col style="width: 30%">
+                                <col style="width: 40%">
+                            </colgroup>
                             <thead>
                                 <th></th>
                                 <th>Subject</th>
@@ -128,16 +140,16 @@
                                 <th>Object</th>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let g of graphs; let index=index" (click)="selectedGraph = g" [ngClass]="{ active: selectedGraph == g }">
-                                    <td class="text-center">{{index+1}}</td>
+                                <tr *ngFor="let g of graphs; let index=index" (click)="selectedGraph = g" [ngClass]="{ 'table-primary': selectedGraph == g }">
+                                    <td class="text-center pl-2">{{index+1}}</td>
                                     <td>
-                                        <select class="form-control" [ngModel]="g.subject" [disabled]="index == 0" (ngModelChange)="updatePearl()">
+                                        <select class="form-control mx-1" [ngModel]="g.subject" [disabled]="index == 0" (ngModelChange)="updatePearl()">
                                             <option [ngValue]="entryPoint">{{entryPoint.nodeId}}</option>
                                             <option *ngFor="let n of nodes" [ngValue]="n">{{n.nodeId}}</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <div class="input-group">
+                                        <div class="input-group mx-1">
                                             <input type="text" class="form-control" [ngModel]="g.predicate?.toNT()" readonly>
                                             <span class="input-group-append">
                                                 <button class="btn btn-light" type="button" style="width:36px;" (click)="selectPredicate(g)">
@@ -147,10 +159,20 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <select class="form-control" [(ngModel)]="g.object" (ngModelChange)="updatePearl()">
-                                            <option *ngFor="let n of nodesFromField" [ngValue]="n">{{n.nodeId}}</option>
-                                            <option *ngFor="let n of nodes" [ngValue]="n">{{n.nodeId}}</option>
-                                        </select>
+                                        <div class="d-flex mx-1">
+                                            <select class="form-control" style="width: initial;" [(ngModel)]="g.object.type">
+                                                <option>node</option>
+                                                <option>value</option>
+                                            </select>
+                                            <div class="ml-3" style="flex: 1">
+                                                <select *ngIf="g.object.type == 'node'" class="form-control" [(ngModel)]="g.object.node" (ngModelChange)="updatePearl()">
+                                                    <option *ngFor="let n of nodesFromField" [ngValue]="n">{{n.nodeId}}</option>
+                                                    <option *ngFor="let n of nodes" [ngValue]="n">{{n.nodeId}}</option>
+                                                </select>
+                                                <value-picker *ngIf="g.object.type == 'value'" [value]="g.object.value" [editable]="true" (valueChanged)="onGraphObjectValueChange(g, $event)">
+                                                </value-picker>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

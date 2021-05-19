@@ -37,10 +37,6 @@ export class CustomFormWizardFieldsEditor {
         )
     }
 
-    selectField(field: WizardField) {
-        this.selectedField = field;
-    }
-
     addFieldUri() {
         this.fields.push(new WizardFieldUri("uri_field"))
         this.onModelChange();
