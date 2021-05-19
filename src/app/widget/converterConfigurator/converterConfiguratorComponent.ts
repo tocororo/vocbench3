@@ -13,10 +13,10 @@ import { RangeType } from "src/app/services/propertyServices";
 })
 export class ConverterConfiguratorComponent {
 
-    @Input() converter: CODAConverter;
+    @Input() converter: CODAConverter; //converter to restore, with params, language, datatype...
     @Input() rangeType: RangeType; //restrict the converters to those which capability is compliant (if not provided, all converter are listed)
-    @Input() language: string;
-    @Input() datatype: ARTURIResource;
+    @Input() language: string; //restrict/force the selection of language for literal converters
+    @Input() datatype: ARTURIResource; //restrict/force the selection of datatype for literal converters
     @Output() update: EventEmitter<ConverterConfigStatus> = new EventEmitter();
 
     availableConverters: ConverterContractDescription[] = [];

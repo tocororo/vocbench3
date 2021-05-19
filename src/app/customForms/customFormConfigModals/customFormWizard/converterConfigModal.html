@@ -1,11 +1,11 @@
 <div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
     <div class="modal-header" cdkDragHandle>
         <h3 class="modal-title">
-            Custom Form Graph Entry Point
+            Converter configuration
         </h3>
     </div>
     <div class="modal-body vbox">
-        <converter-config [converter]="converter" [rangeType]="'resource'" (update)="onConverterUpdate($event)"></converter-config>
+        <converter-config [converter]="converter" [rangeType]="rangeType" [datatype]="datatype" [language]="language" (update)="onConverterUpdate($event)"></converter-config>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>

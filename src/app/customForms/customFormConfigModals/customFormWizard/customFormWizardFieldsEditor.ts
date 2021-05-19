@@ -1,7 +1,7 @@
 import { Component, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ARTURIResource } from "src/app/models/ARTResources";
-import { FormFieldType } from "src/app/models/CustomForms";
+import { CustomForm, FormFieldType } from "src/app/models/CustomForms";
 import { Language } from "src/app/models/LanguagesCountries";
 import { DatatypesServices } from "src/app/services/datatypesServices";
 import { ConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri } from "./CustomFormWizard";
@@ -56,8 +56,8 @@ export class CustomFormWizardFieldsEditor {
         this.onModelChange();
     }
 
-    onLabelChange(field: WizardField) {
-        field.nodeId = field.label + "_node";
+    onLabelChange(formField: WizardField) {
+        formField.featureName = CustomForm.USER_PROMPT_PREFIX + formField.label;
         this.onModelChange();
     }
 
@@ -73,7 +73,6 @@ export class CustomFormWizardFieldsEditor {
         }
         this.onModelChange();
     }
-
 
     onModelChange() {
         this.propagateChange(this.fields);

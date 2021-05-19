@@ -8,45 +8,106 @@
 
             <div class="vbox" style="flex: 2">
 
-                <custom-form-wizard-fields-editor [(ngModel)]="fields" (ngModelChange)="updatePearl()">
+                <custom-form-wizard-fields-editor [(ngModel)]="fields" (ngModelChange)="onFieldChange()">
                 </custom-form-wizard-fields-editor>
 
-                <div class="card mt-2">
+                <div class="card vbox mt-2">
                     <div class="card-header">
-                        <label>Entry point</label>
+                        <label style="flex: 1;">Nodes</label>
+                        <div class="btn-toolbar">
+                            <button class="btn btn-xs btn-light" (click)="addNode()">
+                                <span class="fas fa-plus"></span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="card-body d-flex">
-                        <div class="d-flex align-items-center">
-                            <label class="text-nowrap">Node ID</label>
-                            <input class="form-control ml-2" [ngModel]="entryPoint.nodeId" readonly>
-                        </div>
-                        <div class="d-flex align-items-center ml-4" style="flex: 1">
-                            <label class="text-nowrap">Converter</label>
-                            <div class="input-group ml-2">
-                                <input class="form-control" [ngModel]="entryPoint.converterSerialization" readonly>
-                                <div class="input-group-append">
-                                    <button class="btn btn-light" (click)="editEntryPointConverter()">
-                                        <span class="fas fa-pencil-alt"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="entryPoint.converterStatus?.signatureDesc.getRequirementLevels() == 'REQUIRED'" class="d-flex align-items-center ml-3">
-                            <label class="text-nowrap">Feature</label>
-                            <div class="input-group ml-2">
-                                <select class="form-control" [(ngModel)]="entryPoint.feature" (ngModelChange)="updatePearl()">
-                                    <ng-container *ngFor="let f of fields">
-                                        <option *ngIf="f.type == 'uri'" [ngValue]="f">{{f.label}}</option>
-                                    </ng-container>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="card-body scrollableContainer">
+                        <table class="table table-sm table-borderless">
+                            <colgroup>
+                                <col style="width: 20%">
+                                <col style="width: 50%">
+                                <col style="width: 30%">
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <th>Node ID</th>
+                                <th>Converter</th>
+                                <th>Feature</th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input class="form-control mx-1" [ngModel]="entryPoint.nodeId" readonly>
+                                    </td>
+                                    <td>
+                                        <div class="input-group mx-1">
+                                            <input class="form-control" [ngModel]="entryPoint.converterSerialization" readonly>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-light" (click)="editNodeConverter(entryPoint)">
+                                                    <span class="fas fa-pencil-alt"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select *ngIf="entryPoint.converterStatus?.signatureDesc.getRequirementLevels() == 'REQUIRED'" class="form-control mx-1" 
+                                            [(ngModel)]="entryPoint.feature" (ngModelChange)="updatePearl()">
+                                            <ng-container *ngFor="let f of fields">
+                                                <option *ngIf="f.type == 'uri'" [ngValue]="f">{{f.label}}</option>
+                                            </ng-container>
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let n of nodesFromField">
+                                    <td>
+                                        <input class="form-control mx-1" [ngModel]="n.nodeId" readonly>
+                                    </td>
+                                    <td>
+                                        <input class="form-control mx-1" [ngModel]="n.converterSerialization" readonly>
+                                    </td>
+                                    <td>
+                                        <input class="form-control mx-1" [ngModel]="n.feature.featureName" readonly>
+                                    </td>
+                                    <td></td>
+                                </tr>
+
+                                <tr *ngFor="let n of nodes">
+                                    <td>
+                                        <input class="form-control mx-1" [(ngModel)]="n.nodeId" (ngModelChange)="updatePearl()">
+                                    </td>
+                                    <td>
+                                        <div class="input-group mx-1">
+                                            <input class="form-control" [ngModel]="n.converterSerialization" readonly>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-light" (click)="editNodeConverter(n)">
+                                                    <span class="fas fa-pencil-alt"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select *ngIf="n.converterStatus?.signatureDesc.getRequirementLevels() == 'REQUIRED'" class="form-control mx-1" 
+                                            [(ngModel)]="n.feature" (ngModelChange)="updatePearl()">
+                                            <option *ngFor="let f of fields" [ngValue]="f">{{f.featureName}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-light" (click)="removeNode(n)">
+                                            <span class="far fa-trash-alt"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
 
                 <div class="card vbox mt-2">
                     <div class="card-header">
-                        <label style="flex: 1;">Field relations</label>
+                        <label style="flex: 1;">Nodes relations</label>
                         <div class="btn-toolbar">
                             <div class="btn-group btn-group-xs">
                                 <button class="btn btn-light" (click)="addGraph()">
@@ -72,9 +133,7 @@
                                     <td>
                                         <select class="form-control" [ngModel]="g.subject" [disabled]="index == 0" (ngModelChange)="updatePearl()">
                                             <option [ngValue]="entryPoint">{{entryPoint.nodeId}}</option>
-                                            <ng-container *ngFor="let f of fields">
-                                                <option *ngIf="f.type == 'uri'" [ngValue]="f">{{f.nodeId}}</option>
-                                            </ng-container>
+                                            <option *ngFor="let n of nodes" [ngValue]="n">{{n.nodeId}}</option>
                                         </select>
                                     </td>
                                     <td>
@@ -89,9 +148,8 @@
                                     </td>
                                     <td>
                                         <select class="form-control" [(ngModel)]="g.object" (ngModelChange)="updatePearl()">
-                                            <option *ngFor="let f of fields" [ngValue]="f">
-                                                {{f.nodeId}}
-                                            </option>
+                                            <option *ngFor="let n of nodesFromField" [ngValue]="n">{{n.nodeId}}</option>
+                                            <option *ngFor="let n of nodes" [ngValue]="n">{{n.nodeId}}</option>
                                         </select>
                                     </td>
                                 </tr>

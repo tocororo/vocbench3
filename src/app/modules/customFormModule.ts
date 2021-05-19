@@ -14,7 +14,7 @@ import { CustomFormEditorModal } from '../customForms/customFormConfigModals/cus
 import { ConstraintValuesSelector } from '../customForms/customFormConfigModals/customFormWizard/constraintValuesSelector';
 import { CustomFormWizardFieldsEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardFieldsEditor';
 import { CustomFormWizardModal } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardModal';
-import { GraphEntryPointModal } from '../customForms/customFormConfigModals/customFormWizard/graphEntryPointModal';
+import { ConverterConfigModal } from '../customForms/customFormConfigModals/customFormWizard/converterConfigModal';
 import { RoleSelector } from '../customForms/customFormConfigModals/customFormWizard/roleSelector';
 import { ExtractFromShaclModal } from '../customForms/customFormConfigModals/extractFromShaclModal';
 import { FormCollEditorModal } from '../customForms/customFormConfigModals/formCollEditorModal';
@@ -51,7 +51,7 @@ import { Sheet2RdfModule } from './sheet2rdfModule';
         ExtractFromShaclModal,
         FormCollEditorModal,
         FormCollMappingModal,
-        GraphEntryPointModal,
+        ConverterConfigModal,
         ImportCfModal,
         PearlInferenceValidationModal,
         RoleSelector,
@@ -65,7 +65,7 @@ import { Sheet2RdfModule } from './sheet2rdfModule';
         ExtractFromShaclModal,
         FormCollMappingModal,
         FormCollEditorModal,
-        GraphEntryPointModal,
+        ConverterConfigModal,
         ImportCfModal,
         PearlInferenceValidationModal,
     ]

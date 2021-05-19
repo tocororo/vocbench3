@@ -1,4 +1,6 @@
-import { ARTNode, RDFTypesEnum } from "./ARTResources";
+import { ResourceUtils } from "../utils/ResourceUtils";
+import { ARTNode } from "./ARTResources";
+import { PrefixMapping } from "./Metadata";
 
 export class ConverterContractDescription {
 
@@ -58,6 +60,20 @@ export class ConverterContractDescription {
         }
         return serialization;
     }
+
+    /**
+     * Tells if the converter is compliant with the required capability
+     * @param capability 
+     * @returns 
+     */
+    public isCapabilityCompliant(capability: RDFCapabilityType): boolean {
+        if (this.rdfCapability == capability) {
+            return true;
+        } else if (this.rdfCapability == RDFCapabilityType.node) { //node is compliant with both uri and node
+            return true;
+        }
+        return false;
+    }
 }
 
 export class ConverterUtils {
@@ -70,24 +86,38 @@ export class ConverterUtils {
      * @returns 
      */
     public static getConverterProjectionOperator(converter: ConverterContractDescription, signature?: SignatureDescription,
-            capabilityType?: RDFCapabilityType, paramsValueMap?: {[key: string]: any}): string {
+            capabilityType?: RDFCapabilityType, paramsValueMap?: {[key: string]: any}, language?: string, datatypeIri?: string, prefixMapping?: PrefixMapping[]): string {
         let projectionOperator: string = "";
-        let uriOrLiteral = RDFTypesEnum.literal;
+        let uriOrLiteral = RDFCapabilityType.literal;
         if (converter.getRDFCapability() == RDFCapabilityType.uri || converter.getRDFCapability() == RDFCapabilityType.node && capabilityType == RDFCapabilityType.uri) {
-            uriOrLiteral = RDFTypesEnum.uri;
+            uriOrLiteral = RDFCapabilityType.uri;
         }
         projectionOperator += uriOrLiteral;
-        //default converter doesn't need to be specified explicitly
         if (converter.getURI() == ConverterContractDescription.NAMESPACE + "default") {
-            return capabilityType;
+            //default converter doesn't need to be specified explicitly and doesn't have parameters
+            //just add eventually, in case of literal converter, language or datatype
+            if (uriOrLiteral == RDFCapabilityType.literal) {
+                if (language != null) {
+                    projectionOperator += "@" + language;
+                } else if (datatypeIri != null) {
+                    let dtQname = ResourceUtils.getQName(datatypeIri, prefixMapping);
+                    if (dtQname == datatypeIri) { //qname not resolved => serialize datatype as IRI in NT format
+                        projectionOperator += "^^<" + datatypeIri + ">";
+                    } else {
+                        projectionOperator += "^^" + dtQname;
+                    }
+                }
+            }
+        } else {
+            //for other converter specify URI and parameters (if any)
+            let convQName = converter.getURI().replace(ConverterContractDescription.NAMESPACE, ConverterContractDescription.PREFIX + ":");
+            projectionOperator += "(" + convQName + "(";
+            //converter params
+            if (signature != null) {
+                projectionOperator += this.serializeConverterParams(signature, paramsValueMap);
+            }
+            projectionOperator += "))";
         }
-        let convQName = converter.getURI().replace(ConverterContractDescription.NAMESPACE, ConverterContractDescription.PREFIX + ":");
-        projectionOperator += "(" + convQName + "(";
-        //converter params
-        if (signature != null) {
-            projectionOperator += this.serializeConverterParams(signature, paramsValueMap);
-        }
-        projectionOperator += "))";
         return projectionOperator;
     }
 
@@ -143,7 +173,11 @@ export class ConverterUtils {
                         paramsSerializations.push(listSerialization.join(", "));
                     } else {
                         let value: any = paramsValueMap[sp.getName()];
-                        paramsSerializations.push(JSON.stringify(value));
+                        if (typeof value == "string" && value.startsWith("$")) { //in case of node reference, serialize it as it is
+                            paramsSerializations.push(value);
+                        } else { //otherwise serialize it as json
+                            paramsSerializations.push(JSON.stringify(value));
+                        }
                     }
                 })
             }

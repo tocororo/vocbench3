@@ -4,7 +4,7 @@ import { AnnotationName, CustomForm, FormFieldType } from "src/app/models/Custom
 export abstract class WizardField {
     abstract type: FormFieldType;
     label: string;
-    nodeId: string;
+    featureName: string;
     optional: boolean;
 
     abstract enumeration: ARTNode[] = [];
@@ -15,12 +15,10 @@ export abstract class WizardField {
 
     constructor(label: string) {
         this.label = label;
-        this.nodeId = label + "_node";
+        this.featureName = CustomForm.USER_PROMPT_PREFIX + label;
     }
 
-    abstract getPlaceholderDefinitions(): PlaceholderDef[];
-
-    protected getAnnotationSerializations(): string[] {
+    getAnnotationSerializations(): string[] {
         //the only annotation in commons between uri and literal field is @Collection
         let annotations: string[] = [];
         if (this.collection.enabled) {
@@ -49,37 +47,7 @@ export class WizardFieldLiteral extends WizardField {
     datatype: ARTURIResource; //ConstraintType.Datatype
     enumeration: ARTLiteral[] = []; //ConstraintType.Enumeration => list of Literal (annotation @DataOneOf)
 
-    getPlaceholderDefinitions(): PlaceholderDef[] {
-        let placeholderDefs: PlaceholderDef[] = [];
-        //1st: nodeID
-        let nodeId: string = this.nodeId;
-        //2nd: converter
-        let converter: string = this.type;
-        if (this.constraint == ConstraintType.Datatype) {
-            let dt: string = this.datatype != null ? this.datatype.getShow() : "%DATATYPE%";
-            converter += "^^" + this.datatype.toNT();
-        } else if (this.constraint == ConstraintType.LangString) {
-            if (this.languageConstraint.type == LangConstraintType.Fixed) {
-                let langTag: string = (this.languageConstraint.language != null) ? this.languageConstraint.language : "%LANG%";
-                converter += "@" + langTag;
-            } else { //UserPrompted
-                //define and add a node definition for the language placeholder
-                let langPhNodeId = this.label + "_lang_node";
-                let langPhDef: PlaceholderDef = new PlaceholderDef(langPhNodeId + " " + FormFieldType.literal + " " + CustomForm.USER_PROMPT_PREFIX + this.label + "_lang");
-                placeholderDefs.unshift(langPhDef);
-                //then use it in the langString converter
-                converter += "(coda:langString($" + langPhNodeId + "))";
-            }
-        }
-        //3rd: feature
-        let feature: string = CustomForm.USER_PROMPT_PREFIX + this.label;
-
-        let phDef = new PlaceholderDef(nodeId + " " + converter + " " + feature, this.getAnnotationSerializations());
-        placeholderDefs.push(phDef);
-        return placeholderDefs;
-    }
-
-    protected getAnnotationSerializations(): string[] {
+    getAnnotationSerializations(): string[] {
         let annotations: string[] = super.getAnnotationSerializations();
         //in addition to @Collection, Literal nodes accept also @DataOneOf that can be used in combo with @Collection
         let annotation: string;
@@ -98,21 +66,6 @@ export class WizardFieldUri extends WizardField {
     roles: RDFResourceRolesEnum[] = []; //ConstraintType.Role => role of the value admitted by the field (annotation @Role)
     ranges: ARTURIResource[] = []; //ConstraintType.Range => class(es) of the value admitted by the field (annotation @Range or @RangeList)
     enumeration: ARTURIResource[] = []; //ConstraintType.Enumeration => list of Resource (annotation @ObjectOneOf)
-
-    getPlaceholderDefinitions(): PlaceholderDef[] {
-        let placeholderDefs: PlaceholderDef[] = [];
-        //1st: nodeID
-        let nodeId: string = this.nodeId;
-        //2nd: converter
-        let converter: string = this.type;
-        //TODO: eventually add the customization of the converter
-        //3rd: feature
-        let feature: string = CustomForm.USER_PROMPT_PREFIX + this.label;
-
-        let phDef = new PlaceholderDef(nodeId + " " + converter + " " + feature, this.getAnnotationSerializations());
-        placeholderDefs.push(phDef);
-        return placeholderDefs;
-    }
 
     getAnnotationSerializations(): string[] {
         let annotations: string[] = super.getAnnotationSerializations();
@@ -167,14 +120,4 @@ export class CollectionConstraint {
     min: number = 0;
     maxEnabled: boolean;
     max: number = 0;
-}
-
-export class PlaceholderDef {
-    annotations?: string[];
-    nodeDefinition: string;
-
-    constructor(nodeDef: string, annotations?: string[]) {
-        this.nodeDefinition = nodeDef;
-        this.annotations = annotations;
-    }
 }

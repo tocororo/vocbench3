@@ -78,6 +78,11 @@ export class CODAConverter {
     public language: string; //e.g. language in "literal@it"
     public params: { [key: string]: any };
 
+    constructor(type: RDFCapabilityType, uri: string) {
+        this.type = type;
+        this.contractUri = uri;
+    }
+
     /**
      * Tells if all the parameters foreseen by the signature have been provided
      * @returns 
