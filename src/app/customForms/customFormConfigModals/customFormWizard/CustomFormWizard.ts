@@ -2,6 +2,7 @@ import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "src/a
 import { ConverterUtils, RequirementLevels } from "src/app/models/Coda";
 import { AnnotationName, CustomForm, FormFieldType } from "src/app/models/CustomForms";
 import { PrefixMapping } from "src/app/models/Metadata";
+import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
 
 /**
@@ -133,12 +134,16 @@ export class CollectionConstraint {
  * NODES
  */
 
-export class WizardNode {
+export abstract class WizardNode {
     nodeId: string;
     converterStatus: ConverterConfigStatus;
     converterSerialization: string = "";
     feature?: WizardField; //feature in input to converter (if required)
     paramNode?: WizardNode; //optional node used as parameter of other nodes (ATM the only usage is with field with language user prompted, so with coda:langString converter)
+
+    entryPoint: boolean;
+    fromField: boolean;
+    userCreated: boolean;
 
     constructor(nodeId: string) {
         this.nodeId = nodeId;
@@ -186,15 +191,22 @@ export class WizardNode {
 export class WizardNodeEntryPoint extends WizardNode {
     constructor() {
         super("entryPoint_node");
+        this.entryPoint = true;
     }
 }
-
 export class WizardNodeFromField extends WizardNode {
     fieldSeed: WizardField; //field which generated this node (useful to keep trace of field->node bound in the wizard)
     constructor(field: WizardField) {
         super(field.label + "_node");
         this.feature = field;
         this.fieldSeed = field;
+        this.fromField = true;
+    }
+}
+export class WizardNodeUserCreated extends WizardNode {
+    constructor(nodeId: string) {
+        super(nodeId);
+        this.userCreated = true;
     }
 }
 
@@ -205,4 +217,77 @@ class NodeDefinitionSerialization {
         this.nodeDefinition = nodeDef;
         this.annotations = annotations;
     }
+}
+
+/**
+ * GRAPH
+ */
+
+ export class WizardGraphEntry {
+    subject: WizardNode;
+    predicate: ARTURIResource;
+    // object: WizardNode | ARTNode;
+    object: {
+        type: GraphObjectType,
+        node?: WizardNode,
+        value?: ARTNode
+    }
+
+    constructor(subject: WizardNode) {
+        this.subject = subject;
+        this.object = { type: GraphObjectType.node }
+    }
+
+    getSerialization(prefixMapping: PrefixMapping[]): GraphEntrySerialization {
+        let triples: string[] = [];
+        let optional: boolean = this.object.type == GraphObjectType.node && this.object.node instanceof WizardNodeFromField && this.object.node.feature.optional;
+
+        let subject: string = "$" + this.subject.nodeId;
+
+        let predicate: string = "%PREDICATE%";
+        if (this.predicate != null) {
+            predicate = ResourceUtils.getQName(this.predicate.getURI(), prefixMapping);
+            if (predicate == this.predicate.getURI()) {
+                predicate = "<" + predicate + ">"; //failed to get QName, so sorround the URI with <>
+            }
+        }
+
+        let object: string = "%OBJECT%";
+        if (this.object != null) {
+            if (this.object.type == GraphObjectType.node) {
+                if (this.object.node != null) {
+                    object = "$" + this.object.node.nodeId;
+                }
+            } else { //value
+                if (this.object.value != null) {
+                    if (this.object.value instanceof ARTURIResource) {
+                        object = ResourceUtils.getQName(this.object.value.getURI(), prefixMapping);
+                        if (object == this.object.value.getURI()) {
+                            object = "<" + object + ">"; //failed to get QName, so sorround the URI with <>
+                        }
+                    } else {
+                        object = this.object.value.toNT();
+                    }
+                }
+            }
+        }
+
+        triples.push(subject + " " + predicate + " " + object);
+
+        let ges: GraphEntrySerialization = {
+            triples: triples,
+            optional: optional
+        }
+        return ges;
+    }
+}
+
+export enum GraphObjectType {
+    node = "node",
+    value = "value"
+}
+
+export interface GraphEntrySerialization {
+    triples: string[];
+    optional: boolean;
 }

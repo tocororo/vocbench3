@@ -48,7 +48,7 @@
                         </td>
                         <td class="text-center">{{f.type}}</td>
                         <td class="text-center">
-                            <input type="checkbox" [(ngModel)]="f.optional" (ngModelChange)="onModelChange()">
+                            <input type="checkbox" [(ngModel)]="f.optional" (ngModelChange)="onFieldChange(f)">
                         </td>
                     </tr>
                 </tbody>
@@ -75,13 +75,13 @@
                     </div>
                     <div class="col-sm-1">
                         <div class="col-form-label form-check">
-                            <input class="form-check-input" type="checkbox" [(ngModel)]="selectedField.collection.enabled" (ngModelChange)="onModelChange()">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="selectedField.collection.enabled" (ngModelChange)="onFieldChange(selectedField)">
                         </div>
                     </div>
                     <div *ngIf="selectedField.collection.enabled" class="col-sm-9 row">
                         <div class="d-flex" style="flex: 1">
                             <div class="col-form-label form-check">
-                                <input class="form-check-input" id="minCheck" type="checkbox" [(ngModel)]="selectedField.collection.minEnabled" (ngModelChange)="onModelChange()">
+                                <input class="form-check-input" id="minCheck" type="checkbox" [(ngModel)]="selectedField.collection.minEnabled" (ngModelChange)="onFieldChange(selectedField)">
                                 <label class="form-check-label" for="minCheck">Min</label>
                             </div>
                             <input *ngIf="selectedField.collection.minEnabled" class="form-control ml-2" type="number" step="1" min="0"
@@ -90,7 +90,7 @@
                         </div>
                         <div class="d-flex ml-4" style="flex: 1">
                             <div class="col-form-label form-check">
-                                <input class="form-check-input" id="maxCheck" type="checkbox" [(ngModel)]="selectedField.collection.maxEnabled" (ngModelChange)="onModelChange()">
+                                <input class="form-check-input" id="maxCheck" type="checkbox" [(ngModel)]="selectedField.collection.maxEnabled" (ngModelChange)="onFieldChange(selectedField)">
                                 <label class="form-check-label" for="maxCheck">Max</label>
                             </div>
                             <input *ngIf="selectedField.collection.maxEnabled" class="form-control ml-2" type="number" step="1" min="0"
@@ -103,7 +103,7 @@
                 <div class="form-group row">
                     <label class="col-form-label col-sm-3">Constraint:</label>
                     <div class="col-sm-9">
-                        <select class="form-control" [(ngModel)]="selectedField.constraint" (ngModelChange)="onModelChange()">
+                        <select class="form-control" [(ngModel)]="selectedField.constraint" (ngModelChange)="onFieldChange(selectedField)">
                             <option [ngValue]="null">---</option>
                             <option *ngFor="let c of constraintTypes[selectedField.type]">{{c}}</option>
                         </select>
@@ -111,26 +111,26 @@
                 </div>
                 <div *ngIf="selectedField.constraint == 'Role'" class="form-group row vbox">
                     <div class="col-sm-9 offset-sm-3 vbox">
-                        <role-selector class="vbox" [(ngModel)]="selectedField.roles" (ngModelChange)="onModelChange()"></role-selector>
+                        <role-selector class="vbox" [(ngModel)]="selectedField.roles" (ngModelChange)="onFieldChange(selectedField)"></role-selector>
                     </div>
                 </div>
                 <div *ngIf="selectedField.constraint == 'Enumeration'" class="form-group row">
                     <div class="col-sm-9 offset-sm-3">
                         <constraint-values-selector [type]="selectedField.type" [constraint]="selectedField.constraint" [(ngModel)]="selectedField.enumeration" 
-                            (ngModelChange)="onModelChange()">
+                            (ngModelChange)="onFieldChange(selectedField)">
                         </constraint-values-selector>
                     </div>
                 </div>
                 <div *ngIf="selectedField.constraint == 'Range'" class="form-group row">
                     <div class="col-sm-9 offset-sm-3">
                         <constraint-values-selector [type]="selectedField.type" [constraint]="selectedField.constraint" [(ngModel)]="selectedField.ranges"
-                            (ngModelChange)="onModelChange()">
+                            (ngModelChange)="onFieldChange(selectedField)">
                         </constraint-values-selector>
                     </div>
                 </div>
                 <div *ngIf="selectedField.constraint == 'Datatype'" class="form-group row">
                     <div class="col-sm-9 offset-sm-3">
-                        <select class="form-control" [(ngModel)]="selectedField.datatype" (ngModelChange)="onModelChange()">
+                        <select class="form-control" [(ngModel)]="selectedField.datatype" (ngModelChange)="onFieldChange(selectedField)">
                             <option *ngFor="let dt of datatypes" [ngValue]="dt">{{dt.getShow()}}</option>
                         </select>
                     </div>
@@ -141,12 +141,12 @@
                     </label>
                     <div class="col-sm-9">
                         <div class="d-flex align-items-center">
-                            <select class="form-control" [(ngModel)]="selectedField.languageConstraint.type" (ngModelChange)="onModelChange()">
+                            <select class="form-control" [(ngModel)]="selectedField.languageConstraint.type" (ngModelChange)="onFieldChange(selectedField)">
                                 <option>Fixed</option>
                                 <option>UserPrompted</option>
                             </select>
                             <div *ngIf="selectedField.languageConstraint.type == 'Fixed'" class="ml-2">
-                                <lang-picker [config]="{ projectAware: false }" [(ngModel)]="selectedField.languageConstraint.language" (ngModelChange)="onModelChange()">
+                                <lang-picker [config]="{ projectAware: false }" [(ngModel)]="selectedField.languageConstraint.language" (ngModelChange)="onFieldChange(selectedField)">
                                 </lang-picker>
                             </div>
                         </div>

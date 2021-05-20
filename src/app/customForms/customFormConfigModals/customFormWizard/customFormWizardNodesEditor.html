@@ -1,0 +1,72 @@
+<div class="card vbox">
+    <div class="card-header">
+        <label style="flex: 1;">
+            Nodes
+            <span class="fas fa-info-circle" title="Here are listed the nodes automatically generated from the fields. You can also define new nodes."></span>
+        </label>
+        <div class="btn-toolbar">
+            <button class="btn btn-xs btn-light" (click)="addNode()">
+                <span class="fas fa-plus"></span>
+            </button>
+        </div>
+    </div>
+    <div class="card-body scrollableContainer">
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 20%">
+                <col style="width: 50%">
+                <col style="width: 30%">
+                <col>
+            </colgroup>
+            <thead>
+                <th>Node ID</th>
+                <th>Converter</th>
+                <th>Feature</th>
+                <th></th>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let n of nodes">
+                    <td style="position: relative;">
+                        <input class="form-control mx-1" [(ngModel)]="n.nodeId" (ngModelChange)="onModelChange()" [readonly]="!n.userCreated">
+                        <span *ngIf="n.entryPoint" class="fas fa-info-circle" style="position: absolute; right: 6px; top: 11px;"
+                            title="The entry point of the graph object created by the CustomForm."></span>
+                    </td>
+                    <td>
+                        <div class="input-group mx-1">
+                            <input class="form-control" [ngModel]="n.converterSerialization" readonly>
+                            <!-- Nodes generated from field have converter forced by the facets of the field, so hide the button to edit converter -->
+                            <div *ngIf="!n.fromField" class="input-group-append">
+                                <button class="btn btn-light" (click)="editNodeConverter(n)">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+
+                        <ng-container *ngIf="n.fromField; then fromFieldFeature; else featureSelection"></ng-container>
+                        <!-- Nodes from field have input feature blocked to the userPrompt field feature -->
+                        <ng-template #fromFieldFeature>
+                            <input class="form-control mx-1" [ngModel]="n.feature.featureName" readonly>
+                        </ng-template>
+                        <!-- Other nodes allow selection of the feature when required by the converter -->
+                        <ng-template #featureSelection>
+                            <select *ngIf="n.converterStatus?.signatureDesc.getRequirementLevels() == 'REQUIRED'" class="form-control mx-1" [(ngModel)]="n.feature" (ngModelChange)="onModelChange()">
+                                <option *ngFor="let f of fields" [ngValue]="f">{{f.featureName}}</option>
+                            </select>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <!-- Only nodes created by user can be deleted (entry point node is mandatory, nodes from field are deleted by deleting the field) -->
+                        <button *ngIf="n.userCreated" class="btn btn-light" (click)="removeNode(n)">
+                            <span class="far fa-trash-alt"></span>
+                        </button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

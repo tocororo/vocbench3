@@ -1,5 +1,4 @@
-import { Component, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTURIResource } from "src/app/models/ARTResources";
 import { CustomForm, FormFieldType } from "src/app/models/CustomForms";
 import { Language } from "src/app/models/LanguagesCountries";
@@ -9,14 +8,11 @@ import { ConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri } from 
 @Component({
     selector: "custom-form-wizard-fields-editor",
     templateUrl: "./customFormWizardFieldsEditor.html",
-    providers: [{
-        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CustomFormWizardFieldsEditor), multi: true,
-    }],
     host: { class: "vbox" }
 })
 export class CustomFormWizardFieldsEditor {
-
-    fields: WizardField[];
+    @Output() changed: EventEmitter<WizardFieldChangeEvent> = new EventEmitter();
+    @Input() fields: WizardField[];
     selectedField: WizardField;
 
     //selectors options
@@ -37,71 +33,58 @@ export class CustomFormWizardFieldsEditor {
         )
     }
 
+    //Changes on fields list
     addFieldUri() {
-        this.fields.push(new WizardFieldUri("uri_field"))
-        this.onModelChange();
+        let f = new WizardFieldUri("uri_field");
+        this.fields.push(f)
+        this.emitChangeEvent(f, WizardFieldEventType.created);
     }
     addFieldLiteral() {
-        this.fields.push(new WizardFieldLiteral("lit_field"))
-        this.onModelChange();
+        let f = new WizardFieldLiteral("lit_field");
+        this.fields.push(f)
+        this.emitChangeEvent(f, WizardFieldEventType.created);
     }
-
     removeField() {
         this.fields.splice(this.fields.indexOf(this.selectedField), 1);
+        this.emitChangeEvent(this.selectedField, WizardFieldEventType.removed);
         this.selectedField = null;
-        this.onModelChange();
     }
 
+    //Changes on individual field
     onLabelChange(formField: WizardField) {
         formField.featureName = CustomForm.USER_PROMPT_PREFIX + formField.label;
-        this.onModelChange();
+        this.onFieldChange(formField);
     }
-
     onCollMinChange() {
         if (this.selectedField.collection.min > this.selectedField.collection.max) {
             this.selectedField.collection.max = this.selectedField.collection.min
         }
-        this.onModelChange();
+        this.onFieldChange(this.selectedField);
     }
     onCollMaxChange() {
         if (this.selectedField.collection.max < this.selectedField.collection.min) {
             this.selectedField.collection.min = this.selectedField.collection.max
         }
-        this.onModelChange();
+        this.onFieldChange(this.selectedField);
     }
 
-    onModelChange() {
-        this.propagateChange(this.fields);
+    
+    onFieldChange(field: WizardField) {
+        this.emitChangeEvent(field, WizardFieldEventType.changed);
     }
 
-
-    //---- method of ControlValueAccessor and Validator interfaces ----
-    /**
-     * Write a new value to the element.
-     */
-     writeValue(obj: WizardField[]) {
-        if (obj) {
-            this.fields = obj;
-        } else {
-            this.fields = [];
-        }
+    emitChangeEvent(field: WizardField, type: WizardFieldEventType) {
+        this.changed.emit({ field: field, eventType: type });
     }
-    /**
-     * Set the function to be called when the control receives a change event.
-     */
-    registerOnChange(fn: any): void {
-        this.propagateChange = fn;
-    }
-    /**
-     * Set the function to be called when the control receives a touch event. Not used.
-     */
-    registerOnTouched(fn: any): void { }
 
-    //--------------------------------------------------
+}
 
-    // the method set in registerOnChange, it is just a placeholder for a method that takes one parameter, 
-    // we use it to emit changes back to the parent
-    private propagateChange = (_: any) => { };
-
-
+export interface WizardFieldChangeEvent {
+    eventType: WizardFieldEventType;
+    field: WizardField;
+}
+export enum WizardFieldEventType {
+    created = "created",
+    removed = "removed",
+    changed = "changed",
 }

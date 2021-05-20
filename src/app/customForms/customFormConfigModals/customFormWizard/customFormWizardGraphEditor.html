@@ -1,0 +1,67 @@
+<div class="card vbox">
+    <div class="card-header">
+        <label style="flex: 1;">
+            Nodes relations
+        </label>
+        <div class="btn-toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-light" (click)="addGraph()">
+                    <span class="fas fa-plus"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body scrollableContainer">
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col>
+                <col style="width: 30%">
+                <col style="width: 30%">
+                <col style="width: 40%">
+            </colgroup>
+            <thead>
+                <th></th>
+                <th>Subject</th>
+                <th>Predicate</th>
+                <th>Object</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let g of graphs; let index=index">
+                    <td class="text-center pl-2">{{index+1}}</td>
+                    <td>
+                        <select class="form-control mx-1" [ngModel]="g.subject" [disabled]="index == 0" (ngModelChange)="onModelChange()">
+                            <option [ngValue]="entryPoint">{{entryPoint.nodeId}}</option>
+                            <option *ngFor="let n of nodes" [ngValue]="n">{{n.nodeId}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <resource-picker class="mx-1" [resource]="g.predicate" [config]="{ roles: ['property']}" [editable]="true" (resourceChanged)="onGraphPredicateChange(g, $event)">
+                        </resource-picker>
+                    </td>
+                    <td>
+                        <div class="d-flex mx-1">
+                            <select class="form-control" style="width: initial;" [(ngModel)]="g.object.type">
+                                <option>node</option>
+                                <option>value</option>
+                            </select>
+                            <div class="ml-3" style="flex: 1">
+                                <select *ngIf="g.object.type == 'node'" class="form-control" [(ngModel)]="g.object.node" (ngModelChange)="onModelChange()">
+                                    <ng-container *ngFor="let n of nodes">
+                                        <option *ngIf="!n.entryPoint" [ngValue]="n">{{n.nodeId}}</option>
+                                    </ng-container>
+                                </select>
+                                <value-picker *ngIf="g.object.type == 'value'" [value]="g.object.value" [editable]="true" (valueChanged)="onGraphObjectValueChange(g, $event)">
+                                </value-picker>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" (click)="removeGraph(g)">
+                            <span class="far fa-trash-alt"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

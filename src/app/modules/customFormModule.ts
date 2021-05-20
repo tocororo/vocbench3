@@ -12,9 +12,11 @@ import { CustomFormConfigComponent } from '../customForms/customFormConfComponen
 import { BrokenCFStructReportModal } from '../customForms/customFormConfigModals/brokenCFStructReportModal';
 import { CustomFormEditorModal } from '../customForms/customFormConfigModals/customFormEditorModal';
 import { ConstraintValuesSelector } from '../customForms/customFormConfigModals/customFormWizard/constraintValuesSelector';
-import { CustomFormWizardFieldsEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardFieldsEditor';
-import { CustomFormWizardModal } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardModal';
 import { ConverterConfigModal } from '../customForms/customFormConfigModals/customFormWizard/converterConfigModal';
+import { CustomFormWizardFieldsEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardFieldsEditor';
+import { CustomFormWizardGraphEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardGraphEditor';
+import { CustomFormWizardModal } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardModal';
+import { CustomFormWizardNodesEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardNodesEditor';
 import { RoleSelector } from '../customForms/customFormConfigModals/customFormWizard/roleSelector';
 import { ExtractFromShaclModal } from '../customForms/customFormConfigModals/extractFromShaclModal';
 import { FormCollEditorModal } from '../customForms/customFormConfigModals/formCollEditorModal';
@@ -47,6 +49,8 @@ import { Sheet2RdfModule } from './sheet2rdfModule';
         CustomFormFieldList,
         CustomFormModal,
         CustomFormWizardFieldsEditor,
+        CustomFormWizardGraphEditor,
+        CustomFormWizardNodesEditor,
         CustomFormWizardModal,
         ExtractFromShaclModal,
         FormCollEditorModal,
