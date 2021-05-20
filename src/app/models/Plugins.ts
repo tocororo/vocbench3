@@ -266,12 +266,14 @@ export class DynamicSettingProp extends STProperties {
 export class SettingsPropType {
     public name: string;
     public constraints: SettingsPropTypeConstraint[];
+    public enumeration: Enumeration;
     public typeArguments: SettingsPropType[];
     public schema?: Settings;
 
-    constructor(name: string, constraints?: SettingsPropTypeConstraint[], typeArguments?: SettingsPropType[], schema?: Settings) {
+    constructor(name: string, constraints?: SettingsPropTypeConstraint[], enumeration?: Enumeration, typeArguments?: SettingsPropType[], schema?: Settings) {
         this.name = name;
         this.constraints = constraints;
+        this.enumeration = enumeration;
         this.typeArguments = typeArguments;
         this.schema = schema;
     }
@@ -288,6 +290,8 @@ export class SettingsPropType {
             }
         }
 
+        let enumeration: Enumeration = jsonObject.enumeration;
+
         let typeArguments: SettingsPropType[];
         let typeArgumentsJson = jsonObject.typeArguments;
         if (typeArgumentsJson) {
@@ -302,7 +306,7 @@ export class SettingsPropType {
             schema = Settings.parse(jsonObject.schema);
         }
 
-        return new SettingsPropType(name, constraints, typeArguments, schema);
+        return new SettingsPropType(name, constraints, enumeration, typeArguments, schema);
     }
 
     public clone(): SettingsPropType {
@@ -313,6 +317,13 @@ export class SettingsPropType {
                 constraints.push({ type: this.constraints[i].type, value: this.constraints[i].value });
             }
         }
+        
+        let enumeration: Enumeration;
+        if (this.enumeration) {
+            //note: this copies the JS object, that doesn't work properly in TS if Enumeration will implement methods, in case provide a clone() method
+            enumeration = JSON.parse(JSON.stringify(this.enumeration));
+        }
+
         let typeArguments: SettingsPropType[];
         if (this.typeArguments) {
             typeArguments = [];
@@ -320,7 +331,8 @@ export class SettingsPropType {
                 typeArguments.push(this.typeArguments[i].clone());
             }
         }
-        return new SettingsPropType(this.name, constraints, typeArguments, this.schema ? this.schema.clone() : null);
+
+        return new SettingsPropType(this.name, constraints, enumeration, typeArguments, this.schema ? this.schema.clone() : null);
     }
 }
 

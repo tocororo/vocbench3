@@ -13,8 +13,16 @@
                 <tr *ngFor="let m of map; let index = index; let last = last;">
                     <td><label>Key:</label></td>
                     <td>
-                        <!-- At the moment, do not check the type of the key, consider it always as string -->
-                        <input class="form-control form-control-sm" [(ngModel)]="map[index].key" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                        <!-- At the moment, do not check the type of the key, consider it always as string. Moreover do not
+                        handle enumeration with open: true, in that case handle the key as simple string.
+                        Currently it only handles open: false enumeration with a <select> element  -->
+                        <input *ngIf="!types[0].enumeration || types[0].enumeration.open; else enumerationKeyBlock" class="form-control form-control-sm" 
+                            [(ngModel)]="map[index].key" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                        <ng-template #enumerationKeyBlock>
+                            <select [(ngModel)]="map[index].key" class="form-control form-control-sm" (ngModelChange)="onModelChange()">
+                                <option *ngFor="let e of types[0].enumeration.values">{{e}}</option>
+                            </select>
+                        </ng-template>
                     </td>
                     <td><label>{{'COMMONS.VALUE'|translate}}:</label></td>
                     <td>
