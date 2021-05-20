@@ -5,14 +5,31 @@ import { PrefixMapping } from "src/app/models/Metadata";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
 
+export abstract class FeatureStructure {
+    featureName: string;
+}
+
+export class SessionFeature extends FeatureStructure {
+    constructor(name: string) {
+        super();
+        this.featureName = CustomForm.SESSION_PREFIX + name;
+    }
+}
+
+export class StandardFormFeature extends FeatureStructure {
+    constructor(name: string) {
+        super();
+        this.featureName = CustomForm.STD_FORM_PREFIX + name;
+    }
+}
+
 /**
  * FIELDS
  */
 
-export abstract class WizardField {
+export abstract class WizardField extends FeatureStructure {
     abstract type: FormFieldType;
     label: string;
-    featureName: string;
     optional: boolean;
 
     abstract enumeration: ARTNode[] = [];
@@ -22,6 +39,7 @@ export abstract class WizardField {
     constraint: ConstraintType = null;
 
     constructor(label: string) {
+        super();
         this.label = label;
         this.featureName = CustomForm.USER_PROMPT_PREFIX + label;
     }
@@ -138,7 +156,7 @@ export abstract class WizardNode {
     nodeId: string;
     converterStatus: ConverterConfigStatus;
     converterSerialization: string = "";
-    feature?: WizardField; //feature in input to converter (if required)
+    feature?: FeatureStructure; //feature in input to converter (if required)
     paramNode?: WizardNode; //optional node used as parameter of other nodes (ATM the only usage is with field with language user prompted, so with coda:langString converter)
 
     entryPoint: boolean;
@@ -179,7 +197,9 @@ export abstract class WizardNode {
         if (this.converterStatus != null && this.converterStatus.signatureDesc.getRequirementLevels() == RequirementLevels.REQUIRED) {
             if (this.feature != null) {
                 feature = this.feature.featureName;
-                nodeAnnotations = this.feature.getAnnotationSerializations();
+                if (this.feature instanceof WizardField) {
+                    nodeAnnotations = this.feature.getAnnotationSerializations();
+                }
             }
             nodeDef += " " + feature;
         }
@@ -240,7 +260,7 @@ class NodeDefinitionSerialization {
 
     getSerialization(prefixMapping: PrefixMapping[]): GraphEntrySerialization {
         let triples: string[] = [];
-        let optional: boolean = this.object.type == GraphObjectType.node && this.object.node instanceof WizardNodeFromField && this.object.node.feature.optional;
+        let optional: boolean = this.object.type == GraphObjectType.node && this.object.node instanceof WizardNodeFromField && this.object.node.fieldSeed.optional;
 
         let subject: string = "$" + this.subject.nodeId;
 

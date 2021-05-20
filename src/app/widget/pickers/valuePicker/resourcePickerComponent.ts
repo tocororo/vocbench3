@@ -13,6 +13,7 @@ import { ModalType } from '../../modal/Modals';
 @Component({
     selector: 'resource-picker',
     templateUrl: './resourcePickerComponent.html',
+    styles: [":host { display: block; }"]
 })
 export class ResourcePickerComponent {
     

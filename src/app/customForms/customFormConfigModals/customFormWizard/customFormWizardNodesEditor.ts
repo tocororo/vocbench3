@@ -1,12 +1,13 @@
 import { Component, forwardRef, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { SKOS, SKOSXL } from "src/app/models/Vocabulary";
 import { RangeType } from "src/app/services/propertyServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
 import { ModalOptions } from "src/app/widget/modal/Modals";
 import { ConverterConfigModal } from "./converterConfigModal";
-import { WizardField, WizardNode, WizardNodeEntryPoint, WizardNodeUserCreated } from "./CustomFormWizard";
+import { SessionFeature, StandardFormFeature, WizardField, WizardNode, WizardNodeEntryPoint, WizardNodeUserCreated } from "./CustomFormWizard";
 
 @Component({
     selector: "custom-form-wizard-nodes-editor",
@@ -18,10 +19,33 @@ import { WizardField, WizardNode, WizardNodeEntryPoint, WizardNodeUserCreated } 
 })
 export class CustomFormWizardNodesEditor implements ControlValueAccessor {
     @Input() fields: WizardField[]; //for the selection of the converter feature
+    @Input() range: boolean; //tells if the wizard works for CustomRange (false if for Constructor)
+
+    sessionFeatures: SessionFeature[];
+    stdFormFeatures: StandardFormFeature[];
 
     nodes: WizardNode[];
 
     constructor(private modalService: NgbModal) { }
+
+    ngOnInit() {
+        this.sessionFeatures = [new SessionFeature("user")];
+
+        //for custom constructor add the feature of stdForm
+        if (!this.range) {
+            this.stdFormFeatures = [new StandardFormFeature("resource")];
+            let lexModel: string = VBContext.getWorkingProject().getLexicalizationModelType();
+            if (lexModel == SKOS.uri) {
+                this.stdFormFeatures.push(new StandardFormFeature("labelLang"));
+                this.stdFormFeatures.push(new StandardFormFeature("label"));
+            } else if (lexModel == SKOSXL.uri) {
+                this.stdFormFeatures.push(new StandardFormFeature("labelLang"));
+                this.stdFormFeatures.push(new StandardFormFeature("xlabel"));
+                this.stdFormFeatures.push(new StandardFormFeature("lexicalForm"));
+            }
+            this.stdFormFeatures.sort((f1, f2) => f1.featureName.localeCompare(f2.featureName));
+        }
+    }
 
     addNode() {
         this.nodes.push(new WizardNodeUserCreated("new_node"));

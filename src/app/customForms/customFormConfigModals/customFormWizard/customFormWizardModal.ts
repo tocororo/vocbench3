@@ -6,7 +6,6 @@ import { CODAServices } from "src/app/services/codaServices";
 import { CustomFormsServices } from "src/app/services/customFormsServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
-import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { ModalType } from "src/app/widget/modal/Modals";
 import { ConverterContractDescription, PearlValidationResult, RDFCapabilityType, RequirementLevels, SignatureDescription } from "../../../models/Coda";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -23,14 +22,6 @@ export class CustomFormWizardModal {
     /*
     TODO:
     - distinguere creazione di CustomForm e CustomConstructor (entry point non necessario)
-    - considerare anche le feature structure alternative a userPrompt/
-        - stdForm (solo per constructor):
-            - resource
-            - labelLang //in SKOS e SKOSXL
-            - label //in SKOS
-            - xlabel, lexicalForm //in SKOSXL
-        - session
-            - user
     */
 
     @Input() formId: string = "FORM_ID";
@@ -49,9 +40,8 @@ export class CustomFormWizardModal {
 
     pearl: string;
 
-    constructor(private activeModal: NgbActiveModal, private elementRef: ElementRef,
-        private cfService: CustomFormsServices, private codaService: CODAServices,
-        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
+    constructor(private activeModal: NgbActiveModal, private elementRef: ElementRef, private cfService: CustomFormsServices, private codaService: CODAServices,
+        private basicModals: BasicModalServices) {
     }
 
     ngOnInit() {
@@ -321,7 +311,7 @@ export class CustomFormWizardModal {
         }
         for (let i = 0; i < this.graphs.length; i++) {
             let g: WizardGraphEntry = this.graphs[i];
-            if (i == 0 && g.object instanceof WizardNodeFromField && g.object.feature.optional) { //first usage of graph entry point node cannot be optional
+            if (i == 0 && g.object instanceof WizardNodeFromField && g.object.fieldSeed.optional) { //first usage of graph entry point node cannot be optional
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "The first usage of the " + g.subject.nodeId + " in the graph section cannot use an optional field", ModalType.warning);
                 return false;
             }

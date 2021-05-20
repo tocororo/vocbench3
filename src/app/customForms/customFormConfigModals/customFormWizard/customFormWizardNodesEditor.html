@@ -28,7 +28,7 @@
 
                 <tr *ngFor="let n of nodes">
                     <td style="position: relative;">
-                        <input class="form-control mx-1" [(ngModel)]="n.nodeId" (ngModelChange)="onModelChange()" [readonly]="!n.userCreated">
+                        <input class="form-control mx-1" [(ngModel)]="n.nodeId" (ngModelChange)="onModelChange()" [readonly]="!n.userCreated" sanitized>
                         <span *ngIf="n.entryPoint" class="fas fa-info-circle" style="position: absolute; right: 6px; top: 11px;"
                             title="The entry point of the graph object created by the CustomForm."></span>
                     </td>
@@ -53,7 +53,15 @@
                         <!-- Other nodes allow selection of the feature when required by the converter -->
                         <ng-template #featureSelection>
                             <select *ngIf="n.converterStatus?.signatureDesc.getRequirementLevels() == 'REQUIRED'" class="form-control mx-1" [(ngModel)]="n.feature" (ngModelChange)="onModelChange()">
-                                <option *ngFor="let f of fields" [ngValue]="f">{{f.featureName}}</option>
+                                <optgroup label="User prompted features">
+                                    <option *ngFor="let f of fields" [ngValue]="f">{{f.featureName}}</option>
+                                </optgroup>
+                                <optgroup label="Session's features">
+                                    <option *ngFor="let f of sessionFeatures" [ngValue]="f">{{f.featureName}}</option>
+                                </optgroup>
+                                <optgroup *ngIf="stdFormFeatures" label="Standard Form's features">
+                                    <option *ngFor="let f of stdFormFeatures" [ngValue]="f">{{f.featureName}}</option>
+                                </optgroup>
                             </select>
                         </ng-template>
                     </td>

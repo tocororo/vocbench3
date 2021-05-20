@@ -74,6 +74,8 @@ export class CustomForm {
 
     public static PREFIX = "it.uniroma2.art.semanticturkey.customform.form.";
     public static USER_PROMPT_PREFIX = "userPrompt/";
+    public static SESSION_PREFIX = "session/";
+    public static STD_FORM_PREFIX = "stdForm/";
 
     private id: string;
     private name: string;
