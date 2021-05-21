@@ -24,10 +24,10 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
 
     private lexiconLang: string; //cache the language of the lexicon
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        resViewModals: ResViewModalServices, private ontolexService: OntoLexLemonServices) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
+        private browsingModals: BrowsingModalServices, private ontolexService: OntoLexLemonServices) {
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

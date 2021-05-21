@@ -9,7 +9,6 @@ import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { MultiActionFunction } from "../multipleActionHelper";
@@ -24,10 +23,10 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.topconceptof;
     addBtnImgSrc = "./assets/images/icons/actions/conceptScheme_create.png";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        resViewModals: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
+        private skosService: SkosServices, private eventHandler: VBEventHandler) {
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

@@ -3,7 +3,7 @@
     <div class="card-header">
         <label style="flex: 1">{{predicate.getShow()}}</label>
         <div class="btn-group" ngbDropdown>
-            <button class="btn btn-xs btn-light predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()" [title]="actionAddTitle" [disabled]="addDisabled">
+            <button class="btn btn-xs btn-light predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()" [title]="'ACTIONS.ADD'|translate" [disabled]="addDisabled">
                 <span class="fas fa-plus fa-sm"></span>
             </button>
             <button class="btn btn-xs btn-light dropdown-toggle predObjRenderPanelBtn" style="padding: 3px;" data-toggle="dropdown" ngbDropdownToggle [disabled]="actionMenuDisabled">

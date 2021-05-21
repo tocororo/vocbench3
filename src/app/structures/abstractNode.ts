@@ -48,7 +48,7 @@ export abstract class AbstractNode {
      */
 
     ngOnDestroy() {
-        this.eventSubscriptions.forEach(s => s.unsubscribe);
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     selectNode() {

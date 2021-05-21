@@ -28,6 +28,7 @@ import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/
 import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/classAxiomPartitionRenderer';
 import { ConstituentsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/constituentsPartitionRenderer';
+import { CustomPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/customPartitionRenderer';
 import { DatatypeDefinitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/datatypeDefinitionPartitionRenderer';
 import { DenotationsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/denotationsPartitionRenderer';
 import { DisjointPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/disjointPropertiesRenderer';
@@ -131,6 +132,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         ConstituentsPartitionRenderer,
         CustomFormTableCellComponent,
         CustomFormValueTableComponent,
+        CustomPartitionRenderer,
         DatatypeDefinitionPartitionRenderer,
         DenotationsPartitionRenderer,
         DisjointPropertiesPartitionRenderer,

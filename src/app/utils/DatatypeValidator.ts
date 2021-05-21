@@ -36,7 +36,7 @@ export class DatatypeValidator {
     }
 
     ngOnDestroy() {
-        this.eventSubscriptions.forEach(s => s.unsubscribe);
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     /**

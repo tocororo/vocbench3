@@ -7,7 +7,6 @@ import { ManchesterServices } from "../../../../services/manchesterServices";
 import { PropertyServices } from "../../../../services/propertyServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { MultiActionFunction } from "../multipleActionHelper";
@@ -22,10 +21,10 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.domains;
     addBtnImgSrc = "./assets/images/icons/actions/cls_create.png";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        resViewModals: ResViewModalServices, private manchService: ManchesterServices) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
+        private manchService: ManchesterServices) {
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

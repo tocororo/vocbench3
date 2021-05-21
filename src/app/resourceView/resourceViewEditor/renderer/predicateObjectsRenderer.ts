@@ -57,13 +57,10 @@ export class PredicateObjectsRenderer {
     addManuallyAllowed: boolean = false;
     addExteranlResourceAllowed: boolean = false;
 
-    actionAddTitle: string;
 
     constructor(private cfService: CustomFormsServices) {}
 
-    ngOnInit() {
-        this.actionAddTitle = "Add a " + this.predicateObjects.getPredicate().getShow();
-    }
+    ngOnInit() {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] || changes['readonly']) {

@@ -61,7 +61,7 @@ export class LanguageItemComponent {
     }
 
     ngOnDestroy() {
-        this.eventSubscriptions.forEach(s => s.unsubscribe);
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     private initFlagImgSrc() {

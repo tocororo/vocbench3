@@ -193,6 +193,17 @@
                 [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </properties-renderer>
+
+            <ng-container *ngFor="let p of customSections">
+                <!-- partition: {{p}}
+                poList: {{resViewSections[p]|json}} -->
+                <custom-partition-renderer [partition]="p" [pred-obj-list]="resViewSections[p]"
+                    [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                    (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+                </custom-partition-renderer>
+            </ng-container> 
+            
+
         </ng-container>
     </div>
     <div class="card-footer" style="min-height: 31px;">

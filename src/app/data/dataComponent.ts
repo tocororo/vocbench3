@@ -48,7 +48,7 @@ export class DataComponent {
     }
 
     ngOnDestroy() {
-        this.eventSubscriptions.forEach(s => s.unsubscribe);
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     onNodeSelected(node: ARTResource) {

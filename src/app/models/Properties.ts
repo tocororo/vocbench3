@@ -1,4 +1,4 @@
-import { ARTURIResource } from "./ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "./ARTResources";
 import { Language } from "./LanguagesCountries";
 import { Project } from "./Project";
 import { ResViewPartition } from "./ResourceView";
@@ -78,6 +78,15 @@ export enum ResourceViewType { //used for set a default type of resource view fo
     termView = "termView",
     lexicographerView = "lexicographerView",
     sourceCode = "sourceCode"
+}
+
+export class ResourceViewProjectSettings {
+    customSections: {[key: string]: CustomSection}; //map name -> CustomSection
+    templates: {[key: string]: string[]}; //map role -> sections
+}
+
+export class CustomSection {
+    matchedProperties: string[];
 }
 
 export class SearchSettings {
@@ -235,6 +244,7 @@ export class ProjectPreferences {
 export class ProjectSettings {
     projectLanguagesSetting: Language[] = []; //all available languages in a project (settings)
     prefLabelClashMode: PrefLabelClashMode = PrefLabelClashMode.forbid;
+    resourceView: ResourceViewProjectSettings;
 }
 
 /**

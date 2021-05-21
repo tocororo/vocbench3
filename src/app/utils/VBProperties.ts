@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID, Scope } from '../models/Plugins';
-import { ClassTreePreference, ConceptTreePreference, InstanceListPreference, LexicalEntryListPreference, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, ResourceViewMode, ResourceViewPreference, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassTreePreference, ConceptTreePreference, InstanceListPreference, LexicalEntryListPreference, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, ResourceViewMode, ResourceViewPreference, ResourceViewProjectSettings, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { AdministrationServices } from '../services/administrationServices';
 import { SettingsServices } from '../services/settingsServices';
@@ -26,7 +26,7 @@ export class VBProperties {
     }
 
     ngOnDestroy() {
-        this.eventSubscriptions.forEach(s => s.unsubscribe);
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     /* =============================
@@ -337,6 +337,9 @@ export class VBProperties {
                 if (labelClashModeValue != null && labelClashModeValue in PrefLabelClashMode) { //if not null and valid enum
                     projectSettings.prefLabelClashMode = labelClashModeValue;
                 }
+
+                let rvSettings: ResourceViewProjectSettings = settings.getPropertyValue(SettingsEnum.resourceView);
+                projectSettings.resourceView = rvSettings;
             })
         )
     }

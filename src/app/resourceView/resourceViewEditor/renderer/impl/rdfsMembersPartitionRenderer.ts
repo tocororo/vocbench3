@@ -6,10 +6,7 @@ import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { PropertyServices } from "../../../../services/propertyServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
-import { SkosServices } from "../../../../services/skosServices";
-import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { RdfsMembersModalReturnData } from "../../resViewModals/rdfsMembersModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
@@ -24,10 +21,9 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.rdfsMembers;
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
-        resViewModals: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices) {
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

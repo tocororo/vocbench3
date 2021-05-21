@@ -22,10 +22,10 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.subterms;
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        resViewModals: ResViewModalServices, private ontolexService: OntoLexLemonServices) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
+        private browsingModals: BrowsingModalServices, private ontolexService: OntoLexLemonServices) {
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

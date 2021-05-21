@@ -1,4 +1,6 @@
 import { Directive } from "@angular/core";
+import { PropertyServices } from "src/app/services/propertyServices";
+import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ResViewUtils } from "../../../models/ResourceView";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -14,9 +16,9 @@ export abstract class PartitionRendererMultiRoot extends PartitionRenderer  {
      * ATTRIBUTES
      */
 
-    constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, resViewModals: ResViewModalServices) {
-        super(resourcesService, cfService, basicModals, resViewModals);
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices) {
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     /**

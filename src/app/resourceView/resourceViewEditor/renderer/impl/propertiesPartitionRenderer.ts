@@ -29,11 +29,11 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.properties;
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        resViewModals: ResViewModalServices, private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
+        private browsingModals: BrowsingModalServices, private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper, 
         private translateService: TranslateService) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

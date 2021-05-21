@@ -7,7 +7,6 @@ import { DatatypesServices } from "../../../../services/datatypesServices";
 import { PropertyServices } from "../../../../services/propertyServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
@@ -21,10 +20,10 @@ export class DatatypeDefinitionPartitionRenderer extends PartitionRenderSingleRo
     partition = ResViewPartition.datatypeDefinitions;
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
-        resViewModals: ResViewModalServices, private datatypeService: DatatypesServices) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
+        private datatypeService: DatatypesServices) {
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

@@ -33,7 +33,7 @@ export abstract class AbstractResViewVisualizationMode {
     abstract onRefreshDataBroadcast(): void;
 
     ngOnDestroy() {
-        this.eventSubscriptions.forEach(s => s.unsubscribe);
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
 }

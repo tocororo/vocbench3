@@ -1,16 +1,21 @@
 import { Directive, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Observable } from 'rxjs';
+import { CustomForm, CustomFormValue } from "src/app/models/CustomForms";
+import { PropertyServices } from "src/app/services/propertyServices";
+import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../../models/ResourceView";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { CRUDEnum, ResourceViewAuthEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { AddPropertyValueModalReturnData } from "../resViewModals/addPropertyValueModal";
 import { BrowseExternalResourceModalReturnData } from "../resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { MultiActionError, MultiActionFunction, MultiActionType, MultipleActionHelper } from "./multipleActionHelper";
+import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "./propertyEnrichmentHelper";
 
 @Directive()
 export abstract class PartitionRenderer {
@@ -27,15 +32,19 @@ export abstract class PartitionRenderer {
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     protected resourcesService: ResourcesServices;
+    protected propService: PropertyServices;
     protected cfService: CustomFormsServices;
     protected basicModals: BasicModalServices;
+    protected creationModals: CreationModalServices;
     protected resViewModals: ResViewModalServices;
 
-    constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, resViewModals: ResViewModalServices) {
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices) {
         this.resourcesService = resourcesService;
+        this.propService = propService;
         this.cfService = cfService;
         this.basicModals = basicModals;
+        this.creationModals = creationModals;
         this.resViewModals = resViewModals;
     }
 
@@ -200,6 +209,82 @@ export abstract class PartitionRenderer {
         );
     }
 
+    protected enrichProperty(predicate: ARTURIResource) {
+        PropertyEnrichmentHelper.getPropertyEnrichmentInfo(predicate, this.propService, this.basicModals).subscribe(
+            (data: PropertyEnrichmentInfo) => {
+                if (data.type == EnrichmentType.resource) {
+                    this.enrichWithResource(predicate);
+                } else if (data.type == EnrichmentType.literal) {
+                    this.enrichWithTypedLiteral(predicate, data.allowedDatatypes, data.dataRanges);
+                } else if (data.type == EnrichmentType.customForm) {
+                    this.enrichWithCustomForm(predicate, data.form);
+                }
+            }
+        )
+    }
+
+    protected enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
+        this.resViewModals.enrichCustomForm({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, form.getId()).then(
+            (entryMap: any) => {
+                let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
+                this.getAddPartitionAware(this.resource, predicate, cfValue).subscribe(() => this.update.emit());
+            },
+            () => { }
+        )
+    }
+
+    /**
+     * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
+     */
+     protected enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
+        this.creationModals.newTypedLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, predicate, allowedDatatypes, dataRanges, true, true).then(
+            (literals: ARTLiteral[]) => {
+                let addFunctions: MultiActionFunction[] = [];
+                literals.forEach((l: ARTLiteral) => {
+                    addFunctions.push({
+                        function: this.getAddPartitionAware(this.resource, predicate, l),
+                        value: l
+                    });
+                });
+                this.addMultiple(addFunctions);
+            },
+            () => { }
+        );
+    }
+
+    /**
+     * Opens a modal to enrich the predicate with a resource 
+     */
+     protected enrichWithResource(predicate: ARTURIResource) {
+        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, this.resource, predicate, false).then(
+            (data: AddPropertyValueModalReturnData) => {
+                let prop: ARTURIResource = data.property;
+                let values: ARTURIResource[] = data.value;
+                let addFunctions: MultiActionFunction[] = [];
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push({
+                        function: this.getAddPartitionAware(this.resource, prop, v),
+                        value: v
+                    });
+                });
+                this.addMultiple(addFunctions);
+            },
+            () => { }
+        )
+    }
+
+    /**
+     * This represents the specific partition implementation for the add. 
+     * By default it is Resource.addValue(...), but it could be override in a partition if it has a specific implementation 
+     * (like in notes partition for which exists the addNote service that accept a SpecialValue as value)
+     * @param resource
+     * @param predicate 
+     * @param value 
+     */
+     protected getAddPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue): Observable<void> {
+        return this.resourcesService.addValue(resource, predicate, value);
+    }
+
     /**
      * Returns the predicate to enrich in case of an add operation is fired from the generic partition
      */
@@ -218,7 +303,7 @@ export abstract class PartitionRenderer {
      * @param predicate 
      * @param object 
      */
-    private removeHandler(predicate: ARTURIResource, object?: ARTNode) {
+    protected removeHandler(predicate: ARTURIResource, object?: ARTNode) {
         if (object == null) {
             this.basicModals.confirm({key: "ACTIONS.DELETE_ALL_VALUES"}, {key:"MESSAGES.DELETE_ALL_VALUES_CONFIRM", params:{property: predicate.getShow()}}, ModalType.warning).then(
                 yes => this.removeAllValues(predicate),
@@ -306,13 +391,13 @@ export abstract class PartitionRenderer {
     /**
      * When the object is edited or replaced requires update of res view
      */
-    private onObjectUpdate() {
+    protected onObjectUpdate() {
         this.update.emit();
     }
     /**
      * Fired when an object in a subPanel is double clicked. It should simply emit a objectDblClick event.
      */
-    private objectDblClick(obj: ARTNode) {
+    protected objectDblClick(obj: ARTNode) {
         if (obj.isResource()) {//emit double click only for resources (not for ARTLiteral that cannot be described in a ResView)
             this.dblclickObj.emit(<ARTResource>obj);
         }
@@ -324,7 +409,7 @@ export abstract class PartitionRenderer {
      * or the predicate has no custom range, the object should be rendered as simple rdfResource
      * @param object object of the predicate object list to render in view.
      */
-    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
+    protected renderAsReified(predicate: ARTURIResource, object: ARTNode): boolean {
         return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
     }
 

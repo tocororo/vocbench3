@@ -8,7 +8,7 @@ import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourc
 import { Issue } from "../../models/Collaboration";
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
-import { NotificationStatus, PartitionFilterPreference, ProjectPreferences } from "../../models/Properties";
+import { NotificationStatus, ProjectPreferences, ResourceViewProjectSettings } from "../../models/Properties";
 import { PropertyFacet, ResourceViewCtx, ResViewPartition } from "../../models/ResourceView";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { CollaborationServices } from "../../services/collaborationServices";
@@ -96,6 +96,8 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         [ResViewPartition.topconceptof]: null,
         [ResViewPartition.types]: null,
     };
+    customSections: string[];
+
     private propertyFacets: PropertyFacet[] = null;
 
     //top bar buttons
@@ -127,19 +129,19 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         private eventHandler: VBEventHandler, private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
         private basicModals: BasicModalServices, private collabModals: CollaborationModalServices) {
         super(resViewService, modalService);
-        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
-        this.eventSubscriptions.push(eventHandler.resourceDeprecatedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.resourceDeprecatedEvent.subscribe(
             (resource: ARTResource) => this.onResourceUpdated(resource)
         ));
-        this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.collaborationSystemStatusChanged.subscribe(
             () => this.onCollaborationSystemStatusChange()
         ));
-        this.eventSubscriptions.push(eventHandler.notificationStatusChangedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.notificationStatusChangedEvent.subscribe(
             () => this.initNotificationsAvailable()
         ));
-        this.eventSubscriptions.push(eventHandler.resourceUpdatedEvent.subscribe(
+        this.eventSubscriptions.push(this.eventHandler.resourceUpdatedEvent.subscribe(
             (resource: ARTResource) => this.onResourceUpdated(resource)
         ));
     }
@@ -175,7 +177,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     }
 
     ngOnDestroy() {
-        this.eventSubscriptions.forEach(s => s.unsubscribe);
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     /**
@@ -291,6 +293,14 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         this.resViewSections[ResViewPartition.superproperties] = this.initPartition(ResViewPartition.superproperties, partitionFilter, true);
         this.resViewSections[ResViewPartition.topconceptof] = this.initPartition(ResViewPartition.topconceptof, partitionFilter, true);
         this.resViewSections[ResViewPartition.types] = this.initPartition(ResViewPartition.types, partitionFilter, true);
+
+        let rvSettings: ResourceViewProjectSettings = VBContext.getWorkingProjectCtx().getProjectSettings().resourceView;
+        if (rvSettings.customSections) {
+            this.customSections = Object.keys(rvSettings.customSections);
+            this.customSections.forEach(section => {
+                this.resViewSections[section] = this.initPartition(<ResViewPartition>section, partitionFilter, true);
+            })
+        }
 
         if (
             //these partitions are always returned, even when resource is not defined, so I need to check also if length == 0

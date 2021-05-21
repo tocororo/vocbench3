@@ -482,8 +482,12 @@ export enum CRUDEnum {
 
 export class ResourceViewAuthEvaluator {
 
-    private static returnTrueFn: EvaluationFn = () => true;
-    private static returnFalseFn = () => true;
+    private static customSectionEvalMap: CrudEvaluationMap = {
+        [CRUDEnum.C]: (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource, value),
+        [CRUDEnum.R]: (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value),
+        [CRUDEnum.U]: (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value),
+        [CRUDEnum.D]: (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource, value),
+    }
 
     /**
      * Mapping between resource view partition and authorization evaluation for each kind of action available in RV (CRUD)
@@ -672,7 +676,13 @@ export class ResourceViewAuthEvaluator {
      * @param value value described in the specific predicate-object widget (if provided useful for language checks)
      */
     public static isAuthorized(partition: ResViewPartition, crud: CRUDEnum, resource: ARTResource, value?: ARTNode): boolean {
-        let evaluationFn: EvaluationFn = this.partitionEvaluationMap[partition][crud];
+        let crudEvalMap: CrudEvaluationMap = this.partitionEvaluationMap[partition];
+        let evaluationFn: EvaluationFn;
+        if (crudEvalMap != null) {
+            evaluationFn = crudEvalMap[crud];
+        } else { //probably a custom partition
+            evaluationFn =  this.customSectionEvalMap[crud];
+        }
         return evaluationFn(resource, value);
     }
 

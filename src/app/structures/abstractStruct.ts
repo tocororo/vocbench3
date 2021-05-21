@@ -46,7 +46,7 @@ export abstract class AbstractStruct {
      */
 
     ngOnDestroy() {
-        this.eventSubscriptions.forEach(s => s.unsubscribe);
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     abstract init(): void;

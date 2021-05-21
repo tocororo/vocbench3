@@ -177,6 +177,8 @@ export class ResViewUtils {
                 return "RESOURCE_VIEW.PARTITIONS.TOP_CONCEPT_OF";
             case ResViewPartition.types:
                 return "RESOURCE_VIEW.PARTITIONS.TYPES";
+            default: 
+                return partition; //return the same partition ID
         }
     }
 
@@ -240,6 +242,8 @@ export class ResViewUtils {
                 return "DATA.ACTIONS.ADD_SCHEME";
             case ResViewPartition.types:
                 return "DATA.ACTIONS.ADD_TYPE";
+            default:
+                return "ACTIONS.ADD";
         }
     }
 
@@ -306,6 +310,8 @@ export class ResViewUtils {
             return [SKOS.topConceptOf];
         } else if (partition == ResViewPartition.types) {
             return [RDF.type];
+        } else {
+            return []; //for unknown or custom partitions
         }
     }
 

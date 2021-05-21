@@ -4,7 +4,6 @@ import { from, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
-import { CustomForm, CustomFormValue } from "../../../../models/CustomForms";
 import { Language } from "../../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "../../../../models/Vocabulary";
@@ -41,13 +40,11 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         RDFS.label.getURI()
     ];
 
-    constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, resViewModals: ResViewModalServices,
-        private skosService: SkosServices, private skosxlService: SkosxlServices, private propService: PropertyServices,
-        private resViewService: ResourceViewServices, private ontolexService: OntoLexLemonServices,
-        private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices,
-        private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper, private translateService: TranslateService) {
-        super(resourcesService, cfService, basicModals, resViewModals);
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
+        private skosService: SkosServices, private skosxlService: SkosxlServices, private resViewService: ResourceViewServices, private ontolexService: OntoLexLemonServices,
+        private browsingModals: BrowsingModalServices, private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper, private translateService: TranslateService) {
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {
@@ -164,18 +161,6 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 () => { }
             );
         }
-    }
-
-    private enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
-        this.resViewModals.enrichCustomForm({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, form.getId()).then(
-            (entryMap: any) => {
-                let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
-                this.resourcesService.addValue(this.resource, predicate, cfValue).subscribe(
-                    stResp => this.update.emit()
-                );
-            },
-            () => { }
-        )
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
