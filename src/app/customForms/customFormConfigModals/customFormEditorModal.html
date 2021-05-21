@@ -88,9 +88,19 @@
                                 [title]="'CUSTOM_FORMS.FORMS.FROM_SHACLE_INFO'|translate" [disabled]="readOnly">
                                 {{'CUSTOM_FORMS.FORMS.FROM_SHACLE'|translate}}
                             </button>
-                            <button  class="btn btn-light btn-sm mt-2" (click)="openWizard()" [disabled]="readOnly">
-                                Create with wizard
-                            </button>
+                            <div class="btn-group mt-2" placement="bottom-right" ngbDropdown>
+                                <button class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                                    {{'CUSTOM_FORMS.WIZARD.WIZARD'|translate}}
+                                </button>
+                                <div class="dropdown-menu" ngbDropdownMenu>
+                                    <a class="dropdown-item" (click)="openWizard(false)">
+                                        {{'CUSTOM_FORMS.FORMS.CUSTOM_CONSTRUCTOR'|translate}}
+                                    </a>
+                                    <a class="dropdown-item" (click)="openWizard(true)">
+                                        {{'CUSTOM_FORMS.FORMS.CUSTOM_RANGE'|translate}}
+                                    </a>
+                                </div>
+                            </div>
                         </ng-container>
                     </div>
                     

@@ -1,6 +1,8 @@
 <div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal" resizable>
     <div class="modal-header" cdkDragHandle>
-        <h3 class="modal-title">Custom Form Wizard</h3>
+        <h3 class="modal-title">
+            {{'CUSTOM_FORMS.WIZARD.CUSTOM_FORM_WIZARD'|translate}}
+        </h3>
     </div>
     <div class="modal-body vbox">
 
@@ -10,7 +12,7 @@
                 <custom-form-wizard-fields-editor [fields]="fields" (changed)="onFieldChange($event)">
                 </custom-form-wizard-fields-editor>
 
-                <custom-form-wizard-nodes-editor class="mt-2" [(ngModel)]="nodes" [fields]="fields" (ngModelChange)="updatePearl()">
+                <custom-form-wizard-nodes-editor class="mt-2" [(ngModel)]="nodes" [fields]="fields" [customRange]="customRange" (ngModelChange)="updatePearl()">
                 </custom-form-wizard-nodes-editor>
 
                 <custom-form-wizard-graph-editor class="mt-2" [(ngModel)]="graphs" [nodes]="nodes" (ngModelChange)="updatePearl()">
@@ -19,7 +21,7 @@
 
             <div class="card vbox ml-2">
                 <div class="card-header">
-                    <label style="flex: 1">Pearl Preview</label>
+                    <label style="flex: 1">{{'CUSTOM_FORMS.WIZARD.PEARL_PREVIEW'|translate}}</label>
                 </div>
                 <div class="card-body vbox">
                     <textarea class="form-control vbox" style="resize: none;" [ngModel]="pearl" readonly></textarea>

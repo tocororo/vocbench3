@@ -1,8 +1,8 @@
 <div class="card vbox">
     <div class="card-header">
         <label style="flex: 1;">
-            Nodes
-            <span class="fas fa-info-circle" title="Here are listed the nodes automatically generated from the fields. You can also define new nodes."></span>
+            {{'COMMONS.NODES'|translate}}
+            <span class="fas fa-info-circle" [title]="'CUSTOM_FORMS.WIZARD.NODES.NODES_INFO'|translate"></span>
         </label>
         <div class="btn-toolbar">
             <button class="btn btn-xs btn-light" (click)="addNode()">
@@ -19,9 +19,9 @@
                 <col>
             </colgroup>
             <thead>
-                <th>Node ID</th>
-                <th>Converter</th>
-                <th>Feature</th>
+                <th>{{'COMMONS.ID'|translate}}</th>
+                <th>{{'WIDGETS.CONVERTER.CONVERTER'|translate}}</th>
+                <th>{{'CUSTOM_FORMS.WIZARD.NODES.FEATURE'|translate}}</th>
                 <th></th>
             </thead>
             <tbody>
@@ -30,7 +30,7 @@
                     <td style="position: relative;">
                         <input class="form-control mx-1" [(ngModel)]="n.nodeId" (ngModelChange)="onModelChange()" [readonly]="!n.userCreated" sanitized>
                         <span *ngIf="n.entryPoint" class="fas fa-info-circle" style="position: absolute; right: 6px; top: 11px;"
-                            title="The entry point of the graph object created by the CustomForm."></span>
+                            [title]="'CUSTOM_FORMS.WIZARD.NODES.ENTRY_POINT_INFO'|translate"></span>
                     </td>
                     <td>
                         <div class="input-group mx-1">
@@ -44,7 +44,6 @@
                         </div>
                     </td>
                     <td>
-
                         <ng-container *ngIf="n.fromField; then fromFieldFeature; else featureSelection"></ng-container>
                         <!-- Nodes from field have input feature blocked to the userPrompt field feature -->
                         <ng-template #fromFieldFeature>
@@ -53,7 +52,7 @@
                         <!-- Other nodes allow selection of the feature when required by the converter -->
                         <ng-template #featureSelection>
                             <select *ngIf="n.converterStatus?.signatureDesc.getRequirementLevels() == 'REQUIRED'" class="form-control mx-1" [(ngModel)]="n.feature" (ngModelChange)="onModelChange()">
-                                <optgroup label="User prompted features">
+                                <optgroup *ngIf="fields.length > 0" label="User prompted features">
                                     <option *ngFor="let f of fields" [ngValue]="f">{{f.featureName}}</option>
                                 </optgroup>
                                 <optgroup label="Session's features">

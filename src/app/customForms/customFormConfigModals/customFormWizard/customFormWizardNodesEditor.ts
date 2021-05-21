@@ -19,7 +19,7 @@ import { SessionFeature, StandardFormFeature, WizardField, WizardNode, WizardNod
 })
 export class CustomFormWizardNodesEditor implements ControlValueAccessor {
     @Input() fields: WizardField[]; //for the selection of the converter feature
-    @Input() range: boolean; //tells if the wizard works for CustomRange (false if for Constructor)
+    @Input() customRange: boolean; //tells if the wizard works for CustomRange (false if for Constructor)
 
     sessionFeatures: SessionFeature[];
     stdFormFeatures: StandardFormFeature[];
@@ -29,10 +29,10 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
     constructor(private modalService: NgbModal) { }
 
     ngOnInit() {
-        this.sessionFeatures = [new SessionFeature("user")];
+        this.sessionFeatures = [new SessionFeature("user")]; //available for both C.Range and C.Constructor
 
         //for custom constructor add the feature of stdForm
-        if (!this.range) {
+        if (!this.customRange) {
             this.stdFormFeatures = [new StandardFormFeature("resource")];
             let lexModel: string = VBContext.getWorkingProject().getLexicalizationModelType();
             if (lexModel == SKOS.uri) {

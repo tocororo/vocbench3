@@ -25,8 +25,7 @@ export class CustomFormWizardModal {
     */
 
     @Input() formId: string = "FORM_ID";
-
-    customRange: boolean = true; //tells if the wizard creates a CustomRange or a CustomConstructor
+    @Input() customRange: boolean = true; //tells if the wizard creates a CustomRange or a CustomConstructor
 
     private prefixMappings: PrefixMapping[];
     private converters: ConverterContractDescription[];
@@ -49,11 +48,15 @@ export class CustomFormWizardModal {
 
         this.fields = [];
 
-        let entryPoint: WizardNodeEntryPoint = new WizardNodeEntryPoint();
-        this.nodes = [entryPoint];
+        this.nodes = [];
+        this.graphs = [];
 
-        let g: WizardGraphEntry = new WizardGraphEntry(entryPoint);
-        this.graphs = [g];
+        if (this.customRange) {
+            let entryPoint: WizardNodeEntryPoint = new WizardNodeEntryPoint();
+            this.nodes.push(entryPoint);
+            let g: WizardGraphEntry = new WizardGraphEntry(entryPoint);
+            this.graphs.push(g);
+        }
 
         this.updatePearl();
 
@@ -248,43 +251,44 @@ export class CustomFormWizardModal {
 
     private checkData(): boolean {
         //check on FIELDS
-        if (this.fields.length == 0) {
-            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "No field has been provided", ModalType.warning);
+        if (this.customRange && this.fields.length == 0) {
+            //in CustomRange at least a field is required (not in constructor where it can siply add info to the standard form)
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_EMPTY" }, ModalType.warning);
             return false;
         }
         for (let i = 0; i < this.fields.length; i++) {
             let field = this.fields[i];
             //check on names
             if (field.label.trim() == "") { //invalid name
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field at position " + (i + 1) + " has an invalid name", ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_INVALID_NAME", params: { position: (i + 1) } }, ModalType.warning);
                 return false;
             }
             //look for duplicate
             if (this.fields.filter(f => f.label == field.label).length > 1) { //found more than 1 field with the name of the current one
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Found multiple fields with the same name (" + field.label + ")", ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_MULTIPLE_NAME", params: { name: field.label } }, ModalType.warning);
                 return false;
             }
             //check if all constraints are ok
             if (field.constraint == ConstraintType.Datatype && (<WizardFieldLiteral>field).datatype == null) {
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.Datatype, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_INCOMPLETE_CONSTRAINT", params: { field: field.label, constraint: ConstraintType.Datatype } }, ModalType.warning);
                 return false;
             }
             if (field.constraint == ConstraintType.Enumeration && field.enumeration.length == 0) {
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.Enumeration, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_INCOMPLETE_CONSTRAINT", params: { field: field.label, constraint: ConstraintType.Enumeration } }, ModalType.warning);
                 return false;
             }
             if (field.constraint == ConstraintType.LangString) {
                 if ((<WizardFieldLiteral>field).languageConstraint.type == LangConstraintType.Fixed && (<WizardFieldLiteral>field).languageConstraint.language == null) {
-                    this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.LangString, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_INCOMPLETE_CONSTRAINT", params: { field: field.label, constraint: ConstraintType.LangString } }, ModalType.warning);
                     return false;
                 }
             }
             if (field.constraint == ConstraintType.Range && (<WizardFieldUri>field).ranges.length == 0) {
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.Range, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_INCOMPLETE_CONSTRAINT", params: { field: field.label, constraint: ConstraintType.Range } }, ModalType.warning);
                 return false;
             }
             if (field.constraint == ConstraintType.Role && (<WizardFieldUri>field).roles.length == 0) {
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Field " + field.label + " has incomplete constraint " + ConstraintType.Role, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_INCOMPLETE_CONSTRAINT", params: { field: field.label, constraint: ConstraintType.Role } }, ModalType.warning);
                 return false;
             }
         }
@@ -293,7 +297,7 @@ export class CustomFormWizardModal {
         //duplicates
         for (let n1 of this.nodes) {
             if (this.nodes.some(n2 => n1 != n2 && n1.nodeId == n2.nodeId)) { //exist a node different from the current but with the same id
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Multiple nodes with the same ID '" + n1.nodeId + "'", ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MULTIPLE_ID", params: { id: n1.nodeId } }, ModalType.warning);
                 return false;
             }
         }
@@ -306,21 +310,24 @@ export class CustomFormWizardModal {
 
         //check on GRAPH
         if (this.graphs.length == 0) {
-            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "No relation between nodes has been provided", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_RELATION_EMPTY" }, ModalType.warning);
             return false;
         }
         for (let i = 0; i < this.graphs.length; i++) {
             let g: WizardGraphEntry = this.graphs[i];
-            if (i == 0 && g.object instanceof WizardNodeFromField && g.object.fieldSeed.optional) { //first usage of graph entry point node cannot be optional
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "The first usage of the " + g.subject.nodeId + " in the graph section cannot use an optional field", ModalType.warning);
-                return false;
+            if (this.customRange) {
+                //first usage of graph entry point node cannot be optional
+                if (i == 0 && g.subject instanceof WizardNodeEntryPoint && g.object instanceof WizardNodeFromField && g.object.fieldSeed.optional) {
+                    this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.OPTIONAL_ENTRY_POINT_WARN", params: { id: g.subject.nodeId } }, ModalType.warning);
+                    return false;
+                }
             }
             if (g.predicate == null) {
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Missing predicate in node relation at position " + (i + 1), ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_RELATION_MISSING_PREDICATE", params: { position: (i + 1) } }, ModalType.warning);
                 return false;
             }
             if ((g.object.type == GraphObjectType.node && g.object.node == null) || (g.object.type == GraphObjectType.value && g.object.value == null)) {
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Missing object in node relation at position " + (i + 1), ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_RELATION_MISSING_OBJECT", params: { position: (i + 1) } }, ModalType.warning);
                 return false;
             }
         }
@@ -332,15 +339,15 @@ export class CustomFormWizardModal {
     private checkNode(node: WizardNode): boolean {
         //check on ID
         if (node.nodeId == null || node.nodeId.trim() == "") {
-            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "A node with empty ID has been detected", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MISSING_ID" }, ModalType.warning);
             return false;
         } else if (node.converterStatus != null) {
             if (node.converterStatus.signatureDesc.getRequirementLevels() == RequirementLevels.REQUIRED && node.feature == null) {
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Converter of node '" + node.nodeId + "' requires a feature to be specified", ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MISSING_CONVERTER_FEATURE", params: { id: node.nodeId } }, ModalType.warning);
                 return false;
             }
         } else {
-            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, "Converter missing for node '" + node.nodeId + "'", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MISSING_CONVERTER", params: { id: node.nodeId } }, ModalType.warning);
             return false;
         }
         return true;

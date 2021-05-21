@@ -177,11 +177,12 @@ export class CustomFormEditorModal {
         )
     }
 
-    openWizard() {
+    openWizard(customRange: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(CustomFormWizardModal, new ModalOptions('full'));
         if (this.cfShortId != null) {
             modalRef.componentInstance.formId = this.cfShortId;
         }
+        modalRef.componentInstance.customRange = customRange;
         modalRef.result.then(
             pearl => {
                 this.ref = pearl;

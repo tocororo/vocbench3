@@ -1,7 +1,7 @@
 <div class="card vbox">
     <div class="card-header">
         <label style="flex: 1;">
-            Nodes relations
+            {{'CUSTOM_FORMS.WIZARD.GRAPH.NODES_RELATIONS'|translate}}
         </label>
         <div class="btn-toolbar">
             <div class="btn-group btn-group-xs">
@@ -21,16 +21,15 @@
             </colgroup>
             <thead>
                 <th></th>
-                <th>Subject</th>
-                <th>Predicate</th>
-                <th>Object</th>
+                <th>{{'MODELS.RESOURCE.SUBJECT'|translate}}</th>
+                <th>{{'MODELS.RESOURCE.PREDICATE'|translate}}</th>
+                <th>{{'MODELS.RESOURCE.OBJECT'|translate}}</th>
             </thead>
             <tbody>
                 <tr *ngFor="let g of graphs; let index=index">
                     <td class="text-center pl-2">{{index+1}}</td>
                     <td>
-                        <select class="form-control mx-1" [ngModel]="g.subject" [disabled]="index == 0" (ngModelChange)="onModelChange()">
-                            <option [ngValue]="entryPoint">{{entryPoint.nodeId}}</option>
+                        <select class="form-control mx-1" [(ngModel)]="g.subject" [disabled]="g.subject?.entryPoint && index == 0" (ngModelChange)="onModelChange()">
                             <option *ngFor="let n of nodes" [ngValue]="n">{{n.nodeId}}</option>
                         </select>
                     </td>
@@ -41,8 +40,8 @@
                     <td>
                         <div class="d-flex mx-1">
                             <select class="form-control" style="width: initial;" [(ngModel)]="g.object.type">
-                                <option>node</option>
-                                <option>value</option>
+                                <option value="node">{{'COMMONS.NODE'|translate}}</option>
+                                <option value="value">{{'COMMONS.VALUE'|translate}}</option>
                             </select>
                             <div class="ml-3" style="flex: 1">
                                 <select *ngIf="g.object.type == 'node'" class="form-control" [(ngModel)]="g.object.node" (ngModelChange)="onModelChange()">

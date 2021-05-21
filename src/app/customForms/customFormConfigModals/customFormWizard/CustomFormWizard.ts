@@ -262,7 +262,10 @@ class NodeDefinitionSerialization {
         let triples: string[] = [];
         let optional: boolean = this.object.type == GraphObjectType.node && this.object.node instanceof WizardNodeFromField && this.object.node.fieldSeed.optional;
 
-        let subject: string = "$" + this.subject.nodeId;
+        let subject: string = "%SUBJECT%";
+        if (this.subject != null) {
+            subject = "$" + this.subject.nodeId;
+        }
 
         let predicate: string = "%PREDICATE%";
         if (this.predicate != null) {

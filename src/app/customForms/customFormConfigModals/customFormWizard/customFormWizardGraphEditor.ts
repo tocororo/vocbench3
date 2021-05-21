@@ -16,7 +16,7 @@ export class CustomFormWizardGraphEditor implements ControlValueAccessor {
     
     graphs: WizardGraphEntry[];
 
-    private entryPoint: WizardNodeEntryPoint;
+    private entryPoint: WizardNodeEntryPoint; //this will be found/initialized only if dealing with CustomRange
 
     constructor() { }
 

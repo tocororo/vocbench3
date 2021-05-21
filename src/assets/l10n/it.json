@@ -309,6 +309,8 @@
     "CUSTOM_FORMS": {
         "FORMS": {
             "CUSTOM_FORMS": "Custom Forms",
+            "CUSTOM_CONSTRUCTOR": "Custom Constructor",
+            "CUSTOM_RANGE": "Custom Range",
             "NAME_INFO": "Nome che verrà mostrato all'utente per identificare questo Form",
             "DESCRIPTION_INFO": "Descrizione in linguaggio naturale che spiega brevemente l'utilizzo di questo Form",
             "REF_INFO": "In caso di typo Graph dovrebbe contenere una regola PEARL altrimenti, in caso di tipo Node, dovrebbe contenere un semplice projection operator PEARL",
@@ -368,6 +370,46 @@
         },
         "COMMONS": {
             "USE_ID_OF_IMPORTED": "Usa ID del {{type}} importato"
+        },
+        "WIZARD": {
+            "WIZARD": "Wizard",
+            "CUSTOM_FORM_WIZARD": "Custom Form Wizard",
+            "PEARL_PREVIEW": "Anteprima Pearl",
+            "FIELDS": {
+                "CONSTRAINT": "Vincoli",
+                "FIELD_DETAILS": "Dettagli campo",
+                "FIELD_LITERAL": "Campo Literal",
+                "FIELD_URI": "Campo URI",
+                "FIELDS": "Campi",
+                "FIELDS_INFO": "I campi che verranno mostrati all'utente nel CustomForm",
+                "LANG_FIXED": "Fissa",
+                "LANG_USER_PROMPTED": "Fornita da utente",
+                "MULTIVALUE": "Multivalue",
+                "MULTIVALUE_INFO": "Indica se il campo può ammettere valori multipli",
+                "MULTIVALUE_LANG_WARN": "Attenzione: questo campo ammette valori multipli (opzione 'Multivalue' attiva). Per tutti questi valori verrà usata la stessa lingua."
+            },
+            "GRAPH": {
+                "NODES_RELATIONS": "Relazioni tra nodi"
+            },
+            "NODES": {
+                "ENTRY_POINT_INFO": "L'entry point del grafo generato dal CustomForm",
+                "FEATURE": "Feature",
+                "NODES_INFO": "Qui vengono elencati i nodi generati automaticamente dai campi. E' possibile definire anche nuovi nodi."
+            },
+            "MESSAGES": {
+                "FIELD_EMPTY": "Nessun campo è stato fornito",
+                "FIELD_INCOMPLETE_CONSTRAINT": "Il campo '{{field}}' è un vincolo incompleto: {{constraint}}",
+                "FIELD_INVALID_NAME": "Il campo a posizione {{position}} ha un nome non valido",
+                "FIELD_MULTIPLE_NAME": "Trovati più campi con lo stesso nome: {{name}}",
+                "NODE_MISSING_CONVERTER_FEATURE": "Il Converter del nodo '{{id}}' necessita che venga selezionata una feature",
+                "NODE_MISSING_CONVERTER": "Converter mancante per il nodo '{{id}}'",
+                "NODE_MISSING_ID": "E' stato rilevato un nodo con ID vuoto",
+                "NODE_MULTIPLE_ID": "Trovati più nodi con lo stesso ID: {{id}}",
+                "NODE_RELATION_EMPTY": "Non è stata specificata alcuna relazione tra nodi",
+                "NODE_RELATION_MISSING_PREDICATE": "Predicato mancante nella relazione tra nodi a posizione {{position}}",
+                "NODE_RELATION_MISSING_OBJECT": "Oggetto mancante nella relazione tra nodi a posizione {{position}}",
+                "OPTIONAL_ENTRY_POINT_WARN": "In un CustomForm usato come CustomRange, il primo utilizzo del nodo '{{id}}' nella sezione graph non può usare un nodo opzionale"
+            }
         }
     },
     "CUSTOM_SERVICES": {
@@ -1581,7 +1623,6 @@
             "IGNORE_HEADER_INFO": "Se selezionato, il presente header verrà ignorato nel PEARL generato e quindi nel processo di conversione",
             "HEADER": "Header",
             "PEARL_FEATURE": "Feature PEARL",
-            "NODES": "Nodi",
             "NODES_INFO": "Liste di nodi generati dall'header corrente",
             "NODE_ID": "ID nodo",
             "CONVERTER_TYPE": "Tipo converter",
@@ -1591,7 +1632,7 @@
             "ADD_SIMPLE_GRAPH_APPL": "Aggiungi simple graph application",
             "ADD_ADV_GRAPH_APPL": "Aggiungi advanced graph application",
             "MEMOIZE": "Memoize",
-            "MEMOIZE_INFO": "Applica la memoizzazione: dato lo stesso input, il converter genera lo stesso output"
+            "MEMOIZE_INFO": "Applica la memoizzazione: dato lo stesso input, il converter genera lo stesso output",
             "ADD_MEMOIZE_MAP": "Aggiungi ID mappa per la memoizzazione",
             "NODE_EDITOR": "Editor nodo",
             "SUBJECT_HEADER_EDITOR": "Editor Header soggetto",
@@ -1616,8 +1657,7 @@
                 "RANGE": "Range",
                 "UNDETERMINED": "Indeterminato",
                 "RANGE_TYPE": "Tipo range",
-                "ASSERT_TYPE_INFO": "Spunta questa opzione per dichiarare il rdf:type del nodo generato",
-                "NODE": "Nodo"
+                "ASSERT_TYPE_INFO": "Spunta questa opzione per dichiarare il rdf:type del nodo generato"
             }
         },
         "SETTINGS": {
@@ -1713,6 +1753,7 @@
     "WIDGETS": {
         "CONVERTER": {
             "CONVERTER": "Converter",
+            "CONVERTER_CONFIG": "Configurazione Converter",
             "CONVERTER_PARAMETERIZATION": "Parametrizzazione converter",
             "RDF_CAPABILITY": "RDF Capability",
             "PARAMS": "Parametri",
@@ -1782,12 +1823,15 @@
         "FORCE_FORMAT": "Forza il formato",
         "FORMAT": "Formato",
         "GROUPS": "Gruppi",
+        "ID": "ID",
         "LABEL": "Etichetta",
         "LEVEL": "Livello",
         "MANDATORY": "Obbligatorio",
         "MANDATORY_FIELD": "Campo obbligatorio",
         "MODE": "Modalità",
         "NAME": "Nome",
+        "NODE": "Nodo",
+        "NODES": "Nodi",
         "ONTOLOGY_IRI": "IRI ontologia",
         "OPTIONAL": "Opzionale",
         "OPTIONAL_FIELD": "Campo opzionale",

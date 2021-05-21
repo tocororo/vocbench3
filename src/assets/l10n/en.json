@@ -309,6 +309,8 @@
     "CUSTOM_FORMS": {
         "FORMS": {
             "CUSTOM_FORMS": "Custom Forms",
+            "CUSTOM_CONSTRUCTOR": "Custom Constructor",
+            "CUSTOM_RANGE": "Custom Range",
             "NAME_INFO": "The name that will be shown to the user to identify this form",
             "DESCRIPTION_INFO": "A natural language description that briefly explain the purpose of this form",
             "REF_INFO": "In case of Graph type this should contain a PEARL rule otherwise, in case of Node type, this should contain simply a PEARL projection operator",
@@ -368,6 +370,46 @@
         },
         "COMMONS": {
             "USE_ID_OF_IMPORTED": "Use ID of the imported {{type}}"
+        },
+        "WIZARD": {
+            "WIZARD": "Wizard",
+            "CUSTOM_FORM_WIZARD": "Custom Form Wizard",
+            "PEARL_PREVIEW": "Pearl Preview",
+            "FIELDS": {
+                "CONSTRAINT": "Constraint",
+                "FIELD_DETAILS": "Field details",
+                "FIELD_LITERAL": "Literal field",
+                "FIELD_URI": "URI field",
+                "FIELDS": "Fields",
+                "FIELDS_INFO": "The fields that will be prompted to the user in the CustomForm",
+                "LANG_FIXED": "Fixed",
+                "LANG_USER_PROMPTED": "User prompted",
+                "MULTIVALUE": "Multivalue",
+                "MULTIVALUE_INFO": "Tells if the field should allow multiple values",
+                "MULTIVALUE_LANG_WARN": "Warning: this field admits multiple values ('Multivalue' option checked). For all these values, the same language will be used."
+            },
+            "GRAPH": {
+                "NODES_RELATIONS": "Nodes relations"
+            },
+            "NODES": {
+                "ENTRY_POINT_INFO": "The entry point of the graph object created by the CustomForm",
+                "FEATURE": "Feature",
+                "NODES_INFO": "Here are listed the nodes automatically generated from the fields. You can also define new nodes."
+            },
+            "MESSAGES": {
+                "FIELD_EMPTY": "No field has been provided",
+                "FIELD_INCOMPLETE_CONSTRAINT": "Field '{{field}}' has incomplete constraint {{constraint}}",
+                "FIELD_INVALID_NAME": "Field at position {{position}} has an invalid name",
+                "FIELD_MULTIPLE_NAME": "Found multiple fields with the same name: {{name}}",
+                "NODE_MISSING_CONVERTER_FEATURE": "Converter of node '{{id}}' requires a feature to be specified",
+                "NODE_MISSING_CONVERTER": "Converter missing for node '{{id}}'",
+                "NODE_MISSING_ID": "A node with empty ID has been detected",
+                "NODE_MULTIPLE_ID": "Multiple nodes with the same ID: {{id}}",
+                "NODE_RELATION_EMPTY": "No relation between nodes has been provided",
+                "NODE_RELATION_MISSING_PREDICATE": "Missing predicate in node relation at position {{position}}",
+                "NODE_RELATION_MISSING_OBJECT": "Missing object in node relation at position {{position}}",
+                "OPTIONAL_ENTRY_POINT_WARN": "In CustomForm used as CustomRange, the first usage of the node '{{id}}' in the graph section cannot use an optional field"
+            }
         }
     },
     "CUSTOM_SERVICES": {
@@ -1581,7 +1623,6 @@
             "IGNORE_HEADER_INFO": "If checked, the current header will be ignored in the generated PEARL code and thus in the conversion process",
             "HEADER": "Header",
             "PEARL_FEATURE": "PEARL feature",
-            "NODES": "Nodes",
             "NODES_INFO": "List of nodes generated from the current header",
             "NODE_ID": "Node ID",
             "CONVERTER_TYPE": "Converter type",
@@ -1616,8 +1657,7 @@
                 "RANGE": "Range",
                 "UNDETERMINED": "Undetermined",
                 "RANGE_TYPE": "Range type",
-                "ASSERT_TYPE_INFO": "Check this option in order to assert the rdf:type of the generated node",
-                "NODE": "Node"
+                "ASSERT_TYPE_INFO": "Check this option in order to assert the rdf:type of the generated node"
             }
         },
         "SETTINGS": {
@@ -1713,6 +1753,7 @@
     "WIDGETS": {
         "CONVERTER": {
             "CONVERTER": "Converter",
+            "CONVERTER_CONFIG": "Converter configuration",
             "CONVERTER_PARAMETERIZATION": "Converter parameterization",
             "RDF_CAPABILITY": "RDF Capability",
             "PARAMS": "Params",
@@ -1782,12 +1823,15 @@
         "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
         "GROUPS": "Groups",
+        "ID": "ID",
         "LABEL": "Label",
         "LEVEL": "Level",
         "MANDATORY": "Mandatory",
         "MANDATORY_FIELD": "Mandatory field",
         "MODE": "Mode",
         "NAME": "Name",
+        "NODE": "Node",
+        "NODES": "Nodes",
         "ONTOLOGY_IRI": "Ontology IRI",
         "OPTIONAL": "Optional",
         "OPTIONAL_FIELD": "Optional field",

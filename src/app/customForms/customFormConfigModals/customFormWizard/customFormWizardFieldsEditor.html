@@ -2,8 +2,8 @@
     <div class="card vbox">
         <div class="card-header">
             <label style="flex: 1;">
-                Fields
-                <span class="fas fa-info-circle" title="The fields that will be prompted to the user in the CustomForm"></span>
+                {{'CUSTOM_FORMS.WIZARD.FIELDS.FIELDS'|translate}}
+                <span class="fas fa-info-circle" [title]="'CUSTOM_FORMS.WIZARD.FIELDS.FIELDS_INFO'|translate"></span>
             </label>
             <div class="btn-toolbar">
                 <div class="btn-group btn-group-xs">
@@ -13,10 +13,10 @@
                         </button>
                         <div class="dropdown-menu" ngbDropdownMenu>
                             <a class="dropdown-item" (click)="addFieldLiteral()">
-                                Literal field
+                                {{'CUSTOM_FORMS.WIZARD.FIELDS.FIELD_LITERAL'|translate}}
                             </a>
                             <a class="dropdown-item" (click)="addFieldUri()">
-                                URI field
+                                {{'CUSTOM_FORMS.WIZARD.FIELDS.FIELD_URI'|translate}}
                             </a>
                         </div>
                     </div>
@@ -36,9 +36,9 @@
                 </colgroup>
                 <thead>
                     <th></th>
-                    <th>Label</th>
-                    <th class="text-center">Type</th>
-                    <th class="text-center">Optional</th>
+                    <th>{{'COMMONS.LABEL'|translate}}</th>
+                    <th class="text-center">{{'COMMONS.TYPE'|translate}}</th>
+                    <th class="text-center">{{'COMMONS.OPTIONAL'|translate}}</th>
                 </thead>
                 <tbody>
                     <tr *ngFor="let f of fields; let index=index" [ngClass]="{ 'table-primary' : f == selectedField }" (click)="selectedField = f">
@@ -59,7 +59,7 @@
     <div class="card vbox ml-2" style="flex: 2;">
         <div class="card-header">
             <label>
-                Field details
+                {{'CUSTOM_FORMS.WIZARD.FIELDS.FIELD_DETAILS'|translate}}
                 <ng-container *ngIf="selectedField">
                     ({{selectedField.label}})
                 </ng-container>
@@ -70,7 +70,8 @@
                 <div class="form-group row">
                     <div class="col-sm-2">
                         <label class="col-form-label">
-                            Collection <span class="fas fa-info-circle" title="Tells if the field should allow multiple values"></span>
+                            {{'CUSTOM_FORMS.WIZARD.FIELDS.MULTIVALUE'|translate}}
+                            <span class="fas fa-info-circle" [title]="'CUSTOM_FORMS.WIZARD.FIELDS.MULTIVALUE_INFO'|translate"></span>
                         </label>
                     </div>
                     <div class="col-sm-1">
@@ -101,7 +102,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-form-label col-sm-3">Constraint:</label>
+                    <label class="col-form-label col-sm-3">{{'CUSTOM_FORMS.WIZARD.FIELDS.CONSTRAINT'|translate}}:</label>
                     <div class="col-sm-9">
                         <select class="form-control" [(ngModel)]="selectedField.constraint" (ngModelChange)="onFieldChange(selectedField)">
                             <option [ngValue]="null">---</option>
@@ -137,13 +138,13 @@
                 </div>
                 <div *ngIf="selectedField.constraint == 'LangString'" class="form-group row">
                     <label class="col-form-label col-sm-3">
-                        Language
+                        {{'COMMONS.LANGUAGE.LANGUAGE'|translate}}
                     </label>
                     <div class="col-sm-9">
                         <div class="d-flex align-items-center">
                             <select class="form-control" [(ngModel)]="selectedField.languageConstraint.type" (ngModelChange)="onFieldChange(selectedField)">
-                                <option>Fixed</option>
-                                <option>UserPrompted</option>
+                                <option value="Fixed">{{'CUSTOM_FORMS.WIZARD.FIELDS.LANG_FIXED'|translate}}</option>
+                                <option value="UserPrompted">{{'CUSTOM_FORMS.WIZARD.FIELDS.LANG_USER_PROMPTED'|translate}}</option>
                             </select>
                             <div *ngIf="selectedField.languageConstraint.type == 'Fixed'" class="ml-2">
                                 <lang-picker [config]="{ projectAware: false }" [(ngModel)]="selectedField.languageConstraint.language" (ngModelChange)="onFieldChange(selectedField)">
@@ -151,7 +152,7 @@
                             </div>
                         </div>
                         <div *ngIf="selectedField.languageConstraint.type == 'UserPrompted' && selectedField.collection.enabled" class="alert alert-warning mt-1">
-                            Warning: this field admits multiple values ('Collection' option checked). For all these values, the same language will be used.
+                            {{'CUSTOM_FORMS.WIZARD.FIELDS.MULTIVALUE_LANG_WARN'|translate}}
                         </div>
                     </div>
                 </div>
