@@ -4,31 +4,34 @@
     </div>
     <div class="modal-body">
         
-        <table class="table table-sm table-borderless">
-            <colgroup>
-                <col style="width: 1%;">
-                <col>
-            </colgroup>
-            <tbody>
-                <tr>
-                    <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.PREFIX'|translate}}:</label></td>
-                    <td>
-                        <div class="hbox">
+        <div class="d-flex align-items-center">
+            <table class="table table-sm table-borderless">
+                <colgroup>
+                    <col style="width: 1%;">
+                    <col>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.PREFIX'|translate}}:</label></td>
+                        <td>
                             <input type="text" class="form-control" [(ngModel)]="prefix">
-                            <button class="btn btn-light ml-2" (click)="resolveWithPrefixCC()" [title]="'METADATA.NAMESPACES_AND_IMPORTS.RESOLVE_WITH_PREFIXCC'|translate">
-                                <span class="far fa-closed-captioning"></span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}:</label></td>
-                    <td>
-                        <input type="text" class="form-control" [(ngModel)]="namespace" [disabled]="namespaceReadonly">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}:</label></td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="namespace" [disabled]="namespaceReadonly">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn btn-light ml-2" (click)="resolveWithPrefixCC()" [title]="'METADATA.NAMESPACES_AND_IMPORTS.RESOLVE_WITH_PREFIXCC'|translate"
+                [disabled]="!isPrefixCCResolutionEnabled()">
+                <span class="far fa-closed-captioning"></span>
+            </button>
+
+        </div>
         
     </div>
     <div class="modal-footer">

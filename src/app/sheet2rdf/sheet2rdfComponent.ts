@@ -379,6 +379,7 @@ export class Sheet2RdfComponent {
     truncatedTriples: number;
     totalTriples: number;
     triplesPreview: TriplePreview[];
+    alternateRowHelper: {[key: number]: number}; //support for alternating the style of the triples in the preview
     private selectedTriplePreviewRow: TriplePreview;
 
     exportFormats: RDFFormat[];
@@ -410,6 +411,12 @@ export class Sheet2RdfComponent {
                         this.totalTriples = triplesPreview.total;
                         this.truncatedTriples = triplesPreview.returned;
                         this.triplesPreview = triplesPreview.triples;
+
+                        let rows: number[] = this.triplesPreview.map(t => t.row).filter((item, pos, self) => self.indexOf(item) == pos);
+                        this.alternateRowHelper = {};
+                        rows.forEach((r, idx) => {
+                            this.alternateRowHelper[r] = idx;
+                        })
                     }
                 );
             }

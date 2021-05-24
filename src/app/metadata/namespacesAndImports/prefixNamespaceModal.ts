@@ -29,16 +29,38 @@ export class PrefixNamespaceModal {
         this.namespace = this.namespaceInput;
     }
 
+    isPrefixCCResolutionEnabled() {
+        //one of prefix or namespace is provided
+        return this.prefix != null && this.prefix.trim() != "" || this.namespace != null && this.namespace.trim() != "";
+    }
+
     resolveWithPrefixCC() {
-        if (this.namespace == null || this.namespace.trim() == "") {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_NAMESPACE"}, ModalType.warning);
-            return;
+        if (this.prefix != null && this.prefix.trim() != "") { //prefix provided => resolve namespace
+            this.resolveNamespaceWithPrefixCC();
+        } else if (this.namespace != null && this.namespace.trim() != "") { //prefix not provided, namespace provided => resolve prefix
+            this.resolvePrefixWithPrefixCC();
         }
+    }
+
+    private resolvePrefixWithPrefixCC() {
         this.httpClient.get("http://prefix.cc/reverse?uri=" + this.namespace + "&format=json").subscribe(
             prefixMap => {
                 for (let p in prefixMap) {
                     if (prefixMap[p] == this.namespace) {
                         this.prefix = p;
+                        break;
+                    }
+                }
+            }
+        );
+    }
+
+    private resolveNamespaceWithPrefixCC() {
+        this.httpClient.get("http://prefix.cc/" + this.prefix + ".file.json").subscribe(
+            prefixMap => {
+                for (let p in prefixMap) {
+                    if (p == this.prefix) {
+                        this.namespace = prefixMap[p];
                         break;
                     }
                 }

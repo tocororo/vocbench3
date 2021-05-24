@@ -175,7 +175,7 @@
                             </tr>
                         </thead>
                         <tbody style="overflow: auto;">
-                            <tr *ngFor="let t of triplesPreview" (click)="selectTriplePreviewRow(t)" [ngClass]="{ 'oddTablePreviewRow' : t.row%2==0, 'table-primary': t == selectedTriplePreviewRow }">
+                            <tr *ngFor="let t of triplesPreview;" (click)="selectTriplePreviewRow(t)" [ngClass]="{ 'oddTablePreviewRow' : alternateRowHelper[t.row]%2==0, 'table-primary': t == selectedTriplePreviewRow }">
                                 <td *ngIf="!t.delete" class="text-center" style="background: lightgreen !important; padding: 3px 6px;">
                                     <span class="fas fa-plus" style="color: green" [title]="'STATUS.ADDED'|translate"></span>
                                 </td>

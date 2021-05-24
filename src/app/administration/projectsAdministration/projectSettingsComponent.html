@@ -1,4 +1,5 @@
 <div class="vbox">
+
     <div class="card card-alt vbox">
         <div class="card-header">
             <label style="flex: 1;">{{'COMMONS.LANGUAGE.LANGUAGES'|translate}}</label>
@@ -54,6 +55,70 @@
         </div>
     </div>
 
+    <div *ngIf="project" class="card vbox mt-2">
+        <div class="card-body hbox">
+    
+            <div class="card vbox">
+                <div class="card-header">
+                    <label>{{'RESOURCE_VIEW.PARTITIONS.FILTER.RESOURCE_TYPES'|translate}}</label>
+                </div>
+                <div class="card-body scrollableContainer">
+                    <div *ngFor="let r of roles" class="listItem" (click)="selectRole(r)" [ngClass]="{ active: r == selectedRole }">
+                        {{r}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card vbox ml-2" style="flex: 2;">
+                <div class="card-body hbox">
+                    <div class="card vbox">
+                        <div class="card-header">
+                            <label style="flex: 1;">{{'RESOURCE_VIEW.PARTITIONS.PARTITIONS'|translate}}</label>
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-light" (click)="movePartitionUp(selectedRole)" [disabled]="!selectedEnabledPartition">
+                                    <span class="fas fa-chevron-up"></span>
+                                </button>
+                                <button class="btn btn-light" (click)="movePartitionDown(selectedRole)" [disabled]="!selectedEnabledPartition">
+                                    <span class="fas fa-chevron-down"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body scrollableContainer">
+                            <ng-container *ngIf="selectedRole">
+                                <div *ngFor="let p of templates[selectedRole].enabled; let first=first; let last=last" class="listItem" [ngClass]="{ active: selectedEnabledPartition == p }" (click)="selectPartition(p, true)">
+                                    {{p}}
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+
+                    <div class="btn-group mx-1" style="align-self: center;">
+                        <button class="btn btn-light" (click)="enablePartition(selectedRole)" [disabled]="!selectedDisabledPartition">
+                            <span class="fas fa-chevron-left"></span>
+                        </button>
+                        <button class="btn btn-light" (click)="disablePartition(selectedRole)" [disabled]="!selectedEnabledPartition">
+                            <span class="fas fa-chevron-right"></span>
+                        </button>
+                    </div>
+
+                    <div class="card vbox">
+                        <div class="card-header">
+                            <label style="flex: 1;">Partitions</label>
+                        </div>
+                        <div class="card-body scrollableContainer">
+                            <ng-container *ngIf="selectedRole">
+                                <div *ngFor="let p of templates[selectedRole].disabled" class="listItem" [ngClass]="{ active: selectedDisabledPartition == p }" (click)="selectPartition(p, false)">
+                                    {{p}}
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+
     <div *ngIf="isSkos" class="card card-alt mt-2">
         <div class="card-header">
             <label>
@@ -71,4 +136,5 @@
             </div>
         </div>
     </div>
+
 </div>
