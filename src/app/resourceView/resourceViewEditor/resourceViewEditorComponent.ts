@@ -97,6 +97,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         [ResViewPartition.types]: null,
     };
     customSections: string[];
+    partitionOrder: { [key: string]: number }; //map partition->position
 
     private propertyFacets: PropertyFacet[] = null;
 
@@ -295,6 +296,15 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         this.resViewSections[ResViewPartition.types] = this.initPartition(ResViewPartition.types, partitionFilter, true);
 
         let rvSettings: ResourceViewProjectSettings = VBContext.getWorkingProjectCtx().getProjectSettings().resourceView;
+        this.partitionOrder = {};
+        if (rvSettings.templates) {
+            let templateForRole: ResViewPartition[] = rvSettings.templates[this.resource.getRole()];
+            if (templateForRole != null) {
+                for (let i = 0; i < templateForRole.length; i++) {
+                    this.partitionOrder[templateForRole[i]] = i;
+                }
+            }
+        }
         if (rvSettings.customSections) {
             this.customSections = Object.keys(rvSettings.customSections);
             this.customSections.forEach(section => {

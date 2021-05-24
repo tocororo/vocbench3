@@ -17,6 +17,7 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 import { ImportFromDatasetCatalogModalReturnData } from "./importFromDatasetCatalogModal";
 import { ImportFromLocalFileData, ImportFromMirrorData, ImportFromWebData, ImportFromWebToMirrorData } from "./importOntologyModal";
 import { OntologyMirrorModal } from "./ontologyMirrorModal";
+import { PrefixNamespaceModalData } from "./prefixNamespaceModal";
 
 @Component({
     selector: "namespaces-imports-component",
@@ -246,18 +247,9 @@ export class NamespacesAndImportsComponent {
      * Adds a new prefix namespace mapping
      */
     addMapping() {
-        this.sharedModals.prefixNamespace({key:"ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING"}).then(
-            (mapping: any) => {
-                this.metadataService.setNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
-                    stResp => {
-                        this.refreshNSPrefixMappings();
-                    },
-                    (err: Error) => {
-                        if (err.name.endsWith("NSPrefixMappingUpdateException")) {
-                            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_PREFIX"}, ModalType.warning);
-                        }
-                    }
-                )
+        this.sharedModals.prefixNamespace({key:"ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING"}, null, null, false, true).then(
+            (mapping: PrefixNamespaceModalData) => {
+                this.refreshNSPrefixMappings();
             },
             () => { }
         )
@@ -268,7 +260,7 @@ export class NamespacesAndImportsComponent {
      */
     removeMapping() {
         this.metadataService.removeNSPrefixMapping(this.selectedMapping.namespace).subscribe(
-            stResp => {
+            () => {
                 this.refreshNSPrefixMappings();
             }
         )
@@ -278,13 +270,9 @@ export class NamespacesAndImportsComponent {
      * Changes the prefix of a prefix namespace mapping
      */
     changeMapping() {
-        this.sharedModals.prefixNamespace({key:"ACTIONS.EDIT_MAPPING"}, this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
-            (mapping: any) => {
-                this.metadataService.changeNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
-                    stResp => {
-                        this.refreshNSPrefixMappings();
-                    }
-                );
+        this.sharedModals.prefixNamespace({key:"ACTIONS.EDIT_MAPPING"}, this.selectedMapping.prefix, this.selectedMapping.namespace, true, true).then(
+            (mapping: PrefixNamespaceModalData) => {
+                this.refreshNSPrefixMappings();
             },
             () => { }
         )

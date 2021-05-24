@@ -4,11 +4,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { DatasetCatalogModal } from 'src/app/config/dataManagement/datasetCatalog/datasetCatalogModal';
 import { ImportFromDatasetCatalogModal } from 'src/app/metadata/namespacesAndImports/importFromDatasetCatalogModal';
 import { ImportOntologyModal } from 'src/app/metadata/namespacesAndImports/importOntologyModal';
-import { PrefixNamespaceModal } from 'src/app/metadata/namespacesAndImports/prefixNamespaceModal';
+import { PrefixNamespaceModal, PrefixNamespaceModalData } from 'src/app/metadata/namespacesAndImports/prefixNamespaceModal';
 import { ImportType } from 'src/app/models/Metadata';
 import { ProjectListModal } from 'src/app/project/projectListModal';
 import { ResourceViewModal } from 'src/app/resourceView/resourceViewModal';
-import { ARTNode, ARTResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTNode, ARTResource } from "../../../models/ARTResources";
 import { RDFCapabilityType } from "../../../models/Coda";
 import { Reference } from '../../../models/Configuration';
 import { Settings } from "../../../models/Plugins";
@@ -221,12 +221,14 @@ export class SharedModalServices {
      * @param namespaceReadonly tells if namespace value can be changed
      * @return returns a mapping object containing "prefix" and "namespace"
      */
-    prefixNamespace(title: TextOrTranslation, prefix?: string, namespace?: string, namespaceReadonly?: boolean): Promise<{ prefix: string, namespace: string }> {
+    prefixNamespace(title: TextOrTranslation, prefix?: string, namespace?: string, namespaceReadonly?: boolean,
+        write?: boolean): Promise<PrefixNamespaceModalData> {
         const modalRef: NgbModalRef = this.modalService.open(PrefixNamespaceModal, new ModalOptions());
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (prefix != null) modalRef.componentInstance.prefixInput = prefix;
         if (namespace != null) modalRef.componentInstance.namespaceInput = namespace;
         if (namespaceReadonly != null) modalRef.componentInstance.namespaceReadonly = namespaceReadonly;
+        if (write != null) modalRef.componentInstance.write = write;
         return modalRef.result;
     }
 

@@ -22,12 +22,12 @@ export class MetadataServices {
      * "prefix" the prefix
      */
     getNamespaceMappings(): Observable<PrefixMapping[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getNamespaceMappings", params).pipe(
             map(stResp => {
-                var mappings: PrefixMapping[] = [];
-                for (var i = 0; i < stResp.length; i++) {
-                    var m: PrefixMapping = {
+                let mappings: PrefixMapping[] = [];
+                for (let i = 0; i < stResp.length; i++) {
+                    let m: PrefixMapping = {
                         prefix: stResp[i].prefix,
                         namespace: stResp[i].namespace,
                         explicit: stResp[i].explicit
@@ -56,7 +56,7 @@ export class MetadataServices {
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.ontology.NSPrefixMappingUpdateException']
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.ontology.InvalidPrefixException']
             } 
         });
         return this.httpMgr.doPost(this.serviceName, "setNSPrefixMapping", params, options);
@@ -67,7 +67,7 @@ export class MetadataServices {
      * @param namespace
      */
     removeNSPrefixMapping(namespace: string) {
-        var params = {
+        let params = {
             namespace: namespace
         };
         return this.httpMgr.doPost(this.serviceName, "removeNSPrefixMapping", params);
@@ -79,11 +79,17 @@ export class MetadataServices {
      * @param namespace
      */
     changeNSPrefixMapping(prefix: string, namespace: string) {
-        var params = {
+        let params = {
             prefix: prefix,
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "changeNSPrefixMapping", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.ontology.InvalidPrefixException']
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "changeNSPrefixMapping", params, options);
     }
 
     /**
@@ -94,12 +100,12 @@ export class MetadataServices {
      * "imports": array of recursive imports
      */
     getImports(): Observable<OntologyImport[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getImports", params).pipe(
             map(stResp => {
-                var importedOntologies: OntologyImport[] = [];
+                let importedOntologies: OntologyImport[] = [];
 
-                for (var i = 0; i < stResp.length; i++) {
+                for (let i = 0; i < stResp.length; i++) {
                     importedOntologies.push(this.parseImport(stResp[i]));
                 }
                 return importedOntologies;
@@ -108,11 +114,11 @@ export class MetadataServices {
     }
 
     private parseImport(importNode: any): OntologyImport {
-        var id: string = importNode['@id'];
-        var status: ImportStatus = importNode.status;
-        var imports: OntologyImport[] = [];
+        let id: string = importNode['@id'];
+        let status: ImportStatus = importNode.status;
+        let imports: OntologyImport[] = [];
         if (importNode.imports != null) {
-            for (var i = 0; i < importNode.imports.length; i++) {
+            for (let i = 0; i < importNode.imports.length; i++) {
                 imports.push(this.parseImport(importNode.imports[i]));
             }
         }
@@ -124,7 +130,7 @@ export class MetadataServices {
      * @param baseURI the baseURI that identifies the imported ontology
      */
     removeImport(baseURI: string) {
-        var params: any = {
+        let params: any = {
             baseURI: baseURI
         };
         return this.httpMgr.doPost(this.serviceName, "removeImport", params).pipe(
@@ -142,7 +148,7 @@ export class MetadataServices {
      * @param rdfFormat force the format to read the ontology file to import
      */
     addFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
-        var params: any = {
+        let params: any = {
             baseURI: baseURI,
             transitiveImportAllowance: transitiveImportAllowance
         };
@@ -168,7 +174,7 @@ export class MetadataServices {
      * @param rdfFormat force the format to read the ontology file to import
      */
     addFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
-        var params: any = {
+        let params: any = {
             baseURI: baseURI,
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
@@ -195,7 +201,7 @@ export class MetadataServices {
     * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
     */
     addFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
-        var data = {
+        let data = {
             baseURI: baseURI,
             localFile: localFile,
             mirrorFile: mirrorFile,
@@ -216,7 +222,7 @@ export class MetadataServices {
      * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
      */
     addFromMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
-        var params = {
+        let params = {
             baseURI: baseURI,
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
@@ -237,7 +243,7 @@ export class MetadataServices {
      * @param transitiveImportAllowance 
      */
     getFromLocalFile(baseURI: string, localFile: File, transitiveImportAllowance: TransitiveImportMethodAllowance, mirrorFile?: string) {
-        var data = {
+        let data = {
             baseURI: baseURI,
             localFile: localFile,
             mirrorFile: mirrorFile,
@@ -258,7 +264,7 @@ export class MetadataServices {
      * @param altURL 
      */
     downloadFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
-        var params: any = {
+        let params: any = {
             baseURI: baseURI,
             transitiveImportAllowance: transitiveImportAllowance
         };
@@ -285,7 +291,7 @@ export class MetadataServices {
      */
     downloadFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance,
         altURL?: string, rdfFormat?: RDFFormat) {
-        var params: any = {
+        let params: any = {
             baseURI: baseURI,
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
@@ -308,7 +314,7 @@ export class MetadataServices {
      * Returns the default namespace of the currently open project
      */
     getDefaultNamespace(): Observable<string> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDefaultNamespace", params);
     }
 
@@ -317,7 +323,7 @@ export class MetadataServices {
      * @param namespace
      */
     setDefaultNamespace(namespace: string) {
-        var params = {
+        let params = {
             namespace: namespace
         };
         return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params).pipe(
@@ -332,7 +338,7 @@ export class MetadataServices {
      * Returns the baseURI of the currently open project
      */
     getBaseURI(): Observable<string> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getBaseURI", params);
     }
 
@@ -340,7 +346,7 @@ export class MetadataServices {
      * Returns the URI obtained expanding the given qname
      */
     expandQName(qname: string): Observable<string> {
-        var params: any = {
+        let params: any = {
             qname: qname
         };
         return this.httpMgr.doGet(this.serviceName, "expandQName", params);
