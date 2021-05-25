@@ -195,20 +195,17 @@
             </properties-renderer>
 
             <ng-container *ngFor="let p of customSections">
-                <!-- partition: {{p}}
-                poList: {{resViewSections[p]|json}} -->
-                <custom-partition-renderer [partition]="p" [ngStyle]="{ order: partitionOrder[p] }" 
+                <custom-partition-renderer *ngIf="resViewSections[p]" [partition]="p" [ngStyle]="{ order: partitionOrder[p] }" 
                     [pred-obj-list]="resViewSections[p]" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
                     (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
                 </custom-partition-renderer>
             </ng-container> 
-            
 
         </ng-container>
     </div>
     <div class="card-footer" style="min-height: 31px;">
         <div *ngIf="resourcePosition" class="float-right">
-            <div class="dropup float-right" ngbDropdown placement="top-right">
+            <div ngbDropdown placement="top-right">
                 <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle style="padding: 0px; border: none; background-color: transparent;">
                     <span [ngSwitch]="resource.getAdditionalProperty('accessMethod')">
                         {{'STATUS.STATUS'|translate}}:

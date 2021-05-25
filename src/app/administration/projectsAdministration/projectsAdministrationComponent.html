@@ -30,14 +30,16 @@
                 </div>
 
                 <div class="card-body vbox">
-                    <project-users-manager *ngIf="selectedAspect == projUsersAspect" [project]="selectedProject" class="vbox">
-                    </project-users-manager>
+                    <ng-container *ngIf="selectedProject">
+                        <project-users-manager *ngIf="selectedAspect == projUsersAspect" [project]="selectedProject" class="vbox">
+                        </project-users-manager>
 
-                    <project-groups-manager *ngIf="selectedAspect == projGroupsAspect" [project]="selectedProject" class="vbox">
-                    </project-groups-manager>
+                        <project-groups-manager *ngIf="selectedAspect == projGroupsAspect" [project]="selectedProject" class="vbox">
+                        </project-groups-manager>
 
-                    <project-settings *ngIf="selectedAspect == projSettingsAspect" [project]="selectedProject" class="vbox">
-                    </project-settings>
+                        <project-settings *ngIf="selectedAspect == projSettingsAspect" [project]="selectedProject" class="vbox">
+                        </project-settings>
+                    </ng-container>
                 </div>
 
             </div>

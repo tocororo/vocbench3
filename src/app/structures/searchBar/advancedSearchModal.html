@@ -25,7 +25,7 @@
             </tbody>
         </table>
 
-        <div class="card card-default mt-2">
+        <div class="card mt-2">
             <div class="card-header">
                 <label>{{'SEARCH.SETTINGS.SEARCH_MODE'|translate}}</label>
             </div>
@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <div class="card card-default mt-2">
+        <div class="card mt-2">
             <div class="card-header">
                 <label>{{'SEARCH.SETTINGS.LEXICALIZATIONS_SEARCH'|translate}}</label>
             </div>
@@ -82,7 +82,7 @@
         </div>
 
         <!-- Types -->
-        <div class="card card-default mt-2" >
+        <div class="card mt-2" >
             <div class="card-header">
                 <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.TYPES'|translate}}</label>
                 <div class="btn-group btn-group-xs">
@@ -122,7 +122,7 @@
         </div>
 
         <!-- Schemes -->
-        <div *ngIf="showSchemeSelector" class="card card-default mt-2">
+        <div *ngIf="showSchemeSelector" class="card mt-2">
             <div class="card-header">
                 <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.SCHEMES'|translate}}</label>
                 <div class="btn-group btn-group-xs">
@@ -162,7 +162,7 @@
         </div>
 
         <!-- Ingoing links -->
-        <div class="card card-default mt-2">
+        <div class="card mt-2">
             <div class="card-header">
                 <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.INGOING_LINKS'|translate}}</label>
                 <div class="btn-group btn-group-xs">
@@ -213,10 +213,10 @@
 
 
         <!-- Outgoing links -->
-        <div class="card card-default mt-2">
+        <div class="card mt-2">
             <div class="card-header">
                 <label style="flex: 1;">{{'SEARCH.ADV_SEARCH.OUTGOING_LINKS'|translate}}</label>
-                <div class="btn-group btn-group-xs dropup" ngbDropdown container="body">
+                <div class="btn-group btn-group-xs" ngbDropdown container="body" placement="top-right">
                     <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                         <span class="fas fa-plus"></span>
                     </button>
@@ -251,7 +251,7 @@
                                         <span *ngIf="!lastValue">OR</span>
                                     </div>
                                     <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
-                                        <div class="btn-group btn-group-xs dropup" ngbDropdown container="body">
+                                        <div class="btn-group btn-group-xs" ngbDropdown container="body" placement="top-left">
                                             <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                                                 <span class="fas fa-plus"></span>
                                             </button>

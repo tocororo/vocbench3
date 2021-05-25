@@ -1,0 +1,141 @@
+<div class="card vbox" style="flex: 3;">
+    <div class="card-header">
+        <label>
+            Template
+        </label>
+    </div>
+    <div class="card-body hbox">
+        <div class="card vbox">
+            <div class="card-header">
+                <label>
+                    {{'RESOURCE_VIEW.PARTITIONS.FILTER.RESOURCE_TYPES'|translate}}
+                </label>
+            </div>
+            <div class="card-body scrollableContainer">
+                <div *ngFor="let r of roles" class="listItem" (click)="selectRole(r)" [ngClass]="{ active: r == selectedRole }">
+                    {{r}}
+                </div>
+            </div>
+        </div>
+
+        <div class="card vbox ml-3">
+            <div class="card-header">
+                <label style="flex: 1;">
+                    {{'RESOURCE_VIEW.PARTITIONS.PARTITIONS'|translate}}
+                    <span class="fas fa-eye"></span>
+                </label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-light" (click)="movePartitionUp(selectedRole)" [disabled]="!selectedEnabledPartition">
+                        <span class="fas fa-chevron-up"></span>
+                    </button>
+                    <button class="btn btn-light" (click)="movePartitionDown(selectedRole)" [disabled]="!selectedEnabledPartition">
+                        <span class="fas fa-chevron-down"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body scrollableContainer">
+                <ng-container *ngIf="selectedRole">
+                    <div *ngFor="let p of templates[selectedRole].enabled; let first=first; let last=last" class="listItem" [ngClass]="{ active: selectedEnabledPartition == p }" (click)="selectPartition(p, true)">
+                        {{p}}
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="btn-group mx-1" style="align-self: center;">
+            <button class="btn btn-light" (click)="enablePartition(selectedRole)" [disabled]="!selectedDisabledPartition">
+                <span class="fas fa-chevron-left"></span>
+            </button>
+            <button class="btn btn-light" (click)="disablePartition(selectedRole)" [disabled]="!selectedEnabledPartition">
+                <span class="fas fa-chevron-right"></span>
+            </button>
+        </div>
+
+        <div class="card vbox">
+            <div class="card-header">
+                <label style="flex: 1;">
+                    {{'RESOURCE_VIEW.PARTITIONS.PARTITIONS'|translate}}
+                    <span class="fas fa-eye-slash"></span>
+                </label>
+            </div>
+            <div class="card-body scrollableContainer">
+                <ng-container *ngIf="selectedRole">
+                    <div *ngFor="let p of templates[selectedRole].disabled" class="listItem" [ngClass]="{ active: selectedDisabledPartition == p }" (click)="selectPartition(p, false)">
+                        {{p}}
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card vbox mt-2" style="flex: 2;">
+    <div class="card-header">
+        <label>Custom Sections</label>
+    </div>
+    <div class="card-body hbox">
+        <div class="card vbox">
+            <div class="card-header">
+                <label style="flex: 1;">Sections</label>
+                <div class="btn-toolbar">
+                    <button class="btn btn-light btn-xs" (click)="renameCustomSection()" [disabled]="!selectedCustomSection">
+                        <span class="fas fa-pencil-alt"></span>
+                    </button>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-light" (click)="addCustomSection()">
+                            <span class="fas fa-plus"></span>
+                        </button>
+                        <button class="btn btn-light" (click)="deleteCustomSection()" [disabled]="!selectedCustomSection">
+                            <span class="fas fa-minus"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body scrollableContainer">
+                <div *ngFor="let cs of customSectionsIDs" class="listItem" (click)="selectCustomSection(cs)" [ngClass]="{ active: cs == selectedCustomSection }">
+                    {{cs}}
+                </div>
+            </div>
+        </div>
+
+        <div class="card vbox ml-2">
+            <div class="card-header">
+                <label style="flex: 1;">Managed properties</label>
+
+                <ng-container *ngIf="selectedCustomSection">
+                    <span *ngIf="!isActiveProject" class="fas fa-exclamation-triangle" title="The selected project is not currently accessed, so it is possible to add properties only providing the IRI manually and not by exploring the property tree"></span>
+                    <div class="btn-group btn-group-xs ml-2">
+                        <button class="btn btn-light" (click)="addManagedProperty()">
+                            <span class="fas fa-plus"></span>
+                        </button>
+                        <button class="btn btn-light" (click)="deleteManagedProperty()" [disabled]="!selectedManagedProperty">
+                            <span class="fas fa-minus"></span>
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="card-body scrollableContainer">
+                <ng-container *ngIf="selectedCustomSection">
+                    <div *ngFor="let p of customSections[selectedCustomSection]" class="listItem" (click)="selectManagedProperty(p)" [ngClass]="{ active: p == selectedManagedProperty }">
+                        {{p.toNT()}}
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-right mt-2">
+    <div *ngIf="isAdmin" class="btn-group" style="position: static;" ngbDropdown placement="top-right">
+        <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+            Default
+        </button>
+        <div class="dropdown-menu" ngbDropdownMenu container="body">
+            <a class="dropdown-item" (click)="setAsSystemDefault()">Set this configuration as system default</a>
+            <a class="dropdown-item" (click)="restoreSystemDefault()">Restore system default</a>
+        </div>
+    </div>
+    <button *ngIf="!isAdmin" class="btn btn-light" (click)="restoreSystemDefault()">Restore system default</button>
+</div>
+
+

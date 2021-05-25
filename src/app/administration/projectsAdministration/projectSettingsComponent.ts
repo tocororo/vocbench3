@@ -1,12 +1,10 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum } from "src/app/models/ARTResources";
 import { ExtensionPointID, Scope, Settings } from "src/app/models/Plugins";
-import { ResViewPartition } from "src/app/models/ResourceView";
 import { SKOS } from "src/app/models/Vocabulary";
 import { SettingsServices } from "src/app/services/settingsServices";
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
-import { PrefLabelClashMode, ResourceViewProjectSettings, SettingsEnum, CustomSection } from "../../models/Properties";
+import { PrefLabelClashMode, ResourceViewProjectSettings, SettingsEnum } from "../../models/Properties";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 
@@ -18,6 +16,11 @@ export class ProjectSettingsComponent {
 
     @Input() project: Project;
     isSkos: boolean;
+
+    activeSetting: "languages" | "resView" | "other" = "languages";
+
+    langCollapsed: boolean = false;
+    labelClashCollapsed: boolean = true;
 
     //Lang
     noLangActive: boolean = true;
@@ -32,16 +35,7 @@ export class ProjectSettingsComponent {
     labelClashOptSelected: LabelClashItem;
 
     //res view
-    customSections: { id: ResViewPartition, properties: ARTURIResource[] }[];
-    templates: {[key: string]: { enabled: ResViewPartition[], disabled: ResViewPartition[] }} = {}; //for each role list of enabled and disabled partitions
-
-    roles: RDFResourceRolesEnum[];
-    selectedRole: RDFResourceRolesEnum;
-
-    selectedEnabledPartition: ResViewPartition;
-    selectedDisabledPartition: ResViewPartition;
-
-    private rvSettingTimer: number; //in order to do not fire too much close requests to update rv settings
+    rvSettings: ResourceViewProjectSettings;
 
     constructor(private settingsService: SettingsServices, private vbProperties: VBProperties) { }
 
@@ -59,6 +53,12 @@ export class ProjectSettingsComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['project'] && changes['project'].currentValue) {
+            this.isSkos = this.project.getModelType() == SKOS.uri;
+            //currently the only setting in the "other" tab is the one related to the skos(xl) label clash, so if project is not skos reset the tab to languages
+            if (!this.isSkos && this.activeSetting == "other") {
+                this.activeSetting = "languages";
+            }
+
             if (this.languageItems != null) { //if project changes and system languages already initialized => refresh proj settings
                 this.initProjectSettings();
             }
@@ -66,7 +66,6 @@ export class ProjectSettingsComponent {
     }
 
     private initProjectSettings() {
-        this.isSkos = this.project.getModelType() == SKOS.uri;
         this.settingsService.getSettingsForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, this.project).subscribe(
             settings => {
                 //init active languages
@@ -144,116 +143,7 @@ export class ProjectSettingsComponent {
      * ===================== */
 
     private initResViewSettings(settings: Settings) {
-        let rvSettings = settings.getPropertyValue(SettingsEnum.resourceView);
-        this.customSections = [];
-        if (rvSettings.customSections != null) {
-            for (let partitionId in rvSettings.customSections) {
-                let cs: CustomSection = rvSettings.customSections[partitionId];
-                let matchedProperties: ARTURIResource[] = cs.matchedProperties.map(p => new ARTURIResource(p));
-                this.customSections.push({ id: <ResViewPartition>partitionId, properties: matchedProperties});
-            }
-        }
-
-        //collects all the partition
-        let allPartitions: ResViewPartition[] = [];
-        for (let p in ResViewPartition) { //the built-in
-            allPartitions.push(<ResViewPartition>p);
-        }
-        this.customSections.forEach(cs => allPartitions.push(cs.id)); //the custom ones
-        allPartitions.sort();
-        //init the template
-        this.templates = {};
-        if (rvSettings.templates != null) {
-            for (let role in rvSettings.templates) {
-                let activePartitions: ResViewPartition[] = rvSettings.templates[role];
-                let notActivePartitions: ResViewPartition[] = allPartitions.filter(p => !activePartitions.includes(p));
-                this.templates[role] = { enabled: activePartitions, disabled: notActivePartitions };
-            }
-        }
-        this.roles = <RDFResourceRolesEnum[]>Object.keys(this.templates);
-    }
-
-    selectRole(role: RDFResourceRolesEnum) {
-        this.selectedRole = role;
-        this.selectedEnabledPartition = null;
-        this.selectedDisabledPartition = null;
-    }
-
-    selectPartition(partition: ResViewPartition, enabled: boolean) {
-        if (enabled) {
-            this.selectedEnabledPartition = partition;
-            this.selectedDisabledPartition = null;
-        } else {
-            this.selectedEnabledPartition = null;
-            this.selectedDisabledPartition = partition;
-        }
-    }
-
-    enablePartition(role: RDFResourceRolesEnum) {
-        this.templates[role].enabled.push(this.selectedDisabledPartition);
-        this.templates[role].disabled.splice(this.templates[role].disabled.indexOf(this.selectedDisabledPartition), 1);
-        this.selectedDisabledPartition = null;
-        this.updateResViewSettingsWithTimeout();
-    }
-    disablePartition(role: RDFResourceRolesEnum) {
-        this.templates[role].disabled.push(this.selectedEnabledPartition);
-        this.templates[role].enabled.splice(this.templates[role].enabled.indexOf(this.selectedEnabledPartition), 1);
-        this.templates[role].disabled.sort();
-        this.selectedEnabledPartition = null;
-        this.updateResViewSettingsWithTimeout();
-    }
-
-    movePartitionUp(role: RDFResourceRolesEnum) {
-        let idx = this.templates[role].enabled.indexOf(this.selectedEnabledPartition);
-        if (idx > 0) {
-            let oldP = this.templates[role].enabled[idx-1];
-            this.templates[role].enabled[idx-1] = this.selectedEnabledPartition;
-            this.templates[role].enabled[idx] = oldP;
-        }
-        this.updateResViewSettingsWithTimeout();
-    }
-    movePartitionDown(role: RDFResourceRolesEnum) {
-        let idx = this.templates[role].enabled.indexOf(this.selectedEnabledPartition);
-        if (idx < this.templates[role].enabled.length-1) {
-            let oldP = this.templates[role].enabled[idx+1];
-            this.templates[role].enabled[idx+1] = this.selectedEnabledPartition;
-            this.templates[role].enabled[idx] = oldP;
-        }
-        this.updateResViewSettingsWithTimeout();
-    }
-
-    updateResViewSettingsWithTimeout() {
-        clearTimeout(this.rvSettingTimer);
-        this.rvSettingTimer = window.setTimeout(() => { this.updateResViewSettings() }, 1000);
-    }
-    
-
-    private updateResViewSettings() {
-        let customSections: {[key: string]: CustomSection} = {}; //map name -> CustomSection
-        this.customSections.forEach(cs => {
-            customSections[cs.id] = {
-                matchedProperties: cs.properties.map(p => p.toNT())
-            }
-        })
-
-        let templates: {[key: string]: ResViewPartition[]} = {}; //map role -> sections
-        for (let role in this.templates) {
-            templates[role] = this.templates[role].enabled;
-        }
-
-        let rvSettings: ResourceViewProjectSettings = {
-            customSections: customSections,
-            templates: templates
-        };
-        console.log("store", rvSettings);
-        this.settingsService.storeSettingForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, SettingsEnum.resourceView, rvSettings, this.project).subscribe(
-            () => {
-                //in case the edited project is the active one, update the settings stored in VBContext
-                if (VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()) {
-                    VBContext.getWorkingProjectCtx().getProjectSettings().resourceView = rvSettings;
-                }
-            }
-        )
+        this.rvSettings = settings.getPropertyValue(SettingsEnum.resourceView);
     }
 
     /* =====================

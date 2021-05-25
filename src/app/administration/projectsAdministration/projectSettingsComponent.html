@@ -1,140 +1,93 @@
 <div class="vbox">
 
-    <div class="card card-alt vbox">
-        <div class="card-header">
-            <label style="flex: 1;">{{'COMMONS.LANGUAGE.LANGUAGES'|translate}}</label>
-            <span *ngIf="noLangActive" class="grayText" style="margin-right: 5px;">
-                <span class="fas fa-exclamation-triangle"></span> {{'COMMONS.LANGUAGE.NO_LANG_INFO'|translate}}
-            </span>
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-light" (click)="changeAllLangStatus(true)" [title]="'ACTIONS.CHECK_ALL'|translate" [disabled]="!project">
-                    <span class="far fa-check-square"></span>
-                </button>
-                <button class="btn btn-light" (click)="changeAllLangStatus(false)" [title]="'ACTIONS.UNCHECK_ALL'|translate" [disabled]="!project">
-                    <span class="far fa-square"></span>
-                </button>
-            </div>
-        </div>
-        <div class="card-body scrollableContainer">
-                        
-            <table class="table table-sm table-borderless table-hoverable">
-                <colgroup>
-                    <col style="width: 1%">
-                    <col style="width: 1%">
-                    <col>
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th class="text-center" style="padding: 0px 8px;">{{'STATUS.ACTIVE'|translate}}</th>
-                        <th class="text-center" style="padding: 0px 8px;" nowrap>
-                            {{'ADMINISTRATION.PROJECTS.MANDATORY_LANGS'|translate}}
-                            <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.MANDATORY_LANGS_INFO'|translate"></span>
-                        </th>
-                        <th class="text-center" style="padding: 0px 8px;" nowrap>{{'COMMONS.LANGUAGE.ISO_CODE'|translate}}</th>
-                        <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let l of languageItems">
-                        <td class="text-center">
-                            <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.active" (ngModelChange)="updateActiveLangSettings()"
-                                [disabled]="!project">
-                        </td>
-                        <td class="text-center">
-                            <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.lang.mandatory" (ngModelChange)="updateActiveLangSettings()"
-                                [disabled]="!project || !l.active">
-                        </td>
-                        <td class="text-center" nowrap>{{l.lang.tag}}</td>
-                        <td class="text-center">
-                            <lang-item [language]="l.lang"></lang-item>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <ul class="nav nav-tabs" (click)="$event.preventDefault()">
+        <li class="nav-item" [ngClass]="{ active : activeSetting == 'languages' }">
+            <a class="nav-link" (click)="activeSetting = 'languages'">{{'COMMONS.LANGUAGE.LANGUAGES'|translate}}</a>
+        </li>
+        <li class="nav-item" [ngClass]="{ active : activeSetting == 'resView' }">
+            <a class="nav-link" (click)="activeSetting = 'resView'">Resource View</a>
+        </li>
+        <li *ngIf="isSkos" class="nav-item" [ngClass]="{ active : activeSetting == 'other' }">
+            <a class="nav-link" (click)="activeSetting = 'other'">Other</a>
+        </li>
+    </ul>
+    <div class="tab-content">
 
-        </div>
-    </div>
-
-    <div *ngIf="project" class="card vbox mt-2">
-        <div class="card-body hbox">
-    
-            <div class="card vbox">
-                <div class="card-header">
-                    <label>{{'RESOURCE_VIEW.PARTITIONS.FILTER.RESOURCE_TYPES'|translate}}</label>
-                </div>
-                <div class="card-body scrollableContainer">
-                    <div *ngFor="let r of roles" class="listItem" (click)="selectRole(r)" [ngClass]="{ active: r == selectedRole }">
-                        {{r}}
-                    </div>
+        <div class="card vbox" [hidden]="activeSetting != 'languages'">
+            <div class="card-header">
+                <label style="flex: 1;">{{'COMMONS.LANGUAGE.LANGUAGES'|translate}}</label>
+                <span *ngIf="noLangActive" class="grayText" style="margin-right: 5px;">
+                    <span class="fas fa-exclamation-triangle"></span> {{'COMMONS.LANGUAGE.NO_LANG_INFO'|translate}}
+                </span>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-light" (click)="changeAllLangStatus(true)" [title]="'ACTIONS.CHECK_ALL'|translate" [disabled]="!project">
+                        <span class="far fa-check-square"></span>
+                    </button>
+                    <button class="btn btn-light" (click)="changeAllLangStatus(false)" [title]="'ACTIONS.UNCHECK_ALL'|translate" [disabled]="!project">
+                        <span class="far fa-square"></span>
+                    </button>
                 </div>
             </div>
-
-            <div class="card vbox ml-2" style="flex: 2;">
-                <div class="card-body hbox">
-                    <div class="card vbox">
-                        <div class="card-header">
-                            <label style="flex: 1;">{{'RESOURCE_VIEW.PARTITIONS.PARTITIONS'|translate}}</label>
-                            <div class="btn-group btn-group-xs">
-                                <button class="btn btn-light" (click)="movePartitionUp(selectedRole)" [disabled]="!selectedEnabledPartition">
-                                    <span class="fas fa-chevron-up"></span>
-                                </button>
-                                <button class="btn btn-light" (click)="movePartitionDown(selectedRole)" [disabled]="!selectedEnabledPartition">
-                                    <span class="fas fa-chevron-down"></span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body scrollableContainer">
-                            <ng-container *ngIf="selectedRole">
-                                <div *ngFor="let p of templates[selectedRole].enabled; let first=first; let last=last" class="listItem" [ngClass]="{ active: selectedEnabledPartition == p }" (click)="selectPartition(p, true)">
-                                    {{p}}
-                                </div>
-                            </ng-container>
-                        </div>
-                    </div>
-
-                    <div class="btn-group mx-1" style="align-self: center;">
-                        <button class="btn btn-light" (click)="enablePartition(selectedRole)" [disabled]="!selectedDisabledPartition">
-                            <span class="fas fa-chevron-left"></span>
-                        </button>
-                        <button class="btn btn-light" (click)="disablePartition(selectedRole)" [disabled]="!selectedEnabledPartition">
-                            <span class="fas fa-chevron-right"></span>
-                        </button>
-                    </div>
-
-                    <div class="card vbox">
-                        <div class="card-header">
-                            <label style="flex: 1;">Partitions</label>
-                        </div>
-                        <div class="card-body scrollableContainer">
-                            <ng-container *ngIf="selectedRole">
-                                <div *ngFor="let p of templates[selectedRole].disabled" class="listItem" [ngClass]="{ active: selectedDisabledPartition == p }" (click)="selectPartition(p, false)">
-                                    {{p}}
-                                </div>
-                            </ng-container>
-                        </div>
-                    </div>
-                </div>
+            <div class="card-body scrollableContainer">
+                <table class="table table-sm table-borderless table-hoverable">
+                    <colgroup>
+                        <col style="width: 1%">
+                        <col style="width: 1%">
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="padding: 0px 8px;">{{'STATUS.ACTIVE'|translate}}</th>
+                            <th class="text-center" style="padding: 0px 8px;" nowrap>
+                                {{'ADMINISTRATION.PROJECTS.MANDATORY_LANGS'|translate}}
+                                <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.MANDATORY_LANGS_INFO'|translate"></span>
+                            </th>
+                            <th class="text-center" style="padding: 0px 8px;" nowrap>{{'COMMONS.LANGUAGE.ISO_CODE'|translate}}</th>
+                            <th class="text-center" style="padding: 0px 8px;">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let l of languageItems">
+                            <td class="text-center">
+                                <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.active" (ngModelChange)="updateActiveLangSettings()"
+                                    [disabled]="!project">
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.lang.mandatory" (ngModelChange)="updateActiveLangSettings()"
+                                    [disabled]="!project || !l.active">
+                            </td>
+                            <td class="text-center" nowrap>{{l.lang.tag}}</td>
+                            <td class="text-center">
+                                <lang-item [language]="l.lang"></lang-item>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-    
         </div>
-    </div>
 
-    <div *ngIf="isSkos" class="card card-alt mt-2">
-        <div class="card-header">
-            <label>
-                {{'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE'|translate}}
-                <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE_INFO'|translate"></span>
-            </label>
-        </div>
-        <div class="card-body">
-            <div *ngFor="let opt of labelClashOpts; let i=index" class="form-check mt-2">
-                <input class="form-check-input" [id]="'labelClashRadio'+i" type="radio" name="labelClashRadio" [value]="opt.mode" [checked]="opt == labelClashOptSelected" (click)="setLabelClashSetting(opt)">
-                <label class="form-check-label" [for]="'labelClashRadio'+i">
-                    {{opt.modeTranslationKey|translate}}
-                    <i class="text-secondary font-weight-normal ml-2">{{opt.infoTranslationKey|translate}}</i>
+        <res-view-project-settings [hidden]="activeSetting != 'resView'"
+            [project]="project" [settings]="rvSettings">
+        </res-view-project-settings>
+
+        <div class="card" [hidden]="activeSetting != 'other'">
+            <div class="card-header">
+                <label>
+                    {{'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE'|translate}}
+                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE_INFO'|translate"></span>
                 </label>
             </div>
+            <div class="card-body">
+                <div *ngFor="let opt of labelClashOpts; let i=index" class="form-check mt-2">
+                    <input class="form-check-input" [id]="'labelClashRadio'+i" type="radio" name="labelClashRadio" [value]="opt.mode" [checked]="opt == labelClashOptSelected" (click)="setLabelClashSetting(opt)">
+                    <label class="form-check-label" [for]="'labelClashRadio'+i">
+                        {{opt.modeTranslationKey|translate}}
+                        <i class="text-secondary font-weight-normal ml-2">{{opt.infoTranslationKey|translate}}</i>
+                    </label>
+                </div>
+            </div>
         </div>
+
     </div>
 
 </div>

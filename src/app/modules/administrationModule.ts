@@ -12,6 +12,7 @@ import { ProjectGroupsManagerComponent } from "../administration/projectsAdminis
 import { ProjectsAdministrationComponent } from "../administration/projectsAdministration/projectsAdministrationComponent";
 import { ProjectSettingsComponent } from "../administration/projectsAdministration/projectSettingsComponent";
 import { ProjectUsersManagerComponent } from "../administration/projectsAdministration/projectUsersManagerComponent";
+import { ResViewProjectSettingsComponent } from '../administration/projectsAdministration/resViewProjectSettingsComponent';
 import { UserProjBindingModal } from "../administration/projectsAdministration/userProjBindingModal";
 import { CapabilityEditorModal } from "../administration/rolesAdministration/capabilityEditorModal";
 import { ImportRoleModal } from "../administration/rolesAdministration/importRoleModal";
@@ -45,6 +46,7 @@ import { UserModule } from './userModule';
         ProjectsAdministrationComponent,
         ProjectSettingsComponent,
         ProjectUsersManagerComponent,
+        ResViewProjectSettingsComponent,
         RolesAdministrationComponent,
         SettingsMgrConfigComponent,
         SystemConfigurationComponent,

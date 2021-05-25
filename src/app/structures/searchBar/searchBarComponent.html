@@ -14,7 +14,7 @@
     <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control form-control-sm" style="flex: 1;" 
         [(ngModel)]="searchStr" (keydown.enter)="doSearch()" [placeholder]="'ACTIONS.SEARCH'|translate" [disabled]="disabled">
 
-    <div class="btn-group btn-group-xs dropup ml-2" ngbDropdown placement="top-right">
+    <div class="btn-group btn-group-xs ml-2" ngbDropdown placement="top-right">
         <button class="btn btn-light" type="button" (click)="doSearch()" [disabled]="disabled">
             <span class="fas fa-search"></span>
         </button>
@@ -29,7 +29,7 @@
         </ng-container>
     </div>
 
-    <div class="btn-group btn-group-xs dropup ml-2" ngbDropdown>
+    <div class="btn-group btn-group-xs ml-2" ngbDropdown placement="top-right">
         <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle
             style="border-radius: 0px; padding-left: 3px; padding-right: 3px; border-right: 1px; width: 24px;">
             <span *ngIf="searchSettings.stringMatchMode == 'startsWith'" style="font-weight: bold; font-size: 14px; line-height: 1;">&#945;..</span>
