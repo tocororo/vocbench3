@@ -1,8 +1,6 @@
 <div class="card vbox" style="flex: 3;">
     <div class="card-header">
-        <label>
-            Template
-        </label>
+        <label>{{'COMMONS.TEMPLATE'|translate}}</label>
     </div>
     <div class="card-body hbox">
         <div class="card vbox">
@@ -71,7 +69,7 @@
 
 <div class="card vbox mt-2" style="flex: 2;">
     <div class="card-header">
-        <label>Custom Sections</label>
+        <label>{{'ADMINISTRATION.PROJECTS.RES_VIEW.CUSTOM_SECTIONS'|translate}}</label>
     </div>
     <div class="card-body hbox">
         <div class="card vbox">
@@ -100,10 +98,10 @@
 
         <div class="card vbox ml-2">
             <div class="card-header">
-                <label style="flex: 1;">Managed properties</label>
+                <label style="flex: 1;">{{'ADMINISTRATION.PROJECTS.RES_VIEW.MANAGED_PROPERTIES'|translate}}</label>
 
                 <ng-container *ngIf="selectedCustomSection">
-                    <span *ngIf="!isActiveProject" class="fas fa-exclamation-triangle" title="The selected project is not currently accessed, so it is possible to add properties only providing the IRI manually and not by exploring the property tree"></span>
+                    <span *ngIf="!isActiveProject" class="fas fa-exclamation-triangle" [title]="'ADMINISTRATION.PROJECTS.RES_VIEW.PROP_ADDITION_OTHER_PROJECT_WARN'|translate"></span>
                     <div class="btn-group btn-group-xs ml-2">
                         <button class="btn btn-light" (click)="addManagedProperty()">
                             <span class="fas fa-plus"></span>
@@ -128,14 +126,14 @@
 <div class="text-right mt-2">
     <div *ngIf="isAdmin" class="btn-group" style="position: static;" ngbDropdown placement="top-right">
         <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-            Default
+            {{'STATUS.DEFAULT'|translate}}
         </button>
         <div class="dropdown-menu" ngbDropdownMenu container="body">
-            <a class="dropdown-item" (click)="setAsSystemDefault()">Set this configuration as system default</a>
-            <a class="dropdown-item" (click)="restoreSystemDefault()">Restore system default</a>
+            <a class="dropdown-item" (click)="setAsSystemDefault()">{{'ACTIONS.SET_AS_SYSTEM_DEFAULT'|translate}}</a>
+            <a class="dropdown-item" (click)="restoreSystemDefault()">{{'ACTIONS.RESTORE_SYSTEM_DEFAULT'|translate}}</a>
         </div>
     </div>
-    <button *ngIf="!isAdmin" class="btn btn-light" (click)="restoreSystemDefault()">Restore system default</button>
+    <button *ngIf="!isAdmin" class="btn btn-light" (click)="restoreSystemDefault()">{{'ACTIONS.RESTORE_SYSTEM_DEFAULT'|translate}}</button>
 </div>
 
 

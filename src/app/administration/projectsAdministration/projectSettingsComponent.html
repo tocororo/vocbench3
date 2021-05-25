@@ -8,7 +8,7 @@
             <a class="nav-link" (click)="activeSetting = 'resView'">Resource View</a>
         </li>
         <li *ngIf="isSkos" class="nav-item" [ngClass]="{ active : activeSetting == 'other' }">
-            <a class="nav-link" (click)="activeSetting = 'other'">Other</a>
+            <a class="nav-link" (click)="activeSetting = 'other'">{{'COMMONS.OTHER'|translate}}</a>
         </li>
     </ul>
     <div class="tab-content">

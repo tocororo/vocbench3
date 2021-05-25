@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Component, Input, SimpleChanges } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "src/app/models/ARTResources";
 import { ExtensionPointID, Scope } from "src/app/models/Plugins";
 import { ResViewPartition } from "src/app/models/ResourceView";
@@ -160,13 +160,13 @@ export class ResViewProjectSettingsComponent {
     }
 
     renameCustomSection() {
-        this.basicModals.prompt("Rename Custom Section", null, null, this.selectedCustomSection).then(
+        this.basicModals.prompt({key:"ADMINISTRATION.PROJECTS.RES_VIEW.RENAME_CUSTOM_SECTION"}, null, null, this.selectedCustomSection).then(
             newSectionName => {
                 if (newSectionName == this.selectedCustomSection) { //not changed
                     return;
                 }
                 if (Object.keys(this.templates).includes(newSectionName)) { //changed but section with the same name already exists
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "A Section with the same name already exists", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.ALREADY_EXISTING_SECTION"}, ModalType.warning);
                     return;
                 }
                 //move the managed properties to the new section, then remove the old one
@@ -202,10 +202,10 @@ export class ResViewProjectSettingsComponent {
     }
 
     addCustomSection() {
-        this.basicModals.prompt("Create Custom Section").then(
+        this.basicModals.prompt({key:"ADMINISTRATION.PROJECTS.RES_VIEW.CREATE_CUSTOM_SECTION"}).then(
             customSectionName => {
                 if (Object.keys(this.templates).includes(customSectionName)) { //section with the same name already exists
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, "A Section with the same name already exists", ModalType.warning);
+                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.ALREADY_EXISTING_SECTION"}, ModalType.warning);
                     return;
                 }
                 this.customSections[customSectionName] = [];
@@ -314,12 +314,12 @@ export class ResViewProjectSettingsComponent {
     }
 
     setAsSystemDefault() {
-        this.basicModals.confirm("Set as system default", "You are going to set this configuration as system default. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.SET_AS_SYSTEM_DEFAULT"}, {key:"MESSAGES.CONFIG_SET_SYSTEM_DEFAULT_CONFIRM"}, ModalType.warning).then(
             () => {
                 let rvSettings: ResourceViewProjectSettings = this.getResViewProjectSettings();
                 this.settingsService.storeSettingDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, Scope.SYSTEM, SettingsEnum.resourceView, rvSettings).subscribe(
                     () => {
-                        this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "Configuration set as system default");
+                        this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIG_SYSTEM_DEFAULT_SET"});
                     }
                 )
             },
@@ -328,7 +328,7 @@ export class ResViewProjectSettingsComponent {
     }
 
     restoreSystemDefault() {
-        this.basicModals.confirm("Restore system default", "You are going to override the configuration by restoring the system default settings. Are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({key:"ACTIONS.RESTORE_SYSTEM_DEFAULT"}, {key:"MESSAGES.CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM"}, ModalType.warning).then(
             () => {
                 let rvSettings: ResourceViewProjectSettings = null;
                 this.settingsService.storeSettingForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, SettingsEnum.resourceView, rvSettings, this.project).subscribe(
@@ -340,7 +340,7 @@ export class ResViewProjectSettingsComponent {
                                 settings => {
                                     this.rvSettings = settings.getPropertyValue(SettingsEnum.resourceView);
                                     this.initResViewSettings();
-                                    this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, "System configuration restored");
+                                    this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIG_SYSTEM_DEFAULT_RESTORED"});
                                 }
                             );
                         }
