@@ -34,10 +34,10 @@
                             <input class="form-control" type="date" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
                         </div>
                         <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/2001/XMLSchema#dateTime'">
-                            <input class="form-control" type="datetime-local" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
+                            <input class="form-control" type="datetime-local" step="1" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
                         </div>
                         <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/2001/XMLSchema#time'">
-                            <input class="form-control" type="time" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
+                            <input class="form-control" type="time" step="1" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
                         </div>
                     </div>
                 </div>

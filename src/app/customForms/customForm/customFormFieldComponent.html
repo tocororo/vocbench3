@@ -41,12 +41,12 @@
                 </div>
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#time'" class="hbox">
                     <input class="form-control" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                    <input class="form-control" style="margin-left: 10px;" type="time" [(ngModel)]="field.value"
+                    <input class="form-control" style="margin-left: 10px;" type="time" step="1" [(ngModel)]="field.value"
                         (ngModelChange)="onModelChanged()">
                 </div>
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#datetime'" class="hbox">
                     <input class="form-control" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                    <input class="form-control" style="margin-left: 10px;" type="datetime-local"
+                    <input class="form-control" style="margin-left: 10px;" type="datetime-local" step="1"
                         [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
                 </div>
                 <div *ngSwitchDefault class="hbox" style="align-items: center;">
