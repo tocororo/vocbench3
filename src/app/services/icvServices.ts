@@ -21,7 +21,7 @@ export class IcvServices {
      * @param scheme scheme where to get the dangling concept
      */
     listDanglingConcepts(scheme: ARTURIResource): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             scheme: scheme
         };
         return this.httpMgr.doGet(this.serviceName, "listDanglingConcepts", params).pipe(
@@ -32,7 +32,7 @@ export class IcvServices {
     }
 
     listDanglingConceptsForAllSchemes(): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listDanglingConceptsForAllSchemes", params).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp, ["dangScheme"]);
@@ -44,7 +44,7 @@ export class IcvServices {
      * Returns a list of skos:ConceptScheme that have no top concept
      */
     listConceptSchemesWithNoTopConcept(): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoTopConcept", params).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -56,7 +56,7 @@ export class IcvServices {
      * Returns a list of skos:Concept that don't belong to any scheme 
      */
     listConceptsWithNoScheme(): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoScheme", params).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -68,11 +68,11 @@ export class IcvServices {
      * Returns a list of skos:Concept that are topConcept but have a broader 
      */
     listTopConceptsWithBroader(): Observable<{concept: ARTURIResource, scheme: ARTURIResource}[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listTopConceptsWithBroader", params).pipe(
             map(stResp => {
-                var records: {concept: ARTURIResource, scheme: ARTURIResource}[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let records: {concept: ARTURIResource, scheme: ARTURIResource}[] = [];
+                for (let i = 0; i < stResp.length; i++) {
                     records.push({
                         concept: new ARTURIResource(stResp[i].concept, stResp[i].concept, RDFResourceRolesEnum.concept),
                         scheme: new ARTURIResource(stResp[i].scheme, stResp[i].scheme, RDFResourceRolesEnum.conceptScheme),
@@ -87,7 +87,7 @@ export class IcvServices {
      * Returns a list of skos:Concept that are linked with other by the relation skos:related and other disjoint with this one
      */
     listConceptsRelatedDisjoint(): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsRelatedDisjoint", params).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -99,7 +99,7 @@ export class IcvServices {
      * Returns a list of skos:Concept that are linked with other by the relation skos:exactMatch and other disjoint with this one
      */
     listConceptsExactMatchDisjoint(): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsExactMatchDisjoint", params).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -111,11 +111,11 @@ export class IcvServices {
      * Returns a list of concepts belonging to a hierarchical cycle 
      */
     listConceptsHierarchicalCycles(): Observable<ARTURIResource[][]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsHierarchicalCycles", params).pipe(
             map(stResp => {
                 let cycles: ARTURIResource[][] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                for (let i = 0; i < stResp.length; i++) {
                     cycles.push(Deserializer.createURIArray(stResp[i]));
                 }
                 return cycles;
@@ -128,14 +128,14 @@ export class IcvServices {
      * @param sameScheme tells if the check should be performed considering just the concept in the same scheme
      */
     listConceptsHierarchicalRedundancies(sameScheme?: boolean): Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource}[]> {
-        var params: any = {};
+        let params: any = {};
         if (sameScheme != null) {
             params.sameScheme = sameScheme;
         }
         return this.httpMgr.doGet(this.serviceName, "listConceptsHierarchicalRedundancies", params).pipe(
             map(stResp => {
                 let redundancies: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                for (let i = 0; i < stResp.length; i++) {
                     let r = {
                         subject: Deserializer.createURI(stResp[i].subject),
                         predicate: Deserializer.createURI(stResp[i].predicate),
@@ -148,6 +148,11 @@ export class IcvServices {
         );
     }
 
+    listConsistencyViolations() {
+        let params = {};
+        return this.httpMgr.doGet(this.serviceName, "listConsistencyViolations", params);
+    }
+
     //=============================
     //======== LABEL CHECKS ========
     //=============================
@@ -156,7 +161,7 @@ export class IcvServices {
      * Returns a list of concepts or scheme that have no skos:prefLabel
      */
     listResourcesWithNoSKOSPrefLabel(): Observable<ARTResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSPrefLabel", params).pipe(
             map(stResp => {
                 return Deserializer.createResourceArray(stResp);
@@ -168,7 +173,7 @@ export class IcvServices {
      * Returns a list of concepts or scheme that have no skosxl:prefLabel
      */
     listResourcesWithNoSKOSXLPrefLabel(): Observable<ARTResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSXLPrefLabel", params).pipe(
             map(stResp => {
                 return Deserializer.createResourceArray(stResp);
@@ -180,7 +185,7 @@ export class IcvServices {
      * Returns a list of resources that have a label without languageTag
      */
     listResourcesWithNoLanguageTagForLabel(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray
         };
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagForLabel", params).pipe(
@@ -195,7 +200,7 @@ export class IcvServices {
      * @param rolesArray 
      */
     listResourcesWithExtraSpacesInLabel(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray
         };
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithExtraSpacesInLabel", params).pipe(
@@ -209,7 +214,7 @@ export class IcvServices {
      * Returns a list of resources that have a multiple preferred labels in the same language
      */
     listResourcesWithMorePrefLabelSameLang(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray
         };
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithMorePrefLabelSameLang", params).pipe(
@@ -223,7 +228,7 @@ export class IcvServices {
      * Returns a list of dangling skosxl:Label, namely the skosxl:Label not linked with any concept
      */
     listDanglingXLabels(): Observable<ARTResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listDanglingXLabels", params).pipe(
             map(stResp => {
                 return Deserializer.createResourceArray(stResp);
@@ -237,7 +242,7 @@ export class IcvServices {
      * @param languagesArray 
      */
     listResourcesNoLexicalization(rolesArray: RDFResourceRolesEnum[], languagesArray: string[]): Observable<ARTResource[]> {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray,
             languagesArray: languagesArray
         };
@@ -253,7 +258,7 @@ export class IcvServices {
      * @param rolesArray 
      */
     listResourcesWithOverlappedLabels(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray
         };
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedLabels", params).pipe(
@@ -268,7 +273,7 @@ export class IcvServices {
      * @param rolesArray 
      */
     listResourcesWithSameLabels(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray
         };
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithSameLabels", params).pipe(
@@ -283,7 +288,7 @@ export class IcvServices {
      * @param rolesArray 
      */
     listResourcesWithAltNoPrefLabel(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray
         };
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithAltNoPrefLabel", params).pipe(
@@ -303,7 +308,7 @@ export class IcvServices {
      * @param languagesArray 
      */
     listResourcesNoDef(rolesArray: RDFResourceRolesEnum[], languagesArray: string[]): Observable<ARTResource[]> {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray,
             languagesArray: languagesArray
         };
@@ -319,7 +324,7 @@ export class IcvServices {
      * @param rolesArray 
      */
     listAlignedNamespaces(rolesArray: RDFResourceRolesEnum[]) {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray
         };
         return this.httpMgr.doGet(this.serviceName, "listAlignedNamespaces", params);
@@ -334,14 +339,14 @@ export class IcvServices {
      */
     listBrokenAlignments(nsToLocationMap: { [ns: string]: string }, rolesArray: RDFResourceRolesEnum[]): 
             Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource}[]> {
-        var params: any = {
+        let params: any = {
             nsToLocationMap: JSON.stringify(nsToLocationMap),
             rolesArray: rolesArray
         };
         return this.httpMgr.doPost(this.serviceName, "listBrokenAlignments", params).pipe(
             map(stResp => {
                 let brokenAlignments: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                for (let i = 0; i < stResp.length; i++) {
                     let a = {
                         subject: Deserializer.createURI(stResp[i].subject),
                         predicate: Deserializer.createURI(stResp[i].predicate),
@@ -361,14 +366,14 @@ export class IcvServices {
      */
     listBrokenDefinitions(rolesArray: RDFResourceRolesEnum[], property: ARTURIResource): 
             Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource}[]> {
-        var params: any = {
+        let params: any = {
             rolesArray: rolesArray,
             property: property
         };
         return this.httpMgr.doGet(this.serviceName, "listBrokenDefinitions", params).pipe(
             map(stResp => {
                 let brokenDefs: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                for (let i = 0; i < stResp.length; i++) {
                     let def = {
                         subject: Deserializer.createURI(stResp[i].subject),
                         predicate: Deserializer.createURI(stResp[i].predicate),
@@ -385,7 +390,7 @@ export class IcvServices {
      * Lists IRI resources with a not valid URI
      */
     listLocalInvalidURIs(): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listLocalInvalidURIs", params).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -398,7 +403,7 @@ export class IcvServices {
      * @param limit max number of results to return
      */
     // listResourcesURIWithSpace() {
-    //     var params: any = {};
+    //     let params: any = {};
     //     return this.httpMgr.doGet(this.serviceName, "listResourcesURIWithSpace", params);
     // }
 
@@ -411,7 +416,7 @@ export class IcvServices {
      * @param scheme
      */
     setAllDanglingAsTopConcept(scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             scheme: scheme
         };
         return this.httpMgr.doPost(this.serviceName, "setAllDanglingAsTopConcept", params);
@@ -423,8 +428,8 @@ export class IcvServices {
      * @param broader
      */
     setBroaderForAllDangling(scheme: ARTURIResource, broader: ARTURIResource) {
-        var conceptsUri: string[] = []
-        var params: any = {
+        let conceptsUri: string[] = []
+        let params: any = {
             scheme: scheme,
             broader: broader
         };
@@ -436,7 +441,7 @@ export class IcvServices {
      * @param scheme
      */
     removeAllDanglingFromScheme(scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             scheme: scheme
         };
         return this.httpMgr.doPost(this.serviceName, "removeAllDanglingFromScheme", params);
@@ -447,7 +452,7 @@ export class IcvServices {
      * @param scheme
      */
     deleteAllDanglingConcepts(scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             scheme: scheme
         };
         return this.httpMgr.doPost(this.serviceName, "deleteAllDanglingConcepts", params);
@@ -458,7 +463,7 @@ export class IcvServices {
      * @param scheme
      */
     addAllConceptsToScheme(scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             scheme: scheme
         };
         return this.httpMgr.doPost(this.serviceName, "addAllConceptsToScheme", params);
@@ -470,7 +475,7 @@ export class IcvServices {
      * @param scheme
      */
     removeBroadersToConcept(concept: ARTURIResource, scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             scheme: scheme
         };
@@ -482,7 +487,7 @@ export class IcvServices {
      * of top concepts with broader (in the same scheme).
      */
     removeBroadersToAllConcepts() {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doPost(this.serviceName, "removeBroadersToAllConcepts", params);
     }
 
@@ -490,7 +495,7 @@ export class IcvServices {
      * Quick fix for topConcept with broader. Remove as topConceptOf all the topConcept with broader.
      */
     removeAllAsTopConceptsWithBroader() {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doPost(this.serviceName, "removeAllAsTopConceptsWithBroader", params);
     }
 
@@ -498,7 +503,7 @@ export class IcvServices {
      * Quick fix for hierarchical redundancy. Remove narrower/broader redundant relations.
      */
     removeAllHierarchicalRedundancy() {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doPost(this.serviceName, "removeAllHierarchicalRedundancy", params);
     }
 
@@ -506,7 +511,7 @@ export class IcvServices {
      * Quick fix for dangling xLabel. Deletes all the dangling labels.
      */
     deleteAllDanglingXLabel() {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doPost(this.serviceName, "deleteAllDanglingXLabel", params);
     }
 
@@ -517,7 +522,7 @@ export class IcvServices {
      * @param xlabel
      */
     setDanglingXLabel(concept: ARTURIResource, xlabelPred: ARTURIResource, xlabel: ARTResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             xlabelPred: xlabelPred,
             xlabel: xlabel

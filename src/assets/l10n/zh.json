@@ -957,6 +957,10 @@
                 "NAME": "Cyclic hierarchical concepts",
                 "DESCRIPTION": "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader relations",
                 "CYCLES": "Cycles"
+            },
+            "OWL_CONSISTENCY_VIOLATION": {
+                "NAME": "OWL consistency violations",
+                "DESCRIPTION": "Triples which determine OWL inconsistencies"
             }
         },
         "LABEL": {

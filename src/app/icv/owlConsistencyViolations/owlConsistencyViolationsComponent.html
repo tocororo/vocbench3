@@ -1,0 +1,40 @@
+<div class="card vbox" style="position: relative">
+    <div class="card-header">
+        <label style="flex: 1;">{{'ICV.STRUCTURAL.OWL_CONSISTENCY_VIOLATION.NAME'|translate}}</label>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ACTIONS.RUN'|translate}}</button>
+    </div>
+    <div class="card-body vbox">
+
+        <div *ngIf="violations" class="row">
+            <div class="col-sm-4 text-center">
+                <label>{{'MODELS.RESOURCE.SUBJECT'|translate}}</label>
+            </div>
+            <div class="col-sm-4 text-center">
+                <label>{{'MODELS.RESOURCE.PREDICATE'|translate}}</label>
+            </div>
+            <div class="col-sm-4 text-center">
+                <label>{{'MODELS.RESOURCE.OBJECT'|translate}}</label>
+            </div>
+        </div>
+
+        <div *ngFor="let v of violations" class="card mt-2">
+            <div class="card-body">
+                <div *ngFor="let t of v.inconsistentTriples" class="row">
+                    <div class="col-sm-4 text-center"><rdf-resource [resource]="t.s"></rdf-resource></div>
+                    <div class="col-sm-4 text-center"><rdf-resource [resource]="t.p"></rdf-resource></div>
+                    <div class="col-sm-4 text-center"><rdf-resource [resource]="t.o"></rdf-resource></div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="./assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>

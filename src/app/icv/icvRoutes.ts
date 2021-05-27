@@ -25,6 +25,7 @@ import { CyclicConceptComponent } from "./cyclicConcept/cyclicConceptComponent";
 import { BrokenAlignmentComponent } from "./brokenAlignment/brokenAlignmentComponent";
 import { BrokenDefinitionComponent } from "./brokenDefinition/brokenDefinitionComponent";
 import { InvalidUriComponent } from "./invalidUri/invalidUriComponent";
+import { OwlConsistencyViolationsComponent } from './owlConsistencyViolations/owlConsistencyViolationsComponent';
 
 
 export const routes: Routes = [
@@ -42,6 +43,7 @@ export const routes: Routes = [
             { path: "NoLabelResource", component: NoLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "OnlyAltLabelResource", component: OnlyAltLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "OverlappedLabelResource", component: OverlappedLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "OwlViolations", component: OwlConsistencyViolationsComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "ConflictualLabelResource", component: ConflictualLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "NoLangLabelResource", component: NoLangLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "ExtraSpaceLabelResource", component: ExtraSpaceLabelComponent, canActivate: [AuthGuard, ProjectGuard] },

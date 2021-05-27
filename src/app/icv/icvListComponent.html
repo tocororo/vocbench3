@@ -22,11 +22,11 @@
                 </colgroup>
                 <tbody>
                     <ng-container *ngFor="let icv of structuralIcv.list">
-                        <tr *ngIf="isCompatibleWithProject(icv)">
+                        <tr *ngIf="icv.show">
                             <td nowrap><strong>{{icv.name|translate}}</strong></td>
                             <td><i>{{icv.description|translate}}</i></td>
                             <td>
-                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">{{'ACTIONS.GO'|translate}}</button>
+                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)">{{'ACTIONS.GO'|translate}}</button>
                             </td>
                         </tr>
                     </ng-container>
@@ -52,11 +52,11 @@
                 </colgroup>
                 <tbody>
                     <ng-container *ngFor="let icv of labelIcv.list">
-                        <tr *ngIf="isCompatibleWithProject(icv)">
+                        <tr *ngIf="icv.show">
                             <td nowrap><strong>{{icv.name|translate}}</strong></td>
                             <td><i>{{icv.description|translate}}</i></td>
                             <td>
-                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">{{'ACTIONS.GO'|translate}}</button>
+                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)">{{'ACTIONS.GO'|translate}}</button>
                             </td>
                         </tr>
                     </ng-container>
@@ -82,11 +82,11 @@
                 </colgroup>
                 <tbody>
                     <ng-container *ngFor="let icv of genericIcv.list">
-                        <tr *ngIf="isCompatibleWithProject(icv)">
+                        <tr *ngIf="icv.show">
                             <td nowrap><strong>{{icv.name|translate}}</strong></td>
                             <td><i>{{icv.description|translate}}</i></td>
                             <td>
-                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">{{'ACTIONS.GO'|translate}}</button>
+                                <button class="btn btn-light btn-xs" (click)="goToIcv(icv)">{{'ACTIONS.GO'|translate}}</button>
                             </td>
                         </tr>
                     </ng-container>

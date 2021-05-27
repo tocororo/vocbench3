@@ -957,6 +957,10 @@
                 "NAME": "Concetti gerarchicamente ciclici",
                 "DESCRIPTION": "skos:Concept che formano un ciclo gerarchico tramite le relazioni skos:narrower e skos:broader",
                 "CYCLES": "Cicli"
+            },
+            "OWL_CONSISTENCY_VIOLATION": {
+                "NAME": "Violazioni della consistenza OWL",
+                "DESCRIPTION": "Triple che determinano inconsistenze in OWL"
             }
         },
         "LABEL": {

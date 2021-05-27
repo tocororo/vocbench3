@@ -135,7 +135,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
                     this.numericInputMin = facets.minExclusive + 1;
                 }
                 if (facets.minInclusive != null) {
-                    this.numericInputMin = facets.maxInclusive;
+                    this.numericInputMin = facets.minInclusive;
                 }
             }
         } else if (enums != null) { //if enumeration are available

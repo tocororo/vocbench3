@@ -27,6 +27,7 @@ import { NoSchemeConceptComponent } from "../icv/noSchemeConcept/noSchemeConcept
 import { NoTopConceptSchemeComponent } from "../icv/noTopConceptScheme/noTopConceptSchemeComponent";
 import { OnlyAltLabelResourceComponent } from "../icv/onlyAltLabelResource/onlyAltLabelResourceComponent";
 import { OverlappedLabelComponent } from "../icv/overlappedLabel/overlappedLabelComponent";
+import { OwlConsistencyViolationsComponent } from '../icv/owlConsistencyViolations/owlConsistencyViolationsComponent';
 import { TopConceptWithBroaderComponent } from "../icv/topConceptWithBroader/topConceptWithBroaderComponent";
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
@@ -43,14 +44,31 @@ import { TreeAndListModule } from "./treeAndListModule";
         TreeAndListModule,
     ],
     declarations: [
-        IcvComponent, IcvListComponent,
-        DanglingConceptComponent, NoSchemeConceptComponent, NoTopConceptSchemeComponent, TopConceptWithBroaderComponent,
-        DisjointExactMatchConceptComponent, DisjointRelatedConceptComponent, ExtraSpaceLabelComponent, CyclicConceptComponent,
-        HierarchicalRedundancyComponent, NoLabelResourceComponent, OnlyAltLabelResourceComponent, OverlappedLabelComponent,
-        NoLangLabelComponent, DanglingXLabelComponent, NoMandatoryLabelComponent, MultiplePrefLabelComponent,
-        NoDefinitionResourceComponent, BrokenAlignmentComponent, BrokenDefinitionComponent, InvalidUriComponent,
+        BrokenAlignmentComponent,
+        BrokenDefinitionComponent,
         ConflictualLabelComponent,
-        IcvConfigPanelComponent
+        CyclicConceptComponent,
+        DanglingConceptComponent,
+        DanglingXLabelComponent,
+        DisjointExactMatchConceptComponent,
+        DisjointRelatedConceptComponent,
+        ExtraSpaceLabelComponent,
+        HierarchicalRedundancyComponent,
+        IcvComponent,
+        IcvConfigPanelComponent,
+        IcvListComponent,
+        InvalidUriComponent,
+        MultiplePrefLabelComponent,
+        NoDefinitionResourceComponent,
+        NoLabelResourceComponent,
+        NoLangLabelComponent,
+        NoMandatoryLabelComponent,
+        NoSchemeConceptComponent,
+        NoTopConceptSchemeComponent,
+        OnlyAltLabelResourceComponent,
+        OverlappedLabelComponent,
+        OwlConsistencyViolationsComponent,
+        TopConceptWithBroaderComponent,
     ],
     exports: [IcvComponent],
     providers: []
