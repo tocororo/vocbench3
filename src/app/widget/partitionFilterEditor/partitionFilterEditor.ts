@@ -1,7 +1,8 @@
 import { Component, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { VBContext } from "src/app/utils/VBContext";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
-import { PartitionFilterPreference } from "../../models/Properties";
+import { PartitionFilterPreference, ResourceViewProjectSettings } from "../../models/Properties";
 import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../modal/basicModal/basicModalServices";
@@ -20,64 +21,7 @@ export class PartitionFilterEditor {
     /**
      * When will be provided, this map will be retrieved throught a service call
      */
-    private rolePartitionMap: { [role: string]: ResViewPartition[] } = {
-        [RDFResourceRolesEnum.annotationProperty]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.superproperties, 
-            ResViewPartition.domains, ResViewPartition.ranges, ResViewPartition.lexicalizations, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.cls]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.classaxioms,
-            ResViewPartition.lexicalizations, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.concept]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.topconceptof,
-            ResViewPartition.schemes, ResViewPartition.broaders, ResViewPartition.lexicalizations, ResViewPartition.notes, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.conceptScheme]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.lexicalizations,
-            ResViewPartition.notes, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.dataRange]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.datatypeDefinitions,
-            ResViewPartition.lexicalizations, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.datatypeProperty]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.equivalentProperties,
-            ResViewPartition.superproperties, ResViewPartition.facets, ResViewPartition.disjointProperties, ResViewPartition.domains,
-            ResViewPartition.ranges, ResViewPartition.lexicalizations, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.individual]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.lexicalizations, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.limeLexicon]: null,
-
-        // [RDFResourceRolesEnum.mention], null,
-
-        [RDFResourceRolesEnum.objectProperty]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.equivalentProperties,
-            ResViewPartition.superproperties, ResViewPartition.subPropertyChains, ResViewPartition.facets, ResViewPartition.disjointProperties,
-            ResViewPartition.domains, ResViewPartition.ranges, ResViewPartition.lexicalizations, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.ontolexForm]: [ResViewPartition.types, ResViewPartition.formRepresentations, ResViewPartition.formBasedPreview,
-            ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.ontolexLexicalEntry]: [ResViewPartition.types, ResViewPartition.lexicalForms, ResViewPartition.subterms,
-            ResViewPartition.constituents, ResViewPartition.rdfsMembers, ResViewPartition.formBasedPreview, ResViewPartition.lexicalSenses,
-            ResViewPartition.denotations, ResViewPartition.evokedLexicalConcepts, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.ontolexLexicalSense]: [ResViewPartition.types, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.ontology]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.lexicalizations,
-            ResViewPartition.imports, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.ontologyProperty]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.superproperties,
-            ResViewPartition.domains, ResViewPartition.ranges, ResViewPartition.lexicalizations, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.property]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.equivalentProperties,
-            ResViewPartition.superproperties, ResViewPartition.subPropertyChains, ResViewPartition.facets, ResViewPartition.disjointProperties,
-            ResViewPartition.domains, ResViewPartition.ranges, ResViewPartition.lexicalizations, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.skosCollection]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.lexicalizations,
-            ResViewPartition.notes, ResViewPartition.members, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.skosOrderedCollection]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.lexicalizations,
-            ResViewPartition.notes, ResViewPartition.membersOrdered, ResViewPartition.properties],
-
-        [RDFResourceRolesEnum.xLabel]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.labelRelations,
-            ResViewPartition.notes, ResViewPartition.properties]
-    };
+    private rolePartitionMap: { [role: string]: ResViewPartition[] };
 
     rolePartitionsStructs: RolePartitionsStruct[];
     selectedRolePartitionsStruct: RolePartitionsStruct;
@@ -85,6 +29,9 @@ export class PartitionFilterEditor {
     constructor(private basicModals: BasicModalServices) {}
 
     ngOnInit() {
+        let rvProjSettings: ResourceViewProjectSettings = VBContext.getWorkingProjectCtx().getProjectSettings().resourceView;
+        this.rolePartitionMap = rvProjSettings.templates;
+
         /**
          * Initialize client-side the rolePartitionMap.
          * This is useful untill there is no service that provide the mapping between resource roles and ResourceView partitions.
