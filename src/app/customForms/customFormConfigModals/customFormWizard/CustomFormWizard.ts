@@ -260,7 +260,9 @@ class NodeDefinitionSerialization {
 
     getSerialization(prefixMapping: PrefixMapping[]): GraphEntrySerialization {
         let triples: string[] = [];
-        let optional: boolean = this.object.type == GraphObjectType.node && this.object.node instanceof WizardNodeFromField && this.object.node.fieldSeed.optional;
+        //optional if the subject of object are nodes generated from optional field
+        let optional: boolean = this.subject instanceof WizardNodeFromField && this.subject.fieldSeed.optional ||
+            this.object.type == GraphObjectType.node && this.object.node instanceof WizardNodeFromField && this.object.node.fieldSeed.optional;
 
         let subject: string = "%SUBJECT%";
         if (this.subject != null) {
