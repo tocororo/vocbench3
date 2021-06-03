@@ -6,6 +6,7 @@ import { AdministrationServices } from "../services/administrationServices";
 import { AuthServices } from "../services/authServices";
 import { UserServices } from "../services/userServices";
 import { UIUtils } from "../utils/UIUtils";
+import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalType, Translation } from '../widget/modal/Modals';
@@ -82,7 +83,13 @@ export class RegistrationComponent {
                 if (this.firstAccess) {
                     message = {key:"MESSAGES.USER_ADMINISTRATOR_CREATED"};
                 } else {
-                    message = {key:"MESSAGES.USER_CREATED_VERIFY_EMAIL"};
+                    if (VBContext.getSystemSettings().emailVerification) {
+                        //inform user that email verification is required
+                        message = {key:"MESSAGES.USER_CREATED_VERIFY_EMAIL"};
+                    } else {
+                        //inform user that registration is completed and the account waits to be activated
+                        message = {key:"MESSAGES.USER_CREATED_WAIT_ACTIVATION"};
+                    }
                 }
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, message).then(
                     result => {

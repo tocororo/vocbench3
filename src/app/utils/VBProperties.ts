@@ -304,6 +304,7 @@ export class VBProperties {
                 systemSettings.privacyStatementAvailable = settings.getPropertyValue(SettingsEnum.privacyStatementAvailable);
                 systemSettings.showFlags = settings.getPropertyValue(SettingsEnum.showFlags);
                 systemSettings.homeContent = settings.getPropertyValue(SettingsEnum.homeContent);
+                systemSettings.emailVerification = settings.getPropertyValue(SettingsEnum.emailVerification);
                 let systemLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
                 Languages.sortLanguages(systemLanguages);
                 systemSettings.languages = systemLanguages;
@@ -314,6 +315,11 @@ export class VBProperties {
     setExperimentalFeaturesEnabled(enabled: boolean) {
         this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.experimentalFeaturesEnabled, enabled).subscribe();
         VBContext.getSystemSettings().experimentalFeaturesEnabled = enabled;
+    }
+
+    setEmailVerification(enabled: boolean) {
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.emailVerification, enabled).subscribe();
+        VBContext.getSystemSettings().emailVerification = enabled;
     }
 
     setHomeContent(homeContent: string) {

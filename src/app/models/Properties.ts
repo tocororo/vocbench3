@@ -15,6 +15,7 @@ export enum SettingsEnum {
     defaultConceptType = "defaultConceptType",
     defaultLexEntryType = "defaultLexEntryType",
     editingLanguage = "editingLanguage",
+    emailVerification = "emailVerification",
     experimentalFeaturesEnabled = "experimentalFeaturesEnabled",
     filterValueLanguages = "filterValueLanguages",
     graphViewPartitionFilter = "graphViewPartitionFilter",
@@ -256,6 +257,7 @@ export class SystemSettings {
     showFlags: boolean = true;
     homeContent: string;
     languages: Language[];
+    emailVerification: boolean = false;
 }
 
 export class ProjectCreationPreferences {

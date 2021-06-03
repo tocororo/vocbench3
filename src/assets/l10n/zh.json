@@ -110,7 +110,9 @@
                 "OPTIONAL_FIELDS": "Optional fields",
                 "OPTIONAL_FIELDS_INFO": "Show or hide optional information about the user. These information will be shown or hidden in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.",
                 "CUSTOM_FIELDS": "Custom fields",
-                "CUSTOM_FIELDS_INFO": "Add (and reorder) up to {{maxFields}} custom information about the user. These information will be shown in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br> If a field is removed, any values previously stored for that field will be lost for any user.<br> If a field is renamed, any values previously stored for that field will be preserved."
+                "CUSTOM_FIELDS_INFO": "Add (and reorder) up to {{maxFields}} custom information about the user. These information will be shown in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br> If a field is removed, any values previously stored for that field will be lost for any user.<br> If a field is renamed, any values previously stored for that field will be preserved.",
+                "EMAIL_VERIFICATION": "Email verification",
+                "EMAIL_VERIFICATION_INFO": "Tells if a user must verify the email address in order to complete the registration"
             },
             "SETTINGS_MGR": {
                 "SETTINGS_MGR": "Settings Mgr"
@@ -2282,6 +2284,7 @@
         "USER_CREATED": "User succesfully created",
         "USER_CREATED_VERIFY_EMAIL": "Your account has been created. In order to complete the registration, a verification link has been sent to the email address you provided.",
         "USER_EMAIL_VERIFIED": "Your email has been verified and the administrator has been notified about your registration. Please wait for the system administrator to activate your account, then it will be possible to login with the credentials you provided",
+        "USER_CREATED_WAIT_ACTIVATION": "Your account has been created and the administrator has been notified about your registration. Please wait for the system administrator to activate your account, then it will be possible to login with the credentials you provided",
         "USER_IRI_PERSONAL_URL_INCONSISTENT": "You checked the option to use the personal URL as user IRI, but the URL is not provided. Please enter a valid URL or uncheck the above option",
         "USER_REGISTERED_ACTIVATED": "User {{email}} has been succesfully activated",
         "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "The type of value is not compliant with the range of the property {{property}}. The operation may cause inconsistencies and malfunction. Do you want to force the operation?"

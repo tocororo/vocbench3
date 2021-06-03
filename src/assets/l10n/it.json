@@ -110,7 +110,9 @@
                 "OPTIONAL_FIELDS": "Campi opzionali",
                 "OPTIONAL_FIELDS_INFO": "Mostra o nascondi informazioni opzionali riguardo l'utente. Queste informazioni saranno mostrate o nascoste nel riepilogo dell'utente e saranno richieste come campi non obbligatori durante la registrazione/creazione di un utente.",
                 "CUSTOM_FIELDS": "Campi personalizzati",
-                "CUSTOM_FIELDS_INFO": "Aggiungi (e riordina) fino a {{maxFields}} informazioni personalizzate riguardo l'utente. Queste informazioni saranno mostrate nel riepilogo dell'utente e saranno richieste come campi non obbligatori durante la registrazione/creazione di un utente.<br> Se un campo viene rimosso, valori precedentemente salvati per tale campo per qualsiasi utente verranno persi.<br> Se un campo viene rinominato, valori precedentemente salvati per tale campo saranno mantenuti."
+                "CUSTOM_FIELDS_INFO": "Aggiungi (e riordina) fino a {{maxFields}} informazioni personalizzate riguardo l'utente. Queste informazioni saranno mostrate nel riepilogo dell'utente e saranno richieste come campi non obbligatori durante la registrazione/creazione di un utente.<br> Se un campo viene rimosso, valori precedentemente salvati per tale campo per qualsiasi utente verranno persi.<br> Se un campo viene rinominato, valori precedentemente salvati per tale campo saranno mantenuti.",
+                "EMAIL_VERIFICATION": "Verifica email",
+                "EMAIL_VERIFICATION_INFO": "Indica se un utente deve verificare l'indirizzo email per poter completare la registrazione"
             },
             "SETTINGS_MGR": {
                 "SETTINGS_MGR": "Settings Mgr"
@@ -2282,6 +2284,7 @@
         "USER_CREATED": "Utente creato correttamente",
         "USER_CREATED_VERIFY_EMAIL": "Il tuo account è stato creato. Per completare la registrazione, un link di verifica è stato inviato all'indirizzo email fornito.",
         "USER_EMAIL_VERIFIED": "La tua email è stata verificata e l'amministratore è stato notificato della tua registrazione. Attendi che l'amministratore di sistema attivi il tuo account, dopodichè sarà possibile effettuare il login con le credenziali fornite.",
+        "USER_CREATED_WAIT_ACTIVATION": "Il tuo account è stato creato e l'amministratore è stato notificato della tua registrazione. Attendi che l'amministratore di sistema attivi il tuo account, dopodichè sarà possibile effettuare il login con le credenziali fornite.",
         "USER_IRI_PERSONAL_URL_INCONSISTENT": "Hai selezionato l'opzione per usare l'URL personale come IRI utente, ma l'URL non è fornito. Inserisci un URL valido o deseleziona la suddetta opzione",
         "USER_REGISTERED_ACTIVATED": "L'utente {{email}} è stato attivato",
         "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "Il tipo del valore non è compatibile con il range della proprietà {{property}}. L'operazione potrebbe causare inconsistenze e malfunzionamenti. Vuoi forzare l'operazione?"

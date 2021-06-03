@@ -244,7 +244,7 @@
                         </div>
                     </div>
 
-                    <div class="card card-alt" style="margin-top: 4px;">
+                    <div class="card card-alt mt-2">
                         <div class="card-header">
                             <label style="flex: 1;">{{'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.CUSTOM_FIELDS'|translate}}:</label>
                             <div class="btn-toolbar">
@@ -286,6 +286,12 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" id="emailVerificationCheck" type="checkbox" [(ngModel)]="emailVerification" (ngModelChange)="onEmailVerificationChanged()">
+                        <label class="form-check-label" for="emailVerificationCheck">{{'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.EMAIL_VERIFICATION'|translate}}</label>
+                        <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.EMAIL_VERIFICATION_INFO'|translate"></span>
                     </div>
 
                 </div>
@@ -376,12 +382,12 @@
                 <div class="card-body">
                     <div class="form-check">
                         <input class="form-check-input" id="codaProvisioningCheck" type="checkbox" [(ngModel)]="codaProvisioningEnabled" (ngModelChange)="onCodaProvisioningEnabledChanged()">
-                        <span class="form-check-label" for="codaProvisioningCheck">{{'ADMINISTRATION.SYSTEM.OTHER.ENABLE_CODA_PROVISIONING'|translate}}</span>
+                        <label class="form-check-label" for="codaProvisioningCheck">{{'ADMINISTRATION.SYSTEM.OTHER.ENABLE_CODA_PROVISIONING'|translate}}</label>
                         <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.SYSTEM.OTHER.ENABLE_CODA_PROVISIONING_INFO'|translate"></span>
                     </div>
                     <div class="form-check mt-2">
                         <input class="form-check-input" id="expFeatureCheck" type="checkbox" [(ngModel)]="expFeatEnabled" (ngModelChange)="onExpFeatEnabledChanged()">
-                        <span class="form-check-label" for="expFeatureCheck">{{'ADMINISTRATION.SYSTEM.OTHER.ENABLE_EXPERIMENTAL_FEATURES'|translate}}</span>
+                        <label class="form-check-label" for="expFeatureCheck">{{'ADMINISTRATION.SYSTEM.OTHER.ENABLE_EXPERIMENTAL_FEATURES'|translate}}</label>
                         <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.SYSTEM.OTHER.ENABLE_EXPERIMENTAL_FEATURES_INFO'|translate"></span>
                     </div>
                 </div>

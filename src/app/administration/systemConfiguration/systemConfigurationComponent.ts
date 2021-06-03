@@ -57,6 +57,8 @@ export class SystemConfigurationComponent {
     fieldsIdx: number[] = [0, 1, 2, 3];
     translationParam: { maxFields: number } = { maxFields: this.fieldsIdx.length };
 
+    emailVerification: boolean;
+
     /* Home content */
     homeContent: string;
     private homeContentPristine: string;
@@ -84,6 +86,7 @@ export class SystemConfigurationComponent {
         this.initFields();
         this.initHomeContent();
         this.expFeatEnabled = VBContext.getSystemSettings().experimentalFeaturesEnabled;
+        this.emailVerification = VBContext.getSystemSettings().emailVerification;
 
         this.codaService.isRemoteProvisioningEnabled().subscribe(
             enabled => {
@@ -386,6 +389,10 @@ export class SystemConfigurationComponent {
                 this.initFields();
             }
         );
+    }
+
+    onEmailVerificationChanged() {
+        this.vbProp.setEmailVerification(this.emailVerification);
     }
 
     /* ============================
