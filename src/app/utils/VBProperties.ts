@@ -344,8 +344,11 @@ export class VBProperties {
                     projectSettings.prefLabelClashMode = labelClashModeValue;
                 }
 
+                projectSettings.resourceView = new ResourceViewProjectSettings();
                 let rvSettings: ResourceViewProjectSettings = settings.getPropertyValue(SettingsEnum.resourceView);
-                projectSettings.resourceView = rvSettings;
+                if (rvSettings != null) {
+                    PreferencesUtils.mergePreference(projectSettings.resourceView, rvSettings);
+                }
             })
         )
     }

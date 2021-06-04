@@ -305,6 +305,21 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 }
             }
         }
+        if (Object.keys(this.partitionOrder).length == 0) { //template not provided => init a default
+            [
+                ResViewPartition.types, ResViewPartition.classaxioms, ResViewPartition.topconceptof, ResViewPartition.schemes,
+                ResViewPartition.broaders,ResViewPartition.superproperties, ResViewPartition.equivalentProperties, 
+                ResViewPartition.disjointProperties, ResViewPartition.subPropertyChains, ResViewPartition.constituents,
+                ResViewPartition.subterms, ResViewPartition.domains, ResViewPartition.ranges, ResViewPartition.facets,
+                ResViewPartition.datatypeDefinitions, ResViewPartition.lexicalizations, ResViewPartition.lexicalForms,
+                ResViewPartition.lexicalSenses, ResViewPartition.denotations, ResViewPartition.evokedLexicalConcepts, 
+                ResViewPartition.notes, ResViewPartition.members, ResViewPartition.membersOrdered, ResViewPartition.labelRelations,
+                ResViewPartition.formRepresentations, ResViewPartition.formBasedPreview, ResViewPartition.imports,
+                ResViewPartition.rdfsMembers, ResViewPartition.properties
+            ].forEach((partition, idx) => {
+                this.partitionOrder[partition] = idx;
+            })
+        }
         if (rvSettings.customSections) {
             this.customSections = Object.keys(rvSettings.customSections);
             this.customSections.forEach(section => {
