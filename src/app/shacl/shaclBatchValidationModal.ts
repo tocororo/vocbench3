@@ -28,10 +28,6 @@ export class ShaclBatchValidationModal {
             result => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.validationResult = result;
-
-                this.validationResult += result;
-                this.validationResult += result;
-                this.validationResult += result;
             }
         );
     }
