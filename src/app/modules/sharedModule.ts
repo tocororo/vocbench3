@@ -13,6 +13,7 @@ import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor
 import { MustacheEditorComponent } from '../widget/codemirror/mustacheEditor/mustacheEditorComponent';
 import { NTripleEditorComponent } from '../widget/codemirror/nTripleEditor/nTripleEditorComponent';
 import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
+import { TurtleEditorComponent } from '../widget/codemirror/turtleEditor/turtleEditorComponent';
 import { ConverterConfiguratorComponent } from '../widget/converterConfigurator/converterConfiguratorComponent';
 import { ListParamEditor } from '../widget/converterConfigurator/listParamEditor';
 import { MapParamEditor } from '../widget/converterConfigurator/mapParamEditor';
@@ -87,6 +88,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         NestedSettingSetRendererComponent,
         SettingsRendererPanelComponent,
         TypedLiteralInputComponent,
+        TurtleEditorComponent,
         ValuePickerComponent,
         YasguiComponent,
     ],
@@ -122,6 +124,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         SettingSetRendererComponent,
         SettingsRendererComponent,
         SettingsRendererPanelComponent,
+        TurtleEditorComponent,
         TypedLiteralInputComponent,
         ValuePickerComponent,
         YasguiComponent,

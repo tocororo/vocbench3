@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ARTResource } from "src/app/models/ARTResources";
 import { ExportServices } from "src/app/services/exportServices";
+import { ShaclBatchValidationModal } from "src/app/shacl/shaclBatchValidationModal";
 import { Cookie } from 'src/app/utils/Cookie';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { VersionInfo } from "../../models/History";
@@ -42,6 +43,7 @@ export class ConfigBarComponent {
     loadShapesAuthorized: boolean;
     exportShapesAuthorized: boolean;
     clearShapesAuthorized: boolean;
+    shaclBatchValidationAuthorized: boolean;
 
     constructor(private exportServices: ExportServices, private inOutService: InputOutputServices,
         private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
@@ -168,25 +170,29 @@ export class ConfigBarComponent {
         this.shaclService.exportShapes().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_SHACL_SHAPES" }, null, exportLink, "shapes.ttl");
+                this.basicModals.downloadLink({ key: "SHACL.EXPORT_SHACL_SHAPES" }, null, exportLink, "shapes.ttl");
             }
         )
     }
 
     clearShacleShapes() {
-        this.basicModals.confirm({ key: "ACTIONS.CLEAR_SHACL_SHAPES" }, "This operation will delete all the SHACL shapes stored in the project. Are you sure to proceed?",
+        this.basicModals.confirm({ key: "SHACL.CLEAR_SHACL_SHAPES" }, "This operation will delete all the SHACL shapes stored in the project. Are you sure to proceed?",
             ModalType.warning).then(
             () => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.shaclService.clearShapes().subscribe(
                     () => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({ key: "ACTIONS.CLEAR_SHACL_SHAPES" }, {key:"MESSAGES.SHACL_SHAPES_CLEARED"});
+                        this.basicModals.alert({ key: "SHACL.CLEAR_SHACL_SHAPES" }, {key:"MESSAGES.SHACL_SHAPES_CLEARED"});
                     }
                 );
             },
             () => { }
         );
+    }
+
+    batchShaclValidation() {
+        this.modalService.open(ShaclBatchValidationModal, new ModalOptions());
     }
 
     onTranslateLangChanged() {
@@ -211,6 +217,7 @@ export class ConfigBarComponent {
         this.loadShapesAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclLoadShapes);
         this.exportShapesAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclExportShapes);
         this.clearShapesAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclClearShapes);
+        this.shaclBatchValidationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclBatchValidation);
     }
 
 }

@@ -49,7 +49,7 @@ export class SettingMapRendererComponent {
     private onModelChange() {
         this.value = {}; //reset value map, populate it from scratch and emit changes
         this.map.forEach(entry => {
-            if (entry.key != "" && entry.value != "") {
+            if (entry.key != null && entry.key != "" && entry.value != "") {
                 if (entry.value instanceof Settings) { //nested
                     this.value[entry.key] = entry.value.getPropertiesAsMap();
                 } else {

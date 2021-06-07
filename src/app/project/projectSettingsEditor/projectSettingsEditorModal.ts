@@ -1,14 +1,14 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from "rxjs";
+import { forkJoin, Observable } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings } from "src/app/models/Plugins";
 import { ExtensionsServices } from "src/app/services/extensionsServices";
 import { ProjectServices } from "src/app/services/projectServices";
+import { RepositoriesServices } from "src/app/services/repositoriesServices";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ModalType } from "src/app/widget/modal/Modals";
-import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
-import { Project } from '../../models/Project';
+import { Project, RepositorySummary } from '../../models/Project';
 import { ExtensionConfiguratorComponent } from "../../widget/extensionConfigurator/extensionConfiguratorComponent";
 
 @Component({
@@ -18,9 +18,16 @@ import { ExtensionConfiguratorComponent } from "../../widget/extensionConfigurat
 export class ProjSettingsEditorModal {
     @Input() project: Project;
 
+    remoteProject: boolean;
+    restartRepo: boolean = true;
+
     //BLACKLISTING
     validationEnabled: boolean;
     blacklisting: boolean;
+
+    //SHACL
+    shaclEnabled: boolean;
+    shaclValidationEnabled: boolean;
 
     openAtStartup: boolean;
 
@@ -38,10 +45,13 @@ export class ProjSettingsEditorModal {
 
 
     constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private extensionService: ExtensionsServices,
-        private basicModals: BasicModalServices) { }
+        private repoService: RepositoriesServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
+        this.remoteProject = this.project.getRepositoryLocation().location == "remote";
+
         this.initBlacklisting();
+        this.initShaclValidation();
         //these two initializations needed to be executed sequentially in order to prevent issues related to project locked status
         this.initRenderingEngine().subscribe(() => {
             this.initUriGenerator().subscribe();    
@@ -60,8 +70,57 @@ export class ProjSettingsEditorModal {
 
     changeBlacklisting() {
         this.blacklisting = !this.blacklisting;
-        this.projectService.setBlacklistingEnabled(this.project, this.blacklisting).subscribe();
-        this.project.setBlacklistingEnabled(this.blacklisting);
+        this.projectService.setBlacklistingEnabled(this.project, this.blacklisting).subscribe(
+            () => {
+                this.project.setBlacklistingEnabled(this.blacklisting);
+                this.checkRepositoryRestart()
+            }
+        );
+    }
+
+    //================== SHACL ==================
+
+    initShaclValidation() {
+        this.shaclEnabled = this.project.isShaclEnabled();
+        if (this.shaclEnabled) {
+            this.projectService.isSHACLValidationEnabled(this.project).subscribe(
+                validation => {
+                    this.shaclValidationEnabled = validation;
+                }
+            )
+        }
+    }
+
+    changeShacleValidation() {
+        this.shaclValidationEnabled = !this.shaclValidationEnabled;
+        this.projectService.setSHACLValidationEnabled(this.project, this.shaclValidationEnabled).subscribe(
+            () => {
+                this.checkRepositoryRestart()
+            }
+        );
+    }
+
+    /**
+     * When shacl validation or blacklisting changes, it may be necessary to restart the remote repositories.
+     */
+    private checkRepositoryRestart() {
+        if (this.remoteProject && this.restartRepo) {
+            this.projectService.getRepositories(this.project).subscribe(
+                (repositories: RepositorySummary[]) => {
+                    let restartFn: Observable<void>[] = [];
+                    repositories.forEach(r => {
+                        if (r.backendType == "graphdb:FreeSail" || r.backendType == "owlim:Sail") {
+                            restartFn.push(
+                                this.repoService.restartRemoteRepository(r.remoteRepoSummary.serverURL, r.remoteRepoSummary.repositoryId, r.remoteRepoSummary.username, r.remoteRepoSummary.password)
+                            );
+                        }
+                    })
+                    if (restartFn.length > 0) {
+                        forkJoin(restartFn).subscribe();
+                    }
+                }
+            )
+        }
     }
 
     //================== OPEN AT STARTUP ==================

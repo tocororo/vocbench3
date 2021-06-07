@@ -220,6 +220,7 @@ export enum VBActionsEnum {
     resourceMetadataPatternUpdate = "resourceMetadataPatternUpdate",
     resourceMetadataPatternDelete = "resourceMetadataPatternDelete",
     //Shacl
+    shaclBatchValidation = "shaclBatchValidation",
     shaclClearShapes = "shaclClearShapes",
     shaclExportShapes = "shaclExportShapes",
     shaclLoadShapes = "shaclLoadShapes",

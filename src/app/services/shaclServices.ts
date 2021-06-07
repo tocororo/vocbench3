@@ -50,6 +50,10 @@ export class ShaclServices {
         return this.httpMgr.doPost(this.serviceName, "clearShapes", params);
     }
 
+    batchValidation(): Observable<string> {
+        let params: STRequestParams = {};
+        return this.httpMgr.doGet(this.serviceName, "batchValidation", params);
+    }
 
     /**
      * 

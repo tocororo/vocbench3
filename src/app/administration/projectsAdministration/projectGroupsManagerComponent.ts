@@ -309,7 +309,6 @@ export class ProjectGroupsManagerComponent {
     }
 
     onSyncChange() {
-        console.log("onSyncChange", this.syncInverse);
         //if sync inverse properties change from false to true perform a sync
         if (this.syncInverse) {
             this.syncInverseOfBroader().subscribe(

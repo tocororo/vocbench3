@@ -72,6 +72,7 @@
               "node_modules/codemirror/addon/search/searchcursor.js",
               "node_modules/codemirror/mode/javascript/javascript.js",
               "node_modules/codemirror/mode/ntriples/ntriples.js",
+              "node_modules/codemirror/mode/turtle/turtle.js",
               "node_modules/codemirror/mode/xml/xml.js",
               "node_modules/yasgui-yasqe/dist/yasqe.bundled.js",
               "src/app/widget/codemirror/mustacheEditor/mustache.js",

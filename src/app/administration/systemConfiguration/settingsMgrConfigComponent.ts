@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ExtensionPoint, Scope, Settings } from 'src/app/models/Plugins';
 import { SettingsServices } from 'src/app/services/settingsServices';
+import { UIUtils } from 'src/app/utils/UIUtils';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 
 @Component({
@@ -11,6 +12,7 @@ import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalSe
 })
 export class SettingsMgrConfigComponent {
 
+    @ViewChild('blockingDiv', { static: false }) private blockingDivElement: ElementRef;
 
     extPointMap: {[extPtId: string]: ExtensionPoint[]} = {} //map extension points with the SettingsManager implementations
     extPointIds: { id: string, shortId: string }[]; //IDs of the ext points (keys of the above map)
@@ -90,8 +92,10 @@ export class SettingsMgrConfigComponent {
         } else { //for other scopes get the default at system level
             getSettingsFn = this.settingsService.getSettingsDefault(this.selectedSettingsMgr.id, this.selectedScope, Scope.SYSTEM);
         }
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         getSettingsFn.subscribe(
             settings => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.selectedSettings = settings;
             }
         )

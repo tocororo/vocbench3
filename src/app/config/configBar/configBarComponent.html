@@ -86,15 +86,19 @@
                         <div class="dropdown-divider"></div>
                         <a (click)="loadShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !loadShapesAuthorized }">
-                            <span class="fas fa-upload" style="margin-right: 5px"></span>{{'ACTIONS.LOAD_SHACL_SHAPES'|translate}}
+                            <span class="fas fa-upload" style="margin-right: 5px"></span>{{'SHACL.LOAD_SHACL_SHAPES'|translate}}
                         </a>
                         <a (click)="exportShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !exportShapesAuthorized }">
-                            <span class="fas fa-download" style="margin-right: 5px"></span>{{'ACTIONS.EXPORT_SHACL_SHAPES'|translate}}
+                            <span class="fas fa-download" style="margin-right: 5px"></span>{{'SHACL.EXPORT_SHACL_SHAPES'|translate}}
                         </a>
                         <a (click)="clearShacleShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !clearShapesAuthorized }">
-                            <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'ACTIONS.CLEAR_SHACL_SHAPES'|translate}}
+                            <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'SHACL.CLEAR_SHACL_SHAPES'|translate}}
+                        </a>
+                        <a (click)="batchShaclValidation()" class="dropdown-item"
+                            [ngClass]="{ disabled : !shaclBatchValidationAuthorized }">
+                            <span class="far fa-check-square" style="margin-right: 5px"></span>{{'SHACL.BATCH_VALIDATION'|translate}}
                         </a>
                     </ng-container>
                 </div>

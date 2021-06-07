@@ -1310,6 +1310,7 @@
         "RENDERING_ENGINE": "Rendering Engine",
         "RESOURCE_METADATA": "Resource Metadata",
         "SHACLE_SHAPE_VALIDATION": "Validazione shape SHACL",
+        "SHACLE_SHAPE_VALIDATION_ON_COMMIT": "Validazione shape SHACL (su commit)",
         "TRANSITIVE_IMPORTS": "Import transitivi",
         "TRIVIAL_INFERENCE": "Trivial Inference",
         "TRIVIAL_INFERENCE_INFO": "Abilita trivial inference",
@@ -1602,6 +1603,15 @@
             "EXTEND_TO_ALL": "Estendi la ricerca a tutte le istanze (anche appartenenti ad altre classi)"
         }
     },
+    "SHACL": {
+        "BATCH_VALIDATION": "Validazione di massa",
+        "CLEAR_EXISTING": "Elimina esistenti",
+        "CLEAR_SHACL_SHAPES": "Elimina shapes SHACL",
+        "EXPORT_SHACL_SHAPES": "Esporta shapes SHACL",
+        "EXTRACT_FROM_SHACL": "Estrai da SHACL",
+        "LOAD_SHACL_SHAPES": "Carica shapes SHACL"
+        "RUN_SHACL_VALIDATION": "Esegui validazione SHACL"
+    },
     "SHEET2RDF": {
         "SPREADSHEET": {
             "FILE": "File spreadsheet",
@@ -1893,7 +1903,6 @@
         "CHANGE_PROJECT": "Cambia progetto",
         "CHECK_ALL": "Seleziona tutto",
         "CLEAR_DATA": "Elimina dati",
-        "CLEAR_SHACL_SHAPES": "Elimina shapes SHACL",
         "CLONE": "Clona",
         "CLOSE": "Chiudi",
         "COMMENT": "Commenta",
@@ -1933,9 +1942,7 @@
         "EXPORT_DATA": "Esporta dati",
         "EXPORT_METADATA": "Esporta metadati",
         "EXPORT_PEARL": "Esporta PEARL",
-        "EXPORT_SHACL_SHAPES": "Esporta shapes SHACL",
         "EXPORT_TRIPLES": "Esporta triple",
-        "EXTRACT_FROM_SHACL": "Estrai da SHACL",
         "GO": "Vai",
         "HIDE_FILTERS": "Nascondi filtri",
         "IMPORT": "Importa",
@@ -1945,7 +1952,6 @@
         "LOAD_DATA": "Carica dati",
         "LOAD_EXPORTER_CHAIN_CONFIGURATION": "Carica configurazione exporter chain",
         "LOAD_IMPORTER_CHAIN_CONFIGURATION": "Carica configurazione importer chain",
-        "LOAD_SHACL_SHAPES": "Carica shapes SHACL",
         "LOAD_TEMPLATE": "Carica template",
         "LOCK_UNLOCK_NAMESPACE": "Blocca/sblocca namespace",
         "MIGRATE_DATA_TO_BASEURI_GRAPH": "Migra i dati nel grafo baseURI",
@@ -2241,6 +2247,7 @@
         "RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH": "La risorsa {{resource}} non è raggiungibile nell'albero corrente poichè il path per raggiungerlo contiene nodi deprecati. Abilita la visualizzazione dei nodi deprecati e ripeti la ricerca",
         "RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM": "La risorsa {{resource}} non è raggiungibile nell'albero corrente. Vuoi aprire il suo ResourceView in una finestra modale?",
         "RESOURCE_URI_COPIED_IN_CLIPBOARD": "URI della risorsa copiato negli appunti",
+        "RESTART_LOCAL_REPO_REQUIRED": "Al fine di rendere effettiva la modifica potrebbe essere necessario riavviare il repository locale del progetto riavviando l'intero triple store.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Stai per sovrascrivere il template attuale ripristinando la configurazione di default. Sei sicuro?",
         "REVOKING_ADMIN_CONFIRM": "Stai per revocare l'autorità da amministratore a {{user}}. Sei sicuro?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Salvare le modifiche al baseURI? (Attenzione, il refactoring del baseURI potrebbe essere un processo lungo)",

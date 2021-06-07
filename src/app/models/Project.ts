@@ -287,6 +287,7 @@ export class Repository {
 export class RepositorySummary {
     public id: string;
     public description: string;
+    public backendType: string;
     public remoteRepoSummary: RemoteRepositorySummary
 }
 export class RemoteRepositorySummary {

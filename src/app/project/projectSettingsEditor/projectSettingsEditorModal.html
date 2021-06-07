@@ -8,23 +8,38 @@
             <div class="card-body" style="margin-bottom: -1rem;">
                 <!-- OPEN AT STARTUP -->        
                 <div class="form-group row">
-                    <label class="col-form-label col-sm-2">{{'PROJECTS.OPEN_AT_STARTUP'|translate}}:</label>
-                    <div class="col-sm-10 d-flex align-items-center">
-                        <button class="btn btn-light btn-sm" [ngClass]="{ active: openAtStartup }" (click)="changeOpenAtStartup()">
-                            <b *ngIf="openAtStartup" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
-                            <b *ngIf="!openAtStartup" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
-                        </button>
+                    <label class="col-form-label col-sm-4">{{'PROJECTS.OPEN_AT_STARTUP'|translate}}:</label>
+                    <div class="col-sm-8 d-flex align-items-center">
+                        <input type="checkbox" [(ngModel)]="openAtStartup" (ngModelChange)="changeOpenAtStartup()">
                     </div>
                 </div>
                 <!-- BLACKLISTING -->        
                 <div *ngIf="validationEnabled" class="form-group row">
-                    <label class="col-form-label col-sm-2">{{'PROJECTS.BLACKLIST'|translate}}:</label>
-                    <div class="col-sm-10 d-flex align-items-center">
+                    <label class="col-form-label col-sm-4">{{'PROJECTS.BLACKLIST'|translate}}:</label>
+                    <div class="col-sm-8 d-flex align-items-center">
                         <button class="btn btn-light btn-sm" [ngClass]="{ active: blacklisting }" (click)="changeBlacklisting()">
                             <b *ngIf="blacklisting" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
                             <b *ngIf="!blacklisting" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
                         </button>
+                        <span *ngIf="!remoteProject" class="fas fa-exclamation-triangle ml-3" [title]="'MESSAGES.RESTART_REPO_LOCAL_REQUIRED'|translate"></span>
                     </div>
+                </div>
+                <!-- SHACL VALIDATION -->        
+                <div *ngIf="shaclEnabled" class="form-group row">
+                    <label class="col-form-label col-sm-4">{{'PROJECTS.SHACLE_SHAPE_VALIDATION_ON_COMMIT'|translate}}:</label>
+                    <div class="col-sm-8 d-flex align-items-center">
+                        <button class="btn btn-light btn-sm" [ngClass]="{ active: shaclValidationEnabled }" (click)="changeShacleValidation()">
+                            <b *ngIf="shaclValidationEnabled" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
+                            <b *ngIf="!shaclValidationEnabled" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
+                        </button>
+                        <span *ngIf="!remoteProject" class="fas fa-exclamation-triangle ml-3" [title]="'MESSAGES.RESTART_REPO_LOCAL_REQUIRED'|translate"></span>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="remoteProject && (validationEnabled || shaclEnabled)" class="card-footer text-right">
+                <div class="form-check mt-2">
+                    <input class="form-check-input" id="restartRepoCheck" type="checkbox" [(ngModel)]="restartRepo">
+                    <label class="form-check-label" for="restartRepoCheck">Automatically restart remote repositories on changes</label>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 <div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
     <div class="modal-header" cdkDragHandle>
-        <h3 class="modal-title">Load SHACL shapes</h3>
+        <h3 class="modal-title">{{'SHACL.LOAD_SHACL_SHAPES'|translate}}</h3>
     </div>
     <div class="modal-body vbox">
         <div class="form-group row m-0">
@@ -19,7 +19,7 @@
     <div class="modal-footer">
         <div class="form-check float-left">
             <input class="form-check-input" id="clearCheck" type="checkbox" [(ngModel)]="clearExisting">
-            <label class="form-check-label" for="clearCheck">Clear existing</label>
+            <label class="form-check-label" for="clearCheck">{{'SHACL.CLEAR_EXISTING'|translate}}</label>
         </div>
         <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!file || !selectedInputFormat">Ok</button>
         <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>

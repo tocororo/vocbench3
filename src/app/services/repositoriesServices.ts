@@ -15,7 +15,7 @@ export class RepositoriesServices {
      * Updates the value of a triple replacing the old value with the new one
      */
     getRemoteRepositories(serverURL: string, username?: string, password?: string): Observable<Repository[]> {
-        var params: any = {
+        let params: any = {
             serverURL: serverURL
         };
         if (username != null && password != null) {
@@ -24,8 +24,8 @@ export class RepositoriesServices {
         }
         return this.httpMgr.doPost(this.serviceName, "getRemoteRepositories", params).pipe(
             map(stResp => {
-                var repositories: Repository[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let repositories: Repository[] = [];
+                for (let i = 0; i < stResp.length; i++) {
                     let repo: Repository = {
                         id: stResp[i].id,
                         location: stResp[i].location,
@@ -54,7 +54,7 @@ export class RepositoriesServices {
         return this.httpMgr.doPost(this.serviceName, "deleteRemoteRepositories", params).pipe(
             map(stResp => {
                 let exceptions: ExceptionDAO[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                for (let i = 0; i < stResp.length; i++) {
                     let ex: ExceptionDAO;
                     if (stResp[i] != null) {
                         ex = {
@@ -68,6 +68,16 @@ export class RepositoriesServices {
                 return exceptions;
             })
         );
+    }
+
+    restartRemoteRepository(serverURL: string, repositoryID: string, username?: string, password?: string): Observable<void> {
+        let params: any = {
+            serverURL: serverURL,
+            repositoryID: repositoryID,
+            username: username,
+            password: password,
+        }
+        return this.httpMgr.doPost(this.serviceName, "restartRemoteRepository", params);
     }
 
 

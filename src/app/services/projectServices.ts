@@ -754,4 +754,19 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "setProjectLabels", params);
     }
 
+    isSHACLValidationEnabled(project: Project) {
+        let params = {
+            projectName: project.getName(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "isSHACLValidationEnabled", params);
+    }
+
+    setSHACLValidationEnabled(project: Project, shaclValidationEnabled: boolean) {
+        let params = {
+            projectName: project.getName(),
+            shaclValidationEnabled: shaclValidationEnabled
+        };
+        return this.httpMgr.doPost(this.serviceName, "setSHACLValidationEnabled", params);
+    }
+
 }
