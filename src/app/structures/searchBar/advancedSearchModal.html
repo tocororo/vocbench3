@@ -285,7 +285,7 @@
                                 </div>
                                 <div class="hbox">
                                     <select class="form-control" style="width: initial; margin-right: 4px;" [(ngModel)]="group.mode">
-                                        <option *ngFor="let sm of searchModes" [value]="sm.value">{{sm.show}}</option>
+                                        <option *ngFor="let sm of stringMatchModes" [value]="sm.value">{{sm.labelTranslationKey|translate}}</option>
                                     </select>
                                     <input class="form-control" [(ngModel)]="group.searchString">
                                 </div>

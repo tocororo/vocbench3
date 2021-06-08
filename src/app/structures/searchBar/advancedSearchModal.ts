@@ -36,15 +36,6 @@ export class AdvancedSearchModal {
     useLocalName: boolean = true;
     useNotes: boolean = true;
 
-    // searchModes: { show: string, value: SearchMode }[] = [
-    //     { show: "Starts with", value: SearchMode.startsWith },
-    //     { show: "Contains", value: SearchMode.contains },
-    //     { show: "Ends with", value: SearchMode.endsWith },
-    //     { show: "Exact", value: SearchMode.exact },
-    //     { show: "Fuzzy", value: SearchMode.fuzzy }
-    // ];
-    // activeSearchMode: SearchMode;
-
     stringMatchModes: { labelTranslationKey: string, value: SearchMode }[] = [
         { labelTranslationKey: "SEARCH.SETTINGS.STARTS_WITH", value: SearchMode.startsWith },
         { labelTranslationKey: "SEARCH.SETTINGS.CONTAINS", value: SearchMode.contains },
