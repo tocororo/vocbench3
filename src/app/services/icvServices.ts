@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager } from "../utils/HttpManager";
 
@@ -151,6 +151,15 @@ export class IcvServices {
     listConsistencyViolations() {
         let params = {};
         return this.httpMgr.doGet(this.serviceName, "listConsistencyViolations", params);
+    }
+
+    explain(subject: ARTResource, predicate: ARTURIResource, object: ARTNode) {
+        let params = {
+            subject: subject,
+            predicate: predicate,
+            object: object
+        };
+        return this.httpMgr.doGet(this.serviceName, "explain", params);
     }
 
     //=============================

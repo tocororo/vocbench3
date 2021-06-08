@@ -228,6 +228,13 @@ button > rdf-resource span, .nav-tabs rdf-resource span,
     text-decoration: line-through !important;
 }
 
+.imported {
+    background-color: #ffffee
+}
+.inferred {
+    background-color: #eff0ff
+}
+
 .flagIcon {
     position: relative;
     display: inline-block;

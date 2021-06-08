@@ -15,12 +15,6 @@ import { ResourceUtils } from "../../../utils/ResourceUtils";
             display: block;
             margin-bottom: 4px;
         }
-        .imported {
-            background-color: #ffffee
-        }
-        .inferred {
-            background-color: #eff0ff
-        }
     `]
     
 })

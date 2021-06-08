@@ -1,10 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ProjectServices } from "../services/projectServices";
 import { ShaclServices } from "../services/shaclServices";
 import { UIUtils } from "../utils/UIUtils";
-import { VBContext } from "../utils/VBContext";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "shacl-batch-validation-modal",
@@ -18,8 +15,7 @@ export class ShaclBatchValidationModal {
 
     validationResult: string;
 
-    constructor(public activeModal: NgbActiveModal, private shaclService: ShaclServices,
-        private basicModals: BasicModalServices) {
+    constructor(public activeModal: NgbActiveModal, private shaclService: ShaclServices) {
     }
 
     startValidation() {

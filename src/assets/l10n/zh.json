@@ -962,7 +962,8 @@
             },
             "OWL_CONSISTENCY_VIOLATION": {
                 "NAME": "OWL consistency violations",
-                "DESCRIPTION": "Triples which determine OWL inconsistencies"
+                "DESCRIPTION": "Triples which determine OWL inconsistencies",
+                "INFERENCE_EXPLANATION": "Inference explanation"
             }
         },
         "LABEL": {

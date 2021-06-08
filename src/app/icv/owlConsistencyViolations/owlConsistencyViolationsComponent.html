@@ -19,10 +19,13 @@
 
         <div *ngFor="let v of violations" class="card mt-2">
             <div class="card-body">
-                <div *ngFor="let t of v.inconsistentTriples" class="row">
-                    <div class="col-sm-4 text-center"><rdf-resource [resource]="t.s"></rdf-resource></div>
-                    <div class="col-sm-4 text-center"><rdf-resource [resource]="t.p"></rdf-resource></div>
-                    <div class="col-sm-4 text-center"><rdf-resource [resource]="t.o"></rdf-resource></div>
+                <div *ngFor="let t of v.inconsistentTriple2" class="row p-1" [ngClass]="{ 'inferred' : t.tripleScope == 'inferred' }" style="position: relative;">
+                    <div class="col-sm-4 text-center"><rdf-resource [resource]="t.subject" class="clickable" (click)="onResourceClick(t.subject)"></rdf-resource></div>
+                    <div class="col-sm-4 text-center"><rdf-resource [resource]="t.predicate" class="clickable" (click)="onResourceClick(t.predicate)"></rdf-resource></div>
+                    <div class="col-sm-4 text-center"><rdf-resource [resource]="t.object" class="clickable" (click)="onResourceClick(t.object)"></rdf-resource></div>
+                    <button *ngIf="t.tripleScope == 'inferred'" class="btn btn-light btn-xs" style="position: absolute; right: 2px;" (click)="showExplanation(t)">
+                        <span class="fas fa-question-circle"></span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -38,3 +41,6 @@
     </div>
     
 </div>
+
+
+

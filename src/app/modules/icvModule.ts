@@ -27,6 +27,7 @@ import { NoSchemeConceptComponent } from "../icv/noSchemeConcept/noSchemeConcept
 import { NoTopConceptSchemeComponent } from "../icv/noTopConceptScheme/noTopConceptSchemeComponent";
 import { OnlyAltLabelResourceComponent } from "../icv/onlyAltLabelResource/onlyAltLabelResourceComponent";
 import { OverlappedLabelComponent } from "../icv/overlappedLabel/overlappedLabelComponent";
+import { InferenceExplanationModal } from '../icv/owlConsistencyViolations/inferenceExplanationModal';
 import { OwlConsistencyViolationsComponent } from '../icv/owlConsistencyViolations/owlConsistencyViolationsComponent';
 import { TopConceptWithBroaderComponent } from "../icv/topConceptWithBroader/topConceptWithBroaderComponent";
 import { SharedModule } from './sharedModule';
@@ -57,6 +58,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         IcvComponent,
         IcvConfigPanelComponent,
         IcvListComponent,
+        InferenceExplanationModal,
         InvalidUriComponent,
         MultiplePrefLabelComponent,
         NoDefinitionResourceComponent,
@@ -71,6 +73,9 @@ import { TreeAndListModule } from "./treeAndListModule";
         TopConceptWithBroaderComponent,
     ],
     exports: [IcvComponent],
-    providers: []
+    providers: [],
+    entryComponents: [
+        InferenceExplanationModal
+    ]
 })
 export class IcvModule { }

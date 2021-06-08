@@ -7,14 +7,6 @@ import { ResViewPartition } from "../../../models/ResourceView";
     selector: "resview-value-renderer",
     templateUrl: "./resourceViewValueRenderer.html",
     host: { class: "listItem" },
-    styles: [`
-        .imported {
-            background-color: #ffffee
-        }
-        .inferred {
-            background-color: #eff0ff
-        }
-    `]
 })
 export class ResourceViewValueRenderer {
 

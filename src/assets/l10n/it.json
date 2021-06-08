@@ -962,7 +962,8 @@
             },
             "OWL_CONSISTENCY_VIOLATION": {
                 "NAME": "Violazioni della consistenza OWL",
-                "DESCRIPTION": "Triple che determinano inconsistenze in OWL"
+                "DESCRIPTION": "Triple che determinano inconsistenze in OWL",
+                "INFERENCE_EXPLANATION": "Spiegazione inferenza"
             }
         },
         "LABEL": {
@@ -1609,7 +1610,7 @@
         "CLEAR_SHACL_SHAPES": "Elimina shapes SHACL",
         "EXPORT_SHACL_SHAPES": "Esporta shapes SHACL",
         "EXTRACT_FROM_SHACL": "Estrai da SHACL",
-        "LOAD_SHACL_SHAPES": "Carica shapes SHACL"
+        "LOAD_SHACL_SHAPES": "Carica shapes SHACL",
         "RUN_SHACL_VALIDATION": "Esegui validazione SHACL"
     },
     "SHEET2RDF": {
