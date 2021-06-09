@@ -21,6 +21,7 @@ import { NodeCreationModal } from "./nodeCreationModal";
 })
 export class SimpleGraphApplicationModal {
     @Input() header: SimpleHeader;
+    @Input() headers: SimpleHeader[]; //other headers
     @Input() graphApplication?: SimpleGraphApplication; //optional graph application to edit. If not provided the modal create a new graph application
 
     property: ARTURIResource; //property used in graph section
@@ -288,6 +289,7 @@ export class SimpleGraphApplicationModal {
         modalRef.componentInstance.constrainedLanguage = lang;
         modalRef.componentInstance.constrainedDatatype = dt;
         modalRef.componentInstance.headerNodes = this.availableNodes;
+        modalRef.componentInstance.headers = this.headers;
         return modalRef.result.then(
             (node: NodeConversion) => {
                 this.availableNodes.push(node);

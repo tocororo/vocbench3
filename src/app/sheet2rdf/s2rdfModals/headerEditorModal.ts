@@ -168,6 +168,7 @@ export class HeaderEditorModal {
         modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
         modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
         modalRef.componentInstance.headerNodes = headerNodes;
+        modalRef.componentInstance.headers = this.headers;
         return modalRef.result;
     }
 
@@ -233,6 +234,7 @@ export class HeaderEditorModal {
         const modalRef: NgbModalRef = this.modalService.open(SimpleGraphApplicationModal, new ModalOptions());
         modalRef.componentInstance.header = header;
 		modalRef.componentInstance.graphApplication = graphApplication;
+        modalRef.componentInstance.headers = this.headers;
         return modalRef.result;
     }
 

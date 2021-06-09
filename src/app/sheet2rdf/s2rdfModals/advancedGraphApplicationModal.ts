@@ -146,6 +146,7 @@ export class AdvancedGraphApplicationModal {
         modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
         modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
         modalRef.componentInstance.headerNodes = headerNodes;
+        modalRef.componentInstance.headers = this.headers;
         return modalRef.result;
     }
 

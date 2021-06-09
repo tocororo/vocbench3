@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTLiteral, ARTURIResource } from "src/app/models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole } from "src/app/models/Coda";
 import { CODAConverter } from "src/app/models/Sheet2RDF";
@@ -77,40 +77,54 @@ export class ConverterConfiguratorComponent {
                     }
                 });
                 if (this.converter != null) {
-                    //restore the selected converter
-                    this.availableConverters.forEach(c => {
-                        if (c.getURI() == this.converter.contractUri) {
-                            this.selectConverter(c);
-                        }
-                    });
-                    //restore the selected signature and the parameters
-                    this.selectedConverter.getSignatures().forEach(s => {
-                        if (!this.isSignatureReturnTypeCompliant(this.converter.type, s.getReturnType())) {
-                            return; //skip this signature
-                        }
-                        //compare the names of the params
-                        let signatureParams: string[] = s.getParameters().map(p => p.getName());
-                        let converterParams: string[] = Object.keys(this.converter.params);
-                        signatureParams.sort();
-                        converterParams.sort();
-                        if (signatureParams.length == converterParams.length) {
-                            for (let i = 0; i < signatureParams.length; i++) {
-                                if (signatureParams[i] != converterParams[i]) {
-                                    return; //found a different parameter => this is not the used signature
-                                }
-                            }
-                            //if this code is reached, every parameter of the signature was found in the converter => select the signature
-                            this.selectSignature(s);
-                            //now restore the values
-                            for (let paramName in this.converter.params) {
-                                this.signatureParams.find(p => p.name == paramName).value = this.converter.params[paramName];
-                            }
-                            this.emitStatusUpdate();
-                        }
-                    });
+                    this.restoreConverterSelection();
                 }
             }
         );
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['converter'] && changes['converter'].currentValue != null && !changes['converter'].isFirstChange()) {
+            //NOT isFirstChange required since for the first initialization it needs to wait for availableConverters list initialization
+            //in fact restoreConverterSelection is invoked in ngOnInit also after listConverterContracts invocation
+            this.restoreConverterSelection();
+        }
+    }
+
+    /**
+     * Restore the selection of the Input converter
+     */
+    private restoreConverterSelection() {
+        //restore the selected converter
+        this.availableConverters.forEach(c => {
+            if (c.getURI() == this.converter.contractUri) {
+                this.selectConverter(c, false);
+            }
+        });
+        //restore the selected signature and the parameters
+        this.selectedConverter.getSignatures().forEach(s => {
+            if (!this.isSignatureReturnTypeCompliant(this.converter.type, s.getReturnType())) {
+                return; //skip this signature
+            }
+            //compare the names of the params
+            let signatureParams: string[] = s.getParameters().map(p => p.getName());
+            let converterParams: string[] = Object.keys(this.converter.params);
+            signatureParams.sort();
+            converterParams.sort();
+            if (signatureParams.length == converterParams.length) {
+                for (let i = 0; i < signatureParams.length; i++) {
+                    if (signatureParams[i] != converterParams[i]) {
+                        return; //found a different parameter => this is not the used signature
+                    }
+                }
+                //if this code is reached, every parameter of the signature was found in the converter => select the signature
+                this.selectSignature(s, false);
+                //now restore the values
+                for (let paramName in this.converter.params) {
+                    this.signatureParams.find(p => p.name == paramName).value = this.converter.params[paramName];
+                }
+            }
+        });
     }
 
     /**
@@ -128,7 +142,12 @@ export class ConverterConfiguratorComponent {
         }
     }
 
-    private selectConverter(converter: ConverterContractDescription) {
+    /**
+     * 
+     * @param converter 
+     * @param emitUpdate useful to prevent to emit update during the converter selection restoring that might influence
+     */
+    private selectConverter(converter: ConverterContractDescription, emitUpdate: boolean = true) {
         if (this.selectedConverter != converter) {
             this.selectedConverter = converter;
             /**
@@ -147,9 +166,11 @@ export class ConverterConfiguratorComponent {
                     this.availableSignatures.push(s);
                 }
             })
-            this.selectSignature(this.availableSignatures[0]);
+            this.selectSignature(this.availableSignatures[0], false);
         }
-        this.emitStatusUpdate();
+        if (emitUpdate) {
+            this.emitStatusUpdate();
+        }
     }
 
     /**
@@ -159,25 +180,32 @@ export class ConverterConfiguratorComponent {
     /**
      * check if the selected converter is the default one and if the selected signature is the literal one
      */
-    private showDefaultLiteralConverterOpt() {
+    showDefaultLiteralConverterOpt(): boolean {
         return this.selectedConverter != null && this.selectedConverter.getURI() == ConverterContractDescription.NAMESPACE + "default" &&
             this.selectedSignature != null && this.selectedSignature.getReturnType().endsWith(".Literal");
     }
 
-    private getSignatureShow(signature: SignatureDescription): string {
+    getSignatureShow(signature: SignatureDescription): string {
         return this.selectedConverter.getSerialization(signature);
     }
 
-    private selectSignature(signature: SignatureDescription) {
+    /**
+     * 
+     * @param signature 
+     * @param emitUpdate useful to prevent to emit update during the converter selection restoring that might influence 
+     */
+    private selectSignature(signature: SignatureDescription, emitUpdate: boolean = true) {
         this.selectedSignature = signature;
         this.signatureParams = [];
         this.selectedSignature.getParameters().forEach(p => {
             this.signatureParams.push({ name: p.getName(), value: null, type: p.getType() });
         });
-        this.emitStatusUpdate();
+        if (emitUpdate) {
+            this.emitStatusUpdate();
+        }
     }
 
-    private getParameterTitle(parameter: SignatureParam): string {
+    getParameterTitle(parameter: SignatureParam): string {
         if (parameter.type == "java.lang.String") {
             return "String parameter";
         } else if (parameter.type == "org.eclipse.rdf4j.model.Value[]") {
@@ -187,17 +215,17 @@ export class ConverterConfiguratorComponent {
         }
     }
 
-    private onMapParamChange(value: {[key: string]:any}, p: SignatureParam) {
+    onMapParamChange(value: {[key: string]:any}, p: SignatureParam) {
         p.value = value;
         this.emitStatusUpdate();
     }
 
-    private onListParamChange(value: any[], p: SignatureParam) {
+    onListParamChange(value: any[], p: SignatureParam) {
         p.value = value;
         this.emitStatusUpdate();
     }
 
-    private onSignatureParamChange() {
+    onSignatureParamChange() {
         this.emitStatusUpdate();
     }
 
@@ -232,16 +260,20 @@ export class ConverterConfiguratorComponent {
                 datatypeUri = this.datatype.getURI();
             }
         }
-        let c: CODAConverter = {
-            type: capability,
-            contractUri: this.selectedConverter.getURI(),
-            language: lang,
-            datatypeUri: datatypeUri,
-            datatypeCapability: (this.selectedConverter.getDatatypes().length > 0) ? this.selectedConverter.getDatatypes()[0] : null,
-            params: params
+        //update the converter object
+        if (this.converter == null) { //instantiate it if never done (not set as Input and status emitted for the first time)
+            this.converter = new CODAConverter(capability, this.selectedConverter.getURI());
+        } else {
+            this.converter.type = capability;
+            this.converter.contractUri = this.selectedConverter.getURI();
         }
+        this.converter.language = lang;
+        this.converter.datatypeUri = datatypeUri;
+        this.converter.datatypeCapability = (this.selectedConverter.getDatatypes().length > 0) ? this.selectedConverter.getDatatypes()[0] : null;
+        this.converter.params = params;
+
         let status: ConverterConfigStatus = {
-            converter: c,
+            converter: this.converter,
             converterDesc: this.selectedConverter,
             signatureDesc: this.selectedSignature
         };

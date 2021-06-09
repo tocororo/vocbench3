@@ -12,13 +12,13 @@
                 </label>
             </div>
         
-            <div *ngIf="memoizeData.enabled" class="input-group ml-4">
-                <select class="form-control" [(ngModel)]="memoizeData.id" (ngModelChange)="onModelChange()">
+            <div class="input-group ml-4">
+                <select class="form-control" [(ngModel)]="memoizeData.id" (ngModelChange)="onModelChange()" [disabled]="!memoizeData.enabled">
                     <option [ngValue]="null">Default</option>
                     <option *ngFor="let id of memoizeIds">{{id}}</option>
                 </select>
                 <span class="input-group-append">
-                    <button class="btn btn-light" (click)="addMap()">
+                    <button class="btn btn-light" (click)="addMap()" [disabled]="!memoizeData.enabled">
                         <span class="fas fa-plus"></span>
                     </button>
                 </span>

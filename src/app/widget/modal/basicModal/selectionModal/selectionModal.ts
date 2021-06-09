@@ -19,7 +19,7 @@ export class SelectionModal {
     msgStyle: string;
     
     plainOptions: boolean; //tells if the options are plains or complex object (value+description)
-    optionSelected: any; //string or {string, string} object, according the input options list
+    optionSelected: string | SelectionOption; //string or {string, string} object, according the input options list
     private size: number;
     
     constructor(public activeModal: NgbActiveModal) {}

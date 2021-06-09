@@ -24,7 +24,7 @@ export class MemoizationEditor {
     }
 
     addMap() {
-        this.basicModals.prompt({ key: "SHEET2RDF.HEADER_EDITOR.MEMOIZE_INFO" }, { value: "ID" }, null, null, false, true).then(
+        this.basicModals.prompt({ key: "SHEET2RDF.HEADER_EDITOR.ADD_MEMOIZE_MAP" }, { value: "ID" }, null, null, false, true).then(
             id => {
                 if (!this.memoizeIds.includes(id)) {
                     this.memoizeIds.push(id);
@@ -44,7 +44,7 @@ export class MemoizationEditor {
     /**
      * Write a new value to the element.
      */
-     writeValue(obj: MemoizeData) {
+    writeValue(obj: MemoizeData) {
         if (obj) {
             this.memoizeData = obj;
         } else {
