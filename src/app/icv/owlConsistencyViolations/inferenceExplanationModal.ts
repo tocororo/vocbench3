@@ -24,15 +24,6 @@ export class InferenceExplanationModal {
                 for (let p of stResp.premises) {
                     premises.push(Triple.parse(p));
                 }
-                premises.sort((t1, t2) => { //sort triples pushing the inferred after
-                    if (t1.tripleScope == t2.tripleScope) {
-                        return 0;
-                    } else if (t1.tripleScope == TripleScopes.inferred) {
-                        return 1; 
-                    } else {
-                        return -1;
-                    }
-                });
                 this.explanation = {
                     ruleName: stResp.ruleName,
                     premises: premises

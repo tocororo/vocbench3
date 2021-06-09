@@ -40,15 +40,6 @@ export class OwlConsistencyViolationsComponent {
                     for (let t of violation.inconsistentTriple2) {
                         inconsistentTriple2.push(Triple.parse(t));
                     }
-                    inconsistentTriple2.sort((t1, t2) => { //sort triples pushing the inferred after
-                        if (t1.tripleScope == t2.tripleScope) {
-                            return 0;
-                        } else if (t1.tripleScope == TripleScopes.inferred) {
-                            return 1; 
-                        } else {
-                            return -1;
-                        }
-                    })
                     let cv: ConsistencyViolation = {
                         conditionName: violation.conditionName,
                         inconsistentTriples: inconsistentTriples,
