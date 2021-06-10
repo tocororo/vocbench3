@@ -18,7 +18,7 @@
                     </td>
                     <td>
                         <select class="form-control" [(ngModel)]="selectedHeader">
-                            <option *ngFor="let h of headers" [ngValue]="h">{{h.nameStruct.fullName}}</option>
+                            <option *ngFor="let h of s2rdfModel.headers" [ngValue]="h">{{h.nameStruct.fullName}}</option>
                         </select>
                     </td>
                 </tr>
@@ -35,7 +35,7 @@
                         </label>
                     </td>
                     <td>
-                        <input type="text" class="form-control" [ngModel]="subjectHeader.node.nodeId" readonly>
+                        <input type="text" class="form-control" [ngModel]="s2rdfModel.subjectHeader.node.nodeId" readonly>
                     </td>
                 </tr>
 
@@ -70,7 +70,12 @@
         <converter-config class="mt-2" [converter]="selectedConverter" [rangeType]="'resource'" (update)="onConverterUpdate($event)">
         </converter-config>
 
-        <memoization-editor *ngIf="isConverterRandom()" class="mt-2" [(ngModel)]="memoizeData"></memoization-editor>
+        <div *ngIf="isConverterRandom()" class="d-flex align-items-center mt-2">
+            <memoization-editor style="flex: 1;" [(ngModel)]="memoizeData"></memoization-editor>
+            <button class="btn btn-light ml-2" (click)="selectNodeToBind()" [title]="'SHEET2RDF.HEADER_EDITOR.COPY_MEMOIZED_NODE_CONVERTER_INFO'|translate" [disabled]="!memoizedNodes">
+                <span class="fas fa-link"></span>
+            </button>
+        </div>
 
         <div class="card" style="margin-top: 4px;">
             <div class="card-header">

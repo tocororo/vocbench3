@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from 'src/app/models/ARTResources';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
-import { AdvancedGraphApplication, GraphApplication, NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
+import { AdvancedGraphApplication, GraphApplication, NodeConversion, S2RDFModel, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
 import { RangeType } from "../../services/propertyServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -18,12 +18,12 @@ import { SimpleGraphApplicationModal } from "./simpleGraphApplicationModal";
 })
 export class HeaderEditorModal {
     @Input() headerId: string;
-    @Input() headers: SimpleHeader[];
+    @Input() s2rdfModel: S2RDFModel;
 
     header: SimpleHeader;
 
     private ignoreInitialized: boolean = false;
-    
+
     selectedNode: NodeConversion;
     selectedGraph: GraphApplication;
 
@@ -75,21 +75,21 @@ export class HeaderEditorModal {
     addNode() {
         this.openNodeEditorModal(this.header, null, null, null, null, this.header.nodes).then(
             (newNode: NodeConversion) => {
-                this.s2rdfService.addNodeToHeader(this.header.id, newNode.nodeId, newNode.converter.type, 
+                this.s2rdfService.addNodeToHeader(this.header.id, newNode.nodeId, newNode.converter.type,
                     newNode.converter.contractUri, newNode.converter.datatypeUri, newNode.converter.language,
                     newNode.converter.params, newNode.memoize, newNode.memoizeId).subscribe(
-                    () => {
-                        this.initHeader();
-                        this.changed = true;
-                    }
-                );
+                        () => {
+                            this.initHeader();
+                            this.changed = true;
+                        }
+                    );
             },
-            () => {}
+            () => { }
         );
     }
 
     renameNode(node: NodeConversion) {
-        this.basicModals.prompt({key:"ACTIONS.RENAME_NODE"}, { value: "ID" }, null, node.nodeId, false, true).then(
+        this.basicModals.prompt({ key: "ACTIONS.RENAME_NODE" }, { value: "ID" }, null, node.nodeId, false, true).then(
             (newID: string) => {
                 if (newID != node.nodeId) {
                     this.s2rdfService.renameNodeId(this.header.id, node.nodeId, newID).subscribe(
@@ -100,7 +100,7 @@ export class HeaderEditorModal {
                     );
                 }
             },
-            () => {}
+            () => { }
         )
     }
 
@@ -110,11 +110,11 @@ export class HeaderEditorModal {
         let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
         //TODO allow to forcing the deletion a referenced node or not allow at all? 
         if (referenced) { //cannot delete a node used by a graph application
-            this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM"}, ModalType.warning).then(
+            this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM" }, ModalType.warning).then(
                 confirm => {
                     this.removeNodeImpl();
                 },
-                () => {}
+                () => { }
             );
         } else {
             this.removeNodeImpl();
@@ -132,43 +132,43 @@ export class HeaderEditorModal {
     changeUriConverter(node: NodeConversion) {
         this.openNodeEditorModal(this.header, node, RangeType.resource, null, null, null).then(
             (updatedNode: NodeConversion) => {
-                this.s2rdfService.updateNodeInHeader(this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri, 
+                this.s2rdfService.updateNodeInHeader(this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri,
                     updatedNode.converter.datatypeUri, updatedNode.converter.language, updatedNode.converter.params, updatedNode.memoize, updatedNode.memoizeId).subscribe(
-                    () => {
-                        this.initHeader();
-                        this.changed = true;
-                    }
-                )
+                        () => {
+                            this.initHeader();
+                            this.changed = true;
+                        }
+                    )
             },
-            () => {}
+            () => { }
         );
     }
 
     changeLiteralConverter(node: NodeConversion) {
         this.openNodeEditorModal(this.header, node, RangeType.literal, null, null, null).then(
             (updatedNode: NodeConversion) => {
-                this.s2rdfService.updateNodeInHeader(this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri, 
+                this.s2rdfService.updateNodeInHeader(this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri,
                     updatedNode.converter.datatypeUri, updatedNode.converter.language, updatedNode.converter.params, updatedNode.memoize, updatedNode.memoizeId).subscribe(
-                    () => {
-                        this.initHeader();
-                        this.changed = true;
-                    }
-                )
+                        () => {
+                            this.initHeader();
+                            this.changed = true;
+                        }
+                    )
             },
-            () => {}
+            () => { }
         );
     }
 
-    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType, 
-            constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
+    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType,
+        constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
         const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
         modalRef.componentInstance.header = header;
-		modalRef.componentInstance.editingNode = editingNode;
+        modalRef.componentInstance.editingNode = editingNode;
         modalRef.componentInstance.constrainedRangeType = constrainedRangeType;
         modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
         modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
         modalRef.componentInstance.headerNodes = headerNodes;
-        modalRef.componentInstance.headers = this.headers;
+        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         return modalRef.result;
     }
 
@@ -197,15 +197,15 @@ export class HeaderEditorModal {
                     this.initHeader();
                     this.changed = true;
                 },
-                () => {}
+                () => { }
             );
         } else { //AdvancedGraphApplication
-            this.openAdvancedGraphApplicationModal(this.header, this.headers, <AdvancedGraphApplication>this.selectedGraph).then(
+            this.openAdvancedGraphApplicationModal(this.header, <AdvancedGraphApplication>this.selectedGraph).then(
                 () => {
                     this.initHeader();
                     this.changed = true;
                 },
-                () => {}
+                () => { }
             );
         }
     }
@@ -216,33 +216,33 @@ export class HeaderEditorModal {
                 this.initHeader();
                 this.changed = true;
             },
-            () => {}
+            () => { }
         );
     }
 
     addAdvancedGraphApplication() {
-        this.openAdvancedGraphApplicationModal(this.header, this.headers, null).then(
+        this.openAdvancedGraphApplicationModal(this.header, null).then(
             () => {
                 this.initHeader();
                 this.changed = true;
             },
-            () => {}
+            () => { }
         );
     }
 
     private openSimpleGraphApplicationModal(header: SimpleHeader, graphApplication: SimpleGraphApplication) {
         const modalRef: NgbModalRef = this.modalService.open(SimpleGraphApplicationModal, new ModalOptions());
         modalRef.componentInstance.header = header;
-		modalRef.componentInstance.graphApplication = graphApplication;
-        modalRef.componentInstance.headers = this.headers;
+        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
+        modalRef.componentInstance.graphApplication = graphApplication;
         return modalRef.result;
     }
 
-    private openAdvancedGraphApplicationModal(header: SimpleHeader, headers: SimpleHeader[], graphApplication: AdvancedGraphApplication) {
+    private openAdvancedGraphApplicationModal(header: SimpleHeader, graphApplication: AdvancedGraphApplication) {
         const modalRef: NgbModalRef = this.modalService.open(AdvancedGraphApplicationModal, new ModalOptions('lg'));
         modalRef.componentInstance.header = header;
-        modalRef.componentInstance.headers = headers;
-		modalRef.componentInstance.graphApplication = graphApplication;
+        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
+        modalRef.componentInstance.graphApplication = graphApplication;
         return modalRef.result;
     }
 
@@ -261,19 +261,19 @@ export class HeaderEditorModal {
 
     ok() {
         if (this.changed && this.header.isMultiple) {
-            this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.UPDATE_MULTIPLE_HEADER_SAME_NAME_CONFIRM", params:{headerName: this.header.nameStruct.name}},
+            this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.UPDATE_MULTIPLE_HEADER_SAME_NAME_CONFIRM", params: { headerName: this.header.nameStruct.name } },
                 ModalType.warning).then(
-                confirm => {
-                    this.s2rdfService.replicateMultipleHeader(this.header.id).subscribe(
-                        () => {
-                            this.activeModal.close();
-                        }
-                    )
-                },
-                () => {
-                    this.activeModal.close();
-                }
-            )
+                    confirm => {
+                        this.s2rdfService.replicateMultipleHeader(this.header.id).subscribe(
+                            () => {
+                                this.activeModal.close();
+                            }
+                        )
+                    },
+                    () => {
+                        this.activeModal.close();
+                    }
+                )
         } else {
             this.activeModal.close();
         }

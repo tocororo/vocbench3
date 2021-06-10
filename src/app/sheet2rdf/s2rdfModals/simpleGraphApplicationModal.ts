@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
-import { NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
+import { NodeConversion, S2RDFModel, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
 import { RDF, RDFS } from "../../models/Vocabulary";
 import { PropertyServices, RangeResponse, RangeType } from "../../services/propertyServices";
 import { ResourcesServices } from "../../services/resourcesServices";
@@ -21,7 +21,7 @@ import { NodeCreationModal } from "./nodeCreationModal";
 })
 export class SimpleGraphApplicationModal {
     @Input() header: SimpleHeader;
-    @Input() headers: SimpleHeader[]; //other headers
+    @Input() s2rdfModel: S2RDFModel;
     @Input() graphApplication?: SimpleGraphApplication; //optional graph application to edit. If not provided the modal create a new graph application
 
     property: ARTURIResource; //property used in graph section
@@ -289,7 +289,7 @@ export class SimpleGraphApplicationModal {
         modalRef.componentInstance.constrainedLanguage = lang;
         modalRef.componentInstance.constrainedDatatype = dt;
         modalRef.componentInstance.headerNodes = this.availableNodes;
-        modalRef.componentInstance.headers = this.headers;
+        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         return modalRef.result.then(
             (node: NodeConversion) => {
                 this.availableNodes.push(node);

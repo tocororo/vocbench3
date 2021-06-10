@@ -1,10 +1,12 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from "rxjs";
 import { ConverterContractDescription } from "src/app/models/Coda";
+import { Sheet2RDFServices } from "src/app/services/sheet2rdfServices";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
 import { ModalType, SelectionOption } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
-import { CODAConverter, MemoizeData, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
+import { CODAConverter, MemoizeData, NodeConversion, S2RDFModel, SimpleHeader } from "../../models/Sheet2RDF";
 import { RangeType } from "../../services/propertyServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
@@ -21,17 +23,15 @@ export class NodeCreationModal {
     @Input() headerNodes: NodeConversion[]; //other nodes of the input header 
         //(I don't use header.nodes, despite most of the time these nodes are the same, since they may differ. 
         //E.g. when this modal is called from the AdvancedGraphApplication modal, nodes can be created contextually the definition of the AGA so they are not in the header yet)
-    @Input() headers: SimpleHeader[]; //other headers, useful for copying the memoization convertion
+    @Input() s2rdfModel: S2RDFModel;
 
     nodeId: string;
 
     selectedConverter: CODAConverter;
     memoizeData: MemoizeData = new MemoizeData();
-
     memoizedNodes: NodeConversion[];
-    selectedSourceMemoNode: NodeConversion;
 
-    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices) {
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices) {
     }
 
     ngOnInit() {
@@ -52,29 +52,24 @@ export class NodeCreationModal {
         return this.selectedConverter != null && this.selectedConverter.contractUri == ConverterContractDescription.NAMESPACE + "randIdGen";
     }
 
-    private isNodeAlreadyInUse(nodeId: string): boolean {
+    private isNodeAlreadyInUse(nodeId: string): Observable<boolean> {
         if (this.editingNode) { //in case the modal is editing a pre-existing node, skip the test and return false
-            return false;
+            return of(false);
         } else {
             for (let n of this.headerNodes) {
                 if (n.nodeId == nodeId) {
-                    return true;
+                    return of(true);
                 }
             }
-            for (let h of this.headers) {
-                for (let n of h.nodes) {
-                    if (n.nodeId == nodeId) {
-                        return true;
-                    }
-                }
-            }
+            //if this code is reached, the id is not used locally in the header => check globally invoking the server
+            return this.s2rdfService.isNodeIdAlreadyUsed(nodeId);
         }
-        return false;
     }
 
-    initMemoizedNodes() {
-        let sourceNodes: NodeConversion[] = [];
+    private initMemoizedNodes() {
         //collect the nodes that uses the same memoization map
+        let sourceNodes: NodeConversion[] = [];
+        //from nodes of the current header
         if (this.headerNodes != null) {
             this.headerNodes.forEach(n => {
                 if (n.memoize) {
@@ -84,7 +79,14 @@ export class NodeCreationModal {
                 }
             });
         }
-        this.headers.forEach(h => {
+        //from the subject header
+        if (this.s2rdfModel.subjectHeader.node.memoize) {
+            if (!sourceNodes.some(sn => sn.nodeId == this.s2rdfModel.subjectHeader.node.nodeId)) { //collect it if not yet in the sourceNodes list
+                sourceNodes.push(this.s2rdfModel.subjectHeader.node);
+            }
+        }
+        //from all the other headers
+        this.s2rdfModel.headers.forEach(h => {
             h.nodes.forEach(n => {
                 if (n.memoize) {
                     if (!sourceNodes.some(sn => sn.nodeId == n.nodeId)) { //collect it if not yet in the sourceNodes list
@@ -105,12 +107,12 @@ export class NodeCreationModal {
         });
         this.basicModals.select({key:"SHEET2RDF.HEADER_EDITOR.COPY_MEMOIZED_NODE_CONVERTER"}, {key:"SHEET2RDF.HEADER_EDITOR.SELECT_MEMOIZED_NODE"}, opts).then(
             (opt: SelectionOption) => {
-                this.selectedSourceMemoNode = this.memoizedNodes.find(n => n.nodeId == opt.value);
+                let selectedSourceMemoNode: NodeConversion = this.memoizedNodes.find(n => n.nodeId == opt.value);
                 this.memoizeData = { 
-                    enabled: this.selectedSourceMemoNode.memoize,
-                    id: this.selectedSourceMemoNode.memoizeId
+                    enabled: selectedSourceMemoNode.memoize,
+                    id: selectedSourceMemoNode.memoizeId
                 }
-                this.selectedConverter = this.selectedSourceMemoNode.converter;
+                this.selectedConverter = selectedSourceMemoNode.converter;
             },
             () => {}
         );
@@ -137,17 +139,21 @@ export class NodeCreationModal {
     }
 
     ok() {
-        if (this.isNodeAlreadyInUse(this.nodeId)) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_USED_NODE_ID"}, ModalType.warning);
-            return;
-        }
-        let newNode: NodeConversion = { 
-            nodeId: this.nodeId,
-            converter: this.selectedConverter,
-            memoize: this.memoizeData.enabled,
-            memoizeId: (this.memoizeData.enabled) ? this.memoizeData.id : null,
-        }
-        this.activeModal.close(newNode);
+        this.isNodeAlreadyInUse(this.nodeId).subscribe(
+            used => {
+                if (used) {
+                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_USED_NODE_ID"}, ModalType.warning);
+                    return;
+                }
+                let newNode: NodeConversion = { 
+                    nodeId: this.nodeId,
+                    converter: this.selectedConverter,
+                    memoize: this.memoizeData.enabled,
+                    memoizeId: (this.memoizeData.enabled) ? this.memoizeData.id : null,
+                }
+                this.activeModal.close(newNode);
+            }
+        );
     }
 
     cancel() {

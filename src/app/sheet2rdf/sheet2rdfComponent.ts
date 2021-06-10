@@ -4,7 +4,7 @@ import { PearlValidationResult } from "../models/Coda";
 import { ExtensionPointID, Scope } from "../models/Plugins";
 import { SettingsEnum } from "../models/Properties";
 import { RDFFormat } from "../models/RDFFormat";
-import { AdvancedGraphApplication, FsNamingStrategy, GraphApplication, MemoizeContext, Sheet2RdfSettings, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
+import { AdvancedGraphApplication, FsNamingStrategy, GraphApplication, MemoizeContext, S2RDFModel, Sheet2RdfSettings, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { CODAServices } from "../services/codaServices";
 import { ExportServices } from "../services/exportServices";
 import { SettingsServices } from "../services/settingsServices";
@@ -113,15 +113,14 @@ export class Sheet2RdfComponent {
     private maxSizePreviews: number = 20;
     truncatedRows: number;
     totalRows: number;
-    headers: SimpleHeader[];
-    subjectHeader: SubjectHeader;
+    s2rdfModel: S2RDFModel = new S2RDFModel();
     tablePreview: TableRow[];
     private selectedTablePreviewRow: TableRow;
 
     loadSpreadsheet() {
         // HttpServiceContext.initSessionToken();
         this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
-            stResp => {
+            () => {
                 this.resetAll();
                 this.initHeaders();
                 this.initTablePreview();
@@ -140,7 +139,7 @@ export class Sheet2RdfComponent {
     }
 
     private resetSheetPreview() {
-        this.headers = null;
+        this.s2rdfModel = new S2RDFModel();
         this.tablePreview = null;
         this.truncatedRows = null;
         this.totalRows = null;
@@ -149,12 +148,13 @@ export class Sheet2RdfComponent {
     private initHeaders() {
         this.s2rdfService.getHeaders().subscribe(
             (headers: { subject: SubjectHeader, headers: SimpleHeader[] }) => {
-                this.subjectHeader = headers.subject;
-                this.headers = headers.headers;
+                this.s2rdfModel.subjectHeader = headers.subject;
+                this.s2rdfModel.headers = headers.headers;
+
 
                 //init CSS classes of headers
                 this.initSubjHeaderCssClass();
-                this.headers.forEach(h => this.initHeaderCssClass(h));
+                this.s2rdfModel.headers.forEach(h => this.initHeaderCssClass(h));
 
                 this.initMemoizeIdList();
             }
@@ -167,11 +167,11 @@ export class Sheet2RdfComponent {
     private initMemoizeIdList() {
         MemoizeContext.idList = []; 
         //from subject header
-        if (this.subjectHeader.node.memoize && this.subjectHeader.node.memoizeId != null && !MemoizeContext.idList.includes(this.subjectHeader.node.memoizeId)) {
-            MemoizeContext.idList.push(this.subjectHeader.node.memoizeId);
+        if (this.s2rdfModel.subjectHeader.node.memoize && this.s2rdfModel.subjectHeader.node.memoizeId != null && !MemoizeContext.idList.includes(this.s2rdfModel.subjectHeader.node.memoizeId)) {
+            MemoizeContext.idList.push(this.s2rdfModel.subjectHeader.node.memoizeId);
         }
         //from other headers
-        this.headers.forEach(h => {
+        this.s2rdfModel.headers.forEach(h => {
             h.nodes.forEach(n => {
                 if (n.memoize && n.memoizeId != null && !MemoizeContext.idList.includes(n.memoizeId)) {
                     MemoizeContext.idList.push(n.memoizeId);
@@ -231,7 +231,7 @@ export class Sheet2RdfComponent {
                     if (g.pattern != null && g.nodeIds != null && g.nodeIds.length > 0) {
                         let allDefined: boolean = true; //if one referenced node is not defined, this is set to false
                         for (let id of g.nodeIds) { //for each node referenced in graph application
-                            this.headers.forEach(h => {
+                            this.s2rdfModel.headers.forEach(h => {
                                 if (!h.nodes.some(n => n.nodeId == id)) {
                                     allDefined = true;
                                 }
@@ -253,11 +253,11 @@ export class Sheet2RdfComponent {
     }
 
     initSubjHeaderCssClass() {
-        if (this.subjectHeader != null) {
-            if (this.subjectHeader.id != null && this.subjectHeader.node.converter != null) {
-                this.subjectHeader['cssClass'] = "configuredHeader";
+        if (this.s2rdfModel.subjectHeader != null) {
+            if (this.s2rdfModel.subjectHeader.id != null && this.s2rdfModel.subjectHeader.node.converter != null) {
+                this.s2rdfModel.subjectHeader['cssClass'] = "configuredHeader";
             } else {
-                this.subjectHeader['cssClass'] = "incompleteSubjectHeader";
+                this.s2rdfModel.subjectHeader['cssClass'] = "incompleteSubjectHeader";
             }
         }
     }
@@ -265,7 +265,7 @@ export class Sheet2RdfComponent {
     editHeader(header: SimpleHeader) {
         const modalRef: NgbModalRef = this.modalService.open(HeaderEditorModal, new ModalOptions('xl'));
         modalRef.componentInstance.headerId = header.id;
-		modalRef.componentInstance.headers = this.headers;
+		modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         modalRef.result.then(
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();
@@ -276,8 +276,7 @@ export class Sheet2RdfComponent {
 
     editSubjectHeader() {
         const modalRef: NgbModalRef = this.modalService.open(SubjectHeaderEditorModal, new ModalOptions('xl'));
-        modalRef.componentInstance.headers = this.headers;
-		modalRef.componentInstance.subjectHeader = this.subjectHeader;
+        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         modalRef.result.then(
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();

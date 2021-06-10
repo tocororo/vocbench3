@@ -2,6 +2,11 @@ import { NTriplesUtil } from "../utils/ResourceUtils";
 import { ARTNode, ARTURIResource } from "./ARTResources";
 import { RDFCapabilityType } from "./Coda";
 
+export class S2RDFModel {
+    subjectHeader: SubjectHeader;
+    headers: SimpleHeader[];
+}
+
 export class SimpleHeader {
     public id: string;
     public nameStruct: NameStruct;

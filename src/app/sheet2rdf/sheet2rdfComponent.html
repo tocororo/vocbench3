@@ -30,7 +30,7 @@
                         </span>
                     </span>
                     <div class="btn-toolbar" role="toolbar">
-                        <button class="btn btn-light btn-xs" [class]="subjectHeader ? subjectHeader['cssClass'] : null" (click)="editSubjectHeader()"
+                        <button class="btn btn-light btn-xs" [class]="s2rdfModel.subjectHeader ? s2rdfModel.subjectHeader['cssClass'] : null" (click)="editSubjectHeader()"
                             [title]="'SHEET2RDF.SPREADSHEET.EDIT_SUBJECT_HEADER'|translate" [disabled]="!tablePreview">
                             {{'SHEET2RDF.SPREADSHEET.SUBJECT_MAPPING'|translate}}
                         </button>
@@ -55,8 +55,8 @@
                     <table class="table" style="background-color: #fff;">
                         <tbody>
                             <tr>
-                                <td *ngFor="let h of headers" class="columnHeader">
-                                    <span *ngIf="h.id==subjectHeader.id" class="badge badge-success" [title]="'MODELS.RESOURCE.SUBJECT'|translate">S</span>
+                                <td *ngFor="let h of s2rdfModel.headers" class="columnHeader">
+                                    <span *ngIf="h.id==s2rdfModel.subjectHeader.id" class="badge badge-success" [title]="'MODELS.RESOURCE.SUBJECT'|translate">S</span>
                                     <span [class]="h.cssClass" style="font-weight: bold;">
                                         {{h.nameStruct.fullName}}
                                     </span>

@@ -8,7 +8,7 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
 import { PrefixMapping } from "../../models/Metadata";
-import { AdvancedGraphApplication, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
+import { AdvancedGraphApplication, NodeConversion, S2RDFModel, SimpleHeader } from "../../models/Sheet2RDF";
 import { RangeType } from "../../services/propertyServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -24,7 +24,7 @@ import { NodeCreationModal } from "./nodeCreationModal";
 })
 export class AdvancedGraphApplicationModal {
     @Input() header: SimpleHeader;
-    @Input() headers: SimpleHeader[];
+    @Input() s2rdfModel: S2RDFModel;
     @Input() graphApplication?: AdvancedGraphApplication;
 
     //Nodes
@@ -146,7 +146,7 @@ export class AdvancedGraphApplicationModal {
         modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
         modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
         modalRef.componentInstance.headerNodes = headerNodes;
-        modalRef.componentInstance.headers = this.headers;
+        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         return modalRef.result;
     }
 
@@ -235,7 +235,7 @@ export class AdvancedGraphApplicationModal {
         // - subject
         pearl += "subject uri " + this.header.pearlFeature + " .\n";
         //- other headers nodes (useful in case graph section contains foreign reference)
-        this.headers.forEach(h => {
+        this.s2rdfModel.headers.forEach(h => {
             //skip the same current header (prevent to write multiple time the declaration of its nodes)
             if (h.id == this.header.id) return;
             h.nodes.forEach(n => {
