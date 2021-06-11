@@ -9,6 +9,8 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Enabled possibility to render project through labels
   * Improved the management of the unicity of preferred labels for concepts in the same scheme
   * In Sheet2RDF added possibility to delete triples
+  * Added a wizard for creating CustomForm
+  * Implemented a new ICV: OWL concistency violations
   * Added flags for Scottish Gaelic and Welsh languages
   * Adopted the new Settings services
   * Fixed autocompletion and prefixes resolution in SPARQL editor

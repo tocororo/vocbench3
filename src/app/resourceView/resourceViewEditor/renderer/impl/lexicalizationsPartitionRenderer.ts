@@ -2,6 +2,7 @@ import { Component, SimpleChanges } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { from, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { VBContext } from "src/app/utils/VBContext";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { Language } from "../../../../models/LanguagesCountries";
@@ -52,20 +53,39 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        let renderingLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference;
+        console.log("renderingLangs", renderingLangs);
         super.ngOnChanges(changes);
         //if changes reguard predicateObjectList
         if (changes['predicateObjectList'] && changes['predicateObjectList'].currentValue) {
             //sort predicate (SKOSXL pref, alt, hidden Label, SKOS pref, alt, hidden Label, RDFS label)
             this.predicateObjectList.sort(this.sortPredicates(this.predicateOrder));
             //sort objects by language
-            for (var i = 0; i < this.predicateObjectList.length; i++) {
+            for (let i = 0; i < this.predicateObjectList.length; i++) {
                 let objects: ARTNode[] = this.predicateObjectList[i].getObjects();
                 objects.sort(
-                    function (a: ARTNode, b: ARTNode) {
-                        if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
-                        if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
-                        //same lang code, order alphabetically
-                        return a.getShow().localeCompare(b.getShow());
+                    (a: ARTNode, b: ARTNode) => {
+                        let langA: string = a.getAdditionalProperty(ResAttribute.LANG);
+                        let langAPos: number = renderingLangs.indexOf(langA);
+                        let langB: string = b.getAdditionalProperty(ResAttribute.LANG);
+                        let langBPos: number = renderingLangs.indexOf(langB);
+                        if (langAPos != -1 && langBPos != -1) { //both in the rendering languages
+                            if (langA != langB) { //different languages => returns the comparison of their positions
+                                return langAPos - langBPos;
+                            } else { //same languages => returns the comparison of the value
+                                return a.getShow().localeCompare(b.getShow());
+                            }
+                        } else if (langAPos == -1 && langBPos == -1) { //both not in the rendering languages => returns the comparison of the lang code
+                            if (langA < langB) return 1;
+                            if (langA > langB) return -1;
+                            return a.getShow().localeCompare(b.getShow()); //same lang code, order alphabetically
+                        } else { //just one of the two languages is among the rendering langs
+                            return langBPos - langAPos;
+                        }
+                        // if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
+                        // if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
+                        // //same lang code, order alphabetically
+                        // return a.getShow().localeCompare(b.getShow());
                     }
                 );
             }

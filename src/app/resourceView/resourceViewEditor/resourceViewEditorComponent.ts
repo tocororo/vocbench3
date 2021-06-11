@@ -429,7 +429,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         ) {
             // this.parseFacetsPartition(facetsPartitionJson);
             this.propertyFacets = [];
-            for (var facetName in facetsPartitionJson) {
+            for (let facetName in facetsPartitionJson) {
                 if (facetName == "inverseOf") continue;
                 this.propertyFacets.push({
                     name: facetName,
@@ -462,12 +462,12 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         ) {
             poList = Deserializer.createPredicateObjectsList(partitionJson);
             //the "explicit" attribute for the collection members is not declared => set the attribute based on the explicit of the collection
-            for (var i = 0; i < poList.length; i++) { //for each pred-obj-list
+            for (let i = 0; i < poList.length; i++) { //for each pred-obj-list
                 let collections = poList[i].getObjects();
-                for (var j = 0; j < collections.length; j++) { //for each collection (member list, should be just 1)
+                for (let j = 0; j < collections.length; j++) { //for each collection (member list, should be just 1)
                     if (collections[j].getAdditionalProperty(ResAttribute.EXPLICIT)) { //set member explicit only if collection is explicit
                         let members: ARTResource[] = collections[j].getAdditionalProperty(ResAttribute.MEMBERS);
-                        for (var k = 0; k < members.length; k++) {
+                        for (let k = 0; k < members.length; k++) {
                             members[k].setAdditionalProperty(ResAttribute.EXPLICIT, true);
                         }
                     }
@@ -490,9 +490,9 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
      */
     private filterInferredFromPredObjList(predObjList: ARTPredicateObjects[]) {
         if (!this.showInferred) {
-            for (var i = 0; i < predObjList.length; i++) {
-                var objList: ARTNode[] = predObjList[i].getObjects();
-                for (var j = 0; j < objList.length; j++) {
+            for (let i = 0; i < predObjList.length; i++) {
+                let objList: ARTNode[] = predObjList[i].getObjects();
+                for (let j = 0; j < objList.length; j++) {
                     let objGraphs: ARTURIResource[] = objList[j].getTripleGraphs();
                     if (ResourceUtils.containsNode(objGraphs, new ARTURIResource(SemanticTurkey.inferenceGraph))) {
                         objList.splice(j, 1);
@@ -514,9 +514,9 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         if (this.valueFilterLangEnabled) {
             let valueFilterLanguages = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().filterValueLang.languages;
             if (valueFilterLanguages.length == 0) return;
-            for (var i = 0; i < predObjList.length; i++) {
-                var objList: ARTNode[] = predObjList[i].getObjects();
-                for (var j = 0; j < objList.length; j++) {
+            for (let i = 0; i < predObjList.length; i++) {
+                let objList: ARTNode[] = predObjList[i].getObjects();
+                for (let j = 0; j < objList.length; j++) {
                     let lang = objList[j].getAdditionalProperty(ResAttribute.LANG);
                     //remove the object if it has a language not in the languages list of the filter
                     if (lang != null && valueFilterLanguages.indexOf(lang) == -1) {
@@ -558,7 +558,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     private sortObjects(predObjList: ARTPredicateObjects[]) {
         //sort by show if rendering is active, uri otherwise
         let attribute: SortAttribute = this.rendering ? SortAttribute.show : SortAttribute.value;
-        for (var i = 0; i < predObjList.length; i++) {
+        for (let i = 0; i < predObjList.length; i++) {
             let objList: ARTNode[] = predObjList[i].getObjects();
             ResourceUtils.sortResources(<ARTResource[]>objList, attribute);
         }
@@ -713,7 +713,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 this.versionList = versions;
                 //update the active version
                 if (this.activeVersion != null) {
-                    for (var i = 0; i < this.versionList.length; i++) {
+                    for (let i = 0; i < this.versionList.length; i++) {
                         if (this.versionList[i].versionId == this.activeVersion.versionId) {
                             this.activeVersion = this.versionList[i];
                         }
