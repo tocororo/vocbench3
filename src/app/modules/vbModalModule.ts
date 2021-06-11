@@ -10,6 +10,7 @@ import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignm
 import { AssistedSearchModal } from '../alignment/resourceAlignment/assistedSearchModal';
 import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assistedSearchResultModal';
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
+import { InferenceExplanationModal } from '../icv/owlConsistencyViolations/inferenceExplanationModal';
 import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
 import { ProjectSelectionModal } from '../project/projectListPanel/projectSelectionModal';
 import { LoadShapesModal } from '../shacl/loadShapesModal';
@@ -97,6 +98,7 @@ import { UserModule } from './userModule';
         EditableNsInput,
         FilePickerModal,
         HelperModal,
+        InferenceExplanationModal,
         InstanceListModal,
         LanguageSelectorModal,
         LexicalEntryListModal,
@@ -168,6 +170,7 @@ import { UserModule } from './userModule';
         DownloadModal,
         FilePickerModal,
         HelperModal,
+        InferenceExplanationModal,
         InstanceListModal,
         LanguageSelectorModal,
         LexicalEntryListModal,

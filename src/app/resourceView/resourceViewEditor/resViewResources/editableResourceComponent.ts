@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { TranslateService } from "@ngx-translate/core";
-import { ModalType } from 'src/app/widget/modal/Modals';
+import { InferenceExplanationModal } from "src/app/icv/owlConsistencyViolations/inferenceExplanationModal";
+import { Triple } from "src/app/models/Shared";
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ShowInterpretation } from "../../../models/ARTResources";
 import { Language, Languages } from "../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../models/ResourceView";
@@ -44,26 +47,28 @@ export class EditableResourceComponent extends AbstractResViewResource {
         }
     }; //stores response.ranges of getRange service
 
-    private isImage: boolean = false;
+    isImage: boolean = false;
 
     private editActionScenario: EditActionScenarioEnum = EditActionScenarioEnum.default;
 
     //actions authorizations
-    private editMenuDisabled: boolean = false;
-    private editAuthorized: boolean = false;
-    private bulkEditAuthorized: boolean = false;
-    private deleteAuthorized: boolean = false;
-    private bulkDeleteAuthorized: boolean = false;
-    private spawnFromLabelAuthorized: boolean = false;
-    private moveLabelAuthorized: boolean = false;
-    private assertAuthorized: boolean = false;
-    private copyLocalesAuthorized: boolean = false;
+    editMenuDisabled: boolean = false;
+    editAuthorized: boolean = false;
+    bulkEditAuthorized: boolean = false;
+    deleteAuthorized: boolean = false;
+    bulkDeleteAuthorized: boolean = false;
+    spawnFromLabelAuthorized: boolean = false;
+    moveLabelAuthorized: boolean = false;
+    assertAuthorized: boolean = false;
+    copyLocalesAuthorized: boolean = false;
 
-    private isInferred: boolean = false;
-    private isXLabelMenuItemAvailable: boolean = false;
-    private isReplaceMenuItemAvailable: boolean = true;
-    private isBulkActionMenuItemAvailable: boolean = true;
+    isInferred: boolean = false;
+    isXLabelMenuItemAvailable: boolean = false;
+    isReplaceMenuItemAvailable: boolean = true;
+    isBulkActionMenuItemAvailable: boolean = true;
     private copyLocalesAction: { available: boolean, locales: Language[] } = { available: false, locales: [] };
+
+    isRepoGDB: boolean = false;
 
     editInProgress: boolean = false;
     bulkEditInProgress: boolean = false;
@@ -76,7 +81,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices, 
         private rvModalService: ResViewModalServices, private dtValidator: DatatypeValidator,
-        private translateService: TranslateService) {
+        private translateService: TranslateService, private modalService: NgbModal) {
         super();
     }
 
@@ -167,6 +172,10 @@ export class EditableResourceComponent extends AbstractResViewResource {
         );
 
         this.isInferred = ResourceUtils.isTripleInferred(this.resource);
+        
+        if (this.isInferred) {
+            this.isRepoGDB = VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("graphdb:");
+        }
 
         //init actions authorization
         let inWorkingGraph: boolean = ResourceUtils.containsNode(this.resource.getTripleGraphs(), VBContext.getActualWorkingGraph());
@@ -604,9 +613,9 @@ export class EditableResourceComponent extends AbstractResViewResource {
         )
     }
 
-    //====== "Assert inferred statement" HANDLER =====
+    //====== "Assert/Explain inferred statement" HANDLER =====
 
-    private assertInferred() {
+    assertInferred() {
         this.resourcesService.addValue(this.subject, this.predicate, this.resource).subscribe(
             stResp => {
                 this.update.emit();
@@ -614,9 +623,21 @@ export class EditableResourceComponent extends AbstractResViewResource {
         )
     }
 
+    explainInferred() {
+        const modalRef: NgbModalRef = this.modalService.open(InferenceExplanationModal, new ModalOptions('lg'));
+        let triple: Triple = {
+            subject: this.subject,
+            predicate: this.predicate,
+            object: this.resource,
+            tripleScope: this.resource.getAdditionalProperty(ResAttribute.TRIPLE_SCOPE),
+            graphs: this.resource.getTripleGraphs()
+        }
+        modalRef.componentInstance.triple = triple;
+    }
+
     //====== "Copy value to other locales" HANDLER =====
 
-    private copyLocales() {
+    copyLocales() {
         this.rvModalService.copyLocale(this.resource, this.copyLocalesAction.locales).then(
             locales => {
                 this.copyLocaleOutput.emit(locales);

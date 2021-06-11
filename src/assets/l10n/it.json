@@ -963,6 +963,7 @@
             "OWL_CONSISTENCY_VIOLATION": {
                 "NAME": "Violazioni della consistenza OWL",
                 "DESCRIPTION": "Triple che determinano inconsistenze in OWL",
+                "DELETE_TRIPLE_WARNING": "Nota: dopo aver cancellato una tripla, al fine di rilevare se le inconsistenze siano state risolte, l'ICV sarà ri-eseguito automaticamente.",
                 "INFERENCE_EXPLANATION": "Spiegazione inferenza"
             }
         },
@@ -1460,6 +1461,7 @@
             "COPY_VALUE_TO_LOCALES": "Copia valore in altri locali",
             "DELETE_ALL_VALUES": "Cancella tutti i valori",
             "EDIT_LITERAL_CONTENT": "Modifica contenuto letterale",
+            "EXPLAIN_INFERRED_STATEMENT": "Spiega informazione inferita",
             "MOVE_XLABEL_TO_CONCEPT": "Assegna xLabel ad un altro concetto",
             "SET_AS_DEPRECATED": "Segna come deprecato",
             "SHOW_HIDE_INFERRED": "Mostra/nascondi informazioni inferite",

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { ExplainableTripleComponent } from '../icv/owlConsistencyViolations/explainableTripleComponent';
 import { ProjectListComponent } from '../project/projectListPanel/projectListComponent';
 import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
@@ -56,6 +57,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ConverterConfiguratorComponent,
         DataSizeRenderer,
         DatatypePickerComponent,
+        ExplainableTripleComponent,
         ExtensionConfiguratorComponent,
         FilePickerComponent,
         HtmlEditorComponent,
@@ -96,6 +98,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ConverterConfiguratorComponent,
         DataSizeRenderer,
         DatatypePickerComponent,
+        ExplainableTripleComponent,
         ExtensionConfiguratorComponent,
         FilePickerComponent,
         HtmlEditorComponent,

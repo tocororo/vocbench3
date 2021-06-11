@@ -36,9 +36,15 @@
             <a *ngIf="copyLocalesAction.available" class="dropdown-item" [ngClass]="{ disabled: !copyLocalesAuthorized }" (click)="copyLocales()">
                 {{'RESOURCE_VIEW.ACTIONS.COPY_VALUE_TO_LOCALES'|translate}}
             </a>
-            <a *ngIf="isInferred && partition != 'lexicalizations'" class="dropdown-item" [ngClass]="{ disabled: !assertAuthorized }" (click)="assertInferred()">
-                {{'RESOURCE_VIEW.ACTIONS.ASSERT_INFERRED_STATEMENT'|translate}}
-            </a>
+            <ng-container *ngIf="isInferred">
+                <a *ngIf="partition != 'lexicalizations'" class="dropdown-item" [ngClass]="{ disabled: !assertAuthorized }" (click)="assertInferred()">
+                    {{'RESOURCE_VIEW.ACTIONS.ASSERT_INFERRED_STATEMENT'|translate}}
+                </a>
+                <a *ngIf="isRepoGDB" class="dropdown-item" (click)="explainInferred()">
+                    {{'RESOURCE_VIEW.ACTIONS.EXPLAIN_INFERRED_STATEMENT'|translate}}
+                </a>
+            </ng-container>
+            
             <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized || isInferred }" (click)="delete()">{{'ACTIONS.DELETE'|translate}}</a>
             <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkDeleteAuthorized }" 
                 (click)="bulkDelete()" [title]="'RESOURCE_VIEW.ACTIONS.BULK_DELETE_INFO'|translate">

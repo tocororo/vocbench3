@@ -95,7 +95,7 @@ export class IcvListComponent {
                 precondition: {
                     model: [OWL.uri],
                     authAction: VBActionsEnum.icvGenericResource,
-                    location: "remote"
+                    graphdb: true
                 }
             },
         ]
@@ -282,7 +282,7 @@ export class IcvListComponent {
         let preconditionOk: boolean = AuthorizationEvaluator.isAuthorized(icvElem.precondition.authAction) &&
             (icvElem.precondition.model == null || icvElem.precondition.model.includes(model)) &&
             (icvElem.precondition.lexicalization == null || icvElem.precondition.lexicalization.includes(lexicalization)) &&
-            (icvElem.precondition.location == null || icvElem.precondition.location == location);
+            (!icvElem.precondition.graphdb || VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("graphdb"));
         icvElem.show = preconditionOk;
     }
 
@@ -300,5 +300,5 @@ interface ICVPrecondition {
     model?: string[]; //restricts the compatibility of the icv with the data model
     lexicalization?: string[]; //restricts the compatibility of the icv with the lexicalization model
     authAction: VBActionsEnum;
-    location?: "remote" | "local";
+    graphdb?: boolean; //requires that the repository is hosted on graphdb (namely the repository backend is graphdb:FreeSail)
 }

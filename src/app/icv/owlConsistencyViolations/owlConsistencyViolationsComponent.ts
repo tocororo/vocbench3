@@ -1,13 +1,9 @@
 import { Component } from "@angular/core";
-import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
-import { ARTResource, ARTURIResource, TripleScopes } from "src/app/models/ARTResources";
-import { Triple, TupleTriple } from "src/app/models/Shared";
+import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { Triple } from "src/app/models/Shared";
 import { ResourcesServices } from "src/app/services/resourcesServices";
-import { ModalOptions } from "src/app/widget/modal/Modals";
-import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { IcvServices } from "../../services/icvServices";
 import { UIUtils } from "../../utils/UIUtils";
-import { InferenceExplanationModal } from "./inferenceExplanationModal";
 
 @Component({
     selector: "owl-consistency-violations",
@@ -18,8 +14,7 @@ export class OwlConsistencyViolationsComponent {
 
     violations: ConsistencyViolation[];
 
-    constructor(private icvService: IcvServices, private resourceService: ResourcesServices,
-        private sharedModals: SharedModalServices, private modalService: NgbModal) { }
+    constructor(private icvService: IcvServices, private resourceService: ResourcesServices) { }
 
     /**
      * Run the check
@@ -32,24 +27,19 @@ export class OwlConsistencyViolationsComponent {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
 
                 for (let violation of stResp) {
-                    let inconsistentTriples: TupleTriple[] = []
+                    let inconsistentTriples: Triple[] = [];
                     for (let t of violation.inconsistentTriples) {
-                        inconsistentTriples.push(TupleTriple.parse(t));
-                    }
-                    let inconsistentTriple2: Triple[] = [];
-                    for (let t of violation.inconsistentTriple2) {
-                        inconsistentTriple2.push(Triple.parse(t));
+                        inconsistentTriples.push(Triple.parse(t));
                     }
                     let cv: ConsistencyViolation = {
                         conditionName: violation.conditionName,
                         inconsistentTriples: inconsistentTriples,
-                        inconsistentTriple2: inconsistentTriple2
                     };
                     this.violations.push(cv);
                 }
 
                 let triplesToAnnotate: Triple[] = [];
-                this.violations.forEach(v => triplesToAnnotate.push(...v.inconsistentTriple2));
+                this.violations.forEach(v => triplesToAnnotate.push(...v.inconsistentTriples));
                 this.annotateTripleResources(triplesToAnnotate);
             }
         );
@@ -90,20 +80,16 @@ export class OwlConsistencyViolationsComponent {
         }
     }
 
-    showExplanation(triple: Triple) {
-        const modalRef: NgbModalRef = this.modalService.open(InferenceExplanationModal, new ModalOptions('lg'));
-        modalRef.componentInstance.triple = triple;
-
-    }
-
-    onResourceClick(resource: ARTResource) {
-        this.sharedModals.openResourceView(resource, true);
+    /**
+     * If a triple is deleted, run again the ICV for detecting again new inconcistency
+     */
+    onDelete() {
+        this.runIcv();
     }
 
 }
 
 class ConsistencyViolation {
     conditionName: string;
-    inconsistentTriples: TupleTriple[];
-    inconsistentTriple2: Triple[];
+    inconsistentTriples: Triple[];
 }

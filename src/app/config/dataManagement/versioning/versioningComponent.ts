@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ProjectServices } from "src/app/services/projectServices";
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { RepositoryLocation, RepositoryStatus, VersionInfo } from '../../../models/History';
 import { VersionsServices } from "../../../services/versionsServices";
@@ -25,7 +26,8 @@ export class VersioningComponent {
 
     isAdmin: boolean; //in order to allow dump to a different location
 
-    constructor(private versionsService: VersionsServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
+    constructor(private versionsService: VersionsServices, private projectService: ProjectServices,
+        private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.isAdmin = VBContext.getLoggedUser().isAdmin();
@@ -51,7 +53,7 @@ export class VersioningComponent {
         );
     }
 
-    private selectVersion(version: VersionInfo) {
+    selectVersion(version: VersionInfo) {
         if (this.selectedVersion == version) {
             this.selectedVersion = null;
         } else {
@@ -66,6 +68,7 @@ export class VersioningComponent {
         } else {
             VBContext.setContextVersion(this.selectedVersion);
         }
+        this.projectService.getContextRepositoryBackend().subscribe(backend => VBContext.getWorkingProjectCtx().setRepoBackend(backend));
         VBContext.setProjectChanged(true); //changing version is equivalent to changing project
     }
 

@@ -769,4 +769,9 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "setSHACLValidationEnabled", params);
     }
 
+    getContextRepositoryBackend(): Observable<string> {
+        let params = {};
+        return this.httpMgr.doGet(this.serviceName, "getContextRepositoryBackend", params);
+    }
+
 }

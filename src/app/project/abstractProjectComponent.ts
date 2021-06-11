@@ -2,6 +2,7 @@ import { Directive } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable, Subscription } from "rxjs";
+import { map } from 'rxjs/operators';
 import { Project, ProjectFacets, ProjectLabelCtx, ProjectViewMode } from "../models/Project";
 import { Multimap } from '../models/Shared';
 import { MetadataServices } from "../services/metadataServices";
@@ -120,6 +121,7 @@ export abstract class AbstractProjectComponent {
         VBContext.setProjectChanged(true);
 
         return forkJoin([
+            this.projectService.getContextRepositoryBackend().pipe(map(backend => VBContext.getWorkingProjectCtx().setRepoBackend(backend))),
             this.vbProp.initProjectUserBindings(VBContext.getWorkingProjectCtx()), //init PUBinding
             this.vbProp.initUserProjectPreferences(VBContext.getWorkingProjectCtx()), //init the project preferences
             this.vbProp.initProjectSettings(VBContext.getWorkingProjectCtx()), //init the project settings

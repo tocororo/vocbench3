@@ -29,12 +29,12 @@ export abstract class ARTNode {
         this.tripleGraphs = graphs;
     }
     addTripleGraphs(graphs: ARTURIResource[]) {
-        for (var i = 0; i < graphs.length; i++) {
+        for (let i = 0; i < graphs.length; i++) {
             this.addTripleGraph(graphs[i]);
         }
     }
     addTripleGraph(graph: ARTURIResource) {
-        for (var i = 0; i < this.tripleGraphs.length; i++) {
+        for (let i = 0; i < this.tripleGraphs.length; i++) {
             if (graph.getURI() == this.tripleGraphs[i].getURI()) {
                 return; //graph is already in graphs array => do not add the graph
             }
@@ -115,12 +115,12 @@ export abstract class ARTResource extends ARTNode {
         this.graphs = graphs;
     }
     addGraphs(graphsToAdd: ARTURIResource[]) {
-        for (var i = 0; i < graphsToAdd.length; i++) {
+        for (let i = 0; i < graphsToAdd.length; i++) {
             this.addGraph(graphsToAdd[i]);
         }
     }
     addGraph(graphToAdd: ARTURIResource) {
-        for (var i = 0; i < this.graphs.length; i++) {
+        for (let i = 0; i < this.graphs.length; i++) {
             if (graphToAdd.getURI() == this.graphs[i].getURI()) {
                 return; //graph is already in graphs array => do not add the graph
             }
@@ -189,7 +189,7 @@ export class ARTURIResource extends ARTResource {
     clone(): ARTURIResource {
         let cloneRes = new ARTURIResource(this.uri, this.show, this.role);
         let props: string[] = Object.getOwnPropertyNames(this);
-        for (var i = 0; i < props.length; i++) {
+        for (let i = 0; i < props.length; i++) {
             cloneRes[props[i]] = this[props[i]];
         }
         return cloneRes;
@@ -227,7 +227,7 @@ export class ARTBNode extends ARTResource {
     clone(): ARTBNode {
         let cloneRes = new ARTBNode(this.id, this.show, this.role);
         let props: string[] = Object.getOwnPropertyNames(this);
-        for (var i = 0; i < props.length; i++) {
+        for (let i = 0; i < props.length; i++) {
             cloneRes[props[i]] = this[props[i]];
         }
         return cloneRes;
@@ -285,7 +285,7 @@ export class ARTLiteral extends ARTNode {
     }
 
     toNT(): string {
-        var nt = JSON.stringify(this.value);
+        let nt = JSON.stringify(this.value);
         if (this.lang != null && this.lang.length > 0) {
             nt += "@" + this.lang;
         } else if (this.datatype != null && this.datatype != "") {
@@ -297,7 +297,7 @@ export class ARTLiteral extends ARTNode {
     clone(): ARTLiteral {
         let cloneRes = new ARTLiteral(this.value);
         let props: string[] = Object.getOwnPropertyNames(this);
-        for (var i = 0; i < props.length; i++) {
+        for (let i = 0; i < props.length; i++) {
             cloneRes[props[i]] = this[props[i]];
         }
         return cloneRes;

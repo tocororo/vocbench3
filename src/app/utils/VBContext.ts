@@ -153,6 +153,7 @@ export class ProjectContext { //TODO move to Project model class?
     private prefixMappings: PrefixMapping[];
     private ctxVersion: VersionInfo; // version used
     private ctxWGraph: ARTResource; // write graph used, if not the projects' main graph
+    private repoBackend: string; //type of backend of the current repo (of the current project or version)
     private puBinging: ProjectUserBinding;
     private preferences: ProjectPreferences;
     private settings: ProjectSettings;
@@ -174,6 +175,9 @@ export class ProjectContext { //TODO move to Project model class?
 
     setContextWGraph(wgraph: ARTResource) { this.ctxWGraph = wgraph; }
     getContextWGraph(): ARTResource { return this.ctxWGraph; }
+
+    setRepoBackend(repoBackend: string) { this.repoBackend = repoBackend; }
+    getRepoBackend(): string { return this.repoBackend; }
     
     setProjectUserBinding(puBinging: ProjectUserBinding) { this.puBinging = puBinging; }
     getProjectUserBinding(): ProjectUserBinding { return this.puBinging; }
