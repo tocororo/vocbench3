@@ -398,6 +398,8 @@
                 "MULTIVALUE_LANG_WARN": "Warning: this field admits multiple values ('Multivalue' option checked). For all these values, the same language will be used."
             },
             "GRAPH": {
+                "GRAPH_PATTERN_EDITOR": "Graph pattern free editor",
+                "GRAPH_PATTERN_EDITOR_INFO": "Here you can write a more complex graph pattern to add to the PEARL graph section",
                 "NODES_RELATIONS": "Nodes relations"
             },
             "NODES": {
