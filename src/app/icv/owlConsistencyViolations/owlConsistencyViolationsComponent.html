@@ -1,6 +1,11 @@
 <div class="card vbox" style="position: relative">
     <div class="card-header">
         <label style="flex: 1;">{{'ICV.STRUCTURAL.OWL_CONSISTENCY_VIOLATION.NAME'|translate}}</label>
+        
+        <button *ngIf="violations" class="btn btn-light btn-xs mr-2" [title]="'COMMONS.RENDERING'|translate" (click)="rendering=!rendering" [ngClass]="{ 'active': rendering }">
+            <span class="fas fa-font"></span>
+        </button>
+
         <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ACTIONS.RUN'|translate}}</button>
     </div>
     <div class="card-body vbox">
@@ -20,7 +25,7 @@
         <div *ngIf="violations" class="vbox">
             <div *ngFor="let v of violations" class="card mt-2">
                 <div class="card-body">
-                    <explainable-triple *ngFor="let t of v.inconsistentTriples" [triple]="t" [deletable]="true" (delete)="onDelete()"></explainable-triple>
+                    <explainable-triple *ngFor="let t of v.inconsistentTriples" [triple]="t" [deletable]="true" [rendering]="rendering" (delete)="onDelete()"></explainable-triple>
                 </div>
             </div>
 

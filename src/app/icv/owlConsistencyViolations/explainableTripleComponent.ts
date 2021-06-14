@@ -15,6 +15,7 @@ import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModa
 export class ExplainableTripleComponent {
     @Input() triple: Triple;
     @Input() deletable: boolean;
+    @Input() rendering: boolean;
     @Input() explainAtInit: boolean;
     @Output() delete: EventEmitter<void> = new EventEmitter();
 
@@ -46,44 +47,8 @@ export class ExplainableTripleComponent {
                         ruleName: stResp.ruleName,
                         premises: premises
                     }
-                    this.annotateTripleResources(premises);
                 }
             );
-        }
-    }
-
-    private annotateTripleResources(triples: Triple[]) {
-        let resources: ARTResource[] = [];
-        triples.forEach(t => {
-            if (t.subject instanceof ARTURIResource && !resources.some(r => r.equals(t.subject))) {
-                resources.push(t.subject);
-            }
-            if (!resources.some(r => r.equals(t.predicate))) {
-                resources.push(t.predicate);
-            }
-            if (t.object instanceof ARTURIResource && !resources.some(r => r.equals(t.object))) {
-                resources.push(t.object);
-            }
-        });
-        if (resources.length > 0) {
-            this.resourceService.getResourcesInfo(resources).subscribe(
-                annotatedRes => {
-                    triples.forEach(t => {
-                        let annotatedSubj = annotatedRes.find(a => a.equals(t.subject));
-                        if (annotatedSubj != null) {
-                            t.subject = annotatedSubj;
-                        }
-                        let annotatedPred = annotatedRes.find(a => a.equals(t.predicate));
-                        if (annotatedPred != null) {
-                            t.predicate = <ARTURIResource>annotatedPred;
-                        }
-                        let annotatedObj = annotatedRes.find(a => a.equals(t.object));
-                        if (annotatedObj != null) {
-                            t.object = annotatedObj;
-                        }
-                    })
-                }
-            )
         }
     }
 

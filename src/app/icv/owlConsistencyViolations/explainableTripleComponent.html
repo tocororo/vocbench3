@@ -1,7 +1,7 @@
 <div class="row p-1" [ngClass]="{ 'inferred' : triple.tripleScope == 'inferred' }" style="position: relative;">
-    <div class="col-sm-4 text-center"><rdf-resource [resource]="triple.subject" class="clickable" (dblclick)="onResourceDblClick(triple.subject)"></rdf-resource></div>
-    <div class="col-sm-4 text-center"><rdf-resource [resource]="triple.predicate" class="clickable" (dblclick)="onResourceDblClick(triple.predicate)"></rdf-resource></div>
-    <div class="col-sm-4 text-center"><rdf-resource [resource]="triple.object" class="clickable" (dblclick)="onResourceDblClick(triple.object)"></rdf-resource></div>
+    <div class="col-sm-4 text-center"><rdf-resource [resource]="triple.subject" class="clickable" [rendering]="rendering" (dblclick)="onResourceDblClick(triple.subject)"></rdf-resource></div>
+    <div class="col-sm-4 text-center"><rdf-resource [resource]="triple.predicate" class="clickable" [rendering]="rendering" (dblclick)="onResourceDblClick(triple.predicate)"></rdf-resource></div>
+    <div class="col-sm-4 text-center"><rdf-resource [resource]="triple.object" class="clickable" [rendering]="rendering" (dblclick)="onResourceDblClick(triple.object)"></rdf-resource></div>
     <button *ngIf="triple.tripleScope == 'inferred'" class="btn btn-light btn-xs" [ngClass]="{ active: showExplanation }" style="position: absolute; right: 2px;"
         (click)="explain(t)" [title]="'RESOURCE_VIEW.ACTIONS.EXPLAIN_INFERRED_STATEMENT'|translate">
         <span class="fas fa-question-circle"></span>
@@ -14,6 +14,6 @@
 
 <div *ngIf="showExplanation && explanation" class="card m-2">
     <div class="card-body">
-        <explainable-triple *ngFor="let t of explanation.premises" [triple]="t" [deletable]="deletable" (delete)="onDelete()"></explainable-triple>
+        <explainable-triple *ngFor="let t of explanation.premises" [triple]="t" [rendering]="rendering" [deletable]="deletable" (delete)="onDelete()"></explainable-triple>
     </div>
 </div>

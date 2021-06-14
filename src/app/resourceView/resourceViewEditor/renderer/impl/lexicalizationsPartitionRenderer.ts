@@ -54,7 +54,6 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     ngOnChanges(changes: SimpleChanges) {
         let renderingLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference;
-        console.log("renderingLangs", renderingLangs);
         super.ngOnChanges(changes);
         //if changes reguard predicateObjectList
         if (changes['predicateObjectList'] && changes['predicateObjectList'].currentValue) {
@@ -82,10 +81,6 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                         } else { //just one of the two languages is among the rendering langs
                             return langBPos - langAPos;
                         }
-                        // if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
-                        // if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
-                        // //same lang code, order alphabetically
-                        // return a.getShow().localeCompare(b.getShow());
                     }
                 );
             }

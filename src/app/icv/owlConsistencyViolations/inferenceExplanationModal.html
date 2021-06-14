@@ -4,8 +4,14 @@
     </div>
     <div class="modal-body scrollableContainer">
         <div class="card">
+            <div class="card-header">
+                <label style="flex: 1;"></label>
+                <button class="btn btn-light btn-xs" [title]="'COMMONS.RENDERING'|translate" (click)="rendering=!rendering" [ngClass]="{ 'active': rendering }">
+                    <span class="fas fa-font"></span>
+                </button>
+            </div>
             <div class="card-body">
-                <explainable-triple [triple]="triple" [explainAtInit]="true"></explainable-triple>
+                <explainable-triple [triple]="triple" [explainAtInit]="true" [rendering]="rendering"></explainable-triple>
             </div>
         </div>
     </div>

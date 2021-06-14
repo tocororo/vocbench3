@@ -10,6 +10,7 @@ import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModa
 })
 export class InferenceExplanationModal {
     @Input() triple: Triple;
+    @Input() rendering: boolean;
 
     constructor(public activeModal: NgbActiveModal, private sharedModals: SharedModalServices) {}
 
