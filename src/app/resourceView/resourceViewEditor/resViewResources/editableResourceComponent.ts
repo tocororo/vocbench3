@@ -174,7 +174,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
         this.isInferred = ResourceUtils.isTripleInferred(this.resource);
         
         if (this.isInferred) {
-            this.isRepoGDB = VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("graphdb:");
+            this.isRepoGDB = VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("graphdb:") || VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("owlim:");
         }
 
         //init actions authorization

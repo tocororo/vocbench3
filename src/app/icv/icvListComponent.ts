@@ -282,7 +282,7 @@ export class IcvListComponent {
         let preconditionOk: boolean = AuthorizationEvaluator.isAuthorized(icvElem.precondition.authAction) &&
             (icvElem.precondition.model == null || icvElem.precondition.model.includes(model)) &&
             (icvElem.precondition.lexicalization == null || icvElem.precondition.lexicalization.includes(lexicalization)) &&
-            (!icvElem.precondition.graphdb || VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("graphdb"));
+            (!icvElem.precondition.graphdb || VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("graphdb") || VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("owlim"));
         icvElem.show = preconditionOk;
     }
 
