@@ -29,19 +29,19 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
     constructor(private modalService: NgbModal) { }
 
     ngOnInit() {
-        this.sessionFeatures = [new SessionFeature("user")]; //available for both C.Range and C.Constructor
+        this.sessionFeatures = [SessionFeature.user]; //available for both C.Range and C.Constructor
 
         //for custom constructor add the feature of stdForm
         if (!this.customRange) {
-            this.stdFormFeatures = [new StandardFormFeature("resource")];
+            this.stdFormFeatures = [StandardFormFeature.resource];
             let lexModel: string = VBContext.getWorkingProject().getLexicalizationModelType();
             if (lexModel == SKOS.uri) {
-                this.stdFormFeatures.push(new StandardFormFeature("labelLang"));
-                this.stdFormFeatures.push(new StandardFormFeature("label"));
+                this.stdFormFeatures.push(StandardFormFeature.labelLang);
+                this.stdFormFeatures.push(StandardFormFeature.label);
             } else if (lexModel == SKOSXL.uri) {
-                this.stdFormFeatures.push(new StandardFormFeature("labelLang"));
-                this.stdFormFeatures.push(new StandardFormFeature("xlabel"));
-                this.stdFormFeatures.push(new StandardFormFeature("lexicalForm"));
+                this.stdFormFeatures.push(StandardFormFeature.labelLang);
+                this.stdFormFeatures.push(StandardFormFeature.xlabel);
+                this.stdFormFeatures.push(StandardFormFeature.lexicalForm);
             }
             this.stdFormFeatures.sort((f1, f2) => f1.featureName.localeCompare(f2.featureName));
         }

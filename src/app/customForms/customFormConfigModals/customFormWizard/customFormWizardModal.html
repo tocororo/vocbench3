@@ -1,22 +1,28 @@
 <div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal" resizable>
     <div class="modal-header" cdkDragHandle>
-        <h3 class="modal-title">
-            {{'CUSTOM_FORMS.WIZARD.CUSTOM_FORM_WIZARD'|translate}}
-        </h3>
+        <div class="d-flex align-items-center">
+            <h3 class="modal-title" style="flex: 1;">
+                {{'CUSTOM_FORMS.WIZARD.CUSTOM_FORM_WIZARD'|translate}}
+            </h3>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-light" (click)="storeStatus()" [title]="'ACTIONS.STORE_STATUS'|translate">
+                    <span class="fas fa-download"></span>
+                </button>
+                <button class="btn btn-light" (click)="loadStatus()" [title]="'ACTIONS.LOAD_STATUS'|translate">
+                    <span class="fas fa-upload"></span>
+                </button>
+            </div>
+        </div>
     </div>
     <div class="modal-body vbox">
 
-        <div class="hbox">
-
+        <div class="hbox" style="flex: 2">
             <div class="vbox" style="flex: 2">
                 <custom-form-wizard-fields-editor [fields]="fields" (changed)="onFieldChange($event)">
                 </custom-form-wizard-fields-editor>
 
                 <custom-form-wizard-nodes-editor class="mt-2" [(ngModel)]="nodes" [fields]="fields" [customRange]="customRange" (ngModelChange)="updatePearl()">
                 </custom-form-wizard-nodes-editor>
-
-                <custom-form-wizard-graph-editor class="mt-2" [(ngModel)]="graphs" [nodes]="nodes" (ngModelChange)="updatePearl()">
-                </custom-form-wizard-graph-editor>
             </div>
 
             <div class="card vbox ml-2">
@@ -28,6 +34,26 @@
                 </div>
             </div>
         </div>
+
+        <div class="hbox mt-2">
+            <custom-form-wizard-graph-editor style="flex: 2;" [(ngModel)]="graphs" [nodes]="nodes" (ngModelChange)="updatePearl()">
+            </custom-form-wizard-graph-editor>
+
+            <div class="card vbox ml-2">
+                <div class="card-header">
+                    <label>
+                        Graph pattern free editor
+                        <span class="fas fa-info-circle" title="Here you can write a more complex graph pattern to add to the PEARL graph section"></span>
+                    </label>
+                </div>
+                <div class="card-body vbox">
+                    <textarea class="form-control vbox" style="resize: none;" [(ngModel)]="graphPattern" (ngModelChange)="updatePearl()"></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        
 
     </div>
     <div class="modal-footer">

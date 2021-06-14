@@ -1,7 +1,9 @@
 import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "src/app/models/ARTResources";
-import { ConverterUtils, RequirementLevels } from "src/app/models/Coda";
+import { ConverterContractDescription, ConverterUtils, RequirementLevels, SignatureDescription } from "src/app/models/Coda";
 import { AnnotationName, CustomForm, FormFieldType } from "src/app/models/CustomForms";
 import { PrefixMapping } from "src/app/models/Metadata";
+import { CODAConverter } from "src/app/models/Sheet2RDF";
+import { Deserializer } from "src/app/utils/Deserializer";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
 
@@ -14,6 +16,8 @@ export class SessionFeature extends FeatureStructure {
         super();
         this.featureName = CustomForm.SESSION_PREFIX + name;
     }
+
+    static readonly user: SessionFeature = new SessionFeature("user");
 }
 
 export class StandardFormFeature extends FeatureStructure {
@@ -21,6 +25,12 @@ export class StandardFormFeature extends FeatureStructure {
         super();
         this.featureName = CustomForm.STD_FORM_PREFIX + name;
     }
+
+    static readonly resource: StandardFormFeature = new StandardFormFeature("resource");
+    static readonly labelLang: StandardFormFeature = new StandardFormFeature("labelLang");
+    static readonly label: StandardFormFeature = new StandardFormFeature("label");
+    static readonly xlabel: StandardFormFeature = new StandardFormFeature("xlabel");
+    static readonly lexicalForm: StandardFormFeature = new StandardFormFeature("lexicalForm");
 }
 
 /**
@@ -65,6 +75,7 @@ export abstract class WizardField extends FeatureStructure {
         }
         return annotations;
     }
+
 }
 
 export class WizardFieldLiteral extends WizardField {
@@ -86,6 +97,7 @@ export class WizardFieldLiteral extends WizardField {
         }
         return annotations;
     }
+
 }
 export class WizardFieldUri extends WizardField {
     type: FormFieldType = FormFieldType.uri;
@@ -121,6 +133,7 @@ export class WizardFieldUri extends WizardField {
         }
         return annotations;
     }
+
 }
 
 export enum ConstraintType {
@@ -168,7 +181,7 @@ export abstract class WizardNode {
     }
 
     updateConverterSerialization(prefixMappings?: PrefixMapping[]) {
-        this.converterSerialization = ConverterUtils.getConverterProjectionOperator(this.converterStatus.converterDesc, this.converterStatus.signatureDesc, 
+        this.converterSerialization = ConverterUtils.getConverterProjectionOperator(this.converterStatus.converterDesc, this.converterStatus.signatureDesc,
             this.converterStatus.converter.type, this.converterStatus.converter.params, this.converterStatus.converter.language, this.converterStatus.converter.datatypeUri,
             prefixMappings);
     }
@@ -206,6 +219,7 @@ export abstract class WizardNode {
         nodeDefSerializations.push(new NodeDefinitionSerialization(nodeDef, nodeAnnotations));
         return nodeDefSerializations;
     }
+
 }
 
 export class WizardNodeEntryPoint extends WizardNode {
@@ -243,15 +257,10 @@ class NodeDefinitionSerialization {
  * GRAPH
  */
 
- export class WizardGraphEntry {
+export class WizardGraphEntry {
     subject: WizardNode;
     predicate: ARTURIResource;
-    // object: WizardNode | ARTNode;
-    object: {
-        type: GraphObjectType,
-        node?: WizardNode,
-        value?: ARTNode
-    }
+    object: WizardGraphEntryObject;
 
     constructor(subject: WizardNode) {
         this.subject = subject;
@@ -307,6 +316,12 @@ class NodeDefinitionSerialization {
     }
 }
 
+interface WizardGraphEntryObject {
+    type: GraphObjectType;
+    node?: WizardNode;
+    value?: ARTNode;
+}
+
 export enum GraphObjectType {
     node = "node",
     value = "value"
@@ -315,4 +330,172 @@ export enum GraphObjectType {
 export interface GraphEntrySerialization {
     triples: string[];
     optional: boolean;
+}
+
+
+export interface WizardStatus {
+    customRange: boolean;
+    fields: WizardField[];
+    nodes: WizardNode[];
+    graphs: WizardGraphEntry[];
+    graphPattern: string;
+}
+
+
+export class WizardStatusUtils {
+
+    static restoreWizardStatus(jsonStatus: any): WizardStatus {
+        let fields: WizardField[] = jsonStatus.fields.map(fJson => this.restoreWizardField(fJson));
+        let nodes: WizardNode[] = jsonStatus.nodes.map(nJson => this.restoreWizardNode(nJson, fields));
+        let graphs: WizardGraphEntry[] = jsonStatus.graphs.map(gJson => this.restoreWizardGraphEntry(gJson, nodes));
+        let status: WizardStatus = {
+            customRange: jsonStatus.customRange,
+            fields: fields,
+            nodes: nodes,
+            graphs: graphs,
+            graphPattern: jsonStatus.graphPattern
+        }
+        return status;
+    }
+
+    //========== FIELDS ==============
+
+    static restoreWizardField(jsonStatus): WizardField {
+        if (jsonStatus.type == "literal") {
+            return WizardStatusUtils.restoreWizardFieldLiteral(jsonStatus)
+        } else { //jsonStatus.type == "uri"
+            return WizardStatusUtils.restoreWizardFieldUri(jsonStatus)
+        }
+    }
+
+    static restoreWizardFieldLiteral(jsonStatus: any): WizardFieldLiteral {
+        let field: WizardFieldLiteral = new WizardFieldLiteral(jsonStatus.label);
+        field.collection = jsonStatus.collection;
+        field.constraint = jsonStatus.constraint;
+        field.datatype = jsonStatus.datatype != null ? Deserializer.createURI(jsonStatus.datatype) : null,
+            field.enumeration = Deserializer.createLiteralArray(jsonStatus.enumeration);
+        field.featureName = jsonStatus.featureName;
+        field.label = jsonStatus.label;
+        field.languageConstraint = jsonStatus.languageConstraint;
+        field.optional = jsonStatus.optional;
+        return field;
+    }
+
+    static restoreWizardFieldUri(jsonStatus: any): WizardFieldUri {
+        let field: WizardFieldUri = new WizardFieldUri(jsonStatus.label);
+        field.collection = jsonStatus.collection;
+        field.constraint = jsonStatus.constraint;
+        field.enumeration = Deserializer.createURIArray(jsonStatus.enumeration);
+        field.featureName = jsonStatus.featureName;
+        field.label = jsonStatus.label;
+        field.optional = jsonStatus.optional;
+        field.ranges = Deserializer.createURIArray(jsonStatus.ranges);
+        field.roles = jsonStatus.roles;
+        return field;
+    }
+
+    //========== NODES ==============
+
+    static restoreWizardNode(jsonStatus: any, fields: WizardField[]): WizardNode {
+        if (jsonStatus.entryPoint) {
+            return WizardStatusUtils.restoreWizardNodeEntryPoint(jsonStatus, fields);
+        } else if (jsonStatus.fromField) {
+            return WizardStatusUtils.restoreWizardNodeFromField(jsonStatus, fields);
+        } else { //jsonStatus.userCreated
+            return WizardStatusUtils.restoreWizardNodeUserCreated(jsonStatus, fields);
+        }
+    }
+
+    static restoreWizardNodeEntryPoint(jsonStatus: any, fields: WizardField[]): WizardNodeEntryPoint {
+        let n: WizardNodeEntryPoint = new WizardNodeEntryPoint();
+        n.paramNode = (jsonStatus.paramNode != null) ? this.restoreWizardNode(jsonStatus.paramNode, fields) : null;
+        n.converterStatus = this.restoreConverterConfigStatus(jsonStatus.converterStatus);
+        n.updateConverterSerialization();
+        if (jsonStatus.feature != null) { //node may use a random converter which doesn't need feature
+            n.feature = this.restoreReferencedFeature(jsonStatus.feature, fields);
+        }
+        return n;
+    }
+
+    static restoreWizardNodeFromField(jsonStatus: any, fields: WizardField[]): WizardNodeFromField {
+        let fieldSeed: WizardField = fields.find(f => f.label == jsonStatus.fieldSeed.label);
+        if (fieldSeed == null) { //in case of field used only as param (e.g. for coda:langString converter), referenced field seed is not included among the fields of the status
+            fieldSeed = this.restoreWizardField(jsonStatus.fieldSeed);
+        }
+        let n: WizardNodeFromField = new WizardNodeFromField(fieldSeed);
+        n.paramNode = (jsonStatus.paramNode != null) ? this.restoreWizardNode(jsonStatus.paramNode, fields) : null;
+        n.converterStatus = this.restoreConverterConfigStatus(jsonStatus.converterStatus);
+        n.updateConverterSerialization();
+        return n;
+    }
+
+    static restoreWizardNodeUserCreated(jsonStatus: any, fields: WizardField[]): WizardNodeUserCreated {
+        let n: WizardNodeUserCreated = new WizardNodeUserCreated(jsonStatus.nodeId);
+        n.paramNode = (jsonStatus.paramNode != null) ? this.restoreWizardNode(jsonStatus.paramNode, fields) : null;
+        n.converterStatus = this.restoreConverterConfigStatus(jsonStatus.converterStatus);
+        n.updateConverterSerialization();
+        if (jsonStatus.feature != null) { //node may use a random converter which doesn't need feature
+            n.feature = this.restoreReferencedFeature(jsonStatus.feature, fields);
+        }
+        return n;
+    }
+
+    static restoreConverterConfigStatus(jsonStatus: any): ConverterConfigStatus {
+        let conv: CODAConverter = new CODAConverter(jsonStatus.converter.type, jsonStatus.converter.contractUri);
+        conv.datatypeCapability = jsonStatus.converter.datatypeCapability;
+        conv.datatypeUri = jsonStatus.converter.datatypeUri;
+        conv.language = jsonStatus.converter.language;
+        conv.params = jsonStatus.converter.params;
+        let c: ConverterConfigStatus = {
+            converter: conv,
+            converterDesc: ConverterContractDescription.parse(jsonStatus.converterDesc),
+            signatureDesc: SignatureDescription.parse(jsonStatus.signatureDesc)
+        }
+        return c;
+    }
+
+    private static restoreReferencedFeature(featureJson: FeatureStructure, fields: WizardField[]): FeatureStructure {
+        let feature: FeatureStructure = fields.find(f => f.featureName == featureJson.featureName);
+        if (feature != null) {
+            return feature;
+        } else { //feature null => it was not a feature related to a field; probably a feature builtin
+            if (SessionFeature.user.featureName == featureJson.featureName) {
+                return SessionFeature.user;
+            } else if (StandardFormFeature.label.featureName == featureJson.featureName) {
+                return StandardFormFeature.label;
+            } else if (StandardFormFeature.labelLang.featureName == featureJson.featureName) {
+                return StandardFormFeature.labelLang;
+            } else if (StandardFormFeature.lexicalForm.featureName == featureJson.featureName) {
+                return StandardFormFeature.lexicalForm;
+            } else if (StandardFormFeature.resource.featureName == featureJson.featureName) {
+                return StandardFormFeature.resource;
+            } else if (StandardFormFeature.xlabel.featureName == featureJson.featureName) {
+                return StandardFormFeature.xlabel;
+            }
+        }
+        return null;
+    }
+
+    //========== GRAPH ==============
+
+    static restoreWizardGraphEntry(jsonStatus: any, nodes: WizardNode[]): WizardGraphEntry {
+        let s: WizardNode = nodes.find(n => n.nodeId == jsonStatus.subject.nodeId);
+        let g: WizardGraphEntry = new WizardGraphEntry(s);
+        g.predicate = new ARTURIResource(jsonStatus.predicate.uri);
+
+        let objType: GraphObjectType = jsonStatus.object.type;
+        let graphObj: WizardGraphEntryObject = {
+            type: objType
+        }
+        if (objType == GraphObjectType.node) {
+            let oNode: WizardNode = nodes.find(n => n.nodeId == jsonStatus.object.node.nodeId);
+            graphObj.node = oNode;
+        } else { //value
+            let oValue: ARTNode = Deserializer.createRDFNode(jsonStatus.object.value);
+            graphObj.value = oValue
+        }
+        g.object = graphObj;
+        return g;
+    }
+
 }

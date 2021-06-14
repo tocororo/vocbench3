@@ -74,6 +74,25 @@ export class ConverterContractDescription {
         }
         return false;
     }
+
+    static parse(descrJson: any): ConverterContractDescription {
+        let signatures: SignatureDescription[] = [];
+        let signaturesArrayObj = descrJson.signatures;
+        for (let j = 0; j < signaturesArrayObj.length; j++) {
+            let signatureObj = signaturesArrayObj[j];
+            signatures.push(SignatureDescription.parse(signatureObj));
+        }
+        //sort signatures according the parameters length
+        signatures.sort((s1: SignatureDescription, s2: SignatureDescription) => {
+            if (s1.getParameters().length < s2.getParameters().length) return -1;
+            if (s1.getParameters().length > s2.getParameters().length) return 1;
+            return 0;
+        });
+        let converter: ConverterContractDescription = new ConverterContractDescription(
+            descrJson.uri, descrJson.name, descrJson.description,
+            descrJson.rdfCapability, descrJson.datatypes, signatures);
+        return converter;
+    }
 }
 
 export class ConverterUtils {
@@ -196,12 +215,12 @@ export class SignatureDescription {
     
     private returnType: string;
     private featurePathRequiredLevel: RequirementLevels; //featurePath requirement level
-    private parameters: ParameterDescription[];
+    private params: ParameterDescription[];
     
     constructor(returnType: string, featurePathRequiredLevel: RequirementLevels, parameters: ParameterDescription[]) {
         this.returnType = returnType;
         this.featurePathRequiredLevel = featurePathRequiredLevel;
-        this.parameters = parameters;
+        this.params = parameters;
     }
     
     public getReturnType(): string {
@@ -211,7 +230,18 @@ export class SignatureDescription {
         return this.featurePathRequiredLevel;
     }
     public getParameters(): ParameterDescription[] {
-        return this.parameters;
+        return this.params;
+    }
+
+    static parse(descr: any): SignatureDescription {
+        let parameters: ParameterDescription[] = [];
+        let parametersArrayObj = descr.params;
+        for (let k = 0; k < parametersArrayObj.length; k++) {
+            let paramObj = parametersArrayObj[k];
+            parameters.push(new ParameterDescription(paramObj.name, paramObj.type, paramObj.description));
+        }
+        let signature = new SignatureDescription(descr.returnType, descr.featurePathRequiredLevel, parameters);
+        return signature;
     }
 }
 

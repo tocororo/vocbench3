@@ -21,33 +21,7 @@ export class CODAServices {
 				let converters: ConverterContractDescription[] = [];
 				for (let i = 0; i < stResp.length; i++) {
 					let converterObj = stResp[i];
-
-					let signatures: SignatureDescription[] = [];
-					let signaturesArrayObj = converterObj.signatures;
-					for (let j = 0; j < signaturesArrayObj.length; j++) {
-						let signatureObj = signaturesArrayObj[j];
-
-						let parameters: ParameterDescription[] = [];
-						let parametersArrayObj = signatureObj.params;
-						for (let k = 0; k < parametersArrayObj.length; k++) {
-							let paramObj = parametersArrayObj[k];
-							parameters.push(new ParameterDescription(paramObj.name, paramObj.type, paramObj.description));
-						}
-
-						signatures.push(new SignatureDescription(signatureObj.returnType, signatureObj.featurePathRequiredLevel, parameters));
-					}
-					//sort signatures according the parameters length
-					signatures.sort((s1: SignatureDescription, s2: SignatureDescription) => {
-						if (s1.getParameters().length < s2.getParameters().length) return -1;
-						if (s1.getParameters().length > s2.getParameters().length) return 1;
-						return 0;
-					});
-
-					let converter: ConverterContractDescription = new ConverterContractDescription(
-						converterObj.uri, converterObj.name, converterObj.description,
-						converterObj.rdfCapability, converterObj.datatypes, signatures);
-
-					converters.push(converter);
+					converters.push(ConverterContractDescription.parse(converterObj));
 				}
 				//sort by name
 				converters.sort(

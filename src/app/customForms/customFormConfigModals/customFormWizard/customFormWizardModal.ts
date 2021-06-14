@@ -10,7 +10,7 @@ import { ModalType } from "src/app/widget/modal/Modals";
 import { ConverterContractDescription, PearlValidationResult, RDFCapabilityType, RequirementLevels, SignatureDescription } from "../../../models/Coda";
 import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { ConstraintType, GraphEntrySerialization, GraphObjectType, LangConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri, WizardGraphEntry, WizardNode, WizardNodeEntryPoint, WizardNodeFromField } from "./CustomFormWizard";
+import { ConstraintType, GraphEntrySerialization, GraphObjectType, LangConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri, WizardGraphEntry, WizardNode, WizardNodeEntryPoint, WizardNodeFromField, WizardStatus, WizardStatusUtils } from "./CustomFormWizard";
 import { WizardFieldChangeEvent, WizardFieldEventType } from "./customFormWizardFieldsEditor";
 
 @Component({
@@ -18,11 +18,6 @@ import { WizardFieldChangeEvent, WizardFieldEventType } from "./customFormWizard
     templateUrl: "./customFormWizardModal.html",
 })
 export class CustomFormWizardModal {
-
-    /*
-    TODO:
-    - distinguere creazione di CustomForm e CustomConstructor (entry point non necessario)
-    */
 
     @Input() formId: string = "FORM_ID";
     @Input() customRange: boolean = true; //tells if the wizard creates a CustomRange or a CustomConstructor
@@ -36,6 +31,7 @@ export class CustomFormWizardModal {
     nodes: WizardNode[];
     //graph
     graphs: WizardGraphEntry[];
+    graphPattern: string = "";
 
     pearl: string;
 
@@ -220,7 +216,13 @@ export class CustomFormWizardModal {
                 indentCount--;
                 this.pearl += this.getIndent(indentCount) + "}\n"; //close optional
             }
-        })
+        });
+
+        let graphPatternRows = this.graphPattern.split("\n");
+        for (let gp of graphPatternRows) {
+            this.pearl += this.getIndent(indentCount) + gp +"\n";
+        }
+
         indentCount--;
         this.pearl += this.getIndent(indentCount) + "}\n"; //close graph
         this.pearl += "}"; //close rule
@@ -353,6 +355,63 @@ export class CustomFormWizardModal {
         return true;
     }
 
+
+    //=== STATUS HANDLER
+
+    storeStatus() {
+        let status: WizardStatus = {
+            customRange: this.customRange,
+            fields: this.fields,
+            nodes: this.nodes,
+            graphs: this.graphs,
+            graphPattern: this.graphPattern
+        }
+        this.downloadStatusFile(JSON.stringify(status, null, 4));
+    }
+
+    private downloadStatusFile(fileContent: string) {
+        let data = new Blob([fileContent], { type: 'text/plain' });
+        let textFile = window.URL.createObjectURL(data);
+        let fileName = "cf_wizard_status.json";
+        this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_STATUS" }, null, textFile, fileName).then(
+            done => { window.URL.revokeObjectURL(textFile); },
+            () => { }
+        );
+    }
+
+    loadStatus() {
+        this.basicModals.selectFile({key: "ACTIONS.LOAD_STATUS"}, null, "application/json").then(
+            file => {
+                let reader = new FileReader();
+                reader.onload = (event) => {
+	                let content: string = <string>event.target.result;
+                    let statusJson = JSON.parse(content);
+                    this.restoreStatus(statusJson)
+                };
+                reader.readAsText(file);
+            }
+        );
+    }
+
+    private restoreStatus(jsonContent: any) {
+        if (jsonContent.customRange == undefined) { //lood at the customRange attribute to determine if the json file is a CF status
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NOT_VALID_STATUS" }, ModalType.warning);
+            return;
+        }
+        let status: WizardStatus = WizardStatusUtils.restoreWizardStatus(jsonContent);
+        if (this.customRange && !status.customRange) {
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NOT_CUSTOM_RANGE_STATUS" }, ModalType.warning);
+            return;
+        } else if (!this.customRange && status.customRange) {
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NOT_CUSTOM_CONSTRUCTOR_STATUS" }, ModalType.warning);
+            return;
+        }
+        this.fields = status.fields;
+        this.nodes = status.nodes;
+        this.graphs = status.graphs;
+        this.graphPattern = status.graphPattern;
+        this.updatePearl();
+    }
 
 
     ok() {
