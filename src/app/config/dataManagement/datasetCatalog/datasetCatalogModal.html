@@ -1,4 +1,4 @@
-<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal" resizable>
     <div class="modal-header" cdkDragHandle>
         <h3 class="modal-title">{{'DATA_MANAGEMENT.DATASET_CATALOG.DATASET_CATALOG'|translate}}</h3>
     </div>
@@ -56,17 +56,17 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="searchDatasetResult?.facetAggregations" class="vbox scrollableContainer" style="flex: initial;">
-                        <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="card card-alt" style="margin-bottom: 4px;">
+                    <div *ngIf="searchDatasetResult?.facetAggregations" class="vbox scrollableContainer">
+                        <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="card card-alt mb-2">
                             <div class="card-header"><label>{{facetAggregation.displayName||facetAggregation.name}}</label></div>
                             <div class="card-body">
-                                <div *ngFor="let bucket of facetAggregation.buckets" style="margin-bottom: 3px;">
-                                    <button class="btn btn-light" [ngClass]="{ active: lastSearchFacets[facetAggregation.name]?.items[bucket.name] }"
-                                        (click)="toggleFacet(facetAggregation, bucket)">
+                                <button *ngFor="let bucket of facetAggregation.buckets" class="btn btn-light btn-block mb-1" style="position: relative"
+                                    [ngClass]="{ active: lastSearchFacets[facetAggregation.name]?.items[bucket.name] }" (click)="toggleFacet(facetAggregation, bucket)">
+                                    <div class="ellipsable">
                                         {{bucket.displayName||bucket.name}}
-                                        <span class="badge badge-secondary">{{bucket.count}}</span>
-                                    </button>
-                                </div>
+                                        <span class="badge badge-secondary" style="position: absolute; right: 3px; top: 5px;">{{bucket.count}}</span>
+                                    </div>
+                                </button>
                             </div>
                         </div>
                     </div>

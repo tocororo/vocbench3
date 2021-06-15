@@ -1,7 +1,8 @@
 import { Component, Input } from "@angular/core";
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
-import { DatasetCatalogModal, DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
+import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
+import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
 import { RDFFormat } from "../../models/RDFFormat";
 import { InputOutputServices } from "../../services/inputOutputServices";
@@ -28,13 +29,12 @@ export class ImportFromDatasetCatalogModal {
     importAllowances: { allowance: TransitiveImportMethodAllowance, showTranslationKey: string }[] = TransitiveImportUtils.importAllowancesList;
     selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
-    constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, public basicModals: BasicModalServices,
+    constructor(public activeModal: NgbActiveModal, public basicModals: BasicModalServices, private sharedModals: SharedModalServices,
         public ontoMgrService: OntoManagerServices, public inOutService: InputOutputServices) {
     }
 
     openDatasetCatalog() {
-        const modalRef: NgbModalRef = this.modalService.open(DatasetCatalogModal, new ModalOptions('xl'));
-        modalRef.result.then(
+        this.sharedModals.datasetCatalog().then(
             (data: DatasetCatalogModalReturnData) => {
                 this.preloadCatalog = data.dataset.id + " - " + data.dataset.getPreferredTitle().getValue() + " @" + data.dataset.getPreferredTitle().getLang();
                 this.ontologyIRI = (data.dataset.ontologyIRI != null) ? data.dataset.ontologyIRI.getURI() : null;

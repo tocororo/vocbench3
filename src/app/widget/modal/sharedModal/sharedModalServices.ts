@@ -209,7 +209,7 @@ export class SharedModalServices {
      * 
      */
     datasetCatalog() {
-        const modalRef: NgbModalRef = this.modalService.open(DatasetCatalogModal, new ModalOptions('xl'));
+        const modalRef: NgbModalRef = this.modalService.open(DatasetCatalogModal, new ModalOptions('full'));
         return modalRef.result;
     }
 
