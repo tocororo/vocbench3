@@ -31,7 +31,7 @@ export class HttpManager {
     constructor(private http: HttpClient, private router: Router, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
         let st_protocol: string = window['st_protocol']; //protocol (http/https)
         let protocol: string = st_protocol ? st_protocol : location.protocol;
-        if (!protocol.endsWith(":")) protocol+":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
+        if (!protocol.endsWith(":")) protocol += ":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
 
         let st_host: string = window['st_host'];
         let host: string = st_host ? st_host : location.hostname;
@@ -45,6 +45,7 @@ export class HttpManager {
         if (st_path != null) {
             this.serverhost += "/" + st_path;
         }
+        console.log("this.serverhost", this.serverhost)
     }
 
     /**

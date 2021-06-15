@@ -399,7 +399,7 @@
             },
             "GRAPH": {
                 "GRAPH_PATTERN_EDITOR": "Graph pattern free editor",
-                "GRAPH_PATTERN_EDITOR_INFO": "Qui è possibile scrivere un graph pattern comlpesso a piacere che viene aggiunto alla sezione graph del PEARL",
+                "GRAPH_PATTERN_EDITOR_INFO": "Here you can write a more complex graph pattern to add to the PEARL graph section",
                 "NODES_RELATIONS": "Nodes relations"
             },
             "NODES": {
@@ -1230,6 +1230,7 @@
             "GIVEN_NAME": "Given name",
             "FAMILY_NAME": "Family name",
             "EMAIL": "E-mail",
+            "EMAIL_ADDRESS": "E-mail address",
             "PASSWORD": "Password",
             "CONFIRM_PASSWORD": "Confirm password",
             "OFFICE_ADDRESS": "Office address",
@@ -1240,7 +1241,8 @@
             "LANGUAGE_PROFICIENCIES": "Language proficiencies",
             "USER_IRI": "User IRI",
             "PERSONAL_URL_AS_IRI": "Use personal URL as user IRI",
-            "REGISTERED": "Registered"
+            "REGISTERED": "Registered",
+            "REGISTRATION_DATE": "Registration date"
         }
     },
     "NOTIFICATIONS": {
@@ -1774,6 +1776,14 @@
         "USER_LOGIN": "User login",
         "LOGIN": "Log in",
         "SIGNUP": "Sign up",
+        "SORTING": {
+            "EMAIL_ASC": "Email address (asc)",
+            "EMAIL_DESC": "Email address (desc)",
+            "NAME_ASC": "Name (asc)",
+            "NAME_DESC": "Name (desc)",
+            "REGISTRATION_DATE_ASC": "Registration date (asc)",
+            "REGISTRATION_DATE_DESC": "Registration date (desc)"
+        },
         "PASSWORD": {
             "CHANGE_PASSWORD": "Change password",
             "FORGOT_PASSWORD": "Forgot password",
@@ -2014,6 +2024,7 @@
         "SHOW": "Show",
         "SHOW_ALL": "Show all",
         "SHOW_FILTERS": "Show filters",
+        "SORT": "Sort",
         "START": "Start",
         "STORE": "Store",
         "SUBMIT": "Submit",

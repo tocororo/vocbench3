@@ -1230,6 +1230,7 @@
             "GIVEN_NAME": "Given name",
             "FAMILY_NAME": "Family name",
             "EMAIL": "E-mail",
+            "EMAIL_ADDRESS": "E-mail address",
             "PASSWORD": "Password",
             "CONFIRM_PASSWORD": "Confirm password",
             "OFFICE_ADDRESS": "Office address",
@@ -1240,7 +1241,8 @@
             "LANGUAGE_PROFICIENCIES": "Language proficiencies",
             "USER_IRI": "User IRI",
             "PERSONAL_URL_AS_IRI": "Use personal URL as user IRI",
-            "REGISTERED": "Registered"
+            "REGISTERED": "Registered",
+            "REGISTRATION_DATE": "Registration date"
         }
     },
     "NOTIFICATIONS": {
@@ -1774,6 +1776,14 @@
         "USER_LOGIN": "User login",
         "LOGIN": "Log in",
         "SIGNUP": "Sign up",
+        "SORTING": {
+            "EMAIL_ASC": "Email address (asc)",
+            "EMAIL_DESC": "Email address (desc)",
+            "NAME_ASC": "Name (asc)",
+            "NAME_DESC": "Name (desc)",
+            "REGISTRATION_DATE_ASC": "Registration date (asc)",
+            "REGISTRATION_DATE_DESC": "Registration date (desc)"
+        },
         "PASSWORD": {
             "CHANGE_PASSWORD": "Change password",
             "FORGOT_PASSWORD": "Forgot password",
@@ -2014,6 +2024,7 @@
         "SHOW": "Show",
         "SHOW_ALL": "Show all",
         "SHOW_FILTERS": "Show filters",
+        "SORT": "Sort",
         "START": "Start",
         "STORE": "Store",
         "SUBMIT": "Submit",
@@ -2260,7 +2271,7 @@
         "RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH": "Resource {{resource}} is not reachable in the current tree since the path to reach it contains a deprecated node. Enable the show of deprecated resources and repeat the search",
         "RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM": "Resource {{resource}} is not reachable in the current tree. Do you want to open its ResourceView in a modal dialog?",
         "RESOURCE_URI_COPIED_IN_CLIPBOARD": "Resource URI copied in clipboard!",
-        "RESTART_LOCAL_REPO_REQUIRED": "In order to make this change effective it may be necessary to restart the project local repository by restarting the whole triple store.",
+        "RESTART_REPO_LOCAL_REQUIRED": "In order to make this change effective it may be necessary to restart the repository of the local project by restarting the whole triple store.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "You are overriding the current template by restoring the default configuration. Are you sure?",
         "REVOKING_ADMIN_CONFIRM": "You are revoking the administrator authority to {{user}}. Are you sure?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Save change of baseURI? (Attention, baseURI refactoring could be a long process)",

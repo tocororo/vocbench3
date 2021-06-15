@@ -399,7 +399,7 @@
             },
             "GRAPH": {
                 "GRAPH_PATTERN_EDITOR": "Graph pattern free editor",
-                "GRAPH_PATTERN_EDITOR_INFO": "Here you can write a more complex graph pattern to add to the PEARL graph section",
+                "GRAPH_PATTERN_EDITOR_INFO": "Qui è possibile scrivere un graph pattern comlpesso a piacere che viene aggiunto alla sezione graph del PEARL",
                 "NODES_RELATIONS": "Relazioni tra nodi"
             },
             "NODES": {
@@ -1230,6 +1230,7 @@
             "GIVEN_NAME": "Nome",
             "FAMILY_NAME": "Cognome",
             "EMAIL": "E-mail",
+            "EMAIL_ADDRESS": "Indirizzo e-mail",
             "PASSWORD": "Password",
             "CONFIRM_PASSWORD": "Conferma password",
             "OFFICE_ADDRESS": "Indirizzo ufficio",
@@ -1240,7 +1241,8 @@
             "LANGUAGE_PROFICIENCIES": "Competenze linguistiche",
             "USER_IRI": "IRI utente",
             "PERSONAL_URL_AS_IRI": "Usa l'URL personale come IRI utente",
-            "REGISTERED": "Registrato"
+            "REGISTERED": "Registrato",
+            "REGISTRATION_DATE": "Data di registrazione"
         }
     },
     "NOTIFICATIONS": {
@@ -1774,6 +1776,14 @@
         "USER_LOGIN": "User login",
         "LOGIN": "Log in",
         "SIGNUP": "Registrati",
+        "SORTING": {
+            "EMAIL_ASC": "Indirizzo email (asc)",
+            "EMAIL_DESC": "Indirizzo email (desc)",
+            "NAME_ASC": "Nome (asc)",
+            "NAME_DESC": "Nome (desc)",
+            "REGISTRATION_DATE_ASC": "Data di registrazione (asc)",
+            "REGISTRATION_DATE_DESC": "Data di registrazione (desc)"
+        },
         "PASSWORD": {
             "CHANGE_PASSWORD": "Cambia password",
             "FORGOT_PASSWORD": "Password dimenticata?",
@@ -2014,6 +2024,7 @@
         "SHOW": "Mostra",
         "SHOW_ALL": "Mostra tutto",
         "SHOW_FILTERS": "Mostra filtri",
+        "SORT": "Ordina",
         "START": "Inizia",
         "STORE": "Salva",
         "SUBMIT": "Invia",

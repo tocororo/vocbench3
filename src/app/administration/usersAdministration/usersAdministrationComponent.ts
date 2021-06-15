@@ -28,6 +28,16 @@ export class UsersAdministrationComponent {
     users: User[];
     selectedUser: User;
 
+    userSort: UserSortOpt[] = [
+        { value: UserSort.email_asc, translationKey: "USER.SORTING.EMAIL_ASC", icon: "sort-alpha-down" },
+        { value: UserSort.email_desc, translationKey: "USER.SORTING.EMAIL_DESC", icon: "sort-alpha-up" },
+        { value: UserSort.name_asc, translationKey: "USER.SORTING.NAME_ASC", icon: "sort-alpha-down" },
+        { value: UserSort.name_desc, translationKey: "USER.SORTING.NAME_DESC", icon: "sort-alpha-up" },
+        { value: UserSort.registered_asc, translationKey: "USER.SORTING.REGISTRATION_DATE_ASC", icon: "sort-numeric-down" },
+        { value: UserSort.registered_desc, translationKey: "USER.SORTING.REGISTRATION_DATE_DESC", icon: "sort-numeric-up" },
+    ];
+    selectedUserSort: UserSort = UserSort.name_asc;
+
     showActive: boolean = true;
     showInactive: boolean = true;
     showNew: boolean = true;
@@ -61,6 +71,23 @@ export class UsersAdministrationComponent {
                 this.users = users;
             }
         );
+    }
+
+    sort(sortBy: UserSort) {
+        this.selectedUserSort = sortBy;
+        if (sortBy == UserSort.name_asc) {
+            this.users.sort((u1, u2) => u1.getGivenName().localeCompare(u2.getGivenName()));
+        } else if (sortBy == UserSort.name_desc) {
+            this.users.sort((u1, u2) => u2.getGivenName().localeCompare(u1.getGivenName()));
+        } else if (sortBy == UserSort.email_asc) {
+            this.users.sort((u1, u2) => u1.getEmail().localeCompare(u2.getEmail()));
+        } else if (sortBy == UserSort.email_desc) {
+            this.users.sort((u1, u2) => u2.getGivenName().localeCompare(u1.getGivenName()));
+        } else if (sortBy == UserSort.registered_asc) {
+            this.users.sort((u1, u2) => u1.getRegistrationDate() > u2.getRegistrationDate() ? 1 : -1);
+        } else if (sortBy == UserSort.registered_desc) {
+            this.users.sort((u1, u2) => u1.getRegistrationDate() > u2.getRegistrationDate() ? -1 : 1);
+        }
     }
 
     selectUser(user: User) {
@@ -146,4 +173,19 @@ export class UsersAdministrationComponent {
         )
     }
 
+}
+
+interface UserSortOpt {
+    value: UserSort;
+    translationKey: string;
+    icon: string;
+}
+
+enum UserSort {
+    name_asc = "name_asc",
+    name_desc = "name_desc",
+    email_asc = "email_asc",
+    email_desc = "email_desc",
+    registered_asc = "registered_asc",
+    registered_desc = "registered_desc",
 }
