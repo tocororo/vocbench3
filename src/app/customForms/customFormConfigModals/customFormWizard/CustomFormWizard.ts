@@ -224,14 +224,14 @@ export abstract class WizardNode {
 
 export class WizardNodeEntryPoint extends WizardNode {
     constructor() {
-        super("entryPoint_node");
+        super("entryPoint");
         this.entryPoint = true;
     }
 }
 export class WizardNodeFromField extends WizardNode {
     fieldSeed: WizardField; //field which generated this node (useful to keep trace of field->node bound in the wizard)
     constructor(field: WizardField) {
-        super(field.label + "_node");
+        super(field.label);
         this.feature = field;
         this.fieldSeed = field;
         this.fromField = true;
