@@ -458,7 +458,8 @@ class MailSettings {
         host: string,
         port: number,
         sslEnabled: boolean,
-        starttlsEnabled: boolean
+        starttlsEnabled: boolean,
+        sslProtocols: string,
     };
     from: {
         address: string,

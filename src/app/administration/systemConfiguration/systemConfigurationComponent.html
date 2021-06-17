@@ -103,6 +103,17 @@
                                     </select>
                                 </td>
                             </tr>
+                            <tr *ngIf="emailSettings.smtp.sslEnabled">
+                                <td>
+                                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.SSL_PROTOCOLS_INFO'|translate"></span>
+                                </td>
+                                <td nowrap>
+                                    <label>{{'ADMINISTRATION.SYSTEM.EMAIL.SSL_PROTOCOLS'|translate}}:</label>
+                                </td>
+                                <td>
+                                    <input class="form-control" [(ngModel)]="emailSettings.smtp.sslProtocols">
+                                </td>
+                            </tr>
                             <tr>
                                 <td>
                                     <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.AUTHENTICATION_INFO'|translate"></span>

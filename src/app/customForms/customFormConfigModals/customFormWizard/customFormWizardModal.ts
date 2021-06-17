@@ -218,9 +218,11 @@ export class CustomFormWizardModal {
             }
         });
 
-        let graphPatternRows = this.graphPattern.split("\n");
-        for (let gp of graphPatternRows) {
-            this.pearl += this.getIndent(indentCount) + gp +"\n";
+        if (this.graphPattern.trim() != "") {
+            let graphPatternRows = this.graphPattern.split("\n");
+            for (let gp of graphPatternRows) {
+                this.pearl += this.getIndent(indentCount) + gp +"\n";
+            }
         }
 
         indentCount--;

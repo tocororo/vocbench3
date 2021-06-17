@@ -82,7 +82,9 @@
                 "MAIL_FROM": "Email address used to send administration emails",
                 "MAIL_PASSWORD": "Password of the above email address",
                 "MAIL_ALIAS": "Alias name shown in the administration emails",
-                "EMAIL_CONFIG_TEST": "Email configuration test"
+                "EMAIL_CONFIG_TEST": "Email configuration test",
+                "SSL_PROTOCOLS": "SSL protocols",
+                "SSL_PROTOCOLS_INFO": "Specifies the SSL protocols that will be enabled for SSL connections"
             },
             "NOTIFICATIONS": {
                 "NOTIFICATION_SCHEDULER": "Notification scheduler",
@@ -386,7 +388,9 @@
             "PEARL_PREVIEW": "Pearl Preview",
             "FIELDS": {
                 "CONSTRAINT": "Constraint",
+                "FIELD": "Field",
                 "FIELD_DETAILS": "Field details",
+                "FIELD_INFO": "This determines also the ID of the 'userPrompt/' feature used in the PEARL",
                 "FIELD_LITERAL": "Literal field",
                 "FIELD_URI": "URI field",
                 "FORM_FIELDS": "Form fields",
