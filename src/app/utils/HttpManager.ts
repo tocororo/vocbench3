@@ -45,7 +45,6 @@ export class HttpManager {
         if (st_path != null) {
             this.serverhost += "/" + st_path;
         }
-        console.log("this.serverhost", this.serverhost)
     }
 
     /**

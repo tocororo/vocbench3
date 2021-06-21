@@ -1,13 +1,16 @@
-import { Component } from "@angular/core";
+import { Component, HostListener } from "@angular/core";
 import { TranslateService } from '@ngx-translate/core';
 import { Project, ProjectLabelCtx } from "./models/Project";
+import { OperationMetadata } from "./models/Undo";
 import { EDOAL, OntoLex, OWL, RDFS, SKOS } from "./models/Vocabulary";
+import { UndoServices } from "./services/undoServices";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
 import { Cookie } from './utils/Cookie';
 import { VBActionsEnum } from "./utils/VBActions";
 import { VBContext } from "./utils/VBContext";
 import { VBEventHandler } from './utils/VBEventHandler';
 import { VBProperties } from "./utils/VBProperties";
+import { ToastService } from "./widget/toast/toastService";
 
 @Component({
     selector: "app",
@@ -15,13 +18,21 @@ import { VBProperties } from "./utils/VBProperties";
 })
 export class AppComponent {
 
+    @HostListener('window:keydown', ['$event'])
+    onKeyDown(e: KeyboardEvent) {
+        if (e.ctrlKey && e.key == "z") {
+            this.undoHandler();
+        }
+    }
+
     appVersion = require('../../package.json').version;
 
     navbarCollapsed: boolean;
 
     navbarTheme: number = 0;
 
-    constructor(private vbProp: VBProperties, private eventHandler: VBEventHandler, translate: TranslateService) {
+    constructor(private vbProp: VBProperties, private undoService: UndoServices, private toastService: ToastService,
+        private eventHandler: VBEventHandler, translate: TranslateService) {
         this.eventHandler.themeChangedEvent.subscribe((theme: number) => {
             if (theme != null) {
                 this.navbarTheme = theme;
@@ -31,7 +42,7 @@ export class AppComponent {
         });
 
         //set the available factory-provided l10n languages
-        translate.addLangs(['en', 'it']);
+        translate.addLangs(['de', 'en', 'it']);
         //add additional supported l10n languages
         let additionalLangs: string[] = window['additional_l10n_langs'];
         if (additionalLangs && additionalLangs.length > 0) {
@@ -108,7 +119,7 @@ export class AppComponent {
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlExecuteUpdate)
         );
     }
-    
+
     isDataAuthorized() {
         let modelType: string = VBContext.getWorkingProject().getModelType();
         if (modelType == EDOAL.uri) {
@@ -146,13 +157,13 @@ export class AppComponent {
             VBContext.getContextVersion() == null
         );
     }
-    
+
     isValidationAuthorized() {
         //all user are allowed to see Validation page, further auth checks (is user a validator?) are performed in the Validation page
         return VBContext.getContextVersion() == null;
-        
+
     }
-    
+
     isCustomFormAuthorized() {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormGetFormMappings) &&
@@ -160,7 +171,7 @@ export class AppComponent {
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormGetForms)
         );
     }
-    
+
     isAlignValidationAuthorized() {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentLoadAlignment) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentApplyAlignment);
@@ -189,8 +200,29 @@ export class AppComponent {
     isSkosDiffingAuthorized() {
         return (
             VBContext.getWorkingProject().getModelType() == SKOS.uri
-            //TODO add auth check
         );
+    }
+
+    private undoHandler() {
+        let project = VBContext.getWorkingProject();
+
+        //if no project is accessed do nothing
+        if (project == null) return;
+
+        //if accessed project has neither history or validation enabled, do nothing
+        if (!project.isHistoryEnabled() && !project.isValidationEnabled()) return;
+
+        //perform UNDO only if active element is not a textarea or input (with type text)
+        let activeEl: Element = document.activeElement;
+        let tagName: string = activeEl.tagName.toLowerCase()
+        if (tagName != "textarea" && (tagName != "input" || activeEl.getAttribute("type") != "text")) {
+            this.undoService.undo().subscribe(
+                (metadata: OperationMetadata) => {
+                    this.toastService.show({ title: "Operation undone", message: "You have undone the current operation: " + metadata }, { toastClass: "bg-warning", delay: 3000 });
+                }
+            );
+        }
+
     }
 
 }

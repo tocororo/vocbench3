@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { ExplainableTripleComponent } from '../icv/owlConsistencyViolations/explainableTripleComponent';
 import { ProjectListComponent } from '../project/projectListPanel/projectListComponent';
@@ -42,6 +42,8 @@ import { SettingSetRendererComponent } from '../widget/settingsRenderer/settingS
 import { SettingsRendererComponent } from '../widget/settingsRenderer/settingsRendererComponent';
 import { SettingsRendererPanelComponent } from '../widget/settingsRenderer/settingsRendererPanelComponent';
 import { SettingValueRendererComponent } from '../widget/settingsRenderer/settingValueRendererComponent';
+import { ToastsContainer } from '../widget/toast/toastContainer';
+import { ToastService } from '../widget/toast/toastService';
 import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLiteralInputComponent';
 
 
@@ -51,6 +53,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         CommonModule,
         FormsModule,
         NgbDropdownModule,
+        NgbToastModule,
         TranslateModule,
     ],
     declarations: [
@@ -89,6 +92,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         SettingsRendererComponent,
         NestedSettingSetRendererComponent,
         SettingsRendererPanelComponent,
+        ToastsContainer,
         TypedLiteralInputComponent,
         TurtleEditorComponent,
         ValuePickerComponent,
@@ -127,11 +131,14 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         SettingSetRendererComponent,
         SettingsRendererComponent,
         SettingsRendererPanelComponent,
+        ToastsContainer,
         TurtleEditorComponent,
         TypedLiteralInputComponent,
         ValuePickerComponent,
         YasguiComponent,
     ],
-    providers: []
+    providers: [
+        ToastService,
+    ]
 })
 export class SharedModule { }

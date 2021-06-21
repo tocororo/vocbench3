@@ -52,6 +52,7 @@ import { UsersGroupsServices } from "../services/usersGroupsServices";
 import { ValidationServices } from "../services/validationServices";
 import { VersionsServices } from "../services/versionsServices";
 import { LexicographerViewServices } from '../services/lexicographerViewServices';
+import { UndoServices } from '../services/undoServices';
 
 @NgModule({
     imports: [HttpClientModule],
@@ -106,6 +107,7 @@ import { LexicographerViewServices } from '../services/lexicographerViewServices
         SkosxlServices,
         SparqlServices,
         StMetadataRegistry,
+        UndoServices,
         UserServices,
         UsersGroupsServices,
         ValidationServices,
