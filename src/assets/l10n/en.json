@@ -196,8 +196,8 @@
                 "LANGS": {
                     "ASSIGNED_LANGUAGES": "Assigned Languages",
                     "AVAILABLE_LANGUAGES": "Available Languages",
-                    "LANG_PROFICIENCIES_INFO": "This language is in the language proficiencies of the selected user",
-                    "LANGUAGE_ADMIN_INFO": "For administrator user, no language assigned implicitly means all project languages"
+                    "LANGUAGE_ADMIN_INFO": "For administrator user, no language assigned implicitly means all project languages",
+                    "LANG_PROFICIENCIES_INFO": "This language is in the language proficiencies of the selected user"
                 },
                 "PROJ_USER_SETTINGS": "Project-User settings",
                 "ROLES": {
@@ -286,8 +286,8 @@
             "ST_DATA_FOLDER_INFO": "Provide the SemanticTurkey data folder path. This can be absolute or relative to the SemanticTurkey installation folder."
         },
         "USERS": {
-            "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has autmoatically access to all projects",
             "ADMINISTRATOR": "Administrator",
+            "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has autmoatically access to all projects",
             "ASSIGNED_TO_PROJECTS": "Assigned to projects",
             "FORCE_PASSWORD_WARNING": "This procedure will force the change of {{userShow}}'s password.<br>Note: A <i>forgot password</i> procedure already exists (available in the login form). It is recommended to let the user update its own password through that procedure. Use this procedure only if strictly necessary.",
             "TEMPLATE_INFO": "Here you can assign a ResourceView template to the user. This template describes which ResourceView partitions are visible by default.<br>You can also load an already existing template, or decide to save the template you defined, through the toolbar in panel header.",
@@ -667,6 +667,7 @@
             "AUTHORIZATION": "Authorization",
             "MANDATORY_PARAMETER": "Mandatory parameter",
             "OPTIONAL_PARAMETER": "Optional parameter",
+            "PARAMETERS": "Parameters",
             "PARAM_HELPER": {
                 "ALLOWED_PARAM_TYPES_ARE": "The allowed parameter types are",
                 "ALLOWED_RETURN_TYPE": "The allowed return type depends on the actual SPARQL operation",
@@ -686,7 +687,6 @@
                 ],
                 "T_TYPE_OTP1": "might be any of the above accepted parameter types (in this case the SELECT must return one variable)"
             },
-            "PARAMETERS": "Parameters",
             "RETURNS": "Returns"
         },
         "SERVICE": {
@@ -701,11 +701,11 @@
             "ADD_ALL_CONCEPTS_TO_SCHEME": "Add all concepts to the selected scheme",
             "ADD_BROADER": "Add broader",
             "ADD_CLASS_AXIOM": "Add class axiom",
-            "ADD_CONCEPT_TO_SCHEME": "Add concepts to scheme",
             "ADD_CONCEPTUALIZATION": "Add conceptualization",
+            "ADD_CONCEPT_TO_SCHEME": "Add concepts to scheme",
+            "ADD_DEFINITION": "Add definition",
             "ADD_DEF_TO_LEX_CONCEPT": "Add definition to lexical concept",
             "ADD_DEF_TO_LEX_SENSE": "Add definition to lexical sense",
-            "ADD_DEFINITION": "Add definition",
             "ADD_DENOTATION": "Add denotation",
             "ADD_DISJOINT_PROPERTY": "Add disjoint property",
             "ADD_DOMAIN": "Add domain",
@@ -716,11 +716,11 @@
             "ADD_IMPORT": "Add import",
             "ADD_INVERSE_PROPERTY": "Add inverse property",
             "ADD_LABEL_RELATION": "Add label relation",
+            "ADD_LEXICALIZATION": "Add lexicalization",
+            "ADD_LEXICAL_SENSE": "Add lexical sense",
             "ADD_LEX_CONCEPT": "Add lexical concept",
             "ADD_LEX_ENTRY": "Add Lexical Entry",
             "ADD_LEX_FORM": "Add lexical form",
-            "ADD_LEXICAL_SENSE": "Add lexical sense",
-            "ADD_LEXICALIZATION": "Add lexicalization",
             "ADD_MANCHESTER_EXPRESSION": "Add Manchester expression",
             "ADD_MEMBER": "Add member",
             "ADD_MORPHOSYNTACTIC_PROP": "Add morphosyntactic property",
@@ -748,8 +748,8 @@
             "CREATE_CONSTITUENTS_LIST": "Create constituents list",
             "CREATE_DATATYPE": "Create datatype",
             "CREATE_INSTANCE": "Create instance",
-            "CREATE_LEX_ENTRY": "Create lexical entry",
             "CREATE_LEXICON": "Create lexicon",
+            "CREATE_LEX_ENTRY": "Create lexical entry",
             "CREATE_LITERAL": "Create literal",
             "CREATE_NARROWER_CONCEPT": "Create narrower concept",
             "CREATE_NESTED_COLLECTION": "Create nested collection",
@@ -765,8 +765,8 @@
             "DELETE_CONSTITUENT": "Delete constituent",
             "DELETE_DATATYPE": "Delete datatype",
             "DELETE_INSTANCE": "Delete instance",
-            "DELETE_LEX_ENTRY": "Delete lexical entry",
             "DELETE_LEXICON": "Delete lexicon",
+            "DELETE_LEX_ENTRY": "Delete lexical entry",
             "DELETE_PROPERTY": "Delete property",
             "DELETE_SCHEME": "Delete scheme",
             "DELETE_TRANSLATION_SET": "Delete TranslationSet",
@@ -779,10 +779,10 @@
             "SELECT_COLLECTION": "Select collection",
             "SELECT_CONCEPT": "Select concept",
             "SELECT_INSTANCE": "Select instance",
+            "SELECT_LEXICALIZATION_PROPERTY": "Select lexicalization property",
             "SELECT_LEXICAL_CONCEPT": "Select Lexical Concept",
             "SELECT_LEXICAL_ENTRY": "Select Lexical Entry",
             "SELECT_LEXICAL_SENSE": "Select Lexical Sense",
-            "SELECT_LEXICALIZATION_PROPERTY": "Select lexicalization property",
             "SELECT_LEXICON": "Select Lexicon",
             "SELECT_PROPERTY": "Select property",
             "SELECT_RANGE": "Select range",
@@ -880,9 +880,9 @@
             "INSTANCE": "Instance",
             "INSTANCES": "Instances",
             "SETTINGS": {
-                "INSTANCE_LIST_SETTINGS": "Instance list settings",
                 "INSTANCES_LIMIT": "Instances limit",
-                "INSTANCES_LIMIT_INFO": "Sets the maximum amount of instances visible in the list. This setting prevents the initialization of a list that might cause performance issues"
+                "INSTANCES_LIMIT_INFO": "Sets the maximum amount of instances visible in the list. This setting prevents the initialization of a list that might cause performance issues",
+                "INSTANCE_LIST_SETTINGS": "Instance list settings"
             },
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "This instance list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
@@ -893,6 +893,10 @@
                 "SWITCH_MODE": "switch to 'Search based' visualization mode"
             },
             "USE_SEARCH_MSG": "Please use the search field to retrieve instances"
+        },
+        "LEXICON": {
+            "LEXICON": "Lexicon",
+            "LEXICONS": "Lexicons"
         },
         "LEX_ENTRY": {
             "LEX_ENTRIES": "Lex.Entries",
@@ -917,10 +921,6 @@
             },
             "USE_SEARCH_MSG": "Please use the search field to retrieve lexical entries"
         },
-        "LEXICON": {
-            "LEXICON": "Lexicon",
-            "LEXICONS": "Lexicons"
-        },
         "PROPERTY": {
             "PROPERTIES": "Properties",
             "PROPERTY": "Property"
@@ -940,10 +940,10 @@
         },
         "DATASET_CATALOG": {
             "CATALOG": "Catalog",
-            "DATA_DUMPS": "Data dumps",
             "DATASET_CATALOG": "Dataset Catalog",
             "DATASET_DESCRIPTION": "Dataset description",
             "DATASET_PAGE": "Dataset page",
+            "DATA_DUMPS": "Data dumps",
             "SEARCH_RESULTS": "Search results",
             "TOT_RESULTS": "results",
             "URI_PREFIX": "URI prefix"
@@ -971,18 +971,18 @@
             "MIGRATE_INFO": "This operation will move the content of the default graph to a graph named after the base URI of the current project. It will also clear the default graph and preserve the information already contained in the destination graph.",
             "REFACTOR": "Refactor",
             "REIFY_NOTES": "Reify SKOS notes",
-            "SKOS_TO_SKOSXL": "SKOS to SKOS-XL",
-            "SKOS_TO_SKOSXL_INFO": "This refactor operation transforms all the SKOS labels and notes into reified SKOS-XL labels and notes.",
             "SKOSXL_TO_SKOS": "SKOS-XL to SKOS",
-            "SKOSXL_TO_SKOS_INFO": "This refactor operation transforms all the reified SKOS-XL labels and notes into flattened SKOS labels and notes. Note: this is NOT a loss-less operation, all the information related to the SKOS-XL labels and notes will be lost."
+            "SKOSXL_TO_SKOS_INFO": "This refactor operation transforms all the reified SKOS-XL labels and notes into flattened SKOS labels and notes. Note: this is NOT a loss-less operation, all the information related to the SKOS-XL labels and notes will be lost.",
+            "SKOS_TO_SKOSXL": "SKOS to SKOS-XL",
+            "SKOS_TO_SKOSXL_INFO": "This refactor operation transforms all the SKOS labels and notes into reified SKOS-XL labels and notes."
         },
         "VERSIONING": {
             "DATETIME": "Datetime",
             "DUMP": "Dump",
             "REPO_CONFIGURATION": "Repo Configuration",
             "REPO_LOCATION": "Repo Location",
-            "VERSION_ID": "Version ID",
-            "VERSIONS": "Versions"
+            "VERSIONS": "Versions",
+            "VERSION_ID": "Version ID"
         }
     },
     "EDOAL": {
@@ -1002,8 +1002,8 @@
             "EXPAND_SUB_RESOURCES": "Expand sub-resources",
             "EXPAND_SUPER_RESOURCES": "Expand super-resources",
             "EXPORT_GRAPH_SNAPSHOT": "Export a snapshot of the graph (.svg)",
-            "FIX_NODE_POSITION": "Fix node position",
             "FIX_NODES_POSITION": "Fix nodes position",
+            "FIX_NODE_POSITION": "Fix node position",
             "HIDE_GENERIC_LINKS": "Hide generic relation links",
             "SHOW_DATA_ORIENTED_GRAPH": "Show data-oriented graph"
         },
@@ -1040,19 +1040,19 @@
             "COMMIT_ID": "Commit ID",
             "CONTEXT": "Context"
         },
-        "COMMIT_ID": "Commit ID",
         "COMMITS": "Commits",
+        "COMMIT_ID": "Commit ID",
         "DATE": "Date",
         "FILTERS": {
             "APPLY": "Apply",
             "DATETIME_FORMAT": "Datetime format: yyyy-MM-ddThh:mm",
+            "OPERATIONS": "Operations",
             "OPERATION_PICKER": {
                 "EXTENSION_PATH": "Extension path",
-                "OPERATION_FILTER": "Operation filter",
                 "OPERATIONS": "Operations",
+                "OPERATION_FILTER": "Operation filter",
                 "SERVICE_CLASS": "Service class"
             },
-            "OPERATIONS": "Operations",
             "PERFORMERS": "Performers",
             "TIME_FROM": "From",
             "TIME_TO": "To"
@@ -1165,15 +1165,15 @@
                 "MISSING_LANG_LABEL": "Missing language(s) label",
                 "NAME": "No mandatory label resources"
             },
-            "NO_SKOS_PREFLABEL": {
-                "ADD_PREFLABEL": "Add skos:prefLabel",
-                "DESCRIPTION": "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel",
-                "NAME": "No skos:prefLabel resources"
-            },
             "NO_SKOSXL_PREFLABEL": {
                 "ADD_PREFLABEL": "Add skosxl:prefLabel",
                 "DESCRIPTION": "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel",
                 "NAME": "No skosxl:prefLabel resources"
+            },
+            "NO_SKOS_PREFLABEL": {
+                "ADD_PREFLABEL": "Add skos:prefLabel",
+                "DESCRIPTION": "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel",
+                "NAME": "No skos:prefLabel resources"
             },
             "ONLY_ALTLABEL": {
                 "DESCRIPTION": "Resources that have an alternative label but not a preferred in the same language",
@@ -1190,6 +1190,10 @@
         ],
         "QUICK_ACTION": "Quick action",
         "STRUCTURAL": {
+            "CONCEPTS_RELATED_DISJOINT": {
+                "DESCRIPTION": "skos:Concept(s) connected to another with both the skos:related and the skos:broaderTransitive (skos:related relation is disjoint with skos:broaderTransitive)",
+                "NAME": "Concepts related disjoint relations"
+            },
             "CONCEPT_EXACT_MATCH_DISJOINT": {
                 "DESCRIPTION": "skos:Concept(s) connected to another with both the skos:exactMatch and one of skos:broadMatch or skos:relatedMatch (skos:exactMatch relation is disjoint with skos:broadMatch and skos:relatedMatch)",
                 "NAME": "Concepts exactMatch disjoint relations"
@@ -1200,10 +1204,6 @@
                 "DESCRIPTION": "skos:Concept(s) that doesn't belong to any scheme",
                 "NAME": "Concepts in no scheme",
                 "WARNING": "Warning: adding the concept to a skos:ConceptScheme may be not enough to ensure that it is visible in the concept tree. The concept may be still dangling."
-            },
-            "CONCEPTS_RELATED_DISJOINT": {
-                "DESCRIPTION": "skos:Concept(s) connected to another with both the skos:related and the skos:broaderTransitive (skos:related relation is disjoint with skos:broaderTransitive)",
-                "NAME": "Concepts related disjoint relations"
             },
             "CYCLIC_HIERARCHICAL_CONCEPTS": {
                 "CYCLES": "Cycles",
@@ -1341,11 +1341,11 @@
         "CHANGE_S2RDF_SETTINGS_CONFIRM": "Changing the settings requires to re-initialize the model related to the current spreadsheet. All the changes applied to the headers will be discarder. Do you want to continue?",
         "CLEAR_DATA_CONFIRM": "This operation will erase all the data stored in the project, then you'll be redirect to the home page. Are you sure to proceed?",
         "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "The Collaboration System seems to be configured but it's not working (configuration could be not valid or the server may be not reachable), so it will be disabled.",
+        "CONFIGURATION_SAVED": "Configuration saved succesfully",
         "CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM": "You are going to override the configuration by restoring the system default settings. Are you sure?",
         "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "You are going to set this configuration as system default. Are you sure?",
         "CONFIG_SYSTEM_DEFAULT_RESTORED": "System configuration restored",
         "CONFIG_SYSTEM_DEFAULT_SET": "Configuration set as system default",
-        "CONFIGURATION_SAVED": "Configuration saved succesfully",
         "CUSTOM_FORM_PROP_CHAIN_DESCR": "Write the chain as sequence of comma (,) separated IRIs (QNames are accepted as well)",
         "DATA_CLEARED": "All data cleared successfully.",
         "DATA_IMPORTED": "Data imported successfully",
@@ -1366,15 +1366,15 @@
         "DELETE_PROJECT_CONFIRM": "Warning, this operation will delete the project {{project}}. Are you sure to proceed?",
         "DELETE_RDF_MEMBER_WARN_CONFIRM": "Deleting a single member of the list could compromise the integrity of the members section. If you want to edit the members, it is highly recommended to add a new constituent list from the constituents section. Do you want to confirm the deletion?",
         "DELETE_REMOTE_ALIGN_SYS_CONFIG_CONFIRM": "You are going to delete configuration '{{config}}'. If this configuration is used in a project, by deleting it you could prevent the Remote Alignment System from working. Are you sure?",
-        "DELETE_SCHEME_WITHOUT_TOP_WARN_CONFIRM": "Deleting this scheme, if it contains some concepts, will generate concepts in no scheme. Are you sure to proceed?",
         "DELETE_SCHEMES_WITHOUT_TOP_WARN_CONFIRM": "Deleting the schemes, if they contain some concepts, will generate concepts in no scheme. Are you sure to proceed?",
+        "DELETE_SCHEME_WITHOUT_TOP_WARN_CONFIRM": "Deleting this scheme, if it contains some concepts, will generate concepts in no scheme. Are you sure to proceed?",
         "DELETE_SHARED_METADATA_PATTERN_CONFIRM": "You are deleting the selected Metadata Pattern from the library. Are you sure?",
         "DELETE_USER_CONFIRM": "You are deleting user {{user}}. Are you sure?",
         "DEPLOYER_NOT_CONFIGURED": "The deployer needs to be configured",
         "DEPLOYER_NOT_SAVED": "Deployer configuration is not saved. In order to save the exporter configuration all its sub-configurations need to be saved.",
         "DISABLE_COLLABORATION_SYSTEM_CONFIRM": "You are going to disable the Collaboration System on the current project. Are you sure?",
-        "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM": "With this operation you will overwrite any roles, group, languages and ResourceView template assigned to {{user}} in the target project '{{project}}'. Are you sure?\n\nNote: the project-level roles will not be cloned",
         "DUPLICATED_BINDING_NAME": "Duplicated binding name '{{binding}}', please change the name or delete the binding",
+        "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM": "With this operation you will overwrite any roles, group, languages and ResourceView template assigned to {{user}} in the target project '{{project}}'. Are you sure?\n\nNote: the project-level roles will not be cloned",
         "EDIT_RDF_MEMBER_WARN_CONFIRM": "It is not recommended to edit the member list from this section. There are no checks on the rdf:_n predicate so you could compromise the integrity of the list. Do you want to continue?",
         "EMAIL_CONFIG_CHANGED_SUBMIT_FIRST": "Email configuration has been changed, you need first to submit the changes.",
         "EMAIL_CONFIG_TEST_DESCR": "This test will send an e-mail to the provided address in order to check the e-mail configuration",
@@ -1455,6 +1455,10 @@
         "MULTIPLE_PROP_VALUE_NOT_ALLOWED_FOR_PROPERTY": "Cannot enrich multiple subject with the same property-value for the predicate {{property}}",
         "MULTIVALUE_NOT_ALLOWED_FOR_PROPERTY": "This operation is not allowed for the selected property. Multiple resources cannot have the same {{property}}.",
         "NAMESPACE_UPDATED": "Namespace has been updated successfully",
+        "NOT_ALLOWED_CHARS_IN_ID": "ID contains character(s) not allowed",
+        "NOT_EMPTY_SCHEME_DANGLING_CONCEPT_WARN_CONFIRM": "The scheme is not empty. Deleting it will produce dangling concepts. Are you sure to continue?",
+        "NOT_EXISTING_RESOURCE_URI": "Wrong URI: no resource with URI {{uri}} exists in the current project",
+        "NOT_EXPLICIT_RESOURCES_NOT_AFFECTED_BY_CHANGES": "Some of the selected resources are not explicit, they cannot be edited, so they will be not affected by the changes",
         "NO_ACCESS_GRANTED_TO_ANY_PROJECT": "You have no granted access to any existing open project",
         "NO_FACETS_PROVIDED": "No facets has been provided. Please, fill at least one of the available facets",
         "NO_INFERRED_STATEMENTS_TO_ASSERT": "There are no inferred statements to assert",
@@ -1464,10 +1468,6 @@
         "NO_RESULTS_FOUND": "No results found",
         "NO_RESULTS_FOUND_FOR": "No results found for '{{text}}'",
         "NO_SERVICE_INVOCATION_PROVIDED": "The reporter cannot be compiled since it has no service invocation provided",
-        "NOT_ALLOWED_CHARS_IN_ID": "ID contains character(s) not allowed",
-        "NOT_EMPTY_SCHEME_DANGLING_CONCEPT_WARN_CONFIRM": "The scheme is not empty. Deleting it will produce dangling concepts. Are you sure to continue?",
-        "NOT_EXISTING_RESOURCE_URI": "Wrong URI: no resource with URI {{uri}} exists in the current project",
-        "NOT_EXPLICIT_RESOURCES_NOT_AFFECTED_BY_CHANGES": "Some of the selected resources are not explicit, they cannot be edited, so they will be not affected by the changes",
         "OPERATION_DENIED_ON_NODE_WITH_CHILDREN": "The operation cannot be done on node with children. Please delete the children nodes and then retry",
         "PAIRING_SELECTION_REQUIRED": "You need to select at least one pairing.",
         "PASSWORD_AND_CONFIRMED_INCONSISTENT": "Password and confirmed password are different.",
@@ -1478,10 +1478,10 @@
         "PASSWORD_RESET_INSTRUCTION_SENT": "An e-mail with the instructions for resetting password has been sent to the provided address.",
         "PEARL_CODE_WITH_ERROR": "Pearl code contains errors.",
         "PRELOAD_PROFILER_THRESHOLD_UPDATED": "Preload profiler threshold updated",
-        "PROJ_LANGUAGES_PARSING_ERR": "Initialization of languages for project '{{projName}}' has encountered a problem during parsing the '{{propName}}' settings. Please, report this to the system administrator.",
-        "PROJ_LANGUAGES_PARSING_ERR_SETTING_DEFAULT": "Project setting initialization has encountered a problem during parsing languages settings. Default languages will be set for this project.",
         "PROJECT_CREATED": "Project created successfully",
         "PROJECT_OPEN_CLOSE_AND_RETRY": "The project is currently open. Please, close the project and then retry.",
+        "PROJ_LANGUAGES_PARSING_ERR": "Initialization of languages for project '{{projName}}' has encountered a problem during parsing the '{{propName}}' settings. Please, report this to the system administrator.",
+        "PROJ_LANGUAGES_PARSING_ERR_SETTING_DEFAULT": "Project setting initialization has encountered a problem during parsing languages settings. Default languages will be set for this project.",
         "PROPERTY_CHAIN_NEEDS_AT_LEAST_TWO_PROPS": "The property chain must contain at least two properties",
         "PROVIDE_AT_LEAST_ONE_VALUE": "You have to provide at least one value",
         "QUERY_PARAMETERIZATION_SAVED": "Query parameterization saved succesfully",
@@ -1496,8 +1496,8 @@
             "IN_STANDARD_FORM": "in the standard registration form"
         },
         "REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED": "You need to select a configuration for the selected remote Repository Access. Please, select an existing one from the related combobox or create a new one.",
-        "REMOVE_DANGLING_FROM_SCHEME_WARN_CONFIRM": "If this concept has narrowers, removing it from the scheme may generate other dangling concepts. Are you sure to proceed?",
         "REMOVE_DANGLINGS_FROM_SCHEME_WARN_CONFIRM": "If the concepts have narrowers, removing them from the scheme may generate other dangling concepts. Are you sure to proceed?",
+        "REMOVE_DANGLING_FROM_SCHEME_WARN_CONFIRM": "If this concept has narrowers, removing it from the scheme may generate other dangling concepts. Are you sure to proceed?",
         "REMOVE_USER_FROM_PROJ_CONFIRM": "You are removing the user {{user}} form the project {{project}}. Are you sure?",
         "RENDERING_ENGINE_CONFIG_UPDATED": "The configuration of the Rendering Engine has been updated",
         "REPLACE_METADATA_PATTERN_CONFIRM": "A Pattern with the same name already exists. It will be replaced. Do you want to continue?",
@@ -1519,15 +1519,15 @@
         "SAVE_BASEURI_CHANGE_CONFIRM": "Save change of baseURI? (Attention, baseURI refactoring could be a long process)",
         "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Save change of baseURI and namespace? (Attention, baseURI refactoring could be a long process)",
         "SAVE_NS_CHANGE_CONFIRM": "Save change of namespace?",
-        "SET_DEFAULT_TEMPLATE_FOR_ALL_PROJ_CONFIRM": "You are setting the current template as default configuration for all the projects. Are you sure?",
-        "SETTING_SAVED": "Settings saved succesfully",
         "SETTINGS_DUPLICATED_SUCCESSFULLY": "Settings duplicated successfully",
+        "SETTING_SAVED": "Settings saved succesfully",
+        "SET_DEFAULT_TEMPLATE_FOR_ALL_PROJ_CONFIRM": "You are setting the current template as default configuration for all the projects. Are you sure?",
         "SHACL_SHAPES_CLEARED": "All SHACL shapes cleared successfully.",
         "SHACL_SHAPES_LOADED": "SHACL shapes loaded succesfully",
         "SHACL_VIOLATION_ERROR": "Fail in validating SHACL shape",
         "SKOS_DIFFING_SERVER_NOT_RESPONDING": "The SKOS diffing server didn't respond, make sure it is up and running.",
-        "ST_DATA_FOLDER_UPDATED": "SemanticTurkey data folder updated",
         "STORED_PARAMETERIZED_QUERY_ALREADY_ADDED": "The stored parameterized SPARQL query '{{ref}}' is already in the Stored Custom Search list. It will not be added",
+        "ST_DATA_FOLDER_UPDATED": "SemanticTurkey data folder updated",
         "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_CONFIRM": "Searched instance belongs to a class currently not selected ({{cls}}). Do you want to switch class?",
         "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_SELECT": "Searched instance belong to the following classes. If you want to complete the search, select one of them and confirm",
         "SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT": {
@@ -1589,9 +1589,9 @@
             "LEXICALIZATION_SET": {
                 "AVG_OF_LEXICALIZATIONS": "Avg number of Lexicalizations",
                 "EMBEDDED_LEXICALIZATION_SETS": "Embedded Lexicalization Sets",
-                "LEXICAL_ENTRIES": "Lexical Entries",
-                "LEXICALIZATION_SET": "Lexicalization Set",
                 "LEXICALIZATIONS": "Lexicalizations",
+                "LEXICALIZATION_SET": "Lexicalization Set",
+                "LEXICAL_ENTRIES": "Lexical Entries",
                 "LEXICON_DATASET": "Lexicon Dataset",
                 "PERCENTAGE": "Percentage",
                 "REFERENCES": "References"
@@ -1620,11 +1620,11 @@
             },
             "BIND_NS_AND_BASEURI": "Bind/unbind namespace and baseURI",
             "DATASET_CATALOG": "Dataset Catalog",
+            "IMPORTS": "Imports",
             "IMPORT_TREE": {
                 "FAILED_IMPORT": "Failed import",
                 "LOOP_IMPORTS": "Loop of imports"
             },
-            "IMPORTS": "Imports",
             "LOCAL_FILE": "Local file",
             "NAMESPACE": "Namespace",
             "NAMESPACE_MANAGEMENT": "Namespace management",
@@ -1662,21 +1662,21 @@
                 "AVG_LEXICALIZATIONS_INFO": "Average number of lexicalizations",
                 "AVG_SYNONYMY": "Avg synonymy",
                 "CONCEPTS": "Concepts",
-                "CONCEPTUAL_DATASET": "Conceptual dataset",
                 "CONCEPTUALIZATIONS": "Conceptualizations",
+                "CONCEPTUAL_DATASET": "Conceptual dataset",
                 "CONFORMS_TO": "Conforms to",
                 "DATASET": "Dataset",
                 "LANGUAGE_LEXVO": "Language Lexvo",
                 "LANGUAGE_LOC": "Language LOC",
                 "LANGUAGE_TAG": "Language Tag",
-                "LEXICAL_ENTRIES": "Lexical entries",
-                "LEXICALIZATION_MODEL": "Lexicalization model",
                 "LEXICALIZATIONS": "Lexicalizations",
+                "LEXICALIZATION_MODEL": "Lexicalization model",
+                "LEXICAL_ENTRIES": "Lexical entries",
                 "LEXICON_DATASET": "Lexicon dataset",
                 "LINGUISTIC_CATALOG": "Linguistic catalog",
                 "PERCENTAGE": "Percentage",
-                "REFERENCE_DATASET": "Reference dataset",
                 "REFERENCES": "References",
+                "REFERENCE_DATASET": "Reference dataset",
                 "SPARQL_ENDPOINT": "SPARQL Endpoint",
                 "URI_SPACE": "URI space"
             },
@@ -1701,9 +1701,9 @@
             "MODEL": "Model",
             "PROJECT": "Project",
             "PROJECTS": "Projects",
+            "REPOSITORY_ID": "Repository ID",
             "REPO_ACCESS": "Repository Access",
             "REPO_LOCATION": "Repository Location",
-            "REPOSITORY_ID": "Repository ID",
             "SUPPORT_REPO_ID": "History/Validation Repository ID",
             "VALIDATION": "Validation"
         },
@@ -1713,8 +1713,8 @@
             "OBJECT": "Object",
             "PREDICATE": "Predicate",
             "RESOURCE": "Resource",
-            "RESOURCE_TYPE": "Resource type",
             "RESOURCES": "Resources",
+            "RESOURCE_TYPE": "Resource type",
             "SUBJECT": "Subject"
         },
         "USER": {
@@ -1738,8 +1738,8 @@
     },
     "NOTIFICATIONS": {
         "CLEAR_NOTIFICATIONS": "Clear notifications",
-        "NOTIFICATION_SETTINGS": "Notification Settings",
         "NOTIFICATIONS": "Notifications",
+        "NOTIFICATION_SETTINGS": "Notification Settings",
         "SETTINGS": {
             "DISABLE_ALL": "Disable all notifications",
             "DISABLE_ALL_FOR_TYPE": "Disable all actions for this type",
@@ -1975,9 +1975,9 @@
             "FORM_PRESENTATIONS": "Form representations",
             "IMPORTS": "Imports",
             "LABEL_RELATIONS": "Label relations",
+            "LEXICALIZATIONS": "Lexicalizations",
             "LEXICAL_FORMS": "Lexical forms",
             "LEXICAL_SENSES": "Lexical senses",
-            "LEXICALIZATIONS": "Lexicalizations",
             "MEMBERS": "Members",
             "MEMBERS_ORDERED": "Members (ordered)",
             "NOTES": "Notes",
@@ -2054,8 +2054,8 @@
             "ASSISTED_SEARCH": "Assisted search",
             "AVG_INFO": "Average number of lexicalizations",
             "LOCAL": "Local",
-            "MATCH_MODE": "Match mode",
             "MATCHED_LANG": "Matched language",
+            "MATCH_MODE": "Match mode",
             "METADATA_UNAVAILABLE_LOCAL_WARNING": {
                 "HERE": "here",
                 "METADATA_NOT_AVAILABLE": "VoID/LIME Metadata not available for local project '{{projName}}'. Click",
@@ -2138,10 +2138,10 @@
             }
         },
         "HEADER_EDITOR": {
+            "ADDITIONAL_PRED_OBJ": "Additional predicate-object",
             "ADD_ADV_GRAPH_APPL": "Add advanced graph application",
             "ADD_MEMOIZE_MAP": "Add memoization map ID",
             "ADD_SIMPLE_GRAPH_APPL": "Add simple graph application",
-            "ADDITIONAL_PRED_OBJ": "Additional predicate-object",
             "ASSERT_TYPE": "Assert type",
             "ASSERT_TYPE_INFO": "Check this option in order to assert a class membership for the subject node",
             "CONVERTER_TYPE": "Converter type",
@@ -2156,14 +2156,14 @@
             "IGNORE_HEADER_INFO": "If checked, the current header will be ignored in the generated PEARL code and thus in the conversion process",
             "MEMOIZE": "Memoize",
             "MEMOIZE_INFO": "Apply the memoization: given the same input, the converter will generate the same output",
+            "NODES_INFO": "List of nodes generated from the current header",
             "NODE_EDITOR": "Node editor",
             "NODE_ID": "Node ID",
-            "NODES_INFO": "List of nodes generated from the current header",
             "PEARL_FEATURE": "PEARL feature",
             "SELECT_MEMOIZED_NODE": "Select the node from which you want to copy the memoized converter configuration",
+            "SUBJECT_HEADER_EDITOR": "Subject Header editor",
             "SUBJ_HEADER_INFO": "Set the header used for the creation of the subject",
-            "SUBJ_NODE_ID_INFO": "This value is readonly, 'subject' is a reserved keyword for the subject node",
-            "SUBJECT_HEADER_EDITOR": "Subject Header editor"
+            "SUBJ_NODE_ID_INFO": "This value is readonly, 'subject' is a reserved keyword for the subject node"
         },
         "PEARL": {
             "GENERATE_PEARL": "Generate Pearl",
@@ -2193,8 +2193,8 @@
         },
         "TRIPLES": {
             "ADD_TRIPLES": "Add triples",
-            "GENERATE_TRIPLES": "Generate Triples",
-            "GENERATED_TRIPLES_PREVIEW": "Generated triples preview"
+            "GENERATED_TRIPLES_PREVIEW": "Generated triples preview",
+            "GENERATE_TRIPLES": "Generate Triples"
         }
     },
     "SKOS_DIFF": {

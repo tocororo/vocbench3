@@ -1,4 +1,5 @@
-<ngb-toast *ngFor="let toast of toastService.toasts" [class]="toast.options?.toastClass" [autohide]="toast.options?.delay" [delay]="toast.options?.delay || 3000" (hidden)="toastService.remove(toast)">
+<ngb-toast *ngFor="let toast of toastService.toasts" [class]="toast.options?.toastClass" [autohide]="toast.options?.delay" [delay]="toast.options?.delay || 3000" [animation]="true"
+    (hidden)="toastService.remove(toast)">
 
     <ng-template ngbToastHeader>
         <b style="font-size: 12px;">
