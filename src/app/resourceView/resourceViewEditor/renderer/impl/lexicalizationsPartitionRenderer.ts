@@ -53,7 +53,6 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        let renderingLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference;
         super.ngOnChanges(changes);
         //if changes reguard predicateObjectList
         if (changes['predicateObjectList'] && changes['predicateObjectList'].currentValue) {
@@ -62,27 +61,42 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
             //sort objects by language
             for (let i = 0; i < this.predicateObjectList.length; i++) {
                 let objects: ARTNode[] = this.predicateObjectList[i].getObjects();
-                objects.sort(
-                    (a: ARTNode, b: ARTNode) => {
-                        let langA: string = a.getAdditionalProperty(ResAttribute.LANG);
-                        let langAPos: number = renderingLangs.indexOf(langA);
-                        let langB: string = b.getAdditionalProperty(ResAttribute.LANG);
-                        let langBPos: number = renderingLangs.indexOf(langB);
-                        if (langAPos != -1 && langBPos != -1) { //both in the rendering languages
-                            if (langA != langB) { //different languages => returns the comparison of their positions
-                                return langAPos - langBPos;
-                            } else { //same languages => returns the comparison of the value
-                                return a.getShow().localeCompare(b.getShow());
+                //sort values
+                let sortByRendering: boolean = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.sortByRendering;
+                if (sortByRendering) {
+                    let renderingLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference;
+                    objects.sort(
+                        (a: ARTNode, b: ARTNode) => {
+                            let langA: string = a.getAdditionalProperty(ResAttribute.LANG);
+                            let langAPos: number = renderingLangs.indexOf(langA);
+                            let langB: string = b.getAdditionalProperty(ResAttribute.LANG);
+                            let langBPos: number = renderingLangs.indexOf(langB);
+                            if (langAPos != -1 && langBPos != -1) { //both in the rendering languages
+                                if (langA != langB) { //different languages => returns the comparison of their positions
+                                    return langAPos - langBPos;
+                                } else { //same languages => returns the comparison of the value
+                                    return a.getShow().localeCompare(b.getShow());
+                                }
+                            } else if (langAPos == -1 && langBPos == -1) { //both not in the rendering languages => returns the comparison of the lang code
+                                if (langA < langB) return -1;
+                                if (langA > langB) return 1;
+                                return a.getShow().localeCompare(b.getShow()); //same lang code, order alphabetically
+                            } else { //just one of the two languages is among the rendering langs
+                                return langBPos - langAPos;
                             }
-                        } else if (langAPos == -1 && langBPos == -1) { //both not in the rendering languages => returns the comparison of the lang code
-                            if (langA < langB) return 1;
-                            if (langA > langB) return -1;
-                            return a.getShow().localeCompare(b.getShow()); //same lang code, order alphabetically
-                        } else { //just one of the two languages is among the rendering langs
-                            return langBPos - langAPos;
                         }
-                    }
-                );
+                    );
+                } else {
+                    objects.sort(
+                        (a: ARTNode, b: ARTNode) => {
+                            if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
+                            if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
+                            //same lang code, order alphabetically
+                            return a.getShow().localeCompare(b.getShow());
+                        }
+                    );
+                }
+
             }
         }
     }
@@ -121,7 +135,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                     return of(this.rootProperties[0]);
                 } else { //multiple properties => ask user to select
                     return from(
-                        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
+                        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, this.rootProperties).then(
                             (selectedProp: any) => {
                                 return selectedProp;
                             },
@@ -150,14 +164,14 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     private enrichWithLabel(predicate: ARTURIResource) {
         if (predicate.equals(SKOSXL.prefLabel) || predicate.equals(SKOSXL.altLabel) || predicate.equals(SKOSXL.hiddenLabel)) { //SKOSXL
             let prefLabelPred: boolean = predicate.equals(SKOSXL.prefLabel);
-            this.creationModals.newXLabel({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+            this.creationModals.newXLabel({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (data: NewXLabelModalReturnData) => {
                     this.addMultipleValues(predicate, data.labels, data.cls);
                 },
-                () => {}
+                () => { }
             );
         } else if (predicate.equals(OntoLex.isDenotedBy)) {
-            this.creationModals.newOntoLexicalizationCf({key:"DATA.ACTIONS.ADD_LEX_ENTRY"}, predicate, false).then(
+            this.creationModals.newOntoLexicalizationCf({ key: "DATA.ACTIONS.ADD_LEX_ENTRY" }, predicate, false).then(
                 (data: NewOntoLexicalizationCfModalReturnData) => {
                     this.ontolexService.addLexicalization(data.linkedResource, this.resource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
                         stResp => {
@@ -165,11 +179,11 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                         }
                     );
                 },
-                () => {}
+                () => { }
             )
         } else { //Not SKOSXL lexicalization
             let prefLabelPred: boolean = predicate.equals(SKOS.prefLabel);
-            this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+            this.creationModals.newPlainLiteral({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (labels: ARTLiteral[]) => {
                     this.addMultipleValues(predicate, labels);
                 },
@@ -243,9 +257,9 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
             predicate.equals(SKOS.prefLabel) || predicate.equals(SKOS.altLabel) || predicate.equals(SKOS.hiddenLabel)
         ) {
             labels.forEach((label: ARTLiteral) => {
-                addFunctions.push({ 
+                addFunctions.push({
                     function: this.lexicalizationEnrichmentHelper.getAddLabelFn(<ARTURIResource>this.resource, predicate, label, cls),
-                    value: label 
+                    value: label
                 });
             });
             errorHandler = (errors: MultiActionError[]) => {
@@ -253,16 +267,16 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                     let err: Error = errors[0].error;
                     if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
                         let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                        this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                             confirm => {
                                 this.lexicalizationEnrichmentHelper.getAddLabelFn(
-                                    <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, cls, 
+                                    <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, cls,
                                     !err.name.endsWith('PrefAltLabelClashException'), err.name.endsWith('BlacklistForbiddendException')
                                 ).subscribe(
                                     stResp => this.update.emit(null)
                                 );
                             },
-                            () => {}
+                            () => { }
                         );
                     } else {
                         this.handleSingleMultiAddError(errors[0]);
@@ -273,9 +287,9 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
             }
         } else { //rdfs:label (or maybe a custom property) for which doens't exist a dedicated service
             labels.forEach((label: ARTLiteral) => {
-                addFunctions.push({ 
+                addFunctions.push({
                     function: this.resourcesService.addValue(this.resource, predicate, label),
-                    value: label 
+                    value: label
                 });
             });
         }

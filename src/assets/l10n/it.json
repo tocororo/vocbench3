@@ -2003,6 +2003,8 @@
             "SHOW_DATATYPE_BADGE_INFO": "Se attiva, una targhetta contenente il datatyp verrà sempre mostrato di fianco ai valori. In caso contrario, il badge verrò solo mostrata in caso di datatype sconosciuti (l'icona alla sinistra del valore indicherà il datatype)",
             "SHOW_DEPRECATED": "Mostra valori deprecati",
             "SHOW_DEPRECATED_INFO": "Se attiva, risorse collegate segnate come deprecate verranno mostrate nel ResourceView",
+            "SORT_BY_RENDERING": "Ordina le lessicalizzazioni secondo le lingue di rendering",
+            "SORT_BY_RENDERING_INFO": "Se attiva, i valori nella partizione 'Lessicalizzazioni' saranno ordinati con lo stesso ordine delle lingue indicate nelle preferenze del rendering",
             "SPLITTED_INFO": [
                 "Il pannello del ResourceView è diviso in due: sulla sinistra viene mostrato un ResourceView principale che descrive (ed è sincronizzato con) la risorsa selezionata nell'albero/lista; sulla destra viene mostrato un secondo ResourceView opzionale il quale descrive una risorsa aperta (tramite doppio click) dal principale",
                 "Questa modalità non è raccomandata per schermi con larghezza di risoluzione minore di 1440px"

@@ -399,6 +399,10 @@ export class VBProperties {
         if (showDatatypeBadgeCookie != null) {
             rvPrefs.showDatatypeBadge = showDatatypeBadgeCookie == "true"; //default false
         }
+        let sortByRenderingCookie = Cookie.getCookie(Cookie.RES_VIEW_SORT_BY_RENDERING);
+        if (sortByRenderingCookie != null) {
+            rvPrefs.sortByRendering = sortByRenderingCookie == "true";
+        }
     }
 
     /**
@@ -452,6 +456,11 @@ export class VBProperties {
     setShowDatatypeBadge(show: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_SHOW_DEPRECATED, show + "");
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.showDatatypeBadge = show;
+    }
+
+    setSortByRendering(sort: boolean) {
+        Cookie.setCookie(Cookie.RES_VIEW_SORT_BY_RENDERING, sort + "");
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.sortByRendering = sort;
     }
 
     /**

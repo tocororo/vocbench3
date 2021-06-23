@@ -67,6 +67,7 @@ export class ResourceViewPreference {
     inference: boolean = false;
     showDeprecated: boolean = true;
     showDatatypeBadge: boolean = false;
+    sortByRendering: boolean = false; //use the same rendering language order for sorting value in lexicalizations partition
 }
 
 export enum ResourceViewMode {

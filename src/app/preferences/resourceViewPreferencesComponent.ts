@@ -31,6 +31,7 @@ export class ResourceViewPreferencesComponent {
     displayImg: boolean;
     showDeprecated: boolean;
     showDatatypeBadge: boolean;
+    sortByRendering: boolean;
 
     constructor(private vbProp: VBProperties, private eventHandler: VBEventHandler) { }
 
@@ -41,6 +42,7 @@ export class ResourceViewPreferencesComponent {
         this.displayImg = rvPrefs.displayImg;
         this.showDeprecated = rvPrefs.showDeprecated;
         this.showDatatypeBadge = rvPrefs.showDatatypeBadge;
+        this.sortByRendering = rvPrefs.sortByRendering;
 
         this.selectedRvConceptType = this.rvConceptTypes.find(t => t.type == rvPrefs.defaultConceptType);
         this.selectedRvLexEntryType = this.rvLexEntryTypes.find(t => t.type == rvPrefs.defaultLexEntryType);
@@ -82,6 +84,10 @@ export class ResourceViewPreferencesComponent {
 
     onShowDatatypeBadge() {
         this.vbProp.setShowDatatypeBadge(this.showDatatypeBadge);
+    }
+
+    onSortByRenderingChange() {
+        this.vbProp.setSortByRendering(this.sortByRendering);
     }
 
 }

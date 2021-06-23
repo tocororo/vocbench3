@@ -2003,6 +2003,8 @@
             "SHOW_DATATYPE_BADGE_INFO": "If enabled, a datatype badge will be always shown beside the value. If not, the badge is only shown in case of an unknown datatype (the icon on the left of the value will classify the known datatype)",
             "SHOW_DEPRECATED": "Show deprecated values",
             "SHOW_DEPRECATED_INFO": "If enabled, linked resources marked as deprecated will be shown in the ResourceView",
+            "SORT_BY_RENDERING": "Sort lexicalizations by rendering languages",
+            "SORT_BY_RENDERING_INFO": "If enabled, the values in the 'Lexicalizations' partition will be sorted with the same order of the rendering languages preference",
             "SPLITTED_INFO": [
                 "The Resource View panel is splitted in two: on the left there is a main Resource View which describes (and is synched with) the resource selected in the tree/list; on the right there is an optional secondary Resource View which describes a resource selected (double click) from the main Resource View",
                 "This mode is not recommended in screen with resolution width below 1440px"

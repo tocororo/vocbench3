@@ -109,5 +109,17 @@
             </div>
         </div>
 
+        <div class="card card-default mt-2">
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input" id="sortLexCheck" type="checkbox" [(ngModel)]="sortByRendering" (ngModelChange)="onSortByRenderingChange()">
+                    <label class="form-check-label" for="sortLexCheck">
+                        {{'RESOURCE_VIEW.SETTINGS.SORT_BY_RENDERING'|translate}}
+                        <span class="fas fa-info-circle ml-1" [title]="'RESOURCE_VIEW.SETTINGS.SORT_BY_RENDERING_INFO'|translate"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
