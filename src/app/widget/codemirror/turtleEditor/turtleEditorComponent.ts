@@ -17,7 +17,7 @@ export class TurtleEditorComponent implements ControlValueAccessor {
     
     @ViewChild('cmEditor') private cmEditorView: CodemirrorComponent;
     
-    private cmEditor: CodeMirror.EditorFromTextArea;
+    cmEditor: CodeMirror.EditorFromTextArea;
 
     code: string;
     editorConfig: CodeMirror.EditorConfiguration;
@@ -57,7 +57,6 @@ export class TurtleEditorComponent implements ControlValueAccessor {
         let cursor = this.cmEditor.getDoc().getCursor();
         this.cmEditor.getDoc().replaceRange(text, cursor, cursor);
     }
-
 
     //---- method of ControlValueAccessor and Validator interfaces ----
     /**

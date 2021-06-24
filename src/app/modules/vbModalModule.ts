@@ -13,8 +13,6 @@ import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceA
 import { InferenceExplanationModal } from '../icv/owlConsistencyViolations/inferenceExplanationModal';
 import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
 import { ProjectSelectionModal } from '../project/projectListPanel/projectSelectionModal';
-import { LoadShapesModal } from '../shacl/loadShapesModal';
-import { ShaclBatchValidationModal } from '../shacl/shaclBatchValidationModal';
 import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperModal';
 import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -104,7 +102,6 @@ import { UserModule } from './userModule';
         LexicalEntryListModal,
         LexiconListModal,
         LoadConfigurationModal,
-        LoadShapesModal,
         ManchesterExprModal,
         MappingPropertySelectionModal,
         NewConceptCfModal,
@@ -132,7 +129,6 @@ import { UserModule } from './userModule';
         SchemeListModal,
         SchemeSelectionComponent,
         SelectionModal,
-        ShaclBatchValidationModal,
         SignaturePickerModal,
         StoreConfigurationModal,
         UserSelectionModal,
@@ -176,7 +172,6 @@ import { UserModule } from './userModule';
         LexicalEntryListModal,
         LexiconListModal,
         LoadConfigurationModal,
-        LoadShapesModal,
         ManchesterExprModal,
         MappingPropertySelectionModal,
         NewConceptCfModal,
@@ -203,7 +198,6 @@ import { UserModule } from './userModule';
         ResourceSelectionModal,
         SchemeListModal,
         SelectionModal,
-        ShaclBatchValidationModal,
         SignaturePickerModal,
         StoreConfigurationModal,
         UserSelectionModal,

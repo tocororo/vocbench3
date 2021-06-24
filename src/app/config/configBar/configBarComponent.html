@@ -84,15 +84,15 @@
                     </a>
                     <ng-container *ngIf="shaclEnabled">
                         <div class="dropdown-divider"></div>
-                        <a (click)="loadShacleShapes()" class="dropdown-item"
+                        <a (click)="loadShaclShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !loadShapesAuthorized }">
                             <span class="fas fa-upload" style="margin-right: 5px"></span>{{'SHACL.LOAD_SHACL_SHAPES'|translate}}
                         </a>
-                        <a (click)="exportShacleShapes()" class="dropdown-item"
+                        <a (click)="exportShaclShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !exportShapesAuthorized }">
                             <span class="fas fa-download" style="margin-right: 5px"></span>{{'SHACL.EXPORT_SHACL_SHAPES'|translate}}
                         </a>
-                        <a (click)="clearShacleShapes()" class="dropdown-item"
+                        <a (click)="clearShaclShapes()" class="dropdown-item"
                             [ngClass]="{ disabled : !clearShapesAuthorized }">
                             <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'SHACL.CLEAR_SHACL_SHAPES'|translate}}
                         </a>

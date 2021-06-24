@@ -26,9 +26,9 @@
                 </div>
                 <!-- SHACL VALIDATION -->        
                 <div *ngIf="shaclEnabled" class="form-group row">
-                    <label class="col-form-label col-sm-4">{{'PROJECTS.SHACLE_SHAPE_VALIDATION_ON_COMMIT'|translate}}:</label>
+                    <label class="col-form-label col-sm-4">{{'PROJECTS.SHACL_SHAPE_VALIDATION_ON_COMMIT'|translate}}:</label>
                     <div class="col-sm-8 d-flex align-items-center">
-                        <button class="btn btn-light btn-sm" [ngClass]="{ active: shaclValidationEnabled }" (click)="changeShacleValidation()">
+                        <button class="btn btn-light btn-sm" [ngClass]="{ active: shaclValidationEnabled }" (click)="changeShaclValidation()">
                             <b *ngIf="shaclValidationEnabled" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
                             <b *ngIf="!shaclValidationEnabled" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
                         </button>

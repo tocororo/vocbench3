@@ -597,10 +597,10 @@ export class CreateProjectComponent {
     }
 
     /**
-     * SHACLE
+     * SHACL
      */
 
-    onShacleEnableChange() {
+    onShaclEnableChange() {
         //initialize the shacl settings if are still not
         if (this.enableSHACL && this.shaclSettings == null) {
             this.projectService.createEmptySHACLSettingsForm().subscribe(

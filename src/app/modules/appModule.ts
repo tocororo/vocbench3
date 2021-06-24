@@ -39,6 +39,7 @@ import { PreferencesModule } from './preferencesModule';
 import { ProjectModule } from './projectModule';
 import { ResourceMetadataModule } from './resourceMetadataModule';
 import { ResourceViewModule } from './resourceViewModule';
+import { ShaclModule } from './ShaclModule';
 import { SharedModule } from './sharedModule';
 import { Sheet2RdfModule } from './sheet2rdfModule';
 import { SparqlModule } from './sparqlModule';
@@ -48,73 +49,74 @@ import { UserModule } from './userModule';
 import { VBModalModule } from './vbModalModule';
 
 export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, "./assets/l10n/");
+    return new TranslateHttpLoader(http, "./assets/l10n/");
 }
 
 @NgModule({
-	imports: [
-		BrowserModule,
-		CommonModule,
-		FormsModule,
-		NgbModule,
-		TranslateModule.forRoot({
-			defaultLanguage: 'en',
+    imports: [
+        BrowserModule,
+        CommonModule,
+        FormsModule,
+        NgbModule,
+        TranslateModule.forRoot({
+            defaultLanguage: 'en',
             loader: {
                 provide: TranslateLoader,
-				useFactory: HttpLoaderFactory,
+                useFactory: HttpLoaderFactory,
                 deps: [HttpClient]
             }
         }),
 
-		AppRoutingModule,
+        AppRoutingModule,
 
-		AdministrationModule, 
-		AlignmentModule,
-		CollaborationModule,
-		CustomFormModule,
-		CustomServicesModule,
-		DatasetCatalogModule,
-		EdoalModule,
-		GlobalDataMgmtModule,
-		GraphModule,
-		HistoryValidationModule,
-		IcvModule,
-		MetadataModule,
-		NotificationsModule,
-		PreferencesModule,
-		ProjectModule,
-		ResourceMetadataModule,
-		ResourceViewModule,
-		SharedModule,
-		Sheet2RdfModule,
-		SkosDiffingModule,
-		SparqlModule,
-		STServicesModule,
-		TreeAndListModule,
-		UserModule,
-		VBModalModule,
-	],
-	providers: [
-		DatatypeValidator,
-		HttpManager,
-		GUARD_PROVIDERS,
-		RoleActionResolver,
-		StMetadataRegistry,
-		UserResolver,
-		VBCollaboration,
-		VBEventHandler,
-		VBProperties,
-		{ provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
-		/** Uses the HashLocationStrategy instead of the default "HTML 5 pushState" PathLocationStrategy.
-		 * This solves the 404 error problem when reloading a page in a production server
-		 */
-		{ provide: LocationStrategy, useClass: HashLocationStrategy }
-	],
-	declarations: [
-		AppComponent,
-		HomeComponent,
-		DataComponent,
-  ],
-	bootstrap: [AppComponent]
+        AdministrationModule,
+        AlignmentModule,
+        CollaborationModule,
+        CustomFormModule,
+        CustomServicesModule,
+        DatasetCatalogModule,
+        EdoalModule,
+        GlobalDataMgmtModule,
+        GraphModule,
+        HistoryValidationModule,
+        IcvModule,
+        MetadataModule,
+        NotificationsModule,
+        PreferencesModule,
+        ProjectModule,
+        ResourceMetadataModule,
+        ResourceViewModule,
+        ShaclModule,
+        SharedModule,
+        Sheet2RdfModule,
+        SkosDiffingModule,
+        SparqlModule,
+        STServicesModule,
+        TreeAndListModule,
+        UserModule,
+        VBModalModule,
+    ],
+    providers: [
+        DatatypeValidator,
+        HttpManager,
+        GUARD_PROVIDERS,
+        RoleActionResolver,
+        StMetadataRegistry,
+        UserResolver,
+        VBCollaboration,
+        VBEventHandler,
+        VBProperties,
+        { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
+        /** Uses the HashLocationStrategy instead of the default "HTML 5 pushState" PathLocationStrategy.
+         * This solves the 404 error problem when reloading a page in a production server
+         */
+        { provide: LocationStrategy, useClass: HashLocationStrategy }
+    ],
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        DataComponent,
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -91,7 +91,7 @@ export class ProjSettingsEditorModal {
         }
     }
 
-    changeShacleValidation() {
+    changeShaclValidation() {
         this.shaclValidationEnabled = !this.shaclValidationEnabled;
         this.projectService.setSHACLValidationEnabled(this.project, this.shaclValidationEnabled).subscribe(
             () => {

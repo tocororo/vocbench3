@@ -162,11 +162,11 @@ export class ConfigBarComponent {
         )
     }
 
-    loadShacleShapes() {
+    loadShaclShapes() {
         this.modalService.open(LoadShapesModal, new ModalOptions());
     }
 
-    exportShacleShapes() {
+    exportShaclShapes() {
         this.shaclService.exportShapes().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
@@ -175,7 +175,7 @@ export class ConfigBarComponent {
         )
     }
 
-    clearShacleShapes() {
+    clearShaclShapes() {
         this.basicModals.confirm({ key: "SHACL.CLEAR_SHACL_SHAPES" }, "This operation will delete all the SHACL shapes stored in the project. Are you sure to proceed?",
             ModalType.warning).then(
             () => {
