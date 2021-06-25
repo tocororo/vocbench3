@@ -22,7 +22,7 @@ export class HistoryServices {
      */
     getCommitSummary(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], validatorFilter?: ARTURIResource[],
         timeLowerBound?: string, timeUpperBound?: string, limit?: number) {
-        var params: any = {
+        let params: any = {
             operationFilter: operationFilter,
             performerFilter: performerFilter,
             validatorFilter: validatorFilter,
@@ -51,7 +51,7 @@ export class HistoryServices {
     getCommits(tipRevisionNumber: number, operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], validatorFilter?: ARTURIResource[],
             timeLowerBound?: string, timeUpperBound?: string, operationSorting?: SortingDirection, timeSorting?: SortingDirection, 
             page?: number, limit?: number): Observable<CommitInfo[]> {
-        var params: any = {
+        let params: any = {
             tipRevisionNumber: tipRevisionNumber,
 
             operationFilter: operationFilter,
@@ -66,50 +66,9 @@ export class HistoryServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getCommits", params).pipe(
             map(stResp => {
-                var commits: CommitInfo[] = [];
-                var commitsJsonArray: any[] = stResp;
-                for (var i = 0; i < commitsJsonArray.length; i++) {
-                    let commitJson: any = commitsJsonArray[i];
-
-                    let commitUri: ARTURIResource = new ARTURIResource(commitJson.commit);
-                    
-                    let user: ARTURIResource;
-                    let userJson = commitJson.user;
-                    if (userJson != null) {
-                        user = new ARTURIResource(userJson['@id'], userJson.show);
-                    }
-
-                    let operation: ARTURIResource;
-                    let operationJson = commitJson.operation;
-                    if (operationJson != null) {
-                        operation = new ARTURIResource(operationJson['@id']);
-                    }
-
-                    let operationParameters: ParameterInfo[] = [];
-                    let operationParamsJson: any[] = commitJson.operationParameters;
-                    if (operationParamsJson != null) {
-                        operationParamsJson.forEach(element => {
-                            if (element.value != null) {
-                                operationParameters.push(new ParameterInfo(element.name, element.value));
-                            }
-                        });
-                    }
-
-                    let startTime: Date;
-                    let startTimeJson = commitJson.startTime;
-                    if (startTimeJson != null) {
-                        startTime = new Date(startTimeJson);
-                    }
-
-                    let endTime: Date;
-                    let endTimeJson = commitJson.endTime;
-                    if (endTimeJson != null) {
-                        endTime = new Date(endTimeJson);
-                    }
-                    
-                    let commit: CommitInfo = new CommitInfo(commitUri, user, operation, operationParameters, startTime, endTime);
-
-                    commits.push(commit);
+                let commits: CommitInfo[] = [];
+                for (let commitJson of stResp) {
+                    commits.push(CommitInfo.parse(commitJson));
                 }
                 return commits;
             })
@@ -121,7 +80,7 @@ export class HistoryServices {
      * @param commit 
      */
     getCommitDelta(commit: ARTURIResource): Observable<CommitDelta> {
-        var params: any = {
+        let params: any = {
             commit: commit
         };
         return this.httpMgr.doGet(this.serviceName, "getCommitDelta", params).pipe(
@@ -129,8 +88,8 @@ export class HistoryServices {
                 let additions: CommitOperation[] = [];
                 let removals: CommitOperation[] = [];
 
-                var additionsJsonArray: any[] = stResp.additions;
-                for (var i = 0; i < additionsJsonArray.length; i++) {
+                let additionsJsonArray: any[] = stResp.additions;
+                for (let i = 0; i < additionsJsonArray.length; i++) {
                     let additionJson: any = additionsJsonArray[i];
                     additions.push(
                         new CommitOperation(
@@ -142,8 +101,8 @@ export class HistoryServices {
                     );
                 }
 
-                var removalsJsonArray: any[] = stResp.removals;
-                for (var i = 0; i < removalsJsonArray.length; i++) {
+                let removalsJsonArray: any[] = stResp.removals;
+                for (let i = 0; i < removalsJsonArray.length; i++) {
                     let removalJson: any = removalsJsonArray[i];
                     removals.push(
                         new CommitOperation(

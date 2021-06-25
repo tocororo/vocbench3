@@ -3,12 +3,12 @@
 
     <ng-template ngbToastHeader>
         <b style="font-size: 12px;">
-            {{ toast.data.title }}
+            {{ toast.title }}
         </b>
     </ng-template>
 
     <div [class]="toast.options?.textClass" style="font-size: 11px;">
-        {{ toast.data.message }}
+        {{ toast.message }}
     </div>
 
 </ngb-toast>

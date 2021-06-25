@@ -11,6 +11,7 @@ export class Project {
     private historyEnabled: boolean;
     private validationEnabled: boolean;
     private blacklistingEnabled: boolean;
+    private undoEnabled: boolean;
     private model: string;
     private lexicalizationModel: string;
     private open: boolean;
@@ -95,6 +96,14 @@ export class Project {
 
     public isBlacklistingEnabled(): boolean {
         return this.blacklistingEnabled;
+    }
+
+    public setUndoEnabled(enabled: boolean) {
+        this.undoEnabled = enabled;
+    }
+
+    public isUndoEnabled(): boolean {
+        return this.undoEnabled;
     }
 
     public setShaclEnabled(enabled: boolean) {
@@ -225,6 +234,7 @@ export class Project {
         proj.setHistoryEnabled(projJson.historyEnabled);
         proj.setValidationEnabled(projJson.validationEnabled);
         proj.setBlacklistingEnabled(projJson.blacklistingEnabled);
+        proj.setUndoEnabled(projJson.undoEnabled);
         proj.setModelType(projJson.model);
         proj.setLexicalizationModelType(projJson.lexicalizationModel);
         proj.setOpen(projJson.open);

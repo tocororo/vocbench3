@@ -1,5 +1,6 @@
-export interface UndoToast {
-    data: UndoToastData;
+export interface Toast {
+    title: string;
+    message: string;
     options?: ToastOpt;
 }
 
@@ -7,9 +8,4 @@ export interface ToastOpt {
     toastClass?: string;
     textClass?: string;
     delay?: number;
-}
-
-export interface UndoToastData {
-    title: string;
-    message: string;
 }

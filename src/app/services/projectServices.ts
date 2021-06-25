@@ -165,8 +165,8 @@ export class ProjectServices {
      * @param renderingEngineSpecification
      */
     createProject(projectName: string, baseURI: string, model: ARTURIResource, lexicalizationModel: ARTURIResource,
-        historyEnabled: boolean, validationEnabled: boolean, blacklistingEnabled: boolean, repositoryAccess: RepositoryAccess,
-        coreRepoID: string, supportRepoID: string,
+        historyEnabled: boolean, validationEnabled: boolean, blacklistingEnabled: boolean, undoEnabled: boolean,
+        repositoryAccess: RepositoryAccess, coreRepoID: string, supportRepoID: string,
         coreRepoSailConfigurerSpecification?: PluginSpecification, coreBackendType?: BackendTypesEnum,
         supportRepoSailConfigurerSpecification?: PluginSpecification, supportBackendType?: BackendTypesEnum,
         leftDataset?: string, rightDataset?: string,
@@ -185,6 +185,7 @@ export class ProjectServices {
             historyEnabled: historyEnabled,
             validationEnabled: validationEnabled,
             blacklistingEnabled: blacklistingEnabled,
+            undoEnabled: undoEnabled,
             repositoryAccess: repositoryAccess.stringify(),
             coreRepoID: coreRepoID,
             supportRepoID: supportRepoID,

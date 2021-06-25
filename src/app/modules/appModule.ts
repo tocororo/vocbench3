@@ -13,6 +13,7 @@ import { AppRoutingModule } from '../appRoutes';
 import { DataComponent } from '../data/dataComponent';
 import { HomeComponent } from '../homeComponent';
 import { SkosDiffingModule } from '../skosDiffing/skosDiffingModule';
+import { UndoDirective } from '../undo/undoDirective';
 import { GUARD_PROVIDERS } from '../utils/CanActivateGuards';
 import { DatatypeValidator } from '../utils/DatatypeValidator';
 import { HttpManager } from '../utils/HttpManager';
@@ -116,6 +117,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppComponent,
         HomeComponent,
         DataComponent,
+        UndoDirective
     ],
     bootstrap: [AppComponent]
 })

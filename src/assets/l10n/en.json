@@ -1705,6 +1705,7 @@
             "REPO_ACCESS": "Repository Access",
             "REPO_LOCATION": "Repository Location",
             "SUPPORT_REPO_ID": "History/Validation Repository ID",
+            "UNDO": "Undo",
             "VALIDATION": "Validation"
         },
         "RESOURCE": {
@@ -1874,6 +1875,7 @@
         "TRANSITIVE_IMPORTS": "Transitive imports",
         "TRIVIAL_INFERENCE": "Trivial Inference",
         "TRIVIAL_INFERENCE_INFO": "Enable trivial inference",
+        "UNDO_INFO": "Enable possibility to undo operation on data",
         "URI_GENERATOR": "URI Generator",
         "USE_DEFAULT": "Use default settings",
         "USE_RESOURCE_METADATA_INFO": "Usage of Resource Metadata can be enabled also after the project creation",
@@ -2271,6 +2273,10 @@
         "REMOVED": "Removed",
         "STATUS": "Status",
         "WARNING": "Warning"
+    },
+    "UNDO": {
+        "OPERATION_UNDONE": "Operation undone",
+        "OPERATION_UNDONE_INFO": "The following operation has been undone: {{operation}}"
     },
     "USER": {
         "LOGIN": "Log in",

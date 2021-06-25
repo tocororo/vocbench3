@@ -14,23 +14,14 @@ export class CommitInfo {
     // public comment: string;
 
     constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, operationParameters: ParameterInfo[],
-            startTime: Date, endTime: Date, commentAllowed?: boolean) {
+        startTime: Date, endTime: Date, commentAllowed?: boolean) {
         this.commit = commit;
         this.user = user;
 
         this.operation = operation;
-        if (operation != null) {
-            let stCoreServices: string = "st-core-services/";
-            let operationShow = operation.getURI();
-            var idx = operationShow.indexOf(stCoreServices);
-            if (idx != -1) {
-                operationShow = operationShow.substring(idx + stCoreServices.length);
-            }
-            this.operation.setShow(operationShow);
-        }
 
         this.operationParameters = operationParameters;
-        
+
         this.startTime = startTime;
         if (startTime != null) {
             this.startTimeLocal = Deserializer.parseDateTime(startTime);
@@ -41,6 +32,45 @@ export class CommitInfo {
         }
 
         this.commentAllowed = commentAllowed;
+    }
+
+    public static parse(commitJson: any) {
+        let commitUri: ARTURIResource
+        if (commitJson.commit) {
+            commitUri = new ARTURIResource(commitJson.commit);
+        }
+
+        let user: ARTURIResource;
+        if (commitJson.user != null) {
+            user = new ARTURIResource(commitJson.user['@id'], commitJson.user.show);
+        }
+
+        let operation: ARTURIResource;
+        if (commitJson.operation != null) {
+            operation = Deserializer.createURI(commitJson.operation);
+            // operation = new ARTURIResource(commitJson.operation['@id']);
+        }
+
+        let operationParameters: ParameterInfo[] = [];
+        if (commitJson.operationParameters != null) {
+            commitJson.operationParameters.forEach(element => {
+                if (element.value != null) {
+                    operationParameters.push(new ParameterInfo(element.name, element.value));
+                }
+            });
+        }
+
+        let startTime: Date;
+        if (commitJson.startTime != null) {
+            startTime = new Date(commitJson.startTime);
+        }
+
+        let endTime: Date;
+        if (commitJson.endTime != null) {
+            endTime = new Date(commitJson.endTime);
+        }
+
+        return new CommitInfo(commitUri, user, operation, operationParameters, startTime, endTime);
     }
 }
 
@@ -101,7 +131,7 @@ export enum RepositoryStatus {
 
 export enum RepositoryLocation {
     LOCAL = "LOCAL",
-    REMOTE = "REMOTE", 
+    REMOTE = "REMOTE",
     NOT_FOUND = "NOT_FOUND"
 }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { OperationMetadata } from '../models/Undo';
+import { map } from 'rxjs/operators';
+import { CommitInfo } from '../models/History';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -10,9 +11,13 @@ export class UndoServices {
 
     constructor(private httpMgr: HttpManager) { }
 
-    undo(): Observable<OperationMetadata> {
+    undo(): Observable<CommitInfo> {
         let params = {};
-        return this.httpMgr.doPost(this.serviceName, "undo", params);
+        return this.httpMgr.doPost(this.serviceName, "undo", params).pipe(
+            map(stResp => {
+                return CommitInfo.parse(stResp);
+            })
+        );
     }
 
 }

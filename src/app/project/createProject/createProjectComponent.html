@@ -135,7 +135,7 @@
                         </div>
                     </div>
                 </ng-template>
-                <div class="col-sm-4 d-flex align-items-center justify-items-center">
+                <div class="col-sm-4 d-flex align-items-center justify-items-center" style="flex-wrap: wrap;">
                     <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
                         <input class="form-check-input" id="historyCheck" type="checkbox" [(ngModel)]="history">
                         <label class="form-check-label text-nowrap" for="historyCheck">
@@ -148,6 +148,13 @@
                         <label class="form-check-label text-nowrap" for="validationCheck">
                             {{'MODELS.PROJECT.VALIDATION'|translate}}
                             <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.VALIDATION_INFO'|translate"></span>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
+                        <input class="form-check-input" id="undoCheck" type="checkbox" [(ngModel)]="undo" [disabled]="!history">
+                        <label class="form-check-label text-nowrap" for="undoCheck">
+                            {{'MODELS.PROJECT.UNDO'|translate}}
+                            <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.UNDO_INFO'|translate"></span>
                         </label>
                     </div>
                     <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">

@@ -93,6 +93,7 @@ export class CreateProjectComponent {
     history: boolean = false;
     validation: boolean = false;
     blacklisting: boolean = false;
+    undo: boolean = false;
 
     //edoal
     private projectList: Project[];
@@ -113,8 +114,8 @@ export class CreateProjectComponent {
     private remoteRepoConfigs: RemoteRepositoryAccessConfig[] = [];
     private selectedRemoteRepoConfig: RemoteRepositoryAccessConfig;
 
-    private DEFAULT_REPO_EXTENSION_ID = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.PredefinedRepositoryImplConfigurer";
-    private DEFAULT_REPO_CONFIG_TYPE = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JNativeSailConfigurerConfiguration";
+    private DEFAULT_REPO_EXTENSION_ID = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.PredefinedRepositoryConfigurer";
+    private DEFAULT_REPO_CONFIG_TYPE = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JNativeSailConfiguration";
 
     //core repository containing data
     dataRepoId: string;
@@ -804,7 +805,7 @@ export class CreateProjectComponent {
          */
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.createProject(this.projectName, this.baseUri,
-            this.ontoModelType, this.lexicalModelType, this.history, this.validation, this.blacklisting,
+            this.ontoModelType, this.lexicalModelType, this.history, this.validation, this.blacklisting, this.undo,
             repositoryAccess, this.dataRepoId, supportRepoIdPar, coreRepoSailConfigurerSpecification, coreRepoBackendType,
             supportRepoSailConfigurerSpecification, supportRepoBackendType, leftDataset, rightDataset,
             uriGeneratorSpecification, renderingEngineSpecification, metadataAssociationsPar, this.enableSHACL, shaclSettingsPar,
