@@ -8,7 +8,7 @@
         <!-- Why index and track by? https://stackoverflow.com/q/40314732/5805661 -->
         <tr *ngFor="let v of value; let index = index; let last = last; trackBy: trackByIndex">
             <td style="padding: 2px 0px;">
-                <setting-value [value]="value[index]" [type]="types[0]" [disabled]="disabled" (valueChanged)="onValueChange(index, $event)"></setting-value>
+                <setting-value [value]="value[index]" [type]="argType" [disabled]="disabled" (valueChanged)="onValueChange(index, $event)"></setting-value>
             </td>
             <td style="padding: 0px;">
                 <button *ngIf="value.length > 1 || collapsable" class="btn btn-sm btn-light" (click)="delete(index)" style="margin-left: 3px;" [disabled]="disabled">

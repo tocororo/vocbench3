@@ -21,8 +21,8 @@
         </ng-template>
     </ng-container>
 
-    <setting-set *ngSwitchCase="'List'" [value]="value" [types]="type.typeArguments" (valueChanged)="updateSetValue($event)" [disabled]="disabled"></setting-set>
-    <setting-set *ngSwitchCase="'Set'" [value]="value" [types]="type.typeArguments" (valueChanged)="updateSetValue($event)" [disabled]="disabled"></setting-set>
+    <setting-set *ngSwitchCase="'List'" [value]="value" [type]="type" (valueChanged)="updateSetValue($event)" [disabled]="disabled"></setting-set>
+    <setting-set *ngSwitchCase="'Set'" [value]="value" [type]="type" (valueChanged)="updateSetValue($event)" [disabled]="disabled"></setting-set>
 
     <setting-map *ngSwitchCase="'Map'" [value]="value" [types]="type.typeArguments" (valueChanged)="updateMapValue($event)" [disabled]="disabled"></setting-map>
 

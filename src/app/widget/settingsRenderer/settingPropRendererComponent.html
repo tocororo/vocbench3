@@ -47,10 +47,9 @@
                 </ng-template>
             </ng-container>
 
-            <setting-set *ngSwitchCase="'List'" [collapsable]="!prop.required" [value]="prop.value" [types]="prop.type.typeArguments" 
+            <setting-set *ngSwitchCase="'List'" [collapsable]="!prop.required" [value]="prop.value" [type]="prop.type" 
                 (valueChanged)="updateSetValue(prop, $event)" [disabled]="disabled"></setting-set>
-
-            <setting-set *ngSwitchCase="'Set'" [collapsable]="!prop.required" [value]="prop.value" [types]="prop.type.typeArguments" 
+            <setting-set *ngSwitchCase="'Set'" [collapsable]="!prop.required" [value]="prop.value" [type]="prop.type" 
                 (valueChanged)="updateSetValue(prop, $event)" [disabled]="disabled"></setting-set>
 
             <setting-map *ngSwitchCase="'Map'" [value]="prop.value" [types]="prop.type.typeArguments" 

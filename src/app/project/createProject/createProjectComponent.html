@@ -151,7 +151,7 @@
                         </label>
                     </div>
                     <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
-                        <input class="form-check-input" id="undoCheck" type="checkbox" [(ngModel)]="undo" [disabled]="!history">
+                        <input class="form-check-input" id="undoCheck" type="checkbox" [(ngModel)]="undo">
                         <label class="form-check-label text-nowrap" for="undoCheck">
                             {{'MODELS.PROJECT.UNDO'|translate}}
                             <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.UNDO_INFO'|translate"></span>

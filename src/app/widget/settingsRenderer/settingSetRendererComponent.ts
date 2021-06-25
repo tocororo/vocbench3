@@ -7,16 +7,22 @@ import { SettingsPropType } from '../../models/Plugins';
 })
 export class SettingSetRendererComponent {
 
-    @Input() types: SettingsPropType[]; //list of types (actually it is handled only the first type)
+    @Input() type: SettingsPropType; //for sure type.name will be 'List' or 'Set', useful for retrieve typeArguments (the type of the elements of the list)
     @Input() value: any[];
     @Input() disabled: boolean = false;
     @Input() collapsable: boolean = false; // can be empty
 
     @Output() valueChanged = new EventEmitter<any[]>();
 
+    argType: SettingsPropType; //type of the list/set elements
+
     constructor() { }
 
     ngOnInit() {
+        this.argType = this.type.typeArguments[0];
+        if (this.argType.constraints == null && this.type.constraints != null) { //init the constraints of the elements type with the same constraint of the List/Set
+            this.argType.constraints = this.type.constraints;
+        }
         if (this.value == null) {
             this.value = [];
             if (!this.collapsable) {
@@ -55,9 +61,10 @@ export class SettingSetRendererComponent {
      * @param obj 
      */
     trackByIndex(index: number, obj: any): any {
-        if (this.types && this.types[0].name == "IRI") {
+        if (this.argType && this.argType.name == "IRI") {
             return obj;
-        } else 
-        return index;
+        } else {
+            return index;
+        }
     }
 }
