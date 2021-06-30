@@ -73,6 +73,15 @@ export class VBEventHandler {
     public datatypeCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeCreatedEvent");
     public datatypeDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeDeletedEvent");
 
+    //RESOURCES EVENTS
+    public resourceRenamedEvent: EventEmitter<{ oldResource: ARTURIResource, newResource: ARTURIResource }> = new VBEventEmitter("resourceRenamedEvent");
+    public resourceDeprecatedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceDeprecatedEvent");
+    //useful to refresh the ResourceView when a resource is updated from outside the RV
+    public resourceUpdatedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceUpdatedEvent");
+    public resourceDeletedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceDeletedEvent"); //emitted by undo when created operation is undone
+    // public resourceCreatedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceCreatedEvent");
+
+
     //TRANSLATION_SET EVENTS
     public translationSetCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetCreatedEvent");
     public translationSetDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetDeletedEvent");
@@ -98,11 +107,6 @@ export class VBEventHandler {
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
     public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);
     public refreshTreeListEvent: EventEmitter<RDFResourceRolesEnum[]> = new VBEventEmitter("refreshTreeEvent");
-
-    public resourceRenamedEvent: EventEmitter<{ oldResource: ARTURIResource, newResource: ARTURIResource }> = new VBEventEmitter("resourceRenamedEvent");
-    public resourceDeprecatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTResource>("resourceDeprecatedEvent");
-    //useful to refresh the ResourceView when a resource is updated from outside the RV
-    public resourceUpdatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTResource>("resourceUpdatedEvent");
 
     public collaborationSystemStatusChanged: EventEmitter<any> = new VBEventEmitter("collaborationSystemStatusChanged");
 

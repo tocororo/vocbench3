@@ -43,6 +43,11 @@ export abstract class AbstractTree extends AbstractStruct {
         super(eventHandler);
         this.basicModals = basicModals;
         this.sharedModals = sharedModals;
+        this.eventSubscriptions.push(this.eventHandler.resourceDeletedEvent.subscribe(
+            (node: ARTResource) => {
+                if (node instanceof ARTURIResource) this.onTreeNodeDeleted(node)
+            })
+        );
     }
 
     /**
@@ -92,7 +97,7 @@ export abstract class AbstractTree extends AbstractStruct {
         if (this.ensureRootVisibility(path[0], path)) { //if root is visible
             setTimeout(() => { //wait the the UI is updated after the (possible) update of rootLimit
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                var childrenNodeComponent = this.viewChildrenNode.toArray();
+                let childrenNodeComponent = this.viewChildrenNode.toArray();
                 for (let child of childrenNodeComponent) {
                     if (child.node.equals(path[0])) {
                         //let the found node expand itself and the remaining path
@@ -120,7 +125,7 @@ export abstract class AbstractTree extends AbstractStruct {
 
     onTreeNodeDeleted(deletedNode: ARTResource) {
         //check if the node to delete is a root
-        for (var i = 0; i < this.roots.length; i++) {
+        for (let i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getURI() == deletedNode.getNominalValue()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
@@ -159,7 +164,7 @@ export abstract class AbstractTree extends AbstractStruct {
      * @param path 
      */
     ensureRootVisibility(resource: ARTURIResource, path: ARTURIResource[]): boolean {
-        for (var i = 0; i < this.roots.length; i++) {
+        for (let i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getURI() == resource.getURI()) {
                 if (i >= this.rootLimit) {
                     //update rootLimit so that node at index i is within the range

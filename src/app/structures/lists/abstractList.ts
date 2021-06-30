@@ -1,5 +1,5 @@
 import { Directive, ElementRef, QueryList, ViewChild } from "@angular/core";
-import { ARTURIResource, ResAttribute } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { AbstractListNode } from "./abstractListNode";
 import { AbstractStruct } from "../abstractStruct";
@@ -23,6 +23,11 @@ export abstract class AbstractList extends AbstractStruct {
      */
     constructor(eventHandler: VBEventHandler) {
         super(eventHandler);
+        this.eventSubscriptions.push(this.eventHandler.resourceDeletedEvent.subscribe(
+            (node: ARTResource) => {
+                if (node instanceof ARTURIResource) this.onListNodeDeleted(node)
+            })
+        );
     }
 
     /**

@@ -40,6 +40,11 @@ export abstract class AbstractTreeNode extends AbstractNode {
     constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
         super(eventHandler);
         this.basicModals = basicModals;
+        this.eventSubscriptions.push(this.eventHandler.resourceDeletedEvent.subscribe(
+            (node: ARTResource) => {
+                if (node instanceof ARTURIResource) this.onTreeNodeDeleted(node)
+            })
+        );
     }
 
     /**
@@ -75,7 +80,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
         if (more) { //if the more attribute is true, doesn't implies that the button is visible, the node children could be all deprecated
             if (this.children.length > 0) {
                 let childVisible: boolean = false; //true if showDeprecated true, or child not-deprecated
-                for (var i = 0; i < this.children.length; i++) {
+                for (let i = 0; i < this.children.length; i++) {
                     if (this.showDeprecated || !this.children[i].isDeprecated()) {
                         childVisible = true;
                         break;
@@ -156,7 +161,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
     private expandChild(path: ARTURIResource[]) {
         //If the deprecated nodes are hidden, check if the path pass through a deprecated node not visible
         if (!this.showDeprecated) {
-            for (var i = 0; i < this.children.length; i++) {
+            for (let i = 0; i < this.children.length; i++) {
                 if (this.children[i].getURI() == path[0].getURI() && this.children[i].isDeprecated()) {
                     this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH", params:{resource: path[path.length-1].getShow()}},
                         ModalType.warning);
@@ -165,7 +170,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
             }
         }
         let nodeChildren = this.viewChildrenNode.toArray();
-        for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
+        for (let i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
             if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
                 //let the child node expand the remaining path
                 path.splice(0, 1);
@@ -208,7 +213,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
     //BROADCAST EVENTS HANDLERS
 
     onTreeNodeDeleted(deletedNode: ARTResource) {
-        for (var i = 0; i < this.children.length; i++) {
+        for (let i = 0; i < this.children.length; i++) {
             if (this.children[i].getNominalValue() == deletedNode.getNominalValue()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     /**
@@ -222,6 +227,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
                     if (this.children.length == 0) {
                         this.node.setAdditionalProperty(ResAttribute.MORE, 0);
                         this.open = false;
+                        this.initShowExpandCollapseBtn();
                     }
                 }
                 break;

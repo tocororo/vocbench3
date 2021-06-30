@@ -72,7 +72,6 @@ export class ResourceViewModeDispatcher {
     deleteResource(res: ARTResource) {
         if (this.resViewMode == ResourceViewMode.splitted) {
             this.resViewSplittedChild.deleteResource(res);
-            this.empty.emit();
         } else {
             this.resViewTabbedChild.deleteResource(res);
         }

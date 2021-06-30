@@ -1,7 +1,8 @@
-import { Directive, HostListener } from '@angular/core';
+import { Directive, EventEmitter, HostListener } from '@angular/core';
 import { CommitInfo } from '../models/History';
 import { UndoServices } from '../services/undoServices';
 import { VBContext } from '../utils/VBContext';
+import { VBEventHandler } from '../utils/VBEventHandler';
 import { ToastService } from '../widget/toast/toastService';
 
 @Directive({
@@ -9,11 +10,11 @@ import { ToastService } from '../widget/toast/toastService';
 })
 export class UndoDirective {
 
-    constructor(private undoService: UndoServices, private toastService: ToastService) {}
+    constructor(private undoService: UndoServices, private toastService: ToastService, private eventHandler: VBEventHandler) {}
 
     @HostListener('window:keydown', ['$event'])
     onKeyDown(e: KeyboardEvent) {
-        if (e.ctrlKey && e.key == "z") {
+        if ((e.ctrlKey || e.metaKey) && e.key == "z") {
             this.undoHandler();
         }
     }
@@ -31,9 +32,30 @@ export class UndoDirective {
             this.undoService.undo().subscribe(
                 (commit: CommitInfo) => {
                     let operation: string = commit.operation.getShow();
-                    this.toastService.show({ key: "UNDO.OPERATION_UNDONE" }, { key: "UNDO.OPERATION_UNDONE_INFO", params: { operation: operation} }, { toastClass: "bg-warning", delay: 3000 });
+                    this.toastService.show({ key: "UNDO.OPERATION_UNDONE" }, { key: "UNDO.OPERATION_UNDONE_INFO", params: { operation: operation} }, { toastClass: "bg-warning", delay: 4000 });
+                    this.restoreOldStatus(commit);
                 }
             );
         }
+    }
+
+    private restoreOldStatus(commit: CommitInfo) {
+        if (commit.created != null) {
+            commit.created.forEach(r => { //undo of a created resource => emit event in order to delete
+                this.eventHandler.resourceDeletedEvent.emit(r);
+            })
+        }
+        if (commit.deleted != null) {
+            commit.deleted.forEach(r => { //undo of a deleted resource => emit event in order to create 
+                // TODO check if the resource to recreate should be in a tree or list (how? it could be a top, a child, ...)
+                // this.eventHandler.resourceCreatedEvent.emit(r);
+            })
+        }
+        if (commit.modified != null) {
+            commit.modified.forEach(r => {
+                this.eventHandler.resourceUpdatedEvent.emit(r);
+            })
+        }
+
     }
 }

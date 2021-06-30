@@ -47,9 +47,11 @@ export class ResourceUtils {
     }
 
     static indexOfNode(list: ARTNode[], node: ARTNode): number {
-        for (var i = 0; i < list.length; i++) {
-            if (list[i].getNominalValue() == node.getNominalValue()) {
-                return i;
+        if (node != null) {
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].getNominalValue() == node.getNominalValue()) {
+                    return i;
+                }
             }
         }
         return -1;
@@ -301,7 +303,7 @@ export class NTriplesUtil {
     static parseNode(nTripleNode: string): ARTNode {
         let node: ARTNode;
         try {
-            node = NTriplesUtil.parseURI(nTripleNode);
+            node = NTriplesUtil.parseResource(nTripleNode);
         } catch (err) {}
         if (node == null) {
             try {
@@ -309,12 +311,23 @@ export class NTriplesUtil {
             } catch (err) {}
         }
         if (node == null) {
+            throw new Error("Not a legal value N-Triples representation: " + nTripleNode);
+        }
+        return node;
+    }
+
+    static parseResource(nTripleNode: string): ARTResource {
+        let node: ARTResource;
+        try {
+            node = NTriplesUtil.parseURI(nTripleNode);
+        } catch (err) {}
+        if (node == null) {
             try {
                 node = NTriplesUtil.parseBNode(nTripleNode);
             } catch (err) {}
         }
         if (node == null) {
-            throw new Error("Not a legal N-Triples representation: " + nTripleNode);
+            throw new Error("Not a legal resource N-Triples representation: " + nTripleNode);
         }
         return node;
     }
@@ -395,7 +408,7 @@ export class NTriplesUtil {
         // First character of literal is guaranteed to be a double
         // quote, start search at second character.
         let previousWasBackslash: boolean = false;
-        for (var i = 1; i < nTriplesLiteral.length; i++) {
+        for (let i = 1; i < nTriplesLiteral.length; i++) {
             let c: string = nTriplesLiteral.charAt(i);
             if (c == '"' && !previousWasBackslash) {
                 return i;

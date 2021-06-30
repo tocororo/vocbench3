@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { AbstractResViewVisualizationMode } from "./abstractResViewVisualization";
@@ -24,10 +25,17 @@ export class ResourceViewSplittedComponent extends AbstractResViewVisualizationM
     }
 
     deleteResource(resource: ARTResource) {
-        this.resource = null;
-        this.object = null;
-        this.resStack = [];
-        this.empty.emit();
+        if (this.resource != null && this.resource.equals(resource)) {
+            this.resource = null;
+            this.object = null;
+            this.resStack = [];
+            this.empty.emit();
+        } else {
+            let idx = ResourceUtils.indexOfNode(this.resStack, resource);
+            if (idx != -1) {
+                this.resStack.splice(idx, 1);
+            }
+        }
     }
 
     private closeSecondaryResView() {

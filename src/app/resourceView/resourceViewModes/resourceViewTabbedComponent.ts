@@ -50,7 +50,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
      */
     getMainResource(): ARTResource {
         let activeTabRes: ARTResource = null;
-        for (var i = 0; i < this.tabs.length; i++) {
+        for (let i = 0; i < this.tabs.length; i++) {
             if (this.tabs[i].active) {
                 activeTabRes = this.tabs[i].resource;
                 break;
@@ -60,7 +60,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
     }
 
     objectDblClick(obj: ARTResource) {
-        var tab = this.getTabWithResource(obj);
+        let tab = this.getTabWithResource(obj);
         if (tab != null) { //object already open in a tab => select it
             this.selectTab(tab, true);
         } else {
@@ -75,7 +75,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
      * If none tab describes that resource, returns null
      */
     private getTabWithResource(res: ARTResource) {
-        for (var i = 0; i < this.tabs.length; i++) {
+        for (let i = 0; i < this.tabs.length; i++) {
             if (this.tabs[i].resource.getNominalValue() == res.getNominalValue()) {
                 return this.tabs[i];
             }
@@ -131,7 +131,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
     }
 
     private deactivateCurrentActiveTab() {
-        for (var i = 0; i < this.tabs.length; i++) {
+        for (let i = 0; i < this.tabs.length; i++) {
             if (this.tabs[i].active) {
                 this.tabs[i].active = false;
             }
@@ -149,11 +149,11 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
          * a loop (resource updated -> getResourceView() -> response parsed and resource in RV updated -> resource updated -> ...)
          */
         // let props: string[] = Object.getOwnPropertyNames(resource);
-        // for (var i = 0; i < props.length; i++) {
+        // for (let i = 0; i < props.length; i++) {
         //     tab.resource[props[i]] = resource[props[i]];
         // }
 
-        // Solved the previous problem simply cheching in ngOnChanges of ResourceView if the nominalValue of the resource has changed
+        // Solved the previous problem simply checking in ngOnChanges of ResourceView if the nominalValue of the resource has changed
         tab.resource = resource;
     }
 

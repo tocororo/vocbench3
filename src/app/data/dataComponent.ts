@@ -27,6 +27,8 @@ export class DataComponent {
     private eventSubscriptions: Subscription[] = [];
 
     constructor(private eventHandler: VBEventHandler) {
+        this.eventSubscriptions.push(this.eventHandler.resourceDeletedEvent.subscribe(
+            (deletedRes: ARTResource) => { this.onNodeDeleted(deletedRes) }));
         this.eventSubscriptions.push(this.eventHandler.datatypeDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
         this.eventSubscriptions.push(this.eventHandler.classDeletedEvent.subscribe(

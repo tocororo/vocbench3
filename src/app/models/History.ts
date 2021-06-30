@@ -1,5 +1,6 @@
 import { ARTURIResource, ARTResource, ARTNode } from "./ARTResources";
 import { Deserializer } from "../utils/Deserializer";
+import { NTriplesUtil } from "../utils/ResourceUtils";
 
 export class CommitInfo {
     public commit: ARTURIResource;
@@ -11,6 +12,9 @@ export class CommitInfo {
     public endTime: Date;
     public endTimeLocal: string;
     public commentAllowed: boolean;
+    public created: ARTResource[];
+    public modified: ARTResource[];
+    public deleted: ARTResource[];
     // public comment: string;
 
     constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, operationParameters: ParameterInfo[],
@@ -70,7 +74,18 @@ export class CommitInfo {
             endTime = new Date(commitJson.endTime);
         }
 
-        return new CommitInfo(commitUri, user, operation, operationParameters, startTime, endTime);
+        let commit = new CommitInfo(commitUri, user, operation, operationParameters, startTime, endTime);
+
+        if (commitJson.created) {
+            commit.created = commitJson.created.map((n: string) => NTriplesUtil.parseResource(n));
+        }
+        if (commitJson.modified) {
+            commit.modified = commitJson.modified.map((n: string) => NTriplesUtil.parseResource(n));
+        }
+        if (commitJson.deleted) {
+            commit.deleted = commitJson.deleted.map((n: string) => NTriplesUtil.parseResource(n));
+        }
+        return commit;
     }
 }
 
