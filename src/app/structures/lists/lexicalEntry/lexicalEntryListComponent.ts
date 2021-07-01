@@ -11,7 +11,7 @@ import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { LexEntryDeleteUndoData, VBEventHandler } from "../../../utils/VBEventHandler";
 import { AbstractList } from "../abstractList";
 import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
 
@@ -51,7 +51,7 @@ export class LexicalEntryListComponent extends AbstractList {
         this.eventSubscriptions.push(eventHandler.lexicalEntryDeletedEvent.subscribe(
             (lexEntry: ARTURIResource) => this.onListNodeDeleted(lexEntry)));
         this.eventSubscriptions.push(eventHandler.lexEntryDeletedUndoneEvent.subscribe(
-            (data: { resource: ARTURIResource, lexicons: ARTURIResource[] }) => this.onEntryDeletedUndone(data)
+            (data: LexEntryDeleteUndoData) => this.onEntryDeletedUndone(data)
         ))
     }
 

@@ -11,7 +11,7 @@ import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { InstanceDeleteUndoData, VBEventHandler } from "../../../utils/VBEventHandler";
 import { AbstractList } from "../abstractList";
 import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 
@@ -57,7 +57,7 @@ export class InstanceListComponent extends AbstractList {
         this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
             (data: {resource: ARTResource, type: ARTResource}) => this.onTypeRemoved(data.resource, <ARTURIResource>data.type)));
         this.eventSubscriptions.push(eventHandler.instanceDeletedUndoneEvent.subscribe(
-            (data: {resource: ARTURIResource, types: ARTURIResource[]}) => {
+            (data: InstanceDeleteUndoData) => {
                 if (this.cls == null) return;
                 if (data.types.some(t => t.equals(this.cls))) {
                     this.list.push(data.resource);

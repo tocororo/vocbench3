@@ -17,7 +17,7 @@ import { ToastService } from '../widget/toast/toastService';
 export class UndoDirective {
 
     constructor(private undoService: UndoServices, private resourceService: ResourcesServices, private individualService: IndividualsServices,
-        private ontolexService: OntoLexLemonServices,
+        private ontolexService: OntoLexLemonServices, private skosService: SkosServices,
         private toastService: ToastService, private eventHandler: VBEventHandler) {}
 
     @HostListener('window:keydown', ['$event'])
@@ -102,10 +102,21 @@ export class UndoDirective {
                     } else if (operationId.endsWith("SKOS/deleteCollection")) {
                         //I need a service for retrieving super collections
                     } else if (operationId.endsWith("SKOS/deleteConcept")) {
-                        /*
-                        Here I need to check if the concept to restore should be visible, namely if it belongs to the current active scheme(s).
-                        In case, I need to retrieve the broaders and emit the event
-                        */
+                       this.skosService.getSchemesOfConcept(<ARTURIResource>r).subscribe(
+                            (schemes: ARTURIResource[]) => {
+                                let concTreePref = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
+                                let broaderProps: ARTURIResource[] = concTreePref.broaderProps.map((prop: string) => new ARTURIResource(prop));
+                                let narrowerProps: ARTURIResource[] = concTreePref.narrowerProps.map((prop: string) => new ARTURIResource(prop));
+                                this.skosService.getBroaderConcepts(<ARTURIResource>r, schemes, concTreePref.multischemeMode, broaderProps, narrowerProps, concTreePref.includeSubProps).subscribe(
+                                    (broaders: ARTURIResource[]) => {
+                                        this.resourceService.getResourceDescription(r).subscribe(
+                                            res => this.eventHandler.conceptDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, schemes: schemes, broaders: broaders})
+                                        );
+                                        
+                                    }
+                                )
+                            }
+                       );
                     } else if (operationId.endsWith("SKOS/deleteConceptScheme")) {
                         this.resourceService.getResourceDescription(r).subscribe(
                             res => this.eventHandler.schemeDeletedUndoneEvent.emit(<ARTURIResource>res)

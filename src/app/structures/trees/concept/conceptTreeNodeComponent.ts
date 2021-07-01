@@ -1,12 +1,12 @@
 import { Component, Input, QueryList, ViewChildren } from "@angular/core";
 import { map } from 'rxjs/operators';
-import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
-import { ConceptTreePreference } from "../../../models/Properties";
+import { ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
+import { ConceptTreePreference, MultischemeMode } from "../../../models/Properties";
 import { SkosServices } from "../../../services/skosServices";
 import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { VBContext } from "../../../utils/VBContext";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { ConceptDeleteUndoData, VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../abstractTreeNode";
@@ -41,6 +41,11 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
                 this.onParentAdded(data.newParent, data.child);
             }
         ));
+        this.eventSubscriptions.push(eventHandler.conceptDeletedUndoneEvent.subscribe(
+            (data: ConceptDeleteUndoData) => {
+                this.onDeleteUndo(data);
+            }
+        ))
     }
 
     ngOnInit() {
@@ -50,10 +55,8 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     expandNodeImpl() {
         let prefs: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
 
-        let broaderProps: ARTURIResource[] = [];
-        prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
-        let narrowerProps: ARTURIResource[] = [];
-        prefs.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
+        let broaderProps: ARTURIResource[] = prefs.broaderProps.map((prop: string) => new ARTURIResource(prop));
+        let narrowerProps: ARTURIResource[] = prefs.narrowerProps.map((prop: string) => new ARTURIResource(prop));
         let includeSubProps: boolean = prefs.includeSubProps;
 
         return this.skosService.getNarrowerConcepts(this.node, this.schemes, prefs.multischemeMode, broaderProps, narrowerProps, 
@@ -79,6 +82,37 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
         // if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
         //     this.onConceptDeleted(concept);
         // }
+    }
+
+    private onDeleteUndo(data: ConceptDeleteUndoData) {
+        if (data.broaders.length == 0) return; //has no broaders, so the concept to restore is a top concept
+        if (this.schemes == null || this.schemes.length == 0) { //no scheme mode => no check on scheme, simply add to roots
+            if (data.broaders.some(b => b.equals(this.node))) {
+                this.onChildCreated(this.node, data.resource);
+            }
+        } else {
+            if (data.broaders.some(b => b.equals(this.node))) {
+                let visible: boolean;
+                let multischemeMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.multischemeMode;
+                if (multischemeMode == MultischemeMode.or) { //concept to restore is visible if it belongs to at least one active scheme
+                    data.schemes.forEach(s => {
+                        if (this.schemes.some(activeSc => activeSc.equals(s))) {
+                            visible = true;
+                        }
+                    })
+                } else { //mode AND, visible if belongs to every active scheme
+                    visible = true;
+                    this.schemes.forEach(actSc => {
+                        if (!data.schemes.some(s => s.equals(actSc))) {
+                            visible = false; //there is an active scheme which concept doesn't belong
+                        }
+                    })
+                }
+                if (visible) {
+                    this.onChildCreated(this.node, data.resource);
+                }
+            }
+        }
     }
 
 }

@@ -11,7 +11,7 @@ import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { ConceptDeleteUndoData, VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTree } from "../abstractTree";
@@ -62,6 +62,11 @@ export class ConceptTreeComponent extends AbstractTree {
         this.eventSubscriptions.push(eventHandler.multischemeModeChangedEvent.subscribe(
             () => this.init() //multischeme mode changed => reinit tree
         ));
+        this.eventSubscriptions.push(eventHandler.conceptDeletedUndoneEvent.subscribe(
+            (data: ConceptDeleteUndoData) => {
+                this.onDeleteUndo(data);
+            }
+        ))
     }
 
     /**
@@ -250,6 +255,33 @@ export class ConceptTreeComponent extends AbstractTree {
         //         }
         //     }
         // }
+    }
+
+    private onDeleteUndo(data: ConceptDeleteUndoData) {
+        if (data.broaders.length > 0) return; //has broaders, so the concept to restore is not a top concept
+        if (this.schemes == null || this.schemes.length == 0) { //no scheme mode => no check on scheme, simply add to roots
+            this.roots.push(data.resource);
+        } else {
+            let visible: boolean;
+            let multischemeMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.multischemeMode;
+            if (multischemeMode == MultischemeMode.or) { //concept to restore is visible if it belongs to at least one active scheme
+                data.schemes.forEach(s => {
+                    if (this.schemes.some(activeSc => activeSc.equals(s))) {
+                        visible = true;
+                    }
+                })
+            } else { //mode AND, visible if belongs to every active scheme
+                visible = true;
+                this.schemes.forEach(actSc => {
+                    if (!data.schemes.some(s => s.equals(actSc))) {
+                        visible = false; //there is an active scheme which concept doesn't belong
+                    }
+                })
+            }
+            if (visible) {
+                this.roots.push(data.resource);
+            }
+        }
     }
 
 }

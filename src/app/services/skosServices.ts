@@ -105,13 +105,16 @@ export class SkosServices {
      * @param schemes schemes where the broaders should belong
      * @return an array of broaders
      */
-    getBroaderConcepts(concept: ARTURIResource, schemes: ARTURIResource[]) {
+    getBroaderConcepts(concept: ARTURIResource, schemes: ARTURIResource[], schemeFilter?: MultischemeMode, 
+        broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean) {
         let params: any = {
-            concept: concept
+            concept: concept,
+            schemes: schemes,
+            schemeFilter: schemeFilter,
+            broaderProps: broaderProps,
+            narrowerProps: narrowerProps,
+            includeSubProperties: includeSubProperties
         };
-        if (schemes != null) {
-            params.schemes = schemes;
-        }
         return this.httpMgr.doGet(this.serviceName, "getBroaderConcepts", params).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);

@@ -87,10 +87,10 @@ export class VBEventHandler {
     public resourceCreatedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("resourceCreatedUndoneEvent"); //emitted by undo when created operation is undone
     public classDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("classDeletedUndoneEvent");
     public collectionDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("collectionDeletedUndoneEvent");
-    public conceptDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("conceptDeletedUndoneEvent");
+    public conceptDeletedUndoneEvent: EventEmitter<ConceptDeleteUndoData> = new VBEventEmitter("conceptDeletedUndoneEvent");
     public datatypeDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeDeletedUndoneEvent");
-    public instanceDeletedUndoneEvent: EventEmitter<{ resource: ARTResource, types: ARTURIResource[] }> = new VBEventEmitter("instanceDeletedUndoneEvent");
-    public lexEntryDeletedUndoneEvent: EventEmitter<{ resource: ARTURIResource, lexicons: ARTURIResource[] }> = new VBEventEmitter("lexEntryDeletedUndoneEvent");
+    public instanceDeletedUndoneEvent: EventEmitter<InstanceDeleteUndoData> = new VBEventEmitter("instanceDeletedUndoneEvent");
+    public lexEntryDeletedUndoneEvent: EventEmitter<LexEntryDeleteUndoData> = new VBEventEmitter("lexEntryDeletedUndoneEvent");
     public lexiconDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconDeletedUndoneEvent");
     public propertyDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("propertyDeletedUndoneEvent");
     public schemeDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeDeletedUndoneEvent");
@@ -153,4 +153,20 @@ class VBEventEmitter<T> extends EventEmitter<T> {
         super.emit(value);
     }
 
+}
+
+export interface ConceptDeleteUndoData {
+    resource: ARTURIResource;
+    broaders: ARTURIResource[];
+    schemes: ARTURIResource[];
+}
+
+export interface InstanceDeleteUndoData {
+    resource: ARTResource;
+    types: ARTURIResource[];
+}
+
+export interface LexEntryDeleteUndoData {
+    resource: ARTURIResource;
+    lexicons: ARTURIResource[];
 }
