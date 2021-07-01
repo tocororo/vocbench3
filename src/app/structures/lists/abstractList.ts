@@ -23,11 +23,9 @@ export abstract class AbstractList extends AbstractStruct {
      */
     constructor(eventHandler: VBEventHandler) {
         super(eventHandler);
-        this.eventSubscriptions.push(this.eventHandler.resourceDeletedEvent.subscribe(
-            (node: ARTResource) => {
-                if (node instanceof ARTURIResource) this.onListNodeDeleted(node)
-            })
-        );
+        this.eventSubscriptions.push(this.eventHandler.resourceCreatedUndoneEvent.subscribe(
+            (node: ARTURIResource) => this.onResourceCreatedUndone(node)
+        ));
     }
 
     /**
@@ -57,6 +55,7 @@ export abstract class AbstractList extends AbstractStruct {
     abstract selectNode(node: any): void;
     abstract onListNodeCreated(node: ARTURIResource): void;
     abstract onListNodeDeleted(node: ARTURIResource): void;
+    abstract onResourceCreatedUndone(node: ARTResource): void;
 
     openListAt(node: ARTURIResource) {
         this.ensureNodeVisibility(node);

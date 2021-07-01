@@ -5,6 +5,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 10.0.0 (dd-mm-yyyy)
+  * Implemented possibility to "undo" operations (ctrl/cmd+Z)
   * Added email verification in the registration procedure
   * Enabled possibility to render project through labels
   * Improved the management of the unicity of preferred labels for concepts in the same scheme
@@ -13,6 +14,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Implemented a new ICV: OWL concistency violations
   * Added flags for Scottish Gaelic and Welsh languages
   * Adopted the new Settings services
+  * Added german l10n
   * Fixed autocompletion and prefixes resolution in SPARQL editor
 
 # 9.1.0 (28-04-2021)

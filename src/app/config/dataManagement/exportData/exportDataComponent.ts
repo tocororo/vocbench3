@@ -77,7 +77,7 @@ export class ExportDataComponent {
                         return g1.getURI().localeCompare(g2.getURI());
                     }
                 );
-                for (var i = 0; i < graphs.length; i++) {
+                for (let i = 0; i < graphs.length; i++) {
                     this.exportGraphs.push(new GraphStruct(graphs[i].getURI() == baseURI, graphs[i])); //set checked the project baseURI
                 }
             }
@@ -122,7 +122,7 @@ export class ExportDataComponent {
      * ============= GRAPHS =================
      * =====================================*/
     areAllGraphDeselected(): boolean {
-        for (var i = 0; i < this.exportGraphs.length; i++) {
+        for (let i = 0; i < this.exportGraphs.length; i++) {
             if (this.exportGraphs[i].checked) {
                 return false;
             }
@@ -140,25 +140,25 @@ export class ExportDataComponent {
                 //if the current graphStruct is the only one selected means that previously every graph was unchecked,
                 //so the filterChain element had all the graphs in the filterGraphs array.
                 //In this case, now the filterGraphs array should contains only the just checked graph
-                for (var i = 0; i < this.filtersChain.length; i++) {
+                for (let i = 0; i < this.filtersChain.length; i++) {
                     this.filtersChain[i].filterGraphs = [new GraphStruct(false, graphStruct.graph)];
                 }
             } else {
-                for (var i = 0; i < this.filtersChain.length; i++) {
+                for (let i = 0; i < this.filtersChain.length; i++) {
                     this.filtersChain[i].filterGraphs.push(new GraphStruct(false, graphStruct.graph));
                 }
             }
         } else {//graph is now unselected
             //if now no graph is selected, add them all to the filterGraphs array of the filterChain elements
             if (this.areAllGraphDeselected()) {
-                for (var i = 0; i < this.filtersChain.length; i++) {
+                for (let i = 0; i < this.filtersChain.length; i++) {
                     this.filtersChain[i].filterGraphs = this.collectCheckedGraphStructures();
                 }
             } else {
                 //remove it from the graphs selection of the filters
-                for (var i = 0; i < this.filtersChain.length; i++) {
-                    var fg: GraphStruct[] = this.filtersChain[i].filterGraphs;
-                    for (var j = 0; j < fg.length; j++) {
+                for (let i = 0; i < this.filtersChain.length; i++) {
+                    let fg: GraphStruct[] = this.filtersChain[i].filterGraphs;
+                    for (let j = 0; j < fg.length; j++) {
                         if (fg[j].graph.getURI() == graphStruct.graph.getURI()) {
                             fg.splice(j, 1);
                             break;
@@ -194,12 +194,12 @@ export class ExportDataComponent {
         this.selectedFilterChainElement = null;
     }
     moveFilterDown() {
-        var prevIndex = this.filtersChain.indexOf(this.selectedFilterChainElement);
+        let prevIndex = this.filtersChain.indexOf(this.selectedFilterChainElement);
         this.filtersChain.splice(prevIndex, 1); //remove from current position
         this.filtersChain.splice(prevIndex + 1, 0, this.selectedFilterChainElement);
     }
     moveFilterUp() {
-        var prevIndex = this.filtersChain.indexOf(this.selectedFilterChainElement);
+        let prevIndex = this.filtersChain.indexOf(this.selectedFilterChainElement);
         this.filtersChain.splice(prevIndex, 1); //remove from current position
         this.filtersChain.splice(prevIndex - 1, 0, this.selectedFilterChainElement);
     }
@@ -233,7 +233,7 @@ export class ExportDataComponent {
      * Returns true if a plugin of the filter chain require edit of the configuration and it is not configured
      */
     private requireConfiguration(filterChainEl: TransformerChainElement): boolean {
-        var conf: Settings = filterChainEl.selectedConfiguration;
+        let conf: Settings = filterChainEl.selectedConfiguration;
         if (conf != null && conf.requireConfiguration()) { //!= null required because selectedConfiguration could be not yet initialized
             return true;
         }
@@ -272,7 +272,7 @@ export class ExportDataComponent {
                     this.exportFormats = formats;
                     //set rdf/xml format as default (if found)
                     let rdfIdx: number = 0;
-                    for (var i = 0; i < this.exportFormats.length; i++) {
+                    for (let i = 0; i < this.exportFormats.length; i++) {
                         if (this.exportFormats[i].name == "RDF/XML") {
                             rdfIdx = i;
                             break;
@@ -336,7 +336,7 @@ export class ExportDataComponent {
     saveChain() {
         //graphs
         let graphs: string[] = [];
-        for (var i = 0; i < this.exportGraphs.length; i++) {
+        for (let i = 0; i < this.exportGraphs.length; i++) {
             if (this.exportGraphs[i].checked) {
                 graphs.push(this.exportGraphs[i].graph.toNT());
             }
@@ -345,7 +345,7 @@ export class ExportDataComponent {
         //transformationPipeline
         let transformationPipeline: any[] = [];
 
-        for (var i = 0; i < this.filtersChain.length; i++) {
+        for (let i = 0; i < this.filtersChain.length; i++) {
             if (this.filtersChain[i].status == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.FILTER_NOT_SAVED", params:{position: i+1}}, ModalType.warning);
                 return;
@@ -421,7 +421,7 @@ export class ExportDataComponent {
                 let deployerSpec: {extensionID: string, configRef: string};
                 let reformattingExporterSpec: {extensionID: string, configRef: string};
 
-                for (var i = 0; i < configurations.length; i++) {
+                for (let i = 0; i < configurations.length; i++) {
                     if (configurations[i].name == "transformationPipeline") {
                         //value of a stored transformationPipeline (see loadConfiguration response)
                         let chain: [{extensionID: string, configRef: string}, string[]][] = configurations[i].value;
@@ -542,7 +542,7 @@ export class ExportDataComponent {
      */
     export() {
         //check if every filter has been configured
-        for (var i = 0; i < this.filtersChain.length; i++) {
+        for (let i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
                 this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.EXPORT_FILTER_NOT_CONFIGURED", params:{filterName: this.filtersChain[i].selectedFactory.name}},
                     ModalType.warning);
@@ -551,16 +551,16 @@ export class ExportDataComponent {
         }
 
         //graphsToExport
-        var graphsToExport: ARTURIResource[] = [];
-        for (var i = 0; i < this.exportGraphs.length; i++) {
+        let graphsToExport: ARTURIResource[] = [];
+        for (let i = 0; i < this.exportGraphs.length; i++) {
             if (this.exportGraphs[i].checked) {
                 graphsToExport.push(this.exportGraphs[i].graph);
             }
         }
 
         //filteringPipeline
-        var filteringPipeline: TransformationStep[] = [];
-        for (var i = 0; i < this.filtersChain.length; i++) {
+        let filteringPipeline: TransformationStep[] = [];
+        for (let i = 0; i < this.filtersChain.length; i++) {
             filteringPipeline.push(this.filtersChain[i].convertToFilteringPipelineStep());
         }
 
@@ -639,7 +639,7 @@ export class ExportDataComponent {
      */
     private exportSuccessHandler(data: any | Blob, downloadExpected: boolean) {
         if (downloadExpected) {
-            var exportLink = window.URL.createObjectURL(data);
+            let exportLink = window.URL.createObjectURL(data);
             let ext = this.selectedExportFormat.defaultFileExtension;
             if (this.selectedExportFormat.name == "XLSX") {
                 ext = "xlsx";
@@ -655,13 +655,13 @@ export class ExportDataComponent {
      * =====================================*/
 
     private collectCheckedGraphStructures(): GraphStruct[] {
-        var graphs: GraphStruct[] = []
+        let graphs: GraphStruct[] = []
         if (this.areAllGraphDeselected()) {
-            for (var i = 0; i < this.exportGraphs.length; i++) {
+            for (let i = 0; i < this.exportGraphs.length; i++) {
                 graphs.push({checked: false, graph: this.exportGraphs[i].graph});
             }    
         } else {
-            for (var i = 0; i < this.exportGraphs.length; i++) {
+            for (let i = 0; i < this.exportGraphs.length; i++) {
                 if (this.exportGraphs[i].checked) {
                     graphs.push({checked: false, graph: this.exportGraphs[i].graph});
                 }
@@ -695,7 +695,7 @@ class TransformerChainElement {
     constructor(availableFactories: ConfigurableExtensionFactory[], filterGraphs: GraphStruct[]) {
         //clone the available factories, so changing the configuration of one of them, doesn't change the default of the others
         let availableFactClone: ConfigurableExtensionFactory[] = [];
-        for (var i = 0; i < availableFactories.length; i++) {
+        for (let i = 0; i < availableFactories.length; i++) {
             availableFactClone.push(availableFactories[i].clone());
         }
         this.availableFactories = availableFactClone;
@@ -705,18 +705,18 @@ class TransformerChainElement {
     convertToFilteringPipelineStep(): TransformationStep {
         let filterStep: TransformationStep = {filter: null};
         //filter: factoryId and properties
-        var filter: {factoryId: string, configuration: any} = {
+        let filter: {factoryId: string, configuration: any} = {
             factoryId: this.selectedFactory.id,
             configuration: null
         }
-        var selectedConf: Settings = this.selectedConfiguration;
+        let selectedConf: Settings = this.selectedConfiguration;
         
         filter.configuration = selectedConf.getPropertiesAsMap();
         filterStep.filter = filter;
         //graphs to which apply the filter
-        var graphs: string[] = [];
-        var fg: GraphStruct[] = this.filterGraphs;
-        for (var j = 0; j < fg.length; j++) {
+        let graphs: string[] = [];
+        let fg: GraphStruct[] = this.filterGraphs;
+        for (let j = 0; j < fg.length; j++) {
             if (fg[j].checked) { //collect only the checked graphs
                 graphs.push(fg[j].graph.getURI());
             }
@@ -724,6 +724,7 @@ class TransformerChainElement {
         if (graphs.length > 0) {
             filterStep.graphs = graphs;
         }
+
         return filterStep;
     }
 }

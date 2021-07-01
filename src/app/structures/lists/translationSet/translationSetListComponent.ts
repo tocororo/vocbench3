@@ -1,6 +1,6 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
@@ -28,6 +28,7 @@ export class TranslationSetListComponent extends AbstractList {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.translationSetCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.translationSetDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
+        this.eventSubscriptions.push(eventHandler.translationSetDeletedUndoneEvent.subscribe((node: ARTURIResource) => this.onDeletedUndo(node)));
     }
 
     ngOnInit() {
@@ -71,6 +72,19 @@ export class TranslationSetListComponent extends AbstractList {
                 break;
             }
         }
+    }
+
+    onResourceCreatedUndone(node: ARTResource) {
+        for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i].equals(node)) {
+                this.list.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    onDeletedUndo(node: ARTURIResource) {
+        this.list.push(node);
     }
 
     selectNode(node: ARTURIResource) {

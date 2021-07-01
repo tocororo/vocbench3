@@ -1,5 +1,5 @@
 import { Component, Input, QueryList, ViewChildren } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { DatatypesServices } from "../../../services/datatypesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -31,6 +31,7 @@ export class DatatypeListComponent extends AbstractList {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.datatypeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.datatypeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
+        this.eventSubscriptions.push(eventHandler.datatypeDeletedUndoneEvent.subscribe((node: ARTURIResource) => this.onDeletedUndo(node)));
     }
 
     ngOnInit() {
@@ -72,7 +73,7 @@ export class DatatypeListComponent extends AbstractList {
     }
 
     onListNodeDeleted(node: ARTURIResource) {
-        for (var i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].getURI() == node.getURI()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
@@ -87,6 +88,19 @@ export class DatatypeListComponent extends AbstractList {
                 break;
             }
         }
+    }
+
+    onResourceCreatedUndone(node: ARTResource) {
+        for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i].equals(node)) {
+                this.list.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    onDeletedUndo(node: ARTURIResource) {
+        this.list.push(node);
     }
 
     selectNode(node: ARTURIResource) {

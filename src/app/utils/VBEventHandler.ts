@@ -78,13 +78,23 @@ export class VBEventHandler {
     public resourceDeprecatedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceDeprecatedEvent");
     //useful to refresh the ResourceView when a resource is updated from outside the RV
     public resourceUpdatedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceUpdatedEvent");
-    public resourceDeletedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceDeletedEvent"); //emitted by undo when created operation is undone
-    // public resourceCreatedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceCreatedEvent");
-
 
     //TRANSLATION_SET EVENTS
     public translationSetCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetCreatedEvent");
     public translationSetDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetDeletedEvent");
+
+    //UNDO EVENTS
+    public resourceCreatedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("resourceCreatedUndoneEvent"); //emitted by undo when created operation is undone
+    public classDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("classDeletedUndoneEvent");
+    public collectionDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("collectionDeletedUndoneEvent");
+    public conceptDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("conceptDeletedUndoneEvent");
+    public datatypeDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeDeletedUndoneEvent");
+    public instanceDeletedUndoneEvent: EventEmitter<{ resource: ARTResource, types: ARTURIResource[] }> = new VBEventEmitter("instanceDeletedUndoneEvent");
+    public lexEntryDeletedUndoneEvent: EventEmitter<{ resource: ARTURIResource, lexicons: ARTURIResource[] }> = new VBEventEmitter("lexEntryDeletedUndoneEvent");
+    public lexiconDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconDeletedUndoneEvent");
+    public propertyDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("propertyDeletedUndoneEvent");
+    public schemeDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeDeletedUndoneEvent");
+    public translationSetDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetDeletedUndoneEvent");
 
     //PREFERENCES EVENTS
 

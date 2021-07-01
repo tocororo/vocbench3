@@ -915,7 +915,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     }
 
     private onResourceUpdated(resource: ARTResource) {
-        if (this.resource.getNominalValue() == resource.getNominalValue()) {
+        if (this.resource.equals(resource)) {
             this.buildResourceView(this.resource);
         }
     }

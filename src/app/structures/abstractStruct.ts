@@ -1,6 +1,6 @@
 import { Directive, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { TreeListContext } from "../utils/UIUtils";
 import { ProjectContext } from "../utils/VBContext";
@@ -39,6 +39,14 @@ export abstract class AbstractStruct {
         this.eventSubscriptions.push(eventHandler.refreshTreeListEvent.subscribe((roles: RDFResourceRolesEnum[]) => {
                 if (roles.indexOf(this.structRole) != -1) this.init()
         }));
+        this.eventSubscriptions.push(eventHandler.resourceUpdatedEvent.subscribe(
+            (res: ARTResource) => {
+                if (res instanceof ARTURIResource && res.equals(this.selectedNode)) {
+                    this.selectedNode = res;
+                    this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true); //restore the selected attr
+                }
+            }
+        ))
     }
 
     /**

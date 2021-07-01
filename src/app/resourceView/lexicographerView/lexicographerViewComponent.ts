@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { Form, LexicalEntry, LexicalResourceUtils, Sense } from "src/app/models/LexicographerView";
 import { OntoLex, Vartrans } from "src/app/models/Vocabulary";
 import { ClassesServices } from "src/app/services/classesServices";
@@ -10,6 +10,7 @@ import { PropertyServices } from "src/app/services/propertyServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
+import { VBEventHandler } from "src/app/utils/VBEventHandler";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { NewConceptualizationCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newConceptualizationCfModal";
@@ -43,6 +44,8 @@ export class LexicographerViewComponent {
     @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
     private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
+    private eventSubscriptions: Subscription[] = [];
+
     lexEntry: LexicalEntry;
 
     lemma: Form[];
@@ -67,7 +70,7 @@ export class LexicographerViewComponent {
     constructor(private lexicographerViewService: LexicographerViewServices, private lexViewHelper: LexViewHelper, private resourceService: ResourcesServices,
         private ontolexService: OntoLexLemonServices, private propertyService: PropertyServices, private classService: ClassesServices,
         private creationModals: CreationModalServices, private sharedModals: SharedModalServices, private lexViewModals: LexViewModalService,
-        private browsingModals: BrowsingModalServices, private modalService: NgbModal) {}
+        private browsingModals: BrowsingModalServices, private eventHandler: VBEventHandler, private modalService: NgbModal) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
@@ -88,11 +91,19 @@ export class LexicographerViewComponent {
         this.readonly = this.readonly || HttpServiceContext.getContextVersion() != null; //if it is working on an old dump version, disable the updates
 
         this.lexViewCache = new LexViewCache(this.lexicographerViewService, this.propertyService, this.classService, this.sharedModals);
+
+        this.eventSubscriptions.push(this.eventHandler.resourceUpdatedEvent.subscribe(
+            (resource: ARTResource) => this.onResourceUpdated(resource)
+        ));
     }
 
     ngAfterViewInit() {
         this.viewInitialized = true;
         this.buildLexicographerView();
+    }
+
+    ngOnDestroy() {
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     buildLexicographerView() {
@@ -290,5 +301,11 @@ export class LexicographerViewComponent {
         return modalRef.result;
     }
 
+
+    private onResourceUpdated(resource: ARTResource) {
+        if (this.resource.equals(resource)) {
+            this.buildLexicographerView();
+        }
+    }
 
 }

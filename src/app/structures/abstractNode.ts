@@ -41,6 +41,13 @@ export abstract class AbstractNode {
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.resourceDeprecatedEvent.subscribe(
             (res: ARTResource) => this.onResourceDeprecated(res)));
+        this.eventSubscriptions.push(eventHandler.resourceUpdatedEvent.subscribe(
+            (res: ARTResource) => {
+                if (res instanceof ARTURIResource && this.node.equals(res)) {
+                    this.node = res;
+                }
+            }
+        ))
     }
 
     /**

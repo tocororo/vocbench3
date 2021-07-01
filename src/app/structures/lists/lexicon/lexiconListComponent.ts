@@ -1,5 +1,5 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { Project } from "../../../models/Project";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
@@ -33,6 +33,7 @@ export class LexiconListComponent extends AbstractList {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.lexiconCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.lexiconDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
+        this.eventSubscriptions.push(eventHandler.lexiconDeletedUndoneEvent.subscribe((node: ARTURIResource) => this.onDeletedUndo(node)));
         //handler when active lexicon is changed programmatically when a searched entry belong to a non active lexicon
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
             (data: { lexicon: ARTURIResource, project: Project }) => {
@@ -61,7 +62,7 @@ export class LexiconListComponent extends AbstractList {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(lexicons, this.rendering ? SortAttribute.show : SortAttribute.value);
 
-                for (var i = 0; i < lexicons.length; i++) {
+                for (let i = 0; i < lexicons.length; i++) {
                     let activeLexicon = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeLexicon;
                     if (activeLexicon != null && lexicons[i].equals(activeLexicon)) {
                         this.activeLexicon = lexicons[i];
@@ -83,7 +84,7 @@ export class LexiconListComponent extends AbstractList {
     }
 
     onListNodeDeleted(node: ARTURIResource) {
-        for (var i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].getURI() == node.getURI()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
@@ -98,6 +99,19 @@ export class LexiconListComponent extends AbstractList {
                 break;
             }
         }
+    }
+
+    onResourceCreatedUndone(node: ARTResource) {
+        for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i].equals(node)) {
+                this.list.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    onDeletedUndo(node: ARTURIResource) {
+        this.list.push(node);
     }
 
     selectNode(node: ARTURIResource) {

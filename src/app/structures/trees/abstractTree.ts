@@ -43,11 +43,9 @@ export abstract class AbstractTree extends AbstractStruct {
         super(eventHandler);
         this.basicModals = basicModals;
         this.sharedModals = sharedModals;
-        this.eventSubscriptions.push(this.eventHandler.resourceDeletedEvent.subscribe(
-            (node: ARTResource) => {
-                if (node instanceof ARTURIResource) this.onTreeNodeDeleted(node)
-            })
-        );
+        this.eventSubscriptions.push(this.eventHandler.resourceCreatedUndoneEvent.subscribe(
+            (node: ARTURIResource) => this.onResourceCreatedUndone(node)
+        ));
     }
 
     /**
@@ -137,6 +135,17 @@ export abstract class AbstractTree extends AbstractStruct {
                 } else {
                     this.roots.splice(i, 1);
                 }
+                break;
+            }
+        }
+    }
+
+    onResourceCreatedUndone(node: ARTResource) {
+        //check if the node to delete is a root
+        for (let i = 0; i < this.roots.length; i++) {
+            if (this.roots[i].getURI() == node.getNominalValue()) {
+                //remove it independently from validation (when enabled, the "undo" of a creation doesn't mark the node as staged-del, but simply cancels the creation, so removes it)
+                this.roots.splice(i, 1); 
                 break;
             }
         }

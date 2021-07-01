@@ -1,5 +1,5 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { Project } from "../../../models/Project";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { SkosServices } from "../../../services/skosServices";
@@ -31,6 +31,7 @@ export class SchemeListComponent extends AbstractList {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.schemeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.schemeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
+        this.eventSubscriptions.push(eventHandler.schemeDeletedUndoneEvent.subscribe((node: ARTURIResource) => this.onDeletedUndo(node)));
         //handler when active schemes is changed programmatically when a searched concept belong to a non active scheme
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (data: { schemes: ARTURIResource[], project: Project }) => {
@@ -55,7 +56,7 @@ export class SchemeListComponent extends AbstractList {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(schemes, this.rendering ? SortAttribute.show : SortAttribute.value);
 
-                for (var i = 0; i < schemes.length; i++) {
+                for (let i = 0; i < schemes.length; i++) {
                     let active: boolean = ResourceUtils.containsNode(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes, schemes[i]);
                     this.list.push({ checked: active, scheme: schemes[i] });
                 }
@@ -73,7 +74,7 @@ export class SchemeListComponent extends AbstractList {
     }
 
     onListNodeDeleted(node: ARTURIResource) {
-        for (var i = 0; i < this.list.length; i++) {//Update the schemeList
+        for (let i = 0; i < this.list.length; i++) {//Update the schemeList
             if (this.list[i].scheme.getURI() == node.getURI()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
@@ -95,6 +96,19 @@ export class SchemeListComponent extends AbstractList {
         this.selectedNode = null;
     }
 
+    onResourceCreatedUndone(node: ARTResource) {
+        for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i].scheme.equals(node)) {
+                this.list.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    onDeletedUndo(node: ARTURIResource) {
+        this.list.push({ scheme: node, checked: false });
+    }
+
     /**
      * Called when a scheme is clicked. Set the clicked scheme as selected
      */
@@ -109,7 +123,7 @@ export class SchemeListComponent extends AbstractList {
 
     //@Override
     ensureNodeVisibility(resource: ARTURIResource) {
-        for (var i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].scheme.getURI() == resource.getURI()) {
                 if (i >= this.nodeLimit) {
                     //update nodeLimit so that node at index i is within the range
@@ -122,14 +136,14 @@ export class SchemeListComponent extends AbstractList {
     }
 
     public activateAllScheme() {
-        for (var i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.list.length; i++) {
             this.list[i].checked = true;
         }
         this.updateActiveSchemesPref();
     }
 
     public deactivateAllScheme() {
-        for (var i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.list.length; i++) {
             this.list[i].checked = false;
         }
         this.updateActiveSchemesPref();
@@ -144,8 +158,8 @@ export class SchemeListComponent extends AbstractList {
      */
     private collectCheckedSchemes(): ARTURIResource[] {
         //collect all the active scheme
-        var activeSchemes: ARTURIResource[] = [];
-        for (var i = 0; i < this.list.length; i++) {
+        let activeSchemes: ARTURIResource[] = [];
+        for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].checked) {
                 activeSchemes.push(this.list[i].scheme);
             }

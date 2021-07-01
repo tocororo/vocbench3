@@ -40,11 +40,9 @@ export abstract class AbstractTreeNode extends AbstractNode {
     constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
         super(eventHandler);
         this.basicModals = basicModals;
-        this.eventSubscriptions.push(this.eventHandler.resourceDeletedEvent.subscribe(
-            (node: ARTResource) => {
-                if (node instanceof ARTURIResource) this.onTreeNodeDeleted(node)
-            })
-        );
+        this.eventSubscriptions.push(this.eventHandler.resourceCreatedUndoneEvent.subscribe(
+            (node: ARTURIResource) => this.onResourceCreatedUndone(node)
+        ));
     }
 
     /**
@@ -222,16 +220,30 @@ export abstract class AbstractTreeNode extends AbstractNode {
                      * doesn't imply the removal of the child, but simply that the above triple is replicated in the staging-remove graph
                      */
                 } else {
-                    this.children.splice(i, 1);
-                    //if node has no more children change info of node so the UI will update
-                    if (this.children.length == 0) {
-                        this.node.setAdditionalProperty(ResAttribute.MORE, 0);
-                        this.open = false;
-                        this.initShowExpandCollapseBtn();
-                    }
+                    this.removeChildAtPos(i);
                 }
                 break;
             }
+        }
+    }
+
+    onResourceCreatedUndone(node: ARTResource) {
+        for (let i = 0; i < this.children.length; i++) {
+            if (this.children[i].equals(node)) {
+                //remove it independently from validation (when enabled, the "undo" of a creation doesn't mark the node as staged-del, but simply cancels the creation, so removes it)
+                this.removeChildAtPos(i);
+                break;
+            }
+        }
+    }
+
+    private removeChildAtPos(pos: number) {
+        this.children.splice(pos, 1);
+        //if node has no more children change info of node so the UI will update
+        if (this.children.length == 0) {
+            this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+            this.open = false;
+            this.initShowExpandCollapseBtn();
         }
     }
 

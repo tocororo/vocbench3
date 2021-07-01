@@ -44,18 +44,26 @@ export class InstanceListComponent extends AbstractList {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: {instance: ARTResource, cls: ARTResource}) => { 
-                if (this.cls == null) return; //in case there are multiple InstanceListComponent initialized and one of them has cls null
+                if (this.cls == null) return;
                 if (data.cls.equals(this.cls)) this.onListNodeDeleted(data.instance); 
             }
         ));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
             (data: {instance: ARTResource, cls: ARTResource}) => { 
-                if (this.cls == null) return; //in case there are multiple InstanceListComponent initialized and one of them has cls null
+                if (this.cls == null) return;
                 if (data.cls.equals(this.cls)) this.onListNodeCreated(<ARTURIResource>data.instance); 
             } 
         ));
         this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
             (data: {resource: ARTResource, type: ARTResource}) => this.onTypeRemoved(data.resource, <ARTURIResource>data.type)));
+        this.eventSubscriptions.push(eventHandler.instanceDeletedUndoneEvent.subscribe(
+            (data: {resource: ARTURIResource, types: ARTURIResource[]}) => {
+                if (this.cls == null) return;
+                if (data.types.some(t => t.equals(this.cls))) {
+                    this.list.push(data.resource);
+                }
+            }
+        ));
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -198,7 +206,7 @@ export class InstanceListComponent extends AbstractList {
 
     //EVENT LISTENERS
     onListNodeDeleted(node: ARTResource) {
-        for (var i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].equals(node)) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
@@ -215,6 +223,15 @@ export class InstanceListComponent extends AbstractList {
         }
     }
 
+    onResourceCreatedUndone(node: ARTResource) {
+        for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i].equals(node)) {
+                this.list.splice(i, 1);
+                break;
+            }
+        }
+    }
+
     onListNodeCreated(node: ARTURIResource) {
         this.list.unshift(node);
         if (this.context == TreeListContext.addPropValue) {
@@ -225,7 +242,7 @@ export class InstanceListComponent extends AbstractList {
     private onTypeRemoved(instance: ARTResource, cls: ARTURIResource) {
         //check of cls not undefined is required if instance list has never been initialized with an @Input class
         if (this.cls && this.cls.equals(cls)) {
-            for (var i = 0; i < this.list.length; i++) {
+            for (let i = 0; i < this.list.length; i++) {
                 if (this.list[i].equals(instance)) {
                     this.list.splice(i, 1);
                     break;

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { mergeMap } from 'rxjs/operators';
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { LexEntryVisualizationMode, LexicalEntryListPreference, SafeToGo, SafeToGoMap } from "../../../models/Properties";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
@@ -50,6 +50,9 @@ export class LexicalEntryListComponent extends AbstractList {
         //here there is no need to check for the index (leading char of the entry) since if the entry uri is not found it is not deleted
         this.eventSubscriptions.push(eventHandler.lexicalEntryDeletedEvent.subscribe(
             (lexEntry: ARTURIResource) => this.onListNodeDeleted(lexEntry)));
+        this.eventSubscriptions.push(eventHandler.lexEntryDeletedUndoneEvent.subscribe(
+            (data: { resource: ARTURIResource, lexicons: ARTURIResource[] }) => this.onEntryDeletedUndone(data)
+        ))
     }
 
     ngOnInit() {
@@ -159,7 +162,7 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     onListNodeDeleted(node: ARTURIResource) {
-        for (var i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].getURI() == node.getURI()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
@@ -173,6 +176,27 @@ export class LexicalEntryListComponent extends AbstractList {
                 }
                 break;
             }
+        }
+    }
+
+    onResourceCreatedUndone(node: ARTResource) {
+        for (let i = 0; i < this.list.length; i++) {
+            if (this.list[i].equals(node)) {
+                this.list.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    onEntryDeletedUndone(data: { resource: ARTURIResource, lexicons: ARTURIResource[] }) {
+        if (data.lexicons.some(l => l.equals(this.lexicon))) {
+            this.ontolexService.getLexicalEntryIndex(data.resource).subscribe(
+                index => {
+                    if (index.toLocaleUpperCase() == this.index.toLocaleUpperCase()) {
+                        this.list.push(data.resource);
+                    }
+                }
+            )
         }
     }
 

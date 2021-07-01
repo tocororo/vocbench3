@@ -20,9 +20,6 @@ export class SettingSetRendererComponent {
 
     ngOnInit() {
         this.argType = this.type.typeArguments[0];
-        if (this.argType.constraints == null && this.type.constraints != null) { //init the constraints of the elements type with the same constraint of the List/Set
-            this.argType.constraints = this.type.constraints;
-        }
         if (this.value == null) {
             this.value = [];
             if (!this.collapsable) {
