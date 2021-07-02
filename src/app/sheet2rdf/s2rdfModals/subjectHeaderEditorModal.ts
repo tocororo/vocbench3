@@ -174,8 +174,10 @@ export class SubjectHeaderEditorModal {
             additionalPOParam.push({ first: po.predicate, second: po.object });
         });
         //execute the update
+        let memoizePar: boolean = this.memoizeData ? this.memoizeData.enabled : null;
+        let memoizeIdPar: string = this.memoizeData ? this.memoizeData.id : null
         this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contractUri, this.selectedConverter.params,
-            this.type, additionalPOParam, this.memoizeData.enabled, this.memoizeData.id).subscribe(
+            this.type, additionalPOParam, memoizePar, memoizeIdPar).subscribe(
             () => {
                 this.activeModal.close();
             }

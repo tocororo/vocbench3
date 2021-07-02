@@ -102,9 +102,10 @@ export class ConverterConfiguratorComponent {
             }
         });
         //restore the selected signature and the parameters
-        this.selectedConverter.getSignatures().forEach(s => {
+        let signatureToRestore: SignatureDescription;
+        signLoop: for (let s of this.selectedConverter.getSignatures()) {
             if (!this.isSignatureReturnTypeCompliant(this.converter.type, s.getReturnType())) {
-                return; //skip this signature
+                continue; //skip this signature
             }
             //compare the names of the params
             let signatureParams: string[] = s.getParameters().map(p => p.getName());
@@ -114,17 +115,21 @@ export class ConverterConfiguratorComponent {
             if (signatureParams.length == converterParams.length) {
                 for (let i = 0; i < signatureParams.length; i++) {
                     if (signatureParams[i] != converterParams[i]) {
-                        return; //found a different parameter => this is not the used signature
+                        continue signLoop; //found a different parameter => this is not the used signature
                     }
                 }
                 //if this code is reached, every parameter of the signature was found in the converter => select the signature
-                this.selectSignature(s, false);
-                //now restore the values
-                for (let paramName in this.converter.params) {
-                    this.signatureParams.find(p => p.name == paramName).value = this.converter.params[paramName];
-                }
+                signatureToRestore = s;
+                break;
             }
-        });
+        }
+        if (signatureToRestore != null) {
+            this.selectSignature(signatureToRestore, false);
+            //now restore the values
+            for (let paramName in this.converter.params) {
+                this.signatureParams.find(p => p.name == paramName).value = this.converter.params[paramName];
+            }
+        }
     }
 
     /**

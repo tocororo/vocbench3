@@ -45,6 +45,9 @@ export class HeaderEditorModal {
                 if (!this.ignoreInitialized) {
                     this.ignoreInitialized = true;
                 }
+                //replace the header in the model (useful for keep the model updated in case initHeader in invoked after a change on the current header made in this editor)
+                let idx = this.s2rdfModel.headers.findIndex(h => h.id == this.headerId);
+                this.s2rdfModel.headers[idx] = this.header;
             }
         );
     }

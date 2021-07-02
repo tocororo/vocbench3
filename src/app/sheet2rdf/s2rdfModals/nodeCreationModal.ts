@@ -148,8 +148,8 @@ export class NodeCreationModal {
                 let newNode: NodeConversion = { 
                     nodeId: this.nodeId,
                     converter: this.selectedConverter,
-                    memoize: this.memoizeData.enabled,
-                    memoizeId: (this.memoizeData.enabled) ? this.memoizeData.id : null,
+                    memoize: this.memoizeData ? this.memoizeData.enabled : false,
+                    memoizeId: (this.memoizeData && this.memoizeData.enabled) ? this.memoizeData.id : null,
                 }
                 this.activeModal.close(newNode);
             }
