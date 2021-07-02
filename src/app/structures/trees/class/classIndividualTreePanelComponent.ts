@@ -164,7 +164,6 @@ export class ClassIndividualTreePanelComponent {
     private draggingHandler(event: MouseEvent) {
         let endMousedownY = event.clientY;
         let diffY: number = this.startMousedownY - endMousedownY;
-        // console.log("startMousedownY", this.startMousedownY, "endMousedownY", endMousedownY, "diffY ", diffY);
         let classPanelHeight: number = this.classPanelRef.nativeElement.offsetHeight;
         let instancePanelHeight: number = this.instancePanelRef.nativeElement.offsetHeight;
         /**

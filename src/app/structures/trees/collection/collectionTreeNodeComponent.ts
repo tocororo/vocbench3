@@ -4,7 +4,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from 
 import { SkosServices } from "../../../services/skosServices";
 import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { TreeNodeDeleteUndoData, VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../abstractTreeNode";
@@ -35,6 +35,8 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onNestedCollectionAddedInPosition(data.nested, data.container, data.position)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionRemovedEvent.subscribe(
             (data: any) => this.onParentRemoved(data.container, data.nested)));
+        this.eventSubscriptions.push(eventHandler.collectionDeletedUndoneEvent.subscribe(
+            (data: TreeNodeDeleteUndoData) => this.onDeleteUndo(data)));
     }
 
     ngOnInit() {
@@ -84,6 +86,12 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
             this.children.splice(position, 0, nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.open = true;
+        }
+    }
+
+    private onDeleteUndo(data: TreeNodeDeleteUndoData) {
+        if (data.parents.some(p => p.equals(this.node))) {
+            this.onChildCreated(this.node, data.resource);   
         }
     }
 

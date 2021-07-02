@@ -168,7 +168,6 @@ export class UmlGraphComponent extends AbstractGraph {
         this.graphService.expandGraphModelNode(res).subscribe(
             (graphModel: GraphModelRecord[]) => {
                 let graphTemp = this.convertModelToGraphForAddNode(graphModel, res);
-                //console.log("adding links", graphTemp.links.map(l => l.getShow()).join("\n"));
                 this.mergeGraph(graphTemp);
                 if (this.hideArrow) {
                     this.linksCache.forEach(l => {

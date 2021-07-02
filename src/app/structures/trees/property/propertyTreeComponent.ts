@@ -8,7 +8,7 @@ import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { TreeNodeDeleteUndoData, VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTree } from "../abstractTree";
@@ -38,6 +38,8 @@ export class PropertyTreeComponent extends AbstractTree {
             (node: ARTURIResource) => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(
             (property: ARTURIResource) => this.onTreeNodeDeleted(property)));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedUndoneEvent.subscribe(
+            (data: TreeNodeDeleteUndoData) => this.onDeleteUndo(data)));
     }
 
     /**
@@ -175,6 +177,12 @@ export class PropertyTreeComponent extends AbstractTree {
         this.roots.unshift(property);
         if (this.context == TreeListContext.addPropValue) {
             this.openRoot([property]);
+        }
+    }
+
+    private onDeleteUndo(data: TreeNodeDeleteUndoData) {
+        if (data.parents.length == 0) {
+            this.onTopPropertyCreated(data.resource);   
         }
     }
 

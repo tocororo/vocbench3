@@ -85,14 +85,14 @@ export class VBEventHandler {
 
     //UNDO EVENTS
     public resourceCreatedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("resourceCreatedUndoneEvent"); //emitted by undo when created operation is undone
-    public classDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("classDeletedUndoneEvent");
-    public collectionDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("collectionDeletedUndoneEvent");
+    public classDeletedUndoneEvent: EventEmitter<TreeNodeDeleteUndoData> = new VBEventEmitter("classDeletedUndoneEvent");
+    public collectionDeletedUndoneEvent: EventEmitter<TreeNodeDeleteUndoData> = new VBEventEmitter("collectionDeletedUndoneEvent");
     public conceptDeletedUndoneEvent: EventEmitter<ConceptDeleteUndoData> = new VBEventEmitter("conceptDeletedUndoneEvent");
+    public propertyDeletedUndoneEvent: EventEmitter<TreeNodeDeleteUndoData> = new VBEventEmitter("propertyDeletedUndoneEvent");
     public datatypeDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeDeletedUndoneEvent");
     public instanceDeletedUndoneEvent: EventEmitter<InstanceDeleteUndoData> = new VBEventEmitter("instanceDeletedUndoneEvent");
     public lexEntryDeletedUndoneEvent: EventEmitter<LexEntryDeleteUndoData> = new VBEventEmitter("lexEntryDeletedUndoneEvent");
     public lexiconDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconDeletedUndoneEvent");
-    public propertyDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("propertyDeletedUndoneEvent");
     public schemeDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeDeletedUndoneEvent");
     public translationSetDeletedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetDeletedUndoneEvent");
 
@@ -155,12 +155,6 @@ class VBEventEmitter<T> extends EventEmitter<T> {
 
 }
 
-export interface ConceptDeleteUndoData {
-    resource: ARTURIResource;
-    broaders: ARTURIResource[];
-    schemes: ARTURIResource[];
-}
-
 export interface InstanceDeleteUndoData {
     resource: ARTResource;
     types: ARTURIResource[];
@@ -169,4 +163,13 @@ export interface InstanceDeleteUndoData {
 export interface LexEntryDeleteUndoData {
     resource: ARTURIResource;
     lexicons: ARTURIResource[];
+}
+
+export interface TreeNodeDeleteUndoData {
+    resource: ARTURIResource;
+    parents: ARTURIResource[];
+}
+
+export interface ConceptDeleteUndoData extends TreeNodeDeleteUndoData {
+    schemes: ARTURIResource[];
 }

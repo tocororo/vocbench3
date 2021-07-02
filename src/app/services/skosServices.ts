@@ -612,11 +612,22 @@ export class SkosServices {
      * Get the nested collections of a container collection
      * @param container the URI of the container collection
      */
-    getNestedCollections(container: ARTResource, options?: VBRequestOptions) {
+    getNestedCollections(container: ARTResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         let params: any = {
             container: container
         };
         return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, options).pipe(
+            map(stResp => {
+                return Deserializer.createURIArray(stResp);
+            })
+        );
+    }
+
+    getSuperCollections(collection: ARTURIResource): Observable<ARTURIResource[]> {
+        let params = {
+            collection: collection
+        };
+        return this.httpMgr.doGet(this.serviceName, "getSuperCollections", params).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
             })

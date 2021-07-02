@@ -104,7 +104,6 @@ export class UserCreateComponent implements ControlValueAccessor {
                 this.form[key] = undefined;
             }
         }
-        // console.log("propagate", this.form);
         this.propagateChange(this.form);
     }
 

@@ -42,10 +42,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
             }
         ));
         this.eventSubscriptions.push(eventHandler.conceptDeletedUndoneEvent.subscribe(
-            (data: ConceptDeleteUndoData) => {
-                this.onDeleteUndo(data);
-            }
-        ))
+            (data: ConceptDeleteUndoData) => this.onDeleteUndo(data)));
     }
 
     ngOnInit() {
@@ -85,13 +82,13 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     }
 
     private onDeleteUndo(data: ConceptDeleteUndoData) {
-        if (data.broaders.length == 0) return; //has no broaders, so the concept to restore is a top concept
+        if (data.parents.length == 0) return; //has no broaders, so the concept to restore is a top concept
         if (this.schemes == null || this.schemes.length == 0) { //no scheme mode => no check on scheme, simply add to roots
-            if (data.broaders.some(b => b.equals(this.node))) {
+            if (data.parents.some(b => b.equals(this.node))) {
                 this.onChildCreated(this.node, data.resource);
             }
         } else {
-            if (data.broaders.some(b => b.equals(this.node))) {
+            if (data.parents.some(b => b.equals(this.node))) {
                 let visible: boolean;
                 let multischemeMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.multischemeMode;
                 if (multischemeMode == MultischemeMode.or) { //concept to restore is visible if it belongs to at least one active scheme

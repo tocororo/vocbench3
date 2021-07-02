@@ -10,7 +10,7 @@ import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { TreeNodeDeleteUndoData, VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { AbstractTreeNode } from "../abstractTreeNode";
 
@@ -53,6 +53,8 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onInstanceDeleted(data.type)));
         this.eventSubscriptions.push(eventHandler.typeAddedEvent.subscribe(
             (data: any) => this.onInstanceCreated(data.type)));
+        this.eventSubscriptions.push(eventHandler.classDeletedUndoneEvent.subscribe(
+            (data: TreeNodeDeleteUndoData) => this.onDeleteUndo(data)));
     }
 
     ngOnInit() {
@@ -167,6 +169,15 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         if (this.node.getURI() == cls.getURI()) {
             var numInst = this.node.getAdditionalProperty(ResAttribute.NUM_INST);
             this.node.setAdditionalProperty(ResAttribute.NUM_INST, numInst + 1);
+        }
+    }
+
+    private onDeleteUndo(data: TreeNodeDeleteUndoData) {
+        if (
+            (data.parents.length == 0 && this.root && this.node.equals(OWL.thing)) || //no superClasses but the current node is owl:Thing root
+            data.parents.some(p => p.equals(this.node))
+        ) {
+            this.onChildCreated(this.node, data.resource);   
         }
     }
 

@@ -4,7 +4,7 @@ import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { PropertyServices } from "../../../services/propertyServices";
 import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { TreeNodeDeleteUndoData, VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../abstractTreeNode";
@@ -35,6 +35,8 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
                 this.onParentAdded(data.newParent, data.child);
             }
         ));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedUndoneEvent.subscribe(
+            (data: TreeNodeDeleteUndoData) => this.onDeleteUndo(data)));
     }
 
     ngOnInit() {
@@ -54,6 +56,12 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
                 }
             })
         );
+    }
+
+    private onDeleteUndo(data: TreeNodeDeleteUndoData) {
+        if (data.parents.some(p => p.equals(this.node))) {
+            this.onChildCreated(this.node, data.resource);   
+        }
     }
 
 }

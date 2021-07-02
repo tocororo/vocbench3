@@ -215,14 +215,6 @@ export class UmlNodeComponent extends AbstractGraphNode {
                             property = propLenght.property;
                             range = propLenght.range;
                             p.normalizedShow = property + ": " + range;
-                            // console.log(p.normalizedShow)
-                            // console.log("lenght", p.normalizedShow.length)
-                            // p.normalizedShow = p.normalizedShow.substring(0, truncateAt);
-                            // if (p.show.length > p.normalizedShow.length) {
-                            //     p.normalizedShow = p.show.substring(0, p.normalizedShow.length - (3 + localNameRange.length)) + "..." + localNameRange;
-
-                            // }
-
                         } else { //textElementWidth <= 222
                             let extraRightSide = textElementWidth - this.measures.width;
                             if (!renderingChange) {

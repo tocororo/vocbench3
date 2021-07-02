@@ -192,7 +192,13 @@ export class LexicalEntryListComponent extends AbstractList {
         if (data.lexicons.some(l => l.equals(this.lexicon))) {
             this.ontolexService.getLexicalEntryIndex(data.resource).subscribe(
                 index => {
-                    if (index.toLocaleUpperCase() == this.index.toLocaleUpperCase()) {
+                    let toAdd: boolean;
+                    if (this.index.length == 1) {
+                        toAdd = this.index.toLocaleUpperCase() == index[0].toLocaleUpperCase()
+                    } else if (this.index.length == 2) {
+                        toAdd = index.toLocaleUpperCase() == this.index.toLocaleUpperCase();
+                    }
+                    if (toAdd) {
                         this.list.push(data.resource);
                     }
                 }

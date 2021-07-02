@@ -117,7 +117,6 @@ export class DataComponent {
     private draggingHandler(event: MouseEvent) {
         let endMousedownX = event.clientX;
         let diffX: number = this.startMousedownX - endMousedownX;
-        // console.log("startMousedownX", this.startMousedownX, "endMousedownX", endMousedownX, "diffX ", diffX);
         let classPanelHeight: number = this.treePanelRef.nativeElement.offsetWidth;
         let instancePanelHeight: number = this.resViewPanelRef.nativeElement.offsetWidth;
         /**

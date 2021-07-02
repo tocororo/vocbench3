@@ -4,6 +4,7 @@ import { CommitInfo } from '../models/History';
 import { ClassesServices } from '../services/classesServices';
 import { IndividualsServices } from '../services/individualsServices';
 import { OntoLexLemonServices } from '../services/ontoLexLemonServices';
+import { PropertyServices } from '../services/propertyServices';
 import { ResourcesServices } from '../services/resourcesServices';
 import { SkosServices } from '../services/skosServices';
 import { UndoServices } from '../services/undoServices';
@@ -17,7 +18,8 @@ import { ToastService } from '../widget/toast/toastService';
 export class UndoDirective {
 
     constructor(private undoService: UndoServices, private resourceService: ResourcesServices, private individualService: IndividualsServices,
-        private ontolexService: OntoLexLemonServices, private skosService: SkosServices,
+        private ontolexService: OntoLexLemonServices, private skosService: SkosServices, private classService: ClassesServices,
+        private propertyService: PropertyServices,
         private toastService: ToastService, private eventHandler: VBEventHandler) {}
 
     @HostListener('window:keydown', ['$event'])
@@ -68,7 +70,15 @@ export class UndoDirective {
             } else { //in case of validation disabled emit a dedicated event for each structure
                 commit.deleted.forEach(r => {
                     if (operationId.endsWith("Classes/deleteClass")) {
-                        //I need a service for retrieving super classes
+                        if (r instanceof ARTURIResource) {
+                            this.classService.getSuperClasses(r).subscribe(
+                                superClasses => {
+                                    this.resourceService.getResourceDescription(r).subscribe(
+                                        res => this.eventHandler.classDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, parents: superClasses })
+                                    );
+                                }
+                            )
+                        }
                     } else if (operationId.endsWith("Classes/deleteInstance")) {
                         this.individualService.getNamedTypes(r).subscribe(
                             (types: ARTURIResource[]) => {
@@ -98,9 +108,21 @@ export class UndoDirective {
                             res => this.eventHandler.translationSetDeletedUndoneEvent.emit(<ARTURIResource>res)
                         );
                     } else if (operationId.endsWith("Properties/deleteProperty")) {
-                        //I need a service for retrieving super properties
+                        this.propertyService.getSuperProperties(<ARTURIResource>r).subscribe(
+                            superProps => {
+                                this.resourceService.getResourceDescription(r).subscribe(
+                                    res => this.eventHandler.propertyDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, parents: superProps })
+                                );
+                            }
+                        )
                     } else if (operationId.endsWith("SKOS/deleteCollection")) {
-                        //I need a service for retrieving super collections
+                        this.skosService.getSuperCollections(<ARTURIResource>r).subscribe(
+                            superColls => {
+                                this.resourceService.getResourceDescription(r).subscribe(
+                                    res => this.eventHandler.collectionDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, parents: superColls })
+                                );
+                            }
+                        )
                     } else if (operationId.endsWith("SKOS/deleteConcept")) {
                        this.skosService.getSchemesOfConcept(<ARTURIResource>r).subscribe(
                             (schemes: ARTURIResource[]) => {
@@ -110,7 +132,7 @@ export class UndoDirective {
                                 this.skosService.getBroaderConcepts(<ARTURIResource>r, schemes, concTreePref.multischemeMode, broaderProps, narrowerProps, concTreePref.includeSubProps).subscribe(
                                     (broaders: ARTURIResource[]) => {
                                         this.resourceService.getResourceDescription(r).subscribe(
-                                            res => this.eventHandler.conceptDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, schemes: schemes, broaders: broaders})
+                                            res => this.eventHandler.conceptDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, schemes: schemes, parents: broaders})
                                         );
                                         
                                     }

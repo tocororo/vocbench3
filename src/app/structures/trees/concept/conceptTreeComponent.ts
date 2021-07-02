@@ -63,10 +63,7 @@ export class ConceptTreeComponent extends AbstractTree {
             () => this.init() //multischeme mode changed => reinit tree
         ));
         this.eventSubscriptions.push(eventHandler.conceptDeletedUndoneEvent.subscribe(
-            (data: ConceptDeleteUndoData) => {
-                this.onDeleteUndo(data);
-            }
-        ))
+            (data: ConceptDeleteUndoData) => this.onDeleteUndo(data)));
     }
 
     /**
@@ -258,7 +255,7 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     private onDeleteUndo(data: ConceptDeleteUndoData) {
-        if (data.broaders.length > 0) return; //has broaders, so the concept to restore is not a top concept
+        if (data.parents.length > 0) return; //has broaders, so the concept to restore is not a top concept
         if (this.schemes == null || this.schemes.length == 0) { //no scheme mode => no check on scheme, simply add to roots
             this.roots.push(data.resource);
         } else {

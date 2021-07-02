@@ -47,6 +47,17 @@ export class ClassesServices {
         );
     }
 
+    getSuperClasses(cls: ARTURIResource): Observable<ARTURIResource[]> {
+        let params = {
+            cls: cls
+        };
+        return this.httpMgr.doGet(this.serviceName, "getSuperClasses", params).pipe(
+            map(stResp => {
+                return Deserializer.createURIArray(stResp);
+            })
+        );
+    }
+
     /**
      * Returns the (explicit) instances of the class cls.
 	 * @param cls

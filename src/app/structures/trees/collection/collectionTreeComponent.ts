@@ -7,7 +7,7 @@ import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { TreeNodeDeleteUndoData, VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTree } from "../abstractTree";
@@ -41,6 +41,8 @@ export class CollectionTreeComponent extends AbstractTree {
             (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedInPositionEvent.subscribe(
             (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
+        this.eventSubscriptions.push(eventHandler.collectionDeletedUndoneEvent.subscribe(
+            (data: TreeNodeDeleteUndoData) => this.onDeleteUndo(data)));
     }
 
     initImpl() {
@@ -90,6 +92,12 @@ export class CollectionTreeComponent extends AbstractTree {
                 this.roots.splice(i, 1);
                 break;
             }
+        }
+    }
+
+    private onDeleteUndo(data: TreeNodeDeleteUndoData) {
+        if (data.parents.length == 0) {
+            this.onRootCollectionCreated(data.resource);   
         }
     }
 
