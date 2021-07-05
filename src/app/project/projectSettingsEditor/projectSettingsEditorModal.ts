@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin, Observable } from "rxjs";
-import { map, mergeMap } from "rxjs/operators";
+import { concat, forkJoin, Observable, of } from "rxjs";
+import { map, mergeMap, toArray } from "rxjs/operators";
 import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings } from "src/app/models/Plugins";
 import { ExtensionsServices } from "src/app/services/extensionsServices";
 import { ProjectServices } from "src/app/services/projectServices";
@@ -55,13 +55,17 @@ export class ProjSettingsEditorModal {
         this.remoteProject = this.project.getRepositoryLocation().location == "remote";
 
         this.initBlacklisting();
-        this.initShaclValidation();
-        //these two initializations needed to be executed sequentially in order to prevent issues related to project locked status
-        this.initRenderingEngine().subscribe(() => {
-            this.initUriGenerator().subscribe(() => {
-                this.initUndo();
-            });    
-        });
+        //the following initializations envolve back-end requests that need to be performed sequentially in order to prevent project-lock issues
+        let asyncInitializationFn: Observable<void>[] = [
+            this.initShaclValidation(),
+            this.initRenderingEngine(),
+            this.initUriGenerator(),
+            this.initUndo()
+        ];
+        concat(...asyncInitializationFn).pipe(
+            toArray()
+        ).subscribe();
+        
         this.openAtStartup = this.project.getOpenAtStartup();
     }
 
@@ -86,14 +90,16 @@ export class ProjSettingsEditorModal {
 
     //================== SHACL ==================
 
-    initShaclValidation() {
+    initShaclValidation(): Observable<void> {
         this.shaclEnabled = this.project.isShaclEnabled();
         if (this.shaclEnabled) {
-            this.projectService.isSHACLValidationEnabled(this.project).subscribe(
-                validation => {
+            return this.projectService.isSHACLValidationEnabled(this.project).pipe(
+                map(validation => {
                     this.shaclValidationEnabled = validation;
-                }
+                })
             )
+        } else {
+            return of(null);
         }
     }
 
@@ -131,12 +137,12 @@ export class ProjSettingsEditorModal {
 
     //================== UNDO ==================
 
-    initUndo() {
+    initUndo(): Observable<void> {
         this.undoEnabled = this.project.isUndoEnabled();
-        this.projectService.isChangeTrackerSetUp(this.project).subscribe(
-            changeTrackerSetup => {
+        return this.projectService.isChangeTrackerSetUp(this.project).pipe(
+            map(changeTrackerSetup => {
                 this.changeTrackerSetup = changeTrackerSetup;
-            }
+            })
         )
     }
 

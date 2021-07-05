@@ -151,17 +151,17 @@
                         </label>
                     </div>
                     <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
-                        <input class="form-check-input" id="undoCheck" type="checkbox" [(ngModel)]="undo">
-                        <label class="form-check-label text-nowrap" for="undoCheck">
-                            {{'MODELS.PROJECT.UNDO'|translate}}
-                            <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.UNDO_INFO'|translate"></span>
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
                         <input class="form-check-input" id="blacklistCheck" type="checkbox" [(ngModel)]="blacklisting" [disabled]="!validation">
                         <label class="form-check-label text-nowrap" for="blacklistCheck">
                             {{'PROJECTS.BLACKLIST'|translate}}
                             <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.BLACKLIST_INFO'|translate"></span>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
+                        <input class="form-check-input" id="undoCheck" type="checkbox" [(ngModel)]="undo">
+                        <label class="form-check-label text-nowrap" for="undoCheck">
+                            {{'MODELS.PROJECT.UNDO'|translate}}
+                            <span class="fas fa-info-circle ml-1" [title]="'PROJECTS.UNDO_INFO'|translate"></span>
                         </label>
                     </div>
                     <div class="form-check form-check-inline" style="flex: 1; justify-content: center;">
