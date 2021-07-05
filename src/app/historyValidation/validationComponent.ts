@@ -6,6 +6,7 @@ import { ValidationServices } from "../services/validationServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { UIUtils } from "../utils/UIUtils";
 import { VBActionsEnum } from "../utils/VBActions";
+import { VBEventHandler } from "../utils/VBEventHandler";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalOptions } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
@@ -39,8 +40,8 @@ export class ValidationComponent extends AbstractHistValidComponent {
     private readonly COMMENT_ATTR: string = "comment";
 
     constructor(private validationService: ValidationServices, private basicModals: BasicModalServices, private modalService: NgbModal, 
-        sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices) {
-        super(sharedModals, hvModals);
+        sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices, eventHandler: VBEventHandler) {
+        super(sharedModals, hvModals, eventHandler);
     }
 
     ngOnInit() {

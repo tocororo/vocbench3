@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { HistoryServices } from "../services/historyServices";
 import { UIUtils } from "../utils/UIUtils";
+import { VBEventHandler } from "../utils/VBEventHandler";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 import { HistoryValidationModalServices } from "./modals/historyValidationModalServices";
@@ -15,8 +16,8 @@ export class HistoryComponent extends AbstractHistValidComponent {
     //paging
     private tipRevisionNumber: number;
 
-    constructor(private historyService: HistoryServices, sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices) {
-        super(sharedModals, hvModals);
+    constructor(private historyService: HistoryServices, sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices, eventHandler: VBEventHandler) {
+        super(sharedModals, hvModals, eventHandler);
     }
 
     ngOnInit() {

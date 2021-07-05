@@ -1,8 +1,10 @@
 import { Directive } from "@angular/core";
+import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { CommitInfo, SortingDirection } from "../models/History";
 import { User } from "../models/User";
 import { NTriplesUtil } from "../utils/ResourceUtils";
+import { VBEventHandler } from "../utils/VBEventHandler";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { HistoryValidationModalServices } from "./modals/historyValidationModalServices";
 
@@ -11,6 +13,8 @@ import { HistoryValidationModalServices } from "./modals/historyValidationModalS
  */
 @Directive()
 export abstract class AbstractHistValidComponent {
+
+    eventSubscriptions: Subscription[] = [];
 
     //Sorting
     sortingDirectionList: SortingDirectionStruct[] = [
@@ -41,9 +45,16 @@ export abstract class AbstractHistValidComponent {
 
     protected sharedModals: SharedModalServices;
     protected hvModals: HistoryValidationModalServices;
-    constructor(sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices) {
+    protected eventHandler: VBEventHandler;
+    constructor(sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices, eventHandler: VBEventHandler) {
         this.sharedModals = sharedModals;
         this.hvModals = hvModals;
+        this.eventHandler = eventHandler;
+        this.eventSubscriptions.push(this.eventHandler.operationUndoneEvent.subscribe(commit => this.onOperationUndone(commit)));
+    }
+
+    ngOnDestroy() {
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     abstract init(): void;
@@ -147,6 +158,25 @@ export abstract class AbstractHistValidComponent {
         } catch (err) {
             //not parseable => not a resource
         } 
+    }
+
+    private onOperationUndone(commit: CommitInfo) {
+        let idx = this.commits.findIndex(c => {
+            let sameOperation: boolean = c.operation.equals(commit.operation);
+            let sameParameters: boolean = true;
+            if (sameOperation) {
+                for (let p of c.operationParameters) {
+                    if (!commit.operationParameters.some(p2 => JSON.stringify(p) == JSON.stringify(p2))) {
+                        sameParameters = false;
+                    }
+                }
+            }
+            return sameOperation && sameParameters
+        })
+        if (idx != -1) {
+            this.commits.splice(idx, 1);
+        }
+
     }
 
 }

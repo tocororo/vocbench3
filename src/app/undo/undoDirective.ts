@@ -42,6 +42,7 @@ export class UndoDirective {
         if (tagName != "textarea" && (tagName != "input" || activeEl.getAttribute("type") != "text")) {
             this.undoService.undo().subscribe(
                 (commit: CommitInfo) => {
+                    this.eventHandler.operationUndoneEvent.emit(commit);
                     let operation: string = commit.operation.getShow();
                     this.toastService.show({ key: "UNDO.OPERATION_UNDONE" }, { key: "UNDO.OPERATION_UNDONE_INFO", params: { operation: operation} },
                         { toastClass: "bg-info", textClass: "text-white", delay: 4000 });

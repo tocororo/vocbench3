@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
+import { CommitInfo } from '../models/History';
 import { Project } from '../models/Project';
 import { ResourceViewMode } from '../models/Properties';
 import { VBContext } from '../utils/VBContext';
@@ -84,6 +85,7 @@ export class VBEventHandler {
     public translationSetDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetDeletedEvent");
 
     //UNDO EVENTS
+    public operationUndoneEvent: EventEmitter<CommitInfo> = new VBEventEmitter("operationUndoneEvent"); //generic for inform History/Validation page
     public resourceCreatedUndoneEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("resourceCreatedUndoneEvent"); //emitted by undo when created operation is undone
     public classDeletedUndoneEvent: EventEmitter<TreeNodeDeleteUndoData> = new VBEventEmitter("classDeletedUndoneEvent");
     public collectionDeletedUndoneEvent: EventEmitter<TreeNodeDeleteUndoData> = new VBEventEmitter("collectionDeletedUndoneEvent");
