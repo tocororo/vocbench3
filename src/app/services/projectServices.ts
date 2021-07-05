@@ -770,6 +770,28 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "setSHACLValidationEnabled", params);
     }
 
+    isUndoEnabled(project: Project) {
+        let params = {
+            projectName: project.getName(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "isUndoEnabled", params);
+    }
+
+    setUndoEnabled(project: Project, undoEnabled: boolean) {
+        let params = {
+            projectName: project.getName(),
+            undoEnabled: undoEnabled
+        };
+        return this.httpMgr.doPost(this.serviceName, "setUndoEnabled", params);
+    }
+
+    isChangeTrackerSetUp(project: Project) {
+        let params = {
+            projectName: project.getName(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "isChangeTrackerSetUp", params);
+    }
+
     getContextRepositoryBackend(): Observable<string> {
         let params = {};
         return this.httpMgr.doGet(this.serviceName, "getContextRepositoryBackend", params);

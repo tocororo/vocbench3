@@ -35,12 +35,26 @@ export class CustomFormWizardFieldsEditor {
 
     //Changes on fields list
     addFieldUri() {
-        let f = new WizardFieldUri("uri_field");
+        let fieldLabel = "uri_field";
+        let i = 1;
+        while (this.fields.some(f => f.label == fieldLabel)) {
+            fieldLabel = "uri_field" + i;
+            i++;
+        }
+
+        let f = new WizardFieldUri(fieldLabel);
         this.fields.push(f)
         this.emitChangeEvent(f, WizardFieldEventType.created);
     }
     addFieldLiteral() {
-        let f = new WizardFieldLiteral("lit_field");
+        let fieldLabel = "lit_field";
+        let i = 1;
+        while (this.fields.some(f => f.label == fieldLabel)) {
+            fieldLabel = "lit_field" + i;
+            i++;
+        }
+
+        let f = new WizardFieldLiteral(fieldLabel);
         this.fields.push(f)
         this.emitChangeEvent(f, WizardFieldEventType.created);
     }

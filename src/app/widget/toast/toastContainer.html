@@ -2,12 +2,12 @@
     (hidden)="toastService.remove(toast)">
 
     <ng-template ngbToastHeader>
-        <b style="font-size: 12px;">
+        <b style="font-size: 13px;">
             {{ toast.title }}
         </b>
     </ng-template>
 
-    <div [class]="toast.options?.textClass" style="font-size: 11px;">
+    <div [class]="toast.options?.textClass" style="font-size: 12px;">
         {{ toast.message }}
     </div>
 

@@ -103,6 +103,10 @@ export class SchemeListComponent extends AbstractList {
                 break;
             }
         }
+        //if "undoned" the creation of an active scheme, remove it from the active schemes
+        if (ResourceUtils.containsNode(VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes, node)) {
+            this.updateActiveSchemesPref();
+        }
     }
 
     onDeletedUndo(node: ARTURIResource) {

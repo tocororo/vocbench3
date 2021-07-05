@@ -12,7 +12,7 @@ export class ToastService {
 
     show(title: TextOrTranslation, message: TextOrTranslation, options?: ToastOpt) {
         let t = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        let msg = (typeof message == "string") ? title : this.translateService.instant(message.key, message.params);
+        let msg = (typeof message == "string") ? message : this.translateService.instant(message.key, message.params);
         this.toasts.push({ title: t, message: msg, options: options });
     }
 

@@ -10,6 +10,8 @@ import { SkosServices } from '../services/skosServices';
 import { UndoServices } from '../services/undoServices';
 import { VBContext } from '../utils/VBContext';
 import { VBEventHandler } from '../utils/VBEventHandler';
+import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { ModalType } from '../widget/modal/Modals';
 import { ToastService } from '../widget/toast/toastService';
 
 @Directive({
@@ -18,9 +20,8 @@ import { ToastService } from '../widget/toast/toastService';
 export class UndoDirective {
 
     constructor(private undoService: UndoServices, private resourceService: ResourcesServices, private individualService: IndividualsServices,
-        private ontolexService: OntoLexLemonServices, private skosService: SkosServices, private classService: ClassesServices,
-        private propertyService: PropertyServices,
-        private toastService: ToastService, private eventHandler: VBEventHandler) {}
+        private ontolexService: OntoLexLemonServices, private skosService: SkosServices, private classService: ClassesServices, private propertyService: PropertyServices,
+        private basicModals: BasicModalServices, private toastService: ToastService, private eventHandler: VBEventHandler) {}
 
     @HostListener('window:keydown', ['$event'])
     onKeyDown(e: KeyboardEvent) {
@@ -42,8 +43,24 @@ export class UndoDirective {
             this.undoService.undo().subscribe(
                 (commit: CommitInfo) => {
                     let operation: string = commit.operation.getShow();
-                    this.toastService.show({ key: "UNDO.OPERATION_UNDONE" }, { key: "UNDO.OPERATION_UNDONE_INFO", params: { operation: operation} }, { toastClass: "bg-warning", delay: 4000 });
+                    this.toastService.show({ key: "UNDO.OPERATION_UNDONE" }, { key: "UNDO.OPERATION_UNDONE_INFO", params: { operation: operation} },
+                        { toastClass: "bg-info", textClass: "text-white", delay: 4000 });
                     this.restoreOldStatus(commit);
+                },
+                (error: Error) => {
+                    if (error.name.endsWith("RepositoryException") && 
+                        error.message.includes("Empty undo stack") ||
+                        error.message.includes("The performer of the last operation does not match the agent for whom undo has been requested")
+                    ) { //empty undo stack or different user
+                        let sailExc: string = "SailException: "; //after this exception starts the message
+                        let errorMsg: string = error.message.substring(error.message.indexOf(sailExc) + sailExc.length);
+                        console.log("errorMsg",errorMsg);
+                        this.toastService.show({ key: "STATUS.WARNING"}, errorMsg, { toastClass: "bg-warning", delay: 4000 });
+                    } else {
+                        let errorMsg = error.message != null ? error.message : "Unknown response from the server";
+                        let errorDetails = error.stack ? error.stack : error.name;
+                        this.basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error, errorDetails);
+                    }
                 }
             );
         }

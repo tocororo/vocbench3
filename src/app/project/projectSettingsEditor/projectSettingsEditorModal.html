@@ -35,6 +35,17 @@
                         <span *ngIf="!remoteProject" class="fas fa-exclamation-triangle ml-3" [title]="'MESSAGES.RESTART_REPO_LOCAL_REQUIRED'|translate"></span>
                     </div>
                 </div>
+                <!-- UNDO -->        
+                <div *ngIf="changeTrackerSetup" class="form-group row">
+                    <label class="col-form-label col-sm-4">{{'MODELS.PROJECT.UNDO'|translate}}:</label>
+                    <div class="col-sm-8 d-flex align-items-center">
+                        <button class="btn btn-light btn-sm" [ngClass]="{ active: undoEnabled }" (click)="changeUndo()">
+                            <b *ngIf="undoEnabled" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
+                            <b *ngIf="!undoEnabled" class="text-danger">{{'STATUS.INACTIVE'|translate}}</b>
+                        </button>
+                        <span *ngIf="!remoteProject" class="fas fa-exclamation-triangle ml-3" [title]="'MESSAGES.RESTART_REPO_LOCAL_REQUIRED'|translate"></span>
+                    </div>
+                </div>
             </div>
             <div *ngIf="remoteProject && (validationEnabled || shaclEnabled)" class="card-footer text-right">
                 <div class="form-check mt-2">

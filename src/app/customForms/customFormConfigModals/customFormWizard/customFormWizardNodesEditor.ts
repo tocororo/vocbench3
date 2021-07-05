@@ -48,7 +48,13 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
     }
 
     addNode() {
-        this.nodes.push(new WizardNodeUserCreated("new_node"));
+        let nodeId = "new_node";
+        let i = 1;
+        while (this.nodes.some(n => n.nodeId == nodeId)) {
+            nodeId = "new_node" + i;
+            i++;
+        }
+        this.nodes.push(new WizardNodeUserCreated(nodeId));
         this.onModelChange();
     }
 

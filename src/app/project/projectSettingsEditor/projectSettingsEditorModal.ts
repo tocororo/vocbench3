@@ -29,6 +29,10 @@ export class ProjSettingsEditorModal {
     shaclEnabled: boolean;
     shaclValidationEnabled: boolean;
 
+    //UNDO
+    changeTrackerSetup: boolean; //required in order to enable/disable undo
+    undoEnabled: boolean;
+
     openAtStartup: boolean;
 
     //RENDERING ENGINE PLUGIN
@@ -54,7 +58,9 @@ export class ProjSettingsEditorModal {
         this.initShaclValidation();
         //these two initializations needed to be executed sequentially in order to prevent issues related to project locked status
         this.initRenderingEngine().subscribe(() => {
-            this.initUriGenerator().subscribe();    
+            this.initUriGenerator().subscribe(() => {
+                this.initUndo();
+            });    
         });
         this.openAtStartup = this.project.getOpenAtStartup();
     }
@@ -121,6 +127,26 @@ export class ProjSettingsEditorModal {
                 }
             )
         }
+    }
+
+    //================== UNDO ==================
+
+    initUndo() {
+        this.undoEnabled = this.project.isUndoEnabled();
+        this.projectService.isChangeTrackerSetUp(this.project).subscribe(
+            changeTrackerSetup => {
+                this.changeTrackerSetup = changeTrackerSetup;
+            }
+        )
+    }
+
+    changeUndo() {
+        this.undoEnabled = !this.undoEnabled;
+        this.projectService.setUndoEnabled(this.project, this.undoEnabled).subscribe(
+            () => {
+                this.checkRepositoryRestart()
+            }
+        );
     }
 
     //================== OPEN AT STARTUP ==================

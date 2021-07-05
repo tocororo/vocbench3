@@ -48,11 +48,7 @@ export class ResourceUtils {
 
     static indexOfNode(list: ARTNode[], node: ARTNode): number {
         if (node != null) {
-            for (let i = 0; i < list.length; i++) {
-                if (list[i].getNominalValue() == node.getNominalValue()) {
-                    return i;
-                }
-            }
+            return list.findIndex(el => el.equals(node));
         }
         return -1;
     }
