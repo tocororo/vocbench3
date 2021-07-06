@@ -161,18 +161,7 @@ export abstract class AbstractHistValidComponent {
     }
 
     private onOperationUndone(commit: CommitInfo) {
-        let idx = this.commits.findIndex(c => {
-            let sameOperation: boolean = c.operation.equals(commit.operation);
-            let sameParameters: boolean = true;
-            if (sameOperation) {
-                for (let p of c.operationParameters) {
-                    if (!commit.operationParameters.some(p2 => JSON.stringify(p) == JSON.stringify(p2))) {
-                        sameParameters = false;
-                    }
-                }
-            }
-            return sameOperation && sameParameters
-        })
+        let idx = this.commits.findIndex(c => c.commit.equals(commit.commit));
         if (idx != -1) {
             this.commits.splice(idx, 1);
         }
