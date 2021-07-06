@@ -159,7 +159,7 @@ export class ProjectGroupsManagerComponent {
             () => {
                 if (describeFunctions.length > 0) {
                     forkJoin(describeFunctions).pipe(
-                        finalize(() => () => this.revokeProjectAccess()) //remove the ctx_project
+                        finalize(() => this.revokeProjectAccess()) //remove the ctx_project
                     ).subscribe();
                 } else {
                     this.revokeProjectAccess(); //remove the ctx_project

@@ -4,7 +4,6 @@ import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { VBActionsEnum } from "src/app/utils/VBActions";
 import { ARTLiteral, ARTResource } from "../../../models/ARTResources";
-import { ResourceViewCtx } from "../../../models/ResourceView";
 import { ProjectContext } from "../../../utils/VBContext";
 import { LexViewCache } from "../LexViewChache";
 
@@ -17,7 +16,6 @@ export class LexEntryComponent {
     @Input() entry: LexicalEntry;
     @Input() lexViewCache: LexViewCache;
     @Input() readonly: boolean = false;
-    @Input() context: ResourceViewCtx;
     @Input() projectCtx: ProjectContext;
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
