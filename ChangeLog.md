@@ -5,15 +5,19 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 10.0.0 (dd-mm-yyyy)
+  * Implemented an history-based "time machine" feature in ResourceView
   * Implemented possibility to "undo" operations (ctrl/cmd+Z)
-  * Added email verification in the registration procedure
-  * Enabled possibility to render project through labels
+  * Added possibility to require email verification in the registration procedure
+  * Enabled project rendering through multilingual labels
   * Improved the management of the unicity of preferred labels for concepts in the same scheme
-  * In Sheet2RDF added possibility to delete triples
   * Added a wizard for creating CustomForm
+  * Improvements to Sheet2RDF:
+    * Enabled triples deletion
+    * Improved management of memoization
   * Implemented a new ICV: OWL concistency violations
-  * Added flags for Scottish Gaelic and Welsh languages
+  * Implemented SHACL batch validation
   * Adopted the new Settings services
+  * Added flags for Scottish Gaelic and Welsh languages
   * Added german l10n
   * Fixed autocompletion and prefixes resolution in SPARQL editor
 
