@@ -1,15 +1,15 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Observable, Subscription } from "rxjs";
 import { finalize, map } from 'rxjs/operators';
-import { ModalType } from 'src/app/widget/modal/Modals';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { CollaborationModalServices } from "../../collaboration/collaborationModalService";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, RemoteResourcePosition, ResAttribute, ResourcePosition } from "../../models/ARTResources";
 import { Issue } from "../../models/Collaboration";
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
 import { NotificationStatus, ProjectPreferences, ResourceViewProjectSettings } from "../../models/Properties";
-import { PropertyFacet, ResourceViewCtx, ResViewPartition } from "../../models/ResourceView";
+import { PropertyFacet, ResViewPartition } from "../../models/ResourceView";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { CollaborationServices } from "../../services/collaborationServices";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
@@ -30,6 +30,7 @@ import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AbstractResourceView } from "./abstractResourceView";
 import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./renderer/multipleActionHelper";
+import { TimeMachineModal } from "./timeMachine/timeMachineModal";
 
 @Component({
     selector: "resource-view-editor",
@@ -40,14 +41,19 @@ import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./re
         .in-progress-issues { color: #f0ad4e }
         .done-issues { color: #5cb85c }
         .generic-issues { color: #ff3300 }
-        .card-header .btn.active .fas, .card-header .btn.active .far  { color: #4285f4; } `
+        .card-header .btn.active .fas, .card-header .btn.active .far  { color: #4285f4; }
+        .dropdown-header { color: black; font-size: 1.125rem; }
+        a.dropdown-header:hover { background-color: #e9ecef !important; text-decoration: none; }
+        .dropdown-item { padding-left: 2.5rem !important; }
+        `
     ]
 })
 export class ResourceViewEditorComponent extends AbstractResourceView {
     @Input() resource: ARTResource;
     @Input() readonly: boolean = false;
-    @Input() context: ResourceViewCtx;
+    @Input() inModal: boolean;
     @Input() projectCtx: ProjectContext;
+    @Input() atTime: string; //java.time.ZonedDateTime
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
@@ -115,8 +121,11 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         btnClass: "", issues: null
     };
 
-    versioningAvailable: boolean = false;
-    private versionList: VersionInfo[];
+    //time machine/versioning
+    timeActionsEnabled: boolean = false; //tells if the "clock" icon (for versioning and time machine) should be visible 
+        //hidden if the @Input() projectCtx or atTime != null, namely RV showing external resource, or showing a resource at a different time)
+    timeMachineAvailable: boolean = false; //tells if the conditions for the time machine are satisfied (history enabled)
+    versionList: VersionInfo[];
     private activeVersion: VersionInfo;
 
     notificationsAvailable: boolean = false;
@@ -165,11 +174,16 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 this.buildResourceView(this.resource);//refresh resource view when Input resource changes
             }
         }
+        if (changes['atTime'] && changes['atTime'].currentValue) {
+            this.buildResourceView(this.resource);
+        }
     }
 
     ngOnInit() {
-        this.activeVersion = VBContext.getContextVersion();
-        this.readonly = this.readonly || (this.activeVersion != null || HttpServiceContext.getContextVersion() != null); //if the RV is working on an old dump version, disable the updates
+        this.activeVersion = VBContext.getContextVersion(); //set globally from Versioning page
+        this.readonly = this.readonly || (this.activeVersion != null || HttpServiceContext.getContextVersion() != null) || this.atTime != null; //if the RV is working on an old dump version, disable the updates
+
+        this.initVersions();
     }
 
     ngAfterViewInit() {
@@ -196,7 +210,11 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         if (this.activeVersion != null) {
             HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
         }
-        this.resViewService.getResourceView(res, this.showInferred).subscribe(
+        let getResViewFn: Observable<any> = this.resViewService.getResourceView(res, this.showInferred);
+        if (this.atTime != null) {
+            getResViewFn = this.resViewService.getResourceViewAtTime(<ARTURIResource>res, this.atTime); //cast safe since atTime is provided only if res is IRI
+        }
+        getResViewFn.subscribe(
             stResp => {
                 HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;
@@ -216,8 +234,8 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             if (this.collaborationAvailable) {
                 this.initCollaboration();
             }
-            this.versioningAvailable = this.projectCtx == null;
-            this.settingsAvailable = this.context != ResourceViewCtx.modal;
+            this.timeActionsEnabled = !this.inModal && this.projectCtx == null && this.atTime == null;
+            this.settingsAvailable = !this.inModal; //settings available only if RV is shown in data page (not in modal)
 
             this.initNotificationsAvailable();
         });
@@ -243,6 +261,9 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         ) {
             this.readonly = true;
         }
+
+        //time machine available on local IRI resource and in projects with history enabled (no need to check projectCtx, since if it is provided, clock button is already hidden via timeActionsEnabled)
+        this.timeMachineAvailable = this.resource.isURIResource() && this.resourcePosition.isLocal() && VBContext.getWorkingProject().isHistoryEnabled();
 
         if (this.resourcePosition instanceof LocalResourcePosition) {
             this.resourcePositionLocalProj = this.resourcePosition.project == VBContext.getWorkingProject().getName();
@@ -707,20 +728,22 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
     }
 
-    listVersions() {
-        this.versionService.getVersions().subscribe(
-            versions => {
-                this.versionList = versions;
-                //update the active version
-                if (this.activeVersion != null) {
-                    for (let i = 0; i < this.versionList.length; i++) {
-                        if (this.versionList[i].versionId == this.activeVersion.versionId) {
-                            this.activeVersion = this.versionList[i];
-                        }
+    //TIME ACTIONS
+
+    initVersions() {
+        this.versionList = VBContext.getWorkingProjectCtx(this.projectCtx).resViewCtx.versions;
+        if (this.versionList == null) {
+            this.versionService.getVersions().subscribe(
+                versions => {
+                    this.versionList = versions;
+                    VBContext.getWorkingProjectCtx(this.projectCtx).resViewCtx.versions = this.versionList; //cache/share the version into the RV ctx
+                    //update the active version
+                    if (this.activeVersion != null) {
+                        this.activeVersion = this.versionList.find(v => v.versionId == this.activeVersion.versionId);
                     }
                 }
-            }
-        );
+            );
+        }
     }
 
     switchToVersion(version?: VersionInfo) {
@@ -730,6 +753,11 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         }
         //resView is readonly if one of the temp version and the context version are not null
         this.readonly = this.activeVersion != null || VBContext.getContextVersion() != null;
+    }
+
+    timeMachine() {
+        const modalRef: NgbModalRef = this.modalService.open(TimeMachineModal, new ModalOptions('full'));
+        modalRef.componentInstance.resource = this.resource;
     }
 
     //NOTIFICATIONS HANDLERS

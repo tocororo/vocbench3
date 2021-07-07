@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { PluginSpecification } from "src/app/models/Plugins";
+import { BackendTypesEnum, RepositoryAccess } from "src/app/models/Project";
 import { ProjectServices } from "src/app/services/projectServices";
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { RepositoryLocation, RepositoryStatus, VersionInfo } from '../../../models/History';
@@ -9,7 +11,7 @@ import { UIUtils } from '../../../utils/UIUtils';
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from '../../../utils/VBContext';
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
-import { DumpCreationModal } from "./dumpCreationModal";
+import { DumpCreationModal, DumpCreationModalReturnData } from "./dumpCreationModal";
 
 @Component({
     selector: "versioning-component",
@@ -49,6 +51,9 @@ export class VersioningComponent {
                     repositoryStatus: RepositoryStatus.INITIALIZED 
                 }];
                 this.versionList = this.versionList.concat(versions);
+
+                //if initVersions is invoked after the addition/removal of a version it is useful to update the versions chached in the ResView ctx
+                VBContext.getWorkingProjectCtx().resViewCtx.versions = versions;
             }
         );
     }
@@ -74,14 +79,8 @@ export class VersioningComponent {
 
     dump() {
         this.basicModals.prompt({key:"ACTIONS.CREATE_VERSION_DUMP"}, { value: "Version ID" }).then(
-            (id: any) => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.versionsService.createVersionDump(id).subscribe(
-                    stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.initVersions();
-                    }
-                );
+            (id: string) => {
+                this.createDump(id);
             },
             () => { }
         )
@@ -89,18 +88,21 @@ export class VersioningComponent {
 
     dumpWithLocation() {
         this.configureDumpWithLocation().then(
-            (data: any) => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.versionsService.createVersionDump(
-                    data.versionId, data.repositoryAccess, data.repositoryId, data.repoConfigurerSpecification, data.backendType).subscribe(
-                    stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.initVersions();
-                    }
-                );
+            (data: DumpCreationModalReturnData) => {
+                this.createDump(data.versionId, data.repositoryAccess, data.repositoryId, data.repoConfigurerSpecification, data.backendType);
             },
             () => {}
         )
+    }
+
+    private createDump(versionId: string, repositoryAccess?: RepositoryAccess, repositoryId?: string, repoConfigurerSpecification?: PluginSpecification, backendType?: BackendTypesEnum) {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.versionsService.createVersionDump(versionId, repositoryAccess, repositoryId, repoConfigurerSpecification, backendType).subscribe(
+            () => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.initVersions();
+            }
+        );
     }
 
     private configureDumpWithLocation() {

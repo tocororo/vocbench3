@@ -16,8 +16,8 @@ export class ResourceViewServices {
      * Returns the resource view of the given resource
      * @param resource
      */
-    getResourceView(resource: ARTResource, includeInferred?: boolean, resourcePosition?: string) {
-        var params: any = {
+    getResourceView(resource: ARTResource, includeInferred?: boolean, resourcePosition?: string): Observable<any> {
+        let params: any = {
             resource: resource,
         };
         if (includeInferred != null) {
@@ -26,12 +26,26 @@ export class ResourceViewServices {
         if (resourcePosition != null) {
             params.resourcePosition = resourcePosition;
         }
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, exceptionsToSkip: ['java.net.UnknownHostException']
             } 
         });
         return this.httpMgr.doGet(this.serviceName, "getResourceView", params, options);
+    }
+
+    getResourceViewAtTime(resource: ARTURIResource, date: string): Observable<any> {
+        let zoneDateTime = new Date(date);
+        let params: any = {
+            resource: resource,
+            date: zoneDateTime.toISOString()
+        };
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, exceptionsToSkip: ['java.net.UnknownHostException']
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "getResourceViewAtTime", params, options);
     }
 
     /**
@@ -40,7 +54,7 @@ export class ResourceViewServices {
      * @param resourcePosition ????
      */
     getLexicalizationProperties(resource: ARTResource, resourcePosition?: string): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             resource: resource,
         };
         if (resourcePosition != null) {

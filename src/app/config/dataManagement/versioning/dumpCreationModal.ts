@@ -164,8 +164,7 @@ export class DumpCreationModal {
             repositoryAccess.setConfiguration(this.selectedRemoteRepoConfig);
         }
 
-        var returnedData: { versionId: string, repositoryAccess: RepositoryAccess, 
-                repositoryId: string, repoConfigurerSpecification: PluginSpecification, backendType: BackendTypesEnum} = {
+        var returnedData: DumpCreationModalReturnData = {
             versionId: this.versionId,
             repositoryAccess: repositoryAccess,
             repositoryId: null,
@@ -192,4 +191,12 @@ export class DumpCreationModal {
         this.activeModal.dismiss();
     }
 
+}
+
+export interface DumpCreationModalReturnData {
+    versionId: string;
+    repositoryAccess: RepositoryAccess;
+    repositoryId: string;
+    repoConfigurerSpecification: PluginSpecification;
+    backendType: BackendTypesEnum;
 }

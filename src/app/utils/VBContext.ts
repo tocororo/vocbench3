@@ -3,6 +3,7 @@ import { VersionInfo } from '../models/History';
 import { PrefixMapping } from '../models/Metadata';
 import { Project } from '../models/Project';
 import { ProjectPreferences, ProjectSettings, SystemSettings } from '../models/Properties';
+import { ResourceViewCtx } from '../models/ResourceView';
 import { ProjectUserBinding, User } from '../models/User';
 
 export class VBContext {
@@ -157,11 +158,13 @@ export class ProjectContext { //TODO move to Project model class?
     private puBinging: ProjectUserBinding;
     private preferences: ProjectPreferences;
     private settings: ProjectSettings;
+    resViewCtx: ResourceViewCtx;
 
     constructor(project?: Project) {
         this.project = project;
         this.preferences = new ProjectPreferences();
         this.settings = new ProjectSettings();
+        this.resViewCtx = new ResourceViewCtx();
     }
 
     setProject(project: Project) { this.project = project; }

@@ -1,5 +1,6 @@
 import { ARTURIResource } from "./ARTResources";
-import { SKOS, OWL, RDFS, OntoLex, Decomp, SKOSXL, RDF } from "./Vocabulary";
+import { VersionInfo } from "./History";
+import { Decomp, OntoLex, OWL, RDF, RDFS, SKOS, SKOSXL } from "./Vocabulary";
 
 export enum ResViewPartition {
     broaders = "broaders",
@@ -357,7 +358,6 @@ export enum AddAction {
     remote = "remote"
 }
 
-export enum ResourceViewCtx {
-    modal = "modal",
-    data = "data"
+export class ResourceViewCtx {
+    versions: VersionInfo[]; //caches the versions for sharing them among different ResView (no need to initialize them at each RV)
 }

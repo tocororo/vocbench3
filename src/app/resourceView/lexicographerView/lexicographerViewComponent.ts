@@ -18,7 +18,6 @@ import { NewOntoLexicalizationCfModalReturnData } from "src/app/widget/modal/cre
 import { ModalOptions } from "src/app/widget/modal/Modals";
 import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { ARTLiteral, ARTResource, ARTURIResource } from "../../models/ARTResources";
-import { ResourceViewCtx } from "../../models/ResourceView";
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { UIUtils } from "../../utils/UIUtils";
 import { ProjectContext } from "../../utils/VBContext";
@@ -36,7 +35,6 @@ import { LexViewModalService } from "./lexViewModalService";
 export class LexicographerViewComponent {
     @Input() resource: ARTURIResource;
     @Input() readonly: boolean = false;
-    @Input() context: ResourceViewCtx;
     @Input() projectCtx: ProjectContext;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)

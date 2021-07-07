@@ -1,0 +1,19 @@
+<div class="modal-body hbox">
+    <div class="vbox">
+        <resource-view-editor [resource]="resource" [readonly]="true" [inModal]="true"></resource-view-editor>
+        <input type="datetime-local" step="1" class="form-control mt-1" [ngModel]="timeNow" readonly>
+    </div>
+    <div class="vbox ml-3">
+        <resource-view-editor *ngIf="timePrevious" [resource]="resource" [readonly]="true" [inModal]="true" [atTime]="timePrevious"></resource-view-editor>
+        <div *ngIf="!timePrevious" class="card" style="flex: 1"></div>
+        <div class="mt-1" style="position: relative;">
+            <input type="datetime-local" step="1" class="form-control mt-1" [(ngModel)]="timePreviousSupport" (ngModelChange)="onDatetimeChange()" placeholder="yyyy-MM-ddThh:mm:ss">
+            <span *ngIf="invalidFormat" class="fas fa-exclamation-triangle" style="position: absolute; right: 12px; top: 10px;" 
+                [title]="'MESSAGES.INVALID_DATE_FORMAT'|translate">
+            </span>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+</div>

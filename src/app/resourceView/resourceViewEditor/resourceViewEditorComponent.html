@@ -21,20 +21,29 @@
                 <span class="fas fa-bell"></span>
             </button>
 
-            <div *ngIf="versioningAvailable" class="dropdown ml-2" ngbDropdown>
-                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle (click)="listVersions()" [title]="'RESOURCE_VIEW.ACTIONS.CHANGE_VERSION'|translate">
+            <div *ngIf="timeActionsEnabled" class="dropdown ml-2" ngbDropdown>
+                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle (click)="initVersions()" [title]="'RESOURCE_VIEW.TIME_MACHINE.TIME_MACHINE'|translate" 
+                    [disabled]="versionList?.length == 0 && !timeMachineAvailable">
                     <span class="far fa-clock"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
-                    <a class="dropdown-item" (click)="switchToVersion()" style="padding-right: 18px">
-                        Current
-                        <span *ngIf="!activeVersion" class="fas fa-check float-right"></span>
-                    </a>
-                    <a *ngFor="let v of versionList" class="dropdown-item" (click)="switchToVersion(v)">
-                        {{v.dateTimeLocal}} - {{v.versionId}}
-                        <span *ngIf="v == activeVersion" class="fas fa-check"></span>
-                    </a>
-                </div>
+                    <ng-container *ngIf="versionList?.length > 0">
+                        <h6 class="dropdown-header">{{'RESOURCE_VIEW.TIME_MACHINE.CHANGE_VERSION'|translate}}</h6>
+                        <a class="dropdown-item" (click)="switchToVersion()">
+                            {{'RESOURCE_VIEW.TIME_MACHINE.CURRENT'|translate}}
+                            <span *ngIf="!activeVersion" class="fas fa-check float-right"></span>
+                        </a>
+                        <a *ngFor="let v of versionList" class="dropdown-item" (click)="switchToVersion(v)">
+                            {{v.dateTimeLocal}} - {{v.versionId}}
+                            <span *ngIf="v == activeVersion" class="fas fa-check float-right"></span>
+                        </a>
+                    </ng-container>
+                    <ng-container *ngIf="timeMachineAvailable">
+                        <a class="dropdown-header" (click)="timeMachine()">
+                            {{'RESOURCE_VIEW.TIME_MACHINE.TRAVER_TO_TIME'|translate}}
+                        </a>
+                    </ng-container>
+                  </div>
             </div>
 
             <div *ngIf="collaborationAvailable" class="dropdown ml-2" ngbDropdown>

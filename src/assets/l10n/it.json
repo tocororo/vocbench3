@@ -1404,6 +1404,7 @@
         "INCONSISTENT_PROPERTY_ERROR": "Il range della proprietà {{property}} è inconsistente",
         "INVALID_ALIGNMENT_MEASURE": "La misura inserita non è valida, deve essere compresa tra 0 e 1.",
         "INVALID_CUSTOM_FORM_ID": "L'ID del CustomForm non è valido (potrebbe essere vuoto o contenere caratteri non ammessi).",
+        "INVALID_DATE_FORMAT": "Formato data non valido (richiesto yyyy-MM-ddThh:mm)",
         "INVALID_FROM_TIME_FORMAT": "Il parametro 'Da' non rispetta il formato datetime yyyy-MM-ddThh:mm",
         "INVALID_GRAPH_PATTERN": "Il graph pattern fornito non è valido",
         "INVALID_IRI": "{{iri}} non è un IRI valido",
@@ -1918,7 +1919,6 @@
             "BULK_DELETE_INFO": "Cancella i valori per ogni risorsa che ha questa relazione predicato-oggetto",
             "BULK_EDIT": "Modifica di massa",
             "BULK_EDIT_INFO": "Aggiorna il valore per ogni risorsa che ha questa relazione predicato-oggetto",
-            "CHANGE_VERSION": "Cambia versione",
             "COPY_TO_CLIPBOARD": "Copia negli appunti",
             "COPY_VALUE_TO_LOCALES": "Copia valore in altri locali",
             "DELETE_ALL_VALUES": "Cancella tutti i valori",
@@ -2031,6 +2031,12 @@
             "CONCEPT_SCHEMES": "Schemi",
             "REMOVE_BOX": "Rimuovi box",
             "TERM": "Termine"
+        },
+        "TIME_MACHINE": {
+            "CHANGE_VERSION": "Cambia versione",
+            "CURRENT": "Corrente",
+            "TIME_MACHINE": "Macchina del tempo",
+            "TRAVER_TO_TIME": "Vai indietro nel tempo"
         },
         "TYPES": {
             "DETAILED": "Dettagliato",

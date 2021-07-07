@@ -1404,6 +1404,7 @@
         "INCONSISTENT_PROPERTY_ERROR": "Error range of property {{property}} is inconsistent",
         "INVALID_ALIGNMENT_MEASURE": "The entered measure is invalid, it must be between 0 and 1.",
         "INVALID_CUSTOM_FORM_ID": "The CustomForm ID is not valid (it may be empty or contain invalid characters). Please fix it.",
+        "INVALID_DATE_FORMAT": "Invalid date format (required yyyy-MM-ddThh:mm)",
         "INVALID_FROM_TIME_FORMAT": "'From' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm",
         "INVALID_GRAPH_PATTERN": "The provided graph pattern is not valid",
         "INVALID_IRI": "{{iri}} is not a valid IRI",
@@ -1705,6 +1706,7 @@
             "REPO_ACCESS": "Repository Access",
             "REPO_LOCATION": "资料库位置",
             "SUPPORT_REPO_ID": "History/Validation Repository ID",
+            "UNDO": "Undo",
             "VALIDATION": "验证方式"
         },
         "RESOURCE": {
@@ -1874,6 +1876,7 @@
         "TRANSITIVE_IMPORTS": "Transitive imports",
         "TRIVIAL_INFERENCE": "Trivial Inference",
         "TRIVIAL_INFERENCE_INFO": "Enable trivial inference",
+        "UNDO_INFO": "Enable possibility to undo operation on data",
         "URI_GENERATOR": "URI Generator",
         "USE_DEFAULT": "Use default settings",
         "USE_RESOURCE_METADATA_INFO": "Usage of Resource Metadata can be enabled also after the project creation",
@@ -1916,7 +1919,6 @@
             "BULK_DELETE_INFO": "Delete the value for every resource that has this predicate-value relation",
             "BULK_EDIT": "Bulk edit",
             "BULK_EDIT_INFO": "Update the value for every resource that has this predicate-value relation",
-            "CHANGE_VERSION": "Change version",
             "COPY_TO_CLIPBOARD": "Copy to clipboard",
             "COPY_VALUE_TO_LOCALES": "Copy value to other locales",
             "DELETE_ALL_VALUES": "Delete all values",
@@ -2003,6 +2005,8 @@
             "SHOW_DATATYPE_BADGE_INFO": "If enabled, a datatype badge will be always shown beside the value. If not, the badge is only shown in case of an unknown datatype (the icon on the left of the value will classify the known datatype)",
             "SHOW_DEPRECATED": "Show deprecated values",
             "SHOW_DEPRECATED_INFO": "If enabled, linked resources marked as deprecated will be shown in the ResourceView",
+            "SORT_BY_RENDERING": "Sort lexicalizations by rendering languages",
+            "SORT_BY_RENDERING_INFO": "If enabled, the values in the 'Lexicalizations' partition will be sorted with the same order of the rendering languages preference",
             "SPLITTED_INFO": [
                 "The Resource View panel is splitted in two: on the left there is a main Resource View which describes (and is synched with) the resource selected in the tree/list; on the right there is an optional secondary Resource View which describes a resource selected (double click) from the main Resource View",
                 "This mode is not recommended in screen with resolution width below 1440px"
@@ -2027,6 +2031,12 @@
             "CONCEPT_SCHEMES": "Concept schemes",
             "REMOVE_BOX": "Remove box",
             "TERM": "Term"
+        },
+        "TIME_MACHINE": {
+            "CHANGE_VERSION": "Change version",
+            "CURRENT": "Current",
+            "TIME_MACHINE": "Time machine",
+            "TRAVER_TO_TIME": "Travel to any point in time"
         },
         "TYPES": {
             "DETAILED": "Detailed",
@@ -2108,6 +2118,7 @@
         "BATCH_VALIDATION": "Batch validation",
         "CLEAR_EXISTING": "Clear existing",
         "CLEAR_SHACL_SHAPES": "Clear SHACL shapes",
+        "CLICK_TO_INSPECT": "Click to inspect",
         "EXPORT_SHACL_SHAPES": "Export SHACL shapes",
         "EXTRACT_FROM_SHACL": "Extract from SHACL",
         "LOAD_SHACL_SHAPES": "Load SHACL shapes",
@@ -2268,6 +2279,10 @@
         "REMOVED": "Removed",
         "STATUS": "Status",
         "WARNING": "Warning"
+    },
+    "UNDO": {
+        "OPERATION_UNDONE": "Operation undone",
+        "OPERATION_UNDONE_INFO": "The following operation has been undone: {{operation}}"
     },
     "USER": {
         "LOGIN": "Log in",

@@ -79,6 +79,7 @@ import { CustomFormValueTableComponent } from '../resourceView/resourceViewEdito
 import { EditableResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/editableResourceComponent';
 import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/reifiedResourceComponent';
 import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/resViewResources/resourceViewValueRenderer';
+import { TimeMachineModal } from '../resourceView/resourceViewEditor/timeMachine/timeMachineModal';
 import { ResourceViewModal } from '../resourceView/resourceViewModal';
 import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
 import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
@@ -193,7 +194,8 @@ import { TreeAndListModule } from "./treeAndListModule";
         InstanceListCreatorModal,
         PropertyChainCreatorModal,
         RdfsMembersModal,
-        ResViewSettingsModal
+        ResViewSettingsModal,
+        TimeMachineModal
     ],
     exports: [
         ResourceViewEditorComponent,
@@ -221,6 +223,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         RdfsMembersModal,
         ResourceViewModal,
         ResViewSettingsModal,
+        TimeMachineModal
     ]
 })
 export class ResourceViewModule { }
