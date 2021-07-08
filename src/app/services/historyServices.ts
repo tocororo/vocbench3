@@ -129,4 +129,15 @@ export class HistoryServices {
         );
     }
 
+    getTimeOfOrigin(resource?: ARTURIResource): Observable<Date> {
+        let params = {
+            resource: resource
+        };
+        return this.httpMgr.doGet(this.serviceName, "getTimeOfOrigin", params).pipe(
+            map(datetime => {
+                return new Date(datetime);
+            })
+        );
+    }
+
 }

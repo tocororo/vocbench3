@@ -52,7 +52,6 @@ export class CommitInfo {
         let operation: ARTURIResource;
         if (commitJson.operation != null) {
             operation = Deserializer.createURI(commitJson.operation);
-            // operation = new ARTURIResource(commitJson.operation['@id']);
         }
 
         let operationParameters: ParameterInfo[] = [];

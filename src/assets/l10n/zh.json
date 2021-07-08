@@ -1404,7 +1404,6 @@
         "INCONSISTENT_PROPERTY_ERROR": "Error range of property {{property}} is inconsistent",
         "INVALID_ALIGNMENT_MEASURE": "The entered measure is invalid, it must be between 0 and 1.",
         "INVALID_CUSTOM_FORM_ID": "The CustomForm ID is not valid (it may be empty or contain invalid characters). Please fix it.",
-        "INVALID_DATE_FORMAT": "Invalid date format (required yyyy-MM-ddThh:mm)",
         "INVALID_FROM_TIME_FORMAT": "'From' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm",
         "INVALID_GRAPH_PATTERN": "The provided graph pattern is not valid",
         "INVALID_IRI": "{{iri}} is not a valid IRI",

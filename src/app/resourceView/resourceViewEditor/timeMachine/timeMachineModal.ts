@@ -1,6 +1,8 @@
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Stringifiable } from "d3";
 import { ARTURIResource } from "src/app/models/ARTResources";
+import { HistoryServices } from "src/app/services/historyServices";
 import { UIUtils } from "src/app/utils/UIUtils";
 
 @Component({
@@ -10,61 +12,65 @@ import { UIUtils } from "src/app/utils/UIUtils";
 export class TimeMachineModal {
     @Input() resource: ARTURIResource; //time machine only available for IRI
 
-    timeNow: string;
-    timePrevious: string;
-    timePreviousSupport: string; //see onDateTimeChange for details
-    invalidFormat: boolean;
+    historyDates: Date[];
+    dateSlideIdx: number;
+    sliderDate: Date;
+    selectedDate: string;
 
-    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {
+    constructor(private historyService: HistoryServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) {
     }
 
     ngOnInit() {
-        let nowDatetime: string = this.toDatetimePickerFormat(new Date());
-        this.timeNow = nowDatetime;
+        let now: Date = new Date();
+        this.historyDates = [now];
+        this.historyService.getTimeOfOrigin(this.resource).subscribe(date => {
+            let timeOfOrigin: Date = date;
+            this.historyDates.push(timeOfOrigin);
+            //add random dates (just for testing purpose, all the dates will be retrieved with a service invocation)
+            // for (let i = 0; i < 5; i++) {
+            //     this.historyDates.push(new Date(+timeOfOrigin + Math.random() * (now.getTime() - timeOfOrigin.getTime())));
+            // }
+            this.historyDates.sort((d1, d2) => d1.getTime() - d2.getTime());
+
+            this.dateSlideIdx = this.historyDates.length-1;
+            this.updatePreviewedDate();
+            this.updateSelectedDate();
+        })
     }
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    private toDatetimePickerFormat(date: Date) {
-        let yyyy: string = date.getFullYear() + "";
-        let MM: string = date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth() + "";
-        let dd: string = date.getDate() < 10 ? "0" + date.getDate() : date.getDate() + "";
-        let hh: string = date.getHours() < 10 ? "0" + date.getHours() : date.getHours() + "";
-        let mm: string = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes() + "";
-        let ss: string = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds() + "";
-        return yyyy + "-" + MM + "-" + dd + "T" + hh + ":" + mm + ":" + ss;
+    selectDate(date: Date) {
+        this.dateSlideIdx = this.historyDates.findIndex(d => d == date);
+        this.updatePreviewedDate();
+        this.updateSelectedDate();
+    }
+
+    previousDate() {
+        this.dateSlideIdx = this.dateSlideIdx-1;
+        this.updatePreviewedDate();
+        this.updateSelectedDate();
+    }
+    nextDate() {
+        this.dateSlideIdx = this.dateSlideIdx+1;
+        this.updatePreviewedDate();
+        this.updateSelectedDate();
     }
 
     /**
-     * (at 2021-07-07) datetime-local is not supported in Firefox, so the variable bound to the
-     * datetime-local input is timePreviousSupport which, when changes, is matched with the
-     * yyyy-MM-ddThh:mm:ss format in order to check if it is a valid datetime.
-     * In case the match is passed, timePreviousSupport is assigned to the actual variable timePrevious.
-     * Note: in case input datetime-local is supported, timePreviousSupport will always be assigned to timePrevious,
-     * moreover the check could be unnecessary since the format is granted by the same input widget
+     * Update the slider date during the "sliding" (useful for the preview of the date)
      */
-    onDatetimeChange() {
-        this.timePreviousSupport = this.timePreviousSupport.trim();
-        let regexp = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/;
-        let matchArray: RegExpExecArray = regexp.exec(this.timePreviousSupport);
-        if (matchArray != null) { //if parsed successfully check if it is a valid date
-            let yyyy = matchArray[1]; //no range-check on year
-            let MM: number = parseInt(matchArray[2]);
-            let dd: number = parseInt(matchArray[3]);
-            let hh: number = parseInt(matchArray[4]);
-            let mm: number = parseInt(matchArray[5]);
-            let ss: number = parseInt(matchArray[6]);
-            if ((MM >= 0 && MM <= 12) && (dd >= 1 && dd <= 31) && (hh >= 0 && hh <= 24) && (mm >= 0 && mm <= 60) && (ss >= 0 && ss <= 60)) {
-                this.timePrevious = this.timePreviousSupport;
-                this.invalidFormat = false;
-            } else {
-                this.invalidFormat = true;
-            }
-        } else {
-            this.invalidFormat = true;
-        }
+    updatePreviewedDate() {
+        this.sliderDate = this.historyDates[this.dateSlideIdx];
+    }
+
+    /**
+     * Update the selected date when the slider is left (not during sliding)
+     */
+    updateSelectedDate() {
+        this.selectedDate = this.sliderDate.toISOString();
     }
 
     ok() {

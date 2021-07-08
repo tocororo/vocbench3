@@ -1,17 +1,32 @@
-<div class="modal-body hbox">
-    <div class="vbox">
+<div class="modal-body vbox">
+    <div class="hbox">
         <resource-view-editor [resource]="resource" [readonly]="true" [inModal]="true"></resource-view-editor>
-        <input type="datetime-local" step="1" class="form-control mt-1" [ngModel]="timeNow" readonly>
-    </div>
-    <div class="vbox ml-3">
-        <resource-view-editor *ngIf="timePrevious" [resource]="resource" [readonly]="true" [inModal]="true" [atTime]="timePrevious"></resource-view-editor>
-        <div *ngIf="!timePrevious" class="card" style="flex: 1"></div>
-        <div class="mt-1" style="position: relative;">
-            <input type="datetime-local" step="1" class="form-control mt-1" [(ngModel)]="timePreviousSupport" (ngModelChange)="onDatetimeChange()" placeholder="yyyy-MM-ddThh:mm:ss">
-            <span *ngIf="invalidFormat" class="fas fa-exclamation-triangle" style="position: absolute; right: 12px; top: 10px;" 
-                [title]="'MESSAGES.INVALID_DATE_FORMAT'|translate">
-            </span>
+        <div class="vbox ml-3">
+            <resource-view-editor *ngIf="selectedDate" [resource]="resource" [readonly]="true" [inModal]="true" [atTime]="selectedDate"></resource-view-editor>
+            <div *ngIf="!selectedDate" class="card" style="flex: 1;"></div>
         </div>
+    </div>
+    <div class="vbox mt-2" style="flex: initial; width: 50%; align-self: center;">
+        <div class="btn-group btn-group mb-2" style="align-self: center;">
+            <button class="btn btn-light" (click)="previousDate()" [disabled]="dateSlideIdx==0">
+                <span class="fas fa-caret-left"></span>
+            </button>
+            <div class="btn-group" ngbDropdown placement="top">
+                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                    <b>{{sliderDate?.toLocaleDateString() + ' ' + sliderDate?.toLocaleTimeString()}}</b>
+                </button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <a *ngFor="let d of historyDates" class="dropdown-item" (click)="selectDate(d)">
+                        {{d.toLocaleDateString() + ' ' + d.toLocaleTimeString()}}
+                        <span *ngIf="d.toISOString() == selectedDate" class="fas fa-check ml-3"></span>
+                    </a>
+                </div>
+            </div>
+            <button class="btn btn-light" (click)="nextDate()" [disabled]="dateSlideIdx==historyDates.length-1">
+                <span class="fas fa-caret-right"></span>
+            </button>
+        </div>
+        <input type="range" min="0" [max]="historyDates.length-1" [(ngModel)]="dateSlideIdx" (ngModelChange)="updatePreviewedDate()" (change)="updateSelectedDate()">
     </div>
 </div>
 <div class="modal-footer">

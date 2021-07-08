@@ -77,6 +77,7 @@ export class SettingsMgrConfigComponent {
 
     selectSettingsMgr(settingsMgr: ExtensionPoint) {
         this.selectedSettingsMgr = settingsMgr;
+        this.selectedSettingsMgr.settingsScopes = this.selectedSettingsMgr.settingsScopes.filter(s => s != Scope.PROJECT_GROUP); //filter PG scope since it has no default settings
         this.selectedSettings = null;
         this.selectedScope = null;
     }
