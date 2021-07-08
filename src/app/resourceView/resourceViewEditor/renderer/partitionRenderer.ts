@@ -111,7 +111,8 @@ export abstract class PartitionRenderer {
         this.addDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource) ||
             this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.resource);
         this.addExteranlResourceAllowed = ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
-        this.addManuallyAllowed = ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
+        this.addManuallyAllowed = !(this.partition in ResViewPartition) || ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1; //custom partition OR add manually foreseen
+        
     }
 
     /**

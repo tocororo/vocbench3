@@ -223,6 +223,7 @@ export class ResViewProjectSettingsComponent {
 
     deleteCustomSection() {
         delete this.customSections[this.selectedCustomSection];
+        this.customSectionsIDs = Object.keys(this.customSections); //update the IDs list
         //remove the custom section from the templates
         for (let role in this.templates) {
             //check if it is among the enabled

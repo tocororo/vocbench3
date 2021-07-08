@@ -117,7 +117,7 @@ export class PredicateObjectsRenderer {
         //menu disabled if all of its action are disabled
         this.actionMenuDisabled = this.addDisabled && this.deleteAllDisabled;
 
-        this.addManuallyAllowed = ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
+        this.addManuallyAllowed = !(this.partition in ResViewPartition) || ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1; //custom partition OR add manually foreseen
         this.addExteranlResourceAllowed = ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
     }
 

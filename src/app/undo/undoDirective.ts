@@ -55,7 +55,6 @@ export class UndoDirective {
                     ) { //empty undo stack or different user
                         let sailExc: string = "SailException: "; //after this exception starts the message
                         let errorMsg: string = error.message.substring(error.message.indexOf(sailExc) + sailExc.length);
-                        console.log("errorMsg",errorMsg);
                         this.toastService.show({ key: "STATUS.WARNING"}, errorMsg, { toastClass: "bg-warning", delay: 4000 });
                     } else {
                         let errorMsg = error.message != null ? error.message : "Unknown response from the server";

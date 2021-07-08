@@ -83,8 +83,8 @@ export enum ResourceViewType { //used for set a default type of resource view fo
 }
 
 export class ResourceViewProjectSettings {
-    customSections: {[key: string]: CustomSection}; //map name -> CustomSection
-    templates: {[key: string]: ResViewPartition[]}; //map role -> sections
+    customSections: {[key: string]: CustomSection} = {}; //map name -> CustomSection
+    templates: {[key: string]: ResViewPartition[]} = {}; //map role -> sections
 }
 
 export class CustomSection {
