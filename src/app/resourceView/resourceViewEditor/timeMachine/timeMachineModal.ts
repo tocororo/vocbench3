@@ -21,21 +21,19 @@ export class TimeMachineModal {
     }
 
     ngOnInit() {
-        let now: Date = new Date();
-        this.historyDates = [now];
-        this.historyService.getTimeOfOrigin(this.resource).subscribe(date => {
-            let timeOfOrigin: Date = date;
-            this.historyDates.push(timeOfOrigin);
-            //add random dates (just for testing purpose, all the dates will be retrieved with a service invocation)
-            // for (let i = 0; i < 5; i++) {
-            //     this.historyDates.push(new Date(+timeOfOrigin + Math.random() * (now.getTime() - timeOfOrigin.getTime())));
-            // }
-            this.historyDates.sort((d1, d2) => d1.getTime() - d2.getTime());
-
-            this.dateSlideIdx = this.historyDates.length-1;
-            this.updatePreviewedDate();
-            this.updateSelectedDate();
-        })
+        this.historyDates = [];
+        this.historyService.getCommitSummary(null, null, null, [this.resource]).subscribe(
+            info => {
+                this.historyService.getCommits(info.tipRevisionNumber, null, null, null, [this.resource], null, null, null, null, null, 999).subscribe(
+                    commits => {
+                        commits.forEach(c => {
+                            this.historyDates.push(c.endTime);
+                        });
+                        this.historyDates.sort((d1, d2) => d1.getTime() - d2.getTime());
+                    }
+                )
+            }
+        )
     }
 
     ngAfterViewInit() {

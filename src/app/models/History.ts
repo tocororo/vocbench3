@@ -2,6 +2,11 @@ import { ARTURIResource, ARTResource, ARTNode } from "./ARTResources";
 import { Deserializer } from "../utils/Deserializer";
 import { NTriplesUtil } from "../utils/ResourceUtils";
 
+export interface HistoryPaginationInfo {
+    tipRevisionNumber: number;
+    pageCount: number;
+}
+
 export class CommitInfo {
     public commit: ARTURIResource;
     public user: ARTURIResource;

@@ -2034,6 +2034,7 @@
         "TIME_MACHINE": {
             "CHANGE_VERSION": "Cambia versione",
             "CURRENT": "Corrente",
+            "SELECT_DATE": "Seleziona una data",
             "TIME_MACHINE": "Macchina del tempo",
             "TRAVER_TO_TIME": "Vai indietro nel tempo"
         },

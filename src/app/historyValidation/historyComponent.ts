@@ -28,7 +28,7 @@ export class HistoryComponent extends AbstractHistValidComponent {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.page = 0;
         this.commits = [];
-        this.historyService.getCommitSummary(this.operations, this.getPerformersIRI(), null, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
+        this.historyService.getCommitSummary(this.operations, this.getPerformersIRI(), null, null, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.pageCount = stResp.pageCount;
@@ -42,7 +42,7 @@ export class HistoryComponent extends AbstractHistValidComponent {
 
     listCommits() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.historyService.getCommits(this.tipRevisionNumber, this.operations, this.getPerformersIRI(), null, this.getFormattedFromTime(), this.getFormattedToTime(),
+        this.historyService.getCommits(this.tipRevisionNumber, this.operations, this.getPerformersIRI(), null, null, this.getFormattedFromTime(), this.getFormattedToTime(),
             this.operationSorting.id, this.timeSorting.id, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;

@@ -13,7 +13,8 @@
             </button>
             <div class="btn-group" ngbDropdown placement="top">
                 <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-                    <b>{{sliderDate?.toLocaleDateString() + ' ' + sliderDate?.toLocaleTimeString()}}</b>
+                    <b *ngIf="selectedDate">{{sliderDate?.toLocaleDateString() + ' ' + sliderDate?.toLocaleTimeString()}}</b>
+                    <b *ngIf="!selectedDate">{{'RESOURCE_VIEW.TIME_MACHINE.SELECT_DATE'|translate}}</b>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
                     <a *ngFor="let d of historyDates" class="dropdown-item" (click)="selectDate(d)">
@@ -26,7 +27,7 @@
                 <span class="fas fa-caret-right"></span>
             </button>
         </div>
-        <input type="range" min="0" [max]="historyDates.length-1" [(ngModel)]="dateSlideIdx" (ngModelChange)="updatePreviewedDate()" (change)="updateSelectedDate()">
+        <input type="range" min="0" [max]="historyDates.length-1" [(ngModel)]="dateSlideIdx" (ngModelChange)="updatePreviewedDate()" (change)="updateSelectedDate()" [disabled]="!selectedDate">
     </div>
 </div>
 <div class="modal-footer">

@@ -104,7 +104,7 @@ export class SharedModalServices {
      * @param message 
      */
     selectConverter(title: TextOrTranslation, message?: string, capabilities?: RDFCapabilityType[]) {
-        const modalRef: NgbModalRef = this.modalService.open(ConverterPickerModal, new ModalOptions('lg'));
+        const modalRef: NgbModalRef = this.modalService.open(ConverterPickerModal, new ModalOptions('xl'));
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (message != null) modalRef.componentInstance.message = message;
         if (capabilities != null) modalRef.componentInstance.capabilities = capabilities;

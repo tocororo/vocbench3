@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
-import { CommitDelta, CommitInfo, CommitOperation, ParameterInfo, SortingDirection } from "../models/History";
+import { CommitDelta, CommitInfo, CommitOperation, HistoryPaginationInfo, SortingDirection } from "../models/History";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager } from "../utils/HttpManager";
 
@@ -21,11 +21,12 @@ export class HistoryServices {
      * @param limit 
      */
     getCommitSummary(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], validatorFilter?: ARTURIResource[],
-        timeLowerBound?: string, timeUpperBound?: string, limit?: number) {
+        resourceFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string, limit?: number): Observable<HistoryPaginationInfo> {
         let params: any = {
             operationFilter: operationFilter,
             performerFilter: performerFilter,
             validatorFilter: validatorFilter,
+            resourceFilter: resourceFilter,
             timeLowerBound: timeLowerBound,
             timeUpperBound: timeUpperBound,
             limit: limit
@@ -49,14 +50,14 @@ export class HistoryServices {
      * @param limit 
      */
     getCommits(tipRevisionNumber: number, operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], validatorFilter?: ARTURIResource[],
-            timeLowerBound?: string, timeUpperBound?: string, operationSorting?: SortingDirection, timeSorting?: SortingDirection, 
+            resourceFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string, operationSorting?: SortingDirection, timeSorting?: SortingDirection, 
             page?: number, limit?: number): Observable<CommitInfo[]> {
         let params: any = {
             tipRevisionNumber: tipRevisionNumber,
-
             operationFilter: operationFilter,
             performerFilter: performerFilter,
             validatorFilter: validatorFilter,
+            resourceFilter: resourceFilter,
             timeLowerBound: timeLowerBound,
             timeUpperBound: timeUpperBound,
             operationSorting: operationSorting,
