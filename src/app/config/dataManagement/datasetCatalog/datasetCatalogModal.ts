@@ -74,7 +74,7 @@ export class DatasetCatalogModal {
     }
 
     onKeydown(event: KeyboardEvent) {
-        if (event.which == 13) {
+        if (event.key == "Enter") {
             if (this.query && this.query.trim() != "") {
                 this.searchDataset();
             }

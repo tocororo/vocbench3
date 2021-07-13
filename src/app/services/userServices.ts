@@ -20,10 +20,9 @@ export class UserServices {
     /**
      * Returns the user corrently logged (response contains user object).
      * Returns null if no user is logged (response contains empty user object).
-     * Throw exception if no user is register at all (in this case the response of getUser() is empty).
      */
     getUser(): Observable<User> {
-        var params: any = {}
+        let params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getUser", params).pipe(
             map(stResp => {
                 if (stResp.user != null) { //user object in respnse => serialize it (it could be empty, so no user logged)
@@ -43,7 +42,7 @@ export class UserServices {
      * Lists all the registered users
      */
     listUsers(): Observable<User[]> {
-        var params: any = {}
+        let params: any = {}
         return this.httpMgr.doGet(this.serviceName, "listUsers", params).pipe(
             map(stResp => {
                 let users: User[] = Deserializer.createUsersArray(stResp);
@@ -59,7 +58,7 @@ export class UserServices {
      * Lists all the online users
      */
     listOnlineUsers(): Observable<User[]> {
-        var params: any = {}
+        let params: any = {}
         return this.httpMgr.doGet(this.serviceName, "listOnlineUsers", params).pipe(
             map(stResp => {
                 let users: User[] = Deserializer.createUsersArray(stResp);
@@ -77,7 +76,7 @@ export class UserServices {
      * since the latter is accessed only by the admin that doesn't require authorization check and has no capabilities
      */
     listUserCapabilities(): Observable<string[]> {
-        var params: any = {}
+        let params: any = {}
         return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", params).pipe(
             map(stResp => {
                 AuthorizationEvaluator.initEvalutator(stResp);
@@ -91,7 +90,7 @@ export class UserServices {
      * @param projectName
      */
     listUsersBoundToProject(project: Project): Observable<User[]> {
-        var params: any = {
+        let params: any = {
             projectName: project.getName()
         }
         return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).pipe(
@@ -110,7 +109,7 @@ export class UserServices {
      * @param userIri 
      */
     listProjectsBoundToUser(userIri: ARTURIResource): Observable<string[]> {
-        var params: any = {
+        let params: any = {
             userIri: userIri
         }
         return this.httpMgr.doGet(this.serviceName, "listProjectsBoundToUser", params);
@@ -213,7 +212,7 @@ export class UserServices {
      * @param givenName
      */
     updateUserGivenName(email: string, givenName: string): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
             givenName: givenName,
         }
@@ -230,7 +229,7 @@ export class UserServices {
      * @param familyName
      */
     updateUserFamilyName(email: string, familyName: string): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
             familyName: familyName,
         }
@@ -247,7 +246,7 @@ export class UserServices {
      * @param givenName
      */
     updateUserEmail(email: string, newEmail: string): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
             newEmail: newEmail,
         }
@@ -264,7 +263,7 @@ export class UserServices {
      * @param phone if not provided, remove the info
      */
     updateUserPhone(email: string, phone?: string): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
         }
         if (phone != null) {
@@ -283,7 +282,7 @@ export class UserServices {
      * @param address if not provided removes the info
      */
     updateUserAddress(email: string, address?: string): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
         }
         if (address != null) {
@@ -302,7 +301,7 @@ export class UserServices {
      * @param affiliation if not provided removes the info
      */
     updateUserAffiliation(email: string, affiliation?: string): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
         }
         if (affiliation != null) {
@@ -321,7 +320,7 @@ export class UserServices {
      * @param url if not provided removes the info
      */
     updateUserUrl(email: string, url?: string): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
         }
         if (url != null) {
@@ -340,7 +339,7 @@ export class UserServices {
      * @param avatarUrl if not provided removes the info
      */
     updateUserAvatarUrl(email: string, avatarUrl?: string): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
         }
         if (avatarUrl != null) {
@@ -359,7 +358,7 @@ export class UserServices {
      * @param url
      */
     updateUserLanguageProficiencies(email: string, languageProficiencies: string[]): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
             languageProficiencies: languageProficiencies,
         }
@@ -377,7 +376,7 @@ export class UserServices {
      * @param value 
      */
     updateUserCustomField(email: string, property: ARTURIResource, value?: string): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
             property: property,
             value: value
@@ -395,7 +394,7 @@ export class UserServices {
      * @param enabled true enables the user, false disables the user
      */
     enableUser(email: string, enabled: boolean): Observable<User> {
-        var params: any = {
+        let params: any = {
             email: email,
             enabled: enabled,
         }
@@ -411,7 +410,7 @@ export class UserServices {
      * @param email
      */
     deleteUser(email: string) {
-        var params: any = {
+        let params: any = {
             email: email
         }
         return this.httpMgr.doPost(this.serviceName, "deleteUser", params);
@@ -424,7 +423,7 @@ export class UserServices {
      * @param newPassword 
      */
     changePassword(email: string, oldPassword: string, newPassword: string) {
-        var params: any = {
+        let params: any = {
             email: email,
             oldPassword: oldPassword,
             newPassword: newPassword
@@ -437,7 +436,7 @@ export class UserServices {
      * @param password 
      */
     forcePassword(email: string, password: string) {
-        var params: any = {
+        let params: any = {
             email: email,
             password: password
         }
@@ -449,7 +448,7 @@ export class UserServices {
      * @param email 
      */
     forgotPassword(email: string) {
-        var params: any = {
+        let params: any = {
             email: email,
             vbHostAddress: this.getVbHostAddress()
         }
@@ -462,7 +461,7 @@ export class UserServices {
      * @param token 
      */
     resetPassword(email: string, token: string) {
-        var params: any = {
+        let params: any = {
             email: email,
             token: token
         }
@@ -474,12 +473,12 @@ export class UserServices {
      */
 
     getUserFormFields(): Observable<UserFormFields> {
-        var params: any = {}
+        let params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getUserFormFields", params);
     }
 
     updateUserFormOptionalFieldVisibility(field: ARTURIResource, visibility: boolean) {
-        var params: any = {
+        let params: any = {
             field: field,
             visibility: visibility
         }
@@ -487,14 +486,14 @@ export class UserServices {
     }
 
     addUserFormCustomField(field: string) {
-        var params: any = {
+        let params: any = {
             field: field,
         }
         return this.httpMgr.doPost(this.serviceName, "addUserFormCustomField", params);
     }
 
     swapUserFormCustomFields(field1: ARTURIResource, field2: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             field1: field1,
             field2: field2
         }
@@ -502,7 +501,7 @@ export class UserServices {
     }
 
     updateUserFormCustomField(fieldIri: ARTURIResource, label: string, description?: string) {
-        var params: any = {
+        let params: any = {
             fieldIri: fieldIri,
             label: label,
             description: description
@@ -511,7 +510,7 @@ export class UserServices {
     }
 
     removeUserFormCustomField(field: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             field: field,
         }
         return this.httpMgr.doPost(this.serviceName, "removeUserFormCustomField", params);

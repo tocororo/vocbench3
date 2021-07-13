@@ -77,7 +77,7 @@ export class RegistrationComponent {
         this.userService.registerUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName, userIri,
             this.userForm.address, this.userForm.affiliation, this.userForm.url, this.userForm.avatarUrl, this.userForm.phone,
             this.userForm.languageProficiencies, this.userForm.customProperties).subscribe(
-            stResp => {
+            () => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var message: Translation;
                 if (this.firstAccess) {

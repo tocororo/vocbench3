@@ -23,7 +23,7 @@ export class LoginComponent {
         private basicModals: BasicModalServices) { }
 
     onKeydown(event: KeyboardEvent) {
-        if (event.which == 13) {
+        if (event.key == "Enter") {
             this.login();
         }
     }

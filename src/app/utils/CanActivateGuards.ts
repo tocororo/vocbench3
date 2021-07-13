@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { UserServices } from '../services/userServices';
 import { VBContext } from './VBContext';
+import { VBProperties } from './VBProperties';
 
 /**
  * Guard that prevents accessing page to not logged user
@@ -97,4 +98,23 @@ export class ProjectGuard implements CanActivate, CanLoad {
     }
 }
 
-export const GUARD_PROVIDERS = [AuthGuard, AdminGuard, ProjectGuard];
+@Injectable()
+export class SystemSettingsGuard implements CanActivate {
+
+    constructor(private router: Router, private vbProp: VBProperties) { }
+
+    canActivate(): Observable<boolean> {
+        if (VBContext.getSystemSettings() == null) {
+            return this.vbProp.initStartupSystemSettings().pipe(
+                map(() => {
+                    return true;
+                })
+            );
+        } else {
+            return of(true);
+        }
+        
+    }
+}
+
+export const GUARD_PROVIDERS = [AuthGuard, AdminGuard, ProjectGuard, SystemSettingsGuard];

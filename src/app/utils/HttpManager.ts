@@ -29,22 +29,7 @@ export class HttpManager {
     });
 
     constructor(private http: HttpClient, private router: Router, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
-        let st_protocol: string = window['st_protocol']; //protocol (http/https)
-        let protocol: string = st_protocol ? st_protocol : location.protocol;
-        if (!protocol.endsWith(":")) protocol += ":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
-
-        let st_host: string = window['st_host'];
-        let host: string = st_host ? st_host : location.hostname;
-
-        let st_port: string = window['st_port'];
-        let port: string = st_port ? st_port : location.port;
-
-        let st_path: string = window['st_path']; //url path (optional)
-        
-        this.serverhost = protocol + "//" + host + ":" + port;
-        if (st_path != null) {
-            this.serverhost += "/" + st_path;
-        }
+        this.serverhost = HttpManager.getServerHost();
     }
 
     /**
@@ -486,6 +471,26 @@ export class HttpManager {
             let blobResp = new Blob([arrayBuffer], { type: respContType });
             return blobResp;
         }
+    }
+
+    static getServerHost(): string {
+        let st_protocol: string = window['st_protocol']; //protocol (http/https)
+        let protocol: string = st_protocol ? st_protocol : location.protocol;
+        if (!protocol.endsWith(":")) protocol += ":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
+
+        let st_host: string = window['st_host'];
+        let host: string = st_host ? st_host : location.hostname;
+
+        let st_port: string = window['st_port'];
+        let port: string = st_port ? st_port : location.port;
+
+        let st_path: string = window['st_path']; //url path (optional)
+        
+        let serverhost = protocol + "//" + host + ":" + port;
+        if (st_path != null) {
+            serverhost += "/" + st_path;
+        }
+        return serverhost;
     }
 
 }

@@ -81,7 +81,7 @@ export class SanitizerDirective {
             let inputElement = this.el.nativeElement;
             let txtContent = inputElement.value;
 
-            let charPressed = String.fromCharCode(event.which);
+            let charPressed = event.key;
 
             if (charPressed == this.sourceChar) {
                 let transformedChar = this.sanitize(charPressed);

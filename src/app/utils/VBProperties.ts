@@ -296,10 +296,10 @@ export class VBProperties {
     =========== SETTINGS ===========
     ============================= */
 
-    initStartupSystemSettings() {
-        this.settingsService.getStartupSettings().subscribe(
-            settings => {
-                let systemSettings: SystemSettings = VBContext.getSystemSettings();
+    initStartupSystemSettings(): Observable<void> {
+        return this.settingsService.getStartupSettings().pipe(
+            map(settings => {
+                let systemSettings: SystemSettings = new SystemSettings();
                 systemSettings.experimentalFeaturesEnabled = settings.getPropertyValue(SettingsEnum.experimentalFeaturesEnabled);
                 systemSettings.privacyStatementAvailable = settings.getPropertyValue(SettingsEnum.privacyStatementAvailable);
                 systemSettings.showFlags = settings.getPropertyValue(SettingsEnum.showFlags);
@@ -308,7 +308,8 @@ export class VBProperties {
                 let systemLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
                 Languages.sortLanguages(systemLanguages);
                 systemSettings.languages = systemLanguages;
-            }
+                VBContext.setSystemSettings(systemSettings);
+            })
         )
     }
 

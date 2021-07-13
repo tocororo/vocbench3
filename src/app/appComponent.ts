@@ -7,7 +7,6 @@ import { Cookie } from './utils/Cookie';
 import { VBActionsEnum } from "./utils/VBActions";
 import { VBContext } from "./utils/VBContext";
 import { VBEventHandler } from './utils/VBEventHandler';
-import { VBProperties } from "./utils/VBProperties";
 
 @Component({
     selector: "app",
@@ -21,7 +20,7 @@ export class AppComponent {
 
     navbarTheme: number = 0;
 
-    constructor(private vbProp: VBProperties, private eventHandler: VBEventHandler, translate: TranslateService) {
+    constructor(private eventHandler: VBEventHandler, translate: TranslateService) {
         this.eventHandler.themeChangedEvent.subscribe((theme: number) => {
             if (theme != null) {
                 this.navbarTheme = theme;
@@ -49,9 +48,6 @@ export class AppComponent {
 
     }
 
-    ngOnInit() {
-        this.vbProp.initStartupSystemSettings();
-    }
 
     /**
      * Returns true if the user is logged (an authentication token is stored)

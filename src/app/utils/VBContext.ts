@@ -12,7 +12,7 @@ export class VBContext {
     private static projectChanged: boolean;
     private static loggedUser: User;
 
-    private static systemSettings: SystemSettings = new SystemSettings();
+    private static systemSettings: SystemSettings;
 
     /**
      * If the project context is provided, returns (uses) it, otherwise returns the 'global' project context
@@ -137,6 +137,9 @@ export class VBContext {
 
     static getSystemSettings(): SystemSettings {
         return this.systemSettings;
+    }
+    static setSystemSettings(settings: SystemSettings) {
+        this.systemSettings = settings;
     }
 
     /**
