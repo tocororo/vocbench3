@@ -1324,6 +1324,7 @@
         "CANNOT_EDIT_NOT_EXPLICIT_RESOURCES": "All the selected resources are not explicit, so they cannot be edited",
         "CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS": "You cannot edit credentials of remote repositories linked to an open project. Please, close the project and retry",
         "CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES": "{{property}} range doesn't admit resources. You cannot enrich this property with a remote resource",
+        "CANNOT_EXPORT_ADV_GRAPH_APP_WITH_EXTERNAL_REF": "Cannot store this Advanced Graph Application since it contains reference(s) to node(s) defined in external header(s).",
         "CANNOT_GRANT_ADMIN_TO_INACTIVE_USER": "Cannot grant the administrator authority to a non-active user. Please, activate the user and retry",
         "CANNOT_IMPORT_DATASET_MISSING_ONTO_IRI": "The selected Dataset does not provide any ontology IRI, so it cannot be imported. Please change the Dataset.",
         "CANNOT_INFER_PEARL_ANNOTATIONS": "Cannot infer annotations on an invalid PEARL",

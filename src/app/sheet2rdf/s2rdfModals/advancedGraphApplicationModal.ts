@@ -82,7 +82,7 @@ export class AdvancedGraphApplicationModal {
             (node: NodeConversion) => {
                 this.newDefinedNodes.push(node);
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -99,11 +99,11 @@ export class AdvancedGraphApplicationModal {
             let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
             //TODO allow to forcing the deletion a referenced node or not allow at all? 
             if (referenced) { //cannot delete a node used by a graph application
-                this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM"}, ModalType.warning).then(
+                this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM" }, ModalType.warning).then(
                     confirm => {
                         this.removeNodeImpl();
                     },
-                    () => {}
+                    () => { }
                 );
             } else {
                 this.removeNodeImpl();
@@ -124,7 +124,7 @@ export class AdvancedGraphApplicationModal {
             (n: NodeConversion) => {
                 node.converter = n.converter;
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -133,12 +133,12 @@ export class AdvancedGraphApplicationModal {
             (n: NodeConversion) => {
                 node.converter = n.converter;
             },
-            () => {}
+            () => { }
         );
     }
 
-    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType, 
-            constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
+    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType,
+        constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
         const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
         modalRef.componentInstance.header = header;
         modalRef.componentInstance.editingNode = editingNode;
@@ -164,19 +164,19 @@ export class AdvancedGraphApplicationModal {
     }
 
     addMapping() {
-        this.sharedModals.prefixNamespace({key:"ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING"}).then(
+        this.sharedModals.prefixNamespace({ key: "ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING" }).then(
             (mapping: { prefix: string, namespace: string }) => {
                 //check if the prefix or the namespace are not already defined
                 if (
-                    this.globalPrefixMappings.some(m => m.prefix == mapping.prefix) || 
+                    this.globalPrefixMappings.some(m => m.prefix == mapping.prefix) ||
                     this.localPrefixMappings.some(m => m.prefix == mapping.prefix)
                 ) {
-                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.ALREADY_DEFINED_MAPPING_WITH_PREFIX"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.ALREADY_DEFINED_MAPPING_WITH_PREFIX" }, ModalType.warning);
                 } else if (
-                    this.globalPrefixMappings.some(m => m.namespace == mapping.namespace) || 
+                    this.globalPrefixMappings.some(m => m.namespace == mapping.namespace) ||
                     this.localPrefixMappings.some(m => m.namespace == mapping.namespace)
                 ) {
-                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.ALREADY_DEFINED_MAPPING_WITH_NAMESPACE"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.ALREADY_DEFINED_MAPPING_WITH_NAMESPACE" }, ModalType.warning);
                 } else { //not used => add it
                     let newMapping = { prefix: mapping.prefix, namespace: mapping.namespace, explicit: true };
                     this.localPrefixMappings.push(newMapping);
@@ -192,11 +192,11 @@ export class AdvancedGraphApplicationModal {
     removeMapping() {
         this.localPrefixMappings.splice(this.localPrefixMappings.indexOf(this.selectedMapping), 1);
     }
-    
+
     /**
      * Adds the given mappings into localPrefixMappings
      */
-    private restorePrefixNsMappings(mappings: {[prefix: string]: string}) {
+    private restorePrefixNsMappings(mappings: { [prefix: string]: string }) {
         for (let prefix in mappings) {
             /** 
              * If the mappings is not already in the globalPrefixMappings, add it into the localPrefixMappings.
@@ -263,7 +263,7 @@ export class AdvancedGraphApplicationModal {
         return this.s2rdfService.validateGraphPattern(pearl).pipe(
             map(validation => {
                 if (!validation.valid) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_GRAPH_PATTERN"}, ModalType.warning, validation.details);
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_GRAPH_PATTERN" }, ModalType.warning, validation.details);
                     return validation;
                 } else {
                     validation.usedNodes.forEach((nodeId, index, list) => {
@@ -281,7 +281,7 @@ export class AdvancedGraphApplicationModal {
 
     saveGraph() {
         if (!this.isOkEnabled()) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_GRAPH_APPLICATION"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_GRAPH_APPLICATION" }, ModalType.warning);
             return;
         }
 
@@ -290,14 +290,23 @@ export class AdvancedGraphApplicationModal {
                 if (validation.valid) {
                     //collect only the node to store in the configuration, namely those nodes referenced by the graph pattern
                     let nodesToStore: NodeConversion[] = [];
-                    validation.usedNodes.forEach(nodeId => {
+                    for (let nodeId of validation.usedNodes) {
                         let referencedNode = this.newDefinedNodes.find(n => n.nodeId == nodeId);
                         if (referencedNode == null) {
                             referencedNode = this.alreadyDefinedNodes.find(n => n.nodeId == nodeId);
                         }
-                        nodesToStore.push(referencedNode);
-                    });
-                    let prefixMappingToStore: {[key:string]:string} = {}
+                        if (referencedNode != null) {
+                            nodesToStore.push(referencedNode);
+                        } else {
+                            /* a node used in the graph pattern but not found in both alreadyDefinedNodes and newDefinedNodes, 
+                            so probably a reference to a node defined in an external header. This AGA cannot be stored since
+                            the presence of the referenced node (that is created from another header) is not granted in other cases.
+                            */
+                            this.basicModals.alert({key: "STATUS.WARNING"}, {key: "MESSAGES.CANNOT_EXPORT_ADV_GRAPH_APP_WITH_EXTERNAL_REF"}, ModalType.warning);
+                            return;
+                        }
+                    }
+                    let prefixMappingToStore: { [key: string]: string } = {}
 
                     validation.usedPrefixes.forEach(prefix => {
                         let namespace: string;
@@ -321,11 +330,11 @@ export class AdvancedGraphApplicationModal {
                         prefixMapping: prefixMappingToStore,
                         defaultPredicate: this.defaultPredicate != null ? this.defaultPredicate.toNT() : null
                     };
-                    this.sharedModals.storeConfiguration({key:"SHEET2RDF.ACTIONS.SAVE_ADVANCED_GRAPH_APPLICATION"}, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
+                    this.sharedModals.storeConfiguration({ key: "SHEET2RDF.ACTIONS.SAVE_ADVANCED_GRAPH_APPLICATION" }, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
                         () => {
-                            this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIGURATION_SAVED"});
+                            this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.CONFIGURATION_SAVED" });
                         },
-                        () => {}
+                        () => { }
                     );
                 }
             }
@@ -335,11 +344,10 @@ export class AdvancedGraphApplicationModal {
     loadGraph() {
         this.s2rdfService.getDefaultAdvancedGraphApplicationConfigurations().subscribe(
             references => {
-                this.sharedModals.loadConfiguration({key:"SHEET2RDF.ACTIONS.LOAD_ADVANCED_GRAPH_APPLICATION"}, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, true, true, references).then(
+                this.sharedModals.loadConfiguration({ key: "SHEET2RDF.ACTIONS.LOAD_ADVANCED_GRAPH_APPLICATION" }, ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, true, true, references).then(
                     (data: LoadConfigurationModalReturnData) => {
                         //reset the current status
                         this.newDefinedNodes = [];
-                        // this.alreadyDefinedNodes = [];
                         this.selectedNode = null;
                         this.localPrefixMappings = [];
                         this.selectedMapping = null;
@@ -355,7 +363,7 @@ export class AdvancedGraphApplicationModal {
                             )
                         }
                     },
-                    () => {}
+                    () => { }
                 );
             }
         );
@@ -370,7 +378,7 @@ export class AdvancedGraphApplicationModal {
             } else if (confProps[i].name == "nodes") {
                 nodesToRestore = confProps[i].value;
             } else if (confProps[i].name == "prefixMapping") {
-                let prefMapValue: {[key: string]: string} = confProps[i].value;
+                let prefMapValue: { [key: string]: string } = confProps[i].value;
                 this.restorePrefixNsMappings(prefMapValue);
             } else if (confProps[i].name == "defaultPredicate" && confProps[i].value != null) {
                 this.defaultPredicate = new ARTURIResource(confProps[i].value);
@@ -394,7 +402,7 @@ export class AdvancedGraphApplicationModal {
                             n.nodeId = newId; //node ID
                             //replace node id in graph pattern
                             let nodeRegex = new RegExp("(?<!\\w)\\$" + oldId + "\\b", "g");
-                            this.graphPattern = this.graphPattern.replace(nodeRegex, "$"+newId);
+                            this.graphPattern = this.graphPattern.replace(nodeRegex, "$" + newId);
                         }
                     })
                 )
@@ -405,7 +413,7 @@ export class AdvancedGraphApplicationModal {
                 if (replacedNodeIds.length > 0) { //report of changes
                     let report: string = replacedNodeIds.map(n => " - '" + n.old + "' → '" + n.new + "'").join("\n");
                     let msg = this.translateService.instant("MESSAGES.ADV_GRAPH_APP_LOADED_REPORT");
-                    this.basicModals.alert({key:"STATUS.WARNING"}, msg + ":\n" + report, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, msg + ":\n" + report, ModalType.warning);
                 }
                 /**
                  * Some node might be referenced as parameter of other node converter => replace there as well
@@ -485,7 +493,7 @@ export class AdvancedGraphApplicationModal {
          */
 
         if (this.graphPattern.includes(this.PRED_PLACEHOLDER) && this.defaultPredicate == null) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_DEFAULT_PRED_IN_GRAPH_PATTERN"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_DEFAULT_PRED_IN_GRAPH_PATTERN" }, ModalType.warning);
             return;
         }
 
@@ -499,7 +507,7 @@ export class AdvancedGraphApplicationModal {
                             n.converter.contractUri, n.converter.datatypeUri, n.converter.language, n.converter.params, n.memoize, n.memoizeId));
                     });
 
-                    let prefixMappingMap: {[key: string]: string} = {};
+                    let prefixMappingMap: { [key: string]: string } = {};
                     //collect the prefixes used in the graph pattern and locally defined
                     //(no need to check on global, since it means that the prefix-namespace is already available in the project)
                     validation.usedPrefixes.forEach(prefix => {
@@ -536,7 +544,7 @@ export class AdvancedGraphApplicationModal {
         );
     }
 
-    private addOrUpdateAdvancedGraphApplication(referencedNodesId: string[], prefixMappingMap: {[key: string]: string}): Observable<void> {
+    private addOrUpdateAdvancedGraphApplication(referencedNodesId: string[], prefixMappingMap: { [key: string]: string }): Observable<void> {
         let graphAppFn: Observable<void>;
         if (this.graphApplication == null) { //creation mode
             graphAppFn = this.s2rdfService.addAdvancedGraphApplicationToHeader(
