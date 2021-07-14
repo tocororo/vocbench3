@@ -53,7 +53,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     @Input() readonly: boolean = false;
     @Input() inModal: boolean;
     @Input() projectCtx: ProjectContext;
-    @Input() atTime: string; //java.time.ZonedDateTime
+    @Input() atTime: Date; //java.time.ZonedDateTime
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 

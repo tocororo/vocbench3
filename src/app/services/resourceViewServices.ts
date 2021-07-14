@@ -34,11 +34,10 @@ export class ResourceViewServices {
         return this.httpMgr.doGet(this.serviceName, "getResourceView", params, options);
     }
 
-    getResourceViewAtTime(resource: ARTURIResource, date: string): Observable<any> {
-        let zoneDateTime = new Date(date);
+    getResourceViewAtTime(resource: ARTURIResource, date: Date): Observable<any> {
         let params: any = {
             resource: resource,
-            date: zoneDateTime.toISOString()
+            date: date.toISOString()
         };
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
