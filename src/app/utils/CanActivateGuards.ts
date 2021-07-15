@@ -99,11 +99,18 @@ export class ProjectGuard implements CanActivate, CanLoad {
 }
 
 @Injectable()
-export class SystemSettingsGuard implements CanActivate {
+export class SystemSettingsGuard implements CanActivate, CanLoad {
 
     constructor(private router: Router, private vbProp: VBProperties) { }
 
     canActivate(): Observable<boolean> {
+        return this.guarImpl();
+    }
+    canLoad(): Observable<boolean> {
+        return this.guarImpl();
+    }
+
+    guarImpl(): Observable<boolean> {
         if (VBContext.getSystemSettings() == null) {
             return this.vbProp.initStartupSystemSettings().pipe(
                 map(() => {
