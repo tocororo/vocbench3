@@ -1,14 +1,19 @@
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Stringifiable } from "d3";
 import { ARTURIResource } from "src/app/models/ARTResources";
 import { CommitInfo } from "src/app/models/History";
 import { HistoryServices } from "src/app/services/historyServices";
 import { UIUtils } from "src/app/utils/UIUtils";
+import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "time-machine-modal",
     templateUrl: "./timeMachineModal.html",
+    styles: [`
+        .dropdown-header { color: black; font-size: 1.125rem; }
+        a.dropdown-header:hover { background-color: #e9ecef !important; text-decoration: none; }
+        .dropdown-item { padding-left: 2.5rem !important; }
+        `]
 })
 export class TimeMachineModal {
     @Input() resource: ARTURIResource; //time machine only available for IRI
@@ -19,7 +24,11 @@ export class TimeMachineModal {
     sliderCommit: CommitInfo; //commit of the slider during the "sliding" (useful for commit preview during sliding)
     selectedCommit: CommitInfo; //commit selected by the slider (when the slider is released, so not during the sliding)
 
-    constructor(private historyService: HistoryServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) {}
+    //date could be the taken from commit, or picked manually (remember to keep valued only one of them, the other must be null)
+    commitDate: Date; //from commit
+    pickedDate: Date; //picked manually
+
+    constructor(private historyService: HistoryServices, private sharedModals: SharedModalServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) {}
 
     ngOnInit() {
         this.commits = [];
@@ -39,6 +48,20 @@ export class TimeMachineModal {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
+    pickDate() {
+        let selectedDate: Date = this.commitDate ? this.commitDate : this.pickedDate;
+        this.sharedModals.pickDatetime({key: "RESOURCE_VIEW.TIME_MACHINE.SELECT_DATE"}, selectedDate).then(
+            date => {
+                this.pickedDate = date;
+                //reset stuff about commit
+                this.commitDate = null;
+                this.commitSlideIdx = -1;
+                this.sliderCommit = null;
+                this.selectedCommit = null;
+            },
+            () => {}
+        )
+    }
 
     selectCommit(commit: CommitInfo) {
         this.commitSlideIdx = this.commits.findIndex(c => c == commit);
@@ -68,6 +91,8 @@ export class TimeMachineModal {
      */
     updateSelectedCommit() {
         this.selectedCommit = this.sliderCommit;
+        this.commitDate = this.selectedCommit.endTime;
+        this.pickedDate = null;
     }
     
 

@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
-import { ProjectCreationPreferences, SettingsEnum } from "src/app/models/Properties";
+import { PreferencesUtils, ProjectCreationPreferences, SettingsEnum } from "src/app/models/Properties";
 import { CODAServices } from "src/app/services/codaServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
@@ -122,7 +122,8 @@ export class SystemConfigurationComponent {
                 this.profilerThresholdPristine = this.profilerThreshold;
 
                 //proj creation settings
-                let projCreationSettings: ProjectCreationPreferences = settings.getPropertyValue(SettingsEnum.projectCreation, new ProjectCreationPreferences());
+                let projCreationSettings: ProjectCreationPreferences = new ProjectCreationPreferences();
+                PreferencesUtils.mergePreference(projCreationSettings, settings.getPropertyValue(SettingsEnum.projectCreation, new ProjectCreationPreferences()));
                 this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault;
                 this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault;
             }

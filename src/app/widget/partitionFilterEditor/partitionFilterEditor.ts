@@ -148,6 +148,7 @@ export class PartitionFilterEditor {
         } else {
             this.rolePartitionsStructs = this.convertPrefToRolePartitionsStruct({});
         }
+        this.rolePartitionsStructs.sort((p1, p2) => p1.role.show.localeCompare(p2.role.show))
         this.selectedRolePartitionsStruct = this.rolePartitionsStructs[0];
     }
     /**

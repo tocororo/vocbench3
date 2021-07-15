@@ -27,6 +27,7 @@ import { LangStringEditorComponent } from '../widget/langStringEditor/langString
 import { LanguageItemComponent } from '../widget/languageItem/languageItemComponent';
 import { PartitionFilterEditor } from '../widget/partitionFilterEditor/partitionFilterEditor';
 import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
+import { DatetimePickerComponent } from '../widget/pickers/datetimePicker/datetimePickerComponent';
 import { FilePickerComponent } from '../widget/pickers/filePicker/filePickerComponent';
 import { LangPickerComponent } from '../widget/pickers/langPicker/langPickerComponent';
 import { LiteralPickerComponent } from '../widget/pickers/valuePicker/literalPickerComponent';
@@ -60,6 +61,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ConverterConfiguratorComponent,
         DataSizeRenderer,
         DatatypePickerComponent,
+        DatetimePickerComponent,
         ExplainableTripleComponent,
         ExtensionConfiguratorComponent,
         FilePickerComponent,
@@ -102,6 +104,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ConverterConfiguratorComponent,
         DataSizeRenderer,
         DatatypePickerComponent,
+        DatetimePickerComponent,
         ExplainableTripleComponent,
         ExtensionConfiguratorComponent,
         FilePickerComponent,

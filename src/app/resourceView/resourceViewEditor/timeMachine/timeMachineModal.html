@@ -2,8 +2,10 @@
     <div class="hbox">
         <resource-view-editor [resource]="resource" [readonly]="true" [inModal]="true"></resource-view-editor>
         <div class="vbox ml-3">
-            <resource-view-editor *ngIf="selectedCommit" [resource]="resource" [readonly]="true" [inModal]="true" [atTime]="selectedCommit.endTime"></resource-view-editor>
-            <div *ngIf="!selectedCommit" class="card" style="flex: 1;"></div>
+            <resource-view-editor *ngIf="commitDate || pickedDate; else emptyCard" [resource]="resource" [readonly]="true" [inModal]="true" [atTime]="commitDate ? commitDate : pickedDate"></resource-view-editor>
+            <ng-template #emptyCard>
+                <div *ngIf="!selectedCommit" class="card" style="flex: 1;"></div>
+            </ng-template>
         </div>
     </div>
     <div class="vbox mt-2" style="flex: initial; width: 50%; align-self: center;">
@@ -13,12 +15,15 @@
             </button>
             <div class="btn-group" ngbDropdown placement="top">
                 <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
-                    <b *ngIf="selectedCommit">{{sliderCommit.endTime.toLocaleDateString() + ' ' + sliderCommit.endTime.toLocaleTimeString()}}</b>
-                    <b *ngIf="!selectedCommit">{{'RESOURCE_VIEW.TIME_MACHINE.SELECT_DATE'|translate}}</b>
+                    <b *ngIf="commitDate">{{commitDate.toLocaleDateString() + ' ' + commitDate.toLocaleTimeString()}}</b>
+                    <b *ngIf="pickedDate">{{pickedDate.toLocaleDateString() + ' ' + pickedDate.toLocaleTimeString()}}</b>
+                    <b *ngIf="!commitDate && !pickedDate">{{'RESOURCE_VIEW.TIME_MACHINE.SELECT_DATE'|translate}}</b>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
-                    <ng-container *ngFor="let c of commits; let last=last">
-                        <a class="dropdown-item" [ngClass]="{ 'bg-primary text-white' : c == selectedCommit}" (click)="selectCommit(c)">
+                    <h6 class="dropdown-header">{{'HISTORY_VALIDATION.COMMITS'|translate}}:</h6>
+                    <div class="dropdown-divider"></div>
+                    <ng-container *ngFor="let c of commits">
+                        <a class="dropdown-item" [ngClass]="{ 'bg-primary text-white' : c.endTime == commitDate}" (click)="selectCommit(c)">
                             <div>
                                 <b>{{'HISTORY_VALIDATION.DATE'|translate}}:</b>
                                 <span class="ml-2">{{c.endTime.toLocaleDateString() + ' ' + c.endTime.toLocaleTimeString()}}</span>
@@ -32,8 +37,16 @@
                                 <span class="ml-2">{{c.operation.getShow()}}</span>
                             </div>
                         </a>
-                        <div *ngIf="!last" class="dropdown-divider"></div>
+                        <div class="dropdown-divider"></div>
                     </ng-container>
+                    <h6 class="dropdown-header">Pick a date manually:</h6>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="pickDate()" [ngClass]="{ 'bg-primary text-white' : pickedDate}">
+                        <i class="far fa-calendar-alt ml-2"></i>
+                        <span *ngIf="pickedDate">
+                            <span class="ml-2">{{pickedDate.toLocaleDateString() + ' ' + pickedDate.toLocaleTimeString()}}</span>
+                        </span>
+                    </a>
                 </div>
             </div>
             <button class="btn btn-light" (click)="nextCommit()" [disabled]="commitSlideIdx==commits.length-1 || !selectedCommit">

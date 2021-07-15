@@ -54,6 +54,7 @@ import { LoadConfigurationModal } from '../widget/modal/sharedModal/configuratio
 import { StoreConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/storeConfigurationModal';
 import { ConverterPickerModal } from '../widget/modal/sharedModal/converterPickerModal/converterPickerModal';
 import { SignaturePickerModal } from '../widget/modal/sharedModal/converterPickerModal/signaturePickerModal';
+import { DatetimePickerModal } from '../widget/modal/sharedModal/datetimePickerModal/datetimePickerModal';
 import { LanguageSelectorModal } from '../widget/modal/sharedModal/languagesSelectorModal/languageSelectorModal';
 import { ManchesterExprModal } from '../widget/modal/sharedModal/manchesterExprModal/manchesterExprModal';
 import { PluginConfigModal } from '../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal';
@@ -92,6 +93,7 @@ import { UserModule } from './userModule';
         ConverterPickerModal,
         CustomFormSelectionModal,
         DatatypeListModal,
+        DatetimePickerModal,
         DownloadModal,
         EditableNsInput,
         FilePickerModal,
@@ -163,6 +165,7 @@ import { UserModule } from './userModule';
         ConverterPickerModal,
         CustomFormSelectionModal,
         DatatypeListModal,
+        DatetimePickerModal,
         DownloadModal,
         FilePickerModal,
         HelperModal,

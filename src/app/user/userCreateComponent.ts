@@ -20,6 +20,7 @@ export class UserCreateComponent implements ControlValueAccessor {
     optionalFields: UserFormOptionalField[];
     customFields: UserFormCustomField[];
 
+    //status of the "eye" button for showing/hiding the pwd
     showPwd: boolean = false;
     showPwdConf: boolean = false;
 

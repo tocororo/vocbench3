@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgModuleRef } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { DatasetCatalogModal } from 'src/app/config/dataManagement/datasetCatalog/datasetCatalogModal';
@@ -21,6 +21,7 @@ import { ModalOptions, TextOrTranslation } from '../Modals';
 import { LoadConfigurationModal } from "./configurationStoreModal/loadConfigurationModal";
 import { StoreConfigurationModal } from "./configurationStoreModal/storeConfigurationModal";
 import { ConverterPickerModal } from "./converterPickerModal/converterPickerModal";
+import { DatetimePickerModal } from './datetimePickerModal/datetimePickerModal';
 import { LanguageSelectorModal } from "./languagesSelectorModal/languageSelectorModal";
 import { ManchesterExprModal } from './manchesterExprModal/manchesterExprModal';
 import { PluginConfigModal, PluginSettingsHandler } from "./pluginConfigModal/pluginConfigModal";
@@ -165,6 +166,13 @@ export class SharedModalServices {
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (config != null) modalRef.componentInstance.config = config;
         if (editable != null) modalRef.componentInstance.editable = editable;
+        return modalRef.result;
+    }
+
+    pickDatetime(title: TextOrTranslation, date?: Date) {
+        const modalRef: NgbModalRef = this.modalService.open(DatetimePickerModal, new ModalOptions());
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.date = date;
         return modalRef.result;
     }
 

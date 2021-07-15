@@ -263,6 +263,7 @@ export class RdfResourceComponent {
             let show = this.resource.getShow();
             show = show.replace(/([\{\[\(\}\]\)])/g, " $1 ").replace(/\s+/g, " ").trim(); //add spaces before and after brackets, remove multiple spaces, remove ending space
             let splitted: string[] = show.split(" ");
+            this.manchExprStruct = [];
             splitted.forEach((s, idx, array) => {
                 let tokenCls: string;
                 for (let ts of tokenizerStruct) {

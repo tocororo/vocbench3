@@ -1,0 +1,11 @@
+<ng-container *ngIf="inFirefox; then datetimeNotSupported; else datetimeSupported"></ng-container>
+
+<ng-template #datetimeNotSupported>
+    <input type="date" [(ngModel)]="dateStr" (ngModelChange)="onDatePickerChange()">
+    <input type="time" class="ml-2" [(ngModel)]="timeStr" (ngModelChange)="onTimePickerChange()">
+</ng-template>
+
+<ng-template #datetimeSupported>
+    <input type="datetime-local" [(ngModel)]="datetimeStr" (ngModelChange)="onDatetimePickerChange()">
+</ng-template>
+

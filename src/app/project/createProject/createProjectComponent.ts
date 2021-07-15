@@ -11,7 +11,7 @@ import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum } from "../../models/A
 import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, PluginSpecification, Scope, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
-import { ProjectCreationPreferences, SettingsEnum } from "../../models/Properties";
+import { PreferencesUtils, ProjectCreationPreferences, SettingsEnum } from "../../models/Properties";
 import { RDFFormat } from "../../models/RDFFormat";
 import { PatternStruct } from "../../models/ResourceMetadata";
 import { Pair } from "../../models/Shared";
@@ -216,7 +216,8 @@ export class CreateProjectComponent {
         this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
             settings => {
                 //globally accessible and open at startup
-                let projCreationSettings: ProjectCreationPreferences = settings.getPropertyValue(SettingsEnum.projectCreation, new ProjectCreationPreferences());
+                let projCreationSettings: ProjectCreationPreferences = new ProjectCreationPreferences();
+                PreferencesUtils.mergePreference(projCreationSettings, settings.getPropertyValue(SettingsEnum.projectCreation, new ProjectCreationPreferences()));
                 this.globallyAccessible = projCreationSettings.aclUniversalAccessDefault;
                 this.openAtStartup = projCreationSettings.openAtStartUpDefault;
             }
