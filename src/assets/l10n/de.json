@@ -601,8 +601,7 @@
                 "MULTIVALUE_LANG_WARN": "Achtung: Dieses Feld lässt mehrere Werte zu (Option 'Multivalue' aktiviert). Für alle diese Werte wird die gleiche Sprache verwendet."
             },
             "GRAPH": {
-                "GRAPH_PATTERN_EDITOR": "Graph pattern free editor",
-                "GRAPH_PATTERN_EDITOR_INFO": "Hier können Sie ein komplexeres Graph-Muster schreiben, um es dem PEARL-Graphenabschnitt hinzuzufügen",
+                "ADV_GRAPH_PATTERN": "Advanced graph pattern",
                 "NODES_RELATIONS": "Knotenbeziehungen"
             },
             "MESSAGES": {

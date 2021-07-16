@@ -18,10 +18,11 @@
 
         <div class="hbox" style="flex: 2">
             <div class="vbox" style="flex: 2">
-                <custom-form-wizard-fields-editor [fields]="fields" (changed)="onFieldChange($event)">
+                <custom-form-wizard-fields-editor [fields]="fields" [advGraphs]="advGraphs" (changed)="onFieldChange($event)">
                 </custom-form-wizard-fields-editor>
 
-                <custom-form-wizard-nodes-editor class="mt-2" [(ngModel)]="nodes" [fields]="fields" [customRange]="customRange" (ngModelChange)="updatePearl()">
+                <custom-form-wizard-nodes-editor class="mt-2" [(ngModel)]="nodes" [fields]="fields" [advGraphs]="advGraphs" [customRange]="customRange" 
+                    (ngModelChange)="updatePearl()" (deleted)="onNodeDeleted($event)">
                 </custom-form-wizard-nodes-editor>
             </div>
 
@@ -41,13 +42,31 @@
 
             <div class="card vbox ml-2">
                 <div class="card-header">
-                    <label>
-                        {{'CUSTOM_FORMS.WIZARD.GRAPH.GRAPH_PATTERN_EDITOR'|translate}}
-                        <span class="fas fa-info-circle" [title]="'CUSTOM_FORMS.WIZARD.GRAPH.GRAPH_PATTERN_EDITOR_INFO'|translate"></span>
+                    <label style="flex: 1;">
+                        {{'CUSTOM_FORMS.WIZARD.GRAPH.ADV_GRAPH_PATTERN'|translate}}
                     </label>
+                    <div class="btn-toolbar">
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-light" (click)="addAdvGraph()">
+                                <span class="fas fa-plus"></span>
+                            </button>
+                            <button class="btn btn-light" (click)="deleteAdvGraph()" [disabled]="!selectedAdvGraph">
+                                <span class="fas fa-minus"></span>
+                            </button>
+                            <button class="btn btn-light" (click)="editAdvGraph()" [disabled]="!selectedAdvGraph">
+                                <span class="fas fa-pencil-alt"></span>
+                            </button>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="card-body vbox">
-                    <textarea class="form-control vbox" style="resize: none;" [(ngModel)]="graphPattern" (ngModelChange)="updatePearl()"></textarea>
+                    <div *ngFor="let g of advGraphs" class="listItem" [ngClass]="{ active : selectedAdvGraph == g }" (click)="selectAdvGraph(g)">
+                        <span class="ellipsable" style="flex: 1;">{{g.pattern}}</span>
+                        <button class="btn btn-light" (click)="removeAdvGraph(g)">
+                            <span class="far fa-trash-alt"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
 

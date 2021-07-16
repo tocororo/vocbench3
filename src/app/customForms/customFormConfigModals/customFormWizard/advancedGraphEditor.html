@@ -1,0 +1,157 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">{{'CUSTOM_FORMS.WIZARD.GRAPH.ADV_GRAPH_PATTERN'|translate}}</h3>
+        </div>
+    </div>
+    <div class="modal-body vbox scrollableContainer">
+
+        <div class="d-flex align-items-center">
+            <label class="text-nowrap">{{'CUSTOM_FORMS.WIZARD.FIELDS.FIELD'|translate}}:</label>
+            <select class="form-control ml-2" [(ngModel)]="selectedField" (ngModelChange)="onFieldChange()">
+                <option *ngFor="let f of fields" [ngValue]="f">
+                    {{f.label}}
+                </option>
+            </select>
+        </div>
+
+        <div class="card vbox mt-2">
+            <div class="card-body vbox">
+
+                <div class="card mt-2">
+                    <div class="card-header">
+                        <label style="flex: 1">{{'COMMONS.NODES'|translate}}</label>
+                        <div class="btn-toolbar">
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-light" (click)="addNode()" [disabled]="!selectedField">
+                                    <span class="fas fa-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive" style="min-height: 80px;">
+                        <table class="table table-sm">
+                            <colgroup>
+                                <col style="width: 20%">
+                                <col style="width: 50%">
+                                <col style="width: 30%">
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>{{'COMMONS.ID'|translate}}</th>
+                                    <th>{{'WIDGETS.CONVERTER.CONVERTER'|translate}}</th>
+                                    <th>{{'CUSTOM_FORMS.WIZARD.NODES.FEATURE'|translate}}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let n of selectedFieldNodes">
+                                    <td class="grayText">{{n.nodeId}}</td>
+                                    <td class="grayText">{{n.converterSerialization}}</td>
+                                    <td class="grayText">{{n.feature?.featureName}}</td>
+                                    <td></td>
+                                </tr>
+                                <tr *ngFor="let n of newNodes">
+                                    <td>
+                                        <input class="form-control form-control-sm" [(ngModel)]="n.nodeId" sanitized>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control" [ngModel]="n.converterSerialization" readonly>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-light" (click)="editNodeConverter(n)">
+                                                    <span class="fas fa-pencil-alt"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select *ngIf="n.converterStatus?.signatureDesc.getRequirementLevels() == 'REQUIRED'" class="form-control" [(ngModel)]="n.feature">
+                                            <optgroup *ngIf="fields.length > 0" label="Current field feature">
+                                                <option [ngValue]="selectedField">{{selectedField.featureName}}</option>
+                                            </optgroup>
+                                            <optgroup label="Session's features">
+                                                <option *ngFor="let f of sessionFeatures" [ngValue]="f">{{f.featureName}}</option>
+                                            </optgroup>
+                                            <optgroup *ngIf="stdFormFeatures" label="Standard Form's features">
+                                                <option *ngFor="let f of stdFormFeatures" [ngValue]="f">{{f.featureName}}</option>
+                                            </optgroup>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-light" (click)="removeNode(n)">
+                                            <span class="far fa-trash-alt"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="card vbox" style="margin-top: 4px;">
+                    <div class="card-header">
+                        <label style="flex: 1">Graph</label>
+                    </div>
+                    <div class="card-body vbox">
+
+                        <div class="card card-alt" style="margin-top: 4px;">
+                            <div class="card-header">
+                                <label style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.PREFIX_NS_MAPPINGS'|translate}}</label>
+                                <div class="btn-toolbar">
+                                    <div class="btn-group btn-group-xs">
+                                        <button class="btn btn-light" (click)="addMapping()">
+                                            <span class="fas fa-plus"></span>
+                                        </button>
+                                        <button class="btn btn-light" (click)="removeMapping()" [disabled]="!selectedMapping">
+                                            <span class="fas fa-minus"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div #prefixnstable class="card-body table-responsive" style="min-height: 60px; max-height: 100px;">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>{{'METADATA.NAMESPACES_AND_IMPORTS.PREFIX'|translate}}</th>
+                                            <th>{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let m of globalPrefixMappings" class="grayText" style="cursor: not-allowed">
+                                            <td>{{m.prefix}}</td>
+                                            <td>{{m.namespace}}</td>
+                                        </tr>
+                                        <tr *ngFor="let m of localPrefixMappings" (click)="selectMapping(m)" style="cursor: pointer" [ngClass]="{ 'table-primary': m == selectedMapping }">
+                                            <td>{{m.prefix}}</td>
+                                            <td>{{m.namespace}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card card-alt vbox" style="margin-top: 4px;">
+                            <div class="card-header">
+                                <label style="flex: 1">{{'SHEET2RDF.GRAPH_APPLICATIONS.ADVANCED.GRAPH_PATTERN'|translate}}</label>
+                            </div>
+                            <div class="card-body vbox">
+                                <textarea class="form-control" style="flex: 1; resize: vertical" [(ngModel)]="graphPattern"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+</div>

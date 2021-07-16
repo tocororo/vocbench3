@@ -68,7 +68,8 @@ export class LexicographerViewComponent {
     constructor(private lexicographerViewService: LexicographerViewServices, private lexViewHelper: LexViewHelper, private resourceService: ResourcesServices,
         private ontolexService: OntoLexLemonServices, private propertyService: PropertyServices, private classService: ClassesServices,
         private creationModals: CreationModalServices, private sharedModals: SharedModalServices, private lexViewModals: LexViewModalService,
-        private browsingModals: BrowsingModalServices, private eventHandler: VBEventHandler, private modalService: NgbModal) {}
+        private browsingModals: BrowsingModalServices, private eventHandler: VBEventHandler, private modalService: NgbModal) {
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {

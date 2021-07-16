@@ -1,7 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, of } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { map } from 'rxjs/operators';
+import { VBEventHandler } from "src/app/utils/VBEventHandler";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { CustomForm } from "../../models/CustomForms";
 import { VersionInfo } from "../../models/History";
@@ -64,8 +65,13 @@ export class TermViewComponent extends AbstractResourceView {
 
     private lexicalizationModelType: string;
 
-    constructor(resViewService: ResourceViewServices, modalService: NgbModal, private propService: PropertyServices) {
+    private eventSubscriptions: Subscription[] = [];
+
+    constructor(resViewService: ResourceViewServices, modalService: NgbModal, private propService: PropertyServices, private eventHandler: VBEventHandler) {
         super(resViewService, modalService);
+        this.eventSubscriptions.push(this.eventHandler.resourceUpdatedEvent.subscribe(
+            (resource: ARTResource) => this.onResourceUpdated(resource)
+        ));
     }
 
     ngOnInit() {
@@ -91,6 +97,10 @@ export class TermViewComponent extends AbstractResourceView {
             }
             this.buildResourceView(this.resource);//refresh resource view when Input resource changes
         }
+    }
+
+    ngOnDestroy() {
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     /**
@@ -465,6 +475,12 @@ export class TermViewComponent extends AbstractResourceView {
         delete this.langStruct[lang];
         this.langsWithValue = Object.keys(this.langStruct);
         this.initLanguages();
+    }
+
+    private onResourceUpdated(resource: ARTResource) {
+        if (this.resource.equals(resource)) {
+            this.buildResourceView(this.resource);
+        }
     }
 
 }

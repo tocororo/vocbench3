@@ -191,6 +191,7 @@ export class AdvancedGraphApplicationModal {
 
     removeMapping() {
         this.localPrefixMappings.splice(this.localPrefixMappings.indexOf(this.selectedMapping), 1);
+        this.selectedMapping = null;
     }
 
     /**
@@ -269,7 +270,7 @@ export class AdvancedGraphApplicationModal {
                     validation.usedNodes.forEach((nodeId, index, list) => {
                         list[index] = nodeId.substring(1); //removes the leading $
                     })
-                    if (validation.usedNodes.indexOf("subject")) {
+                    if (validation.usedNodes.includes("subject")) {
                         validation.usedNodes.splice(validation.usedNodes.indexOf("subject"), 1);
                     }
                     return validation;

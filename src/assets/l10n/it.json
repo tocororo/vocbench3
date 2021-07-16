@@ -601,8 +601,7 @@
                 "MULTIVALUE_LANG_WARN": "Attenzione: questo campo ammette valori multipli (opzione 'Multivalue' attiva). Per tutti questi valori verrà usata la stessa lingua."
             },
             "GRAPH": {
-                "GRAPH_PATTERN_EDITOR": "Graph pattern free editor",
-                "GRAPH_PATTERN_EDITOR_INFO": "Qui è possibile scrivere un graph pattern comlpesso a piacere che viene aggiunto alla sezione graph del PEARL",
+                "ADV_GRAPH_PATTERN": "Advanced graph pattern",
                 "NODES_RELATIONS": "Relazioni tra nodi"
             },
             "MESSAGES": {
@@ -620,7 +619,9 @@
                 "NOT_CUSTOM_CONSTRUCTOR_STATUS": "Il presente wizard è per la creazione di Custom Constructor, il file caricato rappresenta lo status di un Custom Range.",
                 "NOT_CUSTOM_RANGE_STATUS": "Il presente wizard è per la creazione di Custom Range, il file caricato rappresenta lo status di un Custom Constructor.",
                 "NOT_VALID_STATUS": "Il file caricato non è un valido status di un CustomForm.",
-                "OPTIONAL_ENTRY_POINT_WARN": "In un CustomForm usato come CustomRange, il primo utilizzo del nodo '{{id}}' nella sezione graph non può usare un nodo opzionale"
+                "OPTIONAL_ENTRY_POINT_WARN": "In un CustomForm usato come CustomRange, il primo utilizzo del nodo '{{id}}' nella sezione graph non può usare un nodo opzionale",
+                "REFERENCED_FIELD_DELETE_WARN": "Il campo che stai eliminando genera un nodo usato in un (o più) advanced graph pattern. Cancellando questo campo verrà eliminato anche il graph pattern. Vuoi continuare?",
+                "REFERENCED_NODE_DELETE_WARN": "Il nodo che stai eliminando è usato in un (o più) advanced graph pattern. Cancellando questo nodo verrà eliminato anche il graph pattern. Vuoi continuare?"
             },
             "NODES": {
                 "ENTRY_POINT_INFO": "L'entry point del grafo generato dal CustomForm",

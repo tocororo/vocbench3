@@ -1,4 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Subscription } from "rxjs";
+import { VBEventHandler } from "src/app/utils/VBEventHandler";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource } from "../../models/ARTResources";
 import { ResourcesServices } from "../../services/resourcesServices";
@@ -24,10 +26,15 @@ export class ResourceTripleEditorComponent {
     @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
 
     editAuthorized: boolean;
-    private pristineDescription: string;
     description: string;
 
-    constructor(private resourcesService: ResourcesServices, private basicModals: BasicModalServices) {}
+    private eventSubscriptions: Subscription[] = [];
+
+    constructor(private resourcesService: ResourcesServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
+        this.eventSubscriptions.push(this.eventHandler.resourceUpdatedEvent.subscribe(
+            (resource: ARTResource) => this.onResourceUpdated(resource)
+        ));
+    }
 
     ngOnInit() {
         //editor disabled if user has no permission to edit
@@ -36,9 +43,12 @@ export class ResourceTripleEditorComponent {
         this.initDescription();
     }
 
+    ngOnDestroy() {
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
+    }
+
     initDescription() {
         //reinit the descriptions so that when initDescription is invoked after applyChanges, onDescriptionChange is triggered 
-        this.pristineDescription = null;
         this.description = null;
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.resourcesService.getOutgoingTriples(this.resource, "Turtle").subscribe(
@@ -49,22 +59,10 @@ export class ResourceTripleEditorComponent {
         );
     }
 
-    /**
-     * For an unknown reason codemirror changes the char codes of the ngModel-bound description string
-     * (discovered by comparing the charCodeAt of the whole description and pristineDescription).
-     * So if I initialize pristineDescription in initDescription(), description is immediately changed by codemirror, 
-     * then the check this.description != this.pristineDescription (in isApplyEnabled()) detects the strings changed even if they are identical.
-     * 
-     * This is a workaround needed in order to initialize pristineDescription at soon as codemirror fire the update of the bound ngModel.
-     */
-    onDescriptionChange() {
-        if (this.pristineDescription == null) {
-            this.pristineDescription = this.description;
-        }
-    }
-
     isApplyEnabled(): boolean {
-        return this.description != this.pristineDescription && this.description != null && this.description.trim() != "";
+        /* encountered too much problems comparing description with a pristine copy (initialized at the initialization of the resource description)
+        so, just check that the description is not empty. Allows to apply changes even if description is not changed */
+        return this.description != null && this.description.trim() != "";
     }
 
     applyChanges() {
@@ -95,6 +93,12 @@ export class ResourceTripleEditorComponent {
                 }
             }
         );
+    }
+
+    private onResourceUpdated(resource: ARTResource) {
+        if (this.resource.equals(resource)) {
+            this.initDescription();
+        }
     }
 
 }

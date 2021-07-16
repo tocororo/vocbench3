@@ -11,6 +11,7 @@ import { CustomFormModal } from '../customForms/customForm/customFormModal';
 import { CustomFormConfigComponent } from '../customForms/customFormConfComponent';
 import { BrokenCFStructReportModal } from '../customForms/customFormConfigModals/brokenCFStructReportModal';
 import { CustomFormEditorModal } from '../customForms/customFormConfigModals/customFormEditorModal';
+import { AdvancedGraphEditor } from '../customForms/customFormConfigModals/customFormWizard/advancedGraphEditor';
 import { ConstraintValuesSelector } from '../customForms/customFormConfigModals/customFormWizard/constraintValuesSelector';
 import { ConverterConfigModal } from '../customForms/customFormConfigModals/customFormWizard/converterConfigModal';
 import { CustomFormWizardFieldsEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardFieldsEditor';
@@ -40,6 +41,7 @@ import { Sheet2RdfModule } from './sheet2rdfModule';
     ],
     providers: [BasicModalServices, BrowsingModalServices],
     declarations: [
+        AdvancedGraphEditor,
         BrokenCFStructReportModal,
         ConstraintValuesSelector,
         CustomFormConfigComponent,
@@ -62,6 +64,7 @@ import { Sheet2RdfModule } from './sheet2rdfModule';
     ],
     exports: [CustomFormConfigComponent, CustomFormComponent], //CustomForm exported since is used in vbModalModule as well in newResourceCfModal
     entryComponents: [
+        AdvancedGraphEditor,
         BrokenCFStructReportModal,
         CustomFormEditorModal,
         CustomFormModal,

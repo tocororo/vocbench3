@@ -1,16 +1,17 @@
 import { Component, ElementRef, Input } from "@angular/core";
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PrefixMapping } from "src/app/models/Metadata";
 import { CODAConverter } from "src/app/models/Sheet2RDF";
 import { CODAServices } from "src/app/services/codaServices";
 import { CustomFormsServices } from "src/app/services/customFormsServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
-import { ModalType } from "src/app/widget/modal/Modals";
-import { ConverterContractDescription, PearlValidationResult, RDFCapabilityType, RequirementLevels, SignatureDescription } from "../../../models/Coda";
+import { ModalOptions, ModalType } from "src/app/widget/modal/Modals";
+import { ConverterContractDescription, PearlValidationResult, RDFCapabilityType, SignatureDescription } from "../../../models/Coda";
 import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { ConstraintType, GraphEntrySerialization, GraphObjectType, LangConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri, WizardGraphEntry, WizardNode, WizardNodeEntryPoint, WizardNodeFromField, WizardStatus, WizardStatusUtils } from "./CustomFormWizard";
+import { AdvancedGraphEditor } from "./advancedGraphEditor";
+import { ConstraintType, CustomFormWizardUtils, GraphEntrySerialization, GraphObjectType, LangConstraintType, WizardAdvGraphEntry, WizardField, WizardFieldLiteral, WizardFieldUri, WizardGraphEntry, WizardNode, WizardNodeEntryPoint, WizardNodeFromField, WizardStatus, WizardStatusUtils } from "./CustomFormWizard";
 import { WizardFieldChangeEvent, WizardFieldEventType } from "./customFormWizardFieldsEditor";
 
 @Component({
@@ -31,12 +32,14 @@ export class CustomFormWizardModal {
     nodes: WizardNode[];
     //graph
     graphs: WizardGraphEntry[];
-    graphPattern: string = "";
+    // graphPattern: string = "";
+    advGraphs: WizardAdvGraphEntry[];
+    selectedAdvGraph: WizardAdvGraphEntry;
 
     pearl: string;
 
     constructor(private activeModal: NgbActiveModal, private elementRef: ElementRef, private cfService: CustomFormsServices, private codaService: CODAServices,
-        private basicModals: BasicModalServices) {
+        private basicModals: BasicModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -46,6 +49,7 @@ export class CustomFormWizardModal {
 
         this.nodes = [];
         this.graphs = [];
+        this.advGraphs = [];
 
         if (this.customRange) {
             let entryPoint: WizardNodeEntryPoint = new WizardNodeEntryPoint();
@@ -96,7 +100,7 @@ export class CustomFormWizardModal {
                 }
             })
         } else if (fieldChangeEvent.eventType == WizardFieldEventType.removed) {
-            //remove all the reference of the removed node in both nodes and graphs list
+            //remove all the reference of the removed node in both nodes, graphs list and advancedGraph
             let idx = this.nodes.findIndex(n => n instanceof WizardNodeFromField && n.fieldSeed == f);
             this.nodes.splice(idx, 1);
             //remove the referenced subject/object node in the graph list
@@ -107,6 +111,12 @@ export class CustomFormWizardModal {
                 //if the selected object was a node (not a resource) generated from a field
                 if (g.object.type == GraphObjectType.node && g.object.node instanceof WizardNodeFromField && g.object.node.fieldSeed == f) {
                     g.object.node = null;
+                }
+            })
+            //remove the adv-graph that uses the node seeded by the removed field
+            this.advGraphs.forEach((g, idx, list) => {
+                if (g.nodes.some(n => n instanceof WizardNodeFromField && n.fieldSeed == f)) {
+                    list.splice(idx, 1);
                 }
             })
         }
@@ -173,6 +183,76 @@ export class CustomFormWizardModal {
         return node;
     }
 
+    /*
+     * ADV GRAPH
+     */
+
+    /**
+     * delete the adv graph that uses the deleted node.
+     * Note: the warning that asks user if he's ok to delete the adgGraph is already handled in the node editor
+     */
+    onNodeDeleted(node: WizardNode) {
+        this.advGraphs.forEach((g, idx, list) => {
+            if (g.nodes.some(n => n == node)) {
+                list.splice(idx, 1);
+            }
+        })
+    }
+
+    selectAdvGraph(advGraph: WizardAdvGraphEntry) {
+        if (this.selectedAdvGraph == advGraph) {
+            this.selectedAdvGraph = null;
+        } else {
+            this.selectedAdvGraph = advGraph;
+        }
+    }
+
+
+    addAdvGraph() {
+        this.openAdgGraphEditor().then(
+            (advGraph: WizardAdvGraphEntry) => {
+                this.advGraphs.push(advGraph);
+                /*
+                TODO: maybe its better to not store adv graph nodes with the other, but these nodes must be kept only in the adv graph.
+                Just remember:
+                - check when creating node if a node with the same ID is among those in the adv graph (provide advGraphs as Input to the node editor)
+                - when serializing pearl, write also nodes of the adv graphs (since they are not stored anymore in this.nodes, they are not automatically added)
+                CON:
+                when checking for duplicates, it could be ugly that a duplicate id is detected if one is in the nodes list and the other belongs to an adv graph 
+                (user sees only those in this.nodes)
+                */
+                // this.nodes.push(...additionalNodes);
+                this.updatePearl();
+            },
+            () => {}
+        );
+    }
+
+    editAdvGraph() {
+        this.openAdgGraphEditor(this.selectedAdvGraph).then(
+            (advGraph: WizardAdvGraphEntry) => {
+                this.advGraphs[this.advGraphs.indexOf(this.selectedAdvGraph)] = advGraph;
+                this.selectedAdvGraph = advGraph;
+                this.updatePearl();
+            },
+            () => {}
+        );
+    }
+
+    private openAdgGraphEditor(advGraph?: WizardAdvGraphEntry) {
+        const modalRef: NgbModalRef = this.modalService.open(AdvancedGraphEditor, new ModalOptions('lg'));
+        modalRef.componentInstance.advGraph = advGraph;
+        modalRef.componentInstance.customRange = this.customRange;
+        modalRef.componentInstance.fields = this.fields;
+		modalRef.componentInstance.nodes = this.nodes;
+        return modalRef.result;
+    }
+
+    deleteAdvGraph() {
+        this.advGraphs.splice(this.advGraphs.indexOf(this.selectedAdvGraph), 1);
+        this.updatePearl();
+    }
+
 
     //==========================
 
@@ -195,6 +275,15 @@ export class CustomFormWizardModal {
                 this.pearl += this.getIndent(indentCount) + ns.nodeDefinition + " .\n";
             })
         })
+        //nodes of advGraph
+        this.advGraphs.forEach(g => {
+            g.nodes.forEach(n => {
+                n.getNodeSerializations(this.prefixMappings).forEach(ns => {
+                    //skip annotation serialization (nodes defined in advGraph, since are not generated from fields, for sure have no annotations)
+                    this.pearl += this.getIndent(indentCount) + ns.nodeDefinition + " .\n";
+                })
+            })  
+        })
 
         indentCount--;
         this.pearl += this.getIndent(indentCount) + "}\n"; //close nodes
@@ -207,7 +296,7 @@ export class CustomFormWizardModal {
             let s: GraphEntrySerialization = g.getSerialization(this.prefixMappings);
             if (s.optional) {
                 this.pearl += this.getIndent(indentCount) + "OPTIONAL {\n"; //open optional
-                indentCount++
+                indentCount++;
             }
             s.triples.forEach(t => {
                 this.pearl += this.getIndent(indentCount) + t + " .\n";
@@ -218,12 +307,23 @@ export class CustomFormWizardModal {
             }
         });
 
-        if (this.graphPattern.trim() != "") {
-            let graphPatternRows = this.graphPattern.split("\n");
+        this.advGraphs.forEach(g => {
+            //the pattern is optional if it is seeded by an optional field
+            let optional: boolean = g.fieldSeed.optional
+            if (optional) {
+                this.pearl += this.getIndent(indentCount) + "OPTIONAL {\n"; //open optional
+                indentCount++;
+            }
+
+            let graphPatternRows = g.pattern.split("\n");
             for (let gp of graphPatternRows) {
                 this.pearl += this.getIndent(indentCount) + gp +"\n";
             }
-        }
+            if (optional) {
+                indentCount--;
+                this.pearl += this.getIndent(indentCount) + "}\n"; //close optional
+            }
+        })
 
         indentCount--;
         this.pearl += this.getIndent(indentCount) + "}\n"; //close graph
@@ -231,16 +331,30 @@ export class CustomFormWizardModal {
 
         //PREFIX
         //collected at the end in order to declare only those used
-        let prefixDeclaration = "";
+        let mappingsToSerializa: PrefixMapping[] = [];
         this.prefixMappings.forEach(m => {
+            if (this.pearl.includes(m.prefix + ":")) {
+                mappingsToSerializa.push(m);
+            }
+        })
+        //coda prefix is always declared (if not already added)
+        if (!mappingsToSerializa.some(m => m.namespace == ConverterContractDescription.NAMESPACE)) {
+            mappingsToSerializa.push({ prefix: "coda", namespace: ConverterContractDescription.NAMESPACE, explicit: false });
+        }
+        //check additional mappings in adv graphs
+        this.advGraphs.forEach(g => {
+            Object.keys(g.prefixMapping).forEach(prefix => {
+                if (this.pearl.includes(prefix + ":")) {
+                    mappingsToSerializa.push({ prefix: prefix, namespace: g.prefixMapping[prefix], explicit: false });
+                }
+            })
+        })
+        let prefixDeclaration = "";
+        mappingsToSerializa.forEach(m => {
             if (this.pearl.includes(m.prefix + ":")) {
                 prefixDeclaration += "prefix\t" + m.prefix + ":\t<" + m.namespace + ">\n";
             }
         })
-        //coda prefix is always declared (if not already in prefixMapping of the project)
-        if (!this.prefixMappings.some(m => m.namespace == ConverterContractDescription.NAMESPACE)) {
-            prefixDeclaration += "prefix\tcoda:\t<" + ConverterContractDescription.NAMESPACE + ">\n";
-        }
 
         this.pearl = prefixDeclaration + "\n" + this.pearl;
     }
@@ -300,17 +414,26 @@ export class CustomFormWizardModal {
         //check on NODES
         //duplicates
         for (let n1 of this.nodes) {
-            if (this.nodes.some(n2 => n1 != n2 && n1.nodeId == n2.nodeId)) { //exist a node different from the current but with the same id
+            //check if exists a node different from the current but with the same id (both in nodes and in the nodes of advGraphs)
+            if (this.nodes.some(n2 => n1 != n2 && n1.nodeId == n2.nodeId) || this.advGraphs.some(g => g.nodes.some(n2 => n1 != n2 && n1.nodeId == n2.nodeId))) {
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MULTIPLE_ID", params: { id: n1.nodeId } }, ModalType.warning);
                 return false;
             }
         }
         //other individual check
         for (let n of this.nodes) {
-            if (!this.checkNode(n)) {
+            if (!CustomFormWizardUtils.checkNode(n, this.basicModals)) {
                 return false;
             }
         }
+        for (let g of this.advGraphs) { //nodes of advGraphs are already checked in the advGraph editor, anyway check them again
+            for (let n of g.nodes) {
+                if (!CustomFormWizardUtils.checkNode(n, this.basicModals)) {
+                    return false;
+                }
+            }
+        }
+        
 
         //check on GRAPH
         if (this.graphs.length == 0) {
@@ -340,24 +463,6 @@ export class CustomFormWizardModal {
 
     }
 
-    private checkNode(node: WizardNode): boolean {
-        //check on ID
-        if (node.nodeId == null || node.nodeId.trim() == "") {
-            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MISSING_ID" }, ModalType.warning);
-            return false;
-        } else if (node.converterStatus != null) {
-            if (node.converterStatus.signatureDesc.getRequirementLevels() == RequirementLevels.REQUIRED && node.feature == null) {
-                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MISSING_CONVERTER_FEATURE", params: { id: node.nodeId } }, ModalType.warning);
-                return false;
-            }
-        } else {
-            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MISSING_CONVERTER", params: { id: node.nodeId } }, ModalType.warning);
-            return false;
-        }
-        return true;
-    }
-
-
     //=== STATUS HANDLER
 
     storeStatus() {
@@ -366,7 +471,7 @@ export class CustomFormWizardModal {
             fields: this.fields,
             nodes: this.nodes,
             graphs: this.graphs,
-            graphPattern: this.graphPattern
+            advGraphs: this.advGraphs
         }
         this.downloadStatusFile(JSON.stringify(status, null, 4));
     }
@@ -391,7 +496,8 @@ export class CustomFormWizardModal {
                     this.restoreStatus(statusJson)
                 };
                 reader.readAsText(file);
-            }
+            },
+            () => {}
         );
     }
 
@@ -411,7 +517,7 @@ export class CustomFormWizardModal {
         this.fields = status.fields;
         this.nodes = status.nodes;
         this.graphs = status.graphs;
-        this.graphPattern = status.graphPattern;
+        this.advGraphs = status.advGraphs;
         this.updatePearl();
     }
 

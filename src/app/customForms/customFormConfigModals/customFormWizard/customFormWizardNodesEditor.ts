@@ -1,13 +1,14 @@
-import { Component, forwardRef, Input } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { SKOS, SKOSXL } from "src/app/models/Vocabulary";
 import { RangeType } from "src/app/services/propertyServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
-import { ModalOptions } from "src/app/widget/modal/Modals";
+import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
+import { ModalOptions, ModalType } from "src/app/widget/modal/Modals";
 import { ConverterConfigModal } from "./converterConfigModal";
-import { SessionFeature, StandardFormFeature, WizardField, WizardNode, WizardNodeEntryPoint, WizardNodeUserCreated } from "./CustomFormWizard";
+import { SessionFeature, StandardFormFeature, WizardAdvGraphEntry, WizardField, WizardNode, WizardNodeEntryPoint, WizardNodeUserCreated } from "./CustomFormWizard";
 
 @Component({
     selector: "custom-form-wizard-nodes-editor",
@@ -18,15 +19,22 @@ import { SessionFeature, StandardFormFeature, WizardField, WizardNode, WizardNod
     host: { class: "vbox" }
 })
 export class CustomFormWizardNodesEditor implements ControlValueAccessor {
-    @Input() fields: WizardField[]; //for the selection of the converter feature
     @Input() customRange: boolean; //tells if the wizard works for CustomRange (false if for Constructor)
+    @Input() fields: WizardField[]; //for the selection of the converter feature
+    @Input() advGraphs: WizardAdvGraphEntry[]; //useful when deleting a node in order to check if an adv graph refers to the node
+    /* The following are useful to inform the wizard that a node has been created/deleted. 
+    The nodes variable is already bound to ngModel, so changes are already notified through ngModelChange, 
+    but they might be not useful in other scenarios (e.g. deleted is useful for deleting an AdvGraph that is using the deleted node)
+    */
+    @Output() created: EventEmitter<WizardNode> = new EventEmitter();
+    @Output() deleted: EventEmitter<WizardNode> = new EventEmitter();
 
     sessionFeatures: SessionFeature[];
     stdFormFeatures: StandardFormFeature[];
 
     nodes: WizardNode[];
 
-    constructor(private modalService: NgbModal) { }
+    constructor(private modalService: NgbModal, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.sessionFeatures = [SessionFeature.user]; //available for both C.Range and C.Constructor
@@ -50,16 +58,32 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
     addNode() {
         let nodeId = "new_node";
         let i = 1;
-        while (this.nodes.some(n => n.nodeId == nodeId)) {
+        while (this.nodes.some(n => n.nodeId == nodeId) || this.advGraphs.some(g => g.nodes.some(n => n.nodeId == nodeId))) { //check if there is a node (in nodes list or in the nodes of the advGraphs) with the same name
             nodeId = "new_node" + i;
             i++;
         }
-        this.nodes.push(new WizardNodeUserCreated(nodeId));
+        let newNode = new WizardNodeUserCreated(nodeId);
+        this.nodes.push(newNode);
+        this.created.emit(newNode);
         this.onModelChange();
     }
 
     removeNode(node: WizardNode) {
+        if (this.advGraphs.some(g => g.nodes.some(n => n == node))) {
+            this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.REFERENCED_NODE_DELETE_WARN" }, ModalType.warning).then(
+                () => {
+                    this.removeImpl(node);
+                },
+                () => {}
+            )
+        } else {
+            this.removeImpl(node);
+        }
+    }
+
+    removeImpl(node: WizardNode) {
         this.nodes.splice(this.nodes.indexOf(node), 1);
+        this.deleted.emit(node);
         this.onModelChange();
     }
 

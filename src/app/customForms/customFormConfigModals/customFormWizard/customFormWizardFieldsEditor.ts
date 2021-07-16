@@ -3,7 +3,9 @@ import { ARTURIResource } from "src/app/models/ARTResources";
 import { CustomForm, FormFieldType } from "src/app/models/CustomForms";
 import { Language } from "src/app/models/LanguagesCountries";
 import { DatatypesServices } from "src/app/services/datatypesServices";
-import { ConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri } from "./CustomFormWizard";
+import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
+import { ModalType } from "src/app/widget/modal/Modals";
+import { ConstraintType, WizardAdvGraphEntry, WizardField, WizardFieldLiteral, WizardFieldUri, WizardNodeFromField } from "./CustomFormWizard";
 
 @Component({
     selector: "custom-form-wizard-fields-editor",
@@ -13,6 +15,7 @@ import { ConstraintType, WizardField, WizardFieldLiteral, WizardFieldUri } from 
 export class CustomFormWizardFieldsEditor {
     @Output() changed: EventEmitter<WizardFieldChangeEvent> = new EventEmitter();
     @Input() fields: WizardField[];
+    @Input() advGraphs: WizardAdvGraphEntry[]; //useful when deleting a field in order to check if an adv graph refers to a node seeded by the field
     selectedField: WizardField;
 
     //selectors options
@@ -23,7 +26,7 @@ export class CustomFormWizardFieldsEditor {
     datatypes: ARTURIResource[];
     languages: Language[];
 
-    constructor(private datatypeService: DatatypesServices) { }
+    constructor(private datatypeService: DatatypesServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.datatypeService.getDatatypes().subscribe(
@@ -58,7 +61,20 @@ export class CustomFormWizardFieldsEditor {
         this.fields.push(f)
         this.emitChangeEvent(f, WizardFieldEventType.created);
     }
+
     removeField() {
+        if (this.advGraphs.some(g => g.nodes.some(n => n instanceof WizardNodeFromField && n.fieldSeed == this.selectedField))) {
+            this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.REFERENCED_NODE_DELETE_WARN" }, ModalType.warning).then(
+                () => {
+                    this.removeImpl();
+                },
+                () => {}
+            )
+        } else {
+            this.removeImpl();
+        }
+    }
+    removeImpl() {
         this.fields.splice(this.fields.indexOf(this.selectedField), 1);
         this.emitChangeEvent(this.selectedField, WizardFieldEventType.removed);
         this.selectedField = null;

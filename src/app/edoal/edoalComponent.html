@@ -74,9 +74,10 @@
                 <div class="table-responsive vbox">
                     <table *ngIf="correspondences" class="table table-sm">
                         <colgroup>
-                            <col style="width: 48%">
-                            <col style="width: 48%">
+                            <col>
+                            <col>
                             <col style="width: 1%">
+                            <col>
                             <col style="width: 1%">
                         </colgroup>
                         <thead>
@@ -101,7 +102,7 @@
                                         <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle>
                                             {{c.relation[0].getShow()}}
                                         </button>
-                                        <div class="dropdown-menu float-right" ngbDropdownMenu>
+                                        <div class="dropdown-menu" ngbDropdownMenu>
                                             <a *ngFor="let rel of relations" class="dropdown-item" (click)="changeRelation(c, rel)" [title]="rel.text">{{rel.relation}}</a>
                                         </div>
                                     </div>
@@ -112,8 +113,8 @@
                                             <span *ngIf="c.mappingProperty[0]" [title]="c.mappingProperty[0].toNT()">{{c.mappingProperty[0].getShow()}}</span>
                                             <span *ngIf="!c.mappingProperty[0]">----</span>
                                         </button>
-                                        <div class="dropdown-menu float-right" ngbDropdownMenu>
-                                            <li *ngFor="let p of c.suggestedMappingProperties">
+                                        <div class="dropdown-menu" ngbDropdownMenu>
+                                            <li *ngFor="let p of c.suggestedMappingProperties" class="dropdown-item">
                                                 <a (click)="changeMappingProperty(c, p)" [title]="p.toNT()">{{p.getShow()}}</a>
                                             </li>
                                         </div>

@@ -601,8 +601,7 @@
                 "MULTIVALUE_LANG_WARN": "Warning: this field admits multiple values ('Multivalue' option checked). For all these values, the same language will be used."
             },
             "GRAPH": {
-                "GRAPH_PATTERN_EDITOR": "Graph pattern free editor",
-                "GRAPH_PATTERN_EDITOR_INFO": "Here you can write a more complex graph pattern to add to the PEARL graph section",
+                "ADV_GRAPH_PATTERN": "Advanced graph pattern",
                 "NODES_RELATIONS": "Nodes relations"
             },
             "MESSAGES": {
@@ -620,7 +619,9 @@
                 "NOT_CUSTOM_CONSTRUCTOR_STATUS": "The current wizard is for creating Custom Constructor, the loaded file represents the status of a Custom Range.",
                 "NOT_CUSTOM_RANGE_STATUS": "The current wizard is for creating Custom Range, the loaded file represents the status of a Custom Constructor.",
                 "NOT_VALID_STATUS": "The loaded file does not represent a valid CustomForm status file.",
-                "OPTIONAL_ENTRY_POINT_WARN": "In CustomForm used as CustomRange, the first usage of the node '{{id}}' in the graph section cannot use an optional field"
+                "OPTIONAL_ENTRY_POINT_WARN": "In CustomForm used as CustomRange, the first usage of the node '{{id}}' in the graph section cannot use an optional field",
+                "REFERENCED_FIELD_DELETE_WARN": "The field you're deleting is the seed of a node used in one (or more) advanced graph pattern. By deleting this field the graph pattern will be automatically deleted as well. Do you want to continue?",
+                "REFERENCED_NODE_DELETE_WARN": "The node you're deleting is used in one (or more) advanced graph pattern. By deleting this node the graph pattern will be automatically deleted as well. Do you want to continue?"
             },
             "NODES": {
                 "ENTRY_POINT_INFO": "The entry point of the graph object created by the CustomForm",

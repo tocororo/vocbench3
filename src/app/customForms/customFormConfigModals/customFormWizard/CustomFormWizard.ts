@@ -6,6 +6,8 @@ import { CODAConverter } from "src/app/models/Sheet2RDF";
 import { Deserializer } from "src/app/utils/Deserializer";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
+import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
+import { ModalType } from "src/app/widget/modal/Modals";
 
 export abstract class FeatureStructure {
     featureName: string;
@@ -175,6 +177,7 @@ export abstract class WizardNode {
     entryPoint: boolean;
     fromField: boolean;
     userCreated: boolean;
+    advGraph: boolean;
 
     constructor(nodeId: string) {
         this.nodeId = nodeId;
@@ -223,8 +226,9 @@ export abstract class WizardNode {
 }
 
 export class WizardNodeEntryPoint extends WizardNode {
+    static readonly NodeID: string = "entryPoint";
     constructor() {
-        super("entryPoint");
+        super(WizardNodeEntryPoint.NodeID);
         this.entryPoint = true;
     }
 }
@@ -316,6 +320,14 @@ export class WizardGraphEntry {
     }
 }
 
+export class WizardAdvGraphEntry {
+    fieldSeed: WizardField; //not provided in case of imported/exported AdvGraph (in that case implicitly means/replaced-by the editing field)
+    nodes: WizardNodeUserCreated[]; //nodes created internally the AdvGraph
+    referencedNodes: WizardNode[]; //already existing nodes created outside the AdvGraph
+    prefixMapping: {[prefix: string]: string};
+    pattern: string;
+}
+
 interface WizardGraphEntryObject {
     type: GraphObjectType;
     node?: WizardNode;
@@ -338,22 +350,23 @@ export interface WizardStatus {
     fields: WizardField[];
     nodes: WizardNode[];
     graphs: WizardGraphEntry[];
-    graphPattern: string;
+    advGraphs: WizardAdvGraphEntry[];
 }
 
 
 export class WizardStatusUtils {
 
     static restoreWizardStatus(jsonStatus: any): WizardStatus {
-        let fields: WizardField[] = jsonStatus.fields.map(fJson => this.restoreWizardField(fJson));
-        let nodes: WizardNode[] = jsonStatus.nodes.map(nJson => this.restoreWizardNode(nJson, fields));
+        let fields: WizardField[] = jsonStatus.fields.map((fJson: any) => this.restoreWizardField(fJson));
+        let nodes: WizardNode[] = jsonStatus.nodes.map((nJson: any) => this.restoreWizardNode(nJson, fields));
         let graphs: WizardGraphEntry[] = jsonStatus.graphs.map(gJson => this.restoreWizardGraphEntry(gJson, nodes));
+        let advGraphs: WizardAdvGraphEntry[] = jsonStatus.advGraphs ? jsonStatus.advGraphs.map(gJson => this.restoreWizardAdvGraphEntry(gJson, nodes, fields)) : [];
         let status: WizardStatus = {
             customRange: jsonStatus.customRange,
             fields: fields,
             nodes: nodes,
             graphs: graphs,
-            graphPattern: jsonStatus.graphPattern
+            advGraphs: advGraphs
         }
         return status;
     }
@@ -496,6 +509,37 @@ export class WizardStatusUtils {
         }
         g.object = graphObj;
         return g;
+    }
+
+    static restoreWizardAdvGraphEntry(jsonStatus: any, nodes: WizardNode[], fields: WizardField[]): WizardAdvGraphEntry {
+        let advG: WizardAdvGraphEntry = new WizardAdvGraphEntry();
+        advG.fieldSeed = fields.find(f => f.label == jsonStatus.fieldSeed.label);
+        advG.referencedNodes = jsonStatus.referencedNodes.map((nJson: any) => nodes.find(n => n.nodeId == nJson.nodeId));
+        advG.nodes = jsonStatus.nodes.map((nJson: any) => WizardStatusUtils.restoreWizardNode(nJson, fields));
+        advG.pattern = jsonStatus.pattern;
+        advG.prefixMapping = jsonStatus.prefixMapping;
+        return advG;
+    }
+
+}
+
+export class CustomFormWizardUtils {
+
+    static checkNode(node: WizardNode, basicModals: BasicModalServices): boolean {
+        //check on ID
+        if (node.nodeId == null || node.nodeId.trim() == "") {
+            basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MISSING_ID" }, ModalType.warning);
+            return false;
+        } else if (node.converterStatus != null) {
+            if (node.converterStatus.signatureDesc.getRequirementLevels() == RequirementLevels.REQUIRED && node.feature == null) {
+                basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MISSING_CONVERTER_FEATURE", params: { id: node.nodeId } }, ModalType.warning);
+                return false;
+            }
+        } else {
+            basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MISSING_CONVERTER", params: { id: node.nodeId } }, ModalType.warning);
+            return false;
+        }
+        return true;
     }
 
 }

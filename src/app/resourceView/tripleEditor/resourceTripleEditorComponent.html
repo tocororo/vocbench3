@@ -6,7 +6,7 @@
         </button>
     </div>
     <div class="card-body vbox">
-        <ntriple-editor [(ngModel)]="description" (ngModelChange)="onDescriptionChange()" [disabled]="!editAuthorized || pendingValidation"></ntriple-editor>
+        <ntriple-editor [(ngModel)]="description" [disabled]="!editAuthorized || pendingValidation"></ntriple-editor>
     </div>
     <div class="card-footer" style="min-height: 31px;">
         <button class="btn btn-xs btn-light float-right" (click)="applyChanges()" [disabled]="!isApplyEnabled()">
