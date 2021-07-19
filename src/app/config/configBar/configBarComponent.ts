@@ -7,7 +7,9 @@ import { ExportServices } from "src/app/services/exportServices";
 import { ShaclBatchValidationModal } from "src/app/shacl/shaclBatchValidationModal";
 import { UndoHandler } from "src/app/undo/undoHandler";
 import { Cookie } from 'src/app/utils/Cookie';
+import { HttpManager } from "src/app/utils/HttpManager";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { ToastService } from "src/app/widget/toast/toastService";
 import { VersionInfo } from "../../models/History";
 import { Project, ProjectLabelCtx } from "../../models/Project";
 import { AdministrationServices } from "../../services/administrationServices";
@@ -46,10 +48,10 @@ export class ConfigBarComponent {
     clearShapesAuthorized: boolean;
     shaclBatchValidationAuthorized: boolean;
 
-    constructor(private exportServices: ExportServices, private inOutService: InputOutputServices, private administrationService: AdministrationServices, 
+    constructor(private exportServices: ExportServices, private inOutService: InputOutputServices, private administrationService: AdministrationServices,
         private shaclService: ShaclServices, private vbProp: VBProperties, private undoHandler: UndoHandler,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
-        private translate: TranslateService, private route: Router) {
+        private toastService: ToastService, private translate: TranslateService, private route: Router) {
     }
 
     ngOnInit() {
@@ -113,8 +115,19 @@ export class ConfigBarComponent {
     onAboutMenuOpen() {
         this.privacyStatementAvailable = this.vbProp.isPrivacyStatementAvailable();
     }
-    private downloadPrivacyStatement() {
+
+    downloadPrivacyStatement() {
         this.administrationService.downloadPrivacyStatement().subscribe();
+    }
+
+    copyWebApiUrl() {
+        let baseUrl = HttpManager.getServerHost() + "/" + HttpManager.serverpath + "/" + 
+            HttpManager.groupId + "/" + HttpManager.artifactId + "/";
+        navigator.clipboard.writeText(baseUrl).then(() => {
+            this.toastService.show(null, { key: "APP.TOP_BAR.ABOUT_MENU.WEB_API_COPIED" }, { toastClass: "bg-info", textClass: "text-white" });
+        }, function (err) {});
+
+
     }
 
     /* ===============================
@@ -131,13 +144,13 @@ export class ConfigBarComponent {
     }
 
     clearData() {
-        this.basicModals.confirm({key:"ACTIONS.CLEAR_DATA"}, {key: "MESSAGES.CLEAR_DATA_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "ACTIONS.CLEAR_DATA" }, { key: "MESSAGES.CLEAR_DATA_CONFIRM" }, ModalType.warning).then(
             () => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.inOutService.clearData().subscribe(
                     () => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({key:"ACTIONS.CLEAR_DATA"}, {key:"MESSAGES.DATA_CLEARED"});
+                        this.basicModals.alert({ key: "ACTIONS.CLEAR_DATA" }, { key: "MESSAGES.DATA_CLEARED" });
                         //reset scheme in order to prevent error when re-init the concept tree
                         this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(), []);
                         //simulate the project change in order to force the destroy of all the Route
@@ -154,7 +167,7 @@ export class ConfigBarComponent {
     changeWGraph() {
         this.exportServices.getNamedGraphs().subscribe(
             graphs => {
-                this.sharedModals.selectResource({key: "APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH"}, null, graphs, false).then(g => {
+                this.sharedModals.selectResource({ key: "APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH" }, null, graphs, false).then(g => {
                     if (VBContext.getWorkingProject()?.getBaseURI() == g.getNominalValue()) {
                         g = null;
                     }
@@ -183,17 +196,17 @@ export class ConfigBarComponent {
     clearShaclShapes() {
         this.basicModals.confirm({ key: "SHACL.CLEAR_SHACL_SHAPES" }, "This operation will delete all the SHACL shapes stored in the project. Are you sure to proceed?",
             ModalType.warning).then(
-            () => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.shaclService.clearShapes().subscribe(
-                    () => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({ key: "SHACL.CLEAR_SHACL_SHAPES" }, {key:"MESSAGES.SHACL_SHAPES_CLEARED"});
-                    }
-                );
-            },
-            () => { }
-        );
+                () => {
+                    UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                    this.shaclService.clearShapes().subscribe(
+                        () => {
+                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                            this.basicModals.alert({ key: "SHACL.CLEAR_SHACL_SHAPES" }, { key: "MESSAGES.SHACL_SHAPES_CLEARED" });
+                        }
+                    );
+                },
+                () => { }
+            );
     }
 
     batchShaclValidation() {

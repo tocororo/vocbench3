@@ -410,7 +410,9 @@
                 "CONTACT_US": "Contattaci",
                 "PRIVACY_STATEMENT": "Informativa sulla privacy",
                 "SUPPORT": "Supporto",
-                "VB_SITE": "VocBench website"
+                "VB_SITE": "VocBench website",
+                "WEB_API": "Copia base URL delle Web API",
+                "WEB_API_COPIED": "Base URL delle Web API copiato negli appunti"
             },
             "CURRENT_PROJECT": "Progetto corrente",
             "GLOBAL_DATA_MENU": {

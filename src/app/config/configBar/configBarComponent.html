@@ -103,16 +103,20 @@
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
                     <a class="dropdown-item" href="http://vocbench.uniroma2.it/" target="_blank">
-                        <span class="fas fa-globe-europe" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.VB_SITE'|translate}}
+                        <span class="fas fa-globe-europe mr-2"></span>{{'APP.TOP_BAR.ABOUT_MENU.VB_SITE'|translate}}
                     </a>
                     <a class="dropdown-item" href="http://vocbench.uniroma2.it/aboutus/" target="_blank">
-                        <span class="fas fa-comment-alt" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.CONTACT_US'|translate}}
+                        <span class="fas fa-comment-alt mr-2"></span>{{'APP.TOP_BAR.ABOUT_MENU.CONTACT_US'|translate}}
                     </a>
                     <a class="dropdown-item" href="http://vocbench.uniroma2.it/support/" target="_blank">
-                        <span class="fas fa-question-circle" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.SUPPORT'|translate}}
+                        <span class="fas fa-question-circle mr-2"></span>{{'APP.TOP_BAR.ABOUT_MENU.SUPPORT'|translate}}
                     </a>
                     <a *ngIf="privacyStatementAvailable" class="dropdown-item" (click)="downloadPrivacyStatement()">
-                        <span class="fas fa-download" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.PRIVACY_STATEMENT'|translate}}
+                        <span class="fas fa-download mr-2"></span>{{'APP.TOP_BAR.ABOUT_MENU.PRIVACY_STATEMENT'|translate}}
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="copyWebApiUrl()">
+                        <span class="fas fa-code mr-2"></span>{{'APP.TOP_BAR.ABOUT_MENU.WEB_API'|translate}}
                     </a>
                 </div>
             </div>

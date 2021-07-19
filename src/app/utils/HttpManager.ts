@@ -17,11 +17,12 @@ import { VBEventHandler } from './VBEventHandler';
 @Injectable()
 export class HttpManager {
 
-    private serverhost: string;
     //services url parts
-    private serverpath: string = "semanticturkey";
-    private groupId: string = "it.uniroma2.art.semanticturkey";
-    protected artifactId: string = "st-core-services";
+    static readonly serverpath: string = "semanticturkey";
+    static readonly groupId: string = "it.uniroma2.art.semanticturkey";
+    static readonly artifactId: string = "st-core-services";
+
+    private serverhost: string;
 
     //default request options, to eventually override through options parameter in doGet, doPost, ...
     private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({
@@ -241,8 +242,8 @@ export class HttpManager {
      * 
      */
     private getRequestBaseUrl(service: string, request: string): string {
-        let url: string = this.serverhost + "/" + this.serverpath + "/" + 
-            this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
+        let url: string = this.serverhost + "/" + HttpManager.serverpath + "/" + 
+        HttpManager.groupId + "/" + HttpManager.artifactId + "/" + service + "/" + request + "?";
         return url;
     }
 
