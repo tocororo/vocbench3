@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ARTResource } from "src/app/models/ARTResources";
 import { ExportServices } from "src/app/services/exportServices";
 import { ShaclBatchValidationModal } from "src/app/shacl/shaclBatchValidationModal";
+import { UndoHandler } from "src/app/undo/undoHandler";
 import { Cookie } from 'src/app/utils/Cookie';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { VersionInfo } from "../../models/History";
@@ -45,8 +46,8 @@ export class ConfigBarComponent {
     clearShapesAuthorized: boolean;
     shaclBatchValidationAuthorized: boolean;
 
-    constructor(private exportServices: ExportServices, private inOutService: InputOutputServices,
-        private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
+    constructor(private exportServices: ExportServices, private inOutService: InputOutputServices, private administrationService: AdministrationServices, 
+        private shaclService: ShaclServices, private vbProp: VBProperties, private undoHandler: UndoHandler,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
         private translate: TranslateService, private route: Router) {
     }
@@ -69,6 +70,10 @@ export class ConfigBarComponent {
      */
     isUserLogged(): boolean {
         return VBContext.isLoggedIn();
+    }
+
+    undo() {
+        this.undoHandler.handle();
     }
 
     /* ===============================

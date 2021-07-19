@@ -1,118 +1,129 @@
 <div class="container-fluid">
 
-    <div class="dropdown float-left" ngbDropdown>
-        <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onAboutMenuOpen()" ngbDropdownToggle>
-            {{'APP.TOP_BAR.ABOUT_MENU.ABOUT_VB'|translate}}
-            <span class="fas fa-caret-down"></span>
-        </button>
-        <div class="dropdown-menu" ngbDropdownMenu>
-            <a class="dropdown-item" href="http://vocbench.uniroma2.it/" target="_blank">
-                <span class="fas fa-globe-europe" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.VB_SITE'|translate}}
-            </a>
-            <a class="dropdown-item" href="http://vocbench.uniroma2.it/aboutus/" target="_blank">
-                <span class="fas fa-comment-alt" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.CONTACT_US'|translate}}
-            </a>
-            <a class="dropdown-item" href="http://vocbench.uniroma2.it/support/" target="_blank">
-                <span class="fas fa-question-circle" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.SUPPORT'|translate}}
-            </a>
-            <a *ngIf="privacyStatementAvailable" class="dropdown-item" (click)="downloadPrivacyStatement()">
-                <span class="fas fa-download" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.PRIVACY_STATEMENT'|translate}}
-            </a>
+    <div class="float-left">
+        <div class="d-flex align-items-center">
+
+            <div *ngIf="isUserLogged()" class="d-flex align-items-center">
+                <div style="display:flex; align-items: center">
+                    <label style="margin-right: 2px;">{{'APP.TOP_BAR.CURRENT_PROJECT'|translate}}:</label>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <a href="#" class="btn btn-light disabled" style="pointer-events: none; opacity: initial" role="button">
+                            <ng-container *ngIf="isProjectAccessed()">
+                                {{currentProject.getName(true)}}
+                            </ng-container>
+                            <ng-container *ngIf="!isProjectAccessed()">
+                                ------
+                            </ng-container>
+                        </a>
+                        <button class="btn btn-light" style="padding-left: 2px;" (click)="changeProject()" [title]="'ACTIONS.CHANGE_PROJECT'|translate">
+                            <span class="far fa-list-alt" style="line-height: 1"></span>
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="getCtxVersion()" class="ml-2" style="display:flex; align-items: center">
+                    <label style="margin-right: 2px;">ver:</label>
+                    <span>{{getCtxVersion().versionId}}</span>
+                </div>
+                <div *ngIf="getCtxWGraph()" class="ml-2" style="display:flex; align-items: center">
+                    <label style="margin-right: 2px;">wgraph:</label>
+                    <span>{{getCtxWGraph().toNT()}}</span>
+                </div>
+            </div>
+
+
+            <div *ngIf="isUserLogged() && isProjectAccessed()" class="ml-3">
+                <div class="dropdown float-right" ngbDropdown>
+                    <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onGlobalDataManagementMenuOpen()" ngbDropdownToggle>
+                        {{'APP.TOP_BAR.GLOBAL_DATA_MENU.GLOBAL_DATA_MANAGEMENT'|translate}}
+                        <span class="fas fa-caret-down ml-1"></span>
+                    </button>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                        <a routerLink="/Config/LoadData" class="dropdown-item"
+                            [ngClass]="{ disabled : !loadDataAuthorized }">
+                            <span class="fas fa-upload" style="margin-right: 5px"></span>{{'ACTIONS.LOAD_DATA'|translate}}
+                        </a>
+                        <a routerLink="/Config/ExportData" class="dropdown-item"
+                            [ngClass]="{ disabled : !exportDataAuthorized }">
+                            <span class="fas fa-download" style="margin-right: 5px"></span>{{'ACTIONS.EXPORT_DATA'|translate}}
+                        </a>
+                        <a (click)="clearData()" class="dropdown-item" [ngClass]="{ disabled : !clearDataAuthorized }">
+                            <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'ACTIONS.CLEAR_DATA'|translate}}
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a routerLink="/Config/Versioning" class="dropdown-item"
+                            [ngClass]="{ disabled : !versioningAuthorized }">
+                            <span class="far fa-clock" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.VERSIONING'|translate}}
+                        </a>
+                        <a (click)="changeWGraph()" class="dropdown-item"
+                            [ngClass]="{ disabled : !wgraphAuthorized }">
+                            <span class="fas fa-pen" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH'|translate}}
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a routerLink="/Config/Refactor" class="dropdown-item">
+                            <span class="fas fa-retweet" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.REFACTOR'|translate}}
+                        </a>
+                        <ng-container *ngIf="shaclEnabled">
+                            <div class="dropdown-divider"></div>
+                            <a (click)="loadShaclShapes()" class="dropdown-item"
+                                [ngClass]="{ disabled : !loadShapesAuthorized }">
+                                <span class="fas fa-upload" style="margin-right: 5px"></span>{{'SHACL.LOAD_SHACL_SHAPES'|translate}}
+                            </a>
+                            <a (click)="exportShaclShapes()" class="dropdown-item"
+                                [ngClass]="{ disabled : !exportShapesAuthorized }">
+                                <span class="fas fa-download" style="margin-right: 5px"></span>{{'SHACL.EXPORT_SHACL_SHAPES'|translate}}
+                            </a>
+                            <a (click)="clearShaclShapes()" class="dropdown-item"
+                                [ngClass]="{ disabled : !clearShapesAuthorized }">
+                                <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'SHACL.CLEAR_SHACL_SHAPES'|translate}}
+                            </a>
+                            <a (click)="batchShaclValidation()" class="dropdown-item"
+                                [ngClass]="{ disabled : !shaclBatchValidationAuthorized }">
+                                <span class="far fa-check-square" style="margin-right: 5px"></span>{{'SHACL.BATCH_VALIDATION'|translate}}
+                            </a>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+
+            <button *ngIf="isProjectAccessed() && currentProject.isUndoEnabled()" class="btn btn-light btn-xs ml-3" (click)="undo()" [title]="'ACTIONS.UNDO'|translate">
+                <span class="fas fa-undo"></span>
+            </button>
+
         </div>
     </div>
 
-    <div class="hbox float-right">
+    <div class="float-right">
+        <div class="d-flex align-items-center">
 
-        <div *ngIf="isUserLogged()" class="d-flex align-items-center ml-2">
-            <div style="display:flex; align-items: center">
-                <label style="margin-right: 2px;">{{'APP.TOP_BAR.CURRENT_PROJECT'|translate}}:</label>
-                <div class="btn-group btn-group-xs" role="group">
-                    <a href="#" class="btn btn-light disabled" style="pointer-events: none; opacity: initial" role="button">
-                        <ng-container *ngIf="isProjectAccessed()">
-                            {{currentProject.getName(true)}}
-                        </ng-container>
-                        <ng-container *ngIf="!isProjectAccessed()">
-                            ------
-                        </ng-container>
-                    </a>
-                    <button class="btn btn-light" style="padding-left: 2px;" (click)="changeProject()" [title]="'ACTIONS.CHANGE_PROJECT'|translate">
-                        <span class="far fa-list-alt" style="line-height: 1"></span>
-                    </button>
-                </div>
-            </div>
-            <div *ngIf="getCtxVersion()" class="ml-2" style="display:flex; align-items: center">
-                <label style="margin-right: 2px;">ver:</label>
-                <span>{{getCtxVersion().versionId}}</span>
-            </div>
-            <div *ngIf="getCtxWGraph()" class="ml-2" style="display:flex; align-items: center">
-                <label style="margin-right: 2px;">wgraph:</label>
-                <span>{{getCtxWGraph().toNT()}}</span>
-            </div>
-        </div>
-
-        <!--Configuration of project data, not available when there is no project accessed-->
-        <div *ngIf="isUserLogged() && isProjectAccessed()" class="ml-4">
-            <div class="dropdown float-right" ngbDropdown>
-                <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onGlobalDataManagementMenuOpen()" ngbDropdownToggle>
-                    {{'APP.TOP_BAR.GLOBAL_DATA_MENU.GLOBAL_DATA_MANAGEMENT'|translate}}
-                    <span class="fas fa-caret-down ml-1"></span>
+            <div class="dropdown" ngbDropdown>
+                <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onAboutMenuOpen()" ngbDropdownToggle>
+                    {{'APP.TOP_BAR.ABOUT_MENU.ABOUT_VB'|translate}}
+                    <span class="fas fa-caret-down"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
-                    <a routerLink="/Config/LoadData" class="dropdown-item"
-                        [ngClass]="{ disabled : !loadDataAuthorized }">
-                        <span class="fas fa-upload" style="margin-right: 5px"></span>{{'ACTIONS.LOAD_DATA'|translate}}
+                    <a class="dropdown-item" href="http://vocbench.uniroma2.it/" target="_blank">
+                        <span class="fas fa-globe-europe" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.VB_SITE'|translate}}
                     </a>
-                    <a routerLink="/Config/ExportData" class="dropdown-item"
-                        [ngClass]="{ disabled : !exportDataAuthorized }">
-                        <span class="fas fa-download" style="margin-right: 5px"></span>{{'ACTIONS.EXPORT_DATA'|translate}}
+                    <a class="dropdown-item" href="http://vocbench.uniroma2.it/aboutus/" target="_blank">
+                        <span class="fas fa-comment-alt" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.CONTACT_US'|translate}}
                     </a>
-                    <a (click)="clearData()" class="dropdown-item" [ngClass]="{ disabled : !clearDataAuthorized }">
-                        <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'ACTIONS.CLEAR_DATA'|translate}}
+                    <a class="dropdown-item" href="http://vocbench.uniroma2.it/support/" target="_blank">
+                        <span class="fas fa-question-circle" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.SUPPORT'|translate}}
                     </a>
-                    <div class="dropdown-divider"></div>
-                    <a routerLink="/Config/Versioning" class="dropdown-item"
-                        [ngClass]="{ disabled : !versioningAuthorized }">
-                        <span class="far fa-clock" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.VERSIONING'|translate}}
+                    <a *ngIf="privacyStatementAvailable" class="dropdown-item" (click)="downloadPrivacyStatement()">
+                        <span class="fas fa-download" style="margin-right: 5px"></span>{{'APP.TOP_BAR.ABOUT_MENU.PRIVACY_STATEMENT'|translate}}
                     </a>
-                    <a (click)="changeWGraph()" class="dropdown-item"
-                        [ngClass]="{ disabled : !wgraphAuthorized }">
-                        <span class="fas fa-pen" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH'|translate}}
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a routerLink="/Config/Refactor" class="dropdown-item">
-                        <span class="fas fa-retweet" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.REFACTOR'|translate}}
-                    </a>
-                    <ng-container *ngIf="shaclEnabled">
-                        <div class="dropdown-divider"></div>
-                        <a (click)="loadShaclShapes()" class="dropdown-item"
-                            [ngClass]="{ disabled : !loadShapesAuthorized }">
-                            <span class="fas fa-upload" style="margin-right: 5px"></span>{{'SHACL.LOAD_SHACL_SHAPES'|translate}}
-                        </a>
-                        <a (click)="exportShaclShapes()" class="dropdown-item"
-                            [ngClass]="{ disabled : !exportShapesAuthorized }">
-                            <span class="fas fa-download" style="margin-right: 5px"></span>{{'SHACL.EXPORT_SHACL_SHAPES'|translate}}
-                        </a>
-                        <a (click)="clearShaclShapes()" class="dropdown-item"
-                            [ngClass]="{ disabled : !clearShapesAuthorized }">
-                            <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'SHACL.CLEAR_SHACL_SHAPES'|translate}}
-                        </a>
-                        <a (click)="batchShaclValidation()" class="dropdown-item"
-                            [ngClass]="{ disabled : !shaclBatchValidationAuthorized }">
-                            <span class="far fa-check-square" style="margin-right: 5px"></span>{{'SHACL.BATCH_VALIDATION'|translate}}
-                        </a>
-                    </ng-container>
                 </div>
             </div>
-        </div>
 
-        <div class="ml-4">
-            <select class="form-control form-control-xs" [(ngModel)]="translateLang" (ngModelChange)="onTranslateLangChanged()">
-                <option *ngFor="let lang of translateLangs">{{ lang }}</option>
-            </select>
-        </div>
+            <div class="ml-3">
+                <select class="form-control form-control-xs" [(ngModel)]="translateLang" (ngModelChange)="onTranslateLangChanged()">
+                    <option *ngFor="let lang of translateLangs">{{ lang }}</option>
+                </select>
+            </div>
 
+        </div>
     </div>
-
-   
 
 </div>

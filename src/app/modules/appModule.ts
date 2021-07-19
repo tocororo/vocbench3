@@ -14,6 +14,7 @@ import { DataComponent } from '../data/dataComponent';
 import { HomeComponent } from '../homeComponent';
 import { SkosDiffingModule } from '../skosDiffing/skosDiffingModule';
 import { UndoDirective } from '../undo/undoDirective';
+import { UndoHandler } from '../undo/undoHandler';
 import { GUARD_PROVIDERS } from '../utils/CanActivateGuards';
 import { DatatypeValidator } from '../utils/DatatypeValidator';
 import { HttpManager } from '../utils/HttpManager';
@@ -103,6 +104,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         GUARD_PROVIDERS,
         RoleActionResolver,
         StMetadataRegistry,
+        UndoHandler,
         UserResolver,
         VBCollaboration,
         VBEventHandler,

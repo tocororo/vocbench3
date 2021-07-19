@@ -11,14 +11,14 @@
                 <span class="fas fa-font"></span>
             </button>
 
-            <div class="btn-group btn-group-xs" ngbDropdown>
+            <div class="btn-group btn-group-xs" ngbDropdown autoClose="outside">
                 <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                     <span class="fas fa-filter"></span>
                 </button>
                 <div class="dropdown-menu float-right" ngbDropdownMenu>
                     <a *ngFor="let f of axiomFilters" class="dropdown-item" (click)="$event.stopPropagation()">
+                        <input type="checkbox" class="mr-1" [(ngModel)]="f.show" (ngModelChange)="onFilterChange(f)">
                         {{f.property.getShow()}}
-                        <input type="checkbox float-right" [(ngModel)]="f.show" (ngModelChange)="onFilterChange(f)">
                     </a>
                 </div>
             </div>

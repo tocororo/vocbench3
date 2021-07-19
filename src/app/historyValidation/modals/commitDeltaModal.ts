@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "../../models/ARTResources";
-import { CommitOperation } from "../../models/History";
+import { CommitInfo, CommitOperation } from "../../models/History";
 import { HistoryServices } from "../../services/historyServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
@@ -13,7 +13,7 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
     templateUrl: "./commitDeltaModal.html"
 })
 export class CommitDeltaModal {
-    @Input() commit: ARTURIResource;
+    @Input() commit: CommitInfo;
 
     @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
@@ -28,7 +28,7 @@ export class CommitDeltaModal {
 
     ngOnInit() {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.historyService.getCommitDelta(this.commit).subscribe(
+        this.historyService.getCommitDelta(this.commit.commit).subscribe(
             delta => {
                 this.additions = delta.additions;
                 this.removals = delta.removals;
