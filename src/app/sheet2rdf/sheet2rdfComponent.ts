@@ -118,7 +118,6 @@ export class Sheet2RdfComponent {
     private selectedTablePreviewRow: TableRow;
 
     loadSpreadsheet() {
-        // HttpServiceContext.initSessionToken();
         this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
             () => {
                 this.resetAll();

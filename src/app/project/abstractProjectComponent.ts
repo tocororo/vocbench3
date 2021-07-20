@@ -159,24 +159,21 @@ export abstract class AbstractProjectComponent {
     }
 
     protected retrieveCollapsedDirectoriesCookie(): string[] {
+        let collapsedDirs: string[] = [];
         let cds: CollapsedDirStore;
         let collapsedDirsCookie: string = Cookie.getCookie(Cookie.PROJECT_COLLAPSED_DIRS)
         if (collapsedDirsCookie != null) {
             try { //cookie might be not parsed, in case return empty list
                 cds = JSON.parse(collapsedDirsCookie);
-            } catch {
-                return [];
-            }
+                if (cds.facet == this.getCurrentFacetBagOf()) {
+                    collapsedDirs = cds.dirs;
+                    collapsedDirs.forEach((dir, index, list) => { //replace the serialized "null" directory with the null value
+                        if (dir == "null") list[index] = null;
+                    });
+                }
+            } catch {}
         }
-        if (cds.facet == this.getCurrentFacetBagOf()) {
-            let collapsedDirs = cds.dirs;
-            collapsedDirs.forEach((dir, index, list) => { //replace the serialized "null" directory with the null value
-                if (dir == "null") list[index] = null;
-            });
-            return collapsedDirs;
-        } else {
-            return [];
-        }
+        return collapsedDirs;
     }
 
     protected getCurrentFacetBagOf() {

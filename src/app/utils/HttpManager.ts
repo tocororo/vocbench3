@@ -22,7 +22,7 @@ export class HttpManager {
     static readonly groupId: string = "it.uniroma2.art.semanticturkey";
     static readonly artifactId: string = "st-core-services";
 
-    private serverhost: string;
+    protected serverhost: string;
 
     //default request options, to eventually override through options parameter in doGet, doPost, ...
     private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({
@@ -241,7 +241,7 @@ export class HttpManager {
      * @param request the request name
      * 
      */
-    private getRequestBaseUrl(service: string, request: string): string {
+    protected getRequestBaseUrl(service: string, request: string): string {
         return this.serverhost + "/" + HttpManager.serverpath + "/" + HttpManager.groupId + "/" + HttpManager.artifactId + "/" + service + "/" + request + "?";
     }
 
