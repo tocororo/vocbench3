@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID, Scope } from '../models/Plugins';
-import { ClassTreePreference, ConceptTreePreference, InstanceListPreference, LexicalEntryListPreference, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, ResourceViewMode, ResourceViewPreference, ResourceViewProjectSettings, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
+import { AuthServiceMode, ClassTreePreference, ConceptTreePreference, InstanceListPreference, LexicalEntryListPreference, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, ResourceViewMode, ResourceViewPreference, ResourceViewProjectSettings, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { AdministrationServices } from '../services/administrationServices';
 import { SettingsServices } from '../services/settingsServices';
@@ -308,6 +308,10 @@ export class VBProperties {
                 let systemLanguages: Language[] = settings.getPropertyValue(SettingsEnum.languages);
                 Languages.sortLanguages(systemLanguages);
                 systemSettings.languages = systemLanguages;
+                let authServiceValue = settings.getPropertyValue(SettingsEnum.authService);
+                if (authServiceValue in AuthServiceMode) {
+                    systemSettings.authService = authServiceValue;
+                }
                 VBContext.setSystemSettings(systemSettings);
             })
         )

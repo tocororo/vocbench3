@@ -104,13 +104,13 @@ export class SystemSettingsGuard implements CanActivate, CanLoad {
     constructor(private router: Router, private vbProp: VBProperties) { }
 
     canActivate(): Observable<boolean> {
-        return this.guarImpl();
+        return this.guardImpl();
     }
     canLoad(): Observable<boolean> {
-        return this.guarImpl();
+        return this.guardImpl();
     }
 
-    guarImpl(): Observable<boolean> {
+    guardImpl(): Observable<boolean> {
         if (VBContext.getSystemSettings() == null) {
             return this.vbProp.initStartupSystemSettings().pipe(
                 map(() => {

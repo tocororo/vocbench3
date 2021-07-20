@@ -1,11 +1,12 @@
-import { Component, Output, EventEmitter } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, EventEmitter, Output } from "@angular/core";
+import { AuthServiceMode } from "../models/Properties";
+import { User } from "../models/User";
 import { AuthServices } from "../services/authServices";
 import { UserServices } from "../services/userServices";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { VBContext } from "../utils/VBContext";
+import { HttpManager } from "../utils/HttpManager";
 import { UIUtils } from "../utils/UIUtils";
-import { User } from "../models/User";
+import { VBContext } from "../utils/VBContext";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "login",
@@ -15,12 +16,24 @@ export class LoginComponent {
 
     @Output() loggedIn: EventEmitter<User> = new EventEmitter();
 
+    authServMode: AuthServiceMode;
+
     private rememberMe: boolean = false;
     email: string;
     password: string;
 
-    constructor(private router: Router, private authService: AuthServices, private userService: UserServices,
+    samlAction: string;
+
+    constructor(private authService: AuthServices, private userService: UserServices,
         private basicModals: BasicModalServices) { }
+
+    ngOnInit() {
+        this.authServMode = VBContext.getSystemSettings().authService;
+        if (this.authServMode == AuthServiceMode.EULogin) {
+            let serverhost = HttpManager.getServerHost();
+            this.samlAction = serverhost + "/semanticturkey/it.uniroma2.art.semanticturkey/st-core-services/saml/login";
+        }
+    }
 
     onKeydown(event: KeyboardEvent) {
         if (event.key == "Enter") {

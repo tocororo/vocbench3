@@ -18,7 +18,7 @@
                 {{'USER.REGISTRATION.NO_USER_REGISTERED_MSG.1'|translate}}
                 <button class="btn btn-xs btn-primary" (click)="fillDefaultUser()">{{'USER.REGISTRATION.FILL_PREDEFINED_USER'|translate}}</button>
             </div>
-            <user-create [(ngModel)]="userForm"></user-create>
+            <user-create [(ngModel)]="userForm" [constraint]="constraintUser" [registration]="true"></user-create>
         </div>
         <div class="card-footer">
             <div class="float-left">

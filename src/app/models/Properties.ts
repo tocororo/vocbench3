@@ -10,6 +10,7 @@ import { OWL, RDFS, SKOS } from "./Vocabulary";
 export enum SettingsEnum {
     activeLexicon = "activeLexicon",
     activeSchemes = "activeSchemes",
+    authService = "authService",
     classTree = "classTree",
     conceptTree = "conceptTree",
     defaultConceptType = "defaultConceptType",
@@ -259,6 +260,7 @@ export class SystemSettings {
     homeContent: string;
     languages: Language[];
     emailVerification: boolean = false;
+    authService: AuthServiceMode = AuthServiceMode.Default;
 }
 
 export class ProjectCreationPreferences {
@@ -275,4 +277,9 @@ export class VisualizationModeTranslation {
         [InstanceListVisualizationMode.searchBased]: "DATA.COMMONS.VISUALIZATION_MODE.SEARCH_BASED",
         [InstanceListVisualizationMode.standard]: "DATA.COMMONS.VISUALIZATION_MODE.STANDARD"
     }
+}
+
+export enum AuthServiceMode {
+    Default = "Default",
+    EULogin = "EULogin",
 }

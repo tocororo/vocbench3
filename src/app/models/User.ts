@@ -16,6 +16,7 @@ export class User {
     private status: UserStatusEnum;
     private admin: boolean = false;
     private online: boolean = false;
+    private samlUser: boolean = false;
 
     private customProperties: { [iri: string]: string };
 
@@ -112,6 +113,14 @@ export class User {
 
     isAdmin(): boolean {
         return this.admin;
+    }
+
+    setSamlUser(samlUser: boolean) {
+        this.samlUser = samlUser;
+    }
+
+    isSamlUser(): boolean {
+        return this.samlUser;
     }
 
     setOnline(online: boolean) {

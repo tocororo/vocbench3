@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
 import { Project } from '../models/Project';
+import { AuthServiceMode } from '../models/Properties';
 import { User, UserFormFields } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
@@ -25,14 +26,29 @@ export class UserServices {
         let params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getUser", params).pipe(
             map(stResp => {
-                if (stResp.user != null) { //user object in respnse => serialize it (it could be empty, so no user logged)
+                /*
+                2 scenarios:
+                - at least a user registered in ST: stResp contains a user object that can be:
+                    - null, if no user is logged
+                    - the serialization of a user object which represents the logged user
+                - no user registered in ST, 2 sub-scenarios in this case according the Authentication Service:
+                    - "Default": redirect to the registration page in order to let the first user (admin) to register
+                    - "EULogin": redirect to the home in order to let the user to login via EULogin
+                    (then, when succesfully logged, user will be able to register the first user / admin)
+                */
+                if (stResp.user != null) { //user object in resp => deserialize it (it could be empty, so no user logged)
                     let user: User = Deserializer.createUser(stResp.user);
-                    if (user != null) {
+                    if (user != null && !user.isSamlUser()) { 
+                        //store the logged user in the context only if not null and not a SAML user (namely a "mockup" user just for the EULogin user registration workflow)
                         VBContext.setLoggedUser(user);
                     }
                     return user;
                 } else { //no user object in the response => there is no user registered
-                    this.router.navigate(["/Registration/1"]);
+                    if (VBContext.getSystemSettings().authService == AuthServiceMode.Default) { //default auth service => redirect to registration page
+                        this.router.navigate(["/Registration/1"]);
+                    } else { //EULogin auth service => do nothing
+
+                    }
                 }
             })
         );

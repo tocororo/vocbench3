@@ -26,7 +26,7 @@ export class UserDetailsPanelComponent {
 
     private isChangeStatusButtonDisabled() {
         //user cannot change status to himself or to an administrator user
-        return VBContext.getLoggedUser().getEmail() == this.user.getEmail() || this.user.isAdmin();
+        return VBContext.getLoggedUser() && (VBContext.getLoggedUser().getEmail() == this.user.getEmail() || this.user.isAdmin());
     }
 
     private changeUserStatus() {
@@ -52,7 +52,7 @@ export class UserDetailsPanelComponent {
 
     private isChangeAdminButtonDisabled() {
         //cannot change the admin status to the same logged user and to non-active user
-        return VBContext.getLoggedUser().getEmail() == this.user.getEmail() || this.user.getStatus() != UserStatusEnum.ACTIVE;
+        return VBContext.getLoggedUser() && (VBContext.getLoggedUser().getEmail() == this.user.getEmail() || this.user.getStatus() != UserStatusEnum.ACTIVE);
     }
 
     private changeAdministratorStatus() {
@@ -99,7 +99,7 @@ export class UserDetailsPanelComponent {
 
     private isDeleteButtonDisabled() {
         //user cannot delete himself
-        return VBContext.getLoggedUser().getEmail() == this.user.getEmail();
+        return VBContext.getLoggedUser() && (VBContext.getLoggedUser().getEmail() == this.user.getEmail());
     }
 
     private deleteUser() {
@@ -117,7 +117,7 @@ export class UserDetailsPanelComponent {
 
     private isChangePwdButtonDisabled() {
         //admin cannot change its password
-        return VBContext.getLoggedUser().getEmail() == this.user.getEmail();
+        return VBContext.getLoggedUser() && (VBContext.getLoggedUser().getEmail() == this.user.getEmail());
     }
 
     private changePassword() {

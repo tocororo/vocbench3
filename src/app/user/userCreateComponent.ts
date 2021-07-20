@@ -1,7 +1,9 @@
-import { Component, forwardRef } from "@angular/core";
+import { Component, forwardRef, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { AuthServiceMode } from "../models/Properties";
 import { UserForm, UserFormCustomField, UserFormOptionalField } from "../models/User";
 import { UserServices } from "../services/userServices";
+import { VBContext } from "../utils/VBContext";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
@@ -13,6 +15,11 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 })
 export class UserCreateComponent implements ControlValueAccessor {
 
+    @Input() constraint: UserConstraint;
+    @Input() registration: boolean // true if this component is used inside registration form
+
+    authServMode: AuthServiceMode;
+
     iriInfoTitle = "This will be used as user identifier inside VocBench. You can specify a personal IRI";
     personalUrlVisible: boolean;
 
@@ -20,13 +27,22 @@ export class UserCreateComponent implements ControlValueAccessor {
     optionalFields: UserFormOptionalField[];
     customFields: UserFormCustomField[];
 
-    //status of the "eye" button for showing/hiding the pwd
     showPwd: boolean = false;
     showPwdConf: boolean = false;
 
     constructor(private userService: UserServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
+        this.authServMode = VBContext.getSystemSettings().authService;
+        if (this.authServMode == AuthServiceMode.EULogin && this.constraint) {
+            this.form.email = this.constraint.email;
+            this.form.givenName = this.constraint.givenName;
+            this.form.familyName = this.constraint.familyName;
+            //set a fake password since in EULogin pwd is not necessary
+            let fakePwd: string = Math.random()+"";
+            this.form.password = fakePwd;
+            this.form.confirmedPassword = fakePwd;
+        }
         this.userService.getUserFormFields().subscribe(
             fields => {
                 this.optionalFields = fields.optionalFields;
@@ -62,7 +78,7 @@ export class UserCreateComponent implements ControlValueAccessor {
             if (this.form.urlAsIri) {
                 this.form.iri = this.form.url;
             }
-            
+
         }
         this.onModelChange();
     }
@@ -82,12 +98,12 @@ export class UserCreateComponent implements ControlValueAccessor {
     }
 
     editLanguages() {
-        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGES"}, this.form.languageProficiencies).then(
+        this.sharedModals.selectLanguages({ key: "ACTIONS.SELECT_LANGUAGES" }, this.form.languageProficiencies).then(
             langs => {
                 this.form.languageProficiencies = langs;
                 this.onModelChange();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -105,6 +121,7 @@ export class UserCreateComponent implements ControlValueAccessor {
                 this.form[key] = undefined;
             }
         }
+
         this.propagateChange(this.form);
     }
 
@@ -134,4 +151,10 @@ export class UserCreateComponent implements ControlValueAccessor {
     // we use it to emit changes back to the parent
     private propagateChange = (_: any) => { };
 
+}
+
+export interface UserConstraint {
+    email: string;
+    givenName: string;
+    familyName: string;
 }

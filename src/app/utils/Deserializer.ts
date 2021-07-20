@@ -123,7 +123,7 @@ export class Deserializer {
                     //I set the last deprecated encountered but it doesn't matter since the deprecated value is the same in all the role-graph-deprecated triples
                     node.setAdditionalProperty(ResAttribute.DEPRECATED, deprecatedInNature);
                 }
-                
+
                 /**
                  * if explicit is null => explicit attribute was missing => infer it from the graphs in the nature:
                  * explicit is true if the resource is defined in the main graph (but not in the remove-staging)
@@ -185,7 +185,7 @@ export class Deserializer {
         if (lang != undefined) {
             artLiteralRes.setLang(lang);
         }
-        
+
         //optional properties
         this.parseNodeOptionalProperties(literal, artLiteralRes, additionalAttr)
 
@@ -314,6 +314,7 @@ export class Deserializer {
         if (userJson.url != undefined) {
             user.setUrl(userJson.url);
         }
+        user.setSamlUser(userJson.samlUser);
         if (userJson.avatarUrl != undefined) {
             user.setAvatarUrl(userJson.avatarUrl);
         }
