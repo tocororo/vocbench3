@@ -30,15 +30,20 @@
                     <ng-container *ngIf="versionList?.length > 0">
                         <h6 class="dropdown-header">{{'RESOURCE_VIEW.TIME_MACHINE.CHANGE_VERSION'|translate}}</h6>
                         <a class="dropdown-item" (click)="switchToVersion()">
-                            {{'RESOURCE_VIEW.TIME_MACHINE.CURRENT'|translate}}
-                            <span *ngIf="!activeVersion" class="fas fa-check float-right"></span>
+                            <div class="d-flex align-items-center">
+                                <span style="flex: 1;">{{'RESOURCE_VIEW.TIME_MACHINE.CURRENT'|translate}}</span>
+                                <span *ngIf="!activeVersion" class="fas fa-check ml-2"></span>
+                            </div>
                         </a>
                         <a *ngFor="let v of versionList" class="dropdown-item" (click)="switchToVersion(v)">
-                            {{v.dateTimeLocal}} - {{v.versionId}}
-                            <span *ngIf="v == activeVersion" class="fas fa-check float-right"></span>
+                            <div class="d-flex align-items-center">
+                                <span style="flex: 1;">{{v.dateTimeLocal}} - {{v.versionId}}</span>
+                                <span *ngIf="v == activeVersion" class="fas fa-check ml-2"></span>
+                            </div>
+                            
                         </a>
                     </ng-container>
-                    <ng-container *ngIf="timeMachineAvailable">
+                    <ng-container *ngIf="timeMachineAvailable && !activeVersion">
                         <a class="dropdown-header" (click)="timeMachine()">
                             {{'RESOURCE_VIEW.TIME_MACHINE.TRAVER_TO_TIME'|translate}}
                         </a>

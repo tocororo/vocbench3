@@ -270,6 +270,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
                     }
                 );
             }
+            this.initShowExpandCollapseBtn();
         }
     }
 

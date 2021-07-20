@@ -288,6 +288,7 @@ export class ProjectServices {
                 projectJsonColl.forEach(projAclJson => {
                     aclMap.push(this.parseAccessStatus(projAclJson));
                 })
+                aclMap.sort((m1, m2) => m1.name.toLocaleLowerCase().localeCompare(m2.name.toLocaleLowerCase()));
                 return aclMap;
             })
         );
@@ -327,6 +328,7 @@ export class ProjectServices {
             }
             consumers.push(consumer);
         }
+        consumers.sort((c1, c2) => c1.name.toLocaleLowerCase().localeCompare(c2.name.toLocaleUpperCase()));
         let universalACLLevel: AccessLevel = projAclJson.universalACLLevel;
         //lock node
         let lockNode = projAclJson.lock;
