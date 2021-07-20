@@ -126,8 +126,6 @@ export class ConfigBarComponent {
         navigator.clipboard.writeText(baseUrl).then(() => {
             this.toastService.show(null, { key: "APP.TOP_BAR.ABOUT_MENU.WEB_API_COPIED" }, { toastClass: "bg-info", textClass: "text-white" });
         }, function (err) {});
-
-
     }
 
     /* ===============================

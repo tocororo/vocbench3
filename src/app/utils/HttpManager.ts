@@ -202,12 +202,12 @@ export class HttpManager {
             };
 
             return this.http.post(url, postData, httpOptions).pipe(
-                map(
-                    res => { return this.arrayBufferRespHandler(res); }
-                ),
-                catchError(
-                    error => { return this.handleError(error, options.errorAlertOpt) }
-                )
+                map(res => { 
+                    return this.arrayBufferRespHandler(res); 
+                }),
+                catchError(error => { 
+                    return this.handleError(error, options.errorAlertOpt);
+                })
             );
         } else { //GET
             //add parameters
@@ -223,12 +223,12 @@ export class HttpManager {
 
             //execute request
             return this.http.get(url, httpOptions).pipe(
-                map(
-                    res => { return this.arrayBufferRespHandler(res); }
-                ),
-                catchError(
-                    error => { return this.handleError(error, options.errorAlertOpt) }
-                )
+                map(res => { 
+                    return this.arrayBufferRespHandler(res);
+                }),
+                catchError(error => {
+                    return this.handleError(error, options.errorAlertOpt);
+                })
             );
         }
 
@@ -242,9 +242,7 @@ export class HttpManager {
      * 
      */
     private getRequestBaseUrl(service: string, request: string): string {
-        let url: string = this.serverhost + "/" + HttpManager.serverpath + "/" + 
-        HttpManager.groupId + "/" + HttpManager.artifactId + "/" + service + "/" + request + "?";
-        return url;
+        return this.serverhost + "/" + HttpManager.serverpath + "/" + HttpManager.groupId + "/" + HttpManager.artifactId + "/" + service + "/" + request + "?";
     }
 
     /**

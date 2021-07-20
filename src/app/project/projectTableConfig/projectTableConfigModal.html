@@ -33,7 +33,7 @@
             </tbody>
         </table>
 
-        <div *ngIf="isAdmin" class="card card-default mt-3">
+        <div *ngIf="isAdmin" class="card card-default vbox mt-3">
             <div class="card-header">
                 <label>{{'PROJECTS.CONFIG.PROJ_INFO'|translate}}</label>
                 <label style="flex: 1"></label>
@@ -51,7 +51,7 @@
                     <span class="fas fa-redo"></span>
                 </button>
             </div>
-            <div class="card-body">
+            <div class="card-body scrollableContainer">
 
                 <div class="alert alert-info" style="margin-bottom: 8px;">
                     {{'PROJECTS.CONFIG.PROJ_INFO_INFO'|translate}}

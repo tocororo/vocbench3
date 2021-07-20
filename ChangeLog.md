@@ -17,6 +17,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Implemented a new ICV: OWL concistency violations
   * Implemented SHACL batch validation
   * Adopted the new Settings services
+  * Implemented EU-Login
   * Added flags for Scottish Gaelic and Welsh languages
   * Added german l10n
   * Fixed autocompletion and prefixes resolution in SPARQL editor

@@ -12,7 +12,7 @@
         </div>
 
         <div style="display: inline-block; margin-left: 5px;">
-            <div class="input-group">
+            <div class="input-group input-group-xs">
                 <select class="form-control" [(ngModel)]="selectedResultFormat">
                     <option *ngFor="let f of resultFormats" [ngValue]="f">{{f | uppercase}}</option>
                 </select>
