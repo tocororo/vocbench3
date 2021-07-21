@@ -50,17 +50,7 @@ export class AdvancedGraphEditor {
         this.sessionFeatures = [SessionFeature.user]; //available for both C.Range and C.Constructor
         //for custom constructor add the feature of stdForm
         if (!this.customRange) {
-            this.stdFormFeatures = [StandardFormFeature.resource];
-            let lexModel: string = VBContext.getWorkingProject().getLexicalizationModelType();
-            if (lexModel == SKOS.uri) {
-                this.stdFormFeatures.push(StandardFormFeature.labelLang);
-                this.stdFormFeatures.push(StandardFormFeature.label);
-            } else if (lexModel == SKOSXL.uri) {
-                this.stdFormFeatures.push(StandardFormFeature.labelLang);
-                this.stdFormFeatures.push(StandardFormFeature.xlabel);
-                this.stdFormFeatures.push(StandardFormFeature.lexicalForm);
-            }
-            this.stdFormFeatures.sort((f1, f2) => f1.featureName.localeCompare(f2.featureName));
+            this.stdFormFeatures = StandardFormFeature.getStdFeatures(VBContext.getWorkingProject().getModelType(), VBContext.getWorkingProject().getLexicalizationModelType())
         }
 
         if (this.advGraph != null) { //edit mode, restore the status

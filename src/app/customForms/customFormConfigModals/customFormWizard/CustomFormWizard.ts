@@ -3,6 +3,7 @@ import { ConverterContractDescription, ConverterUtils, RequirementLevels, Signat
 import { AnnotationName, CustomForm, FormFieldType } from "src/app/models/CustomForms";
 import { PrefixMapping } from "src/app/models/Metadata";
 import { CODAConverter } from "src/app/models/Sheet2RDF";
+import { OntoLex, SKOS, SKOSXL } from "src/app/models/Vocabulary";
 import { Deserializer } from "src/app/utils/Deserializer";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
@@ -33,6 +34,25 @@ export class StandardFormFeature extends FeatureStructure {
     static readonly label: StandardFormFeature = new StandardFormFeature("label");
     static readonly xlabel: StandardFormFeature = new StandardFormFeature("xlabel");
     static readonly lexicalForm: StandardFormFeature = new StandardFormFeature("lexicalForm");
+    static readonly lexicon: StandardFormFeature = new StandardFormFeature("lexicon");
+    // static readonly schemes: StandardFormFeature = new StandardFormFeature("schemes"); //still not used in ST
+
+    static getStdFeatures(model: string, lexModel: string): StandardFormFeature[] {
+        let features: StandardFormFeature[] = [StandardFormFeature.resource];
+        if (model == OntoLex.uri) {
+            features.push(StandardFormFeature.lexicon);
+        }
+        if (lexModel == SKOS.uri) {
+            features.push(StandardFormFeature.labelLang);
+            features.push(StandardFormFeature.label);
+        } else if (lexModel == SKOSXL.uri) {
+            features.push(StandardFormFeature.labelLang);
+            features.push(StandardFormFeature.xlabel);
+            features.push(StandardFormFeature.lexicalForm);
+        }
+        features.sort((f1, f2) => f1.featureName.localeCompare(f2.featureName));
+        return features;
+    }
 }
 
 /**
@@ -422,8 +442,10 @@ export class WizardStatusUtils {
     static restoreWizardNodeEntryPoint(jsonStatus: any, fields: WizardField[]): WizardNodeEntryPoint {
         let n: WizardNodeEntryPoint = new WizardNodeEntryPoint();
         n.paramNode = (jsonStatus.paramNode != null) ? this.restoreWizardNode(jsonStatus.paramNode, fields) : null;
-        n.converterStatus = this.restoreConverterConfigStatus(jsonStatus.converterStatus);
-        n.updateConverterSerialization();
+        n.converterStatus = (jsonStatus.converterStatus != null) ? this.restoreConverterConfigStatus(jsonStatus.converterStatus) : null;
+        if (n.converterStatus != null) {
+            n.updateConverterSerialization();
+        }
         if (jsonStatus.feature != null) { //node may use a random converter which doesn't need feature
             n.feature = this.restoreReferencedFeature(jsonStatus.feature, fields);
         }
@@ -437,16 +459,20 @@ export class WizardStatusUtils {
         }
         let n: WizardNodeFromField = new WizardNodeFromField(fieldSeed);
         n.paramNode = (jsonStatus.paramNode != null) ? this.restoreWizardNode(jsonStatus.paramNode, fields) : null;
-        n.converterStatus = this.restoreConverterConfigStatus(jsonStatus.converterStatus);
-        n.updateConverterSerialization();
+        n.converterStatus = (jsonStatus.converterStatus != null) ? this.restoreConverterConfigStatus(jsonStatus.converterStatus) : null;
+        if (n.converterStatus != null) {
+            n.updateConverterSerialization();
+        }
         return n;
     }
 
     static restoreWizardNodeUserCreated(jsonStatus: any, fields: WizardField[]): WizardNodeUserCreated {
         let n: WizardNodeUserCreated = new WizardNodeUserCreated(jsonStatus.nodeId);
         n.paramNode = (jsonStatus.paramNode != null) ? this.restoreWizardNode(jsonStatus.paramNode, fields) : null;
-        n.converterStatus = this.restoreConverterConfigStatus(jsonStatus.converterStatus);
-        n.updateConverterSerialization();
+        n.converterStatus = (jsonStatus.converterStatus != null) ? this.restoreConverterConfigStatus(jsonStatus.converterStatus) : null;
+        if (n.converterStatus != null) {
+            n.updateConverterSerialization();
+        }
         if (jsonStatus.feature != null) { //node may use a random converter which doesn't need feature
             n.feature = this.restoreReferencedFeature(jsonStatus.feature, fields);
         }
@@ -501,10 +527,16 @@ export class WizardStatusUtils {
             type: objType
         }
         if (objType == GraphObjectType.node) {
-            let oNode: WizardNode = nodes.find(n => n.nodeId == jsonStatus.object.node.nodeId);
+            let oNode: WizardNode;
+            if (jsonStatus.object.node != null) { //node might be not assigned
+                oNode = nodes.find(n => n.nodeId == jsonStatus.object.node.nodeId);
+            }
             graphObj.node = oNode;
         } else { //value
-            let oValue: ARTNode = Deserializer.createRDFNode(jsonStatus.object.value);
+            let oValue: ARTNode;
+            if (jsonStatus.object.value != null) { //value might be not assigned
+                oValue = Deserializer.createRDFNode(jsonStatus.object.value);
+            }
             graphObj.value = oValue
         }
         g.object = graphObj;

@@ -11,7 +11,7 @@ export class FilePickerModal {
     @Input() message: string;
     @Input() accept: string;
 
-    private pickedFile: File;
+    pickedFile: File;
 
     constructor(public activeModal: NgbActiveModal) { }
 

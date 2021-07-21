@@ -63,9 +63,6 @@
                 <div class="card-body vbox">
                     <div *ngFor="let g of advGraphs" class="listItem" [ngClass]="{ active : selectedAdvGraph == g }" (click)="selectAdvGraph(g)">
                         <span class="ellipsable" style="flex: 1;">{{g.pattern}}</span>
-                        <button class="btn btn-light" (click)="removeAdvGraph(g)">
-                            <span class="far fa-trash-alt"></span>
-                        </button>
                     </div>
                 </div>
             </div>
