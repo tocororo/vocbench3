@@ -113,12 +113,12 @@ export class CreateRemoteAlignmentTaskModal {
 
     profileProject(projStruct: AlignedProjectStruct) {
         if (projStruct.profileAvailable) {
-            this.basicModals.confirm({key: "ACTIONS.PROFILE_PROJECT"}, {key:"MESSAGES.REFRESH_PROJECT_PROFILE_CONFIRM", params:{project: projStruct.project.getName()}},
+            this.basicModals.confirm({key: "ACTIONS.PROFILE_PROJECT"}, {key:"MESSAGES.PROFILE_PROJECT_REFRESH_CONFIRM", params:{project: projStruct.project.getName()}},
                 ModalType.warning).then(
-                confirm => {
+                () => {
                     this.profileProjectImpl(projStruct);
                 },
-                cancel => {}
+                () => {}
             )
         } else {
             this.profileProjectImpl(projStruct);
@@ -288,7 +288,8 @@ export class CreateRemoteAlignmentTaskModal {
             leftDataset: this.alignmentScenario.leftDataset,
             rightDataset: this.alignmentScenario.rightDataset,
             supportDatasets: this.alignmentScenario.supportDatasets,
-            pairings: pairings
+            pairings: pairings,
+            alignmentChains: this.alignmentScenario.alignmentChains
         }
     }
 
@@ -316,10 +317,12 @@ export class CreateRemoteAlignmentTaskModal {
          * - matcherDefinition (optionally)
          */
         let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
-        if (scenarioDef.pairings.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.PAIRING_SELECTION_REQUIRED"}, ModalType.warning);
-            return;
-        }
+        /*the following check seems to be no more needed in VB 10.0 given the introduction of the new tool of alignment-bootstrapping.
+        I leave it commented in case it will have to be restored later */
+        // if (scenarioDef.pairings.length == 0) {
+        //     this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.PAIRING_SELECTION_REQUIRED"}, ModalType.warning);
+        //     return;
+        // }
         
         let matcherDefinition: MatcherDefinitionDTO;
         if (this.selectedMatcher != null) { //if a matcher is selected, create its definition
@@ -345,7 +348,7 @@ export class CreateRemoteAlignmentTaskModal {
         }
 
         let serviceSettings: any;
-        if (this.serviceMetadata.settings != null) { //if settings are available
+        if (this.serviceMetadata && this.serviceMetadata.settings != null) { //if settings are available
             if (this.serviceMetadata.settings.stProperties != null) { //get them from the stProperties
                 serviceSettings = this.serviceMetadata.settings.stProperties.getPropertiesAsMap();
             } else { //or from the originalSchema

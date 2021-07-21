@@ -1,11 +1,5 @@
 <ngb-toast *ngFor="let toast of toastService.toasts" [class]="toast.options?.toastClass" [autohide]="true" [delay]="toast.options?.delay || 4000" [animation]="true"
-    (hidden)="toastService.remove(toast)">
-
-    <ng-template *ngIf="toast.title" ngbToastHeader>
-        <b style="font-size: 13px;">
-            {{ toast.title }}
-        </b>
-    </ng-template>
+    (hidden)="toastService.remove(toast)" [header]="toast.title ? toast.title : null">
 
     <div [class]="toast.options?.textClass" style="font-size: 12px;">
         {{ toast.message }}

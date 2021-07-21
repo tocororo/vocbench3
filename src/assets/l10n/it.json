@@ -1483,6 +1483,9 @@
         "PASSWORD_RESET_INSTRUCTION_SENT": "Una email con le istruzioni per resettare la password è stata inviata all'indirizzo fornito.",
         "PEARL_CODE_WITH_ERROR": "Il codice Pearl contiene errori.",
         "PRELOAD_PROFILER_THRESHOLD_UPDATED": "Soglia del preload profiler aggiornata",
+        "PROFILE_PROJECT_COMPLETED": "Profilazione del progetto '{{project}}' completata",
+        "PROFILE_PROJECT_CONFIRM": "Vuoi profilare il progetto '{{project}}'?",
+        "PROFILE_PROJECT_REFRESH_CONFIRM": "Il progetto '{{project}}' è già stato profilato. Vuoi ripetere e sovrascrivere i metadati?",
         "PROJECT_CREATED": "Progetto creato con successo",
         "PROJECT_OPEN_CLOSE_AND_RETRY": "Il progetto è aperto. Chiudi il progetto e riprova.",
         "PROJ_LANGUAGES_PARSING_ERR": "Durante l'inizializzazione delle lingue del progetto '{{projName}}' è stato riscontrato un errore nel parsing del setting '{{propName}}'. Si prega di riportare l'errore all'amministratore di sistema.",
@@ -1495,7 +1498,6 @@
         "REFERENCED_SPARQL_QUERY_NOT_EXISTING": "La query SPARQL referenziata dalla custom search selezionata non esiste più.",
         "REFORMATTING_EXPORTER_NOT_CONFIGURED": "Il reformatting exporter ({{exporterName}}) deve essere configurato",
         "REFORMETTER_CONFIG_NOT_SAVED": "La configurazione del reformatter non è salvata. Per salvare la configurazione dell'exporter, tutte le sue sotto-configurazioni devono essere salvate.",
-        "REFRESH_PROJECT_PROFILE_CONFIRM": "Il progetto '{{project}}' è già stato profilato. Vuoi ripetere e sovrascrivere la profilazione?",
         "REGISTRATION_FORM_FIELD_ALREADY_DEFINED": {
             "FIELD_ALREADY_DEFINED": "Campo '{{fieldName}}' già definito",
             "IN_STANDARD_FORM": "nel form di registrazione standard"

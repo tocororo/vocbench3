@@ -187,6 +187,8 @@
                 <button class="dropdown-item" (click)="editFacets(p)">{{'PROJECTS.ACTIONS.EDIT_FACETS'|translate}}</button>
                 <button class="dropdown-item" (click)="editSettings(p)" [disabled]="p.isOpen()">{{'PROJECTS.ACTIONS.EDIT_SETTINGS'|translate}}</button>
                 <div class="dropdown-divider"></div>
+                <button class="dropdown-item" (click)="profileProject(p)" [disabled]="!p.isOpen()">{{'ACTIONS.PROFILE_PROJECT'|translate}}</button>
+                <div class="dropdown-divider"></div>
                 <button class="dropdown-item" (click)="openPropertyModal(p)">{{'PROJECTS.ACTIONS.SHOW_PROPERTIES'|translate}}</button>
             </div>
         </div>

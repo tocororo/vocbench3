@@ -1,3 +1,4 @@
+import { ARTURIResource } from "./ARTResources";
 import { Settings } from "./Plugins";
 
 export class AlignmentPlan {
@@ -11,6 +12,7 @@ export class ScenarioDefinition {
     rightDataset: Dataset;
     supportDatasets: Dataset[];
     pairings: Pairing[];
+    alignmentChains: AlignmentChain[];
 }
 
 export class MatcherDefinitionDTO {
@@ -23,6 +25,7 @@ export class AlignmentScenario {
     rightDataset: Dataset;
     supportDatasets: Dataset[];
     pairings: RefinablePairing[];
+    alignmentChains: AlignmentChain[];
 }
 
 export class MatcherDTO {
@@ -82,8 +85,17 @@ export class RefinablePairing {
     synonymizers: Synonymizer[];
 }
 
+export class AlignmentChain {
+    score: number;
+    chain: string[];
+}
+
 export class PairingHand {
     lexicalizationSet: string;
+}
+
+export class AlignmentsPairingHand {
+    alignment: string;
 }
 
 export class Synonymizer {

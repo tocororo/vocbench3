@@ -3,15 +3,17 @@ import { Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
 import { from, Observable } from "rxjs";
-import { map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { Settings } from "../models/Plugins";
 import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
+import { MapleServices } from "../services/mapleServices";
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { RepositoriesServices } from "../services/repositoriesServices";
 import { UserServices } from "../services/userServices";
 import { Cookie } from "../utils/Cookie";
 import { DatatypeValidator } from "../utils/DatatypeValidator";
+import { HttpServiceContext } from "../utils/HttpManager";
 import { UIUtils } from "../utils/UIUtils";
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBContext } from '../utils/VBContext';
@@ -20,6 +22,7 @@ import { BasicModalServices } from "../widget/modal/basicModal/basicModalService
 import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { PluginSettingsHandler } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { ToastService } from "../widget/toast/toastService";
 import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { OpenAllProjReportModal } from "./openAllProjReportModal";
 import { ACLEditorModal } from "./projectACL/aclEditorModal";
@@ -39,13 +42,13 @@ import { RemoteRepoEditorModal } from "./remoteRepositories/remoteRepoEditorModa
 export class ProjectComponent extends AbstractProjectComponent implements OnInit {
 
     private columnIDs: ProjectColumnId[] = [ProjectColumnId.accessed, ProjectColumnId.history, ProjectColumnId.lexicalization,
-        ProjectColumnId.location, ProjectColumnId.model, ProjectColumnId.name, ProjectColumnId.open, ProjectColumnId.validation];
-    private columnOrder: { [id: string]: { show: string, flex: number, order: number} };
+    ProjectColumnId.location, ProjectColumnId.model, ProjectColumnId.name, ProjectColumnId.open, ProjectColumnId.validation];
+    private columnOrder: { [id: string]: { show: string, flex: number, order: number } };
 
     constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
-        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal, translateService: TranslateService, 
-        private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
-        private router: Router) {
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal, translateService: TranslateService,
+        private repositoriesService: RepositoriesServices, private mapleService: MapleServices,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private toastService: ToastService, private router: Router) {
         super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService, translateService);
     }
 
@@ -96,7 +99,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     openAll() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.accessAllProjects().subscribe(
-            (report: {[key: string]: ExceptionDAO }) => {
+            (report: { [key: string]: ExceptionDAO }) => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.openAllRespHandler(report);
             }
@@ -106,14 +109,14 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     openAllStartup() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.accessAllProjects(null, null, null, true).subscribe(
-            (report: {[key: string]: ExceptionDAO }) => {
+            (report: { [key: string]: ExceptionDAO }) => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.openAllRespHandler(report);
             }
         );
     }
 
-    openAllRespHandler(report: {[key: string]: ExceptionDAO }) {
+    openAllRespHandler(report: { [key: string]: ExceptionDAO }) {
         if (Object.keys(report).length != 0) {
             const modalRef: NgbModalRef = this.modalService.open(OpenAllProjReportModal, new ModalOptions('lg'));
             modalRef.componentInstance.report = report;
@@ -164,10 +167,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     deleteProject(project: Project) {
         if (project.isOpen()) {
-            this.basicModals.alert({key:"ACTIONS.DELETE_PROJECT"}, {key:"MESSAGES.PROJECT_OPEN_CLOSE_AND_RETRY"}, ModalType.warning);
+            this.basicModals.alert({ key: "ACTIONS.DELETE_PROJECT" }, { key: "MESSAGES.PROJECT_OPEN_CLOSE_AND_RETRY" }, ModalType.warning);
             return;
         } else {
-            this.basicModals.confirm({key:"ACTIONS.DELETE_PROJECT"}, {key:"MESSAGES.DELETE_PROJECT_CONFIRM", params:{project: project.getName()}}, ModalType.warning).then(
+            this.basicModals.confirm({ key: "ACTIONS.DELETE_PROJECT" }, { key: "MESSAGES.DELETE_PROJECT_CONFIRM", params: { project: project.getName() } }, ModalType.warning).then(
                 result => {
                     //retrieve the remote repositories referenced by the deleting project (this must be done before the deletion in order to prevent errors)
                     this.projectService.getRepositories(project, true).subscribe(
@@ -245,11 +248,11 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
             this.projectDirs.forEach(dir => projLength = projLength + dir.projects.length);
         }
         if (projLength > 50) {
-            this.basicModals.confirm({key:"PROJECTS.ACL.ACL_MATRIX"}, {key:"MESSAGES.ACL_TOO_MUCH_PROJ_CONFIRM", params:{projCount: this.projectList.length}}, ModalType.warning).then(
+            this.basicModals.confirm({ key: "PROJECTS.ACL.ACL_MATRIX" }, { key: "MESSAGES.ACL_TOO_MUCH_PROJ_CONFIRM", params: { projCount: this.projectList.length } }, ModalType.warning).then(
                 () => { //confirmed
                     this.openACLMatrix();
                 },
-                () => {}
+                () => { }
             )
         } else {
             this.openACLMatrix();
@@ -271,7 +274,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
      */
     editRemoteRepoCredential(project: Project) {
         if (project.isOpen()) {
-            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.OPERATION_DENIED" }, { key: "MESSAGES.CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS" }, ModalType.warning);
             return;
         }
         const modalRef: NgbModalRef = this.modalService.open(RemoteRepoEditorModal, new ModalOptions());
@@ -285,7 +288,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     editDescription(project: Project) {
-        this.basicModals.prompt({key:"MODELS.PROJECT.DESCRIPTION"}, { value: "Description" }, null, project.getDescription(), true).then(
+        this.basicModals.prompt({ key: "MODELS.PROJECT.DESCRIPTION" }, { value: "Description" }, null, project.getDescription(), true).then(
             descr => {
                 if (descr.trim() == "") {
                     descr = null;
@@ -296,7 +299,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                     }
                 )
             },
-            () => {}
+            () => { }
         )
     }
 
@@ -310,7 +313,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                     }
                 }
             );
-        }, () => {});
+        }, () => { });
     }
 
     editCustomFacetsSchema() {
@@ -318,16 +321,45 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         this.projectService.getCustomProjectFacetsSchema().subscribe(facetsSchema => {
             this.sharedModals.configurePlugin(facetsSchema, handler).then(
                 facets => { //changed settings
-                    this.initProjects(); 
+                    this.initProjects();
                 },
-                () => {}  //nothing changed
-            );    
+                () => { }  //nothing changed
+            );
         });
     }
 
     editSettings(project: Project) {
         const modalRef: NgbModalRef = this.modalService.open(ProjSettingsEditorModal, new ModalOptions('lg'));
         modalRef.componentInstance.project = project;
+    }
+
+    profileProject(project: Project) {
+        HttpServiceContext.setContextProject(project);
+        this.mapleService.checkProjectMetadataAvailability().pipe(
+            finalize(() => HttpServiceContext.removeContextProject())
+        ).subscribe(
+            available => {
+                let msgKey = available ? "MESSAGES.PROFILE_PROJECT_REFRESH_CONFIRM" : "MESSAGES.PROFILE_PROJECT_CONFIRM";
+                this.basicModals.confirm({ key: "ACTIONS.PROFILE_PROJECT" }, { key: msgKey, params: { project: project.getName() } }, ModalType.warning).then(
+                    () => {
+                        this.profileProjectImpl(project);
+                    },
+                    () => { }
+                );
+            }
+        );
+    }
+    private profileProjectImpl(project: Project) {
+        // UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+        HttpServiceContext.setContextProject(project);
+        this.mapleService.profileProject().pipe(
+            finalize(() => HttpServiceContext.removeContextProject())
+        ).subscribe(
+            () => {
+                this.toastService.show({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.PROFILE_PROJECT_COMPLETED", params: { project: project.getName() } });
+                // UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+            }
+        );
     }
 
     /**

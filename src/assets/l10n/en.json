@@ -1483,6 +1483,9 @@
         "PASSWORD_RESET_INSTRUCTION_SENT": "An e-mail with the instructions for resetting password has been sent to the provided address.",
         "PEARL_CODE_WITH_ERROR": "Pearl code contains errors.",
         "PRELOAD_PROFILER_THRESHOLD_UPDATED": "Preload profiler threshold updated",
+        "PROFILE_PROJECT_COMPLETED": "Profilation of project '{{project}}' completed",
+        "PROFILE_PROJECT_CONFIRM": "Do you want to profile project '{{project}}'?",
+        "PROFILE_PROJECT_REFRESH_CONFIRM": "The project '{{project}}' has already been profiled. Do you want to repeat and override the metadata?",
         "PROJECT_CREATED": "Project created successfully",
         "PROJECT_OPEN_CLOSE_AND_RETRY": "The project is currently open. Please, close the project and then retry.",
         "PROJ_LANGUAGES_PARSING_ERR": "Initialization of languages for project '{{projName}}' has encountered a problem during parsing the '{{propName}}' settings. Please, report this to the system administrator.",
@@ -1495,7 +1498,6 @@
         "REFERENCED_SPARQL_QUERY_NOT_EXISTING": "The stored SPARQL query referenced by the selected custom search does not exist anymore.",
         "REFORMATTING_EXPORTER_NOT_CONFIGURED": "The reformatting exporter ({{exporterName}}) needs to be configured",
         "REFORMETTER_CONFIG_NOT_SAVED": "Reformatter configuration is not saved. In order to save the exporter configuration all its sub-configurations need to be saved.",
-        "REFRESH_PROJECT_PROFILE_CONFIRM": "The project '{{project}}' has already been profiled. Do you want to repeat and override the profilation?",
         "REGISTRATION_FORM_FIELD_ALREADY_DEFINED": {
             "FIELD_ALREADY_DEFINED": "Field '{{fieldName}}' already defined",
             "IN_STANDARD_FORM": "in the standard registration form"
