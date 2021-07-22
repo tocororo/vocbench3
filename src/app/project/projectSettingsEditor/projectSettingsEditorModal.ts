@@ -157,8 +157,7 @@ export class ProjSettingsEditorModal {
 
     //================== OPEN AT STARTUP ==================
 
-    changeOpenAtStartup() {
-        this.openAtStartup = !this.openAtStartup;
+    onOpenAtStartupChanged() {
         this.projectService.setOpenAtStartup(this.project, this.openAtStartup).subscribe();
         this.project.setOpenAtStartup(this.openAtStartup);
     }

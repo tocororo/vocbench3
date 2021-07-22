@@ -10,7 +10,7 @@
                 <div class="form-group row">
                     <label class="col-form-label col-sm-4">{{'PROJECTS.OPEN_AT_STARTUP'|translate}}:</label>
                     <div class="col-sm-8 d-flex align-items-center">
-                        <input type="checkbox" [(ngModel)]="openAtStartup" (ngModelChange)="changeOpenAtStartup()">
+                        <input type="checkbox" [(ngModel)]="openAtStartup" (ngModelChange)="onOpenAtStartupChanged()">
                     </div>
                 </div>
                 <!-- BLACKLISTING -->        
