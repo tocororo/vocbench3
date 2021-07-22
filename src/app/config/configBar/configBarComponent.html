@@ -38,11 +38,11 @@
                         <span class="fas fa-caret-down ml-1"></span>
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu>
-                        <a routerLink="/Config/LoadData" class="dropdown-item"
+                        <a routerLink="/LoadData" class="dropdown-item"
                             [ngClass]="{ disabled : !loadDataAuthorized }">
                             <span class="fas fa-upload" style="margin-right: 5px"></span>{{'ACTIONS.LOAD_DATA'|translate}}
                         </a>
-                        <a routerLink="/Config/ExportData" class="dropdown-item"
+                        <a routerLink="/ExportData" class="dropdown-item"
                             [ngClass]="{ disabled : !exportDataAuthorized }">
                             <span class="fas fa-download" style="margin-right: 5px"></span>{{'ACTIONS.EXPORT_DATA'|translate}}
                         </a>
@@ -50,7 +50,7 @@
                             <span class="fas fa-eraser" style="margin-right: 5px"></span>{{'ACTIONS.CLEAR_DATA'|translate}}
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a routerLink="/Config/Versioning" class="dropdown-item"
+                        <a routerLink="/Versioning" class="dropdown-item"
                             [ngClass]="{ disabled : !versioningAuthorized }">
                             <span class="far fa-clock" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.VERSIONING'|translate}}
                         </a>
@@ -59,7 +59,7 @@
                             <span class="fas fa-pen" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH'|translate}}
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a routerLink="/Config/Refactor" class="dropdown-item">
+                        <a routerLink="/Refactor" class="dropdown-item">
                             <span class="fas fa-retweet" style="margin-right: 5px"></span>{{'APP.TOP_BAR.GLOBAL_DATA_MENU.REFACTOR'|translate}}
                         </a>
                         <ng-container *ngIf="shaclEnabled">

@@ -314,7 +314,7 @@ export class Deserializer {
         if (userJson.url != undefined) {
             user.setUrl(userJson.url);
         }
-        user.setSamlUser(userJson.samlUser);
+        user.setSamlLevel(userJson.samlLevel);
         if (userJson.avatarUrl != undefined) {
             user.setAvatarUrl(userJson.avatarUrl);
         }

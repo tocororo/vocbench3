@@ -16,7 +16,7 @@ export class User {
     private status: UserStatusEnum;
     private admin: boolean = false;
     private online: boolean = false;
-    private samlUser: boolean = false;
+    private samlLevel: SamlLevel;
 
     private customProperties: { [iri: string]: string };
 
@@ -115,12 +115,16 @@ export class User {
         return this.admin;
     }
 
-    setSamlUser(samlUser: boolean) {
-        this.samlUser = samlUser;
+    setSamlLevel(samlLevel: SamlLevel) {
+        this.samlLevel = samlLevel;
+    }
+
+    getSamlLevel(): SamlLevel {
+        return this.samlLevel;
     }
 
     isSamlUser(): boolean {
-        return this.samlUser;
+        return this.samlLevel != null;
     }
 
     setOnline(online: boolean) {
@@ -235,6 +239,11 @@ export class ProjectUserBinding {
     removeLanguage(language: string) {
         this.languages.splice(this.languages.indexOf(language), 1);
     }
+}
+
+export enum SamlLevel {
+    LEV_1 = "LEV_1", //first user registered
+    LEV_2 = "LEV_2" //other users already registered
 }
 
 export class Role {

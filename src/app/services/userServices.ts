@@ -49,6 +49,7 @@ export class UserServices {
                     } else { //EULogin auth service => do nothing
 
                     }
+                    return null
                 }
             })
         );

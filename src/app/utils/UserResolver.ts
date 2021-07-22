@@ -2,7 +2,7 @@ import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Router } from "@angular/router";
 import { Observable, of } from 'rxjs';
-import { User } from "../models/User";
+import { SamlLevel, User } from "../models/User";
 import { UserServices } from "../services/userServices";
 import { VBContext } from "./VBContext";
 
@@ -25,7 +25,8 @@ export class UserResolver implements Resolve<User> {
         return this.userService.getUser().pipe(
             map(user => {
                 if (user && user.isSamlUser()) { //special case: logged user is a "mockup" user for SAML login (EULogin), so redirect to the registration page
-                    this.router.navigate(['/Registration/0'], { queryParams: { email: user.getEmail(), givenName: user.getGivenName(), familyName: user.getFamilyName() } });
+                    let firstAccessPar: string = user.getSamlLevel() == SamlLevel.LEV_1 ? "1" : "0"; //saml level tells if the registering user is the 1st (lev_1) or not (lev_2)
+                    this.router.navigate(['/Registration/' + firstAccessPar], { queryParams: { email: user.getEmail(), givenName: user.getGivenName(), familyName: user.getFamilyName() } });
                 }
                 return user;
             })

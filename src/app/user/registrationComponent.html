@@ -12,7 +12,7 @@
                 </a>
             </div>
 
-            <div *ngIf="firstAccess" class="alert alert-info mb-2">
+            <div *ngIf="authServMode == 'Default' && firstAccess" class="alert alert-info mb-2">
                 {{'USER.REGISTRATION.NO_USER_REGISTERED_MSG.0'|translate}}
                 (<span style="font-weight: bold;">username:</span> admin@vocbench.com, <span style="font-weight: bold;">password:</span> admin)
                 {{'USER.REGISTRATION.NO_USER_REGISTERED_MSG.1'|translate}}

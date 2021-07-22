@@ -32,11 +32,10 @@ export class RegistrationComponent {
 
     ngOnInit() {
 
+        this.firstAccess = this.activeRoute.snapshot.params['firstAccess'] == "1";
+
         this.authServMode = VBContext.getSystemSettings().authService;
-        console.log(this.authServMode);
-        if (this.authServMode == AuthServiceMode.Default) {
-            this.firstAccess = this.activeRoute.snapshot.params['firstAccess'] == "1";
-        } else {
+        if (this.authServMode == AuthServiceMode.EULogin) {
             let constraintEmail = this.activeRoute.snapshot.queryParams['email'];
             if (constraintEmail) {
                 let constraintGivenName = this.activeRoute.snapshot.queryParams['givenName'];
@@ -99,7 +98,7 @@ export class RegistrationComponent {
             this.userForm.languageProficiencies, this.userForm.customProperties).subscribe(
             () => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                var message: Translation;
+                let message: Translation;
                 if (this.firstAccess) {
                     message = {key:"MESSAGES.USER_ADMINISTRATOR_CREATED"};
                 } else {
@@ -112,13 +111,18 @@ export class RegistrationComponent {
                     }
                 }
                 this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, message).then(
-                    result => {
+                    () => {
                         if (this.firstAccess) {
-                            this.authService.login(this.userForm.email, this.userForm.password).subscribe(
-                                () => {
-                                    this.router.navigate(["/Sysconfig"]);
-                                }
-                            );
+                            //in case first access, the admin has been registered
+                            if (this.authServMode == AuthServiceMode.Default) { //login and redirect to sys config
+                                this.authService.login(this.userForm.email, this.userForm.password).subscribe(
+                                    () => {
+                                        this.router.navigate(["/Sysconfig"]);
+                                    }
+                                );
+                            } else { //EULogin: simply redirect to sys config (registered user is automatically set server side)
+                                this.router.navigate(["/Sysconfig"]);
+                            }
                         } else {
                             this.router.navigate(['/Home']);
                         }
