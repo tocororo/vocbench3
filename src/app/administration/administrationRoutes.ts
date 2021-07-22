@@ -1,5 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
-import { AdminGuard, AuthGuard } from "../utils/CanActivateGuards";
+import { AdminGuard, AuthGuard, SystemSettingsGuard } from "../utils/CanActivateGuards";
 import { AdministrationComponent } from "./administrationComponent";
 import { GroupsAdministrationComponent } from './groupsAdministration/groupsAdministrationComponent';
 import { ProjectsAdministrationComponent } from "./projectsAdministration/projectsAdministrationComponent";
@@ -10,7 +10,7 @@ import { UsersAdministrationComponent } from "./usersAdministration/usersAdminis
 
 export const routes: Routes = [
     {
-        path: "", component: AdministrationComponent, canActivate: [AuthGuard], children: [
+        path: "", component: AdministrationComponent, canActivate: [SystemSettingsGuard, AuthGuard], children: [
             { path: "", redirectTo: "Projects", pathMatch: "full" },
             { path: "Users", component: UsersAdministrationComponent, canActivate: [AdminGuard] },
             { path: "Roles", component: RolesAdministrationComponent, canActivate: [AuthGuard] },

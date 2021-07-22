@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanLoad, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanLoad, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { UserServices } from '../services/userServices';
 import { VBContext } from './VBContext';
 import { VBProperties } from './VBProperties';
@@ -81,19 +81,19 @@ export class ProjectGuard implements CanActivate, CanLoad {
 
     constructor(private router: Router) { }
 
-    canActivate(): boolean {
+    canActivate(): Observable<boolean> {
         return this.guardImpl();
     }
-    canLoad(): boolean {
+    canLoad(): Observable<boolean> {
         return this.guardImpl();
     }
 
-    guardImpl(): boolean {
+    guardImpl(): Observable<boolean> {
         if (VBContext.getWorkingProject() != undefined) {
-            return true;
+            return of(true);
         } else {
             this.router.navigate(['/Home']);
-            return false;
+            return of(false);
         }
     }
 }
@@ -101,7 +101,7 @@ export class ProjectGuard implements CanActivate, CanLoad {
 @Injectable()
 export class SystemSettingsGuard implements CanActivate, CanLoad {
 
-    constructor(private router: Router, private vbProp: VBProperties) { }
+    constructor(private vbProp: VBProperties) { }
 
     canActivate(): Observable<boolean> {
         return this.guardImpl();
@@ -124,4 +124,102 @@ export class SystemSettingsGuard implements CanActivate, CanLoad {
     }
 }
 
-export const GUARD_PROVIDERS = [AuthGuard, AdminGuard, ProjectGuard, SystemSettingsGuard];
+
+/**
+ * In some routes of VB I need to apply multiple guards (e.g. [AuthGuard, ProjectGuard, SystemSettingsGuard]).
+ * Some Guards are async, they need to do service invocations in order to determine if the route can be activated or not.
+ * Angular normally execute multiple guards in order, namely if I have [Guard1, Guard2] and Guard1 fails, Guard2 is not executed.
+ * But this happens only if these guards are not async (return boolean, not Observable<boolean>), in such case, 
+ * the route is activate if all guards returns true, but they are all executed.
+ * This represents a problem in VB since it may happen that SystemSettingsGuard is invoked twice almost simoultaneously
+ * causing error server side (ST may give error when trying to access the same settings file at the same time)
+ * (e.g. 
+ * - user refreshes Data page
+ * - SystemSettingsGuard is invoked
+ * - ProjectGuard is invoked as well and redirects to Home since the chached Project into VBContext has been reset
+ * - SystemSettingsGuard is invoked again in Home but the 1st invocation was still going on
+ * -> ST Error
+ * )
+ * 
+ * The following is a solution inspired by answers found online (see useful links below).
+ * This AsyncGuardResolver is a "master" guards that retrieves a list of guards ID from the route data object
+ * (note: this is passed in the definition of the route like:
+ * canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, AuthGuard, ProjectGuard] })
+ * and execute them sequencially.
+ * 
+ * https://stackoverflow.com/questions/44641092/execute-multiple-asynchronous-route-guards-in-order
+ * https://stackoverflow.com/questions/40589878/multiple-canactivate-guards-all-run-when-first-fails
+ * https://github.com/angular/angular/issues/21702
+ * 
+ * Note: in lazy-loaded module has been enough to set SystemSettingsGuard in canActivate of the parent route (empty path "").
+ */
+
+@Injectable()
+export class AsyncGuardResolver implements CanActivate{
+
+    constructor(private router: Router, private userService: UserServices, private vbProp: VBProperties) {}
+
+    private route: ActivatedRouteSnapshot;
+    private state: RouterStateSnapshot;
+
+    //This method gets triggered when the route is hit
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+        this.route = route;
+        this.state = state;
+
+        if (this.route.data && this.route.data.guards && this.route.data.guards.length > 0) {
+            //if a guards list has been provided in data, execute the guards
+            return this.executeGuards();
+        } else { 
+            //otherwise (no guards), view can be activated 
+            //(this should never happens since it makes no sense to set AsyncGuardResolver as guard if not check needs to be done)
+            return of(true);
+        }
+    }
+
+    //Execute the guards sent in the route data 
+    private executeGuards(guardIndex: number = 0): Observable<boolean> {
+        let guardName = this.route.data.guards[guardIndex];
+        let guardFn: Observable<boolean> = this.getGuard(guardName);
+        return guardFn.pipe(
+            mergeMap(() => { //no need to check the result, if this code is reached, for sure the previous guard returned true
+                if (guardIndex < this.route.data.guards.length - 1) {
+                    return this.executeGuards(guardIndex + 1);
+                } else {
+                    return of(true);
+                }
+            })
+        )
+    }
+
+    //Create an instance of the guard and fire canActivate method returning the Observable
+    private getGuard(guardKey: VBGuards): Observable<boolean> {
+        let guard: AuthGuard | AdminGuard | ProjectGuard | SystemSettingsGuard;
+        switch (guardKey) {
+            case VBGuards.AuthGuard:
+                guard = new AuthGuard(this.router, this.userService);
+                break;
+            case VBGuards.AdminGuard:
+                guard = new AdminGuard(this.router, this.userService);
+                break;
+            case VBGuards.ProjectGuard:
+                guard = new ProjectGuard(this.router);
+                break;
+            case VBGuards.SystemSettingsGuard:
+                guard = new SystemSettingsGuard(this.vbProp);
+                break;
+            default:
+                break; //should never happen
+        }
+        return guard.canActivate();
+    }
+}
+
+export enum VBGuards {
+    AuthGuard = "AuthGuard",
+    AdminGuard = "AdminGuard",
+    ProjectGuard = "ProjectGuard",
+    SystemSettingsGuard = "SystemSettingsGuard",
+}
+
+export const GUARD_PROVIDERS = [AsyncGuardResolver, AuthGuard, AdminGuard, ProjectGuard, SystemSettingsGuard];

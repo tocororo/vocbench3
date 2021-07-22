@@ -29,57 +29,57 @@ import { RegistrationComponent } from './user/registrationComponent';
 import { ResetPasswordComponent } from './user/resetPasswordComponent';
 import { UserProfileComponent } from './user/userProfileComponent';
 import { UserActionsComponent } from './user/userActionsComponent';
-import { AdminGuard, AuthGuard, ProjectGuard, SystemSettingsGuard } from './utils/CanActivateGuards';
+import { AdminGuard, AuthGuard, VBGuards, AsyncGuardResolver, ProjectGuard, SystemSettingsGuard } from './utils/CanActivateGuards';
 import { UserResolver } from './utils/UserResolver';
 
 const routes: Routes = [
-	{ path: "", redirectTo: "/Home", pathMatch: "full" },
-	{ path: "Home", component: HomeComponent, canActivate: [SystemSettingsGuard], resolve: { user: UserResolver } },
-	// // route config of navigation bar
-	{ path: "Projects", component: ProjectComponent, canActivate: [SystemSettingsGuard, AdminGuard] },
-	{ path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [SystemSettingsGuard, AdminGuard] },
-	{ path: "Data", component: DataComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Edoal", component: EdoalComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Sparql", component: SparqlComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Vocabularies", component: MetadataVocabulariesComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Imports", component: NamespacesAndImportsComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "MetadataRegistry", component: MetadataRegistryComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "History", component: HistoryComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Validation", component: ValidationComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Sheet2RDF", component: Sheet2RdfComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "SkosDiffing", component: SkosDiffingComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Collaboration", component: CollaborationComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "CustomForm", component: CustomFormConfigComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "CustomServices", component: CustomServiceRouterComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Notifications", component: NotificationsComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "ResourceMetadata", component: ResourceMetadataComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Registration/:firstAccess", component: RegistrationComponent, canActivate: [SystemSettingsGuard] }, //param firstAccess 1 to indicate that there's no user registered
-	{ path: "ResetPassword/:token", component: ResetPasswordComponent, canActivate: [SystemSettingsGuard] },
-	{ path: "UserActions", component: UserActionsComponent, canActivate: [SystemSettingsGuard] },
-	{ path: "Profile", component: UserProfileComponent, canActivate: [SystemSettingsGuard, AuthGuard] },
-	{ path: "Preferences", component: VocbenchPreferencesComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	//lazy loading of module with child route
-	{ 
-		path: "Administration", 
-		loadChildren: () => import('./modules/administrationModule').then(m => m.AdministrationModule),
-		canLoad: [SystemSettingsGuard, AuthGuard] 
-	},
-	{ 
-		path: "Icv", 
-		loadChildren: () => import('./modules/icvModule').then(m => m.IcvModule),
-		canLoad: [SystemSettingsGuard, AuthGuard, ProjectGuard] 
-	},
-	// route config of config bar
-	{ path: "Config/LoadData", component: LoadDataComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Config/ExportData", component: ExportDataComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Config/Refactor", component: RefactorComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Config/Versioning", component: VersioningComponent, canActivate: [SystemSettingsGuard, AuthGuard, ProjectGuard] },
-	{ path: "Sysconfig", component: SystemConfigurationComponent, canActivate: [SystemSettingsGuard, AuthGuard] },
+    { path: "", redirectTo: "/Home", pathMatch: "full" },
+    { path: "Home", component: HomeComponent, canActivate: [SystemSettingsGuard], resolve: { user: UserResolver } },
+    // // route config of navigation bar
+    { path: "Projects", component: ProjectComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AdminGuard] } },
+    { path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, AdminGuard] } },
+    { path: "Data", component: DataComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Edoal", component: EdoalComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Sparql", component: SparqlComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Vocabularies", component: MetadataVocabulariesComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Imports", component: NamespacesAndImportsComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "MetadataRegistry", component: MetadataRegistryComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "History", component: HistoryComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Validation", component: ValidationComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Sheet2RDF", component: Sheet2RdfComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "SkosDiffing", component: SkosDiffingComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Collaboration", component: CollaborationComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "CustomServices", component: CustomServiceRouterComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Notifications", component: NotificationsComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "ResourceMetadata", component: ResourceMetadataComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Registration/:firstAccess", component: RegistrationComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard] } }, //param firstAccess 1 to indicate that there's no user registered
+    { path: "ResetPassword/:token", component: ResetPasswordComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard] } },
+    { path: "UserActions", component: UserActionsComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard] } },
+    { path: "Profile", component: UserProfileComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard] } },
+    { path: "Preferences", component: VocbenchPreferencesComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    //lazy loading of module with child route
+    {
+        path: "Administration",
+        loadChildren: () => import('./modules/administrationModule').then(m => m.AdministrationModule),
+        canLoad: [AuthGuard]
+    },
+    {
+        path: "Icv",
+        loadChildren: () => import('./modules/icvModule').then(m => m.IcvModule),
+        canLoad: [AuthGuard, ProjectGuard]
+    },
+    // route config of config bar
+    { path: "Config/LoadData", component: LoadDataComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Config/ExportData", component: ExportDataComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Config/Refactor", component: RefactorComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Config/Versioning", component: VersioningComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
+    { path: "Sysconfig", component: SystemConfigurationComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard] } },
 ];
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
-	exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
 })
 export class AppRoutingModule { }

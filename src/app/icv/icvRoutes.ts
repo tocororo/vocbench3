@@ -1,32 +1,29 @@
 import { RouterModule, Routes } from '@angular/router';
-
 import { AuthGuard, ProjectGuard } from "../utils/CanActivateGuards";
-
-import { IcvComponent } from "./icvComponent";
-import { IcvListComponent } from "./icvListComponent";
-import { DanglingConceptComponent } from "./danglingConcept/danglingConceptComponent";
-import { NoSchemeConceptComponent } from "./noSchemeConcept/noSchemeConceptComponent";
-import { NoTopConceptSchemeComponent } from "./noTopConceptScheme/noTopConceptSchemeComponent";
-import { TopConceptWithBroaderComponent } from "./topConceptWithBroader/topConceptWithBroaderComponent";
-import { HierarchicalRedundancyComponent } from "./hierarchicalRedundancy/hierarchicalRedundancyComponent";
-import { NoLabelResourceComponent } from "./noLabelResource/noLabelResourceComponent";
-import { OnlyAltLabelResourceComponent } from "./onlyAltLabelResource/onlyAltLabelResourceComponent";
-import { OverlappedLabelComponent } from "./overlappedLabel/overlappedLabelComponent";
-import { ConflictualLabelComponent } from "./conflictualLabel/conflictualLabelComponent";
-import { NoLangLabelComponent } from "./noLangLabel/noLangLabelComponent";
-import { ExtraSpaceLabelComponent } from "./extraSpaceLabel/extraSpaceLabelComponent";
-import { DanglingXLabelComponent } from "./danglingXLabel/danglingXLabelComponent";
-import { NoMandatoryLabelComponent } from "./noMandatoryLabel/noMandatoryLabelComponent";
-import { MultiplePrefLabelComponent } from "./multiplePrefLabel/multiplePrefLabelComponent";
-import { DisjointExactMatchConceptComponent } from "./disjointExactMatchConcept/disjointExactMatchConceptComponent";
-import { DisjointRelatedConceptComponent } from "./disjointRelatedConcept/disjointRelatedConceptComponent";
-import { NoDefinitionResourceComponent } from "./noDefinitionResource/noDefinitionResourceComponent";
-import { CyclicConceptComponent } from "./cyclicConcept/cyclicConceptComponent";
 import { BrokenAlignmentComponent } from "./brokenAlignment/brokenAlignmentComponent";
 import { BrokenDefinitionComponent } from "./brokenDefinition/brokenDefinitionComponent";
+import { ConflictualLabelComponent } from "./conflictualLabel/conflictualLabelComponent";
+import { CyclicConceptComponent } from "./cyclicConcept/cyclicConceptComponent";
+import { DanglingConceptComponent } from "./danglingConcept/danglingConceptComponent";
+import { DanglingXLabelComponent } from "./danglingXLabel/danglingXLabelComponent";
+import { DisjointExactMatchConceptComponent } from "./disjointExactMatchConcept/disjointExactMatchConceptComponent";
+import { DisjointRelatedConceptComponent } from "./disjointRelatedConcept/disjointRelatedConceptComponent";
+import { ExtraSpaceLabelComponent } from "./extraSpaceLabel/extraSpaceLabelComponent";
+import { HierarchicalRedundancyComponent } from "./hierarchicalRedundancy/hierarchicalRedundancyComponent";
+import { IcvComponent } from "./icvComponent";
+import { IcvListComponent } from "./icvListComponent";
 import { InvalidUriComponent } from "./invalidUri/invalidUriComponent";
+import { MultiplePrefLabelComponent } from "./multiplePrefLabel/multiplePrefLabelComponent";
+import { NoDefinitionResourceComponent } from "./noDefinitionResource/noDefinitionResourceComponent";
+import { NoLabelResourceComponent } from "./noLabelResource/noLabelResourceComponent";
+import { NoLangLabelComponent } from "./noLangLabel/noLangLabelComponent";
+import { NoMandatoryLabelComponent } from "./noMandatoryLabel/noMandatoryLabelComponent";
+import { NoSchemeConceptComponent } from "./noSchemeConcept/noSchemeConceptComponent";
+import { NoTopConceptSchemeComponent } from "./noTopConceptScheme/noTopConceptSchemeComponent";
+import { OnlyAltLabelResourceComponent } from "./onlyAltLabelResource/onlyAltLabelResourceComponent";
+import { OverlappedLabelComponent } from "./overlappedLabel/overlappedLabelComponent";
 import { OwlConsistencyViolationsComponent } from './owlConsistencyViolations/owlConsistencyViolationsComponent';
-
+import { TopConceptWithBroaderComponent } from "./topConceptWithBroader/topConceptWithBroaderComponent";
 
 export const routes: Routes = [
     {
