@@ -146,11 +146,11 @@ export class BasicModalServices {
      * @param msg 
      * @param warningCookie 
      */
-    alertCheckCookie(title: TextOrTranslation, msg: TextOrTranslation, warningCookie: string, type?: ModalType) {
+    alertCheckCookie(title: TextOrTranslation, msg: TextOrTranslation, warningCookie: string, type?: ModalType): Promise<void> {
         return this.alert(title, msg, type, null, "Don't show this again").then(
             confirm => {
                 if (confirm) {
-                    Cookie.setCookie(warningCookie, "false", 365*10, VBContext.getLoggedUser().getIri());
+                    Cookie.setCookie(warningCookie, "false", null, VBContext.getLoggedUser());
                 }
             }
         );

@@ -213,7 +213,7 @@ export class ConfigBarComponent {
 
     onTranslateLangChanged() {
         this.translate.use(this.translateLang);
-        Cookie.setCookie(Cookie.TRANSLATE_LANG, this.translateLang);
+        Cookie.setCookie(Cookie.TRANSLATE_LANG, this.translateLang, null, null, { path: "/" });
         ProjectLabelCtx.language = this.translateLang;
     }
 

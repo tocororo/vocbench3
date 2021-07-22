@@ -74,7 +74,7 @@ export class ClassTreeSettingsModal {
     changeClass() {
         this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_ROOT_CLASS"}, [RDFS.resource]).then(
             (cls: ARTURIResource) => {
-                if (Cookie.getCookie(Cookie.WARNING_CUSTOM_ROOT, VBContext.getLoggedUser().getIri()) != "false") {
+                if (Cookie.getCookie(Cookie.WARNING_CUSTOM_ROOT, null, VBContext.getLoggedUser()) != "false") {
                     let model: string = VBContext.getWorkingProject().getModelType();
                     if ((model == RDFS.uri && cls.getURI() != RDFS.resource.getURI()) ||
                         (cls.getURI() != RDFS.resource.getURI() && cls.getURI() != OWL.thing.getURI()) //OWL or RDFS model

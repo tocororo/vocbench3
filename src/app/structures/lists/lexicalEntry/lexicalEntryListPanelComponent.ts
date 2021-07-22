@@ -347,14 +347,14 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
      * Store a cookie with the current index in order to restore in the next sessions
      */
     private storeLastIndex() {
-        Cookie.setProjectCookie(Cookie.LEX_ENTRY_LAST_INDEX, VBContext.getWorkingProject(), this.index);
+        Cookie.setCookie(Cookie.LEX_ENTRY_LAST_INDEX, this.index, VBContext.getWorkingProject());
     }
     /**
      * Restore the index selected the last session by getting a dedicated cookie
      */
     private restoreLastIndex() {
         //init firstDigitIndex and secondDigitIndex restoring the last selection from cookie (if set)
-        let lastIdxsCookie: string = Cookie.getProjectCookie(Cookie.LEX_ENTRY_LAST_INDEX, VBContext.getWorkingProject());
+        let lastIdxsCookie: string = Cookie.getCookie(Cookie.LEX_ENTRY_LAST_INDEX, VBContext.getWorkingProject());
         if (lastIdxsCookie != null) {
             lastIdxsCookie = lastIdxsCookie.toUpperCase();
             if (lastIdxsCookie.length == 1) {

@@ -41,10 +41,10 @@ export class ValidationSettingsModal {
         if (this.maxAlignment < 1 || this.maxAlignment > 100) {
             return;
         }
-        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION, this.rejectedAlignmentAction, 365*10);
-        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW, this.showRelationType, 365*10);
-        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE, this.confOnMeterCheck + "", 365*10);
-        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE, this.maxAlignment + "", 365*10);
+        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION, this.rejectedAlignmentAction);
+        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW, this.showRelationType);
+        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE, this.confOnMeterCheck + "");
+        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE, this.maxAlignment + "");
         
         this.activeModal.close();
     }

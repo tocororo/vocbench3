@@ -3,6 +3,7 @@
 
 import { ARTURIResource } from "../models/ARTResources";
 import { Project } from "../models/Project";
+import { User } from "../models/User";
 
 export class Cookie {
 
@@ -49,13 +50,16 @@ export class Cookie {
     /**
      * Retrieves a single cookie by it's name
      * @param  {string} name Identification of the Cookie
-     * @param  {string} userIri IRI of the user useful to contextualize the cookie
      * @returns The Cookie's value 
      */
-    public static getCookie(name: string, userIri?: ARTURIResource): string {
-        if (userIri) {
-            name += ":" + userIri.getURI();
+    public static getCookie(name: string, project?: Project, user?: User): string {
+        if (project) {
+            name += ".P." + project.getName();
         }
+        if (user) {
+            name += ".U." + user.getIri().getURI();
+        }
+
         let myWindow: any = window;
         name = myWindow.escape(name);
         let regexp = new RegExp('(?:^' + name + '|;\\s*' + name + ')=(.*?)(?:;|$)', 'g');
@@ -63,50 +67,53 @@ export class Cookie {
         return (result === null) ? null : myWindow.unescape(result[1]);
     }
 
-    public static getProjectCookie(name: string, project: Project, userIri?: ARTURIResource): string {
-        return Cookie.getCookie(name + "." + project.getName(), userIri);
-    }
-
-    /**
-     * Save the Cookie
-     * @param  {string} name Cookie's identification
-     * @param  {string} value Cookie's value
-     * @param  {number} expires Cookie's expiration date in days from now. If it's undefined the cookie has a duration of 10 years
-     * @param  {string} userIri IRI of the user useful to contextualize the cookie
-     */
-    public static setCookie(name: string, value: string, expires?: number, userIri?: ARTURIResource) {
-        if (userIri) {
-            name += ":" + userIri.getURI();
+     /**
+      * Save the Cookie
+      * @param name 
+      * @param value 
+      * @param attrs 
+      */
+      public static setCookie(name: string, value: string, project?: Project, user?: User, attrs?: CookieAttr) {
+        if (project) {
+            name += ".P." + project.getName();
         }
+        if (user) {
+            name += ".U." + user.getIri().getURI();
+        }
+
         let myWindow: any = window;
         let cookieStr = myWindow.escape(name) + '=' + myWindow.escape(value) + ';';
 
-        if (!expires) {
-            expires = 365 * 10;
-        }
+        let expires = (attrs && attrs.expires) ? attrs.expires : 365 * 10; //default 10 years
         let dtExpires = new Date(new Date().getTime() + expires * 1000 * 60 * 60 * 24);
         cookieStr += 'expires=' + dtExpires.toUTCString() + ';';
-        document.cookie = cookieStr;
-    }
+        
+        let path: string = (attrs && attrs.path) ? attrs.path : null;
+        if (path) {
+            cookieStr += "path=" + path + ";";
+        }
 
-    public static setProjectCookie(name: string, project: Project, value: string, expires?: number, userIri?: ARTURIResource) {
-        Cookie.setCookie(name + "." + project.getName(), value, expires, userIri);
+        document.cookie = cookieStr;
     }
 
     /**
      * Removes specified Cookie
-     * @param  {string} name Cookie's identification
-     * @param  {string} userIri IRI of the user useful to contextualize the cookie
      */
-    public static deleteCookie(name: string, userIri?: ARTURIResource) {
+    public static deleteCookie(name: string, project?: Project, user?: User) {
         // If the cookie exists
-        if (Cookie.getCookie(name)) {
-            Cookie.setCookie(name, '', -1, userIri);
+        if (Cookie.getCookie(name, project, user)) {
+            Cookie.setCookie(name, '', project, user, { expires: -1 });
         }
     }
 
-    public static deleteProjectCookie(name: string, project: Project, userIri?: string) {
-        Cookie.setCookie(name + "." + project.getName(), userIri);
-    }
 
+}
+
+/**
+ * Note: path is useful for the translate.lang cookie which if it is set for http://<hostname>/vocbench3 
+ * is blocked by the browser for requests toward http://<hostname>/semanticturkey since they have different path
+ */
+export interface CookieAttr {
+    expires?: number;
+    path?: string; 
 }

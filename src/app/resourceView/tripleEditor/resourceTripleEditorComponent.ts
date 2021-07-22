@@ -66,7 +66,7 @@ export class ResourceTripleEditorComponent {
     }
 
     applyChanges() {
-        if (VBContext.getWorkingProject().isValidationEnabled() && Cookie.getCookie(Cookie.WARNING_CODE_CHANGE_VALIDATION, VBContext.getLoggedUser().getIri()) != "false") {
+        if (VBContext.getWorkingProject().isValidationEnabled() && Cookie.getCookie(Cookie.WARNING_CODE_CHANGE_VALIDATION, null, VBContext.getLoggedUser()) != "false") {
             this.basicModals.alertCheckCookie({key: "RESOURCE_VIEW.CODE_EDITOR.CODE_EDITOR"}, 
                 "Warning: the current project has the Validation feature enabled. This changes will not undergo to validation.", 
                 Cookie.WARNING_CODE_CHANGE_VALIDATION).then(

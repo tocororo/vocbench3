@@ -414,7 +414,7 @@ export class VBProperties {
      * ResView Inference
      */
     setInferenceInResourceView(showInferred: boolean) {
-        Cookie.setCookie(Cookie.RES_VIEW_INCLUDE_INFERENCE, showInferred + "", 365*10);
+        Cookie.setCookie(Cookie.RES_VIEW_INCLUDE_INFERENCE, showInferred + "");
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.inference = showInferred;
     }
 
@@ -422,7 +422,7 @@ export class VBProperties {
      * ResView Rendering
      */
     setRenderingInResourceView(rendering: boolean) {
-        Cookie.setCookie(Cookie.RES_VIEW_RENDERING, rendering + "", 365*10);
+        Cookie.setCookie(Cookie.RES_VIEW_RENDERING, rendering + "");
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.rendering = rendering;
     }
 
@@ -430,14 +430,14 @@ export class VBProperties {
      * ResView mode
      */
     setResourceViewMode(mode: ResourceViewMode) {
-        Cookie.setCookie(Cookie.RES_VIEW_MODE, mode, 365*10);
+        Cookie.setCookie(Cookie.RES_VIEW_MODE, mode);
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.mode = mode;
     }
     /**
      * ResView Tab sync
      */
     setResourceViewTabSync(sync: boolean) {
-        Cookie.setCookie(Cookie.RES_VIEW_TAB_SYNCED, sync + "", 365*10);
+        Cookie.setCookie(Cookie.RES_VIEW_TAB_SYNCED, sync + "");
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.syncTabs = sync;
     }
 
@@ -472,7 +472,7 @@ export class VBProperties {
      * Tree/list Show deprecated
      */
     setShowDeprecated(showDeprecated: boolean) {
-        Cookie.setCookie(Cookie.SHOW_DEPRECATED, showDeprecated + "", 365*10);
+        Cookie.setCookie(Cookie.SHOW_DEPRECATED, showDeprecated + "");
     }
     getShowDeprecated(): boolean {
         let cookieValue: string = Cookie.getCookie(Cookie.SHOW_DEPRECATED);
@@ -510,12 +510,12 @@ export class VBProperties {
     setSearchSettings(projectCtx: ProjectContext, settings: SearchSettings) {
         let oldSearchSettings: SearchSettings = projectCtx.getProjectPreferences().searchSettings;
 
-        Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, settings.stringMatchMode, 365*10);
-        Cookie.setCookie(Cookie.SEARCH_USE_URI, settings.useURI+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, settings.useLocalName+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_USE_NOTES, settings.useNotes+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_EXTEND_ALL_INDIVIDUALS, settings.extendToAllIndividuals+"", 365*10);
+        Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, settings.stringMatchMode);
+        Cookie.setCookie(Cookie.SEARCH_USE_URI, settings.useURI+"");
+        Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, settings.useLocalName+"");
+        Cookie.setCookie(Cookie.SEARCH_USE_NOTES, settings.useNotes+"");
+        Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"");
+        Cookie.setCookie(Cookie.SEARCH_EXTEND_ALL_INDIVIDUALS, settings.extendToAllIndividuals+"");
 
         let changed: boolean = oldSearchSettings.languages != settings.languages ||
             oldSearchSettings.languages != settings.languages ||

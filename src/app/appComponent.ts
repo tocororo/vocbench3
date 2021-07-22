@@ -42,6 +42,7 @@ export class AppComponent {
         let transLang: string = Cookie.getCookie(Cookie.TRANSLATE_LANG);
         if (transLang == null || !translate.getLangs().includes(transLang)) {
             transLang = "en";
+            Cookie.setCookie(Cookie.TRANSLATE_LANG, transLang, null, null, { path: "/" }); //init the cookie
         }
         translate.use(transLang);
         ProjectLabelCtx.language = transLang; //init lang for project rendering
