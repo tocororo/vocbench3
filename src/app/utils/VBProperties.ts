@@ -82,7 +82,7 @@ export class VBProperties {
                 //graph preferences
                 let graphPartitionFilterPref = settings.getPropertyValue(SettingsEnum.graphViewPartitionFilter);
                 if (graphPartitionFilterPref == null) { //initialize with the only lexicalization partition for each role
-                    let graphPartitionFilterPref: PartitionFilterPreference = {};
+                    graphPartitionFilterPref = {};
                     for (let role in RDFResourceRolesEnum) { 
                         graphPartitionFilterPref[role] = [ResViewPartition.lexicalizations];
                     }
