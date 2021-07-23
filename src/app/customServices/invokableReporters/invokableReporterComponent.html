@@ -112,10 +112,10 @@
                             (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
                             style="flex: 1;">
                         </extension-configurator>
+                        <div *ngIf="requireConfigurationDeployer()" class="ml-2" style="font-size: 14px;">
+                            <span class="fas fa-exclamation-triangle" [title]="'COMMONS.CONFIG.CONFIGURATION_REQUIRED'|translate"></span>
+                        </div>
                     </ng-container>
-                    <div *ngIf="requireConfigurationDeployer()" style="font-size: 14px; margin-left: 4px;">
-                        <span class="fas fa-exclamation-triangle" [title]="'COMMONS.CONFIG.CONFIGURATION_REQUIRED'|translate"></span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -124,7 +124,10 @@
     </div>
 
     <div class="card-footer">
-        <button class="btn btn-info float-right" (click)="compileAndDeploy()">{{'ACTIONS.SUBMIT'|translate}}</button>
+        <button class="btn btn-info float-right" (click)="compileAndDeploy()">
+            <ng-container *ngIf="!selectedDeployment.source">{{'ACTIONS.DOWNLOAD'|translate}}</ng-container>
+            <ng-container *ngIf="selectedDeployment.source == 'stream'">{{'ACTIONS.DEPLOY'|translate}}</ng-container>
+        </button>
     </div>
 
     <div #blockingDiv class="blockingDiv" style="display:none">

@@ -74,6 +74,11 @@ export class Cookie {
       * @param attrs 
       */
       public static setCookie(name: string, value: string, project?: Project, user?: User, attrs?: CookieAttr) {
+        if (value == null) {
+            this.deleteCookie(name, project, user);
+            return;
+        }
+
         if (project) {
             name += ".P." + project.getName();
         }
