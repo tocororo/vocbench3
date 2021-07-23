@@ -498,3 +498,8 @@ export enum ExtensionConfigurationStatus {
     saved = "saved", //configuration just loaded or saved
     unsaved = "unsaved" //configuration modified or unsaved
 }
+
+export enum DeploySource {
+    stream = "stream",
+    repository = "repository"
+}

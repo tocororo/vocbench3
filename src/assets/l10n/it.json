@@ -375,7 +375,7 @@
             },
             "SETTINGS": {
                 "ALIGN_VALIATION_SETTINGS": "Impostazioni della validazione allineamenti",
-                "MAX_ALING_SHOWN": "Numero massimo di allineamenti mostrati (1÷100)",
+                "MAX_ALING_SHOWN": "Numero massimo di allineamenti mostrati (1-100)",
                 "REJECTED_ALIGN_ACTION": "Azione allineamenti rifiutati",
                 "REJECTED_ALIGN_ACTION_INFO": "Specifica cosa farne degli allineamenti rifiutati quando le validazioni sono scritte nell'ontologia",
                 "RELATION_METER_ASPECT": "Aspetto del relation meter",
@@ -953,6 +953,13 @@
             "URI_PREFIX": "Prefisso URI"
         },
         "EXPORT": {
+            "DEPLOY": {
+                "DEPLOYER": "Deployer",
+                "DEPLOYMENT": "Deployment",
+                "DEPLOY_TO_TRIPLE_STORE": "Deploy su triple store",
+                "SAVE_TO_FILE": "Salva su file",
+                "USE_CUSTOM_DEPLOYER": "Usa deployer custom"
+            },
             "GRAPHS": "Grafi",
             "GRAPHS_TO_EXPORT": "Grafi da esportare",
             "INCLUDE_INFERRED": "Includi informazioni inferite",
@@ -1258,7 +1265,6 @@
     },
     "INVOKABLE_REPORTERS": {
         "ACTIONS": {
-            "COMPILE_AND_DOWNLOAD_REPORT": "Compila e scarica report",
             "COMPILE_REPORT": "Compila report",
             "CREATE_INVOKABLE_REPORT": "Crea Invokable Report",
             "CREATE_SERVICE_INVOCATION": "Crea Service Invocation",

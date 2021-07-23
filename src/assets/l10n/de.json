@@ -375,7 +375,7 @@
             },
             "SETTINGS": {
                 "ALIGN_VALIATION_SETTINGS": "Einstellungen für die Alignment-Validierung",
-                "MAX_ALING_SHOWN": "Maximale Anzahl der angezeigten Alignments (1÷100)",
+                "MAX_ALING_SHOWN": "Maximale Anzahl der angezeigten Alignments (1-100)",
                 "REJECTED_ALIGN_ACTION": "Aktion bei abgelehntem Alignment",
                 "REJECTED_ALIGN_ACTION_INFO": "Gibt an, was mit abgelehnten Alignments zu tun ist, wenn die Validierung auf die Ontologie angewendet wird.",
                 "RELATION_METER_ASPECT": "Aussehen des Beziehungsmessers",
@@ -1254,7 +1254,6 @@
     },
     "INVOKABLE_REPORTERS": {
         "ACTIONS": {
-            "COMPILE_AND_DOWNLOAD_REPORT": "Bericht erstellen und herunterladen",
             "COMPILE_REPORT": "Bericht erstellen",
             "CREATE_INVOKABLE_REPORT": "Aufrufbaren Bericht erstellen",
             "CREATE_SERVICE_INVOCATION": "Serviceaufruf erstellen",

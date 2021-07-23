@@ -977,6 +977,7 @@ label {
 }
 
 /* tags bar START */
+
 /* .nav-tabs>li>a { */
 .nav-tabs .nav-link {
     padding: 4px 8px;
@@ -994,10 +995,12 @@ label {
     color: #555555;
 }
 
-.nav-tabs .nav-item {
-    margin-bottom: -1px;
+/* since in the nav-item of res-view tabs there are rdf-resource with icons, this is needed to prevent disalignment in nav bar */
+resource-view-tabbed .nav-item {
+    max-height: 26px;
 }
-/* tags bar END */
+
+/* tabs bar END */
 
 /* modals START */
 

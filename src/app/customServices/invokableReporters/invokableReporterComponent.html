@@ -6,21 +6,9 @@
                 <span class="fas fa-pencil-alt"></span>
             </button>
             <div class="btn-group btn-group-sm" style="margin-left: 5px;">
-                <button class="btn btn-light" (click)="compileReport()" [title]="'INVOKABLE_REPORTERS.ACTIONS.COMPILE_REPORT'|translate">
+                <button class="btn btn-light" (click)="compileAndShowReport()" [title]="'INVOKABLE_REPORTERS.ACTIONS.COMPILE_REPORT'|translate">
                     <span class="fas fa-play"></span>
                 </button>
-            </div>
-            <div style="display: inline-block; margin-left: 5px;">
-                <div class="input-group input-group-sm">
-                    <select class="form-control" [(ngModel)]="selectedReportFormat">
-                        <option *ngFor="let f of reportFormats" [ngValue]="f">{{f.label}}</option>
-                    </select>
-                    <span class="input-group-append">
-                        <button class="btn btn-light" (click)="compileAndDownloadReport()" [title]="'INVOKABLE_REPORTERS.ACTIONS.COMPILE_AND_DOWNLOAD_REPORT'|translate">
-                            <span class="fas fa-download"></span>
-                        </button>
-                    </span>
-                </div>
             </div>
         </div>
     </div>
@@ -103,6 +91,40 @@
             </service-invocation>
         </div>
 
+        <div class="card mt-2">
+            <div class="card-header">
+                <label>{{'DATA_MANAGEMENT.EXPORT.DEPLOY.DEPLOYMENT'|translate}}</label>
+                <select class="form-control form-control-sm ml-2" style="width: initial" [(ngModel)]="selectedDeployment">
+                    <option *ngFor="let depOpt of deploymentOptions" [ngValue]="depOpt">{{depOpt.translationKey|translate}}</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <ng-container *ngIf="!selectedDeployment.source">
+                        <select class="form-control" [(ngModel)]="selectedReportFormat">
+                            <option *ngFor="let f of reportFormats" [ngValue]="f">{{f.label}}</option>
+                        </select>
+                    </ng-container>
+                    <ng-container *ngIf="selectedDeployment.source == 'stream'">
+                        <extension-configurator #deployerConfigurator *ngIf="streamSourcedDeployer" [extensions]="streamSourcedDeployer"
+                            (extensionUpdated)="selectedDeployerExtension = $event"
+                            (configurationUpdated)="onDeployerConfigUpdated($event)"
+                            (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
+                            style="flex: 1;">
+                        </extension-configurator>
+                    </ng-container>
+                    <div *ngIf="requireConfigurationDeployer()" style="font-size: 14px; margin-left: 4px;">
+                        <span class="fas fa-exclamation-triangle" [title]="'COMMONS.CONFIG.CONFIGURATION_REQUIRED'|translate"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="card-footer">
+        <button class="btn btn-info float-right" (click)="compileAndDeploy()">{{'ACTIONS.SUBMIT'|translate}}</button>
     </div>
 
     <div #blockingDiv class="blockingDiv" style="display:none">

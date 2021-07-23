@@ -1,8 +1,10 @@
 import { Component, ElementRef, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { ExtensionsServices } from "src/app/services/extensionsServices";
+import { ExtensionConfiguratorComponent } from "src/app/widget/extensionConfigurator/extensionConfiguratorComponent";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { Reference } from "../../models/Configuration";
 import { InvokableReporter, ServiceInvocationDefinition } from "../../models/InvokableReporter";
-import { SettingsProp } from "../../models/Plugins";
+import { ConfigurableExtensionFactory, DeploySource, ExtensionConfigurationStatus, ExtensionPointID, PluginSpecification, Settings, SettingsProp } from "../../models/Plugins";
 import { InvokableReportersServices } from "../../services/invokableReportersServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
@@ -20,6 +22,7 @@ export class InvokableReporterComponent {
     @Input() ref: Reference;
 
     @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
+    @ViewChild("deployerConfigurator", { static: false }) deployerConfigurator: ExtensionConfiguratorComponent;
 
     private reporter: InvokableReporter;
     private selectedServiceInvocation: ServiceInvocationDefinition;
@@ -36,8 +39,23 @@ export class InvokableReporterComponent {
     createInvocationAuthorized: boolean;
     deleteInvocationAuthorized: boolean;
 
+    //deployer
+    repoSourcedDeployer: ConfigurableExtensionFactory[];
+    streamSourcedDeployer: ConfigurableExtensionFactory[];
+    selectedDeployerExtension: ConfigurableExtensionFactory;
+    selectedDeployerConfig: Settings;
+
+    deployerStatus: ExtensionConfigurationStatus;
+    deployerRelativeRef: string;
+
+    deploymentOptions: { translationKey: string, source: DeploySource }[] = [
+        { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.SAVE_TO_FILE", source: null },
+        { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.USE_CUSTOM_DEPLOYER", source: DeploySource.stream }
+    ]
+    selectedDeployment = this.deploymentOptions[0];
+
     constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices,
-        private basicModals: BasicModalServices) { }
+        private extensionService: ExtensionsServices, private basicModals: BasicModalServices) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['ref'] && changes['ref'].currentValue) {
@@ -49,6 +67,12 @@ export class InvokableReporterComponent {
         this.editReporterAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterUpdate);
         this.createInvocationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterSectionCreate);
         this.deleteInvocationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterSectionDelete);
+
+        this.extensionService.getExtensions(ExtensionPointID.STREAM_SOURCED_DEPLOYER_ID).subscribe(
+            extensions => {
+                this.streamSourcedDeployer = <ConfigurableExtensionFactory[]>extensions;
+            }
+        );
     }
 
     private initReporter(restoreInvocation: boolean) {
@@ -86,7 +110,64 @@ export class InvokableReporterComponent {
         )
     }
 
-    compileReport() {
+    selectServiceInvocation(index: number) {
+        this.selectedServiceInvocationIdx = index;
+        this.selectedServiceInvocation = this.form.sections.value[index];
+        //set the reference of the reporter which the invocation belongs to (usefult when editing the service invocation)
+        this.selectedServiceInvocation.reporterRef = this.ref;
+    }
+
+    createServiceInvocation() {
+        this.invokableReporterModals.openServiceInvocationEditor({key:"INVOKABLE_REPORTERS.ACTIONS.CREATE_SERVICE_INVOCATION"}, this.ref).then(
+            () => { //operation created => require update
+                this.initReporter(true);
+            },
+            () => { }
+        )
+    }
+
+    deleteServiceInvocation() {
+        this.invokableReporterService.removeSectionFromReporter(this.ref.relativeReference, this.selectedServiceInvocationIdx).subscribe(
+            () => {
+                this.initReporter(false)
+            }
+        )
+    }
+
+    onServiceInvocationUpdate() {
+        //a service invocation of the reporter changed => require update
+        this.initReporter(true);
+    }
+
+    /** =====================================
+     * Deployer
+     * =====================================*/
+
+    onDeployerConfigUpdated(config: Settings) {
+        setTimeout(() => { //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
+            this.selectedDeployerConfig = config;
+        });
+    }
+    
+    onDeployerConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+        this.deployerStatus = statusEvent.status;
+        this.deployerRelativeRef = statusEvent.relativeReference;
+    }
+
+    requireConfigurationDeployer() {
+        if (this.selectedDeployerConfig != null) {
+            return this.selectedDeployerConfig.requireConfiguration();
+        }
+        return false;
+    }
+
+    //========= Deployer end ================
+
+    /** =====================================
+     * Compilation
+     * =====================================*/
+
+    compileAndShowReport() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
             this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_SERVICE_INVOCATION_PROVIDED"}, ModalType.warning);
         } else {
@@ -103,21 +184,39 @@ export class InvokableReporterComponent {
         }
     }
 
-    compileAndDownloadReport() {
+    compileAndDeploy() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
             this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_SERVICE_INVOCATION_PROVIDED"}, ModalType.warning);
         } else {
-            UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-            this.invokableReporterService.compileAndDownloadReport(this.ref.relativeReference, this.selectedReportFormat.value).subscribe(
-                report => {
-                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                    let url = window.URL.createObjectURL(report);
-                    window.open(url);
-                },
-                (err: Error) => {
-                    this.compilationErrorHandler(err);
+            if (this.selectedDeployment.source == DeploySource.stream) { //use custom deployer
+                let deployerSpec: PluginSpecification;
+                if (this.selectedDeployment.source != null) {
+                    deployerSpec = {
+                        factoryId: this.selectedDeployerExtension.id
+                    }
+                    if (this.selectedDeployerConfig != null) {
+                        if (this.requireConfigurationDeployer()) {
+                            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.DEPLOYER_NOT_CONFIGURED"}, ModalType.warning);
+                            return;
+                        }
+                        deployerSpec.configType = this.selectedDeployerConfig.type;
+                        deployerSpec.configuration = this.selectedDeployerConfig.getPropertiesAsMap();
+                    }
                 }
-            );
+                //TODO service invocation
+            } else if (this.selectedDeployment.source == null) { //save to file
+                UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+                this.invokableReporterService.compileAndDownloadReport(this.ref.relativeReference, this.selectedReportFormat.value).subscribe(
+                    report => {
+                        UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                        let url = window.URL.createObjectURL(report);
+                        window.open(url);
+                    },
+                    (err: Error) => {
+                        this.compilationErrorHandler(err);
+                    }
+                );
+            }
         }
     }
 
@@ -127,35 +226,6 @@ export class InvokableReporterComponent {
         } else { //if not due to access denied show in error modal
             this.basicModals.alert({key:"STATUS.ERROR"}, error.message, ModalType.error, error.stack);
         }
-    }
-    
-    private selectServiceInvocation(index: number) {
-        this.selectedServiceInvocationIdx = index;
-        this.selectedServiceInvocation = this.form.sections.value[index];
-        //set the reference of the reporter which the invocation belongs to (usefult when editing the service invocation)
-        this.selectedServiceInvocation.reporterRef = this.ref;
-    }
-
-    private createServiceInvocation() {
-        this.invokableReporterModals.openServiceInvocationEditor({key:"INVOKABLE_REPORTERS.ACTIONS.CREATE_SERVICE_INVOCATION"}, this.ref).then(
-            () => { //operation created => require update
-                this.initReporter(true);
-            },
-            () => { }
-        )
-    }
-
-    private deleteServiceInvocation() {
-        this.invokableReporterService.removeSectionFromReporter(this.ref.relativeReference, this.selectedServiceInvocationIdx).subscribe(
-            () => {
-                this.initReporter(false)
-            }
-        )
-    }
-
-    private onServiceInvocationUpdate() {
-        //a service invocation of the reporter changed => require update
-        this.initReporter(true);
     }
 
 }

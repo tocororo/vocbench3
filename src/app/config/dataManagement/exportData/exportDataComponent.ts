@@ -3,7 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
-import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, STProperties, TransformationStep } from "../../../models/Plugins";
+import { ConfigurableExtensionFactory, DeploySource, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, STProperties, TransformationStep } from "../../../models/Plugins";
 import { DataFormat } from "../../../models/RDFFormat";
 import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
@@ -57,10 +57,10 @@ export class ExportDataComponent {
     private deployerStatus: ExtensionConfigurationStatus;
     private deployerRelativeRef: string;
 
-    deploymentOptions: { label: string, source: DeploySource }[] = [
-        { label: "Save to file", source: null },
-        { label: "Deploy to a triple store", source: DeploySource.repository },
-        { label: "Use custom deployer", source: DeploySource.stream }
+    deploymentOptions: { translationKey: string, source: DeploySource }[] = [
+        { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.SAVE_TO_FILE", source: null },
+        { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.DEPLOY_TO_TRIPLE_STORE", source: DeploySource.repository },
+        { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.USE_CUSTOM_DEPLOYER", source: DeploySource.stream }
     ]
     selectedDeployment = this.deploymentOptions[0];
     
@@ -311,18 +311,18 @@ export class ExportDataComponent {
         return this.selectedDeployment.source != null;
     }
     
-    private onDeployerConfigUpdated(config: Settings) {
+    onDeployerConfigUpdated(config: Settings) {
         setTimeout(() => { //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
             this.selectedDeployerConfig = config;
         });
     }
     
-    private onDeployerConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+    onDeployerConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
         this.deployerStatus = statusEvent.status;
         this.deployerRelativeRef = statusEvent.relativeReference;
     }
 
-    private requireConfigurationDeployer() {
+    requireConfigurationDeployer() {
         if (this.selectedDeployerConfig != null) {
             return this.selectedDeployerConfig.requireConfiguration();
         }
@@ -727,9 +727,4 @@ class TransformerChainElement {
 
         return filterStep;
     }
-}
-
-enum DeploySource {
-    stream = "stream",
-    repository = "repository"
 }

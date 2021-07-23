@@ -92,9 +92,9 @@
 
         <div class="card card-alt" style="margin-top: 4px;">
             <div class="card-header">
-                <label style="margin-right: 8px">Deployment:</label>
+                <label class="mr-3">{{'DATA_MANAGEMENT.EXPORT.DEPLOY.DEPLOYMENT'|translate}}:</label>
                 <select class="form-control form-control-sm" style="width: initial" [(ngModel)]="selectedDeployment">
-                    <option *ngFor="let depOpt of deploymentOptions" [ngValue]="depOpt">{{depOpt.label}}</option>
+                    <option *ngFor="let depOpt of deploymentOptions" [ngValue]="depOpt">{{depOpt.translationKey|translate}}</option>
                 </select>
             </div>
             <div class="card-body">
@@ -105,7 +105,7 @@
                     </colgroup>
                     <!-- When a deployer source is specified (so a deployer is used) -->
                     <tr *ngIf="useDeployer()">
-                        <td><label class="col-form-label">Deployer:</label></td>
+                        <td><label class="col-form-label">{{'DATA_MANAGEMENT.EXPORT.DEPLOY.DEPLOYER'|translate}}:</label></td>
                         <td>
                             <div class="hbox" style="align-items: center">
                                 <ng-container *ngIf="selectedDeployment.source == 'repository'">

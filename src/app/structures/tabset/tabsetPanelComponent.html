@@ -3,11 +3,11 @@
     <ul class="nav nav-tabs nav-tabs-xs" (click)="$event.preventDefault()">
         <ng-container *ngFor="let t of tabs">
             <li *ngIf="showTab(t.role)" class="nav-item" [ngClass]="{ active : activeTab == t.role, disabled: !isTabAuthorized(t.role) }">
-                <a href class="nav-link" (click)="selectTab(t.role)">{{t.translationKey | translate}}</a>
+                <a class="nav-link" (click)="selectTab(t.role)">{{t.translationKey | translate}}</a>
             </li>
         </ng-container>
         <li class="nav-item active ml-auto">
-            <a (click)="openSettings()" class="nav-link" style="margin: 0px 2px;">
+            <a (click)="openSettings()" class="nav-link">
                 <span class="fas fa-cog"></span>
             </a>
         </li>

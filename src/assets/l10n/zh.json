@@ -375,7 +375,7 @@
             },
             "SETTINGS": {
                 "ALIGN_VALIATION_SETTINGS": "Alignment validation settings",
-                "MAX_ALING_SHOWN": "Maximum number of alignments shown (1÷100)",
+                "MAX_ALING_SHOWN": "Maximum number of alignments shown (1-100)",
                 "REJECTED_ALIGN_ACTION": "Rejected alignment action",
                 "REJECTED_ALIGN_ACTION_INFO": "Specifies what to do with rejected alignments when applyng the validation to the ontology",
                 "RELATION_METER_ASPECT": "Relation meter aspect",
@@ -953,6 +953,13 @@
             "URI_PREFIX": "URI prefix"
         },
         "EXPORT": {
+            "DEPLOY": {
+                "DEPLOYER": "Deployer",
+                "DEPLOYMENT": "Deployment",
+                "DEPLOY_TO_TRIPLE_STORE": "Deploy to triple store",
+                "SAVE_TO_FILE": "Save to file",
+                "USE_CUSTOM_DEPLOYER": "Use custom deployer"
+            },
             "GRAPHS": "Graphs",
             "GRAPHS_TO_EXPORT": "Graphs to export",
             "INCLUDE_INFERRED": "Include inferred",
@@ -1258,7 +1265,6 @@
     },
     "INVOKABLE_REPORTERS": {
         "ACTIONS": {
-            "COMPILE_AND_DOWNLOAD_REPORT": "Compile and download report",
             "COMPILE_REPORT": "Compile report",
             "CREATE_INVOKABLE_REPORT": "Create Invokable Report",
             "CREATE_SERVICE_INVOCATION": "Create Service Invocation",
