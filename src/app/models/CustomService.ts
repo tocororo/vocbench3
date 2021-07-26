@@ -11,6 +11,8 @@ export class CustomService extends Configuration {
     id?: string; //not in the configuration object, but useful to keep trace of the id
 }
 
+export class Operation extends Configuration {}
+
 export class CustomOperation extends Configuration {}
 
 export class CustomOperationDefinition {

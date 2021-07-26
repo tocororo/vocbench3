@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ConfigurationComponents, Reference } from "../../../models/Configuration";
-import { InvokableReporterDefinition } from "../../../models/InvokableReporter";
+import { InvokableReporter, InvokableReporterDefinition } from "../../../models/InvokableReporter";
 import { Scope, ScopeUtils, SettingsProp } from "../../../models/Plugins";
 import { ConfigurationsServices } from "../../../services/configurationsServices";
 import { InvokableReportersServices } from "../../../services/invokableReportersServices";
@@ -31,13 +31,7 @@ export class InvokableReporterEditorModal {
         if (this.reporterRef == null) { //create
             this.invokableReporterService.getInvokableReporterForm().subscribe(
                 reporter => {
-                    this.form = {
-                        label: reporter.getProperty("label"),
-                        description: reporter.getProperty("description"),
-                        sections: reporter.getProperty("sections"),
-                        template: reporter.getProperty("template"),
-                        mimeType: reporter.getProperty("mimeType")
-                    };
+                    this.initForm(reporter);
                     this.form.mimeType.value = "text/html";
                 }
             );
@@ -51,16 +45,22 @@ export class InvokableReporterEditorModal {
             this.id = this.reporterRef.identifier;
             this.invokableReporterService.getInvokableReporter(this.reporterRef.relativeReference).subscribe(
                 reporter => {
-                    this.form = {
-                        label: reporter.getProperty("label"),
-                        description: reporter.getProperty("description"),
-                        sections: reporter.getProperty("sections"),
-                        template: reporter.getProperty("template"),
-                        mimeType: reporter.getProperty("mimeType")
-                    };
+                    this.initForm(reporter);
                 }
             )
         }
+    }
+
+    private initForm(reporter: InvokableReporter) {
+        this.form = {
+            label: reporter.getProperty("label"),
+            description: reporter.getProperty("description"),
+            sections: reporter.getProperty("sections"),
+            template: reporter.getProperty("template"),
+            filename: reporter.getProperty("filename"),
+            additionalFiles: reporter.getProperty("additionalFiles"),
+            mimeType: reporter.getProperty("mimeType")
+        };
     }
 
     isDataValid(): boolean {
@@ -86,6 +86,8 @@ export class InvokableReporterEditorModal {
             description: this.form.description.value,
             template: this.form.template.value,
             sections: this.form.sections.value,
+            filename: this.form.filename.value,
+            additionalFiles: this.form.additionalFiles.value,
             mimeType: this.form.mimeType.value
         };
 

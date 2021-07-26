@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ConfigurationDefinition, Reference } from '../models/Configuration';
 import { InvokableReporter, Report, ServiceInvocationDefinition } from '../models/InvokableReporter';
-import { Scope } from '../models/Plugins';
+import { PluginSpecification, Scope } from '../models/Plugins';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
@@ -37,10 +37,11 @@ export class InvokableReportersServices {
      * @param reporterReference 
      * @param targetMimeType 
      */
-    compileAndDownloadReport(reporterReference: string, targetMimeType?: string) {
+    compileAndExportReport(reporterReference: string, targetMimeType?: string, deployerSpec?: PluginSpecification) {
         let params = {
             reporterReference: reporterReference,
-            targetMimeType: targetMimeType
+            targetMimeType: targetMimeType,
+            deployerSpec: deployerSpec ? JSON.stringify(deployerSpec) : null
         }
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
@@ -48,7 +49,7 @@ export class InvokableReportersServices {
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.InvokableReporterException']
             } 
         });
-        return this.httpMgr.downloadFile(this.serviceName, "compileAndDownloadReport", params, false, options);
+        return this.httpMgr.downloadFile(this.serviceName, "compileAndExportReport", params, false, options);
     }
 
     getConfigurationScopes(): Observable<Scope[]> {

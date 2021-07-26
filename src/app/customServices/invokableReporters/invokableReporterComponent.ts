@@ -3,7 +3,7 @@ import { ExtensionsServices } from "src/app/services/extensionsServices";
 import { ExtensionConfiguratorComponent } from "src/app/widget/extensionConfigurator/extensionConfiguratorComponent";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { Reference } from "../../models/Configuration";
-import { InvokableReporter, ServiceInvocationDefinition } from "../../models/InvokableReporter";
+import { AdditionalFile, InvokableReporter, ServiceInvocationDefinition } from "../../models/InvokableReporter";
 import { ConfigurableExtensionFactory, DeploySource, ExtensionConfigurationStatus, ExtensionPointID, PluginSpecification, Settings, SettingsProp } from "../../models/Plugins";
 import { InvokableReportersServices } from "../../services/invokableReportersServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -33,6 +33,9 @@ export class InvokableReporterComponent {
     ]
     selectedReportFormat: ReportFormatStruct = this.reportFormats[0];
 
+    /* despite invokable repotrers exploit the Settings standard, I cannot use the renderer since I have to 
+    handle sections and additionalFiles ad-hoc (there is no dedicated widget in settings-renderer for such types of field
+    which are complex) */
     form: InvokableReporterForm;
 
     editReporterAuthorized: boolean;
@@ -84,6 +87,8 @@ export class InvokableReporterComponent {
                     description: this.reporter.getProperty("description"),
                     sections: this.reporter.getProperty("sections"),
                     template: this.reporter.getProperty("template"),
+                    filename: this.reporter.getProperty("filename"),
+                    additionalFiles: this.reporter.getProperty("additionalFiles"),
                     mimeType: this.reporter.getProperty("mimeType")
                 }
                 if (restoreInvocation) {
@@ -188,8 +193,11 @@ export class InvokableReporterComponent {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
             this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_SERVICE_INVOCATION_PROVIDED"}, ModalType.warning);
         } else {
+            let reporterRef: string = this.ref.relativeReference;
+            let mimeType: string = this.selectedReportFormat.value;
+            let deployerSpec: PluginSpecification;
+
             if (this.selectedDeployment.source == DeploySource.stream) { //use custom deployer
-                let deployerSpec: PluginSpecification;
                 if (this.selectedDeployment.source != null) {
                     deployerSpec = {
                         factoryId: this.selectedDeployerExtension.id
@@ -203,20 +211,18 @@ export class InvokableReporterComponent {
                         deployerSpec.configuration = this.selectedDeployerConfig.getPropertiesAsMap();
                     }
                 }
-                //TODO service invocation
-            } else if (this.selectedDeployment.source == null) { //save to file
-                UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-                this.invokableReporterService.compileAndDownloadReport(this.ref.relativeReference, this.selectedReportFormat.value).subscribe(
-                    report => {
-                        UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                        let url = window.URL.createObjectURL(report);
-                        window.open(url);
-                    },
-                    (err: Error) => {
-                        this.compilationErrorHandler(err);
-                    }
-                );
             }
+            UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+            this.invokableReporterService.compileAndExportReport(reporterRef, mimeType, deployerSpec).subscribe(
+                report => {
+                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                    let url = window.URL.createObjectURL(report);
+                    window.open(url);
+                },
+                (err: Error) => {
+                    this.compilationErrorHandler(err);
+                }
+            );
         }
     }
 
@@ -236,6 +242,8 @@ export class InvokableReporterForm {
     description: InvokableReporterFormEntry<string>;
     sections: InvokableReporterFormEntry<ServiceInvocationDefinition[]>;
     template: InvokableReporterFormEntry<string>;
+    filename: InvokableReporterFormEntry<string>
+    additionalFiles: InvokableReporterFormEntry<AdditionalFile[]>
     mimeType: InvokableReporterFormEntry<string>;
 }
 

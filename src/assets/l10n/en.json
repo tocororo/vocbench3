@@ -323,12 +323,12 @@
             },
             "MANAGEMENT": {
                 "ALIGNMENTS": "Alignments",
+                "LEFT_ENTITY": "Left entity",
                 "MAPPING_PROP": "Mapping Property",
                 "QUICK_ACTIONS": "Quick Actions",
                 "RELATION": "Relation",
+                "RIGHT_ENTITY": "Right entity",
                 "SET_DEFAULT_FOR_RELATION": "Set the property as default for the relation",
-                "SOURCE_ENTITY": "Source entity",
-                "TARGET_ENTITY": "Target entity",
                 "YOU_CAN_FORCE_PROP": "You can force a property"
             },
             "REMOTE_SYS": {

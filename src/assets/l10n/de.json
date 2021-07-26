@@ -321,12 +321,12 @@
             },
             "MANAGEMENT": {
                 "ALIGNMENTS": "Alignments",
+                "LEFT_ENTITY": "Linke Entität",
                 "MAPPING_PROP": "Mapping-Property",
                 "QUICK_ACTIONS": "Schnelle Aktionen",
                 "RELATION": "Beziehung",
+                "RIGHT_ENTITY": "Rechte Entität",
                 "SET_DEFAULT_FOR_RELATION": "Diese Eigenschaft als Standard für die Beziehung festlegen",
-                "SOURCE_ENTITY": "Quell-Entität",
-                "TARGET_ENTITY": "Ziel-Entität",
                 "YOU_CAN_FORCE_PROP": "Sie können eine Eigenschaft erzwingen"
             },
             "REMOTE_SYS": {

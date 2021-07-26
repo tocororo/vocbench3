@@ -23,7 +23,7 @@ export class InvokableReporterModalServices {
     }
 
     public openServiceInvocationEditor(title: TextOrTranslation, invokableReporterRef: Reference, serviceInvocation?: { def: ServiceInvocationDefinition, idx: number }): Promise<void> {
-        const modalRef: NgbModalRef = this.modalService.open(ServiceInvocationEditorModal, new ModalOptions('lg'));
+        const modalRef: NgbModalRef = this.modalService.open(ServiceInvocationEditorModal, new ModalOptions('xl'));
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.invokableReporterRef = invokableReporterRef;
 		if (serviceInvocation != null) modalRef.componentInstance.serviceInvocation = serviceInvocation;

@@ -61,6 +61,25 @@
                 </tr>
                 <tr>
                     <td class="text-right" nowrap>
+                        <label>{{form.filename.displayName}}</label>
+                        <span class="fas fa-info-circle ml-1" [title]="form.filename.description"></span>
+                    </td>
+                    <td><input class="form-control form-control-sm" [(ngModel)]="form.filename.value"></td>
+                    <td><ng-container *ngIf="form.filename.required">*</ng-container></td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>{{form.additionalFiles.displayName}}</label>
+                        <span class="fas fa-info-circle ml-1" [title]="form.additionalFiles.description"></span>
+                    </td>
+                    <td>
+                        <!-- TODO implement an editor -->
+                        <input class="form-control form-control-sm" [(ngModel)]="form.additionalFiles.value">
+                    </td>
+                    <td><ng-container *ngIf="form.additionalFiles.required">*</ng-container></td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap>
                         <label>{{form.mimeType.displayName}}</label>
                         <span class="fas fa-info-circle ml-1" [title]="form.mimeType.description"></span>
                     </td>

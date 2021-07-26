@@ -30,6 +30,14 @@
         </div>
         <div class="gridRow">
             <div class="gridEntry">
+                <label class="entryLabel">Extension path:</label>
+                <div style="flex: 1">
+                    <input class="form-control form-control-sm" [ngModel]="invocation.extensionPath" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="gridRow">
+            <div class="gridEntry">
                 <label class="entryLabel">{{'INVOKABLE_REPORTERS.INVOCATION.SERVICE'|translate}}:</label>
                 <div style="flex: 1">
                     <input class="form-control form-control-sm" [ngModel]="invocation.service" readonly>

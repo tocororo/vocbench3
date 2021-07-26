@@ -10,14 +10,23 @@ export class InvokableReporterDefinition {
     sections?: ServiceInvocationDefinition[];
     template: string;
     mimeType: string;
+    filename?: string;
+    additionalFiles?: AdditionalFile[];
 
     ref?: Reference; //not in the configuration definition, but useful to keep trace of its reference
+}
+
+export class AdditionalFile {
+    sourcePath: string;
+    destinationPath: string;
+    required: boolean;
 }
 
 export class ServiceInvocation extends Configuration { }
 
 export class ServiceInvocationDefinition {
     // '@type': string;
+    extensionPath: string;
     service: string;
     operation: string;
     arguments?: { [key: string]: string };

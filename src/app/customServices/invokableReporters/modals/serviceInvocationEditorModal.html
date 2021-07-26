@@ -42,16 +42,78 @@
 
             <div class="card card-default vbox">
                 <div class="card-header">
-                    <label style="flex: 1;">{{'CUSTOM_SERVICES.CUSTOM_SERVICES'|translate}}</label>
+                    <label>{{'INVOKABLE_REPORTERS.INVOCATION.SERVICE'|translate}}</label>
+                    <select class="form-control form-control-sm ml-2" [(ngModel)]="selectedExtPath" (ngModelChange)="initServiceList().subscribe()">
+                        <option *ngFor="let e of extPaths" [ngValue]="e.id">{{e.show}}</option>
+                    </select>
                 </div>
                 <div class="card-body vbox scrollableContainer">
-                    <div *ngFor="let id of customServiceIds" class="listItem" [ngClass]="{ active: selectedServiceId == id }" (click)="selectService(id).subscribe()">
-                        {{id}}
+                    <div *ngFor="let serv of pathServiceMap[selectedExtPath]" class="listItem" [ngClass]="{ active: selectedServiceId == serv.id }" (click)="selectService(serv.id).subscribe()">
+                        {{serv.show}}
                     </div>
                 </div>
             </div>
 
-            <div *ngIf="selectedService" class="hbox" style="flex: 3; margin-left: 4px">
+            <div class="card card-default vbox ml-2">
+                <div class="card-header" style="min-height: 33px;">
+                    <label>{{'INVOKABLE_REPORTERS.INVOCATION.OPERATION'|translate}}</label>
+                </div>
+                <div class="card-body vbox scrollableContainer">
+                    <ng-container *ngIf="selectedServiceId">
+                        <div *ngFor="let op of operations" class="listItem" [ngClass]="{ active: selectedOperationId == op.id }" (click)="selectOperation(op.id).subscribe()">
+                            {{op.show}}
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="card card-default vbox ml-2" style="flex: 3;">
+                <div class="card-header" style="min-height: 33px;">
+                    <label style="flex: 1;">{{selectedOperation?.name}}</label>
+                    <button class="btn btn-xs btn-light" (click)="describeSelectedOperation()" [title]="'INVOKABLE_REPORTERS.INVOCATION.SEE_CUSTOM_OPERATIONS_DETAILS'|translate" [disabled]="!selectedOperation">
+                        <span class="fas fa-eye"></span>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <ng-container *ngIf="selectedOperation">
+                        <ng-container *ngIf="selectedOperation.returns?.name != 'void'; then readOperationBlock; else writeOperationBlock"></ng-container>
+
+                        <ng-template #readOperationBlock>
+                            <ng-container *ngIf="parameters.length > 0; then paramsTable; else noParamsBlock"></ng-container>
+                            <ng-template #paramsTable>
+                                <table class="table table-borderless table-sm">
+                                    <colgroup>
+                                        <col style="width: 1%;">
+                                        <col>
+                                        <col style="width: 1%;">
+                                    </colgroup>
+                                    <tr *ngFor="let p of parameters">
+                                        <td class="text-right" style="font-family: monospace;" nowrap>{{p.show}} = </td>
+                                        <td>
+                                            <input class="form-control form-control-sm" [(ngModel)]="p.value">
+                                        </td>
+                                        <td>
+                                            <span *ngIf="!p.param.required" class="fas fa-question-circle" [title]="'CUSTOM_SERVICES.OPERATION.OPTIONAL_PARAMETER'|translate"></span>
+                                            <span *ngIf="p.param.required" class="fas fa-exclamation-circle" [title]="'CUSTOM_SERVICES.OPERATION.MANDATORY_PARAMETER'|translate"></span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #noParamsBlock>
+                                <div class="alert alert-info">{{'INVOKABLE_REPORTERS.INVOCATION.NO_PARAM_OPERATION_INFO'|translate}}</div>
+                            </ng-template>
+                        </ng-template>
+
+                        <ng-template #writeOperationBlock>
+                            <div class="alert alert-warning">
+                                {{'INVOKABLE_REPORTERS.INVOCATION.INVALID_UPDATE_OPERATION'|translate}}
+                            </div>
+                        </ng-template>
+                    </ng-container>
+                </div>
+            </div>
+
+            <!-- <div *ngIf="selectedService" class="hbox" style="flex: 3; margin-left: 4px">
 
                 <div class="card card-default vbox">
                     <div class="card-header">
@@ -110,7 +172,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div> -->
         </div>
 
     </div>
