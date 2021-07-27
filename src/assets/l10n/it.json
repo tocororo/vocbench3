@@ -1313,6 +1313,7 @@
         "ALREADY_EXISTING_CONFIG_FOR_SERVER_URL": "Una configurazione per lo stesso serverURL già esiste",
         "ALREADY_EXISTING_CONFIG_ID": "Una configurazione con lo stesso ID già esiste",
         "ALREADY_EXISTING_CUSTOM_FORM_ID": "Un CustomForm con lo stesso ID già esiste",
+        "ALREADY_EXISTING_FILE_OVERWRITE_CONFIRM": "Esiste già un file con lo stesso nome. Vuoi sovrascriverlo?",
         "ALREADY_EXISTING_FILTER_FOR_CLASS": "Un filtro per la classe selezionata già esiste.",
         "ALREADY_EXISTING_FORM_COLLECTION_ID": "Una FormCollection con lo stesso ID già esiste",
         "ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE": "Impossibile addiungere un nodo per {{resource}}, un nodo per la medesima risorsa già esiste",

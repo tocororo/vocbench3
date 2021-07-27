@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DirectoryEntryInfo } from '../models/Storage';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class StorageServices {
@@ -38,7 +38,13 @@ export class StorageServices {
             path: path,
             overwrite: overwrite,
         }
-        return this.httpMgr.uploadFile(this.serviceName, "createFile", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['java.nio.file.FileAlreadyExistsException']
+            } 
+        });
+        return this.httpMgr.uploadFile(this.serviceName, "createFile", params, options);
     }
     
     deleteFile(path: string): Observable<void> {

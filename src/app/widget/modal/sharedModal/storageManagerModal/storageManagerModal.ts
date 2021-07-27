@@ -1,10 +1,12 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from "rxjs";
+import { from, Observable, of } from "rxjs";
+import { catchError, map, mergeMap } from "rxjs/operators";
 import { Scope, ScopeUtils } from "src/app/models/Plugins";
 import { DirectoryEntryInfo, EntryType } from "src/app/models/Storage";
 import { StorageServices } from "src/app/services/storageServices";
 import { BasicModalServices } from "../../basicModal/basicModalServices";
+import { ModalType } from "../../Modals";
 
 @Component({
     selector: "storage-mgr-modal",
@@ -46,7 +48,7 @@ export class StorageManagerModal {
     levelUp() {
         this.path = this.path.substring(0, this.path.lastIndexOf("/") + 1);
         if (this.path != this.selectedScope.rootPath) {
-            this.path = this.path.substring(0, this.path.length-1);
+            this.path = this.path.substring(0, this.path.length - 1);
         }
         this.listEntries();
     }
@@ -163,31 +165,60 @@ export class StorageManagerModal {
                 }
                 let sanitizedFileName = file.name.replace(new RegExp(" ", 'g'), "_");
                 newFilePath += sanitizedFileName;
-                this.storageServices.createFile(file, newFilePath).subscribe(
-                    () => {
-                        this.listEntries();
+                this.createFile(file, newFilePath).subscribe(
+                    (done: boolean) => {
+                        if (done) {
+                            this.listEntries();
+                        }
                     }
                 );
             }
         )
     }
 
-    isOkEnabled(): boolean {
-        if (this.multiselection) {
-            return this.selectedEntries.length > 0;
-        } else {
-            return this.selectedEntry != null && this.selectedEntry.type == EntryType.FILE;
-        }
+    private createFile(file: File, path: string, overwrite: boolean = false): Observable<boolean> {
+        return this.storageServices.createFile(file, path, overwrite).pipe(
+            map(() => {
+                return true;
+            }),
+            catchError((err: Error) => {
+                if (err.name.endsWith("FileAlreadyExistsException")) {
+                    return from(
+                        this.basicModals.confirm({ key: "WIDGETS.STORAGE_MGR.UPLOAD_FILE" }, { key: "MESSAGES.ALREADY_EXISTING_FILE_OVERWRITE_CONFIRM" }, ModalType.warning).then(
+                            () => {
+                                return this.storageServices.createFile(file, path, true).pipe(
+                                    map(() => {
+                                        return true;
+                                    })
+                                )
+                            },
+                            () => {
+                                return of(false);
+                            }
+                        )
+                    ).pipe(
+                        mergeMap(done => done)
+                    )
+                } else {
+                    return of(false);
+                }
+            })
+        );
     }
 
     ok() {
-        let returnFile: string[];
+        let returnData: string[]; //returns the full path of the selected file(s)
         if (this.multiselection) {
-            returnFile = this.selectedEntries;
+            returnData = this.selectedEntries;
         } else {
-            returnFile = [this.selectedEntry.fullPath];
+            if (this.selectedEntry != null) {
+                returnData = [this.selectedEntry.fullPath];
+            } else {
+                returnData = [];
+            }
+            
         }
-        this.activeModal.close(returnFile);
+        this.activeModal.close(returnData);
 
     }
 
