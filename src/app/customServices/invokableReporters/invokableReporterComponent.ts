@@ -37,6 +37,7 @@ export class InvokableReporterComponent {
     handle sections and additionalFiles ad-hoc (there is no dedicated widget in settings-renderer for such types of field
     which are complex) */
     form: InvokableReporterForm;
+    additionalFilesPreview: string;
 
     editReporterAuthorized: boolean;
     createInvocationAuthorized: boolean;
@@ -91,6 +92,7 @@ export class InvokableReporterComponent {
                     additionalFiles: this.reporter.getProperty("additionalFiles"),
                     mimeType: this.reporter.getProperty("mimeType")
                 }
+                this.additionalFilesPreview = this.form.additionalFiles.value != null ? this.form.additionalFiles.value.map(f => f.destinationPath).join(", ") : null;
                 if (restoreInvocation) {
                     //try to restore the selected service invocation (if any)
                     if (this.selectedServiceInvocationIdx != null && this.form.sections.value != null && this.form.sections.value.length > this.selectedServiceInvocationIdx) {

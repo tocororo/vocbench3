@@ -73,8 +73,14 @@
                         <span class="fas fa-info-circle ml-1" [title]="form.additionalFiles.description"></span>
                     </td>
                     <td>
-                        <!-- TODO implement an editor -->
-                        <input class="form-control form-control-sm" [(ngModel)]="form.additionalFiles.value">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control ellipsable" [ngModel]="additionalFilesPreview" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-light" (click)="editAdditionalFiles()">
+                                    {{'WIDGETS.FILE_PICKER.BROWSE'|translate}}
+                                </button>
+                            </div>
+                        </div>
                     </td>
                     <td><ng-container *ngIf="form.additionalFiles.required">*</ng-container></td>
                 </tr>

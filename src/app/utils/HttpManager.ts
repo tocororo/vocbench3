@@ -453,7 +453,7 @@ export class HttpManager {
      private arrayBufferRespHandler(resp: HttpResponse<ArrayBuffer>) {
         let arrayBuffer = resp.body;
         let respContType = resp.headers.get("content-type");
-        if (respContType.includes(STResponseUtils.ContentType.applicationJson+";")) { //could be an error response
+        if (respContType && respContType.includes(STResponseUtils.ContentType.applicationJson+";")) { //could be an error response
             //convert arrayBuffer to json object
             let respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
             let jsonResp = JSON.parse(respContentAsString);

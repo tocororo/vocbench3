@@ -113,66 +113,6 @@
                 </div>
             </div>
 
-            <!-- <div *ngIf="selectedService" class="hbox" style="flex: 3; margin-left: 4px">
-
-                <div class="card card-default vbox">
-                    <div class="card-header">
-                        <label style="flex: 1">
-                            {{selectedService.name}}
-                        </label>
-                    </div>
-                    <div class="card-body hbox">
-                        <div class="card card-default vbox">
-                            <div class="card-header">
-                                <label style="flex: 1;">{{'INVOKABLE_REPORTERS.INVOCATION.CUSTOM_OPERATIONS'|translate}}</label>
-                            </div>
-                            <div class="card-body vbox scrollableContainer">
-                                <div *ngFor="let o of selectedService.operations" class="listItem" [ngClass]="{ active: selectedOperation == o }" (click)="selectOperation(o)">
-                                    {{o.name}}
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="selectedOperation" class="card card-default vbox" style="margin-left: 4px; flex: 2;">
-                            <div class="card-header">
-                                <label style="flex: 1;">{{selectedOperation.name}}</label>
-                                <button class="btn btn-xs btn-light" (click)="describeSelectedOperation()" [title]="'INVOKABLE_REPORTERS.INVOCATION.SEE_CUSTOM_OPERATIONS_DETAILS'|translate">
-                                    <span class="fas fa-eye"></span>
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <ng-container *ngIf="selectedOperation.returns.name != 'void'; else voidBlock">
-                                    <table *ngIf="parameters.length > 0; else noParamsBlock" class="table table-borderless table-sm">
-                                        <colgroup>
-                                            <col style="width: 1%;">
-                                            <col>
-                                            <col style="width: 1%;">
-                                        </colgroup>
-                                        <tr *ngFor="let p of parameters">
-                                            <td class="text-right" style="font-family: monospace;" nowrap>{{p.show}} = </td>
-                                            <td>
-                                                <input class="form-control form-control-sm" [(ngModel)]="p.value">
-                                            </td>
-                                            <td>
-                                                <span *ngIf="!p.param.required" class="fas fa-question-circle" [title]="'CUSTOM_SERVICES.OPERATION.OPTIONAL_PARAMETER'|translate"></span>
-                                                <span *ngIf="p.param.required" class="fas fa-exclamation-circle" [title]="'CUSTOM_SERVICES.OPERATION.MANDATORY_PARAMETER'|translate"></span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <ng-template #noParamsBlock>
-                                        <div class="alert alert-info">{{'INVOKABLE_REPORTERS.INVOCATION.NO_PARAM_OPERATION_INFO'|translate}}</div>
-                                    </ng-template>
-                                </ng-container>
-                                <ng-template #voidBlock>
-                                    <div class="alert alert-warning">
-                                        {{'INVOKABLE_REPORTERS.INVOCATION.INVALID_UPDATE_OPERATION'|translate}}
-                                    </div>
-                                </ng-template>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div> -->
         </div>
 
     </div>

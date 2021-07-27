@@ -2365,6 +2365,12 @@
             "DELETE_OPTIONAL_VALUE": "Delete optional value",
             "UNKNOWN_TYPE_WARN": "This parameter has an unknown type ({{propTypeName}}). The entered value will be interpreted as a low-level JSON value"
         },
+        "STORAGE_MGR": {
+            "CREATE_DIR": "Create directory",
+            "LEVEL_UP": "Level up",
+            "STORAGE_MANAGER": "Storage manager",
+            "UPLOAD_FILE": "Upload file"
+        },
         "VALUE_PICKER": {
             "FROM_CURRENT_PROJ": "From current project",
             "FROM_EXTERNAL_PROJ": "From external project"

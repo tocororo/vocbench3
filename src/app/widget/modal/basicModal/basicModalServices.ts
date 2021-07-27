@@ -209,7 +209,7 @@ export class BasicModalServices {
      * @param downloadLink link for download
      * @param fileName name of the file to download
      */
-    selectFile(title: TextOrTranslation, msg?: TextOrTranslation, accept?: string) {
+    selectFile(title: TextOrTranslation, msg?: TextOrTranslation, accept?: string): Promise<File> {
         const modalRef: NgbModalRef = this.modalService.open(FilePickerModal, new ModalOptions());
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (msg != null) {

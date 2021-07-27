@@ -1,8 +1,9 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from 'src/app/widget/modal/Modals';
+import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { ConfigurationComponents, Reference } from "../../../models/Configuration";
-import { InvokableReporter, InvokableReporterDefinition } from "../../../models/InvokableReporter";
+import { AdditionalFile, InvokableReporter, InvokableReporterDefinition } from "../../../models/InvokableReporter";
 import { Scope, ScopeUtils, SettingsProp } from "../../../models/Plugins";
 import { ConfigurationsServices } from "../../../services/configurationsServices";
 import { InvokableReportersServices } from "../../../services/invokableReportersServices";
@@ -18,13 +19,16 @@ export class InvokableReporterEditorModal {
     @Input() existingReporters: Reference[];
     @Input() reporterRef: Reference;
 
-    private id: string;
-    private scopes: Scope[];
-    private selectedScope: Scope;
+    id: string;
+    scopes: Scope[];
+    selectedScope: Scope;
     form: InvokableReporterForm;
 
+    additionalFilesPreview: string;
+
     constructor(public activeModal: NgbActiveModal, private configurationServices: ConfigurationsServices,
-        private invokableReporterService: InvokableReportersServices, private basicModals: BasicModalServices) {
+        private invokableReporterService: InvokableReportersServices, private basicModals: BasicModalServices,
+        private sharedModals: SharedModalServices) {
     }
 
     ngOnInit() {
@@ -61,6 +65,29 @@ export class InvokableReporterEditorModal {
             additionalFiles: reporter.getProperty("additionalFiles"),
             mimeType: reporter.getProperty("mimeType")
         };
+        this.initAdditionalFilePreview();
+    }
+
+    editAdditionalFiles() {
+        let additionalFilesPaths: string[] = this.form.additionalFiles.value ? this.form.additionalFiles.value.map(f => f.sourcePath) : [];
+        this.sharedModals.storageManager({ key: "WIDGETS.STORAGE_MGR.STORAGE_MANAGER" }, additionalFilesPaths, true).then(
+            (files: string[]) => {
+                let additionalFiles: AdditionalFile[] = files.map(f => {
+                    return {
+                        sourcePath: f,
+                        destinationPath: "images/" + f.substring(f.lastIndexOf("/") + 1),
+                        required: true
+                    }
+                })
+                this.form.additionalFiles.value = additionalFiles;
+                this.initAdditionalFilePreview();
+            },
+            () => {}
+        )
+    }
+
+    private initAdditionalFilePreview() {
+        this.additionalFilesPreview = this.form.additionalFiles.value != null ? this.form.additionalFiles.value.map(f => f.destinationPath).join(", ") : null;
     }
 
     isDataValid(): boolean {

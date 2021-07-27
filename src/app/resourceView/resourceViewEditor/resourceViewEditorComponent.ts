@@ -174,7 +174,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 this.buildResourceView(this.resource);//refresh resource view when Input resource changes
             }
         }
-        if (changes['atTime'] && changes['atTime'].currentValue) {
+        if (changes['atTime'] && changes['atTime'].currentValue && !changes['atTime'].firstChange) {
             this.buildResourceView(this.resource);
         }
     }

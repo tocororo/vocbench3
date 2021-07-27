@@ -1,7 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { HttpManager } from '../utils/HttpManager';
-import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 import { AdministrationServices } from "../services/administrationServices";
 import { AlignmentServices } from "../services/alignmentServices";
 import { AuthServices } from "../services/authServices";
@@ -23,6 +21,7 @@ import { IcvServices } from "../services/icvServices";
 import { IndividualsServices } from "../services/individualsServices";
 import { InputOutputServices } from "../services/inputOutputServices";
 import { InvokableReportersServices } from '../services/invokableReportersServices';
+import { LexicographerViewServices } from '../services/lexicographerViewServices';
 import { ManchesterServices } from "../services/manchesterServices";
 import { MapleServices } from '../services/mapleServices';
 import { MetadataRegistryServices } from "../services/metadataRegistryServices";
@@ -47,12 +46,14 @@ import { SkosDiffingServices } from '../services/skosDiffingServices';
 import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
 import { SparqlServices } from "../services/sparqlServices";
+import { StorageServices } from '../services/storageServices';
+import { UndoServices } from '../services/undoServices';
 import { UserServices } from "../services/userServices";
 import { UsersGroupsServices } from "../services/usersGroupsServices";
 import { ValidationServices } from "../services/validationServices";
 import { VersionsServices } from "../services/versionsServices";
-import { LexicographerViewServices } from '../services/lexicographerViewServices';
-import { UndoServices } from '../services/undoServices';
+import { HttpManager } from '../utils/HttpManager';
+import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 
 @NgModule({
     imports: [HttpClientModule],
@@ -107,6 +108,7 @@ import { UndoServices } from '../services/undoServices';
         SkosxlServices,
         SparqlServices,
         StMetadataRegistry,
+        StorageServices,
         UndoServices,
         UserServices,
         UsersGroupsServices,

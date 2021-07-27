@@ -62,6 +62,7 @@ import { RemoteAccessConfigModal } from '../widget/modal/sharedModal/remoteAcces
 import { RemoteRepoSelectionModal } from '../widget/modal/sharedModal/remoteRepoSelectionModal/remoteRepoSelectionModal';
 import { ResourcePickerModal } from '../widget/modal/sharedModal/resourcePickerModal/resourcePickerModal';
 import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
+import { StorageManagerModal } from '../widget/modal/sharedModal/storageManagerModal/storageManagerModal';
 import { UserSelectionModal } from '../widget/modal/sharedModal/userSelectionModal/userSelectionModal';
 import { CustomFormModule } from './customFormModule';
 import { SharedModule } from './sharedModule';
@@ -132,6 +133,7 @@ import { UserModule } from './userModule';
         SchemeSelectionComponent,
         SelectionModal,
         SignaturePickerModal,
+        StorageManagerModal,
         StoreConfigurationModal,
         UserSelectionModal,
         ValidationReportModal,
@@ -202,6 +204,7 @@ import { UserModule } from './userModule';
         SchemeListModal,
         SelectionModal,
         SignaturePickerModal,
+        StorageManagerModal,
         StoreConfigurationModal,
         UserSelectionModal,
         ValidationReportModal,

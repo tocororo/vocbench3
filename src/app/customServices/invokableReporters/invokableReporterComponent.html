@@ -65,8 +65,7 @@
                     {{form.additionalFiles.displayName}}
                     <span class="fas fa-info-circle" [title]="form.additionalFiles.description"></span>
                 </label>
-                <!-- TODO find a way to represent this -->
-                <input class="form-control form-control-sm" style="flex: 1;" [ngModel]="form.additionalFiles.value" disabled/>
+                <input class="form-control form-control-sm" style="flex: 1;" [ngModel]="additionalFilesPreview" disabled/>
             </div>
         </div>
         

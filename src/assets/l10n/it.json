@@ -2365,6 +2365,12 @@
             "DELETE_OPTIONAL_VALUE": "Cancella valore opzionale",
             "UNKNOWN_TYPE_WARN": "Questo parametro ha un tipo sconosciuto ({{propTypeName}}). Il valore inserito sarà interpretato come un valore JSON a basso livello"
         },
+        "STORAGE_MGR": {
+            "CREATE_DIR": "Crea cartella",
+            "LEVEL_UP": "Livello superiore",
+            "STORAGE_MANAGER": "Gestore storage",
+            "UPLOAD_FILE": "Carica file"
+        },
         "VALUE_PICKER": {
             "FROM_CURRENT_PROJ": "Dal progetto corrente",
             "FROM_EXTERNAL_PROJ": "Da un progetto esterno"

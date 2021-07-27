@@ -28,6 +28,7 @@ import { PluginConfigModal, PluginSettingsHandler } from "./pluginConfigModal/pl
 import { RemoteAccessConfigModal } from "./remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
 import { ResourcePickerModal } from './resourcePickerModal/resourcePickerModal';
+import { StorageManagerModal } from './storageManagerModal/storageManagerModal';
 import { UserSelectionModal } from './userSelectionModal/userSelectionModal';
 
 @Injectable()
@@ -278,6 +279,14 @@ export class SharedModalServices {
         }
         modalRef.componentInstance.resourceList = resourceList;
         if (rendering != null) modalRef.componentInstance.rendering = rendering;
+        return modalRef.result;
+    }
+
+    storageManager(title: TextOrTranslation, selectedFiles: string[], multiselection?: boolean): Promise<string[]> {
+        const modalRef: NgbModalRef = this.modalService.open(StorageManagerModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.selectedFiles = selectedFiles;
+        modalRef.componentInstance.multiselection = multiselection;
         return modalRef.result;
     }
 
