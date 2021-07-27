@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { VBContext } from "src/app/utils/VBContext";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { ConfigurationComponents, Reference } from "../../../models/Configuration";
@@ -19,6 +20,8 @@ export class InvokableReporterEditorModal {
     @Input() existingReporters: Reference[];
     @Input() reporterRef: Reference;
 
+    isAdmin: boolean; //only admin can use the storage manager
+
     id: string;
     scopes: Scope[];
     selectedScope: Scope;
@@ -32,6 +35,7 @@ export class InvokableReporterEditorModal {
     }
 
     ngOnInit() {
+        this.isAdmin = VBContext.getLoggedUser().isAdmin();
         if (this.reporterRef == null) { //create
             this.invokableReporterService.getInvokableReporterForm().subscribe(
                 reporter => {

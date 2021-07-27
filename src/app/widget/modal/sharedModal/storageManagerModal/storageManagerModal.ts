@@ -119,6 +119,19 @@ export class StorageManagerModal {
         }
         deleteFn.subscribe(
             () => {
+                if (this.selectedEntry.type == EntryType.FILE) {
+                    if (this.selectedEntries.includes(this.selectedEntry.fullPath)) {
+                        //if a file is deleted, check if it needs to be removed from the selected entries
+                        this.selectedEntries.splice(this.selectedEntries.indexOf(this.selectedEntry.fullPath), 1);
+                    }
+                } else if (this.selectedEntry.type == EntryType.DIRECTORY) {
+                    //if a directory is deleted, check if there are selected files that need to be removed from the selected entries
+                    this.selectedEntries.forEach((entry, idx, list) => {
+                        if (entry.startsWith(this.selectedEntry.fullPath)) {
+                            list.splice(idx, 1);
+                        }
+                    })
+                }
                 this.listEntries();
             }
         )

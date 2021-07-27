@@ -75,7 +75,7 @@
                     <td>
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control ellipsable" [ngModel]="additionalFilesPreview" readonly>
-                            <div class="input-group-append">
+                            <div *ngIf="isAdmin" class="input-group-append">
                                 <button class="btn btn-light" (click)="editAdditionalFiles()">
                                     {{'WIDGETS.FILE_PICKER.BROWSE'|translate}}
                                 </button>
