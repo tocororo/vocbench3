@@ -73,13 +73,38 @@
                         <span class="fas fa-info-circle ml-1" [title]="form.additionalFiles.description"></span>
                     </td>
                     <td>
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control ellipsable" [ngModel]="additionalFilesPreview" readonly>
-                            <div *ngIf="isAdmin" class="input-group-append">
-                                <button class="btn btn-light" (click)="editAdditionalFiles()">
-                                    {{'WIDGETS.FILE_PICKER.BROWSE'|translate}}
-                                </button>
+                        <div class="d-flex">
+                            <div class="card" style="flex: 1">
+                                <div class="card-body scrollableContainer" style="max-height: 200px;">
+                                    <!-- <div *ngFor="let f of form.additionalFiles.value; let index=index" class="listItem">
+                                        <div class="d-flex align-items-center" style="flex: 1">
+                                            <div class="form-check" [title]="'COMMONS.REQUIRED'|translate">
+                                                <input class="form-check-input" [id]="'requiredCheck'+index" type="checkbox" [(ngModel)]="f.required">
+                                                <label class="form-check-label" [for]="'requiredCheck'+index">
+                                                    <i class="fas fa-exclamation"></i>
+                                                </label>
+                                            </div>
+                                            <span class="ml-4">{{f.sourcePath}}</span>
+                                        </div>
+                                        <button class="btn btn-light btn-xs ml-2" (click)="removeAdditionalFile(f)">
+                                            <span class="far fa-trash-alt"></span>
+                                        </button>
+                                    </div> -->
+                                    <div *ngFor="let f of form.additionalFiles.value" class="listItem">
+                                        <span style="flex: 1">{{f.sourcePath}}</span>
+                                        <button class="btn btn-light btn-xs ml-2" style="width: 22px" (click)="f.required=!f.required" [ngClass]="{ active: f.required }" [title]="'COMMONS.REQUIRED'|translate">
+                                            <span *ngIf="f.required" class="fas fa-exclamation"></span>
+                                            <span *ngIf="!f.required" class="fas fa-question"></span>
+                                        </button>
+                                        <button class="btn btn-light btn-xs ml-3" (click)="removeAdditionalFile(f)">
+                                            <span class="far fa-trash-alt"></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                            <button class="btn btn-light btn-sm ml-3" style="align-self: flex-start;" (click)="editAdditionalFiles()">
+                                {{'WIDGETS.FILE_PICKER.BROWSE'|translate}}
+                            </button>
                         </div>
                     </td>
                     <td><ng-container *ngIf="form.additionalFiles.required">*</ng-container></td>

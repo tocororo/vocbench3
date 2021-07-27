@@ -15,7 +15,7 @@ export class InvokableReporterModalServices {
     constructor(private modalService: NgbModal, private translateService: TranslateService) { }
 
     public openInvokableReporterEditor(title: TextOrTranslation, existingReporters: Reference[], reporterRef?: Reference): Promise<void> {
-        const modalRef: NgbModalRef = this.modalService.open(InvokableReporterEditorModal, new ModalOptions());
+        const modalRef: NgbModalRef = this.modalService.open(InvokableReporterEditorModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.existingReporters = existingReporters;
 		if (reporterRef != null) modalRef.componentInstance.reporterRef = reporterRef;

@@ -69,7 +69,6 @@ export class InvokableReporterEditorModal {
             additionalFiles: reporter.getProperty("additionalFiles"),
             mimeType: reporter.getProperty("mimeType")
         };
-        this.initAdditionalFilePreview();
     }
 
     editAdditionalFiles() {
@@ -84,14 +83,13 @@ export class InvokableReporterEditorModal {
                     }
                 })
                 this.form.additionalFiles.value = additionalFiles;
-                this.initAdditionalFilePreview();
             },
             () => {}
         )
     }
 
-    private initAdditionalFilePreview() {
-        this.additionalFilesPreview = this.form.additionalFiles.value != null ? this.form.additionalFiles.value.map(f => f.destinationPath).join(", ") : null;
+    removeAdditionalFile(file: AdditionalFile) {
+        this.form.additionalFiles.value.splice(this.form.additionalFiles.value.indexOf(file), 1);
     }
 
     isDataValid(): boolean {
