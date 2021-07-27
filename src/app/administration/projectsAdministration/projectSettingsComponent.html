@@ -7,7 +7,7 @@
         <li class="nav-item" [ngClass]="{ active : activeSetting == 'resView' }">
             <a class="nav-link" (click)="activeSetting = 'resView'">Resource View</a>
         </li>
-        <li *ngIf="isSkos" class="nav-item" [ngClass]="{ active : activeSetting == 'other' }">
+        <li *ngIf="isSkos || historyEnabled" class="nav-item" [ngClass]="{ active : activeSetting == 'other' }">
             <a class="nav-link" (click)="activeSetting = 'other'">{{'COMMONS.OTHER'|translate}}</a>
         </li>
     </ul>
@@ -70,20 +70,31 @@
             [project]="project" [settings]="rvSettings">
         </res-view-project-settings>
 
-        <div class="card" [hidden]="activeSetting != 'other'">
-            <div class="card-header">
-                <label>
-                    {{'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE'|translate}}
-                    <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE_INFO'|translate"></span>
-                </label>
-            </div>
-            <div class="card-body">
-                <div *ngFor="let opt of labelClashOpts; let i=index" class="form-check mt-2">
-                    <input class="form-check-input" [id]="'labelClashRadio'+i" type="radio" name="labelClashRadio" [value]="opt.mode" [checked]="opt == labelClashOptSelected" (click)="setLabelClashSetting(opt)">
-                    <label class="form-check-label" [for]="'labelClashRadio'+i">
-                        {{opt.modeTranslationKey|translate}}
-                        <i class="text-secondary font-weight-normal ml-2">{{opt.infoTranslationKey|translate}}</i>
+        <div [hidden]="activeSetting != 'other'">
+            <div *ngIf="isSkos" class="card">
+                <div class="card-header">
+                    <label>
+                        {{'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE'|translate}}
+                        <span class="fas fa-info-circle" [title]="'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE_INFO'|translate"></span>
                     </label>
+                </div>
+                <div class="card-body">
+                    <div *ngFor="let opt of labelClashOpts; let i=index" class="form-check mt-2">
+                        <input class="form-check-input" [id]="'labelClashRadio'+i" type="radio" name="labelClashRadio" [value]="opt.mode" [checked]="opt == labelClashOptSelected" (click)="setLabelClashSetting(opt)">
+                        <label class="form-check-label" [for]="'labelClashRadio'+i">
+                            {{opt.modeTranslationKey|translate}}
+                            <i class="text-secondary font-weight-normal ml-2">{{opt.infoTranslationKey|translate}}</i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="historyEnabled" class="card mt-2">
+                <div class="card-body">
+                    <div class="form-check">
+                        <input class="form-check-input" id="tmCheck" type="checkbox" [(ngModel)]="timeMachineEnabled" (ngModelChange)="onTimeMachineEnabledChanged()">
+                        <label class="form-check-label" for="tmCheck">{{'ADMINISTRATION.PROJECTS.TIME_MACHINE_ENABLED'|translate}}</label>
+                        <span class="fas fa-info-circle ml-2" [title]="'ADMINISTRATION.PROJECTS.TIME_MACHINE_ENABLED_INFO'|translate"></span>
+                    </div>
                 </div>
             </div>
         </div>

@@ -37,6 +37,7 @@ export enum SettingsEnum {
     searchSettings = "searchSettings",
     sheet2rdfSettings = "sheet2rdfSettings",
     showFlags = "showFlags",
+    timeMachineEnabled = "timeMachineEnabled",
 }
 
 export class PreferencesUtils {
@@ -248,6 +249,7 @@ export class ProjectSettings {
     projectLanguagesSetting: Language[] = []; //all available languages in a project (settings)
     prefLabelClashMode: PrefLabelClashMode = PrefLabelClashMode.forbid;
     resourceView: ResourceViewProjectSettings;
+    timeMachineEnabled: boolean = true;
 }
 
 /**

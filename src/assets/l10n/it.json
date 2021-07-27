@@ -219,7 +219,9 @@
                 "MANAGED_PROPERTIES": "Proprietà gestite",
                 "PROP_ADDITION_OTHER_PROJECT_WARN": "Il progetto selezionato non è al momento acceduto, pertanto è possibile aggiungere proprietà solo fornendo l'IRI manualmente e non esplorando l'albero delle proprietà",
                 "RENAME_CUSTOM_SECTION": "Rinomina Custom Section"
-            }
+            },
+            "TIME_MACHINE_ENABLED": "Time Machine abilitata",
+            "TIME_MACHINE_ENABLED_INFO": "Indica se la funzionalità di Time Machine è accessibile nel ResourceView"
         },
         "ROLES": {
             "AREA": "Area",

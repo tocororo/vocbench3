@@ -354,6 +354,8 @@ export class VBProperties {
                 if (rvSettings != null) {
                     PreferencesUtils.mergePreference(projectSettings.resourceView, rvSettings);
                 }
+
+                projectSettings.timeMachineEnabled = settings.getPropertyValue(SettingsEnum.timeMachineEnabled);
             })
         )
     }

@@ -263,7 +263,9 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         }
 
         //time machine available on local IRI resource and in projects with history enabled (no need to check projectCtx, since if it is provided, clock button is already hidden via timeActionsEnabled)
-        this.timeMachineAvailable = this.resource.isURIResource() && this.resourcePosition.isLocal() && VBContext.getWorkingProject().isHistoryEnabled();
+        this.timeMachineAvailable = this.resource.isURIResource() && this.resourcePosition.isLocal() && 
+            VBContext.getWorkingProject().isHistoryEnabled() &&
+            VBContext.getWorkingProjectCtx().getProjectSettings().timeMachineEnabled;
 
         if (this.resourcePosition instanceof LocalResourcePosition) {
             this.resourcePositionLocalProj = this.resourcePosition.project == VBContext.getWorkingProject().getName();

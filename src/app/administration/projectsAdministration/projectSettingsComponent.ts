@@ -37,6 +37,10 @@ export class ProjectSettingsComponent {
     //res view
     rvSettings: ResourceViewProjectSettings;
 
+    //time machine
+    historyEnabled: boolean; //show the option for time machine only if the project has history
+    timeMachineEnabled: boolean;
+
     constructor(private settingsService: SettingsServices, private vbProperties: VBProperties) { }
 
     ngOnInit() {
@@ -54,6 +58,7 @@ export class ProjectSettingsComponent {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['project'] && changes['project'].currentValue) {
             this.isSkos = this.project.getModelType() == SKOS.uri;
+            this.historyEnabled = this.project.isHistoryEnabled();
             //currently the only setting in the "other" tab is the one related to the skos(xl) label clash, so if project is not skos reset the tab to languages
             if (!this.isSkos && this.activeSetting == "other") {
                 this.activeSetting = "languages";
@@ -74,6 +79,8 @@ export class ProjectSettingsComponent {
                 this.initResViewSettings(settings);
                 //init label clash mode
                 this.initLabelClashSetting(settings);
+                //time machine
+                this.initTimeMachineSetting(settings);
             }
         )
     }
@@ -150,6 +157,8 @@ export class ProjectSettingsComponent {
      * OTHER
      * ===================== */
 
+    //label clash
+
     initLabelClashSetting(settings: Settings) {
         if (this.isSkos) {
             let labelClashMode: string = settings.getPropertyValue(SettingsEnum.labelClashMode);
@@ -168,6 +177,25 @@ export class ProjectSettingsComponent {
                 //in case the edited project is the active one, update the settings stored in VBContext
                 if (VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()) {
                     VBContext.getWorkingProjectCtx().getProjectSettings().prefLabelClashMode = this.labelClashOptSelected.mode;
+                }
+            }
+        )
+    }
+
+    //time machine
+
+    initTimeMachineSetting(settings: Settings) {
+        if (this.historyEnabled) {
+            this.timeMachineEnabled = settings.getPropertyValue(SettingsEnum.timeMachineEnabled);
+        }
+    }
+
+    onTimeMachineEnabledChanged() {
+        this.settingsService.storeSettingForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, SettingsEnum.timeMachineEnabled, this.timeMachineEnabled, this.project).subscribe(
+            () => {
+                //in case the edited project is the active one, update the settings stored in VBContext
+                if (VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()) {
+                    VBContext.getWorkingProjectCtx().getProjectSettings().timeMachineEnabled = this.timeMachineEnabled;
                 }
             }
         )
