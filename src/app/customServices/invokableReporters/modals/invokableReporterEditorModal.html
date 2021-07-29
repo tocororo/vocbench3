@@ -76,21 +76,33 @@
                         <div class="d-flex">
                             <div class="card" style="flex: 1">
                                 <div class="card-body scrollableContainer" style="max-height: 200px;">
-                                    <!-- <div *ngFor="let f of form.additionalFiles.value; let index=index" class="listItem">
-                                        <div class="d-flex align-items-center" style="flex: 1">
-                                            <div class="form-check" [title]="'COMMONS.REQUIRED'|translate">
-                                                <input class="form-check-input" [id]="'requiredCheck'+index" type="checkbox" [(ngModel)]="f.required">
-                                                <label class="form-check-label" [for]="'requiredCheck'+index">
-                                                    <i class="fas fa-exclamation"></i>
-                                                </label>
-                                            </div>
-                                            <span class="ml-4">{{f.sourcePath}}</span>
-                                        </div>
-                                        <button class="btn btn-light btn-xs ml-2" (click)="removeAdditionalFile(f)">
-                                            <span class="far fa-trash-alt"></span>
-                                        </button>
-                                    </div> -->
-                                    <div *ngFor="let f of form.additionalFiles.value" class="listItem">
+                                    <table class="table table-sm">
+                                        <colgroup>
+                                            <col>
+                                            <col>
+                                            <col style="width: 1%;">
+                                            <col style="width: 1%;">
+                                        </colgroup>
+                                        <thead>
+                                            <th>{{'INVOKABLE_REPORTERS.SOURCE_PATH'|translate}}</th>
+                                            <th>{{'INVOKABLE_REPORTERS.DESTINATION_PATH'|translate}}</th>
+                                            <th>{{'COMMONS.REQUIRED'|translate}}</th>
+                                            <th></th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let f of form.additionalFiles.value">
+                                                <td><input class="form-control form-control-sm" [ngModel]="f.sourcePath" readonly></td>
+                                                <td><input class="form-control form-control-sm" [(ngModel)]="f.destinationPath"></td>
+                                                <td class="text-center"><input type="checkbox" [(ngModel)]="f.required"></td>
+                                                <td>
+                                                    <button class="btn btn-light btn-xs ml-3" (click)="removeAdditionalFile(f)">
+                                                        <span class="far fa-trash-alt"></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- <div *ngFor="let f of form.additionalFiles.value" class="listItem">
                                         <span style="flex: 1">{{f.sourcePath}}</span>
                                         <button class="btn btn-light btn-xs ml-2" style="width: 22px" (click)="f.required=!f.required" [ngClass]="{ active: f.required }" [title]="'COMMONS.REQUIRED'|translate">
                                             <span *ngIf="f.required" class="fas fa-exclamation"></span>
@@ -99,7 +111,7 @@
                                         <button class="btn btn-light btn-xs ml-3" (click)="removeAdditionalFile(f)">
                                             <span class="far fa-trash-alt"></span>
                                         </button>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <button class="btn btn-light btn-sm ml-3" style="align-self: flex-start;" (click)="editAdditionalFiles()">

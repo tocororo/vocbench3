@@ -78,7 +78,7 @@ export class InvokableReporterEditorModal {
                 let additionalFiles: AdditionalFile[] = files.map(f => {
                     return {
                         sourcePath: f,
-                        destinationPath: "images/" + f.substring(f.lastIndexOf("/") + 1),
+                        destinationPath: "resources/" + f.substring(f.lastIndexOf("/") + 1),
                         required: true
                     }
                 })

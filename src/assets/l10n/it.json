@@ -1277,6 +1277,7 @@
             "EDIT_INVOKABLE_REPORT": "Modifica Invokable Report",
             "EDIT_SERVICE_INVOCATION": "Modifica Service Invocation"
         },
+        "DESTINATION_PATH": "Path destinazione",
         "INVOCATION": {
             "ARGUMENTS": "Argomenti",
             "CUSTOM_OPERATIONS": "Custom Operations",
@@ -1289,7 +1290,8 @@
         },
         "INVOKABLE_REPORTS": "Invokable Reports",
         "REPORT": "Report",
-        "RESULT": "Risultato"
+        "RESULT": "Risultato",
+        "SOURCE_PATH": "Path sorgente"
     },
     "MESSAGES": {
         "ACL_CHANGE_ACCESS_CONFIRM": "Sei sicuro di voler cambiare l'Access Level di '{{project}}' a '{{level}}' per il consumer '{{consumer}}'?",
