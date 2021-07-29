@@ -5,8 +5,9 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 10.0.0 (dd-mm-yyyy)
-  * Implemented an history-based "time machine" feature in ResourceView
-  * Implemented possibility to "undo" operations (ctrl/cmd+Z)
+  * Implemented an history-based "time machine" feature, allowing for the recreation of the state 
+    of any resource (up to two hops of context in the graph) at any time in history
+  * Implemented support for "undo" on any data operation (ctrl/cmd+Z)
   * Added possibility to require email verification in the registration procedure
   * Enabled project rendering through multilingual labels
   * Improved the management of the unicity of preferred labels for concepts in the same scheme
@@ -17,7 +18,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Implemented a new ICV: OWL concistency violations
   * Implemented SHACL batch validation
   * Adopted the new Settings services
-  * Implemented EU-Login
+  * Implemented support for EU-Login
   * Added flags for Scottish Gaelic and Welsh languages
   * Added german l10n
   * Fixed autocompletion and prefixes resolution in SPARQL editor
