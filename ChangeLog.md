@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 10.0.0 (dd-mm-yyyy)
+# 10.0.0 (02-08-2021)
   * Implemented an history-based "time machine" feature, allowing for the recreation of the state 
     of any resource (up to two hops of context in the graph) at any time in history
   * Implemented support for "undo" on any data operation (ctrl/cmd+Z)
