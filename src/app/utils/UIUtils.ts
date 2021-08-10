@@ -247,14 +247,10 @@ export class UIUtils {
             } else if (role == RDFResourceRolesEnum.mention) {
                 imgSrc = this.mentionImgSrc;
                 /**
-                 * If the role is mention, it means that the serialized resource has no nature.
-                 * In this case the resource is not necessary a mention, in fact:
-                 * - it is a untyped individual in case the resource is a local IRI
-                 * - it could be a custom form preview, so check if it has a language
+                 * If the role is mention, it means that the resource has no nature.
+                 * In this case the resource is not necessary a mention, in fact it could be a reified resource in a custom form preview, 
+                 * so check if it has a language or a datatype
                  */
-                if (rdfResource instanceof ARTURIResource && rdfResource.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) { 
-                    imgSrc = this.untypedIndividualImgSrc; //local IRI => untyped individual
-                }
                 if (rdfResource.getAdditionalProperty(ResAttribute.LANG) != null) { //has a language => use the flag icon
                     imgSrc = this.getFlagImgSrc(rdfResource.getAdditionalProperty(ResAttribute.LANG));
                 } else if (rdfResource.getAdditionalProperty(ResAttribute.DATA_TYPE) != null) {

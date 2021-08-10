@@ -14,7 +14,13 @@ export class Deserializer {
         let uriRes: ARTURIResource = new ARTURIResource(id, show);
         //other properties
         this.parseNodeOptionalProperties(uri, uriRes, additionalAttr);
-
+        /**
+         * If the role is mention, it means that the resource has no nature.
+         * But the resource could be a local IRI without a declarated type, in such case force the individual role.
+         */
+        if (uriRes.getRole() == RDFResourceRolesEnum.mention && VBContext.getWorkingProject() != null && uriRes.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) {
+            uriRes.setRole(RDFResourceRolesEnum.individual);
+        }
         return uriRes;
     }
 

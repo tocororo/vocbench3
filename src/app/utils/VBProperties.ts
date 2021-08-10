@@ -122,11 +122,11 @@ export class VBProperties {
                 }
 
                 //search settings
+                projectPreferences.searchSettings = new SearchSettings();
                 let searchSettings: SearchSettings = settings.getPropertyValue(SettingsEnum.searchSettings);
                 if (searchSettings == null) {
-                    searchSettings = new SearchSettings();
+                    PreferencesUtils.mergePreference(projectPreferences.searchSettings, searchSettings);
                 }
-                projectPreferences.searchSettings = searchSettings;
                 this.initSearchSettingsCookie(projectPreferences); //other settings stored in cookies
 
                 //notifications
@@ -507,6 +507,7 @@ export class VBProperties {
         if (restrictSchemesCookie != null) {
             preferences.searchSettings.extendToAllIndividuals = extendAllIndividualsCookie == "true";
         }
+        console.log("searchSettings", preferences.searchSettings);
     }
 
     setSearchSettings(projectCtx: ProjectContext, settings: SearchSettings) {
@@ -526,11 +527,11 @@ export class VBProperties {
             oldSearchSettings.useAutocompletion != settings.useAutocompletion;
 
         if (changed) {
-            projectCtx.getProjectPreferences().searchSettings = settings;
             //the properties stored as cookie (e.g. useURI, useLocalName, ...) will be simply ignored server side, so I can pass here the whole searchSettings object
             this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.searchSettings, settings, 
                 new VBRequestOptions({ ctxProject: projectCtx.getProject() })).subscribe();
         }
+        projectCtx.getProjectPreferences().searchSettings = settings;
         this.eventHandler.searchPrefsUpdatedEvent.emit(projectCtx.getProject());
     }
 
