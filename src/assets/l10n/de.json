@@ -45,11 +45,13 @@
         "DELETE_MEMBER": "Mitglied löschen",
         "DELETE_MIRROR": "Mirror löschen",
         "DELETE_PROJECT": "Projekt löschen",
+        "DEPLOY": "Bereitstellen",
         "DEPRECATE": "Als veraltet markieren",
         "DETECT": "Erkennen",
         "DETECT_FORMAT": "Format erkennen",
         "DISABLE": "Deaktivieren",
         "DISCARD": "Verwerfen",
+        "DOWNLOAD": "Herunterladen",
         "DO_QUICK_ACTION": "Schnelle Aktion ausführen",
         "DUMP_NEW_VERSION": "Neue Dump-Version erstellen",
         "DUMP_NEW_VERSION_DIFFERENT_LOCATION": "Neue Dump-Version an einem anderen Ort speichern",
@@ -217,7 +219,9 @@
                 "MANAGED_PROPERTIES": "Managed Properties",
                 "PROP_ADDITION_OTHER_PROJECT_WARN": "Das ausgewählte Projekt ist aktuell nicht geöffnet, so dass Eigenschaften nur durch manuelle Eingabe der IRI hinzugefügt werden können, eine Auswahl aus dem Eigenschaftsbaum ist nicht möglich.",
                 "RENAME_CUSTOM_SECTION": "Benutzerdefinierten Abschnitt umbenennen"
-            }
+            },
+            "TIME_MACHINE_ENABLED": "Zeitmaschine aktiviert",
+            "TIME_MACHINE_ENABLED_INFO": "Gibt an, ob die Zeitmaschine in der Ressourcenansicht verfügbar ist"
         },
         "ROLES": {
             "AREA": "Bereich",
@@ -410,7 +414,9 @@
                 "CONTACT_US": "Kontakt",
                 "PRIVACY_STATEMENT": "Datenschutzerklärung",
                 "SUPPORT": "Support",
-                "VB_SITE": "VocBench Website"
+                "VB_SITE": "VocBench Website",
+                "WEB_API": "Web-API-Basis-URL kopieren",
+                "WEB_API_COPIED": "Web-API-Basis-URL in die Zwischenablage kopiert"
             },
             "CURRENT_PROJECT": "Aktuelles Projekt",
             "GLOBAL_DATA_MENU": {
@@ -506,6 +512,7 @@
         "REASON": "Reasoning",
         "REIFIED": "Reifiziert",
         "RENDERING": "Rendern",
+        "REQUIRED": "Erforderlich",
         "ROLE": "Rolle",
         "ROLES": "Rollen",
         "SCOPE": "Umfang",
@@ -602,7 +609,7 @@
                 "MULTIVALUE_LANG_WARN": "Achtung: Dieses Feld lässt mehrere Werte zu (Option 'Multivalue' aktiviert). Für alle diese Werte wird die gleiche Sprache verwendet."
             },
             "GRAPH": {
-                "ADV_GRAPH_PATTERN": "Advanced graph pattern",
+                "ADV_GRAPH_PATTERN": "Fortgeschrittenes Graph-Muster",
                 "NODES_RELATIONS": "Knotenbeziehungen"
             },
             "MESSAGES": {
@@ -620,7 +627,9 @@
                 "NOT_CUSTOM_CONSTRUCTOR_STATUS": "Dieser Assistent dient zum Erstellen des benutzerdefinierten Konstruktors, die geladene Datei stellt den Custom Range dar.",
                 "NOT_CUSTOM_RANGE_STATUS": "Dieser Assistent dient zum Erstellen von Custom Range, die geladene Datei stellt den Custom Constructor dar.",
                 "NOT_VALID_STATUS": "Die geladene Datei stellt keine gültige CustomForm-Statusdatei dar.",
-                "OPTIONAL_ENTRY_POINT_WARN": "In einer CustomForm, die als CustomRange verwendet wird, kann die erste Verwendung des Knotens '{{id}}' im Diagrammabschnitt kein optionales Feld sein."
+                "OPTIONAL_ENTRY_POINT_WARN": "In einer CustomForm, die als CustomRange verwendet wird, kann die erste Verwendung des Knotens '{{id}}' im Diagrammabschnitt kein optionales Feld sein.",
+                "REFERENCED_FIELD_DELETE_WARN": "Das zu löschende Feld ist der Ursprung eines Knotens, der in einem (oder mehreren) erweiterten Graph-Mustern verwendet wird. Durch Löschen dieses Feldes wird automatisch auch das Graph-Muster gelöscht. Möchten Sie fortfahren?",
+                "REFERENCED_NODE_DELETE_WARN": "Der zu löschende Knoten wird in einem (oder mehreren) erweiterten Graph-Mustern verwendet. Durch Löschen dieses Knotens wird automatisch auch das Graph-Muster gelöscht. Möchten Sie fortfahren?"
             },
             "NODES": {
                 "ENTRY_POINT_INFO": "Der Einstiegspunkt des von der CustomForm erzeugten Graph-Objekts",
@@ -949,6 +958,13 @@
             "URI_PREFIX": "URI-Präfix"
         },
         "EXPORT": {
+            "DEPLOY": {
+                "DEPLOYER": "Bereitsteller",
+                "DEPLOYMENT": "Bereitstellung",
+                "DEPLOY_TO_TRIPLE_STORE": "Im Tripel-Store bereitstellen",
+                "SAVE_TO_FILE": "Als Datei speichern",
+                "USE_CUSTOM_DEPLOYER": "Benutzerdefinierten Deployer verwenden"
+            },
             "GRAPHS": "Graphen",
             "GRAPHS_TO_EXPORT": "Zu exportierende Graphen",
             "INCLUDE_INFERRED": "Abgeleitete einschließen",
@@ -1261,6 +1277,7 @@
             "EDIT_INVOKABLE_REPORT": "Aufrufbaren Bericht bearbeiten",
             "EDIT_SERVICE_INVOCATION": "Serviceaufruf bearbeiten"
         },
+        "DESTINATION_PATH": "Zielpfad",
         "INVOCATION": {
             "ARGUMENTS": "Argumente",
             "CUSTOM_OPERATIONS": "Benutzerdefinierte Operationen",
@@ -1273,7 +1290,8 @@
         },
         "INVOKABLE_REPORTS": "Aufrufbare Berichte",
         "REPORT": "Bericht",
-        "RESULT": "Ergebnis"
+        "RESULT": "Ergebnis",
+        "SOURCE_PATH": "Quellpfad"
     },
     "MESSAGES": {
         "ACL_CHANGE_ACCESS_CONFIRM": "Sind Sie sicher, dass Sie die Zugriffsebene von '{{project}}' auf '{{level}}' für den Verbraucher '{{consumer}}' ändern möchten?",
@@ -1287,7 +1305,7 @@
         "ADD_ALL_CONCEPT_TO_SCHEME_CONFIRM": "Sie sind dabei, alle vorhandenen Begriffe zum Schema '{{scheme}}' hinzuzufügen. Sind Sie  sicher?",
         "ADD_DELETE_ALIGNMENT_TO_EDOAL_CONFIRM": "Dieser Vorgang fügt die akzeptierte Ausrichtung zum EDOAL-Linkset hinzu und löscht die abgelehnten. Möchten Sie fortfahren?",
         "ADD_DELETE_ALIGNMENT_TO_ONTO_CONFIRM": "Diese Operation fügt der Ontologie die Triples der akzeptierten Ausrichtungen hinzu, abgelehnte werden gelöscht. Möchten Sie fortfahren?",
-        "ADV_GRAPH_APP_LOADED_REPORT": "Ein oder mehrere Knoten, die in der geladenen Advanced Graph-Anwendung definiert sind, haben eine ID, die bereits von anderen Knoten verwendet wird. Sie wurden ersetzt.",
+        "ADV_GRAPH_APP_LOADED_REPORT": "Ein oder mehrere Knoten, die in der geladenen fortgeschrittenen Graph-Anwendung definiert sind, haben eine ID, die bereits von anderen Knoten verwendet wird. Diese ID(s) wurde(n) ersetzt.",
         "ALIGNED_PROJ_METADATA_NOT_FOUND_GENERATE_CONFIRM": "Keine Metadaten zum Projekt '{{project}}' gefunden. Möchten Sie Metadaten generieren? (Erforderlich für die Ausrichtung)",
         "ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM": "Durch manuelles Ändern der Beziehung wird das Maß für die Ausrichtung automatisch auf 1,0 gesetzt. Möchten Sie fortfahren?",
         "ALIGNMENT_SERVICE_NOT_RESPONDING": "Der Alignment-Service-Server hat nicht geantwortet. Stellen Sie sicher, dass er aktiv ist und die Konfiguration korrekt ist.",
@@ -1300,6 +1318,7 @@
         "ALREADY_EXISTING_CONFIG_FOR_SERVER_URL": "Für diese Server-URL gibt es bereits eine Konfiguration.",
         "ALREADY_EXISTING_CONFIG_ID": "Es gibt bereits eine Konfiguration mit dieser ID.",
         "ALREADY_EXISTING_CUSTOM_FORM_ID": "Es gibt bereits eine CustomForm mit dieser ID.",
+        "ALREADY_EXISTING_FILE_OVERWRITE_CONFIRM": "Es existiert bereits eine Datei mit diesem Namen. Datei überschreiben?",
         "ALREADY_EXISTING_FILTER_FOR_CLASS": "Es gibt bereits einen Filter für die ausgewählte Klasse.",
         "ALREADY_EXISTING_FORM_COLLECTION_ID": "Es gibt bereits eine FormCollection mit dieser ID.",
         "ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE": "Es kann kein Knoten für {{resource}} hinzugefügt werden, da der Knoten für diese Ressource bereits vorhanden ist.",
@@ -1323,6 +1342,7 @@
         "CANNOT_EDIT_NOT_EXPLICIT_RESOURCES": "Alle ausgewählten Ressourcen sind nicht explizit und können daher nicht bearbeitet werden",
         "CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS": "Anmeldeinformationen von Remote-Repositorys, die mit einem geöffneten Projekt verknüpft sind, können nicht bearbeitet werden. Bitte Projekt schließen und noch einmal versuchen.",
         "CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES": "Die Range von {{property}} lässt keine Ressourcen zu. Sie können keine Remote-Ressource hinzufügen.",
+        "CANNOT_EXPORT_ADV_GRAPH_APP_WITH_EXTERNAL_REF": "Die fortgeschrittene Graph-Anwendung kann nicht gespeichert werden, da sie Verweise auf Knoten enthält, die in externen Headern definiert sind.",
         "CANNOT_GRANT_ADMIN_TO_INACTIVE_USER": "Die Administratorberechtigung kann einem nicht aktiven Benutzer nicht erteilt werden. Bitte den Status des Benutzers ändern und erneut versuchen.",
         "CANNOT_IMPORT_DATASET_MISSING_ONTO_IRI": "Das ausgewählte Dataset enthält keine Ontologie-IRI und kann daher nicht importiert werden. Bitte Datensatz ändern.",
         "CANNOT_INFER_PEARL_ANNOTATIONS": "Es ist nicht möglich, Annotationen aus ungültigem PEARL-Code zu generieren.",
@@ -1354,7 +1374,7 @@
         "DELETE_CUSTOM_FORM_CONFIRM": "Sie löschen die ausgewählte CustomForm. Sind Sie sicher?",
         "DELETE_CUSTOM_SERVICE_CONFIRM": "Sie sind dabei, den ausgewählten CustomService zu löschen. Sind Sie sicher?",
         "DELETE_FORM_COLLECTION_CONFIRM": "Sie löschen die ausgewählte FormCollection. Sind Sie sicher?",
-        "DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM": "Der zu löschende Knoten wird in einer oder mehreren Diagrammanwendungen verwendet. Dieser Vorgang wirkt sich auch auf die Diagrammanwendung aus. Möchten Sie fortfahren?",
+        "DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM": "Der zu löschende Knoten wird in einer oder mehreren Graph-Anwendungen verwendet. Dieser Vorgang wirkt sich auch auf die Graph-Anwendung aus. Möchten Sie fortfahren?",
         "DELETE_INVOKABLE_REPORT_CONFIRM": "Sie löschen den ausgewählten aufrufbaren Bericht. Sind Sie sicher?",
         "DELETE_METADATA_PATTERN_ASSOCIATION_CONFIRM": "Sie löschen die ausgewählte Metadaten-Muster-Zuordnung. Sind Sie sicher?",
         "DELETE_METADATA_PATTERN_CONFIRM": {
@@ -1396,7 +1416,7 @@
         "INCOMPLETE_BINDING_PARAMETERIZATION_DATATYPE": "Unvollständige Parametrierung für die Bindung '{{binding}}'. Bitte Datentyp angeben oder die Bindung löschen.",
         "INCOMPLETE_BINDING_PARAMETERIZATION_ROLE": "Unvollständiger Parametrierung für die Bindung '{{binding}}'. Bitte eine Rolle festlegen oder die Bindung löschen.",
         "INCOMPLETE_BINDING_PARAMETERIZATION_VALUE": "Unvollständige Parametrierung für die Bindung '{{binding}}'. Bitte einen Wert festlegen oder die Bindung löschen.",
-        "INCOMPLETE_GRAPH_APPLICATION": "Die Graph-Anwendung ist nicht abgeschlossen. Bitte geben Sie eine Liste der Knoten und ein Graph-Pattern an.",
+        "INCOMPLETE_GRAPH_APPLICATION": "Die Graph-Anwendung ist noch nicht vollständig. Bitte geben Sie eine Liste der Knoten und ein Graph-Muster an.",
         "INCOMPLETE_METADATA_PATTERN_ASSOCIATION": "Die Konfiguration der Ressourcen-Metadaten enthält eine unvollständige Zuordnung. Bitte korrigieren oder Ressourcen-Metadaten deaktivieren.",
         "INCOMPLETE_PRED_OBJ_PAIR": "Ein unvollständiges zusätzliches Prädikat-Objekt-Paar wurde erkannt.",
         "INCONSISTENT_MIN_MAX_FACETS": "Die minimalen und maximalen Facetten sind inkonsistent.",
@@ -1404,7 +1424,7 @@
         "INVALID_ALIGNMENT_MEASURE": "Die eingegebene Maßzahl ist ungültig. Sie muss zwischen 0 und 1 liegen.",
         "INVALID_CUSTOM_FORM_ID": "Die CustomForm-ID ist ungültig (sie kann leer sein oder ungültige Zeichen enthalten). Bitte korrigieren.",
         "INVALID_FROM_TIME_FORMAT": "Der Zeitparameter 'Von' entspricht nicht dem Datum-Uhrzeit-Format JJJJ-MM-TTTHH:mm",
-        "INVALID_GRAPH_PATTERN": "Das angegebene Graph-Pattern ist ungültig",
+        "INVALID_GRAPH_PATTERN": "Das angegebene Graph-Muster ist ungültig",
         "INVALID_IRI": "{{iri}} ist keine gültige IRI",
         "INVALID_LANG_TAG": "{{lang}} ist kein gültiges Sprach-Tag",
         "INVALID_LOCAL_NAME": "Der angegebene lokale Name ist ungültig",
@@ -1432,7 +1452,7 @@
         "METADATA_PATTERN_REQUIRED": "Sie müssen mindestens ein Muster angeben (Konstruktion, Aktualisierung oder Zerstörung).",
         "MISSING_BINDING_NAME": "Fehlender Bindungsname an Position {{position}}. Bitte einen Namen eingeben.",
         "MISSING_DATA_REPO_CONFIG": "Das Datenrepository muss konfiguriert werden.",
-        "MISSING_DEFAULT_PRED_IN_GRAPH_PATTERN": "Das Graph-Pattern enthält den Platzhalter {{pred}}, es wurde jedoch kein Standardprädikat angegeben.",
+        "MISSING_DEFAULT_PRED_IN_GRAPH_PATTERN": "Das Graph-Muster enthält den Platzhalter {{pred}}, es wurde jedoch kein Standardprädikat angegeben.",
         "MISSING_HISTORY_VALIDATION_REPO_CONFIG": "Das Verlaufs- / Validierungs-Repository muss konfiguriert werden.",
         "MISSING_ICV_ALIGNMENTS": "Es gibt keine Ausrichtungen für die ausgewählten Ressourcentypen, auf denen das ICV ausgeführt wird",
         "MISSING_ICV_LANGUAGE": "Sie müssen mindestens eine Sprache auswählen, um das ICV auszuführen",
@@ -1442,7 +1462,7 @@
         "MISSING_OR_INVALID_BASEURI": "BaseURI fehlt oder ist ungültig",
         "MISSING_OR_INVALID_PROJECT_NAME": "Projektname fehlt oder ist ungültig",
         "MISSING_PRELOAD_DATA_SELECT_NO_PRELOAD": "Keine Daten vorinstalliert. Bitte laden Sie Daten oder wählen Sie '{{doNotPreloadOpt}}', wenn Sie keine vorladen möchten.",
-        "MISSING_RENDERING_ENGINE_CONFIG": "Das Rendern des Engine-Plugins erfordert eine Konfiguration",
+        "MISSING_RENDERING_ENGINE_CONFIG": "Das Rendering-Engine-Plugin muss konfiguriert werden",
         "MISSING_REQUIRED_FIELD": "Das erforderliche Feld {{fieldName}} fehlt",
         "MISSING_REQUIRED_PARAM": "Der erforderliche Parameter '{{parma}}' fehlt",
         "MISSING_REQUIRED_PARAM_IN_EXPORTER": "In der Exporterkonfiguration ({{exporter}}, Gültigkeitsbereich: {{scope}}) fehlt ein oder mehrere erforderliche Parameter.",
@@ -1461,7 +1481,7 @@
         "NO_ACCESS_GRANTED_TO_ANY_PROJECT": "Sie haben kein Zugriffsrecht auf ein vorhandenes offenes Projekt.",
         "NO_FACETS_PROVIDED": "Es sind keine Facetten angegeben. Bitte füllen Sie mindestens eine der verfügbaren Facetten aus.",
         "NO_INFERRED_STATEMENTS_TO_ASSERT": "Es gibt keine abgeleiteten Aussagen zu behaupten",
-        "NO_LANG_DETECTED_IN_EDOAL_ALIGNMENT": "Für das Projekt '{{projName}}' wurde keine Benutzersprache erkannt. Das System kann die Liste der Ausrichtungen nicht initialisieren.\nBitte öffnen Sie das Projekt, gehen Sie zu den Benutzereinstellungen und legen Sie eine Rendering-Sprache fest.",
+        "NO_LANG_DETECTED_IN_EDOAL_ALIGNMENT": "Für das Projekt '{{projName}}' wurde keine Benutzersprache erkannt. Das System kann die Liste der Alignments nicht initialisieren.\nBitte öffnen Sie das Projekt, gehen Sie zu den Benutzereinstellungen und legen Sie eine Rendering-Sprache fest.",
         "NO_PERMISSION_FOR_SERVICE_INVOCATION": "Ihre Rechte sind nicht ausreichend, um einen (oder mehrere) Dienste aufzurufen, die von diesem Bericht ausgeführt werden.",
         "NO_RESOURCE_SUGGESTED_FOR_FORM_COLLECTION": "Für die FormCollection wurden keine Klassen/Eigenschaften vorgeschlagen",
         "NO_RESULTS_FOUND": "Keine Ergebnisse gefunden",
@@ -1477,6 +1497,8 @@
         "PASSWORD_RESET_INSTRUCTION_SENT": "Eine E-Mail mit den Anweisungen zum Zurücksetzen des Passworts wurde an die angegebene Adresse gesendet.",
         "PEARL_CODE_WITH_ERROR": "Pearl Code enthält Fehler.",
         "PRELOAD_PROFILER_THRESHOLD_UPDATED": "Der Preload-Profiler-Schwellenwert wurde aktualisiert.",
+        "PROFILE_PROJECT_COMPLETED": "Profilierung des Projekts '{{project}}' abgeschlossen",
+        "PROFILE_PROJECT_CONFIRM": "Möchten Sie das Projekt '{{project}}' profilieren?",
         "PROFILE_PROJECT_REFRESH_CONFIRM": "Das Projekt '{{project}}' wurde bereits profiliert. Möchten Sie die Profilerstellung wiederholen und überschreiben?",
         "PROJECT_CREATED": "Projekt erfolgreich erstellt",
         "PROJECT_OPEN_CLOSE_AND_RETRY": "Das Projekt ist derzeit geöffnet. Bitte schließen Sie das Projekt und versuchen Sie es erneut.",
@@ -1498,7 +1520,7 @@
         "REMOVE_DANGLINGS_FROM_SCHEME_WARN_CONFIRM": "Wenn diese Begriffe Unterbegriffe haben kann das Entfernen aus dem Schema weitere baumelnde Begriffe erzeugen. Möchten Sie dennoch fortfahren?",
         "REMOVE_DANGLING_FROM_SCHEME_WARN_CONFIRM": "Wenn dieser Begriff Unterbegriffe hat, kann das Entfernen aus dem Schema weitere baumelnde Begriffe erzeugen. Möchten Sie dennoch fortfahren?",
         "REMOVE_USER_FROM_PROJ_CONFIRM": "Sie entfernen den Benutzer {{user}} aus dem Projekt {{project}}. Sind Sie sicher?",
-        "RENDERING_ENGINE_CONFIG_UPDATED": "Die Konfiguration der Rendering Engine wurde aktualisiert.",
+        "RENDERING_ENGINE_CONFIG_UPDATED": "Die Konfiguration der Rendering-Engine wurde aktualisiert.",
         "REPLACE_METADATA_PATTERN_CONFIRM": "Es gibt bereits ein Muster mit diesem Namen. Es wird ersetzt. Möchten Sie fortfahren?",
         "REPLACE_SHARED_METADATA_PATTERN_CONFIRM": "Es gibt bereits ein gemeinsames Muster mit diesem Namen. Es wird ersetzt. Möchten Sie fortfahren?",
         "REPO_CREDENTIALS_BATCH_UPDATED": {
@@ -1512,7 +1534,8 @@
         "RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH": "Die Ressource {{resource}} ist im aktuellen Baum nicht erreichbar, da der Pfad zu ihr einen veralteten Knoten enthält. Aktivieren Sie die Anzeige veralteter Ressourcen und wiederholen Sie die Suche.",
         "RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM": "Die Ressource {{resource}} ist im aktuellen Baum nicht erreichbar. Möchten Sie die ResourceView in einem modalen Dialog öffnen?",
         "RESOURCE_URI_COPIED_IN_CLIPBOARD": "Ressourcen-URI in Zwischenablage kopiert!",
-        "RESTART_REPO_LOCAL_REQUIRED": "Damit die Änderung wirksam wird, müssen Sie möglicherweise das Repository des lokalen Projekts neu starten, indem Sie den gesamten Triple-Store neu starten.",
+        "RESTART_LOCAL_REPO_REQUIRED": "Damit die Änderung wirksam wird, kann es erforderlich sein, das lokale Repository des Projekts neu zu starten, indem der gesamte Triple Store neu gestartet wird.",
+        "RESTART_REPO_LOCAL_REQUIRED": "Damit die Änderung wirksam wird, müssen Sie möglicherweise das Repository des lokalen Projekts neu starten, indem Sie den gesamten Tripel-Store neu starten.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Sie überschreiben die aktuelle Vorlage, indem Sie die Standardkonfiguration wiederherstellen. Sind Sie sicher?",
         "REVOKING_ADMIN_CONFIRM": "Sie widerrufen die Administratorenrechte für {{user}}. Sind Sie sicher?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Änderung der baseURI speichern? (Achtung, baseURI-Refactoring könnte ein langer Prozess sein)",
@@ -1704,6 +1727,7 @@
             "REPO_ACCESS": "Repository-Zugriff",
             "REPO_LOCATION": "Repository-Speicherort",
             "SUPPORT_REPO_ID": "Historie- / Validierungs-Repository-ID",
+            "UNDO": "Rückgängig machen",
             "VALIDATION": "Validierung"
         },
         "RESOURCE": {
@@ -1772,7 +1796,7 @@
             },
             "RENDERING": {
                 "DESCRIPTION": "Wählen Sie die Sprachen (und deren Reihenfolge) aus, die zum Rendern der Ressourcen verwendet werden",
-                "RENDERING_LANGS": "Sprachen rendern"
+                "RENDERING_LANGS": "Rendering-Sprachen"
             },
             "VALUE_FILTER": {
                 "DESCRIPTION": "Wählen Sie die Sprachen aus, die beim Filtern von Literalwerten in Ressourcenbeschreibungen angezeigt werden. Schalten Sie den Filter um, um die Werte in den nicht ausgewählten Sprachen auszublenden.",
@@ -1873,6 +1897,7 @@
         "TRANSITIVE_IMPORTS": "Transitive Importe",
         "TRIVIAL_INFERENCE": "Triviale Folgerung",
         "TRIVIAL_INFERENCE_INFO": "Triviale Folgerung aktivieren",
+        "UNDO_INFO": "Aktiviert die Möglichkeit, Daten-Operationen rückgängig zu machen",
         "URI_GENERATOR": "URI-Generator",
         "USE_DEFAULT": "Standardeinstellungen verwenden",
         "USE_RESOURCE_METADATA_INFO": "Die Verwendung von Ressourcenmetadaten kann auch nach der Projekterstellung aktiviert werden",
@@ -2001,6 +2026,8 @@
             "SHOW_DATATYPE_BADGE_INFO": "Wenn diese Option aktiviert ist, wird neben dem Wert immer eine Kennung für den Datentyp angezeigt. Wenn nicht, wird die Kennung nur bei einem unbekannten Datentyp angezeigt (das Symbol links neben dem Wert klassifiziert den bekannten Datentyp).",
             "SHOW_DEPRECATED": "Veraltete Werte anzeigen",
             "SHOW_DEPRECATED_INFO": "Wenn diese Option aktiviert ist, werden verknüpfte Ressourcen, die als veraltet markiert sind, in der Ressourcenansicht angezeigt.",
+            "SORT_BY_RENDERING": "Lexikalisierungen in der Reihenfolge der Rendering-Sprachen sortieren",
+            "SORT_BY_RENDERING_INFO": "Wenn diese Option aktiviert ist, werden die Werte in der Partition 'Lexikalisierungen' in der Reihenfolge der Rendering-Sprachen sortiert (entsprechend den Einstellungen in 'Präferenzen').",
             "SPLITTED_INFO": [
                 "Die Ressourcenansicht ist zweigeteilt: links befindet sich eine Hauptressourcenansicht, die die in der Baumstruktur / Liste ausgewählte Ressource beschreibt (und mit dieser synchronisiert ist). Rechts befindet sich eine optionale zweite Ressourcenansicht, die eine in der Hauptressourcenansicht (per Doppelklick) ausgewählte Ressource beschreibt.",
                 "Dieser Modus wird bei Bildschirmen mit einer Auflösungsbreite unter 1440px nicht empfohlen"
@@ -2027,7 +2054,11 @@
             "TERM": "Begriff"
         },
         "TIME_MACHINE": {
-            "CHANGE_VERSION": "Version ändern"
+            "CHANGE_VERSION": "Version ändern",
+            "CURRENT": "Aktuell",
+            "SELECT_DATE": "Datum auswählen",
+            "TIME_MACHINE": "Zeitmaschine",
+            "TRAVER_TO_TIME": "Zu jedem beliebigen Zeitpunkt reisen"
         },
         "TYPES": {
             "DETAILED": "Detailliert",
@@ -2109,6 +2140,7 @@
         "BATCH_VALIDATION": "Batch-Validierung",
         "CLEAR_EXISTING": "Vorhandenes löschen",
         "CLEAR_SHACL_SHAPES": "SHACL-Formen löschen",
+        "CLICK_TO_INSPECT": "Zum Inspizieren klicken",
         "EXPORT_SHACL_SHAPES": "SHACL-Formen exportieren",
         "EXTRACT_FROM_SHACL": "Auszug aus SHACL",
         "LOAD_SHACL_SHAPES": "SHACL-Formen laden",
@@ -2117,16 +2149,16 @@
     "SHEET2RDF": {
         "ACTIONS": {
             "EXPORT_MAPPING_STATUS": "Mapping-Status exportieren",
-            "LOAD_ADVANCED_GRAPH_APPLICATION": "Erweiterte Graph-Anwendung laden",
-            "SAVE_ADVANCED_GRAPH_APPLICATION": "Erweiterte Graph-Anwendung speichern"
+            "LOAD_ADVANCED_GRAPH_APPLICATION": "Fortgeschrittene Graph-Anwendung laden",
+            "SAVE_ADVANCED_GRAPH_APPLICATION": "Fortgeschrittene Graph-Anwendung speichern"
         },
         "GRAPH_APPLICATIONS": {
             "ADVANCED": {
-                "ADV_GRAPH_APPL": "Erweiterte Graph-Anwendung",
+                "ADV_GRAPH_APPL": "Fortgeschrittene  Graph-Anwendung",
                 "DEFAULT_PREDICATE": "Standardprädikat",
-                "DEFAULT_PREDICATE_INFO": "Wenn das Graph-Pattern den Platzhalter 'pred' enthält, ist dieses Prädikat obligatorisch, andernfalls wird es ignoriert",
-                "GRAPH_PATTERN": "Graph-Pattern",
-                "GRAPH_PATTERN_INFO": "Das Graph-Pattern darf nur Knoten-IDs enthalten, die bereits in einem Header definiert sind.<br>Es könnte auch einen <code>{{pred}}</code> Platzhalter enthalten, der durch das Prädikat des Headers ersetzt wird. Wenn das <code>{{pred}}</code> im Pattern verwendet wird, <strong>muss</strong>  ein Standardprädikat als Fallback bereitgestellt werden, wenn der Header kein gültiges Prädikat darstellt.",
+                "DEFAULT_PREDICATE_INFO": "Wenn das Graph-Muster den Platzhalter 'pred' enthält, ist dieses Prädikat obligatorisch, andernfalls wird es ignoriert",
+                "GRAPH_PATTERN": "Graph-Muster",
+                "GRAPH_PATTERN_INFO": "Das Graph-Muster darf nur Knoten-IDs enthalten, die bereits in einem Header definiert sind.<br>Es könnte auch einen <code>{{pred}}</code> Platzhalter enthalten, der durch das Prädikat des Headers ersetzt wird. Wenn das <code>{{pred}}</code> im Muster verwendet wird, <strong>muss</strong>  ein Standardprädikat als Fallback bereitgestellt werden, wenn der Header kein gültiges Prädikat darstellt.",
                 "PREFIX_NS_MAPPINGS": "Präfix-Namensraum-Mapping"
             },
             "DELETE_INFO": "Gibt an, ob diese Graph-Anwendung in den Löschabschnitt des PEARL-Codes eingefügt werden soll",
@@ -2140,9 +2172,9 @@
         },
         "HEADER_EDITOR": {
             "ADDITIONAL_PRED_OBJ": "Weitere Prädikat-Objekt-Paare",
-            "ADD_ADV_GRAPH_APPL": "Erweiterte Graph-Anwendung hinzufügen",
+            "ADD_ADV_GRAPH_APPL": "Fortgeschrittene Graph-Anwendung hinzufügen",
             "ADD_MEMOIZE_MAP": "Memoization Map ID hinzufügen",
-            "ADD_SIMPLE_GRAPH_APPL": "Einfache Grafikanwendung hinzufügen",
+            "ADD_SIMPLE_GRAPH_APPL": "Einfache Graph-Anwendung hinzufügen",
             "ASSERT_TYPE": "Typ bestätigen",
             "ASSERT_TYPE_INFO": "Aktivieren Sie diese Option, um eine Klassenmitgliedschaft für den Subjekt-Knoten zu bestätigen",
             "CONVERTER_TYPE": "Konvertertyp",
@@ -2270,6 +2302,10 @@
         "STATUS": "Status",
         "WARNING": "Warnung"
     },
+    "UNDO": {
+        "OPERATION_UNDONE": "Vorgang rückgängig gemacht",
+        "OPERATION_UNDONE_INFO": "Der folgende Vorgang wurde rückgängig gemacht: {{operation}}"
+    },
     "USER": {
         "LOGIN": "Anmelden",
         "PASSWORD": {
@@ -2335,6 +2371,12 @@
             "ADD_OPTIONAL_VALUE": "Optionalen Wert hinzufügen",
             "DELETE_OPTIONAL_VALUE": "Optionalen Wert löschen",
             "UNKNOWN_TYPE_WARN": "Dieser Parameter hat einen unbekannten Typ ({{propTypeName}}). Der eingegebene Wert wird als low-level JSON-Wert interpretiert"
+        },
+        "STORAGE_MGR": {
+            "CREATE_DIR": "Verzeichnis erstellen",
+            "LEVEL_UP": "Eine Ebene höher",
+            "STORAGE_MANAGER": "Speichermanager",
+            "UPLOAD_FILE": "Datei hochladen"
         },
         "VALUE_PICKER": {
             "FROM_CURRENT_PROJ": "Aus dem aktuellen Projekt",
