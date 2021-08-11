@@ -124,7 +124,7 @@ export class VBProperties {
                 //search settings
                 projectPreferences.searchSettings = new SearchSettings();
                 let searchSettings: SearchSettings = settings.getPropertyValue(SettingsEnum.searchSettings);
-                if (searchSettings == null) {
+                if (searchSettings != null) {
                     PreferencesUtils.mergePreference(projectPreferences.searchSettings, searchSettings);
                 }
                 this.initSearchSettingsCookie(projectPreferences); //other settings stored in cookies
@@ -507,7 +507,6 @@ export class VBProperties {
         if (restrictSchemesCookie != null) {
             preferences.searchSettings.extendToAllIndividuals = extendAllIndividualsCookie == "true";
         }
-        console.log("searchSettings", preferences.searchSettings);
     }
 
     setSearchSettings(projectCtx: ProjectContext, settings: SearchSettings) {

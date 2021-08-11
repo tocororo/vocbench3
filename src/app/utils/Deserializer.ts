@@ -17,6 +17,7 @@ export class Deserializer {
         /**
          * If the role is mention, it means that the resource has no nature.
          * But the resource could be a local IRI without a declarated type, in such case force the individual role.
+         * (this solves issues with the resource icon and with authorization checks)
          */
         if (uriRes.getRole() == RDFResourceRolesEnum.mention && VBContext.getWorkingProject() != null && uriRes.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) {
             uriRes.setRole(RDFResourceRolesEnum.individual);
