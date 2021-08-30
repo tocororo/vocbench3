@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { RepositoryLocation } from "../models/History";
 import { OWL, SKOS, SKOSXL } from "../models/Vocabulary";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../utils/VBActions";

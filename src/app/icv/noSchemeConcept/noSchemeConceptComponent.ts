@@ -16,6 +16,8 @@ export class NoSchemeConceptComponent {
 
     brokenConceptList: Array<ARTURIResource>;
 
+    hideAlert: boolean;
+
     constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingModals: BrowsingModalServices,
         private sharedModals: SharedModalServices) { }
 

@@ -1207,8 +1207,9 @@
         "QUICK_ACTION": "Quick action",
         "STRUCTURAL": {
             "CONCEPTS_RELATED_DISJOINT": {
-                "DESCRIPTION": "skos:Concept(s) connected to another with both the skos:related and the skos:broaderTransitive (skos:related relation is disjoint with skos:broaderTransitive)",
-                "NAME": "Concepts related disjoint relations"
+                "DESCRIPTION": "skos:Concept(s) connected to another one through both the skos:related and the skos:broaderTransitive (skos:related relation is disjoint with skos:broaderTransitive)",
+                "NAME": "Concepts related disjoint relations",
+                "WARNING": "Warning: this ICV checks possible clashes on all patterns including subproperties of both skos:related and skos:broaderTransitive. However, it does not check the transitive closure of the skos:broaderTransitive relation. For this, activation of a reasoner is necessary."
             },
             "CONCEPT_EXACT_MATCH_DISJOINT": {
                 "DESCRIPTION": "skos:Concept(s) connected to another with both the skos:exactMatch and one of skos:broadMatch or skos:relatedMatch (skos:exactMatch relation is disjoint with skos:broadMatch and skos:relatedMatch)",

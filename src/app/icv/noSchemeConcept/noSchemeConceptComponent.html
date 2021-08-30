@@ -5,17 +5,18 @@
     </div>
     <div class="card-body vbox">
         
-        <div class="alert alert-info">
+        <div *ngIf="!hideAlert" class="alert alert-info alert-dismissible alert-multiline">
             <i>
                 {{'ICV.STRUCTURAL.CONCEPT_IN_NO_SCHEME.DESCRIPTION'|translate}}<br/>
                 {{'ICV.STRUCTURAL.CONCEPT_IN_NO_SCHEME.WARNING'|translate}}
             </i>
+            <button class="close" data-dismiss="alert" (click)="hideAlert = true"><span>&times;</span></button>
         </div>
 
         <div *ngIf="!brokenConceptList" style="padding: 4px;">
             {{'ICV.PRESS_RUN_TO_RUN_CHECK.0'|translate}} <strong>{{'ACTIONS.RUN'|translate}}</strong> {{'ICV.PRESS_RUN_TO_RUN_CHECK.1'|translate}}
         </div>
-        <div *ngIf="brokenConceptList" class="scrollableContainer">
+        <div *ngIf="brokenConceptList" class="table-responsive">
             <table class="table table-sm table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
@@ -30,7 +31,7 @@
                         </td>
                         <td style="white-space: nowrap">
                             <button class="btn btn-xs btn-light" (click)="addToScheme(concept)">{{'ICV.STRUCTURAL.CONCEPT_IN_NO_SCHEME.ADD_TO_SCHEME'|translate}}</button>
-                            <button class="btn btn-xs btn-light" (click)="deleteConcept(concept)">{{'DATA.ACTIONS.DELETE_CONCEPT'|translate}}</button>
+                            <button class="btn btn-xs btn-light ml-1" (click)="deleteConcept(concept)">{{'DATA.ACTIONS.DELETE_CONCEPT'|translate}}</button>
                         </td>
                     </tr>
                 </tbody>

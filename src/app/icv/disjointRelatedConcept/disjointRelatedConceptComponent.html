@@ -3,43 +3,51 @@
         <label style="flex: 1;">{{'ICV.STRUCTURAL.CONCEPTS_RELATED_DISJOINT.NAME'|translate}}</label>
         <button class="btn btn-xs btn-light" (click)="runIcv()">{{'ACTIONS.RUN'|translate}}</button>
     </div>
-    <div class="card-body vbox">
-        
-        <div class="card card-default vbox">
-            <div class="card-body scrollableContainer">
-                <table *ngIf="brokenRecordList" class="table table-sm table-hoverable">
-                    <thead>
-                        <tr>
-                            <th class="text-center">{{'MODELS.RESOURCE.RESOURCE'|translate}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <ng-container *ngFor="let record of brokenRecordList; let i=index">
-                            <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
-                                <td class="text-center">
-                                    <rdf-resource class="clickable" [resource]="record" (click)="onResourceClick(record)"></rdf-resource>
-                                </td>
-                            </tr>
-                        </ng-container>
-                    </tbody>
-                </table>
-            </div>
+    <div class="card-body scrollableContainer">
 
-            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="card-footer">
-                <div class="btn-group btn-group-xs float-right" role="group">
-                    <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="page=page-1" [disabled]="page <= 0">
-                        <span class="fas fa-caret-left"></span>
-                    </button>
-                    <button class="btn btn-light" style="cursor: auto" disabled>
-                        <span>{{page+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
-                    </button>
-                    <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="page=page+1" [disabled]="page+1 >= pageCount">
-                        <span class="fas fa-caret-right"></span>
-                    </button>
-                </div>
-            </div>
+        <div *ngIf="!hideAlert" class="alert alert-info alert-dismissible alert-multiline">
+            <i>
+                {{'ICV.STRUCTURAL.CONCEPTS_RELATED_DISJOINT.DESCRIPTION'|translate}}<br/>
+                {{'ICV.STRUCTURAL.CONCEPTS_RELATED_DISJOINT.WARNING'|translate}}
+            </i>
+            <button class="close" data-dismiss="alert" (click)="hideAlert = true"><span>&times;</span></button>
+        </div>
+
+        <div *ngIf="!brokenRecordList" style="padding: 4px;">
+            {{'ICV.PRESS_RUN_TO_RUN_CHECK.0'|translate}} <strong>{{'ACTIONS.RUN'|translate}}</strong> {{'ICV.PRESS_RUN_TO_RUN_CHECK.1'|translate}}
         </div>
         
+        <table *ngIf="brokenRecordList" class="table table-sm table-hoverable">
+            <thead>
+                <tr>
+                    <th class="text-center">{{'MODELS.RESOURCE.RESOURCE'|translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let record of brokenRecordList; let i=index">
+                    <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
+                        <td class="text-center">
+                            <rdf-resource class="clickable" [resource]="record" (click)="onResourceClick(record)"></rdf-resource>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="card-footer">
+        <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="btn-group btn-group-xs float-right">
+            <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="page=page-1" [disabled]="page <= 0">
+                <span class="fas fa-caret-left"></span>
+            </button>
+            <button class="btn btn-light" style="cursor: auto" disabled>
+                <span>{{page+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
+            </button>
+            <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                <span class="fas fa-caret-right"></span>
+            </button>
+        </div>
     </div>
     
     <div id="blockDivIcv" class="blockingDiv" style="display:none">

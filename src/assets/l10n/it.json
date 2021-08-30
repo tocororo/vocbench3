@@ -1208,7 +1208,8 @@
         "STRUCTURAL": {
             "CONCEPTS_RELATED_DISJOINT": {
                 "DESCRIPTION": "skos:Concept legati ad altri con entrambe le relazioni skos:related e skos:broaderTransitive (skos:related è disgiunta da skos:broaderTransitive)",
-                "NAME": "Concetti related con relazioni disgiunte"
+                "NAME": "Concetti related con relazioni disgiunte",
+                "WARNING": "Attenzione: questo ICV verifica possibili clash su tutti i pattern che includono sotto-proprietà di skos:related e skos:broaderTransitive. Non controlla però la chiusura transitiva della relazione skos:broaderTransitive. A tale scopo, è necessario attivare il reasoner."
             },
             "CONCEPT_EXACT_MATCH_DISJOINT": {
                 "DESCRIPTION": "skos:Concept legati ad altri con entrambe le relazioni skos:exactMatch e una tra skos:broadMatch o skos:relatedMatch (skos:exactMatch è disgiunta da skos:broadMatch e skos:relatedMatch)",
