@@ -22,7 +22,7 @@ export class ValidationServices {
      */
     getStagedCommitSummary(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], timeLowerBound?: string,
         timeUpperBound?: string, limit?: number) {
-        var params: any = {
+        let params: any = {
             operationFilter: operationFilter,
             performerFilter: performerFilter,
             timeLowerBound: timeLowerBound,
@@ -33,7 +33,7 @@ export class ValidationServices {
     }
 
     getCurrentUserStagedCommitSummary(operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string, limit?: number) {
-        var params: any = {
+        let params: any = {
             operationFilter: operationFilter,
             timeLowerBound: timeLowerBound,
             timeUpperBound: timeUpperBound,
@@ -54,7 +54,7 @@ export class ValidationServices {
      */
     getCommits(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], timeUpperBound?: string, timeLowerBound?: string,
         operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
-        var params: any = {
+        let params: any = {
             operationFilter: operationFilter,
             performerFilter: performerFilter,
             timeLowerBound: timeLowerBound,
@@ -70,11 +70,20 @@ export class ValidationServices {
                 return this.parseCommitInfoList(stResp);
             })
         );
+        return this.httpMgr.doGet(this.serviceName, "getCommits", params).pipe(
+            map(stResp => {
+                let commits: CommitInfo[] = [];
+                for (let commitJson of stResp) {
+                    commits.push(CommitInfo.parse(commitJson));
+                }
+                return commits;
+            })
+        );
     }
 
     getCurrentUserCommits(operationFilter?: ARTURIResource[], timeUpperBound?: string, timeLowerBound?: string,
         operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
-        var params: any = {
+        let params: any = {
             operationFilter: operationFilter,
             timeLowerBound: timeLowerBound,
             timeUpperBound: timeUpperBound,
@@ -93,49 +102,8 @@ export class ValidationServices {
 
     private parseCommitInfoList(commitsJsonArray: any[]): CommitInfo[] {
         let commits: CommitInfo[] = [];
-        for (var i = 0; i < commitsJsonArray.length; i++) {
-            let commitJson: any = commitsJsonArray[i];
-
-            let commitUri: ARTURIResource = new ARTURIResource(commitJson.commit);
-
-            let user: ARTURIResource;
-            let userJson = commitJson.user;
-            if (userJson != null) {
-                user = new ARTURIResource(userJson['@id'], userJson.show);
-            }
-
-            let operation: ARTURIResource;
-            let operationJson = commitJson.operation;
-            if (operationJson != null) {
-                operation = new ARTURIResource(operationJson['@id']);
-            }
-
-            let operationParameters: ParameterInfo[] = [];
-            let operationParamsJson: any[] = commitJson.operationParameters;
-            if (operationParamsJson != null) {
-                operationParamsJson.forEach(element => {
-                    if (element.value != null) {
-                        operationParameters.push(new ParameterInfo(element.name, element.value));
-                    }
-                });
-            }
-
-            let startTime: Date;
-            let startTimeJson = commitJson.startTime;
-            if (startTimeJson != null) {
-                startTime = new Date(startTimeJson);
-            }
-
-            let endTime: Date;
-            let endTimeJson = commitJson.endTime;
-            if (endTimeJson != null) {
-                endTime = new Date(endTimeJson);
-            }
-
-            let ca: boolean = commitJson.commentAllowed;
-            let commit: CommitInfo = new CommitInfo(commitUri, user, operation, operationParameters, startTime, endTime, ca);
-
-            commits.push(commit);
+        for (let commitJson of commitsJsonArray) {
+            commits.push(CommitInfo.parse(commitJson));
         }
         return commits;
     }
@@ -145,7 +113,7 @@ export class ValidationServices {
      * @param validatableCommit 
      */
     accept(validatableCommit: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             validatableCommit: validatableCommit
         };
         return this.httpMgr.doPost(this.serviceName, "accept", params);
@@ -157,7 +125,7 @@ export class ValidationServices {
      * @param comment
      */
     reject(validatableCommit: ARTURIResource, comment?: string) {
-        var params: any = {
+        let params: any = {
             validatableCommit: validatableCommit,
             comment: comment
         };
@@ -170,7 +138,7 @@ export class ValidationServices {
      * @param comment
      */
     rejectCurrentUserCommit(validatableCommit: ARTURIResource, comment?: string) {
-        var params: any = {
+        let params: any = {
             validatableCommit: validatableCommit,
             comment: comment
         };
