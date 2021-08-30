@@ -870,6 +870,7 @@
                 "MULTIPLE_SIBLING_WARN": "Il concetto sibling selezionato ha più broader, seleziona quale sarà il broader del concetto generato",
                 "SIBLING": "Sibling"
             },
+            "SWITCH_TO_HIERARCHY_MODE": "Passa alla visualizzazione gerarchica",
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "Questo albero dei concetti ha una quantità di top concept ({{count}}) che supera il limite impostato ({{safeToGoLimit}}).",
                 "FORCE_INIT": "Se si desidera forzare l'inizializzazione dell'albero a proprio rischio, cliccare",
@@ -893,6 +894,7 @@
                 "INSTANCES_LIMIT_INFO": "Imposta la quantità massima di istanze visibili nella lista. Questo setting evita che venga inizializzata una lista che potrebbe causare problemi di performance",
                 "INSTANCE_LIST_SETTINGS": "Impostazione lista istanze"
             },
+            "SWITCH_TO_STANDARD_MODE": "Passa alla visualizzazione standard",
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "Questa lista di istanze contiene un numero di elementi ({{count}}) che eccede il limite impostato ({{safeToGoLimit}}).",
                 "FORCE_INIT": "Se si desidera forzare l'inizializzazione della lista a proprio rischio, cliccare",
@@ -917,6 +919,7 @@
                 "LEX_ENTRIES_LIMIT_INFO": "Imposta la quantità massima di lexical entry visibili nella lista. Questo setting evita che venga inizializzata una lista che potrebbe causare problemi di performance",
                 "LEX_ENTRY_SETTINGS": "Impostazioni lista lexical entry"
             },
+            "SWITCH_TO_INDEX_BASED_MODE": "Passa alla visualizzazione basata su indice",
             "UNSAFE_WARN": {
                 "CHANGE_INDEX_LENGHT": "portare la dimensione dell'indice a 2 caratteri.",
                 "ELEMENT_COUNT": "Questa lista di LexicalEntry ha una quantità di elementi ({{count}}) che supera il limite impostato ({{safeToGoLimit}}).",

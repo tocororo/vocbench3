@@ -193,19 +193,19 @@ export abstract class AbstractTreeNode extends AbstractNode {
     /**
      * Listener to the nodeSelected @Output event, called when a node in the subTree is clicked
      */
-    private onNodeSelected(node: ARTURIResource) {
+    onNodeSelected(node: ARTURIResource) {
         this.nodeSelected.emit(node);
     }
 
-    private onNodeChecked(event: { node: ARTURIResource, checked: boolean }) {
+    onNodeChecked(event: { node: ARTURIResource, checked: boolean }) {
         this.nodeChecked.emit(event);
     }
 
     //Listeners to node expansion start/end. Simply forward the event to the parent
-    private onNodeExpandStart() {
+    onNodeExpandStart() {
         this.nodeExpandStart.emit();
     }
-    private onNodeExpandEnd() {
+    onNodeExpandEnd() {
         this.nodeExpandEnd.emit();
     }
 

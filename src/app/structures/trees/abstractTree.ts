@@ -112,10 +112,10 @@ export abstract class AbstractTree extends AbstractStruct {
     }
 
     //Listeners to node expansion start/end. Simply show/hide the loading div
-    private onNodeExpandStart() {
+    onNodeExpandStart() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
     }
-    private onNodeExpandEnd() {
+    onNodeExpandEnd() {
         UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
     }
 

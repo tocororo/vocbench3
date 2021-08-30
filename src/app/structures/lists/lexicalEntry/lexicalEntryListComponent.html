@@ -5,6 +5,10 @@
 
             <div *ngIf="visualizationMode == 'searchBased' && !list" class="alert alert-warning mb-1">
                 {{'DATA.LEX_ENTRY.USE_SEARCH_MSG'|translate}}
+                <ng-container *ngIf="context=='addPropValue'">
+                    <br/><br/>
+                    <a href="javascript:void(0)" style="font-size: .9rem;" (click)="switchMode.emit('indexBased')">{{'DATA.INSTANCE.SWITCH_TO_INDEX_BASED_MODE'|translate}}</a>
+                </ng-container>
             </div>
             
             <ng-container *ngIf="safeToGo.safe; then safetyBlock else unsafetyBlock"></ng-container>

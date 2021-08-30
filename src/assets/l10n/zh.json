@@ -870,6 +870,7 @@
                 "MULTIPLE_SIBLING_WARN": "Selected sibling concept has multiple broaders, select which one will be the broader of the spawning concept",
                 "SIBLING": "Sibling"
             },
+            "SWITCH_TO_HIERARCHY_MODE": "Switch to hierarchical visualization mode",
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "This Concept tree has an amount of top concepts ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
                 "FORCE_INIT": "If you want to force the Concept tree initialization at your own risk, click",
@@ -893,6 +894,7 @@
                 "INSTANCES_LIMIT_INFO": "Sets the maximum amount of instances visible in the list. This setting prevents the initialization of a list that might cause performance issues",
                 "INSTANCE_LIST_SETTINGS": "Instance list settings"
             },
+            "SWITCH_TO_STANDARD_MODE": "Switch to standard visualization mode",
             "UNSAFE_WARN": {
                 "ELEMENT_COUNT": "This instance list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
                 "FORCE_INIT": "If you want to force the instance list initialization at your own risk, click",
@@ -917,6 +919,7 @@
                 "LEX_ENTRIES_LIMIT_INFO": "Sets the maximum amount of lexical entries visible in the list. This setting prevents the initialization of a list that might cause performance issues",
                 "LEX_ENTRY_SETTINGS": "Lexical Entry list settings"
             },
+            "SWITCH_TO_INDEX_BASED_MODE": "Switch to index-based visualization mode",
             "UNSAFE_WARN": {
                 "CHANGE_INDEX_LENGHT": "change the index lenght to 2-char",
                 "ELEMENT_COUNT": "This LexicalEntry list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
