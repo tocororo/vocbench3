@@ -1,6 +1,7 @@
 import { Directive, ElementRef, EventEmitter, Output, QueryList, SimpleChanges, ViewChild } from "@angular/core";
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { SemanticTurkey } from "src/app/models/Vocabulary";
 import { ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { TreeListContext } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
@@ -215,10 +216,17 @@ export abstract class AbstractTreeNode extends AbstractNode {
             if (this.children[i].getNominalValue() == deletedNode.getNominalValue()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     /**
-                     * In case of validation don't do nothing, the removal of a triple like
+                     * In case of validation don't remove the child, the removal of a triple like
                      * :child skos:broader :parent 
                      * doesn't imply the removal of the child, but simply that the above triple is replicated in the staging-remove graph
+                     * Just update the style of the child node
                      */
+                    //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
+                    let stagedRes: ARTURIResource = this.children[i].clone();
+                    stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
+                    stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
+                    stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
+                    this.children[i] = stagedRes;
                 } else {
                     this.removeChildAtPos(i);
                 }
