@@ -10,7 +10,6 @@ import { Project } from "../../models/Project";
 import { PartitionFilterPreference, ResourceViewPreference, SettingsEnum } from "../../models/Properties";
 import { ProjectUserBinding, Role, User, UsersGroup } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
-import { ProjectServices } from "../../services/projectServices";
 import { UserServices } from "../../services/userServices";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -44,8 +43,8 @@ export class ProjectUsersManagerComponent {
     private availableLanguages: Language[]; //the languages that are shown in the "Available languages" panel, those who is possible to assign to user
     //this might be a subset of projectLanguages (if filterProficiencies is active)
     private puLanguages: Language[]; //languages assigned to the user in the selected project
-    private selectedLang: Language; //role selected in langList (available langs)
-    private selectedUserLang: Language; //selected lang in the list of the language assigned to the selectedUser in the selectedProject
+    selectedLangs: Language[];  //languages selected in available lang list (availableLanguages)
+    selectedUserLangs: Language[]; //selected langs in the list of the languages assigned to the selectedUser in the selectedProject
     private filterProficiencies: boolean = false;
 
     private groupList: UsersGroup[];
@@ -117,7 +116,7 @@ export class ProjectUsersManagerComponent {
             puBinding => {
                 this.puBinding = puBinding;
                 this.selectedUserRole = null;
-                this.selectedUserLang = null;
+                this.selectedUserLangs = [];
                 this.initAvailableLanguages();
                 this.initPULanguages();
             }
@@ -207,7 +206,7 @@ export class ProjectUsersManagerComponent {
 
     //=========== ROLES ===========
 
-    private selectUserRole(role: string) {
+    selectUserRole(role: string) {
         if (this.selectedUserRole == role) {
             this.selectedUserRole = null;
         } else {
@@ -215,7 +214,7 @@ export class ProjectUsersManagerComponent {
         }
     }
 
-    private selectRole(role: Role) {
+    selectRole(role: Role) {
         if (!this.isRoleAlreadyAssigned(role)) {
             if (this.selectedRole == role) {
                 this.selectedRole = null;
@@ -225,7 +224,7 @@ export class ProjectUsersManagerComponent {
         }
     }
 
-    private addRole() {
+    addRole() {
         this.adminService.addRolesToUser(this.project, this.selectedUser.getEmail(), [this.selectedRole.getName()]).subscribe(
             stResp => {
                 this.puBinding.addRole(this.selectedRole.getName());
@@ -234,7 +233,7 @@ export class ProjectUsersManagerComponent {
         );
     }
 
-    private removeRole() {
+    removeRole() {
         this.adminService.removeRoleFromUser(this.project, this.selectedUser.getEmail(), this.selectedUserRole).subscribe(
             stResp => {
                 this.puBinding.removeRole(this.selectedUserRole);
@@ -267,7 +266,7 @@ export class ProjectUsersManagerComponent {
 
     //=========== GROUPS ===========
 
-    private selectUserGroup(group: UsersGroup) {
+    selectUserGroup(group: UsersGroup) {
         if (this.selectedUserGroup == group) {
             this.selectedUserGroup = null;
         } else {
@@ -275,7 +274,7 @@ export class ProjectUsersManagerComponent {
         }
     }
 
-    private selectGroup(group: UsersGroup) {
+    selectGroup(group: UsersGroup) {
         if (!this.isGroupAlreadyAssigned(group)) {
             if (this.selectedGroup == group) {
                 this.selectedGroup = null;
@@ -285,7 +284,7 @@ export class ProjectUsersManagerComponent {
         }
     }
 
-    private assignGroup() {
+    assignGroup() {
         this.groupsService.assignGroupToUser(this.project, this.selectedUser.getEmail(), this.selectedGroup.iri).subscribe(
             stResp => {
                 this.puBinding.setGroup(this.selectedGroup);
@@ -294,7 +293,7 @@ export class ProjectUsersManagerComponent {
         )
     }
 
-    private removeGroup() {
+    removeGroup() {
         this.groupsService.removeGroupFromUser(this.project, this.selectedUser.getEmail()).subscribe(
             stResp => {
                 this.puBinding.removeGroup();
@@ -303,7 +302,7 @@ export class ProjectUsersManagerComponent {
         );
     }
 
-    private changeGroupLimitations() {
+    changeGroupLimitations() {
         let limitations: boolean = !this.puBinding.isSubjectToGroupLimitations();
         this.groupsService.setGroupLimitationsToUser(this.project, this.selectedUser.getEmail(), this.puBinding.getGroup().iri, limitations).subscribe(
             stResp => {
@@ -325,7 +324,7 @@ export class ProjectUsersManagerComponent {
 
     //=========== LANGUAGES ===========
 
-    private toggleFilterProficencies() {
+    toggleFilterProficencies() {
         this.filterProficiencies = !this.filterProficiencies;
         this.initAvailableLanguages();
     }
@@ -354,30 +353,38 @@ export class ProjectUsersManagerComponent {
         Languages.sortLanguages(this.puLanguages);
     }
 
-    private selectUserLang(lang: Language) {
-        if (this.selectedUserLang == lang) {
-            this.selectedUserLang = null;
-        } else {
-            this.selectedUserLang = lang;
-        }
+    selectUserLang(lang: Language, event: MouseEvent) {
+        this.handleClickInLangList(this.selectedUserLangs, lang, event);
     }
 
-    private selectLang(lang: Language) {
+    selectLang(lang: Language, event: MouseEvent) {
         if (!this.isLangAlreadyAssigned(lang)) {
-            if (this.selectedLang == lang) {
-                this.selectedLang = null;
-            } else {
-                this.selectedLang = lang;
-            }
+            this.handleClickInLangList(this.selectedLangs, lang, event);
         }
     }
 
-    private addLanguage() {
-        this.puBinding.addLanguage(this.selectedLang.tag);
+    private handleClickInLangList(list: Language[], lang: Language, event: MouseEvent) {
+        if (event.ctrlKey) { //ctrl+click => remove from selected langs if lang was selected, add it otherwise
+            if (list.includes(lang)) { //was selected => remove it
+                list.splice(list.indexOf(lang), 1);
+            } else { //was not selected => add it
+                list.push(lang);
+            }
+        } else { //not ctrl+click => just select/deselect the lang
+            //empty the list and add lang (do not assign list=[lang] since in this way the reference of selectedUserLangs/selectedLangs changes)
+            list.splice(0, list.length);
+            list.push(lang);
+        }
+    }
+
+    addLanguage() {
+        this.selectedLangs.forEach(l => {
+            this.puBinding.addLanguage(l.tag);
+        })
         this.updateLanguagesOfUserInProject();
     }
 
-    private addAllLanguages() {
+    addAllLanguages() {
         let langs: string[] = [];
         this.projectLanguages.forEach(l => {
             langs.push(l.tag);
@@ -386,7 +393,7 @@ export class ProjectUsersManagerComponent {
         this.updateLanguagesOfUserInProject();
     }
 
-    private addProficienciesLangs() {
+    addProficienciesLangs() {
         this.projectLanguages.forEach(l => {
             if (!this.isLangAlreadyAssigned(l) && this.isProficiencyLang(l.tag)) {
                 this.puBinding.addLanguage(l.tag);
@@ -395,17 +402,19 @@ export class ProjectUsersManagerComponent {
         this.updateLanguagesOfUserInProject();
     }
 
-    private removeLanguage() {
-        this.puBinding.removeLanguage(this.selectedUserLang.tag);
+    removeLanguage() {
+        this.selectedUserLangs.forEach(l => {
+            this.puBinding.removeLanguage(l.tag);
+        })
         this.updateLanguagesOfUserInProject();
     }
 
-    private removeAllLanguages() {
+    removeAllLanguages() {
         this.puBinding.setLanguages([]);
         this.updateLanguagesOfUserInProject();
     }
 
-    private leaveProficienciesLangs() {
+    leaveProficienciesLangs() {
         let langs: string[] = [];
         this.puBinding.getLanguages().forEach(l => {
             if (this.isProficiencyLang(l)) {
@@ -435,7 +444,8 @@ export class ProjectUsersManagerComponent {
     private updateLanguagesOfUserInProject() {
         this.adminService.updateLanguagesOfUserInProject(this.project, this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
             () => {
-                this.selectedUserLang = null;
+                this.selectedLangs = [];
+                this.selectedUserLangs = [];
                 this.initPULanguages();
                 //if the updates are applied to the current user in the current project, update project binding in context 
                 if (
@@ -450,7 +460,7 @@ export class ProjectUsersManagerComponent {
 
     //=========== TEMPLATES ===========
 
-    private loadTemplate() {
+    loadTemplate() {
         this.sharedModals.loadConfiguration({ key: "ACTIONS.LOAD_TEMPLATE" }, ConfigurationComponents.TEMPLATE_STORE).then(
             (conf: LoadConfigurationModalReturnData) => {
                 let templateProp: SettingsProp = conf.configuration.properties.find(p => p.name == "template");
@@ -462,7 +472,7 @@ export class ProjectUsersManagerComponent {
         )
     }
 
-    private storeTemplate() {
+    storeTemplate() {
         let config: { [key: string]: any } = {
             template: this.puTemplate
         }
@@ -497,7 +507,7 @@ export class ProjectUsersManagerComponent {
         return loggedUser != null && loggedUser.isAdmin();
     }
 
-    private isSelectedUserAdmin(): boolean {
+    isSelectedUserAdmin(): boolean {
         if (this.selectedUser == null) {
             return false;
         } else {
@@ -505,10 +515,10 @@ export class ProjectUsersManagerComponent {
         }
     }
 
-    private isRoleManagementAuthorized(): boolean {
+    isRoleManagementAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement);
     }
-    private isGroupManagementAuthorized(): boolean {
+    isGroupManagementAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement);
     }
 

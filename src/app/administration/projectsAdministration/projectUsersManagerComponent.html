@@ -6,7 +6,7 @@
                 <button class="btn btn-light" (click)="addUserToProject()" [disabled]="!project" [title]="'ADMINISTRATION.ACTIONS.ADD_USER_TO_PROJ'|translate">
                     <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-light" (click)="removeUserFromProject()" 
+                <button class="btn btn-light" (click)="removeUserFromProject()"
                     [disabled]="!selectedUser || selectedUser.isAdmin() || !project" [title]="'ADMINISTRATION.ACTIONS.REMOVE_USER_FROM_PROJ'|translate">
                     <span class="fas fa-minus"></span>
                 </button>
@@ -16,7 +16,7 @@
             <div *ngFor="let u of usersBound" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
                 <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
                 <span *ngIf="u.isAdmin()" class="badge badge-primary">Admin</span>
-            </div> 
+            </div>
         </div>
     </div>
     <div *ngIf="selectedUser" class="card card-alt vbox" style="margin-left: 5px; flex: 3;">
@@ -49,7 +49,7 @@
                             <button class="btn btn-light btn-sm btn-block" (click)="addRole()" [disabled]="!selectedRole || !puBinding">
                                 <span class="fas fa-chevron-left"></span> {{'ACTIONS.ADD'|translate}}
                             </button>
-                            <button class="btn btn-light btn-sm btn-block"  (click)="removeRole()" [disabled]="!selectedUserRole">
+                            <button class="btn btn-light btn-sm btn-block" (click)="removeRole()" [disabled]="!selectedUserRole">
                                 {{'ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                             </button>
                         </div>
@@ -80,7 +80,7 @@
                         <div class="card card-alt vbox">
                             <div class="card-header">
                                 <label style="flex: 1">{{'ADMINISTRATION.PROJECTS.PROJ_USER.GROUPS.ASSIGNED_GROUP'|translate}}:</label>
-                                <button *ngIf="puBinding?.getGroup()" class="btn btn-xs btn-light" [ngClass]="{ active: puBinding.isSubjectToGroupLimitations()}" (click)="changeGroupLimitations()" 
+                                <button *ngIf="puBinding?.getGroup()" class="btn btn-xs btn-light" [ngClass]="{ active: puBinding.isSubjectToGroupLimitations()}" (click)="changeGroupLimitations()"
                                     [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.GROUPS.RESTRICTIONS_INFO'|translate" [disabled]="selectedUser.isAdmin()">
                                     <span *ngIf="puBinding.isSubjectToGroupLimitations()" class="greenText" style="font-weight: bold">{{'ADMINISTRATION.PROJECTS.PROJ_USER.GROUPS.RESTRICTIONS_APPLIED'|translate}}</span>
                                     <span *ngIf="!puBinding.isSubjectToGroupLimitations()" class="grayText">{{'ACTIONS.APPLY_RESTRICTIONS'|translate}}</span>
@@ -99,7 +99,7 @@
                             <button class="btn btn-light btn-sm btn-block" (click)="assignGroup()" [disabled]="!selectedGroup || !puBinding">
                                 <span class="fas fa-chevron-left"></span> {{'ACTIONS.ASSIGN'|translate}}
                             </button>
-                            <button class="btn btn-light btn-sm btn-block"  (click)="removeGroup()" [disabled]="!selectedUserGroup">
+                            <button class="btn btn-light btn-sm btn-block" (click)="removeGroup()" [disabled]="!selectedUserGroup">
                                 {{'ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                             </button>
                         </div>
@@ -109,7 +109,7 @@
                             </div>
                             <div class="card-body vbox scrollableContainer">
                                 <div *ngFor="let g of groupList" class="listItem" (click)="selectGroup(g)"
-                                    [ngClass]="{active: g == selectedGroup, disabled: isGroupAlreadyAssigned(g)}" >
+                                    [ngClass]="{active: g == selectedGroup, disabled: isGroupAlreadyAssigned(g)}">
                                     {{g.shortName}}
                                 </div>
                             </div>
@@ -128,10 +128,10 @@
                             </div>
                             <div class="card-body vbox scrollableContainer">
                                 <ng-container *ngIf="puBinding">
-                                    <div *ngFor="let l of puLanguages" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
-                                        (click)="selectUserLang(l)">
+                                    <div *ngFor="let l of puLanguages" class="listItem" [ngClass]="{active: selectedUserLangs?.includes(l)}"
+                                        (click)="selectUserLang(l, $event)">
                                         <lang-item style="flex: 1" [language]="l" showTag="true"></lang-item>
-                                        <span *ngIf="l.proficiency" class="fas fa-star" 
+                                        <span *ngIf="l.proficiency" class="fas fa-star"
                                             [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.LANG_PROFICIENCIES_INFO'|translate">
                                         </span>
                                     </div>
@@ -144,7 +144,7 @@
                         </div>
                         <div class="vbox" style="align-self: center; margin: 5px; flex: initial;">
                             <div class="btn-group" style="display: flex; margin-bottom: 5px;">
-                                <button class="btn btn-sm btn-light" style="width: 100%" (click)="addLanguage()" [disabled]="!selectedLang || !puBinding">
+                                <button class="btn btn-sm btn-light" style="width: 100%" (click)="addLanguage()" [disabled]="selectedLangs?.length == 0 || !puBinding">
                                     <span class="fas fa-chevron-left"></span> {{'ACTIONS.ADD'|translate}}
                                 </button>
                                 <div class="btn-group" ngbDropdown>
@@ -161,7 +161,7 @@
                                 </div>
                             </div>
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-light" (click)="removeLanguage()" [disabled]="!selectedUserLang">
+                                <button class="btn btn-sm btn-light" (click)="removeLanguage()" [disabled]="selectedUserLangs?.length == 0">
                                     {{'ACTIONS.REMOVE'|translate}} <span class="fas fa-chevron-right"></span>
                                 </button>
                                 <div class="btn-group" ngbDropdown>
@@ -186,9 +186,9 @@
                                 </button>
                             </div>
                             <div class="card-body vbox scrollableContainer">
-                                <div *ngFor="let l of availableLanguages" class="listItem" [ngClass]="{active: l == selectedLang}" (click)="selectLang(l)">
+                                <div *ngFor="let l of availableLanguages" class="listItem" [ngClass]="{active: selectedLangs?.includes(l)}" (click)="selectLang(l, $event)">
                                     <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
-                                    <span *ngIf="l.proficiency" class="fas fa-star" 
+                                    <span *ngIf="l.proficiency" class="fas fa-star"
                                         [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.LANG_PROFICIENCIES_INFO'|translate">
                                     </span>
                                 </div>
