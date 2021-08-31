@@ -5,7 +5,8 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 10.0.1 (dd-mm-yyyy)
-  *
+  * Enabled multi-selection (ctrl+click) of languages in Project-User settings manager
+  * Minor bugfixes and improvements
 
 # 10.0.0 (02-08-2021)
   * Implemented an history-based "time machine" feature, allowing for the recreation of the state 

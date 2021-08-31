@@ -94,7 +94,7 @@ export class SettingsServices {
      * @param defaultScope 
      * @returns 
      */
-    getSettingsDefault(componentID: string, scope: Scope, defaultScope?: Scope) {
+    getSettingsDefault(componentID: string, scope: Scope, defaultScope: Scope) {
         let params = {
             componentID: componentID,
             scope: scope,

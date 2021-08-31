@@ -219,7 +219,7 @@
                     <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
                         {{'ADMINISTRATION.PROJECTS.PROJ_USER.TEMPLATE.RES_VIEW_TEMPLATE_DESCRIPTION'|translate}}
                     </div>
-                    <partition-filter-editor [(ngModel)]="puTemplate" (ngModelChange)="updateTemplate()"></partition-filter-editor>
+                    <partition-filter-editor [(ngModel)]="puTemplate" [ctx]="'Project'" [project]="project" (ngModelChange)="updateTemplate()"></partition-filter-editor>
                 </div>
             </div>
 

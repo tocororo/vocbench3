@@ -94,7 +94,7 @@ export class ResViewProjectSettingsComponent {
                 this.templates[role] = { enabled: activePartitions, disabled: notActivePartitions };
             }
         }
-        this.roles = <RDFResourceRolesEnum[]>Object.keys(this.templates);
+        this.roles = <RDFResourceRolesEnum[]>Object.keys(this.templates).sort();
     }
 
     /* ================

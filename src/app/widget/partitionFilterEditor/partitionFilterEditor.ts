@@ -1,8 +1,13 @@
-import { Component, forwardRef } from "@angular/core";
+import { Component, forwardRef, Input, SimpleChanges } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Observable, of } from "rxjs";
+import { map } from "rxjs/operators";
+import { ExtensionPointID, Scope } from "src/app/models/Plugins";
+import { Project } from "src/app/models/Project";
+import { SettingsServices } from "src/app/services/settingsServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
-import { PartitionFilterPreference, ResourceViewProjectSettings } from "../../models/Properties";
+import { PartitionFilterPreference, SettingsEnum } from "../../models/Properties";
 import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../modal/basicModal/basicModalServices";
@@ -18,59 +23,99 @@ import { ModalType } from '../modal/Modals';
 })
 export class PartitionFilterEditor {
 
+    @Input() ctx: PartitionFilterEditorCtx = PartitionFilterEditorCtx.Default;
+
+    /* 
+    in administration pages (user, project-user), the partition filter must be initialized for the provided user or project-user pair, 
+    not for the current one in VBContext (that may not even exist)
+    */
+    @Input() project: Project;
+
+    private partitionFilterSetting: PartitionFilterPreference;
+
     /**
      * When will be provided, this map will be retrieved throught a service call
      */
-    private rolePartitionMap: { [role: string]: ResViewPartition[] };
+    private templates: { [role: string]: ResViewPartition[] };
 
     rolePartitionsStructs: RolePartitionsStruct[];
     selectedRolePartitionsStruct: RolePartitionsStruct;
 
-    constructor(private basicModals: BasicModalServices) {}
+    constructor(private settingsService: SettingsServices, private basicModals: BasicModalServices) { }
 
-    ngOnInit() {
-        let rvProjSettings: ResourceViewProjectSettings = VBContext.getWorkingProjectCtx().getProjectSettings().resourceView;
-        this.rolePartitionMap = rvProjSettings.templates;
-
-        /**
-         * Initialize client-side the rolePartitionMap.
-         * This is useful untill there is no service that provide the mapping between resource roles and ResourceView partitions.
-         */
-        for (let role in this.rolePartitionMap) {
-            if (this.rolePartitionMap[role] == null) {
-                //set the individual partitions (as fallback) to those roles that have no partitions specified
-                this.rolePartitionMap[role] = this.rolePartitionMap[RDFResourceRolesEnum.individual]
-            }
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['project'] && changes['project'].currentValue) {
+            this.templates = null;
+            this.initPartitionFilter();
         }
     }
 
-    /**
-     * Convert the preference to a RolePartitionStruct list.
-     * The preference is an object that lists the hidden partitions for each roles.
-     * RolePartitionStruct contains also other info, such as the role or partition "show" and the "checked" boolean when a partition is visible
-     * @param pref 
-     */
-    private convertPrefToRolePartitionsStruct(pref: PartitionFilterPreference): RolePartitionsStruct[] {
-        let struct: RolePartitionsStruct[] = [];
+    private initPartitionFilter() {
+        this.ensureTemplateInitialized().subscribe( //ensure that the template is initialized
+            () => {
+                /*
+                Convert the partitionFilterSetting to a RolePartitionStruct list.
+                PartitionFilterSetting is an object that lists the hidden partitions for each roles.
+                RolePartitionStruct contains also other info, such as the role or partition "show" and the "checked" boolean when a partition is visible
+                */
+                this.rolePartitionsStructs = [];
+                for (let role in this.templates) {
+                    let partitionsStructs: PartitionStruct[] = [];
+                    let partitions: ResViewPartition[] = this.templates[role];
+                    partitions.forEach(p => {
+                        //partition visible if the role has no filtered-partition listed, or the partition for the role is not present among the filtered
+                        let showPartition: boolean = this.partitionFilterSetting[role] == null || this.partitionFilterSetting[role].indexOf(p) == -1;
+                        partitionsStructs.push({
+                            id: p,
+                            labelTranslationKey: ResViewUtils.getResourceViewPartitionLabelTranslationKey(p),
+                            checked: showPartition
+                        });
+                    });
+                    this.rolePartitionsStructs.push({
+                        role: { id: <RDFResourceRolesEnum>role, show: ResourceUtils.getResourceRoleLabel(<RDFResourceRolesEnum>role) },
+                        partitions: partitionsStructs
+                    });
+                }
+                this.rolePartitionsStructs.sort((p1, p2) => p1.role.show.localeCompare(p2.role.show));
+                //init the selection on the first role
+                this.selectedRolePartitionsStruct = this.rolePartitionsStructs[0];
+            }
+        );
+    }
 
-        for (let role in this.rolePartitionMap) {
-            let partitionsStructs: PartitionStruct[] = [];
-            let partitions: ResViewPartition[] = this.rolePartitionMap[role];
-            partitions.forEach(p => {
-                //partition visible if the role has no filtered-partition listed, or the partition for the role is not present among the filtered
-                let showPartition: boolean = pref[role] == null || pref[role].indexOf(p) == -1;
-                partitionsStructs.push({ 
-                    id: p,
-                    labelTranslationKey: ResViewUtils.getResourceViewPartitionLabelTranslationKey(p),
-                    checked: showPartition
-                });
-            });
-            struct.push({
-                role: { id: <RDFResourceRolesEnum>role, show: ResourceUtils.getResourceRoleLabel(<RDFResourceRolesEnum>role) },
-                partitions: partitionsStructs
-            });
+    /**
+     * Ensures that the template is initialized: 
+     * if the component is working in a administration page the template is the one set for the project (retrieved with a service call), 
+     * otherwise the component is working inside a project (e.g. RV or graph settings) and the template is the one already set in the VBContext
+     * @returns 
+     */
+    private ensureTemplateInitialized(): Observable<void> {
+        if (this.templates != null) {
+            return of(null);
+        } else {
+            if (this.ctx == PartitionFilterEditorCtx.Project && this.project != null) { //proj provided (probably in administration page) => init template about such project
+                /* init template as empty object, preventing further invokation of the following service when this method is invoked (almost) mutliple time
+                (e.g. in writeValue, ngOnChanges when projects changes, ...) */
+                this.templates = {};
+                return this.settingsService.getSettingsForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, this.project).pipe(
+                    map(settings => {
+                        this.templates = settings.getPropertyValue(SettingsEnum.resourceView).templates;
+                    })
+                )
+            } else if (this.ctx == PartitionFilterEditorCtx.User) { //init default system template
+                if (VBContext.getWorkingProjectCtx() == null) {
+                    this.templates = {};
+                    return this.settingsService.getSettingsDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, Scope.SYSTEM).pipe(
+                        map(settings => {
+                            this.templates = settings.getPropertyValue(SettingsEnum.resourceView).templates;
+                        })
+                    );
+                }
+            } else { //init template set in the project settings of project in VBContext
+                this.templates = VBContext.getWorkingProjectCtx().getProjectSettings().resourceView.templates;
+                return of(null);
+            }
         }
-        return struct
     }
 
     selectRolePartitionsStruct(rps: RolePartitionsStruct) {
@@ -107,7 +152,7 @@ export class PartitionFilterEditor {
      * Restore to visible all the partitions for all the roles
      */
     reset() {
-        this.basicModals.confirm({key:"ACTIONS.ENABLE_ALL"}, {key:"MESSAGES.ENABLE_ALL_PARTITIONS_IN_ALL_TYPES_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "ACTIONS.ENABLE_ALL" }, { key: "MESSAGES.ENABLE_ALL_PARTITIONS_IN_ALL_TYPES_CONFIRM" }, ModalType.warning).then(
             confirm => {
                 this.rolePartitionsStructs.forEach(rps => {
                     rps.partitions.forEach(p => {
@@ -116,7 +161,7 @@ export class PartitionFilterEditor {
                 })
                 this.updatePref();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -130,7 +175,7 @@ export class PartitionFilterEditor {
                 }
             });
             if (partitionsPref.length > 0) {
-                pref[rps.role.id+""] = partitionsPref;
+                pref[rps.role.id + ""] = partitionsPref;
             }
         });
         this.propagateChange(pref)
@@ -143,13 +188,12 @@ export class PartitionFilterEditor {
      * Write a new value to the element.
      */
     writeValue(obj: PartitionFilterPreference) {
-        if (obj) {
-            this.rolePartitionsStructs = this.convertPrefToRolePartitionsStruct(obj);
+        if (obj != null) {
+            this.partitionFilterSetting = obj;
         } else {
-            this.rolePartitionsStructs = this.convertPrefToRolePartitionsStruct({});
+            this.partitionFilterSetting = {};
         }
-        this.rolePartitionsStructs.sort((p1, p2) => p1.role.show.localeCompare(p2.role.show))
-        this.selectedRolePartitionsStruct = this.rolePartitionsStructs[0];
+        this.initPartitionFilter();
     }
     /**
      * Set the function to be called when the control receives a change event.
@@ -182,4 +226,10 @@ class PartitionStruct {
     id: ResViewPartition;
     labelTranslationKey: string;
     checked: boolean;
+}
+
+export enum PartitionFilterEditorCtx {
+    User = "User", //when this editor is used inside the user partition filter editor => use the system default template
+    Project = "Project", //when this editor is used inside the project-user filter editor => use the template set for project
+    Default = "Default" //otherwise (e.g. ResView/Graph settings) => use the template of the current project (from settings in VBContext). Teoretically no need to specify this case.
 }
