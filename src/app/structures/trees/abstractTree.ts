@@ -1,5 +1,5 @@
 import { Directive, ElementRef, QueryList, ViewChild } from "@angular/core";
-import { ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { TreeListContext, UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
@@ -108,6 +108,20 @@ export abstract class AbstractTree extends AbstractStruct {
                 //if this line is reached it means that the first node of the path has not been found
                 this.onTreeNodeNotFound(path[0]);
             });
+        } else {
+            /* 
+            if the node is not among the roots at all, it may be that the roots are still not initialized (e.g. after a scheme change following a concept search).
+            So, only for concept tree (which, at the moment, is the only struct that uses the pending search) store pending search.
+            Note that this prevent to distinguish those cases where the first element of the path is not found due to a tree that is still initializing, or those where
+            the path does not exist at all. This second case should never happen since ST should always return the correct path, the only case where
+            a not existing path could be returned should be in Property tree when it is filtered according the suggested property of a "source" resource (e.g. in the
+            add value modal when "Show all" is unchecked)
+            */
+            if (this.structRole == RDFResourceRolesEnum.concept) {
+                this.pendingSearchPath = path;
+            } else {
+                this.onTreeNodeNotFound(path[0]);
+            }
         }
     }
 
@@ -187,8 +201,7 @@ export abstract class AbstractTree extends AbstractStruct {
                 return true;
             }
         }
-        //if this code is reached, the root is not found (so probably it is waiting that the roots are initialized)
-        this.pendingSearchPath = path;
+        //if this code is reached, the root was not found (probably it is waiting that the roots are initialized)
         return false;
     }
 
