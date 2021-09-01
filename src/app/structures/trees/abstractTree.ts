@@ -106,7 +106,7 @@ export abstract class AbstractTree extends AbstractStruct {
                     }
                 }
                 //if this line is reached it means that the first node of the path has not been found
-                this.onTreeNodeNotFound(path[0]);
+                this.onTreeNodeNotFound(path[path.length-1]);
             });
         } else {
             /* 
@@ -120,7 +120,7 @@ export abstract class AbstractTree extends AbstractStruct {
             if (this.structRole == RDFResourceRolesEnum.concept) {
                 this.pendingSearchPath = path;
             } else {
-                this.onTreeNodeNotFound(path[0]);
+                this.onTreeNodeNotFound(path[path.length-1]);
             }
         }
     }
