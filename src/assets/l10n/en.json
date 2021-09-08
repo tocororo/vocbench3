@@ -762,9 +762,11 @@
             "CREATE_LITERAL": "Create literal",
             "CREATE_NARROWER_CONCEPT": "Create narrower concept",
             "CREATE_NESTED_COLLECTION": "Create nested collection",
+            "CREATE_PLAIN": "Create plain",
             "CREATE_PROPERTY": "Create property",
             "CREATE_PROPERTY_CHAIN": "Create property chain",
             "CREATE_SCHEME": "Create scheme",
+            "CREATE_SENSE": "Create Sense",
             "CREATE_SUBCLASS": "Create subClass",
             "CREATE_SUBPROPERTY": "Create subProperty",
             "CREATE_TRANSLATION_SET": "Create TranslationSet",
@@ -910,6 +912,7 @@
             "LEXICONS": "Lexicons"
         },
         "LEX_ENTRY": {
+            "LEX_CONCEPT": "Lexical Concept",
             "LEX_ENTRIES": "Lex.Entries",
             "LEX_ENTRY": "Lex.Entry",
             "NO_LEXICON_SELECTED_WARN": "No Lexicon selected, creation operations are disabled",
@@ -1963,6 +1966,7 @@
         "LEX_VIEW": {
             "CATEGORY": "Category",
             "PRONUNCIATION": "Pronunciation",
+            "REFERENCE": "Reference",
             "RELATED": "Related",
             "SEMANTIC_REFERENCE": "Semantic reference",
             "TRANSLATION": "Translation",

@@ -17,51 +17,52 @@
                 <col>
             </colgroup>
             <tbody>
-                <tr *ngIf="linkToReference; else linkToLexEntry">
-                    <td class="text-right"><label>Reference:</label></td>
-                    <td>
-                        <resource-picker [config]="{ roles: pickerRoles }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
+                <tr>
+                    <td class="text-right">
+                        <label *ngIf="showReference">{{'RESOURCE_VIEW.LEX_VIEW.REFERENCE'|translate}}:</label>
+                        <label *ngIf="showLexEntry">{{'DATA.LEX_ENTRY.LEX_ENTRY'|translate}}:</label>
+
+                        <select *ngIf="showRefAndConc" class="form-control" style="width: initial;" [(ngModel)]="scenario" (ngModelChange)="linkedResource = null">
+                            <option [value]="'reference'">{{'RESOURCE_VIEW.LEX_VIEW.REFERENCE'|translate}}</option>
+                            <option [value]="'lexConcept'">{{'DATA.LEX_ENTRY.LEX_CONCEPT'|translate}}</option>
+                        </select>
                     </td>
-                </tr>
-                <ng-template #linkToLexEntry>
-                    <tr>
-                        <td class="text-right" nowrap><label>Lexical Entry:</label></td>
-                        <td>
+                    <td>
+                        <ng-container *ngIf="scenario == 'reference'">
+                            <resource-picker [config]="{ roles: pickerRoles }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
+                        </ng-container>
+                        <ng-container *ngIf="scenario == 'lexEntry'">
                             <div class="hbox">
                                 <editable-ns-input style="flex: 1" [(ngModel)]="linkedResource"></editable-ns-input>
                                 <button class="btn btn-light btn-sm" style="margin-left: 4px;" (click)="pickLexicalEntry()">
                                     <span class="fas fa-pencil-alt"></span>
                                 </button>
                             </div>
-                        </td>
-                    </tr>
-                </ng-template>
+                        </ng-container>
+                        <ng-container *ngIf="scenario == 'lexConcept'">
+                            <resource-picker [config]="{ roles: ['concept'] }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
+                        </ng-container>
+                    </td>
+                </tr>
 
-                <tr *ngIf="createSense; else createPlain">
+                <tr>
                     <td></td>
                     <td>
-                        <div class="form-check">
+                        <div *ngIf="showCreatePlain" class="form-check">
                             <input class="form-check-input" id="plainCheck" type="checkbox" [(ngModel)]="createPlainCheck">
-                            <label class="form-check-label" for="plainCheck">Create Plain</label>
+                            <label class="form-check-label" for="plainCheck">{{'DATA.ACTIONS.CREATE_PLAIN'|translate}}</label>
+                        </div>
+                        <div *ngIf="showCreateSense" class="form-check">
+                            <input class="form-check-input" id="senseCheck" type="checkbox" [(ngModel)]="createSenseCheck">
+                            <label class="form-check-label" for="senseCheck">{{'DATA.ACTIONS.CREATE_SENSE'|translate}}</label>
                         </div>
                     </td>
                 </tr>
-                <ng-template #createPlain>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" id="senseCheck" type="checkbox" [(ngModel)]="createSenseCheck">
-                                <label class="form-check-label" for="senseCheck">Create Sense</label>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
 
             </tbody>
         </table>
 
-        <custom-form *ngIf="customFormId && createSense" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+        <custom-form *ngIf="customFormId && showCreateSense" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
             [(ngModel)]="formFields"></custom-form>
 
     </div>

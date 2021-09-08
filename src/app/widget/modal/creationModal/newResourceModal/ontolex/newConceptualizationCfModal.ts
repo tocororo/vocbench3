@@ -14,6 +14,13 @@ import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModa
 })
 export class NewConceptualizationCfModal extends AbstractCustomConstructorModal {
     @Input() title: string;
+    /* tells if, by default, the dialog prompt the creation of a "reified" conceptualization (with sense and optionally allows the creation of plain conceptualization),
+     or a plain (optionally allows the sense creation). 
+     Thus determines the checkbox meaning: 
+     - reified true => "create plain"
+     - reified false => "create sense"
+     */
+    @Input() createSense: boolean; 
     @Input() clsChangeable: boolean = true;
 
     //standard form
@@ -21,6 +28,7 @@ export class NewConceptualizationCfModal extends AbstractCustomConstructorModal 
     pickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.concept];
 
     createPlainCheck: boolean = true;
+    createSenseCheck: boolean = true;
 
     constructor(public activeModal: NgbActiveModal, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
@@ -49,12 +57,13 @@ export class NewConceptualizationCfModal extends AbstractCustomConstructorModal 
     }
 
     okImpl() {
-        var entryMap: any = this.collectCustomFormData();
+        let entryMap: any = this.collectCustomFormData();
 
-        var returnedData: NewConceptualizationCfModalReturnData = {
+        let returnedData: NewConceptualizationCfModalReturnData = {
             linkedResource: new ARTURIResource(this.linkedResource),
-            createPlain: this.createPlainCheck,
             cls: this.resourceClass,
+            createPlain: this.createPlainCheck,
+            createSense: this.createSenseCheck,
             cfValue: null
         }
         //set class only if not the default
@@ -76,7 +85,8 @@ export class NewConceptualizationCfModal extends AbstractCustomConstructorModal 
 
 export class NewConceptualizationCfModalReturnData {
     linkedResource: ARTURIResource; //lexicalEntry or reference
-    createPlain: boolean;
+    createPlain?: boolean;
+    createSense?: boolean;
     cls: ARTURIResource
     cfValue: CustomFormValue;
 }

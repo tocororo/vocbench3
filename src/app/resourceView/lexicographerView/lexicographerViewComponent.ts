@@ -164,14 +164,30 @@ export class LexicographerViewComponent {
     
     private sortSenses(senses: Sense[]) {
         senses.sort((s1, s2) => {
-            if (s1.reference.length != 0 && s2.reference.length != 0) {
-                return s1.reference[0].getShow().localeCompare(s2.reference[0].getShow())
-            } else if (s1.reference.length != 0 && s2.reference.length == 0) {
-                return 1
-            } else if (s1.reference.length == 0 && s2.reference.length != 0) {
-                return -1
-            } else {
+            /*
+            sense may be reified (with an ID) or plain (no ID, but with concept or reference). 
+            So consider to take into account different types of senses
+            */
+            if (s1.reference != null && s2.reference != null) { //try to compare senses with reference
+                if (s1.reference.length != 0 && s2.reference.length != 0) {
+                    return s1.reference[0].getShow().localeCompare(s2.reference[0].getShow())
+                } else if (s1.reference.length != 0 && s2.reference.length == 0) {
+                    return 1
+                } else if (s1.reference.length == 0 && s2.reference.length != 0) {
+                    return -1
+                }
+            } else if (s1.concept != null && s2.concept != null) { //try to compare senses with concept
+                if (s1.concept.length != 0 && s2.concept.length != 0) {
+                    return s1.concept[0].id.getNominalValue().localeCompare(s2.concept[0].id.getNominalValue())
+                } else if (s1.concept.length != 0 && s2.concept.length == 0) {
+                    return 1
+                } else if (s1.concept.length == 0 && s2.concept.length != 0) {
+                    return -1
+                }
+            } else if (s1.id != null && s2.id != null) { //try to compare by id
                 return s1.id.getNominalValue().localeCompare(s2.id.getNominalValue());
+            } else { //plain senses with different content (concept vs reference) => just keep the position
+                return 0;
             }
         });
     }
@@ -275,7 +291,7 @@ export class LexicographerViewComponent {
     }
 
     addConceptualization() {
-        this.creationModals.newConceptualizationCf({key:"DATA.ACTIONS.ADD_CONCEPTUALIZATION"}, false).then(
+        this.creationModals.newConceptualizationCf({key:"DATA.ACTIONS.ADD_CONCEPTUALIZATION"}, true, false).then(
             (data: NewConceptualizationCfModalReturnData) => {
                 this.ontolexService.addConceptualization(this.resource, data.linkedResource, data.createPlain, true, data.cls, data.cfValue).subscribe(
                     () => {

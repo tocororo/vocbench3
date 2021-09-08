@@ -112,10 +112,19 @@ export class CreationModalServices {
         return modalRef.result;
     }
 
-    newConceptualizationCf(title: TextOrTranslation, clsChangeable?: boolean) {
+    /**
+     * 
+     * @param title 
+     * @param createSense tells if, by default, the dialog prompt the creation of a "reified" conceptualization (with sense and optionally allows the creation of plain conceptualization),
+     *  or a plain (optionally allows the sense creation)
+     * @param clsChangeable 
+     * @returns 
+     */
+    newConceptualizationCf(title: TextOrTranslation, createSense: boolean, clsChangeable?: boolean) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewConceptualizationCfModal, _options);
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.createSense = createSense;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
     }

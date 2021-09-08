@@ -762,9 +762,11 @@
             "CREATE_LITERAL": "Crea literal",
             "CREATE_NARROWER_CONCEPT": "Crea concetto narrower",
             "CREATE_NESTED_COLLECTION": "Crea collezione annidata",
+            "CREATE_PLAIN": "Crea plain",
             "CREATE_PROPERTY": "Crea proprietà",
             "CREATE_PROPERTY_CHAIN": "Crea property chain",
             "CREATE_SCHEME": "Crea schema",
+            "CREATE_SENSE": "Crea Senso",
             "CREATE_SUBCLASS": "Crea sotto-classe",
             "CREATE_SUBPROPERTY": "Crea sotto-proprietà",
             "CREATE_TRANSLATION_SET": "Crea TranslationSet",
@@ -910,6 +912,7 @@
             "LEXICONS": "Lessici"
         },
         "LEX_ENTRY": {
+            "LEX_CONCEPT": "Lexical Concept",
             "LEX_ENTRIES": "Lex.Entries",
             "LEX_ENTRY": "Lex.Entry",
             "NO_LEXICON_SELECTED_WARN": "Nessun lessico selezionato, le operazioni di creazione sono disabilitate",
@@ -1963,6 +1966,7 @@
         "LEX_VIEW": {
             "CATEGORY": "Categoria",
             "PRONUNCIATION": "Pronuncia",
+            "REFERENCE": "Reference",
             "RELATED": "Correlati",
             "SEMANTIC_REFERENCE": "Riferimento semantico",
             "TRANSLATION": "Traduzione",
