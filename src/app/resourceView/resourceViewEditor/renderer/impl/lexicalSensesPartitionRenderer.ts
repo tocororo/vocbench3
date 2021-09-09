@@ -62,7 +62,7 @@ export class LexicalSensesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        return this.ontolexService.removeReifiedLexicalization(<ARTResource>object, true);
+        return this.ontolexService.removeSense(<ARTResource>object, true);
     }
 
 }

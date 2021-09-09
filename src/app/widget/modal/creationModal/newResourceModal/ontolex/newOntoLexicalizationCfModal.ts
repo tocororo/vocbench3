@@ -19,23 +19,22 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
 
 
     /*
-    - ontolex:denotes => ask for Reference; checkbox: Create plain
-    - ontolex:isDenotedBy => ask for Lexical Entry; checkbox: Create plain
-    - ontolex:sense => ask for Reference OR Lexical Concept; checkbox: Create sense
+    - ontolex:denotes => ask for Reference; checkbox "create sense"
+    - ontolex:isDenotedBy => ask for Lexical Entry; checkbox "create sense"
+    - ontolex:sense => ask for Reference OR Lexical Concept; checkbox "create plain"
     */
     showReference: boolean;
     showLexEntry: boolean;
-    showRefAndConc: boolean; //case for ontolex:sense
-    showCreateSense: boolean;
-    showCreatePlain: boolean;
+
+    creatingSense: boolean; //tells if the modal is used for creating a lexical sense (enriching ontolex:sense)
 
     scenario: CreationScenario; //specify what is the resource to provide in the creation
 
+    createSenseCheck: boolean = true;
+    createPlainCheck: boolean = true;
+
     //standard form
     private linkedResource: string;
-
-    private createPlainCheck: boolean = true;
-    private createSenseCheck: boolean = true;
 
     pickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.property, 
         RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.skosCollection];
@@ -51,15 +50,14 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
         if (this.lexicalizationProp.getURI() == OntoLex.denotes.getURI()) {
             this.scenario = CreationScenario.reference;
             this.showReference = true;
-            this.showCreatePlain = true;
+            this.creatingSense = false;
         } else if (this.lexicalizationProp.getURI() == OntoLex.isDenotedBy.getURI()) {
             this.scenario = CreationScenario.lexEntry;
             this.showLexEntry = true;
-            this.showCreatePlain = true;
+            this.creatingSense = false;
         } else if (this.lexicalizationProp.getURI() == OntoLex.sense.getURI()) {
             this.scenario = CreationScenario.reference;
-            this.showRefAndConc = true;
-            this.showCreateSense = true;
+            this.creatingSense = true;
         }
 
         this.selectCustomForm();
@@ -112,7 +110,7 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
             returnedData.cls = this.resourceClass;
         }
         //set cfValue only if not null and only if it's creating a sense (that is a reified lexicalizaion, CF doesn't make sense for a plain lexicalization)
-        if (this.showCreateSense && this.customFormId != null && entryMap != null) {
+        if (this.creatingSense && this.customFormId != null && entryMap != null) {
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
         this.activeModal.close(returnedData);

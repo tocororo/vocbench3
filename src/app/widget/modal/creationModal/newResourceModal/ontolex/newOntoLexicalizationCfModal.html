@@ -2,7 +2,7 @@
     <div class="modal-header" cdkDragHandle>
         <div class="hbox" style="align-items: center">
             <h3 class="modal-title" style="flex: 1">{{title}}</h3>
-            <span *ngIf="showCreateSense">
+            <span *ngIf="creatingSense">
                 <button class="btn btn-light btn-xs" [title]="'DATA.ACTIONS.CHANGE_CLASS'|translate" (click)="changeClass()" [disabled]="!clsChangeable">
                     <rdf-resource [resource]="resourceClass"></rdf-resource>
                 </button>
@@ -22,7 +22,7 @@
                         <label *ngIf="showReference">{{'RESOURCE_VIEW.LEX_VIEW.REFERENCE'|translate}}:</label>
                         <label *ngIf="showLexEntry">{{'DATA.LEX_ENTRY.LEX_ENTRY'|translate}}:</label>
 
-                        <select *ngIf="showRefAndConc" class="form-control" style="width: initial;" [(ngModel)]="scenario" (ngModelChange)="linkedResource = null">
+                        <select *ngIf="creatingSense" class="form-control" style="width: initial;" [(ngModel)]="scenario" (ngModelChange)="linkedResource = null">
                             <option [value]="'reference'">{{'RESOURCE_VIEW.LEX_VIEW.REFERENCE'|translate}}</option>
                             <option [value]="'lexConcept'">{{'DATA.LEX_ENTRY.LEX_CONCEPT'|translate}}</option>
                         </select>
@@ -48,21 +48,26 @@
                 <tr>
                     <td></td>
                     <td>
-                        <div *ngIf="showCreatePlain" class="form-check">
-                            <input class="form-check-input" id="plainCheck" type="checkbox" [(ngModel)]="createPlainCheck">
-                            <label class="form-check-label" for="plainCheck">{{'DATA.ACTIONS.CREATE_PLAIN'|translate}}</label>
-                        </div>
-                        <div *ngIf="showCreateSense" class="form-check">
-                            <input class="form-check-input" id="senseCheck" type="checkbox" [(ngModel)]="createSenseCheck">
-                            <label class="form-check-label" for="senseCheck">{{'DATA.ACTIONS.CREATE_SENSE'|translate}}</label>
-                        </div>
+                        <ng-container *ngIf="creatingSense; then createPlainCheckBlock; else createSenseCheckBlock"></ng-container>
+                        <ng-template #createPlainCheckBlock>
+                            <div class="form-check">
+                                <input class="form-check-input" id="plainCheck" type="checkbox" [(ngModel)]="createPlainCheck">
+                                <label class="form-check-label" for="plainCheck">{{'DATA.ACTIONS.CREATE_PLAIN'|translate}}</label>
+                            </div>
+                        </ng-template>
+                        <ng-template #createSenseCheckBlock>
+                            <div class="form-check">
+                                <input class="form-check-input" id="senseCheck" type="checkbox" [(ngModel)]="createSenseCheck">
+                                <label class="form-check-label" for="senseCheck">{{'DATA.ACTIONS.CREATE_SENSE'|translate}}</label>
+                            </div>
+                        </ng-template>
                     </td>
                 </tr>
 
             </tbody>
         </table>
 
-        <custom-form *ngIf="customFormId && showCreateSense" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+        <custom-form *ngIf="customFormId && creatingSense" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
             [(ngModel)]="formFields"></custom-form>
 
     </div>
