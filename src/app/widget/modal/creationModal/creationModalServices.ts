@@ -7,6 +7,7 @@ import { ModalOptions, TextOrTranslation } from '../Modals';
 import { NewPlainLiteralModal } from "./newPlainLiteralModal/newPlainLiteralModal";
 import { NewConceptualizationCfModal } from './newResourceModal/ontolex/newConceptualizationCfModal';
 import { NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
+import { NewLexSenseCfModal, NewLexSenseCfModalReturnData } from './newResourceModal/ontolex/newLexSenseCfModal';
 import { NewOntoLexicalizationCfModal } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
 import { NewResourceCfModal, NewResourceCfModalReturnData } from "./newResourceModal/shared/newResourceCfModal";
 import { NewResourceWithLiteralCfModal } from './newResourceModal/shared/newResourceWithLiteralCfModal';
@@ -100,7 +101,7 @@ export class CreationModalServices {
      * 
      * @param title 
      * @param lexicalizationProp determines which type of lexicalization should create
-     *  (OntoLex.senses | OntoLex.denotes | Ontolex.isDenotedBy)
+     *  (OntoLex.denotes | Ontolex.isDenotedBy)
      * @param clsChangeable 
      */
     newOntoLexicalizationCf(title: TextOrTranslation, lexicalizationProp: ARTURIResource, clsChangeable?: boolean) {
@@ -108,6 +109,20 @@ export class CreationModalServices {
         const modalRef: NgbModalRef = this.modalService.open(NewOntoLexicalizationCfModal, _options);
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.lexicalizationProp = lexicalizationProp;
+        if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
+        return modalRef.result;
+    }
+
+    /**
+     * Allows to create a sense, namely a lexicalization (with a resource reference) or a conceptualization (with a lexical sense)
+     * @param title 
+     * @param clsChangeable 
+     * @returns 
+     */
+    newOntoLexSenseCf(title: TextOrTranslation, clsChangeable?: boolean): Promise<NewLexSenseCfModalReturnData> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewLexSenseCfModal, _options);
+        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
     }

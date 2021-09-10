@@ -10,52 +10,29 @@ import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModa
 
 @Component({
     selector: "new-ontolexicalization-cf-modal",
-    templateUrl: "./newOntoLexicalizationCfModal.html",
+    templateUrl: "./newLexSenseCfModal.html",
 })
-export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal {
+export class NewLexSenseCfModal extends AbstractCustomConstructorModal {
     @Input() title: string;
-    @Input() lexicalizationProp: ARTURIResource; //(OntoLex.senses | OntoLex.denotes | Ontolex.isDenotedBy)
     @Input() clsChangeable: boolean = true;
 
-    //standard form
-    private linkedResource: string;
 
-    private createPlainCheck: boolean = true;
-    private createSenseCheck: boolean = true;
+    nature: PromptedResourceNature = PromptedResourceNature.reference; //specify what is the resource to provide in the creation reference/lex.concept
+
+    createPlainCheck: boolean = true;
+
+    //standard form
+    linkedResource: string;
 
     pickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.property, 
         RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.skosCollection];
 
-    /**
-     * true if the modal should allow to link a lexical entry to a reference (show the reference input field),
-     * false if it should allow to link a resource to a lexical entry (show the lexical entry input field).
-     */
-    linkToReference: boolean;
-    /**
-     * true if the modal should allow to create a LexicalSense (show the "create plain" checkbox),
-     * false if it should allow to create a plain lexicalization (show the "create sense" checkbox).
-     */
-    createSense: boolean;
-
-    constructor(public activeModal: NgbActiveModal, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
+    constructor(public activeModal: NgbActiveModal, cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
     }
 
     ngOnInit() {
         this.resourceClass = OntoLex.lexicalSense;
-
-        if (this.lexicalizationProp.getURI() == OntoLex.isDenotedBy.getURI()) {
-            this.linkToReference = false;
-            this.createSense = false;
-        } else if (this.lexicalizationProp.getURI() == OntoLex.sense.getURI()) {
-            this.linkToReference = true;
-            this.createSense = true;
-        } else if (this.lexicalizationProp.getURI() == OntoLex.denotes.getURI()) {
-            this.linkToReference = true;
-            this.createSense = false;
-        }
-
         this.selectCustomForm();
     }
 
@@ -63,10 +40,10 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
         this.changeClassWithRoot(OntoLex.lexicalSense);
     }
 
-    pickLexicalEntry() {
-        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
-            (lexEntry: ARTURIResource) => {
-                this.linkedResource = lexEntry.getURI();
+    pickLexicalConcept() {
+        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}).then(
+            (res: ARTURIResource) => {
+                this.linkedResource = res.getURI();
             }
         )
     }
@@ -86,10 +63,10 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
     okImpl() {
         let entryMap: any = this.collectCustomFormData();
 
-        let returnedData: NewOntoLexicalizationCfModalReturnData = {
+        let returnedData: NewLexSenseCfModalReturnData = {
             linkedResource: new ARTURIResource(this.linkedResource),
+            nature: this.nature,
             createPlain: this.createPlainCheck,
-            createSense: this.createSenseCheck,
             cls: this.resourceClass,
             cfValue: null
         }
@@ -98,7 +75,7 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
             returnedData.cls = this.resourceClass;
         }
         //set cfValue only if not null and only if it's creating a sense (that is a reified lexicalizaion, CF doesn't make sense for a plain lexicalization)
-        if (this.createSense && this.customFormId != null && entryMap != null) {
+        if (this.customFormId != null && entryMap != null) {
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
         this.activeModal.close(returnedData);
@@ -110,10 +87,15 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
 
 }
 
-export class NewOntoLexicalizationCfModalReturnData {
+export class NewLexSenseCfModalReturnData {
     linkedResource: ARTURIResource; //lexicalEntry or reference
+    nature: PromptedResourceNature;
     createPlain: boolean;
-    createSense: boolean;
     cls: ARTURIResource
     cfValue: CustomFormValue;
+}
+
+enum PromptedResourceNature {
+    reference = "reference",
+    lexConcept = "lexConcept"
 }

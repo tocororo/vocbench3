@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable, of } from "rxjs";
+import { NewLexSenseCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newLexSenseCfModal";
 import { ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -33,10 +34,16 @@ export class LexicalSensesPartitionRenderer extends PartitionRenderSingleRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (predicate.getURI() == this.rootProperty.getURI()) {
-            this.creationModals.newOntoLexicalizationCf({key:"DATA.ACTIONS.ADD_LEXICAL_SENSE"}, this.rootProperty, false).then(
-                (data: NewOntoLexicalizationCfModalReturnData) => {
-                    this.ontolexService.addLexicalization(this.resource, data.linkedResource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
-                        stResp => {
+            this.creationModals.newOntoLexSenseCf({key:"DATA.ACTIONS.ADD_LEXICAL_SENSE"}, false).then(
+                (data: NewLexSenseCfModalReturnData) => {
+                    let addFn: Observable<any>;
+                    if (data.nature == 'reference') {
+                        addFn = this.ontolexService.addLexicalization(this.resource, data.linkedResource, data.createPlain, true, data.cls, data.cfValue);
+                    } else { //nature lex.concept
+                        addFn = this.ontolexService.addConceptualization(this.resource, data.linkedResource, data.createPlain, true, data.cls, data.cfValue);
+                    }
+                    addFn.subscribe(
+                        () => {
                             this.update.emit()
                         }
                     );

@@ -24,6 +24,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
+import { NewLexSenseCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/ontolex/newLexSenseCfModal";
 import { NewOntoLexicalizationCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
 import { NewResourceWithLiteralCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
 import { NewXLabelModalReturnData } from "../widget/modal/creationModal/newResourceModal/skos/newXLabelModal";
@@ -410,12 +411,18 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private lexicalSensesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
-        this.creationModals.newOntoLexicalizationCf({key:"DATA.ACTIONS.ADD_LEXICAL_SENSE"}, predicate, false).then(
-            (data: NewOntoLexicalizationCfModalReturnData) => {
+        this.creationModals.newOntoLexSenseCf({key:"DATA.ACTIONS.ADD_LEXICAL_SENSE"}, false).then(
+            (data: NewLexSenseCfModalReturnData) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 subjects.forEach((s: ARTURIResource) => {
+                    let addFn: Observable<any>;
+                    if (data.nature == 'reference') {
+                        addFn = this.ontolexService.addLexicalization(s, data.linkedResource, data.createPlain, true, data.cls, data.cfValue);
+                    } else { //nature lex.concept
+                        addFn = this.ontolexService.addConceptualization(s, data.linkedResource, data.createPlain, true, data.cls, data.cfValue);
+                    }
                     addFunctions.push({
-                        function: this.ontolexService.addLexicalization(s, data.linkedResource, data.createPlain, data.createSense, data.cls, data.cfValue),
+                        function: addFn,
                         subject: s
                     });
                 });

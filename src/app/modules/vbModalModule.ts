@@ -42,6 +42,7 @@ import { NewPlainLiteralModal } from '../widget/modal/creationModal/newPlainLite
 import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
 import { NewConceptualizationCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newConceptualizationCfModal';
 import { NewLexiconCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal';
+import { NewLexSenseCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexSenseCfModal';
 import { NewOntoLexicalizationCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal';
 import { NewResourceCfModal } from '../widget/modal/creationModal/newResourceModal/shared/newResourceCfModal';
 import { NewResourceWithLiteralCfModal } from '../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal';
@@ -111,6 +112,7 @@ import { UserModule } from './userModule';
         NewConceptFromLabelModal,
         NewConceptualizationCfModal,
         NewLexiconCfModal,
+        NewLexSenseCfModal,
         NewOntoLexicalizationCfModal,
         NewPlainLiteralModal,
         NewResourceCfModal,
@@ -183,6 +185,7 @@ import { UserModule } from './userModule';
         NewConceptFromLabelModal,
         NewConceptualizationCfModal,
         NewLexiconCfModal,
+        NewLexSenseCfModal,
         NewOntoLexicalizationCfModal,
         NewPlainLiteralModal,
         NewResourceCfModal,
