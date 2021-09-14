@@ -365,6 +365,21 @@ export class OntoLexLemonServices {
     }
 
     /**
+     * Removes a lexicalization, both its plain and reification through a sense. This operation addresses the triples connecting the
+     * related resources in both directions.
+     * 
+     * @param lexicalEntry 
+     * @param reference 
+     */
+    removeLexicalization(lexicalEntry: ARTResource, reference: ARTResource) {
+        let params: any = {
+            lexicalEntry: lexicalEntry,
+            reference: reference,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeLexicalization", params);
+    }
+
+    /**
      * Removes a reified lexicalization expressed as an ontolex:LexicalSense.
      * Optionally, it is possible to remove the corresponding plain lexicalization(s).
      * @param lexicalSense 
@@ -472,6 +487,15 @@ export class OntoLexLemonServices {
         }
         return this.httpMgr.doPost(this.serviceName, "removePlainConceptualization", params);
     }
+
+    removeConceptualization(lexicalEntry: ARTResource, concept: ARTResource) {
+        let params = {
+            lexicalEntry: lexicalEntry,
+            concept: concept,
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeConceptualization", params);
+    }
+
 
     removeSense(lexicalSense: ARTResource, removePlain: boolean) {
         let params = {

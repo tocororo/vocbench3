@@ -63,7 +63,7 @@ export class EvokedLexicalConceptsPartitionRenderer extends PartitionRenderSingl
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        return this.resourcesService.removeValue(this.resource, predicate, <ARTResource>object);
+        return this.ontolexService.removeConceptualization(this.resource, <ARTResource>object);
     }
 
 }
