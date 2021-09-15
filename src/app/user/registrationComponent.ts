@@ -35,13 +35,13 @@ export class RegistrationComponent {
         this.firstAccess = this.activeRoute.snapshot.params['firstAccess'] == "1";
 
         this.authServMode = VBContext.getSystemSettings().authService;
-        if (this.authServMode == AuthServiceMode.EULogin) {
+        if (this.authServMode == AuthServiceMode.SAML) {
             let constraintEmail = this.activeRoute.snapshot.queryParams['email'];
             if (constraintEmail) {
                 let constraintGivenName = this.activeRoute.snapshot.queryParams['givenName'];
                 let constraintFamilyName = this.activeRoute.snapshot.queryParams['familyName'];
                 this.constraintUser = {email: constraintEmail, givenName: constraintGivenName, familyName: constraintFamilyName};
-            } else { //data about the EULogin user are not provided. Probably the page has been accessed manually. Redirect to Home
+            } else { //data about the SAML user are not provided. Probably the page has been accessed manually. Redirect to Home
                 this.router.navigate(["/Home"]);
             }
         }
@@ -120,7 +120,7 @@ export class RegistrationComponent {
                                         this.router.navigate(["/Sysconfig"]);
                                     }
                                 );
-                            } else { //EULogin: simply redirect to sys config (registered user is automatically set server side)
+                            } else { //SAML: simply redirect to sys config (registered user is automatically set server side)
                                 this.router.navigate(["/Sysconfig"]);
                             }
                         } else {

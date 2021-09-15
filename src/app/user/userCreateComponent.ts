@@ -34,11 +34,11 @@ export class UserCreateComponent implements ControlValueAccessor {
 
     ngOnInit() {
         this.authServMode = VBContext.getSystemSettings().authService;
-        if (this.authServMode == AuthServiceMode.EULogin && this.constraint) {
+        if (this.authServMode == AuthServiceMode.SAML && this.constraint) {
             this.form.email = this.constraint.email;
             this.form.givenName = this.constraint.givenName;
             this.form.familyName = this.constraint.familyName;
-            //set a fake password since in EULogin pwd is not necessary
+            //set a fake password since in SAML pwd is not necessary
             let fakePwd: string = Math.random()+"";
             this.form.password = fakePwd;
             this.form.confirmedPassword = fakePwd;

@@ -283,5 +283,5 @@ export class VisualizationModeTranslation {
 
 export enum AuthServiceMode {
     Default = "Default",
-    EULogin = "EULogin",
+    SAML = "SAML",
 }

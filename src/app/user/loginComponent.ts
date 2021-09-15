@@ -23,16 +23,19 @@ export class LoginComponent {
     password: string;
 
     samlAction: string;
+    samlBtnLabel: string;
 
     constructor(private authService: AuthServices, private userService: UserServices,
         private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.authServMode = VBContext.getSystemSettings().authService;
-        if (this.authServMode == AuthServiceMode.EULogin) {
+        if (this.authServMode == AuthServiceMode.SAML) {
             let serverhost = HttpManager.getServerHost();
             this.samlAction = serverhost + "/semanticturkey/it.uniroma2.art.semanticturkey/st-core-services/saml/login";
         }
+        let saml_login_label: string = window['saml_login_label'];
+        this.samlBtnLabel = saml_login_label ? saml_login_label : "SAML login";
     }
 
     onKeydown(event: KeyboardEvent) {

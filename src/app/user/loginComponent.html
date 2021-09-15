@@ -4,7 +4,7 @@
 		<span> {{'USER.USER_LOGIN'|translate}}</span>
 	</div>
 
-	<ng-container *ngIf="authServMode == 'Default'; then formLoginBlock; else euLoginBlock"></ng-container>
+	<ng-container *ngIf="authServMode == 'Default'; then formLoginBlock; else samlLoginBlock"></ng-container>
 
 	<ng-template #formLoginBlock>
 		<input type="text" class="form-control mb-2" [(ngModel)]="email" [placeholder]="'MODELS.USER.EMAIL'|translate">
@@ -14,9 +14,9 @@
 		<a [routerLink]="['/Registration/0']">{{'USER.SIGNUP'|translate}}</a>
 	</ng-template>
 
-	<ng-template #euLoginBlock>
+	<ng-template #samlLoginBlock>
 		<form #form class="mt-3" [action]='samlAction' method='post'>
-			<button type="submit" class="btn btn-primary mb-2" (click)="form.submit()">EU-Login</button>
+			<button type="submit" class="btn btn-primary mb-2" (click)="form.submit()">{{samlBtnLabel}}</button>
 		</form>
 	</ng-template>
 

@@ -33,20 +33,20 @@ export class UserServices {
                     - the serialization of a user object which represents the logged user
                 - no user registered in ST, 2 sub-scenarios in this case according the Authentication Service:
                     - "Default": redirect to the registration page in order to let the first user (admin) to register
-                    - "EULogin": redirect to the home in order to let the user to login via EULogin
+                    - "SAML": redirect to the home in order to let the user to login via SAML
                     (then, when succesfully logged, user will be able to register the first user / admin)
                 */
                 if (stResp.user != null) { //user object in resp => deserialize it (it could be empty, so no user logged)
                     let user: User = Deserializer.createUser(stResp.user);
                     if (user != null && !user.isSamlUser()) { 
-                        //store the logged user in the context only if not null and not a SAML user (namely a "mockup" user just for the EULogin user registration workflow)
+                        //store the logged user in the context only if not null and not a SAML user (namely a "mockup" user just for the SAML user registration workflow)
                         VBContext.setLoggedUser(user);
                     }
                     return user;
                 } else { //no user object in the response => there is no user registered
                     if (VBContext.getSystemSettings().authService == AuthServiceMode.Default) { //default auth service => redirect to registration page
                         this.router.navigate(["/Registration/1"]);
-                    } else { //EULogin auth service => do nothing
+                    } else { //SAML auth service => do nothing
 
                     }
                     return null

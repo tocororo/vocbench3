@@ -38,3 +38,9 @@ var st_path;
  * the folder assets/l10n and then add the same langTag to the following list
  */
 var additional_l10n_langs = [];
+
+/**
+ * In case of SAML login enabled, this will the label of the login button.
+ * If not provided, the default label is "SAML Login"
+ */
+// var saml_login_label = "Login"
