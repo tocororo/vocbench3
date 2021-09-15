@@ -63,7 +63,7 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        return this.ontolexService.removePlainLexicalization(this.resource, <ARTResource>object);
+        return this.ontolexService.removeLexicalization(this.resource, <ARTResource>object);
     }
 
 }

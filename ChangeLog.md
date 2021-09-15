@@ -6,6 +6,8 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 10.0.1 (dd-mm-yyyy)
   * In ResourceView allowed the creation of lexical sense using lexical concept.
+  * In ResourceView, when deleting a (plain) lexicalization/conceptualization, the corresponding
+    sense is deleted as well
   * Enabled multi-selection (ctrl+click) of languages in Project-User settings manager
   * Minor bugfixes and improvements
 
