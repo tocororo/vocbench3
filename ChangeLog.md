@@ -5,9 +5,10 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 10.0.1 (dd-mm-yyyy)
-  * In ResourceView allowed the creation of lexical sense using lexical concept.
-  * In ResourceView, when deleting a (plain) lexicalization/conceptualization, the corresponding
-    sense is deleted as well
+  * ontolex: in the resource view, it is now possible to select concepts as targets of lexical senses and not 
+    references only
+  * ontolex: in the resource view, when deleting a (plain) lexicalization/conceptualization, the corresponding
+    sense bound to the edited concept/lexical entry is deleted as well
   * Enabled multi-selection (ctrl+click) of languages in Project-User settings manager
   * Minor bugfixes and improvements
 
