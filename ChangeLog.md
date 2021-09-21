@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 10.0.1 (dd-mm-yyyy)
+# 10.1 (21-09-2021)
   * ontolex: in the resource view, it is now possible to select concepts as targets of lexical senses and not 
     references only
   * ontolex: in the resource view, when deleting a (plain) lexicalization/conceptualization, the corresponding
