@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 10.1.1 (dd-mm-yyyy)
+# 11.0.0 (dd-mm-yyyy)
   * 
 
 # 10.1.0 (21-09-2021)

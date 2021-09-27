@@ -4,6 +4,7 @@ import { Observable, of } from "rxjs";
 import { map } from "rxjs/operators";
 import { ExtensionPointID, Scope } from "src/app/models/Plugins";
 import { Project } from "src/app/models/Project";
+import { User } from "src/app/models/User";
 import { SettingsServices } from "src/app/services/settingsServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
@@ -87,13 +88,15 @@ export class PartitionFilterEditor {
      * Ensures that the template is initialized: 
      * if the component is working in a administration page the template is the one set for the project (retrieved with a service call), 
      * otherwise the component is working inside a project (e.g. RV or graph settings) and the template is the one already set in the VBContext
+     * Note: the template is just the mapping between resource types and RV partitions, namely the basic "skeleton" on which the filter work on (allowing to show/hide partition).
+     * Such templates is a project settings, so it can be retrieved only at system level (the default) or local to a project.
      * @returns 
      */
     private ensureTemplateInitialized(): Observable<void> {
         if (this.templates != null) {
             return of(null);
         } else {
-            if (this.ctx == PartitionFilterEditorCtx.Project && this.project != null) { //proj provided (probably in administration page) => init template about such project
+            if (this.ctx == PartitionFilterEditorCtx.Project && this.project != null) { //component used in project administration page => init template about such project
                 /* init template as empty object, preventing further invokation of the following service when this method is invoked (almost) mutliple time
                 (e.g. in writeValue, ngOnChanges when projects changes, ...) */
                 this.templates = {};
@@ -102,15 +105,13 @@ export class PartitionFilterEditor {
                         this.templates = settings.getPropertyValue(SettingsEnum.resourceView).templates;
                     })
                 )
-            } else if (this.ctx == PartitionFilterEditorCtx.User) { //init default system template
-                if (VBContext.getWorkingProjectCtx() == null) {
-                    this.templates = {};
-                    return this.settingsService.getSettingsDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, Scope.SYSTEM).pipe(
-                        map(settings => {
-                            this.templates = settings.getPropertyValue(SettingsEnum.resourceView).templates;
-                        })
-                    );
-                }
+            } else if (this.ctx == PartitionFilterEditorCtx.User) { //the template is edited in the User template editor => use the system default template
+                this.templates = {};
+                return this.settingsService.getSettingsDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, Scope.SYSTEM).pipe(
+                    map(settings => {
+                        this.templates = settings.getPropertyValue(SettingsEnum.resourceView).templates;
+                    })
+                );
             } else { //init template set in the project settings of project in VBContext
                 this.templates = VBContext.getWorkingProjectCtx().getProjectSettings().resourceView.templates;
                 return of(null);

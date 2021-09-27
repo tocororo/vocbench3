@@ -56,7 +56,7 @@
 
     <!-- Search -->
     <div *ngIf="!hideSearch" class="card-footer">
-        <search-bar (search)="doSearch($event)" [role]="panelRole" [cls]="cls" [disabled]="!isSearchEnabled()" [context]="context"></search-bar>
+        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [role]="panelRole" [cls]="cls" [disabled]="!isSearchEnabled()" [context]="context"></search-bar>
     </div>
     
 </div>
