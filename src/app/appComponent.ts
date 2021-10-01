@@ -30,7 +30,7 @@ export class AppComponent {
         });
 
         //set the available factory-provided l10n languages
-        translate.addLangs(['de', 'en', 'it']);
+        translate.addLangs(['de', 'en', 'fr', 'it']);
         //add additional supported l10n languages
         let additionalLangs: string[] = window['additional_l10n_langs'];
         if (additionalLangs && additionalLangs.length > 0) {

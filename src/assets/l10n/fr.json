@@ -1,0 +1,2392 @@
+{
+    "ACTIONS": {
+        "ACCEPT": "Accepter",
+        "ACCEPT_ALL": "Accepter tout",
+        "ACCESS": "Accéder",
+        "ACTION": "Action",
+        "ACTIONS": "Actions",
+        "ADD": "Ajouter",
+        "ADD_AFTER": "Ajouter après",
+        "ADD_ALL": "Ajouter tout",
+        "ADD_BEFORE": "Ajouter avant",
+        "ADD_DATASET": "Ajouter un Dataset",
+        "ADD_FIRST": "Ajouter au début",
+        "ADD_LAST": "Ajouter à la fin",
+        "ADD_MAPPING": "Ajouter un alignement",
+        "ADD_NODE": "Ajouter un nœud",
+        "ADD_OPERATION": "Ajouter une opération",
+        "ADD_PREFIX_NAMESPACE_MAPPING": "Ajouter un alignement préfixe-espace de nom",
+        "ADD_X": "Ajouter {{x}}",
+        "APPLY_CHANGES": "Appliquer les modifications",
+        "APPLY_RESTRICTIONS": "Appliquer les restrictions",
+        "ASSIGN": "Attribuer",
+        "ASSIGN_PROJECT": "Attribuer un projet",
+        "BROWSE_LOCAL_PROJ": "Parcourir les projets locaux",
+        "CANCEL": "Annuler",
+        "CHANGE_PROJECT": "Changee de projet",
+        "CHECK_ALL": "Tout sélectionner",
+        "CLEAR_DATA": "Supprimer les données",
+        "CLONE": "Dupliquer",
+        "CLOSE": "Fermer",
+        "COMMENT": "Commenter",
+        "CONFIRM": "Confirmer",
+        "CREATE": "Créer",
+        "CREATE_PROJECT": "Créer un projet",
+        "CREATE_ROLE": "Créer un rôle",
+        "CREATE_TASK": "Créer une tâche",
+        "CREATE_VERSION_DUMP": "Créer une version dump",
+        "CREATE_X": "Créer {{x}}",
+        "DELETE": "Supprimer",
+        "DELETE_ALL": "Supprimer tout",
+        "DELETE_ALL_VALUES": "Supprimer toutes les valeurs",
+        "DELETE_CONFIGURATION": "Supprimer la configuration",
+        "DELETE_DATASET": "Supprimer le jeu de données",
+        "DELETE_MAPPING": "Supprimer l'alignement",
+        "DELETE_MEMBER": "Supprimer le membre",
+        "DELETE_MIRROR": "Supprimer le miroir",
+        "DELETE_PROJECT": "Supprimer le projet",
+        "DEPLOY": "Déployer",
+        "DEPRECATE": "Déprécier",
+        "DETECT": "Détecter",
+        "DETECT_FORMAT": "Détecter le format",
+        "DISABLE": "Désactiver",
+        "DISCARD": "Supprimer",
+        "DOWNLOAD": "Télécharger",
+        "DO_QUICK_ACTION": "Exécuter une action rapide",
+        "DUMP_NEW_VERSION": "Télécharger une nouvelle version",
+        "DUMP_NEW_VERSION_DIFFERENT_LOCATION": "Télécharger une nouvelle version à un autre emplacement",
+        "DUPLICATE_SETTINGS": "Dupliquer les réglages",
+        "EDIT": "Éditer",
+        "EDIT_MANUALLY": "Éditer manuellement",
+        "EDIT_MAPPING": "Éditer l'alignement",
+        "EDIT_X": "Éditer {{x}}",
+        "ENABLE": "Autoriser",
+        "ENABLE_ALL": "Autoriser tout",
+        "ENTER_VALUE_MANUALLY": "Entrer la valeur manuellement",
+        "EXPORT": "Exporter",
+        "EXPORT_DATA": "Exporter les données",
+        "EXPORT_METADATA": "Exporter les métadonnées",
+        "EXPORT_PEARL": "Exporter PEARL",
+        "EXPORT_STATUS": "Exporter le statut",
+        "EXPORT_TRIPLES": "Exporter les triplets",
+        "GO": "Aller",
+        "HIDE_FILTERS": "Masquer les filtres",
+        "IMPORT": "Importer",
+        "INSERT_VALUE_MANUALLY": "Insérer la valeur manuellement",
+        "LOAD": "Charger",
+        "LOAD_CONFIGURATION": "Charger la configuration",
+        "LOAD_DATA": "Charger les données",
+        "LOAD_EXPORTER_CHAIN_CONFIGURATION": "Charger la configuration de la chaîne d'export",
+        "LOAD_IMPORTER_CHAIN_CONFIGURATION": "Charger la configuration de la chaîne d'import",
+        "LOAD_STATUS": "Charger le statut",
+        "LOAD_TEMPLATE": "Charger le modèle",
+        "LOCK_UNLOCK_NAMESPACE": "Verrouiller/déverrouiller l'espace de noms",
+        "MIGRATE_DATA_TO_BASEURI_GRAPH": "Migrer les données vers le graphe baseURI",
+        "MOVE_AFTER": "Déplacer après",
+        "MOVE_BEFORE": "Déplacer avant",
+        "MOVE_DOWN": "Descendre",
+        "MOVE_UP": "Remonter",
+        "PICK_CONVERTER": "Sélectionner un convertisseur",
+        "PICK_RESOURCE": "Sélectionner une ressource",
+        "PROFILE_PROJECT": "Profil du projet",
+        "REFRESH": "Rafraîchir",
+        "REJECT": "Rejeter",
+        "REJECT_ALL": "Rejeter tout",
+        "RELOAD": "Recharger",
+        "REMOVE": "Supprimer",
+        "REMOVE_ALL": "Supprimer tout",
+        "RENAME": "Renommer",
+        "RENAME_NODE": "Renommer le nœud",
+        "REPLACE": "Remplacer",
+        "REPLACE_WITH_EXISTING_RES": "Remplacer avec une ressource existante",
+        "RESET": "Réinitialiser",
+        "RESTORE_DEFAULT": "Restaurer la valeur par défaut",
+        "RESTORE_SYSTEM_DEFAULT": "Restaurer le système par défaut",
+        "RUN": "Lancer",
+        "SAVE": "Sauvegarder",
+        "SAVE_CHANGES": "Sauvegarder les modifications",
+        "SAVE_CONFIGURATION": "Sauvegarder la configuration",
+        "SAVE_EXPORTER_CHAIN_CONFIGURATION": "Sauvegarder la configuration de la chaîne d'export",
+        "SAVE_IMPORTER_CHAIN_CONFIGURATION": "Sauvegarder la configuration de la chaîne d'import",
+        "SAVE_TEMPLATE": "Sauvegarder le modèle",
+        "SEARCH": "Rechercher",
+        "SELECT": "Sélectionner",
+        "SELECT_CONSTRUCTOR": "Sélectionner un constructor",
+        "SELECT_CUSTOM_RANGE": "Sélectionner un Custom Range",
+        "SELECT_EXISTING_RESOURCE": "Sélectionner une ressource existante",
+        "SELECT_EXTERNAL_RESOURCE": "Sélectionner une ressource externe",
+        "SELECT_LANGUAGE": "Sélectionner une langue",
+        "SELECT_LANGUAGES": "Sélectionner des langues",
+        "SELECT_PROJECT": "Sélectionner un projet",
+        "SELECT_REMOTE_REPO": "Sélectionner un dépôt distant",
+        "SELECT_RESOURCE": "Sélectionner une ressource",
+        "SELECT_RESOURCE_TYPE_TO_PICK": "Indique le type de essource à sélectionner",
+        "SELECT_TARGET_PROJECT": "Sélectionner le projet cible",
+        "SELECT_USER": "Sélectionner l'utilisateur",
+        "SET_AS_DEFAULT": "Définir comme valeur par défaut",
+        "SET_AS_SYSTEM_DEFAULT": "Définir cette configuration comme le système par défaut",
+        "SHOW": "Montrer",
+        "SHOW_ALL": "Montrer tout",
+        "SHOW_FILTERS": "Montrer les filtres",
+        "SORT": "Trier",
+        "START": "Démarrer",
+        "STORE": "Enregistrer",
+        "SUBMIT": "Soumettre",
+        "SWITCH_TO_VERSION": "Passer à la version",
+        "UNCHECK_ALL": "Désélectionner tout",
+        "UNDO": "Défaire",
+        "UPDATE": "Mettre à jour",
+        "USE": "Utiliser",
+        "VALIDATE": "Valider"
+    },
+    "ADMINISTRATION": {
+        "ACTIONS": {
+            "ADD_ADMINISTRATOR": "Ajouter un administrateur",
+            "ADD_ALL_PROFICIENCIES": "Ajouter toutes les langues de compétence",
+            "ADD_CAPABILITY": "Ajouter une capacité",
+            "ADD_USER_TO_PROJ": "Ajouter un utilisateur au projet",
+            "CLONE_ROLE": "Dupliquer le rôle",
+            "CREATE_GROUP": "Créer un groupe",
+            "CREATE_USER": "Créer un utilisateur",
+            "DELETE_USER": "Supprimer un utilisateur",
+            "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ": "Copier les réglages dans un autre projet",
+            "EDIT_CAPABILITY": "Éditer une capacité",
+            "EDIT_GROUP": "Éditer un groupe",
+            "EXPORT_ROLE": "Exporter un rôle",
+            "IMPORT_ROLE": "Importer un rôle",
+            "LEAVE_ONLY_PROFICIENCIES": "Ne laisser que les langues de compétence",
+            "REMOVE_USER": "Supprimer l'utilisateur",
+            "REMOVE_USER_FROM_PROJ": "Supprimer l'utilisateur du projet",
+            "REVOKE_ADMINISTRATOR": "Révoquer l'administrateur",
+            "SHOW_HIDE_ACTIVE_USER": "Afficher/Cacher les utilisateurs actifs",
+            "SHOW_HIDE_INACTIVE_USER": "Afficher/Cacher les utilisateurs inactifs",
+            "SHOW_HIDE_NEW_USER": "Afficher/Cacher les nouveaux utilisateurs",
+            "SHOW_ONLY_PROFICIENCIES": "N'afficher que les langues de compétence de l'utilisateur"
+        },
+        "GROUPS": {
+            "FULL_NAME": "Nom complet",
+            "GROUP_DESCRIPTION": "Description du groupe",
+            "SHORT_NAME": "Nom abrégé",
+            "WEB_PAGE": "Page web"
+        },
+        "PROJECTS": {
+            "MANDATORY_LANGS": "Obligatoire",
+            "MANDATORY_LANGS_INFO": "Les langues obligatoires doivent être utilisées de manière extensive dans le jeu de données. Certaines fonctionnalités de la plateforme (par ex. ICV) supportent la vérification de cette contrainte",
+            "PREF_LABEL_CLASH": {
+                "ALLOW": "Autorise",
+                "ALLOW_INFO": "Autorise la création de concepts avec le même prefLabel sans alerte à l'utilisateur",
+                "FORBID": "Interdit",
+                "FORBID_INFO": "Interdit toujours la création de plusieurs concepts possédant le même prefLabel",
+                "PREF_LABEL_CLASH_MODE": "Gestion des doublons de prefLabel",
+                "PREF_LABEL_CLASH_MODE_INFO": "Détermine comment le système doit gérer l'unicité des prefLabels au sein d'un schéma de concepts",
+                "WARNING": "Autorisé avec une alerte",
+                "WARNING_INFO": "L'utilisateur est averti qu'un concept possédant le même prefLabel existe déjà, l'utilisateur peut choisir de forcer l'ajout de la nouvelle entrée ou de supprimer l'opération"
+            },
+            "PROJ_GROUP": {
+                "OWL_PROJECT_WARNING": "Le project {{projName}} adopte le modèle OWL. Actuellement, il n'est possible d'éditer les réglages de groupe que pour les projets SKOS.",
+                "PROJ_CLOSED_WARNING": "Le project {{projName}} est fermé. Il n'est possible d'éditer les réglages de groupe que pour les projets ouverts.",
+                "PROJ_GROUP_SETTINGS": "Réglages projet-groupe",
+                "SCHEME_AUTH": "Autorisations du schéma de concept",
+                "SCHEME_AUTH_INFO": "Défini sur quel schéma de concept le groupe est autorisé à travailler."
+            },
+            "PROJ_USER": {
+                "GROUPS": {
+                    "ASSIGNED_GROUP": "Groupe attribué",
+                    "AVAILABLE_GROUPS": "Groupes disponibles",
+                    "RESTRICTIONS_APPLIED": "Restrictions appliquées",
+                    "RESTRICTIONS_INFO": "Si autorisé, l'utilisateur est soumis aux limitations du groupe"
+                },
+                "LANGS": {
+                    "ASSIGNED_LANGUAGES": "Langues attribuées",
+                    "AVAILABLE_LANGUAGES": "Langues disponibles",
+                    "LANGUAGE_ADMIN_INFO": "Pour un administrateur, l'attribution d'aucune langue a priori équivaut à toutes les langues du projet",
+                    "LANG_PROFICIENCIES_INFO": "Cette langue figure parmi les langues de compétences de l'utilisateur sélectionné"
+                },
+                "PROJ_USER_SETTINGS": "Réglages projet-utilisateur",
+                "ROLES": {
+                    "ASSIGNED_ROLES": "Rôles attribués",
+                    "AVAILABLE_ROLES": "Rôles disponibles",
+                    "DEFINED_AT_PROJ_LEVEL": "Défini au niveau du projet"
+                },
+                "TEMPLATE": {
+                    "RES_VIEW_TEMPLATE": "Modèle du ResourceView",
+                    "RES_VIEW_TEMPLATE_DESCRIPTION": "Vous pouvez ici personnaliser le modèle du ResourceView pour l'utilisateur d'un projet donné. À noter : il s'agit des réglages de l'utilisateur, donc en les modifiant ici vous impactez directement son modèle de ResourceView."
+                }
+            },
+            "RES_VIEW": {
+                "CREATE_CUSTOM_SECTION": "Créer une section personnalisée",
+                "CUSTOM_SECTIONS": "Sections personnalisées",
+                "MANAGED_PROPERTIES": "Propriétés gérées",
+                "PROP_ADDITION_OTHER_PROJECT_WARN": "Le projet sélectionné n'est actuellement pas accessible, il est donc uniquement possible d'ajouter des propriétés en indiquant les IRI manuellement et non pas en explorant l'arbre des propriétés",
+                "RENAME_CUSTOM_SECTION": "Renommer la section personnalisé"
+            },
+            "TIME_MACHINE_ENABLED": "Time Machine activée",
+            "TIME_MACHINE_ENABLED_INFO": "Indique si la fonctionnalité de Time Machine est accessible dans la ResourceView"
+        },
+        "ROLES": {
+            "AREA": "Domaine",
+            "ROLE_CAPABILITIES": "Capacités du rôle",
+            "ROLE_NAME": "Nom du rôle",
+            "SUBJECT_AND_SCOPE": "Sujet et portée",
+            "TOPIC": "Objet"
+        },
+        "SYSTEM": {
+            "EMAIL": {
+                "AUTHENTICATION": "Authentification",
+                "AUTHENTICATION_INFO": "Indique si le serveur SMTP nécessite une authentification",
+                "CRYPTOGRAPHIC_PROTOCOL": "Protocole cryptographique",
+                "EMAIL_CONFIG_TEST": "Test de configuration de l'e-mail",
+                "MAIL_ALIAS": "Alias affiché dans les e-mails d'administration",
+                "MAIL_FROM": "Adresse électronique utilisée pour l'envoi des e-mails d'administration",
+                "MAIL_PASSWORD": "Mot de passe de l'adresse électronique ci-dessus",
+                "MAIL_SERVER_PORT_INFO": "Port du serveur de courrier électronique",
+                "MAIL_SERVER_URL_INFO": "IP/URL du serveur de courrier électronique SMTP",
+                "SSL_PROTOCOLS": "Protocoles SSL",
+                "SSL_PROTOCOLS_INFO": "Spécifie les protocoles SSL autorisés pour les connexions SSL",
+                "VB_EMAIL_CONFIG": "Configuration de l'e-mail VocBench",
+                "VB_EMAIL_CONFIG_INFO": "Configuration du service d'e-mail de VocBench. Ce service sera utilisé pour envoyer des notifications à l'administrateur du système et aux utilisateurs. <b>À noter</b> : si ce service est mal configuré il sera impossible d'envoyer les e-mails nécessaires à la finalisation de l'enregistrement des utilisateurs ou aux procédures de réinitialisation des mots de passe."
+            },
+            "HOME_PAGE": {
+                "HOME_CONTENT": "Contenu de la page d'accueil",
+                "HOME_CONTENT_INFO": "Vous pouvez saisir ici un texte formaté en HTML qui sera publié sur la page d'accueil",
+                "PREVIEW": "Prévisualiser"
+            },
+            "INTRO": "Dans cette section vous pouvez préciser certains aspects principaux du système. Ce panneau sera également accessible ultérieurement par l'<i>Administration</i> <i>Configuration</i> (depuis le menu utilisateur)",
+            "NOTIFICATIONS": {
+                "DETECT_INFO": "Détecte le fuseau horaire du navigateur",
+                "DISABLE_INFO": "Désactive la synthèse quotidienne des notifications",
+                "HOURS_OF_DAY": "Heure du jour",
+                "HOURS_OF_DAY_INFO": "L'heure à laquelle le rapport sera envoyé quotidiennement",
+                "NOTIFICATION_SCHEDULER": "Planificateur de notification",
+                "NOTIFICATION_SCHEDULER_INFO": "Configuration du service de notification par e-mail de VocBench. Le service enverra une synthèse quotidienne des notifications aux utilisateurs qui ont choisi le mode de notification <i>Synthèse quotidienne par e-mail</i>.",
+                "TIMEZONE_ID_INFO": "Identifiant de fuseau horaire"
+            },
+            "OTHER": {
+                "ENABLE_CODA_PROVISIONING": "Active le provisionnement CODA",
+                "ENABLE_CODA_PROVISIONING_INFO": "Active le téléchargement automatique de composants CODA",
+                "ENABLE_EXPERIMENTAL_FEATURES": "Active les fonctionnalités expérimentales",
+                "ENABLE_EXPERIMENTAL_FEATURES_INFO": "Cocher cette option pour activer les fonctionnalités expérimentales (très instables)",
+                "OTHER_SETTINGS": "Autres réglages"
+            },
+            "PRELOAD_THRESHOLD": "Seuil du profileur de préchargement",
+            "PRELOAD_THRESHOLD_INFO": "Indique la taille maximale du fichier (en bytes) admise par le profileur de préchargement durant la création du projet. Si elle nest pas indiquée, ou 0, la valeur par défaut est de 1048576 bytes (1 mégabyte).",
+            "PROJ_CREATION": {
+                "DEFAULT_FOR": "Défaut pour",
+                "PROJ_CREATION": "Création de projet",
+                "PROJ_CREATION_INFO": "Configuration des valeurs par défaut de certaines options demandées dans le formulaire de création de projet"
+            },
+            "REGISTRATION_FORM": {
+                "CUSTOM_FIELDS": "Champs personnalisés",
+                "CUSTOM_FIELDS_INFO": "Ajouter (et réorganiser) jusqu'à {{maxFields}} informations personnalisées relatives à l'utilisateur. Ces informations seront affichées dans l'aperçu des utilisateurs et seront également demandées en tant que champs optionnels dans la phase de création/enregistrement de l'utilisateur.<br> Si un champ est supprimé, toutes les valeurs préalablement saisies dans ce champ seront perdues, pour tous les utilisateurs.<br>Si un champ est renommé, toutes les valeurs préalablement saisies dans ce champ seront conservées.",
+                "EMAIL_VERIFICATION": "Vérification de l'e-mail",
+                "EMAIL_VERIFICATION_INFO": "Indique si un utilisateur doit vérifier son adresse e-mail pour compléter son enregistrement",
+                "FORM_FIELDS": "Champs du formulaire d'enregistrement",
+                "OPTIONAL_FIELDS": "Champs optionnels",
+                "OPTIONAL_FIELDS_INFO": "Affiche ou masque les informations optionnelles sur l'utilisateur. Ces informations seront affichées ou masquées dans l'aperçu utilisateur et seront également demandées en tant que champs optionnels dans la phase de création/enregistrement de l'utilisateur"
+            },
+            "SETTINGS_MGR": {
+                "SETTINGS_MGR": "Réglages Mgr"
+            },
+            "ST_DATA_FOLDER": "Dossier des données de SemanticTurkey",
+            "ST_DATA_FOLDER_INFO": "Fournir le chemin du dossier des données de SemanticTurkey. Il peut être absolu ou relatif par rapport au dossier d'installation de SemanticTurkey."
+        },
+        "USERS": {
+            "ADMINISTRATOR": "Administrateurr",
+            "ADMIN_ASSIGNED_PROJECTS_INFO": "L'administrateur a automatiquement accès à tous les projets",
+            "ASSIGNED_TO_PROJECTS": "Attribué aux projets",
+            "FORCE_PASSWORD_WARNING": "Cette procédure imposera la modification du mot de passe de {{userShow}}.<br>À noter : une procédure <i>oubli de mot de passe</i> existe déjà (disponible dans le formulaire de connexion). Il est recommandé de laisser l'utilisateur l'utiliser pour mettre lui-même à jour son mot de passe. N'utiliser cette procédure qu'en cas d'absolue nécessité.",
+            "TEMPLATE_INFO": "Il est ici possible d'attribuer un modèle de ResourceView à l'utilisateur. Ce modèle décrit les partitions de ResourceView qui sont visibles par défaut.<br>Vous pouvez également charger un modèle pré-existant ou décider de sauvegarder le modèle que vous avez défini à l'aide de la barre d'outils de l'en-tête de la page.",
+            "USER_DETAILS": "Détails sur l'utilisateur"
+        }
+    },
+    "ALIGNMENT": {
+        "ACTIONS": {
+            "APPLY_TO_DATASET": "Appliquer au jeu de données",
+            "APPLY_TO_EDOAL": "Appliquer au linkset EDOAL",
+            "APPLY_VALIDATION": "Appliquer la validation",
+            "CHANGE_RELATION": "Changee la relation",
+            "CREATE_ALIGNMENT": "Créer un alignement",
+            "EXPORT_ALIGNMENT": "Exporter un alignement",
+            "PROFILE_MATCHING": "Profiler la correspondance",
+            "START_VALIDATION": "Démarrer la validation"
+        },
+        "CREATION": {
+            "ALL_PROP": "Toutes les prop.",
+            "ALL_PROP_INFO": "Montrer toutes les propriétés d'alignement",
+            "SOURCE_RESOURCE": "Ressource source",
+            "TARGET_RESOURCE": "Ressource cible"
+        },
+        "VALIDATION": {
+            "ALIGNMENT_VALIDATION": "Validation de l'alignement",
+            "FROM_FILE": {
+                "ALIGN_FILE": "Fichier d'alignement",
+                "LEFT_ONTO_URI": "URI de base de l'ontologie de gauche",
+                "RIGHT_ONTO_URI": "URI de base de l'ontologie de droite"
+            },
+            "MANAGEMENT": {
+                "ALIGNMENTS": "Alignements",
+                "LEFT_ENTITY": "Entité de gauche",
+                "MAPPING_PROP": "Propriété de mapping",
+                "QUICK_ACTIONS": "Actions rapides",
+                "RELATION": "Relation",
+                "RIGHT_ENTITY": "Entité de droite",
+                "SET_DEFAULT_FOR_RELATION": "Définit la propriété par défaut pour la relation",
+                "YOU_CAN_FORCE_PROP": "Vous pouvez forcer une propriété"
+            },
+            "REMOTE_SYS": {
+                "CONFIG": {
+                    "DEFAULT_CHECK_INFO": "Cocher pour enregistrer la nouvelle configuration comme valeur par défaut",
+                    "FORWARD_CREDENTIALS": "Transférer les informations d'identification",
+                    "FORWARD_CREDENTIALS_INFO": "Cocher pour transférer les informations permettant d'accéder aux jeux de données pertinents au service d'alignement distant",
+                    "ID_INFO": "Identifiant de la configuration",
+                    "REMOTE_ALIGN_SYS_CONFIG": "Configurations du système d'alignement distant"
+                },
+                "CREATE_TASK": {
+                    "CONCEPTUALIZATION_SET": "Conceptualization Set",
+                    "JSON_SETTINGS_INFO": "Les réglages JSON doivent respecter les spécifications du schéma affichées sur la droite",
+                    "MATCHERS": "Matchers",
+                    "MATCHERS_INFO": [
+                        "Un matcher peut être fourni au système d'alignement. Cliquer",
+                        "ici",
+                        "pour rechercher les matchers disponibles."
+                    ],
+                    "METADATA_PROFILE_AVAILABLE": "Profil de métadonnées disponible",
+                    "METADATA_PROFILE_NOT_AVAILABLE": "Profil de métadonnées indisponible",
+                    "PAIRINGS": "Appariements",
+                    "PAIRINGS_CHANGED_WARN": [
+                        "La sélection des appariements a été modifiée, la liste des matchers disponibles peut être mise à jour. Cliquer",
+                        "ici",
+                        "pour rafraîchir la liste."
+                    ],
+                    "SYNONIMIZERS": "Synonymiseurs",
+                    "SYNONIMIZERS_INFO": "Autorise l'utilisation d'un synonymiseur pour améliorer la qualité de l'alignement",
+                    "SYNONYMIZER_DATASETS": "Jeux de données du synonymiseur"
+                },
+                "MAIN": {
+                    "END_TIME": "Heure de fin",
+                    "LEFT_PROJECT": "Projet de gauche",
+                    "REMOTE_ALIGN_SYS": "Système d'alignement distant",
+                    "RIGHT_PROJECT": "Projet de droite",
+                    "SERVICE_DOWN": "Service inactif",
+                    "START_TIME": "Heure de début",
+                    "TASKS": "Tâches",
+                    "UNCONFIGURED_WARN": "Aucune connexion à un système d'alignement distant n'a été détectée. Veuillez créer ou sélectionner une configuration en cliquant sur le bouton <span class=\"fas fa-cog\"></span> dans le coin en haut à droite."
+                }
+            },
+            "REPORT": {
+                "ACTION_PERFORMED": "Action exécutée",
+                "ALIGN_REPORT": "Rapport d'alignement"
+            },
+            "SETTINGS": {
+                "ALIGN_VALIATION_SETTINGS": "Réglages de la validation de l'alignement",
+                "MAX_ALING_SHOWN": "Nombre maximum d'alignements affichés (1-100)",
+                "REJECTED_ALIGN_ACTION": "Action sur les alignements rejetés",
+                "REJECTED_ALIGN_ACTION_INFO": "Précise le traitement à appliquer aux alignements rejetés lors de l'enregistrement des validations dans l'ontologie",
+                "RELATION_METER_ASPECT": "Aspect de l'indicateur de relation",
+                "SHOW_CONF_ON_METER": "Montre la confiance au sujet de l'indicateur",
+                "SHOW_RELATION_AS": "Montre la relation comme"
+            }
+        }
+    },
+    "APP": {
+        "NAVBAR": {
+            "CUSTOM_SERVICES_AND_REPORTS": "Services et rapports personnalisés",
+            "DATA": "Donnée",
+            "HISTORY": "Historique",
+            "METADATA": {
+                "METADATA_REGISTRY": "Registre des métadonnées",
+                "METADATA_VOCABULARIES": "Vocabulaires de métadonnées",
+                "NAMESPACES_AND_IMPORTS": "Espaces de noms et imports",
+                "TITLE": "Métadonnées"
+            },
+            "SPARQL": "SPARQL",
+            "TOOLS": "Outils",
+            "USER_MENU": {
+                "ADMINISTRATION": "Administration",
+                "PREFERENCES": "Préférences",
+                "VIEW_PROFILE": "Voir le profil"
+            },
+            "VALIDATION": "Validation"
+        },
+        "TOP_BAR": {
+            "ABOUT_MENU": {
+                "ABOUT_VB": "Au sujet de VocBench",
+                "CONTACT_US": "Contactez-nous",
+                "PRIVACY_STATEMENT": "Politique de confidentialité",
+                "SUPPORT": "Support",
+                "VB_SITE": "Site web de VocBench",
+                "WEB_API": "Copier l'URL de base de l'API web",
+                "WEB_API_COPIED": "URL de base de l'API web copiée dans le presse-papier"
+            },
+            "CURRENT_PROJECT": "Projet courant",
+            "GLOBAL_DATA_MENU": {
+                "GLOBAL_DATA_MANAGEMENT": "Gestion des données globales",
+                "REFACTOR": "Refonte",
+                "VERSIONING": "Versionnage",
+                "WGRAPH": "Changer de graphe de travail"
+            }
+        }
+    },
+    "COLLABORATION": {
+        "ACTIONS": {
+            "ASSIGN_ISSUE": "Attribuer un rapport",
+            "ASSIGN_TO_ISSUE": "Attribuer cette ressource à un rapport existant",
+            "CREATE_ISSUE": "Créer un rapport",
+            "RESET_COLLABORATION_SYSTEM": "Réinitialiser le système de collaboration",
+            "SHOW_ISSUES": "Montrer les rapports",
+            "UNASSIGN_ISSUE": "Désattribuer un rapport"
+        },
+        "COLLABORATION_SYSTEM": "Système de collaboration",
+        "COLLABORATION_SYSTEM_CONFIG": "Configuration du système de collaboration",
+        "COLLABORATION_SYSTEM_PROJECTS": "Projets du système de collaboration",
+        "CS_NOT_ACTIVE": "Le système de collaboration a été désactivé, la liste des tâches est donc indisponible. Activez le système de collaboration afin d'afficher les tâches",
+        "CS_NOT_WORKING_WARNING": "Le système de collaboration semble être configuré mais il ne fonctionne pas. Vérifiez que la configuration est valide ou que le serveur du système de collaboration est en fonction.",
+        "NO_RESOURCE_ASSOCIATED": "Aucune ressource associée à ce rapport",
+        "PROJECT_CONFIG": "Configuration du projet",
+        "UNASSIGNED_PROJ": {
+            "A_PROJECT": "un projet",
+            "CREATE_OR_ASSIGN": "Créer ou attribuer",
+            "UNASSIGNED_PROJ_WARNING": "Aucun projet du système de collaboration n'a été attribué à ce projet VocBench."
+        },
+        "UNCONFIGURED_CS": {
+            "A_CS": "un système de collaboration",
+            "CONFIGURE": "Configurer",
+            "UNCONFIGURED_CS_WARNING": "Aucun système de collaboration n'a été configuré."
+        },
+        "UNCONFIGURED_FOR_PROJECT": "Le système de collaboration n'a pas été configuré pour ce projet.",
+        "UNSIGNED_USER": {
+            "PROVIDE": "Fournir",
+            "UNSIGNED_USER_WARNING": "Vous devez être connecté au système de collaboration pour visualiser la liste des rapports.",
+            "YOUR_CREDENTIALS": "vos informations d'identification"
+        },
+        "USER_CONFIG": "Configuration de l'utilisateur"
+    },
+    "COMMONS": {
+        "BOOLEAN": {
+            "FALSE": "Faux",
+            "NO": "Non",
+            "TRUE": "Vrai",
+            "YES": "Oui"
+        },
+        "CONFIG": {
+            "CONFIGURATION": "Configuration",
+            "CONFIGURATION_REQUIRED": "Configuration nécessaire",
+            "CONFIGURE": "Configurer",
+            "NO_CONFIG_FOUND": "Aucune configuration trouvée. Créez-en une nouvelle",
+            "PASSWORD": "Mot de passe",
+            "SERVER_URL": "URL du serveur",
+            "USERNAME": "Nom d'utilisateur"
+        },
+        "DEFINITION": "Définition",
+        "DESCRIPTION": "Description",
+        "DETAILS": "Détails",
+        "FORCE_FORMAT": "Forcer le format",
+        "FORMAT": "Format",
+        "GROUPS": "Groupes",
+        "ID": "ID",
+        "LABEL": "Étiquette",
+        "LANGUAGE": {
+            "ISO_CODE": "Code ISO",
+            "LANGUAGE": "Langue",
+            "LANGUAGES": "Langues",
+            "NO_LANG_INFO": "Aucune langue sélectionnée équivaut implicitement à toutes les langues"
+        },
+        "LEVEL": "Niveau",
+        "MANDATORY": "Obligatoire",
+        "MANDATORY_FIELD": "Champs obligatoires",
+        "MODE": "Modalité",
+        "NAME": "Nom",
+        "NODE": "Nœud",
+        "NODES": "Nœuds",
+        "ONTOLOGY_IRI": "IRI de l'ontologie",
+        "OPTIONAL": "Optionnel",
+        "OPTIONAL_FIELD": "Champ optionnel",
+        "OTHER": "Autre",
+        "PAGING": {
+            "NEXT_PAGE": "Page suivante",
+            "PAGE_OF_TOT": "de",
+            "PREV_PAGE": "Page précédente"
+        },
+        "PLAIN": "Plain",
+        "POSITION": "Position",
+        "REASON": "Motif",
+        "REIFIED": "Réifié",
+        "RENDERING": "Rendu",
+        "REQUIRED": "Nécessaire",
+        "ROLE": "Rôle",
+        "ROLES": "Rôles",
+        "SCOPE": "Champ d'application",
+        "SETTINGS": "Réglages",
+        "SOURCE": "Source",
+        "TEMPLATE": "Modèle",
+        "TIME": "Temps",
+        "TITLE": "Titre",
+        "TYPE": "Type",
+        "USERS": "Utilisateurs",
+        "VALUE": "Valeur",
+        "VISUALIZATION_MODE": "Mode de visualisation"
+    },
+    "CUSTOM_FORMS": {
+        "ACTIONS": {
+            "ADD_CLASS_AS_SUGGESTION": "Ajouter une classe en tant que suggestion",
+            "ADD_PROPERTY_AS_SUGGESTION": "Ajouter une propriété en tant que suggestion",
+            "CLONE_CUSTOM_FORM": "Dupliquer un formulaire personnalisé",
+            "CLONE_FORM_COLLECTION": "Dupliquer une collection de formulaires",
+            "CREATE_CUSTOM_FORM": "Créer un formulaire personnalisé",
+            "CREATE_FORM_COLLECTION": "Créer une collection de formulaires",
+            "CREATE_RESOURCE_FORM_COLL_MAPPING": "Créer un mapping Ressource - Collection de formulaires",
+            "DELETE_CUSTOM_FORM": "Supprimer un formulaire personnalisé",
+            "DELETE_FORM_COLLECTION": "Supprimer une collection de formulaires",
+            "EDIT_CUSTOM_FORM": "Éditer un formulaire personnalisé",
+            "EDIT_FORM_COLLECTION": "Éditer une collection de formulaires",
+            "EXPORT_FORM_COLLECTION": "Exporter une collection de formulaires",
+            "IMPORT_CUSTOM_FORM": "Importer un formulaire personnalisé",
+            "IMPORT_FORM_COLLECTION": "Importer une collection de formulaires",
+            "INFER_ANNOTATIONS": "Inférer les annotations",
+            "SELECT_SUGGESTION_FOR_FORM_COLL": "Sélectionner une suggestion pour une collection de formulaires"
+        },
+        "COLLECTIONS": {
+            "AVAILABLE_CUSTOM_FORMS": "Formulaires personnalisés disponibles",
+            "FORM_COLLECTION": "Collection de formulaires",
+            "FORM_COLLECTIONS": "Collection de formulaires",
+            "SUGGESTIONS": "Suggestions",
+            "SUGGESTIONS_INFO": "Propriété/Classes suggéré pour l'utilisation de cette collection de formulaires"
+        },
+        "COMMONS": {
+            "USE_ID_OF_IMPORTED": "Utiliser l'ID du {{type}} importé"
+        },
+        "CONFIG": {
+            "CUSTOM_FORMS_CONFIG": "Configuration des Custom Forms",
+            "PROJECT_LEVEL_ELEM": "Éléments de niveau projet",
+            "REPLACE_INFO": "Indique que le formulaire personnalisé remplace le formulaire par défaut. Valable uniquement pour CustomRanges (pas CustomConstructors)",
+            "SHOW_BROKEN_CF": "Affiche les structures de formulaires personnalisés corrompues",
+            "SYSTEM_LEVEL_ELEM": "Éléments de niveau système"
+        },
+        "FORMS": {
+            "CUSTOM_CONSTRUCTOR": "Custom Constructor",
+            "CUSTOM_FORMS": "Formulaires personnalisés",
+            "CUSTOM_RANGE": "Custom Range",
+            "DESCRIPTION_INFO": "Une descritpion en langage naturel qui explique brièvement le but de ce formulaire",
+            "FROM_SHACL": "Depuis SHACL",
+            "FROM_SHACL_INFO": "Extrait le PEARL depuis une forme SHACL",
+            "INFER_ANNOTATIONS_INFO": "Infère les annotations à partir de la définition du formulaire personnalisé",
+            "NAME_INFO": "Le nom qui sera montré à l'utilisateur pour identifier ce formulaire",
+            "PEARL_INFERENCE_VALIDATION": {
+                "INFERRED_PEARL": "PEARL inféré",
+                "ORIGINAL_PEARL": "PEARL d'origine",
+                "PEARL_ANNOTATIONS_INFERENCE": "Inférence des annotations PEARL",
+                "WARNING_MSG": "À noter : si aucune annotation n'a été inférée, les deux versions de PEARL peuvent être identiques. Malgré tout, le procéssus d'inférence peut avoir apporté des modifications, comme le réordonnancement des préfixes définis et la suppression de commentaires.<br> Il est également possible d'éditer le PEARL avant d'appliquer les changements."
+            },
+            "PREVIEW_FORM": {
+                "PREVIEW_FORM": "Prévisualiser le formulaire",
+                "PREVIEW_FORM_INFO": "Spécifie comment afficher la prévisualisation du graphe générée par ce formulaire personnalisé",
+                "PROP_CHAIN": "Chaîne de propriété",
+                "PROP_CHAIN_INFO": "La prévisualisation est une valeur unique retrouvée en suivant une chaîne de propriété débutant au point d'entrée du graphe généré",
+                "TABLE": "Tableau",
+                "TABLE_INFO": "Une prévisualisation sous forme de tableau dont les en-têtes correspondent à une liste de propriétés"
+            },
+            "REF_INFO": "En cas de type graphe, doit contenir une règle PEARL, en cas de type nœud, doit contenir simplement un opérateur de projection PEARL",
+            "SHAPE_SOURCE": "Source de forme"
+        },
+        "MAPPINGS": {
+            "FORM_MAPPINGS": "Correspondances de formes"
+        },
+        "WIZARD": {
+            "CUSTOM_FORM_WIZARD": "Assistant de forme personnalisée",
+            "FIELDS": {
+                "CONSTRAINT": "Contrainte",
+                "FIELD": "Champ",
+                "FIELD_DETAILS": "Détails du champ",
+                "FIELD_INFO": "Cela détermine également l'ID de la fonctionnalité 'userPrompt/' utilisée dans le PEARL",
+                "FIELD_LITERAL": "Champ littéral",
+                "FIELD_URI": "Champ URI",
+                "FORM_FIELDS": "Champs du formulaire",
+                "FORM_FIELDS_INFO": "Les champs qui seront proposés à l'utilisateur dans le formulaire personnalisé",
+                "LANG_FIXED": "Fixé",
+                "LANG_USER_PROMPTED": "Fourni par l'utilisateur",
+                "MULTIVALUE": "Multivalué",
+                "MULTIVALUE_INFO": "Indique si le champ peut autoriser plusieurs valeurs",
+                "MULTIVALUE_LANG_WARN": "Attention : ce champs peut avoir plusieurs valeurs (option 'Multivalué' activée). Pour toutes ces valeurs, la même langue sera utilisée."
+            },
+            "GRAPH": {
+                "ADV_GRAPH_PATTERN": "Modèle de graphe avancé",
+                "NODES_RELATIONS": "Relations entre nœuds"
+            },
+            "MESSAGES": {
+                "FIELD_EMPTY": "Aucun champ n'a été fourni",
+                "FIELD_INCOMPLETE_CONSTRAINT": "Le champ '{{field}}' possède un chemin incomplet : {{constraint}}",
+                "FIELD_INVALID_NAME": "Le champ de position {{position}} possède un nom invalide",
+                "FIELD_MULTIPLE_NAME": "Plusieurs champs possédant le même nom {{name}} ont été trouvés",
+                "NODE_MISSING_CONVERTER": "Convertisseur manquant pour le nœud '{{id}}'",
+                "NODE_MISSING_CONVERTER_FEATURE": "Le convertisseur du nœud '{{id}}' nécessite qu'une fonctionnalité soit spécifiée",
+                "NODE_MISSING_ID": "Un nœud dont l'ID est vide a été détecté",
+                "NODE_MULTIPLE_ID": "Plusieurs nœuds possédant le même ID : {{id}}",
+                "NODE_RELATION_EMPTY": "Aucune relation n'a été fournie entre les nœuds",
+                "NODE_RELATION_MISSING_OBJECT": "Un objet est manquant dans la relation entre les nœuds à la position {{position}}",
+                "NODE_RELATION_MISSING_PREDICATE": "Un prédicat est manquant dans la relation entre les nœuds à la position {{position}}",
+                "NOT_CUSTOM_CONSTRUCTOR_STATUS": "Cet assistant permet de créer un Custom Constructor, le fichier chargé représente le statut d'un Custom Range",
+                "NOT_CUSTOM_RANGE_STATUS": "Cet assistant permet de créer un Custom Range, le fichier chargé représente le statut d'un Custom Constructor.",
+                "NOT_VALID_STATUS": "Le fichier chargé n'est pas un statut valide de formulaire personnalisé",
+                "OPTIONAL_ENTRY_POINT_WARN": "Dans un formulaire personnalisé utilisé en tant que Custom Range, la première utilisation du nœud '{{id}}' dans la section graphe ne peut utiliser un champ optionnel",
+                "REFERENCED_FIELD_DELETE_WARN": "Le champ que vous êtes sur le point de supprimer est à l'origine d'un nœud utilisé dans un (ou plusieurs) modèle de graphe avancé. La suppression de ce champ entrainera automatiquement celle du modèle de graphe. Souhaitez-vous poursuivre ?",
+                "REFERENCED_NODE_DELETE_WARN": "Le nœud que vous êtes sur le point de supprimer est utilisé dans un (ou plusieurs) modèle de graphe avancé. La suppression de ce nœud entrainera automatiquement celle du modèle de graphe. Souhaitez-vous poursuivre ?"
+            },
+            "NODES": {
+                "ENTRY_POINT_INFO": "Le point d'entrée du graphe créé par le formulaire personnalisé",
+                "FEATURE": "Fonctionnalité",
+                "NODES_INFO": "Liste des nœuds générés automatiquement à partir des champs. Vous pouvez également définir de nouveaux nœuds"
+            },
+            "PEARL_PREVIEW": "Prévisualisation Pearl",
+            "WIZARD": "Assistant"
+        }
+    },
+    "CUSTOM_SERVICES": {
+        "ACTIONS": {
+            "CREATE_CUSTOM_OPERATION": "Créer une opération personnalisée",
+            "CREATE_CUSTOM_SERVICE": "Créer un service personnalisé",
+            "DELETE_CUSTOM_SERVICE": "Supprimer un service personnalisé",
+            "EDIT_CUSTOM_OPERATION": "Editer une opération personnalisée"
+        },
+        "AUTH_HELPER": {
+            "CAPABILITIES_DOCUMENTATION_REF": "Pour plus de détails au sujet du vocabulaire des capacités, référez-vous à la <a href=\"http://vocbench.uniroma2.it/doc/user/roles_adm.jsf#capabilities_vocabulary\" target=\"_blank\">documentation</a> de VB.",
+            "LANG_REQUIREMENT": {
+                "LANGUAGE_REQUIREMENT": "Exigence linguistique",
+                "LANGUAGE_REQUIREMENT_INFO": "Détermine si l'opération nécessite qu'une langue spécifique ait été attribuée à l'utilisateur qui la réalise. Il est possible de sélectionner une langue parmi celles qui sont disponibles dans VocBench ou de laisser le système la calculer à partir d'un paramètre de l'opération.",
+                "REQUIRE_NONE": "Aucun",
+                "REQUIRE_PARAMETER_LANG": "Nécessite la langue d'un paramètre",
+                "REQUIRE_SPECIFIC_LANG": "Nécessite une langue spécifique"
+            },
+            "NO_PARAM_OPERATION": "L'opération ne prévoit aucun paramètre",
+            "OPERATION_AUTH": "Autorisation de l'opération",
+            "PARAMETER": "Paramètre",
+            "RESTRICTION": "Restriction",
+            "SCOPE_INFO": "Affine la portée du type sélectionné",
+            "TYPE_RESTR": {
+                "RESTRICTION_NONE": "Aucun",
+                "RESTRICTION_TO_PARAMETER_TYPE": "Restreint au type d'un paramètre",
+                "RESTRICTION_TO_SPECIFIC_TYPE": "Restreint à un type spécifique",
+                "TYPE_RESTRICTION": "Restriction sur le type",
+                "TYPE_RESTRICTION_INFO": "Détermine si la capacité <i>rdf</i> est requise pour un type de resssource spécifique. Il est possible de sélectionner un type parmi ceux qui sont disponibles dans VocBench ou de laisser le système calculer le type à partir d'un paramètre de l'opération."
+            }
+        },
+        "CUSTOM_SERVICES": "Services personnalisés",
+        "FORCE_RELOAD": "Forcer le rechargement du filesystem",
+        "FORCE_RELOAD_INFO": "Services de rechargement (utiles lorsque les services personnalisés sont modifiés/chargés manuellement)",
+        "OPERATION": {
+            "AUTHORIZATION": "Autorisation",
+            "MANDATORY_PARAMETER": "Paramètre obligatoire",
+            "OPTIONAL_PARAMETER": "Paramètre optionnel",
+            "PARAMETERS": "Paramètres",
+            "PARAM_HELPER": {
+                "ALLOWED_PARAM_TYPES_ARE": "Les types de paramètres autorisés sont",
+                "ALLOWED_RETURN_TYPE": "Les types de retours autorisés dépendent de l'opération SPARQL actuelle",
+                "INTRO": [
+                    "Les paramètres correspondent à des variables portant le même nom dans la requête SPARQL. Les paramètres passés dans l'appel à un service sont liés à la variable correspondante dans la requête SPARQL. Une variable réservée est",
+                    "qui est liée par défaut au graphe de travail du projet."
+                ],
+                "LIST_T_WHERE": "où",
+                "T_TYPE_OPT2": {
+                    "BE": "est",
+                    "MIGHT_BE": "peut être",
+                    "WHERE": "où"
+                },
+                "T_TYPE_OPT2_ADDENDA": [
+                    "Dans ce cas SELECT doit retourner une seule variable plus des paramètres additionnels",
+					"pour les attributs additionnels"
+                ],
+                "T_TYPE_OTP1": "peut être n'importe lequel des types de paramètre acceptés ci-dessus (dans ce cas SELECT doit retourner une seule variable)"
+            },
+            "RETURNS": "Retourne"
+        },
+        "SERVICE": {
+            "DESCRIPTION_INFO": "Une description de ce service personnalisé",
+            "ID_INFO": "Un identifiant unique",
+            "SERVICE_NAME": "Nom du service",
+            "SERVICE_NAME_INFO": "Le nom utilisé pour regrouper toutes les opérations définies par ce service personnalisé"
+        }
+    },
+    "DATA": {
+        "ACTIONS": {
+            "ADD_ALL_CONCEPTS_TO_SCHEME": "Ajouter tous les concepts au Schéma sélectionné",
+            "ADD_BROADER": "Ajouter un générique",
+            "ADD_CLASS_AXIOM": "Ajouter un axiome de classe",
+            "ADD_CONCEPTUALIZATION": "Ajouter une conceptualisation",
+            "ADD_CONCEPT_TO_SCHEME": "Ajouter des concepts au schéma",
+            "ADD_DEFINITION": "Ajouter une définition",
+            "ADD_DEF_TO_LEX_CONCEPT": "Ajouter une définition au concept lexical",
+            "ADD_DEF_TO_LEX_SENSE": "Ajouter une définition au sens lexical",
+            "ADD_DENOTATION": "Ajouter une dénotation",
+            "ADD_DISJOINT_PROPERTY": "Ajouter une propriété disjointe",
+            "ADD_DOMAIN": "Ajouter un domaine",
+            "ADD_EQUIVALENT_PROPERTY": "Ajouter une propriété équivalente",
+            "ADD_EVOKED_LEXICAL_CONCEPT": "Ajouter un concept lexical évoqué",
+            "ADD_FACET": "Ajouter une facette",
+            "ADD_FORM_REPRESENTATION": "Ajouter une représentation de forme",
+            "ADD_IMPORT": "Ajouter un import",
+            "ADD_INVERSE_PROPERTY": "Ajouter une propriété inverse",
+            "ADD_LABEL_RELATION": "Ajouter une relation entre labels",
+            "ADD_LEXICALIZATION": "Ajouter une lexicalisation",
+            "ADD_LEXICAL_SENSE": "Ajouter un sens lexical",
+            "ADD_LEX_CONCEPT": "Ajouter un concept lexical",
+            "ADD_LEX_ENTRY": "Ajouter une entrée lexicale",
+            "ADD_LEX_FORM": "Ajouter une forme lexicale",
+            "ADD_MANCHESTER_EXPRESSION": "Ajouter une expression de Manchester",
+            "ADD_MEMBER": "Ajouter un membre",
+            "ADD_MORPHOSYNTACTIC_PROP": "Ajouter une propriété morphosyntaxique",
+            "ADD_NOTE": "Ajouter une note",
+            "ADD_OTHER_FORM": "Ajouter une autre forme",
+            "ADD_PHONETIC_REPRESENTATION": "Ajouter une représentation phonétique",
+            "ADD_PROPERTY": "Ajouter une propriété",
+            "ADD_PROPERTY_CHAIN_AXIOM": "Ajouter un axiome de chaîne de propriété",
+            "ADD_RANGE": "Ajouter un rang",
+            "ADD_RELATED_LEX_ENTRY": "Ajouter une entrée lexicale liée",
+            "ADD_RELATED_SENSE": "Ajouter un sens lié",
+            "ADD_SCHEME": "Ajouter un schéma",
+            "ADD_SUBTERM": "Ajouter un sous-terme",
+            "ADD_SUPERPROPERTY": "Ajouter une super-propriété",
+            "ADD_TO_SCHEME": "Ajouter au schéma",
+            "ADD_TRANSLATION": "Ajouter une traduction",
+            "ADD_TYPE": "Ajouter un type",
+            "CHANGE_BROADER_PROP": "Changer la propriété générique",
+            "CHANGE_CLASS": "Changer la classe",
+            "CHANGE_LEXICON": "Changer le lexique",
+            "CHANGE_PROPERTY": "Changer la propriété",
+            "CREATE_CLASS": "Créer une classe",
+            "CREATE_COLLECTION": "Créer une collection",
+            "CREATE_CONCEPT": "Créer un concept",
+            "CREATE_CONSTITUENTS_LIST": "Créer une liste de composants",
+            "CREATE_DATATYPE": "Créer un type de donnée",
+            "CREATE_INSTANCE": "Créer une instance",
+            "CREATE_LEXICON": "Créer un lexique",
+            "CREATE_LEX_ENTRY": "Créer une entrée lexicale",
+            "CREATE_LITERAL": "Créer un littéral",
+            "CREATE_NARROWER_CONCEPT": "Créer un concept spécifique",
+            "CREATE_NESTED_COLLECTION": "Créer une collection imbriquée",
+            "CREATE_PLAIN": "Créer un plain",
+            "CREATE_PROPERTY": "Créer une propriété",
+            "CREATE_PROPERTY_CHAIN": "Créer une chaîne de propriétés",
+            "CREATE_SCHEME": "Créer un schéma",
+            "CREATE_SENSE": "Créer un sens",
+            "CREATE_SUBCLASS": "Créer une sous-classe",
+            "CREATE_SUBPROPERTY": "Créer une sous-propriété",
+            "CREATE_TRANSLATION_SET": "Créer un TranslationSet",
+            "DELETE_CLASS": "Supprimer une classe",
+            "DELETE_COLLECTION": "Supprimer une collection",
+            "DELETE_CONCEPT": "Supprimer un concept",
+            "DELETE_CONSTITUENT": "Supprimer un constituant",
+            "DELETE_DATATYPE": "Supprimer un type de données",
+            "DELETE_INSTANCE": "Supprimer une instance",
+            "DELETE_LEXICON": "Supprimer un lexique",
+            "DELETE_LEX_ENTRY": "Supprimer une entrée lexicale",
+            "DELETE_PROPERTY": "Supprimer une propriété",
+            "DELETE_SCHEME": "Supprimer un schéma",
+            "DELETE_TRANSLATION_SET": "Supprimer un TranslationSet",
+            "EDIT_DATATYPE_RESTRICTIONS": "Éditer les restrictions de type de donnée",
+            "EDIT_MANCHESTER_EXPRESSION": "Éditer une expression de Manchester",
+            "EDIT_PROPERTY_CHAIN": "Éditer une chaine de propriétés",
+            "REIFY_PLAIN_SENSE": "Réifier un sens",
+            "REMOVE_FROM_SCHEME": "Supprimer du schéma",
+            "SELECT_CLASS": "Sélectionner une classe",
+            "SELECT_COLLECTION": "Sélectionner une collection",
+            "SELECT_CONCEPT": "Sélectionner un concept",
+            "SELECT_INSTANCE": "Sélectionner une instance",
+            "SELECT_LEXICALIZATION_PROPERTY": "Sélectionner une propriété de lexicalisation",
+            "SELECT_LEXICAL_CONCEPT": "Sélectionner un concept lexical",
+            "SELECT_LEXICAL_ENTRY": "Sélectionner une entrée lexicale",
+            "SELECT_LEXICAL_SENSE": "Sélectionner un sens lexical",
+            "SELECT_LEXICON": "Sélectionner un lexique",
+            "SELECT_PROPERTY": "Sélectionner une propriété",
+            "SELECT_RANGE": "Sélectionner un rang",
+            "SELECT_RANGE_TYPE": "Sélectionner un type de rang",
+            "SELECT_ROOT_CLASS": "Sélectionner une classe racine",
+            "SELECT_SCHEME": "Sélectionner un schéma",
+            "SELECT_TRANSLATION_SET": "Sélectionner un TranslationSet",
+            "SET_AS_TOP_CONCEPT": "Définir comme concept de premier niveau",
+            "SET_CONSTITUENTS": "Définir les constituants",
+            "SET_DATATYPE_RESTRICTIONS": "Définir les restrictions de type de données",
+            "SET_INVERSE_PROPERTY": "Définir les propriétés inverses",
+            "SET_REFERENCE": "Définir la référence"
+        },
+        "CLASS": {
+            "CLASS": "Classe",
+            "CLASSES": "Classes",
+            "SETTINGS": {
+                "CLASS_TREE_SETTINGS": "Réglages de l'arbre des classes",
+                "FILTERED_SUBCLASSES": "Sous-classes filtrées",
+                "ROOT_CLASS": "Classe racine",
+                "SHOW_INSTANCES_NUMBER": "Afficher le nombre d'instances",
+                "SUBCLASS_FILTER": "Filtre de sous-classes",
+                "SUBCLASS_FILTER_INFO": "Dans cette section vous pouvez créer des filtres afin de masquer les sous-classes des classes"
+            },
+            "SHOW_CLASS_DIAGRAM": "Afficher le diagramme des classes",
+            "SHOW_MODEL_GRAPH": "Afficher le graphe orienté-modèle",
+            "SHOW_MODEL_GRAPH_ROOTED": "Afficher le graphe orienté-modèle centré sur le nœud sélectionné"
+        },
+        "COLLECTION": {
+            "COLLECTION": "Collection",
+            "COLLECTIONS": "Collections"
+        },
+        "COMMONS": {
+            "ADD_PROP_VALUE_TO_SELECTION": "Ajouter une valeur de propriété aux ressources sélectionnées",
+            "DUPLICATED_VALUES_WARN": "Vous ne pouvez pas créer plusieurs valeurs dans la même langue",
+            "LEAVE_EMPTY_FOR_RANDOM_URI": "Laisser vide pour générer automatiquement un URI aléatoire",
+            "MULTISELECTION": "Sélection multiple",
+            "MULTIVALUE_WARN": "Avertissement : la valeur saisie ne sera pas prise en compte. Elle doit être ajoutée avec le bouton '+'",
+            "NO_LANGUAGE_ASSIGNED_WARN": "Vous ne pouvez pas créer de ressources. Aucune langue ne vous a été attribuée pour le projet concerné.",
+            "VISUALIZATION_MODE": {
+                "HIERARCHY_BASED": "Hiérarchique",
+                "INDEX_BASED": "Fondé sur l'index",
+                "SEARCH_BASED": "Fondé sur la recherche",
+                "STANDARD": "Standard"
+            }
+        },
+        "CONCEPT": {
+            "ADD_SUBTREE_TO_SCHEME": "Ajouter le sous-arbre du concept sélectionné au schéma...",
+            "ADD_TO_SCHEME": {
+                "CONFIRM_MSG": "Vous êtes sur le point d'ajouter le concept '{{concept}}' et ses descendants au schéma '{{scheme}}'. Le confirmez-vous ?",
+                "SCHEMES_FILTER": "Filtre de schémas",
+                "SCHEMES_FILTER_INFO": "Parmi les descendants de '{{concept}}', seuls les concepts appartenant au moins à l'un des schémas qui suivent seront ajoutés au schéma cible.",
+                "SET_TOP_CONCEPT": "Définir comme concept de premier niveau",
+                "SET_TOP_CONCEPT_INFO": "Si sélectionné, définit le concept fourni comme concept de premier niveau du schéma cible"
+            },
+            "CONCEPT": "Concept",
+            "CONCEPTS": "Concepts",
+            "NO_SCHEME_SELECTED_WARN": "Aucun schéma de concept sélectionné, les opérations de créations sont désactivées",
+            "SETTINGS": {
+                "APPLY_GROUP_SETTINGS": "Appliquer les réglages de groupe",
+                "BASE_BROADER_PROP": "Propriété générique prédéfinie",
+                "BASE_BROADER_PROP_INFO": "Propriété générique prédéfinie utilisée au moment de la création de concepts spécifiques",
+                "BROADER_NARROWER_MGMT": "Gestion générique/spécifique",
+                "BROADER_NARROWER_MGMT_INFO": "Personnalise les propriétés sur lesquelles l'arbre hiérarchique des concepts est fondé. Si aucune propriété générique/spécifique n'est sélectionnée, skos:broader^ et skos:narrower seront utilisés (avec un OU) pour déterminer les concepts spécifiques. Si l'une des deux est sélectionnée (avec une ou plusieurs propriétés), seules les propriétés sélectionnées seront utilisées.",
+                "CONCEPT_TREE_SETTINGS": "Réglages de l'arbre des concepts",
+                "INCLUDE_SUBPROP": "Inclure les sous-propriétés",
+                "INCLUDE_SUBPROP_INFO": "Inclus les sous-propriétés des propriétés générique/spécifique sélectionnées",
+                "MULTISCHEME_MODE": "Mode multi-schéma",
+                "SYNC_INV_PROP": "Synchroniser les propriétés inverses",
+                "SYNC_INV_PROP_INFO": "Maintenir les propriétés générique/spécifique synchronisées avec leurs propriétés inverses",
+                "TOGGLE_OR_AND": "Bascule entre OU et ET le filtre basé sur le schéma des concepts pour la construction de l'arbre des concepts",
+                "TOP_CONCEPTS_LIMIT": "Limitation des concepts de premier niveau",
+                "TOP_CONCEPTS_LIMIT_INFO": "Définit le nombre maximum de concepts de premier niveau visibles dans l'arbre. Ce réglage évite la création d'un arbre qui pourrait générer des problèmes de performances."
+            },
+            "SPAWN_FROM_LABEL": {
+                "MULTIPLE_SIBLING_WARN": "Le concept de même rang sélectionné possède de nombreux génériques, choisir celui qui sera la générique du concept généré ",
+                "SIBLING": "De même rang"
+            },
+            "SWITCH_TO_HIERARCHY_MODE": "Basculer vers la visualisation hiérarchique",
+            "UNSAFE_WARN": {
+                "ELEMENT_COUNT": "Cet arbre de concepts possède un nombre de concepts de premier niveau ({{count}}) qui dépasse la limite fixée dans les réglages ({{safeToGoLimit}}).",
+                "FORCE_INIT": "Cliquer pour forcer l'initialisation de l'arbre des concepts, à vos propres risques",
+                "HERE": "ici",
+                "IT_IS_RECOMMENDED": "Il est recommandé de",
+                "PERFORMANCE_ISSUE": "Les récupérer tous peut prendre un certain temps, vous pourrez constater des baisses de performance voire un blocage du système.",
+                "SELECT_SCHEME": "Vous pouvez également réduire le nombre de concepts de premier niveau en sélectionnant un schéma",
+                "SWITCH_MODE": "basculer vers la visualisation 'fondée sur la recherche'"
+            },
+            "USE_SEARCH_MSG": "Utilisez le champ de recherche pour retrouver des concepts"
+        },
+        "DATATYPE": {
+            "DATATYPE": "Type de données",
+            "DATATYPES": "Types de données"
+        },
+        "INSTANCE": {
+            "INSTANCE": "Instance",
+            "INSTANCES": "Instances",
+            "SETTINGS": {
+                "INSTANCES_LIMIT": "Limite des instances",
+                "INSTANCES_LIMIT_INFO": "Définit le nombre maximum d'instances visibles dans la liste. Ce réglage évite la création d'une liste qui pourrait générer des problèmes de performances.",
+                "INSTANCE_LIST_SETTINGS": "Réglages de la liste des instances"
+            },
+            "SWITCH_TO_STANDARD_MODE": "Basculer vers le mode de visualisation standard",
+            "UNSAFE_WARN": {
+                "ELEMENT_COUNT": "Cette liste d'instances possède un nombre d'éléments ({{count}}) qui dépasse la limite fixée dans les réglages ({{safeToGoLimit}}).",
+                "FORCE_INIT": "Cliquer pour forcer l'initialisation de la liste d'instances, à vos propres risques",
+                "HERE": "ici",
+                "IT_IS_RECOMMENDED": "Il est recommandé de",
+                "PERFORMANCE_ISSUE": "Les récupérer tous peut prendre un certain temps, vous pourrez constater des baisses de performance voire un blocage du système.",
+                "SWITCH_MODE": "basculer vers la visualisation 'fondée sur la recherche'"
+            },
+            "USE_SEARCH_MSG": "Utilisez le champ de recherche pour retrouver des instances"
+        },
+        "LEXICON": {
+            "LEXICON": "Lexique",
+            "LEXICONS": "Lexiques"
+        },
+        "LEX_ENTRY": {
+            "LEX_CONCEPT": "Concept lexical",
+            "LEX_ENTRIES": "Entrées lexicales",
+            "LEX_ENTRY": "Entrée lexicale",
+            "NO_LEXICON_SELECTED_WARN": "Aucun lexique n'est sélectionné, les opérations de création sont désactivées",
+            "SETTINGS": {
+                "INDEX_LENGHT": "Longueur de l'index",
+                "LEX_ENTRIES_LIMIT": "Limite des entrées lexicales",
+                "LEX_ENTRIES_LIMIT_INFO": "Définit le nombre maximum d'entrées lexicales visibles dans la liste. Ce réglage évite la création d'une liste qui pourrait générer des problèmes de performances.",
+                "LEX_ENTRY_SETTINGS": "Réglages de la liste des entrées lexicales"
+            },
+            "SWITCH_TO_INDEX_BASED_MODE": "Basculer vers la visualisation 'fondée sur l'index'",
+            "UNSAFE_WARN": {
+                "CHANGE_INDEX_LENGHT": "Passer la longueur de l'index à 2 caractères",
+                "ELEMENT_COUNT": "Cette liste d'entrées lexicales possède un nombre d'éléments ({{count}}) qui dépasse la limite fixée dans les réglages ({{safeToGoLimit}}).",
+                "FORCE_INIT": "Cliquer pour forcer l'initialisation de la liste d'entrées lexicales, à vos propres risques",
+                "HERE": "ici",
+                "IT_IS_RECOMMENDED": "Il est recommandé de",
+                "OR": "ou",
+                "PERFORMANCE_ISSUE": "Les récupérer tous peut prendre un certain temps, vous pourrez constater des baisses de performance voire un blocage du système.",
+                "SELECT_LEXICON": "Vous pouvez également réduire le nombre d'entrées lexicales en sélectionnant un lexique",
+                "SWITCH_MODE": "basculer vers la visualisation 'fondée sur la recherche'"
+            },
+            "USE_SEARCH_MSG": "Utilisez le champ de recherche pour retrouver des entrées lexicales"
+        },
+        "PROPERTY": {
+            "PROPERTIES": "Propriétés",
+            "PROPERTY": "Propriété"
+        },
+        "SCHEME": {
+            "SCHEME": "Schéma",
+            "SCHEMES": "Schémas"
+        },
+        "SETTINGS": {
+            "SHOW_DEPRECATED_RES": "Montrer les ressources dépréciées dans l'arbre/la liste",
+            "TREE_LIST_SETTINGS": "Réglages de l'arbre/la liste"
+        }
+    },
+    "DATA_MANAGEMENT": {
+        "COMMONS": {
+            "DATA_TRANSFORMATIONS": "Transformations des données"
+        },
+        "DATASET_CATALOG": {
+            "CATALOG": "Catalogue",
+            "DATASET_CATALOG": "Catalogue du jeu de données",
+            "DATASET_DESCRIPTION": "Description du jeu de données",
+            "DATASET_PAGE": "Page du jeu de données",
+            "DATA_DUMPS": "Copies des données",
+            "SEARCH_RESULTS": "Résultats de recherche",
+            "TOT_RESULTS": "Résultats",
+            "URI_PREFIX": "Préfixe de l'URI"
+        },
+        "EXPORT": {
+            "DEPLOY": {
+                "DEPLOYER": "Déployeur",
+                "DEPLOYMENT": "Déploiement",
+                "DEPLOY_TO_TRIPLE_STORE": "Déployer le triple store",
+                "SAVE_TO_FILE": "Sauvegarder vers le fichier",
+                "USE_CUSTOM_DEPLOYER": "Utiliser le déployeur personnalisé"
+            },
+            "GRAPHS": "Graphes",
+            "GRAPHS_TO_EXPORT": "Graphes à exporter",
+            "INCLUDE_INFERRED": "Inclure les informations inférées",
+            "NO_GRAPHS_EXPORTED_MSG": "Si aucun graphe n'est sélectionné, tous les graphes nommés seront exportés",
+            "TRANSFORMERS_DESCRIPTION": "Il est possible à ce stade de créer et de configurer une suite de transformations à appliquer durant le processus d'export. Chaque transformeur est appliqué à un sous-ensemble de graphes. Aucun graphe équivaut à l'export de tous les graphes"
+        },
+        "LOAD": {
+            "DATA_DUMP": "Copie des données",
+            "FORCE_FORMAT_INFO": "Permet d'imposer la sélection d'un format en supplantant celui détecté par le système",
+            "IMPLICITLY_VALIDATE": "Valider implicitement les données importées",
+            "IMPORTS_RESOLUTION_INFO": "Spécifier la source pour résoudre les imports transitifs",
+            "LOAD_FROM": "Importer depuis",
+            "RESOLVE_IMPORTS": "Résoudre les imports",
+            "TRANSFORMERS_DESCRIPTION": "Il est possible à ce stade de créer et de configurer une suite de transformations à appliquer durant le processus d'import.",
+            "USE_PROJECT_BASEURI": "Utiliser l'URI de base du projet"
+        },
+        "REFACTOR": {
+            "DATA_REFACTOR": "Remanier des données",
+            "FLATTEN_NOTES": "Déréifier les notes SKOS",
+            "MIGRATE_INFO": "Cette opération va déplacer le contenu du graphe par défaut vers un graphe nommé selon l'URI de base du projet en cours. Elle va également effacer le graphe par défaut tout en préservant les informations déjà présentes dans le graphe de destination.",
+            "REFACTOR": "Remanier",
+            "REIFY_NOTES": "Réifier les notes SKOS",
+            "SKOSXL_TO_SKOS": "SKOS-XL vers SKOS",
+            "SKOSXL_TO_SKOS_INFO": "Cette opération déréifie toutes les étiquettes et notes SKOS-XL et les transforme en étiquettes et en notes SKOS. À noter : il ne s'agit pas d'une opération sans perte, toutes les informations relatives aux étiquettes et aux notes SKOS-XL seront perdues.",
+            "SKOS_TO_SKOSXL": "SKOS vers SKOS-XL",
+            "SKOS_TO_SKOSXL_INFO": "Cette opération transforme toutes les étiquettes et notes SKOS en étiquettes et notes SKOS-XL réifiées"
+        },
+        "VERSIONING": {
+            "DATETIME": "Date et heure",
+            "DUMP": "Copie",
+            "REPO_CONFIGURATION": "Configuration du dépôt",
+            "REPO_LOCATION": "Localisation du dépôt",
+            "VERSIONS": "Versions",
+            "VERSION_ID": "ID de version"
+        }
+    },
+    "EDOAL": {
+        "ALIGNMENTS": "Alignements",
+        "CHANGE_MEASURE": "Modifier le degré de confiance",
+        "LEFT_ENTITY": "Entité de gauche",
+        "MAPPING_PROP": "Relation d'alignement",
+        "MEASURE": "Degré de confiance",
+        "NEW_ALIGNMENT": "Nouvel alignement",
+        "RELATION": "Relation",
+        "RIGHT_ENTITY": "Entité de droite",
+        "SYNC_ENTITIES": "Synchroniser les entités"
+    },
+    "GRAPHS": {
+        "ACTIONS": {
+            "DELETE_SELECTED_NODE": "Supprimer le nœud sélectionné",
+            "EXPAND_SUB_RESOURCES": "Développer les sous-ressources",
+            "EXPAND_SUPER_RESOURCES": "Développer les super-ressources",
+            "EXPORT_GRAPH_SNAPSHOT": "Exporter une image instantanée du graphe (.svg)",
+            "FIX_NODES_POSITION": "Fixer la position des nœuds",
+            "FIX_NODE_POSITION": "Fixer la position du nœud",
+            "HIDE_GENERIC_LINKS": "Masquer les liens de relations génériques",
+            "SHOW_DATA_ORIENTED_GRAPH": "Afficher le graphe orienté-données"
+        },
+        "FORCE_CONTROL": {
+            "LENGTH": "Longueur",
+            "LINKS": "Liens",
+            "STRENGTH": "Force"
+        },
+        "LINKS_FILTER": {
+            "EXPAND_NODE": "Développer le nœud",
+            "TOO_MUCH_RELATIONS_WARNING": "La ressource que vous développez possède un grand nombre de relations, ce qui va générer un nombre important de liens et de nœuds et peut rendre la visualisation du graphe confuse. Il est fortement recommandé de filtrer certaines des relations afin de limiter la taille du graphe.",
+            "VISIBLE_X_OUT_OF_Y": [
+                "Visible",
+                "parmi"
+            ]
+        },
+        "RESOURCE_DETAILS": {
+            "SHOW_THE_COMPLETE": "Montrer la totalité"
+        },
+        "SETTINGS": {
+            "DATA_GRAPH_SETTINGS": "Réglages du graphe orienté-données",
+            "GRAPH_FILTER": "Filtrer le graphe",
+            "HIDE_LITERAL_NODES": "Masquer les nœuds littéraux",
+            "HIDE_LITERAL_NODES_INFO": "Si la case est cochée, tous les nœuds littéraux ne seront pas visibles dans le graphe",
+            "PARTITION_FILTER_INFO": "Sélectionner la partition de la description de la ressource qui sera affichée au développement d'un nœud."
+        }
+    },
+    "HISTORY_VALIDATION": {
+        "1ST_PARAM": "1er param",
+        "2ND_PARAM": "2e param",
+        "COMMIT": {
+            "COMMENT": "Commenter",
+            "COMMIT_DETAILS": "Détails de commit",
+            "COMMIT_ID": "ID de commit",
+            "CONTEXT": "Contexte"
+        },
+        "COMMITS": "Commits",
+        "COMMIT_ID": "ID de commit",
+        "DATE": "Date",
+        "FILTERS": {
+            "APPLY": "Appliquer",
+            "DATETIME_FORMAT": "Format de date : yyyy-MM-ddThh:mm",
+            "OPERATIONS": "Opérations",
+            "OPERATION_PICKER": {
+                "EXTENSION_PATH": "Chemin d'extension",
+                "OPERATIONS": "Opérations",
+                "OPERATION_FILTER": "Filtre d'opération",
+                "SERVICE_CLASS": "Classe de service"
+            },
+            "PERFORMERS": "Auteurs",
+            "TIME_FROM": "De",
+            "TIME_TO": "À"
+        },
+        "OPERATION": "Opération",
+        "OPERATION_SORT": "Tri des opérations",
+        "OTHER_PARAMS": "Autre param(s)",
+        "PROVIDE_COMMENT": "Fournir un commentaire pour l'action de validation",
+        "SORT_ASCENDING": "Ascendant",
+        "SORT_DESCENDING": "Descendant",
+        "SORT_UNORDERED": "Non ordonné",
+        "STAGED_COMMITS": "Commits ordonnés",
+        "TIME_SORT": "Tri temporel",
+        "USER": "Utilisateur",
+        "VALIDATION_COMMENT": {
+            "COMMENT": "Commentaire",
+            "COMMENT_INFO": "Il est possible d'enregistrer un commentaire pour les commits rejetés qui suivent, afin de motiver la décision de rejet. Même si le commentaire est facultatif, il est recommandé d'en enregistrer un. Malgré tout, si vous ne souhaitez pas commenter vous pouvez laisser le champ vide et poursuivre.",
+            "SHOW_PARAMS": "Afficher les paramètres",
+            "VALIDATION_COMMENTS": "Commentaires de validation"
+        }
+    },
+    "HOME": {
+        "DESCRIPTION": "VocBench est une plateforme web multilingue et collaborative permettant de gérer des ontologies <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a>, des thesaurus <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>), des lexiques <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> et des jeux de données RDF",
+        "DEVELOPED_BY": {
+            "TITLE": "VocBench 3 a été développé par",
+            "TOR_VERGATA_NAME": "l'Université de Rome \"Tor Vergata\"", 
+            "TOR_VERGATA_SUBTITLE": "Oggi, l´Ateneo del domani"
+        },
+        "FUNDED_BY": {
+            "ISA2_NAME": "ISA<sup>2</sup>",
+            "ISA2_SUBTITLE": "Solutions d'interopérabilité pour les administrations publiques, les sociétés et les citoyens",
+            "OP_NAME": "Office des publications de l'Union européenne",
+            "OP_SUBTITLE": "législation et publications de l'UE",
+            "TITLE": "VocBench 3 est financé par"
+        },
+        "MANAGED_BY": {
+            "INFEUROPE_NAME": "Infeurope",
+            "INFEUROPE_SUBTITLE": "Architecture begins where engineering ends",
+            "TITLE": "Contrat géré par"
+        },
+        "POWERED_BY": "VocBench s'appuie sur la plateforme d'acquisition et de gestion des connaissances <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a>", 
+        "PRIVACY_STATEMENT": {
+            "LINK_TEXT": "charte de confidentialité",
+            "READ_OUR": "Veuillez lire notre"
+        },
+        "WELCOME": "Bienvenue dans VocBench"
+    },
+    "ICV": {
+        "CONFIG": {
+            "CHECK": "Contrôler",
+            "ICV_CONFIG": "Configuration ICV",
+            "LANGUAGES_TO_CHECK": "Langues à contrôler",
+            "ONLY_MANDATORY": "Uniquement les obligatoires",
+            "ONLY_MANDATORY_INFO": "Contrôler uniquement les langues obligatoires",
+            "RESOURCES_TO_CHECK": "Ressources à contrôler"
+        },
+        "GENERIC": {
+            "BROKEN_ALIGNMENTS": {
+                "ALIGN_COUNT": "Nombre d'alignements",
+                "DESCRIPTION": "Alignement dont la ressource objet n'existe pas ou est dépréciée",
+                "LOCATIONS": "Positions",
+                "NAME": "Alignements corrompus",
+                "NAMESPACES_TO_CHECK": "Espaces de noms à contrôler",
+                "NAMESPACES_TO_CHECK_INFO": "Espaces de noms des ressources qui apparaissent en tant qu'objets des relations de correspondance",
+                "RELOAD_INFO": "Les types de ressources à contrôler ont changé, il est fortement conseillé de recharger les espaces de noms"
+            },
+            "BROKEN_DEFINITIONS": {
+                "DEFINITION_PROP": "Propriété de définition",
+                "DEFINITION_PROP_INFO": "ICV contrôle les ressources dont les définitions liées sont corrompues au moyen de cette propriété ou de ses sous-propriétés",
+                "DESCRIPTION": "Définitions de ressources dont la ressource objet n'existe pas ou est dépréciée",
+                "NAME": "Définitions corrompues"
+            },
+            "GENERIC_CHECKS": "Contrôles génériques",
+            "INVALID_URI_LOCAL_RES": {
+                "DESCRIPTION": "Ressources définies localement avec un URI de syntaxe invalide ",
+                "NAME": "Ressources locales d'URI invalide"
+            },
+            "NO_DEFINITION": {
+                "DESCRIPTION": "Ressources qui ne possèdent aucune définition SKOS dans la(les) langue(s) donnée(s)",
+                "NAME": "Ressources sans définition"
+            }
+        },
+        "ICV": "Validation des contraintes d'intégrité (ICV)",
+        "LABEL": {
+            "CONFLICTUAL_LABEL": {
+                "DESCRIPTION": "Ressources ou, plus spécifiquement, concepts du même schéma, qui possèdent le même label préférentiel dans la même langue",
+                "NAME": "Ressources dont les labels sont en conflit"
+            },
+            "DANGLING_SKOSXL_LABEL": {
+                "ADD_TO_CONCEPT": "Ajouter à un concept",
+                "DELETE_LABEL": "Supprimer un label",
+                "DESCRIPTION": "skosxl:Label(s) qui ne sont liés à aucun skos:Concept",
+                "NAME": "skosxl:Label(s) orphelins"
+            },
+            "EXTRA_WHITESPACE_LABEL": {
+                "DESCRIPTION": "Ressources dont le label comporte des espaces surnuméraires",
+                "NAME": "Ressources au label avec espaces surnuméraires"
+            },
+            "LABEL_CHECKS": "Contrôles des labels",
+            "MULTIPLE_PREFLABEL": {
+                "DESCRIPTION": "Ressources qui possèdent plusieurs labels préférentiels dans la même langue",
+                "NAME": "Ressources aux labels préférentiels multiples"
+            },
+            "NO_LANGTAG_LABEL": {
+                "DESCRIPTION": "Ressources qui possèdent un label sans étiquette de langue",
+                "NAME": "Ressources sans étiquette de langue"
+            },
+            "NO_MANDATORY_LABEL": {
+                "DESCRIPTION": "Ressources qui ne possèdent aucun label dans la langue donnée",
+                "MISSING_LANG_LABEL": "Label de langue(s) manquant",
+                "NAME": "Ressources sans label obligatoire"
+            },
+            "NO_SKOSXL_PREFLABEL": {
+                "ADD_PREFLABEL": "Ajouter un skosxl:prefLabel",
+                "DESCRIPTION": "skos:Concept(s) ou skos:ConceptScheme(s) qui ne possède aucun skosxl:prefLabel",
+                "NAME": "Ressources sans skosxl:prefLabel"
+            },
+            "NO_SKOS_PREFLABEL": {
+                "ADD_PREFLABEL": "Ajouter un skos:prefLabel",
+                "DESCRIPTION": "skos:Concept(s) ou skos:ConceptScheme(s) qui ne possède aucun skos:prefLabel",
+                "NAME": "Ressources sans skos:prefLabel"
+            },
+            "ONLY_ALTLABEL": {
+                "DESCRIPTION": "Ressources qui possèdent un label alternatif mais aucun label préférentiel dans la même langue",
+                "NAME": "Ressources avec uniquement un label alternatif"
+            },
+            "OVERLAPPED_LABEL": {
+                "DESCRIPTION": "Ressources qui possèdent le même label dans la même langue dupliqué comme label préférentiel, alternatif ou caché",
+                "NAME": "Ressources aux labels dupliqués"
+            }
+        },
+        "PRESS_RUN_TO_RUN_CHECK": [
+            "Presser",
+            "le bouton pour lancer le contrôle."
+        ],
+        "QUICK_ACTION": "Action rapide",
+        "STRUCTURAL": {
+            "CONCEPTS_RELATED_DISJOINT": {
+                "DESCRIPTION": "skos:Concept(s) connecté à un autre à la fois par une relation skos:related et par une relation skos:broaderTransitive (la relation skos:related est disjointe de skos:broaderTransitive)",
+                "NAME": "Concepts liés avec des relations disjointes",
+                "WARNING": "Attention : ICV contrôle les incohérences possibles dans tous les modèles y compris les sous-propriétés de skos:related et skos:broaderTransitive. Cependant, il ne contrôle pas la fermeture transitive de la relation skos:broaderTransitive. Pour cela il est nécessaire d'activer le raisonneur."
+            },
+            "CONCEPT_EXACT_MATCH_DISJOINT": {
+                "DESCRIPTION": "skos:Concept(s) connecté à un autre à la fois par une relation skos:exactMatch et par skos:broadMatch ou skos:relatedMatch (la relation skos:exactMatch est disjointe de skos:broadMatch et de skos:relatedMatch)",
+                "NAME": "Concepts avec des exactMatch aux relations disjointes"
+            },
+            "CONCEPT_IN_NO_SCHEME": {
+                "ADD_ALL_TO_SCHEME": "Ajouter tout à un skos:ConceptScheme",
+                "ADD_TO_SCHEME": "Ajouter à un skos:ConceptScheme",
+                "DESCRIPTION": "skos:Concept(s) qui n'appartient à aucun schéma",
+                "NAME": "Concepts sans schéma",
+                "WARNING": "Attention : ajouter le concept à un skos:ConceptScheme peut ne pas suffire pour assurer sa visibilité dans l'arbre des concepts. Le concept peut être encore orphelin."
+            },
+            "CYCLIC_HIERARCHICAL_CONCEPTS": {
+                "CYCLES": "Cycles",
+                "DESCRIPTION": "skos:Concept(s) qui forme un cycle hiérarchique au travers des relations skos:narrower et skos:broader",
+                "NAME": "Concepts hiérarchiquement cycliques"
+            },
+            "DANGLING_CONCEPTS": {
+                "ALL_SCHEMES": "Tous les schémas",
+                "DESCRIPTION": "skos:Concept(s) qui ne possède aucun skos:broader ou qui n'est pas un skos:topConceptOf du skos:ConceptScheme auquel il est rattaché",
+                "NAME": "Concepts orphelins",
+                "REMOVE_ALL_FROM_SCHEME": "Tout supprimer du schéma",
+                "SELECT_BROADER": "Sélectionner un skos:broader",
+                "SELECT_BROADER_FOR_ALL": "Sélectionner un skos:broader pour tous",
+                "SET_ALL_AS_TOP": "Définir tout comme skos:topConceptOf"
+            },
+            "HIERARCHICAL_REDUNDANCIES": {
+                "DESCRIPTION": "skos:Concept(s) qui forme une relation hiérarchiquement redondante avec un autre concept",
+                "EXAMPLE": [
+                    "la 3e relation est redondante car c'est une conséquence de 1) et 2)",
+                    "par ex."
+                ],
+                "NAME": "Redondances hiérarchiques",
+                "SAME_SCHEME": "Même schéma",
+                "SAME_SCHEME_INFO": "Si la fonction est activée, le contrôle ne porte que sur des relations entre concepts appartenant au même ConceptScheme"
+            },
+            "OMITTED_TOP_CONCEPT": {
+                "CREATE_TOP_CONCEPT": "Créer un concept de premier niveau",
+                "DESCRIPTION": "skos:ConceptScheme(s) qui ne possède aucun concept de premier niveau ou qui est vide",
+                "NAME": "ConceptScheme sans concept de premier niveau",
+                "SELECT_TOP_CONCEPT": "Sélectionner le concept de premier niveau"
+            },
+            "OWL_CONSISTENCY_VIOLATION": {
+                "DELETE_TRIPLE_WARNING": "À noter : après la suppression d'un triplet, afin de vérifier si les incohérences ont été supprimées, ICV sera relancé automatiquement.",
+                "DESCRIPTION": "Triplets qui déterminent les incohérences OWL",
+                "INFERENCE_EXPLANATION": "Explication de l'inférence",
+                "NAME": "Violations de la cohérence OWL"
+            },
+            "STRUCTUAL_CHECKS": "Vérifications structurales",
+            "TOP_CONCEPT_WITH_BROADER": {
+                "DESCRIPTION": "skos:Concept(s) qui est skos:topConceptOf d'un schéma et possède des skos:broader",
+                "NAME": "Concept de premier niveau avec un générique",
+                "REMOVE_ALL_AS_TOP": "Supprimer tous les topConceptOf",
+                "REMOVE_AS_TOP": "Supprimer le topConceptOf",
+                "REMOVE_BROADER": "Supprimer le(s) générique(s)",
+                "REMOVE_BROADER_TO_ALL": "Supprimer le(s) générique(s) pour tous"
+            }
+        }
+    },
+    "INVOKABLE_REPORTERS": {
+        "ACTIONS": {
+            "COMPILE_REPORT": "Générer le rapport",
+            "CREATE_INVOKABLE_REPORT": "Créer un rapport invocable",
+            "CREATE_SERVICE_INVOCATION": "Créer une invocation de service",
+            "DELETE_INVOKABLE_REPORT": "Supprimer un rapport invocable",
+            "EDIT_INVOKABLE_REPORT": "Éditer un rapport invocable",
+            "EDIT_SERVICE_INVOCATION": "Éditer une invocation de service"
+        },
+        "DESTINATION_PATH": "Chemin de destination",
+        "INVOCATION": {
+            "ARGUMENTS": "Arguments",
+            "CUSTOM_OPERATIONS": "Opérations personnalisées",
+            "INVALID_UPDATE_OPERATION": "Un rapporteur invocable ne peut pas définir une invocation de service qui exécute et met à jour, il peut uniquement exploiter des opérations personnalisées en lecture seule. L'opération sélectionnée n'est pas une opération de lecture, elle ne peut donc pas être utilisée.",
+            "NO_PARAM_OPERATION_INFO": "Cette opération n'a pas de paramètres, elle peut être invoquée sans aucune configuration",
+            "OPERATION": "Opération",
+            "SEE_CUSTOM_OPERATIONS_DETAILS": "Voir les détails de l'opération personnalisée",
+            "SERVICE": "Service",
+            "TEMPLATE_INFO": "Un modèle de rendu d'une section individuelle. Le modèle doit être conforme au langage de modélisation Mustache"
+        },
+        "INVOKABLE_REPORTS": "Rapports invocables",
+        "REPORT": "Rapport",
+        "RESULT": "Résultat",
+        "SOURCE_PATH": "Chemin source"
+    },
+    "MESSAGES": {
+        "ACL_CHANGE_ACCESS_CONFIRM": "Êtes-vous certain de vouloir passer le niveau d'accès de '{{project}}' à '{{level}}' pour le consumer '{{consumer}}' ?",
+        "ACL_CHANGE_LOCK_CONFIRM": "Êtes-vous certain de vouloir passer le niveau de verouillage du projet à '{{level}}' ?",
+        "ACL_CHANGE_UNIVERSAL_ACCESS_CONFIRM": "Êtes-vous certain de vouloir passer le niveau d'accès de '{{project}}' à '{{level}}' pour tous les consumers ?",
+        "ACL_REVOKE_ACCESS_CONFIRM": "Êtes-vous certain de vouloir révoquer le niveau d'accès de'{{project}}' pour le consumer '{{consumer}}' ?",
+        "ACL_REVOKE_UNIVERSAL_ACCESS_CONFIRM": "Êtes-vous certain de vouloir révoquer le niveau d'accès de '{{project}}' pour tous les consumers ?",
+        "ACL_TOO_MUCH_PROJ_CONFIRM": "Attention : il existe un grand nombre de projets ({{projCount}}), de ce fait la matrice ACL peut mettre du temps à se charger et être peu lisible. Voulez-vous poursuivre malgré tout ?\n\n Sinon l'ACL d'un projet spécifique est disponible depuis le menu de l'action, à l'entrée 'Éditer ACL'",
+        "ADD_ALIGNMENT_TO_EDOAL_CONFIRM": "Cette opération va ajouter l'alignement accepté au jeu de liens EDOAL. Voulez-vous poursuivre ?",
+        "ADD_ALIGNMENT_TO_ONTO_CONFIRM": "Cette opération va ajouter à l'ontologie les triplets des alignements acceptés. Voulez-vous poursuivre ?",
+        "ADD_ALL_CONCEPT_TO_SCHEME_CONFIRM": "Vous êtes sur le point d'ajouter tous les concepts existants au schéma '{{scheme}}'. Êtes-vous certain ?",
+        "ADD_DELETE_ALIGNMENT_TO_EDOAL_CONFIRM": "Cette opération va ajouter les alignements acceptés au jeu de liens EDOAL et va supprimer ceux qui ont été rejetés. Voulez-vous poursuivre ?",
+        "ADD_DELETE_ALIGNMENT_TO_ONTO_CONFIRM": "Cette opération va ajouter à l'ontologie les triplets des alignements acceptés et va supprimer les triplets de ceux qui ont été rejetés. Voulez-vous poursuivre ?",
+        "ADV_GRAPH_APP_LOADED_REPORT": "Un ou plusieurs des nœuds définis dans la Advanced Graph Application chargée possèdent un ID déjà utilisé par d'autres nœuds. Ils ont été remplacés",
+        "ALIGNED_PROJ_METADATA_NOT_FOUND_GENERATE_CONFIRM": "Les métadonnées du projet '{{project}}' n'ont pas été trouvées, voulez-vous les générer ? (Nécessaires pour l'alignement)",
+        "ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM": "Un changement manuel de la relation va automatiquement positionner le niveau de confiance de l'alignement sur 1.0. Voulez-vous poursuivre ?",
+        "ALIGNMENT_SERVICE_NOT_RESPONDING": " Le serveur du service d'alignement ne répond pas, assurez-vous qu'il est opérationnel et fonctionne ou que la configuration est correcte",
+        "ALIGNMENT_VALIDATION_DATA_STORING_WARN": "Veuillez noter que les données de validation ne sont pas conservées en interne et doivent être restaurées au moyen du fichier de sauvegarde disponible derrière ce lien de téléchargement",
+        "ALL_CORRESPONDENCES_ADDED": "Toutes les correspondances ont été ajoutées avec succès",
+        "ALREADY_ASSIGNED_FORM_COLL_TO_RESOURCE": "Une collection de formulaires est déjà attribuée à {{resource}}. Veuillez sélectionner une autre ressource ou, si vous souhaitez ajouter un formulaire à {{resource}}, ajoutez plus de formulaires personnalisés à la collection déjà attribuée",
+        "ALREADY_DEFINED_MAPPING_WITH_NAMESPACE": "Une correspondance avec l'espace de nom fourni est déjà définie",
+        "ALREADY_DEFINED_MAPPING_WITH_PREFIX": "Une correspondance avec le préfixe fourni est déjà définie",
+        "ALREADY_EXISTING_CAPABILITY": "La capacité fournie existe déjà dans le rôle sélectionné",
+        "ALREADY_EXISTING_CONFIG_FOR_SERVER_URL": "Une configuration pour le même URL de serveur existe déjà",
+        "ALREADY_EXISTING_CONFIG_ID": "Une configuration ayant le même ID existe déjà",
+        "ALREADY_EXISTING_CUSTOM_FORM_ID": "Un formulaire personnalisé ayant le même ID existe déjà",
+        "ALREADY_EXISTING_FILE_OVERWRITE_CONFIRM": "Un fichier portant le même nom existe déjà. Voulez-vous l'écraser ?",
+        "ALREADY_EXISTING_FILTER_FOR_CLASS": "Un filtre existe déjà pour la classe sélectionnée.",
+        "ALREADY_EXISTING_FORM_COLLECTION_ID": "Une collection de formulaires ayant le même ID existe déjà",
+        "ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE": "Impossible d'ajouter un nouveau nœud à {{resource}} car un nœud existe déjà pour la même ressource",
+        "ALREADY_EXISTING_INVOKABLE_REPORTER_ID": "Un rapporteur invocable ayant le même ID existe déjà. Veuillez changer l'ID et réessayer",
+        "ALREADY_EXISTING_METADATA_ASSOCIATION": "Une association entre le même type de ressource et de modèle existe déjà.",
+        "ALREADY_EXISTING_METADATA_PATTERN_NAME": "Un modèle de métadonnées portant le même nom existe déjà",
+        "ALREADY_EXISTING_ROLE_NAME": "Un rôle portant le même nom existe déjà",
+        "ALREADY_EXISTING_SECTION": "Une section portant le même nom existe déjà",
+        "ALREADY_USED_NODE_ID": "L'ID fourni pour le nœud est déjà utilisé pour un autre nœud",
+        "BASEURI_AND_NAMESPACE_UPDATED": "L'URI de base et l'espace de nom ont été mis-à-jour avec succès",
+        "BASEURI_REQUIRED": "URI de base nécessaire",
+        "BASEURI_UPDATED": "L'URI de base a été mis-à-jour avec succès et le remaniement a été complété.",
+        "BULK_DELETE_CONFIRM": "Vous êtes sur le point de supprimer la valeur pour chaque ressource qui possède cette relation prédicat-valeur. Êtes-vous certain ?",
+        "BULK_EDIT_CONFIRM": "Vous êtes sur le point de mettre à jour la valeur pour chaque ressource qui possède cette relation prédicat-valeur. Êtes-vous certain ?",
+        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED": "Impossible d'ajouter un nouveau nœud à {{resource}}. Dans ce graphe, vous pouvez uniquement ajouter des ressources définies localement.",
+        "CANNOT_ADD_SAME_RANGE_TO_DIFFERENT_PROP_TYPES": "L'ajout du même niveau à plusieurs propriétés de types différents n'est pas autorisé",
+        "CANNOT_CHANGE_ADMIN_STATUS": "Impossible de modifier le statut d'un administrateur. Veuillez d'abord révoquer le rôle d'administrateur puis réessayez",
+        "CANNOT_COPY_RESOURCE_URI_IN_CLIPBOARD": "Impossible de copier l'URI de la ressource dans le presse-papier",
+        "CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR": "Impossible de créer le formulaire personnalisé '{{cfId}}'. Sa description doit comporter des erreurs.",
+        "CANNOT_EDIT_DIFFERENT_RESOURCE_CODE": "Vous ne pouvez pas modifier une ressource différente. Le seul sujet admis est la ressource que vous êtes en train de modifier",
+        "CANNOT_EDIT_NOT_EXPLICIT_RESOURCES": "Toutes les ressources sélectionnées sont non explicites, elles ne peuvent donc pas être éditées",
+        "CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS": "Vous ne pouvez pas éditer les informations d'authentification de dépôts distants liés à un projet ouvert. Fermez d'abord le projet puis réessayez",
+        "CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES": "La portée de {{property}} n'admet pas de ressources. Vous ne pouvez pas enrichir cette propriété avec une ressource distante",
+        "CANNOT_EXPORT_ADV_GRAPH_APP_WITH_EXTERNAL_REF": "Impossible de sauvegarder cette application de graphe avancée car elle fait référence à des nœuds définis dans d'autres en-têtes externes",
+        "CANNOT_GRANT_ADMIN_TO_INACTIVE_USER": "Impossible de donner un rôle d'administrateur à un utilisateur non activé. Activez l'utilisateur et réessayez",
+        "CANNOT_IMPORT_DATASET_MISSING_ONTO_IRI": "Le jeu de données sélectionné ne fournit aucun IRI d'ontologie, il ne peut donc pas être importé. Changez de jeu de données.",
+        "CANNOT_INFER_PEARL_ANNOTATIONS": "Impossible d'inférer des annotations sur un PEARL invalide",
+        "CANNOT_PARSE_AUTH": "Impossible de parser l'autorisation que vous essayez d'éditer ({{auth}}). Le formulaire n'a pas été restauré.",
+        "CANNOT_PARSE_JSON_MATCHER_CONFIGURATION": "La configuration fournie pour le matcher ne peut pas être parsée en tant que JSON",
+        "CANNOT_PARSE_JSON_METADATA_SETTING": "Les réglages fournis pour les métadonnées ne peuvent pas être parsés en tant que JSON",
+        "CANNOT_PRELOAD_DATA_FROM_DATASET": "Le jeu de donné sélectionné ne possède ni copie de données ni IRI d'ontologie, il ne peut donc pas être utilisé pour le préchargement des données.",
+        "CANNOT_RETRIEVE_ISSUES_CONNECTION_FAILED": "Impossible de retrouver la liste des rapports. La connexion au système de collaboration a échoué.",
+        "CANNOT_RETRIEVE_ISSUES_LOGIN_FAILED": "Impossible de retrouver la liste des rapports. La connexion au système de collaboration a échoué au moment de l'authentification. Veuillez vérifier les informations d'authentification.",
+        "CANNOT_REVOKE_ADMIN_AUTHORITY": "Impossible de révoquer le rôle d'administrateur de l'utilisateur sélectionné. Il n'y a qu'un seul administrateur",
+        "CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_PROJ": "Impossible de lancer une tâche de comparaison SKOS pour le projet '{{project}}' car il est hébergé dans un dépôt qui ne possède pas de SPARQL endpoint",
+        "CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS": "Impossible de lancer une tâche de comparaison SKOS pour la version '{{version}}' car elle est hébergée dans un dépôt qui ne possède pas de SPARQL endpoint",
+        "CANNOT_RUN_SKOS_DIFFING_SAME_VERS": "Impossible de comparer deux versions identiques du projet",
+        "CATALOG_CONNECTOR_NOT_CONFIGURED": "Le connecteur du catalogue doit être configuré",
+        "CHANGE_S2RDF_SETTINGS_CONFIRM": "La modification des réglages nécessite la ré-initialisation du modèle lié à la feuille de calcul actuelle. Toutes les modifications apportées aux en-têtes seront supprimées. Voulez-vous poursuivre ?",
+        "CLEAR_DATA_CONFIRM": "Cette opération va supprimer toute les données enregistrées dans ce projet, vous serez ensuite redirigé vers la page d'accueil. Êtes-vous certain de vouloir poursuivre ?",
+        "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "Le système de collaboration semble être configuré mais il ne fonctionne pas (la configuration est peut-être invalide ou le serveur n'est peut-être pas joignable), il va donc être désactivé.",
+        "CONFIGURATION_SAVED": "Configuration sauvegardée avec succès",
+        "CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM": "Vous êtes sur le point d'écraser la configuration en restaurant les réglages par défaut du système. Êtes-vous certain ?",
+        "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "Vous allez définir cette configuration comme valeur par défaut. Êtes-vous certain ?",
+        "CONFIG_SYSTEM_DEFAULT_RESTORED": "Configuration du système restaurée",
+        "CONFIG_SYSTEM_DEFAULT_SET": "Configuration définie comme valeur par défaut",
+        "CUSTOM_FORM_PROP_CHAIN_DESCR": "Saisissez la chaîne comme une suite d'IRIs séparés par des virgules (,) (les QNames sont également acceptés)",
+        "DATA_CLEARED": "Toutes les données ont été supprimées avec succès.",
+        "DATA_IMPORTED": "Données importées avec succès",
+        "DELETE_ALL_VALUES_CONFIRM": "Vous êtes sur le point de supprimer toutes les valeurs de {{property}}. Êtes-vous certain ?",
+        "DELETE_CONFIG_CONFIRM": "Vous êtes sur le point de supprimer la configuration. Êtes-vous certain ?",
+        "DELETE_CONSTITUENT_WARN_CONFIRM": "Supprimer un constituant peut compromettre l'intégrité de la section des constituents. Si vous voulez éditer les constituants de l'entrée lexicale, il est fortement recommandé d'utiliser la procédure d'ajout qui remplacera la liste actuelle des constituants. Confirmez-vous la suppression ?",
+        "DELETE_CUSTOM_FORM_CONFIRM": "Vous êtes sur le point de supprimer le formulaire personnalisé sélectionné. Êtes-vous certain ?",
+        "DELETE_CUSTOM_SERVICE_CONFIRM": "Vous êtes sur le point de supprimer le formulaire personnalisé sélectionné. Êtes-vous certain ?",
+        "DELETE_FORM_COLLECTION_CONFIRM": "Vous êtes sur le point de supprimer la collection de formulaires sélectionnée. Êtes-vous certain ?",
+        "DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM": "Le nœud que vous êtes sur le point de supprimer est utilisé dans au moins une application de graphe. Cette opération va affecter l'application des graphes. Voulez-vous poursuivre ?",
+        "DELETE_INVOKABLE_REPORT_CONFIRM": "Vous êtes sur le point de supprimer le rapport invocable sélectionné. Êtes-vous certain ?",
+        "DELETE_METADATA_PATTERN_ASSOCIATION_CONFIRM": "Vous êtes sur le point de supprimer l'association de modèles de métadonnées sélectionnée. Êtes-vous certain ?",
+        "DELETE_METADATA_PATTERN_CONFIRM": {
+            "CONTINUE": "Voulez-vous poursuivre ?",
+            "DELETING": "Vous êtes sur le point de supprimer le modèle de métadonnées sélectionné.",
+            "USED_IN_ASSOCIATION": "À noter : le modèle de métadonnées est utilisé dans au moins une association. Supprimer le modèle supprimera également les associations"
+        },
+        "DELETE_PROJECT_CONFIRM": "Attention, cette opération va supprimer le projet {{project}}. Êtes-vous certain de vouloir poursuivre ?",
+        "DELETE_RDF_MEMBER_WARN_CONFIRM": "La suppression d'un membre de la liste pourrait compromettre l'intégrité de la section des membres. Si vous souhaitez éditer les membres, il est fortement conseillé d'ajouter une nouvelle liste depuis la section des composants. Confirmez-vous la suppression ?",
+        "DELETE_REMOTE_ALIGN_SYS_CONFIG_CONFIRM": "Vous êtes sur le point de supprimer la configuration '{{config}}'. Si cette configuration est utilisée dans un projet, sa suppression pourrait empêcher le système d'alignement distant de fonctionner. Êtes-vous certain ?",
+        "DELETE_SCHEMES_WITHOUT_TOP_WARN_CONFIRM": "Supprimer les schémas, s'ils contiennent des concepts, provoquera la génération de concepts sans schéma. Voulez-vous poursuivre ?",
+        "DELETE_SCHEME_WITHOUT_TOP_WARN_CONFIRM": "Supprimer ce schéma, s'il contient des concepts, provoquera la génération de concepts sans schéma. Voulez-vous poursuivre ?",
+        "DELETE_SHARED_METADATA_PATTERN_CONFIRM": "Vous êtes sur le point de supprimer de la bibliothèque le modèle de métadonnées sélectionné. Êtes-vous certain ?",
+        "DELETE_USER_CONFIRM": "Vous êtes sur le point de supprimer l'utilisateur {{user}}. Êtes-vous certain ?",
+        "DEPLOYER_NOT_CONFIGURED": "Le déployeur doit être configuré",
+        "DEPLOYER_NOT_SAVED": "La configuration du déployeur n'a pas été sauvegardée. Pour sauvegarder la configuration de l'exportateur, toutes ses sous-configurations doivent être sauvegardées.",
+        "DISABLE_COLLABORATION_SYSTEM_CONFIRM": "Vous êtes sur le point de désactiver le système collaboratif du projet en cours. Êtes-vous certain ?",
+        "DUPLICATED_BINDING_NAME": "Le nom du lien '{{binding}}' est en double, veuillez changer le nom ou supprimer le lien",
+        "DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM": "Cette opération va écraser tous les rôles, groupes, langues et modèles de ResourceView attribués à l'utilisateur {{user}} pour le projet '{{project}}'. Êtes-vous certain ?\n\nÀ noter : les rôles définis au niveau du projet ne seront pas dupliqués",
+        "EDIT_RDF_MEMBER_WARN_CONFIRM": "Il est déconseillé d'éditer la liste des membres depuis cette section. Il n'y a aucun contrôle du prédicat rdf:_n et vous pourriez compromettre l'intégrité de la liste. Voulez-vous poursuivre ?",
+        "EMAIL_CONFIG_CHANGED_SUBMIT_FIRST": "La configuration des e-mails a été modifiée, vous devez en premier lieu confirmer les modifications.",
+        "EMAIL_CONFIG_TEST_DESCR": "Ce test va envoyer un e-mail à l'adresse fournie afin de vérifier la configuration des e-mails",
+        "EMAIL_CONFIG_WORKS_FINE": "La configuration est correcte. L'e-mail test a été envoyé à l'adresse électronique fournie.",
+        "EMPTY_PARAM_NAME": "Un paramètre fourni ne possède pas de nom",
+        "ENABLE_ALL_PARTITIONS_IN_ALL_TYPES_CONFIRM": "Toutes les partitions seront rendues visibles pour tous les types de ressouces disponibles. Êtes-vous certain ?",
+        "ENTER_VALID_EMAIL": "Veuillez saisir une adresse électronique valide",
+        "ENTER_VALID_IRI": "Veuillez saisir un IRI valide",
+        "ENTER_VALID_STRING_TO_SEARCH": "Veuillez saisir une chaîne de caractères valide à rechercher",
+        "EXPORT_FILTER_NOT_CONFIGURED": "Un filtre d'export ({{filterName}}) doit être configuré",
+        "EXPORT_RESULT_DEPLOYED": "Le résultat de l'export a été déployé avec succès",
+        "FACETS_INDEX_RECREATED": "L'index des facettes a été recréé avec succès",
+        "FILE_REQUIRED": "Un fichier est nécessaire",
+        "FILL_ALL_REQUIRED_FIELDS": "Veuillez renseigner tous les champs demandés",
+        "FILTER_NOT_SAVED": "Le filtre à la position {{position}} n'est pas sauvegardé. Pour sauvegarder une chaîne de filtres, tous ses filtres doivent être sauvegardés.",
+        "FORCE_OPERATION_CONFIRM": "Voulez-vous forcer l'opération ?",
+        "FORMAT_REQUIRED_NOT_DETECTED": "Format nécessaire. Le système n'a pas réussi à déterminer le format à partir de l'entrée.",
+        "GENERATED_TRIPLES_ADDED": "Les triplets générés ont été ajoutés",
+        "GRANTING_ADMIN_CONFIRM": "Vous êtes sur le point de donner le rôle d'administrateur à l'utilisateur {{user}}. Êtes-vous certain ?",
+        "INCOMPLETE_BINDING_PARAMETERIZATION_DATATYPE": "La paramétrisation du lien '{{binding}}' est incomplète, veuillez sélectionner un type de données ou supprimer le lien",
+        "INCOMPLETE_BINDING_PARAMETERIZATION_ROLE": "La paramétrisation du lien '{{binding}}' est incomplète, veuillez sélectionner un rôle ou supprimer le lien",
+        "INCOMPLETE_BINDING_PARAMETERIZATION_VALUE": "La paramétrisation du lien '{{binding}}' est incomplète, veuillez sélectionner une valeur ou supprimer le lien",
+        "INCOMPLETE_GRAPH_APPLICATION": "L'application de graphe est incomplète. Veuillez fournir une liste de nœuds et un modèle de graphe",
+        "INCOMPLETE_METADATA_PATTERN_ASSOCIATION": "Une association incomplète a été détectée dans le Resource Metadata. Veuillez corriger ou désactiver le Resource Metadata",
+        "INCOMPLETE_PRED_OBJ_PAIR": "Une paire prédicat-objet additionnelle incomplète a été détectée.",
+        "INCONSISTENT_MIN_MAX_FACETS": "Les facettes minimale et maximale sont incohérentes.",
+        "INCONSISTENT_PROPERTY_ERROR": "Le rang de la propriété {{property}} est incohérent",
+        "INVALID_ALIGNMENT_MEASURE": "La valeur saisie n'est pas valide, elle doit être comprise entre 0 et 1.",
+        "INVALID_CUSTOM_FORM_ID": "L'ID du formulaire personalisé n'est pas valide (il est peut-être vide ou comporte des caractères non valides). Veuillez le corriger.",
+        "INVALID_FROM_TIME_FORMAT": "Le paramètre 'de' ne respecte pas le format yyyy-MM-ddThh:mm",
+        "INVALID_GRAPH_PATTERN": "Le modèle de graphe fourni n'est pas valide",
+        "INVALID_IRI": "{{iri}} n'est pas un IRI valide",
+        "INVALID_LANG_TAG": "{{lang}} n'est pas une étiquette de langue valide",
+        "INVALID_LOCAL_NAME": "Le nom local fourni n'est pas valide",
+        "INVALID_MANCHESTER_EXPR": "L'expression fournie n'est pas une expression de Manchester valide",
+        "INVALID_METADATA_PATTERN": "Un modèle au moins n'est pas valide. Veuillez corriger et réessayer",
+        "INVALID_NAME": "Le nom fourni n'est pas valide",
+        "INVALID_NAMESPACE_AND_BASEURI": "Veuillez saisir un espace de nom et un URI de base valides",
+        "INVALID_OR_EMPTY_VALUE": "La valeur saisie est vide ou non valide. Veuillez vérifier et réessayer",
+        "INVALID_PARAM_NAME": "Le nom de paramètre {{param}} n'est pas valide",
+        "INVALID_PARAM_TYPE": "Le type du paramètre {{param}} n'est pas valide",
+        "INVALID_PATTERN": "Le modèle fourni n'est pas valide",
+        "INVALID_PREFIX": "Le préfixe fourni n'est pas valide, essayez-en un autre",
+        "INVALID_REPO_ID": "Saisir un ID de dépôt valide",
+        "INVALID_RETURN_TYPE": "Le type de retour fourni n'est pas valide",
+        "INVALID_SPARQL_QUERY": "La requête SPARQL fournie n'est pas valide",
+        "INVALID_TO_TIME_FORMAT": "Le paramètre 'À' ne respecte pas le format yyyy-MM-ddThh:mm",
+        "INVALID_VALUE_FOR_DATATYPE": "{{value}} n'est pas une valeur valide pour le type de données : {{datatype}}",
+        "INVALID_VERSION_ID": "Saisir un ID de version valide",
+        "LEX_MODEL_CHANGE_CONFIRM": "Vous êtes sur le point de changer le modèle de lexicalisation du projet pour {{model}}. Êtes-vous certain ?",
+        "LIFTER_NOT_CONFIGURED": "Le Lifter doit être configuré",
+        "LOADER_NOT_CONFIGURED": "Le Loader  doit être configuré",
+        "LOADER_NOT_SAVED": "La configuration du Loader n'est pas sauvegardée. Pour sauvegarder la configuration de l'importateur, toutes ses sous-configurations doivent être sauvegardées.",
+        "LONG_PROCESS_WARN_CONFIRM": "Le processus pourrait être long. Êtes-vous certain de vouloir continuer ?",
+        "LONG_RESOURCE_RENDERING_WARNING": "Le rendu de la ressource est trop long : vous devriez vérifier la liste des langues à utiliser dans les préférences du rendu, ou vous devriez modifier la configuration de votre moteur de rendu si vous utilisez un moteur personnalisé",
+        "METADATA_PATTERN_REQUIRED": "Vous devez fournir au moins un modèle (Construction, Mise-à-jour ou Suppression)",
+        "MISSING_BINDING_NAME": "Un nom de lien est manquant à la position {{position}}, veuillez saisir un nom",
+        "MISSING_DATA_REPO_CONFIG": "L'entrepôt de données doit être configuré",
+        "MISSING_DEFAULT_PRED_IN_GRAPH_PATTERN": "Le modèle de graphe contient le placeholder {{pred}}, mais un prédicat par défaut n'a pas été fourni",
+        "MISSING_HISTORY_VALIDATION_REPO_CONFIG": "L'entrepôt Historique/Validation doit être configuré",
+        "MISSING_ICV_ALIGNMENTS": "Il n'y a pas d'alignements pour le(s) type(s) de ressource sélectionné(s) sur lesquels exécuter l'ICV",
+        "MISSING_ICV_LANGUAGE": "Vous devez sélectionner au moins une langue afin d'exécuter l'ICV",
+        "MISSING_ICV_NAMESPACE": "Vous devez sélectionner au moins un espace de nom afin d'exécuter l'ICV",
+        "MISSING_ICV_RESOURCE_TYPE": "Vous devez sélectionner au moins un type de ressource afin d'exécuter l'ICV",
+        "MISSING_LEFT_RIGHT_DATASET": "Le jeu de données de droite ou de gauche est manquant",
+        "MISSING_OR_INVALID_BASEURI": "L'URI de base est manquant ou non valide",
+        "MISSING_OR_INVALID_PROJECT_NAME": "Le nom du projet est manquant ou non valide",
+        "MISSING_PRELOAD_DATA_SELECT_NO_PRELOAD": "Aucune donnée préchargée. Veuillez charger des données ou sélectionner '{{doNotPreloadOpt}}' si vous ne voulez précharger aucune donnée.",
+        "MISSING_RENDERING_ENGINE_CONFIG": "Le plugin du moteur de rendu doit être configuré",
+        "MISSING_REQUIRED_FIELD": "Le champ obligatoire {{fieldName}} est manquant",
+        "MISSING_REQUIRED_PARAM": "Le paramètre obligatoire '{{parma}}' est manquant",
+        "MISSING_REQUIRED_PARAM_IN_EXPORTER": "Paramètre(s) obligatoire(s) manquant dans la configuration de l'exporteur ({{exporter}}, scope : {{scope}})",
+        "MISSING_REQUIRED_PARAM_IN_EXT_POINT": "Paramètre(s) obligatoire(s) manquant dans la configuration du point d'extension ({{extPoint}})",
+        "MISSING_REQUIRED_PARAM_IN_REPO_ACCESS_CONFIG": "Paramètre(s) obligatoire(s) manquant dans la configuration du Repository Access sélectionné",
+        "MISSING_SHACL_VALIDATION_CONFIG": "Vous avez autorisé la validation SHACL, mais elle nécessite une configuration",
+        "MISSING_URI_GENERATOR_CONFIG": "Le plugin UriGenerator doit être configuré",
+        "MISSING_VARIABLE_BINDING": "La variable de lien '{{binding}}' est manquante",
+        "MULTIPLE_PROP_VALUE_NOT_ALLOWED_FOR_PROPERTY": "Il est impossible d'enrichir des sujets multiples avec la même valeur de propriété pour le prédicat {{property}}",
+        "MULTIVALUE_NOT_ALLOWED_FOR_PROPERTY": "Cette opération n'est pas autorisée pour la propriété sélectionnée. Des ressources multiples ne peuvent posséder la même {{property}}.",
+        "NAMESPACE_UPDATED": "L'espace de nom a été mis-à-jour avec succès",
+        "NOT_ALLOWED_CHARS_IN_ID": "L'ID contient un ou plusieurs caractères non autorisés",
+        "NOT_EMPTY_SCHEME_DANGLING_CONCEPT_WARN_CONFIRM": "The scheme is not empty. Deleting it will produce dangling concepts. Are you sure to continue? Le schéma n'est pas vide. Le supprimer va générer des concept orphelins. Voulez-vous poursuivre ?",
+        "NOT_EXISTING_RESOURCE_URI": "URI erroné : aucune ressource possédant cet URI n'existe dans le projet en cours",
+        "NOT_EXPLICIT_RESOURCES_NOT_AFFECTED_BY_CHANGES": "Certaines des ressources sélectionnées ne sont pas explicites, elles ne peuvent pas être éditées et ne seront donc pas affectées par les modifications",
+        "NO_ACCESS_GRANTED_TO_ANY_PROJECT": "Vous n'avez accès à aucun projet existant ouvert",
+        "NO_FACETS_PROVIDED": "Aucune facette n'a été fournie. Veuillez compléter au moins une des facettes disponibles",
+        "NO_INFERRED_STATEMENTS_TO_ASSERT": "Il n'existe aucune déclaration inférée à asserter",
+        "NO_LANG_DETECTED_IN_EDOAL_ALIGNMENT": "Aucune langue d'utilisateur n'a été détectée pour le projet '{{projName}}'. Le système ne sera pas capable d'initialiser la liste des alignements. \nVeuillez accéder au projet, aller dans les préférences utilisateurs puis sélectionner une langue de rendu.",
+        "NO_PERMISSION_FOR_SERVICE_INVOCATION": "Vous n'avez pas un niveau d'autorisation vous permettant d'appeler une ou plusieurs des invocations à des service exécutés par ce rapport",
+        "NO_RESOURCE_SUGGESTED_FOR_FORM_COLLECTION": "Aucune classe/propriété suggérée pour cette collection de formulaires",
+        "NO_RESULTS_FOUND": "Aucun résultat trouvé",
+        "NO_RESULTS_FOUND_FOR": "Aucun résultat trouvé pour '{{text}}'",
+        "NO_SERVICE_INVOCATION_PROVIDED": "Le rapport ne peut pas être compilé car il n'y a aucune invocation à un service",
+        "OPERATION_DENIED_ON_NODE_WITH_CHILDREN": "L'opération ne peut pas être réalisée sur un nœud possédant des enfants. Veuillez supprimer les nœuds enfants et réessayer",
+        "PAIRING_SELECTION_REQUIRED": "Vous devez sélectionner au moins un appariement.",
+        "PASSWORD_AND_CONFIRMED_INCONSISTENT": "Le mot de passe et sa confirmation sont différents.",
+        "PASSWORD_CHANGED": "Le mot de passe a été modifié avec succès.",
+        "PASSWORD_CHANGED_LOGGING_OUT": "Votre mot de passe a été modifié avec succès. Vous allez maintenant être déconnecté.",
+        "PASSWORD_RESET": "Le mot de passe a été réinitialisé avec succès. Vous allez recevoir un e-mail comportant le nouveau mot de passe temporaire.",
+        "PASSWORD_RESET_INSERT_EMAIL": "Insérez l'adresse électronique de votre compte. Vous recevrez un e-mail comportant des instructions pour réinitialiser votre mot de passe",
+        "PASSWORD_RESET_INSTRUCTION_SENT": "Un e-mail comportant des instructions pour réinitialiser le mot de passe a été envoyé à l'adresse fournie",
+        "PEARL_CODE_WITH_ERROR": "Le code Pearl contient des erreurs.",
+        "PRELOAD_PROFILER_THRESHOLD_UPDATED": "Seuil du profiler de préchargement mis-à-jour",
+        "PROFILE_PROJECT_COMPLETED": "Profilage du projet '{{project}}' complétée",
+        "PROFILE_PROJECT_CONFIRM": "Voulez-vous profiler le projet '{{project}}' ?",
+        "PROFILE_PROJECT_REFRESH_CONFIRM": "Le projet '{{project}}' a déjà été profilé. Voulez-vous recommencer et écraser les métadonnées ?",
+        "PROJECT_CREATED": "Projet créé avec succès",
+        "PROJECT_OPEN_CLOSE_AND_RETRY": "L'initialisation de la langue pour le projet '{{projName}}' a rencontré un problème lors du parsage des réglages de '{{propName}}'. Veuillez le signaler à l'administrateur du système.",
+        "PROJ_LANGUAGES_PARSING_ERR_SETTING_DEFAULT": "L'initialisation des paramètres du projet a rencontré un problème lors du parsage des paramètres de langues. Les langues par défaut seront appliquées à ce projet.",
+        "PROPERTY_CHAIN_NEEDS_AT_LEAST_TWO_PROPS": "La chaîne de propriétés doit comporter au moins deux propriétés",
+        "PROVIDE_AT_LEAST_ONE_VALUE": "Vous devez fournir au moins une valeur",
+        "QUERY_PARAMETERIZATION_SAVED": "Le paramétrage de la requête a été sauvegardé avec succès",
+        "QUERY_SAVED": "Requête sauvegardée avec succès",
+        "REFACTORING_COMPLETED": "Processus de refonte complété",
+        "REFERENCED_SPARQL_QUERY_NOT_EXISTING": "La requête SPARQL référencée par la requête personnalisée sélectionnée n'existe plus.",
+        "REFORMATTING_EXPORTER_NOT_CONFIGURED": "L'exportateur de reformatage ({{exporterName}}) doit être configuré",
+        "REFORMETTER_CONFIG_NOT_SAVED": "La configuration du reformateur n'est pas sauvegardée. Pour sauvegarder la configuration de l'exporteur, toutes ses sous-configurations doivent être sauvegardées.",
+        "REGISTRATION_FORM_FIELD_ALREADY_DEFINED": {
+            "FIELD_ALREADY_DEFINED": "Le champ '{{fieldName}}' est déjà défini",
+            "IN_STANDARD_FORM": "dans le formulaire d'enregistrement standard"
+        },
+        "REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED": "Vous devez sélectionner une configuration pour l'entrepôt d'accès distant sélectionné. Veuillez en sélectionner un depuis la liste déroulante associée ou en créer un nouveau.",
+        "REMOVE_DANGLINGS_FROM_SCHEME_WARN_CONFIRM": "Si les concepts possèdent des spécifiques, les supprimer du schéma peut créer des concepts orphelins. Voulez-vous poursuivre ?",
+        "REMOVE_DANGLING_FROM_SCHEME_WARN_CONFIRM": "Si ce concept possède des spécifiques, le supprimer du schéma peut créer des concepts orphelins. Voulez-vous poursuivre ?",
+        "REMOVE_USER_FROM_PROJ_CONFIRM": "Vous êtes sur le point de supprimer l'utilisateur {{user}} du projet {{project}}. Êtes-vous certain ?",
+        "RENDERING_ENGINE_CONFIG_UPDATED": "La configuration du moteur de rendu a été mise à jour",
+        "REPLACE_METADATA_PATTERN_CONFIRM": "Un Pattern portant le même nom existe déjà. Il sera remplacé. Voulez-vous poursuivre ?",
+        "REPLACE_SHARED_METADATA_PATTERN_CONFIRM": "Un Pattern partagé portant le même nom existe déjà. Il sera remplacé. Voulez-vous poursuivre ?",
+        "REPO_CREDENTIALS_BATCH_UPDATED": {
+            "AND_USERNAME": "et nom d'utilisateur '{{username}}'",
+            "CREDENTIALS_OF_SERVER_URL": "Les références des entrepôts distants dont l'URL du serveur est {{serverUrl}}",
+            "UPDATED": "ont été mises à jour"
+        },
+        "REPO_CREDENTIALS_UPDATED": "Les références de l'entrepôt distant '{{repoId}}' ont été mises à jour",
+        "RESOURCE_NOT_FOCUSABLE_RES_VIEW_MODAL": "La ressource {{resource}} ne peut pas être affichée dans une vue arbre/liste, elle sera montrée dans une fenêtre modale",
+        "RESOURCE_NOT_REACHABLE_IN_TREE": "La ressource {{resource}} n'est pas accessible dans l'arbre courant.",
+        "RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH": "La ressource {{resource}} n'est pas accessible dans l'arbre courant car le chemin qui y conduit comporte un nœud déprécié. Autorisez l'affichage des ressources dépréciées et renouvelez la recherche",
+        "RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM": "La ressource {{resource}} n'est pas accessible dans l'arbre courant. Voulez-vous l'afficher dans une fenêtre modale ?",
+        "RESOURCE_URI_COPIED_IN_CLIPBOARD": "URI de la ressource copiée dans le presse-papier !",
+        "RESTART_REPO_LOCAL_REQUIRED": "Pour rendre cette modification effective il peut être nécessaire de redémarrer l'entrepôt du projet local en relançant le triple store.",
+        "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Vous êtes sur le point d'écraser le modèle en cours en restaurant la configuration par défaut. Êtes-vous certain ?",
+        "REVOKING_ADMIN_CONFIRM": "Vous êtes sur le point de révoquer les droits d'administrateur de l'utilisateur {{user}}. Êtes-vous certain ?",
+        "SAVE_BASEURI_CHANGE_CONFIRM": "Sauvegarder la modification de l'URI de base ? (Attention, le processus de modification de l'URI de base peut prendre du temps)",
+        "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Sauvegarder les modifications de l'URI de base et de l'espace de nom ?  (Attention, le processus de modification de l'URI de base peut prendre du temps)",
+        "SAVE_NS_CHANGE_CONFIRM": "Sauvegarder la modification de l'espace de nom ?",
+        "SETTINGS_DUPLICATED_SUCCESSFULLY": "Les paramètres ont été dupliqués avec succès",
+        "SETTING_SAVED": "Les paramètres ont été sauvegardés avec succès",
+        "SET_DEFAULT_TEMPLATE_FOR_ALL_PROJ_CONFIRM": "Vous êtes sur le point de définir le modèle en cours comme configuration par défaut pour tous les projets. Êtes-vous certain ?",
+        "SHACL_SHAPES_CLEARED": "Toutes les formes SHACL ont été supprimées avec succès",
+        "SHACL_SHAPES_LOADED": "Formes SHACL chargées avec succès",
+        "SHACL_VIOLATION_ERROR": "Echec de validation de la forme SHACL",
+        "SKOS_DIFFING_SERVER_NOT_RESPONDING": "Le serveur de comparaison SKOS n'a pas répondu, assurez-vous qu'il est opérationnel et en fonction.",
+        "STORED_PARAMETERIZED_QUERY_ALREADY_ADDED": "La requête SPARQL paramétrée '{{ref}}' est déjà dans la liste des recherches personnalisées sauvegardées. Elle ne sera pas ajoutée",
+        "ST_DATA_FOLDER_UPDATED": "Le répertoire des données de SemanticTurquey a été mis-à-jour",
+        "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_CONFIRM": "L'instance recherchée appartient à une classe ({{cls}}) qui n'est actuellement pas sélectionnée. Voulez-vous changer de classe ?",
+        "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_SELECT": "L'instance recherchée appartient aux classes suivantes. Pour compléter la recherche, sélectionnez l'une d'elles et confirmez",
+        "SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT": {
+            "BELONGS_TO_FOLLOWING": "L'entrée lexicale recherchée n'est pas accessible dans la liste car elle appartient",
+            "LEXICON": "au lexique suivant. Si vous voulez activer le lexique et poursuivre la recherche, veuillez le sélectionner et cliquer sur OK.",
+            "LEXICONS": "aux lexiques suivants. Si vous voulez activer l'un de ces lexiques et poursuivre la recherche, veuillez sélectionner le lexique à activer et cliquer sur OK."
+        },
+        "SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_CONFIRM": "Le concept recherché n'appartient à aucun schéma. Voulez-vous passer au mode sans schéma ?",
+        "SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_SELECT": {
+            "BELONGS_TO_FOLLOWING": "Le concept recherché n'est pas accessible dans l'arbre car il appartient",
+            "SCHEME": "au schéma suivant. Si vous voulez activer le schéma et poursuivre la recherche, veuillez le sélectionner et cliquer sur OK.",
+            "SCHEMES": "aux schémas suivants. Si vous voulez activer l'un de ces schémas et poursuivre la recherche, veuillez sélectionner le schéma à activer et cliquer sur OK."
+        },
+        "SYS_LANGUAGES_PROP_PARSING_ERR": "L'initialisation des langues du système a rencontré un problème lors du parsage de la propriété '{{propName}}'. Veuillez le signaler à l'administrateur du système.",
+        "TOO_MUCH_LINKS_GRAPH_WARN_CONFIRM": "Le graphe que vous essayez d'afficher possède un nombre de relations important ({{relCount}}). Une baisse des performances peut être constatée lorsque le nombre d'éléments visuels du graphe augmente. Voulez-vous afficher le graphe malgré tout ?\n\nUne alternative consiste à utiliser le graphe orienté-modèle explorable de manière 'incrémentale' (à partir de l'arbre des classes : sélectionner une ressource, puis dans le menu contextuel choisir 'Afficher le graphe centré sur le nœud sélectionné').",
+        "TOO_MUCH_NODES_GRAPH_WARN_CONFIRM": "Le graphe que vous essayez d'afficher possède un nombre de nœuds important ({{nodesCount}}). Une baisse des performances peut être constatée lorsque le nombre d'éléments visuels du graphe augmente. Voulez-vous afficher le graphe malgré tout ?",
+        "TOO_MUCH_NODES_LINKS_WARN_CONFIRM": "Le graphe que vous essayez d'afficher possède un grand nombre de nœuds et de liens. Il pourrait être confus et peu lisible. Voulez-vous l'afficher malgré tout ?",
+        "TOT_RESULTS_FOUND": "{{count}} résultats trouvés.",
+        "TRANSFORMER_NOT_SAVED": "Le transformateur à la position {{position}} n'est pas sauvegardé. Pour sauvegarder une chaîne de transformateurs, tous ses transformateurs doivent être sauvegardés. ",
+        "UNAUTHORIZED_SPARQL_QUERY": "Vous n'êtes pas autorisé à exécuter une requête SPARQL",
+        "UNAUTHORIZED_SPARQL_UPDATE": "Vous n'êtes pas autorisé à faire une mise à jour SPARQL",
+        "UNHANDLED_AXIOM_PROPERTY": "La propriété {{property}} n'est pas une propriété connue pour les axiomes de classe, elle ne peut pas être gérée.",
+        "UNHANDLED_LEXICAL_FORM_PROPERTY": "La propriété {{property}} n'est pas une propriété connue pour les formes lexicales, elle ne peut pas être gérée.",
+        "UPDATE_MULTIPLE_HEADER_SAME_NAME_CONFIRM": "Il existe plusieurs en-têtes avec le nom ({{headerName}}). Voulez-vous tous les modifier ?",
+        "URI_GENERATOR_CONFIG_UPDATED": "La configuration du générateur d'URI a été mise-à-jour",
+        "USER_ADMINISTRATOR_CREATED": "Le compte administrateur a été créé. Vous serez désormais automatiquement connecté avec les informations d'authentification que vous avez fournies",
+        "USER_CREATED": "Utilisateur créé avec succès",
+        "USER_CREATED_VERIFY_EMAIL": "Votre compte a été créé. Pour compléter votre enregistrement, un lien de vérification a été envoyé à l'adresse électronique que vous avez fournie.",
+        "USER_CREATED_WAIT_ACTIVATION": "Votre compte a été créé et l'administrateur a reçu une notification de votre enregistrement. Une fois que l'administrateur aura activé votre compte, vous pourrez vous connecter avec les informations d'authentification que vous avez fournies",
+        "USER_EMAIL_VERIFIED": "Votre adresse électronique a été vérifiée et l'administrateur a reçu une notification de votre enregistrement. Une fois que l'administrateur aura activé votre compte, vous pourrez vous connecter avec les informations d'authentification que vous avez fournies",
+        "USER_IRI_PERSONAL_URL_INCONSISTENT": "Vous avez coché l'option permettant d'utiliser un URL personnel en tant qu'IRI utilisateur, mais vous n'avez pas fourni cet URL. Veuillez entrer un URL valide ou décocher l'option précédente",
+        "USER_REGISTERED_ACTIVATED": "L'utilisateur {{email}} a été activé avec succès",
+        "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "Le type de valeur n'est pas compatible avec le rang de la propriété {{property}}. L'opération peut provoquer des incohérences et des disfonctionnements. Voulez-vous forcer l'opération ?"
+    },
+    "METADATA": {
+        "METADATA_REGISTRY": {
+            "ACTIONS": {
+                "ADD_CATALOG_RECORD": "Ajouter un enregistrement de catalogue",
+                "ADD_DATASET_VERSION": "Ajouter une version de jeu de données",
+                "ADD_EMBEDDED_LEXICALIZATION_SET": "Ajouter un jeu de lexicalisation intégré",
+                "ASSESS_LEXICALIZATION_MODEL": "Évaluer le modèle de lexicalisation",
+                "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Supprimer tous les jeux de lexicalisation intégrés",
+                "DELETE_DATASET_VERSION": "Supprimer la version du jeu de données",
+                "DELETE_EMBEDDED_LEXICALIZATION_SET": "Supprimer le jeu de lexicalisation intégré",
+                "DISCOVER_DATASET": "Trouver un jeu de données"
+            },
+            "DATASET_METADATA": {
+                "CATALOG_RECORDS": "Enregistrements de catalogue",
+                "DEREFERENCEABLE": "Déréférençable",
+                "DEREFERENCIATION_SYSTEM": "Système de déréférencement",
+                "IDENTITY": "Identité",
+                "ISSUED": "Publié",
+                "MODIFIED": "Modifié",
+                "NO_AGGREGATION": "Aucune agrégation",
+                "NO_AGGREGATION_INFO": "Si cette option est cochés, cela signifie que l'agrégation pourrait être supportée, mais que son support est insuffisant pour les objectifs de VocBench",
+                "OTHER_VERSIONS": "Autres versions",
+                "VERSION_INFO": "Information de version"
+            },
+            "LEXICALIZATION_SET": {
+                "AVG_OF_LEXICALIZATIONS": "Nombre moyen de lexicalisations",
+                "EMBEDDED_LEXICALIZATION_SETS": "Jeux de lexicalisation intégrés",
+                "LEXICALIZATIONS": "Lexicalisations",
+                "LEXICALIZATION_SET": "Jeu de lexicalisation",
+                "LEXICAL_ENTRIES": "Entrées lexicales",
+                "LEXICON_DATASET": "Jeu de données lexical",
+                "PERCENTAGE": "Pourcentage",
+                "REFERENCES": "Références"
+            }
+        },
+        "METADATA_VOCABULARIES": {
+            "METADATA_VOCABULARY": "Vocabulaire de métadonnées"
+        },
+        "NAMESPACES_AND_IMPORTS": {
+            "ACTIONS": {
+                "ADD_IMPORT_FROM": "Ajouter un import depuis",
+                "IMPORT_FROM_DATASET_CATALOG": "Importer depuis un catalogue de jeu de donnée",
+                "IMPORT_FROM_LOCAL_FILE": "Importer depuis un fichier local",
+                "IMPORT_FROM_ONTOLOGY_MIRROR": "Importer depuis un miroir d'ontologie",
+                "IMPORT_FROM_WEB": "Importer depuis le web",
+                "IMPORT_FROM_WEB_TO_MIRROR": "Importer depuis le web vers un miroir",
+                "REPAIR_FROM_LOCAL_FILE": "Réparer depuis un fichier local",
+                "REPAIR_FROM_WEB": "Réparer depuis le web",
+                "REPAIR_FROM_WEB_TO_MIRROR": "Réparer depuis le web vers un miroir",
+                "UPDATE_FROM_LOCAL_FILE": "Mettre à jour depuis un fichier local",
+                "UPDATE_FROM_WEB_ALT_URL": "Mettre à jour depuis le web à partir d'un URL alternatif",
+                "UPDATE_FROM_WEB_BASEURI": "Mettre à jour depuis le web en utilisant un URI de base",
+                "UPDATE_MIRROR": "Mettre à jour le miroir",
+                "UPDATE_ONTO_MIRROR_FROM_ALT_URL": "Mettre à jour le miroir d'ontologie depuis un URL alternatif",
+                "UPDATE_ONTO_MIRROR_FROM_WEB": "Mettre à jour le miroir d'ontologie depuis le web"
+            },
+            "BIND_NS_AND_BASEURI": "Lier/délier l'espace de nom et l'URI de base",
+            "DATASET_CATALOG": "Catalogue de jeu de donnée",
+            "IMPORTS": "Imports",
+            "IMPORT_TREE": {
+                "FAILED_IMPORT": "Import échoué",
+                "LOOP_IMPORTS": "Boucle d'imports"
+            },
+            "LOCAL_FILE": "Fichier local",
+            "NAMESPACE": "Espace de nom",
+            "NAMESPACE_MANAGEMENT": "Gestion de l'espace de nom",
+            "ONTOLOGY_IMPORT": {
+                "ALTERNATIVE_URL": "URL alternatif",
+                "DATA_DUMP": "Copie de données",
+                "DATA_DUMP_CHECK": "Si l'option est cochée, l'import est ajouté depuis la copie de données fournie plutôt que depuis l'IRI de l'ontologie",
+                "MIRROR_FILE_NAME": "Nom du fichier miroir",
+                "NO_ONTOLOGIES_MIRRORED": "Aucun miroir d'ontologie",
+                "USE_DATA_DUMP": "Utiliser la copie des données"
+            },
+            "ONTOLOGY_MIRROR": "Miroir d'ontologie",
+            "ONTOLOGY_MIRROR_MANAGEMENT": "Gestion du miroir d'ontologie",
+            "PREFIX": "Préfixe",
+            "RESOLVE_WITH_PREFIXCC": "Résoudre en utilisant prefix.cc",
+            "TRANSITIVE_IMPORTS": {
+                "FROM_OPT": {
+                    "MIRROR": "Résoudre depuis le miroir d'ontologie",
+                    "MIRROR_FALLBACK_WEB": "Résoudre depuis le miroir d'ontologie avec repli vers le web",
+                    "NOWHERE": "Ne pas résoudre",
+                    "WEB": "Résoudre depuis le web",
+                    "WEB_FALLBACK_MIRROR": "Résoudre depuis le web avec repli vers le miroir d'ontologie"
+                },
+                "TRANSITIVE_IMPORTS": "Imports transitifs"
+            },
+            "WEB": "Web",
+            "WEB_TO_MIRROR": "Web à miroir"
+        }
+    },
+    "MODELS": {
+        "MAPLE": {
+            "DATASET": {
+                "AVG_AMBIGUITY": "Ambiguïté moyenne",
+                "AVG_LEXICALIZATIONS": "Lexicalisations moyennes",
+                "AVG_LEXICALIZATIONS_INFO": "Nombre moyen de lexicalisations",
+                "AVG_SYNONYMY": "Synonymie moyenne",
+                "CONCEPTS": "Concepts",
+                "CONCEPTUALIZATIONS": "Conceptualisations",
+                "CONCEPTUAL_DATASET": "Jeu de données conceptuel",
+                "CONFORMS_TO": "Conforme à",
+                "DATASET": "Jeu de données",
+                "LANGUAGE_LEXVO": "Langue Lexvo",
+                "LANGUAGE_LOC": "Langue LOC",
+                "LANGUAGE_TAG": "Étiquette de langue",
+                "LEXICALIZATIONS": "Lexicalisations",
+                "LEXICALIZATION_MODEL": "Modèle de lexicalisation",
+                "LEXICAL_ENTRIES": "Entrées lexicales",
+                "LEXICON_DATASET": "Jeu de données de lexique",
+                "LINGUISTIC_CATALOG": "Catalogue linguistique",
+                "PERCENTAGE": "Pourcentage",
+                "REFERENCES": "Références",
+                "REFERENCE_DATASET": "Jeu de données de référence",
+                "SPARQL_ENDPOINT": "SPARQL Endpoint",
+                "URI_SPACE": "Espace d'URI"
+            },
+            "PAIRING": {
+                "BEST_COMBINED_SCORE": "Meilleur score combiné",
+                "SCORE": "Score",
+                "SOURCE": "Source",
+                "SYNONYMIZER": "Synonymiseur",
+                "TARGET": "Cible"
+            }
+        },
+        "PROJECT": {
+            "BACKEND_TYPE": "Type d'arrière-plan",
+            "BASE_URI": "URI de base",
+            "CONSUMER": "Consommateur",
+            "DATA_REPO_ID": "ID de l'entrepôt de données",
+            "DATA_STORE": "Entrepôt de données",
+            "DESCRIPTION": "Description du projet",
+            "HISTORY": "Historique",
+            "LEXICALIZATION": "Lexicalisation",
+            "LEXICALIZATION_MODEL": "Modèle de lexicalisation",
+            "MODEL": "Modèle",
+            "PROJECT": "Projet",
+            "PROJECTS": "Projets",
+            "REPOSITORY_ID": "ID de l'entrepôt",
+            "REPO_ACCESS": "Accès à l'entrepôt",
+            "REPO_LOCATION": "Localisation de l'entrepôt",
+            "SUPPORT_REPO_ID": "ID de l'entrepôt historique/vaidation",
+            "UNDO": "Défaire",
+            "VALIDATION": "Validation"
+        },
+        "RESOURCE": {
+            "DEPRECATED": "Déprécié",
+            "LABEL": "Étiquette",
+            "OBJECT": "Objet",
+            "PREDICATE": "Prédicat",
+            "RESOURCE": "Ressource",
+            "RESOURCES": "Ressources",
+            "RESOURCE_TYPE": "Type de ressource",
+            "SUBJECT": "Sujet"
+        },
+        "USER": {
+            "AFFILIATION": "Affiliation",
+            "AVATAR_URL": "URL d'avatar",
+            "CONFIRM_PASSWORD": "Confirmer le mot de passe",
+            "EMAIL": "E-mail",
+            "EMAIL_ADDRESS": "adresse E-mail",
+            "FAMILY_NAME": "Nom de famille",
+            "GIVEN_NAME": "Prénom",
+            "LANGUAGE_PROFICIENCIES": "Compétences linguistiques",
+            "OFFICE_ADDRESS": "Adresse profesionnelle",
+            "PASSWORD": "Mot de passe",
+            "PERSONAL_URL": "URL personnel",
+            "PERSONAL_URL_AS_IRI": "Utiliser l'URL personnel en tant qu'IRI d'utilisateur",
+            "PHONE": "Téléphone",
+            "REGISTERED": "Enregistré",
+            "REGISTRATION_DATE": "Date d'enregistrement",
+            "USER_IRI": "IRI d'utilisateur"
+        }
+    },
+    "NOTIFICATIONS": {
+        "CLEAR_NOTIFICATIONS": "Supprimer les notifications",
+        "NOTIFICATIONS": "Notifications",
+        "NOTIFICATION_SETTINGS": "Paramètres des notification",
+        "SETTINGS": {
+            "DISABLE_ALL": "Désactiver toutes les notifications",
+            "DISABLE_ALL_FOR_TYPE": "Désactiver toutes les actions pour ce type",
+            "ENABLE_ALL": "Activer toutes les notifications",
+            "ENABLE_ALL_FOR_TYPE": "Activer toutes les actions pour ce type",
+            "MODES": {
+                "EMAIL_DAILY": "E-mail (résumé quotidien)",
+                "EMAIL_DAILY_INFO": "Vous recevrez un résumé quotidien par e-mail",
+                "EMAIL_INSTANT": "E-mail (instantané)",
+                "EMAIL_INSTANT_INFO": "Vous recevrez les e-mail instantanément",
+                "IN_APP": "Uniquement dans l'application",
+                "IN_APP_INFO": "Vous ne pourrez lire les notifications que dans l'application à partir de la page dédiée",
+                "NO_NOTIFICATIONS": "Pas de notifications",
+                "NO_NOTIFICATIONS_INFO": "Vous ne recevrez aucune notification"
+            },
+            "NO_RESOURCE_WATCHING_MSG": [
+                "Vous n'avez activé les notifications pour aucune ressource. Vous pouvez commencer à consulter les ressources en cliquant sur le",
+                "bouton placé dans la barre d'outils d'une vue de ressource."
+            ],
+            "STOP_WATCHING_RES": "Arrêter de consulter cette ressource",
+            "TYPE_EVENT_NOTIFICATIONS": "Notifications d'événement type",
+            "TYPE_EVENT_NOTIFICATIONS_INFO": "Pour chaque type de ressource vous pouvez sélectionner les événements pour lesquels vous voulez recevoir des notifications",
+            "WATCHING_RESOURCES": "Ressources consultées"
+        }
+    },
+    "PREFERENCES": {
+        "LANG": {
+            "EDITING": {
+                "DESCRIPTION": "Sélectionner la langue par défaut lors de la création d'un nouveau littéral étiqueté avec une langue",
+                "EDITING_LANGS": "Langues d'édition"
+            },
+            "RENDERING": {
+                "DESCRIPTION": "Sélectionner les langues (et leur ordre) pour le rendu des ressources",
+                "RENDERING_LANGS": "Langues de rendu"
+            },
+            "VALUE_FILTER": {
+                "DESCRIPTION": "Sélectionner les langues qui seront affichées pour filtrer les valeurs littérales dans la description des ressources. Activer le filtre pour masquer les valeurs associées aux langues non sélectionnées.",
+                "VALUE_FILTER_LANGS": "Filtre de valeur des langues"
+            }
+        },
+        "OTHER": {
+            "OTHER_PREFS": "Autres préférences",
+            "PROJECT_THEME": "Thème du projet",
+            "PROJECT_THEME_INFO": "Modifie la couleur de l'en-tête/barre de navigation pour le projet en cours",
+            "SHOW_FLAGS": "Montrer les drapeaux",
+            "SHOW_FLAGS_INFO": "Définit si les icônes de drapeaux doivent être affichés à la place des codes langues ISO"
+        },
+        "VB_PREFS": "Préférences de VocBench"
+    },
+    "PROJECTS": {
+        "ACCESSED": "Accédé",
+        "ACL": {
+            "ACL_MATRIX": "Matrice ACL",
+            "ACL_OF_PROJECT": "Liste de contrôle d'accès du projet",
+            "LOCKABLE": "Verrouillable",
+            "PROJECT_ACL": "ACL du projet",
+            "UNIVERSAL_ACCESS_LEVEL": "Niveau d'accès universel",
+            "UNIVERSAL_ACCESS_LEVEL_INFO": "Niveau d'accès accordé à tous les consommateurs (sauf SYSTEM)"
+        },
+        "ACL_UNIVERSAL_ACCESS": "ACL positionné sur accès universel",
+        "ACL_UNIVERSAL_ACCESS_INFO": "Activer cette option pour permettre de rendre le contenu de ce projet accessible par tous les autres projets (ce choix pourra être modifié par la suite depuis l'éditeur ACL)",
+        "ACTIONS": {
+            "CLOSE_ALL": "Fermer tous les projets",
+            "EDIT_ACL": "Éditer ACL",
+            "EDIT_DESCRIPTION": "Éditer la description",
+            "EDIT_FACETS": "Éditer les facettes",
+            "EDIT_LABELS": "Éditer les étiquettes",
+            "EDIT_PROJECT_ACL": "Éditer l'ACL du projet",
+            "EDIT_REMOTE_REPO_CONFIG": "Éditer la configuration de l'entrepôt distant",
+            "EDIT_SETTINGS": "Éditer les paramétrages du projet",
+            "OPEN_ALL": "Ouvrir tous les projets",
+            "OPEN_ALL_STARTUP": "Ouvrir tous les projets configurés pour être ouverts au démarrage du système",
+            "RECREATE_FACETS_INDEX": "Recréer les index de facettes",
+            "SHOW_ACL_MATRIX": "Montrer la matrice ACL",
+            "SHOW_PROPERTIES": "Propriétés",
+            "UPDATE_ACCESS_LEVEL": "Mettre à jour le niveau d'accès",
+            "UPDATE_LOCK_LEVEL": "Mettre à jour le niveau de verrouillage"
+        },
+        "BLACKLIST": "Liste noire",
+        "BLACKLIST_INFO": "Activer cette option pour établir une liste noire des termes rejetés lors de la validation",
+        "CONFIG": {
+            "COL_NAME": "Nom de la colonne",
+            "CUSTOM_PROJ_FACETS_SCHEMA_SETTINGS": "Réglages du schéma de facettes du projet personnalisé",
+            "FACET": "Facette",
+            "FACET_BASED": "Fondé sur une facette",
+            "LIST": "Liste",
+            "PROJ_INFO": "Information sur le projet",
+            "PROJ_INFO_INFO": "À ce niveau vous pouvez afficher ou masquer les informations sur le projet et personnaliser leur ordre.",
+            "PROJ_VIEW_SETTINGS": "Réglages de la vue du projet"
+        },
+        "HISTORY_INFO": "Activer cette option pour conserver une trace des modifications faites sur le graphe de travail",
+        "INFERENCE_DISCOURAGED_INFO": "Il est fortement recommandé de ne pas utiliser l'inférence",
+        "LEFT_RIGHT": "Gauche/Droite",
+        "LEFT_RIGHT_INFO": "En raison de limites techniques, les deux jeux de données doivent être distants",
+        "OPEN_ALL_REPORT_INFO": "L'ouverture du(des) projet(s) suivant(s) a échoué",
+        "OPEN_AT_STARTUP": "Ouvrir au démarrage",
+        "OPEN_AT_STARTUP_INFO": "Activer cette option pour ouvrir automatiquement le projet au démarrage du serveur SemanticTurkey",
+        "OPEN_CLOSE": "Ouvert/Fermé",
+        "OPTIONAL_SETTINGS": "Réglages optionnels",
+        "OTHER_OPTIONS": "Autres options",
+        "PRELOAD": {
+            "DATA_LOADED_CORRECTLY": "Données chargées correctement",
+            "DATA_NOT_LOADED": "Données non chargées",
+            "DATA_PRELOADING": "Préchargement optionnel des données",
+            "OPT": {
+                "FROM_DATASET_CATALOG": "Préchargement depuis le catalogue des jeux de données",
+                "FROM_LOCAL_FILE": "Préchargement depuis un fichier local",
+                "FROM_URI": "Préchargement depuis un URI",
+                "NONE": "Aucun préchargement"
+            },
+            "PRELOAD": "Précharger",
+            "SELECTION_AUTO_DETERMINED": "Ce choix a été déterminé automatiquement à partir des données préchargées ; ne le modifiez que si vous savez ce que vous faites",
+            "SELECTION_UNDETERMINED": "Le processus de préchargement n'a pas pu déterminer cette information. Veuillez la fournir manuellement"
+        },
+        "PROJECT_NAME": "Nom du projet",
+        "PROJECT_PROPERTIES": "Propriétés du projet",
+        "REMOTE_REPO": {
+            "BATCH_MODIFY": "Modifier en bloc",
+            "BATCH_MODIFY_INFO": "Modifie en bloc les informations d'accès de (potentiellement) plusieurs entrepôts qui possèdent le même URL de serveur",
+            "DELETE_REMOTE_REPO": "Supprimer les entrepôts distants",
+            "DELETE_REMOTE_REPO_INFO": "Les entrepôts suivants étaient référencés par le projet supprimé. Sélectionnez ceux que vous voulez supprimer.",
+            "DELETE_REMOTE_REPO_REPORT_INFO": "La suppression des entrepôts distants suivants a échoué",
+            "MATCH_USERNAME": "Associer le nom d'utilisateur",
+            "MATCH_USERNAME_INFO": "Activer cette option pour modifier les informations d'accès aux entrepôts avec le même URL de serveur et nom d'utilisateur (un champ nom d'utilisateur vide indique les entrepôts auquel aucun nom d'utilisateur n'a été associé)",
+            "NO_REMOTE_REPO_WARN": "Aucun entrepôt distant n'est lié à ce projet",
+            "REMOTE_REPOSITORIES": "Entrepôts distants"
+        },
+        "RENDERING_ENGINE": "Moteur de rendu",
+        "RESOURCE_METADATA": "Métadonnées de ressource",
+        "SHACL_SHAPE_VALIDATION": "Validation de forme SHACL",
+        "SHACL_SHAPE_VALIDATION_ON_COMMIT": "Validation de forme SHACL (sur commit)",
+        "TRANSITIVE_IMPORTS": "Imports transitifs",
+        "TRIVIAL_INFERENCE": "Inférence triviale",
+        "TRIVIAL_INFERENCE_INFO": "Autoriser l'inférence triviale",
+        "UNDO_INFO": "Permet d'annuler une opération sur les données",
+        "URI_GENERATOR": "Générateur d'URI",
+        "USE_DEFAULT": "Utiliser les réglages par défaut",
+        "USE_RESOURCE_METADATA_INFO": "L'utilisation des métadonnées de la ressource peut être également activée après la création du projet",
+        "VALIDATION_INFO": "Activer cette option pour conserver une trace des demandes de modification afin de les valider ultérieurement (acceptation ou refus)"
+    },
+    "RESOURCE_METADATA": {
+        "ACTIONS": {
+            "CLONE_METADATA_PATTERN": "Dupliquer le modèle de métadonnées",
+            "CREATE_METADATA_ASSOCIATION": "Créer une association de métadonnées",
+            "CREATE_METADATA_PATTERN": "Créer un modèle de métadonnées",
+            "DELETE_METADATA_ASSOCIATION": "Supprimer une association de métadonnées",
+            "DELETE_METADATA_PATTERN": "Supprimer un modèle de métadonnées",
+            "EDIT_METADATA_PATTERN": "Éditer un modèle de métadonnées",
+            "EXPORT_METADATA_PATTERN": "Exporter un modèle de métadonnées",
+            "IMPORT_SHARED_METADATA_PATTERN": "Importer un modèle de métadonnées partagé",
+            "SHARE_METADATA_PATTERN": "Partager un modèle de métadonnées"
+        },
+        "DESTRUCTION_PATTERN_INFO": "Veuillez noter que lorsqu'une ressource est supprimée, tous ses triplets sortants sont automatiquement supprimés, donc créer un modèle de suppression n'est nécessaire que dans le cas où d'autres ressources liées à la ressource (et uniquement à elle) devraient être supprimées à leur tour (celà se produit, par ex. dans le cas de métadonnées réifiées)",
+        "IMPORT_FROM_LIBRARY": "Importer le modèle depuis une bibliothèque partagée",
+        "METADATA_PATTERN": "Modèle de métadonnées",
+        "METADATA_PATTERNS": "Modèles de métadonnées",
+        "PATTERN_ASSOSIACTIONS": "Associations de modèles",
+        "PATTERN_FACTORY_PROVIDED": "Modèle prédéfini",
+        "PATTERN_ID": "ID de modèle",
+        "PATTERN_LIBRARY": "Bibliothèque de modèles",
+        "RESOURCE_METADATA_CONFIG": "Configuration des métadonnées de la ressource",
+        "SHARED_PATTERNS": "Modèles partagés",
+        "SHOW_DETAILS": "Montrer les détails du modèle",
+        "STORE_IN_LIBRARY": "Sauvegarder le modèle dans la bibliothèque partagée"
+    },
+    "RESOURCE_VIEW": {
+        "ACTIONS": {
+            "ADD_VALUE_FROM_ANOTHER_PROJ": "Ajouter une valeur depuis un autre projet",
+            "ADD_VALUE_MANUALLY": "Ajouter une valeur manuellement",
+            "ALIGN_WITH_EXTERNAL_RESOURCE": "Aligner avec une ressource extérieure",
+            "ASSERT_INFERRED_STATEMENT": "Asserter une déclaration inférée",
+            "ASSERT_INFERRED_STATEMENTS": "Asserter toutes les déclarations inférées",
+            "BLOCK_NAMESPACE": "Bloquer l'espace de nom",
+            "BULK_DELETE": "Supprimer en masse",
+            "BULK_DELETE_INFO": "Supprimer la valeur pour chaque ressource qui possède cette relation prédicat-valeur",
+            "BULK_EDIT": "Éditer en masse",
+            "BULK_EDIT_INFO": "Mettre à jour la valeur pour chaque ressource qui possède cette relation prédicat-valeur",
+            "COPY_TO_CLIPBOARD": "Copier vers le presse-papier",
+            "COPY_VALUE_TO_LOCALES": "Copier la valeur vers d'autres locales",
+            "DELETE_ALL_VALUES": "Supprimer toutes les valeurs",
+            "EDIT_LITERAL_CONTENT": "Éditer le contenu littéral",
+            "EXPLAIN_INFERRED_STATEMENT": "Expliquer les déclarations inférées",
+            "MOVE_XLABEL_TO_CONCEPT": "Déplacer xLabel vers un autre concept",
+            "SET_AS_DEPRECATED": "Définir en tant que déprécié",
+            "SHOW_HIDE_INFERRED": "Montrer/Masquer l'information inférée",
+            "SHOW_IN_DATA_GRAPH": "Montrer dans le graphe orienté-données",
+            "SPAWN_CONCEPT_FROM_XLABEL": "Créer un nouveau concept à partir de xLabel",
+            "TOGGLE_NOTIFICATIONS": "Autoriser/Interdire les notifications au sujet de cette ressource",
+            "TOGGLE_VALUE_FILTER_LANG": "Autoriser/Interdire le filtre-valeur sur les langues "
+        },
+        "CODE_EDITOR": {
+            "CODE_EDITOR": "Éditeur de code",
+            "DISABLED_UNDER_VALIDATION": "L'onglet Code a été désactivé car cette ressource - ou une partie de sa description - est en cours de validation"
+        },
+        "LEX_VIEW": {
+            "CATEGORY": "Catégorie",
+            "PRONUNCIATION": "Prononciation",
+            "REFERENCE": "Référence",
+            "RELATED": "Corrélé",
+            "SEMANTIC_REFERENCE": "Référence sémantique",
+            "TRANSLATION": "Traduction",
+            "TRANSLATION_SET": "TranslationSet",
+            "UNDIRECTIONAL": "Non directionnel"
+        },
+        "MISC": {
+            "EDIT_DATARANGE": "Éditer le rang des données",
+            "INVERSE_PROPERTY": "Propriété inverse",
+            "INVERSE_PROPERTY_MULTIVALUE_WARN": "Si plusieurs propriétés sont sélectionnées, le drapeau 'Propriété inverse' est attribué à toutes (disponible uniquement si toutes sont des ObjectProperties)",
+            "IS_ALREADY_IN_LIST": "est déjà dans la liste !",
+            "ORDERED": "Ordonné",
+            "PROPERTY_CHAIN": "Chaîne de propriété",
+            "SHOW_ALL_CLASSES": "Montrer toutes les classes",
+            "TARGET_LANGS": "Langues cibles",
+            "VALLUE_TO_COPY": "Valeur à copier"
+        },
+        "PARTITIONS": {
+            "BROADERS": "Génériques",
+            "CLASS_AXIOMS": "Axiomes entre classes",
+            "CONSTITUENTS": "Constituants",
+            "DATATYPE_DEFINITIONS": "Définitions du type de données",
+            "DENOTATIONS": "Dénotations",
+            "DISJOINT_PROPERTIES": "Propriétés disjointes",
+            "DOMAINS": "Domaines",
+            "EQUIVALENT_PROPERTIES": "Propriétés équivalentes",
+            "EVOKED_LEXICAL_CONCEPTS": "Concepts lexicaux évoqués",
+            "FACETS": "Facettes",
+            "FILTER": {
+                "HIDE_FOR_ALL": "Masquer pour toutes les ressources",
+                "RESOURCE_TYPES": "Types de ressource",
+                "SET_VISIBLE_ALL": "Rendre visible toutes les partitions pour toutes les ressources",
+                "SET_VISIBLE_FOR_ALL": "Rendre visible pour toutes les ressources"
+            },
+            "FORM_BASED_PREVIEW": "Prévisualisation du formulaire personnalisé",
+            "FORM_PRESENTATIONS": "Représentations en formulaire",
+            "IMPORTS": "Imports",
+            "LABEL_RELATIONS": "Relations entre Labels",
+            "LEXICALIZATIONS": "Lexicalisations",
+            "LEXICAL_FORMS": "Formes lexicales",
+            "LEXICAL_SENSES": "Sens lexicaux",
+            "MEMBERS": "Membres",
+            "MEMBERS_ORDERED": "Membres (liste ordonnée)",
+            "NOTES": "Notes",
+            "PARTITIONS": "Partitions",
+            "PROPERTIES": "Autres propriétés",
+            "RANGES": "Rangs",
+            "RDFS_MEMBERS": "Membres RDFS",
+            "SCHEMES": "Schémas",
+            "SUBPROPERTY_CHAINS": "Axiomes de chaîne de sous-propriété",
+            "SUBTERMS": "Sous-termes",
+            "SUPERPROPERTIES": "Super-propriétés",
+            "TOP_CONCEPT_OF": "Concept de tête de",
+            "TYPES": "Types"
+        },
+        "SETTINGS": {
+            "DISPLAY_IMAGES": "Afficher les images",
+            "DISPLAY_IMAGES_INFO": "Sélectionner pour afficher les URL résolvables vers des images stockées sur le web comme des images sur la visualsation des ressources (prévisualisation)",
+            "INITIAL_VIEW_FOR_CONCEPTS": "Vue initiale pour les concepts",
+            "INITIAL_VIEW_FOR_CONCEPTS_INFO": "Ce choix sera utilisé par défaut pour naviguer dans les concepts SKOS. Un utilisateur peut basculer sur d'autres vues durant sa session de travail, mais ce choix sera appliqué en tant que paramétrage initial à chaque nouvelle connexion",
+            "INITIAL_VIEW_FOR_LEXENTRY": "Vue initiale pour les entrées lexicales",
+            "INITIAL_VIEW_FOR_LEXENTRY_INFO": "Ce choix sera utilisé par défaut pour naviguer dans les entrées lexicales Ontolex. Un utilisateur peut basculer sur d'autres vues durant sa session de travail, mais ce choix sera appliqué en tant que paramétrage initial à chaque nouvelle connexion",
+            "SHOW_DATATYPE_BADGE": "Toujours afficher le badge de type de données",
+            "SHOW_DATATYPE_BADGE_INFO": "Sélectionner pour afficher en permanence un badge de type de données à côté de la valeur. Si l'option n'est pas sélectionnée, le badge n'est affiché que dans le cas d'un type de données inconnu (l'icône à gauche de la valeur indiquera le type de donnée connu)",
+            "SHOW_DEPRECATED": "Afficher les valeurs dépréciées",
+            "SHOW_DEPRECATED_INFO": "Sélectionner pour afficher dans la visualisaion des ressources les ressources liées marquées comme dépréciées ",
+            "SORT_BY_RENDERING": "Trier les lexicalisations par langue de rendu",
+            "SORT_BY_RENDERING_INFO": "Sélectionner pour trier les valeurs de la partition 'Lexicalisation' dans le même ordre que celui des langues des préférences du rendu",
+            "SPLITTED_INFO": [
+                "Le panneau de visualisation des ressources est séparé en deux : à gauche s'affiche une vue principale qui décrit (et se synchronise avec) la ressource sélectionnée dans l'arbre/la liste ; à droite s'affiche une vue secondaire optionnelle qui décrit une ressource sélectionnée (par un double clic) depuis la vue principale",
+                "Ce mode n'est pas recommandé avec un écran dont la largeur de résolution est inférieure à 1440 px"
+            ],
+            "SYNC_WITH_TREE_LIST": "Garder l'onglet sélectionné synchronisé avec l'arbre/la liste",
+            "SYNC_WITH_TREE_LIST_WARNING": "Il est recommandé de désactiver cette option. La synchronisation entre les onglets et l'arbre/la liste pourrait ralentir la navigation dans les ressources.",
+            "TABBED_INFO": "La visualisation des ressources est affichée dans un onglet et plusieurs visualisations peuvent être ouvertes dans différents onglets"
+        },
+        "STATUS": {
+            "ACCESS_METHOD": "Méthode d'accès",
+            "CLOSE_ALL_TABS": "Fermer tous les onglets",
+            "LOCAL_PROJECT": "Projet local",
+            "OTHER_LOCAL_PROJECT": "Autre projet local",
+            "PREVIOUS_RESOURCE": "Ressource précédente",
+            "REMOTE_DATASET": "Jeu de données distant",
+            "RESOURCE_NOT_EXISTING": "Cette ressource n'est pas disponible dans le projet courant",
+            "RESOURCE_UNKNOWN_HOST": "Cette ressource n'est pas disponible dans les projets locaux accessibles et ne peut pas être atteinte sur le web",
+            "UNKNOWN_POSITION": "Position inconnue"
+        },
+        "TERM_VIEW": {
+            "BROADER_CONCEPTS": "Concepts génériques",
+            "CONCEPT_SCHEMES": "Schémas de concepts",
+            "REMOVE_BOX": "Supprimer la boite",
+            "TERM": "Terme"
+        },
+        "TIME_MACHINE": {
+            "CHANGE_VERSION": "Changee de version",
+            "CURRENT": "Courant",
+            "SELECT_DATE": "Sélectionner une date",
+            "TIME_MACHINE": "Machine temporelle",
+            "TRAVER_TO_TIME": "Remonter dans le temps"
+        },
+        "TYPES": {
+            "DETAILED": "Détaillé",
+            "DETAILED_DESCR": "La forme standard pour éditer des ressources RDF",
+            "LEXICOGRAPHER": "Lexicographe",
+            "LEXICOGRAPHER_DESCR": "Une forme simplifiée - moins centrée sur RDF - dédiée aux besoins des lexicographes (orientée Ontolex)",
+            "TERMINOLOGIST": "Terminologue",
+            "TERMINOLOGIST_DESCR": "Une forme simplifiée - moins centrée sur RDF - dédiée aux besoins des terminologues"
+        }
+    },
+    "SEARCH": {
+        "ADV_SEARCH": {
+            "ADD_FREE_TEXT": "Ajouter la recherche de texte libre",
+            "ADD_LITERAL": "Ajouter un littéral",
+            "ADD_RESOURCE": "Ajouter une ressource",
+            "ADD_SET_OF_VALUES": "Ajouter un jeu de valeurs",
+            "ADVANCED_SEARCH": "Recherche avancée",
+            "INGOING_LINKS": "Liens entrants",
+            "OUTGOING_LINKS": "Liens sortants",
+            "SCHEMES": "Schémas",
+            "SEARCH_STRING": "Rechercher la chaîne",
+            "TYPES": "Types"
+        },
+        "ASSISTED_SEARCH": {
+            "ASSISTED_SEARCH": "Recherche assistée",
+            "AVG_INFO": "Nombre moyen de lexicalisations",
+            "LOCAL": "Local",
+            "MATCHED_LANG": "Langue appariée",
+            "MATCH_MODE": "Mode d'appariement",
+            "METADATA_UNAVAILABLE_LOCAL_WARNING": {
+                "HERE": "ici",
+                "METADATA_NOT_AVAILABLE": "Les métadonnées VoID/LIME ne sont pas disponibles pour le projet local '{{projName}}'. Cliquer",
+                "TO_GENERATE_IT": "pour les générer"
+            },
+            "METADATA_UNAVAILABLE_REMOTE_WARNING": "Les métadonnées VoID/LIME ne sont pas disponibles pour le jeu de données distant '{{datasetUriSpace}}'. Vous devez générer/ajouter des 'jeux de lexicalisation embarqués' à partir du registre des métadonnées afin d'utiliser cette fonctionnalité.",
+            "NO_SEARCH_MODE_SELECTED_WARNING": "Si aucun n'est sélectionné, 'Approchant' et 'Contient' sont utilisés par défaut",
+            "PAIRED_LEX_SETS": "Jeux de lexicalisation appariés",
+            "PAIRED_LEX_SETS_INFO": "Jeux de lexicalisations partagés entre la ressource source et le projet/jeu de données cible",
+            "PERCENTAGE_INFO": "Pourcentage de ressources qui possèdent une lexicalisation dans la langue donnée",
+            "REFRESH_METADATA_INFO": "Rafraîchir les métadonnées du projet cible",
+            "REMOTE": "Distant",
+            "REMOTE_DATASETS": "Jeux de données distants",
+            "SEARCH_MODE_INFO": "Modes d'appariement des chaînes sur lesquels la comparaison des lexicalisations est fondé"
+        },
+        "CUSTOM_SEARCH": {
+            "CUSTOM_SEARCH": "Recherche personnalisée",
+            "LOAD_CUSTOM_SEARCH": "Charger les recherches personnalisées sauvegardées",
+            "NO_PARAM_SEARCH": "Cette recherche n'a pas de paramètres et peut donc être executée que telle quelle",
+            "SHOW_HIDE_SPARQL_DETAILS": "Montrer/Cacher les détaisl SPARQL concernant la recherche personnalisée",
+            "STORE_CUSTOM_SEARCH": "Recherche personnalisée sauvegardée"
+        },
+        "SEARCH": "Recherche",
+        "SETTINGS": {
+            "AUTOCOMPLETION": "Autocomplétion",
+            "AUTOCOMPLETION_INFO": "Il est fortement recommandé de désactiver cette fonctionnalité pour les gros projets qui ne sont pas hébergés sur un serveur GraphDB",
+            "CONCEPTS_SEARCH": "Recherche de concept",
+            "CONTAINS": "Contiens",
+            "ENABLE_AUTOCOMPLETION": "Autorise l'autocomplétion durant la frappe",
+            "ENDS_WITH": "Se termine par",
+            "EXACT": "Exact",
+            "EXTEND_TO_ALL": "Étendre la recherche à toutes les instances (y compris appartenant à d'autres classes)",
+            "FUZZY": "Approchant",
+            "INCLUDE_LOCALES": "Inclure les variantes locales dans la recherche (par ex en-GB, en-US)",
+            "INSTANCES_SEARCH": "Recherche d'instances",
+            "LEXICALIZATIONS_SEARCH": "Recherche de lexicalisations",
+            "RESTRICT_TO_LANGUAGES": "Restreindre la recherche aux langues",
+            "RESTRICT_TO_SCHEME": "Restreindre la recherche au(x) skos:ConceptScheme(s) actif(s)",
+            "SEARCH_IN_LOCAL_NAME": "Rechercher dans le nom local",
+            "SEARCH_IN_NOTES": "Rechercher dans les notes",
+            "SEARCH_IN_URI": "Rechercher dans l'URI",
+            "SEARCH_MODE": "Mode de recherche",
+            "SEARCH_MODE_INFO": "La recherche est toujours lancée parmi les lexicalisations",
+            "SEARCH_SETTINGS": "Paramétrages de la recherche",
+            "STARTS_WITH": "Commence par",
+            "STRING_MATCH_MODE": "Mode d'appariement de la chaîne"
+        }
+    },
+    "SHACL": {
+        "BATCH_VALIDATION": "Validation en masse",
+        "CLEAR_EXISTING": "Supprimer l'existant",
+        "CLEAR_SHACL_SHAPES": "Supprimer les formes SHACL",
+        "CLICK_TO_INSPECT": "Cliquer pour inspecter",
+        "EXPORT_SHACL_SHAPES": "Exporter les formes SHACL",
+        "EXTRACT_FROM_SHACL": "Extraire depuis SHACL",
+        "LOAD_SHACL_SHAPES": "Charger les formes SHACL",
+        "RUN_SHACL_VALIDATION": "Démarrer la validation SHACL"
+    },
+    "SHEET2RDF": {
+        "ACTIONS": {
+            "EXPORT_MAPPING_STATUS": "Exporter le statut de correspondance",
+            "LOAD_ADVANCED_GRAPH_APPLICATION": "Charger l'application de graphe avancée",
+            "SAVE_ADVANCED_GRAPH_APPLICATION": "Sauvegarder l'application de graphe avancée"
+        },
+        "GRAPH_APPLICATIONS": {
+            "ADVANCED": {
+                "ADV_GRAPH_APPL": "Application de graphe avancée",
+                "DEFAULT_PREDICATE": "Prédicat par défaut",
+                "DEFAULT_PREDICATE_INFO": "Si le modèle de graphe contient 'pred' ce prédicat est obligatoire, sinon il sera ignoré",
+                "GRAPH_PATTERN": "Modèle de graphe",
+                "GRAPH_PATTERN_INFO": "Le modèle de graphe ne doit contenir que des IDs de nœuds déjà définis dans l'en-tête.<br>Il peut également contenir la chaîne <code>{{pred}}</code> qui sera remplacée par le prédicat de l'en-tête. Dans le cas où <code>{{pred}}</code> est utilisé dans le modèle, un prédicat par défaut <strong>doit</strong> être fourni comme solution de rechange dans le cas où l'en-tête n'est pas un prédicat valide.",
+                "PREFIX_NS_MAPPINGS": "Correspondance préfixe-espace de nom"
+            },
+            "DELETE_INFO": "Indique si cette application de graphe doit être insérée dans la section supprimer du code PEARL",
+            "SIMPLE": {
+                "ASSERT_TYPE_INFO": "Cocher cette option pour asserter le rdf:type du nœud généré",
+                "RANGE": "Rang",
+                "RANGE_TYPE": "Type de rang",
+                "SIMPLE_GRAPH_APPL": "Application de graphe simple",
+                "UNDETERMINED": "Indéterminé"
+            }
+        },
+        "HEADER_EDITOR": {
+            "ADDITIONAL_PRED_OBJ": "Prédicat-objet additionnel",
+            "ADD_ADV_GRAPH_APPL": "Ajouter une application de graphe avancée",
+            "ADD_MEMOIZE_MAP": "Ajouter un ID de carte de mémorisation",
+            "ADD_SIMPLE_GRAPH_APPL": "Ajouter une application de graphe simple",
+            "ASSERT_TYPE": "Asserter le type",
+            "ASSERT_TYPE_INFO": "Cocher cette option pour asserter l'appartenance à une classe du nœud sujet",
+            "CONVERTER_TYPE": "Type de convertisseur",
+            "CONVERTER_URI": "URI du convertisseur",
+            "COPY_MEMOIZED_NODE_CONVERTER": "Copier le convertisseur de nœud mémorisé",
+            "COPY_MEMOIZED_NODE_CONVERTER_INFO": "Copier la configuration du convertisseur depuis un nœud existant utilisant la mémorisation",
+            "GRAPH_APPLICATIONS": "Applications de graphe",
+            "GRAPH_APPLICATIONS_INFO": "Liste des applications des nœuds définis dans l'écran 'Nœuds'",
+            "HEADER": "En-tête",
+            "HEADER_EDITOR": "Éditeur d'en-tête",
+            "IGNORE_HEADER": "Ignorer l'en-tête",
+            "IGNORE_HEADER_INFO": "Cocher cette option pour ignorer l'en-tête courant dans le code PEARL généré et donc dans le processus de conversion",
+            "MEMOIZE": "Memoriser",
+            "MEMOIZE_INFO": "Appliquer la mémorisation : à partir de la même entrée, le convertisseur générera la même sortie",
+            "NODES_INFO": "Liste des nœuds générés à partir de l'entête courant",
+            "NODE_EDITOR": "Éditeur de nœud",
+            "NODE_ID": "ID de nœud",
+            "PEARL_FEATURE": "Fonctionnalité PEARL",
+            "SELECT_MEMOIZED_NODE": "Sélectionner le nœud à partir duquel vous voulez copier la configuration du convertisseur mémorisé",
+            "SUBJECT_HEADER_EDITOR": "Éditeur de l'en-tête du sujet",
+            "SUBJ_HEADER_INFO": "Définir l'en-tête utilisé pour la création du sujet",
+            "SUBJ_NODE_ID_INFO": "Cette valeur est en lecture seule, 'sujet' est un mot-clé réservé au nœud sujet"
+        },
+        "PEARL": {
+            "GENERATE_PEARL": "Générer Pearl",
+            "INSERT_CONVERTER": "Insérer le convertisseur"
+        },
+        "SETTINGS": {
+            "FS_NAMING": "Nommage FS",
+            "FS_NAMING_INFO": "Stratégie à utiliser pour nommer les structures de fonctionnalités UIMA liées aux en-têtes",
+            "S2RDF_SETTINGS": "Réglages Sheet2RDF"
+        },
+        "SPREADSHEET": {
+            "EDIT_SUBJECT_HEADER": "Éditer l'en-tête du sujet",
+            "FILE": "Fichier de feuille de calcul",
+            "LEGEND": {
+                "IGNORED": "En-tête ignoré",
+                "INCOMPLETED_SUBJECT": "En-tête de sujet incomplet",
+                "LEGEND": "Légende",
+                "NOT_CONFIGURED": "En-tête non configuré",
+                "PARTIALLY_CONFIGURED": "En-tête partiellement configuré (par ex. un seul nœud défini)",
+                "SUBJECT_HEADER": "En-tête utilisé pour la correspondance des sujets",
+                "VALID_CONFIGURATION": "En-tête comportant au moins une configuration valide"
+            },
+            "LOAD_STATUS": "Charger le statut de correspondance",
+            "PREVIEW": "Prévisualisation de la feuille de calcul",
+            "ROWS": "Lignes",
+            "SUBJECT_MAPPING": "Correspondance des sujets"
+        },
+        "TRIPLES": {
+            "ADD_TRIPLES": "Ajouter des triplets",
+            "GENERATED_TRIPLES_PREVIEW": "Générer la prévisualisation des triplets",
+            "GENERATE_TRIPLES": "Générer des triplets"
+        }
+    },
+    "SKOS_DIFF": {
+        "ACTIONS": {
+            "EXPORT_SKOS_DIFFING_RESULT": "Télécharger le résultat de la comparaison SKOS"
+        },
+        "DOWNLOAD_TASK_RESULT": "Télécharger le résultat de la tâche",
+        "LEFT_DATASET": "Jeu de données de gauche",
+        "RIGHT_DATASET": "Jeu de données de droite",
+        "SKOS_DIFFING_TASKS": "Tâches de comparaison SKOS",
+        "VERSION": "Version"
+    },
+    "SPARQL": {
+        "ACTIONS": {
+            "LOAD_SPARQL_PARAMETERIZED_QUERY": "Charger une requête SPARQL paramétrée",
+            "LOAD_SPARQL_QUERY": "Charger une requête SPARQL",
+            "SAVE_SPARQL_PARAMETERIZED_QUERY": "Sauvegarder une requête SPARQL paramétrée",
+            "SAVE_SPARQL_QUERY": "Sauvegarder une requête SPARQL",
+            "SAVE_SPARQL_QUERY_PARAMETERIZATION": "Sauvegarder la paramétrisation d'une requête SPARQL",
+            "SELECT_STORED_SPARQL_PARAMETERIZED_QUERY": "Sélectionner une paramétrisation de requête SPARQL sauvegardée"
+        },
+        "EXPORT": {
+            "APPLY_EXPORT_FILTERS": "Appliquer les filtres d'export",
+            "EXPORT_AS_RDF": "Exporter en RDF",
+            "EXPORT_TRANSFORMATIONS": "Transformations d'export",
+            "TRANSFORMATION_INFO": "Il est ici possible de créer et de configurer une suite de transformations à appliquer durant l'export.",
+            "UNCONFIGURED_FILTER": "Ce filtre doit être configuré"
+        },
+        "PARAMETERIZATION": {
+            "BINDING_TYPE": "Type de lien",
+            "DISPLAY_NAME": "Nom d'affichage",
+            "QUERY_PARAMETERIZATION": "Paramétrisation de requête",
+            "QUERY_PARAMETERS": "Paramètres de requête",
+            "SHOW_VARIABLE_BINDINGS_DISPLAY_NAME": "Montrer le nom d'affichage du lien de la variable",
+            "USE_VARIABLE_BINDINGS": "Utiliser les liens de la variable",
+            "VARIABLE_BINDING": "Lien de la variable",
+            "VARIABLE_BINDINGS": "Liens de la variable"
+        },
+        "QUERY": {
+            "ADD_PARAMETERIZED_QUERY_TAB": "Ajouter un onglet de requête paramétrée",
+            "ADD_QUERY_TAB": "Ajouter un onglet de requête",
+            "CHANGE_STORED_QUERY": "Modifier la requête sauvegardée",
+            "FETCH_FROM_PREFIXCC": "Récupérer le préfixe depuis prefix.cc",
+            "PARAMETERIZED_QUERY": "Requête paramétrée",
+            "STORED_QUERY": "Requête sauvegardée",
+            "UNNAMED_PARAMETERIZED_QUERY": "Requête paramétrée non nommée",
+            "UNNAMED_QUERY": "Requête non nommée"
+        },
+        "RESULTS": {
+            "CLEAR": "Effacer",
+            "DONE_IN": "Réalisé en",
+            "EXPORT_RESULTS": "Exporter les résultats SPARQL",
+            "INCLUDE_INFERRED": "Inclure les inférés",
+            "RESULTS_COUNT": "Comptage des résultats",
+            "SAVE_RESULTS_AS": "Sauvegarder les résultats en tant que",
+            "SHOW_RESULTS_AS_GRAPH": "Montrer les résultats sous forme de graphe"
+        }
+    },
+    "STATUS": {
+        "ACTIVE": "Actif",
+        "ADDED": "Ajouté",
+        "DEFAULT": "Défaut",
+        "ENABLED": "Autorisé",
+        "ERROR": "Erreur",
+        "INACTIVE": "Inactif",
+        "INVALID_DATA": "Donnée non valide",
+        "INVALID_VALUE": "Valeur non valide",
+        "NEW": "Nouveau",
+        "OPERATION_DENIED": "Opération refusée",
+        "OPERATION_DONE": "Opération réalisée",
+        "REMOVED": "Enlevé",
+        "STATUS": "Statut",
+        "WARNING": "Avertissement"
+    },
+    "UNDO": {
+        "OPERATION_UNDONE": "Opération annulée",
+        "OPERATION_UNDONE_INFO": "L'opération suivante a été annulée : {{operation}}"
+    },
+    "USER": {
+        "LOGIN": "Se connecter",
+        "PASSWORD": {
+            "CHANGE_PASSWORD": "Changer de mot de passe",
+            "CONFIRM_NEW_PASSWORD": "Confirmer le nouveau mot de passe",
+            "FORGOT_PASSWORD": "Mot de passe oublié",
+            "NEW_PASSWORD": "Nouveau mot de passe",
+            "OLD_PASSWORD": "Ancien mot de passe",
+            "RESET_PASSWORD": "Réinitialiser le mot de passe"
+        },
+        "REGISTRATION": {
+            "FILL_PREDEFINED_USER": "Renseigner avec les données de l'utilisateur prédéfini",
+            "NO_USER_REGISTERED_MSG": [
+                "VocBench n'a trouvé aucun utilisateur enregistré. Afin d'utiliser la plateforme, vous devez créer un compte administrateur en fournissant des données personnelles et des informations de connexion. Un utilisateur prédéfini",
+                "est disponible pour permettre à ceux qui veulent utiliser VocBench en tant que simple outil de bureau de sauter l'étape de création d'utilisateurs."
+            ],
+            "OPTIONAL_RECOMMENDED_FIELD": "Champ optionnel mais fortement recommandé",
+            "USER_REGISTRATION": "Enregistrement de l'utilisateur"
+        },
+        "SIGNUP": "S'enregistrer",
+        "SORTING": {
+            "EMAIL_ASC": "Adresse électronique (tri ascendant)",
+            "EMAIL_DESC": "Adresse électronique (tri ascendant)",
+            "NAME_ASC": "Nom (tri ascendant)",
+            "NAME_DESC": "Nom (tri ascendant)",
+            "REGISTRATION_DATE_ASC": "Date d'enregistrement (tri ascendant)",
+            "REGISTRATION_DATE_DESC": "Date d'enregistrement (tri ascendant)"
+        },
+        "USER_DETAILS": "Détails utilisateur",
+        "USER_LOGIN": "Login utilisateur"
+    },
+    "WIDGETS": {
+        "CONVERTER": {
+            "CONVERTER": "Convertisseur",
+            "CONVERTER_CONFIG": "Configuration du convertisseur",
+            "CONVERTER_PARAMETERIZATION": "Paramétrisation du convertisseur",
+            "PARAMS": "Paramètres",
+            "RDF_CAPABILITY": "Capacité RDF",
+            "SIGNATURE": "Signature"
+        },
+        "EDITORS": {
+            "MANCHESTER": {
+                "AXIOM": "Axiome",
+                "CONSTRUCTOR": "Constructeur",
+                "DL_SYNTAX": "Syntaxe DL",
+                "HELPER": "Aide",
+                "MANCHESTER_SYNTAX": "Syntaxe de Manchester",
+                "MANCHESTER_SYNTAX_HELPER": "Aide pour la syntaxe de Manchester",
+                "PREST_CTRL_SPACE": "Appuyer sur 'ctrl-espace' pour afficher des conseils",
+                "TABLE_AXIOMS_INFO": "Cette table montre les conversions entre la syntaxe DL et la syntaxe de Manchester pour ces axiomes",
+                "TABLE_CONSTRUCTORS_INFO": "Cette table montre les conversions entre la syntaxe DL et la syntaxe de Manchester pour ces constructeurs"
+            }
+        },
+        "FILE_PICKER": {
+            "BROWSE": "Parcourir",
+            "SELECT_A_FILE": "Sélectionner un fichier"
+        },
+        "REMOTE_ACCESS_CONFIG": {
+            "CONFIG_FOR_REMOTE": "Configuration de l'entrepôt de données distant",
+            "NO_CONFIG_FOUND": "Aucune configuration d'accès distant n'a été trouvée. Veuillez en créer une"
+        },
+        "SETTINGS_RENDERER": {
+            "ADD_OPTIONAL_VALUE": "Ajouter une valeur optionnelle",
+            "DELETE_OPTIONAL_VALUE": "Supprimer une valeur optionnelle",
+            "UNKNOWN_TYPE_WARN": "Ce paramètre possède un type ({{propTypeName}}) inconnu. La valeur saisie sera interprétée comme une valeur JSON de bas niveau"
+        },
+        "STORAGE_MGR": {
+            "CREATE_DIR": "Créer un répertoire",
+            "LEVEL_UP": "Mettre à niveau",
+            "STORAGE_MANAGER": "Gestionnaire de sauvegarde",
+            "UPLOAD_FILE": "Charger un fichier "
+        },
+        "VALUE_PICKER": {
+            "FROM_CURRENT_PROJ": "Depuis le projet courant",
+            "FROM_EXTERNAL_PROJ": "Depuis un projet externe"
+        }
+    }
+}
