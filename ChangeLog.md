@@ -5,7 +5,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 11.0.0 (dd-mm-yyyy)
-  * added localization for French
+  * added localization for French, thanks to Nathalie Vedovotto for the contribution!
 
 # 10.1.0 (21-09-2021)
   * ontolex: in the resource view, it is now possible to select concepts as targets of lexical senses and not 
@@ -31,7 +31,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Adopted the new Settings services
   * Implemented support for EU-Login
   * Added flags for Scottish Gaelic and Welsh languages
-  * Added german l10n
+  * Added german l10n, thanks to Roland Wingerter for the contribution!
   * Fixed autocompletion and prefixes resolution in SPARQL editor
 
 # 9.1.0 (28-04-2021)
