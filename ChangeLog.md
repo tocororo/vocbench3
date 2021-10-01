@@ -5,7 +5,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 11.0.0 (dd-mm-yyyy)
-  * 
+  * added localization for French
 
 # 10.1.0 (21-09-2021)
   * ontolex: in the resource view, it is now possible to select concepts as targets of lexical senses and not 
