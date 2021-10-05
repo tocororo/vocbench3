@@ -103,7 +103,7 @@ export class InlineEditableValue {
         if (event.key == "Escape") {
             this.cancelEdit();
         } else if (event.key == "Enter") {
-            if (event.altKey) { //newline
+            if (event.shiftKey || event.altKey || event.ctrlKey) { //newline
                 let selectionStart: number = (<HTMLTextAreaElement>this.textarea.nativeElement).selectionStart;
                 let selectionEnd: number = (<HTMLTextAreaElement>this.textarea.nativeElement).selectionEnd;
                 let before = this.stringValue.substring(0, selectionStart);

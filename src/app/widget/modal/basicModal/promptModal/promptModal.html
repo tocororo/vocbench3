@@ -14,7 +14,7 @@
                 <label>{{label.value}}:</label>
                 <span *ngIf="label.tooltip" class="fas fa-info-circle" [title]="label.tooltip"></span>
             </div>
-            <textarea ngbAutofocus class="form-control" style="flex: 1; resize: vertical" [(ngModel)]="value" rows="1" (keydown.enter)="ok()" [sanitized]="inputSanitized"></textarea>
+            <textarea ngbAutofocus class="form-control" style="flex: 1; resize: vertical" [(ngModel)]="value" rows="1" (keydown.enter)="onEnter($event)" [sanitized]="inputSanitized"></textarea>
         </div>
     </div>
     <div class="modal-footer">

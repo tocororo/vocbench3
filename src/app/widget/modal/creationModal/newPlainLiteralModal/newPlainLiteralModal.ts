@@ -28,12 +28,10 @@ export class NewPlainLiteralModal {
         });
     }
 
-    onKeydown(event: KeyboardEvent) {
-        if (event.key == "Enter") {
-            if (!event.shiftKey && !event.altKey && !event.ctrlKey) {
-                if (this.values.length == 0 && this.isInputValid()) { //only when the input value is the only one
-                    this.ok();
-                }
+    onEnter(event: KeyboardEvent) {
+        if (!event.shiftKey) { //when enter is not in combo with shift (which insert a newline)
+            if (this.values.length == 0 && this.isInputValid()) { //only when the input value is the only one
+                this.ok();
             }
         }
     }

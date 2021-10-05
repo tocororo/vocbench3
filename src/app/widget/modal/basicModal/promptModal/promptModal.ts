@@ -20,6 +20,14 @@ export class PromptModal {
     ngOnInit() {
     }
 
+    onEnter(event: KeyboardEvent) {
+        if (!event.shiftKey) { //when enter is not in combo with shift (which insert a newline)
+            if (this.isInputValid()) { //only when the input value is the only one
+                this.ok();
+            }
+        }
+    }
+
     isInputValid(): boolean {
         return (this.value != undefined && this.value.trim() != "");
     }

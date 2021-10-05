@@ -34,7 +34,7 @@
                                 <tr>
                                     <td><label>{{'MODELS.PROJECT.BASE_URI'|translate}}:</label></td>
                                     <td>
-                                        <input type="text" class="form-control form-control-sm"
+                                        <input type="text" class="form-control"
                                             [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isBaseURIValid() }" [ngModel]="baseURI"
                                             (ngModelChange)="onBaseURIChanged($event)" [disabled]="!isBaseuriNsEditAuthorized()">
                                     </td>
@@ -55,7 +55,7 @@
                                 <tr>
                                     <td><label>{{'METADATA.NAMESPACES_AND_IMPORTS.NAMESPACE'|translate}}:</label></td>
                                     <td>
-                                        <input type="text" class="form-control form-control-sm"
+                                        <input type="text" class="form-control"
                                             [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isNamespaceValid() }" [ngModel]="namespace"
                                             (ngModelChange)="onNamespaceChanged($event)" [disabled]="!isBaseuriNsEditAuthorized()" >
                                     </td>
