@@ -331,6 +331,7 @@ export class ProjectUsersManagerComponent {
 
     private initAvailableLanguages() {
         this.availableLanguages = [];
+        this.selectedLangs = [];
         this.projectLanguages.forEach(l => {
             let availableLang: Language = { name: l.name, tag: l.tag, mandatory: l.mandatory };
             availableLang['proficiency'] = this.isProficiencyLang(l.tag);
