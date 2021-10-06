@@ -27,18 +27,13 @@ export class UserMenuComponent {
 
     constructor(private authService: AuthServices, private sanitizer: DomSanitizer) { }
 
-    ngOnInit() {
-        this.currentUser = VBContext.getLoggedUser();
-        this.userShow = this.currentUser.getShow();
-        this.initBackgroundImgSrc();
-    }
-
     /**
      * Listener when menu is clicked to open. Updates currentUser variable.
      * This is needed because the user in the context could have been changed from user profile page.
      */
     onMenuOpen() {
         this.currentUser = VBContext.getLoggedUser();
+        this.userShow = this.currentUser.getShow();
         this.initBackgroundImgSrc();
 
         this.isProjectOpen = VBContext.getWorkingProject() != undefined;

@@ -1,4 +1,5 @@
-import { Component, Input } from "@angular/core";
+import { Component, forwardRef, Input } from "@angular/core";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../models/ARTResources";
 import { User, UserFormCustomField, UserFormOptionalField } from "../models/User";
@@ -11,12 +12,16 @@ import { ChangePasswordModal } from "./changePasswordModal";
 @Component({
     selector: "user-details",
     templateUrl: "./userDetailsComponent.html",
-    host: { class: "vbox" }
+    host: { class: "vbox" },
+    providers: [{
+        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UserDetailsComponent), multi: true,
+    }],
 })
 export class UserDetailsComponent {
 
     @Input() readonly: boolean = false; //true if the component is inside the Profile page, so the info (about the current logged user) can be changed
-    @Input() user: User;
+
+    user: User;
 
     optionalFields: UserFormOptionalField[];
     customFields: UserFormCustomField[];
@@ -36,31 +41,31 @@ export class UserDetailsComponent {
      * Mandatory
      */
 
-    private updateGivenName(newGivenName: string) {
+    updateGivenName(newGivenName: string) {
         this.userService.updateUserGivenName(this.user.getEmail(), newGivenName).subscribe(
             user => {
-                VBContext.setLoggedUser(user);
+                this.updateUser(user);
             }
         )
     }
 
-    private updateFamilyName(newFamilyName: string) {
+    updateFamilyName(newFamilyName: string) {
         this.userService.updateUserFamilyName(this.user.getEmail(), newFamilyName).subscribe(
             user => {
-                VBContext.setLoggedUser(user);
+                this.updateUser(user);
             }
         )
     }
 
-    private updateEmail(newEmail: string) {
+    updateEmail(newEmail: string) {
         this.userService.updateUserEmail(this.user.getEmail(), newEmail).subscribe(
             user => {
-                VBContext.setLoggedUser(user);
+                this.updateUser(user);
             }
         )
     }
 
-    private changePwd() {
+    changePwd() {
         this.modalService.open(ChangePasswordModal, new ModalOptions())
     }
 
@@ -68,7 +73,7 @@ export class UserDetailsComponent {
      * Optional
      */
 
-    private getOptionalFieldValue(field: UserFormOptionalField): string {
+    getOptionalFieldValue(field: UserFormOptionalField): string {
         if (field.iri == UserFormOptionalField.URL_IRI) {
             return this.user.getUrl();
         } else if (field.iri == UserFormOptionalField.ADDRESS_IRI) {
@@ -79,7 +84,7 @@ export class UserDetailsComponent {
             return this.user.getPhone();
         }
     }
-    private updateOptionalFieldValue(field: UserFormOptionalField, value: string) {
+    updateOptionalFieldValue(field: UserFormOptionalField, value: string) {
         if (field.iri == UserFormOptionalField.URL_IRI) {
             this.updateUrl(value);
         } else if (field.iri == UserFormOptionalField.ADDRESS_IRI) {
@@ -90,38 +95,38 @@ export class UserDetailsComponent {
             this.updatePhone(value);
         }
     }
-    private getOptionalFieldLabel(field: UserFormOptionalField): string {
+    getOptionalFieldLabel(field: UserFormOptionalField): string {
         return UserFormOptionalField.getOptionalFieldLabel(field);
     }
 
-    private updatePhone(newPhone: string) {
+    updatePhone(newPhone: string) {
         this.userService.updateUserPhone(this.user.getEmail(), newPhone).subscribe(
             user => {
-                VBContext.setLoggedUser(user);
+                this.updateUser(user);
             }
         )
     }
 
-    private updateAddress(newAddress: string) {
+    updateAddress(newAddress: string) {
         this.userService.updateUserAddress(this.user.getEmail(), newAddress).subscribe(
             user => {
-                VBContext.setLoggedUser(user);
+                this.updateUser(user);
             }
         )
     }
 
-    private updateAffiliation(newAffiliation: string) {
+    updateAffiliation(newAffiliation: string) {
         this.userService.updateUserAffiliation(this.user.getEmail(), newAffiliation).subscribe(
             user => {
-                VBContext.setLoggedUser(user);
+                this.updateUser(user);
             }
         )
     }
 
-    private updateUrl(newUrl: string) {
+    updateUrl(newUrl: string) {
         this.userService.updateUserUrl(this.user.getEmail(), newUrl).subscribe(
             user => {
-                VBContext.setLoggedUser(user);
+                this.updateUser(user);
             }
         )
     }
@@ -130,10 +135,10 @@ export class UserDetailsComponent {
      * Other
      */
 
-    private updateAvatarUrl(newUrl: string) {
+    updateAvatarUrl(newUrl: string) {
         this.userService.updateUserAvatarUrl(this.user.getEmail(), newUrl).subscribe(
             user => {
-                VBContext.setLoggedUser(user);
+                this.updateUser(user);
             }
         )
     }
@@ -143,7 +148,7 @@ export class UserDetailsComponent {
             langs => {
                 this.userService.updateUserLanguageProficiencies(this.user.getEmail(), langs).subscribe(
                     user => {
-                        VBContext.setLoggedUser(user);
+                        this.updateUser(user);
                     }
                 );
             },
@@ -155,13 +160,46 @@ export class UserDetailsComponent {
      * Custom
      */
 
-    private updateCustomProperty(field: UserFormCustomField, value: string) {
+    updateCustomProperty(field: UserFormCustomField, value: string) {
         this.userService.updateUserCustomField(this.user.getEmail(), new ARTURIResource(field.iri), value).subscribe(
             user => {
-                VBContext.setLoggedUser(user);
+                this.updateUser(user);
             }
         );
     }
+
+    private updateUser(user: User) {
+        this.user = user;
+        VBContext.setLoggedUser(this.user);
+        this.propagateChange(this.user);
+    }
+
+
+    //---- method of ControlValueAccessor and Validator interfaces ----
+    /**
+     * Write a new value to the element.
+     */
+     writeValue(obj: User) {
+        if (obj) {
+            this.user = obj;
+        }
+    }
+    /**
+     * Set the function to be called when the control receives a change event.
+     */
+    registerOnChange(fn: any): void {
+        this.propagateChange = fn;
+    }
+    /**
+     * Set the function to be called when the control receives a touch event. Not used.
+     */
+    registerOnTouched(fn: any): void { }
+
+    //--------------------------------------------------
+
+    // the method set in registerOnChange, it is just a placeholder for a method that takes one parameter, 
+    // we use it to emit changes back to the parent
+    private propagateChange = (_: any) => { };
 
     
 }

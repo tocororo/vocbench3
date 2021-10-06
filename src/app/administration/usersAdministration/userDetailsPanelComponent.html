@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="card-body vbox">
-        <user-details *ngIf="user" [user]="user" [readonly]="true"></user-details>
+        <user-details *ngIf="user" [ngModel]="user" [readonly]="true"></user-details>
     </div>
     <div class="card-footer" *ngIf="user">
         <button class="btn btn-light btn-xs" (click)="changePassword()" [disabled]="isChangePwdButtonDisabled()">

@@ -69,7 +69,7 @@
 
                 <div class="card card-default vbox" *ngIf="selectedAspectSelector == userDetailsAspect">
                     <div class="card-body vbox">
-                        <user-details-panel [user]="selectedUser" (deleted)="initUserList()">
+                        <user-details-panel [(ngModel)]="selectedUser" (deleted)="initUserList()">
                         </user-details-panel>
                         <div class="card card-default" style="margin-top: 8px">
                             <div class="card-body hbox" style="align-items: center;">
@@ -86,8 +86,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <user-details-panel *ngIf="selectedAspectSelector == userDetailsAspect" [user]="selectedUser" (deleted)="initUserList()">
-                </user-details-panel> -->
 
                 <div class="card card-default vbox" *ngIf="selectedAspectSelector == rvTemplateAspect">
                     <div class="card-header">
