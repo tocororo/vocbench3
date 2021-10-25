@@ -36,10 +36,13 @@ export abstract class AbstractHistValidComponent {
     toTime: any;
 
     //paging
-    limit: number = 100;
+    limit: number = 10;
     page: number = 0;
     pageCount: number;
     revisionNumber: number = 0;
+
+    pageSelector: number[] = [];
+    pageSelectorOpt: number;
 
     commits: CommitInfo[];
 
@@ -69,6 +72,13 @@ export abstract class AbstractHistValidComponent {
     getNextCommits() {
         this.page++;
         this.listCommits();
+    }
+
+    goToPage() {
+        if (this.page != this.pageSelectorOpt) {
+            this.page = this.pageSelectorOpt;
+            this.listCommits();
+        }
     }
 
     inspectParams(item: CommitInfo) {
@@ -157,7 +167,7 @@ export abstract class AbstractHistValidComponent {
             }
         } catch (err) {
             //not parseable => not a resource
-        } 
+        }
     }
 
     private onOperationUndone(commit: CommitInfo) {

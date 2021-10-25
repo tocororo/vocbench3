@@ -75,6 +75,10 @@ export class ValidationComponent extends AbstractHistValidComponent {
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.pageCount = stResp.pageCount;
+                this.pageSelector = [];
+                for (let i = 0; i < this.pageCount; i++) {
+                    this.pageSelector.push(i);
+                }
                 this.tipTime = stResp.tipTime;
                 if (this.tipTime != null) {
                     this.listCommits();

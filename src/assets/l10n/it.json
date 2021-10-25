@@ -503,6 +503,7 @@
         "OPTIONAL_FIELD": "Campo opzionale",
         "OTHER": "Altro",
         "PAGING": {
+            "GO_TO": "Vai a",
             "NEXT_PAGE": "Pagina successiva",
             "PAGE_OF_TOT": "di",
             "PREV_PAGE": "Pagina precedente"

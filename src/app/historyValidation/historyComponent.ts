@@ -32,6 +32,10 @@ export class HistoryComponent extends AbstractHistValidComponent {
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.pageCount = stResp.pageCount;
+                this.pageSelector = [];
+                for (let i = 0; i < this.pageCount; i++) {
+                    this.pageSelector.push(i);
+                }
                 this.tipRevisionNumber = stResp.tipRevisionNumber;
                 if (this.tipRevisionNumber != null) {
                     this.listCommits();

@@ -124,17 +124,32 @@
     </div>
 
     <div class="card-footer">
-        <div class="btn-group btn-group-xs float-right">
-            <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="getPreviousCommits()" [disabled]="page <= 0">
-                <span class="fas fa-caret-left"></span>
-            </button>
-            <button class="btn btn-light" style="cursor: auto" disabled>
-                <span>{{page+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
-            </button>
-            <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="getNextCommits()" [disabled]="page+1 >= pageCount">
-                <span class="fas fa-caret-right"></span>
-            </button>
-        </div>
+
+        <div class="d-flex align-items-center" style="justify-content: end;">
+
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="getPreviousCommits()" [disabled]="page <= 0">
+                    <span class="fas fa-caret-left"></span>
+                </button>
+                <button class="btn btn-light" style="cursor: auto" disabled>
+                    <span>{{pageCount != 0 ? page+1 : '0'}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
+                </button>
+                <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="getNextCommits()" [disabled]="page+1 >= pageCount">
+                    <span class="fas fa-caret-right"></span>
+                </button>
+            </div>
+    
+            <div class="d-flex align-items-center ml-3">
+                <label style="white-space: nowrap;">{{'COMMONS.PAGING.GO_TO'|translate}}:</label>
+                <div class="input-group input-group-sm ml-2">
+                    <select class="form-control" [(ngModel)]="pageSelectorOpt" [disabled]="pageSelector.length == 0">
+                        <option *ngFor="let p of pageSelector" [ngValue]="p">{{p+1}}</option>
+                    </select>
+                    <span class="input-group-append">
+                        <button class="btn btn-light" (click)="goToPage()" [disabled]="!pageSelectorOpt || pageSelectorOpt < 0">{{'ACTIONS.GO'|translate}}</button>
+                    </span>
+                </div>
+            </div>
     </div>
 
 </div>

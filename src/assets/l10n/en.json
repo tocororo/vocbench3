@@ -503,6 +503,7 @@
         "OPTIONAL_FIELD": "Optional field",
         "OTHER": "Other",
         "PAGING": {
+            "GO_TO": "Go to",
             "NEXT_PAGE": "Next page",
             "PAGE_OF_TOT": "of",
             "PREV_PAGE": "Previous page"
