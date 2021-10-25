@@ -36,7 +36,7 @@ export abstract class AbstractHistValidComponent {
     toTime: any;
 
     //paging
-    limit: number = 10;
+    limit: number = 100;
     page: number = 0;
     pageCount: number;
     revisionNumber: number = 0;
