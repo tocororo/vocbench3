@@ -147,20 +147,21 @@ export class DataTypeRestrictionsModal {
         if (this.facetsDescription.facets.pattern != null && this.facetsDescription.facets.pattern.trim() != "") {
             facetsMap[XmlSchema.pattern.toNT()] = new ARTLiteral(this.facetsDescription.facets.pattern).toNT();
         }
+        //handle min/max in case they are provided (the datatype of min/max is the same of the base)
         if (this.facetsDescription.facets.minExclusive != null) {
-            let dt: string = Number.isInteger(this.facetsDescription.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
+            let dt: string = this.facetsDescription.base.getURI();
             facetsMap[XmlSchema.minExclusive.toNT()] = new ARTLiteral(this.facetsDescription.facets.minExclusive + "", dt).toNT();
         }
         if (this.facetsDescription.facets.minInclusive != null) {
-            let dt: string = Number.isInteger(this.facetsDescription.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
+            let dt: string = this.facetsDescription.base.getURI();
             facetsMap[XmlSchema.minInclusive.toNT()] = new ARTLiteral(this.facetsDescription.facets.minInclusive + "", dt).toNT();
         }
         if (this.facetsDescription.facets.maxExclusive != null) {
-            let dt: string = Number.isInteger(this.facetsDescription.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
+            let dt: string = this.facetsDescription.base.getURI();
             facetsMap[XmlSchema.maxExclusive.toNT()] = new ARTLiteral(this.facetsDescription.facets.maxExclusive + "", dt).toNT();
         }
         if (this.facetsDescription.facets.maxInclusive != null) {
-            let dt: string = Number.isInteger(this.facetsDescription.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
+            let dt: string = this.facetsDescription.base.getURI();
             facetsMap[XmlSchema.maxInclusive.toNT()] = new ARTLiteral(this.facetsDescription.facets.maxInclusive + "", dt).toNT();
         }
         return this.datatypeService.setDatatypeFacetsRestriction(this.datatype, this.facetsDescription.base, facetsMap);

@@ -7,7 +7,7 @@
         <tr>
             <td nowrap><label>Base</label></td>
             <td>
-                <select class="form-control form-control-sm" [(ngModel)]="base" (ngModelChange)="onFacetsChange()">
+                <select class="form-control" [(ngModel)]="base" (ngModelChange)="onFacetsChange()">
                     <option *ngFor="let b of baseOpts" [ngValue]="b">{{b.getShow()}}</option>
                 </select>
             </td>
@@ -17,10 +17,10 @@
                 <td nowrap><label>Min</label></td>
                 <td>
                     <div class="hbox">
-                        <select class="form-control form-control-sm" style="width: initial; margin-right: 4px;" [(ngModel)]="minIE" (ngModelChange)="onFacetsChange()">
+                        <select class="form-control" style="width: initial; margin-right: 4px;" [(ngModel)]="minIE" (ngModelChange)="onFacetsChange()">
                             <option *ngFor="let ie of inclusiveExclusive">{{ie}}</option>
                         </select>
-                        <input type="number" class="form-control form-control-sm" [(ngModel)]="min" (ngModelChange)="onFacetsChange()">
+                        <input type="number" class="form-control" [(ngModel)]="min" (ngModelChange)="onFacetsChange()">
                     </div>
                 </td>
             </tr>
@@ -28,10 +28,10 @@
                 <td nowrap><label>Max</label></td>
                 <td>
                     <div class="hbox">
-                        <select class="form-control form-control-sm" style="width: initial; margin-right: 4px;" [(ngModel)]="maxIE" (ngModelChange)="onFacetsChange()">
+                        <select class="form-control" style="width: initial; margin-right: 4px;" [(ngModel)]="maxIE" (ngModelChange)="onFacetsChange()">
                             <option *ngFor="let ie of inclusiveExclusive">{{ie}}</option>
                         </select>
-                        <input type="number" class="form-control form-control-sm"[(ngModel)]="max" (ngModelChange)="onFacetsChange()">
+                        <input type="number" class="form-control"[(ngModel)]="max" (ngModelChange)="onFacetsChange()">
                     </div>
                 </td>
             </tr>
@@ -39,7 +39,7 @@
         <tr>
             <td nowrap><label>Pattern</label></td>
             <td>
-                <input class="form-control form-control-sm" [(ngModel)]="pattern" (ngModelChange)="onFacetsChange()">
+                <input class="form-control" [(ngModel)]="pattern" (ngModelChange)="onFacetsChange()">
             </td>
         </tr>
     </tbody>

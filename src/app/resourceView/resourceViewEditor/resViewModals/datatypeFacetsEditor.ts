@@ -1,7 +1,7 @@
 import { Component, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ARTURIResource } from "../../../models/ARTResources";
-import { DatatypeRestrictionDescription, DatatypeUtils, FacetsRestriction } from "../../../models/Datatypes";
+import { DatatypeUtils, FacetsRestriction } from "../../../models/Datatypes";
 import { XmlSchema } from "../../../models/Vocabulary";
 
 @Component({
