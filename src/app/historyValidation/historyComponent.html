@@ -146,7 +146,7 @@
                         <option *ngFor="let p of pageSelector" [ngValue]="p">{{p+1}}</option>
                     </select>
                     <span class="input-group-append">
-                        <button class="btn btn-light" (click)="goToPage()" [disabled]="!pageSelectorOpt || pageSelectorOpt < 0">{{'ACTIONS.GO'|translate}}</button>
+                        <button class="btn btn-light" (click)="goToPage()" [disabled]="pageSelectorOpt == null">{{'ACTIONS.GO'|translate}}</button>
                     </span>
                 </div>
             </div>

@@ -29,7 +29,7 @@ export class ValidationComponent extends AbstractHistValidComponent {
     private ACTION_ACCEPT = { value: "accept", show: "Accept" };
     private ACTION_REJECT = { value: "reject", show: "Reject" };
     private ACTION_NONE = { value: "------", show: "------" };
-    private validationActions: { value: string, show: string }[] = [
+    validationActions: { value: string, show: string }[] = [
         this.ACTION_NONE,
         this.ACTION_ACCEPT,
         this.ACTION_REJECT

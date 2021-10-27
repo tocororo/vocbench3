@@ -111,6 +111,7 @@ export abstract class AbstractHistValidComponent {
         this.performers = filters.performers;
         this.fromTime = filters.fromTime;
         this.toTime = filters.toTime;
+        this.pageSelectorOpt = null;
         this.init();
     }
 
