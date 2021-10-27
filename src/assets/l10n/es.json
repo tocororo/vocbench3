@@ -1215,7 +1215,7 @@
          "CONCEPTS_RELATED_DISJOINT": {
             "DESCRIPTION": "Concepto(s) que no pertenece(n) a ningún esquema,conectado(s) a otro con skos:related y skos:broaderTransitive (la relación skos:related es disjunta con skos:broaderTransitive)",
             "NAME": "Conceptos relacionados con relaciones disjuntas",
-            "WARNING": "Warning: this ICV checks possible clashes on all patterns including subproperties of both skos:related and skos:broaderTransitive. However, it does not check the transitive closure of the skos:broaderTransitive relation. For this, activation of a reasoner is necessary. XXXXXXX"
+            "WARNING": "Advertencia: este ICV comprueba posibles conflictos en todos los patrones, incluidas las subpropiedades de skos:related y skos:broaderTransitive. Sin embargo, no comprueba el cierre transitivo de la relación skos:broaderTransitive. Para ello, es necesaria la activación de un razonador."
          },
          "CONCEPT_EXACT_MATCH_DISJOINT": {
             "DESCRIPTION": "Concepto(s) conectado(s) a otro con skos:exactMatch y skos:broadMatch o skos: relatedMatch (la relación skos:exactMatch es disjunta con skos:broadMatch y skos:relatedMatch)",
@@ -1226,7 +1226,7 @@
             "ADD_TO_SCHEME": "añadir a un esquema de conceptos",
             "DESCRIPTION": "Concepto(s) que no pertenece(n) a ningún esquema",
             "NAME": "Conceptos sin esquema",
-            "WARNING": "Warning: adding the concept to a skos:ConceptScheme may be not enough to ensure that it is visible in the concept tree. The concept may be still dangling. XXXXXXX"
+            "WARNING": "Advertencia: agregar el concepto a un skos:ConceptScheme puede que no sea suficiente para garantizar que sea visible en el árbol de conceptos. Si el concepto no está relacionado con otros conceptos puede que quede aislado."
          },
          "CYCLIC_HIERARCHICAL_CONCEPTS": {
             "CYCLES": "Ciclos",
@@ -1245,8 +1245,8 @@
          "HIERARCHICAL_REDUNDANCIES": {
             "DESCRIPTION": "Concepto(s) con relaciones jerárquicas redundantes con otro concepto",
             "EXAMPLE": [
-               "3rd statement is redundant since it is a consequence of 1) and 2) XXXXXXX",
-               "e.g. XXXXXXX"
+               "La tercera declaración es redundante ya que es una consecuencia de 1) y 2)",
+               "p.e."
             ],
             "NAME": "Redundancias jerárquicas",
             "SAME_SCHEME": "Mismo esquema",
@@ -1259,10 +1259,10 @@
             "SELECT_TOP_CONCEPT": "Seleccionar concepto superior"
          },
          "OWL_CONSISTENCY_VIOLATION": {
-            "DELETE_TRIPLE_WARNING": "Note: after deleting a triple, in order to detect if the inconsistencies have been resolved, the ICV will be automatically run again. XXXXXXX",
-            "DESCRIPTION": "Triples which determine OWL inconsistencies XXXXXXX",
-            "INFERENCE_EXPLANATION": "Inference explanation XXXXXXX",
-            "NAME": "OWL consistency violations XXXXXXX"
+            "DELETE_TRIPLE_WARNING": "Nota: después de eliminar un triple, para detectar si se han resuelto las inconsistencias, el ICV se ejecutará de nuevo automáticamente.",
+            "DESCRIPTION": "Triples que determinan inconsistencias OWL",
+            "INFERENCE_EXPLANATION": "Explicación de la inferencia",
+            "NAME": "Violaciones de coherencia de OWL"
          },
          "STRUCTUAL_CHECKS": "Comprobaciones estructurales",
          "TOP_CONCEPT_WITH_BROADER": {
@@ -1284,7 +1284,7 @@
          "EDIT_INVOKABLE_REPORT": "Editar informe invocable",
          "EDIT_SERVICE_INVOCATION": "Editar invocación de servicio"
       },
-      "DESTINATION_PATH": "Destination path XXXXXXX",
+      "DESTINATION_PATH": "Ruta de destino",
       "INVOCATION": {
          "ARGUMENTS": "Argumentos",
          "CUSTOM_OPERATIONS": "Operaciones personalizadas",
@@ -1298,7 +1298,7 @@
       "INVOKABLE_REPORTS": "Informes invocables",
       "REPORT": "Informe",
       "RESULT": "Resultado",
-      "SOURCE_PATH": "Source path XXXXXXX"
+      "SOURCE_PATH": "Ruta de origen"
    },
    "MESSAGES": {
       "ACL_CHANGE_ACCESS_CONFIRM": "¿Está seguro de cambiar el nivel de acceso de '{{proyecto}}' a '{{nivel}}' para el consumidor '{{consumidor}}'?",
@@ -1325,7 +1325,7 @@
       "ALREADY_EXISTING_CONFIG_FOR_SERVER_URL": "Ya existe una configuración para el mismo serverURL",
       "ALREADY_EXISTING_CONFIG_ID": "Ya existe una configuración con el mismo ID",
       "ALREADY_EXISTING_CUSTOM_FORM_ID": "Ya existe un formulario personalizado con el mismo ID",
-      "ALREADY_EXISTING_FILE_OVERWRITE_CONFIRM": "A file with the same name already exists. Do you want to overwrite it? XXXXXXX",
+      "ALREADY_EXISTING_FILE_OVERWRITE_CONFIRM": "Ya existe un archivo con el mismo nombre. ¿Quieres sobreescribirlo?",
       "ALREADY_EXISTING_FILTER_FOR_CLASS": "Ya existe un filtro para la clase seleccionada.",
       "ALREADY_EXISTING_FORM_COLLECTION_ID": "Ya existe una colección de formularios con el mismo ID",
       "ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE": "No se puede añadir un nuevo nodo para {{resource}} porque ya existe un nodo para el mismo recurso",
@@ -1333,7 +1333,7 @@
       "ALREADY_EXISTING_METADATA_ASSOCIATION": "Ya existe una asociación entre el mismo tipo de recurso y patrón.",
       "ALREADY_EXISTING_METADATA_PATTERN_NAME": "Ya existe un patrón de metadatos con el mismo nombre",
       "ALREADY_EXISTING_ROLE_NAME": "Ya existe un rol con el mismo nombre",
-      "ALREADY_EXISTING_SECTION": "A Section with the same name already exists XXXXXXX",
+      "ALREADY_EXISTING_SECTION": "Ya existe una sección con el mismo nombre",
       "ALREADY_USED_NODE_ID": "El ID de nodo proporcionado ya se utiliza para otro nodo",
       "BASEURI_AND_NAMESPACE_UPDATED": "BaseURI y el espacio de nombres se han actualizado correctamente",
       "BASEURI_REQUIRED": "BaseURI obligatorio",
@@ -1349,7 +1349,7 @@
       "CANNOT_EDIT_NOT_EXPLICIT_RESOURCES": "Todos los recursos seleccionados no son explícitos, por lo que no se pueden editar",
       "CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS": "No puede editar las credenciales de los repositorios remotos vinculados a un proyecto abierto. Por favor, cierre el proyecto y vuelva a intentarlo",
       "CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES": "El rango {{property}} no admite recursos. No puede enriquecer esta propiedad con un recurso remoto",
-      "CANNOT_EXPORT_ADV_GRAPH_APP_WITH_EXTERNAL_REF": "Cannot store this Advanced Graph Application since it contains reference(s) to node(s) defined in external header(s). XXXXXXX",
+      "CANNOT_EXPORT_ADV_GRAPH_APP_WITH_EXTERNAL_REF": "No se puede almacenar esta aplicación de grafo avanzado porque contiene referencias a nodos definidos en encabezados externos.",
       "CANNOT_GRANT_ADMIN_TO_INACTIVE_USER": "No se puede otorgar la autoridad de administrador a un usuario no activo. Por favor, active el usuario y vuelva a intentarlo",
       "CANNOT_IMPORT_DATASET_MISSING_ONTO_IRI": "El conjunto de datos seleccionado no proporciona ningún IRI de ontología, por lo que no se puede importar. Cambie el conjunto de datos.",
       "CANNOT_INFER_PEARL_ANNOTATIONS": "No se pueden inferir anotaciones en una PERLA no válida",
@@ -1368,10 +1368,10 @@
       "CLEAR_DATA_CONFIRM": "Esta operación borrará todos los datos almacenados en el proyecto, luego será redirigido a la página de inicio. ¿Está seguro de continuar?",
       "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "Parece que el sistema de colaboración está configurado pero no funciona (la configuración puede no ser válida o el servidor puede no ser accesible), por lo que estará deshabilitado.",
       "CONFIGURATION_SAVED": "Configuración guardada correctamente",
-      "CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM": "You are going to override the configuration by restoring the system default settings. Are you sure? XXXXXXX",
-      "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "You are going to set this configuration as system default. Are you sure? XXXXXXX",
-      "CONFIG_SYSTEM_DEFAULT_RESTORED": "System configuration restored XXXXXXX",
-      "CONFIG_SYSTEM_DEFAULT_SET": "Configuration set as system default XXXXXXX",
+      "CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM": "Va a anular la configuración restaurando la configuración predeterminada del sistema. ¿Está seguro?",
+      "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "Va a establecer esta configuración como predeterminada del sistema. ¿Está seguro?",
+      "CONFIG_SYSTEM_DEFAULT_RESTORED": "Configuración del sistema restaurada",
+      "CONFIG_SYSTEM_DEFAULT_SET": "Configuración establecida como predeterminada del sistema",
       "CUSTOM_FORM_PROP_CHAIN_DESCR": "Escriba la cadena como una secuencia de IRI separados por comas (,) (también se aceptan QNames)",
       "DATA_CLEARED": "Todos los datos se borraron correctamente.",
       "DATA_IMPORTED": "Datos importados correctamente",
@@ -1455,7 +1455,7 @@
       "LOADER_NOT_CONFIGURED": "Es necesario configurar el cargador",
       "LOADER_NOT_SAVED": "La configuración del cargador no se guarda. Para guardar la configuración del importador, es necesario guardar todas sus subconfiguraciones.",
       "LONG_PROCESS_WARN_CONFIRM": "Este puede ser un proceso largo. ¿Seguro que continuará?",
-      "LONG_RESOURCE_RENDERING_WARNING": "The rendering of the resource is too long: you may check the list of languages to be used for rendering in the preferences, or you may change the configuration of your Rendering Engine in case a custom one has been used XXXXXXX",
+      "LONG_RESOURCE_RENDERING_WARNING": "La representación del recurso es demasiado larga: puede consultar la lista de idiomas que se utilizarán para la representación en las preferencias, o puede cambiar la configuración de su motor de representación en caso de que se haya utilizado uno personalizado",
       "METADATA_PATTERN_REQUIRED": "Debes proporcionar al menos un patrón (Construcción, Actualización o Destrucción)",
       "MISSING_BINDING_NAME": "Falta el nombre de enlace en la posición {{position}}, inserte un nombre",
       "MISSING_DATA_REPO_CONFIG": "Es necesario configurar el repositorio de datos",
@@ -1504,9 +1504,9 @@
       "PASSWORD_RESET_INSTRUCTION_SENT": "Se envió un correo electrónico con las instrucciones para restablecer la contraseña a la dirección proporcionada.",
       "PEARL_CODE_WITH_ERROR": "El código PEARL contiene errores.",
       "PRELOAD_PROFILER_THRESHOLD_UPDATED": "Umbral del generador de perfiles de precarga actualizado",
-      "PROFILE_PROJECT_COMPLETED": "Profilation of project '{{project}}' completed XXXXXXX",
-      "PROFILE_PROJECT_CONFIRM": "Do you want to profile project '{{project}}'? XXXXXXX",
-      "PROFILE_PROJECT_REFRESH_CONFIRM": "The project '{{project}}' has already been profiled. Do you want to repeat and override the metadata? XXXXXXX",
+      "PROFILE_PROJECT_COMPLETED": "Se completó el perfil del proyecto '{{project}}'",
+      "PROFILE_PROJECT_CONFIRM": "¿Quieres establecer un perfil para el proyecto '{{project}}'?",
+      "PROFILE_PROJECT_REFRESH_CONFIRM": "El proyecto '{{project}}' ya tiene un perfil. ¿Quiere repetir y anular los metadatos?",
       "PROJECT_CREATED": "Proyecto creado correctamente",
       "PROJECT_OPEN_CLOSE_AND_RETRY": "El proyecto está abierto actualmente. Por favor, cierre el proyecto y vuelva a intentarlo.",
       "PROJ_LANGUAGES_PARSING_ERR": "La inicialización de idiomas para el proyecto '{{projName}}' ha encontrado un problema durante el análisis de la configuración de '{{propName}}'. Por favor, infórmelo al administrador del sistema.",
@@ -1541,7 +1541,7 @@
       "RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH": "El recurso {{resource}} no es accesible en el árbol actual ya que la ruta para llegar contiene un nodo obsoleto. Habilita la visualización de recursos obsoletos y repite la búsqueda",
       "RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM": "El recurso {{resource}} no es accesible en el árbol actual. ¿Desea abrir su Vista de recursos en un diálogo modal?",
       "RESOURCE_URI_COPIED_IN_CLIPBOARD": "¡URI de recurso copiado en el portapapeles!",
-      "RESTART_REPO_LOCAL_REQUIRED": "In order to make this change effective it may be necessary to restart the repository of the local project by restarting the whole triple store. XXXXXXX",
+      "RESTART_REPO_LOCAL_REQUIRED": "Para que este cambio sea efectivo, puede ser necesario reiniciar el repositorio del proyecto local reiniciando toda el triple store.",
       "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Estás anulando la plantilla actual al restaurar la configuración predeterminada. ¿Estás seguro?",
       "REVOKING_ADMIN_CONFIRM": "Está revocando la autoridad de administrador a {{user}}. ¿Está seguro?",
       "SAVE_BASEURI_CHANGE_CONFIRM": "¿Guardar cambio de baseURI? (Atención, la refactorización de baseURI podría ser un proceso largo)",
@@ -1552,7 +1552,7 @@
       "SET_DEFAULT_TEMPLATE_FOR_ALL_PROJ_CONFIRM": "Estás configurando la plantilla actual como configuración predeterminada para todos los proyectos. ¿Estás seguro?",
       "SHACL_SHAPES_CLEARED": "Todas las formas SHACL se borraron correctamente.",
       "SHACL_SHAPES_LOADED": "Las formas SHACL se cargaron correctamente",
-      "SHACL_VIOLATION_ERROR": "Fail in validating SHACL shape XXXXXXX",
+      "SHACL_VIOLATION_ERROR": "Falla en la validación de la forma SHACL",
       "SKOS_DIFFING_SERVER_NOT_RESPONDING": "El servidor SKOS_diffing no respondió, asegúrese de que esté funcionando",
       "STORED_PARAMETERIZED_QUERY_ALREADY_ADDED": "La consulta SPARQL parametrizada almacenada '{{ref}}' ya está en la lista de búsqueda personalizada almacenada. No se añadirá",
       "ST_DATA_FOLDER_UPDATED": "Carpeta de datos de SemanticTurkey actualizada",
@@ -1583,11 +1583,11 @@
       "URI_GENERATOR_CONFIG_UPDATED": "Se ha actualizado la configuración del generador de URI",
       "USER_ADMINISTRATOR_CREATED": "Se ha creado la cuenta de administrador. Ahora iniciará sesión automáticamente con las credenciales que proporcionó",
       "USER_CREATED": "Usuario creado correctamente",
-      "USER_CREATED_VERIFY_EMAIL": "Your account has been created. In order to complete the registration, a verification link has been sent to the email address you provided. XXXXXXX",
-      "USER_CREATED_WAIT_ACTIVATION": "Your account has been created and the administrator has been notified about your registration. Please wait for the system administrator to activate your account, then it will be possible to login with the credentials you provided XXXXXXX",
-      "USER_EMAIL_VERIFIED": "Your email has been verified and the administrator has been notified about your registration. Please wait for the system administrator to activate your account, then it will be possible to login with the credentials you provided XXXXXXX",
+      "USER_CREATED_VERIFY_EMAIL": "Se ha creado la cuenta. Para completar el registro, se ha enviado un enlace de verificación a la dirección de correo electrónico que proporcionó.",
+      "USER_CREATED_WAIT_ACTIVATION": "Se ha creado su cuenta y se ha notificado al administrador sobre su registro. Espere a que el administrador del sistema active su cuenta, luego será posible iniciar sesión con las credenciales que proporcionó.",
+      "USER_EMAIL_VERIFIED": "Su correo electrónico ha sido verificado y el administrador ha sido notificado sobre su registro. Espere a que el administrador del sistema active su cuenta, luego será posible iniciar sesión con las credenciales que proporcionó.",
       "USER_IRI_PERSONAL_URL_INCONSISTENT": "Marcó la opción para usar la URL personal como IRI del usuario, pero no se proporciona la URL. Ingrese una URL válida o desmarque la opción anterior",
-      "USER_REGISTERED_ACTIVATED": "User {{email}} has been succesfully activated XXXXXXX",
+      "USER_REGISTERED_ACTIVATED": "La usuario {{email}} se ha activado correctamente.",
       "VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM": "El tipo de valor no cumple con el rango de la propiedad {{property}}. La operación puede causar inconsistencias y mal funcionamiento. ¿Desea forzar la operación?"
    },
    "METADATA": {
@@ -1617,12 +1617,12 @@
          "LEXICALIZATION_SET": {
             "AVG_OF_LEXICALIZATIONS": "Número medio de Lexicalizaciones",
             "EMBEDDED_LEXICALIZATION_SETS": "Conjuntos de Lexicalización integrados",
-            "LEXICALIZATIONS": "Lexicalizations XXXXXXX",
+            "LEXICALIZATIONS": "Lexicalizaciones",
             "LEXICALIZATION_SET": "Conjunto de Lexicalización",
             "LEXICAL_ENTRIES": "Entradas léxicas",
             "LEXICON_DATASET": "Conjunto de datos de léxico",
             "PERCENTAGE": "Porcentaje",
-            "REFERENCES": "References XXXXXXX"
+            "REFERENCES": "Referencias"
          }
       },
       "METADATA_VOCABULARIES": {
@@ -1733,7 +1733,7 @@
          "REPO_ACCESS": "Acceso al repositorio",
          "REPO_LOCATION": "Localización del repositorio",
          "SUPPORT_REPO_ID": "Historia/Validación ID del repositorio",
-         "UNDO": "Undo XXXXXXX",
+         "UNDO": "Deshacer",
          "VALIDATION": "Validación"
       },
       "RESOURCE": {
@@ -1751,7 +1751,7 @@
          "AVATAR_URL": "URL de avatar",
          "CONFIRM_PASSWORD": "Confirmar contraseña",
          "EMAIL": "Correo electrónico",
-         "EMAIL_ADDRESS": "E-mail address XXXXXXX",
+         "EMAIL_ADDRESS": "Dirección de correo electrónico",
          "FAMILY_NAME": "Apellido",
          "GIVEN_NAME": "Nombre de pila",
          "LANGUAGE_PROFICIENCIES": "Competencias lingüísticas",
@@ -1761,7 +1761,7 @@
          "PERSONAL_URL_AS_IRI": "Usar URL personal como usuario IRI",
          "PHONE": "Teléfono",
          "REGISTERED": "Registrado",
-         "REGISTRATION_DATE": "Registration date XXXXXXX",
+         "REGISTRATION_DATE": "Fecha de registro",
          "USER_IRI": "Usuario IRI"
       }
    },
@@ -1835,7 +1835,7 @@
          "EDIT_ACL": "Editar ACL",
          "EDIT_DESCRIPTION": "Editar descripción",
          "EDIT_FACETS": "Editar facetas",
-         "EDIT_LABELS": "Edit labels XXXXXXX",
+         "EDIT_LABELS": "Editar etiquetas",
          "EDIT_PROJECT_ACL": "Editar ACL del proyecto",
          "EDIT_REMOTE_REPO_CONFIG": "Editar configuración de repositorio remoto",
          "EDIT_SETTINGS": "Editar la configuración del proyecto",
@@ -1898,12 +1898,12 @@
       },
       "RENDERING_ENGINE": "Motor de renderizado",
       "RESOURCE_METADATA": "Metadatos de recursos",
-      "SHACL_SHAPE_VALIDATION": "SHACL Shape Validation XXXXXXX",
-      "SHACL_SHAPE_VALIDATION_ON_COMMIT": "SHACL Shape Validation (on commit) XXXXXXX",
+      "SHACL_SHAPE_VALIDATION": "Validación de forma SHACL",
+      "SHACL_SHAPE_VALIDATION_ON_COMMIT": "Validación de forma SHACL (al confirmar)",
       "TRANSITIVE_IMPORTS": "Importaciones transitivas",
       "TRIVIAL_INFERENCE": "Inferencia trivial",
       "TRIVIAL_INFERENCE_INFO": "Habilitar inferencia trivial",
-      "UNDO_INFO": "Enable possibility to undo operation on data XXXXXXX",
+      "UNDO_INFO": "Habilitar la posibilidad de deshacer la operación sobre los datos",
       "URI_GENERATOR": "Generador de URI",
       "USE_DEFAULT": "Usar configuración predeterminada",
       "USE_RESOURCE_METADATA_INFO": "El uso de metadatos de recursos se puede habilitar también después de la creación del proyecto",
@@ -1950,7 +1950,7 @@
          "COPY_VALUE_TO_LOCALES": "Copiar valor a otras configuraciones regionales",
          "DELETE_ALL_VALUES": "Eliminar todos los valores",
          "EDIT_LITERAL_CONTENT": "Editar contenido literal",
-         "EXPLAIN_INFERRED_STATEMENT": "Explain inferred statement XXXXXXX",
+         "EXPLAIN_INFERRED_STATEMENT": "Explica la declaración inferida",
          "MOVE_XLABEL_TO_CONCEPT": "Mover xLabel a otro concepto",
          "SET_AS_DEPRECATED": "Establecer como obsoleto",
          "SHOW_HIDE_INFERRED": "Mostrar / ocultar información inferida",
@@ -1966,7 +1966,7 @@
       "LEX_VIEW": {
          "CATEGORY": "Categoría",
          "PRONUNCIATION": "Pronunciación",
-         "REFERENCE": "Reference XXXXXXX",
+         "REFERENCE": "Referencia",
          "RELATED": "Relacionado",
          "SEMANTIC_REFERENCE": "Referencia semántica",
          "TRANSLATION": "Traducción",
@@ -2005,7 +2005,7 @@
          "FORM_PRESENTATIONS": "Representaciones de formulario",
          "IMPORTS": "Importaciones",
          "LABEL_RELATIONS": "Relaciones de etiqueta",
-         "LEXICALIZATIONS": "Lexicalizations XXXXXXX",
+         "LEXICALIZATIONS": "Lexicalizaciones",
          "LEXICAL_FORMS": "Formas léxicas",
          "LEXICAL_SENSES": "Sentidos léxicos",
          "MEMBERS": "Miembros",
@@ -2033,8 +2033,8 @@
          "SHOW_DATATYPE_BADGE_INFO": "Si está habilitado, siempre se mostrará un indicador de tipo de datos al lado del valor. De lo contrario, el indicador solo se muestra en caso de un tipo de datos desconocido (el icono a la izquierda del valor clasificará el tipo de datos conocido)",
          "SHOW_DEPRECATED": "Mostrar valores obsoletos",
          "SHOW_DEPRECATED_INFO": "Si está habilitado, los recursos vinculados marcados como obsoletos se mostrarán en ResourceView",
-         "SORT_BY_RENDERING": "Sort lexicalizations by rendering languages XXXXXXX",
-         "SORT_BY_RENDERING_INFO": "If enabled, the values in the 'Lexicalizations' partition will be sorted with the same order of the rendering languages preference XXXXXXX",
+         "SORT_BY_RENDERING": "Ordenar lexicalizaciones por lenguajes de visualización",
+         "SORT_BY_RENDERING_INFO": "Si está habilitado, los valores en la partición 'Lexicalizaciones' se ordenarán con el mismo orden de preferencia de los idiomas de visualización",
          "SPLITTED_INFO": [
             "El panel Vista de recursos está dividido en dos: a la izquierda hay una Vista de recursos principal que describe (y está sincronizada con) el recurso seleccionado en el árbol / lista; a la derecha hay una Vista de recursos secundaria opcional que describe un recurso seleccionado (doble clic) en la vista principal de recursos ",
             "Este modo no se recomienda en pantallas con un ancho de resolución inferior a 1440 px"
@@ -2056,16 +2056,16 @@
       },
       "TERM_VIEW": {
          "BROADER_CONCEPTS": "Conceptos genéricos",
-         "CONCEPT_SCHEMES": "Concept schemes XXXXXXX",
+         "CONCEPT_SCHEMES": "Esquemas de conceptos",
          "REMOVE_BOX": "Eliminar cuadro",
          "TERM": "Término"
       },
       "TIME_MACHINE": {
-         "CHANGE_VERSION": "Change version XXXXXXX",
-         "CURRENT": "Current XXXXXXX",
-         "SELECT_DATE": "Select a date XXXXXXX",
-         "TIME_MACHINE": "Time machine XXXXXXX",
-         "TRAVER_TO_TIME": "Travel to any point in time XXXXXXX"
+         "CHANGE_VERSION": "Cambiar versión",
+         "CURRENT": "Actual",
+         "SELECT_DATE": "Seleccionar una fecha",
+         "TIME_MACHINE": "Máquina del tiempo",
+         "TRAVER_TO_TIME": "Viajar a cualquier lugar en el tiempo"
       },
       "TYPES": {
          "DETAILED": "Detallado",
@@ -2168,7 +2168,7 @@
             "GRAPH_PATTERN_INFO": "El patrón de grafo debe contener solo los ID de nodo ya definidos en cualquier encabezado. <br> También podría contener un marcador de posición <code> {{pred}} </code> que se reemplazará con el predicado del encabezado . En caso de que se use <code> {{pred}} </code> en el patrón, se debe proporcionar un predicado predeterminado <strong> </strong> como respaldo cuando el encabezado no representa ningún predicado válido. ",
             "PREFIX_NS_MAPPINGS": "Asignaciones de prefijo-espacio de nombres"
          },
-         "DELETE_INFO": "Tells if this Graph Application should be inserted in the delete section of the PEARL code XXXXXXX",
+         "DELETE_INFO": "Indica si esta aplicación de grafo debe insertarse en la sección de eliminación del código PEARL",
          "SIMPLE": {
             "ASSERT_TYPE_INFO": "Marque esta opción para afirmar el rdf: tipo del nodo generado",
             "RANGE": "Rango",
@@ -2180,27 +2180,27 @@
       "HEADER_EDITOR": {
          "ADDITIONAL_PRED_OBJ": "Objeto de predicado adicional",
          "ADD_ADV_GRAPH_APPL": "añadir aplicación de grafos avanzados",
-         "ADD_MEMOIZE_MAP": "Add memoization map ID XXXXXXX",
+         "ADD_MEMOIZE_MAP": "Agregar ID de mapa de memoización",
          "ADD_SIMPLE_GRAPH_APPL": "añadir una aplicación de grafo simple",
          "ASSERT_TYPE": "Tipo de afirmación",
-         "ASSERT_TYPE_INFO": "Marque esta opción para afirmar una membresía de clase para el nodo sujeto",
+         "ASSERT_TYPE_INFO": "Marcar esta opción para afirmar una membresía de clase para el nodo sujeto",
          "CONVERTER_TYPE": "Tipo de convertidor",
          "CONVERTER_URI": "Convertidor URI",
-         "COPY_MEMOIZED_NODE_CONVERTER": "Copy memoized node converter XXXXXXX",
-         "COPY_MEMOIZED_NODE_CONVERTER_INFO": "Copy the converter configuration from an existing node which uses memoization XXXXXXX",
+         "COPY_MEMOIZED_NODE_CONVERTER": "Copiar convertidor de nodos memoizados",
+         "COPY_MEMOIZED_NODE_CONVERTER_INFO": "Copiar la configuración del convertidor de un nodo existente que usa la memoización",
          "GRAPH_APPLICATIONS": "Aplicaciones de grafo",
          "GRAPH_APPLICATIONS_INFO": "Lista de aplicaciones de los nodos definidos en el panel 'Nodos'",
          "HEADER": "Encabezado",
          "HEADER_EDITOR": "Editor de encabezados",
          "IGNORE_HEADER": "Ignorar encabezado",
          "IGNORE_HEADER_INFO": "Si está marcado, el encabezado actual se ignorará en el código PEARL generado y, por lo tanto, en el proceso de conversión",
-         "MEMOIZE": "Memoize XXXXXXX",
-         "MEMOIZE_INFO": "Apply the memoization: given the same input, the converter will generate the same output XXXXXXX",
+         "MEMOIZE": "Memoizar",
+         "MEMOIZE_INFO": "Aplicar la memoización: dada la misma entrada, el convertidor generará la misma salida",
          "NODES_INFO": "Lista de nodos generados a partir del encabezado actual",
          "NODE_EDITOR": "Editor de nodo",
          "NODE_ID": "ID de nodo",
          "PEARL_FEATURE": "Característica PEARL",
-         "SELECT_MEMOIZED_NODE": "Select the node from which you want to copy the memoized converter configuration XXXXXXX",
+         "SELECT_MEMOIZED_NODE": "Seleccione el nodo desde el que desea copiar la configuración del convertidor memoizado",
          "SUBJECT_HEADER_EDITOR": "Editor de encabezado de asunto",
          "SUBJ_HEADER_INFO": "Establecer el encabezado utilizado para la creación del asunto",
          "SUBJ_NODE_ID_INFO": "Este valor es de solo lectura, 'asunto' es una palabra clave reservada para el nodo de asunto"
@@ -2310,8 +2310,8 @@
       "WARNING": "Aviso"
    },
    "UNDO": {
-      "OPERATION_UNDONE": "Operation undone XXXXXXX",
-      "OPERATION_UNDONE_INFO": "The following operation has been undone: {{operation}} XXXXXXX"
+      "OPERATION_UNDONE": "Operación deshecha",
+      "OPERATION_UNDONE_INFO": "Se ha deshecho la siguiente operación: {{operación}}"
    },
    "USER": {
       "LOGIN": "Inicio de sesión",
