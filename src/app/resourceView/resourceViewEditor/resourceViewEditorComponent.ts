@@ -243,7 +243,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     /**
      * Fill all the partitions of the RV. This not requires that the RV description is fetched again from server,
-     * in fact if the user switches on/off the inference, there's no need to perform a new request.
+     * in fact if the user switches on/off the value filter, there's no need to perform a new request.
      */
     private fillPartitions() {
         let resourcePartition: any = this.resViewResponse.resource;
@@ -734,7 +734,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     initVersions() {
         this.versionList = VBContext.getWorkingProjectCtx(this.projectCtx).resViewCtx.versions;
-        if (this.versionList == null) {
+        if (this.versionList == null && AuthorizationEvaluator.isAuthorized(VBActionsEnum.versionsGetVersions)) {
             this.versionService.getVersions().subscribe(
                 versions => {
                     this.versionList = versions;

@@ -23,7 +23,7 @@
 
             <div *ngIf="timeActionsEnabled" class="dropdown ml-2" ngbDropdown>
                 <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle (click)="initVersions()" [title]="'RESOURCE_VIEW.TIME_MACHINE.TIME_MACHINE'|translate" 
-                    [disabled]="versionList?.length == 0 && !timeMachineAvailable">
+                    [disabled]="(!versionList || versionList.length == 0) && !timeMachineAvailable">
                     <span class="far fa-clock"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
