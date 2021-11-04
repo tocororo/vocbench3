@@ -1344,7 +1344,6 @@
         "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED": "Cannot add a new node for {{resource}}. In this graph you can only add resources locally defined.",
         "CANNOT_ADD_SAME_RANGE_TO_DIFFERENT_PROP_TYPES": "The addition of the same range to multiple properties is not allowed on properties of different types",
         "CANNOT_CHANGE_ADMIN_STATUS": "Cannot change the status of an administrator. Please revoke the administrator authority first and retry",
-        "CANNOT_COPY_RESOURCE_URI_IN_CLIPBOARD": "Unable to copy the resource URI in the clipboard",
         "CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR": "Impossible to create the CustomForm '{{cfId}}'. Its description may contains error.",
         "CANNOT_EDIT_DIFFERENT_RESOURCE_CODE": "You cannot modify a different resource. The only admitted subject is the editing resource",
         "CANNOT_EDIT_NOT_EXPLICIT_RESOURCES": "All the selected resources are not explicit, so they cannot be edited",

@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, SimpleChanges, ViewChild } from "@angular/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
+import { ToastService } from "src/app/widget/toast/toastService";
 import { ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { RefactorServices } from "../../services/refactorServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -19,16 +20,16 @@ export class ResourceRenameComponent {
     @ViewChild('localrenameinput') localRenameInput: ElementRef;
     @ViewChild('totalrenameinput') totalRenameInput: ElementRef;
 
-    private renameDisabled: boolean = true;
+    renameDisabled: boolean = true;
 
     private localName: string;
-    private pristineNamespace: string;
-    private pristineLocalName: string;
+    pristineNamespace: string;
+    pristineLocalName: string;
 
-    private renameLocked = true;
-    private namespaceLocked = true;
+    renameLocked = true;
+    namespaceLocked = true;
 
-    constructor(private refactorService: RefactorServices, private basicModals: BasicModalServices) { }
+    constructor(private refactorService: RefactorServices, private basicModals: BasicModalServices, private toastService: ToastService) { }
 
     ngOnInit() {
         if (this.resource.isURIResource()) {
@@ -51,7 +52,7 @@ export class ResourceRenameComponent {
     /** 
      * Enable and focus the input text to rename the resource 
      */
-    private startRename() {
+    startRename() {
         this.localRenameInput.nativeElement.focus();
         this.renameLocked = false;
     }
@@ -59,22 +60,22 @@ export class ResourceRenameComponent {
     /**
      * Cancel the renaming of the resource and restore the original UI
      */
-    private cancelRename() {
+    cancelRename() {
         //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
         this.localName = (<ARTURIResource>this.resource).getLocalName(); //restore the local name
         this.renameLocked = true;
         this.namespaceLocked = true;
     }
 
-    private blockNamespace() {
+    blockNamespace() {
         this.namespaceLocked = !this.namespaceLocked;
     }
 
     /**
      * Apply the renaming of the resource and restore the original UI
      */
-    private renameResource() {
-        var newUri: string;
+    renameResource() {
+        let newUri: string;
         //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
         if (this.namespaceLocked) { //just the namespace has changed
             if (this.localName.trim() == "") {
@@ -94,7 +95,7 @@ export class ResourceRenameComponent {
         if ((<ARTURIResource>this.resource).getURI() != newUri) { //if the uri has changed
             let toRes = new ARTURIResource(newUri);
             this.refactorService.changeResourceURI(<ARTURIResource>this.resource, toRes).subscribe(
-                stResp => {
+                () => {
                     this.renameLocked = true;
                     this.namespaceLocked = true;
                 },
@@ -109,24 +110,13 @@ export class ResourceRenameComponent {
 
     /**
      * Since URI of URIResource is splitted in namespace and localName, this method allows
-     * to copy the complete URI in the clipboard. It uses a workaround described here
-     * http://stackoverflow.com/a/30810322/5805661
+     * to copy the complete URI in the clipboard.
      */
-    private copyToClipboard() {
-        var textArea = document.createElement("textarea");
+    copyToClipboard() {
         //this method is called by clicking on a button visible only if the resource is a URIResource, so cast is safe
-        textArea.value = (<ARTURIResource>this.resource).getURI();
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-            var successful = document.execCommand('copy');
-            var msg = successful ? 'successful' : 'unsuccessful';
-            this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.RESOURCE_URI_COPIED_IN_CLIPBOARD"});
-        } catch (err) {
-            this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_COPY_RESOURCE_URI_IN_CLIPBOARD"}, ModalType.error);
-        } finally {
-            document.body.removeChild(textArea);
-        }
+        navigator.clipboard.writeText((<ARTURIResource>this.resource).getURI()).then(() => {
+            this.toastService.show({key:"STATUS.OPERATION_DONE"}, { key: "MESSAGES.RESOURCE_URI_COPIED_IN_CLIPBOARD" }, { toastClass: "bg-info", textClass: "text-white" });
+        }, function (err) {});
     }
 
 }
