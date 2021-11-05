@@ -46,6 +46,7 @@ export abstract class AbstractList extends AbstractStruct {
         this.checkedNodes = [];
         this.nodeChecked.emit(this.checkedNodes);
         this.nodeLimit = this.initialNodes;
+        this.unauthorized = false;
     }
 
     /**

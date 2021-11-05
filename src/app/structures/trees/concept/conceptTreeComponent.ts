@@ -77,6 +77,7 @@ export class ConceptTreeComponent extends AbstractTree {
 
     initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetConceptTaxonomy)) {
+            this.unauthorized = true;
             return;
         }
 

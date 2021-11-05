@@ -2,6 +2,10 @@
 
     <div class="card-body vbox">
 
+        <div *ngIf="unauthorized" class="alert alert-danger m-2">
+            {{'MESSAGES.UNAUTHORIZED_VIEW'|translate}}
+        </div>
+
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
             <ng-container *ngFor="let n of list; let idx=index">
                 <div *ngIf="idx < nodeLimit && (!n.scheme.isDeprecated() || showDeprecated && n.scheme.isDeprecated())">

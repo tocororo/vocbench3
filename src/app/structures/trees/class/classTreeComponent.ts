@@ -28,8 +28,6 @@ export class ClassTreeComponent extends AbstractTree {
 
     structRole = RDFResourceRolesEnum.cls;
 
-    private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initTree when the view is not initialized
-
     constructor(private clsService: ClassesServices, private searchService: SearchServices,
         eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(eventHandler, basicModals, sharedModals);
@@ -45,6 +43,7 @@ export class ClassTreeComponent extends AbstractTree {
 
     initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetClassTaxonomy)) {
+            this.unauthorized = true;
             return;
         }
         

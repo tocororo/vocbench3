@@ -53,6 +53,7 @@ export class PropertyTreeComponent extends AbstractTree {
 
     initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy)) {
+            this.unauthorized = true;
             return;
         }
 

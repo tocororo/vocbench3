@@ -44,6 +44,7 @@ export class SchemeListComponent extends AbstractList {
 
     ngOnInit() {
         if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetSchemes)) {
+            this.unauthorized = true;
             return;
         }
         this.init();

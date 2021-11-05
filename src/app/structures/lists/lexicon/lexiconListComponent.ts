@@ -50,6 +50,7 @@ export class LexiconListComponent extends AbstractList {
 
     ngOnInit() {
         if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexGetLexicon)) {
+            this.unauthorized = true;
             return;
         }
         this.init();

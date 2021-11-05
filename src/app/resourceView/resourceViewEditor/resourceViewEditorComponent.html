@@ -2,28 +2,28 @@
     <div class="card-header">
         <div class="hbox" style="align-items: center">
             <rdf-resource *ngIf="resource" [resource]="resource"></rdf-resource>
-            <resource-rename [resource]="resource" style="flex: 1;" [readonly]="readonly" (update)="buildResourceView(resource)">
+            <resource-rename [resource]="resource" style="flex: 1;" [readonly]="readonly || disabled" (update)="buildResourceView(resource)">
             </resource-rename>
             
-            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: rendering}" [title]="'COMMONS.RENDERING'|translate" (click)="switchRendering()">
+            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: rendering}" [title]="'COMMONS.RENDERING'|translate" (click)="switchRendering()" [disabled]="disabled">
                 <span class="fas fa-font"></span>
             </button>
-            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: showInferred}" [title]="'RESOURCE_VIEW.ACTIONS.SHOW_HIDE_INFERRED'|translate" (click)="switchInferred()">
+            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: showInferred}" [title]="'RESOURCE_VIEW.ACTIONS.SHOW_HIDE_INFERRED'|translate" (click)="switchInferred()" [disabled]="disabled">
                 <span *ngIf="showInferred" class="fas fa-eye"></span>
                 <span *ngIf="!showInferred" class="fas fa-eye-slash"></span>
             </button>
-            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: valueFilterLangEnabled}" [title]="'RESOURCE_VIEW.ACTIONS.TOGGLE_VALUE_FILTER_LANG'|translate" (click)="switchValueFilterLang()">
+            <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: valueFilterLangEnabled}" [title]="'RESOURCE_VIEW.ACTIONS.TOGGLE_VALUE_FILTER_LANG'|translate" (click)="switchValueFilterLang()" [disabled]="disabled">
                 <span class="fas fa-filter"></span>
             </button>
             
             <button *ngIf="notificationsAvailable" class="btn btn-light btn-xs ml-2" [ngClass]="{active: isWatching}" 
-                (click)="changeNotificationStatus()" [title]="'RESOURCE_VIEW.ACTIONS.TOGGLE_NOTIFICATIONS'|translate">
+                (click)="changeNotificationStatus()" [title]="'RESOURCE_VIEW.ACTIONS.TOGGLE_NOTIFICATIONS'|translate" [disabled]="disabled">
                 <span class="fas fa-bell"></span>
             </button>
 
             <div *ngIf="timeActionsEnabled" class="dropdown ml-2" ngbDropdown>
                 <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle (click)="initVersions()" [title]="'RESOURCE_VIEW.TIME_MACHINE.TIME_MACHINE'|translate" 
-                    [disabled]="(!versionList || versionList.length == 0) && !timeMachineAvailable">
+                    [disabled]="(!versionList || versionList.length == 0) && !timeMachineAvailable || disabled">
                     <span class="far fa-clock"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
@@ -52,7 +52,7 @@
             </div>
 
             <div *ngIf="collaborationAvailable" class="dropdown ml-2" ngbDropdown>
-                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [title]="'COLLABORATION.ACTIONS.SHOW_ISSUES'|translate">
+                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [title]="'COLLABORATION.ACTIONS.SHOW_ISSUES'|translate" [disabled]="disabled">
                     <span [class]="'fas fa-exclamation-circle ' + issuesStruct.btnClass"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
@@ -71,19 +71,22 @@
                 </div>
             </div>
 
-            <button class="btn btn-light btn-xs ml-2" [title]="'ACTIONS.REFRESH'|translate" (click)="buildResourceView(resource)">
+            <button class="btn btn-light btn-xs ml-2" [title]="'ACTIONS.REFRESH'|translate" (click)="buildResourceView(resource)" [disabled]="disabled">
                 <span class="fas fa-redo"></span>
             </button>
 
-            <button *ngIf="settingsAvailable" class="btn btn-light btn-xs ml-2" [title]="'COMMONS.SETTINGS'|translate" (click)="openSettings()">
+            <button *ngIf="settingsAvailable" class="btn btn-light btn-xs ml-2" [title]="'COMMONS.SETTINGS'|translate" (click)="openSettings()" [disabled]="disabled">
                 <span class="fas fa-cog"></span>
             </button>
             
-            <res-view-menu [resource]="resource" [rendering]="rendering" [showInferred]="showInferred" [readonly]="readonly" [projectCtx]="projectCtx"
+            <res-view-menu [resource]="resource" [rendering]="rendering" [showInferred]="showInferred" [readonly]="readonly || disabled" [projectCtx]="projectCtx"
                 (update)="buildResourceView(resource)" (assertInferred)="assertInferredStatements()"></res-view-menu>
         </div>
     </div>
     <div class="card-body scrollableContainer">
+        <div *ngIf="unauthorizedResource" class="alert alert-danger">
+            {{'RESOURCE_VIEW.STATUS.UNAUTHORIZED_RESOURCE'|translate}}
+        </div>
         <div *ngIf="unexistingResource" class="alert alert-danger">
             {{'RESOURCE_VIEW.STATUS.RESOURCE_NOT_EXISTING'|translate}}
         </div>
@@ -220,7 +223,7 @@
     <div class="card-footer" style="min-height: 31px;">
         <div *ngIf="resourcePosition" class="float-right">
             <div ngbDropdown placement="top-right">
-                <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle style="padding: 0px; border: none; background-color: transparent;">
+                <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle style="padding: 0px; border: none; background-color: transparent;" [disabled]="disabled">
                     <span [ngSwitch]="resource.getAdditionalProperty('accessMethod')">
                         {{'STATUS.STATUS'|translate}}:
                         <ng-container *ngSwitchCase="'local'">

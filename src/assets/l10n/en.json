@@ -1577,6 +1577,7 @@
         "TRANSFORMER_NOT_SAVED": "Transformer at position {{position}} is not saved. In order to save a transformer chain all its transformers need to be saved.",
         "UNAUTHORIZED_SPARQL_QUERY": "You are not authorized to perform SPARQL query",
         "UNAUTHORIZED_SPARQL_UPDATE": "You are not authorized to perform SPARQL update",
+        "UNAUTHORIZED_VIEW": "You don't have the required permissions to access this view",
         "UNHANDLED_AXIOM_PROPERTY": "{{property}} is not a class axiom known property, it cannot be handled.",
         "UNHANDLED_LEXICAL_FORM_PROPERTY": "{{property}} is not a lexical form known property, it cannot be handled.",
         "UPDATE_MULTIPLE_HEADER_SAME_NAME_CONFIRM": "There are multiple headers with the same name ({{headerName}}). Do you want to apply the changes to all of them?",
@@ -2052,6 +2053,7 @@
             "REMOTE_DATASET": "Remote Dataset",
             "RESOURCE_NOT_EXISTING": "This resource is not available in the current project",
             "RESOURCE_UNKNOWN_HOST": "This resource is not available on accessible local projects nor can be reached on the Web",
+            "UNAUTHORIZED_RESOURCE": "You don't have the required permissions to access this resource",
             "UNKNOWN_POSITION": "Unknown position"
         },
         "TERM_VIEW": {

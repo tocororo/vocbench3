@@ -25,6 +25,8 @@ export abstract class AbstractStruct {
 
     abstract structRole: RDFResourceRolesEnum; //declare the type of resources in the panel
 
+    unauthorized: boolean = false; //true if user is not authorized to access the tree/list
+
     eventSubscriptions: Subscription[] = [];
     selectedNode: ARTURIResource;
     checkedNodes: ARTURIResource[] = [];
@@ -61,7 +63,7 @@ export abstract class AbstractStruct {
 
     abstract setInitialStatus(): void
 
-    private onNodeSelected(node: ARTURIResource) {
+    onNodeSelected(node: ARTURIResource) {
         if (this.selectedNode != undefined) {
             this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
         }
@@ -70,7 +72,7 @@ export abstract class AbstractStruct {
         this.nodeSelected.emit(node);
     }
 
-    private onNodeChecked(event: { node: ARTURIResource, checked: boolean }) {
+    onNodeChecked(event: { node: ARTURIResource, checked: boolean }) {
         if (event.checked) {
             this.checkedNodes.push(event.node);
         } else {

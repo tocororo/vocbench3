@@ -81,6 +81,7 @@ export abstract class AbstractTree extends AbstractStruct {
         this.checkedNodes = [];
         this.nodeChecked.emit(this.checkedNodes);
         this.rootLimit = this.initialRoots;
+        this.unauthorized = false;
     }
 
     abstract openTreeAt(node: ARTURIResource): void;

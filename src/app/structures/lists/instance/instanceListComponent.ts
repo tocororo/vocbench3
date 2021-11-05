@@ -74,6 +74,7 @@ export class InstanceListComponent extends AbstractList {
 
     initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetInstances)) {
+            this.unauthorized = true;
             return;
         }
 

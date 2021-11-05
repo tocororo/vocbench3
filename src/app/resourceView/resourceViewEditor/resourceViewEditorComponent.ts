@@ -51,6 +51,7 @@ import { TimeMachineModal } from "./timeMachine/timeMachineModal";
 export class ResourceViewEditorComponent extends AbstractResourceView {
     @Input() resource: ARTResource;
     @Input() readonly: boolean = false;
+    @Input() disabled: boolean = false; //disable all the interaction, also those available in readonly (e.g. rendering, value-filter, inference...)
     @Input() inModal: boolean;
     @Input() projectCtx: ProjectContext;
     @Input() atTime: Date; //java.time.ZonedDateTime
@@ -62,6 +63,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     private eventSubscriptions: Subscription[] = [];
 
+    unauthorizedResource: boolean = false; //true if user has no capabilities for accessing the current resource (capability for invoking getResourceView)
     unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
     unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
 
@@ -205,8 +207,16 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
      * - some partition has performed a change and emits an update event (which invokes this method, see template)
      */
     public buildResourceView(res: ARTResource) {
+
+        this.unauthorizedResource = false;
+        if (this.resource.getRole() != RDFResourceRolesEnum.mention && this.resource.getRole() != RDFResourceRolesEnum.individual) {
+            this.unauthorizedResource = !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceViewGetResourceView, this.resource)
+        }
+        this.disabled = this.unauthorizedResource;
+        if (this.unauthorizedResource) return;
+        
+
         this.showInferredPristine = this.showInferred;
-        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         if (this.activeVersion != null) {
             HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
         }
@@ -214,13 +224,15 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         if (this.atTime != null) {
             getResViewFn = this.resViewService.getResourceViewAtTime(<ARTURIResource>res, this.atTime); //cast safe since atTime is provided only if res is IRI
         }
-        getResViewFn.subscribe(
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+        getResViewFn.pipe(
+            finalize(() => UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement))
+        ).subscribe(
             stResp => {
                 HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;
                 this.fillPartitions();
                 this.unknownHost = false;
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },
             (err: Error) => {
                 if (err.name.endsWith("UnknownHostException")) {
@@ -707,9 +719,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         if (!this.showInferredPristine) { //resource view has been initialized with showInferred to false, so repeat the request
             this.buildResourceView(this.resource);
         } else { //resource view has been initialized with showInferred to true, so there's no need to repeat the request
-            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.fillPartitions();
-            UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
         }
     }
 
@@ -725,9 +735,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         valueFilterLangPref.enabled = this.valueFilterLangEnabled;
         this.vbProp.setValueFilterLanguages(valueFilterLangPref);
         //update the RV
-        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.fillPartitions();
-        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
     }
 
     //TIME ACTIONS
@@ -870,9 +878,10 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         this.collabModals.createIssue().then(
             formMap => {
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                this.collaborationService.createIssue(<ARTURIResource>this.resource, formMap).subscribe(
-                    stResp => {
-                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                this.collaborationService.createIssue(<ARTURIResource>this.resource, formMap).pipe(
+                    finalize(() => UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement))
+                ).subscribe(
+                    () => {
                         this.initCollaboration();
                     }
                 );
@@ -885,9 +894,10 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         this.collabModals.openIssueList().then(
             issue => {
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                this.collaborationService.assignResourceToIssue(issue.getKey(), <ARTURIResource>this.resource).subscribe(
-                    stResp => {
-                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                this.collaborationService.assignResourceToIssue(issue.getKey(), <ARTURIResource>this.resource).pipe(
+                    finalize(() => UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement))
+                ).subscribe(
+                    () => {
                         this.initCollaboration();
                     },
                 );
@@ -919,9 +929,10 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     discoverDataset() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.metadataRegistryService.discoverDataset(<ARTURIResource>this.resource).subscribe(
+        this.metadataRegistryService.discoverDataset(<ARTURIResource>this.resource).pipe(
+            finalize(() => UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement))
+        ).subscribe(
             metadataDataset => {
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 this.buildResourceView(this.resource);
             }
         )

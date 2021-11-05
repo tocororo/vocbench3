@@ -36,6 +36,7 @@ export class DatatypeListComponent extends AbstractList {
 
     ngOnInit() {
         if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesGetDatatype)) {
+            this.unauthorized = true;
             return;
         }
         this.init();

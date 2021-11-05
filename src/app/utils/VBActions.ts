@@ -219,6 +219,8 @@ export enum VBActionsEnum {
     resourceMetadataPatternRead = "resourceMetadataPatternRead",
     resourceMetadataPatternUpdate = "resourceMetadataPatternUpdate",
     resourceMetadataPatternDelete = "resourceMetadataPatternDelete",
+    //ResourceView
+    resourceViewGetResourceView = "resourceViewGetResourceView",
     //Shacl
     shaclBatchValidation = "shaclBatchValidation",
     shaclClearShapes = "shaclClearShapes",

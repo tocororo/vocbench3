@@ -47,6 +47,7 @@ export class CollectionTreeComponent extends AbstractTree {
 
     initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy)) {
+            this.unauthorized = true;
             return;
         }
 

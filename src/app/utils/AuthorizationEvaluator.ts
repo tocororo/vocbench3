@@ -178,6 +178,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.resourceMetadataPatternDelete]: 'auth(pm(resourceMetadata,pattern), "D").',
         [VBActionsEnum.resourceMetadataPatternRead]: 'auth(pm(resourceMetadata,pattern), "R").',
         [VBActionsEnum.resourceMetadataPatternUpdate]: 'auth(pm(resourceMetadata,pattern), "U").',
+        [VBActionsEnum.resourceViewGetResourceView]: 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "R").',
         [VBActionsEnum.shaclBatchValidation]: 'auth(rdf, "R").',
         [VBActionsEnum.shaclClearShapes]: 'auth(rdf(shacl), "D").',
         [VBActionsEnum.shaclExportShapes]: 'auth(rdf(shacl), "R").',
@@ -283,7 +284,7 @@ export class AuthorizationEvaluator {
         }
     }
 
-    private static evaulateGoal(goal: string): boolean {
+    static evaulateGoal(goal: string): boolean {
         let cachedAuth: boolean = this.authCache[goal];
         if (cachedAuth != null) { //if it was chached => return it
             return cachedAuth;
