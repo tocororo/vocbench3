@@ -16,7 +16,7 @@
             <tbody style="overflow: auto;">
                 <ng-container *ngIf="resultType != 'boolean'">
                     <ng-container *ngFor="let bindings of queryResult; let i=index">
-                        <ng-container *ngIf="i >= resultsPage*resultsLimit && i < resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
+                        <ng-container *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit"> <!-- paging filter -->
                             <tr>
                                 <td *ngFor="let h of headers">
                                     <span *ngIf="bindings[h]" [ngClass]="{ clickable: isBindingResource(bindings[h]) }" style="white-space: pre-wrap;" (click)="onBindingClick(bindings[h])">{{getBindingShow(bindings[h])}}</span>
@@ -36,11 +36,13 @@
         </table>
     </div>
 
-    <div class="mt-2">
+    <div class="d-flex align-items-center mt-2">
+
         <span *ngIf="queryResult != null && resultType != 'boolean'">
             {{'SPARQL.RESULTS.RESULTS_COUNT'|translate}}: {{queryResult.length}}
         </span>
-        <div class="hbox ml-2" style="align-items: center; display: inline-flex; margin-left: 6px;">
+        
+        <div class="d-flex align-items-center ml-2" style="flex: 1">
             <div class="dropdown ml-2" ngbDropdown>
                 <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle
                     [disabled]="queryResult == null || resultType == 'boolean'">
@@ -56,20 +58,38 @@
                 </div>
             </div>
         </div>
+
         <button *ngIf="isOpenGraphEnabled()" class="btn btn-xs btn-light ml-2" (click)="openGraph()">
             <img src="./assets/images/icons/res/ontology.png" [title]="'SPARQL.RESULTS.SHOW_RESULTS_AS_GRAPH'|translate" width="11px">
         </button>
-        <div class="btn-group btn-group-xs float-right">
-            <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="resultsPage=resultsPage-1" [disabled]="resultsPage==0">
-                <span class="fas fa-caret-left"></span>
-            </button>
-            <button class="btn btn-light" style="cursor: auto" disabled>
-                <span>{{resultsPage+1}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{resultsTotPage}}</span>
-            </button>
-            <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="resultsPage=resultsPage+1" [disabled]="resultsPage>=resultsTotPage-1">
-                <span class="fas fa-caret-right"></span>
-            </button>
+
+        <div class="d-flex align-items-center" style="justify-content: end;">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-light" [title]="'COMMONS.PAGING.PREV_PAGE'|translate" (click)="page=page-1" [disabled]="page <= 0">
+                    <span class="fas fa-caret-left"></span>
+                </button>
+                <button class="btn btn-light" style="cursor: auto" disabled>
+                    <span>{{pageCount != 0 ? page+1 : '0'}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{pageCount}}</span>
+                </button>
+                <button class="btn btn-light" [title]="'COMMONS.PAGING.NEXT_PAGE'|translate" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                    <span class="fas fa-caret-right"></span>
+                </button>
+            </div>
+
+            <div class="d-flex align-items-center ml-3">
+                <label style="white-space: nowrap;">{{'COMMONS.PAGING.GO_TO'|translate}}:</label>
+                <div class="input-group input-group-sm ml-2">
+                    <select class="form-control" [(ngModel)]="pageSelectorOpt" [disabled]="pageSelector.length == 0">
+                        <option *ngFor="let p of pageSelector" [ngValue]="p">{{p+1}}</option>
+                    </select>
+                    <span class="input-group-append">
+                        <button class="btn btn-light" (click)="goToPage()" [disabled]="pageSelectorOpt == null">{{'ACTIONS.GO'|translate}}</button>
+                    </span>
+                </div>
+            </div>
         </div>
+
+
     </div>
 
 </div>

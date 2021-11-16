@@ -34,9 +34,11 @@ export class QueryResultsComponent {
     private desc_Order: string = "_desc";
 
     //result paging
-    private resultsPage: number = 0;
-    private resultsTotPage: number = 0;
+    page: number = 0;
+    pageCount: number = 0;
     private resultsLimit: number = 100;
+    pageSelector: number[] = [];
+    pageSelectorOpt: number;
 
     private isGraphAuthorized: boolean;
 
@@ -49,8 +51,10 @@ export class QueryResultsComponent {
 
     ngOnChanges() {
         this.headers = null;
-        this.resultsPage = 0;
-        this.resultsTotPage = 1;
+        this.page = 0;
+        this.pageCount = 1;
+        this.pageSelector = [];
+        this.pageSelectorOpt = null;
         
         this.respSparqlJSON = this.queryResultResp.sparql;
         this.resultType = this.queryResultResp.resultType;
@@ -59,7 +63,11 @@ export class QueryResultsComponent {
             this.queryResult = this.queryResultResp.sparql.results.bindings;
             //paging handler
             if ((<QueryResultBinding[]>this.queryResult).length > 0) {
-                this.resultsTotPage = Math.ceil((<QueryResultBinding[]>this.queryResult).length / this.resultsLimit);
+                this.pageCount = Math.ceil((<QueryResultBinding[]>this.queryResult).length / this.resultsLimit);
+            }
+            
+            for (let i = 0; i < this.pageCount; i++) {
+                this.pageSelector.push(i);
             }
         } else if (this.queryResultResp.resultType == ResultType.boolean) {
             this.headers = ["boolean"];
@@ -67,7 +75,7 @@ export class QueryResultsComponent {
         }
     }
 
-    private sortResult(header: string) {
+    sortResult(header: string) {
         if (this.sortOrder == header + this.asc_Order) { //from ascending to descending (alphabetical) order
             (<QueryResultBinding[]>this.queryResult).sort((binding1: QueryResultBinding, binding2: QueryResultBinding) => {
                 //support variables v1 and v2 in order to preved error if binding is not defined
@@ -87,11 +95,11 @@ export class QueryResultsComponent {
         }
     }
 
-    private isOpenGraphEnabled() {
+    isOpenGraphEnabled() {
         return this.isGraphAuthorized && this.resultType == 'graph' && (<QueryResultBinding[]>this.queryResult).length > 0;
     }
 
-    private openGraph() {
+    openGraph() {
         if ((<QueryResultBinding[]>this.queryResult).length > 100) { //limit of triples
             this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.TOO_MUCH_NODES_LINKS_WARN_CONFIRM"}, ModalType.warning).then(
                 confirm => {
@@ -105,7 +113,7 @@ export class QueryResultsComponent {
         
     }
 
-    private getBindingShow(binding: QueryResultBinding) {
+    getBindingShow(binding: QueryResultBinding) {
         if (binding.type == "uri") {
             return "<" + binding.value + ">";
         } else if (binding.type == "bnode") {
@@ -122,7 +130,7 @@ export class QueryResultsComponent {
         }
     }
 
-    private onBindingClick(binding: QueryResultBinding) {
+    onBindingClick(binding: QueryResultBinding) {
         if (this.isBindingResource(binding)) {
             let res: ARTResource;
             if (binding.type == "uri") {
@@ -289,5 +297,12 @@ export class QueryResultsComponent {
             done => { window.URL.revokeObjectURL(textFile); },
             () => { }
         );
+    }
+
+
+    goToPage() {
+        if (this.page != this.pageSelectorOpt) {
+            this.page = this.pageSelectorOpt;
+        }
     }
 }
