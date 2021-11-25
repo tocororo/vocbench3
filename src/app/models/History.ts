@@ -43,7 +43,7 @@ export class CommitInfo {
         this.commentAllowed = commentAllowed;
     }
 
-    public static parse(commitJson: any) {
+    public static parse(commitJson: any): CommitInfo {
         let commitUri: ARTURIResource
         if (commitJson.commit) {
             commitUri = new ARTURIResource(commitJson.commit);
@@ -79,6 +79,8 @@ export class CommitInfo {
         }
 
         let commit = new CommitInfo(commitUri, user, operation, operationParameters, startTime, endTime);
+
+        commit.commentAllowed = commitJson.commentAllowed
 
         if (commitJson.created) {
             commit.created = commitJson.created.map((n: string) => NTriplesUtil.parseResource(n));
