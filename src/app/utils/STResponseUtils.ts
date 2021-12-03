@@ -117,12 +117,13 @@ export class STResponseUtils {
         let message: string;
         //07/09/2017 currently ST return only exception error response, so I get directly the message of an exception response
         let errorMsg = this.getExceptionMessage(stResp);
-        let errorMsgStartingIdx = errorMsg.indexOf(":");
-        //if there is no ":" it means that the error msg contains just the exception name, so return it as the whole message
-        if (errorMsgStartingIdx == -1) {
-            return errorMsg;
+        let errorMsgStartingIdx: number = 0;
+        if (errorMsg.includes("Exception:")) {
+            errorMsgStartingIdx = errorMsg.indexOf("Exception:") + "Exception:".length + 1; //+1 for the space after
+        } else if (errorMsg.includes("Error:")) {
+            errorMsgStartingIdx = errorMsg.indexOf("Error:") + "Error:".length + 1; //+1 for the space after
         }
-        message = errorMsg.substring(errorMsgStartingIdx + 2, errorMsg.length);
+        message = errorMsg.substring(errorMsgStartingIdx, errorMsg.length);
         return message;
     }
 
