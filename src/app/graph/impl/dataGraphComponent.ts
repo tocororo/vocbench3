@@ -253,20 +253,22 @@ export class DataGraphComponent extends AbstractGraph {
         let valueFilterLangEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.enabled;
         if (valueFilterLangEnabled) {
             let valueFilterLanguages = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.languages;
-            for (var i = 0; i < predObjList.length; i++) {
-                var objList: ARTNode[] = predObjList[i].getObjects();
-                for (var j = 0; j < objList.length; j++) {
-                    let lang = objList[j].getAdditionalProperty(ResAttribute.LANG);
-                    //remove the object if it has a language not in the languages list of the filter
-                    if (lang != null && valueFilterLanguages.indexOf(lang) == -1) {
-                        objList.splice(j, 1);
-                        j--;
+            if (valueFilterLanguages != null && valueFilterLanguages.length != 0) { //if no languages are set, it means all languages are used
+                for (let i = 0; i < predObjList.length; i++) {
+                    let objList: ARTNode[] = predObjList[i].getObjects();
+                    for (let j = 0; j < objList.length; j++) {
+                        let lang = objList[j].getAdditionalProperty(ResAttribute.LANG);
+                        //remove the object if it has a language not in the languages list of the filter
+                        if (lang != null && valueFilterLanguages.indexOf(lang) == -1) {
+                            objList.splice(j, 1);
+                            j--;
+                        }
                     }
-                }
-                //after filtering the objects list, if the predicate has no more objects, remove it from predObjList
-                if (objList.length == 0) {
-                    predObjList.splice(i, 1);
-                    i--;
+                    //after filtering the objects list, if the predicate has no more objects, remove it from predObjList
+                    if (objList.length == 0) {
+                        predObjList.splice(i, 1);
+                        i--;
+                    }
                 }
             }
         }
