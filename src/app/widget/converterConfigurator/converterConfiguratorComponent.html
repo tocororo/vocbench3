@@ -4,7 +4,7 @@
     </div>
     <div class="card-body scrollableContainer">
 
-        <table class="table table-sm table-hoverable" style="margin-top: 4px;">
+        <table class="table table-sm table-hoverable mt-2">
             <thead>
                 <tr>
                     <th>{{'COMMONS.NAME'|translate}}</th>
@@ -16,7 +16,7 @@
             <tbody>
                 <tr *ngFor="let c of availableConverters" (click)="selectConverter(c)" [ngClass]="{ 'table-primary': c == selectedConverter }" style="cursor: pointer;">
                     <td>{{c.getName()}}</td>
-                    <td style="white-space: pre;">{{c.getDescription()}}</td>
+                    <td class="px-2" style="white-space: pre-wrap;">{{c.getDescription()}}</td>
                     <td nowrap>{{c.getRDFCapability()}}
                         <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="fas fa-info-circle" [title]="c.getDatatypes()"></span>
                     </td>

@@ -70,7 +70,7 @@ export class ConverterPickerModal {
         }
     }
 
-    private selectConverter(converter: ConverterContractDescription) {
+    selectConverter(converter: ConverterContractDescription) {
         if (converter != this.selectedConverter) {
             this.selectedConverter = converter;
             if (this.selectedConverter.getRDFCapability() == RDFCapabilityType.literal ||
@@ -83,9 +83,9 @@ export class ConverterPickerModal {
                 this.selectedConverterType = RDFCapabilityType.uri;
             }
             //set as selected signature the one with less parameters
-            var signatures = this.selectedConverter.getSignatures();
+            let signatures = this.selectedConverter.getSignatures();
             this.selectedSignature = signatures[0];
-            for (var i = 1; i < signatures.length; i++) {
+            for (let i = 1; i < signatures.length; i++) {
                 if (signatures[i].getParameters().length < this.selectedSignature.getParameters().length) {
                     this.selectedSignature = signatures[i];
                 }
@@ -98,6 +98,7 @@ export class ConverterPickerModal {
         const modalRef: NgbModalRef = this.modalService.open(SignaturePickerModal, new ModalOptions());
         modalRef.componentInstance.title = "Choose the signature for " + this.selectedConverter.getName();
         modalRef.componentInstance.message = null;
+        modalRef.componentInstance.capabilityType = this.selectedConverterType;
         modalRef.componentInstance.signatures = this.selectedConverter.getSignatures();
         modalRef.componentInstance.selected = this.selectedSignature;
         return modalRef.result.then(
@@ -119,7 +120,7 @@ export class ConverterPickerModal {
             if (signatures.length == 1) {
                 return false;
             }
-            for (var i = 0; i < signatures.length; i++) {
+            for (let i = 0; i < signatures.length; i++) {
                 if (signatures[i].getParameters().length > 0) {
                     return true;
                 }

@@ -20,7 +20,7 @@
                 <tbody>
                     <tr *ngFor="let c of converters" (click)="selectConverter(c)" [ngClass]="{ 'table-primary': c == selectedConverter }">
                         <td>{{c.getName()}}</td>
-                        <td style="white-space: pre;">{{c.getDescription()}}</td>
+                        <td class="px-2" style="white-space: pre-wrap;">{{c.getDescription()}}</td>
                         <td nowrap>{{c.getRDFCapability()}}
                             <span *ngIf="c.getDatatypes().length > 0" class="fas fa-info-circle" [title]="c.getDatatypes()"></span>
                         </td>
