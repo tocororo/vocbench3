@@ -17,6 +17,7 @@ export class Cookie {
     public static RES_VIEW_SORT_BY_RENDERING = "resource_view.sort_by_rendering";
     public static RES_VIEW_SHOW_DEPRECATED = "resource_view.show_deprecated";
     public static RES_VIEW_SHOW_DATATYPE_BADGE = "resource_view.show_datatype_badge";
+    public static RES_VIEW_CODE_FORMAT = "resource_view.code_format";
 
     public static SHOW_DEPRECATED = "tree_list.show_deprecated";
 

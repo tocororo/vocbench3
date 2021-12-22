@@ -1,4 +1,4 @@
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from './../../models/ARTResources';
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from './../../models/ARTResources';
 import { Size } from './GraphConstants';
 import { Node, NodeShape } from "./Node";
 import { ARTNode } from '../../models/ARTResources';
@@ -45,11 +45,11 @@ export class PropInfo {
     x?: number = 0;
     y?: number = 0;
     property: ARTURIResource;
-    range: ARTURIResource;
+    range: ARTResource;
     show?: string;
     normalizedShow?: string;
     xlink?: string;
-    constructor(property: ARTURIResource, range: ARTURIResource) {
+    constructor(property: ARTURIResource, range: ARTResource) {
         this.property = property;
         this.range = range;
         //generate random id for the instances

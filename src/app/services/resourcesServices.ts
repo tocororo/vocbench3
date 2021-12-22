@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResourcePosition } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
+import { RDFFormat } from '../models/RDFFormat';
 import { RDFS, SKOS } from '../models/Vocabulary';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
@@ -154,10 +155,10 @@ export class ResourcesServices {
      * @param format 
      * @param options 
      */
-    getOutgoingTriples(resource: ARTResource, format: string): Observable<string> {
+    getOutgoingTriples(resource: ARTResource, format: RDFFormat): Observable<string> {
         let params: any = {
             resource: resource,
-            format: format
+            format: format.name
         };
         return this.httpMgr.doGet(this.serviceName, "getOutgoingTriples", params);
     }
@@ -168,11 +169,11 @@ export class ResourcesServices {
      * @param triples 
      * @param format 
      */
-    updateResourceTriplesDescription(resource: ARTResource, triples: string, format: string) {
+    updateResourceTriplesDescription(resource: ARTResource, triples: string, format: RDFFormat) {
         let params: any = {
             resource: resource,
             triples: triples,
-            format: format
+            format: format.name
         };
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 

@@ -1,5 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
+import { RDFFormat } from "src/app/models/RDFFormat";
+import { RDF } from "src/app/models/Vocabulary";
+import { ExportServices } from "src/app/services/exportServices";
 import { VBEventHandler } from "src/app/utils/VBEventHandler";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource } from "../../models/ARTResources";
@@ -28,9 +31,12 @@ export class ResourceTripleEditorComponent {
     editAuthorized: boolean;
     description: string;
 
+    rdfFormats: RDFFormat[];
+    format: RDFFormat;
+
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private resourcesService: ResourcesServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
+    constructor(private resourcesService: ResourcesServices, private exportService: ExportServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(this.eventHandler.resourceUpdatedEvent.subscribe(
             (resource: ARTResource) => this.onResourceUpdated(resource)
         ));
@@ -40,7 +46,25 @@ export class ResourceTripleEditorComponent {
         //editor disabled if user has no permission to edit
         this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateResourceTriplesDescription);
 
-        this.initDescription();
+        let formatNameCookie: string = Cookie.getCookie(Cookie.RES_VIEW_CODE_FORMAT) || "Turtle";
+
+        this.exportService.getOutputFormats().subscribe(
+            formats => {
+                this.rdfFormats = formats;
+                //select Turtle as default
+                for (let f of this.rdfFormats) {
+                    if (f.name == formatNameCookie) {
+                        this.format = f;
+                    }
+                }
+                if (this.format == null) { //in case it has not been set (e.g. if cookie-stored format was not valid)
+                    this.format = this.rdfFormats.find(f => f.name == "Turtle"); 
+                }
+                this.initDescription();
+            }
+        );
+
+        //INIT format according cookie and store last format as cookie
     }
 
     ngOnDestroy() {
@@ -51,12 +75,18 @@ export class ResourceTripleEditorComponent {
         //reinit the descriptions so that when initDescription is invoked after applyChanges, onDescriptionChange is triggered 
         this.description = null;
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.resourcesService.getOutgoingTriples(this.resource, "Turtle").subscribe(
+
+        this.resourcesService.getOutgoingTriples(this.resource, this.format).subscribe(
             triples => {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 this.description = triples;
             }
         );
+    }
+
+    onFormatChange() {
+        Cookie.setCookie(Cookie.RES_VIEW_CODE_FORMAT, this.format.name);
+        this.initDescription();
     }
 
     isApplyEnabled(): boolean {
@@ -67,8 +97,7 @@ export class ResourceTripleEditorComponent {
 
     applyChanges() {
         if (VBContext.getWorkingProject().isValidationEnabled() && Cookie.getCookie(Cookie.WARNING_CODE_CHANGE_VALIDATION, null, VBContext.getLoggedUser()) != "false") {
-            this.basicModals.alertCheckCookie({key: "RESOURCE_VIEW.CODE_EDITOR.CODE_EDITOR"}, 
-                "Warning: the current project has the Validation feature enabled. This changes will not undergo to validation.", 
+            this.basicModals.alertCheckCookie({key: "RESOURCE_VIEW.CODE_EDITOR.CODE_EDITOR"}, { key: "MESSAGES.CODE_EDITOR_VALIDATION_IGNORED_WARN" }, 
                 Cookie.WARNING_CODE_CHANGE_VALIDATION).then(
                 () => {
                     this.applyChangesImpl();
@@ -81,7 +110,7 @@ export class ResourceTripleEditorComponent {
 
     private applyChangesImpl() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.resourcesService.updateResourceTriplesDescription(this.resource, this.description, "Turtle").subscribe(
+        this.resourcesService.updateResourceTriplesDescription(this.resource, this.description, this.format).subscribe(
             () => {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 this.update.emit(this.resource);

@@ -1,4 +1,4 @@
-import { ARTURIResource } from "./ARTResources";
+import { ARTResource, ARTURIResource } from "./ARTResources";
 
 export enum DataGraphContext {
     sparql = "sparql",
@@ -6,9 +6,9 @@ export enum DataGraphContext {
 }
 
 export class GraphModelRecord {
-    source: ARTURIResource;
+    source: ARTResource;
     link: ARTURIResource;
-    target: ARTURIResource;
+    target: ARTResource;
     classAxiom: boolean;
 }
 

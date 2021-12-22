@@ -1366,6 +1366,7 @@
         "CATALOG_CONNECTOR_NOT_CONFIGURED": "The catalog connector needs to be configured",
         "CHANGE_S2RDF_SETTINGS_CONFIRM": "Changing the settings requires to re-initialize the model related to the current spreadsheet. All the changes applied to the headers will be discarder. Do you want to continue?",
         "CLEAR_DATA_CONFIRM": "This operation will erase all the data stored in the project, then you'll be redirect to the home page. Are you sure to proceed?",
+        "CODE_EDITOR_VALIDATION_IGNORED_WARN": "Warning: the current project has the Validation feature enabled. This changes will not undergo to validation.",
         "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "The Collaboration System seems to be configured but it's not working (configuration could be not valid or the server may be not reachable), so it will be disabled.",
         "CONFIGURATION_SAVED": "Configuration saved succesfully",
         "CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM": "You are going to override the configuration by restoring the system default settings. Are you sure?",
