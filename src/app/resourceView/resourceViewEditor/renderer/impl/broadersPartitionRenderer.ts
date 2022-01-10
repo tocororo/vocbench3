@@ -54,26 +54,12 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
                 let addFunctions: MultiActionFunction[] = [];
-
-                if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept as skos:broader
-                    values.forEach((v: ARTURIResource) => {
-                        addFunctions.push({
-                            function: this.skosService.addBroaderConcept(<ARTURIResource>this.resource, v),
-                            value: v
-                        });
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push({
+                        function: this.skosService.addBroaderConcept(<ARTURIResource>this.resource, v, prop),
+                        value: v
                     });
-                } else { //it's enriching a subProperty of skos:broader
-                    values.forEach((v: ARTURIResource) => {
-                        addFunctions.push({
-                            function: this.resourcesService.addValue(this.resource, prop, v).pipe(
-                                map(stResp => {
-                                    this.eventHandler.broaderAddedEvent.emit({narrower: <ARTURIResource>this.resource, broader: v});
-                                })
-                            ),
-                            value: v
-                        });
-                    });
-                }
+                });
                 this.addMultiple(addFunctions);
             },
             () => {}

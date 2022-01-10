@@ -283,6 +283,11 @@ editable-resource {
     display: flex;
 }
 
+open-street-map {
+    width: 100%;
+    height: 100px;
+}
+
 .expandableResource {
     border: 1px solid #ccc;
     border-radius: 2px;

@@ -40,26 +40,12 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
                 let addFunctions: MultiActionFunction[] = [];
-
-                if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept as skos:topConceptOf
-                    values.forEach((v: ARTURIResource) => {
-                        addFunctions.push({
-                            function: this.skosService.addTopConcept(<ARTURIResource>this.resource, v),
-                            value: v
-                        });
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push({
+                        function: this.skosService.addTopConcept(<ARTURIResource>this.resource, v, prop),
+                        value: v
                     });
-                } else { //it's adding a subProperty of skos:topConceptOf
-                    values.forEach((v: ARTURIResource) => {
-                        addFunctions.push({
-                            function: this.resourcesService.addValue(this.resource, prop, v).pipe(
-                                map(() => {
-                                    this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>this.resource, schemes: [v]});
-                                })
-                            ),
-                            value: v
-                        });
-                    });
-                }
+                });
                 this.addMultiple(addFunctions);
             },
             () => {}

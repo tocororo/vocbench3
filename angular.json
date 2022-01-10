@@ -57,6 +57,7 @@
               "node_modules/yasgui-yasqe/dist/yasqe.min.css",
               "node_modules/codemirror/lib/codemirror.css",
               "node_modules/codemirror/addon/hint/show-hint.css",
+              "node_modules/leaflet/dist/leaflet.css",
               "src/styles.css"
             ],
             "scripts": [

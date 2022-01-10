@@ -189,13 +189,14 @@ export class SkosServices {
      * @param scheme where to add the top concept
      * @return object with concept and scheme
      */
-    addTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
+    addTopConcept(concept: ARTURIResource, scheme: ARTURIResource, topConceptProp?: ARTURIResource) {
         let params: any = {
             concept: concept,
             scheme: scheme,
+            topConceptProp: topConceptProp ? topConceptProp : null
         };
         return this.httpMgr.doPost(this.serviceName, "addTopConcept", params).pipe(
-            map(stResp => {
+            map(() => {
                 this.eventHandler.topConceptCreatedEvent.emit({ concept: concept, schemes: [scheme] });
                 return { concept: concept, scheme: scheme };
             })
@@ -241,10 +242,11 @@ export class SkosServices {
      * @param concept concept to which add the broader
      * @param broaderConcept the broader concept
      */
-    addBroaderConcept(concept: ARTURIResource, broaderConcept: ARTURIResource) {
+    addBroaderConcept(concept: ARTURIResource, broaderConcept: ARTURIResource, broaderProp?: ARTURIResource) {
         let params: any = {
             concept: concept,
             broaderConcept: broaderConcept,
+            broaderProp: broaderProp ? broaderProp : null
         };
         return this.httpMgr.doPost(this.serviceName, "addBroaderConcept", params).pipe(
             map(stResp => {
