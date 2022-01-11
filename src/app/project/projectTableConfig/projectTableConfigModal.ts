@@ -38,8 +38,7 @@ export class ProjectTableConfigModal {
         if (this.selectedVisualizationMode == null) {
             this.selectedVisualizationMode = this.visualizationModes[0];
         }
-        this.selectedFacet = Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
-
+        
         if (this.isAdmin) {
             this.initColumnTable();
         }
@@ -77,6 +76,14 @@ export class ProjectTableConfigModal {
                         });
 
                         this.facets.sort((f1, f2) => f1.displayName.localeCompare(f2.displayName));
+
+                        //init selected facet (for facet-based visualization) with the stored cookie, or if none (or not valid) with the first facet available
+                        let selectedFacetCookie: string = Cookie.getCookie(Cookie.PROJECT_FACET_BAG_OF);
+                        if (selectedFacetCookie != null && this.facets.some(f => f.name == selectedFacetCookie)) {
+                            this.selectedFacet = selectedFacetCookie;
+                        } else {
+                            this.selectedFacet = this.facets[0].name;
+                        }
                     }
                 )
             }
