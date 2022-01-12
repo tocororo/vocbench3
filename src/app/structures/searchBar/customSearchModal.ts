@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
-import { ARTNode } from "../../models/ARTResources";
+import { ARTNode, ARTResource } from "../../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
 import { SettingsProp, STProperties } from "../../models/Plugins";
 import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
@@ -107,8 +107,8 @@ export class CustomSearchModal {
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
                     this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, true).then(
-                        (selectedResource: any) => {
-                            this.activeModal.close(selectedResource);
+                        (selectedResources: ARTResource[]) => {
+                            this.activeModal.close(selectedResources[0]);
                         },
                         () => { }
                     );

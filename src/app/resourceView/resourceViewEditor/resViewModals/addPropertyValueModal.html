@@ -31,7 +31,7 @@
             </div>
 
             <concept-tree-panel *ngIf="viewType == 'conceptTree'" [context]="treeListCtx" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes" [allowMultiselection]="allowMultiselection"
-                (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (schemeChanged)="onConceptTreeSchemeChange($event)"
+                (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (schemeChanged)="onConceptTreeSchemeChange()"
                 (multiselectionStatus)="onMultiselectionChange($event)">
             </concept-tree-panel>
             

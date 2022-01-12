@@ -16,13 +16,13 @@
                 </div>
             </div>
             <div class="card-body vbox">
-                <resource-list [resources]="resourceList" [rendering]="rendering" (nodeSelected)="onResourceSelected($event)" (dblClicked)="onResDblClicked($event)">
-                </resource-list>
+                <resource-list-selection [resources]="resourceList" [selectedResources]="selectedResources" [rendering]="rendering" [multiselection]="multiselection" (nodeSelected)="onResourceSelected($event)" (dblClicked)="onResDblClicked($event)">
+                </resource-list-selection>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!resourceSelected">Ok</button>
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
         <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
 </div>

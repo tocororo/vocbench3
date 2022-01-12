@@ -49,7 +49,7 @@
             </class-tree-panel>
                     
             <concept-tree-panel *ngIf="activeView=='concept'" [schemeChangeable]="true" [schemes]="schemes" [editable]="false" [projectCtx]="remoteProjCtx"
-                (nodeSelected)="onResourceSelected($event)" (schemeChanged)="onSchemeChanged()">
+                (nodeSelected)="onResourceSelected($event)" (schemeChanged)="onConceptTreeSchemeChange()">
             </concept-tree-panel>
                     
             <property-tree-panel *ngIf="activeView=='property'" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">

@@ -12,28 +12,33 @@ import { ARTNode } from "../../../../models/ARTResources";
 export class ResourceSelectionModal {
     @Input() title: string;
     @Input() message: string;
-    @Input() resourceList: Array<ARTNode>;
+    @Input() resourceList: ARTNode[];
+    @Input() multiselection: boolean = false; //tells if multiple selection is allowed
+    @Input() selectedResources: ARTNode[]; //resources that will be selected once the dialog is initialized
+    @Input() emptySelectionAllowed: boolean = false;
     @Input() rendering: boolean = true;
     
-    resourceSelected: ARTNode;
+    private selection: ARTNode[];
     
     constructor(public activeModal: NgbActiveModal) {}
-    
-    isResourceSelected(resource: ARTNode) {
-        return this.resourceSelected == resource;
+
+    isOkEnabled() {
+        return this.emptySelectionAllowed || this.selection && this.selection.length > 0;
     }
     
-    onResourceSelected(resource: ARTNode) {
-        this.resourceSelected = resource;
+    onResourceSelected(resources: ARTNode[]) {
+        this.selection = resources;
     }
 
     onResDblClicked(resource: ARTNode) {
-        this.resourceSelected = resource;
-        this.ok();
+        if (!this.multiselection) {
+            this.selection = [resource];
+            this.ok();
+        }
     }
 
     ok() {
-        this.activeModal.close(this.resourceSelected);
+        this.activeModal.close(this.selection);
     }
 
     cancel() {

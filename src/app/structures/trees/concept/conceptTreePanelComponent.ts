@@ -38,7 +38,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     @Input() schemes: ARTURIResource[]; //if set the concept tree is initialized with this scheme, otherwise with the scheme from VB context
     @Input() schemeChangeable: boolean = false; //if true, above the tree is shown a menu to select a scheme
-    @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
+    @Output() schemeChanged = new EventEmitter<ARTURIResource[]>(); //when dynamic scheme is changed (inform parent component in order to eventually reset a previous concept selection)
 
     @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent
 
@@ -46,9 +46,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     private modelType: string;
 
-    private schemeList: Array<ARTURIResource>;
-    private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
-    //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
     workingSchemes: ARTURIResource[];//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
@@ -85,22 +82,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme
             this.workingSchemes = this.schemes;
         }
-
-        if (this.schemeChangeable) {
-            //init the scheme list if the concept tree allows dynamic change of scheme
-            this.skosService.getAllSchemes(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                schemes => {
-                    ResourceUtils.sortResources(schemes, this.rendering ? SortAttribute.show : SortAttribute.value);
-                    this.schemeList = schemes;
-                }
-            );
-            if (this.workingSchemes.length > 0) { //multiple schemes not allowed when schemeChangeable true => select the first
-                this.selectedSchemeUri = this.workingSchemes[0].getURI();
-                this.workingSchemes = [this.workingSchemes[0]];
-            } else { //no scheme mode
-                this.selectedSchemeUri = "---"; //no scheme
-            }
-        }
     }
     
     //top bar commands handlers
@@ -135,38 +116,18 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         return this.workingSchemes.length == 0;
     }
 
-    //scheme selection menu handlers
-
-    /**
-     * Listener to <select> element that allows to change dynamically the scheme of the
-     * concept tree (visible only if @Input schemeChangeable is true).
-     * This is only invokable if schemeChangeable is true, this mode allow only one scheme at time, so can reset workingSchemes
-     */
-    private onSchemeSelectionChange() {
-        var newSelectedScheme: ARTURIResource = this.getSchemeResourceFromUri(this.selectedSchemeUri);
-        if (newSelectedScheme != null) { //if it is not "no-scheme"                 
-            this.workingSchemes = [newSelectedScheme];
-        } else {
-            this.workingSchemes = [];
-        }
-        this.schemeChanged.emit(newSelectedScheme);
-    }
-
-    /**
-     * Retrieves the ARTURIResource of a scheme URI from the available scheme. Returns null
-     * if the URI doesn't represent a scheme in the list.
-     */
-    private getSchemeResourceFromUri(schemeUri: string): ARTURIResource {
-        for (var i = 0; i < this.schemeList.length; i++) {
-            if (this.schemeList[i].getURI() == schemeUri) {
-                return this.schemeList[i];
-            }
-        }
-        return null; //schemeUri was probably "---", so for no-scheme mode return a null object
-    }
-
-    private getSchemeRendering(scheme: ARTURIResource) {
-        return ResourceUtils.getRendering(scheme, this.rendering);
+    changeSchemeSelection() {
+        this.skosService.getAllSchemes(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+            schemes => {
+                this.sharedModals.selectResource("Select scheme", null, schemes, this.rendering, true, true, this.workingSchemes).then(
+                    (schemes: ARTURIResource[]) => {
+                        this.workingSchemes = schemes;
+                        this.schemeChanged.emit(schemes)
+                    }
+                )
+            },
+            () => {}
+        );
     }
 
     //search handlers
@@ -184,11 +145,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         }
         let searchingScheme: ARTURIResource[] = [];
         if (searchSettings.restrictActiveScheme) {
-            if (this.schemeChangeable) {
-                searchingScheme.push(this.getSchemeResourceFromUri(this.selectedSchemeUri));
-            } else {
-                searchingScheme = this.workingSchemes;
-            }
+            searchingScheme = this.workingSchemes;
         }
 
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
@@ -207,8 +164,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                             this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
-                                (selectedResource: any) => {
-                                    this.selectSearchedResource(selectedResource);
+                                (selectedResources: ARTURIResource[]) => {
+                                    this.selectSearchedResource(selectedResources[0]);
                                 },
                                 () => { }
                             );
@@ -267,8 +224,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         this.resourceService.getResourcesInfo(schemes).subscribe(
                             schemes => {
                                 this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, message, schemes, this.rendering).then(
-                                    (scheme: ARTURIResource) => {
-                                        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(scheme)); //update the active schemes
+                                    (schemes: ARTURIResource[]) => {
+                                        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(schemes[0])); //update the active schemes
                                         setTimeout(() => {
                                             this.selectResourceVisualizationModeAware(resource);
                                         });

@@ -84,8 +84,8 @@ export class LexViewCache {
                         //TODO what if simply retrieve the instances of all the classes?
                         return from(
                             this.sharedModals.selectResource({key:"DATA.ACTIONS.SELECT_RANGE"}, null, rangeColl).then(
-                                (selectedRange: ARTURIResource) => {
-                                    return { cls: selectedRange, storeInCache: false };
+                                (selectedRange: ARTURIResource[]) => {
+                                    return { cls: selectedRange[0], storeInCache: false };
                                 },
                                 () => {
                                     return null;

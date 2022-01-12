@@ -42,8 +42,8 @@ export class FormCollMappingModal {
                     this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_RESOURCE_SUGGESTED_FOR_FORM_COLLECTION"}, ModalType.warning);
                 } else {
                     this.sharedModals.selectResource({key:"ACTIONS.SELECT_RESOURCE"}, null, suggestions).then(
-                        (res: ARTURIResource) => {
-                            this.selectedResourceIri = res.getURI();
+                        (res: ARTURIResource[]) => {
+                            this.selectedResourceIri = res[0].getURI();
                         },
                         () => {}
                     );

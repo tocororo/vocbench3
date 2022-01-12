@@ -168,8 +168,8 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                         this.selectSearchedResource(searchResult[0]);
                     } else { //multiple results, ask the user which one select
                         this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
-                            (selectedResource: any) => {
-                                this.selectSearchedResource(selectedResource);
+                            (selectedResources: ARTURIResource[]) => {
+                                this.selectSearchedResource(selectedResources[0]);
                             },
                             () => { }
                         );
@@ -200,8 +200,8 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                         message += " " + this.translateService.instant("MESSAGES.SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT.LEXICON");
                     }
                     this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, message, lexicons, this.rendering).then(
-                        (lexicon: ARTURIResource) => {
-                            this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), lexicon); //update the active lexicon
+                        (lexicons: ARTURIResource[]) => {
+                            this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), lexicons[0]); //update the active lexicon
                             setTimeout(() => { //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset
                                 this.selectSearchedResource(resource); //then open the list on the searched resource
                             });

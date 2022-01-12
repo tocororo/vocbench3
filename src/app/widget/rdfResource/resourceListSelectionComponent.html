@@ -1,0 +1,10 @@
+<div style="border: 1px solid #ddd;" class="vbox">
+    <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
+        <ng-container *ngFor="let n of nodeList; let idx=index">
+            <div *ngIf="idx < resLimit" class="listNodeItem" [ngClass]="{ selectedResource: n.selected && !multiselection }" (click)="onResourceSelected(n)" (dblclick)="onDblClick(n)">
+                <input *ngIf="multiselection" type="checkbox" class="mr-2" [(ngModel)]="n.selected" (ngModelChange)="emitSelection()">
+                <rdf-resource [resource]="n.resource" [rendering]="rendering"></rdf-resource>
+            </div>
+        </ng-container>
+    </div>
+</div>

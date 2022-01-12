@@ -269,9 +269,9 @@ export class SharedModalServices {
      * @param message the message to show in the modal dialog body. If null no message will be in the modal
      * @param resourceList array of available resources
      * @param rendering in case of array of resources, it tells whether the resources should be rendered
-     * @return if the modal closes with ok returns a promise containing the selected resource
+     * @return if the modal closes with ok returns a promise containing a list of selected resource
      */
-    selectResource(title: TextOrTranslation, message: TextOrTranslation, resourceList: Array<ARTNode>, rendering?: boolean) {
+    selectResource(title: TextOrTranslation, message: TextOrTranslation, resourceList: ARTNode[], rendering?: boolean, multiselection?: boolean, emptySelectionAllowed?: boolean, selectedResources?: ARTNode[]): Promise<any[]> {
         const modalRef: NgbModalRef = this.modalService.open(ResourceSelectionModal, new ModalOptions());
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (message != null) {
@@ -279,6 +279,9 @@ export class SharedModalServices {
         }
         modalRef.componentInstance.resourceList = resourceList;
         if (rendering != null) modalRef.componentInstance.rendering = rendering;
+        if (multiselection != null) modalRef.componentInstance.multiselection = multiselection;
+        if (emptySelectionAllowed != null) modalRef.componentInstance.emptySelectionAllowed = emptySelectionAllowed;
+        if (selectedResources != null) modalRef.componentInstance.selectedResources = selectedResources;
         return modalRef.result;
     }
 

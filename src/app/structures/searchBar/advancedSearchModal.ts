@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { ARTLiteral, ARTNode, ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
 import { SearchMode, SearchSettings, StatusFilter } from "../../models/Properties";
 import { OntoLex, SKOS } from "../../models/Vocabulary";
 import { SearchServices } from "../../services/searchServices";
@@ -348,8 +348,8 @@ export class AdvancedSearchModal {
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
                     this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, true).then(
-                        (selectedResource: any) => {
-                            this.activeModal.close(selectedResource);
+                        (selectedResources: ARTResource[]) => {
+                            this.activeModal.close(selectedResources[0]);
                         },
                         () => { }
                     );

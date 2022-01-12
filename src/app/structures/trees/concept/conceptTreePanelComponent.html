@@ -64,13 +64,11 @@
     <!-- Tree -->
     <div class="card-body vbox">
 
-        <div *ngIf="schemeChangeable" style="padding-bottom: 3px; display: flex; align-items: center">
-            <span style="white-space: nowrap; margin: 0px 3px;">{{'DATA.SCHEME.SCHEME'|translate}}:</span>
-            <select class="form-control form-control-sm " [(ngModel)]="selectedSchemeUri"
-                (ngModelChange)="onSchemeSelectionChange()">
-                <option value="---">no-scheme</option>
-                <option *ngFor="let s of schemeList" [value]="s.getURI()">{{getSchemeRendering(s)}}</option>
-            </select>
+        <div *ngIf="schemeChangeable" class="d-flex align-items-center mb-2" style="justify-content: end;">
+            <button class="btn btn-light btn-xs float-right" (click)="changeSchemeSelection()">
+                <img src="./assets/images/icons/res/conceptScheme.png">
+                {{'DATA.ACTIONS.SELECT_SCHEME'|translate}}
+            </button>
         </div>
 
         <concept-tree [projectCtx]="projectCtx" [schemes]="workingSchemes" [rendering]="rendering"

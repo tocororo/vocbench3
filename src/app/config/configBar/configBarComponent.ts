@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { ARTResource } from "src/app/models/ARTResources";
+import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { ExportServices } from "src/app/services/exportServices";
 import { ShaclBatchValidationModal } from "src/app/shacl/shaclBatchValidationModal";
 import { UndoHandler } from "src/app/undo/undoHandler";
@@ -165,15 +165,19 @@ export class ConfigBarComponent {
     changeWGraph() {
         this.exportServices.getNamedGraphs().subscribe(
             graphs => {
-                this.sharedModals.selectResource({ key: "APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH" }, null, graphs, false).then(g => {
-                    if (VBContext.getWorkingProject()?.getBaseURI() == g.getNominalValue()) {
-                        g = null;
-                    }
-                    VBContext.setContextWGraph(g);
-                    VBContext.setProjectChanged(true); //changing wgraph is equivalent to changing projectv
-                    //redirect to the home in order to reset views that were based on the old wgraph
-                    this.route.navigate(["/Home"]);
-                }, () => { });
+                this.sharedModals.selectResource({ key: "APP.TOP_BAR.GLOBAL_DATA_MENU.WGRAPH" }, null, graphs, false).then(
+                    (selectedGraphs: ARTURIResource[]) => {
+                        let graph: ARTURIResource = selectedGraphs[0];
+                        if (VBContext.getWorkingProject()?.getBaseURI() == graph.getNominalValue()) {
+                            graph = null;
+                        }
+                        VBContext.setContextWGraph(graph);
+                        VBContext.setProjectChanged(true); //changing wgraph is equivalent to changing projectv
+                        //redirect to the home in order to reset views that were based on the old wgraph
+                        this.route.navigate(["/Home"]);
+                    },
+                    () => { }
+                );
             }
         )
     }

@@ -186,7 +186,7 @@ export class BrowseExternalResourceModal {
     /**
      * Listener called when it's aligning concept and the scheme in the concept tree is changed
      */
-    onSchemeChanged() {
+     onConceptTreeSchemeChange() {
         this.remoteResource = null;
     }
 

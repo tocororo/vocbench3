@@ -9,14 +9,14 @@
             [schemes]="currentSchemes" [editable]="editable" [deletable]="deletable" [schemeChangeable]="true"
             [allowMultiselection]="allowMultiselection" [projectCtx]="projectCtx"
             (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)"
-            (schemeChanged)="onConceptTreeSchemeChange($event)" (multiselectionStatus)="onMultiselectionChange($event)">
+            (schemeChanged)="onConceptTreeSchemeChange()" (multiselectionStatus)="onMultiselectionChange($event)">
         </concept-tree-panel>
 
         <concept-tree-panel *ngSwitchCase="'http://www.w3.org/ns/lemon/ontolex#LexicalConcept'" [context]="context"
             [schemes]="currentSchemes" [editable]="editable" [deletable]="deletable" [schemeChangeable]="true"
             [allowMultiselection]="allowMultiselection" [projectCtx]="projectCtx"
             (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)"
-            (schemeChanged)="onConceptTreeSchemeChange($event)" (multiselectionStatus)="onMultiselectionChange($event)">
+            (schemeChanged)="onConceptTreeSchemeChange()" (multiselectionStatus)="onMultiselectionChange($event)">
         </concept-tree-panel>
 
         <scheme-list-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#ConceptScheme'" [context]="context"

@@ -27,7 +27,7 @@ export class ResourceListComponent {
 	}
 
 	//Resource limitation management
-	private initialRes: number = 50;
+	private initialRes: number = 150;
 	private resLimit: number = this.initialRes;
 	private increaseRate: number = this.initialRes / 5;
 	onScroll() {

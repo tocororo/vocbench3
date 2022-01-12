@@ -53,12 +53,12 @@ export class DanglingXLabelComponent {
         //as pref alt or hidden?
         var predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
         this.sharedModals.selectResource({key:"DATA.ACTIONS.SELECT_LEXICALIZATION_PROPERTY"}, null, predOpts).then(
-            (selectedPred: any) => {
+            (selectedPred: ARTURIResource[]) => {
                 let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
                 this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, activeSchemes, true).then(
                     (concept: any) => {
                         var xlabelPred: ARTURIResource;
-                        this.icvService.setDanglingXLabel(concept, selectedPred, xlabel).subscribe(
+                        this.icvService.setDanglingXLabel(concept, selectedPred[0], xlabel).subscribe(
                             stResp => {
                                 this.runIcv();
                             }
