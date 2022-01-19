@@ -4,8 +4,10 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 10.1.2 (dd-mm-yyyy)
-  *
+# 10.2.0 (dd-mm-yyyy)
+  * Improved the schemes filter selection in the concept tree dialog
+  * Added the possibility to provide a custom xRole in the converter configuration component
+  * Minor bugfixes
 
 # 10.1.1 (28-10-2021)
   * Added localization for French, thanks to Nathalie Vedovotto for the contribution!

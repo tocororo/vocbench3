@@ -1,0 +1,23 @@
+<ngx-charts-pie-chart
+    [scheme]="randColorScheme"
+    [results]="data"
+    [gradient]="gradient"
+    [legend]="showLegend"
+    [legendPosition]="legendPosition"
+    [labels]="showLabels"
+    [doughnut]="isDoughnut"
+    [tooltipText]="getTooltipText"
+    (select)="onSelect($event)"
+    (activate)="onActivate($event)"
+    (deactivate)="onDeactivate($event)">
+
+    <!-- 
+        The following is a way, alternative to [tooltipText] which is not available in other charts, to customize the template of the tooltip
+    -->
+    <!-- <ng-template #tooltipTemplate let-model="model">
+        <span class="tooltip-label">Label: {{model.extra.label}}</span>
+        <span class="tooltip-val">Value: {{model.value.toLocaleString()}}</span>
+    </ng-template> -->
+
+
+</ngx-charts-pie-chart>

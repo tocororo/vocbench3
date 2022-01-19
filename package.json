@@ -1,6 +1,6 @@
 {
   "name": "vocbench3",
-  "version": "10.1.2-SNAPSHOT",
+  "version": "10.2.0-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -35,6 +35,7 @@
     "jquery": "3.5.1",
     "jsprolog": "0.2.2",
     "leaflet": "1.7.1",
+    "@swimlane/ngx-charts": "16.0.0",
     "rxjs": "6.6.6",
     "tslib": "2.2.0",
     "yasgui-yasqe": "2.11.21",

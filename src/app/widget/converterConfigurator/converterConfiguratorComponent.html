@@ -1,10 +1,10 @@
-<div class="card">
+<div class="card vbox">
     <div class="card-header">
         <label>{{'WIDGETS.CONVERTER.CONVERTER'|translate}}</label>
     </div>
     <div class="card-body scrollableContainer">
 
-        <table class="table table-sm table-hoverable mt-2">
+        <table class="table table-sm table-hoverable border-bottom mt-2">
             <thead>
                 <tr>
                     <th>{{'COMMONS.NAME'|translate}}</th>
@@ -25,7 +25,7 @@
             </tbody>
         </table>
 
-        <div *ngIf="selectedConverter" class="groupPanel vbox" style="margin-top: 12px;">
+        <div *ngIf="selectedConverter" class="groupPanel mt-4">
             <div class="groupPanel-heading">
                 <span style="flex: 1">
                     <label class="groupPanel-heading-content">{{'WIDGETS.CONVERTER.CONVERTER_PARAMETERIZATION'|translate}}:</label>
@@ -97,9 +97,11 @@
                                         <td>
                                             <ng-container *ngIf="p.type == 'java.lang.String'">
                                                 <div *ngIf="p.name == 'xRole'; else genericStringParamElseBlock" class="hbox">
-                                                    <select [(ngModel)]="p.value" class="form-control form-control-sm" (ngModelChange)="onSignatureParamChange()">
+                                                    <select [(ngModel)]="p[XROLE_SEL_ATTR]" class="form-control form-control-sm" (ngModelChange)="onXRoleChange(p)">
                                                         <option *ngFor="let r of xRoles">{{r}}</option>
+                                                        <option [value]="xRoleOther">{{'COMMONS.OTHER'|translate}}</option>
                                                     </select>
+                                                    <input *ngIf="p[XROLE_SEL_ATTR] == xRoleOther" class="form-control form-control-sm ml-2" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()">
                                                 </div>
                                                 <ng-template #genericStringParamElseBlock>
                                                     <input class="form-control form-control-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()">

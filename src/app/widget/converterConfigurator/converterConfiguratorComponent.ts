@@ -9,7 +9,8 @@ import { RangeType } from "src/app/services/propertyServices";
 
 @Component({
     selector: "converter-config",
-    templateUrl: "./converterConfiguratorComponent.html"
+    templateUrl: "./converterConfiguratorComponent.html",
+    host: { class: "vbox" }
 })
 export class ConverterConfiguratorComponent {
 
@@ -32,7 +33,9 @@ export class ConverterConfiguratorComponent {
     private selectedLiteralAspect: string = this.literalAspectOpts[0];
     private literalAspectChangeable: boolean = true;
 
-    private xRoles: string[] = [XRole.concept, XRole.conceptScheme, XRole.skosCollection, XRole.xLabel, XRole.xNote];
+    xRoles: string[] = [XRole.concept, XRole.conceptScheme, XRole.skosCollection, XRole.xLabel, XRole.xNote];
+    XROLE_SEL_ATTR: string = 'xRoleSelection';
+    xRoleOther: string = "other";
     
     constructor(private codaService: CODAServices) {}
 
@@ -127,7 +130,20 @@ export class ConverterConfiguratorComponent {
             this.selectSignature(signatureToRestore, false);
             //now restore the values
             for (let paramName in this.converter.params) {
-                this.signatureParams.find(p => p.name == paramName).value = this.converter.params[paramName];
+                let paramValue = this.converter.params[paramName];
+                if (paramValue == null) return;
+
+                let paramInSignature = this.signatureParams.find(p => p.name == paramName);
+                paramInSignature.value = paramValue;
+
+                // this.signatureParams.find(p => p.name == paramName).value = this.converter.params[paramName];    
+                if (paramName == 'xRole') {
+                    if (this.xRoles.includes(paramValue)) { //well-known xRole => assign to xRoleSelection the value
+                        paramInSignature[this.XROLE_SEL_ATTR] = paramValue
+                    } else { //other value => assign to xRoleSelection the "other" option
+                        paramInSignature[this.XROLE_SEL_ATTR] = this.xRoleOther;
+                    }
+                }
             }
         }
     }
@@ -218,6 +234,22 @@ export class ConverterConfiguratorComponent {
         } else if (parameter.type == "java.util.Map<java.lang.String, org.eclipse.rdf4j.model.Value>") {
             return "Key-value Map. Each value can be the id of a node or an RDF value represented in NT serialization";
         }
+    }
+
+    /**
+     * This is an ad-hoc handler for xRole parameter. The idea is to force the selection to one of the predefined options (xLabel, xNote, concept, ...).
+     * In addition there's a further option "Other" which allows user to enter a custom value.
+     * When the selection (xRoleSelection attr) changes, this handler checks if the selection is one of the well-known roles.
+     * In case, it assigns the selection to the param, otherwise, if the selection is "other", it doesn't do nothin since 
+     * the param value is bound to the value of the input field added into the view
+     *
+     * @param parameter 
+     */
+    onXRoleChange(parameter: SignatureParam) {
+        if (this.xRoles.includes(parameter[this.XROLE_SEL_ATTR])) { //in case the selected xRole is one of the predefined
+            parameter.value = parameter[this.XROLE_SEL_ATTR];
+        }
+        this.onSignatureParamChange();
     }
 
     onMapParamChange(value: {[key: string]:any}, p: SignatureParam) {

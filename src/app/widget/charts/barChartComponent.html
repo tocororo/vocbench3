@@ -1,0 +1,19 @@
+<ngx-charts-bar-vertical
+    [scheme]="randColorScheme"
+    [results]="data"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    (select)="onSelect($event)">
+
+    <ng-template #tooltipTemplate let-model="model">
+        <span class="tooltip-label">Label: {{model.extra.label}}</span>
+        <span class="tooltip-val">Value: {{model.value.toLocaleString()}}</span>
+    </ng-template>
+
+</ngx-charts-bar-vertical>

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ConstituentComponent } from '../resourceView/lexicographerView/constituents/constituentComponent';
 import { constituentFeatureRenderer } from '../resourceView/lexicographerView/constituents/constituentFeatureRenderer';
 import { ConstituentListComponent } from '../resourceView/lexicographerView/constituents/constituentListComponent';
@@ -90,6 +91,8 @@ import { LanguageDefinitionComponent } from '../resourceView/termView/languageDe
 import { LanguageTermComponent } from '../resourceView/termView/languageTerm/languageTerm';
 import { TermViewComponent } from '../resourceView/termView/termViewComponent';
 import { ResourceTripleEditorComponent } from '../resourceView/tripleEditor/resourceTripleEditorComponent';
+import { BarChartComponent } from '../widget/charts/barChartComponent';
+import { PieChartComponent } from '../widget/charts/pieChartComponent';
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
@@ -100,6 +103,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         DragDropModule,
         FormsModule,
         NgbDropdownModule,
+        NgxChartsModule,
         PreferencesModule,
         SharedModule, 
         TranslateModule,
@@ -195,7 +199,10 @@ import { TreeAndListModule } from "./treeAndListModule";
         PropertyChainCreatorModal,
         RdfsMembersModal,
         ResViewSettingsModal,
-        TimeMachineModal
+        TimeMachineModal,
+
+        BarChartComponent,
+        PieChartComponent,
     ],
     exports: [
         ResourceViewEditorComponent,

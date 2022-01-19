@@ -35,7 +35,7 @@
                 <div class="form-group row" *ngIf="selectedLoader.target == 'datasetCatalog'">
                     <label class="col-form-label col-sm-1">{{'DATA_MANAGEMENT.LOAD.DATA_DUMP'|translate}}:</label>
                     <div class="col-sm-5">
-                        <div class="input-group input-group-sm">
+                        <div class="input-group input-group">
                             <input type="text" class="form-control" [(ngModel)]="dataDumpUrl" readonly>
                             <div class="input-group-append">
                                 <button class="btn btn-light" (click)="loadFromDatasetCatalog()">

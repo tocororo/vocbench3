@@ -3,6 +3,7 @@ import { ARTURIResource } from "src/app/models/ARTResources";
 import { CustomForm, FormFieldType } from "src/app/models/CustomForms";
 import { Language } from "src/app/models/LanguagesCountries";
 import { DatatypesServices } from "src/app/services/datatypesServices";
+import { ResourceUtils, SortAttribute } from "src/app/utils/ResourceUtils";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ModalType } from "src/app/widget/modal/Modals";
 import { ConstraintType, WizardAdvGraphEntry, WizardField, WizardFieldLiteral, WizardFieldUri, WizardNodeFromField } from "./CustomFormWizard";
@@ -32,6 +33,7 @@ export class CustomFormWizardFieldsEditor {
         this.datatypeService.getDatatypes().subscribe(
             datatypes => {
                 this.datatypes = datatypes;
+                ResourceUtils.sortResources(this.datatypes, SortAttribute.show);
             }
         )
     }
