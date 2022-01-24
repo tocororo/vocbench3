@@ -24,10 +24,9 @@ export class InvokableReportersServices {
             includeTemplate: includeTemplate
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.InvokableReporterException']
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.services.core.InvokableReporterException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "compileReport", params, options);
     }
@@ -44,10 +43,9 @@ export class InvokableReportersServices {
             deployerSpec: deployerSpec ? JSON.stringify(deployerSpec) : null
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.InvokableReporterException']
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.services.core.InvokableReporterException', action: 'skip' },
+            ]
         });
         return this.httpMgr.downloadFile(this.serviceName, "compileAndExportReport", params, false, options);
     }

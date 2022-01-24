@@ -181,10 +181,9 @@ export class RefactorServices {
             params.force = force;
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException'] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "moveXLabelToResource", params, options);
     }

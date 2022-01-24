@@ -120,10 +120,9 @@ export class CustomFormsServices {
             id: customFormId
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.coda.exception.parserexception.PRParserException'] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.coda.exception.parserexception.PRParserException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "getCustomFormRepresentation", params, options).pipe(
             map(

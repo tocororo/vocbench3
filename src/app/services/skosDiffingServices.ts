@@ -27,10 +27,9 @@ export class SkosDiffingServices {
             projectName: projectName
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['org.apache.http.conn.HttpHostConnectException']
-            } 
+            errorHandlers: [
+                { className: 'org.apache.http.conn.HttpHostConnectException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "getAllTasksInfo", params, options);
     }

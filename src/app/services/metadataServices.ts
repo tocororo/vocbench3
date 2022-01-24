@@ -54,10 +54,9 @@ export class MetadataServices {
             namespace: namespace
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.ontology.InvalidPrefixException']
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.ontology.InvalidPrefixException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "setNSPrefixMapping", params, options);
     }
@@ -84,10 +83,9 @@ export class MetadataServices {
             namespace: namespace
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.ontology.InvalidPrefixException']
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.ontology.InvalidPrefixException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "changeNSPrefixMapping", params, options);
     }

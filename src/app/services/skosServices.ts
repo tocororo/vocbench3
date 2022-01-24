@@ -153,14 +153,11 @@ export class SkosServices {
 
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException',
-                    'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
-                ] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "createConcept", params, options).pipe(
             map(stResp => {
@@ -383,10 +380,9 @@ export class SkosServices {
             params.customFormValue = customFormValue;
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, options).pipe(
             map(stResp => {
@@ -449,14 +445,11 @@ export class SkosServices {
             checkExistingPrefLabel: checkExistingPrefLabel
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException',
-                    'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
-                ] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, options);
     }
@@ -503,12 +496,10 @@ export class SkosServices {
             literal: literal
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
-                ] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.AltPrefLabelClashException', action: 'warning' } //addAltLabel cannot be forced, so just show a warning
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, options);
     }
@@ -537,10 +528,9 @@ export class SkosServices {
             literal: literal
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, options);
     }
@@ -670,13 +660,10 @@ export class SkosServices {
             params.customFormValue = customFormValue;
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException'
-                ] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "createCollection", params, options).pipe(
             map(stResp => {

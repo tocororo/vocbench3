@@ -122,14 +122,11 @@ export class ExportServices {
             params.force = force;
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    "it.uniroma2.art.semanticturkey.services.core.ExportPreconditionViolationException",
-                    "it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongModelException",
-                    "it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongLexModelException"
-                ]
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.services.core.ExportPreconditionViolationException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongModelException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongLexModelException', action: 'skip' },
+            ]
         });
         if (deployerSpec == null) {
             //no deployer used => the result of the export will be downloaded

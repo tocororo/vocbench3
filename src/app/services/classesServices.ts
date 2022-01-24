@@ -150,10 +150,9 @@ export class ClassesServices {
             customFormValue: customFormValue
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['org.springframework.transaction.TransactionSystemException'] //for shacl violations
-            } 
+            errorHandlers: [
+                { className: 'org.springframework.transaction.TransactionSystemException', action: 'skip' }, //for shacl violations
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "createInstance", params, options).pipe(
             map(stResp => {

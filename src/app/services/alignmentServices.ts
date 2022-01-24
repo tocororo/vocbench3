@@ -6,7 +6,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ART
 import { Project } from '../models/Project';
 import { SearchMode } from '../models/Properties';
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
+import { HttpManager, HttpServiceContext, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class AlignmentServices {
 	 * @return a collection of properties
      */
     getMappingProperties(role: RDFResourceRolesEnum, allMappingProps: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             role: role,
             allMappingProps: allMappingProps
         };
@@ -48,7 +48,7 @@ export class AlignmentServices {
      * @param targetResource the resource (of an external project) to align
      */
     addAlignment(sourceResource: ARTResource, predicate: ARTURIResource, targetResource: ARTResource) {
-        let params: any = {
+        let params: STRequestParams = {
             sourceResource: sourceResource,
             predicate: predicate,
             targetResource: targetResource
@@ -82,7 +82,7 @@ export class AlignmentServices {
      * @return returns an object containing "cells" (an array of AlignmentCell), "page" and "totPage"
      */
     listCells(pageIdx?: number, range?: number): Observable<{page: number, totPage: number, cells: AlignmentCell[]}> {
-        let params: any = {};
+        let params: STRequestParams = {};
         if (pageIdx != undefined && range != undefined) {
             params.pageIdx = pageIdx,
                 params.range = range
@@ -115,7 +115,7 @@ export class AlignmentServices {
      * @return a cell resulting from the action
      */
     acceptAlignment(entity1: ARTURIResource, entity2: ARTURIResource, relation: string, entity1Role?: RDFResourceRolesEnum, forcedProperty?: ARTURIResource, setAsDefault?: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             entity1: entity1,
             entity2: entity2,
             relation: relation,
@@ -388,18 +388,19 @@ export class AlignmentServices {
     searchResources(inputRes: ARTURIResource, resourcePosition: string, rolesArray: RDFResourceRolesEnum[], 
         langToLexModel?: Map<string, ARTURIResource>, searchModeList?: SearchMode[]): Observable<ARTURIResource[]> {
 
-        let params: any = {
+        let params: STRequestParams = {
             inputRes: inputRes,
             resourcePosition: resourcePosition,
-            rolesArray: rolesArray
+            rolesArray: rolesArray,
+            langToLexModel: langToLexModel,
+            searchModeList: searchModeList,
         };
-        if (langToLexModel != null) {
-            params.langToLexModel = langToLexModel;
-        }
-        if (searchModeList != null) {
-            params.searchModeList = searchModeList;
-        }
-        return this.httpMgr.doGet(this.serviceName, "searchResources", params).pipe(
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorHandlers: [{
+                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+            }]
+        });
+        return this.httpMgr.doGet(this.serviceName, "searchResources", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp, ["matchMode", "matchedLang"]);
             })
@@ -414,7 +415,7 @@ export class AlignmentServices {
      * @param pageSize if less or equal to zero, then everything goes into one page
      */
     getMappingCount(targetUriPrefix: string, mappingProperties?: ARTURIResource[], expressInPages?: boolean, pageSize?: number): Observable<number> {
-        let params: any = {
+        let params: STRequestParams = {
             targetUriPrefix: targetUriPrefix,
             mappingProperties: mappingProperties,
             expressInPages: expressInPages,
@@ -431,7 +432,7 @@ export class AlignmentServices {
      * @param mappingProperties 
      */
     getMappings(targetUriPrefix: string, page?: number, pageSize?: number, mappingProperties?: ARTURIResource[]): Observable<ARTURIResource[]> {
-        let params: any = {
+        let params: STRequestParams = {
             targetUriPrefix: targetUriPrefix,
             page: page,
             pageSize: pageSize,

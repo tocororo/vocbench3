@@ -176,10 +176,9 @@ export class UserServices {
             vbHostAddress: this.getVbHostAddress()
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.user.EmailVerificationExpiredException']
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.user.EmailVerificationExpiredException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "verifyUserEmail", params, options);
     }
@@ -190,10 +189,9 @@ export class UserServices {
             token: token,
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.user.UserActivationExpiredException']
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.user.UserActivationExpiredException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "activateRegisteredUser", params, options);
     }

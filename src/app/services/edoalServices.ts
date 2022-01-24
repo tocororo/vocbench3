@@ -141,10 +141,9 @@ export class EdoalServices {
             pageSize: pageSize
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [ 'it.uniroma2.art.semanticturkey.services.core.IndexingLanguageNotFound']
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.services.core.IndexingLanguageNotFound', action: 'skip' },
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "getCorrespondences", params, options).pipe(
             map(stResp => {

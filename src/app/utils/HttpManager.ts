@@ -25,9 +25,7 @@ export class HttpManager {
     protected serverhost: string;
 
     //default request options, to eventually override through options parameter in doGet, doPost, ...
-    private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({
-        errorAlertOpt: { show: true, exceptionsToSkip: [] }
-    });
+    private defaultRequestOptions: VBRequestOptions = new VBRequestOptions();
 
     constructor(private http: HttpClient, private router: Router, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
         this.serverhost = HttpManager.getServerHost();
@@ -67,7 +65,7 @@ export class HttpManager {
                 return this.handleOkOrErrorResponse(res); 
             }),
             catchError(error => {
-                return this.handleError(error, options.errorAlertOpt);
+                return this.handleError(error, options.errorHandlers);
             })
         );
     }
@@ -109,7 +107,7 @@ export class HttpManager {
                 return this.handleOkOrErrorResponse(res); 
             }),
             catchError(error => {
-                return this.handleError(error, options.errorAlertOpt);
+                return this.handleError(error, options.errorHandlers);
             })
         );
     }
@@ -162,7 +160,7 @@ export class HttpManager {
                 return this.handleOkOrErrorResponse(res); 
             }),
             catchError(error => {
-                return this.handleError(error, options.errorAlertOpt);
+                return this.handleError(error, options.errorHandlers);
             })
         );
     }
@@ -206,7 +204,7 @@ export class HttpManager {
                     return this.arrayBufferRespHandler(res); 
                 }),
                 catchError(error => { 
-                    return this.handleError(error, options.errorAlertOpt);
+                    return this.handleError(error, options.errorHandlers);
                 })
             );
         } else { //GET
@@ -227,7 +225,7 @@ export class HttpManager {
                     return this.arrayBufferRespHandler(res);
                 }),
                 catchError(error => {
-                    return this.handleError(error, options.errorAlertOpt);
+                    return this.handleError(error, options.errorHandlers);
                 })
             );
         }
@@ -383,7 +381,7 @@ export class HttpManager {
      * @param error error catched in catch clause (is a Response in case the error is a 401 || 403 response or if the server doesn't respond)
      * @param errorAlertOpt tells wheter to show error alert. Is useful to handle the error from the component that invokes the service.
      */
-    private handleError(err: HttpErrorResponse | Error, errorAlertOpt: ErrorAlertOptions) {
+    private handleError(err: HttpErrorResponse | Error, errorHandlers: ExceptionHandlerInfo[]) {
         let error: Error = new Error();
         if (err instanceof HttpErrorResponse) { //error thrown by the angular HttpClient get() or post()
             if (err.error instanceof ErrorEvent) { //A client-side or network error occurred
@@ -430,14 +428,25 @@ export class HttpManager {
             }
         } else if (err instanceof Error) { //error already parsed and thrown in handleOkOrErrorResponse or arrayBufferRespHandler
             error = err;
-            if (
-                errorAlertOpt.show && 
-                (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) &&
-                HttpServiceContext.isErrorInterceptionEnabled()
-            ) { //if the alert should be shown
-                let errorMsg = error.message != null ? error.message : "Unknown response from the server";
-                let errorDetails = error.stack ? error.stack : error.name;
-                this.basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error, errorDetails);
+            if (HttpServiceContext.isErrorInterceptionEnabled()) {
+                let handleErrorDefault: boolean = true;
+                if (errorHandlers) {
+                    let errHandler = errorHandlers.find(h => h.className == error.name);
+                    if (errHandler) {
+                        if (errHandler.action == 'warning') {
+                            let errorMsg = error.message;
+                            this.basicModals.alert({key:"STATUS.WARNING"}, errorMsg, ModalType.warning);
+                            handleErrorDefault = false; //handled with a simple warning alert, so skip the default "error" alert
+                        } else if (errHandler.action == 'skip') {
+                            handleErrorDefault = false; //simply skip the alert (it will be handled ad-hoc by the component that invoked the service)
+                        }
+                    }
+                } 
+                if (handleErrorDefault) { //if the alert should be shown
+                    let errorMsg = error.message != null ? error.message : "Unknown response from the server";
+                    let errorDetails = error.stack ? error.stack : error.name;
+                    this.basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error, errorDetails);
+                }
             }
         }
         UIUtils.stopAllLoadingDiv();
@@ -621,11 +630,11 @@ export class HttpServiceContext {
 //inspired by angular RequestOptions
 export class VBRequestOptions {
 
-    errorAlertOpt: ErrorAlertOptions;
+    errorHandlers: ExceptionHandlerInfo[];
     ctxProject: Project;
     
-    constructor({ errorAlertOpt, ctxProject }: VBRequestOptionsArgs = {}) {
-        this.errorAlertOpt = errorAlertOpt != null ? errorAlertOpt : null;
+    constructor({ errorHandlers, ctxProject }: VBRequestOptionsArgs = {}) {
+        this.errorHandlers = errorHandlers != null ? errorHandlers : null;
         this.ctxProject = ctxProject != null ? ctxProject : null;
     }
 
@@ -637,7 +646,7 @@ export class VBRequestOptions {
     merge(options?: VBRequestOptions): VBRequestOptions {
         //if options is provided and its parameters is not null, override the value of the current instance
         return new VBRequestOptions({
-            errorAlertOpt: options && options.errorAlertOpt != null ? options.errorAlertOpt : this.errorAlertOpt,
+            errorHandlers: options && options.errorHandlers != null ? options.errorHandlers : this.errorHandlers,
             ctxProject: options && options.ctxProject != null ? options.ctxProject : this.ctxProject
         });
     }
@@ -654,18 +663,19 @@ export class VBRequestOptions {
 
 //inspired by angular RequestOptionsArgs
 interface VBRequestOptionsArgs {
-    /**
-     * To prevent an alert dialog to show up in case of error during requests.
-     * Is useful to handle the error from the component that invokes the service.
-     */
-    errorAlertOpt?: ErrorAlertOptions;
-
+    errorHandlers?: ExceptionHandlerInfo[];
     ctxProject?: Project;
 }
 
-class ErrorAlertOptions {
-    show: boolean; //if true HttpManager show the error alert in case of error response, skip the show alert otherwise
-    exceptionsToSkip?: string[]; //if provided, tells for which exceptions the alert should be skipped (useful only if show is true)
+export interface ExceptionHandlerInfo {
+    className: string;
+    /**
+     * tells how the exception should be handled: 
+     * - skip: doesn't show any alert (it will be handled ad-hoc into the component which invoked the service)
+     * - warning: show the alert as warning, not as error (this can be used when the exception doesn't need to be handled in the component, but the error message
+     * is quite user-friendly and can be simply shown in a warning dialog)
+     */
+    action: 'skip' | 'warning';
 }
 
 export class STRequestParams { [key: string]: any }

@@ -26,13 +26,10 @@ export class RemoteAlignmentServices {
             params.rightDataset = rightDataset.getName();
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException',
-                    'java.lang.IllegalStateException'
-                ]
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException', action: 'skip' },
+                { className: 'java.lang.IllegalStateException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "listTasks", params, options).pipe(
             map(stResp => {
@@ -105,13 +102,10 @@ export class RemoteAlignmentServices {
     getServiceMetadata(): Observable<ServiceMetadataDTO> {
         let params: any = {};
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException',
-                    'java.lang.IllegalStateException'
-                ]
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException', action: 'skip' },
+                { className: 'java.lang.IllegalStateException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "getServiceMetadata", params, options).pipe(
             map(stResp => {

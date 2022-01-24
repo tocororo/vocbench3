@@ -5,7 +5,7 @@ import { ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Settings } from '../models/Plugins';
 import { MultischemeMode, SearchMode, StatusFilter } from "../models/Properties";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class SearchServices {
@@ -28,7 +28,7 @@ export class SearchServices {
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean, useNotes: boolean,
         searchMode: SearchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: STRequestParams = {
             searchString: searchString,
             rolesArray: rolesArray,
             useLocalName: useLocalName,
@@ -40,6 +40,11 @@ export class SearchServices {
             schemes: schemes,
             schemeFilter: schemeFilter,
         };
+        options = new VBRequestOptions({
+            errorHandlers: [{
+                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+            }]
+        }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -60,20 +65,21 @@ export class SearchServices {
      */
     searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean,
         searchMode: SearchMode, langs?: string[], includeLocales?: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: STRequestParams = {
             cls: cls,
             searchString: searchString,
             useLocalName: useLocalName,
             useURI: useURI,
             useNotes: useNotes,
             searchMode: searchMode,
+            langs: langs,
+            includeLocales: includeLocales
         };
-        if (langs != null) {
-            params.langs = langs;
-        }
-        if (includeLocales != null) {
-            params.includeLocales = includeLocales;
-        }
+        options = new VBRequestOptions({
+            errorHandlers: [{
+                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+            }]
+        }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -96,22 +102,21 @@ export class SearchServices {
     searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean, searchMode: SearchMode,
         lexicons?: ARTURIResource[], langs?: string[], includeLocales?: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
 
-        var params: any = {
+        let params: STRequestParams = {
             searchString: searchString,
             useLocalName: useLocalName,
             useURI: useURI,
             useNotes: useNotes,
             searchMode: searchMode,
+            lexicons: lexicons,
+            langs: langs,
+            includeLocales: includeLocales
         };
-        if (lexicons != null) {
-            params.lexicons = lexicons;
-        }
-        if (langs != null) {
-            params.langs = langs;
-        }
-        if (includeLocales != null) {
-            params.includeLocales = includeLocales;
-        }
+        options = new VBRequestOptions({
+            errorHandlers: [{
+                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+            }]
+        }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchLexicalEntry", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp, ["index"]);
@@ -135,7 +140,7 @@ export class SearchServices {
     getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, 
         broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, 
         root?: ARTURIResource, options?: VBRequestOptions) {
-        var params: any = {
+        let params: STRequestParams = {
             role: role,
             resourceURI: resource,
             schemesIRI: schemes,
@@ -147,9 +152,9 @@ export class SearchServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, options).pipe(
             map(stResp => {
-                var shortestPath: ARTURIResource[] = [];
-                var paths: ARTURIResource[] = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < paths.length; i++) {
+                let shortestPath: ARTURIResource[] = [];
+                let paths: ARTURIResource[] = Deserializer.createURIArray(stResp);
+                for (let i = 0; i < paths.length; i++) {
                     shortestPath.push(paths[i]);
                     if (paths[i].getURI() == resource.getURI()) {
                         break;
@@ -172,7 +177,7 @@ export class SearchServices {
     searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: SearchMode,
         langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, cls?: ARTURIResource,
         options?: VBRequestOptions): Observable<string[]> {
-        var params: any = {
+        let params: STRequestParams = {
             searchString: searchString,
             rolesArray: rolesArray,
             useLocalName: useLocalName,
@@ -183,6 +188,12 @@ export class SearchServices {
             schemeFilter: schemeFilter,
             cls: cls
         };
+        let excOptions: VBRequestOptions = new VBRequestOptions({
+            errorHandlers: [{
+                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+            }]
+        });
+        options = excOptions.merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchStringList", params, options);
     }
 
@@ -200,7 +211,7 @@ export class SearchServices {
      */
     searchURIList(searchString: string, searchMode: SearchMode, maxNumResults?: number, rolesArray?: string[],
         schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, cls?: ARTURIResource, options?: VBRequestOptions): Observable<string[]> {
-        var params: any = {
+        let params: STRequestParams = {
             searchString: searchString,
             searchMode: searchMode,
             maxNumResults: maxNumResults,
@@ -208,8 +219,12 @@ export class SearchServices {
             schemes: schemes,
             schemeFilter: schemeFilter,
             cls: cls
-           
         };
+        options = new VBRequestOptions({
+            errorHandlers: [{
+                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+            }]
+        }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchURIList", params, options);
     }
 
@@ -221,7 +236,7 @@ export class SearchServices {
    * @param options 
    */
     searchPrefix(searchString: string, searchMode: SearchMode,options?: VBRequestOptions): Observable<string[]> {
-        var params: any = {
+        let params: STRequestParams = {
             searchString: searchString,
             searchMode: searchMode
         };
@@ -247,9 +262,16 @@ export class SearchServices {
         ingoingLinks?: { first: ARTURIResource, second: ARTNode[] }[], outgoingLinks?: { first: ARTURIResource, second: ARTNode[] }[],
         outgoingSearch?: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[]): Observable<ARTResource[]> {
 
-        var params: any = {
+        let params: STRequestParams = {
             statusFilter: statusFilter,
-            searchMode: searchMode
+            searchMode: searchMode,
+            langs: langs,
+            includeLocales: includeLocales,
+            types: types ? this.serializeListOfList(types) : null,
+            schemes: schemes ? this.serializeListOfList(schemes) : null,
+            ingoingLinks: ingoingLinks ? this.serializeLinks(ingoingLinks) : null,
+            outgoingLinks: outgoingLinks ? this.serializeLinks(outgoingLinks) : null,
+            outgoingSearch: outgoingSearch ? this.serializeSearchLinks(outgoingSearch) : null,
         };
         if (searchString != null) {
             params.searchString = searchString;
@@ -257,28 +279,12 @@ export class SearchServices {
             params.useURI = useURI;
             params.useNotes = useNotes;
         }
-        if (langs != null) {
-            params.langs = langs;
-        }
-        if (includeLocales != null) {
-            params.includeLocales = includeLocales;
-        }
-        if (types != null) {
-            params.types = this.serializeListOfList(types);
-        }
-        if (schemes != null) {
-            params.schemes = this.serializeListOfList(schemes);
-        }
-        if (ingoingLinks != null) {
-            params.ingoingLinks = this.serializeLinks(ingoingLinks);
-        }
-        if (outgoingLinks != null) {
-            params.outgoingLinks = this.serializeLinks(outgoingLinks);
-        }
-        if (outgoingSearch != null) {
-            params.outgoingSearch = this.serializeSearchLinks(outgoingSearch);
-        }
-        return this.httpMgr.doPost(this.serviceName, "advancedSearch", params).pipe(
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorHandlers: [{
+                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+            }]
+        });
+        return this.httpMgr.doPost(this.serviceName, "advancedSearch", params, options).pipe(
             map(stResp => {
                 return Deserializer.createResourceArray(stResp);
             })
@@ -334,7 +340,7 @@ export class SearchServices {
      * @param searchParameterizationReference 
      */
     getCustomSearchForm(searchParameterizationReference: string): Observable<Settings> {
-        var params: any = {
+        let params: STRequestParams = {
             searchParameterizationReference: searchParameterizationReference
         };
         return this.httpMgr.doGet(this.serviceName, "getCustomSearchForm", params).pipe(
@@ -345,7 +351,7 @@ export class SearchServices {
     }
 
     customSearch(searchParameterizationReference: string, boundValues: Map<string, ARTNode>): Observable<ARTResource[]> {
-        var params: any = {
+        let params: STRequestParams = {
             searchParameterizationReference: searchParameterizationReference,
             boundValues: boundValues
         };

@@ -14,10 +14,9 @@ export class UndoServices {
     undo(): Observable<CommitInfo> {
         let params = {};
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['org.eclipse.rdf4j.repository.RepositoryException'] //when undo stack is empty (contains a message "...SailException: Empty undo stack")
-            } 
+            errorHandlers: [
+                { className: 'org.eclipse.rdf4j.repository.RepositoryException', action: 'skip' }, //when undo stack is empty (contains a message "...SailException: Empty undo stack")
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "undo", params, options).pipe(
             map(stResp => {

@@ -99,10 +99,9 @@ export class ProjectServices {
             requestedLockLevel: "NO"
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException'] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "accessProject", params, options);
     }
@@ -209,10 +208,10 @@ export class ProjectServices {
             label: label
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException', 'org.eclipse.rdf4j.repository.RepositoryException'] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException', action: 'skip' },
+                { className: 'org.eclipse.rdf4j.repository.RepositoryException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "createProject", params, options);
     }

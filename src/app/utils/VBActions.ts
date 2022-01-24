@@ -385,97 +385,86 @@ export class VBActionFunctions {
      */
 
     private skosCreateTopConcept = (ctx: VBActionFunctionCtx) => {
-        return this.createConcept(ctx, true);
+        return this.createConcept(ctx);
     }
 
     private skosCreateNarrowerConcept = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
-        return this.createConcept(ctx, false, parent);
+        return this.createConcept(ctx, parent);
     }
 
-    private createConcept(ctx: VBActionFunctionCtx, top: boolean, parent?: ARTURIResource) {
-        let clashLabelMode: PrefLabelClashMode = VBContext.getWorkingProjectCtx().getProjectSettings().prefLabelClashMode;
-        let checkExistingPrefLabel: boolean = clashLabelMode != PrefLabelClashMode.allow; //if not "allow" (forbid or warning) enable the check
+    private createConcept(ctx: VBActionFunctionCtx, parent?: ARTURIResource) {
 
-        let creationModalTitleKey: string = top ? "DATA.ACTIONS.CREATE_CONCEPT" : "DATA.ACTIONS.CREATE_NARROWER_CONCEPT";
+        let creationModalTitleKey: string = parent ? "DATA.ACTIONS.CREATE_NARROWER_CONCEPT" : "DATA.ACTIONS.CREATE_CONCEPT";
 
         return new Observable((observer: Observer<void>) => {
             this.creationModals.newConceptCf({key:creationModalTitleKey}, parent, ctx.schemes, ctx.metaClass, true).then(
                 (data: NewConceptCfModalReturnData) => {
-                    UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-
-                    let broaderProp: ARTURIResource = top ? null : data.broaderProp;
-
-                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue, null, checkExistingPrefLabel).subscribe(
-                        () => { 
-                            UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
-                            observer.next(null);
-                        },
-                        (err: Error) => {
-                            if (err.name.endsWith('PrefAltLabelClashException')) {
-                                let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
-                                    confirm => {
-                                        UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                                        this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue, false).subscribe(
-                                            () => {
-                                                UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
-                                                observer.next(null);
-                                            }
-                                        );
-                                    },
-                                    reject => {
-                                        observer.error(null);
-                                    }
-                                );
-                            } else if (err.name.endsWith('PrefPrefLabelClashException')) {
-                                let msg = err.message;
-                                if (clashLabelMode == PrefLabelClashMode.warning) { //mode warning => ask user if he wants to force the operation
-                                    msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
-                                        confirm => {
-                                            UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                                            this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue, null, false).subscribe(
-                                                () => {
-                                                    UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
-                                                    observer.next(null);
-                                                }
-                                            );
-                                        },
-                                        reject => {
-                                            observer.error(null);
-                                        }
-                                    );
-                                } else { //mode forbid => just show the error message
-                                    this.basicModals.alert({key:"STATUS.WARNING"}, msg, ModalType.warning)
-                                    observer.error(null);
-                                }
-                            } else if (err.name.endsWith('BlacklistForbiddendException')) {
-                                let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
-                                    confirm => {
-                                        UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                                        HttpServiceContext.setContextForce(true);
-                                        this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue).subscribe(
-                                            () => {
-                                                UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
-                                                HttpServiceContext.setContextForce(false);
-                                                observer.next(null);
-                                            }
-                                        );
-                                    },
-                                    reject => {
-                                        observer.error(null);
-                                    }
-                                )
-                            }
-                        }
-                    );
+                    let clashLabelMode: PrefLabelClashMode = VBContext.getWorkingProjectCtx().getProjectSettings().prefLabelClashMode;
+                    let checkClash: boolean = clashLabelMode != PrefLabelClashMode.allow; //if not "allow" (forbid or warning) enable the check
+                    this.createConceptImpl(ctx, data, observer, parent, checkClash, checkClash, false);
                 },
                 () => {
                     observer.error(null);
                 }
             );
         });
+    }
+
+    private createConceptImpl(ctx: VBActionFunctionCtx, data: NewConceptCfModalReturnData, observer: Observer<void>, parent?: ARTURIResource, checkAlt?: boolean, checkPref?: boolean, forceBlacklist?: boolean) {
+        if (forceBlacklist) {
+            HttpServiceContext.setContextForce(true);
+        }
+        let clashLabelMode: PrefLabelClashMode = VBContext.getWorkingProjectCtx().getProjectSettings().prefLabelClashMode;
+
+        let broaderProp: ARTURIResource = parent ? data.broaderProp : null;
+
+        UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
+        this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue, checkAlt, checkPref).subscribe(
+            () => { 
+                UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
+                HttpServiceContext.setContextForce(false); //remove the ctx_force param
+                observer.next(null);
+            },
+            (err: Error) => {
+                if (err.name.endsWith('PrefAltLabelClashException')) {
+                    let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                        confirm => {
+                            this.createConceptImpl(ctx, data, observer, parent, false, checkPref, forceBlacklist);
+                        },
+                        reject => {
+                            observer.error(null);
+                        }
+                    );
+                } else if (err.name.endsWith('PrefPrefLabelClashException')) {
+                    let msg = err.message;
+                    if (clashLabelMode == PrefLabelClashMode.warning) { //mode warning => ask user if he wants to force the operation
+                        msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                        this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                            confirm => {
+                                this.createConceptImpl(ctx, data, observer, parent, checkAlt, false, forceBlacklist);
+                            },
+                            reject => {
+                                observer.error(null);
+                            }
+                        );
+                    } else { //mode forbid => just show the error message
+                        this.basicModals.alert({key:"STATUS.WARNING"}, msg, ModalType.warning)
+                        observer.error(null);
+                    }
+                } else if (err.name.endsWith('BlacklistForbiddendException')) {
+                    let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                        confirm => {
+                            this.createConceptImpl(ctx, data, observer, parent, checkAlt, checkPref, true);
+                        },
+                        reject => {
+                            observer.error(null);
+                        }
+                    )
+                }
+            }
+        );
     }
 
     private skosDeleteConcept = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {

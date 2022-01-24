@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { User } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from '../utils/VBEventHandler';
 
@@ -20,15 +20,14 @@ export class AuthServices {
      * Logs in and registers the logged user in the VBContext
      */
     login(email: string, password: string, rememberMe?: boolean): Observable<User> {
-        var params: any = {
+        let params: STRequestParams = {
             email: email,
             password: password,
             _spring_security_remember_me: rememberMe
         }
-        var options: VBRequestOptions = new VBRequestOptions({ errorAlertOpt: { show: false } });
-        return this.httpMgr.doPost(this.serviceName, "login", params, options).pipe(
+        return this.httpMgr.doPost(this.serviceName, "login", params).pipe(
             map(stResp => {
-                var loggedUser: User = Deserializer.createUser(stResp);
+                let loggedUser: User = Deserializer.createUser(stResp);
                 VBContext.setLoggedUser(loggedUser);
                 return loggedUser;
             })
@@ -40,7 +39,7 @@ export class AuthServices {
      * Logs out and removes the logged user from the VBContext
      */
     logout() {
-        var params: any = {}
+        let params: STRequestParams = {}
         return this.httpMgr.doGet(this.serviceName, "logout", params).pipe(
             map(stResp => {
                 this.router.navigate(["/Home"]);

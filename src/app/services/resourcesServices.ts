@@ -176,10 +176,9 @@ export class ResourcesServices {
             format: format.name
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['java.lang.IllegalArgumentException'] 
-            } 
+            errorHandlers: [
+                { className: 'java.lang.IllegalArgumentException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "updateResourceTriplesDescription", params, options);
     }

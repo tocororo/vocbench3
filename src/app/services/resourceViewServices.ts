@@ -27,9 +27,9 @@ export class ResourceViewServices {
             params.resourcePosition = resourcePosition;
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, exceptionsToSkip: ['java.net.UnknownHostException']
-            } 
+            errorHandlers: [
+                { className: 'java.net.UnknownHostException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "getResourceView", params, options);
     }
@@ -40,9 +40,9 @@ export class ResourceViewServices {
             date: date.toISOString()
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, exceptionsToSkip: ['java.net.UnknownHostException']
-            } 
+            errorHandlers: [
+                { className: 'java.net.UnknownHostException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "getResourceViewAtTime", params, options);
     }

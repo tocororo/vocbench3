@@ -39,10 +39,9 @@ export class StorageServices {
             overwrite: overwrite,
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['java.nio.file.FileAlreadyExistsException']
-            } 
+            errorHandlers: [
+                { className: 'java.nio.file.FileAlreadyExistsException', action: 'skip' },
+            ]
         });
         return this.httpMgr.uploadFile(this.serviceName, "createFile", params, options);
     }

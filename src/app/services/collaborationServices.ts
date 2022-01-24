@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, skip } from 'rxjs/operators';
 import { ARTURIResource } from '../models/ARTResources';
 import { CollaborationSystemStatus, CollaborationUtils, Issue, IssuesStruct } from '../models/Collaboration';
 import { Settings } from '../models/Plugins';
@@ -176,13 +176,10 @@ export class CollaborationServices {
             resource: resource
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'java.net.ConnectException',
-                    'it.uniroma2.art.semanticturkey.extension.extpts.collaboration.CollaborationBackendException'
-                ]
-            } 
+            errorHandlers: [
+                { className: 'java.net.ConnectException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.extension.extpts.collaboration.CollaborationBackendException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "listIssuesAssignedToResource", params, options).pipe(
             map(resp => {
@@ -199,13 +196,10 @@ export class CollaborationServices {
     listProjects(): Observable<{ headers: string[], projects: any[] }> {
         let params: any = {};
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'java.net.ConnectException',
-                    'it.uniroma2.art.semanticturkey.extension.extpts.collaboration.CollaborationBackendException'
-                ]
-            } 
+            errorHandlers: [
+                { className: 'java.net.ConnectException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.extension.extpts.collaboration.CollaborationBackendException', action: 'skip' }
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "listProjects", params, options);
     }
@@ -218,13 +212,10 @@ export class CollaborationServices {
             pageOffset: pageOffset
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'java.net.ConnectException',
-                    'it.uniroma2.art.semanticturkey.extension.extpts.collaboration.CollaborationBackendException'
-                ]
-            } 
+            errorHandlers: [
+                { className: 'java.net.ConnectException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.extension.extpts.collaboration.CollaborationBackendException', action: 'skip' }
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "listIssues", params, options).pipe(
             map(stResp => {

@@ -2,6 +2,7 @@ import { Component, SimpleChanges } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { from, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import { PrefLabelClashMode } from "src/app/models/Properties";
 import { VBContext } from "src/app/utils/VBContext";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
@@ -252,34 +253,28 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         let errorHandler: (errors: MultiActionError[]) => void;
 
         //SKOS or SKOSXL lexicalization predicates
+        let prefLabelClashMode = VBContext.getWorkingProjectCtx().getProjectSettings().prefLabelClashMode;
+        let checkClash: boolean = prefLabelClashMode != PrefLabelClashMode.allow; //enable the clash checks only if not "allow" ("forbid"|"warning")
         if (
             predicate.equals(SKOSXL.prefLabel) || predicate.equals(SKOSXL.altLabel) || predicate.equals(SKOSXL.hiddenLabel) ||
             predicate.equals(SKOS.prefLabel) || predicate.equals(SKOS.altLabel) || predicate.equals(SKOS.hiddenLabel)
         ) {
             labels.forEach((label: ARTLiteral) => {
                 addFunctions.push({
-                    function: this.lexicalizationEnrichmentHelper.getAddLabelFn(<ARTURIResource>this.resource, predicate, label, cls),
+                    function: this.lexicalizationEnrichmentHelper.getAddLabelFn(<ARTURIResource>this.resource, predicate, label, cls, checkClash, checkClash, false),
                     value: label
                 });
             });
             errorHandler = (errors: MultiActionError[]) => {
                 if (errors.length == 1) { //if only one error, try to handle it
-                    let err: Error = errors[0].error;
-                    if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
-                        let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                        this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
-                            confirm => {
-                                this.lexicalizationEnrichmentHelper.getAddLabelFn(
-                                    <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, cls,
-                                    !err.name.endsWith('PrefAltLabelClashException'), err.name.endsWith('BlacklistForbiddendException')
-                                ).subscribe(
-                                    stResp => this.update.emit(null)
-                                );
-                            },
-                            () => { }
-                        );
-                    } else {
-                        this.handleSingleMultiAddError(errors[0]);
+                    let err: MultiActionError = errors[0];
+                    if (
+                        ((err.error.name.endsWith("PrefPrefLabelClashException") || err.error.name.endsWith("PrefAltLabelClashException")) && prefLabelClashMode == PrefLabelClashMode.warning) || 
+                        err.error.name.endsWith("BlacklistForbiddendException")
+                    ) {
+                        this.lexicalizationEnrichmentHelper.handleForceAddLexicalizationError(err.error, <ARTURIResource>this.resource, predicate, <ARTLiteral>err.value, cls, checkClash, checkClash, false, { eventEmitter: this.update })
+                    } else { //other error that cannot be handled with a "force action"
+                        this.handleSingleMultiAddError(err);
                     }
                 } else {
                     this.handleMultipleMultiAddError(errors);
@@ -295,6 +290,5 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         }
         this.addMultiple(addFunctions, errorHandler);
     }
-
 
 }

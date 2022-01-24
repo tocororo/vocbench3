@@ -49,14 +49,11 @@ export class SkosxlServices {
             checkExistingPrefLabel: checkExistingPrefLabel
         };
         var options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
-                    'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException',
-                    'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
-                ] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, options);
     }
@@ -108,12 +105,10 @@ export class SkosxlServices {
             params.labelCls = labelCls;
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: [
-                    'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException',
-                ] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.AltPrefLabelClashException', action: 'warning' } //addAltLabel cannot be forced, so just show a warning
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, options);
     }
@@ -148,10 +143,9 @@ export class SkosxlServices {
             params.labelCls = labelCls;
         }
         let options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'] 
-            } 
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException', action: 'skip' },
+            ]
         });
         return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, options);
     }
