@@ -1,5 +1,6 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable, of } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { ConfirmCheckOptions } from 'src/app/widget/modal/basicModal/confirmModal/confirmCheckModal';
@@ -61,7 +62,7 @@ export class AlignmentManagementComponent {
     private relationSymbols: AlignmentRelationSymbol[];
 
     constructor(private alignmentService: AlignmentServices, private resourceService: ResourcesServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal, private translateService: TranslateService) { }
 
     ngOnInit() {
         this.isEdoal = VBContext.getWorkingProject().getModelType() == EDOAL.uri;
@@ -179,7 +180,7 @@ export class AlignmentManagementComponent {
     /**
      * List cells of previous page.
      */
-    private prevPage() {
+    prevPage() {
         this.page--;
         this.updateAlignmentCells();
     }
@@ -187,7 +188,7 @@ export class AlignmentManagementComponent {
     /**
      * List cells of next page.
      */
-    private nextPage() {
+    nextPage() {
         this.page++;
         this.updateAlignmentCells();
     }
@@ -195,7 +196,7 @@ export class AlignmentManagementComponent {
     /**
      * Listener to the "Accept" button. Accepts the alignment and updates the UI
      */
-    private acceptAlignment(cell: AlignmentCell) {
+    acceptAlignment(cell: AlignmentCell) {
         this.alignmentService.acceptAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), cell.getEntity1().getRole()).subscribe(
             resultCell => {
                 //replace the accepted alignment cell with the returned one (keeping the "rendered" entities)
@@ -208,7 +209,7 @@ export class AlignmentManagementComponent {
                         (data: any) => {
                             let mappingProp: ARTURIResource = data.property;
                             let setAsDefault: boolean = data.setAsDefault;
-                            this.alignmentService.acceptAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), data.property, data.setAsDefault).subscribe(
+                            this.alignmentService.acceptAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), cell.getEntity1().getRole(), mappingProp, setAsDefault).subscribe(
                                 resultCell => {
                                     //replace the accepted alignment cell with the returned one
                                     this.replaceAlignmentCell(resultCell);
@@ -237,7 +238,7 @@ export class AlignmentManagementComponent {
     /**
      * Listener to the "Reject" button. Rejects the alignment and updates the UI
      */
-    private rejectAlignment(cell: AlignmentCell) {
+    rejectAlignment(cell: AlignmentCell) {
         this.alignmentService.rejectAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation()).subscribe(
             resultCell => {
                 //replace the rejected alignment cell with the returned one (keeping the "rendered" entities)
@@ -252,7 +253,7 @@ export class AlignmentManagementComponent {
     /**
      * Returns the relation symbol rendered according to the show type in settings (relation, dlSymbol or text)
      */
-    private getRelationRendered(cell: AlignmentCell): string {
+    getRelationRendered(cell: AlignmentCell): string {
         var result = cell.getRelation();
         var rel = cell.getRelation();
         for (var i = 0; i < this.relationSymbols.length; i++) {
@@ -270,21 +271,31 @@ export class AlignmentManagementComponent {
     /**
      * Called when user changes the relation of an alignment. Changes the relation and updates the UI.
      */
-    private changeRelation(cell: AlignmentCell, relation: string) {
+    changeRelation(cell: AlignmentCell, relation: string) {
         //change relation only if user choses a relation different from the current
         if (cell.getRelation() != relation) {
-            this.basicModals.confirm({key:"ALIGNMENT.ACTIONS.CHANGE_RELATION"}, {key:"MESSAGES.ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM"},
-                ModalType.warning).then(
-                (confirm: any) => {
-                    this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
-                        resultCell => {//replace the alignment cell with the new one
-                            this.replaceAlignmentCell(resultCell);
-                        }
-                    )
-                },
-                () => { }
-            );
+            let showWarning = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_WARN_CHANGE_RELATION, null, VBContext.getLoggedUser()) != "false";
+            if (showWarning) {
+                this.basicModals.confirmCheckCookie({key:"ALIGNMENT.ACTIONS.CHANGE_RELATION"}, {key:"MESSAGES.ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM"}, 
+                    Cookie.ALIGNMENT_VALIDATION_WARN_CHANGE_RELATION, ModalType.warning).then(
+                    () => {
+                        this.changeRelationImpl(cell, relation);
+                    },
+                    () => { }
+                );
+            } else {
+                this.changeRelationImpl(cell, relation);
+            }
+            
         }
+    }
+
+    private changeRelationImpl(cell: AlignmentCell, relation: string) {
+        this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
+            resultCell => {//replace the alignment cell with the new one
+                this.replaceAlignmentCell(resultCell);
+            }
+        )
     }
 
     /**
@@ -292,7 +303,7 @@ export class AlignmentManagementComponent {
      * Useful to populate the menu of the mapping properties.
      * Retrieves the suggested mapping properties and set them to the alignment cell.
      */
-    private getSuggestedMappingProperties(cell: AlignmentCell) {
+    getSuggestedMappingProperties(cell: AlignmentCell) {
         //call the service only if suggested properties for the given cell is not yet initialized
         if (cell.getSuggestedMappingProperties() == null) {
             //mention is not a valid role in ST, so get the role with fallback to individual
@@ -315,7 +326,7 @@ export class AlignmentManagementComponent {
     /**
      * Called when user changes the mapping prop of an alignment. Changes the the prop and updates the UI.
      */
-    private changeMappingProperty(cell: AlignmentCell, property: ARTURIResource) {
+    changeMappingProperty(cell: AlignmentCell, property: ARTURIResource) {
         //change property only if the user choses a property different from the current.
         if (property.getURI() != cell.getMappingProperty().getURI()) {
             this.alignmentService.changeMappingProperty(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), property).subscribe(
@@ -471,7 +482,8 @@ export class AlignmentManagementComponent {
                 () => { }
             );
         } else { //ask
-            this.basicModals.confirmCheck({ key: "ALIGNMENT.ACTIONS.APPLY_VALIDATION" }, message, [{ label: "Delete triples of rejected alignments", value: false }], ModalType.warning).then(
+            let checkLabel: string = this.translateService.instant("ALIGNMENT.VALIDATION.MANAGEMENT.DELETE_REJECTED");
+            this.basicModals.confirmCheck({ key: "ALIGNMENT.ACTIONS.APPLY_VALIDATION" }, message, [{ label: checkLabel, value: false }], ModalType.warning).then(
                 (checkOpts: ConfirmCheckOptions[]) => {
                     if (this.isEdoal) {
                         this.applyToEdoalLinkset(checkOpts[0].value)
@@ -529,7 +541,7 @@ export class AlignmentManagementComponent {
             c.getEntity1().getURI() == cell.getEntity1().getURI() && c.getEntity2().getURI() == cell.getEntity2().getURI());
     }
 
-    private openResView(resource: ARTURIResource, rightProject: boolean) {
+    openResView(resource: ARTURIResource, rightProject: boolean) {
         if (rightProject) {
             HttpServiceContext.setContextProject(this.rightProject);
         }

@@ -79,9 +79,7 @@ export class ClassTreeSettingsModal {
                     if ((model == RDFS.uri && cls.getURI() != RDFS.resource.getURI()) ||
                         (cls.getURI() != RDFS.resource.getURI() && cls.getURI() != OWL.thing.getURI()) //OWL or RDFS model
                     ) {
-                        let message: string = "Selecting a specific class as a root could hide newly created classes " + 
-                            "that are not subclasses of the chosen root.";
-                        this.basicModals.alertCheckCookie({key:"STATUS.WARNING"}, message, Cookie.WARNING_CUSTOM_ROOT);
+                        this.basicModals.alertCheckCookie({key:"STATUS.WARNING"}, { key: "MESSAGES.CHANGE_CLASS_TREE_ROOT_WARN" }, Cookie.WARNING_CUSTOM_ROOT, ModalType.warning);
                     }
                 }
                 this.rootClass = cls;

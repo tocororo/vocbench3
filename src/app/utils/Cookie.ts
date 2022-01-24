@@ -26,6 +26,7 @@ export class Cookie {
     public static ALIGNMENT_VALIDATION_SHOW_CONFIDENCE = "alignment_validation.show_confidence";
     public static ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION = "alignment_validation.rejected_alignment_action";
     public static ALIGNMENT_VALIDATION_RENDERING = "alignment_validation.rendering";
+    public static ALIGNMENT_VALIDATION_WARN_CHANGE_RELATION = "alignment_validation.warnings.change_relation";
 
     public static ALIGNMENT_LAST_EXPLORED_PROJECT = "alignment.last_project";
     public static ALIGNMENT_LAST_CHOSEN_TYPE = "alignment.last_type";

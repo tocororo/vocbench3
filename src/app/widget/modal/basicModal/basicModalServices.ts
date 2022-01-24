@@ -121,6 +121,20 @@ export class BasicModalServices {
         return modalRef.result;
     }
 
+    confirmCheckCookie(title: TextOrTranslation, msg: TextOrTranslation, warningCookie: string, type?: ModalType): Promise<void> {
+        let confCheckOpt: ConfirmCheckOptions = {
+            label: this.translateService.instant("COMMONS.DONT_ASK_AGAIN"),
+            value: false
+        }
+        return this.confirmCheck(title, msg, [confCheckOpt], type).then(
+            (checkOpts: ConfirmCheckOptions[]) => {
+                if (checkOpts[0].value) {
+                    Cookie.setCookie(warningCookie, "false", null, VBContext.getLoggedUser());
+                }
+            }
+        );
+    }
+
     /**
      * Opens a modal with an info message and a single button to dismiss the modal.
      * @param title the title of the modal dialog
@@ -147,7 +161,8 @@ export class BasicModalServices {
      * @param warningCookie 
      */
     alertCheckCookie(title: TextOrTranslation, msg: TextOrTranslation, warningCookie: string, type?: ModalType): Promise<void> {
-        return this.alert(title, msg, type, null, "Don't show this again").then(
+        let detailMsg: string = this.translateService.instant("COMMONS.DONT_SHOW_AGAIN");
+        return this.alert(title, msg, type, null, detailMsg).then(
             confirm => {
                 if (confirm) {
                     Cookie.setCookie(warningCookie, "false", null, VBContext.getLoggedUser());

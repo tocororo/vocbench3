@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Observable, of } from 'rxjs';
 import { finalize, map, mergeMap } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { ResourcesServices } from "../services/resourcesServices";
 import { TabsetPanelComponent } from "../structures/tabset/tabsetPanelComponent";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { ResourceUtils } from "../utils/ResourceUtils";
+import { UIUtils } from "../utils/UIUtils";
 import { ProjectContext, VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -29,6 +30,8 @@ export class EdoalComponent {
 
     @ViewChild('leftTabset') leftTabset: TabsetPanelComponent;
     @ViewChild('rightTabset') rightTabset: TabsetPanelComponent;
+
+    @ViewChild('blockingDiv', { static: false }) private blockingDivElement: ElementRef;
 
     /**
      * Projects and tabs
@@ -55,8 +58,11 @@ export class EdoalComponent {
 
     //pagination
     private page: number = 0;
-    private totPage: number;
+    totPage: number;
     private pageSize: number = 50;
+
+    pageSelector: number[] = [];
+    pageSelectorOpt: number;
 
     constructor(private edoalService: EdoalServices, private alignmentService: AlignmentServices, private projectService: ProjectServices, private resourcesService: ResourcesServices,
         private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
@@ -144,6 +150,11 @@ export class EdoalComponent {
                     this.totPage++;
                 }
 
+                this.pageSelector = [];
+                for (let i = 0; i < this.totPage; i++) {
+                    this.pageSelector.push(i);
+                }
+
                 this.listCorrespondences();
             }
         )
@@ -175,8 +186,10 @@ export class EdoalComponent {
      * ====================== */
 
     private listCorrespondences() {
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.edoalService.getCorrespondences(this.alignemnts[0], this.page, this.pageSize).subscribe(
             correspondences => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.correspondences = correspondences;
                 //try to set qname of mapping property
                 this.correspondences.forEach(c => {
@@ -235,7 +248,7 @@ export class EdoalComponent {
         }
     }
 
-    private selectCorrespondence(correspondece: Correspondence) {
+    selectCorrespondence(correspondece: Correspondence) {
         if (this.selectedCorrespondence == correspondece) {
             this.selectedCorrespondence = null;
         } else {
@@ -243,7 +256,7 @@ export class EdoalComponent {
         }
     }
 
-    private addCorrespondence() {
+    addCorrespondence() {
         if (this.measure < 0 || this.measure > 1) {
             this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_ALIGNMENT_MEASURE"}, ModalType.warning);
             return;
@@ -257,7 +270,7 @@ export class EdoalComponent {
         );
     }
 
-    private deleteCorrespondece() {
+    deleteCorrespondece() {
         this.edoalService.deleteCorrespondence(this.selectedCorrespondence.identity).subscribe(
             () => {
                 this.correspondences.splice(this.correspondences.indexOf(this.selectedCorrespondence), 1);
@@ -266,12 +279,12 @@ export class EdoalComponent {
         );
     }
 
-    private syncCorrespondece() {
+    syncCorrespondece() {
         this.leftTabset.syncResource(<ARTURIResource>this.selectedCorrespondence.leftEntity[0], true);
         this.rightTabset.syncResource(<ARTURIResource>this.selectedCorrespondence.rightEntity[0], true);
     }
 
-    private changeRelation(correspondence: Correspondence, relation: AlignmentRelationSymbol) {
+    changeRelation(correspondence: Correspondence, relation: AlignmentRelationSymbol) {
         this.edoalService.setRelation(correspondence.identity, relation.relation).subscribe(
             () => {
                 this.listCorrespondences();
@@ -279,7 +292,7 @@ export class EdoalComponent {
         )
     }
 
-    private changeMeasure(correspondence: Correspondence) {
+    changeMeasure(correspondence: Correspondence) {
         const modalRef: NgbModalRef = this.modalService.open(ChangeMeasureModal, new ModalOptions());
         modalRef.componentInstance.value = <number><any>correspondence.measure[0].getShow();
         return modalRef.result.then(
@@ -294,7 +307,7 @@ export class EdoalComponent {
         );
     }
 
-    private changeMappingProperty(correspondence: Correspondence, property: ARTURIResource) {
+    changeMappingProperty(correspondence: Correspondence, property: ARTURIResource) {
         this.edoalService.setMappingProperty(correspondence.identity, property).subscribe(
             () => {
                 this.listCorrespondences();
@@ -307,7 +320,7 @@ export class EdoalComponent {
      * Useful to populate the menu of the mapping properties.
      * Retrieves the suggested mapping properties and set them to the alignment cell.
      */
-    private initSuggestedMappingProperties(correspondence: Correspondence) {
+    initSuggestedMappingProperties(correspondence: Correspondence) {
         //call the service only if suggested properties for the given cell is not yet initialized
         if (correspondence['suggestedMappingProperties'] == null) {
             //mention is not a valid role in ST, so get the role with fallback to individual
@@ -327,32 +340,39 @@ export class EdoalComponent {
      * Paging
      */
 
-    private prevPage() {
+    prevPage() {
         this.page--;
         this.listCorrespondences();
     }
 
-    private nextPage() {
+    nextPage() {
         this.page++;
         this.listCorrespondences();
+    }
+
+    goToPage() {
+        if (this.page != this.pageSelectorOpt) {
+            this.page = this.pageSelectorOpt;
+            this.listCorrespondences();
+        }
     }
 
     /** ======================
      * Tabset handlers
      * ====================== */
 
-    private openLeftResourceView(res: ARTURIResource) {
+    openLeftResourceView(res: ARTURIResource) {
         this.sharedModals.openResourceView(res, true, this.leftProjCtx);
     }
-    private openRightResourceView(res: ARTURIResource) {
+    openRightResourceView(res: ARTURIResource) {
         this.sharedModals.openResourceView(res, true, this.rightProjCtx);
     }
 
-    private onLeftResourceSelected(resource: ARTURIResource) {
+    onLeftResourceSelected(resource: ARTURIResource) {
         this.leftSelectedResource = resource;
     }
 
-    private onRightResourceSelected(resource: ARTURIResource) {
+    onRightResourceSelected(resource: ARTURIResource) {
         this.rightSelectedResource = resource;
     }
 

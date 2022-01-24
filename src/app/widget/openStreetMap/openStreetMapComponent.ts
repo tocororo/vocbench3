@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import * as L from "leaflet";
-import { Point, Trace } from "./GeoData";
+import { Point } from "./GeoData";
 
 @Component({
     selector: "open-street-map",
@@ -13,18 +13,19 @@ import { Point, Trace } from "./GeoData";
     `]
 })
 export class OpenStreeMapComponent {
-    @Input() lat: number;
-    @Input() lng: number;
+    @Input() selection: boolean = false; //tells if the component is working in selection mode, namely if it allows the selection of a point (with a marker)
 
-    @Input() point: Point;
-    @Input() trace: Point[];
+    @Input() point: Point; //a point to be represented (with a marker) on the map
+    @Input() trace: Point[]; //a trace (set of points) to be represented (with a polyline) on the map
 
     @ViewChild('mapEl', { static: false }) mapEl: ElementRef;
 
     private map: L.Map;
 
     private tracePolyline: L.Polyline; //trace converted in leaflet format
-    private pointLatLng: L.LatLngExpression; //point converter in leaflet format
+    private pointLatLng: L.LatLngLiteral; //point converter in leaflet format
+
+    private marker: L.Marker;
 
 
     constructor() { }
@@ -37,8 +38,8 @@ export class OpenStreeMapComponent {
     ngAfterViewInit(): void {
         this.initMap();
 
-        this.addMarker();
-        this.addPolyline();
+        this.initMarker();
+        this.drawPolyline();
         this.setCenter();
     }
 
@@ -59,37 +60,52 @@ export class OpenStreeMapComponent {
             zoomControl: false,
             layers: [omsLayer]
         });
-    }
 
-    private addMarker() {
-        if (this.point) {
-            let marker = L.marker(this.pointLatLng);
-            marker.addTo(this.map)
-
-            let popup: L.Popup = L.popup({ offset: L.point(0, -20) });
-            popup.setContent("Hello popup");
-            marker.bindPopup(popup);
-
-            let tooltip: L.Tooltip = L.tooltip({ direction: 'top' });
-            tooltip.setContent("Hello tooltip")
-
-
-            marker.bindTooltip(tooltip).openTooltip();
-
-            // let tooltipPopup: L.Popup = L.popup({ offset: L.point(0, -20) });
-            // tooltipPopup.setContent("Hello");
-            // marker.on('mouseover', (e: L.LeafletEvent) => {
-            //     tooltipPopup.setLatLng(e.target.getLatLng());
-            //     tooltipPopup.openOn(this.map);
-            // }
-            // );
-            // marker.on('mouseout', (e: L.LeafletEvent) => {
-            //     this.map.closePopup(tooltipPopup);
-            // });
+        if (this.selection) { //if it works in selection mode, enable the click handler
+            this.map.on('click', (e: L.LeafletMouseEvent) => {
+                this.setMarker(e);   
+            })    
         }
     }
 
-    private addPolyline() {
+    private initMarker() {
+        if (this.point) {
+            this.marker = L.marker(this.pointLatLng);
+            this.marker.addTo(this.map)
+
+            let popup: L.Popup = L.popup({ closeButton: false });
+            popup.setContent(
+                "<table><tbody>" + 
+                "<tr><td><b>Lat:</b></td><td>" + this.pointLatLng.lat + "</td></tr>" +
+                "<tr><td><b>Long:</b></td><td>" + this.pointLatLng.lng + "</td></tr>" +
+                "</tbody></table>"
+            );
+            this.marker.bindPopup(popup).openPopup();
+
+            // let tooltip: L.Tooltip = L.tooltip({ direction: 'top' });
+            // tooltip.setContent("Hello tooltip")
+            // this.marker.bindTooltip(tooltip).openTooltip();
+        }
+    }
+
+    setMarker(e: L.LeafletMouseEvent) {
+        //remove the previous marker (if any)
+        if (this.marker) {
+            this.marker.remove();
+        }
+        //add the new one
+        this.marker = L.marker(e.latlng).addTo(this.map);
+        let popup: L.Popup = L.popup({ closeButton: false });
+        popup.setContent(
+            "<table><tbody>" + 
+            "<tr><td><b>Lat:</b></td><td>" + e.latlng.lat + "</td></tr>" +
+            "<tr><td><b>Long:</b></td><td>" + e.latlng.lng + "</td></tr>" +
+            "</tbody></table>"
+        );
+        this.marker.bindPopup(popup).openPopup();
+    };
+
+    private drawPolyline() {
         if (this.trace) {
             this.tracePolyline.addTo(this.map);
         }
