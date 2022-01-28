@@ -1,10 +1,11 @@
-import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as CodeMirror from 'codemirror';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Cookie } from 'src/app/utils/Cookie';
 import { ExpressionCheckResponse, ManchesterServices, ObjectError } from '../../../services/manchesterServices';
 import { ModalOptions } from '../../modal/Modals';
 import { SearchMode } from './../../../models/Properties';
@@ -23,17 +24,20 @@ import { HelperModal } from './modal/helperModal';
 export class ManchesterEditorComponent implements ControlValueAccessor {
     @Input() context: ManchesterCtx;
     @Input() disabled: boolean;
+    @Output('skipSemCheck') skipSemCheckEmitter: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('cmEditor') private cmEditorView: CodemirrorComponent;
 
     code: string;
     editorConfig: CodeMirror.EditorConfiguration;
 
+    skipSemanticCheck: boolean = false;
+
     private cmEditor: CodeMirror.EditorFromTextArea;
     private markers: CodeMirror.TextMarker[] = [];
     codeValid: boolean = true;
     private codeValidationTimer: number;
-    private codeInvalidDetails: string;
+    codeInvalidDetails: string;
 
     constructor(private manchesterService: ManchesterServices, private searchServices: SearchServices, private modalService: NgbModal) { }
 
@@ -55,6 +59,9 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
             //     }
             // }
         }
+
+        this.skipSemanticCheck = Cookie.getCookie(Cookie.MANCH_EXPR_SKIP_SEMANTIC_CHECK) == "true";
+        this.skipSemCheckEmitter.emit(this.skipSemanticCheck);
     }
 
     ngAfterViewInit() {
@@ -76,7 +83,15 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
 
     onCodeChange() {
         clearTimeout(this.codeValidationTimer);
+        this.propagateChange(null); //in order to prevent that OK is enabled in the meantime an expr check is performed
         this.codeValidationTimer = window.setTimeout(() => { this.validateExpression(this.code) }, 1000);
+    }
+
+    onSkipSemCheckChange() {
+        Cookie.setCookie(Cookie.MANCH_EXPR_SKIP_SEMANTIC_CHECK, this.skipSemanticCheck+"");
+        this.skipSemCheckEmitter.emit(this.skipSemanticCheck);
+        clearTimeout(this.codeValidationTimer);
+        this.validateExpression(this.code);
     }
 
     /**
@@ -89,7 +104,6 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
     /**
      * This method manages hints window (activated via "crtl-space").
      */
-    // private asyncHintFunction(): Promise<CodeMirror.Hints> {
     private asyncHintFunction(): Promise<any> {
         let wordRegExp = /[\w|:$]+/;
         let cur = this.cmEditor.getDoc().getCursor();
@@ -238,7 +252,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
         } else if (this.context == ManchesterCtx.datatypeEnumeration) {
             validationFn = this.manchesterService.checkLiteralEnumerationExpression(code);
         } else {
-            validationFn = this.manchesterService.checkExpression(code)
+            validationFn = this.manchesterService.checkExpression(code, this.skipSemanticCheck)
         }
         validationFn.subscribe(
             (checkResp: ExpressionCheckResponse) => {

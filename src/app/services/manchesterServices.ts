@@ -14,9 +14,10 @@ export class ManchesterServices {
      * Checks if a manchester expression in valid
      * @param manchExpr manchester expression to check
      */
-    checkExpression(manchExpr: string): Observable<ExpressionCheckResponse> {
-        var params = {
-            manchExpr: manchExpr
+    checkExpression(manchExpr: string, skipSemanticCheck?: boolean): Observable<ExpressionCheckResponse> {
+        let params = {
+            manchExpr: manchExpr,
+            skipSemanticCheck: skipSemanticCheck
         };
         return this.httpMgr.doGet(this.serviceName, "checkExpression", params);
     }
@@ -27,7 +28,7 @@ export class ManchesterServices {
      * @param manchExpr 
      */
     checkDatatypeExpression(manchExpr: string): Observable<ExpressionCheckResponse> {
-        var params = {
+        let params = {
             manchExpr: manchExpr
         };
         return this.httpMgr.doGet(this.serviceName, "checkDatatypeExpression", params);
@@ -38,7 +39,7 @@ export class ManchesterServices {
      * @param manchExpr 
      */
     checkLiteralEnumerationExpression(manchExpr: string): Observable<ExpressionCheckResponse> {
-        var params = {
+        let params = {
             manchExpr: manchExpr
         };
         return this.httpMgr.doGet(this.serviceName, "checkLiteralEnumerationExpression", params);
@@ -50,11 +51,12 @@ export class ManchesterServices {
      * @param predicate
      * @param manchExpr manchester expression used to create restriction
      */
-    createRestriction(cls: ARTURIResource, predicate: ARTURIResource, manchExpr: string) {
-        var params = {
+    createRestriction(cls: ARTURIResource, predicate: ARTURIResource, manchExpr: string, skipSemanticCheck?: boolean) {
+        let params = {
             classIri: cls,
             exprType: predicate,
-            manchExpr: manchExpr
+            manchExpr: manchExpr,
+            skipSemanticCheck: skipSemanticCheck
         };
         return this.httpMgr.doPost(this.serviceName, "createRestriction", params);
     }
@@ -66,7 +68,7 @@ export class ManchesterServices {
      * @param manchExpr manchester expression to check
      */
     removeExpression(cls: ARTURIResource, predicate: ARTURIResource, bnode: ARTNode) {
-        var params = {
+        let params = {
             classIri: cls,
             exprType: predicate,
             bnode: bnode
@@ -79,16 +81,17 @@ export class ManchesterServices {
      * @param newManchExpr 
      * @param bnode bnode that represents the restriction
      */
-    updateExpression(newManchExpr: string, bnode: ARTBNode) {
-        var params = {
+    updateExpression(newManchExpr: string, bnode: ARTBNode, skipSemanticCheck?: boolean) {
+        let params = {
             newManchExpr: newManchExpr,
-            bnode: bnode
+            bnode: bnode,
+            skipSemanticCheck: skipSemanticCheck
         };
         return this.httpMgr.doPost(this.serviceName, "updateExpression", params);
     }
 
     isClassAxiom(bnode: ARTBNode): Observable<boolean> {
-        var params = {
+        let params = {
             bnode: bnode
         };
         return this.httpMgr.doGet(this.serviceName, "isClassAxiom", params);

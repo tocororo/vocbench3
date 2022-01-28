@@ -3,7 +3,7 @@
         <h3 class="modal-title">{{title}}</h3>
     </div>
     <div class="modal-body vbox">
-        <manchester-editor class="vbox" [(ngModel)]="expression"></manchester-editor>
+        <manchester-editor class="vbox" [(ngModel)]="expression" (skipSemCheck)="onSkipSemCheckChamge($event)"></manchester-editor>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>

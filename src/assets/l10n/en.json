@@ -2369,6 +2369,7 @@
                 "MANCHESTER_SYNTAX": "Manchester syntax",
                 "MANCHESTER_SYNTAX_HELPER": "Manchester Syntax helper",
                 "PREST_CTRL_SPACE": "Press 'ctrl-space' to show hints",
+                "SKIP_SEM_CHECKS": "Skip semantic checks",
                 "TABLE_AXIOMS_INFO": "This table shows the conversions between DL syntax and Manchester syntax for these axioms",
                 "TABLE_CONSTRUCTORS_INFO": "This table shows the conversions between DL syntax and Manchester syntax for these constructors"
             }

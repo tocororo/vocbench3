@@ -235,7 +235,7 @@ export class MultiSubjectEnrichmentHelper {
                     if (typeof value == "string") {
                         subjects.forEach((s: ARTURIResource) => {
                             addFunctions.push({
-                                function: this.manchService.createRestriction(s, predicate, value),
+                                function: this.manchService.createRestriction(s, predicate, value, data.skipSemCheck),
                                 subject: s
                             });
                         });
@@ -316,13 +316,13 @@ export class MultiSubjectEnrichmentHelper {
 
     private domainsPropertiesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
         this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_DOMAIN"}, subjects[0], predicate, false, null, false).then(
-            (data: any) => {
+            (data: AddPropertyValueModalReturnData) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 let value: any = data.value; //value can be class(es) or a manchester Expression
                 if (typeof value == "string") {
                     subjects.forEach((s: ARTURIResource) => {
                         addFunctions.push({
-                            function: this.manchService.createRestriction(s, predicate, value),
+                            function: this.manchService.createRestriction(s, predicate, value, data.skipSemCheck),
                             subject: s
                         });
                     });
@@ -578,7 +578,7 @@ export class MultiSubjectEnrichmentHelper {
                     if (typeof value == "string") {
                         subjects.forEach((s: ARTURIResource) => {
                             addFunctions.push({
-                                function: this.manchService.createRestriction(s, predicate, value),
+                                function: this.manchService.createRestriction(s, predicate, value, data.skipSemCheck),
                                 subject: s
                             });
                         })

@@ -4,6 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { InferenceExplanationModal } from "src/app/icv/owlConsistencyViolations/inferenceExplanationModal";
 import { Triple } from "src/app/models/Shared";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { ManchesterExprModalReturnData } from "src/app/widget/modal/sharedModal/manchesterExprModal/manchesterExprModal";
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ShowInterpretation } from "../../../models/ARTResources";
 import { Language, Languages } from "../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../models/ResourceView";
@@ -231,7 +232,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     //======== "edit" HANDLER ========
 
-    private editLiteral() {
+    editLiteral() {
         if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
             this.resourceStringValue = this.resource.getShow()
         } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral || this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) {
@@ -241,14 +242,14 @@ export class EditableResourceComponent extends AbstractResViewResource {
         this.editLiteralInProgress = true;
     }
 
-    private edit() {
+    edit() {
         if (this.editActionScenario == EditActionScenarioEnum.partition) {
             this.editOutput.emit();
         } else if (this.editActionScenario == EditActionScenarioEnum.manchesterDescr) {
             this.sharedModals.manchesterExpression({key:"DATA.ACTIONS.EDIT_MANCHESTER_EXPRESSION"}, this.resource.getShow()).then(
-                expr => {
-                    if (expr == this.resource.getShow()) return; //if expression didn't change, don't do nothing
-                    this.manchesterService.updateExpression(expr, <ARTBNode>this.resource).subscribe(
+                (data: ManchesterExprModalReturnData) => {
+                    if (data.expression == this.resource.getShow()) return; //if expression didn't change, don't do nothing
+                    this.manchesterService.updateExpression(data.expression, <ARTBNode>this.resource, data.skipSemCheck).subscribe(
                         () => { this.update.emit(); }
                     );
                 },
@@ -387,29 +388,19 @@ export class EditableResourceComponent extends AbstractResViewResource {
                 }
             } else if (this.editInProgress) {
                 try {
-                    try {
-                        let newValue: ARTNode = this.parseEditedValue();
-                        //check consistency of the new value
-                        if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
-                            this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params:{property: this.predicate.getShow()}}, 
-                                ModalType.warning).then(
-                                confirm => { this.updateTriple(this.subject, this.predicate, this.resource, newValue); },
-                                reject => { this.cancelEdit(); }
-                            );
+                    let newValue: ARTNode = this.parseEditedValue();
+                    //check consistency of the new value
+                    if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
+                        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params:{property: this.predicate.getShow()}}, 
+                            ModalType.warning).then(
+                            confirm => { this.updateTriple(this.subject, this.predicate, this.resource, newValue); },
+                            reject => { this.cancelEdit(); }
+                        );
+                    } else {
+                        if (this.partition == ResViewPartition.notes) {
+                            this.updateNote(this.subject, this.predicate, <ARTLiteral>this.resource, newValue);
                         } else {
-                            if (this.partition == ResViewPartition.notes) {
-                                this.updateNote(this.subject, this.predicate, <ARTLiteral>this.resource, newValue);
-                            } else {
-                                this.updateTriple(this.subject, this.predicate, this.resource, newValue);
-                            }
-                        }
-                    } catch (err) { //if resourceStringValue is not a NTriple representation, check if it is a manchester expr. 
-                        if (this.resource.isBNode() && this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) != null) {
-                            //If the editing resource is a bnode and it has a show interpretation, it means that it is a manch expr,
-                            this.applyManchesterUpdate(<ARTBNode>this.resource, this.resourceStringValue);
-                            return;
-                        } else { //if neither a manchester expression, re-throw the exception
-                            throw err;
+                            this.updateTriple(this.subject, this.predicate, this.resource, newValue);
                         }
                     }
                 } catch (err) {
@@ -511,29 +502,6 @@ export class EditableResourceComponent extends AbstractResViewResource {
                 this.update.emit();
             }
         );
-    }
-
-    /**
-     * Theoretically this should be never invoked since every resource that represents a manchester expression
-     * should be handled by the proper partition renderer. Anyway I leave it as it is a fallback handling mechanism
-     */
-    private applyManchesterUpdate(node: ARTBNode, expression: string) {
-        this.manchesterService.checkExpression(expression).subscribe(
-            (checkResp: ExpressionCheckResponse) => {
-                if (checkResp.valid) {
-                    this.manchesterService.updateExpression(this.resourceStringValue, node).subscribe(
-                        stResp => {
-                            this.cancelEdit();
-                            this.update.emit();
-                        }
-                    );
-                } else {
-                    let detailsMsg: string[] = checkResp.details.map(d => d.msg);
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_MANCHESTER_EXPR"}, 
-                        ModalType.warning, detailsMsg.join("\n"));
-                }
-            }
-        )
     }
 
     private cancelEdit() {

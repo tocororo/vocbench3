@@ -50,7 +50,8 @@ export class AddPropertyValueModal {
     //available returned data
     private selectedResource: ARTURIResource; //the trees and lists shows only ARTURIResource at the moment
     private checkedResources: ARTURIResource[] = []; //the adding resources (in case of multiple selection)
-    private manchExpr: string;
+    manchExpr: string;
+    skipSemCheck: boolean;
     private inverseProp: boolean = false; //for properties selection (when viewType is propertyTree and showInversePropertyCheckbox is true)
     private datarange: ARTLiteral[];
 
@@ -261,6 +262,10 @@ export class AddPropertyValueModal {
         this.inverseProp = false; //reset inverseProp flag
     }
 
+    onSkipSemCheckChamge(check: boolean) { //for manchester expr editor
+        this.skipSemCheck = check;
+    }
+
     /**
      * User can click on OK button just if there is a manchester expression (in case property allows and user choose to add it)
      * or if there is a resource selected in the tree
@@ -284,6 +289,7 @@ export class AddPropertyValueModal {
             let returnedData: AddPropertyValueModalReturnData = {
                 property: this.enrichingProperty,
                 value: this.manchExpr,
+                skipSemCheck: this.skipSemCheck
             }
             this.activeModal.close(returnedData);
         } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
@@ -326,6 +332,7 @@ export class AddPropertyValueModalReturnData {
     property: ARTURIResource;
     value: any; //string in case of manchester expr || ARTLiteral[] if dataRange || ARTURIResource[] in other cases
     inverseProperty?: boolean;
+    skipSemCheck?: boolean; //in case of manch expr
 }
 
 enum ViewType {

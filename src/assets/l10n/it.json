@@ -2369,6 +2369,7 @@
                 "MANCHESTER_SYNTAX": "Sintassi Manchester",
                 "MANCHESTER_SYNTAX_HELPER": "Helper sintassi Manchester",
                 "PREST_CTRL_SPACE": "Premi 'ctrl-space' per mostrare suggerimenti",
+                "SKIP_SEM_CHECKS": "Ignora controlli semantici",
                 "TABLE_AXIOMS_INFO": "Questa tabella mostra le conversioni tra sintassi DL e sintassi Manchester per i seguenti assiomi",
                 "TABLE_CONSTRUCTORS_INFO": "Questa tabella mostra le conversioni tra sintassi DL e sintassi Manchester per i seguenti costrutti"
             }

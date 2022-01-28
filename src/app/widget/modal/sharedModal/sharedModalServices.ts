@@ -23,7 +23,7 @@ import { StoreConfigurationModal } from "./configurationStoreModal/storeConfigur
 import { ConverterPickerModal } from "./converterPickerModal/converterPickerModal";
 import { DatetimePickerModal } from './datetimePickerModal/datetimePickerModal';
 import { LanguageSelectorModal } from "./languagesSelectorModal/languageSelectorModal";
-import { ManchesterExprModal } from './manchesterExprModal/manchesterExprModal';
+import { ManchesterExprModal, ManchesterExprModalReturnData } from './manchesterExprModal/manchesterExprModal';
 import { PluginConfigModal, PluginSettingsHandler } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal } from "./remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
@@ -247,7 +247,7 @@ export class SharedModalServices {
      * @param expression 
      * @return returns a manchester expression
      */
-    manchesterExpression(title: TextOrTranslation, expression?: string): Promise<string> {
+    manchesterExpression(title: TextOrTranslation, expression?: string): Promise<ManchesterExprModalReturnData> {
         const modalRef: NgbModalRef = this.modalService.open(ManchesterExprModal, new ModalOptions());
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (expression != null) modalRef.componentInstance.expression = expression;

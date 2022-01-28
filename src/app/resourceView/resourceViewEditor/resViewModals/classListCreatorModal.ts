@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from 'src/app/widget/modal/Modals';
+import { ManchesterExprModalReturnData } from "src/app/widget/modal/sharedModal/manchesterExprModal/manchesterExprModal";
 import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../../models/ARTResources';
 import { ExpressionCheckResponse, ManchesterServices } from "../../../services/manchesterServices";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -33,14 +34,14 @@ export class ClassListCreatorModal {
      */
     addClassToList() {
         //check if the class is already in the list
-        for (var i = 0; i < this.classList.length; i++) {
+        for (let i = 0; i < this.classList.length; i++) {
             if (this.classList[i].getNominalValue() == this.selectedTreeClass.getNominalValue()) {
                 this.duplicateResource = this.classList[i];
                 return;
             }
         }
         //push a copy of the selected class in tree to avoid problem with "selected" attribute
-        var cls = new ARTURIResource(
+        let cls = new ARTURIResource(
             this.selectedTreeClass.getURI(), this.selectedTreeClass.getShow(), this.selectedTreeClass.getRole());
         cls.setAdditionalProperty(ResAttribute.EXPLICIT, this.selectedTreeClass.getAdditionalProperty(ResAttribute.EXPLICIT));
         this.classList.push(cls);
@@ -52,30 +53,21 @@ export class ClassListCreatorModal {
      */
     addExpressionToList() {
         this.sharedModals.manchesterExpression({key:"DATA.ACTIONS.ADD_MANCHESTER_EXPRESSION"}).then(
-            expr => {
-                this.manchService.checkExpression(expr).subscribe(
-                    (checkResp: ExpressionCheckResponse) => {
-                        if (checkResp.valid) {
-                            //check if the expression is already in the list
-                            for (var i = 0; i < this.classList.length; i++) {
-                                if (this.classList[i].getShow() == expr) {
-                                    this.duplicateResource = this.classList[i];
-                                    return;
-                                }
-                            }
-                            //adds the expression as ARTBNode to the list 
-                            var exprCls = new ARTBNode(expr, expr, RDFResourceRolesEnum.cls);
-                            exprCls.setAdditionalProperty(ResAttribute.EXPLICIT, true);
-                            this.classList.push(exprCls);
-                            this.duplicateResource = null;
-                        } else {
-                            let detailsMsgs: string[] = checkResp.details.map(d => d.msg);
-                            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_MANCHESTER_EXPR"},
-                                ModalType.warning, detailsMsgs.join("\n"));
-                        }
+            (data: ManchesterExprModalReturnData) => {
+                //check if the expression is already in the list
+                for (let i = 0; i < this.classList.length; i++) {
+                    if (this.classList[i].getShow() == data.expression) {
+                        this.duplicateResource = this.classList[i];
+                        return;
                     }
-                )
-            }
+                }
+                //adds the expression as ARTBNode to the list 
+                let exprCls = new ARTBNode(data.expression, data.expression, RDFResourceRolesEnum.cls);
+                exprCls.setAdditionalProperty(ResAttribute.EXPLICIT, true);
+                this.classList.push(exprCls);
+                this.duplicateResource = null;
+            },
+            () => {}
         );
     }
 

@@ -1,7 +1,12 @@
 <div class="card card-default vbox">
-    <div style="padding: 6px 6px 0px">
+    <div class="d-flex pt-1 px-2">
         <button class="btn btn-xs btn-light" (click)="openHelper()">{{'WIDGETS.EDITORS.MANCHESTER.HELPER'|translate}}</button>
+        <div *ngIf="!context" class="form-check form-check-inline ml-auto">
+            <input class="form-check-input" id="semCheck" type="checkbox" [(ngModel)]="skipSemanticCheck" (ngModelChange)="onSkipSemCheckChange()">
+            <label class="form-check-label" for="semCheck">{{'WIDGETS.EDITORS.MANCHESTER.SKIP_SEM_CHECKS'|translate}}</label>
+        </div>
     </div>
+
     <div class="card-body vbox" style="overflow: auto; position: relative">
         <div *ngIf="!codeValid" style="position: absolute; top: 12px; right: 30px; z-index: 1;" [title]="codeInvalidDetails">
             <span class="fas fa-exclamation-triangle" style="color: red;"></span>

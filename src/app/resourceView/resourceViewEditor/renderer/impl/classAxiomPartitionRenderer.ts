@@ -13,6 +13,7 @@ import { PropertyServices, RangeResponse } from "../../../../services/propertySe
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from '../../../../widget/modal/browsingModal/browsingModalServices';
+import { AddPropertyValueModalReturnData } from "../../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
@@ -58,11 +59,11 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
         } else { //rdfs:subClassOf, owl:equivalentClass, owl:disjointWith, owl:complementOf
             //ask the user to choose to add an existing class or to add a class expression
             this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, this.resource, predicate, false).then(
-                (data: any) => {
-                    var value: any = data.value; //value can be a class or a manchester Expression
+                (data: AddPropertyValueModalReturnData) => {
+                    let value: any = data.value; //value can be a class or a manchester Expression
                     if (typeof value == "string") {
-                        this.manchService.createRestriction(<ARTURIResource>this.resource, predicate, value).subscribe(
-                            stResp => this.update.emit(null)
+                        this.manchService.createRestriction(<ARTURIResource>this.resource, predicate, value, data.skipSemCheck).subscribe(
+                            () => this.update.emit(null)
                         );
                     } else { //value is an ARTURIResource[] (class(es) selected from the tree)
                         let values: ARTURIResource[] = data.value;

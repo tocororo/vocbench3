@@ -33,7 +33,7 @@ export class DataTypeRestrictionsModal {
     private facetsDescription: FacetsRestriction;
 
     /* manchester */
-    private manchesterCtx: ManchesterCtx;
+    manchesterCtx: ManchesterCtx;
     private manchExpr: string;
 
     /* enumeration */

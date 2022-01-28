@@ -8,6 +8,7 @@ import { PropertyServices } from "../../../../services/propertyServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
+import { AddPropertyValueModalReturnData } from "../../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
@@ -33,7 +34,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_RANGE"}, this.resource, predicate, propChangeable).then(
-            (data: any) => {
+            (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
                 /** If the rerource is a datatype property, value could be a:
@@ -74,7 +75,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
                  */
                 else {
                     if (typeof value == "string") {
-                        this.manchService.createRestriction(<ARTURIResource>this.resource, prop, value).subscribe(
+                        this.manchService.createRestriction(<ARTURIResource>this.resource, prop, value, data.skipSemCheck).subscribe(
                             stResp => this.update.emit(null)
                         );
                     } else { //value is ARTURIResource[] (class(es) selected from the tree)

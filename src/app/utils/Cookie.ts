@@ -19,6 +19,8 @@ export class Cookie {
     public static RES_VIEW_SHOW_DATATYPE_BADGE = "resource_view.show_datatype_badge";
     public static RES_VIEW_CODE_FORMAT = "resource_view.code_format";
 
+    public static MANCH_EXPR_SKIP_SEMANTIC_CHECK = "manchester.skip_semantic_check";
+
     public static SHOW_DEPRECATED = "tree_list.show_deprecated";
 
     public static ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE = "alignment_validation.alignment_per_page";
