@@ -1,11 +1,9 @@
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalType } from 'src/app/widget/modal/Modals';
 import { ManchesterExprModalReturnData } from "src/app/widget/modal/sharedModal/manchesterExprModal/manchesterExprModal";
 import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../../models/ARTResources';
-import { ExpressionCheckResponse, ManchesterServices } from "../../../services/manchesterServices";
+import { ManchesterServices } from "../../../services/manchesterServices";
 import { UIUtils } from "../../../utils/UIUtils";
-import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
@@ -22,7 +20,7 @@ export class ClassListCreatorModal {
     duplicateResource: ARTResource; //resource tried to add to the classList but already there 
 
     constructor(public activeModal: NgbActiveModal, public manchService: ManchesterServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private elementRef: ElementRef) {
+        private sharedModals: SharedModalServices, private elementRef: ElementRef) {
     }
 
     ngAfterViewInit() {

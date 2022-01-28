@@ -31,7 +31,7 @@ export class ResViewModalServices {
      * @return if the modal closes with ok returns a promise containing an array of 
      * classes (ARTURIResource) and expressions (ARTBNode)
      */
-    createClassList(title: TextOrTranslation) {
+    createClassList(title: TextOrTranslation): Promise<ARTResource[]> {
         const modalRef: NgbModalRef = this.modalService.open(ClassListCreatorModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         return modalRef.result;

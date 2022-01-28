@@ -106,12 +106,11 @@ export class EditableResourceComponent extends AbstractResViewResource {
             //in datatypeDefinitions and subPropertyChains partitions the edit is delegated to the PartitionRenderer.
             this.partition == ResViewPartition.datatypeDefinitions || this.partition == ResViewPartition.subPropertyChains ||
             //in facets (precisely inverseOf in property facets) the edit of ObjectProperty expression is delegated to the PartitionRenderer
-            (this.partition == ResViewPartition.facets && this.resource.isBNode() && 
-            this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) == ShowInterpretation.ope)
+            (this.partition == ResViewPartition.facets && this.resource.isBNode() && this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) == ShowInterpretation.ope) ||
+            (this.partition == ResViewPartition.classaxioms && this.resource.isBNode() && this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) == ShowInterpretation.list)
         ) {
             this.editActionScenario = EditActionScenarioEnum.partition;
-        } else if (this.partition == ResViewPartition.classaxioms && this.resource.isBNode() && 
-            this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) == ShowInterpretation.descr) {
+        } else if (this.partition == ResViewPartition.classaxioms && this.resource.isBNode() && this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) == ShowInterpretation.descr) {
             this.editActionScenario = EditActionScenarioEnum.manchesterDescr;
         }
 

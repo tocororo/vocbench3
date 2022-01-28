@@ -3,7 +3,7 @@ import { from, Observable, of } from 'rxjs';
 import { mergeMap } from "rxjs/operators";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { ARTBNode, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
+import { ARTBNode, ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { OWL, RDFS } from "../../../../models/Vocabulary";
 import { ClassesServices } from "../../../../services/classesServices";
@@ -29,7 +29,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
 
     constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
-        private clsService: ClassesServices, private manchService: ManchesterServices,  
+        private clsService: ClassesServices, private manchService: ManchesterServices,
         private browsingModals: BrowsingModalServices) {
         super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
@@ -47,7 +47,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
      */
     add(predicate: ARTURIResource) {
         if (!this.isKnownProperty(predicate)) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.UNHANDLED_AXIOM_PROPERTY", params:{property: predicate.getShow()}}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.UNHANDLED_AXIOM_PROPERTY", params: { property: predicate.getShow() } }, ModalType.warning);
             return;
         }
 
@@ -58,7 +58,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
             this.createClassList(predicate);
         } else { //rdfs:subClassOf, owl:equivalentClass, owl:disjointWith, owl:complementOf
             //ask the user to choose to add an existing class or to add a class expression
-            this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, this.resource, predicate, false).then(
+            this.resViewModals.addPropertyValue({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, this.resource, predicate, false).then(
                 (data: AddPropertyValueModalReturnData) => {
                     let value: any = data.value; //value can be a class or a manchester Expression
                     if (typeof value == "string") {
@@ -94,11 +94,11 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
+            this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, this.rootProperties).then(
                 (selectedProp: any) => {
                     return selectedProp;
                 },
-                () => {}
+                () => { }
             )
         );
     }
@@ -111,12 +111,44 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
         )
     }
 
+    editHandler(predicate: ARTURIResource, object: ARTNode) {
+        /* 
+        in this partition, this handler can be triggered only when user edits a list bNode representing a unionOf or intersectionOf list
+        (see editable-resource component, the edit event is emitted only in such case).
+        Handle such scenario by recreating a new list
+        */
+       //this check is actually unnecessary since if the predicate is not one of these, editHandler would never be triggered from editable-resource, but better to be careful
+        if (predicate.equals(OWL.unionOf) || predicate.equals(OWL.intersectionOf)) { 
+            this.resViewModals.createClassList({ key: "ACTIONS.EDIT_X", params: { x: predicate.getShow() } }).then(
+                (classes: ARTResource[]) => {
+                    //now, in order to update, remove the old expression and add the new one
+                    let removeFn: Observable<void> = this.getRemoveFunctionImpl(predicate, object);
+                    let addFn: Observable<void>;
+                    if (predicate.equals(OWL.intersectionOf)) {
+                        addFn = this.clsService.addIntersectionOf(<ARTURIResource>this.resource, classes);
+                    } else if (predicate.equals(OWL.unionOf)) {
+                        addFn = this.clsService.addUnionOf(<ARTURIResource>this.resource, classes);
+                    }
+                    removeFn.subscribe(
+                        () => {
+                            addFn.subscribe(
+                                () => this.update.emit()
+                            )
+                        }
+                    )
+                },
+                () => { }
+            );
+        }
+
+    }
+
     /**
      * Opens a modal to create a class list.
      * Called to enrich intersectionOf and unionOf
      */
     private createClassList(predicate: ARTURIResource) {
-        this.resViewModals.createClassList({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
+        this.resViewModals.createClassList({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }).then(
             (classes: any) => {
                 if (predicate.getURI() == OWL.intersectionOf.getURI()) {
                     this.clsService.addIntersectionOf(<ARTURIResource>this.resource, classes).subscribe(
@@ -137,7 +169,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
      * Called to enrich oneOf
      */
     private createInstanceList(predicate: ARTURIResource) {
-        this.resViewModals.createInstanceList({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}).then(
+        this.resViewModals.createInstanceList({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }).then(
             (instances: any) => {
                 this.clsService.addOneOf(<ARTURIResource>this.resource, instances).subscribe(
                     stResp => this.update.emit(null)

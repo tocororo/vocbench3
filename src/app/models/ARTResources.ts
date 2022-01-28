@@ -498,5 +498,6 @@ export class ResourceNature {
 
 export enum ShowInterpretation {
     descr = "descr", //class or datatype description
-    ope = "ope" //object property expression
+    ope = "ope", //object property expression
+    list = "list", //e.g. for bNode representing list for unionOf or intersectionOf values
 }

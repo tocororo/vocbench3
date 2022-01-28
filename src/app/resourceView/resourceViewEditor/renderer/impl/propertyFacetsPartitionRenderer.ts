@@ -71,7 +71,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         return this.propService.removeInverseProperty(<ARTURIResource>this.resource, <ARTURIResource>object, predicate);
     }
 
-    private changeFacet(facet: PropertyFacet) {
+    changeFacet(facet: PropertyFacet) {
         if (facet.name == PropertyFacetsEnum.symmetric) {
             this.setPropertyFacet(OWL.symmetricProperty, facet.value);
         } else if (facet.name == PropertyFacetsEnum.asymmetric) {
@@ -101,7 +101,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         }
     }
 
-    private isChangeFacetDisabled(facet: PropertyFacet) {
+    isChangeFacetDisabled(facet: PropertyFacet) {
         return (
             !facet.explicit ||
             (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) ||
