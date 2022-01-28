@@ -4,6 +4,7 @@ import { ARTNode } from "../../models/ARTResources";
 @Component({
 	selector: "resource-list-selection",
 	templateUrl: "./resourceListSelectionComponent.html",
+	host: { class: "vbox" }
 })
 export class ResourceListSelectionComponent {
 	@Input() resources: ARTNode[];
