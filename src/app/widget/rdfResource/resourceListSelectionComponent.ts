@@ -2,35 +2,35 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@
 import { ARTNode } from "../../models/ARTResources";
 
 @Component({
-	selector: "resource-list-selection",
-	templateUrl: "./resourceListSelectionComponent.html",
-	host: { class: "vbox" }
+    selector: "resource-list-selection",
+    templateUrl: "./resourceListSelectionComponent.html",
+    host: { class: "vbox" }
 })
 export class ResourceListSelectionComponent {
-	@Input() resources: ARTNode[];
-	@Input() rendering: boolean = true;
+    @Input() resources: ARTNode[];
+    @Input() rendering: boolean = true;
     @Input() multiselection: boolean = false;
     @Input() selectedResources: ARTNode[]; //resources that will be selected once the dialog is initialized
 
-	@Output() nodeSelected = new EventEmitter<ARTNode[]>();
+    @Output() nodeSelected = new EventEmitter<ARTNode[]>();
     @Output() dblClicked = new EventEmitter<ARTNode>();
 
-	@ViewChild('scrollableContainer') scrollableElement: ElementRef;
+    @ViewChild('scrollableContainer') scrollableElement: ElementRef;
 
-	nodeList: NodeStruct[];
+    nodeList: NodeStruct[];
 
 
-	constructor() { }
+    constructor() { }
 
     ngOnInit() {
         this.nodeList = [];
         this.resources.forEach(r => {
-            this.nodeList.push({ 
+            this.nodeList.push({
                 resource: r,
                 selected: this.selectedResources && this.selectedResources.length > 0 && this.selectedResources.some(sr => sr.equals(r))
             })
         })
-        if (!this.multiselection && this.selectedResources && this.selectedResources.length > 1) { 
+        if (!this.multiselection && this.selectedResources && this.selectedResources.length > 1) {
             //multiselection disabled, but selected resources more than 1 -> leave only the first selected
             let firstChecked: boolean = false;
             for (let r of this.nodeList) {
@@ -49,7 +49,7 @@ export class ResourceListSelectionComponent {
         this.dblClicked.emit(node.resource);
     }
 
-	onResourceSelected(node: NodeStruct) {
+    onResourceSelected(node: NodeStruct) {
         if (this.multiselection) {
             node.selected = !node.selected;
         } else {
@@ -62,7 +62,7 @@ export class ResourceListSelectionComponent {
             })
         }
         this.emitSelection();
-	}
+    }
 
     emitSelection() {
         let selectedRes: ARTNode[] = [];
@@ -75,19 +75,19 @@ export class ResourceListSelectionComponent {
     }
 
 
-	//Resource limitation management
-	private initialRes: number = 150;
-	private resLimit: number = this.initialRes;
-	private increaseRate: number = this.initialRes / 5;
-	onScroll() {
-		let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
-		if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
-			//bottom reached => increase max range if there are more roots to show
-			if (this.resLimit < this.resources.length) {
-				this.resLimit = this.resLimit + this.increaseRate;
-			}
-		}
-	}
+    //Resource limitation management
+    private initialRes: number = 150;
+    private resLimit: number = this.initialRes;
+    private increaseRate: number = this.initialRes / 5;
+    onScroll() {
+        let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
+        if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
+            //bottom reached => increase max range if there are more roots to show
+            if (this.resLimit < this.resources.length) {
+                this.resLimit = this.resLimit + this.increaseRate;
+            }
+        }
+    }
 
 }
 
