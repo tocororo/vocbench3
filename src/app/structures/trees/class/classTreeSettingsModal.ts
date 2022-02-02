@@ -33,8 +33,8 @@ export class ClassTreeSettingsModal {
 
     showInstNumb: boolean;
 
-    constructor(public activeModal: NgbActiveModal, private clsService: ClassesServices, private resourceService: ResourcesServices, 
-        private vbProp: VBProperties, private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {}
+    constructor(public activeModal: NgbActiveModal, private clsService: ClassesServices, private resourceService: ResourcesServices,
+        private vbProp: VBProperties, private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
         let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
@@ -62,7 +62,7 @@ export class ClassTreeSettingsModal {
                 }
             )
         }
-        
+
         //init show instances number
         this.showInstNumb = clsTreePref.showInstancesNumber;
     }
@@ -72,19 +72,18 @@ export class ClassTreeSettingsModal {
      */
 
     changeClass() {
-        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_ROOT_CLASS"}, [RDFS.resource]).then(
+        this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.SELECT_ROOT_CLASS" }, [RDFS.resource]).then(
             (cls: ARTURIResource) => {
-                if (Cookie.getCookie(Cookie.WARNING_CUSTOM_ROOT, null, VBContext.getLoggedUser()) != "false") {
-                    let model: string = VBContext.getWorkingProject().getModelType();
-                    if ((model == RDFS.uri && cls.getURI() != RDFS.resource.getURI()) ||
-                        (cls.getURI() != RDFS.resource.getURI() && cls.getURI() != OWL.thing.getURI()) //OWL or RDFS model
-                    ) {
-                        this.basicModals.alertCheckCookie({key:"STATUS.WARNING"}, { key: "MESSAGES.CHANGE_CLASS_TREE_ROOT_WARN" }, Cookie.WARNING_CUSTOM_ROOT, ModalType.warning);
-                    }
+                let model: string = VBContext.getWorkingProject().getModelType();
+                if (
+                    (model == RDFS.uri && cls.getURI() != RDFS.resource.getURI()) ||
+                    (cls.getURI() != RDFS.resource.getURI() && cls.getURI() != OWL.thing.getURI()) //OWL or RDFS model
+                ) {
+                    this.basicModals.alertCheckCookie({ key: "STATUS.WARNING" }, { key: "MESSAGES.CHANGE_CLASS_TREE_ROOT_WARN" }, Cookie.WARNING_CUSTOM_ROOT, ModalType.warning);
                 }
                 this.rootClass = cls;
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -96,7 +95,7 @@ export class ClassTreeSettingsModal {
                 if (position.isLocal()) {
                     this.rootClass = cls;
                 } else {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.NOT_EXISTING_RESOURCE_URI", params:{uri: cls.getNominalValue()}}, ModalType.error);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.NOT_EXISTING_RESOURCE_URI", params: { uri: cls.getNominalValue() } }, ModalType.error);
                     //temporarly reset the root class and the restore it (in order to trigger the change detection editable-input)
                     let oldRootClass = this.rootClass;
                     this.rootClass = null;
@@ -104,7 +103,7 @@ export class ClassTreeSettingsModal {
                 }
             }
         )
-        
+
     }
 
 
@@ -122,15 +121,15 @@ export class ClassTreeSettingsModal {
                     ResourceUtils.sortResources(classes, SortAttribute.show);
                     let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
                     let filteredSubClssPref = clsTreePref.filter.map[this.selectedFilteredClass.getURI()];
-    
+
                     filterMapEntry.subClasses = [];
-    
+
                     classes.forEach(c => {
                         if (filteredSubClssPref != null) { //exists a subclasses filter for the selected class
-                            filterMapEntry.subClasses.push({ 
+                            filterMapEntry.subClasses.push({
                                 checked: filteredSubClssPref.indexOf(c.getURI()) == -1, //subClass not in the filter, so checked (visible)
                                 disabled: c.getURI() == OWL.thing.getURI(), //owl:Thing cannot be filtered out
-                                resource: c 
+                                resource: c
                             });
                         } else { //doesn't exist a subclasses filter for the selected class => every subclasses is checked
                             filterMapEntry.subClasses.push({ checked: true, disabled: c.getURI() == OWL.thing.getURI(), resource: c });
@@ -150,15 +149,15 @@ export class ClassTreeSettingsModal {
     }
 
     addFilter() {
-        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_CLASS"}, [RDFS.resource]).then(
+        this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.SELECT_CLASS" }, [RDFS.resource]).then(
             (cls: ARTURIResource) => {
                 if (this.getFilterMapEntry(cls) == null) {
                     this.filterMapRes.push({ cls: cls, subClasses: null });
                 } else {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.ALREADY_EXISTING_FILTER_FOR_CLASS"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.ALREADY_EXISTING_FILTER_FOR_CLASS" }, ModalType.warning);
                 }
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -191,7 +190,7 @@ export class ClassTreeSettingsModal {
 
     ok() {
         //convert filterMapRes to a map string: string[]
-        let filterMap: {[key: string]: string[]} = {};
+        let filterMap: { [key: string]: string[] } = {};
         this.filterMapRes.forEach(f => {
             let filteredSubClasses: string[] = [];
             if (f.subClasses == null) {

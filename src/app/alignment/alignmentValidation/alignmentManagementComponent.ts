@@ -274,29 +274,21 @@ export class AlignmentManagementComponent {
     changeRelation(cell: AlignmentCell, relation: string) {
         //change relation only if user choses a relation different from the current
         if (cell.getRelation() != relation) {
-            let showWarning = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_WARN_CHANGE_RELATION, null, VBContext.getLoggedUser()) != "false";
-            if (showWarning) {
-                this.basicModals.confirmCheckCookie({key:"ALIGNMENT.ACTIONS.CHANGE_RELATION"}, {key:"MESSAGES.ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM"}, 
-                    Cookie.ALIGNMENT_VALIDATION_WARN_CHANGE_RELATION, ModalType.warning).then(
-                    () => {
-                        this.changeRelationImpl(cell, relation);
-                    },
-                    () => { }
-                );
-            } else {
-                this.changeRelationImpl(cell, relation);
-            }
+            this.basicModals.confirmCheckCookie({key:"ALIGNMENT.ACTIONS.CHANGE_RELATION"}, {key:"MESSAGES.ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM"}, 
+                Cookie.WARNING_ALIGN_VALIDATION_CHANGE_REL, ModalType.warning).then(
+                () => {
+                    this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
+                        resultCell => {//replace the alignment cell with the new one
+                            this.replaceAlignmentCell(resultCell);
+                        }
+                    )
+                },
+                () => { }
+            );
             
         }
     }
 
-    private changeRelationImpl(cell: AlignmentCell, relation: string) {
-        this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
-            resultCell => {//replace the alignment cell with the new one
-                this.replaceAlignmentCell(resultCell);
-            }
-        )
-    }
 
     /**
      * Called when user click on menu to change the mapping property of an alignment.

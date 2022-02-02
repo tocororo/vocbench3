@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTURIResource } from '../models/ARTResources';
 import { Project } from "../models/Project";
-import { ProjectUserBinding, Role, UsersGroup } from "../models/User";
-import { HttpManager } from "../utils/HttpManager";
+import { ProjectUserBinding, Role, User, UsersGroup } from "../models/User";
+import { HttpManager, STRequestParams } from "../utils/HttpManager";
 
 @Injectable()
 export class AdministrationServices {
@@ -17,24 +17,50 @@ export class AdministrationServices {
 
     /**
      * 
-     * @param email 
+     * @param user 
+     * @returns 
      */
-    setAdministrator(email: string) {
-        let params: any = {
-            email: email,
+    setAdministrator(user: User) {
+        let params: STRequestParams = {
+            email: user.getEmail(),
         }
         return this.httpMgr.doPost(this.serviceName, "setAdministrator", params);
     }
 
     /**
      * 
-     * @param email 
+     * @param user 
+     * @returns 
      */
-    removeAdministrator(email: string) {
-        let params: any = {
-            email: email,
+    removeAdministrator(user: User) {
+        let params: STRequestParams = {
+            email: user.getEmail(),
         }
         return this.httpMgr.doPost(this.serviceName, "removeAdministrator", params);
+    }
+
+    /**
+     * 
+     * @param user 
+     * @returns 
+     */
+    setSuperUser(user: User) {
+        let params: STRequestParams = {
+            email: user.getEmail(),
+        }
+        return this.httpMgr.doPost(this.serviceName, "setSuperUser", params);
+    }
+
+    /**
+     * 
+     * @param user 
+     * @returns 
+     */
+    removeSuperUser(user: User) {
+        let params: STRequestParams = {
+            email: user.getEmail(),
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeSuperUser", params);
     }
 
     /**
@@ -42,7 +68,7 @@ export class AdministrationServices {
      * @param mailTo 
      */
     testEmailConfig(mailTo: string) {
-        let params: any = {
+        let params: STRequestParams = {
             mailTo: mailTo
         }
         return this.httpMgr.doGet(this.serviceName, "testEmailConfig", params);
@@ -58,7 +84,7 @@ export class AdministrationServices {
      * @param role
      */
     getProjectUserBinding(project: Project, email: string): Observable<ProjectUserBinding> {
-        let params: any = {
+        let params: STRequestParams = {
             projectName: project.getName(),
             email: email
         };
@@ -80,7 +106,7 @@ export class AdministrationServices {
      * @param roles
      */
     addRolesToUser(project: Project, email: string, roles: string[]) {
-        let params: any = {
+        let params: STRequestParams = {
             projectName: project.getName(),
             email: email,
             roles: roles
@@ -95,7 +121,7 @@ export class AdministrationServices {
      * @param role
      */
     removeRoleFromUser(project: Project, email: string, role: string) {
-        let params: any = {
+        let params: STRequestParams = {
             projectName: project.getName(),
             email: email,
             role: role
@@ -110,7 +136,7 @@ export class AdministrationServices {
      * @param role
      */
     removeUserFromProject(project: Project, email: string) {
-        let params: any = {
+        let params: STRequestParams = {
             projectName: project.getName(),
             email: email
         };
@@ -124,7 +150,7 @@ export class AdministrationServices {
      * @param language
      */
     updateLanguagesOfUserInProject(project: Project, email: string, languages: string[]) {
-        let params: any = {
+        let params: STRequestParams = {
             projectName: project.getName(),
             email: email,
             languages: languages
@@ -139,7 +165,7 @@ export class AdministrationServices {
      * @param projectName if not provided returns the roles at system level
      */
     listRoles(project?: Project): Observable<Role[]> {
-        let params: any = {};
+        let params: STRequestParams = {};
         if (project != null) {
             params.projectName = project.getName();
         }
@@ -162,7 +188,7 @@ export class AdministrationServices {
      * @param roleName
      */
     createRole(roleName: string) {
-        let params: any = {
+        let params: STRequestParams = {
             roleName: roleName
         };
         return this.httpMgr.doPost(this.serviceName, "createRole", params);
@@ -173,7 +199,7 @@ export class AdministrationServices {
      * @param roleName
      */
     cloneRole(sourceRoleName: string, targetRoleName: string) {
-        let params: any = {
+        let params: STRequestParams = {
             sourceRoleName: sourceRoleName,
             targetRoleName: targetRoleName
         };
@@ -185,7 +211,7 @@ export class AdministrationServices {
      * @param roleName
      */
     deleteRole(roleName: string) {
-        let params: any = {
+        let params: STRequestParams = {
             roleName: roleName
         };
         return this.httpMgr.doPost(this.serviceName, "deleteRole", params);
@@ -196,7 +222,7 @@ export class AdministrationServices {
      * @param roleName 
      */
     exportRole(roleName: string) {
-        let params: any = {
+        let params: STRequestParams = {
             roleName: roleName
         };
         return this.httpMgr.downloadFile(this.serviceName, "exportRole", params);
@@ -208,7 +234,7 @@ export class AdministrationServices {
      * @param newRoleName name of the new role (Optional, if not provided the name will be inferred from the input file)
      */
     importRole(inputFile: File, newRoleName?: string) {
-        let data: any = {
+        let data: STRequestParams = {
             inputFile: inputFile
         };
         if (newRoleName != null) {
@@ -222,7 +248,7 @@ export class AdministrationServices {
      * @param projectName if not provided returns the roles at system level
      */
     listCapabilities(role: Role, project?: Project): Observable<string[]> {
-        let params: any = {
+        let params: STRequestParams = {
             role: role.getName()
         };
         if (project != null) {
@@ -237,7 +263,7 @@ export class AdministrationServices {
      * @param capability
      */
     addCapabilityToRole(role: string, capability: string) {
-        let params: any = {
+        let params: STRequestParams = {
             role: role,
             capability: capability
         };
@@ -250,7 +276,7 @@ export class AdministrationServices {
      * @param capability
      */
     removeCapabilityFromRole(role: string, capability: string) {
-        let params: any = {
+        let params: STRequestParams = {
             role: role,
             capability: capability
         };
@@ -263,7 +289,7 @@ export class AdministrationServices {
      * @param capability
      */
     updateCapabilityForRole(role: string, oldCapability: string, newCapability: string) {
-        let params: any = {
+        let params: STRequestParams = {
             role: role,
             oldCapability: oldCapability,
             newCapability: newCapability
@@ -279,7 +305,7 @@ export class AdministrationServices {
      * @param targetProjectName 
      */
     clonePUBinding(sourceUserIri: ARTURIResource, sourceProject: Project, targetUserIri: ARTURIResource, targetProject: Project) {
-        let params: any = {
+        let params: STRequestParams = {
             sourceUserIri: sourceUserIri,
             sourceProjectName: sourceProject.getName(),
             targetUserIri: targetUserIri,

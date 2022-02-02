@@ -141,7 +141,6 @@
     },
     "ADMINISTRATION": {
         "ACTIONS": {
-            "ADD_ADMINISTRATOR": "Administrator hinzufügen",
             "ADD_ALL_PROFICIENCIES": "Alle Sprachkenntnisse hinzufügen",
             "ADD_CAPABILITY": "Fähigkeit hinzufügen",
             "ADD_USER_TO_PROJ": "Benutzer zum Projekt hinzufügen",
@@ -157,7 +156,6 @@
             "LEAVE_ONLY_PROFICIENCIES": "Nur Sprachkenntnisse behalten",
             "REMOVE_USER": "Benutzer entfernen",
             "REMOVE_USER_FROM_PROJ": "Benutzer aus dem Projekt entfernen",
-            "REVOKE_ADMINISTRATOR": "Administrator widerrufen",
             "SHOW_HIDE_ACTIVE_USER": "Aktive Benutzer ein- / ausblenden",
             "SHOW_HIDE_INACTIVE_USER": "Inaktive Benutzer ein- / ausblenden",
             "SHOW_HIDE_NEW_USER": "Neue Benutzer ein- / ausblenden",
@@ -295,8 +293,7 @@
             "ADMIN_ASSIGNED_PROJECTS_INFO": "Der Administrator hat automatisch Zugriff auf alle Projekte",
             "ASSIGNED_TO_PROJECTS": "Zugeordnete Projekte",
             "FORCE_PASSWORD_WARNING": "Diese Prozedur erzwingt die Änderung des Passworts von {{userShow}}.<br>Hinweis: Bitte beachten Sie die <i>Passwort vergessen</i>-Funktion, die im Anmeldeformular verfügbar ist. Es wird empfohlen, den Benutzer durch diese Funktion sein eigenes Passwort selbst  aktualisieren zu lassen. Verwenden Sie dieses Verfahren nur, wenn dies unbedingt erforderlich ist.",
-            "TEMPLATE_INFO": "Hier können Sie dem Benutzer eine Ressourcenansicht-Vorlage zuweisen. Diese Vorlage beschreibt, welche Partitionen der Ressourcenansicht standardmäßig sichtbar sind.<br>Sie können auch eine bereits vorhandene Vorlage über die Toolbar in der Bedienfeldüberschrift laden oder die von Ihnen definierte Vorlage speichern.",
-            "USER_DETAILS": "Benutzerdetails"
+            "TEMPLATE_INFO": "Hier können Sie dem Benutzer eine Ressourcenansicht-Vorlage zuweisen. Diese Vorlage beschreibt, welche Partitionen der Ressourcenansicht standardmäßig sichtbar sind.<br>Sie können auch eine bereits vorhandene Vorlage über die Toolbar in der Bedienfeldüberschrift laden oder die von Ihnen definierte Vorlage speichern."
         }
     },
     "ALIGNMENT": {
@@ -1082,7 +1079,6 @@
         "SORT_UNORDERED": "Ungeordnet",
         "STAGED_COMMITS": "Staged Commits",
         "TIME_SORT": "Nach Zeit",
-        "USER": "Nutzer",
         "VALIDATION_COMMENT": {
             "COMMENT": "Kommentar",
             "COMMENT_INFO": "Für die folgenden abgelehnten Commits ist es möglich, einen Kommentar abzugeben, um die Entscheidung zur Ablehnung zu begründen. Auch wenn der Kommentar optional ist, wird empfohlen, ihn anzugeben. Wenn Sie überhaupt keinen Kommentar abgeben möchten, können Sie das Textfeld leer lassen und fortfahren.",
@@ -1536,7 +1532,6 @@
         "RESTART_LOCAL_REPO_REQUIRED": "Damit die Änderung wirksam wird, kann es erforderlich sein, das lokale Repository des Projekts neu zu starten, indem der gesamte Triple Store neu gestartet wird.",
         "RESTART_REPO_LOCAL_REQUIRED": "Damit die Änderung wirksam wird, müssen Sie möglicherweise das Repository des lokalen Projekts neu starten, indem Sie den gesamten Tripel-Store neu starten.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Sie überschreiben die aktuelle Vorlage, indem Sie die Standardkonfiguration wiederherstellen. Sind Sie sicher?",
-        "REVOKING_ADMIN_CONFIRM": "Sie widerrufen die Administratorenrechte für {{user}}. Sind Sie sicher?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Änderung der baseURI speichern? (Achtung, baseURI-Refactoring könnte ein langer Prozess sein)",
         "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Änderung von baseURI und Namensraum speichern? (Achtung, baseURI-Refactoring könnte ein langer Prozess sein)",
         "SAVE_NS_CHANGE_CONFIRM": "Änderung des Namensraums speichern?",
@@ -2333,6 +2328,7 @@
             "REGISTRATION_DATE_ASC": "Registrierungsdatum (asc)",
             "REGISTRATION_DATE_DESC": "Registrierungsdatum (absteigend)"
         },
+        "USER": "Nutzer",
         "USER_DETAILS": "Nutzerdetails",
         "USER_LOGIN": "Benutzer-Anmeldung"
     },

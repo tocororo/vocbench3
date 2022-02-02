@@ -141,7 +141,6 @@
     },
     "ADMINISTRATION": {
         "ACTIONS": {
-            "ADD_ADMINISTRATOR": "Add administrator",
             "ADD_ALL_PROFICIENCIES": "Add all proficiencies",
             "ADD_CAPABILITY": "Add capability",
             "ADD_USER_TO_PROJ": "Add user to project",
@@ -157,7 +156,6 @@
             "LEAVE_ONLY_PROFICIENCIES": "Leave only proficiencies",
             "REMOVE_USER": "Remove user",
             "REMOVE_USER_FROM_PROJ": "Remove user from project",
-            "REVOKE_ADMINISTRATOR": "Revoke administrator",
             "SHOW_HIDE_ACTIVE_USER": "Show/Hide active users",
             "SHOW_HIDE_INACTIVE_USER": "Show/Hide inactive users",
             "SHOW_HIDE_NEW_USER": "Show/Hide new users",
@@ -295,8 +293,7 @@
             "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has autmoatically access to all projects",
             "ASSIGNED_TO_PROJECTS": "Assigned to projects",
             "FORCE_PASSWORD_WARNING": "This procedure will force the change of {{userShow}}'s password.<br>Note: A <i>forgot password</i> procedure already exists (available in the login form). It is recommended to let the user update its own password through that procedure. Use this procedure only if strictly necessary.",
-            "TEMPLATE_INFO": "Here you can assign a ResourceView template to the user. This template describes which ResourceView partitions are visible by default.<br>You can also load an already existing template, or decide to save the template you defined, through the toolbar in panel header.",
-            "USER_DETAILS": "User Details"
+            "TEMPLATE_INFO": "Here you can assign a ResourceView template to the user. This template describes which ResourceView partitions are visible by default.<br>You can also load an already existing template, or decide to save the template you defined, through the toolbar in panel header."
         }
     },
     "ALIGNMENT": {
@@ -1088,7 +1085,6 @@
         "SORT_UNORDERED": "Unordered",
         "STAGED_COMMITS": "Staged Commits",
         "TIME_SORT": "Time sort",
-        "USER": "User",
         "VALIDATION_COMMENT": {
             "COMMENT": "Comment",
             "COMMENT_INFO": "For the following rejected commits it is possible to provide a comment in order to motivate the decision to reject. Even if the comment is optional, it is recommended to provide it. Anyway, if you don't want to provide a comment at all, you can leave empty the text field and continue.",
@@ -1542,7 +1538,6 @@
         "RESOURCE_URI_COPIED_IN_CLIPBOARD": "Resource URI copied in clipboard!",
         "RESTART_REPO_LOCAL_REQUIRED": "In order to make this change effective it may be necessary to restart the repository of the local project by restarting the whole triple store.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "You are overriding the current template by restoring the default configuration. Are you sure?",
-        "REVOKING_ADMIN_CONFIRM": "You are revoking the administrator authority to {{user}}. Are you sure?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Save change of baseURI? (Attention, baseURI refactoring could be a long process)",
         "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Save change of baseURI and namespace? (Attention, baseURI refactoring could be a long process)",
         "SAVE_NS_CHANGE_CONFIRM": "Save change of namespace?",
@@ -2340,6 +2335,7 @@
             "REGISTRATION_DATE_ASC": "Registration date (asc)",
             "REGISTRATION_DATE_DESC": "Registration date (desc)"
         },
+        "USER": "User",
         "USER_DETAILS": "User details",
         "USER_LOGIN": "User login"
     },

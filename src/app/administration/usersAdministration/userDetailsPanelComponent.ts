@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from "rxjs";
+import { mergeMap, tap } from "rxjs/operators";
+import { Cookie } from "src/app/utils/Cookie";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { User, UserStatusEnum } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
@@ -20,18 +23,18 @@ export class UserDetailsPanelComponent {
     constructor(private userService: UserServices, private administrationServices: AdministrationServices,
         private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
-    private isUserActive(): boolean {
+    isUserActive(): boolean {
         return this.user.getStatus() == UserStatusEnum.ACTIVE;
     }
 
-    private isChangeStatusButtonDisabled() {
+    isChangeStatusButtonDisabled() {
         //user cannot change status to himself or to an administrator user
         return VBContext.getLoggedUser() && (VBContext.getLoggedUser().getEmail() == this.user.getEmail() || this.user.isAdmin());
     }
 
-    private changeUserStatus() {
+    changeUserStatus() {
         if (this.user.isAdmin()) { //check performed for robustness, this should never happen since it is forbidden by the UI
-            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.CANNOT_CHANGE_ADMIN_STATUS"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.OPERATION_DENIED" }, { key: "MESSAGES.CANNOT_CHANGE_ADMIN_STATUS" }, ModalType.warning);
             return;
         }
         var enabled = this.user.getStatus() == UserStatusEnum.ACTIVE;
@@ -50,60 +53,93 @@ export class UserDetailsPanelComponent {
         }
     }
 
-    private isChangeAdminButtonDisabled() {
+    isChangeAdminButtonDisabled() {
         //cannot change the admin status to the same logged user and to non-active user
         return VBContext.getLoggedUser() && (VBContext.getLoggedUser().getEmail() == this.user.getEmail() || this.user.getStatus() != UserStatusEnum.ACTIVE);
     }
 
-    private changeAdministratorStatus() {
-        if (this.user.isAdmin()) { //revoke administator
-            //check if there is another admin
-            let adminCount = 0;
-
-            this.userService.listUsers().subscribe(
-                users => {
-                    let adminCount = users.map(u => u.isAdmin).length;
+    changeUserType(type?: UserType) {
+        let removeOldRoleFn: Observable<void>;
+        if (this.user.isAdmin() && type != "admin") {
+            removeOldRoleFn = this.userService.listUsers().pipe(
+                mergeMap(users => {
+                    let adminCount = users.filter(u => u.isAdmin).length;
                     if (adminCount < 2) {
-                        this.basicModals.alert({key:"ADMINISTRATION.ACTIONS.REVOKE_ADMINISTRATOR"}, {key:"MESSAGES.CANNOT_REVOKE_ADMIN_AUTHORITY"}, ModalType.warning);
+                        this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_REVOKE_ADMIN_AUTHORITY" }, ModalType.warning);
                         return;
                     } else {
-                        this.basicModals.confirm({key:"ADMINISTRATION.ACTIONS.REVOKE_ADMINISTRATOR"}, {key:"MESSAGES.REVOKING_ADMIN_CONFIRM", params: {user: this.user.getShow()}}, ModalType.warning).then(
-                            confirm => {
-                                this.administrationServices.removeAdministrator(this.user.getEmail()).subscribe(
-                                    user => {
-                                        this.user.setAdmin(false);
-                                    }
-                                );
-                            }, 
-                            cancel => {}
-                        );
+                        return this.administrationServices.removeAdministrator(this.user).pipe(tap(() => this.user.setAdmin(false)))
                     }
-                }
-            );
-        } else { //assign administrator
-            if (this.user.getStatus() != UserStatusEnum.ACTIVE) { //only active user can be administator
-                this.basicModals.alert({key:"ADMINISTRATION.ACTIONS.ADD_ADMINISTRATOR"}, {key:"MESSAGES.CANNOT_GRANT_ADMIN_TO_INACTIVE_USER"}, ModalType.warning);
-                return;
-            }
-            this.basicModals.confirm({key:"ADMINISTRATION.ACTIONS.ADD_ADMINISTRATOR"}, {key:"MESSAGES.GRANTING_ADMIN_CONFIRM", params: {user: this.user.getShow()}}, ModalType.warning).then(
-                confirm => {
-                    this.administrationServices.setAdministrator(this.user.getEmail()).subscribe(
-                        user => {
-                            this.user.setAdmin(true);
+                })
+            )
+        }
+        if (this.user.isSuperUser() && type != "su") {
+            removeOldRoleFn = this.administrationServices.removeSuperUser(this.user).pipe(tap(() => this.user.setSuperUser(false)));
+        }
+
+        let setNewRoleFn: Observable<void>;
+        if (type == "admin") {
+            setNewRoleFn = this.administrationServices.setAdministrator(this.user).pipe(tap(() => this.user.setAdmin(true)));
+        } else if (type == "su") {
+            setNewRoleFn = this.administrationServices.setSuperUser(this.user).pipe(tap(() => this.user.setSuperUser(true)));
+        }
+
+        if (removeOldRoleFn || setNewRoleFn) {
+            let msgKey = this.getChangeUserTypeWarningMsg(type);
+            this.basicModals.confirmCheckCookie({ key: "STATUS.WARNING" }, { key: msgKey, params: { user: this.user.getShow() } }, Cookie.WARNING_ADMIN_CHANGE_USER_TYPE, ModalType.warning).then(
+                () => {
+                    if (removeOldRoleFn) {
+                        removeOldRoleFn.subscribe(
+                            () => {
+                                if (setNewRoleFn) {
+                                    setNewRoleFn.subscribe();
+                                }
+                            }
+                        )
+                    } else {
+                        if (setNewRoleFn) {
+                            setNewRoleFn.subscribe();
                         }
-                    );
-                }
+                    }
+                },
+                () => { }
             );
         }
+
     }
 
-    private isDeleteButtonDisabled() {
+    private getChangeUserTypeWarningMsg(role?: UserType): string {
+        let msg: string;
+        if (this.user.isAdmin()) {
+            if (role == "su") {
+                msg = "MESSAGES.CHANGE_USER_TYPE_ADMIN_TO_SUPER_CONFIRM";
+            } else if (role == null) {
+                msg = "MESSAGES.CHANGE_USER_TYPE_ADMIN_TO_USER_CONFIRM"
+            }
+        } else if (this.user.isSuperUser()) {
+            if (role == "admin") {
+                msg = "MESSAGES.CHANGE_USER_TYPE_SUPER_TO_ADMIN_CONFIRM"
+            } else if (role == null) {
+                msg = "MESSAGES.CHANGE_USER_TYPE_SUPER_TO_USER_CONFIRM"
+            }
+        } else { //nor admin or superuser
+            if (role == "admin") {
+                msg = "MESSAGES.CHANGE_USER_TYPE_USER_TO_ADMIN_CONFIRM"
+            } else if (role == "su") {
+                msg = "MESSAGES.CHANGE_USER_TYPE_USER_TO_SUPER_CONFIRM"
+            }
+        }
+        //other cases are not foreseen since this method is invoked only in role != user type
+        return msg;
+    }
+
+    isDeleteButtonDisabled() {
         //user cannot delete himself
         return VBContext.getLoggedUser() && (VBContext.getLoggedUser().getEmail() == this.user.getEmail());
     }
 
-    private deleteUser() {
-        this.basicModals.confirm({key:"ADMINISTRATION.ACTIONS.DELETE_USER"}, {key:"MESSAGES.DELETE_USER_CONFIRM", params:{user: this.user.getShow()}}, ModalType.warning).then(
+    deleteUser() {
+        this.basicModals.confirm({ key: "ADMINISTRATION.ACTIONS.DELETE_USER" }, { key: "MESSAGES.DELETE_USER_CONFIRM", params: { user: this.user.getShow() } }, ModalType.warning).then(
             () => {
                 this.userService.deleteUser(this.user.getEmail()).subscribe(
                     () => {
@@ -111,19 +147,21 @@ export class UserDetailsPanelComponent {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
-    private isChangePwdButtonDisabled() {
+    isChangePwdButtonDisabled() {
         //admin cannot change its password
         return VBContext.getLoggedUser() && (VBContext.getLoggedUser().getEmail() == this.user.getEmail());
     }
 
-    private changePassword() {
+    changePassword() {
         const modalRef: NgbModalRef = this.modalService.open(ForcePasswordModal, new ModalOptions());
         modalRef.componentInstance.user = this.user;
         return modalRef.result;
     }
 
 }
+
+type UserType = "admin" | "su";

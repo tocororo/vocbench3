@@ -15,6 +15,7 @@ export class User {
     private languageProficiencies: string[];
     private status: UserStatusEnum;
     private admin: boolean = false;
+    private superuser: boolean = false;
     private online: boolean = false;
     private samlLevel: SamlLevel;
 
@@ -115,6 +116,14 @@ export class User {
         return this.admin;
     }
 
+    setSuperUser(superuser: boolean) {
+        this.superuser = superuser;
+    }
+
+    isSuperUser(): boolean {
+        return this.superuser;
+    }
+
     setSamlLevel(samlLevel: SamlLevel) {
         this.samlLevel = samlLevel;
     }
@@ -147,6 +156,50 @@ export class User {
     }
     getCustomPropertyValue(prop: string): string {
         return this.customProperties[prop];
+    }
+
+    /**
+     * Parses a json response, creates and returns a User. Returns null if no user is present in input param
+     * @param resp could be a "data" element of a response (containing a "user" element)
+     * or directly a "user" element
+     */
+     static parse(userJson: any): User {
+        if (userJson.email == null) { //user object is empty (scenario: getUser with no logged user)
+            return null;
+        }
+        let user = new User(userJson.email, userJson.givenName, userJson.familyName, userJson.iri);
+        user.setRegistrationDate(userJson.registrationDate);
+        user.setStatus(userJson.status);
+        user.setAdmin(userJson.admin);
+        user.setSuperUser(userJson.superuser);
+        user.setOnline(userJson.online);
+        if (userJson.phone != undefined) {
+            user.setPhone(userJson.phone);
+        }
+        if (userJson.address != undefined) {
+            user.setAddress(userJson.address);
+        }
+        if (userJson.affiliation != undefined) {
+            user.setAffiliation(userJson.affiliation);
+        }
+        if (userJson.url != undefined) {
+            user.setUrl(userJson.url);
+        }
+        user.setSamlLevel(userJson.samlLevel);
+        if (userJson.avatarUrl != undefined) {
+            user.setAvatarUrl(userJson.avatarUrl);
+        }
+        if (userJson.languageProficiencies != undefined) {
+            user.setLanguageProficiencies(userJson.languageProficiencies);
+        }
+        if (userJson.customProperties != undefined) {
+            let cp: { [iri: string]: string } = {};
+            userJson.customProperties.forEach((cpJson: any) => {
+                cp[cpJson.iri] = cpJson.value;
+            })
+            user.setCustomProperties(cp);
+        }
+        return user;
     }
 }
 

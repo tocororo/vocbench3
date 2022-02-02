@@ -121,18 +121,32 @@ export class BasicModalServices {
         return modalRef.result;
     }
 
+    /**
+     * Open a modal that ask for confirmation. It uses the checkbox for "dont'show/ask again". It stores the choice in a cookie.
+     * If the cookie was set in order to not show the confirmation, it skips the dialog and simply returns an empty promise (like the user has confirmed)
+     * @param title 
+     * @param msg 
+     * @param warningCookie 
+     * @param type 
+     * @returns 
+     */
     confirmCheckCookie(title: TextOrTranslation, msg: TextOrTranslation, warningCookie: string, type?: ModalType): Promise<void> {
-        let confCheckOpt: ConfirmCheckOptions = {
-            label: this.translateService.instant("COMMONS.DONT_ASK_AGAIN"),
-            value: false
-        }
-        return this.confirmCheck(title, msg, [confCheckOpt], type).then(
-            (checkOpts: ConfirmCheckOptions[]) => {
-                if (checkOpts[0].value) {
-                    Cookie.setCookie(warningCookie, "false", null, VBContext.getLoggedUser());
-                }
+        let showWarning = Cookie.getCookie(warningCookie, null, VBContext.getLoggedUser()) != "false";
+        if (showWarning) {
+            let confCheckOpt: ConfirmCheckOptions = {
+                label: this.translateService.instant("COMMONS.DONT_ASK_AGAIN"),
+                value: false
             }
-        );
+            return this.confirmCheck(title, msg, [confCheckOpt], type).then(
+                (checkOpts: ConfirmCheckOptions[]) => {
+                    if (checkOpts[0].value) {
+                        Cookie.setCookie(warningCookie, "false", null, VBContext.getLoggedUser());
+                    }
+                }
+            );
+        } else {
+            return new Promise((resolve, reject) => resolve());
+        }
     }
 
     /**
@@ -161,14 +175,19 @@ export class BasicModalServices {
      * @param warningCookie 
      */
     alertCheckCookie(title: TextOrTranslation, msg: TextOrTranslation, warningCookie: string, type?: ModalType): Promise<void> {
-        let detailMsg: string = this.translateService.instant("COMMONS.DONT_SHOW_AGAIN");
-        return this.alert(title, msg, type, null, detailMsg).then(
-            confirm => {
-                if (confirm) {
-                    Cookie.setCookie(warningCookie, "false", null, VBContext.getLoggedUser());
+        let showWarning = Cookie.getCookie(warningCookie, null, VBContext.getLoggedUser()) != "false";
+        if (showWarning) {
+            let detailMsg: string = this.translateService.instant("COMMONS.DONT_SHOW_AGAIN");
+            return this.alert(title, msg, type, null, detailMsg).then(
+                confirm => {
+                    if (confirm) {
+                        Cookie.setCookie(warningCookie, "false", null, VBContext.getLoggedUser());
+                    }
                 }
-            }
-        );
+            );
+        } else {
+            return new Promise((resolve, reject) => resolve());
+        }
     }
 
     /**

@@ -1,7 +1,6 @@
 // this class is partially re-using code from the project:
 // https://github.com/BCJTI/ng2-cookies
 
-import { ARTURIResource } from "../models/ARTResources";
 import { Project } from "../models/Project";
 import { User } from "../models/User";
 
@@ -28,7 +27,6 @@ export class Cookie {
     public static ALIGNMENT_VALIDATION_SHOW_CONFIDENCE = "alignment_validation.show_confidence";
     public static ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION = "alignment_validation.rejected_alignment_action";
     public static ALIGNMENT_VALIDATION_RENDERING = "alignment_validation.rendering";
-    public static ALIGNMENT_VALIDATION_WARN_CHANGE_RELATION = "alignment_validation.warnings.change_relation";
 
     public static ALIGNMENT_LAST_EXPLORED_PROJECT = "alignment.last_project";
     public static ALIGNMENT_LAST_CHOSEN_TYPE = "alignment.last_type";
@@ -48,8 +46,11 @@ export class Cookie {
     public static PROJECT_FACET_BAG_OF = "project.facet_bag_of";
     public static PROJECT_RENDERING = "project.rendering";
 
-    public static WARNING_CUSTOM_ROOT = "ui.tree.cls.warnings.customroot";
-    public static WARNING_CODE_CHANGE_VALIDATION = "resource_view.warnings.code_change_validation";
+
+    public static WARNING_CUSTOM_ROOT = "warnings.ui.tree.cls.customroot";
+    public static WARNING_CODE_CHANGE_VALIDATION = "warnings.resource_view.code_change_validation";
+    public static WARNING_ALIGN_VALIDATION_CHANGE_REL = "warnings.alignment_validation.change_relation";
+    public static WARNING_ADMIN_CHANGE_USER_TYPE = "warnings.administration.change_user_type";
 
     /**
      * Retrieves a single cookie by it's name

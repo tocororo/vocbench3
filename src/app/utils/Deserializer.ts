@@ -1,5 +1,4 @@
 import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ShowInterpretation } from "../models/ARTResources";
-import { User } from "../models/User";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { VBContext } from "./VBContext";
 
@@ -283,59 +282,5 @@ export class Deserializer {
         return datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
     }
 
-
-    /**
-     * @param resp json response containing {"user"" : [{givenName: string, familyName: string, ...}, {...}]}
-     */
-    static createUsersArray(resp: any): User[] {
-        let users: User[] = [];
-        for (let u of resp) {
-            users.push(this.createUser(u));
-        }
-        return users;
-    }
-
-    /**
-     * Parses a json response, creates and returns a User. Returns null if no user is present in input param
-     * @param resp could be a "data" element of a response (containing a "user" element)
-     * or directly a "user" element
-     */
-    static createUser(userJson: any): User {
-        if (userJson.email == null) { //user object is empty (scenario: getUser with no logged user)
-            return null;
-        }
-        let user = new User(userJson.email, userJson.givenName, userJson.familyName, userJson.iri);
-        user.setRegistrationDate(userJson.registrationDate);
-        user.setStatus(userJson.status);
-        user.setAdmin(userJson.admin);
-        user.setOnline(userJson.online);
-        if (userJson.phone != undefined) {
-            user.setPhone(userJson.phone);
-        }
-        if (userJson.address != undefined) {
-            user.setAddress(userJson.address);
-        }
-        if (userJson.affiliation != undefined) {
-            user.setAffiliation(userJson.affiliation);
-        }
-        if (userJson.url != undefined) {
-            user.setUrl(userJson.url);
-        }
-        user.setSamlLevel(userJson.samlLevel);
-        if (userJson.avatarUrl != undefined) {
-            user.setAvatarUrl(userJson.avatarUrl);
-        }
-        if (userJson.languageProficiencies != undefined) {
-            user.setLanguageProficiencies(userJson.languageProficiencies);
-        }
-        if (userJson.customProperties != undefined) {
-            let cp: { [iri: string]: string } = {};
-            userJson.customProperties.forEach((cpJson: any) => {
-                cp[cpJson.iri] = cpJson.value;
-            })
-            user.setCustomProperties(cp);
-        }
-        return user;
-    }
 
 }

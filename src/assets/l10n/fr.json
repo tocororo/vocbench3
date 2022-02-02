@@ -141,7 +141,6 @@
     },
     "ADMINISTRATION": {
         "ACTIONS": {
-            "ADD_ADMINISTRATOR": "Ajouter un administrateur",
             "ADD_ALL_PROFICIENCIES": "Ajouter toutes les langues de compétence",
             "ADD_CAPABILITY": "Ajouter une capacité",
             "ADD_USER_TO_PROJ": "Ajouter un utilisateur au projet",
@@ -157,7 +156,6 @@
             "LEAVE_ONLY_PROFICIENCIES": "Ne laisser que les langues de compétence",
             "REMOVE_USER": "Supprimer l'utilisateur",
             "REMOVE_USER_FROM_PROJ": "Supprimer l'utilisateur du projet",
-            "REVOKE_ADMINISTRATOR": "Révoquer l'administrateur",
             "SHOW_HIDE_ACTIVE_USER": "Afficher/Cacher les utilisateurs actifs",
             "SHOW_HIDE_INACTIVE_USER": "Afficher/Cacher les utilisateurs inactifs",
             "SHOW_HIDE_NEW_USER": "Afficher/Cacher les nouveaux utilisateurs",
@@ -295,8 +293,7 @@
             "ADMIN_ASSIGNED_PROJECTS_INFO": "L'administrateur a automatiquement accès à tous les projets",
             "ASSIGNED_TO_PROJECTS": "Attribué aux projets",
             "FORCE_PASSWORD_WARNING": "Cette procédure imposera la modification du mot de passe de {{userShow}}.<br>À noter : une procédure <i>oubli de mot de passe</i> existe déjà (disponible dans le formulaire de connexion). Il est recommandé de laisser l'utilisateur l'utiliser pour mettre lui-même à jour son mot de passe. N'utiliser cette procédure qu'en cas d'absolue nécessité.",
-            "TEMPLATE_INFO": "Il est ici possible d'attribuer un modèle de ResourceView à l'utilisateur. Ce modèle décrit les partitions de ResourceView qui sont visibles par défaut.<br>Vous pouvez également charger un modèle pré-existant ou décider de sauvegarder le modèle que vous avez défini à l'aide de la barre d'outils de l'en-tête de la page.",
-            "USER_DETAILS": "Détails sur l'utilisateur"
+            "TEMPLATE_INFO": "Il est ici possible d'attribuer un modèle de ResourceView à l'utilisateur. Ce modèle décrit les partitions de ResourceView qui sont visibles par défaut.<br>Vous pouvez également charger un modèle pré-existant ou décider de sauvegarder le modèle que vous avez défini à l'aide de la barre d'outils de l'en-tête de la page."
         }
     },
     "ALIGNMENT": {
@@ -1088,7 +1085,6 @@
         "SORT_UNORDERED": "Non ordonné",
         "STAGED_COMMITS": "Commits ordonnés",
         "TIME_SORT": "Tri temporel",
-        "USER": "Utilisateur",
         "VALIDATION_COMMENT": {
             "COMMENT": "Commentaire",
             "COMMENT_INFO": "Il est possible d'enregistrer un commentaire pour les commits rejetés qui suivent, afin de motiver la décision de rejet. Même si le commentaire est facultatif, il est recommandé d'en enregistrer un. Malgré tout, si vous ne souhaitez pas commenter vous pouvez laisser le champ vide et poursuivre.",
@@ -1541,7 +1537,6 @@
         "RESOURCE_URI_COPIED_IN_CLIPBOARD": "URI de la ressource copiée dans le presse-papier !",
         "RESTART_REPO_LOCAL_REQUIRED": "Pour rendre cette modification effective il peut être nécessaire de redémarrer l'entrepôt du projet local en relançant le triple store.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Vous êtes sur le point d'écraser le modèle en cours en restaurant la configuration par défaut. Êtes-vous certain ?",
-        "REVOKING_ADMIN_CONFIRM": "Vous êtes sur le point de révoquer les droits d'administrateur de l'utilisateur {{user}}. Êtes-vous certain ?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Sauvegarder la modification de l'URI de base ? (Attention, le processus de modification de l'URI de base peut prendre du temps)",
         "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Sauvegarder les modifications de l'URI de base et de l'espace de nom ?  (Attention, le processus de modification de l'URI de base peut prendre du temps)",
         "SAVE_NS_CHANGE_CONFIRM": "Sauvegarder la modification de l'espace de nom ?",
@@ -2339,6 +2334,7 @@
             "REGISTRATION_DATE_ASC": "Date d'enregistrement (tri ascendant)",
             "REGISTRATION_DATE_DESC": "Date d'enregistrement (tri ascendant)"
         },
+        "USER": "Utilisateur",
         "USER_DETAILS": "Détails utilisateur",
         "USER_LOGIN": "Login utilisateur"
     },

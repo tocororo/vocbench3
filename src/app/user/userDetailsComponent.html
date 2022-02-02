@@ -75,7 +75,8 @@
             </div>
         </div>
     </div>
-    <div class="card-footer">
-        <label>{{'MODELS.USER.REGISTERED'|translate}}: </label> {{user?.getRegistrationDate()}}
+    <div class="card-footer d-flex">
+        <div style="flex: 1"><label>IRI: </label> {{user?.getIri().getURI()}}</div>
+        <div><label>{{'MODELS.USER.REGISTERED'|translate}}: </label> {{user?.getRegistrationDate()}}</div>
     </div>
 </div>

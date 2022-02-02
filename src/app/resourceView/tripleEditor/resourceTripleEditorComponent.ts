@@ -96,8 +96,7 @@ export class ResourceTripleEditorComponent {
     }
 
     applyChanges() {
-        let showWarning = Cookie.getCookie(Cookie.WARNING_CODE_CHANGE_VALIDATION, null, VBContext.getLoggedUser()) != "false";
-        if (VBContext.getWorkingProject().isValidationEnabled() && showWarning) {
+        if (VBContext.getWorkingProject().isValidationEnabled()) {
             this.basicModals.alertCheckCookie({key: "RESOURCE_VIEW.CODE_EDITOR.CODE_EDITOR"}, { key: "MESSAGES.CODE_EDITOR_VALIDATION_IGNORED_WARN" }, 
                 Cookie.WARNING_CODE_CHANGE_VALIDATION).then(
                 () => {

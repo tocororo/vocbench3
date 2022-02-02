@@ -99,6 +99,7 @@ export class UsersAdministrationComponent {
                 this.userService.listProjectsBoundToUser(this.selectedUser.getIri()).subscribe(
                     projects => {
                         this.userProjects = projects;
+                        this.userProjects.sort();
                     }
                 );
             }

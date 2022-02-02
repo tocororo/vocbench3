@@ -48,7 +48,7 @@ export class BarChartComponent {
         })
     }
 
-    onSelect(data): void {
+    onSelect(data: ChartData): void {
         console.log('Item clicked', data);
     }
 

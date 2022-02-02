@@ -27,7 +27,7 @@ export class AuthServices {
         }
         return this.httpMgr.doPost(this.serviceName, "login", params).pipe(
             map(stResp => {
-                let loggedUser: User = Deserializer.createUser(stResp);
+                let loggedUser: User = User.parse(stResp);
                 VBContext.setLoggedUser(loggedUser);
                 return loggedUser;
             })

@@ -141,7 +141,6 @@
     },
     "ADMINISTRATION": {
         "ACTIONS": {
-            "ADD_ADMINISTRATOR": "Aggiungi amministratore",
             "ADD_ALL_PROFICIENCIES": "Aggiungi tutte le lingue di competenza",
             "ADD_CAPABILITY": "Aggiungi capability",
             "ADD_USER_TO_PROJ": "Aggiungi utente al progetto",
@@ -157,7 +156,6 @@
             "LEAVE_ONLY_PROFICIENCIES": "Lascia solo le lingue di competenza",
             "REMOVE_USER": "Rimuovi utente",
             "REMOVE_USER_FROM_PROJ": "Rimuovi utente dal progetto",
-            "REVOKE_ADMINISTRATOR": "Revoca amministratore",
             "SHOW_HIDE_ACTIVE_USER": "Mostra/nascondi utenti attivi",
             "SHOW_HIDE_INACTIVE_USER": "Mostra/nascondi utenti inattivi",
             "SHOW_HIDE_NEW_USER": "Mostra/nascondi nuovi utenti",
@@ -295,8 +293,8 @@
             "ADMIN_ASSIGNED_PROJECTS_INFO": "L'amministratore ha automaticamente accesso a tutti i progetti",
             "ASSIGNED_TO_PROJECTS": "Assegnato ai progetti",
             "FORCE_PASSWORD_WARNING": "Questa procedura forza la modifica della password di {{userShow}}.<br>Nota: Esiste una procedura dedicata <i>password dimenticata</i> (accessibile dal form di login). E' raccomandabile lasciar aggiornare all'utente la propria password tramite tale procedura. Usate questa procedura solo se strettamente necessario.",
-            "TEMPLATE_INFO": "Qui è possibile assegnare un ResourceView template all'utente. Il template descrive quali partizioni del ResourceView sono visibili di default.<br>E' inoltre possibile caricare template esistenti, o salvare template definiti, tramite la toolbar presente in alto al pannello.",
-            "USER_DETAILS": "Dettagli utente"
+            "SUPER_USER": "Super-user",
+            "TEMPLATE_INFO": "Qui è possibile assegnare un ResourceView template all'utente. Il template descrive quali partizioni del ResourceView sono visibili di default.<br>E' inoltre possibile caricare template esistenti, o salvare template definiti, tramite la toolbar presente in alto al pannello."
         }
     },
     "ALIGNMENT": {
@@ -1092,7 +1090,6 @@
         "SORT_UNORDERED": "Non ordinare",
         "STAGED_COMMITS": "Staged Commits",
         "TIME_SORT": "Ordine temporale",
-        "USER": "Utente",
         "VALIDATION_COMMENT": {
             "COMMENT": "Commento",
             "COMMENT_INFO": "Per le seguenti commit rifiutatet è possibile fornire un commento in modo da motivare la decisione presa. Anche se il commento è opzionale, è consigliato fornirne uno. Se non si desidera fornire alcun commento è possibile lasciar vuoto il campo di testo e continuare.",
@@ -1369,6 +1366,12 @@
         "CATALOG_CONNECTOR_NOT_CONFIGURED": "Il catalog connector deve essere configurato",
         "CHANGE_CLASS_TREE_ROOT_WARN": "Selezionando una classe specifica come root dell'albero potrebbe far sì che nuove classi create non siano visibili se non appartengono al sottoalbero della root scelta.",
         "CHANGE_S2RDF_SETTINGS_CONFIRM": "La modifica ai setting richiede di re-inizializzare il modello relativo allo spreadsheet. Tutte le modifiche fatte agli header verranno perse. Vuoi continuare?",
+        "CHANGE_USER_TYPE_ADMIN_TO_SUPER_CONFIRM": "Stai declassando {{user}} da amministratore a super-user. Vuoi continuare?",
+        "CHANGE_USER_TYPE_ADMIN_TO_USER_CONFIRM": "Stai revocando il ruolo d'amministratore a {{user}}. Vuoi continuare?",
+        "CHANGE_USER_TYPE_SUPER_TO_ADMIN_CONFIRM": "Stai promuovendo {{user}} da super-user ad amministratore. Vuoi continuare?",
+        "CHANGE_USER_TYPE_SUPER_TO_USER_CONFIRM": "Stai revocando il ruolo di super-user a {{user}}. Vuoi continuare?",
+        "CHANGE_USER_TYPE_USER_TO_ADMIN_CONFIRM": "Stai promuovendo {{user}} ad amministratore. Vuoi continuare?",
+        "CHANGE_USER_TYPE_USER_TO_SUPER_CONFIRM": "Stai promuovendo {{user}} a super-user. Vuoi continuare?",
         "CLEAR_DATA_CONFIRM": "Con questa operazione cancellerai i dati salvati nel progetto e sarai rimandato alla home page. Vuoi procedere?",
         "CODE_EDITOR_VALIDATION_IGNORED_WARN": "Attenzione: il progetto corrente ha la funzionalità di validazione attiva. Questa modifica non sarà sottoposta a validazione.",
         "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "Il Collaboration System sembra essere configurato ma non funziona (la configurazione potrebbe non essere valida o il server potrebbe non essere raggiungibile), pertanto verrà disabilitato.",
@@ -1548,7 +1551,6 @@
         "RESOURCE_URI_COPIED_IN_CLIPBOARD": "URI della risorsa copiato negli appunti",
         "RESTART_LOCAL_REPO_REQUIRED": "Al fine di rendere effettiva la modifica potrebbe essere necessario riavviare il repository locale del progetto riavviando l'intero triple store.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Stai per sovrascrivere il template attuale ripristinando la configurazione di default. Sei sicuro?",
-        "REVOKING_ADMIN_CONFIRM": "Stai per revocare l'autorità da amministratore a {{user}}. Sei sicuro?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Salvare le modifiche al baseURI? (Attenzione, il refactoring del baseURI potrebbe essere un processo lungo)",
         "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Salvare le modifiche al baseURI e namespace? (Attenzione, il refactoring del baseURI potrebbe essere un processo lungo)",
         "SAVE_NS_CHANGE_CONFIRM": "Salvare le modifiche al namespace?",
@@ -2348,8 +2350,10 @@
             "REGISTRATION_DATE_ASC": "Data di registrazione (asc)",
             "REGISTRATION_DATE_DESC": "Data di registrazione (desc)"
         },
+        "USER": "Utente",
         "USER_DETAILS": "Dettagli utente",
-        "USER_LOGIN": "User login"
+        "USER_LOGIN": "User login",
+        "USER_TYPE": "Tipo utente"
     },
     "WIDGETS": {
         "CONVERTER": {

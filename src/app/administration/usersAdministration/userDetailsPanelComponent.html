@@ -1,23 +1,52 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1;">{{'ADMINISTRATION.USERS.USER_DETAILS'|translate}}:</label>
-        <div *ngIf="user" class="btn-toolbar">
-            <button type="button" class="btn btn-xs btn-light" (click)="changeAdministratorStatus()"
-                [ngClass]="{'active online': user.isAdmin()}" [disabled]="isChangeAdminButtonDisabled()"
-                [title]="user.isAdmin() ? 'Revoke administrator authority' : 'Grant administrator authority'">
-                {{'ADMINISTRATION.USERS.ADMINISTRATOR'|translate}}
-            </button>
-            <div class="btn-group btn-group-xs" role="group">
-                <button type="button" class="btn btn-light" (click)="changeUserStatus()"
-                    [ngClass]="{'active': isUserActive()}" style="color: green" [disabled]="isChangeStatusButtonDisabled()">
-                    {{'STATUS.ACTIVE'|translate}}
-                </button>
-                <button type="button" class="btn btn-light" (click)="changeUserStatus()"
-                    [ngClass]="{'active': !isUserActive()}" style="color: red" [disabled]="isChangeStatusButtonDisabled()">
-                    {{'STATUS.INACTIVE'|translate}}
-                </button>
+        <label style="flex: 1;">{{'USER.USER_DETAILS'|translate}}</label>
+        <ng-container *ngIf="user">
+            <div *ngIf="isUserActive()">
+                <label>{{'USER.USER_TYPE'|translate}}:</label>
+                <div class="btn-group ml-2" style="width: 80px;" ngbDropdown>
+                    <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                        <span *ngIf="user.isAdmin()">{{'ADMINISTRATION.USERS.ADMINISTRATOR'|translate}}</span>
+                        <span *ngIf="user.isSuperUser()">{{'ADMINISTRATION.USERS.SUPER_USER'|translate}}</span>
+                        <span *ngIf="!user.isSuperUser() && !user.isAdmin()">{{'USER.USER'|translate}}</span>
+                    </button>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="changeUserType('admin')" [disabled]="user.isAdmin()">
+                            <div class="d-flex align-items-center text-nowrap">
+                                <span style="flex: 1;">{{'ADMINISTRATION.USERS.ADMINISTRATOR'|translate}}</span>
+                                <span *ngIf="user.isAdmin()" class="fas fa-check ml-2"></span>
+                            </div>
+                        </a>
+                        <a class="dropdown-item text-nowrap" (click)="changeUserType('su')" [disabled]="user.isSuperUser()">
+                            <div class="d-flex align-items-center text-nowrap">
+                                <span style="flex: 1;">{{'ADMINISTRATION.USERS.SUPER_USER'|translate}}</span>
+                                <span *ngIf="user.isSuperUser()" class="fas fa-check ml-2"></span>
+                            </div>
+                        </a>
+                        <a class="dropdown-item text-nowrap" (click)="changeUserType()" [disabled]="!user.isSuperUser() && !user.isAdmin()">
+                            <div class="d-flex align-items-center text-nowrap">
+                                <span style="flex: 1;">{{'USER.USER'|translate}}</span>
+                                <span *ngIf="!user.isSuperUser() && !user.isAdmin()" class="fas fa-check ml-2"></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <div class="ml-4">
+                <label>{{'STATUS.STATUS'|translate}}:</label>
+                <div class="btn-group btn-group-xs ml-2">
+                    <button type="button" class="btn btn-light" (click)="changeUserStatus()"
+                        [ngClass]="{'active': isUserActive()}" style="color: green" [disabled]="isChangeStatusButtonDisabled()">
+                        {{'STATUS.ACTIVE'|translate}}
+                    </button>
+                    <button type="button" class="btn btn-light" (click)="changeUserStatus()"
+                        [ngClass]="{'active': !isUserActive()}" style="color: red" [disabled]="isChangeStatusButtonDisabled()">
+                        {{'STATUS.INACTIVE'|translate}}
+                    </button>
+                </div>
+            </div>
+        </ng-container>
     </div>
     <div class="card-body vbox">
         <user-details *ngIf="user" [ngModel]="user" [readonly]="true"></user-details>

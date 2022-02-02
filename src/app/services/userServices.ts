@@ -37,7 +37,7 @@ export class UserServices {
                     (then, when succesfully logged, user will be able to register the first user / admin)
                 */
                 if (stResp.user != null) { //user object in resp => deserialize it (it could be empty, so no user logged)
-                    let user: User = Deserializer.createUser(stResp.user);
+                    let user: User = User.parse(stResp.user);
                     if (user != null && !user.isSamlUser()) { 
                         //store the logged user in the context only if not null and not a SAML user (namely a "mockup" user just for the SAML user registration workflow)
                         VBContext.setLoggedUser(user);
@@ -62,7 +62,7 @@ export class UserServices {
         let params: any = {}
         return this.httpMgr.doGet(this.serviceName, "listUsers", params).pipe(
             map(stResp => {
-                let users: User[] = Deserializer.createUsersArray(stResp);
+                let users: User[] = this.parseUsersArray(stResp);
                 users.sort((u1: User, u2: User) => {
                     return u1.getGivenName().localeCompare(u2.getGivenName());
                 });
@@ -78,7 +78,7 @@ export class UserServices {
         let params: any = {}
         return this.httpMgr.doGet(this.serviceName, "listOnlineUsers", params).pipe(
             map(stResp => {
-                let users: User[] = Deserializer.createUsersArray(stResp);
+                let users: User[] = this.parseUsersArray(stResp);
                 users.sort((u1: User, u2: User) => {
                     return u1.getGivenName().localeCompare(u2.getGivenName());
                 });
@@ -112,7 +112,7 @@ export class UserServices {
         }
         return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).pipe(
             map(stResp => {
-                let users: User[] = Deserializer.createUsersArray(stResp);
+                let users: User[] = this.parseUsersArray(stResp);
                 users.sort((u1: User, u2: User) => {
                     return u1.getGivenName().localeCompare(u2.getGivenName());
                 });
@@ -233,7 +233,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserGivenName", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -250,7 +250,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserFamilyName", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -267,7 +267,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserEmail", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -286,7 +286,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserPhone", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -305,7 +305,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserAddress", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -324,7 +324,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserAffiliation", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -343,7 +343,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserUrl", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -362,7 +362,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserAvatarUrl", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -379,7 +379,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserLanguageProficiencies", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -398,7 +398,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserCustomField", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -415,7 +415,7 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "enableUser", params).pipe(
             map(stResp => {
-                return Deserializer.createUser(stResp);
+                return User.parse(stResp);
             })
         );
     }
@@ -534,5 +534,14 @@ export class UserServices {
 
     private getVbHostAddress(): string {
         return location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname
+    }
+
+
+    private parseUsersArray(resp: any): User[] {
+        let users: User[] = [];
+        for (let u of resp) {
+            users.push(User.parse(u));
+        }
+        return users;
     }
 }

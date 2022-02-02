@@ -141,7 +141,6 @@
    },
    "ADMINISTRATION": {
       "ACTIONS": {
-         "ADD_ADMINISTRATOR": "añadir administrador",
          "ADD_ALL_PROFICIENCIES": "añadir todas las competencias",
          "ADD_CAPABILITY": "añadir capacidad",
          "ADD_USER_TO_PROJ": "añadir usuario al proyecto",
@@ -157,7 +156,6 @@
          "LEAVE_ONLY_PROFICIENCIES": "Dejar solo competencias",
          "REMOVE_USER": "Eliminar usuario",
          "REMOVE_USER_FROM_PROJ": "Eliminar usuario del proyecto",
-         "REVOKE_ADMINISTRATOR": "Revocar administrador",
          "SHOW_HIDE_ACTIVE_USER": "Mostrar / Ocultar usuarios activos",
          "SHOW_HIDE_INACTIVE_USER": "Mostrar / Ocultar usuarios inactivos",
          "SHOW_HIDE_NEW_USER": "Mostrar / Ocultar nuevos usuarios",
@@ -295,8 +293,7 @@
          "ADMIN_ASSIGNED_PROJECTS_INFO": "El administrador tiene acceso automático a todos los proyectos",
          "ASSIGNED_TO_PROJECTS": "Asignado a proyectos",
          "FORCE_PASSWORD_WARNING": "Este procedimiento forzará el cambio de la contraseña de {{userShow}}. <br> Nota: Ya existe un procedimiento de <i> contraseña olvidada </i> (disponible en el formulario de inicio de sesión). Se recomienda para permitir que el usuario actualice su propia contraseña a través de ese procedimiento. Utilice este procedimiento solo si es estrictamente necesario. ",
-         "TEMPLATE_INFO": "Aquí puede asignar una plantilla de Vista de recursos al usuario. Esta plantilla describe qué particiones de Vista de recursos están visibles de forma predeterminada. <br> También puede cargar una plantilla ya existente o decidir guardar la plantilla que definió, a través de la barra de herramientas en el encabezado del panel .",
-         "USER_DETAILS": "Detalles del usuario"
+         "TEMPLATE_INFO": "Aquí puede asignar una plantilla de Vista de recursos al usuario. Esta plantilla describe qué particiones de Vista de recursos están visibles de forma predeterminada. <br> También puede cargar una plantilla ya existente o decidir guardar la plantilla que definió, a través de la barra de herramientas en el encabezado del panel ."
       }
    },
    "ALIGNMENT": {
@@ -1088,7 +1085,6 @@
       "SORT_UNORDERED": "No ordenado",
       "STAGED_COMMITS": "Operaciones por etapas",
       "TIME_SORT": "Ordenar por fecha",
-      "USER": "Usuario",
       "VALIDATION_COMMENT": {
          "COMMENT": "Comentario",
          "COMMENT_INFO": "Para los siguientes operaciones rechazadas es posible proporcionar un comentario para motivar la decisión de rechazarlo. Incluso si el comentario es opcional, se recomienda proporcionarlo. De todos modos, si no desea proporcionar un comentario, puede dejar vacío el campo de texto y continuar. ",
@@ -1542,7 +1538,6 @@
       "RESOURCE_URI_COPIED_IN_CLIPBOARD": "¡URI de recurso copiado en el portapapeles!",
       "RESTART_REPO_LOCAL_REQUIRED": "Para que este cambio sea efectivo, puede ser necesario reiniciar el repositorio del proyecto local reiniciando toda el triple store.",
       "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Estás anulando la plantilla actual al restaurar la configuración predeterminada. ¿Estás seguro?",
-      "REVOKING_ADMIN_CONFIRM": "Está revocando la autoridad de administrador a {{user}}. ¿Está seguro?",
       "SAVE_BASEURI_CHANGE_CONFIRM": "¿Guardar cambio de baseURI? (Atención, la refactorización de baseURI podría ser un proceso largo)",
       "SAVE_BASEURI_NS_CHANGE_CONFIRM": "¿Guardar cambio de baseURI y espacio de nombres? (Atención, la refactorización de baseURI podría ser un proceso largo)",
       "SAVE_NS_CHANGE_CONFIRM": "¿Guardar cambio de espacio de nombres?",
@@ -2340,6 +2335,7 @@
          "REGISTRATION_DATE_ASC": "Fecha de registro (asc)",
          "REGISTRATION_DATE_DESC": "Fecha de registro (desc)"
       },
+      "USER": "Usuario",
       "USER_DETAILS": "Detalles del usuario",
       "USER_LOGIN": "Inicio de sesión de usuario"
    },
