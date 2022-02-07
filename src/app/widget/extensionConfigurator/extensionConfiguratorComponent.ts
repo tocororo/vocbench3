@@ -124,6 +124,7 @@ export class ExtensionConfiguratorComponent {
         for (let conf of this.selectedExtension.configurations) {
             if (conf.type == configurationType) {
                 this.selectedConfiguration = conf;
+                this.configurationUpdated.emit(this.selectedConfiguration);
             }
         }
     }

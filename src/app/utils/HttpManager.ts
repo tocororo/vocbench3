@@ -458,8 +458,11 @@ export class HttpManager {
      * Handle the response of downloadFile that returns an array buffer.
      * This method check if the response is json, in case it could be an json error response.
      * In case, throws an error containing the error message in the response.
+     * 
+     * Note: this method is called only if the backend responds correctly with a 200 response, even if the response contains an error
+     * (that is then parsed here).
      */
-     private arrayBufferRespHandler(resp: HttpResponse<ArrayBuffer>) {
+    private arrayBufferRespHandler(resp: HttpResponse<ArrayBuffer>) {
         let arrayBuffer = resp.body;
         let respContType = resp.headers.get("content-type");
         if (respContType && respContType.includes(STResponseUtils.ContentType.applicationJson+";")) { //could be an error response

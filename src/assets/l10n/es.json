@@ -1538,6 +1538,7 @@
       "RESOURCE_URI_COPIED_IN_CLIPBOARD": "¡URI de recurso copiado en el portapapeles!",
       "RESTART_REPO_LOCAL_REQUIRED": "Para que este cambio sea efectivo, puede ser necesario reiniciar el repositorio del proyecto local reiniciando toda el triple store.",
       "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Estás anulando la plantilla actual al restaurar la configuración predeterminada. ¿Estás seguro?",
+      "REVOKING_ADMIN_CONFIRM": "Está revocando la autoridad de administrador a {{user}}. ¿Está seguro?",
       "SAVE_BASEURI_CHANGE_CONFIRM": "¿Guardar cambio de baseURI? (Atención, la refactorización de baseURI podría ser un proceso largo)",
       "SAVE_BASEURI_NS_CHANGE_CONFIRM": "¿Guardar cambio de baseURI y espacio de nombres? (Atención, la refactorización de baseURI podría ser un proceso largo)",
       "SAVE_NS_CHANGE_CONFIRM": "¿Guardar cambio de espacio de nombres?",

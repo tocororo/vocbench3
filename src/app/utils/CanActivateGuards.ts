@@ -3,6 +3,8 @@ import { ActivatedRouteSnapshot, CanActivate, CanLoad, Router, RouterStateSnapsh
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { UserServices } from '../services/userServices';
+import { AuthorizationEvaluator } from './AuthorizationEvaluator';
+import { VBActionsEnum } from './VBActions';
 import { VBContext } from './VBContext';
 import { VBProperties } from './VBProperties';
 
@@ -73,6 +75,21 @@ export class AdminGuard implements CanActivate {
     }
 }
 
+@Injectable()
+export class PMGuard implements CanActivate {
+
+    constructor() { }
+
+    //this canActivate return Observable<boolean> since I need to check asynchronously if a user is logged
+    canActivate(): Observable<boolean> {
+        if (VBContext.isLoggedIn()) {
+            return of(AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement));
+        } else {
+            return of(false);
+        }
+    }
+}
+
 /**
  * Guard that prevents accessing page whit no project accessed
  */
@@ -120,7 +137,6 @@ export class SystemSettingsGuard implements CanActivate, CanLoad {
         } else {
             return of(true);
         }
-        
     }
 }
 
@@ -155,7 +171,7 @@ export class SystemSettingsGuard implements CanActivate, CanLoad {
  */
 
 @Injectable()
-export class AsyncGuardResolver implements CanActivate{
+export class AsyncGuardResolver implements CanActivate {
 
     constructor(private router: Router, private userService: UserServices, private vbProp: VBProperties) {}
 
@@ -194,7 +210,7 @@ export class AsyncGuardResolver implements CanActivate{
 
     //Create an instance of the guard and fire canActivate method returning the Observable
     private getGuard(guardKey: VBGuards): Observable<boolean> {
-        let guard: AuthGuard | AdminGuard | ProjectGuard | SystemSettingsGuard;
+        let guard: AuthGuard | AdminGuard | PMGuard | ProjectGuard | SystemSettingsGuard;
         switch (guardKey) {
             case VBGuards.AuthGuard:
                 guard = new AuthGuard(this.router, this.userService);
@@ -202,6 +218,8 @@ export class AsyncGuardResolver implements CanActivate{
             case VBGuards.AdminGuard:
                 guard = new AdminGuard(this.router, this.userService);
                 break;
+            case VBGuards.PMGuard: 
+                guard = new PMGuard();
             case VBGuards.ProjectGuard:
                 guard = new ProjectGuard(this.router);
                 break;
@@ -218,8 +236,9 @@ export class AsyncGuardResolver implements CanActivate{
 export enum VBGuards {
     AuthGuard = "AuthGuard",
     AdminGuard = "AdminGuard",
+    PMGuard = "PMGuard",
     ProjectGuard = "ProjectGuard",
     SystemSettingsGuard = "SystemSettingsGuard",
 }
 
-export const GUARD_PROVIDERS = [AsyncGuardResolver, AuthGuard, AdminGuard, ProjectGuard, SystemSettingsGuard];
+export const GUARD_PROVIDERS = [AsyncGuardResolver, AuthGuard, AdminGuard, PMGuard, ProjectGuard, SystemSettingsGuard];

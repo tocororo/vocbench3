@@ -61,7 +61,7 @@ export class RemoteRepoEditorModal {
             this.projectService.modifyRepositoryAccessCredentials(this.project, repo.id,
                 repo.remoteRepoSummary.username, repo.remoteRepoSummary.password).subscribe(
                     () => {
-                        this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.REPO_CREDENTIALS_UPDATED", params:{repoId: repo.id}});
+                        this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.REPO_CREDENTIALS_UPDATED", params:{repoId: repo.remoteRepoSummary.repositoryId}});
                     }
                 );
         }

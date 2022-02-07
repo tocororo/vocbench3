@@ -4,8 +4,9 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 10.2.1 (dd-mm-yyyy)
+# 10.2.1 (02-07-2022)
   * Added checkbox for ignoring semantic checks in Manchester editor
+  * Fixed minor UI issues in search results dialog
 
 # 10.2.0 (26-01-2022)
   * Improved the schemes filter selection in the concept tree dialog

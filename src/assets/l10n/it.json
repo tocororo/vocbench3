@@ -1551,6 +1551,7 @@
         "RESOURCE_URI_COPIED_IN_CLIPBOARD": "URI della risorsa copiato negli appunti",
         "RESTART_LOCAL_REPO_REQUIRED": "Al fine di rendere effettiva la modifica potrebbe essere necessario riavviare il repository locale del progetto riavviando l'intero triple store.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Stai per sovrascrivere il template attuale ripristinando la configurazione di default. Sei sicuro?",
+        "REVOKING_ADMIN_CONFIRM": "Stai per revocare l'autorità da amministratore a {{user}}. Sei sicuro?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Salvare le modifiche al baseURI? (Attenzione, il refactoring del baseURI potrebbe essere un processo lungo)",
         "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Salvare le modifiche al baseURI e namespace? (Attenzione, il refactoring del baseURI potrebbe essere un processo lungo)",
         "SAVE_NS_CHANGE_CONFIRM": "Salvare le modifiche al namespace?",

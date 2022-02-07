@@ -188,12 +188,11 @@ export class SearchServices {
             schemeFilter: schemeFilter,
             cls: cls
         };
-        let excOptions: VBRequestOptions = new VBRequestOptions({
+        options = new VBRequestOptions({
             errorHandlers: [{
                     className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
             }]
-        });
-        options = excOptions.merge(options);
+        }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchStringList", params, options);
     }
 

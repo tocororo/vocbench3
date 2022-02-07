@@ -1532,6 +1532,7 @@
         "RESTART_LOCAL_REPO_REQUIRED": "Damit die Änderung wirksam wird, kann es erforderlich sein, das lokale Repository des Projekts neu zu starten, indem der gesamte Triple Store neu gestartet wird.",
         "RESTART_REPO_LOCAL_REQUIRED": "Damit die Änderung wirksam wird, müssen Sie möglicherweise das Repository des lokalen Projekts neu starten, indem Sie den gesamten Tripel-Store neu starten.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Sie überschreiben die aktuelle Vorlage, indem Sie die Standardkonfiguration wiederherstellen. Sind Sie sicher?",
+        "REVOKING_ADMIN_CONFIRM": "Sie widerrufen die Administratorenrechte für {{user}}. Sind Sie sicher?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Änderung der baseURI speichern? (Achtung, baseURI-Refactoring könnte ein langer Prozess sein)",
         "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Änderung von baseURI und Namensraum speichern? (Achtung, baseURI-Refactoring könnte ein langer Prozess sein)",
         "SAVE_NS_CHANGE_CONFIRM": "Änderung des Namensraums speichern?",

@@ -1551,6 +1551,7 @@
         "RESOURCE_URI_COPIED_IN_CLIPBOARD": "Resource URI copied in clipboard!",
         "RESTART_REPO_LOCAL_REQUIRED": "In order to make this change effective it may be necessary to restart the repository of the local project by restarting the whole triple store.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "You are overriding the current template by restoring the default configuration. Are you sure?",
+        "REVOKING_ADMIN_CONFIRM": "You are revoking the administrator authority to {{user}}. Are you sure?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Save change of baseURI? (Attention, baseURI refactoring could be a long process)",
         "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Save change of baseURI and namespace? (Attention, baseURI refactoring could be a long process)",
         "SAVE_NS_CHANGE_CONFIRM": "Save change of namespace?",
@@ -1937,7 +1938,7 @@
         "PATTERN_FACTORY_PROVIDED": "Pattern Factory-provided",
         "PATTERN_ID": "Pattern ID",
         "PATTERN_LIBRARY": "Pattern Library",
-        "RESOURCE_METADATA_CONFIG": "Configurazione Resource Metadata",
+        "RESOURCE_METADATA_CONFIG": "Resource Metadata configuration",
         "SHARED_PATTERNS": "Shared Patterns",
         "SHOW_DETAILS": "Show pattern details",
         "STORE_IN_LIBRARY": "Store Pattern in shared library"

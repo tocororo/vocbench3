@@ -1537,6 +1537,7 @@
         "RESOURCE_URI_COPIED_IN_CLIPBOARD": "URI de la ressource copiée dans le presse-papier !",
         "RESTART_REPO_LOCAL_REQUIRED": "Pour rendre cette modification effective il peut être nécessaire de redémarrer l'entrepôt du projet local en relançant le triple store.",
         "RESTORE_DEFAULT_TEMPLATE_CONFIRM": "Vous êtes sur le point d'écraser le modèle en cours en restaurant la configuration par défaut. Êtes-vous certain ?",
+        "REVOKING_ADMIN_CONFIRM": "Vous êtes sur le point de révoquer les droits d'administrateur de l'utilisateur {{user}}. Êtes-vous certain ?",
         "SAVE_BASEURI_CHANGE_CONFIRM": "Sauvegarder la modification de l'URI de base ? (Attention, le processus de modification de l'URI de base peut prendre du temps)",
         "SAVE_BASEURI_NS_CHANGE_CONFIRM": "Sauvegarder les modifications de l'URI de base et de l'espace de nom ?  (Attention, le processus de modification de l'URI de base peut prendre du temps)",
         "SAVE_NS_CHANGE_CONFIRM": "Sauvegarder la modification de l'espace de nom ?",

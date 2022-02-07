@@ -1,5 +1,4 @@
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-import { Transition } from 'd3';
 
 export enum ModalType {
     info = "info",

@@ -7,7 +7,7 @@ import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { VBActionsEnum } from "../utils/VBActions";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { ModalOptions, ModalType, TextOrTranslation, Translation } from '../widget/modal/Modals';
+import { ModalOptions, ModalType, Translation } from '../widget/modal/Modals';
 import { ImportPatternModal } from "./modals/importPatternModal";
 import { MetadataAssociationEditorModal } from "./modals/metadataAssociationEditorModal";
 import { MetadataPatternEditorModal } from "./modals/metadataPatternEditorModal";
