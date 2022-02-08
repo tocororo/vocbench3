@@ -1,24 +1,7 @@
 <div class="card card-default vbox">
     <div class="card-header">
         <label style="flex: 1;">{{'USER.USER_DETAILS'|translate}}</label>
-        <div *ngIf="user" class="btn-toolbar">
-            <button type="button" class="btn btn-xs btn-light" (click)="changeAdministratorStatus()"
-                [ngClass]="{'active online': user.isAdmin()}" [disabled]="isChangeAdminButtonDisabled()"
-                [title]="user.isAdmin() ? 'Revoke administrator authority' : 'Grant administrator authority'">
-                {{'ADMINISTRATION.USERS.ADMINISTRATOR'|translate}}
-            </button>
-            <div class="btn-group btn-group-xs" role="group">
-                <button type="button" class="btn btn-light" (click)="changeUserStatus()"
-                    [ngClass]="{'active': isUserActive()}" style="color: green" [disabled]="isChangeStatusButtonDisabled()">
-                    {{'STATUS.ACTIVE'|translate}}
-                </button>
-                <button type="button" class="btn btn-light" (click)="changeUserStatus()"
-                    [ngClass]="{'active': !isUserActive()}" style="color: red" [disabled]="isChangeStatusButtonDisabled()">
-                    {{'STATUS.INACTIVE'|translate}}
-                </button>
-            </div>
-        </div>
-        <!-- <ng-container *ngIf="user">
+        <ng-container *ngIf="user">
             <div *ngIf="isUserActive()">
                 <label>{{'USER.USER_TYPE'|translate}}:</label>
                 <div class="btn-group ml-2" style="width: 80px;" ngbDropdown>
@@ -63,7 +46,7 @@
                     </button>
                 </div>
             </div>
-        </ng-container> -->
+        </ng-container>
     </div>
     <div class="card-body vbox">
         <user-details *ngIf="user" [ngModel]="user" [readonly]="true"></user-details>

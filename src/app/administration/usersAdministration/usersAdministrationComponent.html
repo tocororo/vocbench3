@@ -49,7 +49,7 @@
                         <ng-container *ngFor="let u of users">
                             <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
                                 <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
-                                <span *ngIf="u.isAdmin()" class="fas fa-wrench" style="color: gray; margin-right: 2px;" [title]="'ADMINISTRATION.USERS.ADMINISTRATOR'|translate"></span>
+                                <span *ngIf="u.isAdmin()" class="fas fa-wrench mr-2" style="color: gray;" [title]="'ADMINISTRATION.USERS.ADMINISTRATOR'|translate"></span>
                                 <span *ngIf="u.getStatus() == 'NEW'" class="fas fa-exclamation-circle inactive" [title]="'STATUS.NEW'|translate"></span>
                                 <span *ngIf="u.getStatus() == 'INACTIVE'" class="fas fa-ban inactive" [title]="'STATUS.INACTIVE'|translate"></span>
                                 <span *ngIf="u.getStatus() == 'ACTIVE'" class="fas fa-user" 

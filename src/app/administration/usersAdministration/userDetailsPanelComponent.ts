@@ -53,54 +53,6 @@ export class UserDetailsPanelComponent {
         }
     }
 
-    /** TEMP CODE, REMOVE WHEN SUPER USER WILL BE ENABLED */
-    isChangeAdminButtonDisabled() {
-        //cannot change the admin status to the same logged user and to non-active user
-        return VBContext.getLoggedUser() && (VBContext.getLoggedUser().getEmail() == this.user.getEmail() || this.user.getStatus() != UserStatusEnum.ACTIVE);
-    }
-
-    changeAdministratorStatus() {
-        if (this.user.isAdmin()) { //revoke administator
-            //check if there is another admin
-            this.userService.listUsers().subscribe(
-                users => {
-                    let adminCount = users.map(u => u.isAdmin).length;
-                    if (adminCount < 2) {
-                        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CANNOT_REVOKE_ADMIN_AUTHORITY"}, ModalType.warning);
-                        return;
-                    } else {
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.REVOKING_ADMIN_CONFIRM", params: {user: this.user.getShow()}}, ModalType.warning).then(
-                            confirm => {
-                                this.administrationServices.removeAdministrator(this.user).subscribe(
-                                    user => {
-                                        this.user.setAdmin(false);
-                                    }
-                                );
-                            }, 
-                            cancel => {}
-                        );
-                    }
-                }
-            );
-        } else { //assign administrator
-            if (this.user.getStatus() != UserStatusEnum.ACTIVE) { //only active user can be administator
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CANNOT_GRANT_ADMIN_TO_INACTIVE_USER"}, ModalType.warning);
-                return;
-            }
-            this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.GRANTING_ADMIN_CONFIRM", params: {user: this.user.getShow()}}, ModalType.warning).then(
-                confirm => {
-                    this.administrationServices.setAdministrator(this.user).subscribe(
-                        user => {
-                            this.user.setAdmin(true);
-                        }
-                    );
-                }
-            );
-        }
-    }
-
-    /** TEMP CODE -- END */
-
     changeUserType(type?: UserType) {
         let removeOldRoleFn: Observable<void>;
         if (this.user.isAdmin() && type != "admin") {
