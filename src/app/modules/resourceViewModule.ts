@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ConstituentComponent } from '../resourceView/lexicographerView/constituents/constituentComponent';
 import { constituentFeatureRenderer } from '../resourceView/lexicographerView/constituents/constituentFeatureRenderer';
 import { ConstituentListComponent } from '../resourceView/lexicographerView/constituents/constituentListComponent';
@@ -26,38 +25,38 @@ import { LexViewModalService } from '../resourceView/lexicographerView/lexViewMo
 import { EntryReferenceComponent } from '../resourceView/lexicographerView/subterms/entryReferenceComponent';
 import { SubtermComponent } from '../resourceView/lexicographerView/subterms/subtermComponent';
 import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
-import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
-import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/classAxiomPartitionRenderer';
-import { ConstituentsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/constituentsPartitionRenderer';
-import { CustomPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/customPartitionRenderer';
-import { DatatypeDefinitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/datatypeDefinitionPartitionRenderer';
-import { DenotationsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/denotationsPartitionRenderer';
-import { DisjointPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/disjointPropertiesRenderer';
-import { DomainsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/domainsPartitionRenderer';
-import { EquivalentPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/equivalentPropertiesPartitionRenderer';
-import { EvokedLexicalConceptsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/evokedLexicalConceptsPartitionRenderer';
-import { FormBasedPreviewRenderer } from '../resourceView/resourceViewEditor/renderer/impl/formBasedPreviewRenderer';
-import { FormRepresentationsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/formRepresentationsPartitionRenderer';
-import { ImportsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/importsPartitionRenderer';
-import { LabelRelationsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/labelRelationsPartitionRenderer';
-import { LexicalFormsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/lexicalFormsPartitionRenderer';
-import { LexicalizationsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/lexicalizationsPartitionRenderer';
-import { LexicalSensesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/lexicalSensesPartitionRenderer';
-import { MembersOrderedPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/membersOrderedPartitionRenderer';
-import { MembersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/membersPartitionRenderer';
-import { NotesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/notesPartitionRenderer';
-import { PropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/propertiesPartitionRenderer';
-import { PropertyChainRenderer } from '../resourceView/resourceViewEditor/renderer/impl/propertyChainRenderer';
-import { PropertyFacetsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/propertyFacetsPartitionRenderer';
-import { RangesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/rangesPartitionRenderer';
-import { RdfsMembersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/rdfsMembersPartitionRenderer';
-import { SchemesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/schemesPartitionRenderer';
-import { SubtermsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/subtermsPartitionRenderer';
-import { SuperPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/superPropertiesPartitionRenderer';
-import { TopConceptsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/topConceptsPartitionRenderer';
-import { TypesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/typesPartitionRenderer';
-import { LexicalizationEnrichmentHelper } from '../resourceView/resourceViewEditor/renderer/lexicalizationEnrichmentHelper';
-import { PredicateObjectsRenderer } from '../resourceView/resourceViewEditor/renderer/predicateObjectsRenderer';
+import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/broadersPartitionRenderer';
+import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/classAxiomPartitionRenderer';
+import { ConstituentsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/constituentsPartitionRenderer';
+import { CustomPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/customPartitionRenderer';
+import { DatatypeDefinitionPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/datatypeDefinitionPartitionRenderer';
+import { DenotationsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/denotationsPartitionRenderer';
+import { DisjointPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/disjointPropertiesRenderer';
+import { DomainsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/domainsPartitionRenderer';
+import { EquivalentPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/equivalentPropertiesPartitionRenderer';
+import { EvokedLexicalConceptsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/evokedLexicalConceptsPartitionRenderer';
+import { FormBasedPreviewRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/formBasedPreviewRenderer';
+import { FormRepresentationsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/formRepresentationsPartitionRenderer';
+import { ImportsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/importsPartitionRenderer';
+import { LabelRelationsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/labelRelationsPartitionRenderer';
+import { LexicalFormsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/lexicalFormsPartitionRenderer';
+import { LexicalizationsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/lexicalizationsPartitionRenderer';
+import { LexicalSensesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/lexicalSensesPartitionRenderer';
+import { MembersOrderedPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/membersOrderedPartitionRenderer';
+import { MembersPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/membersPartitionRenderer';
+import { NotesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/notesPartitionRenderer';
+import { PropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/propertiesPartitionRenderer';
+import { PropertyChainRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/propertyChainRenderer';
+import { PropertyFacetsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/propertyFacetsPartitionRenderer';
+import { RangesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/rangesPartitionRenderer';
+import { RdfsMembersPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/rdfsMembersPartitionRenderer';
+import { SchemesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/schemesPartitionRenderer';
+import { SubtermsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/subtermsPartitionRenderer';
+import { SuperPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/superPropertiesPartitionRenderer';
+import { TopConceptsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/topConceptsPartitionRenderer';
+import { TypesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/typesPartitionRenderer';
+import { LexicalizationEnrichmentHelper } from '../resourceView/resourceViewEditor/partitionRenderer/lexicalizationEnrichmentHelper';
+import { PredicateObjectsRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/predicateObjectsRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceViewEditor/resourceRenameComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewEditor/resourceViewCtxMenu';
 import { ResourceViewEditorComponent } from '../resourceView/resourceViewEditor/resourceViewEditorComponent';
@@ -75,12 +74,12 @@ import { InstanceListCreatorModal } from '../resourceView/resourceViewEditor/res
 import { PropertyChainCreatorModal } from '../resourceView/resourceViewEditor/resViewModals/propertyChainCreatorModal';
 import { RdfsMembersModal } from '../resourceView/resourceViewEditor/resViewModals/rdfsMembersModal';
 import { ResViewModalServices } from '../resourceView/resourceViewEditor/resViewModals/resViewModalServices';
-import { CustomFormTableCellComponent } from '../resourceView/resourceViewEditor/resViewResources/cfValueTablePreview/customFormTableCellComponent';
-import { CustomFormValueTableComponent } from '../resourceView/resourceViewEditor/resViewResources/cfValueTablePreview/customFormValueTableComponent';
-import { EditableResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/editableResourceComponent';
-import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/reifiedResourceComponent';
-import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/resViewResources/resourceViewValueRenderer';
 import { TimeMachineModal } from '../resourceView/resourceViewEditor/timeMachine/timeMachineModal';
+import { CustomFormTableCellComponent } from '../resourceView/resourceViewEditor/valueRenderer/cfValueTablePreview/customFormTableCellComponent';
+import { CustomFormValueTableComponent } from '../resourceView/resourceViewEditor/valueRenderer/cfValueTablePreview/customFormValueTableComponent';
+import { EditableResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/editableResourceComponent';
+import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/reifiedResourceComponent';
+import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/valueRenderer/resourceViewValueRenderer';
 import { ResourceViewModal } from '../resourceView/resourceViewModal';
 import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
 import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
@@ -91,8 +90,6 @@ import { LanguageDefinitionComponent } from '../resourceView/termView/languageDe
 import { LanguageTermComponent } from '../resourceView/termView/languageTerm/languageTerm';
 import { TermViewComponent } from '../resourceView/termView/termViewComponent';
 import { ResourceTripleEditorComponent } from '../resourceView/tripleEditor/resourceTripleEditorComponent';
-import { BarChartComponent } from '../widget/charts/barChartComponent';
-import { PieChartComponent } from '../widget/charts/pieChartComponent';
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
@@ -103,7 +100,6 @@ import { TreeAndListModule } from "./treeAndListModule";
         DragDropModule,
         FormsModule,
         NgbDropdownModule,
-        NgxChartsModule,
         PreferencesModule,
         SharedModule, 
         TranslateModule,
@@ -200,9 +196,6 @@ import { TreeAndListModule } from "./treeAndListModule";
         RdfsMembersModal,
         ResViewSettingsModal,
         TimeMachineModal,
-
-        BarChartComponent,
-        PieChartComponent,
     ],
     exports: [
         ResourceViewEditorComponent,

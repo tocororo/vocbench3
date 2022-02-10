@@ -13,7 +13,7 @@ import { ChartData, NgxChartsUtils } from "./NgxChartsUtils";
 })
 export class BarChartComponent {
 
-    data: ChartData[] = []
+    chartData: ChartData[] = []
 
     randColorScheme = { domain: [] };
     // colorScheme = {
@@ -30,21 +30,18 @@ export class BarChartComponent {
     showYAxisLabel = true;
     yAxisLabel = 'Population';
 
-    constructor() {
-    }
-
     ngOnInit() {
         //generate random data
         for (let i = 0; i < ((Math.random() * 10) + 1); i++) {
-            this.data.push({
+            this.chartData.push({
                 name: "value" + i,
                 extra: { label: "label" + i },
                 value: Math.random() * 1000
             })
         }
         //generate random colors
-        this.randColorScheme.domain = this.data.map((d, idx) => {
-            return NgxChartsUtils.getRandColor(this.data.length, idx)
+        this.randColorScheme.domain = this.chartData.map((d, idx) => {
+            return NgxChartsUtils.getRandColor(this.chartData.length, idx)
         })
     }
 

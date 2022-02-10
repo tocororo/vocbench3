@@ -5,7 +5,7 @@ import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "
 import { CustomForm, CustomFormValue } from "../models/CustomForms";
 import { ResViewPartition, ResViewUtils } from "../models/ResourceView";
 import { OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../models/Vocabulary";
-import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../resourceView/resourceViewEditor/renderer/propertyEnrichmentHelper";
+import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../resourceView/resourceViewEditor/partitionRenderer/propertyEnrichmentHelper";
 import { AddPropertyValueModalReturnData } from "../resourceView/resourceViewEditor/resViewModals/addPropertyValueModal";
 import { ConstituentListCreatorModalReturnData } from "../resourceView/resourceViewEditor/resViewModals/constituentListCreatorModal";
 import { PropertyListCreatorModalReturnData } from "../resourceView/resourceViewEditor/resViewModals/propertyChainCreatorModal";

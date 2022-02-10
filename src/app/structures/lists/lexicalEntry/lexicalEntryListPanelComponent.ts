@@ -231,7 +231,6 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                 this.openAt(resource);
             });
         }
-        
     }
 
     public openAt(node: ARTURIResource) {

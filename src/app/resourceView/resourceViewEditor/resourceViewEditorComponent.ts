@@ -29,7 +29,7 @@ import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AbstractResourceView } from "./abstractResourceView";
-import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./renderer/multipleActionHelper";
+import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./partitionRenderer/multipleActionHelper";
 import { TimeMachineModal } from "./timeMachine/timeMachineModal";
 
 @Component({

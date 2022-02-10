@@ -1,0 +1,15 @@
+<editable-resource *ngIf="!renderAsReified(); else reifiedBlock" [ngClass]="{ clickable: object.isResource() }" style="flex: 1"
+    [resource]="object" [rendering]="rendering" [subject]="subject" [predicate]="predicate" [readonly]="readonly" [partition]="partition"
+    (dblClick)="onDblClick($event)" (link)="onDblClick($event)" (delete)="onDelete(object)" (edit)="onEdit(object)" (update)="onUpdate()"
+    (copyLocale)="onCopyLocale($event)" [title]="graphTitle">
+</editable-resource>
+
+<ng-template #reifiedBlock>
+    <reified-resource [ngClass]="{ clickable: object.isResource() }" style="flex:1"
+        [subject]="subject" [predicate]="predicate" [resource]="object" [rendering]="rendering" [readonly]="readonly" [partition]="partition"
+        (delete)="onDelete(object)" (dblClick)="onDblClick($event)">
+    </reified-resource>
+</ng-template>
+
+<!-- <widget-renderer *ngIf="predicate.getShow() == 'geo:location' || predicate.getShow() == ':population'" [subject]="subject" [predicate]="predicate">
+</widget-renderer> -->

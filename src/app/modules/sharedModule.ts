@@ -4,10 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgbDropdownModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ExplainableTripleComponent } from '../icv/owlConsistencyViolations/explainableTripleComponent';
 import { ProjectListComponent } from '../project/projectListPanel/projectListComponent';
 import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
+import { BarChartComponent } from '../widget/charts/barChartComponent';
+import { PieChartComponent } from '../widget/charts/pieChartComponent';
 import { HtmlEditorComponent } from '../widget/codemirror/htmlEditor/htmlEditorComponent';
 import { JsonEditorComponent } from '../widget/codemirror/jsonEditor/jsonEditorComponent';
 import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor/manchesterEditorComponent';
@@ -57,6 +60,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         FormsModule,
         NgbDropdownModule,
         NgbToastModule,
+        NgxChartsModule,
         TranslateModule,
     ],
     declarations: [
@@ -80,7 +84,6 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         MapParamEditor,
         MustacheEditorComponent,
         NTripleEditorComponent,
-        OpenStreeMapComponent,
         PartitionFilterEditor,
         PearlEditorComponent,
         ProjectListComponent,
@@ -103,6 +106,10 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         TurtleEditorComponent,
         ValuePickerComponent,
         YasguiComponent,
+
+        BarChartComponent,
+        OpenStreeMapComponent,
+        PieChartComponent,
     ],
     exports: [
         ConverterConfiguratorComponent,
@@ -123,7 +130,6 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ManchesterEditorComponent,
         MustacheEditorComponent,
         NTripleEditorComponent,
-        OpenStreeMapComponent,
         PartitionFilterEditor,
         PearlEditorComponent,
         ProjectListComponent,
@@ -145,6 +151,10 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         TypedLiteralInputComponent,
         ValuePickerComponent,
         YasguiComponent,
+
+        BarChartComponent,
+        OpenStreeMapComponent,
+        PieChartComponent,
     ],
     providers: [
         ToastService,

@@ -27,9 +27,9 @@ import { SkosDiffingComponent } from './skosDiffing/skosDiffingComponent';
 import { SparqlComponent } from './sparql/sparqlComponent';
 import { RegistrationComponent } from './user/registrationComponent';
 import { ResetPasswordComponent } from './user/resetPasswordComponent';
-import { UserProfileComponent } from './user/userProfileComponent';
 import { UserActionsComponent } from './user/userActionsComponent';
-import { AdminGuard, AuthGuard, VBGuards, AsyncGuardResolver, ProjectGuard, SystemSettingsGuard } from './utils/CanActivateGuards';
+import { UserProfileComponent } from './user/userProfileComponent';
+import { AsyncGuardResolver, AuthGuard, ProjectGuard, SystemSettingsGuard, VBGuards } from './utils/CanActivateGuards';
 import { UserResolver } from './utils/UserResolver';
 
 const routes: Routes = [

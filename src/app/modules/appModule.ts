@@ -2,8 +2,8 @@ import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/c
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -42,7 +42,7 @@ import { PreferencesModule } from './preferencesModule';
 import { ProjectModule } from './projectModule';
 import { ResourceMetadataModule } from './resourceMetadataModule';
 import { ResourceViewModule } from './resourceViewModule';
-import { ShaclModule } from './ShaclModule';
+import { ShaclModule } from './shaclModule';
 import { SharedModule } from './sharedModule';
 import { Sheet2RdfModule } from './sheet2rdfModule';
 import { SparqlModule } from './sparqlModule';

@@ -147,7 +147,7 @@
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </ranges-renderer>
             <property-facets-renderer *ngIf="resViewSections['facets'] && propertyFacets" [ngStyle]="{ order: partitionOrder['facets'] }"
-                [pred-obj-list]="resViewSections['facets']" [facets]="propertyFacets" [resource]="resource" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['facets']" [facets]="propertyFacets" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </property-facets-renderer>
             <datatype-definition-renderer *ngIf="resViewSections['datatypeDefinitions']" [ngStyle]="{ order: partitionOrder['datatypeDefinitions'] }"

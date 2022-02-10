@@ -9,7 +9,7 @@ import { VBActionsEnum } from "src/app/utils/VBActions";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
-import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../../renderer/propertyEnrichmentHelper";
+import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../../partitionRenderer/propertyEnrichmentHelper";
 import { AddPropertyValueModalReturnData } from "../../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 

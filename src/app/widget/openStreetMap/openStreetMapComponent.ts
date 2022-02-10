@@ -1,6 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import * as L from "leaflet";
-import { Point } from "./GeoData";
 
 @Component({
     selector: "open-street-map",
@@ -22,30 +21,29 @@ export class OpenStreeMapComponent {
 
     private map: L.Map;
 
-    private tracePolyline: L.Polyline; //trace converted in leaflet format
     private pointLatLng: L.LatLngLiteral; //point converter in leaflet format
+    private tracePolyline: L.Polyline; //trace converted in leaflet format
 
     private marker: L.Marker;
 
 
-    constructor() { }
-
     ngOnInit() {
         this.fixLeafletMarker();
-        this.processInput();
     }
 
     ngAfterViewInit(): void {
         this.initMap();
+        this.convertInputToLeaflet();
 
-        this.initMarker();
-        this.drawPolyline();
-        this.setCenter();
-    }
+        //once the input has been converted, init marker or polyline
+        if (this.pointLatLng) {
+            this.drawMarker();
+        } else if (this.tracePolyline) {
+            this.drawPolyline();
+        }
 
-    private processInput() {
-        this.pointLatLng = this.point ? new L.LatLng(this.point.latitude, this.point.longitude) : null;
-        this.tracePolyline = this.trace ? L.polyline(this.trace.map(p => new L.LatLng(p.latitude, p.longitude))) : null;
+        //finally center the map
+        this.centerMap();
     }
 
     private initMap(): void {
@@ -63,32 +61,57 @@ export class OpenStreeMapComponent {
 
         if (this.selection) { //if it works in selection mode, enable the click handler
             this.map.on('click', (e: L.LeafletMouseEvent) => {
-                this.setMarker(e);   
+                this.onClickListener(e);   
             })    
         }
     }
 
-    private initMarker() {
+    /**
+     * Convert the input data (point or trace) in Leaflet format (LatLngLiteral or Polyline)
+     */
+    private convertInputToLeaflet() {
         if (this.point) {
-            this.marker = L.marker(this.pointLatLng);
-            this.marker.addTo(this.map)
-
-            let popup: L.Popup = L.popup({ closeButton: false });
-            popup.setContent(
-                "<table><tbody>" + 
-                "<tr><td><b>Lat:</b></td><td>" + this.pointLatLng.lat + "</td></tr>" +
-                "<tr><td><b>Long:</b></td><td>" + this.pointLatLng.lng + "</td></tr>" +
-                "</tbody></table>"
-            );
-            this.marker.bindPopup(popup).openPopup();
-
-            // let tooltip: L.Tooltip = L.tooltip({ direction: 'top' });
-            // tooltip.setContent("Hello tooltip")
-            // this.marker.bindTooltip(tooltip).openTooltip();
+            this.pointLatLng = new L.LatLng(this.point.lat, this.point.long);
+        } else if (this.trace) {
+            this.tracePolyline = this.trace ? L.polyline(this.trace.map(p => new L.LatLng(p.lat, p.long))) : null;
         }
     }
 
-    setMarker(e: L.LeafletMouseEvent) {
+    private drawMarker() {
+        this.marker = L.marker(this.pointLatLng);
+        this.marker.addTo(this.map)
+
+        let popup: L.Popup = L.popup({ closeButton: false });
+        popup.setContent(
+            "<table><tbody>" + 
+            "<tr><td><b>Lat:</b></td><td>" + this.pointLatLng.lat + "</td></tr>" +
+            "<tr><td><b>Long:</b></td><td>" + this.pointLatLng.lng + "</td></tr>" +
+            "</tbody></table>"
+        );
+        this.marker.bindPopup(popup).openPopup();
+
+        // let tooltip: L.Tooltip = L.tooltip({ direction: 'top' });
+        // tooltip.setContent("Hello tooltip")
+        // this.marker.bindTooltip(tooltip).openTooltip();
+    }
+
+    private drawPolyline() {
+        this.tracePolyline.addTo(this.map);
+    }
+
+    private centerMap() {
+        if (this.tracePolyline) {
+            this.map.fitBounds(this.tracePolyline.getBounds())
+        } else {
+            this.map.setView(this.pointLatLng);
+        }
+    }
+
+    /**
+     * Listener to click on map. Set a marker on the point clicked
+     * @param e 
+     */
+    private onClickListener(e: L.LeafletMouseEvent) {
         //remove the previous marker (if any)
         if (this.marker) {
             this.marker.remove();
@@ -105,20 +128,7 @@ export class OpenStreeMapComponent {
         this.marker.bindPopup(popup).openPopup();
     };
 
-    private drawPolyline() {
-        if (this.trace) {
-            this.tracePolyline.addTo(this.map);
-        }
-    }
-
-    private setCenter() {
-        if (this.tracePolyline) {
-            this.map.fitBounds(this.tracePolyline.getBounds())
-        } else {
-            this.map.setView(this.pointLatLng);
-        }
-    }
-
+    
 
     /**
      * Solves issues with markers
@@ -142,4 +152,9 @@ export class OpenStreeMapComponent {
 
     }
 
+}
+
+export interface Point {
+    lat: number;
+    long: number;
 }
