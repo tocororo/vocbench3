@@ -62,11 +62,12 @@
                                 The retrieve query for this kind of widget must return the following variables:
                             </ng-container>
                             <ng-container *ngIf="e.type == 'Update'">
-                                The update query for this kind of widget must contains in the <span style="font-family: monospace">insert</span>  block the following variables:
+                                The update query for this kind of widget must contains in the <span style="font-family: monospace">insert</span> block the following variables:
                             </ng-container>
                             <div>
-                                <code *ngFor="let b of requiredBindings">{{b}} </code>
+                                <code *ngFor="let b of requiredBindings">?{{b}} </code>
                             </div>
+                            The query must also contains the placeholder <code>&lt;trigger&gt;</code> which represents the predicate that will be associated to the widget.
                         </div>
                         <div class="card vbox">
                             <div class="card-body vbox">

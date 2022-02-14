@@ -70,6 +70,19 @@ export class VisualizationWidgetsComponent {
         );
     }
 
+    deleteWidget() {
+        this.basicModals.confirm("Delete widget", "You are deleting widget, are you sure?", ModalType.warning).then(
+            () => {
+                this.visualizationWidgetsService.deleteWidget(this.selectedWidget.reference).subscribe(
+                    () => {
+                        this.initWidgets();
+                    }
+                );
+            },
+            () => {}
+        );
+    }
+
     private openWidgetEditor(title: Translation, widgetRef?: string) {
         // let readonly: boolean = (widgetRef != null) ? widgetRef.startsWith("factory") : false;
         const modalRef: NgbModalRef = this.modalService.open(WidgetEditorModal, new ModalOptions('lg'));

@@ -12,7 +12,7 @@
                         <button class="btn btn-light" [title]="'ACTIONS.CREATE'|translate" (click)="createWidget()" [disabled]="!createWidgetAuthorized">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'ACTIONS.DELETE'|translate" [disabled]="!selectedWidget || !deleteWidgetAuthorized">
+                        <button class="btn btn-light" [title]="'ACTIONS.DELETE'|translate" (click)="deleteWidget()" [disabled]="!selectedWidget || !deleteWidgetAuthorized">
                             <span class="fas fa-minus"></span>
                         </button>
                         <button class="btn btn-light" [title]="'ACTIONS.EDIT'|translate" (click)="editWidget()" [disabled]="!selectedWidget || !modifyWidgetAuthorized">

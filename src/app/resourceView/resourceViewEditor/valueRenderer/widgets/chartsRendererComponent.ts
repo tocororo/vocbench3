@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { ARTLiteral, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { DataTypeBindingsMap, WidgetDataBinding, WidgetDataType, WidgetDataTypeCompliantMap, WidgetEnum } from "src/app/models/VisualizationWidgets";
+import { XmlSchema } from "src/app/models/Vocabulary";
 import { ChartData, ChartSeries } from "src/app/widget/charts/NgxChartsUtils";
 import { AbstractWidgetComponent } from "./abstractWidgetRenderer";
 
@@ -74,6 +75,17 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
         if (dataTypes.includes(WidgetDataType.series)) {
             this.xAxisLabel = this.data[0].getValue(WidgetDataBinding.value_label).getShow();
             this.yAxisLabel = this.data[0].getValue(WidgetDataBinding.series_label).getShow();
+
+            //in case the values are based on dates, sort them before the initialization of the series
+            let name = this.data[0].getValue(WidgetDataBinding.name);
+            if (name instanceof ARTLiteral && (name.getDatatype() == XmlSchema.date.getURI() || name.getDatatype() == XmlSchema.dateTime.getURI())) {
+                this.data.sort((d1, d2) => {
+                    let date1 = new Date(d1.getValue(WidgetDataBinding.name).getShow());
+                    let date2 = new Date(d2.getValue(WidgetDataBinding.name).getShow());
+                    return date1.getTime() - date2.getTime();
+                })
+            }
+
             this.series = [];
             this.data.forEach(d => {
                 let cd: ChartData = {

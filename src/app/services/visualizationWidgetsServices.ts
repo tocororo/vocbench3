@@ -73,6 +73,12 @@ export class VisualizationWidgetsServices {
         );
     }
 
+    deleteWidget(reference: string) {
+        let params = {
+            reference: reference,
+        }
+        return this.httpMgr.doPost(this.serviceName, "deleteWidget", params);
+    }
 
 
     /**
