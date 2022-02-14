@@ -362,6 +362,8 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             })
         }
 
+        this.resViewSections["widgets"] = this.initPartition(<ResViewPartition>"widgets", partitionFilter, true);
+
         if (
             //these partitions are always returned, even when resource is not defined, so I need to check also if length == 0
             (!this.resViewResponse[ResViewPartition.lexicalizations] || this.resViewResponse[ResViewPartition.lexicalizations].length == 0) &&

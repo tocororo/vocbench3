@@ -4,7 +4,7 @@
             <rdf-resource *ngIf="resource" [resource]="resource"></rdf-resource>
             <resource-rename [resource]="resource" style="flex: 1;" [readonly]="readonly || disabled" (update)="buildResourceView(resource)">
             </resource-rename>
-            
+
             <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: rendering}" [title]="'COMMONS.RENDERING'|translate" (click)="switchRendering()" [disabled]="disabled">
                 <span class="fas fa-font"></span>
             </button>
@@ -15,14 +15,14 @@
             <button class="btn btn-light btn-xs ml-2" [ngClass]="{active: valueFilterLangEnabled}" [title]="'RESOURCE_VIEW.ACTIONS.TOGGLE_VALUE_FILTER_LANG'|translate" (click)="switchValueFilterLang()" [disabled]="disabled">
                 <span class="fas fa-filter"></span>
             </button>
-            
-            <button *ngIf="notificationsAvailable" class="btn btn-light btn-xs ml-2" [ngClass]="{active: isWatching}" 
+
+            <button *ngIf="notificationsAvailable" class="btn btn-light btn-xs ml-2" [ngClass]="{active: isWatching}"
                 (click)="changeNotificationStatus()" [title]="'RESOURCE_VIEW.ACTIONS.TOGGLE_NOTIFICATIONS'|translate" [disabled]="disabled">
                 <span class="fas fa-bell"></span>
             </button>
 
             <div *ngIf="timeActionsEnabled" class="dropdown ml-2" ngbDropdown>
-                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle (click)="initVersions()" [title]="'RESOURCE_VIEW.TIME_MACHINE.TIME_MACHINE'|translate" 
+                <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle (click)="initVersions()" [title]="'RESOURCE_VIEW.TIME_MACHINE.TIME_MACHINE'|translate"
                     [disabled]="(!versionList || versionList.length == 0) && !timeMachineAvailable || disabled">
                     <span class="far fa-clock"></span>
                 </button>
@@ -40,7 +40,7 @@
                                 <span style="flex: 1;">{{v.dateTimeLocal}} - {{v.versionId}}</span>
                                 <span *ngIf="v == activeVersion" class="fas fa-check ml-2"></span>
                             </div>
-                            
+
                         </a>
                     </ng-container>
                     <ng-container *ngIf="timeMachineAvailable && !activeVersion">
@@ -48,7 +48,7 @@
                             {{'RESOURCE_VIEW.TIME_MACHINE.TRAVER_TO_TIME'|translate}}
                         </a>
                     </ng-container>
-                  </div>
+                </div>
             </div>
 
             <div *ngIf="collaborationAvailable" class="dropdown ml-2" ngbDropdown>
@@ -78,7 +78,7 @@
             <button *ngIf="settingsAvailable" class="btn btn-light btn-xs ml-2" [title]="'COMMONS.SETTINGS'|translate" (click)="openSettings()" [disabled]="disabled">
                 <span class="fas fa-cog"></span>
             </button>
-            
+
             <res-view-menu [resource]="resource" [rendering]="rendering" [showInferred]="showInferred" [readonly]="readonly || disabled" [projectCtx]="projectCtx"
                 (update)="buildResourceView(resource)" (assertInferred)="assertInferredStatements()"></res-view-menu>
         </div>
@@ -94,24 +94,24 @@
             {{'RESOURCE_VIEW.STATUS.RESOURCE_UNKNOWN_HOST'|translate}}
         </div>
         <ng-container *ngIf="!unexistingResource && !unknownHost">
-            <types-renderer *ngIf="resViewSections['types']" [ngStyle]="{ order: partitionOrder['types'] }" 
-                [pred-obj-list]="resViewSections['types']"  [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+            <types-renderer *ngIf="resViewSections['types']" [ngStyle]="{ order: partitionOrder['types'] }"
+                [pred-obj-list]="resViewSections['types']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </types-renderer>
-            <class-axiom-renderer *ngIf="resViewSections['classaxioms']" [ngStyle]="{ order: partitionOrder['classaxioms'] }" 
-                [pred-obj-list]="resViewSections['classaxioms']"  [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+            <class-axiom-renderer *ngIf="resViewSections['classaxioms']" [ngStyle]="{ order: partitionOrder['classaxioms'] }"
+                [pred-obj-list]="resViewSections['classaxioms']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </class-axiom-renderer>
             <top-concepts-renderer *ngIf="resViewSections['topconceptof']" [ngStyle]="{ order: partitionOrder['topconceptof'] }"
-                [pred-obj-list]="resViewSections['topconceptof']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['topconceptof']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </top-concepts-renderer>
             <schemes-renderer *ngIf="resViewSections['schemes']" [ngStyle]="{ order: partitionOrder['schemes'] }"
-                [pred-obj-list]="resViewSections['schemes']"  [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['schemes']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </schemes-renderer>
             <broaders-renderer *ngIf="resViewSections['broaders']" [ngStyle]="{ order: partitionOrder['broaders'] }"
-                [pred-obj-list]="resViewSections['broaders']"  [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['broaders']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </broaders-renderer>
             <superproperties-renderer *ngIf="resViewSections['superproperties']" [ngStyle]="{ order: partitionOrder['superproperties'] }"
@@ -119,23 +119,23 @@
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </superproperties-renderer>
             <equivalent-properties-renderer *ngIf="resViewSections['equivalentProperties']" [ngStyle]="{ order: partitionOrder['equivalentProperties'] }"
-                [pred-obj-list]="resViewSections['equivalentProperties']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['equivalentProperties']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </equivalent-properties-renderer>
             <disjoint-properties-renderer *ngIf="resViewSections['disjointProperties']" [ngStyle]="{ order: partitionOrder['disjointProperties'] }"
-                [pred-obj-list]="resViewSections['disjointProperties']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['disjointProperties']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </disjoint-properties-renderer>
             <property-chain-renderer *ngIf="resViewSections['subPropertyChains']" [ngStyle]="{ order: partitionOrder['subPropertyChains'] }"
-                [pred-obj-list]="resViewSections['subPropertyChains']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['subPropertyChains']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </property-chain-renderer>
             <constituents-renderer *ngIf="resViewSections['constituents']" [ngStyle]="{ order: partitionOrder['constituents'] }"
-                [pred-obj-list]="resViewSections['constituents']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['constituents']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </constituents-renderer>
             <subterms-renderer *ngIf="resViewSections['subterms']" [ngStyle]="{ order: partitionOrder['subterms'] }"
-                [pred-obj-list]="resViewSections['subterms']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['subterms']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </subterms-renderer>
             <domains-renderer *ngIf="resViewSections['domains']" [ngStyle]="{ order: partitionOrder['domains'] }"
@@ -147,31 +147,31 @@
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </ranges-renderer>
             <property-facets-renderer *ngIf="resViewSections['facets'] && propertyFacets" [ngStyle]="{ order: partitionOrder['facets'] }"
-                [pred-obj-list]="resViewSections['facets']" [facets]="propertyFacets" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['facets']" [facets]="propertyFacets" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </property-facets-renderer>
             <datatype-definition-renderer *ngIf="resViewSections['datatypeDefinitions']" [ngStyle]="{ order: partitionOrder['datatypeDefinitions'] }"
-                [pred-obj-list]="resViewSections['datatypeDefinitions']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['datatypeDefinitions']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </datatype-definition-renderer>
             <lexicalizations-renderer *ngIf="resViewSections['lexicalizations']" [ngStyle]="{ order: partitionOrder['lexicalizations'] }"
-                [pred-obj-list]="resViewSections['lexicalizations']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['lexicalizations']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </lexicalizations-renderer>
             <lexical-forms-renderer *ngIf="resViewSections['lexicalForms']" [ngStyle]="{ order: partitionOrder['lexicalForms'] }"
-                [pred-obj-list]="resViewSections['lexicalForms']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['lexicalForms']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </lexical-forms-renderer>
             <lexical-senses-renderer *ngIf="resViewSections['lexicalSenses']" [ngStyle]="{ order: partitionOrder['lexicalSenses'] }"
-                [pred-obj-list]="resViewSections['lexicalSenses']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['lexicalSenses']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </lexical-senses-renderer>
             <denotations-renderer *ngIf="resViewSections['denotations']" [ngStyle]="{ order: partitionOrder['denotations'] }"
-                [pred-obj-list]="resViewSections['denotations']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['denotations']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </denotations-renderer>
             <evoked-lexical-concepts-renderer *ngIf="resViewSections['evokedLexicalConcepts']" [ngStyle]="{ order: partitionOrder['evokedLexicalConcepts'] }"
-                [pred-obj-list]="resViewSections['evokedLexicalConcepts']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['evokedLexicalConcepts']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </evoked-lexical-concepts-renderer>
             <notes-renderer *ngIf="resViewSections['notes']" [ngStyle]="{ order: partitionOrder['notes'] }"
@@ -183,40 +183,45 @@
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </members-renderer>
             <members-ordered-renderer *ngIf="resViewSections['membersOrdered']" [ngStyle]="{ order: partitionOrder['membersOrdered'] }"
-                [pred-obj-list]="resViewSections['membersOrdered']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['membersOrdered']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </members-ordered-renderer>
             <label-relations-renderer *ngIf="resViewSections['labelRelations']" [ngStyle]="{ order: partitionOrder['labelRelations'] }"
-                [pred-obj-list]="resViewSections['labelRelations']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['labelRelations']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </label-relations-renderer>
             <form-representations-renderer *ngIf="resViewSections['formRepresentations']" [ngStyle]="{ order: partitionOrder['formRepresentations'] }"
-                [pred-obj-list]="resViewSections['formRepresentations']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['formRepresentations']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </form-representations-renderer>
             <form-based-preview-renderer *ngIf="resViewSections['formBasedPreview']" [ngStyle]="{ order: partitionOrder['formBasedPreview'] }"
-                [pred-obj-list]="resViewSections['formBasedPreview']" [resource]="resource" [rendering]="rendering" [readonly]="true" 
+                [pred-obj-list]="resViewSections['formBasedPreview']" [resource]="resource" [rendering]="rendering" [readonly]="true"
                 (dblclickObj)="objectDblClick($event)">
             </form-based-preview-renderer>
             <imports-renderer *ngIf="resViewSections['imports']" [ngStyle]="{ order: partitionOrder['imports'] }"
-                [pred-obj-list]="resViewSections['imports']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['imports']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </imports-renderer>
             <rdfs-members-renderer *ngIf="resViewSections['rdfsMembers']" [ngStyle]="{ order: partitionOrder['rdfsMembers'] }"
-                [pred-obj-list]="resViewSections['rdfsMembers']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['rdfsMembers']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </rdfs-members-renderer>
             <properties-renderer *ngIf="resViewSections['properties']" [ngStyle]="{ order: partitionOrder['properties'] }"
-                [pred-obj-list]="resViewSections['properties']" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                [pred-obj-list]="resViewSections['properties']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </properties-renderer>
 
             <ng-container *ngFor="let p of customSections">
-                <custom-partition-renderer *ngIf="resViewSections[p]" [partition]="p" [ngStyle]="{ order: partitionOrder[p] }" 
-                    [pred-obj-list]="resViewSections[p]" [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                <custom-partition-renderer *ngIf="resViewSections[p]" [partition]="p" [ngStyle]="{ order: partitionOrder[p] }"
+                    [pred-obj-list]="resViewSections[p]" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                     (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
                 </custom-partition-renderer>
-            </ng-container> 
+            </ng-container>
+
+            <widgets-renderer *ngIf="resViewSections['widgets']" style="order: 99;"
+                [pred-obj-list]="resViewSections['widgets']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </widgets-renderer>
 
         </ng-container>
     </div>
@@ -267,5 +272,5 @@
             </div>
         </div>
     </div>
-    
+
 </div>

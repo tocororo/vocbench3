@@ -264,7 +264,9 @@ export enum VBActionsEnum {
     //Versions
     versionsCreateVersionDump = "versionsCreateVersionDump",
     versionsDeleteVersions = "versionsDeleteVersions",
-    versionsGetVersions = "versionsGetVersions"
+    versionsGetVersions = "versionsGetVersions",
+    //Visualization Widgets
+    visualizationWidgetsRead = "visualizationWidgetsRead"
 }
 
 /**

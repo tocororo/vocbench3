@@ -52,6 +52,7 @@ import { UserServices } from "../services/userServices";
 import { UsersGroupsServices } from "../services/usersGroupsServices";
 import { ValidationServices } from "../services/validationServices";
 import { VersionsServices } from "../services/versionsServices";
+import { VisualizationWidgetsServices } from '../services/visualizationWidgetsServices';
 import { HttpManager } from '../utils/HttpManager';
 import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 
@@ -113,7 +114,8 @@ import { StMetadataRegistry } from '../utils/STMetadataRegistry';
         UserServices,
         UsersGroupsServices,
         ValidationServices,
-        VersionsServices
+        VersionsServices,
+        VisualizationWidgetsServices
     ]
 })
 export class STServicesModule { }

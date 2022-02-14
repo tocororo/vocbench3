@@ -1,21 +1,22 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import * as L from "leaflet";
 
 @Component({
-    selector: "open-street-map",
-    templateUrl: "./openStreetMapComponent.html",
+    selector: "leaflet-map",
+    templateUrl: "./leafletMapComponent.html",
     styles: [`
         :host {
             width: 100%;
-            height: 200px;
+            height: 100%;
         }
     `]
 })
-export class OpenStreeMapComponent {
+export class LeafletMapComponent {
     @Input() selection: boolean = false; //tells if the component is working in selection mode, namely if it allows the selection of a point (with a marker)
+    @Input() point: GeoPoint; //a point to be represented (with a marker) on the map
+    @Input() trace: GeoPoint[]; //a trace (set of points) to be represented (with a polyline) on the map
 
-    @Input() point: Point; //a point to be represented (with a marker) on the map
-    @Input() trace: Point[]; //a trace (set of points) to be represented (with a polyline) on the map
+    @Output() pointSelected: EventEmitter<GeoPoint> = new EventEmitter();
 
     @ViewChild('mapEl', { static: false }) mapEl: ElementRef;
 
@@ -33,17 +34,13 @@ export class OpenStreeMapComponent {
 
     ngAfterViewInit(): void {
         this.initMap();
-        this.convertInputToLeaflet();
+        this.initGraphicElements();
+    }
 
-        //once the input has been converted, init marker or polyline
-        if (this.pointLatLng) {
-            this.drawMarker();
-        } else if (this.tracePolyline) {
-            this.drawPolyline();
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['point'] && !changes['point'].firstChange || changes['trace'] && !changes['trace'].firstChange) {
+            this.initGraphicElements();
         }
-
-        //finally center the map
-        this.centerMap();
     }
 
     private initMap(): void {
@@ -61,9 +58,22 @@ export class OpenStreeMapComponent {
 
         if (this.selection) { //if it works in selection mode, enable the click handler
             this.map.on('click', (e: L.LeafletMouseEvent) => {
-                this.onClickListener(e);   
-            })    
+                this.onClickListener(e);
+            })
         }
+    }
+
+    private initGraphicElements() {
+        this.convertInputToLeaflet();
+        //once the input has been converted, init marker or polyline
+        if (this.pointLatLng) {
+            this.drawMarker();
+        } else if (this.tracePolyline) {
+            this.drawPolyline();
+        }
+
+        //finally center the map
+        this.centerMap();
     }
 
     /**
@@ -78,21 +88,21 @@ export class OpenStreeMapComponent {
     }
 
     private drawMarker() {
+        if (this.marker) {
+            this.marker.remove();
+        }
+
         this.marker = L.marker(this.pointLatLng);
         this.marker.addTo(this.map)
 
         let popup: L.Popup = L.popup({ closeButton: false });
         popup.setContent(
-            "<table><tbody>" + 
+            "<table><tbody>" +
             "<tr><td><b>Lat:</b></td><td>" + this.pointLatLng.lat + "</td></tr>" +
             "<tr><td><b>Long:</b></td><td>" + this.pointLatLng.lng + "</td></tr>" +
             "</tbody></table>"
         );
         this.marker.bindPopup(popup).openPopup();
-
-        // let tooltip: L.Tooltip = L.tooltip({ direction: 'top' });
-        // tooltip.setContent("Hello tooltip")
-        // this.marker.bindTooltip(tooltip).openTooltip();
     }
 
     private drawPolyline() {
@@ -100,10 +110,10 @@ export class OpenStreeMapComponent {
     }
 
     private centerMap() {
-        if (this.tracePolyline) {
-            this.map.fitBounds(this.tracePolyline.getBounds())
-        } else {
+        if (this.pointLatLng) {
             this.map.setView(this.pointLatLng);
+        } else if (this.tracePolyline) {
+            this.map.fitBounds(this.tracePolyline.getBounds())
         }
     }
 
@@ -120,15 +130,17 @@ export class OpenStreeMapComponent {
         this.marker = L.marker(e.latlng).addTo(this.map);
         let popup: L.Popup = L.popup({ closeButton: false });
         popup.setContent(
-            "<table><tbody>" + 
+            "<table><tbody>" +
             "<tr><td><b>Lat:</b></td><td>" + e.latlng.lat + "</td></tr>" +
             "<tr><td><b>Long:</b></td><td>" + e.latlng.lng + "</td></tr>" +
             "</tbody></table>"
         );
         this.marker.bindPopup(popup).openPopup();
+
+        this.pointSelected.emit({ lat: e.latlng.lat, long: e.latlng.lng });
     };
 
-    
+
 
     /**
      * Solves issues with markers
@@ -154,7 +166,7 @@ export class OpenStreeMapComponent {
 
 }
 
-export interface Point {
+export interface GeoPoint {
     lat: number;
     long: number;
 }

@@ -217,6 +217,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.versionsCreateVersionDump]: 'auth(rdf(dataset, version), "C").',
         [VBActionsEnum.versionsDeleteVersions]: 'auth(rdf(dataset, version), "D").',
         [VBActionsEnum.versionsGetVersions]: 'auth(rdf(dataset, version), "R").',
+        [VBActionsEnum.visualizationWidgetsRead]: 'auth(pm(widget), "R").'
     };
 
     public static initEvalutator(capabilityList: string[]) {

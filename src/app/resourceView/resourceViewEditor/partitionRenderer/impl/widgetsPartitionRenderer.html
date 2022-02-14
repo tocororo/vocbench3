@@ -1,0 +1,68 @@
+<div class="groupPanel">
+
+    <div class="groupPanel-heading">
+        <div class="expandCollapseBtnContainer groupPanel-heading-content m-0">
+            <img src="./assets/images/icons/arrow.png" (click)="partitionCollapsed = !partitionCollapsed"
+                [ngClass]="{'arrow-right': partitionCollapsed}">
+        </div>
+        <span style="flex: 1">
+            <!-- <label class="groupPanel-heading-content">{{labelTranslationKey|translate}}:</label> -->
+            <label class="groupPanel-heading-content">Widgets:</label>
+        </span>
+        <!-- <span class="groupPanel-heading-content groupPanel-add-btn">
+            <button class="resViewPartitionAddBtn" (click)="addHandler(null, AddAction.default)" [title]="addTitleTranslationKey|translate" [disabled]="addDisabled">
+                <img [src]="addBtnImgSrc"/>
+            </button>
+            <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;" ngbDropdown>
+                <button class="dropdown-toggle transparentBtn" style="width: 12px; padding-right: 2px;" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-caret-down fa-sm" style="margin: 0px;"></span>
+                </button>
+                <div class="dropdown-menu float-right" ngbDropdownMenu>
+                    <a class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addManually()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
+                    <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addExternalValue()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_FROM_ANOTHER_PROJ'|translate}}</a>
+                </div>
+            </div>
+        </span> -->
+    </div>
+
+    <div class="groupPanel-body">
+        <ng-container *ngIf="!partitionCollapsed">
+            <ng-container *ngFor="let po of predicateObjectList">
+
+                <div class="card card-alt" *ngFor="let po of predicateObjectList" style="margin-bottom: 4px;">
+                    <div class="card-header">
+                        <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
+                        <div class="btn-group" ngbDropdown>
+                            <button class="btn btn-xs btn-light predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()" [title]="'ACTIONS.ADD'|translate" [disabled]="addDisabled">
+                                <span class="fas fa-plus fa-sm"></span>
+                            </button>
+                            <button class="btn btn-xs btn-light dropdown-toggle predObjRenderPanelBtn" style="padding: 3px;" data-toggle="dropdown" ngbDropdownToggle [disabled]="actionMenuDisabled">
+                                <span class="fas fa-caret-down fa-sm"></span>
+                            </button>
+                            <div class="dropdown-menu float-right" ngbDropdownMenu>
+                                <!-- <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }"(click)="addManually()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
+                                <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addExternalValue()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_FROM_ANOTHER_PROJ'|translate}}</a>
+                                <a class="dropdown-item" [ngClass]="{ disabled: deleteAllDisabled }" (click)="removeAllValues()">{{'RESOURCE_VIEW.ACTIONS.DELETE_ALL_VALUES'|translate}}</a> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ng-container *ngFor="let obj of po.getObjects()">
+                            <widget-renderer [subject]="resource" [predicate]="po.getPredicate()" [object]="obj" (update)="onObjectUpdate()" (dblclick)="objectDblClick(obj)">
+                            </widget-renderer>
+                            <!-- <resview-value-renderer
+                                [subject]="resource" [predicate]="po.getPredicate()" [object]="obj" [rendering]="rendering"
+                                [readonly]="readonly" [partition]="partition"
+                                (dblClick)="objectDblClick($event)"
+                                (delete)="removePredicateObject(po.getPredicate(), obj)"
+                                (edit)="editHandler(po.getPredicate(), obj)" (update)="onObjectUpdate()">
+                            </resview-value-renderer> -->
+                        </ng-container>
+                    </div>
+                </div>
+
+            </ng-container>
+        </ng-container>
+    </div>
+
+</div>

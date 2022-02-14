@@ -1,8 +1,12 @@
 export interface ChartData {
     name: string;
     value: number;
-    extra?: any;
-    label?: string;
+    extra?: {[key:string]:any};
+}
+
+export interface ChartSeries {
+    name: string;
+    series: ChartData[];
 }
 
 export enum ColorSetEnum {
@@ -36,7 +40,7 @@ export class NgxChartsUtils {
      * @param step: The step number, means the order of the color
      */
     static getRandColor(numOfSteps: number, step: number) {
-        return '#'+(0x1000000+Math.random()*0xffffff).toString(16).substr(1,6)
+        return '#'+(0x1000000+Math.random()*0xffffff).toString(16).substring(1,7)
         // // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
         // // Adam Cole, 2011-Sept-14
         // // HSV to RBG adapted from: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript

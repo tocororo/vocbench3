@@ -18,7 +18,7 @@
             <a *ngIf="editActionScenario != 'xLabel'" class="dropdown-item" [ngClass]="{ disabled: !editAuthorized || isInferred }" (click)="edit()">
                 {{'ACTIONS.EDIT'|translate}}
             </a>
-            <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkEditAuthorized }"
+            <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkEditAuthorized || isInferred }"
 				(click)="bulkEdit()"  [title]="'RESOURCE_VIEW.ACTIONS.BULK_EDIT_INFO'|translate">
                 {{'RESOURCE_VIEW.ACTIONS.BULK_EDIT'|translate}}
             </a>
@@ -46,7 +46,7 @@
             </ng-container>
             
             <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized || isInferred }" (click)="delete()">{{'ACTIONS.DELETE'|translate}}</a>
-            <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkDeleteAuthorized }" 
+            <a *ngIf="isBulkActionMenuItemAvailable" class="dropdown-item" [ngClass]="{ disabled: !bulkDeleteAuthorized || isInferred }" 
                 (click)="bulkDelete()" [title]="'RESOURCE_VIEW.ACTIONS.BULK_DELETE_INFO'|translate">
                 {{'RESOURCE_VIEW.ACTIONS.BULK_DELETE'|translate}}
             </a>

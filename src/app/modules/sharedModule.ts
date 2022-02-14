@@ -28,7 +28,8 @@ import { InlineEditableValue } from '../widget/inlineEditableValue/inlineEditabl
 import { InputEditableComponent } from '../widget/inputEditable/inputEditableComponent';
 import { LangStringEditorComponent } from '../widget/langStringEditor/langStringEditorComponent';
 import { LanguageItemComponent } from '../widget/languageItem/languageItemComponent';
-import { OpenStreeMapComponent } from '../widget/openStreetMap/openStreetMapComponent';
+import { LeafletMapComponent } from '../widget/leafletMap/leafletMapComponent';
+import { LeafletMapModal } from '../widget/leafletMap/leafletMapModal';
 import { PartitionFilterEditor } from '../widget/partitionFilterEditor/partitionFilterEditor';
 import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
 import { DatetimePickerComponent } from '../widget/pickers/datetimePicker/datetimePickerComponent';
@@ -108,7 +109,8 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         YasguiComponent,
 
         BarChartComponent,
-        OpenStreeMapComponent,
+        LeafletMapComponent,
+        LeafletMapModal,
         PieChartComponent,
     ],
     exports: [
@@ -153,11 +155,15 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         YasguiComponent,
 
         BarChartComponent,
-        OpenStreeMapComponent,
+        LeafletMapComponent,
+        LeafletMapModal,
         PieChartComponent,
     ],
     providers: [
         ToastService,
+    ],
+    entryComponents: [
+        LeafletMapModal
     ]
 })
 export class SharedModule { }

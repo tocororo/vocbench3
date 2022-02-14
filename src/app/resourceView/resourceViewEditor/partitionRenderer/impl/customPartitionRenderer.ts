@@ -29,7 +29,6 @@ export class CustomPartitionRenderer extends PartitionRendererMultiRoot {
 
     ngOnInit() {
         super.ngOnInit();
-        this.rootProperties
     }
 
     //@Override

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { ChartData, ColorSet, NgxChartsUtils } from "./NgxChartsUtils";
 
 @Component({
@@ -13,18 +13,12 @@ import { ChartData, ColorSet, NgxChartsUtils } from "./NgxChartsUtils";
 })
 export class PieChartComponent {
 
-    data: ChartData[] = []
+    @Input() chartData: ChartData[];
 
     randColorScheme = { domain: [] };
 
-    // colorSchemeSet: ColorSet = {
-    //     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-    // };
-    // colorSchemeName: string = ColorSetEnum.fire;
-
     //options
-    gradient: boolean = true;
-    showLegend: boolean = true;
+    showLegend: boolean = false;
     showLabels: boolean = true;
     isDoughnut: boolean = true;
     legendPosition: string = 'right';
@@ -32,30 +26,13 @@ export class PieChartComponent {
     constructor() { }
 
     ngOnInit() {
-        //generate random data
-        for (let i = 0; i < ((Math.random() * 10) + 1); i++) {
-            this.data.push({
-                name: "value" + i,
-                extra: { label: "label" + i },
-                value: Math.random() * 1000
-            })
-        }
         //generate random colors
-        this.randColorScheme.domain = this.data.map((d, idx) => {
-            return NgxChartsUtils.getRandColor(this.data.length, idx)
+        this.randColorScheme.domain = this.chartData.map((d, idx) => {
+            return NgxChartsUtils.getRandColor(this.chartData.length, idx)
         })
     }
 
-    getTooltipText(entry: ChartItem) {
-        const label = entry.data.extra.label;
-        const val = entry.data.value.toLocaleString();
-        return `
-            <span class="tooltip-label">Label: ${label}</span>
-            <span class="tooltip-val">Value: ${val}</span>
-        `;
-    }
-
-    onSelect(data): void {
+    onSelect(data: ChartData): void {
         console.log('Item clicked', data);
     }
 
@@ -67,14 +44,4 @@ export class PieChartComponent {
         // console.log('Deactivate', JSON.parse(JSON.stringify(data)));
     }
 
-}
-
-interface ChartItem {
-    data: ChartData;
-    endAngle: number;
-    index: number;
-    padAngle: number;
-    pos: number[];
-    startAngle: number;
-    value: number;
 }

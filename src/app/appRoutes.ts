@@ -31,6 +31,7 @@ import { UserActionsComponent } from './user/userActionsComponent';
 import { UserProfileComponent } from './user/userProfileComponent';
 import { AsyncGuardResolver, AuthGuard, ProjectGuard, SystemSettingsGuard, VBGuards } from './utils/CanActivateGuards';
 import { UserResolver } from './utils/UserResolver';
+import { VisualizationWidgetsComponent } from './visualizationWidgets/visualizationWidgetsComponent';
 
 const routes: Routes = [
     { path: "", redirectTo: "/Home", pathMatch: "full" },
@@ -54,6 +55,7 @@ const routes: Routes = [
     { path: "CustomServices", component: CustomServiceRouterComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
     { path: "Notifications", component: NotificationsComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
     { path: "ResourceMetadata", component: ResourceMetadataComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.PMGuard, VBGuards.ProjectGuard] } },
+    { path: "VisualizationWidgets", component: VisualizationWidgetsComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.PMGuard, VBGuards.ProjectGuard] } },
     { path: "LoadData", component: LoadDataComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
     { path: "ExportData", component: ExportDataComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
     { path: "Refactor", component: RefactorComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },

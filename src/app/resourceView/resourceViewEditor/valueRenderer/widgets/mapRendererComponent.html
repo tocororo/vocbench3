@@ -1,0 +1,12 @@
+<leaflet-map [point]="point" [trace]="trace"></leaflet-map>
+
+<div class="dropdown float-right" style="align-self: flex-start;" ngbDropdown container="body">
+    <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="readonly" [title]="'ACTIONS.EDIT'|translate">
+        <span class="fas fa-caret-down fa-sm"></span>
+    </button>
+    <div class="dropdown-menu" ngbDropdownMenu>
+        <a class="dropdown-item" [ngClass]="{ disabled: !editAuthorized }" (click)="edit()">
+            {{'ACTIONS.EDIT'|translate}}
+        </a>
+    </div>
+</div>

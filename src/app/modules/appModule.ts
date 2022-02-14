@@ -50,6 +50,7 @@ import { STServicesModule } from './stServicesModule';
 import { TreeAndListModule } from './treeAndListModule';
 import { UserModule } from './userModule';
 import { VBModalModule } from './vbModalModule';
+import { VisualizationWidgetsModule } from './visualizationWidgetsModule';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, "./assets/l10n/");
@@ -99,6 +100,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         TreeAndListModule,
         UserModule,
         VBModalModule,
+        VisualizationWidgetsModule,
     ],
     providers: [
         DatatypeValidator,
