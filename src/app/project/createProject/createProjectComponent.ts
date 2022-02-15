@@ -5,6 +5,7 @@ import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
 import { Subscription } from "rxjs";
 import { Language, Languages } from "src/app/models/LanguagesCountries";
 import { SettingsServices } from "src/app/services/settingsServices";
+import { VBContext } from "src/app/utils/VBContext";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
@@ -167,6 +168,8 @@ export class CreateProjectComponent {
 
     private eventSubscriptions: Subscription[] = [];
 
+    isAdmin: boolean; //useful for auth-checking of actions allowed only to Admin and not to SuperUser
+
     constructor(private projectService: ProjectServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private settingsService: SettingsServices,
         private translateService: TranslateService, private router: Router,
@@ -174,6 +177,7 @@ export class CreateProjectComponent {
     }
 
     ngOnInit() {
+        this.isAdmin = VBContext.getLoggedUser().isAdmin();
         //init core repo extensions
         this.extensionService.getExtensions(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
             extensions => {
@@ -815,7 +819,15 @@ export class CreateProjectComponent {
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PROJECT_CREATED"}).then(
-                        () => this.router.navigate(['/Projects'])
+                        () => {
+                            //redirect admin to Projects page, superuser to Home
+                            if (this.isAdmin) {
+                                this.router.navigate(['/Projects']);
+                            } else {
+                                this.router.navigate(['/Home']);
+                            }
+                            
+                        }
                     );
                 },
                 (err: Error) => {

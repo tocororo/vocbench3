@@ -159,7 +159,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     /**
-     * Redirects to the import project page
+     * Redirects to the create project page
      */
     createProject() {
         this.router.navigate(["/Projects/CreateProject"]);

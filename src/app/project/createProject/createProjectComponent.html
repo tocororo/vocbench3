@@ -192,7 +192,7 @@
                                     <select class="form-control" [(ngModel)]="selectedRemoteRepoConfig">
                                         <option *ngFor="let c of remoteRepoConfigs" [ngValue]="c">{{c.serverURL}}</option>
                                     </select>
-                                    <span class="input-group-append">
+                                    <span *ngIf="isAdmin" class="input-group-append">
                                         <button class="btn btn-light" (click)="configureRemoteRepositoryAccess()">
                                             <span class="fas fa-pencil-alt"></span>
                                         </button>

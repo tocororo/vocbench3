@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import { forkJoin, Observable, Subscription } from "rxjs";
+import { TranslateService } from '@ngx-translate/core';
+import { forkJoin, Observable } from "rxjs";
 import { map } from 'rxjs/operators';
 import { Project, ProjectFacets, ProjectLabelCtx, ProjectViewMode } from "../models/Project";
 import { Multimap } from '../models/Shared';

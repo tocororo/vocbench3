@@ -7,6 +7,9 @@
             <div class="card-header">
                 <label style="flex: 1;">{{'MODELS.PROJECT.PROJECTS'|translate}}</label>
                 <div class="btn-toolbar">
+                    <button *ngIf="isSuperUser" class="btn btn-xs btn-light" (click)="createProject()">
+                        {{'ACTIONS.CREATE'|translate}}
+                    </button>
                     <button class="btn btn-xs btn-light" [ngClass]="{ active: rendering }" (click)="switchRendering()" [title]="'COMMONS.RENDERING'|translate">
                         <span class="fas fa-font"></span>
                     </button>

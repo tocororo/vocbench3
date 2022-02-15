@@ -9,6 +9,7 @@ import { UserServices } from "../services/userServices";
 import { Cookie } from "../utils/Cookie";
 import { DatatypeValidator } from "../utils/DatatypeValidator";
 import { VBCollaboration } from '../utils/VBCollaboration';
+import { VBContext } from "../utils/VBContext";
 import { VBProperties } from '../utils/VBProperties';
 import { AbstractProjectComponent } from "./abstractProjectComponent";
 
@@ -17,12 +18,20 @@ import { AbstractProjectComponent } from "./abstractProjectComponent";
     templateUrl: "./projectListModal.html",
 })
 export class ProjectListModal extends AbstractProjectComponent {
+    
     selectedProject: Project;
+
+    isSuperUser: boolean;
 
     constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
         vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal, 
         translateService: TranslateService, private activeModal: NgbActiveModal, private router: Router) {
         super(projectService, userService, metadataService, vbCollaboration, vbProp, dtValidator, modalService, translateService);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
+        this.isSuperUser = VBContext.getLoggedUser().isSuperUser();
     }
 
     getListProjectsFn() {
@@ -36,6 +45,11 @@ export class ProjectListModal extends AbstractProjectComponent {
     changeVisualizationMode(mode: ProjectViewMode) {
         this.visualizationMode = mode;
         Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, mode);
+    }
+
+    createProject() {
+        this.router.navigate(["/Projects/CreateProject"]);
+        this.cancel();
     }
 
     ok() {

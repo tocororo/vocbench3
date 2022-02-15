@@ -55,7 +55,9 @@ export class AdminGuard implements CanActivate {
 
     //this canActivate return Observable<boolean> since I need to check asynchronously if a user is logged
     canActivate(): Observable<boolean> {
+        console.log("admin guard");
         if (VBContext.isLoggedIn()) {
+            console.log("1", VBContext.getLoggedUser())
             return of(VBContext.getLoggedUser().isAdmin());
         } else {
             /* if there is no user in vbCtx it doesn't mean that the user is not logged, in fact,
@@ -63,8 +65,36 @@ export class AdminGuard implements CanActivate {
             Here try to retrieve from server the logged user. */
             return this.userService.getUser().pipe(
                 map(user => { //request completed succesfully, set the user in the context and return true
+                    console.log("2", user)
                     if (user) { //getUser returned the logged user
+                        console.log("return", user.isAdmin())
                         return user.isAdmin();
+                    } else { //no logged user, getUser returned null
+                        this.router.navigate(['/Home']);
+                        return false;
+                    }
+                })
+            )
+        }
+    }
+}
+
+@Injectable()
+export class SuperUserGuard implements CanActivate {
+
+    constructor(private router: Router, private userService: UserServices) { }
+
+    canActivate(): Observable<boolean> {
+        if (VBContext.isLoggedIn()) {
+            return of(VBContext.getLoggedUser().isSuperUser() || VBContext.getLoggedUser().isAdmin());
+        } else {
+            /* if there is no user in vbCtx it doesn't mean that the user is not logged, in fact,
+            if the user refresh the page, VBContext is reinitialized and then userLogged is reset to null.
+            Here try to retrieve from server the logged user. */
+            return this.userService.getUser().pipe(
+                map(user => { //request completed succesfully, set the user in the context and return true
+                    if (user) { //getUser returned the logged user
+                        return user.isSuperUser() || user.isAdmin();
                     } else { //no logged user, getUser returned null
                         this.router.navigate(['/Home']);
                         return false;
@@ -198,11 +228,15 @@ export class AsyncGuardResolver implements CanActivate {
         let guardName = this.route.data.guards[guardIndex];
         let guardFn: Observable<boolean> = this.getGuard(guardName);
         return guardFn.pipe(
-            mergeMap(() => { //no need to check the result, if this code is reached, for sure the previous guard returned true
-                if (guardIndex < this.route.data.guards.length - 1) {
-                    return this.executeGuards(guardIndex + 1);
+            mergeMap(guardPassed => {
+                if (!guardPassed) {
+                    return of(false);
                 } else {
-                    return of(true);
+                    if (guardIndex < this.route.data.guards.length - 1) {
+                        return this.executeGuards(guardIndex + 1); //call the next guard
+                    } else {
+                        return of(true); //all guards passed, returns true
+                    }
                 }
             })
         )
@@ -223,6 +257,9 @@ export class AsyncGuardResolver implements CanActivate {
             case VBGuards.ProjectGuard:
                 guard = new ProjectGuard(this.router);
                 break;
+            case VBGuards.SuperUserGuard:
+                guard = new SuperUserGuard(this.router, this.userService);
+                break;
             case VBGuards.SystemSettingsGuard:
                 guard = new SystemSettingsGuard(this.vbProp);
                 break;
@@ -238,7 +275,8 @@ export enum VBGuards {
     AdminGuard = "AdminGuard",
     PMGuard = "PMGuard",
     ProjectGuard = "ProjectGuard",
+    SuperUserGuard = "SuperUserGuard",
     SystemSettingsGuard = "SystemSettingsGuard",
 }
 
-export const GUARD_PROVIDERS = [AsyncGuardResolver, AuthGuard, AdminGuard, PMGuard, ProjectGuard, SystemSettingsGuard];
+export const GUARD_PROVIDERS = [AsyncGuardResolver, AuthGuard, AdminGuard, PMGuard, ProjectGuard, SuperUserGuard, SystemSettingsGuard];

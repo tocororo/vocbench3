@@ -38,7 +38,7 @@ const routes: Routes = [
     { path: "Home", component: HomeComponent, canActivate: [SystemSettingsGuard], resolve: { user: UserResolver } },
     // // route config of navigation bar
     { path: "Projects", component: ProjectComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AdminGuard] } },
-    { path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AdminGuard] } },
+    { path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.SuperUserGuard] } },
     { path: "Data", component: DataComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
     { path: "Edoal", component: EdoalComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
     { path: "Sparql", component: SparqlComponent, canActivate: [AsyncGuardResolver], data: { guards: [VBGuards.SystemSettingsGuard, VBGuards.AuthGuard, VBGuards.ProjectGuard] } },
