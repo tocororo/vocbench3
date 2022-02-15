@@ -356,7 +356,7 @@ export class CreateProjectComponent {
         )
     }
 
-    private preloadFromUri() {
+    preloadFromUri() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.preloadDataFromURL(this.preloadUri).subscribe(
             (summary: PreloadedDataSummary) => {
@@ -366,7 +366,7 @@ export class CreateProjectComponent {
         );
     }
 
-    private preloadFromDatasetCatalog() {
+    preloadFromDatasetCatalog() {
         this.sharedModals.datasetCatalog().then(
             (data: DatasetCatalogModalReturnData) => {
                 this.preloadCatalog = data.dataset.id + " - " + data.dataset.getPreferredTitle().getValue() + " @" + data.dataset.getPreferredTitle().getLang();
@@ -547,7 +547,7 @@ export class CreateProjectComponent {
     /**
      * Configure the selected repository access in case it is remote.
      */
-    private configureRemoteRepositoryAccess() {
+    configureRemoteRepositoryAccess() {
         this.sharedModals.configureRemoteRepositoryAccess().then(
             () => {
                 this.initRemoteRepoAccessConfigurations();

@@ -13,10 +13,8 @@ export class ToastService {
     show(title: TextOrTranslation, message: TextOrTranslation, options?: ToastOpt) {
         let t = title != null ? (typeof title == "string") ? title : this.translateService.instant(title.key, title.params) : null;
         let msg = (typeof message == "string") ? message : this.translateService.instant(message.key, message.params);
-        if (options == null) {
-            options = { toastClass: "bg-info", textClass: "text-white" }; //default style
-        }
-        this.toasts.push({ title: t, message: msg, options: options });
+        let opt: ToastOpt = new ToastOpt().merge(options);
+        this.toasts.push({ title: t, message: msg, options: opt });
     }
 
     remove(toast: Toast) {

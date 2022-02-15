@@ -176,6 +176,10 @@ export class AppComponent {
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataAssociationRead);
     }
 
+    isVisualizationWidgetsAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.visualizationWidgetsRead);
+    }
+
     isCustomServicesAuthorized() {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceRead) ||

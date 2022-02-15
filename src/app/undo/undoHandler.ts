@@ -12,6 +12,7 @@ import { VBContext } from '../utils/VBContext';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { ModalType } from '../widget/modal/Modals';
+import { ToastOpt } from '../widget/toast/Toasts';
 import { ToastService } from '../widget/toast/toastService';
 
 @Injectable()
@@ -35,8 +36,7 @@ export class UndoHandler {
                 (commit: CommitInfo) => {
                     this.eventHandler.operationUndoneEvent.emit(commit);
                     let operation: string = commit.operation.getShow();
-                    this.toastService.show({ key: "UNDO.OPERATION_UNDONE" }, { key: "UNDO.OPERATION_UNDONE_INFO", params: { operation: operation} },
-                        { toastClass: "bg-info", textClass: "text-white", delay: 4000 });
+                    this.toastService.show({ key: "UNDO.OPERATION_UNDONE" }, { key: "UNDO.OPERATION_UNDONE_INFO", params: { operation: operation} });
                     this.restoreOldStatus(commit);
                 },
                 (error: Error) => {
@@ -46,7 +46,7 @@ export class UndoHandler {
                     ) { //empty undo stack or different user
                         let sailExc: string = "SailException: "; //after this exception starts the message
                         let errorMsg: string = error.message.substring(error.message.indexOf(sailExc) + sailExc.length);
-                        this.toastService.show({ key: "STATUS.WARNING"}, errorMsg, { toastClass: "bg-warning", delay: 4000 });
+                        this.toastService.show({ key: "STATUS.WARNING"}, errorMsg, new ToastOpt({ toastClass: "bg-warning", textClass: "text-body" }));
                     } else {
                         let errorMsg = error.message != null ? error.message : "Unknown response from the server";
                         let errorDetails = error.stack ? error.stack : error.name;

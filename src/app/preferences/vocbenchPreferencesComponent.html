@@ -49,8 +49,8 @@
                             <span class="fas fa-info-circle" [title]="'PREFERENCES.OTHER.PROJECT_THEME_INFO'|translate"></span>
                         </label>
                         <div *ngFor="let t of themes; let i=index" class="form-check form-check-inline ml-3">
-                            <input class="form-check-input" [id]="'themeCheck'+i" type="checkbox" [checked]="t == selectedTheme" (click)="changeTheme(t)">
-                            <label class="form-check-label" [for]="'themeCheck'+i">
+                            <input class="form-check-input" [id]="'themeRadio'+i" type="radio" name="themeRadio" [(ngModel)]="selectedTheme" [value]="t" (click)="changeTheme(t)">
+                            <label class="form-check-label" [for]="'themeRadio'+i">
                                 <div class="d-flex" style="border: 1px solid black;">
                                     <div style="width: 12px; height: 12px;" [class]="'bg-theme-' + t"></div>
                                     <div style="width: 12px; height: 12px;" [class]="'bg-theme-alt-' + t"></div>

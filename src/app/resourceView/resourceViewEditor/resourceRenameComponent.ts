@@ -115,7 +115,7 @@ export class ResourceRenameComponent {
     copyToClipboard() {
         //this method is called by clicking on a button visible only if the resource is a URIResource, so cast is safe
         navigator.clipboard.writeText((<ARTURIResource>this.resource).getURI()).then(() => {
-            this.toastService.show({key:"STATUS.OPERATION_DONE"}, { key: "MESSAGES.RESOURCE_URI_COPIED_IN_CLIPBOARD" }, { toastClass: "bg-info", textClass: "text-white" });
+            this.toastService.show({key:"STATUS.OPERATION_DONE"}, { key: "MESSAGES.RESOURCE_URI_COPIED_IN_CLIPBOARD" });
         }, function (err) {});
     }
 
