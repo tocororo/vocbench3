@@ -26,7 +26,6 @@ export class UserResolver implements Resolve<User> {
             map(user => {
                 if (user && user.isSamlUser()) { //special case: logged user is a "mockup" user for SAML login, so redirect to the registration page
                     let firstAccessPar: string = user.getSamlLevel() == SamlLevel.LEV_1 ? "1" : "0"; //saml level tells if the registering user is the 1st (lev_1) or not (lev_2)
-                    console.log("redirect to registration ", firstAccessPar)
                     this.router.navigate(['/Registration/' + firstAccessPar], { queryParams: { email: user.getEmail(), givenName: user.getGivenName(), familyName: user.getFamilyName() } });
                 }
                 return user;

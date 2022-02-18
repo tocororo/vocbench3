@@ -8,7 +8,7 @@ import { AuthServiceMode } from '../models/Properties';
 import { User, UserFormFields } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
 
 @Injectable()
@@ -23,7 +23,7 @@ export class UserServices {
      * Returns null if no user is logged (response contains empty user object).
      */
     getUser(): Observable<User> {
-        let params: any = {}
+        let params: STRequestParams = {}
         return this.httpMgr.doGet(this.serviceName, "getUser", params).pipe(
             map(stResp => {
                 /*
@@ -46,8 +46,10 @@ export class UserServices {
                 } else { //no user object in the response => there is no user registered
                     if (VBContext.getSystemSettings().authService == AuthServiceMode.Default) { //default auth service => redirect to registration page
                         this.router.navigate(["/Registration/1"]);
-                    } else { //SAML auth service => do nothing
-
+                    } else { 
+                        //SAML auth service => do nothing, user will land to the home page where he can login via SAML.
+                        //Once logged, he will be recognized as first user/admin and registration form will prompted with prefilled data
+                        //(see UserResolver.resolve())
                     }
                     return null
                 }
@@ -59,24 +61,8 @@ export class UserServices {
      * Lists all the registered users
      */
     listUsers(): Observable<User[]> {
-        let params: any = {}
+        let params: STRequestParams = {}
         return this.httpMgr.doGet(this.serviceName, "listUsers", params).pipe(
-            map(stResp => {
-                let users: User[] = this.parseUsersArray(stResp);
-                users.sort((u1: User, u2: User) => {
-                    return u1.getGivenName().localeCompare(u2.getGivenName());
-                });
-                return users;
-            })
-        );
-    }
-
-    /**
-     * Lists all the online users
-     */
-    listOnlineUsers(): Observable<User[]> {
-        let params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "listOnlineUsers", params).pipe(
             map(stResp => {
                 let users: User[] = this.parseUsersArray(stResp);
                 users.sort((u1: User, u2: User) => {
@@ -93,7 +79,7 @@ export class UserServices {
      * since the latter is accessed only by the admin that doesn't require authorization check and has no capabilities
      */
     listUserCapabilities(): Observable<string[]> {
-        let params: any = {}
+        let params: STRequestParams = {}
         return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", params).pipe(
             map(stResp => {
                 AuthorizationEvaluator.initEvalutator(stResp);
@@ -107,7 +93,7 @@ export class UserServices {
      * @param projectName
      */
     listUsersBoundToProject(project: Project): Observable<User[]> {
-        let params: any = {
+        let params: STRequestParams = {
             projectName: project.getName()
         }
         return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).pipe(
@@ -126,7 +112,7 @@ export class UserServices {
      * @param userIri 
      */
     listProjectsBoundToUser(userIri: ARTURIResource): Observable<string[]> {
-        let params: any = {
+        let params: STRequestParams = {
             userIri: userIri
         }
         return this.httpMgr.doGet(this.serviceName, "listProjectsBoundToUser", params);
@@ -145,13 +131,13 @@ export class UserServices {
      */
     registerUser(email: string, password: string, givenName: string, familyName: string, iri?: ARTURIResource,
         address?: string, affiliation?: string, url?: string, avatarUrl?: string, phone?: string, 
-        languageProficiencies?: string[], customProperties?: {[iri: string]: string}) {
+        languageProficiencies?: string[], customProperties?: {[iri: string]: string}): Observable<User> {
         //customProperties server side is a Map<IRI, String>, so the keys of the customProperties should be serialized as NT IRIs
         let convertedCustomProps: {[iri: string]: string} = {};
         for (let prop in customProperties) {
             convertedCustomProps["<"+prop+">"] = customProperties[prop];
         }
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             password: password,
             givenName: givenName,
@@ -166,7 +152,11 @@ export class UserServices {
             customProperties: JSON.stringify(convertedCustomProps),
             vbHostAddress: this.getVbHostAddress()
         }
-        return this.httpMgr.doPost(this.serviceName, "registerUser", params);
+        return this.httpMgr.doPost(this.serviceName, "registerUser", params).pipe(
+            map(stResp => {
+                return User.parse(stResp);
+            })
+        );;
     }
 
     verifyUserEmail(email: string, token: string) {
@@ -198,13 +188,13 @@ export class UserServices {
 
     createUser(email: string, password: string, givenName: string, familyName: string, iri?: ARTURIResource,
         address?: string, affiliation?: string, url?: string, avatarUrl?: string, phone?: string, 
-        languageProficiencies?: string[], customProperties?: {[iri: string]: string}) {
+        languageProficiencies?: string[], customProperties?: {[iri: string]: string}): Observable<User> {
         //customProperties server side is a Map<IRI, String>, so the keys of the customProperties should be serialized as NT IRIs
         let convertedCustomProps: {[iri: string]: string} = {};
         for (let prop in customProperties) {
             convertedCustomProps["<"+prop+">"] = customProperties[prop];
         }
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             password: password,
             givenName: givenName,
@@ -218,7 +208,11 @@ export class UserServices {
             languageProficiencies: languageProficiencies,
             customProperties: JSON.stringify(convertedCustomProps)
         }
-        return this.httpMgr.doPost(this.serviceName, "createUser", params);
+        return this.httpMgr.doPost(this.serviceName, "createUser", params).pipe(
+            map(stResp => {
+                return User.parse(stResp);
+            })
+        );
     }
 
     /**
@@ -227,7 +221,7 @@ export class UserServices {
      * @param givenName
      */
     updateUserGivenName(email: string, givenName: string): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             givenName: givenName,
         }
@@ -244,7 +238,7 @@ export class UserServices {
      * @param familyName
      */
     updateUserFamilyName(email: string, familyName: string): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             familyName: familyName,
         }
@@ -261,7 +255,7 @@ export class UserServices {
      * @param givenName
      */
     updateUserEmail(email: string, newEmail: string): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             newEmail: newEmail,
         }
@@ -278,7 +272,7 @@ export class UserServices {
      * @param phone if not provided, remove the info
      */
     updateUserPhone(email: string, phone?: string): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
         }
         if (phone != null) {
@@ -297,7 +291,7 @@ export class UserServices {
      * @param address if not provided removes the info
      */
     updateUserAddress(email: string, address?: string): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
         }
         if (address != null) {
@@ -316,7 +310,7 @@ export class UserServices {
      * @param affiliation if not provided removes the info
      */
     updateUserAffiliation(email: string, affiliation?: string): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
         }
         if (affiliation != null) {
@@ -335,7 +329,7 @@ export class UserServices {
      * @param url if not provided removes the info
      */
     updateUserUrl(email: string, url?: string): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
         }
         if (url != null) {
@@ -354,7 +348,7 @@ export class UserServices {
      * @param avatarUrl if not provided removes the info
      */
     updateUserAvatarUrl(email: string, avatarUrl?: string): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
         }
         if (avatarUrl != null) {
@@ -373,7 +367,7 @@ export class UserServices {
      * @param url
      */
     updateUserLanguageProficiencies(email: string, languageProficiencies: string[]): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             languageProficiencies: languageProficiencies,
         }
@@ -391,7 +385,7 @@ export class UserServices {
      * @param value 
      */
     updateUserCustomField(email: string, property: ARTURIResource, value?: string): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             property: property,
             value: value
@@ -409,7 +403,7 @@ export class UserServices {
      * @param enabled true enables the user, false disables the user
      */
     enableUser(email: string, enabled: boolean): Observable<User> {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             enabled: enabled,
         }
@@ -425,7 +419,7 @@ export class UserServices {
      * @param email
      */
     deleteUser(email: string) {
-        let params: any = {
+        let params: STRequestParams = {
             email: email
         }
         return this.httpMgr.doPost(this.serviceName, "deleteUser", params);
@@ -438,7 +432,7 @@ export class UserServices {
      * @param newPassword 
      */
     changePassword(email: string, oldPassword: string, newPassword: string) {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             oldPassword: oldPassword,
             newPassword: newPassword
@@ -451,7 +445,7 @@ export class UserServices {
      * @param password 
      */
     forcePassword(email: string, password: string) {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             password: password
         }
@@ -463,7 +457,7 @@ export class UserServices {
      * @param email 
      */
     forgotPassword(email: string) {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             vbHostAddress: this.getVbHostAddress()
         }
@@ -476,7 +470,7 @@ export class UserServices {
      * @param token 
      */
     resetPassword(email: string, token: string) {
-        let params: any = {
+        let params: STRequestParams = {
             email: email,
             token: token
         }
@@ -488,12 +482,12 @@ export class UserServices {
      */
 
     getUserFormFields(): Observable<UserFormFields> {
-        let params: any = {}
+        let params: STRequestParams = {}
         return this.httpMgr.doGet(this.serviceName, "getUserFormFields", params);
     }
 
     updateUserFormOptionalFieldVisibility(field: ARTURIResource, visibility: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             field: field,
             visibility: visibility
         }
@@ -501,14 +495,14 @@ export class UserServices {
     }
 
     addUserFormCustomField(field: string) {
-        let params: any = {
+        let params: STRequestParams = {
             field: field,
         }
         return this.httpMgr.doPost(this.serviceName, "addUserFormCustomField", params);
     }
 
     swapUserFormCustomFields(field1: ARTURIResource, field2: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             field1: field1,
             field2: field2
         }
@@ -516,7 +510,7 @@ export class UserServices {
     }
 
     updateUserFormCustomField(fieldIri: ARTURIResource, label: string, description?: string) {
-        let params: any = {
+        let params: STRequestParams = {
             fieldIri: fieldIri,
             label: label,
             description: description
@@ -525,7 +519,7 @@ export class UserServices {
     }
 
     removeUserFormCustomField(field: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             field: field,
         }
         return this.httpMgr.doPost(this.serviceName, "removeUserFormCustomField", params);
