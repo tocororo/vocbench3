@@ -71,6 +71,14 @@ export class Sheet2RdfComponent {
     private useHeader: boolean = true;
     private fsNamingStrategy: FsNamingStrategy = FsNamingStrategy.columnNumericIndex;
 
+    inputSources: { id: InputSource, translationKey: string }[] = [
+        { id: InputSource.spreadsheet, translationKey: "SHEET2RDF.SPREADSHEET.FILE" },
+        { id: InputSource.database, translationKey: "Database table info" },
+    ];
+    selectedInputSource: InputSource = this.inputSources[0].id;
+
+    dbInfo: DatabaseInfo = { db_base_url: null, db_name: null, db_table: null, db_user: null, db_password: null };
+
     constructor(private s2rdfService: Sheet2RDFServices, private codaService: CODAServices, private exportService: ExportServices, 
         private settingsService: SettingsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
 
@@ -118,13 +126,24 @@ export class Sheet2RdfComponent {
     private selectedTablePreviewRow: TableRow;
 
     loadSpreadsheet() {
-        this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
-            () => {
-                this.resetAll();
-                this.initHeaders();
-                this.initTablePreview();
-            }
-        );
+        if (this.selectedInputSource == InputSource.spreadsheet) {
+            this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
+                () => {
+                    this.resetAll();
+                    this.initHeaders();
+                    this.initTablePreview();
+                }
+            );
+        } else {
+            this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_table, this.dbInfo.db_user, this.dbInfo.db_password, this.fsNamingStrategy).subscribe(
+                () => {
+                    this.resetAll();
+                    this.initHeaders();
+                    this.initTablePreview();
+                }
+            );
+        }
+        
     }
 
     private resetAll() {
@@ -548,4 +567,18 @@ export class Sheet2RdfComponent {
     }
 
 
+}
+
+
+enum InputSource {
+    spreadsheet = "spreadsheet",
+    database = "database"
+}
+
+interface DatabaseInfo {
+    db_base_url: string;
+    db_name: string;
+    db_table: string;
+    db_user: string;
+    db_password: string;
 }
