@@ -1,0 +1,33 @@
+:host { display: inline-block }
+
+.flag-xs { zoom: 100%; }
+.flag-sm { zoom: 130%; }
+.flag-md { zoom: 150%; }
+.flag-lg { zoom: 170%; }
+
+.flagIcon {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 1;
+}
+.langTagSpan {
+    position: absolute;
+    top: 1px;
+    left: 0px;
+    /* width: 16px; */
+    font-family: monospace;
+    margin: 0 auto;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.flagShape {
+    height: 12px;
+    min-width: 16px;
+}

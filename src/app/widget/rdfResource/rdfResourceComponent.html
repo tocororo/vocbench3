@@ -1,17 +1,11 @@
 <div class="rdfResourceIcon">
-    <ng-container *ngIf="imgSrc">
-        <img *ngIf="!lang; else resWithLangBlock" [src]="imgSrc" [title]="natureTooltip">    
-        <ng-template #resWithLangBlock>
-            <!--If flag is not available write the langTag over an empty flag-->
-            <div *ngIf="!langFlagAvailable; else langFlagBlock" class="flagIcon" [title]="lang">
-                <img [src]="unknownFlagImgSrc" [ngClass]="{disabled: !isExplicit()}">
-                <span>{{lang}}</span>
-            </div>
-            <ng-template #langFlagBlock>
-                <img [src]="imgSrc" [title]="lang" [ngClass]="{disabled: !isExplicit()}">
-            </ng-template>
-        </ng-template>
-    </ng-container>
+    <ng-container *ngIf="language; then flagBlock; else iconBlock"></ng-container>
+    <ng-template #flagBlock>
+        <lang-item [language]="language" [disabled]="!isExplicit" [showName]="false" [showTag]="false"></lang-item>
+    </ng-template>
+    <ng-template #iconBlock>
+        <img [src]="imgSrc" [title]="natureTooltip">    
+    </ng-template>
 </div>
 <span [title]="resource.toNT()" [class]="'rdfResourceText' + renderingClass">
     <ng-container *ngIf="manchExpr; else notManchExprBlock">

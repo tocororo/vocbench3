@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Language, Languages } from "src/app/models/LanguagesCountries";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceNature } from "../../models/ARTResources";
 import { XmlSchema } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
@@ -21,18 +22,18 @@ export class RdfResourceComponent {
     renderingClass: string;
     renderingLabel: string;
 
-    private lang: string; //language of the resource
-    private langFlagAvailable: boolean = false; //true if the language (if any) has a flag icon available
-    private unknownFlagImgSrc: string = UIUtils.getFlagImgSrc("unknown"); //pass an invalid langTag so returns the empty flag image source
+    language: Language; //language of the resource
+
+    isExplicit: boolean; //tells if the resource is explicit (useful for disabling/make transparent lang-item)
 
     private datatype: ARTURIResource; //datatype of the resource
     showDatatypeBadge: boolean = false;
 
-    private literalWithLink: boolean = false; //true if the resource is a literal which contains url
+    literalWithLink: boolean = false; //true if the resource is a literal which contains url
     private splittedLiteral: string[]; //when literalWithLink is true, even elements are plain text, odd elements are url
 
     imgSrc: string; //src of the image icon
-    private natureTooltip: string;
+    natureTooltip: string;
 
     manchExpr: boolean = false;
     private manchExprStruct: { token: string, class: string }[] = [];
@@ -56,6 +57,10 @@ export class RdfResourceComponent {
         this.initRenderingClass();
         this.initNatureTooltip();
         this.initManchExpr();
+
+        //init isExplicit
+        this.isExplicit = this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+            this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
     }
 
     private initRenderingLabel() {
@@ -67,6 +72,27 @@ export class RdfResourceComponent {
 	 */
     private initImgSrc() {
         this.imgSrc = UIUtils.getImageSrc(this.resource);
+    }
+
+    /**
+	 * Returns the language tag of the current resource in order to show it as title of resource icon (flag)
+	 */
+     private initLang(): void {
+        //reset
+        this.language = null;
+        //init
+        let lang: string;
+        if (this.resource.isResource()) { //even if it is a resource, get the lang (it could be a custom form preview)
+            lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
+        } else if (this.resource instanceof ARTLiteral) {
+            lang = this.resource.getLang();
+            if (this.resource.getDatatype() == XmlSchema.language.getURI()) {
+                lang = this.resource.getValue();
+            }
+        }
+        if (lang != null) {
+            this.language = Languages.getLanguageFromTag(lang);
+        }
     }
 
 	/**
@@ -104,43 +130,17 @@ export class RdfResourceComponent {
                 });
                 this.natureTooltip = natureListSerlalized.join("\n\n");
             } else { //nature empty => could be the case of a reified resource => check language or datatype (representing the one of the preview value)
-                if (this.lang != null) {
-                    this.natureTooltip = this.lang;
+                if (this.language != null) {
+                    this.natureTooltip = this.language.tag;
                 } else if (this.datatype != null) {
                     this.natureTooltip = this.datatype.toNT();    
                 }
             }
         } else if (this.resource instanceof ARTLiteral) {
-            if (this.lang != null) {
-                this.natureTooltip = this.lang;
+            if (this.language != null) {
+                this.natureTooltip = this.language.tag;
             } else if (this.datatype != null) {
                 this.natureTooltip = this.datatype.toNT();    
-            }
-        }
-    }
-
-	/**
-	 * Returns the language tag of the current resource in order to show it as title of resource icon (flag)
-	 */
-    private initLang(): void {
-        //reset
-        this.lang = null; 
-        this.langFlagAvailable = false;
-        //init
-        if (this.resource.isResource()) { //even if it is a resource, get the lang (it could be a custom form preview)
-            this.lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
-        } else if (this.resource instanceof ARTLiteral) {
-            this.lang = this.resource.getLang();
-            if (this.resource.getDatatype() == XmlSchema.language.getURI()) {
-                this.lang = this.resource.getValue();
-            }
-        }
-        if (this.lang != null) { //if a language is present, init langFlagAvailable
-            if (this.vbProp.getShowFlags()) {
-                //just check if the image name doesn't contains "unknown" since the image name for unavailable flag is flag_unknown.png
-                this.langFlagAvailable = !this.imgSrc.includes("flag_unknown");
-            } else {
-                this.langFlagAvailable = false; //if the show_flag preference is false, show always the langTag
             }
         }
     }
@@ -288,15 +288,6 @@ export class RdfResourceComponent {
         } else {
             return new RegExp("(?:" + tokensList.join("|") + ")\\b", "i");
         }
-    }
-
-    /**
-     * Tells if the described resource is explicit.
-     * Useful for flag icons since they have not the "transparent" version (as for the concept/class/property... icons)
-     */
-    private isExplicit(): boolean {
-        return this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
-            this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
     }
 
 }

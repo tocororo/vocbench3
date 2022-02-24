@@ -235,27 +235,6 @@ button > rdf-resource span, .nav-tabs rdf-resource span,
     background-color: #eff0ff
 }
 
-.flagIcon {
-    position: relative;
-    display: inline-block;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    font-size: 10px;
-    line-height: 1;
-}
-.flagIcon > span {
-    position: absolute;
-    top: 1px;
-    left: 0px;
-    width: 16px;
-    margin: 0 auto;
-    user-select: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-align: center;
-    vertical-align: middle;
-}
-
 .treeListComponent {
     /* vbox + blockingDivHost */
     display: flex;

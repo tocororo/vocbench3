@@ -9,13 +9,7 @@ import { VBProperties } from "../../utils/VBProperties";
 @Component({
     selector: "lang-item",
     templateUrl: "./languageItemComponent.html",
-    styles: [`
-        :host { display: inline-block }
-        .flag-xs { zoom: 100%; }
-        .flag-sm { zoom: 130%; }
-        .flag-md { zoom: 150%; }
-        .flag-lg { zoom: 170%; }
-    `]
+    styleUrls: ["./languageItemComponent.css"],
 })
 export class LanguageItemComponent {
     @Input() language: Language;
@@ -26,6 +20,8 @@ export class LanguageItemComponent {
 
     flagImgSrc: string;
     flagCls: string;
+
+    langTagWidth: number; //compute dynamically the width of the flag in case of no-flag available (or don't diplay flag option)
 
     private themeId: number;
 
@@ -74,6 +70,7 @@ export class LanguageItemComponent {
                 this.flagImgSrc = UIUtils.getFlagImgSrc(null); //null makes return unknown flag => do not show flag
             }
         }
+        this.langTagWidth = (this.language.tag.length * 6) + 2; //6px for each char + 2px of padding
     }
 
 }
