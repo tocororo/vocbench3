@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import * as L from "leaflet";
+import { ARTResource } from "src/app/models/ARTResources";
 
 @Component({
     selector: "leaflet-map",
@@ -12,20 +13,23 @@ import * as L from "leaflet";
     `]
 })
 export class LeafletMapComponent {
-    @Input() selection: boolean = false; //tells if the component is working in selection mode, namely if it allows the selection of a point (with a marker)
-    @Input() point: GeoPoint; //a point to be represented (with a marker) on the map
-    @Input() trace: GeoPoint[]; //a trace (set of points) to be represented (with a polyline) on the map
+    @Input() edit: boolean = false; //tells if the component is working in edit mode, namely if it allows the selection of a point (with a marker)
 
-    @Output() pointSelected: EventEmitter<GeoPoint> = new EventEmitter();
+    @Input() point: GeoPoint; //a point to be represented (with a marker) on the map
+    @Input() route: GeoPoint[]; //a trace (set of points) to be represented (with a polyline) on the map
+    @Input() area: GeoPoint[];
+
+    @Output() pointChanged: EventEmitter<PoinChangedEvent> = new EventEmitter();
+    @Output() routePointChanged: EventEmitter<PoinChangedEvent> = new EventEmitter();
 
     @ViewChild('mapEl', { static: false }) mapEl: ElementRef;
 
     private map: L.Map;
-
-    private pointLatLng: L.LatLngLiteral; //point converter in leaflet format
-    private tracePolyline: L.Polyline; //trace converted in leaflet format
+    private mapReady: boolean; //tells that the map layer is ready, so prevent to add element if not
 
     private marker: L.Marker;
+    private polyline: L.Polyline;
+    private polygon: L.Polygon;
 
 
     ngOnInit() {
@@ -34,11 +38,12 @@ export class LeafletMapComponent {
 
     ngAfterViewInit(): void {
         this.initMap();
+        this.mapReady = true;
         this.initGraphicElements();
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['point'] && !changes['point'].firstChange || changes['trace'] && !changes['trace'].firstChange) {
+        if ((changes['point'] || changes['trace'] || changes['area']) && this.mapReady) {
             this.initGraphicElements();
         }
     }
@@ -55,35 +60,16 @@ export class LeafletMapComponent {
             zoomControl: false,
             layers: [omsLayer]
         });
-
-        if (this.selection) { //if it works in selection mode, enable the click handler
-            this.map.on('click', (e: L.LeafletMouseEvent) => {
-                this.onClickListener(e);
-            })
-        }
     }
 
     private initGraphicElements() {
-        this.convertInputToLeaflet();
         //once the input has been converted, init marker or polyline
-        if (this.pointLatLng) {
-            this.drawMarker();
-        } else if (this.tracePolyline) {
-            this.drawPolyline();
-        }
-
-        //finally center the map
-        this.centerMap();
-    }
-
-    /**
-     * Convert the input data (point or trace) in Leaflet format (LatLngLiteral or Polyline)
-     */
-    private convertInputToLeaflet() {
         if (this.point) {
-            this.pointLatLng = new L.LatLng(this.point.lat, this.point.long);
-        } else if (this.trace) {
-            this.tracePolyline = this.trace ? L.polyline(this.trace.map(p => new L.LatLng(p.lat, p.long))) : null;
+            this.drawMarker();
+        } else if (this.route) {
+            this.drawPolyline();
+        } else if (this.area) {
+            this.drawPolygon();
         }
     }
 
@@ -92,30 +78,133 @@ export class LeafletMapComponent {
             this.marker.remove();
         }
 
-        this.marker = L.marker(this.pointLatLng);
+        let pointLatLng: VbLatLng = new VbLatLng(this.point.location, this.point.lat, this.point.lng);
+        this.marker = L.marker(pointLatLng);
         this.marker.addTo(this.map)
 
         let popup: L.Popup = L.popup({ closeButton: false });
         popup.setContent(
             "<table><tbody>" +
-            "<tr><td><b>Lat:</b></td><td>" + this.pointLatLng.lat + "</td></tr>" +
-            "<tr><td><b>Long:</b></td><td>" + this.pointLatLng.lng + "</td></tr>" +
+            "<tr><td><b>Lat:</b></td><td>" + pointLatLng.lat + "</td></tr>" +
+            "<tr><td><b>Long:</b></td><td>" + pointLatLng.lng + "</td></tr>" +
             "</tbody></table>"
         );
         this.marker.bindPopup(popup).openPopup();
-    }
 
-    private drawPolyline() {
-        this.tracePolyline.addTo(this.map);
-    }
+        //center map
+        this.map.setView(pointLatLng);
 
-    private centerMap() {
-        if (this.pointLatLng) {
-            this.map.setView(this.pointLatLng);
-        } else if (this.tracePolyline) {
-            this.map.fitBounds(this.tracePolyline.getBounds())
+        //if it works in edit mode, enable the click handler
+        if (this.edit) {
+            this.map.on('click', (e: L.LeafletMouseEvent) => {
+                this.onClickListener(e);
+            })
         }
     }
+
+
+    private drawPolyline() {
+        if (this.polyline) {
+            this.polyline.remove();
+        }
+
+        let polylinePoints = this.route.map(p => new VbLatLng(p.location, p.lat, p.lng));
+
+        this.polyline = L.polyline(polylinePoints);
+        this.polyline.bindPopup("Route");
+        this.polyline.addTo(this.map);
+        this.polyline.on('popupopen', function (e: L.PopupEvent) {
+            let popup = e.popup;
+            popup.setContent(
+                "<table><tbody>" +
+                "<tr><td><b>Lat:</b></td><td>" + popup.getLatLng().lat + "</td></tr>" +
+                "<tr><td><b>Long:</b></td><td>" + popup.getLatLng().lng + "</td></tr>" +
+                "</tbody></table>"
+            )
+        });
+
+        //center map
+        this.map.fitBounds(this.polyline.getBounds(), { padding: [10, 10] })
+
+        if (this.edit) {
+            this.registerPointsDragListener(this.polyline);
+        }
+    }
+
+    private drawPolygon() {
+        if (this.polygon) {
+            this.polygon.remove();
+        }
+
+        let polygonPoints = this.area.map(p => new VbLatLng(p.location, p.lat, p.lng));
+
+        this.polygon = L.polygon(polygonPoints, { color: 'blue' });
+        this.polygon.bindPopup("Route");
+        this.polygon.addTo(this.map);
+        this.polygon.on('popupopen', function (e: L.PopupEvent) {
+            let popup = e.popup;
+            popup.setContent(
+                "<table><tbody>" +
+                "<tr><td><b>Lat:</b></td><td>" + popup.getLatLng().lat + "</td></tr>" +
+                "<tr><td><b>Long:</b></td><td>" + popup.getLatLng().lng + "</td></tr>" +
+                "</tbody></table>"
+            )
+        });
+
+        //center map
+        this.map.fitBounds(this.polygon.getBounds(), { padding: [10, 10] })
+
+        if (this.edit) {
+            this.registerPointsDragListener(this.polygon);
+        }
+    }
+
+
+    private draggingPoint: VbLatLng; //keep trace of the point linked to the dragging marker
+    private draggingPointInitialPos: VbLatLng; //store the initial position of the point dragged
+
+    private registerPointsDragListener(graphicElement: L.Polygon | L.Polyline) {
+        console.log("registerPointsDragListener", graphicElement)
+        let pathMarkers: L.Marker[] = [];
+
+        let points: VbLatLng[]; 
+        if (graphicElement instanceof L.Polygon) {
+            //The return value of L.Polygon.getLatLngs() is an array of one element (see https://github.com/Leaflet/Leaflet/issues/5212)
+            points = <VbLatLng[]>graphicElement.getLatLngs()[0];
+        } else {
+            points = <VbLatLng[]>graphicElement.getLatLngs();
+        }
+            
+        points.forEach(p => {
+            let m: L.Marker = new L.Marker(p, {draggable: true});
+            this.addMarkerPopup(m);
+            m.addTo(this.map);
+            pathMarkers.push(m);
+        })
+        
+        pathMarkers.forEach(m => {
+            m.on('dragstart', () => {
+                //when user starts dragging, keep trace of the point with the same coords of the draggin marker
+                this.draggingPoint = points.find(p => p.location.equals((<VbLatLng>m.getLatLng()).location));
+                this.draggingPointInitialPos = new VbLatLng(this.draggingPoint.location, this.draggingPoint.lat, this.draggingPoint.lng); //store also the initial position for the event emitted in dragend
+            })
+            m.on('drag', () => {
+                //during the drag operation, update the coords of the dragging point setting the same coords of the marker
+                this.draggingPoint.lat = m.getLatLng().lat;
+                this.draggingPoint.lng = m.getLatLng().lng;
+                graphicElement.redraw(); //update the polyline/polygon with the new coords
+            })
+            m.on('dragend', () => {
+                //when drag ends emit an event
+                this.routePointChanged.emit({ 
+                    old: { location: this.draggingPointInitialPos.location, lat: this.draggingPointInitialPos.lat, lng: this.draggingPointInitialPos.lng }, 
+                    new: { location: this.draggingPointInitialPos.location, lat: this.draggingPoint.lat, lng: this.draggingPoint.lng }, 
+                })
+                
+            })
+        })
+    }
+
 
     /**
      * Listener to click on map. Set a marker on the point clicked
@@ -128,19 +217,26 @@ export class LeafletMapComponent {
         }
         //add the new one
         this.marker = L.marker(e.latlng).addTo(this.map);
+
+        this.addMarkerPopup(this.marker);
+        this.marker.openPopup();
+
+        this.pointChanged.emit({ 
+            old: this.point, 
+            new : { location: this.point.location, lat: e.latlng.lat, lng: e.latlng.lng } }
+        );
+    };
+
+    private addMarkerPopup(marker: L.Marker) {
         let popup: L.Popup = L.popup({ closeButton: false });
         popup.setContent(
             "<table><tbody>" +
-            "<tr><td><b>Lat:</b></td><td>" + e.latlng.lat + "</td></tr>" +
-            "<tr><td><b>Long:</b></td><td>" + e.latlng.lng + "</td></tr>" +
+            "<tr><td><b>Lat:</b></td><td>" + marker.getLatLng().lat + "</td></tr>" +
+            "<tr><td><b>Long:</b></td><td>" + marker.getLatLng().lng + "</td></tr>" +
             "</tbody></table>"
         );
-        this.marker.bindPopup(popup).openPopup();
-
-        this.pointSelected.emit({ lat: e.latlng.lat, long: e.latlng.lng });
-    };
-
-
+        marker.bindPopup(popup);
+    }
 
     /**
      * Solves issues with markers
@@ -167,6 +263,21 @@ export class LeafletMapComponent {
 }
 
 export interface GeoPoint {
+    location: ARTResource;
     lat: number;
-    long: number;
+    lng: number;
+}
+
+export interface PoinChangedEvent {
+    old: GeoPoint;
+    new: GeoPoint;
+}
+
+class VbLatLng extends L.LatLng {
+    location: ARTResource;
+
+    constructor(location: ARTResource, lat: number, lng: number) {
+        super(lat, lng);
+        this.location = location;
+    }
 }

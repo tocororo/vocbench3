@@ -3,7 +3,7 @@ import { WidgetDataRecord } from "src/app/models/VisualizationWidgets";
 
 @Directive()
 export abstract class AbstractWidgetComponent {
-    @Input() data: WidgetDataRecord[];
+    @Input() data: WidgetDataRecord;
     @Input() readonly: boolean;
 
     editAuthorized: boolean = true;

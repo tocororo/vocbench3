@@ -1,19 +1,23 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { DataTypeBindingsMap, WidgetCategory, WidgetDataRecord, WidgetDataType, WidgetDataTypeCompliantMap, WidgetEnum } from "src/app/models/VisualizationWidgets";
-import { VisualizationWidgetsServices } from "src/app/services/visualizationWidgetsServices";
+import { Component, EventEmitter, Input, Output, SimpleChange, SimpleChanges } from "@angular/core";
+import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { WidgetCategory, WidgetDataRecord, WidgetDataType } from "src/app/models/VisualizationWidgets";
 
 @Component({
     selector: "widget-renderer",
     templateUrl: "./widgetRenderer.html",
     host: { class: "hbox" },
+    styles: [`
+        :host {
+            padding: 3px;
+        }
+    `]
 })
 export class WidgetRenderer {
 
     // @Input() partition: ResViewPartition;
     @Input() subject: ARTResource;
     @Input() predicate: ARTURIResource;
-    @Input() object: ARTNode;
+    @Input() widgetData: WidgetDataRecord;
     @Input() rendering: boolean;
     @Input() readonly: boolean;
 
@@ -22,23 +26,24 @@ export class WidgetRenderer {
 
     activeWidgetRenderer: WidgetCategory;
 
-    widgetData: WidgetDataRecord[];
+    
 
-    constructor(private visualizationWidgetsService: VisualizationWidgetsServices) {}
+    constructor() {}
 
-    ngOnInit() {
-        this.visualizationWidgetsService.getVisualizationData(this.subject, this.predicate).subscribe(
-            (data: WidgetDataRecord[]) => {
-                this.widgetData = data;
-                //according the bindings returned in the response data, detect which widgets can be used to represent them
-                let compliantDataTypes: WidgetDataType[] = DataTypeBindingsMap.getCompliantDataTypes(data[0].getBindings());
-                if (compliantDataTypes.includes(WidgetDataType.point)) {
-                    this.activeWidgetRenderer = WidgetCategory.map;
-                } else if (compliantDataTypes.includes(WidgetDataType.series)) {
-                    this.activeWidgetRenderer = WidgetCategory.chart;
-                }
-            }
-        );
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['widgetData']) {
+            this.init();
+        }
+    }
+
+    private init() {
+        //according the data type, choose the widget (category) to use
+        let wdt: WidgetDataType = this.widgetData.type;
+        if (wdt == WidgetDataType.area || wdt == WidgetDataType.point || wdt == WidgetDataType.route) {
+            this.activeWidgetRenderer = WidgetCategory.map;
+        } else {
+            this.activeWidgetRenderer = WidgetCategory.chart;
+        }
     }
 
     onUpdate() {

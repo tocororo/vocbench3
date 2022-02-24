@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UIUtils } from "src/app/utils/UIUtils";
-import { GeoPoint } from "./leafletMapComponent";
+import { GeoPoint, PoinChangedEvent } from "./leafletMapComponent";
 
 @Component({
     selector: "leaflet-map-modal",
@@ -9,14 +9,41 @@ import { GeoPoint } from "./leafletMapComponent";
 })
 export class LeafletMapModal {
     @Input() title: string;
-    @Input() selection: boolean;
+    @Input() edit: boolean;
     
     @Input() point: GeoPoint;
-    @Input() trace: GeoPoint[];
+    @Input() route: GeoPoint[];
+    @Input() area: GeoPoint[];
+
+    //to keep the input values untouched in case of cancel when edit
+    mapPoint: GeoPoint;
+    mapRoute: GeoPoint[];
+    mapArea: GeoPoint[];
 
     viewInitialized: boolean;
     
     constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
+
+    ngOnInit() {
+        if (this.point) {
+            this.mapPoint = {
+                location: this.point.location, 
+                lat: this.point.lat,
+                lng: this.point.lng
+            };
+        }
+        if (this.route) {
+            this.mapRoute = this.route.map(p => {
+                return { location: p.location, lat: p.lat, lng: p.lng }
+            })
+        }
+        if (this.area) {
+            this.mapArea = this.area.map(p => {
+                return { location: p.location, lat: p.lat, lng: p.lng }
+            })
+        }
+        
+    }
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
@@ -31,19 +58,28 @@ export class LeafletMapModal {
         });
     }
 
-    onPointSelected(point: GeoPoint) {
-        this.point = point;
+    onPointChanged(point: PoinChangedEvent) {
+        this.mapPoint = point.new;
     }
 
-    isOkEnabled(): boolean {
-        return !this.selection || (this.point != null || this.trace != null); //ok enabled in any case if modal is not working in selection mode, if a point or a trace is selected otherwise 
+    onRoutePointChanged(event: PoinChangedEvent) {
+        console.log("event", event);
+        if (this.mapRoute) {
+            let idx = this.mapRoute.findIndex(p => p.location.equals(event.old.location));
+            this.mapRoute[idx] = event.new;
+        } else if (this.mapArea) {
+            let idx = this.mapArea.findIndex(p => p.location.equals(event.old.location));
+            this.mapArea[idx] = event.new;
+        }
     }
 
     ok() {
         if (this.point) {
-            this.activeModal.close(this.point);
+            this.activeModal.close(this.mapPoint);
+        } else if (this.route) {
+            this.activeModal.close(this.mapRoute);
         } else {
-            this.activeModal.close(this.trace);
+            this.activeModal.close(this.mapArea);
         }
     }
 

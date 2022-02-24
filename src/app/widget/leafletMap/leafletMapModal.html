@@ -3,10 +3,10 @@
         <h3 class="modal-title">{{title}}</h3>
     </div>
     <div class="modal-body">
-        <leaflet-map *ngIf="viewInitialized" [point]="point" [trace]="trace" [selection]="selection" (pointSelected)="onPointSelected($event)"></leaflet-map>
+        <leaflet-map *ngIf="viewInitialized" [point]="mapPoint" [route]="mapRoute" [area]="mapArea" [edit]="edit" (pointChanged)="onPointChanged($event)" (routePointChanged)="onRoutePointChanged($event)"></leaflet-map>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
         <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
 </div>

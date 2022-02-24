@@ -4,7 +4,7 @@ import { timingSafeEqual } from "crypto";
 import { Reference } from "src/app/models/Configuration";
 import { Scope, ScopeUtils } from "src/app/models/Plugins";
 import { QueryChangedEvent } from "src/app/models/Sparql";
-import { DataTypeBindingsMap, WidgetCategory, WidgetDataBinding, WidgetDataType, WidgetDefinition, WidgetStruct } from "src/app/models/VisualizationWidgets";
+import { DataTypeBindingsMap, WidgetCategory, WidgetDataBinding, WidgetDataType, WidgetDefinition, WidgetStruct, WidgetUtils } from "src/app/models/VisualizationWidgets";
 import { VisualizationWidgetsServices } from "src/app/services/visualizationWidgetsServices";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ModalType } from "src/app/widget/modal/Modals";
@@ -58,7 +58,7 @@ export class WidgetEditorModal {
                 patternConf => {
                     this.name = Reference.getRelativeReferenceIdentifier(this.ref);
 
-                    this.selectedWidgetDataType = patternConf.getPropertyValue("type");
+                    this.selectedWidgetDataType = WidgetUtils.classNameDataTypeMap[patternConf.type];
                     if (this.selectedWidgetDataType == WidgetDataType.area || this.selectedWidgetDataType == WidgetDataType.point || this.selectedWidgetDataType == WidgetDataType.route) {
                         this.selectedWidgetCategory = WidgetCategory.map;
                     } else {
@@ -119,13 +119,12 @@ export class WidgetEditorModal {
     ok() {
         if (this.isDataValid()) {
             let widgetDef: WidgetDefinition = {
-                type: this.selectedWidgetDataType,
                 retrieve: this.sparqlEditors.find(e => e.type == SparqlEditorEnum.Retrieve).query,
                 update: this.sparqlEditors.find(e => e.type == SparqlEditorEnum.Update).query
             }
             //ref is the same provided as input (in edit mode) or built according the name entered by user (in create mode)
             let refParam = this.ref ? this.ref : ScopeUtils.serializeScope(Scope.PROJECT) + ":" + this.name; //store pattern at project level
-            this.visualizationWidgetsService.createWidget(refParam, widgetDef).subscribe(
+            this.visualizationWidgetsService.createWidget(refParam, widgetDef, this.selectedWidgetDataType).subscribe(
                 () => {
                     this.activeModal.close();
                 }

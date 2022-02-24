@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ARTResource, ARTURIResource } from '../models/ARTResources';
+import { ARTNode, ARTResource, ARTURIResource } from '../models/ARTResources';
 import { Reference } from '../models/Configuration';
 import { Widget, WidgetAssociation, WidgetDataRecord, WidgetDataType, WidgetDefinition } from '../models/VisualizationWidgets';
 import { HttpManager } from "../utils/HttpManager";
@@ -13,12 +13,12 @@ export class VisualizationWidgetsServices {
 
     constructor(private httpMgr: HttpManager) { }
 
-    getVisualizationData(resource: ARTResource, predicate: ARTURIResource): Observable<WidgetDataRecord[]> {
+    getWidgetData(resource: ARTResource, predicate: ARTURIResource): Observable<WidgetDataRecord[]> {
         let params = {
             resource: resource,
             predicate: predicate
         }
-        return this.httpMgr.doGet(this.serviceName, "getVisualizationData", params).pipe(
+        return this.httpMgr.doGet(this.serviceName, "getWidgetData", params).pipe(
             map(stResp => {
                 let records: WidgetDataRecord[] = stResp.map((r: any) => WidgetDataRecord.parse(r));
                 return records;
@@ -26,30 +26,29 @@ export class VisualizationWidgetsServices {
         );
     }
 
-    updateMapPoint(resource: ARTResource, predicate: ARTURIResource, location: ARTResource, latitude: number, longitude: number): Observable<void> {
+    updateWidgetData(resource: ARTResource, predicate: ARTURIResource, bindings: Map<string, ARTNode>): Observable<void> {
         let params = {
             resource: resource,
             predicate: predicate,
-            location: location,
-            latitude: latitude,
-            longitude: longitude,
+            bindings: bindings
         }
-        return this.httpMgr.doPost(this.serviceName, "updateMapPoint", params);
+        return this.httpMgr.doPost(this.serviceName, "updateWidgetData", params);
     }
 
-   
-    createWidget(reference: string, definition: WidgetDefinition): Observable<void> {
+
+    createWidget(reference: string, definition: WidgetDefinition, type: WidgetDataType): Observable<void> {
         let params = {
             reference: reference,
-            definition: JSON.stringify(definition)
+            definition: JSON.stringify(definition),
+            type: type
         }
         return this.httpMgr.doPost(this.serviceName, "createWidget", params);
-	}
+    }
 
     /**
      * 
      */
-     getWidgetIdentifiers(): Observable<string[]> {
+    getWidgetIdentifiers(): Observable<string[]> {
         let params = {}
         return this.httpMgr.doGet(this.serviceName, "getWidgetIdentifiers", params).pipe(
             map(refs => {
@@ -84,7 +83,7 @@ export class VisualizationWidgetsServices {
     /**
      * 
      */
-     listAssociations(): Observable<WidgetAssociation[]> {
+    listAssociations(): Observable<WidgetAssociation[]> {
         let params = {};
         return this.httpMgr.doGet(this.serviceName, "listAssociations", params).pipe(
             map(stResp => {

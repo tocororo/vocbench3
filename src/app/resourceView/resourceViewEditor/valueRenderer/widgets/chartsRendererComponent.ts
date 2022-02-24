@@ -20,14 +20,13 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
 
     @Input() subject: ARTResource;
     @Input() predicate: ARTURIResource;
-    @Input() object: ARTResource;
 
     @Output() update = new EventEmitter();
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     //input data needs to be converted in data compliant with charts
     series: ChartData[]; //a series of chart data 
-    seriesCollection: ChartSeries[]; //a trace (set of points) to be represented (with a polyline) on the map
+    seriesCollection: ChartSeries[];
 
     compliantWidgets: WidgetEnum[];
     activeWidget: WidgetEnum; //currently selected/rendered widget
@@ -43,7 +42,7 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
     }
 
     ngOnInit() {
-        let compliantDataTypes: WidgetDataType[] = DataTypeBindingsMap.getCompliantDataTypes(this.data[0].getBindings());
+        let compliantDataTypes: WidgetDataType[] = DataTypeBindingsMap.getCompliantDataTypes(this.data.getBindingsNames());
 
         this.compliantWidgets = [];
         for (let t of compliantDataTypes) {
@@ -71,26 +70,26 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
          * here I need to detect if I need to draw a point or a polyline (route/area)
          * the fact that the data types are compliant with the map widget is already granted from the parent component
          */
-        let dataTypes: WidgetDataType[] = DataTypeBindingsMap.getCompliantDataTypes(this.data[0].getBindings());
+        let dataTypes: WidgetDataType[] = DataTypeBindingsMap.getCompliantDataTypes(this.data.getBindingsNames());
         if (dataTypes.includes(WidgetDataType.series)) {
-            this.xAxisLabel = this.data[0].getValue(WidgetDataBinding.value_label).getShow();
-            this.yAxisLabel = this.data[0].getValue(WidgetDataBinding.series_label).getShow();
+            this.xAxisLabel = this.data.bindingsList[0][WidgetDataBinding.value_label].getShow();
+            this.yAxisLabel = this.data.bindingsList[0][WidgetDataBinding.series_label].getShow();
 
             //in case the values are based on dates, sort them before the initialization of the series
-            let name = this.data[0].getValue(WidgetDataBinding.name);
+            let name = this.data.bindingsList[0][WidgetDataBinding.name];
             if (name instanceof ARTLiteral && (name.getDatatype() == XmlSchema.date.getURI() || name.getDatatype() == XmlSchema.dateTime.getURI())) {
-                this.data.sort((d1, d2) => {
-                    let date1 = new Date(d1.getValue(WidgetDataBinding.name).getShow());
-                    let date2 = new Date(d2.getValue(WidgetDataBinding.name).getShow());
+                this.data.bindingsList.sort((bs1, bs2) => {
+                    let date1 = new Date(bs1[WidgetDataBinding.name].getShow());
+                    let date2 = new Date(bs2[WidgetDataBinding.name].getShow());
                     return date1.getTime() - date2.getTime();
                 })
             }
 
             this.series = [];
-            this.data.forEach(d => {
+            this.data.bindingsList.forEach(bs => {
                 let cd: ChartData = {
-                    name: d.getValue(WidgetDataBinding.name).getShow(),
-                    value: Number.parseFloat(d.getValue(WidgetDataBinding.value).getShow())
+                    name: bs[WidgetDataBinding.name].getShow(),
+                    value: Number.parseFloat(bs[WidgetDataBinding.value].getShow())
                 }
                 this.series.push(cd);
             })

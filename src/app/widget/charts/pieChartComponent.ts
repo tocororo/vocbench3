@@ -27,9 +27,9 @@ export class PieChartComponent {
 
     ngOnInit() {
         //generate random colors
-        this.randColorScheme.domain = this.chartData.map((d, idx) => {
-            return NgxChartsUtils.getRandColor(this.chartData.length, idx)
-        })
+        // this.randColorScheme.domain = this.chartData.map((d, idx) => {
+        //     return NgxChartsUtils.getRandColor(this.chartData.length, idx)
+        // })
     }
 
     onSelect(data: ChartData): void {
