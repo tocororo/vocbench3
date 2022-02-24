@@ -2166,6 +2166,14 @@
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Load Advanced Graph Application",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Save Advanced Graph Application"
         },
+        "DATABASE": {
+            "DATABASE": "Database",
+            "DB_BASE_URL": "DB base URL",
+            "DB_NAME": "DB name",
+            "DB_PASSWORD": "Password",
+            "DB_TABLE": "Table",
+            "DB_USER": "User"
+        },
         "GRAPH_APPLICATIONS": {
             "ADVANCED": {
                 "ADV_GRAPH_APPL": "Advanced Graph Application",

@@ -8,12 +8,12 @@
             <label class="groupPanel-heading-content">{{labelTranslationKey|translate}}:</label>
         </span>
         <span *ngIf="addBtnImgSrc" class="groupPanel-heading-content groupPanel-add-btn">
-            <button class="resViewPartitionAddBtn" [title]="addTitleTranslationKey|translate" (click)="addHandler(null, 'default')" [disabled]="addDisabled">
+            <button class="resViewPartitionAddBtn" (click)="addHandler(null, 'default')" [title]="addTitleTranslationKey|translate" [disabled]="addDisabled">
                 <img [src]="addBtnImgSrc"/>
             </button>
         </span>
         <span *ngIf="addManuallyAllowed || addExteranlResourceAllowed" class="groupPanel-heading-content groupPanel-dropdown-btn">
-            <div class="btn-group" style="vertical-align: initial;" ngbDropdown>
+            <div class="btn-group" style="vertical-align: initial;" ngbDropdown container="body">
                 <button class="dropdown-toggle transparentBtn" style="width: 12px;" data-toggle="dropdown" ngbDropdownToggle>
                     <span class="fas fa-caret-down fa-sm" style="margin: 0px;"></span>
                 </button>
@@ -23,7 +23,6 @@
                 </div>
             </div>
         </span>
-
     </div>
 
     <div class="groupPanel-body">

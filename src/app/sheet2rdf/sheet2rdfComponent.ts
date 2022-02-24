@@ -73,7 +73,7 @@ export class Sheet2RdfComponent {
 
     inputSources: { id: InputSource, translationKey: string }[] = [
         { id: InputSource.spreadsheet, translationKey: "SHEET2RDF.SPREADSHEET.FILE" },
-        { id: InputSource.database, translationKey: "Database table info" },
+        { id: InputSource.database, translationKey: "SHEET2RDF.DATABASE.DATABASE" },
     ];
     selectedInputSource: InputSource = this.inputSources[0].id;
 
@@ -126,24 +126,23 @@ export class Sheet2RdfComponent {
     private selectedTablePreviewRow: TableRow;
 
     loadSpreadsheet() {
-        if (this.selectedInputSource == InputSource.spreadsheet) {
-            this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
-                () => {
-                    this.resetAll();
-                    this.initHeaders();
-                    this.initTablePreview();
-                }
-            );
-        } else {
-            this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_table, this.dbInfo.db_user, this.dbInfo.db_password, this.fsNamingStrategy).subscribe(
-                () => {
-                    this.resetAll();
-                    this.initHeaders();
-                    this.initTablePreview();
-                }
-            );
-        }
-        
+        this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
+            () => {
+                this.resetAll();
+                this.initHeaders();
+                this.initTablePreview();
+            }
+        );
+    }
+
+    loadDbInfo() {
+        this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_table, this.dbInfo.db_user, this.dbInfo.db_password, this.fsNamingStrategy).subscribe(
+            () => {
+                this.resetAll();
+                this.initHeaders();
+                this.initTablePreview();
+            }
+        );
     }
 
     private resetAll() {

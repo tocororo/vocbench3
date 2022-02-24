@@ -1,5 +1,4 @@
 <div class="groupPanel">
-
     <div class="groupPanel-heading">
         <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
             <img src="./assets/images/icons/arrow.png" (click)="partitionCollapsed = !partitionCollapsed"
@@ -12,12 +11,14 @@
             <button class="resViewPartitionAddBtn" (click)="addHandler(null, AddAction.default)" [title]="addTitleTranslationKey|translate" [disabled]="addDisabled">
                 <img [src]="addBtnImgSrc"/>
             </button>
-            <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;" ngbDropdown>
-                <button class="dropdown-toggle transparentBtn" style="width: 12px; padding-right: 2px;" data-toggle="dropdown" ngbDropdownToggle>
+        </span>
+        <span *ngIf="addManuallyAllowed || addExteranlResourceAllowed" class="groupPanel-heading-content groupPanel-dropdown-btn">
+            <div class="btn-group" style="vertical-align: initial;" ngbDropdown container="body">
+                <button class="dropdown-toggle transparentBtn" style="width: 12px;" data-toggle="dropdown" ngbDropdownToggle>
                     <span class="fas fa-caret-down fa-sm" style="margin: 0px;"></span>
                 </button>
                 <div class="dropdown-menu float-right" ngbDropdownMenu>
-                    <a class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addManually()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
+                    <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addManually()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
                     <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addExternalValue()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_FROM_ANOTHER_PROJ'|translate}}</a>
                 </div>
             </div>

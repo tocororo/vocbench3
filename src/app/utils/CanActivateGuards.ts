@@ -55,9 +55,7 @@ export class AdminGuard implements CanActivate {
 
     //this canActivate return Observable<boolean> since I need to check asynchronously if a user is logged
     canActivate(): Observable<boolean> {
-        console.log("admin guard");
         if (VBContext.isLoggedIn()) {
-            console.log("1", VBContext.getLoggedUser())
             return of(VBContext.getLoggedUser().isAdmin());
         } else {
             /* if there is no user in vbCtx it doesn't mean that the user is not logged, in fact,
@@ -65,9 +63,7 @@ export class AdminGuard implements CanActivate {
             Here try to retrieve from server the logged user. */
             return this.userService.getUser().pipe(
                 map(user => { //request completed succesfully, set the user in the context and return true
-                    console.log("2", user)
                     if (user) { //getUser returned the logged user
-                        console.log("return", user.isAdmin())
                         return user.isAdmin();
                     } else { //no logged user, getUser returned null
                         this.router.navigate(['/Home']);

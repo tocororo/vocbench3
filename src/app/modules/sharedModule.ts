@@ -31,6 +31,7 @@ import { LanguageItemComponent } from '../widget/languageItem/languageItemCompon
 import { LeafletMapComponent } from '../widget/leafletMap/leafletMapComponent';
 import { LeafletMapModal } from '../widget/leafletMap/leafletMapModal';
 import { PartitionFilterEditor } from '../widget/partitionFilterEditor/partitionFilterEditor';
+import { PasswordInputComponent } from '../widget/passwordInput/passwordInputComponent';
 import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
 import { DatetimePickerComponent } from '../widget/pickers/datetimePicker/datetimePickerComponent';
 import { FilePickerComponent } from '../widget/pickers/filePicker/filePickerComponent';
@@ -86,6 +87,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         MustacheEditorComponent,
         NTripleEditorComponent,
         PartitionFilterEditor,
+        PasswordInputComponent,
         PearlEditorComponent,
         ProjectListComponent,
         QueryParameterForm,
@@ -133,6 +135,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         MustacheEditorComponent,
         NTripleEditorComponent,
         PartitionFilterEditor,
+        PasswordInputComponent,
         PearlEditorComponent,
         ProjectListComponent,
         QueryParameterForm,

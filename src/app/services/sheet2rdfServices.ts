@@ -8,7 +8,7 @@ import { PrefixMapping } from '../models/Metadata';
 import { RDFFormat } from "../models/RDFFormat";
 import { Pair } from '../models/Shared';
 import { Sheet2RdfDeserializer, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
-import { HttpManager, HttpServiceContext, STRequestParams } from "../utils/HttpManager";
+import { HttpManager, HttpServiceContext, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { ResourcesServices } from './resourcesServices';
 
 @Injectable()
@@ -39,13 +39,18 @@ export class Sheet2RDFServices {
             db_password: db_password,
             fsNamingStrategy: fsNamingStrategy
         };
-        return this.httpMgr.uploadFile(this.serviceName, "uploadDBInfo", data);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorHandlers: [{
+                className: "it.uniroma2.art.sheet2rdf.exception.DBLocalizedException", action: 'warning'
+            }]
+        });
+        return this.httpMgr.uploadFile(this.serviceName, "uploadDBInfo", data, options);
     }
 
     /**
      * Returns the header structures of the uploaded spreadsheet
      */
-    getHeaders(): Observable<{subject: SubjectHeader, headers: SimpleHeader[]}> {
+    getHeaders(): Observable<{ subject: SubjectHeader, headers: SimpleHeader[] }> {
         let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getHeaders", params).pipe(
             mergeMap(stResp => {
@@ -111,7 +116,7 @@ export class Sheet2RDFServices {
                 } else {
                     return of(header);
                 }
-                
+
             })
         );
     }
@@ -134,7 +139,7 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addSimpleGraphApplicationToHeader", params);
     }
 
-    addAdvancedGraphApplicationToHeader(headerId: string, graphPattern: string, nodeIds: string[], prefixMapping: {[key: string]: string}, defaultPredicate?: ARTURIResource) {
+    addAdvancedGraphApplicationToHeader(headerId: string, graphPattern: string, nodeIds: string[], prefixMapping: { [key: string]: string }, defaultPredicate?: ARTURIResource) {
         let params: STRequestParams = {
             headerId: headerId,
             graphPattern: graphPattern,
@@ -155,8 +160,8 @@ export class Sheet2RDFServices {
         };
         return this.httpMgr.doPost(this.serviceName, "updateSimpleGraphApplication", params);
     }
-    
-    updateAdvancedGraphApplication(headerId: string, graphId: string, graphPattern: string, nodeIds: string[], prefixMapping: {[key: string]: string}, defaultPredicate?: ARTURIResource) {
+
+    updateAdvancedGraphApplication(headerId: string, graphId: string, graphPattern: string, nodeIds: string[], prefixMapping: { [key: string]: string }, defaultPredicate?: ARTURIResource) {
         let params: STRequestParams = {
             headerId: headerId,
             graphId: graphId,
@@ -192,9 +197,9 @@ export class Sheet2RDFServices {
         return this.httpMgr.doGet(this.serviceName, "isNodeIdAlreadyUsed", params);
     }
 
-    addNodeToHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType, 
-        converterContract: string, converterDatatypeUri?: string, converterLanguage?: string, 
-        converterParams?: {[key: string]: STRequestParams}, memoize?: boolean, memoizeId?: string) {
+    addNodeToHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType,
+        converterContract: string, converterDatatypeUri?: string, converterLanguage?: string,
+        converterParams?: { [key: string]: any }, memoize?: boolean, memoizeId?: string) {
         let params: STRequestParams = {
             headerId: headerId,
             nodeId: nodeId,
@@ -209,9 +214,9 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addNodeToHeader", params);
     }
 
-    updateNodeInHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType, 
-        converterContract: string, converterDatatypeUri?: string, converterLanguage?: string, 
-        converterParams?: {[key: string]: any}, memoize?: boolean, memoizeId?: string) {
+    updateNodeInHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType,
+        converterContract: string, converterDatatypeUri?: string, converterLanguage?: string,
+        converterParams?: { [key: string]: any }, memoize?: boolean, memoizeId?: string) {
         let params: STRequestParams = {
             headerId: headerId,
             nodeId: nodeId,
@@ -243,8 +248,8 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "removeNodeFromHeader", params);
     }
 
-    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: {[key: string]: any}, type?: ARTResource, 
-            additionalPredObjs?: Pair<ARTURIResource, ARTNode>[], memoize?: boolean, memoizeId?: string) {
+    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: { [key: string]: any }, type?: ARTResource,
+        additionalPredObjs?: Pair<ARTURIResource, ARTNode>[], memoize?: boolean, memoizeId?: string) {
         let params: STRequestParams = {
             headerId: headerId,
             converterContract: converterContract,
@@ -288,7 +293,7 @@ export class Sheet2RDFServices {
      * Returns a preview (first maxRows rows) of the spreadsheet uploaded
      * @param maxRows 
      */
-    getTablePreview(maxRows: number): Observable<{returned: number, total: number, rows: TableRow[]}> {
+    getTablePreview(maxRows: number): Observable<{ returned: number, total: number, rows: TableRow[] }> {
         let params: STRequestParams = {
             maxRows: maxRows,
         };
@@ -314,7 +319,7 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "savePearl", data);
     }
 
-    validateGraphPattern(pearlCode: string): Observable<{valid: boolean, details: string, usedNodes: string[], usedPrefixes: string[]}> {
+    validateGraphPattern(pearlCode: string): Observable<{ valid: boolean, details: string, usedNodes: string[], usedPrefixes: string[] }> {
         let params: STRequestParams = {
             pearlCode: pearlCode
         };
@@ -338,7 +343,7 @@ export class Sheet2RDFServices {
      * 'maxTableRows' of the datasheet
      * @param maxTableRows 
      */
-    getTriplesPreview(maxTableRows: number): Observable<{returned: number, total: number, triples: TriplePreview[]}> {
+    getTriplesPreview(maxTableRows: number): Observable<{ returned: number, total: number, triples: TriplePreview[] }> {
         let params: STRequestParams = {
             maxTableRows: maxTableRows
         };
@@ -415,7 +420,7 @@ export class Sheet2RDFServices {
     }
 
 
-    private getMapSerialization(map: {[key:string]: any}): string {
+    private getMapSerialization(map: { [key: string]: any }): string {
         let mapSerialized: { [key: string]: string } = {};
         for (let paramName in map) {
             let paramValue = map[paramName];
