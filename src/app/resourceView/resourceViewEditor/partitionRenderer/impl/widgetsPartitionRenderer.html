@@ -28,26 +28,13 @@
     <div class="groupPanel-body">
         <ng-container *ngIf="!partitionCollapsed">
 
-                <div class="card card-alt mb-1" *ngFor="let pd of predWidgetDataList">
+                <div class="card card-alt mb-1" *ngFor="let pw of predWidgetsList">
                     <div class="card-header">
-                        <label style="flex: 1">{{pd.predicate.getShow()}}</label>
-                        <!-- <div class="btn-group" ngbDropdown>
-                            <button class="btn btn-xs btn-light predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()" [title]="'ACTIONS.ADD'|translate" [disabled]="addDisabled">
-                                <span class="fas fa-plus fa-sm"></span>
-                            </button>
-                            <button class="btn btn-xs btn-light dropdown-toggle predObjRenderPanelBtn" style="padding: 3px;" data-toggle="dropdown" ngbDropdownToggle [disabled]="actionMenuDisabled">
-                                <span class="fas fa-caret-down fa-sm"></span>
-                            </button>
-                            <div class="dropdown-menu float-right" ngbDropdownMenu>
-                                <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }"(click)="addManually()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
-                                <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addExternalValue()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_FROM_ANOTHER_PROJ'|translate}}</a>
-                                <a class="dropdown-item" [ngClass]="{ disabled: deleteAllDisabled }" (click)="removeAllValues()">{{'RESOURCE_VIEW.ACTIONS.DELETE_ALL_VALUES'|translate}}</a>
-                            </div>
-                        </div> -->
+                        <label style="flex: 1">{{pw.predicate.getShow()}}</label>
                     </div>
                     <div class="card-body">
-                        <ng-container *ngFor="let wd of pd.widgetData">
-                            <widget-renderer class="p-1" [subject]="resource" [predicate]="pd.predicate" [widgetData]="wd" (update)="onObjectUpdate()" (dblclick)="onDoubleClick(wd)">
+                        <ng-container *ngFor="let w of pw.widgets">
+                            <widget-renderer class="p-1" [subject]="resource" [predicate]="pw.predicate" [widget]="w" (update)="onObjectUpdate()" (doubleClick)="objectDblClick($event)">
                             </widget-renderer>
                         </ng-container>
                     </div>

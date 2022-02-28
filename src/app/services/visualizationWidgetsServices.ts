@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource } from '../models/ARTResources';
 import { Reference } from '../models/Configuration';
-import { Widget, WidgetAssociation, WidgetDataRecord, WidgetDataType, WidgetDefinition } from '../models/VisualizationWidgets';
+import { WidgetConfiguration, WidgetAssociation, WidgetDataRecord, WidgetDataType, WidgetDefinition } from '../models/VisualizationWidgets';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -61,13 +61,13 @@ export class VisualizationWidgetsServices {
      * 
      * @param reference 
      */
-    getWidget(reference: string): Observable<Widget> {
+    getWidget(reference: string): Observable<WidgetConfiguration> {
         let params = {
             reference: reference
         }
         return this.httpMgr.doGet(this.serviceName, "getWidget", params).pipe(
             map(stResp => {
-                return <Widget>Widget.parse(stResp);
+                return <WidgetConfiguration>WidgetConfiguration.parse(stResp);
             })
         );
     }

@@ -162,45 +162,48 @@ export class LeafletMapComponent {
 
     private draggingPoint: VbLatLng; //keep trace of the point linked to the dragging marker
     private draggingPointInitialPos: VbLatLng; //store the initial position of the point dragged
-
-    private registerPointsDragListener(graphicElement: L.Polygon | L.Polyline) {
-        console.log("registerPointsDragListener", graphicElement)
-        let pathMarkers: L.Marker[] = [];
-
+    private registerPointsDragListener(polygonOrPolyline: L.Polygon | L.Polyline) {
         let points: VbLatLng[]; 
-        if (graphicElement instanceof L.Polygon) {
-            //The return value of L.Polygon.getLatLngs() is an array of one element (see https://github.com/Leaflet/Leaflet/issues/5212)
-            points = <VbLatLng[]>graphicElement.getLatLngs()[0];
+        if (polygonOrPolyline instanceof L.Polygon) {
+            //in case of polygon, get the first element since the return value of getLatLngs() is an array of one element (see https://github.com/Leaflet/Leaflet/issues/5212)
+            points = <VbLatLng[]>polygonOrPolyline.getLatLngs()[0];
         } else {
-            points = <VbLatLng[]>graphicElement.getLatLngs();
+            points = <VbLatLng[]>polygonOrPolyline.getLatLngs();
         }
-            
+        //add a draggable marker to each point of the track
+        let pathMarkers: L.Marker[] = [];
         points.forEach(p => {
             let m: L.Marker = new L.Marker(p, {draggable: true});
+            m['location'] = p.location.toNT(); //add this custom attribute. so that in dragstart I can identify the GeoPoint related to the marker
             this.addMarkerPopup(m);
             m.addTo(this.map);
             pathMarkers.push(m);
         })
-        
+        //register drag handler for each marker
         pathMarkers.forEach(m => {
             m.on('dragstart', () => {
-                //when user starts dragging, keep trace of the point with the same coords of the draggin marker
-                this.draggingPoint = points.find(p => p.location.equals((<VbLatLng>m.getLatLng()).location));
-                this.draggingPointInitialPos = new VbLatLng(this.draggingPoint.location, this.draggingPoint.lat, this.draggingPoint.lng); //store also the initial position for the event emitted in dragend
+                /* 
+                when user starts dragging, store:
+                - the point associated to the dragging marker, so that its coords will be updated following the coords of the marker
+                - the same point in a different variable, so that when drag ends, I can emit an update event reporting both the old and the new points
+                Note: in order to identify the point related to the marker, I use a custom attribute 'location' in the marker because:
+                - I don't trust using lat and lng as reference since accidentally I couldn't distinguish two markers on the same position (remote but possible case)
+                - I cannot get directly the location from the point returned in m.getLatLng(), since when the marker is dragged, the point returned from
+                    getLatLng has no more location in it (probably leaflet re-creates the marker with the LatLng in it, so the location I put in VbLatLng get lost)
+                */
+                this.draggingPoint = points.find(p => p.location.toNT() == m['location']);
+                this.draggingPointInitialPos = new VbLatLng(this.draggingPoint.location, this.draggingPoint.lat, this.draggingPoint.lng);
             })
             m.on('drag', () => {
-                //during the drag operation, update the coords of the dragging point setting the same coords of the marker
                 this.draggingPoint.lat = m.getLatLng().lat;
                 this.draggingPoint.lng = m.getLatLng().lng;
-                graphicElement.redraw(); //update the polyline/polygon with the new coords
+                polygonOrPolyline.redraw(); //update the polyline/polygon with the new coords
             })
             m.on('dragend', () => {
                 //when drag ends emit an event
-                this.routePointChanged.emit({ 
-                    old: { location: this.draggingPointInitialPos.location, lat: this.draggingPointInitialPos.lat, lng: this.draggingPointInitialPos.lng }, 
-                    new: { location: this.draggingPointInitialPos.location, lat: this.draggingPoint.lat, lng: this.draggingPoint.lng }, 
-                })
-                
+                let oldPoint: GeoPoint = { location: this.draggingPointInitialPos.location, lat: this.draggingPointInitialPos.lat, lng: this.draggingPointInitialPos.lng };
+                let newPoint: GeoPoint = { location: this.draggingPointInitialPos.location, lat: this.draggingPoint.lat, lng: this.draggingPoint.lng };
+                this.routePointChanged.emit({ old: oldPoint, new: newPoint });
             })
         })
     }

@@ -63,7 +63,6 @@ export class LeafletMapModal {
     }
 
     onRoutePointChanged(event: PoinChangedEvent) {
-        console.log("event", event);
         if (this.mapRoute) {
             let idx = this.mapRoute.findIndex(p => p.location.equals(event.old.location));
             this.mapRoute[idx] = event.new;

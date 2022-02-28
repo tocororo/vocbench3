@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output, SimpleChange, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { WidgetCategory, WidgetDataRecord, WidgetDataType } from "src/app/models/VisualizationWidgets";
+import { AreaWidget, PointWidget, RouteWidget, Widget, WidgetCategory } from "src/app/models/VisualizationWidgets";
 
 @Component({
     selector: "widget-renderer",
@@ -9,45 +9,46 @@ import { WidgetCategory, WidgetDataRecord, WidgetDataType } from "src/app/models
     styles: [`
         :host {
             padding: 3px;
+            height: 300px;
         }
     `]
 })
 export class WidgetRenderer {
 
-    // @Input() partition: ResViewPartition;
     @Input() subject: ARTResource;
     @Input() predicate: ARTURIResource;
-    @Input() widgetData: WidgetDataRecord;
+    @Input() widget: Widget;
     @Input() rendering: boolean;
     @Input() readonly: boolean;
 
-    // @Output() delete = new EventEmitter(); //request to delete the object ("delete" action of the editable-resource or "-" button of reified-resource)
     @Output() update = new EventEmitter(); //a change has been done => request to update the RV
+    @Output() doubleClick: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     activeWidgetRenderer: WidgetCategory;
-
-    
 
     constructor() {}
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['widgetData']) {
+        if (changes['widget']) {
             this.init();
         }
     }
 
     private init() {
-        //according the data type, choose the widget (category) to use
-        let wdt: WidgetDataType = this.widgetData.type;
-        if (wdt == WidgetDataType.area || wdt == WidgetDataType.point || wdt == WidgetDataType.route) {
+        if (this.widget instanceof AreaWidget || this.widget instanceof RouteWidget || this.widget instanceof PointWidget) {
             this.activeWidgetRenderer = WidgetCategory.map;
         } else {
             this.activeWidgetRenderer = WidgetCategory.chart;
         }
+        
     }
 
     onUpdate() {
         this.update.emit();
+    }
+
+    onDoubleClick(res: ARTResource) {
+        this.doubleClick.emit(res);
     }
 
 

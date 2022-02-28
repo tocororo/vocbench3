@@ -67,7 +67,7 @@ export class CustomFormTableCellComponent {
     }
 
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        this.creationModals.newTypedLiteral({key: "ACTIONS.EDIT_X", params:{x: predicate.getShow()}}, predicate, allowedDatatypes, dataRanges, false, true).then(
+        this.creationModals.newTypedLiteral({key: "ACTIONS.EDIT_X", params:{x: predicate.getShow()}}, predicate, null, allowedDatatypes, dataRanges, false, true).then(
             (literals: ARTLiteral[]) => {
                 let newValue: ARTLiteral = literals[0];
                 this.resourceService.updateTriple(this.subject, predicate, this.cell.value, newValue).subscribe(

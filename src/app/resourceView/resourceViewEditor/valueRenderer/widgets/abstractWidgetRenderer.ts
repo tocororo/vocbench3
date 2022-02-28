@@ -1,10 +1,13 @@
-import { Directive, Input } from "@angular/core";
-import { WidgetDataRecord } from "src/app/models/VisualizationWidgets";
+import { Directive, EventEmitter, Input, Output } from "@angular/core";
+import { ARTNode } from "src/app/models/ARTResources";
+import { Widget } from "src/app/models/VisualizationWidgets";
 
 @Directive()
 export abstract class AbstractWidgetComponent {
-    @Input() data: WidgetDataRecord;
+    @Input() widget: Widget;
     @Input() readonly: boolean;
+
+    @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter;
 
     editAuthorized: boolean = true;
 
@@ -12,5 +15,9 @@ export abstract class AbstractWidgetComponent {
      * normalizes the input data in a format compliant for the widget
      */
     protected abstract processInput(): void;
+
+    onDoubleClick(res: ARTNode) {
+        this.doubleClick.emit(res);
+    }
 
 }

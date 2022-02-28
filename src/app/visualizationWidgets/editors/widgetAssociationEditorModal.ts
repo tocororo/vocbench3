@@ -35,7 +35,6 @@ export class WidgetAssociationEditorModal {
     onTriggerSelected(predicate: ARTURIResource) {
         //check if an association for the given predicate already exists
         if (this.existingAssociations.some(a => a.trigger.equals(predicate))) {
-            //TODOOOOOOOOOO MESSAGES.ALREADY_EXISTING_WIDGET_ASSOCIATION
             this.basicModals.alert({key:"STATUS.WARNING"}, "The selected property has already a widget associated.", ModalType.warning);
         } else {
             this.selectedTrigger = predicate;
@@ -47,7 +46,6 @@ export class WidgetAssociationEditorModal {
     }
 
     ok() {
-        
         this.visualizationWidgetsService.addAssociation(this.selectedTrigger, this.selectedWidget.reference).subscribe(
             () => {
                 this.activeModal.close();

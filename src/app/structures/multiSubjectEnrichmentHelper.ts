@@ -760,7 +760,7 @@ export class MultiSubjectEnrichmentHelper {
     }
 
     private enrichWithTypedLiteral(subjects: ARTURIResource[], predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        this.creationModals.newTypedLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, predicate, allowedDatatypes, dataRanges, true, true).then(
+        this.creationModals.newTypedLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, predicate, null, allowedDatatypes, dataRanges, true, true).then(
             (literals: ARTLiteral[]) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 subjects.forEach((s: ARTURIResource) => {

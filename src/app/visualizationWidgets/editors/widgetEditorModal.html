@@ -60,14 +60,17 @@
                         <div class="alert alert-warning mb-2">
                             <ng-container *ngIf="e.type == 'Retrieve'">
                                 The retrieve query for this kind of widget must return the following variables:
+                                <div>
+                                    <code *ngFor="let b of requiredRetrieveBindings">?{{b}} </code>
+                                </div>
+                                The query must also contains the placeholder <code>&lt;trigger&gt;</code> which represents the predicate that will be associated to the widget.
                             </ng-container>
                             <ng-container *ngIf="e.type == 'Update'">
                                 The update query for this kind of widget must contains in the <span style="font-family: monospace">insert</span> block the following variables:
+                                <div>
+                                    <code *ngFor="let b of requiredUpdateBindings">?{{b}} </code>
+                                </div>
                             </ng-container>
-                            <div>
-                                <code *ngFor="let b of requiredBindings">?{{b}} </code>
-                            </div>
-                            The query must also contains the placeholder <code>&lt;trigger&gt;</code> which represents the predicate that will be associated to the widget.
                         </div>
                         <div class="card vbox">
                             <div class="card-body vbox">

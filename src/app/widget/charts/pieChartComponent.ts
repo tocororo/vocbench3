@@ -1,47 +1,28 @@
-import { Component, Input } from "@angular/core";
-import { ChartData, ColorSet, NgxChartsUtils } from "./NgxChartsUtils";
+import { Component } from "@angular/core";
+import { CreationModalServices } from "../modal/creationModal/creationModalServices";
+import { AbstractChartComponent } from "./abstractChartComponent";
+import { ChartData } from "./NgxChartsUtils";
 
 @Component({
     selector: "pie-chart",
     templateUrl: "./pieChartComponent.html",
-    styles: [`
-        :host {
-            width: 100%;
-            height: 200px;
-        }
-    `]
+    host: { class: "hbox" },
+    styleUrls: ["./chartComponent.css"]
 })
-export class PieChartComponent {
+export class PieChartComponent extends AbstractChartComponent {
 
-    @Input() chartData: ChartData[];
-
-    randColorScheme = { domain: [] };
-
-    //options
-    showLegend: boolean = false;
-    showLabels: boolean = true;
-    isDoughnut: boolean = true;
-    legendPosition: string = 'right';
-
-    constructor() { }
-
-    ngOnInit() {
-        //generate random colors
-        // this.randColorScheme.domain = this.chartData.map((d, idx) => {
-        //     return NgxChartsUtils.getRandColor(this.chartData.length, idx)
-        // })
+    constructor(creationModals: CreationModalServices) {
+        super(creationModals);
     }
 
-    onSelect(data: ChartData): void {
-        console.log('Item clicked', data);
-    }
-
-    onActivate(data): void {
-        // console.log('Activate', JSON.parse(JSON.stringify(data)));
-    }
-
-    onDeactivate(data): void {
-        // console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+    onDblClick(event: { data: ChartData, nativeEvent: MouseEvent }) {
+        if (event.data.extra && event.data.extra.nameResource) {
+            //I need to do as follow since the data.extra.resource returned from the select event is an Object, not an ARTNode, so I will lost any method of ARTNode instances
+            let cd = this.chartData.find(d => JSON.stringify(d.extra.nameResource) == JSON.stringify(event.data.extra.nameResource))
+            if (cd) {
+                this.doubleClick.emit(cd.extra.nameResource);
+            }
+        }
     }
 
 }

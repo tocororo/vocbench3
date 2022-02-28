@@ -1,6 +1,5 @@
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { timingSafeEqual } from "crypto";
 import { Reference } from "src/app/models/Configuration";
 import { Scope, ScopeUtils } from "src/app/models/Plugins";
 import { QueryChangedEvent } from "src/app/models/Sparql";
@@ -39,7 +38,8 @@ export class WidgetEditorModal {
     ];
     selectedWidgetDataType: WidgetDataType;
 
-    requiredBindings: WidgetDataBinding[];
+    requiredRetrieveBindings: WidgetDataBinding[];
+    requiredUpdateBindings: WidgetDataBinding[];
 
     sparqlEditors: SparqlEditorStruct[] = [
         { type: SparqlEditorEnum.Retrieve, query: "", valid: false },
@@ -75,11 +75,12 @@ export class WidgetEditorModal {
 
     onWidgetCategoryChanged() {
         this.selectedWidgetDataType = null;
-        this.requiredBindings = [];
+        this.requiredRetrieveBindings = [];
     }
 
     onWidgetDataTypeChanged() {
-        this.requiredBindings = DataTypeBindingsMap.getRequiredBindings(this.selectedWidgetDataType);
+        this.requiredRetrieveBindings = DataTypeBindingsMap.getRequiredRetrieveBindings(this.selectedWidgetDataType);
+        this.requiredUpdateBindings = DataTypeBindingsMap.getRequiredUpdateBindings(this.selectedWidgetDataType);
     }
 
     onQueryChanged(editor: SparqlEditorStruct, event: QueryChangedEvent) {
@@ -89,15 +90,14 @@ export class WidgetEditorModal {
 
     isDataValid(): boolean {
         //check if in the retrieve (and update, if any) query, there are the required bindings
-
         let retrieveQuery = this.sparqlEditors.find(e => e.type == SparqlEditorEnum.Retrieve).query;
         let select = retrieveQuery.substring(retrieveQuery.toLocaleLowerCase().indexOf("select"), retrieveQuery.indexOf("{"));
-        let retrieveValid = this.containsRequiredBindings(select, this.requiredBindings);
+        let retrieveValid = this.containsRequiredBindings(select, this.requiredRetrieveBindings);
 
         let updateValid: boolean = true;
         let udpateQuery = this.sparqlEditors.find(e => e.type == SparqlEditorEnum.Update).query;
         if (udpateQuery) {
-            updateValid = this.containsRequiredBindings(udpateQuery, this.requiredBindings);
+            updateValid = this.containsRequiredBindings(udpateQuery, this.requiredUpdateBindings);
         }
 
         return retrieveValid && updateValid;

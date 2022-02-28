@@ -75,7 +75,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
                 if (this.selectedDatatype == null) { //if still null => set the first
                     this.selectedDatatype = this.datatypeList[0];
                 }
-                this.onDatatypeChange();
+                this.onDatatypeChange(false); //trigger the operation after the datatype change (without resetting the value since it could be set as input)
             }
         );
     }
@@ -108,10 +108,16 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         }
     }
 
-    onDatatypeChange() {
+    /**
+     * 
+     * @param keepValue if true, the value is reset after a datatype change
+     */
+    onDatatypeChange(resetValue: boolean = true) {
+        if (resetValue) {
+            this.stringValue = null;
+        }
         this.updateInputConfiguration();
         this.datatypeChange.emit(this.selectedDatatype);
-        this.stringValue = null;
         this.onValueChanged();
     }
 
@@ -171,7 +177,8 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         if (obj != null) {
             this.stringValue = obj.getValue();
             let dt: string = obj.getDatatype();
-            if (dt != null) {
+            //select the datatype of the input value (only if datatype list has been initialized)
+            if (dt != null && this.datatypeList != null) {
                 this.datatypeList.forEach(el => {
                     if (el.getURI() == dt) {
                         this.selectedDatatype = el;

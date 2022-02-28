@@ -1,40 +1,42 @@
 import { Component, Input } from "@angular/core";
-import { ChartData, NgxChartsUtils } from "./NgxChartsUtils";
+import { CreationModalServices } from "../modal/creationModal/creationModalServices";
+import { AbstractChartComponent } from "./abstractChartComponent";
+import { ChartData } from "./NgxChartsUtils";
 
 @Component({
     selector: "bar-chart",
     templateUrl: "./barChartComponent.html",
-    styles: [`
-        :host {
-            width: 100%;
-            height: 200px;
-        }
-    `]
+    host: { class: "hbox" },
+    styleUrls: ["./chartComponent.css"]
 })
-export class BarChartComponent {
+export class BarChartComponent extends AbstractChartComponent {
 
-    @Input() chartData: ChartData[];
     @Input() xAxisLabel: string;
     @Input() yAxisLabel: string;
 
-    randColorScheme = { domain: [] };
-
-    // options
-    showXAxis = true;
-    showYAxis = true;
-    showLegend = false;
-    showXAxisLabel = true;
-    showYAxisLabel = true;
-
-    ngOnInit() {
-        //generate random colors
-        // this.randColorScheme.domain = this.chartData.map((d, idx) => {
-        //     return NgxChartsUtils.getRandColor(this.chartData.length, idx)
-        // })
+    constructor(creationModals: CreationModalServices) {
+        super(creationModals);
     }
 
-    onSelect(data: ChartData): void {
-        console.log('Item clicked', data);
+    private firstClick: boolean; //tells if first click has already registered
+    onSelect(data: ChartData) {
+        if (this.firstClick) {
+            this.firstClick = false;
+            if (data.extra && data.extra.nameResource) {
+                //I need to do as follow since the data.extra.resource returned from the select event is an Object, not an ARTNode, so I will lost any method of ARTNode instances
+                let cd = this.chartData.find(d => JSON.stringify(d.extra.nameResource) == JSON.stringify(data.extra.nameResource));
+                if (cd) {
+                    this.doubleClick.emit(cd.extra.nameResource);
+                }
+            }
+        } else {
+            this.firstClick = true;
+            setTimeout(() => {
+                if (this.firstClick) {
+                    this.firstClick = false;
+                }
+            }, 500);
+        }
     }
 
 }

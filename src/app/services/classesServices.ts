@@ -129,7 +129,12 @@ export class ClassesServices {
         let params: any = {
             cls: cls
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteClass", params).pipe(
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorHandlers: [
+                { className: 'it.uniroma2.art.semanticturkey.exceptions.ClassWithSubclassesOrInstancesException', action: 'warning' },
+            ]
+        });
+        return this.httpMgr.doPost(this.serviceName, "deleteClass", params, options).pipe(
             map(stResp => {
                 this.eventHandler.classDeletedEvent.emit(cls);
                 return stResp;

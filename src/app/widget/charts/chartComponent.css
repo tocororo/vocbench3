@@ -1,0 +1,8 @@
+.legend-label { 
+    cursor: pointer;
+    color: #888;
+    flex: 1;
+}
+.legend-label.active { 
+    color: #000;
+}

@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTLiteral, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { DataTypeBindingsMap, WidgetDataBinding, WidgetDataType, WidgetDataTypeCompliantMap, WidgetEnum } from "src/app/models/VisualizationWidgets";
-import { XmlSchema } from "src/app/models/Vocabulary";
+import { ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { SeriesCollectionWidget, SeriesWidget, WidgetDataBinding, WidgetEnum } from "src/app/models/VisualizationWidgets";
+import { VisualizationWidgetsServices } from "src/app/services/visualizationWidgetsServices";
+import { ChartDataChangedEvent } from "src/app/widget/charts/abstractChartComponent";
 import { ChartData, ChartSeries } from "src/app/widget/charts/NgxChartsUtils";
 import { AbstractWidgetComponent } from "./abstractWidgetRenderer";
 
@@ -9,12 +10,6 @@ import { AbstractWidgetComponent } from "./abstractWidgetRenderer";
     selector: "charts-renderer",
     templateUrl: "./chartsRendererComponent.html",
     host: { class: "hbox" },
-    styles: [`
-        :host {
-            width: 100%;
-            height: 200px;
-        }
-    `]
 })
 export class ChartsRendererComponent extends AbstractWidgetComponent {
 
@@ -22,7 +17,7 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
     @Input() predicate: ARTURIResource;
 
     @Output() update = new EventEmitter();
-    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+
 
     //input data needs to be converted in data compliant with charts
     series: ChartData[]; //a series of chart data 
@@ -37,20 +32,20 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
 
     viewInitialized: boolean;
 
-    constructor() {
+    constructor(private visualizationWidgetsService: VisualizationWidgetsServices) {
         super()
     }
 
     ngOnInit() {
-        let compliantDataTypes: WidgetDataType[] = DataTypeBindingsMap.getCompliantDataTypes(this.data.getBindingsNames());
-
         this.compliantWidgets = [];
-        for (let t of compliantDataTypes) {
-            WidgetDataTypeCompliantMap.getCompliantWidgets(t).forEach(w => {
-                if (!this.compliantWidgets.includes(w)) {
-                    this.compliantWidgets.push(w);
-                }
-            });
+        if (this.widget instanceof SeriesWidget) {
+            this.compliantWidgets = [
+                WidgetEnum.bar, WidgetEnum.pie
+            ]
+        } else  if (this.widget instanceof SeriesCollectionWidget) {
+            this.compliantWidgets = [
+                WidgetEnum.bar
+            ]
         }
         if (this.compliantWidgets.length > 0) {
             this.activeWidget = this.compliantWidgets[0];
@@ -66,34 +61,40 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
     }
 
     processInput() {
-        /**
-         * here I need to detect if I need to draw a point or a polyline (route/area)
-         * the fact that the data types are compliant with the map widget is already granted from the parent component
-         */
-        let dataTypes: WidgetDataType[] = DataTypeBindingsMap.getCompliantDataTypes(this.data.getBindingsNames());
-        if (dataTypes.includes(WidgetDataType.series)) {
-            this.xAxisLabel = this.data.bindingsList[0][WidgetDataBinding.value_label].getShow();
-            this.yAxisLabel = this.data.bindingsList[0][WidgetDataBinding.series_label].getShow();
-
-            //in case the values are based on dates, sort them before the initialization of the series
-            let name = this.data.bindingsList[0][WidgetDataBinding.name];
-            if (name instanceof ARTLiteral && (name.getDatatype() == XmlSchema.date.getURI() || name.getDatatype() == XmlSchema.dateTime.getURI())) {
-                this.data.bindingsList.sort((bs1, bs2) => {
-                    let date1 = new Date(bs1[WidgetDataBinding.name].getShow());
-                    let date2 = new Date(bs2[WidgetDataBinding.name].getShow());
-                    return date1.getTime() - date2.getTime();
-                })
-            }
+        if (this.widget instanceof SeriesWidget) {
+            this.xAxisLabel = this.widget.x_axis_label;
+            this.yAxisLabel = this.widget.y_axis_label;
 
             this.series = [];
-            this.data.bindingsList.forEach(bs => {
+            this.widget.data.forEach(d => {
                 let cd: ChartData = {
-                    name: bs[WidgetDataBinding.name].getShow(),
-                    value: Number.parseFloat(bs[WidgetDataBinding.value].getShow())
+                    name: d.name.getShow(),
+                    value: Number.parseFloat(d.value.getShow()),
+                    extra: {
+                        valueDatatype: d.value.getDatatype(),
+                        nameResource: d.name
+                    }
                 }
                 this.series.push(cd);
             })
-        } else if (dataTypes.includes(WidgetDataType.series_collection)) {
+        } else if (this.widget instanceof SeriesCollectionWidget) {
+            //TODO
+        }
+    }
+
+    onDataChanged(event: ChartDataChangedEvent) {
+        let bindingsMap: Map<string, ARTNode> = new Map();
+        if (this.widget instanceof SeriesWidget) {
+            bindingsMap.set(WidgetDataBinding.series_id, this.widget.series_id);
+            let updatedData = this.widget.data.find(d => d.name.equals(event.old.extra.nameResource)); //get the changed data
+            updatedData.value.setValue(event.new.value+"");
+            bindingsMap.set(WidgetDataBinding.name, updatedData.name);
+            bindingsMap.set(WidgetDataBinding.value, updatedData.value);
+            this.visualizationWidgetsService.updateWidgetData(this.subject, this.predicate, bindingsMap).subscribe(
+                () => {
+                    // this.update.emit();
+                }
+            )
         }
     }
 
@@ -107,6 +108,5 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
 
     edit() {
     }
-
 
 }

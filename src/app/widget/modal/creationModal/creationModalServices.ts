@@ -198,17 +198,19 @@ export class CreationModalServices {
      * Opens a modal to create a new literal with datatype
      * @param title the title of the modal dialog
      * @param predicate the (optional) predicate that is going to enrich with the typed literal
+     * @param value the (optional) value inserted initially
      * @param allowedDatatypes datatypes allowed in the datatype selection list
      * @param dataRanges if provided, tells which values can be created/chosed (e.g. xml:string ["male", "female"])
      * @param multivalue if true, allows multiple literal creation
      * @param validation if true, validates the provided value according the datatype
      * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
-    newTypedLiteral(title: TextOrTranslation, predicate?: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[], multivalue?: boolean, validation?: boolean) {
+    newTypedLiteral(title: TextOrTranslation, predicate?: ARTURIResource, value?: ARTLiteral, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[], multivalue?: boolean, validation?: boolean): Promise<ARTLiteral[]> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewTypedLiteralModal, _options);
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
         if (predicate != null) modalRef.componentInstance.predicate = predicate;
+        if (value != null) modalRef.componentInstance.value = value;
         if (allowedDatatypes != null) modalRef.componentInstance.allowedDatatypes = allowedDatatypes;
         if (dataRanges != null) modalRef.componentInstance.dataRanges = dataRanges;
         if (multivalue != null) modalRef.componentInstance.multivalue = multivalue;

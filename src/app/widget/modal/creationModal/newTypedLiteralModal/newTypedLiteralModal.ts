@@ -15,6 +15,7 @@ export class NewTypedLiteralModal {
 
     @Input() title: string = 'Create new label';
     @Input() predicate: ARTURIResource;
+    @Input() value: ARTLiteral;
     @Input() allowedDatatypes: Array<ARTURIResource>;
     @Input() dataRanges: Array<ARTLiteral[]>;
     @Input() multivalue: boolean = false;
@@ -27,7 +28,6 @@ export class NewTypedLiteralModal {
     selectedAspectSelector: string = this.aspectSelectors[0];
 
     private datatype: ARTURIResource;
-    private value: ARTLiteral; //value inserted by the user or selected among the datarange
     private notValidatableType: boolean = false;
 
     private selectedDataRange: ARTLiteral[]; //selected list of dataranges among which chose one
@@ -48,9 +48,20 @@ export class NewTypedLiteralModal {
         } else { //both allowedDatatypes and dataRanges null
             this.selectedAspectSelector = this.typedLiteralAspectSelector;
         }
+
+        //reset the input value if it has a datatype not allowed 
+        if (this.value != null && this.allowedDatatypes != null && this.allowedDatatypes.length > 0) {
+            if (!this.allowedDatatypes.some(d => d.getURI() == this.value.getDatatype())) {
+                this.value = null; 
+            }
+        }
+        //init datatype according the input value (if any)
+        if (this.value != null) {
+            this.datatype = new ARTURIResource(this.value.getDatatype());
+        }
     }
 
-    private addValue() {
+    addValue() {
         if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
             if (this.validate && this.dtValidator.isValid(this.value, this.datatype)) {
                 this.values.push(this.value);
@@ -69,15 +80,15 @@ export class NewTypedLiteralModal {
     /**
      * Add value enabled in case the adding value is not already been added in the values list
      */
-    private isAddValueEnabled() {
+    isAddValueEnabled() {
         return this.value != null && this.value.getValue() != "" && !ResourceUtils.containsNode(this.values, this.value)
     }
 
-    private removeValue(value: ARTLiteral) {
+    removeValue(value: ARTLiteral) {
         this.values.splice(this.values.indexOf(value), 1);
     }
 
-    private getDataRangePreview(dataRange: ARTLiteral[]): string {
+    getDataRangePreview(dataRange: ARTLiteral[]): string {
         var preview: string = "OneOf: [";
         for (var i = 0; i < dataRange.length; i++) {
             let v: ARTLiteral = dataRange[i];
@@ -97,7 +108,7 @@ export class NewTypedLiteralModal {
         return preview;
     }
 
-    private onDatatypeChange(datatype: ARTURIResource) {
+    onDatatypeChange(datatype: ARTURIResource) {
         this.datatype = datatype;
         this.notValidatableType = !this.dtValidator.isValidableType(datatype);
     }

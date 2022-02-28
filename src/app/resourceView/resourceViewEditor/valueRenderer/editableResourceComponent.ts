@@ -274,7 +274,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                                 this.ranges != null && this.ranges.type == RDFTypesEnum.literal && 
                                 this.ranges.rangeCollection != null && this.ranges.rangeCollection.dataRanges != null
                             ) {
-                                this.creationModals.newTypedLiteral({key:"ACTIONS.EDIT_X", params:{x: this.predicate.getShow()}}, this.predicate,
+                                this.creationModals.newTypedLiteral({key:"ACTIONS.EDIT_X", params:{x: this.predicate.getShow()}}, this.predicate, null,
                                     this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges, false, true).then(
                                     (literals: ARTLiteral[]) => {
                                         this.updateTriple(this.subject, this.predicate, this.resource, literals[0]);

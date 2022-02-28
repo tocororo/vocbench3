@@ -1,20 +1,9 @@
 
 <ng-container *ngIf="viewInitialized && series">
-    <bar-chart *ngIf="activeWidget=='bar'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"></bar-chart>
-    <pie-chart *ngIf="activeWidget=='pie'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"></pie-chart>
+    <bar-chart *ngIf="activeWidget=='bar'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></bar-chart>
+    <pie-chart *ngIf="activeWidget=='pie'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></pie-chart>
 </ng-container>
 
 <select class="form-control form-control-sm ml-2" style="width: initial;" [(ngModel)]="activeWidget" (ngModelChange)="onWidgetChanged()">
     <option *ngFor="let w of compliantWidgets">{{w}}</option>
 </select>
-
-<div class="dropdown float-right" style="align-self: flex-start;" ngbDropdown container="body">
-    <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="readonly" [title]="'ACTIONS.EDIT'|translate">
-        <span class="fas fa-caret-down fa-sm"></span>
-    </button>
-    <div class="dropdown-menu" ngbDropdownMenu>
-        <a class="dropdown-item" [ngClass]="{ disabled: !editAuthorized }" (click)="edit()">
-            {{'ACTIONS.EDIT'|translate}}
-        </a>
-    </div>
-</div>

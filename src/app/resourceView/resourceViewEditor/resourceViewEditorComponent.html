@@ -218,7 +218,7 @@
                 </custom-partition-renderer>
             </ng-container>
 
-            <widgets-renderer *ngIf="resViewSections['widgets']" style="order: 99;"
+            <widgets-renderer *ngIf="resViewSections['widgets']?.length > 0" style="order: 99;"
                 [pred-obj-list]="resViewSections['widgets']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </widgets-renderer>

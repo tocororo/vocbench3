@@ -238,7 +238,7 @@ export abstract class PartitionRenderer {
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
      protected enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        this.creationModals.newTypedLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, predicate, allowedDatatypes, dataRanges, true, true).then(
+        this.creationModals.newTypedLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, predicate, null, allowedDatatypes, dataRanges, true, true).then(
             (literals: ARTLiteral[]) => {
                 let addFunctions: MultiActionFunction[] = [];
                 literals.forEach((l: ARTLiteral) => {

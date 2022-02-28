@@ -1,10 +1,9 @@
-import { BindingName } from "typescript";
 import { Deserializer } from "../utils/Deserializer";
-import { ARTNode, ARTResource, ARTURIResource } from "./ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "./ARTResources";
 import { Configuration, Reference } from "./Configuration";
 import { Scope } from "./Plugins";
 
-export class Widget extends Configuration {}
+export class WidgetConfiguration extends Configuration {}
 
 export interface WidgetDefinition {
     retrieve: string;
@@ -34,37 +33,6 @@ export class WidgetDataRecord {
     constructor(type: WidgetDataType) {
         this.type = type;
         this.bindingsList = [];
-    }
-
-    getBindingsNames(): WidgetDataBinding[] {
-        return <WidgetDataBinding[]>Object.keys(this.bindingsList[0]);
-    }
-
-    /**
-     * Returns the binding used as identifier of the grouped data
-     * @returns
-     */
-    getIdBinding(): WidgetDataBinding {
-        if (this.type == WidgetDataType.area || this.type == WidgetDataType.route) {
-            return WidgetDataBinding.route_id;
-        } else if (this.type == WidgetDataType.point) {
-            return WidgetDataBinding.location;
-        } else if (this.type == WidgetDataType.series) {
-            return WidgetDataBinding.series_id;
-        } else if (this.type == WidgetDataType.series_collection) {
-            return WidgetDataBinding.series_collection_id;
-        }
-    }
-
-    /**
-     * Returns the value used as identifier of the data
-     * @returns 
-     */
-    getIdValue(): ARTResource {
-        let idBinding = this.getIdBinding();
-        //identifier should be the same for each bindings set, so it is ok to get just the first
-        //moreover, by construction, the id value must be a resource, so it is ok to cast it
-        return <ARTResource>this.bindingsList[0][idBinding];
     }
 
     static parse(jsonData: any): WidgetDataRecord {
@@ -123,11 +91,11 @@ export enum WidgetDataBinding {
     //for charts data
     series_collection_id = "series_collection_id",
     series_id = "series_id",
-    series_label = "series_label",
     series_name = "series_name",
     name = "name",
-    value_label = "value_label",
     value = "value",
+    x_axis_label = "x_axis_label",
+    y_axis_label = "y_axis_label",
 }
 
 export class WidgetUtils {
@@ -155,12 +123,19 @@ export class WidgetUtils {
  */
 export class DataTypeBindingsMap {
 
-    private static map: { [type: string]: WidgetDataBinding[] } = {
+    private static retrieve: { [type: string]: WidgetDataBinding[] } = {
         [WidgetDataType.point]: [WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
         [WidgetDataType.area]: [WidgetDataBinding.route_id, WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
         [WidgetDataType.route]: [WidgetDataBinding.route_id, WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
-        [WidgetDataType.series]: [WidgetDataBinding.series_id, WidgetDataBinding.series_label, WidgetDataBinding.value_label, WidgetDataBinding.name, WidgetDataBinding.value],
-        [WidgetDataType.series_collection]: [WidgetDataBinding.series_collection_id, WidgetDataBinding.series_label, WidgetDataBinding.value_label, WidgetDataBinding.series_name, WidgetDataBinding.name, WidgetDataBinding.value],
+        [WidgetDataType.series]: [WidgetDataBinding.series_id, WidgetDataBinding.x_axis_label, WidgetDataBinding.y_axis_label, WidgetDataBinding.name, WidgetDataBinding.value],
+        [WidgetDataType.series_collection]: [WidgetDataBinding.series_collection_id, WidgetDataBinding.x_axis_label, WidgetDataBinding.y_axis_label, WidgetDataBinding.series_name, WidgetDataBinding.name, WidgetDataBinding.value],
+    };
+    private static update: { [type: string]: WidgetDataBinding[] } = {
+        [WidgetDataType.point]: [WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
+        [WidgetDataType.area]: [WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
+        [WidgetDataType.route]: [WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
+        [WidgetDataType.series]: [WidgetDataBinding.name, WidgetDataBinding.value],
+        [WidgetDataType.series_collection]: [WidgetDataBinding.name, WidgetDataBinding.value],
     };
 
     /**
@@ -169,61 +144,55 @@ export class DataTypeBindingsMap {
      * @param dataType 
      * @returns 
      */
-    static getRequiredBindings(dataType: WidgetDataType): WidgetDataBinding[] {
-        return this.map[dataType].slice(); //in order to not let alterate directly the map from the returned list
+    static getRequiredRetrieveBindings(dataType: WidgetDataType): WidgetDataBinding[] {
+        return this.retrieve[dataType].slice(); //in order to not let alterate directly the map from the returned list
     }
-
-    /**
-     * Given a list of bindings, returns the list of datatype that foreseen such bindings
-     * (e.g. route_id, location, latitude, longitude are foreseen in area and route)
-     * @param bindings 
-     */
-    static getCompliantDataTypes(bindings: WidgetDataBinding[]): WidgetDataType[] {
-        let compliant: WidgetDataType[] = [];
-        for (let dataType in this.map) {
-            let typeBindings = this.getRequiredBindings(<WidgetDataType>dataType); 
-            bindings.sort();
-            typeBindings.sort();
-            if (bindings.length == typeBindings.length && JSON.stringify(bindings) == JSON.stringify(typeBindings)) {
-                compliant.push(<WidgetDataType>dataType);
-            } 
-        }
-        return compliant;
+    static getRequiredUpdateBindings(dataType: WidgetDataType): WidgetDataBinding[] {
+        return this.update[dataType].slice(); //in order to not let alterate directly the map from the returned list
     }
 
 }
 
-export class WidgetDataTypeCompliantMap {
 
-    private static map: { [type: string]: WidgetDataType[] } = {
-        [WidgetEnum.map]: [WidgetDataType.area, WidgetDataType.point, WidgetDataType.route],
-        [WidgetEnum.bar]: [WidgetDataType.series, WidgetDataType.series_collection],
-        [WidgetEnum.pie]: [WidgetDataType.series],
-    }
+export abstract class Widget {}
 
-    /**
-     * given the type of widget (map, pie-chart, bar-chart) returns the representable type of data
-     * (e.g. map can represents area, point, route)
-     * @param widgetType 
-     * @returns 
-     */
-    static getCompliantDataType(widgetType: WidgetEnum): WidgetDataType[] {
-        return this.map[widgetType];
-    }
+export class PointWidget extends Widget {
+    location: ARTResource;
+    latitude: ARTLiteral;
+    longitude: ARTLiteral;
+}
 
-    /**
-     * Given a type of data, returns the widgets able to represent it (e.g. series can be represented by pie-chart and bar-chart)
-     * @param dataType 
-     * @returns 
-     */
-    static getCompliantWidgets(dataType: WidgetDataType): WidgetEnum[] {
-        let widgets: WidgetEnum[] = [];
-        for (let w in this.map) {
-            if (this.map[w].includes(dataType)) {
-                widgets.push(<WidgetEnum>w);
-            }
-        }
-        return widgets;
-    }
+export abstract class MultiPointWidget extends Widget {
+    routeId: ARTResource;
+    locations: {
+        location: ARTResource;
+        latitude: ARTLiteral;
+        longitude: ARTLiteral;
+    }[] = [];
+}
 
-};
+export class AreaWidget extends MultiPointWidget {}
+export class RouteWidget extends MultiPointWidget {}
+
+export class SeriesWidget extends Widget {
+    series_id: ARTResource;
+    x_axis_label: string;
+    y_axis_label: string;
+    data: {
+        name: ARTResource;
+        value: ARTLiteral;
+    }[] = [];
+}
+
+export class SeriesCollectionWidget extends Widget {
+    series_collection_id: ARTResource;
+    x_axis_label: string;
+    y_axis_label: string;
+    data: {
+        series_name: ARTResource;
+        data: {
+            name: ARTResource;
+            value: ARTLiteral;
+        }[];
+    }[] = [];
+}
