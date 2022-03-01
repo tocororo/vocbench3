@@ -1,4 +1,4 @@
-import { ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { ARTNode } from "src/app/models/ARTResources";
 
 export interface ChartData {
     name: string;
@@ -10,7 +10,7 @@ export interface ChartData {
 }
 
 export interface ChartSeries {
-    resource: ARTResource;
+    // resource: ARTResource;
     name: string;
     series: ChartData[];
 }
@@ -53,4 +53,10 @@ export class NgxChartsUtils {
         let r2 = d2.extra && d2.extra.nameResource ? d2.extra.nameResource : null;
         return d1.name == d2.name && d1.value == d2.value && (r1 == null || r2 == null || r1.equals(r2));
     }
+}
+
+
+export interface ChartDataChangedEvent {
+    old: ChartData;
+    new: ChartData;
 }

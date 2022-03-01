@@ -1,21 +1,19 @@
 import { Component, Input } from "@angular/core";
-import { CreationModalServices } from "../modal/creationModal/creationModalServices";
-import { AbstractChartComponent } from "./abstractChartComponent";
+import { AbstractSeriesChartComponent } from "./abstractSeriesChartComponent";
 import { ChartData } from "./NgxChartsUtils";
 
 @Component({
     selector: "bar-chart",
     templateUrl: "./barChartComponent.html",
     host: { class: "hbox" },
-    styleUrls: ["./chartComponent.css"]
 })
-export class BarChartComponent extends AbstractChartComponent {
+export class BarChartComponent extends AbstractSeriesChartComponent {
 
     @Input() xAxisLabel: string;
     @Input() yAxisLabel: string;
 
-    constructor(creationModals: CreationModalServices) {
-        super(creationModals);
+    constructor() {
+        super();
     }
 
     private firstClick: boolean; //tells if first click has already registered

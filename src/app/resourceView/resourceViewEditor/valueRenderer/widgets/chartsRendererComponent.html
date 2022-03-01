@@ -1,9 +1,10 @@
 
-<ng-container *ngIf="viewInitialized && series">
+<ng-container *ngIf="viewInitialized && (series || seriesCollection)">
     <bar-chart *ngIf="activeWidget=='bar'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></bar-chart>
     <pie-chart *ngIf="activeWidget=='pie'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></pie-chart>
+    <line-chart *ngIf="activeWidget=='line'" [chartData]="seriesCollection" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></line-chart>
 </ng-container>
 
-<select class="form-control form-control-sm ml-2" style="width: initial;" [(ngModel)]="activeWidget" (ngModelChange)="onWidgetChanged()">
+<select *ngIf="compliantWidgets.length > 1" class="form-control form-control-sm ml-2" style="width: initial;" [(ngModel)]="activeWidget" (ngModelChange)="onWidgetChanged()">
     <option *ngFor="let w of compliantWidgets">{{w}}</option>
 </select>

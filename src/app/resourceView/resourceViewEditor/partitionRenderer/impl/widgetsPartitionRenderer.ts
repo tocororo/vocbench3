@@ -104,11 +104,14 @@ export class WidgetsPartitionRenderer extends PartitionRendererMultiRoot {
                                     name: <ARTResource>b[WidgetDataBinding.name],
                                     value:  <ARTLiteral>b[WidgetDataBinding.value]
                                 };
-                                let series = w.data.find(s => s.series_name.equals(seriesName));
+                                let series = w.series.find(s => s.series_name.equals(seriesName));
                                 if (series) {
                                     series.data.push(data)
                                 } else {
-                                    series.data = [data];
+                                    w.series.push({
+                                        series_name: seriesName,
+                                        data: [data]
+                                    })
                                 }
                             });
                             widget = w;

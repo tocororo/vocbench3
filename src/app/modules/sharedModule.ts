@@ -10,7 +10,9 @@ import { ProjectListComponent } from '../project/projectListPanel/projectListCom
 import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
 import { BarChartComponent } from '../widget/charts/barChartComponent';
+import { LineChartComponent } from '../widget/charts/lineChartComponent';
 import { PieChartComponent } from '../widget/charts/pieChartComponent';
+import { SeriesChartLegendComponent } from '../widget/charts/seriesChartLegendComponent';
 import { HtmlEditorComponent } from '../widget/codemirror/htmlEditor/htmlEditorComponent';
 import { JsonEditorComponent } from '../widget/codemirror/jsonEditor/jsonEditorComponent';
 import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor/manchesterEditorComponent';
@@ -113,7 +115,9 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         BarChartComponent,
         LeafletMapComponent,
         LeafletMapModal,
+        LineChartComponent,
         PieChartComponent,
+        SeriesChartLegendComponent,
     ],
     exports: [
         ConverterConfiguratorComponent,
@@ -160,6 +164,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         BarChartComponent,
         LeafletMapComponent,
         LeafletMapModal,
+        LineChartComponent,
         PieChartComponent,
     ],
     providers: [

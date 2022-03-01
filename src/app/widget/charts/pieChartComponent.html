@@ -13,19 +13,5 @@
     </ngx-charts-pie-chart>
 </div>
 
-<div style="display: inline-block; min-width: 200px; max-width: 300px;">
-    <!-- <div class="p-2">
-        <label style="font-size: 13px;">Legend</label>
-    </div> -->
-    <div class="p-2" style="background: #eee;">
-        <div *ngFor="let d of chartData" class="d-flex align-items-center m-2" style="font-size: 12px;" (mouseover)="onActivate(d)" (mouseout)="onDeactivate()">
-            <span class="fas fa-stop mr-2" [ngStyle]="{ 'color': colorHelper.getColor(d.value) }"></span>
-            <span class="legend-label ellipsable" [ngClass]="{ 'active': isLabelActive(d) }" [title]="d.name">
-                {{d.name}} 
-            </span>
-            <button class="btn btn-xs btn-light ml-1" (click)="edit(d)">
-                <span class="fas fa-pencil-alt"></span>
-            </button>
-        </div>
-    </div>
-</div>
+<series-chart-legend [chartData]="chartData" [colorScheme]="colorScheme" [activeEntries]="activeEntries" 
+    (activate)="onActivate($event)" (deactivate)="onDeactivate()" (dataChanged)="onDataChanged($event)"></series-chart-legend>

@@ -1,25 +1,45 @@
-import { Directive, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ColorHelper } from "@swimlane/ngx-charts";
-import { ARTLiteral, ARTNode, ARTURIResource } from "src/app/models/ARTResources";
+import { ARTLiteral, ARTURIResource } from "src/app/models/ARTResources";
 import { CreationModalServices } from "../modal/creationModal/creationModalServices";
-import { ChartData, NgxChartsUtils } from "./NgxChartsUtils";
+import { ChartData, ChartDataChangedEvent, NgxChartsUtils } from "./NgxChartsUtils";
 
-@Directive()
-export abstract class AbstractChartComponent {
+@Component({
+    selector: "series-chart-legend",
+    templateUrl: "./seriesChartLegendComponent.html",
+    styles: [`
+    .legend-entry {
+        display: flex;
+        align-items: center;
+        width: 230px;
+        font-size: 12px;
+        margin: 0.5rem;
+    }
+    .legend-label { 
+        cursor: pointer;
+        color: #888;
+        flex: 1;
+    }
+    .legend-label.active { 
+        color: #000;
+    }
+    `]
+})
+export class SeriesChartLegendComponent {
 
     @Input() chartData: ChartData[];
-
-    @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter;
+    @Input() activeEntries: ChartData[] = [];
+    @Input() colorScheme: string;
     @Output() dataChanged: EventEmitter<ChartDataChangedEvent> = new EventEmitter();
+    @Output() activate: EventEmitter<ChartData> = new EventEmitter();
+    @Output() deactivate: EventEmitter<ChartData> = new EventEmitter();
 
-    colorScheme: string = "picnic";
-    colorHelper = new ColorHelper(this.colorScheme, 'ordinal', [], null);
+    colorHelper: ColorHelper;
 
-    activeEntries: ChartData[] = [];
-
-    creationModals: CreationModalServices;
-    constructor(creationModals: CreationModalServices) {
-        this.creationModals = creationModals;
+    constructor(private creationModals: CreationModalServices) {}
+    
+    ngOnInit() {
+        this.colorHelper = new ColorHelper(this.colorScheme, 'ordinal', [], null);
     }
 
     edit(data: ChartData) {
@@ -48,23 +68,17 @@ export abstract class AbstractChartComponent {
             },
             () => {}
         );
-        
     }
 
     isLabelActive(data: ChartData): boolean {
         return this.activeEntries[0] != null && NgxChartsUtils.chartDataEquals(data, this.activeEntries[0]);
     }
-    
+
     onActivate(data: ChartData) {
-        this.activeEntries = [{ name: data.name, value: data.value }]
+        this.activate.emit(data);
     }
     onDeactivate() {
-        this.activeEntries = [];
+        this.deactivate.emit();
     }
 
-}
-
-export interface ChartDataChangedEvent {
-    old: ChartData;
-    new: ChartData;
 }

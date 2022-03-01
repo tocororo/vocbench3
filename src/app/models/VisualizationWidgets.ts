@@ -61,6 +61,7 @@ export interface BindingMapping {
     map = "map",
     pie = "pie",
     bar = "bar",
+    line = "line"
 }
 
 /**
@@ -188,8 +189,8 @@ export class SeriesCollectionWidget extends Widget {
     series_collection_id: ARTResource;
     x_axis_label: string;
     y_axis_label: string;
-    data: {
-        series_name: ARTResource;
+    series: {
+        series_name: ARTNode;
         data: {
             name: ARTResource;
             value: ARTLiteral;

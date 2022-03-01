@@ -1,18 +1,16 @@
 import { Component } from "@angular/core";
-import { CreationModalServices } from "../modal/creationModal/creationModalServices";
-import { AbstractChartComponent } from "./abstractChartComponent";
+import { AbstractSeriesChartComponent } from "./abstractSeriesChartComponent";
 import { ChartData } from "./NgxChartsUtils";
 
 @Component({
     selector: "pie-chart",
     templateUrl: "./pieChartComponent.html",
     host: { class: "hbox" },
-    styleUrls: ["./chartComponent.css"]
 })
-export class PieChartComponent extends AbstractChartComponent {
+export class PieChartComponent extends AbstractSeriesChartComponent {
 
-    constructor(creationModals: CreationModalServices) {
-        super(creationModals);
+    constructor() {
+        super();
     }
 
     onDblClick(event: { data: ChartData, nativeEvent: MouseEvent }) {
