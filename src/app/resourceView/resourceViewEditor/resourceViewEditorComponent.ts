@@ -41,10 +41,10 @@ import { TimeMachineModal } from "./timeMachine/timeMachineModal";
         .in-progress-issues { color: #f0ad4e }
         .done-issues { color: #5cb85c }
         .generic-issues { color: #ff3300 }
-        .card-header .btn.active .fas, .card-header .btn.active .far  { color: #4285f4; }
         .dropdown-header { color: black; font-size: 1.125rem; }
         a.dropdown-header:hover { background-color: #e9ecef !important; text-decoration: none; }
         .dropdown-item { padding-left: 2.5rem !important; }
+        .partition-renderer { margin-top: 3px; }
         `
     ]
 })

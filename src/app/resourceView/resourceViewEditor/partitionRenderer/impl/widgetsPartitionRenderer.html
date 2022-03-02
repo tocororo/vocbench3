@@ -6,29 +6,22 @@
                 [ngClass]="{'arrow-right': partitionCollapsed}">
         </div>
         <span style="flex: 1">
-            <!-- <label class="groupPanel-heading-content">{{labelTranslationKey|translate}}:</label> -->
             <label class="groupPanel-heading-content">Widgets:</label>
         </span>
-        <!-- <span class="groupPanel-heading-content groupPanel-add-btn">
-            <button class="resViewPartitionAddBtn" (click)="addHandler(null, AddAction.default)" [title]="addTitleTranslationKey|translate" [disabled]="addDisabled">
-                <img [src]="addBtnImgSrc"/>
+        <span class="groupPanel-heading-content groupPanel-add-btn" style="top: 0px;">
+            <button #wdgBtn class="btn btn-xs btn-bright py-0" [ngClass]="{ active: widgetActive }" (click)="widgetActive = !widgetActive" (mouseup)="wdgBtn.blur()">
+                <i class="fas fa-chart-pie"></i>
             </button>
-            <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;" ngbDropdown container="body">
-                <button class="dropdown-toggle transparentBtn" style="width: 12px; padding-right: 2px;" data-toggle="dropdown" ngbDropdownToggle>
-                    <span class="fas fa-caret-down fa-sm" style="margin: 0px;"></span>
-                </button>
-                <div class="dropdown-menu float-right" ngbDropdownMenu>
-                    <a class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addManually()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
-                    <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addExternalValue()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_FROM_ANOTHER_PROJ'|translate}}</a>
-                </div>
-            </div>
-        </span> -->
+        </span>
     </div>
 
     <div class="groupPanel-body">
         <ng-container *ngIf="!partitionCollapsed">
 
-                <div class="card card-alt mb-1" *ngFor="let pw of predWidgetsList">
+            <ng-container *ngIf="widgetActive; then widgetsBlock; else predObjBlock"></ng-container>
+
+            <ng-template #widgetsBlock>
+                <div *ngFor="let pw of predWidgetsList" class="card card-alt mb-1">
                     <div class="card-header">
                         <label style="flex: 1">{{pw.predicate.getShow()}}</label>
                     </div>
@@ -39,6 +32,19 @@
                         </ng-container>
                     </div>
                 </div>
+            </ng-template>
+
+            <ng-template #predObjBlock>
+                <ng-container *ngIf="!widgetActive">
+                    <pred-obj-renderer *ngFor="let po of predicateObjectList"
+                        [pred-obj]="po" [resource]="resource" [readonly]="readonly"
+                        [rendering]="rendering" [partition]="partition" (dblclickObj)="objectDblClick($event)"
+                        (add)="addHandler(po.getPredicate(), $event)" (edit)="editHandler(po.getPredicate(), $event)" 
+                        (remove)="removeHandler(po.getPredicate(), $event)" (update)="onObjectUpdate()"
+                        (copyLocale)="copyLocaleHandler(po.getPredicate(), $event)" >
+                    </pred-obj-renderer>
+                </ng-container>
+            </ng-template>
 
         </ng-container>
     </div>

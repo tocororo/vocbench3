@@ -7,7 +7,7 @@ export abstract class AbstractSeriesChartComponent {
 
     @Input() chartData: ChartData[];
 
-    @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter;
+    @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter; //emits the resource related to the double click graphic element. Null if double click on empty area
     @Output() dataChanged: EventEmitter<ChartDataChangedEvent> = new EventEmitter();
 
     colorScheme: string = "picnic";

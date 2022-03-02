@@ -155,12 +155,19 @@ export class DataTypeBindingsMap {
 }
 
 
-export abstract class Widget {}
+export abstract class Widget {
+
+    abstract getIdResource(): ARTResource;
+}
 
 export class PointWidget extends Widget {
     location: ARTResource;
     latitude: ARTLiteral;
     longitude: ARTLiteral;
+
+    getIdResource(): ARTResource {
+        return this.location;
+    }
 }
 
 export abstract class MultiPointWidget extends Widget {
@@ -170,6 +177,10 @@ export abstract class MultiPointWidget extends Widget {
         latitude: ARTLiteral;
         longitude: ARTLiteral;
     }[] = [];
+
+    getIdResource(): ARTResource {
+        return this.routeId;
+    }
 }
 
 export class AreaWidget extends MultiPointWidget {}
@@ -183,6 +194,10 @@ export class SeriesWidget extends Widget {
         name: ARTResource;
         value: ARTLiteral;
     }[] = [];
+
+    getIdResource(): ARTResource {
+        return this.series_id;
+    }
 }
 
 export class SeriesCollectionWidget extends Widget {
@@ -196,4 +211,8 @@ export class SeriesCollectionWidget extends Widget {
             value: ARTLiteral;
         }[];
     }[] = [];
+
+    getIdResource(): ARTResource {
+        return this.series_collection_id;
+    }
 }

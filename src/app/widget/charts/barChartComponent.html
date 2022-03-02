@@ -11,6 +11,7 @@
         [legend]="false"
         [activeEntries]="activeEntries"
         [scheme]="colorScheme"
+        (dblclick)="onDoubleClick()"
         (select)="onSelect($event)"
         (activate)="onActivate($event.value)"
         (deactivate)="onDeactivate()"

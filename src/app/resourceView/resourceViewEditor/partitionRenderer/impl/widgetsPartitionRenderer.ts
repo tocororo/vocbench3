@@ -21,6 +21,8 @@ export class WidgetsPartitionRenderer extends PartitionRendererMultiRoot {
     @Input() partition: ResViewPartition;
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
+    widgetActive: boolean = true; //toggle on/off the visualization of widgets
+
     predWidgetsList: PredWidgets[] = [];
 
     constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,

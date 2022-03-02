@@ -475,6 +475,11 @@ input[type=number]::-webkit-outer-spin-button {
     color: #fff;
 }
 
+/* btn-bright to apply at those button that when active/pressed, the text/icon inside is colored in a bright blue */
+.btn-bright.active .fas, .btn-bright.active .far  {
+    color: #4285f4;
+}
+
 .btn-group:hover > .btn-faded {
     background: #eee;
     transition: all 0.4s ease-in;

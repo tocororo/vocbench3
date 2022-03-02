@@ -47,7 +47,6 @@ export class NgxChartsUtils {
     }
 
     public static chartDataEquals(d1: ChartData, d2: ChartData): boolean {
-        // console.log(d1, d2);
         //return true if the elements have same name, value, extra.resource (if any)
         let r1 = d1.extra && d1.extra.nameResource ? d1.extra.nameResource : null;
         let r2 = d2.extra && d2.extra.nameResource ? d2.extra.nameResource : null;
