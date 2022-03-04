@@ -59,8 +59,8 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
 
     processInput() {
         if (this.widget instanceof SeriesWidget) {
-            this.xAxisLabel = this.widget.x_axis_label;
-            this.yAxisLabel = this.widget.y_axis_label;
+            this.xAxisLabel = this.widget.series_label;
+            this.yAxisLabel = this.widget.value_label;
             //convert to ChartData[]
             this.series = this.widget.data.map(d => {
                 let cd: ChartData = {
@@ -74,8 +74,8 @@ export class ChartsRendererComponent extends AbstractWidgetComponent {
                 return cd;
             })
         } else if (this.widget instanceof SeriesCollectionWidget) {
-            this.xAxisLabel = this.widget.x_axis_label;
-            this.yAxisLabel = this.widget.y_axis_label;
+            this.xAxisLabel = this.widget.series_label;
+            this.yAxisLabel = this.widget.value_label;
             this.seriesCollection = [];
             //convert to ChartSeries[]
             this.widget.series.forEach(s => {

@@ -95,8 +95,8 @@ export enum WidgetDataBinding {
     series_name = "series_name",
     name = "name",
     value = "value",
-    x_axis_label = "x_axis_label",
-    y_axis_label = "y_axis_label",
+    series_label = "series_label",
+    value_label = "value_label",
 }
 
 export class WidgetUtils {
@@ -124,19 +124,39 @@ export class WidgetUtils {
  */
 export class DataTypeBindingsMap {
 
-    private static retrieve: { [type: string]: WidgetDataBinding[] } = {
-        [WidgetDataType.point]: [WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
-        [WidgetDataType.area]: [WidgetDataBinding.route_id, WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
-        [WidgetDataType.route]: [WidgetDataBinding.route_id, WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
-        [WidgetDataType.series]: [WidgetDataBinding.series_id, WidgetDataBinding.x_axis_label, WidgetDataBinding.y_axis_label, WidgetDataBinding.name, WidgetDataBinding.value],
-        [WidgetDataType.series_collection]: [WidgetDataBinding.series_collection_id, WidgetDataBinding.x_axis_label, WidgetDataBinding.y_axis_label, WidgetDataBinding.series_name, WidgetDataBinding.name, WidgetDataBinding.value],
-    };
-    private static update: { [type: string]: WidgetDataBinding[] } = {
-        [WidgetDataType.point]: [WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
-        [WidgetDataType.area]: [WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
-        [WidgetDataType.route]: [WidgetDataBinding.location, WidgetDataBinding.latitude, WidgetDataBinding.longitude],
-        [WidgetDataType.series]: [WidgetDataBinding.name, WidgetDataBinding.value],
-        [WidgetDataType.series_collection]: [WidgetDataBinding.name, WidgetDataBinding.value],
+    private static variableRequirementsMap: { [type: string]: { variable: WidgetDataBinding, retrieveRequired: boolean, updateRequired: boolean }[] } = {
+        [WidgetDataType.point]: [
+            { variable: WidgetDataBinding.location, retrieveRequired: true, updateRequired: true }, 
+            { variable: WidgetDataBinding.latitude, retrieveRequired: true, updateRequired: true }, 
+            { variable: WidgetDataBinding.longitude, retrieveRequired: true, updateRequired: true }, 
+        ],
+        [WidgetDataType.area]: [
+            { variable: WidgetDataBinding.route_id, retrieveRequired: true, updateRequired: false }, 
+            { variable: WidgetDataBinding.location, retrieveRequired: true, updateRequired: true }, 
+            { variable: WidgetDataBinding.latitude, retrieveRequired: true, updateRequired: true }, 
+            { variable: WidgetDataBinding.longitude, retrieveRequired: true, updateRequired: true }, 
+        ],
+        [WidgetDataType.route]: [
+            { variable: WidgetDataBinding.route_id, retrieveRequired: true, updateRequired: false }, 
+            { variable: WidgetDataBinding.location, retrieveRequired: true, updateRequired: true }, 
+            { variable: WidgetDataBinding.latitude, retrieveRequired: true, updateRequired: true }, 
+            { variable: WidgetDataBinding.longitude, retrieveRequired: true, updateRequired: true }, 
+        ],
+        [WidgetDataType.series]: [
+            { variable: WidgetDataBinding.series_id, retrieveRequired: true, updateRequired: false }, 
+            { variable: WidgetDataBinding.series_label, retrieveRequired: false, updateRequired: false }, 
+            { variable: WidgetDataBinding.value_label, retrieveRequired: false, updateRequired: false }, 
+            { variable: WidgetDataBinding.name, retrieveRequired: true, updateRequired: false }, 
+            { variable: WidgetDataBinding.value, retrieveRequired: true, updateRequired: true }, 
+        ],
+        [WidgetDataType.series_collection]: [
+            { variable: WidgetDataBinding.series_collection_id, retrieveRequired: true, updateRequired: false }, 
+            { variable: WidgetDataBinding.series_label, retrieveRequired: false, updateRequired: false }, 
+            { variable: WidgetDataBinding.value_label, retrieveRequired: false, updateRequired: false }, 
+            { variable: WidgetDataBinding.series_name, retrieveRequired: true, updateRequired: false }, 
+            { variable: WidgetDataBinding.name, retrieveRequired: true, updateRequired: false }, 
+            { variable: WidgetDataBinding.value, retrieveRequired: true, updateRequired: true }, 
+        ]
     };
 
     /**
@@ -146,10 +166,10 @@ export class DataTypeBindingsMap {
      * @returns 
      */
     static getRequiredRetrieveBindings(dataType: WidgetDataType): WidgetDataBinding[] {
-        return this.retrieve[dataType].slice(); //in order to not let alterate directly the map from the returned list
+        return this.variableRequirementsMap[dataType].filter(el => el.retrieveRequired).map(el => el.variable);
     }
     static getRequiredUpdateBindings(dataType: WidgetDataType): WidgetDataBinding[] {
-        return this.update[dataType].slice(); //in order to not let alterate directly the map from the returned list
+        return this.variableRequirementsMap[dataType].filter(el => el.updateRequired).map(el => el.variable);
     }
 
 }
@@ -188,8 +208,8 @@ export class RouteWidget extends MultiPointWidget {}
 
 export class SeriesWidget extends Widget {
     series_id: ARTResource;
-    x_axis_label: string;
-    y_axis_label: string;
+    series_label: string;
+    value_label: string;
     data: {
         name: ARTResource;
         value: ARTLiteral;
@@ -202,8 +222,8 @@ export class SeriesWidget extends Widget {
 
 export class SeriesCollectionWidget extends Widget {
     series_collection_id: ARTResource;
-    x_axis_label: string;
-    y_axis_label: string;
+    series_label: string;
+    value_label: string;
     series: {
         series_name: ARTNode;
         data: {

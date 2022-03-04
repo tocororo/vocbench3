@@ -17,7 +17,7 @@
                 <tr>
                     <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.IDENTITY'|translate}}:</label></td>
                     <td>
-                        <input class="form-control form-control-sm" [ngModel]="dataset?.identity" disabled>
+                        <input class="form-control" [ngModel]="dataset?.identity" disabled>
                     </td>
                 </tr>
                 <tr>
@@ -51,13 +51,13 @@
                 <tr>
                     <td><label>{{'MODELS.MAPLE.DATASET.URI_SPACE'|translate}}:</label></td>
                     <td>
-                        <input class="form-control form-control-sm" [ngModel]="dataset?.uriSpace" disabled>
+                        <input class="form-control" [ngModel]="dataset?.uriSpace" disabled>
                     </td>
                 </tr>
                 <tr *ngIf="version">
                     <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_INFO'|translate}}:</label></td>
                     <td>
-                        <input class="form-control form-control-sm" [ngModel]="dataset?.versionInfo" disabled>
+                        <input class="form-control" [ngModel]="dataset?.versionInfo" disabled>
                     </td>
                 </tr>
             </tbody>

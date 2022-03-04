@@ -51,6 +51,7 @@
                 <li *ngFor="let e of sparqlEditors" class="nav-item" [ngClass]="{ active : activeSparqlEditor == e }">
                     <a class="nav-link" (click)="activeSparqlEditor = e">
                         {{e.type}}
+                        <i *ngIf="!e.valid" class="fas fa-exclamation text-danger" [title]="'STATUS.ERROR'|translate"></i>
                     </a>
                 </li>
             </ul>
@@ -59,18 +60,21 @@
                     <div *ngIf="e == activeSparqlEditor" class="vbox">
                         <div class="alert alert-warning mb-2">
                             <ng-container *ngIf="e.type == 'Retrieve'">
-                                The retrieve query for this kind of widget must return the following variables:
-                                <div>
-                                    <code *ngFor="let b of requiredRetrieveBindings">?{{b}} </code>
-                                </div>
-                                The query must also contains the placeholder <code>&lt;trigger&gt;</code> which represents the predicate that will be associated to the widget.
+                                The retrieve query for this kind of widget must return the following bindings:
+                                <ul>
+                                    <li *ngFor="let v of retrieveVariableDescr | keyvalue: originalOrder"><code>?{{v.key}}</code>: {{v.value}};</li>
+                                </ul>
+                                The query must also contain the placeholders:
+                                <ul>
+                                    <li><code>$resource</code> represents the resource being described in ResourceView where the widget is going to be shown;</li>
+                                    <li><code>$trigger</code> represents the predicate that will be associated to the widget.</li>
+                                </ul>
                             </ng-container>
                             <ng-container *ngIf="e.type == 'Update'">
-                                The update query for this kind of widget must contains in the <span style="font-family: monospace">insert</span> block the following variables:
-                                <div>
-                                    <code *ngFor="let b of requiredUpdateBindings">?{{b}} </code>
-                                </div>
+                                {{udpateInfo}}
                             </ng-container>
+
+                            For further details, read the <a href="" target="_blank">documentation</a> on VocBench website.
                         </div>
                         <div class="card vbox">
                             <div class="card-body vbox">

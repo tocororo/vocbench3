@@ -85,7 +85,6 @@ export class YasguiComponent {
      * If query is changed in code from the parent component, the @Input query changes, but content of the yasqe editor is not updated.
      * I need to force it by setting the value with setValue().
      * Note: this operation reset the caret at the beginning of the editor, so use it with caution.
-     * @param changes 
      */
     public forceContentUpdate() {
         this.yasqe.setValue(this.query);

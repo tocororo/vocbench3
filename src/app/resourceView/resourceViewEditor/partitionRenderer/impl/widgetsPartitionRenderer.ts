@@ -83,10 +83,10 @@ export class WidgetsPartitionRenderer extends PartitionRendererMultiRoot {
                             widget = w;
                         } else if (d.type == WidgetDataType.series) {
                             let w: SeriesWidget = new SeriesWidget();
-                            //series_id, x_axis_label and y_axis_label are supposed to be the same for all the data
+                            //series_id, series_label and value_label are supposed to be the same for all the data
                             w.series_id = <ARTResource>d.bindingsList[0][WidgetDataBinding.series_id];
-                            w.x_axis_label = d.bindingsList[0][WidgetDataBinding.x_axis_label].getShow();
-                            w.y_axis_label = d.bindingsList[0][WidgetDataBinding.y_axis_label].getShow();
+                            w.series_label = d.bindingsList[0][WidgetDataBinding.series_label].getShow();
+                            w.value_label = d.bindingsList[0][WidgetDataBinding.value_label].getShow();
                             d.bindingsList.forEach(b => {
                                 w.data.push({
                                     name: <ARTResource>b[WidgetDataBinding.name],
@@ -96,10 +96,10 @@ export class WidgetsPartitionRenderer extends PartitionRendererMultiRoot {
                             widget = w;
                         } else if (d.type == WidgetDataType.series_collection) {
                             let w: SeriesCollectionWidget = new SeriesCollectionWidget();
-                            //series_collection_id, x_axis_label and y_axis_label are supposed to be the same for all the data
+                            //series_collection_id, series_label and value_label are supposed to be the same for all the data
                             w.series_collection_id = <ARTResource>d.bindingsList[0][WidgetDataBinding.series_collection_id];
-                            w.x_axis_label = d.bindingsList[0][WidgetDataBinding.x_axis_label].getShow();
-                            w.y_axis_label = d.bindingsList[0][WidgetDataBinding.y_axis_label].getShow();
+                            w.series_label = d.bindingsList[0][WidgetDataBinding.series_label].getShow();
+                            w.value_label = d.bindingsList[0][WidgetDataBinding.value_label].getShow();
                             d.bindingsList.forEach(b => {
                                 let seriesName = b[WidgetDataBinding.series_name];
                                 let data = {
