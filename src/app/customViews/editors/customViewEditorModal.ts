@@ -5,7 +5,7 @@ import { AdvSingleValueViewDefinition, AreaViewDefinition, CustomViewCategory, C
 import { Scope, ScopeUtils } from "src/app/models/Plugins";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
-import { UIUtils } from "../../../utils/UIUtils";
+import { UIUtils } from "../../utils/UIUtils";
 import { AbstractCustomViewEditor } from "./views/abstractCustomViewEditor";
 import { AdvSingleValueViewEditorComponent } from "./views/advSingleValueViewEditorComponent";
 import { AreaViewEditorComponent } from "./views/areaViewEditorComponent";

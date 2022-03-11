@@ -9,11 +9,11 @@ import { VBActionsEnum } from "../utils/VBActions";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ConfirmCheckOptions } from '../widget/modal/basicModal/confirmModal/confirmCheckModal';
 import { ModalOptions, ModalType, Translation } from '../widget/modal/Modals';
-import { BrokenCFStructReportModal } from "./customFormConfigModals/brokenCFStructReportModal";
-import { CustomFormEditorModal } from "./customFormConfigModals/customFormEditorModal";
-import { FormCollEditorModal } from "./customFormConfigModals/formCollEditorModal";
-import { FormCollMappingModal } from "./customFormConfigModals/formCollMappingModal";
-import { ImportCfModal, ImportCfModalReturnData } from "./customFormConfigModals/importCfModal";
+import { BrokenCFStructReportModal } from "./editors/brokenCFStructReportModal";
+import { CustomFormEditorModal } from "./editors/customFormEditorModal";
+import { FormCollEditorModal } from "./editors/formCollEditorModal";
+import { FormCollMappingModal } from "./editors/formCollMappingModal";
+import { ImportCfModal, ImportCfModalReturnData } from "./editors/importCfModal";
 
 @Component({
     selector: "custom-form-conf-component",

@@ -9,21 +9,21 @@ import { CustomFormField } from '../customForms/customForm/customFormFieldCompon
 import { CustomFormFieldList } from '../customForms/customForm/customFormFieldListComponent';
 import { CustomFormModal } from '../customForms/customForm/customFormModal';
 import { CustomFormConfigComponent } from '../customForms/customFormConfComponent';
-import { BrokenCFStructReportModal } from '../customForms/customFormConfigModals/brokenCFStructReportModal';
-import { CustomFormEditorModal } from '../customForms/customFormConfigModals/customFormEditorModal';
-import { AdvancedGraphEditor } from '../customForms/customFormConfigModals/customFormWizard/advancedGraphEditor';
-import { ConstraintValuesSelector } from '../customForms/customFormConfigModals/customFormWizard/constraintValuesSelector';
-import { ConverterConfigModal } from '../customForms/customFormConfigModals/customFormWizard/converterConfigModal';
-import { CustomFormWizardFieldsEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardFieldsEditor';
-import { CustomFormWizardGraphEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardGraphEditor';
-import { CustomFormWizardModal } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardModal';
-import { CustomFormWizardNodesEditor } from '../customForms/customFormConfigModals/customFormWizard/customFormWizardNodesEditor';
-import { RoleSelector } from '../customForms/customFormConfigModals/customFormWizard/roleSelector';
-import { ExtractFromShaclModal } from '../customForms/customFormConfigModals/extractFromShaclModal';
-import { FormCollEditorModal } from '../customForms/customFormConfigModals/formCollEditorModal';
-import { FormCollMappingModal } from '../customForms/customFormConfigModals/formCollMappingModal';
-import { ImportCfModal } from '../customForms/customFormConfigModals/importCfModal';
-import { PearlInferenceValidationModal } from '../customForms/customFormConfigModals/pearlInferenceValidationModal';
+import { BrokenCFStructReportModal } from '../customForms/editors/brokenCFStructReportModal';
+import { CustomFormEditorModal } from '../customForms/editors/customFormEditorModal';
+import { AdvancedGraphEditor } from '../customForms/editors/customFormWizard/advancedGraphEditor';
+import { ConstraintValuesSelector } from '../customForms/editors/customFormWizard/constraintValuesSelector';
+import { ConverterConfigModal } from '../customForms/editors/customFormWizard/converterConfigModal';
+import { CustomFormWizardFieldsEditor } from '../customForms/editors/customFormWizard/customFormWizardFieldsEditor';
+import { CustomFormWizardGraphEditor } from '../customForms/editors/customFormWizard/customFormWizardGraphEditor';
+import { CustomFormWizardModal } from '../customForms/editors/customFormWizard/customFormWizardModal';
+import { CustomFormWizardNodesEditor } from '../customForms/editors/customFormWizard/customFormWizardNodesEditor';
+import { RoleSelector } from '../customForms/editors/customFormWizard/roleSelector';
+import { ExtractFromShaclModal } from '../customForms/editors/extractFromShaclModal';
+import { FormCollEditorModal } from '../customForms/editors/formCollEditorModal';
+import { FormCollMappingModal } from '../customForms/editors/formCollMappingModal';
+import { ImportCfModal } from '../customForms/editors/importCfModal';
+import { PearlInferenceValidationModal } from '../customForms/editors/pearlInferenceValidationModal';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { SharedModule } from './sharedModule';
@@ -62,7 +62,10 @@ import { Sheet2RdfModule } from './sheet2rdfModule';
         PearlInferenceValidationModal,
         RoleSelector,
     ],
-    exports: [CustomFormConfigComponent, CustomFormComponent], //CustomForm exported since is used in vbModalModule as well in newResourceCfModal
+    exports: [
+        CustomFormConfigComponent,
+        CustomFormComponent //exported since is used in vbModalModule (creation dialogs)
+    ], 
     entryComponents: [
         AdvancedGraphEditor,
         BrokenCFStructReportModal,

@@ -873,7 +873,7 @@ nav {
     display: flex;
     align-items: center;
     padding: 5px;
-    min-height: 30px;
+    min-height: 32px; /* header height changes according the content: only label 27.5px, buttons/toolbar 31.5px. Align to 32px */
     background: linear-gradient(#FFFFFF, #CACACA);
     border-color: #BFBFBF;
 }

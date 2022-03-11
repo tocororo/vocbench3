@@ -11,7 +11,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CustomReuseStrategy } from '../a2Customization/CustomReuseStrategy';
 import { AppComponent } from '../appComponent';
 import { AppRoutingModule } from '../appRoutes';
-import { CustomFormViewPageComponent } from '../customFormView/customFormViewPageComponent';
+import { CustomFormViewPageComponent } from '../customViews/customFormViewPageComponent';
 import { DataComponent } from '../data/dataComponent';
 import { HomeComponent } from '../homeComponent';
 import { SkosDiffingModule } from '../skosDiffing/skosDiffingModule';

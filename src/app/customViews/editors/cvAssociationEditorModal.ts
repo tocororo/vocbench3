@@ -3,8 +3,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomViewAssociation, CustomViewConfiguration, CustomViewConst, CustomViewDefinition, CustomViewDefinitionKeys, CustomViewReference, ViewsEnum } from "src/app/models/CustomViews";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { ARTURIResource } from "../../../models/ARTResources";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { ARTURIResource } from "../../models/ARTResources";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "cv-assosiaction-editor-modal",

@@ -8,7 +8,7 @@ import { LoadDataComponent } from './config/dataManagement/loadData/loadDataComp
 import { RefactorComponent } from './config/dataManagement/refactor/refactorComponent';
 import { VersioningComponent } from './config/dataManagement/versioning/versioningComponent';
 import { CustomFormConfigComponent } from './customForms/customFormConfComponent';
-import { CustomFormViewPageComponent } from './customFormView/customFormViewPageComponent';
+import { CustomFormViewPageComponent } from './customViews/customFormViewPageComponent';
 import { CustomServiceRouterComponent } from './customServices/customServiceRouterComponent';
 import { DataComponent } from './data/dataComponent';
 import { EdoalComponent } from './edoal/edoalComponent';
