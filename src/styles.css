@@ -170,6 +170,10 @@ config-bar {
     min-width: 0;
 }
 
+code {
+    font-size: inherit;
+}
+
 .project-row:first-of-type { border-top: 1px solid #ddd; }
 .project-row { border-bottom: 1px solid #ddd; }
 

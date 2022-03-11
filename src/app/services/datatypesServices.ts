@@ -175,7 +175,7 @@ export class DatatypesServices {
                 }
             }
             description.facets = facetsDescription;
-        } else if (enumerationsJson.lenght != 0) { //enumeration array not empty?
+        } else if (enumerationsJson.length != 0) { //enumeration array not empty?
             description.enumerations = Deserializer.createLiteralArray(enumerationsJson);
         }
         return description;

@@ -56,7 +56,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     private firstDigitIndex: string = this.alphabet[0];
     private secondDigitIndex: string = this.alphabet[0];
     index: string;
-    private indexLenght: number;
+    private indexLength: number;
 
     //for visualization searchBased
     lastSearch: string;
@@ -107,7 +107,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         }
 
         this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
-        this.indexLenght = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.indexLength;
+        this.indexLength = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.indexLength;
         this.restoreLastIndex();
         this.onDigitChange();
     }
@@ -288,7 +288,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                 let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
                 this.visualizationMode = lexEntryListPref.visualization;
                 if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
-                    this.indexLenght = lexEntryListPref.indexLength;
+                    this.indexLength = lexEntryListPref.indexLength;
                     this.onDigitChange();
                 }
                 this.viewChildList.init();
@@ -305,16 +305,16 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         this.viewChildList.init();
     }
 
-    onChangeIndexLenght(lenght: number) {
+    onChangeIndexLength(length: number) {
         let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
-        lexEntryListPref.indexLength = lenght;
+        lexEntryListPref.indexLength = length;
         this.vbProp.setLexicalEntryListPreferences(lexEntryListPref);
-        this.indexLenght = lexEntryListPref.indexLength;
+        this.indexLength = lexEntryListPref.indexLength;
         this.onDigitChange();
     }
 
     private onDigitChange() {
-        this.index = (this.indexLenght == 1) ? this.firstDigitIndex : this.firstDigitIndex + this.secondDigitIndex;
+        this.index = (this.indexLength == 1) ? this.firstDigitIndex : this.firstDigitIndex + this.secondDigitIndex;
         this.storeLastIndex();
         this.indexChanged.emit(this.index);
     }

@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { from, Observable, of } from 'rxjs';
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { PropertyServices } from "src/app/services/propertyServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
@@ -26,10 +27,10 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
     private lexiconLang: string; //cache the language of the lexicon
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

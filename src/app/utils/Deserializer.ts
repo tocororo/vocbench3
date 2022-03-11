@@ -62,6 +62,10 @@ export class Deserializer {
         if (hasCustomRange != undefined) {
             node.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, hasCustomRange);
         }
+        let hasCustomView: boolean = resJson[ResAttribute.HAS_CUSTOM_VIEW];
+        if (hasCustomView != undefined) {
+            node.setAdditionalProperty(ResAttribute.HAS_CUSTOM_VIEW, hasCustomView);
+        }
         let resourcePosition: string = resJson[ResAttribute.RESOURCE_POSITION];
         if (resourcePosition != undefined) {
             node.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);

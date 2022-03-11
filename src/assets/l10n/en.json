@@ -919,14 +919,14 @@
             "LEX_ENTRY": "Lex.Entry",
             "NO_LEXICON_SELECTED_WARN": "No Lexicon selected, creation operations are disabled",
             "SETTINGS": {
-                "INDEX_LENGHT": "Index lenght",
+                "INDEX_LENGTH": "Index length",
                 "LEX_ENTRIES_LIMIT": "Lexical entries limit",
                 "LEX_ENTRIES_LIMIT_INFO": "Sets the maximum amount of lexical entries visible in the list. This setting prevents the initialization of a list that might cause performance issues",
                 "LEX_ENTRY_SETTINGS": "Lexical Entry list settings"
             },
             "SWITCH_TO_INDEX_BASED_MODE": "Switch to index-based visualization mode",
             "UNSAFE_WARN": {
-                "CHANGE_INDEX_LENGHT": "change the index lenght to 2-char",
+                "CHANGE_INDEX_LENGTH": "change the index length to 2-char",
                 "ELEMENT_COUNT": "This LexicalEntry list has an amount of elements ({{count}}) that exceeds the limit set in the settings ({{safeToGoLimit}}).",
                 "FORCE_INIT": "If you want to force the lexical entry list initialization at your own risk, click",
                 "HERE": "here",

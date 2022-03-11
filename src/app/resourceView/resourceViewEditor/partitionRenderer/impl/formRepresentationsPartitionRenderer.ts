@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { from, Observable, of } from "rxjs";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTLiteral, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -24,10 +25,10 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
 
     private lexiconLang: string; //cache the language of the lexicon
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private browsingModals: BrowsingModalServices, private ontolexService: OntoLexLemonServices) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

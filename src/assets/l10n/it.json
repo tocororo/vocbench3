@@ -919,14 +919,14 @@
             "LEX_ENTRY": "Lex.Entry",
             "NO_LEXICON_SELECTED_WARN": "Nessun lessico selezionato, le operazioni di creazione sono disabilitate",
             "SETTINGS": {
-                "INDEX_LENGHT": "Lunghezza indice",
+                "INDEX_LENGTH": "Lunghezza indice",
                 "LEX_ENTRIES_LIMIT": "Limite lexical entry",
                 "LEX_ENTRIES_LIMIT_INFO": "Imposta la quantità massima di lexical entry visibili nella lista. Questo setting evita che venga inizializzata una lista che potrebbe causare problemi di performance",
                 "LEX_ENTRY_SETTINGS": "Impostazioni lista lexical entry"
             },
             "SWITCH_TO_INDEX_BASED_MODE": "Passa alla visualizzazione basata su indice",
             "UNSAFE_WARN": {
-                "CHANGE_INDEX_LENGHT": "portare la dimensione dell'indice a 2 caratteri.",
+                "CHANGE_INDEX_LENGTH": "portare la dimensione dell'indice a 2 caratteri.",
                 "ELEMENT_COUNT": "Questa lista di LexicalEntry ha una quantità di elementi ({{count}}) che supera il limite impostato ({{safeToGoLimit}}).",
                 "FORCE_INIT": "Se si desidera forzare l'inizializzazione della lista a proprio rischio, cliccare",
                 "HERE": "qui",

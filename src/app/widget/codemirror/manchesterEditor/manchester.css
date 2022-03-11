@@ -5,7 +5,7 @@ Here I extended the CSS rules of the default theme in codemirror.css
 
 .cm-quantifier { color: #9c0cb2; font-weight: bold; } /* some, value, ... */
 .cm-conjuction { color: #0c965f; font-weight: bold; } /* and, or, ... */
-.cm-facet { color: #05a; } /* minLenght, pattern, ... */
+.cm-facet { color: #05a; } /* minLength, pattern, ... */
 .cm-builtinDatatype { color: #085; } /* integer, decimal, ... */
 .cm-characteristic { color: #0075ba; font-weight: bold; } /* Functional, InverseFunctional */
 .cm-bracket { color: #997; }
@@ -16,7 +16,7 @@ Here I extended the CSS rules of the default theme in codemirror.css
 /* these are used for hints window*/
 .quantifier { color: #9c0cb2; font-weight: bold; } /* some, value, ... */
 .conjuction { color: #0c965f; font-weight: bold; } /* and, or, ... */
-.facet { color: #05a; } /* minLenght, pattern, ... */ 
+.facet { color: #05a; } /* minLength, pattern, ... */ 
 
 .underline{
     background: url("../../../../assets/images/underline.gif") bottom repeat-x;

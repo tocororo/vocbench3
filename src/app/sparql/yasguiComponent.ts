@@ -88,6 +88,7 @@ export class YasguiComponent {
      */
     public forceContentUpdate() {
         this.yasqe.setValue(this.query);
+        this.yasqe.refresh(); //this fixes strange issues with gutter (see https://github.com/codemirror/CodeMirror/issues/4412)
         this.collapsePrefixDeclaration();
     }
 

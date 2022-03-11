@@ -11,6 +11,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CustomReuseStrategy } from '../a2Customization/CustomReuseStrategy';
 import { AppComponent } from '../appComponent';
 import { AppRoutingModule } from '../appRoutes';
+import { CustomFormViewPageComponent } from '../customFormView/customFormViewPageComponent';
 import { DataComponent } from '../data/dataComponent';
 import { HomeComponent } from '../homeComponent';
 import { SkosDiffingModule } from '../skosDiffing/skosDiffingModule';
@@ -30,6 +31,7 @@ import { AlignmentModule } from './alignmentModule';
 import { CollaborationModule } from './collaborationModule';
 import { CustomFormModule } from './customFormModule';
 import { CustomServicesModule } from './customServicesModule';
+import { CustomViewsModule } from './customViewsModule';
 import { DatasetCatalogModule } from './datasetCatalogModule';
 import { EdoalModule } from './edoalModule';
 import { GlobalDataMgmtModule } from './globalDataMgmtModule';
@@ -50,7 +52,6 @@ import { STServicesModule } from './stServicesModule';
 import { TreeAndListModule } from './treeAndListModule';
 import { UserModule } from './userModule';
 import { VBModalModule } from './vbModalModule';
-import { VisualizationWidgetsModule } from './visualizationWidgetsModule';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, "./assets/l10n/");
@@ -78,6 +79,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AlignmentModule,
         CollaborationModule,
         CustomFormModule,
+        CustomViewsModule,
         CustomServicesModule,
         DatasetCatalogModule,
         EdoalModule,
@@ -100,7 +102,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         TreeAndListModule,
         UserModule,
         VBModalModule,
-        VisualizationWidgetsModule,
     ],
     providers: [
         DatatypeValidator,
@@ -123,6 +124,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppComponent,
         HomeComponent,
         DataComponent,
+        CustomFormViewPageComponent,
         UndoDirective
     ],
     bootstrap: [AppComponent]

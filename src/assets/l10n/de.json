@@ -909,13 +909,13 @@
             "LEX_ENTRY": "Lex.Eintrag",
             "NO_LEXICON_SELECTED_WARN": "Kein Lexikon ausgewählt, Erstellungsvorgänge sind deaktiviert.",
             "SETTINGS": {
-                "INDEX_LENGHT": "Indexlänge",
+                "INDEX_LENGTH": "Indexlänge",
                 "LEX_ENTRIES_LIMIT": "Limit für Lexikalische Einträge",
                 "LEX_ENTRIES_LIMIT_INFO": "Legt die maximale Anzahl der in der Liste sichtbaren lexikalischen Einträge fest. Diese Einstellung verhindert die Initialisierung einer Liste, die Performanzprobleme verursachen könnte.",
                 "LEX_ENTRY_SETTINGS": "Einstellungen für die Liste der lexikalischen Einträge"
             },
             "UNSAFE_WARN": {
-                "CHANGE_INDEX_LENGHT": "Indexlänge auf 2 Zeichen ändern",
+                "CHANGE_INDEX_LENGTH": "Indexlänge auf 2 Zeichen ändern",
                 "ELEMENT_COUNT": "Die Anzahl Lexikalischer Einträge in dieser Liste ({{count}}) überschreitet den in den Einstellungen  festgelegten Grenzwert ({{safeToGoLimit}}).",
                 "FORCE_INIT": "Wenn Sie die Initialisierung der lexikalischen Eintragsliste auf eigenes Risiko erzwingen möchten, klicken Sie",
                 "HERE": "hier",

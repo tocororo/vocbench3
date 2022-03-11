@@ -1,0 +1,5 @@
+<ng-container [ngSwitch]="activeViewRenderer">
+    <map-renderer *ngSwitchCase="'geospatial'" [view]="view" [subject]="subject" [predicate]="predicate" [readonly]="readonly" (update)="onUpdate()" (doubleClick)="onDoubleClick($event)"></map-renderer>
+    <charts-renderer *ngSwitchCase="'statistical_series'" [view]="view" [subject]="subject" [predicate]="predicate" [readonly]="readonly" (update)="onUpdate()" (doubleClick)="onDoubleClick($event)"></charts-renderer>
+    <div *ngSwitchDefault></div>
+</ng-container>

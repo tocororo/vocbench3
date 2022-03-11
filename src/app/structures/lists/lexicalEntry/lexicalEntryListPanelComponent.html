@@ -65,7 +65,7 @@
             <select class="form-control form-control-sm" [(ngModel)]="firstDigitIndex" (ngModelChange)="onDigitChange()" style="width: initial">
                 <option *ngFor="let i of alphabet">{{i}}</option>
             </select>
-            <ng-container *ngIf="indexLenght>1">
+            <ng-container *ngIf="indexLength>1">
                 <span style="font-weight: bold; margin: 0 5px">&gt;</span>
                 <select class="form-control form-control-sm" [(ngModel)]="secondDigitIndex" (ngModelChange)="onDigitChange()" style="width: initial">
                     <option value=" ">{{firstDigitIndex}}⎵</option>
@@ -76,7 +76,7 @@
 
         <lexical-entry-list [lexicon]="workingLexicon" [index]="index" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
             [context]="context" [projectCtx]="projectCtx" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)"
-            (switchMode)="onSwitchMode($event)"  (changeIndexLenght)="onChangeIndexLenght($event)">
+            (switchMode)="onSwitchMode($event)"  (changeIndexLength)="onChangeIndexLength($event)">
         </lexical-entry-list>
     </div>
 

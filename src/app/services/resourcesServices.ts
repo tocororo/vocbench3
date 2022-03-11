@@ -234,4 +234,27 @@ export class ResourcesServices {
         );
     }
 
+    /**
+     * Checks if a IRIs/QNames list (manually entered by the user) is correct.
+     * Returns an exception if it is not a valid IRI list
+     * 
+     * @param iriList
+     * @return
+     */
+     validateIRIList(iriList: string): Observable<ARTURIResource[]> {
+        let params = {
+            iriList: iriList
+        };
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorHandlers: [{
+                className: "*", action: 'skip'
+            }]
+        });
+        return this.httpMgr.doGet(this.serviceName, "validateIRIList", params, options).pipe(
+            map(stResp => {
+                return Deserializer.createURIArray(stResp);
+            })
+        );
+    }
+    
 }

@@ -1,5 +1,6 @@
 import { Directive } from "@angular/core";
 import { Observable, of } from "rxjs";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ResViewUtils } from "../../../models/ResourceView";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -13,10 +14,10 @@ import { PartitionRenderer } from "./partitionRenderer";
 @Directive()
 export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, 
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, 
         resViewModals: ResViewModalServices) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     /**

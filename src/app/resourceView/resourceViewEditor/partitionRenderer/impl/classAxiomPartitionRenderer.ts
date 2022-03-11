@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { from, Observable, of } from 'rxjs';
 import { mergeMap } from "rxjs/operators";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
@@ -27,11 +28,11 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
     partition = ResViewPartition.classaxioms;
     addBtnImgSrc = "./assets/images/icons/actions/cls_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private clsService: ClassesServices, private manchService: ManchesterServices,
         private browsingModals: BrowsingModalServices) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

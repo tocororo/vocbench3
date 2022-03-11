@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable, of } from "rxjs";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTBNode, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -20,10 +21,10 @@ export class DatatypeDefinitionPartitionRenderer extends PartitionRenderSingleRo
     partition = ResViewPartition.datatypeDefinitions;
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private datatypeService: DatatypesServices) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

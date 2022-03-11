@@ -211,9 +211,9 @@ export class UmlNodeComponent extends AbstractGraphNode {
                             nodeWidth = this.measures.width - 6 - dimImg - 10;
                             let ratio = textElementWidth / nodeWidth;
                             let truncateAt = Math.floor(p.normalizedShow.length / ratio);
-                            let propLenght = this.updatePropLenght(property, range, truncateAt, localNameProp, localNameRange);
-                            property = propLenght.property;
-                            range = propLenght.range;
+                            let propLength = this.updatePropLength(property, range, truncateAt, localNameProp, localNameRange);
+                            property = propLength.property;
+                            range = propLength.range;
                             p.normalizedShow = property + ": " + range;
                         } else { //textElementWidth <= 222
                             let extraRightSide = textElementWidth - this.measures.width;
@@ -222,9 +222,9 @@ export class UmlNodeComponent extends AbstractGraphNode {
                             } else {
                                 let ratio = textElementWidth / nodeWidth;
                                 let truncateAt = Math.floor(p.normalizedShow.length / ratio);
-                                let propLenght = this.updatePropLenght(property, range, truncateAt, localNameProp, localNameRange)
-                                property = propLenght.property;
-                                range = propLenght.range;
+                                let propLength = this.updatePropLength(property, range, truncateAt, localNameProp, localNameRange)
+                                property = propLength.property;
+                                range = propLength.range;
                                 p.normalizedShow = property + ": " + range;
                                 // p.normalizedShow = p.normalizedShow.substring(0, truncateAt);
                                 // if (p.show.length > p.normalizedShow.length) {
@@ -243,10 +243,10 @@ export class UmlNodeComponent extends AbstractGraphNode {
 
 
     /**
-     * This method update lenghts of property and range inside node
+     * This method update lengths of property and range inside node
     */
 
-    private updatePropLenght(property: string, range: string, truncateAt: number, localNameProp: string, localNameRange: string): { property: string, range: string } {
+    private updatePropLength(property: string, range: string, truncateAt: number, localNameProp: string, localNameRange: string): { property: string, range: string } {
         if (property.length < range.length) {
             let newTruncateAt = Math.floor(truncateAt / 3); // total space = 3/3 so property has 1/3 and range 2/3
             if (property.length <= newTruncateAt) {

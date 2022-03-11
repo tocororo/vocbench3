@@ -284,7 +284,7 @@ export class ConceptTreeSettingsModal {
             changedSyncInverse = this.pristineConcPref.syncInverse != this.syncInverse;
 
             //look for changes in broaderProps:
-            //first compare lenght
+            //first compare length
             changedBroaderProps = this.pristineConcPref.broaderProps.length != this.broaderProps.length;
             //eventually check if every property in the pristine collection is still in the current collection (properties removed?)...
             if (!changedBroaderProps) {
@@ -297,7 +297,7 @@ export class ConceptTreeSettingsModal {
             }
 
             //look for changes in narrowerProps:
-            //first compare lenght
+            //first compare length
             changedNarrowerProps = this.pristineConcPref.narrowerProps.length != this.narrowerProps.length;
             //eventually check if every property in the pristine collection is still in the current collection (properties removed?)...
             if (!changedNarrowerProps) {

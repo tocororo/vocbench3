@@ -218,11 +218,6 @@
                 </custom-partition-renderer>
             </ng-container>
 
-            <widgets-renderer *ngIf="resViewSections['widgets']?.length > 0" class="partition-renderer" style="order: 99;"
-                [pred-obj-list]="resViewSections['widgets']" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
-                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-            </widgets-renderer>
-
         </ng-container>
     </div>
     <div class="card-footer" style="min-height: 31px;">

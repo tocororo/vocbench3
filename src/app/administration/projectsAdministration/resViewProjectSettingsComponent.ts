@@ -161,7 +161,8 @@ export class ResViewProjectSettingsComponent {
 
     renameCustomSection() {
         this.basicModals.prompt({key:"ADMINISTRATION.PROJECTS.RES_VIEW.RENAME_CUSTOM_SECTION"}, null, null, this.selectedCustomSection).then(
-            newSectionName => {
+            sectionName => {
+                let newSectionName: ResViewPartition = <ResViewPartition> sectionName;
                 if (newSectionName == this.selectedCustomSection) { //not changed
                     return;
                 }

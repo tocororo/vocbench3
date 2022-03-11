@@ -1,0 +1,23 @@
+<div class="d-flex align-items-center">
+    <div class="d-flex align-items-center tile-group" style="flex: 1">
+        <span *ngFor="let res of resources" (click)="selectResource(res)" class="tile" [ngClass]="{ selectedResource : selectedRes == res }">
+            <rdf-resource [resource]="res"></rdf-resource>
+            <span class="far fa-times-circle" (click)="removeResource(res)" style="cursor: pointer" onmouseover="this.className='fas fa-times-circle';" onmouseout="this.className='far fa-times-circle';"></span>
+        </span>
+    </div>
+    <div class="btn-group ml-2" ngbDropdown placement="top-right">
+        <button class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown" ngbDropdownToggle>
+            <span class="fas fa-pencil-alt"></span>
+        </button>
+        <div class="dropdown-menu float-right" ngbDropdownMenu>
+            <a class="dropdown-item" (click)="addResource()">{{'ACTIONS.ADD'|translate}}</a>
+            <a class="dropdown-item" (click)="editManually()">{{'ACTIONS.EDIT_MANUALLY'|translate}}</a>
+            <ng-container *ngIf="ordered">
+                <a class="dropdown-item" [ngClass]="{disabled : !selectedRes}" (click)="addResource('before')">{{'ACTIONS.ADD_BEFORE'|translate}}</a>
+                <a class="dropdown-item" [ngClass]="{disabled : !selectedRes}" (click)="addResource('after')">{{'ACTIONS.ADD_AFTER'|translate}}</a>
+                <a class="dropdown-item" [ngClass]="{disabled : isMoveDisabled('before')}" (click)="moveResource('before')">{{'ACTIONS.MOVE_BEFORE'|translate}}</a>
+                <a class="dropdown-item" [ngClass]="{disabled : isMoveDisabled('after')}" (click)="moveResource('after')">{{'ACTIONS.MOVE_AFTER'|translate}}</a>
+            </ng-container>
+        </div>
+    </div>
+</div>

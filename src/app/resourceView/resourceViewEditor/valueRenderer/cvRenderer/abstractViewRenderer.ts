@@ -1,10 +1,10 @@
 import { Directive, EventEmitter, Input, Output } from "@angular/core";
 import { ARTNode } from "src/app/models/ARTResources";
-import { Widget } from "src/app/models/VisualizationWidgets";
+import { AbstractView } from "src/app/models/CustomViews";
 
 @Directive()
-export abstract class AbstractWidgetComponent {
-    @Input() widget: Widget;
+export abstract class AbstractViewRendererComponent {
+    @Input() view: AbstractView;
     @Input() readonly: boolean;
 
     @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter;
@@ -12,7 +12,7 @@ export abstract class AbstractWidgetComponent {
     editAuthorized: boolean = true;
 
     /**
-     * normalizes the input data in a format compliant for the widget
+     * normalizes the input data in a format compliant for the view renderer
      */
     protected abstract processInput(): void;
 
@@ -20,7 +20,7 @@ export abstract class AbstractWidgetComponent {
         if (res == null) { 
             //doubleClick provide a null entity when user double click on empty area of chart (pie/bar/line),
             //in this case the resource to expand is the ID element of the widget
-            res = this.widget.getIdResource();
+            res = this.view.getIdResource();
         }
         this.doubleClick.emit(res);
     }

@@ -457,10 +457,16 @@ export class UIUtils {
      * This method is needed in order to face cross-browser compatibility with full size modals (modals that stretch to fill up to 95vh).
      * Note: This method must be called only after the view is initialized, so preferrable in ngAfterViewInit()
      * @param elementRef 
+     * @param full if false, undo the full size previously set (in case)
      */
-    public static setFullSizeModal(elementRef: ElementRef) {
+    public static setFullSizeModal(elementRef: ElementRef, full: boolean = true) {
         let modalContentElement: HTMLElement = elementRef.nativeElement.parentElement;
-        modalContentElement.style.setProperty("flex", "1");
+        if (full) {
+            modalContentElement.style.setProperty("flex", "1");
+        } else {
+            modalContentElement.style.removeProperty("flex");
+        }
+        
     }
 
 }

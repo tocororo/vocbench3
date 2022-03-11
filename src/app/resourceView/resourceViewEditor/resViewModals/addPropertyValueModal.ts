@@ -74,8 +74,7 @@ export class AddPropertyValueModal {
         this.selectedAspectSelector = selector;
         //update the modal flex according the selector: if manchester expr there's no need to fill the whole window
         if (this.selectedAspectSelector == this.manchExprAspectSelector) {
-            let modalContentElement: HTMLElement = this.elementRef.nativeElement.parentElement;
-            modalContentElement.style.removeProperty("flex");
+            UIUtils.setFullSizeModal(this.elementRef, false)
         } else {
             UIUtils.setFullSizeModal(this.elementRef)
         }

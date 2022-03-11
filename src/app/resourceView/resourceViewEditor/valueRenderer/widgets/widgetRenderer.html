@@ -1,5 +1,0 @@
-<ng-container [ngSwitch]="activeWidgetRenderer">
-    <map-renderer *ngSwitchCase="'map'" [widget]="widget" [subject]="subject" [predicate]="predicate" [readonly]="readonly" (update)="onUpdate()" (doubleClick)="onDoubleClick($event)"></map-renderer>
-    <charts-renderer *ngSwitchCase="'chart'" [widget]="widget" [subject]="subject" [predicate]="predicate" [readonly]="readonly" (update)="onUpdate()" (doubleClick)="onDoubleClick($event)"></charts-renderer>
-    <div *ngSwitchDefault></div>
-</ng-container>

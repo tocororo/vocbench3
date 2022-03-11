@@ -55,7 +55,6 @@ import { SubtermsPartitionRenderer } from '../resourceView/resourceViewEditor/pa
 import { SuperPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/superPropertiesPartitionRenderer';
 import { TopConceptsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/topConceptsPartitionRenderer';
 import { TypesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/typesPartitionRenderer';
-import { WidgetsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/widgetsPartitionRenderer';
 import { LexicalizationEnrichmentHelper } from '../resourceView/resourceViewEditor/partitionRenderer/lexicalizationEnrichmentHelper';
 import { PredicateObjectsRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/predicateObjectsRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceViewEditor/resourceRenameComponent';
@@ -81,9 +80,9 @@ import { CustomFormValueTableComponent } from '../resourceView/resourceViewEdito
 import { EditableResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/editableResourceComponent';
 import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/reifiedResourceComponent';
 import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/valueRenderer/resourceViewValueRenderer';
-import { ChartsRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/widgets/chartsRendererComponent';
-import { MapRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/widgets/mapRendererComponent';
-import { WidgetRenderer } from '../resourceView/resourceViewEditor/valueRenderer/widgets/widgetRenderer';
+import { ChartsRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/chartsRendererComponent';
+import { MapRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/mapRendererComponent';
+import { CustomViewRenderer } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/customViewRenderer';
 import { ResourceViewModal } from '../resourceView/resourceViewModal';
 import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
 import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
@@ -97,6 +96,7 @@ import { ResourceTripleEditorComponent } from '../resourceView/tripleEditor/reso
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
+import { PredicateCustomViewsRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/predicateCustomViewRenderer';
 
 @NgModule({
     imports: [
@@ -155,6 +155,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         MembersOrderedPartitionRenderer,
         MembersPartitionRenderer,
         NotesPartitionRenderer,
+        PredicateCustomViewsRenderer,
         PredicateObjectsRenderer,
         PropertiesPartitionRenderer,
         PropertyChainRenderer,
@@ -172,7 +173,6 @@ import { TreeAndListModule } from "./treeAndListModule";
         SuperPropertiesPartitionRenderer,
         TopConceptsPartitionRenderer,
         TypesPartitionRenderer,
-        WidgetsPartitionRenderer,
         //TermView
         LanguageBoxComponent,
         LanguageDefinitionComponent,
@@ -202,7 +202,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResViewSettingsModal,
         TimeMachineModal,
 
-        WidgetRenderer,
+        CustomViewRenderer,
         ChartsRendererComponent,
         MapRendererComponent
     ],

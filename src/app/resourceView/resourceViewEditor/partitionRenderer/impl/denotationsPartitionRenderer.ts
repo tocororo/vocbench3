@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable, of } from "rxjs";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -22,10 +23,10 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.denotations;
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private ontolexService: OntoLexLemonServices) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

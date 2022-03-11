@@ -3,6 +3,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { from, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { PrefLabelClashMode } from "src/app/models/Properties";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
@@ -42,11 +43,11 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         RDFS.label.getURI()
     ];
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private skosService: SkosServices, private skosxlService: SkosxlServices, private resViewService: ResourceViewServices, private ontolexService: OntoLexLemonServices,
         private browsingModals: BrowsingModalServices, private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper, private translateService: TranslateService) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

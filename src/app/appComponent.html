@@ -45,10 +45,10 @@
                     <a *ngIf="isAlignValidationAuthorized()" class="dropdown-item" [routerLink]="['/AlignmentValidation']">{{'ALIGNMENT.VALIDATION.ALIGNMENT_VALIDATION'|translate}}</a>
                     <a *ngIf="isCollaborationAuthorized()" class="dropdown-item" [routerLink]="['/Collaboration']">{{'COLLABORATION.COLLABORATION_SYSTEM'|translate}}</a>
                     <a *ngIf="isCustomFormAuthorized()" class="dropdown-item" [routerLink]="['/CustomForm']">{{'CUSTOM_FORMS.FORMS.CUSTOM_FORMS'|translate}}</a>
+                    <a class="dropdown-item" [routerLink]="['/CustomFormView']">Custom Forms and Views</a>
                     <a *ngIf="isCustomServicesAuthorized()" class="dropdown-item" [routerLink]="['/CustomServices']">{{'APP.NAVBAR.CUSTOM_SERVICES_AND_REPORTS'|translate}}</a>
                     <a class="dropdown-item" [routerLink]="['/Icv']">{{'ICV.ICV'|translate}}</a>
                     <a *ngIf="isResourceMetadataAuthorized()" class="dropdown-item" [routerLink]="['/ResourceMetadata']">ResourceMetadata</a>
-                    <a *ngIf="isVisualizationWidgetsAuthorized()" class="dropdown-item" [routerLink]="['/VisualizationWidgets']">Visualization widgets</a>
                     <a *ngIf="isSheet2RdfAuthorized()" class="dropdown-item" [routerLink]="['/Sheet2RDF']">Sheet2RDF</a>
                     <a *ngIf="isSkosDiffingAuthorized()" class="dropdown-item" [routerLink]="['/SkosDiffing']">SKOS diffing</a>
                 </div>

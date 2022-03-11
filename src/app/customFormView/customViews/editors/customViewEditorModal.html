@@ -1,0 +1,41 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body vbox">
+
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2">{{'COMMONS.NAME'|translate}}</label>
+            <input class="form-control col-10" [(ngModel)]="name" [disabled]="ref || readOnly">
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2">Category</label>
+            <select class="form-control col-4" style="flex: 1" [(ngModel)]="selectedCategory" (ngModelChange)="onCategoryChanged()">
+                <option *ngFor="let c of categories" [value]="c.id">{{c.translationKey|translate}}</option>
+            </select>
+            <label class="col-form-label col-sm-2">Model</label>
+            <select class="form-control col-4" [(ngModel)]="selectedModel" (ngModelChange)="onModelChanged()" [disabled]="!selectedCategory">
+                <option *ngFor="let m of models[selectedCategory]" [value]="m.id">{{m.translationKey|translate}}</option>
+            </select>
+        </div>
+
+        <div *ngIf="selectedModel" class="vbox mt-2">
+
+            <area-view-editor #areaEditor *ngIf="selectedModel == 'area'" [cvDef]="customViewDef" (changed)="onCvDefChanged($event)"></area-view-editor>
+            <point-view-editor #pointEditor *ngIf="selectedModel == 'point'" [cvDef]="customViewDef" (changed)="onCvDefChanged($event)"></point-view-editor>
+            <route-view-editor #routeEditor *ngIf="selectedModel == 'route'" [cvDef]="customViewDef" (changed)="onCvDefChanged($event)"></route-view-editor>
+            <series-view-editor #seriesEditor *ngIf="selectedModel == 'series'" [cvDef]="customViewDef" (changed)="onCvDefChanged($event)"></series-view-editor>
+            <series-collection-view-editor #seriesCollEditor *ngIf="selectedModel == 'series_collection'" [cvDef]="customViewDef" (changed)="onCvDefChanged($event)"></series-collection-view-editor>
+            <property-chain-view-editor #propChainEditor *ngIf="selectedModel == 'property_chain'" [cvDef]="customViewDef" (changed)="onCvDefChanged($event)"></property-chain-view-editor>
+            <adv-single-value-view-editor #advSingleValueEditor *ngIf="selectedModel == 'adv_single_value'" [cvDef]="customViewDef" (changed)="onCvDefChanged($event)"></adv-single-value-view-editor>
+            <static-vector-view-editor #staticVectorEditor *ngIf="selectedModel == 'static_vector'" [cvDef]="customViewDef" (changed)="onCvDefChanged($event)"></static-vector-view-editor>
+            <dynamic-vector-view-editor #dynamicVectorEditor *ngIf="selectedModel == 'dynamic_vector'" [cvDef]="customViewDef" (changed)="onCvDefChanged($event)"></dynamic-vector-view-editor>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+</div>

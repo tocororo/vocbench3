@@ -1,21 +1,21 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1;">Visualization tools:</label>
+        <label style="flex: 1;">Custom Views:</label>
     </div>
-    <div class="card-body hbox">
+    <div class="card-body vbox">
 
         <div class="card card-alt vbox">
             <div class="card-header">
-                <label style="flex: 1">Widgets:</label>
+                <label style="flex: 1">Views:</label>
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-light" [title]="'ACTIONS.CREATE'|translate" (click)="createWidget()" [disabled]="!createWidgetAuthorized">
+                        <button class="btn btn-light" [title]="'ACTIONS.CREATE'|translate" (click)="createCustomView()" [disabled]="!createCustomViewAuthorized">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'ACTIONS.DELETE'|translate" (click)="deleteWidget()" [disabled]="!selectedWidget || !deleteWidgetAuthorized">
+                        <button class="btn btn-light" [title]="'ACTIONS.DELETE'|translate" (click)="deleteCustomView()" [disabled]="!selectedCustomView || !deleteCustomViewAuthorized">
                             <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-light" [title]="'ACTIONS.EDIT'|translate" (click)="editWidget()" [disabled]="!selectedWidget || !modifyWidgetAuthorized">
+                        <button class="btn btn-light" [title]="'ACTIONS.EDIT'|translate" (click)="editCustomView()" [disabled]="!selectedCustomView || !modifyCustomViewAuthorized">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                     </div>
@@ -29,7 +29,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let w of widgets" (click)="selectedWidget = w" [ngClass]="{ 'table-primary': w == selectedWidget }">
+                        <tr *ngFor="let w of customViews" (click)="selectedCustomView = w" [ngClass]="{ 'table-primary': w == selectedCustomView }">
                             <td>{{w.name}}</td>
                         </tr>
                     </tbody>
@@ -37,9 +37,9 @@
             </div>
         </div>
 
-        <div class="card card-alt vbox ml-2">
+        <div class="card card-alt vbox mt-2">
             <div class="card-header">
-                <label style="flex: 1">Triggers:</label>
+                <label style="flex: 1">Property associations:</label>
                 <div class="btn-group btn-group-xs">
                     <button class="btn btn-light" [title]="'ACTIONS.CREATE'|translate" (click)="createAssociation()" [disabled]="!createAssociationAuthorized">
                         <span class="fas fa-plus"></span>
@@ -53,23 +53,20 @@
                 <table class="table table-sm table-borderless table-hoverable">
                     <thead style="border-bottom: 1px solid #ddd;">
                         <tr>
-                            <th>Predicate</th>
-                            <th>Widget</th>
+                            <th>Property</th>
+                            <th>Custom View</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let a of associations" (click)="selectedAssociation = a" [ngClass]="{ 'table-primary': a == selectedAssociation }">
-                            <td>{{a.trigger.getURI()}}</td>
-                            <td>{{a.widget.name}}</td>
+                            <td>{{a.property.getURI()}}</td>
+                            <td>{{a.customViewRef.name}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-    </div>
-    <div class="card-footer">
-        <span class="grayText float-right">{{'RESOURCE_METADATA.PATTERN_FACTORY_PROVIDED'|translate}}</span>
     </div>
 
 </div>

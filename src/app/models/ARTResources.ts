@@ -332,6 +332,7 @@ export class ResAttribute {
     public static MORE = "more";
     public static NUM_INST = "numInst";
     public static HAS_CUSTOM_RANGE = "hasCustomRange";
+    public static HAS_CUSTOM_VIEW = "hasCustomView";
     public static RESOURCE_POSITION = "resourcePosition";
     public static ACCESS_METHOD = "accessMethod";
     public static LANG = "lang";

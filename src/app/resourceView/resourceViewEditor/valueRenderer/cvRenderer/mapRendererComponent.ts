@@ -3,12 +3,12 @@ import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { TranslateService } from "@ngx-translate/core";
 import { forkJoin, Observable } from "rxjs";
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { AreaWidget, MultiPointWidget, PointWidget, RouteWidget, WidgetDataBinding } from "src/app/models/VisualizationWidgets";
-import { VisualizationWidgetsServices } from "src/app/services/visualizationWidgetsServices";
+import { AbstractMultiPointView, AreaView, CustomViewVariables, PointView, RouteView } from "src/app/models/CustomViews";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { GeoPoint } from "src/app/widget/leafletMap/leafletMapComponent";
 import { LeafletMapModal } from "src/app/widget/leafletMap/leafletMapModal";
 import { ModalOptions, Translation } from "src/app/widget/modal/Modals";
-import { AbstractWidgetComponent } from "./abstractWidgetRenderer";
+import { AbstractViewRendererComponent } from "./abstractViewRenderer";
 
 @Component({
     selector: "map-renderer",
@@ -20,7 +20,7 @@ import { AbstractWidgetComponent } from "./abstractWidgetRenderer";
         }
     `]
 })
-export class MapRendererComponent extends AbstractWidgetComponent {
+export class MapRendererComponent extends AbstractViewRendererComponent {
 
     @Input() subject: ARTResource;
     @Input() predicate: ARTURIResource;
@@ -32,12 +32,12 @@ export class MapRendererComponent extends AbstractWidgetComponent {
     route: GeoPoint[]; //a set of points to be represented (with a polyline) on the map
     area: GeoPoint[];
 
-    constructor(private visualizationWidgetsService: VisualizationWidgetsServices, private modalService: NgbModal, private translateService: TranslateService) {
+    constructor(private cvService: CustomViewsServices, private modalService: NgbModal, private translateService: TranslateService) {
         super()
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['widget']) {
+        if (changes['view']) {
             this.processInput();
         }
     }
@@ -45,24 +45,24 @@ export class MapRendererComponent extends AbstractWidgetComponent {
     processInput() {
         /**
          * here I need to detect if I need to draw a point or a polyline (route/area)
-         * the fact that the data types are compliant with the map widget is already granted from the parent component
+         * the fact that the data types are compliant with the map view is already granted from the parent component
          */
-        if (this.widget instanceof PointWidget) {
+        if (this.view instanceof PointView) {
             this.point = {
-                location: this.widget.location, 
-                lat: Number.parseFloat(this.widget.latitude.getShow()), 
-                lng: Number.parseFloat(this.widget.longitude.getShow())
+                location: this.view.location, 
+                lat: Number.parseFloat(this.view.latitude.getShow()), 
+                lng: Number.parseFloat(this.view.longitude.getShow())
             }
-        } else if (this.widget instanceof RouteWidget) {
-            this.route = this.widget.locations.map(l => {
+        } else if (this.view instanceof RouteView) {
+            this.route = this.view.locations.map(l => {
                 return { 
                     location: l.location, 
                     lat: Number.parseFloat(l.latitude.getShow()), 
                     lng: Number.parseFloat(l.longitude.getShow())
                 } 
             });
-        } else if (this.widget instanceof AreaWidget) {
-            this.area = this.widget.locations.map(l => {
+        } else if (this.view instanceof AreaView) {
+            this.area = this.view.locations.map(l => {
                 return { 
                     location: l.location, 
                     lat: Number.parseFloat(l.latitude.getShow()), 
@@ -73,21 +73,21 @@ export class MapRendererComponent extends AbstractWidgetComponent {
     }
 
     edit() {
-        if (this.widget instanceof PointWidget) {
-            let w = <PointWidget>this.widget;
+        if (this.view instanceof PointView) {
+            let w = <PointView>this.view;
             this.openMapModal({ key: "Edit point"}).then(
                 (point: GeoPoint) => {
                     w.latitude.setValue(point.lat+"");
                     w.longitude.setValue(point.lng+"");
                     let bindingsMap = new Map();
-                    bindingsMap.set(WidgetDataBinding.location, w.location);
-                    bindingsMap.set(WidgetDataBinding.latitude, w.latitude);
-                    bindingsMap.set(WidgetDataBinding.longitude, w.longitude);
-                    this.visualizationWidgetsService.updateWidgetData(this.subject, this.predicate, bindingsMap).subscribe(
-                        () => {
-                            this.update.emit();
-                        }
-                    )
+                    bindingsMap.set(CustomViewVariables.location, w.location);
+                    bindingsMap.set(CustomViewVariables.latitude, w.latitude);
+                    bindingsMap.set(CustomViewVariables.longitude, w.longitude);
+                    // this.visualizationWidgetsService.updateWidgetData(this.subject, this.predicate, bindingsMap).subscribe(
+                    //     () => {
+                    //         this.update.emit();
+                    //     }
+                    // )
                 },
                 () => {}
             );
@@ -103,7 +103,7 @@ export class MapRendererComponent extends AbstractWidgetComponent {
     }
 
     private updateMultiplePoints(newPoints: GeoPoint[]) {
-        let w: MultiPointWidget = <MultiPointWidget>this.widget;
+        let w: AbstractMultiPointView = <AbstractMultiPointView>this.view;
 
         let updatedLocations = []; //collect
         w.locations.forEach(l => {
@@ -118,11 +118,11 @@ export class MapRendererComponent extends AbstractWidgetComponent {
         let updateFn: Observable<void>[] = [];
         for (let l of updatedLocations) {
             let bindingsMap = new Map();
-            bindingsMap.set(WidgetDataBinding.route_id, w.routeId);
-            bindingsMap.set(WidgetDataBinding.location, l.location);
-            bindingsMap.set(WidgetDataBinding.latitude, l.latitude);
-            bindingsMap.set(WidgetDataBinding.longitude, l.longitude);
-            updateFn.push(this.visualizationWidgetsService.updateWidgetData(this.subject, this.predicate, bindingsMap));
+            bindingsMap.set(CustomViewVariables.route_id, w.routeId);
+            bindingsMap.set(CustomViewVariables.location, l.location);
+            bindingsMap.set(CustomViewVariables.latitude, l.latitude);
+            bindingsMap.set(CustomViewVariables.longitude, l.longitude);
+            // updateFn.push(this.visualizationWidgetsService.updateWidgetData(this.subject, this.predicate, bindingsMap));
         }
         if (updateFn.length > 0) {
             forkJoin(updateFn).subscribe(() => {
@@ -143,10 +143,10 @@ export class MapRendererComponent extends AbstractWidgetComponent {
 
 
     onMapDoubleClick() {
-        if (this.widget instanceof PointWidget) {
-            this.onDoubleClick(this.widget.location);    
-        } else if (this.widget instanceof MultiPointWidget) {
-            this.onDoubleClick(this.widget.routeId);
+        if (this.view instanceof PointView) {
+            this.onDoubleClick(this.view.location);    
+        } else if (this.view instanceof AbstractMultiPointView) {
+            this.onDoubleClick(this.view.routeId);
         }
     }
 

@@ -3,6 +3,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { from, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { PrefLabelClashMode } from "src/app/models/Properties";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
@@ -31,11 +32,11 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.properties;
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private browsingModals: BrowsingModalServices, private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper, 
         private translateService: TranslateService) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

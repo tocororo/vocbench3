@@ -9,6 +9,7 @@ import { CollaborationServices } from "../services/collaborationServices";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { CustomServiceServices } from '../services/customServiceServices';
+import { CustomViewsServices } from '../services/customViewsServices';
 import { DatasetCatalogsServices } from '../services/datasetCatalogsServices';
 import { DatasetMetadataServices } from "../services/datasetMetadataServices";
 import { DatatypesServices } from '../services/datatypesServices';
@@ -52,7 +53,6 @@ import { UserServices } from "../services/userServices";
 import { UsersGroupsServices } from "../services/usersGroupsServices";
 import { ValidationServices } from "../services/validationServices";
 import { VersionsServices } from "../services/versionsServices";
-import { VisualizationWidgetsServices } from '../services/visualizationWidgetsServices';
 import { HttpManager } from '../utils/HttpManager';
 import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 
@@ -70,6 +70,7 @@ import { StMetadataRegistry } from '../utils/STMetadataRegistry';
         ConfigurationsServices,
         CustomFormsServices,
         CustomServiceServices,
+        CustomViewsServices,
         DatatypesServices,
         DatasetCatalogsServices,
         DatasetMetadataServices,
@@ -115,7 +116,6 @@ import { StMetadataRegistry } from '../utils/STMetadataRegistry';
         UsersGroupsServices,
         ValidationServices,
         VersionsServices,
-        VisualizationWidgetsServices
     ]
 })
 export class STServicesModule { }

@@ -914,14 +914,14 @@
             "LEX_ENTRY": "Entrée lexicale",
             "NO_LEXICON_SELECTED_WARN": "Aucun lexique n'est sélectionné, les opérations de création sont désactivées",
             "SETTINGS": {
-                "INDEX_LENGHT": "Longueur de l'index",
+                "INDEX_LENGTH": "Longueur de l'index",
                 "LEX_ENTRIES_LIMIT": "Limite des entrées lexicales",
                 "LEX_ENTRIES_LIMIT_INFO": "Définit le nombre maximum d'entrées lexicales visibles dans la liste. Ce réglage évite la création d'une liste qui pourrait générer des problèmes de performances.",
                 "LEX_ENTRY_SETTINGS": "Réglages de la liste des entrées lexicales"
             },
             "SWITCH_TO_INDEX_BASED_MODE": "Basculer vers la visualisation 'fondée sur l'index'",
             "UNSAFE_WARN": {
-                "CHANGE_INDEX_LENGHT": "Passer la longueur de l'index à 2 caractères",
+                "CHANGE_INDEX_LENGTH": "Passer la longueur de l'index à 2 caractères",
                 "ELEMENT_COUNT": "Cette liste d'entrées lexicales possède un nombre d'éléments ({{count}}) qui dépasse la limite fixée dans les réglages ({{safeToGoLimit}}).",
                 "FORCE_INIT": "Cliquer pour forcer l'initialisation de la liste d'entrées lexicales, à vos propres risques",
                 "HERE": "ici",

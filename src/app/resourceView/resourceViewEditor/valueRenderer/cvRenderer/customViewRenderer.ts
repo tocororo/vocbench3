@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { AreaWidget, PointWidget, RouteWidget, Widget, WidgetCategory } from "src/app/models/VisualizationWidgets";
+import { AbstractView, AreaView, CustomViewCategory, PointView, RouteView, SeriesCollectionView, SeriesView } from "src/app/models/CustomViews";
 
 @Component({
-    selector: "widget-renderer",
-    templateUrl: "./widgetRenderer.html",
+    selector: "custom-view-renderer",
+    templateUrl: "./customViewRenderer.html",
     host: { class: "hbox" },
     styles: [`
         :host {
@@ -13,33 +13,34 @@ import { AreaWidget, PointWidget, RouteWidget, Widget, WidgetCategory } from "sr
         }
     `]
 })
-export class WidgetRenderer {
+export class CustomViewRenderer {
 
     @Input() subject: ARTResource;
     @Input() predicate: ARTURIResource;
-    @Input() widget: Widget;
+    @Input() view: AbstractView;
     @Input() rendering: boolean;
     @Input() readonly: boolean;
 
     @Output() update = new EventEmitter(); //a change has been done => request to update the RV
     @Output() doubleClick: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
-    activeWidgetRenderer: WidgetCategory;
+    activeViewRenderer: CustomViewCategory;
 
     constructor() {}
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['widget']) {
+        if (changes['view']) {
             this.init();
         }
     }
 
     private init() {
-        if (this.widget instanceof AreaWidget || this.widget instanceof RouteWidget || this.widget instanceof PointWidget) {
-            this.activeWidgetRenderer = WidgetCategory.map;
-        } else {
-            this.activeWidgetRenderer = WidgetCategory.chart;
+        if (this.view instanceof AreaView || this.view instanceof RouteView || this.view instanceof PointView) {
+            this.activeViewRenderer = CustomViewCategory.geospatial;
+        } else if (this.view instanceof SeriesView || this.view instanceof SeriesCollectionView) {
+            this.activeViewRenderer = CustomViewCategory.statistical_series;
         }
+        // else if (this view instanceof )
         
     }
 

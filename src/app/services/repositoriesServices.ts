@@ -42,7 +42,7 @@ export class RepositoriesServices {
 
     /**
      * Delete a list of remote repositories.
-     * Returns a list of ExceptionDAO. This list has the same lenght of the param remoteRepositories and contains null if the repository
+     * Returns a list of ExceptionDAO. This list has the same length of the param remoteRepositories and contains null if the repository
      * (at the corresponding position) has been deleted successfully, or the exception description if it failed
      * 
      * @param remoteRepositories 

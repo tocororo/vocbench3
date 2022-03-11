@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { from, Observable, of } from "rxjs";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
@@ -21,10 +22,10 @@ export class CustomPartitionRenderer extends PartitionRendererMultiRoot {
     @Input() partition: ResViewPartition;
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private browsingModals: BrowsingModalServices) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

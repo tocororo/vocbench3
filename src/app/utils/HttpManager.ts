@@ -431,7 +431,7 @@ export class HttpManager {
             if (HttpServiceContext.isErrorInterceptionEnabled()) {
                 let handleErrorDefault: boolean = true;
                 if (errorHandlers) {
-                    let errHandler = errorHandlers.find(h => h.className == error.name);
+                    let errHandler = errorHandlers.find(h => h.className == error.name || h.className == "*");
                     if (errHandler) {
                         if (errHandler.action == 'warning') {
                             let errorMsg = error.message;
@@ -671,7 +671,7 @@ interface VBRequestOptionsArgs {
 }
 
 export interface ExceptionHandlerInfo {
-    className: string;
+    className: string; //"*" for any exception
     /**
      * tells how the exception should be handled: 
      * - skip: doesn't show any alert (it will be handled ad-hoc into the component which invoked the service)

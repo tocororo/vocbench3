@@ -20,8 +20,8 @@ export class LexicalEntryListSettingsModal {
 
     private safeToGoLimit: number;
 
-    private indexLenght: number;
-    private lenghtChoices: number[] = [1, 2];
+    private indexLength: number;
+    private lengthChoices: number[] = [1, 2];
 
     constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties) {}
 
@@ -30,17 +30,17 @@ export class LexicalEntryListSettingsModal {
         this.pristineLexEntryPref = JSON.parse(JSON.stringify(lexEntryPref));
         this.visualization = lexEntryPref.visualization;
         this.safeToGoLimit = lexEntryPref.safeToGoLimit;
-        this.indexLenght = lexEntryPref.indexLength;
+        this.indexLength = lexEntryPref.indexLength;
     }
 
     ok() {
         let changed: boolean = this.pristineLexEntryPref.visualization != this.visualization ||
             this.pristineLexEntryPref.safeToGoLimit != this.safeToGoLimit || 
-            this.pristineLexEntryPref.indexLength != this.indexLenght;
+            this.pristineLexEntryPref.indexLength != this.indexLength;
         //if something changed store the settings and close the dialog, otherwise cancel
         if (changed) {
             let lexEntryListPrefs: LexicalEntryListPreference = new LexicalEntryListPreference();
-            lexEntryListPrefs.indexLength = this.indexLenght;
+            lexEntryListPrefs.indexLength = this.indexLength;
             lexEntryListPrefs.safeToGoLimit = this.safeToGoLimit;
             lexEntryListPrefs.visualization = this.visualization;
             this.vbProp.setLexicalEntryListPreferences(lexEntryListPrefs);

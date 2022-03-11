@@ -27,7 +27,7 @@ export class LexicalEntryListComponent extends AbstractList {
     @Input() index: string; //initial letter of the entries to show
     @Input() lexicon: ARTURIResource;
     @Output() switchMode = new EventEmitter<LexEntryVisualizationMode>(); //requires to the parent panel to switch mode
-    @Output() changeIndexLenght = new EventEmitter<number>(); //requires to the parent to change the index lenght
+    @Output() changeIndexLength = new EventEmitter<number>(); //requires to the parent to change the index length
 
     structRole = RDFResourceRolesEnum.ontolexLexicalEntry;
 

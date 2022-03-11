@@ -348,7 +348,7 @@ export class CustomFormUtils {
                 }
                 let emptyList: boolean = false;
                 if (field.getAnnotation(AnnotationName.Collection) != null && Array.isArray(value)) {
-                    emptyList = value.length == 0 || //list of 0 lenght
+                    emptyList = value.length == 0 || //list of 0 length
                         !value.some(v => v != null && v.trim() != ""); //NOT a string not null and different from ""
                 }
 

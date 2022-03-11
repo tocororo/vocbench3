@@ -37,6 +37,7 @@ import { PasswordInputComponent } from '../widget/passwordInput/passwordInputCom
 import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
 import { DatetimePickerComponent } from '../widget/pickers/datetimePicker/datetimePickerComponent';
 import { FilePickerComponent } from '../widget/pickers/filePicker/filePickerComponent';
+import { InlineResourceListEditor } from '../widget/pickers/inlineResourceList/inlineResourceListEditor';
 import { LangPickerComponent } from '../widget/pickers/langPicker/langPickerComponent';
 import { LiteralPickerComponent } from '../widget/pickers/valuePicker/literalPickerComponent';
 import { ResourcePickerComponent } from '../widget/pickers/valuePicker/resourcePickerComponent';
@@ -77,6 +78,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         FilePickerComponent,
         HtmlEditorComponent,
         InlineEditableValue,
+        InlineResourceListEditor,
         InputEditableComponent,
         JsonEditorComponent,
         LangPickerComponent,
@@ -130,6 +132,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         HtmlEditorComponent,
         InlineEditableValue,
         InputEditableComponent,
+        InlineResourceListEditor,
         JsonEditorComponent,
         LangPickerComponent,
         LangStringEditorComponent,

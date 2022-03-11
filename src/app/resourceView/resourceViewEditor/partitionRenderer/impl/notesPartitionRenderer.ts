@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { from, Observable, of } from "rxjs";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../models/CustomForms";
 import { Language } from "../../../../models/LanguagesCountries";
@@ -24,10 +25,10 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.notes;
     addBtnImgSrc = "./assets/images/icons/actions/annotationProperty_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private browsingModals: BrowsingModalServices, private skosService: SkosServices) {
-        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {
