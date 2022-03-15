@@ -15,41 +15,50 @@ export interface SparqlBasedCustomViewDefinition extends CustomViewDefinition {
     retrieve: string;
     update?: string;
 }
+export interface PropertiesBasedViewDefinition extends CustomViewDefinition {
+    properties: string[]; //list of properties in NT
+}
+
 export interface PointViewDefinition extends SparqlBasedCustomViewDefinition {}
 export interface AreaViewDefinition extends SparqlBasedCustomViewDefinition {}
 export interface RouteViewDefinition extends SparqlBasedCustomViewDefinition {}
 export interface SeriesViewDefinition extends SparqlBasedCustomViewDefinition {}
 export interface SeriesCollectionViewDefinition extends SparqlBasedCustomViewDefinition {}
 
-export interface PropertyChainViewDefinition extends CustomViewDefinition {
-    propertyChain: string[]; //list of properties
+export interface PropertyChainViewDefinition extends PropertiesBasedViewDefinition {}
+
+export interface AdvSingleValueViewDefinition extends CustomViewDefinition {
+    retrieve: string;
+    update: SingleValueUpdate;
 }
-export interface AdvSingleValueViewDefinition extends SparqlBasedCustomViewDefinition {
-    updateMode: AdvSingleValueUpdateMode; //tells if and how the new value can be edited/chosen (through a resource picker or with edit inline)
+
+export interface StaticVectorViewDefinition extends PropertiesBasedViewDefinition {}
+
+export interface DynamicVectorViewDefinition extends CustomViewDefinition {
+    retrieve: string;
+    update: SingleValueUpdate[];
+}
+
+export interface SingleValueUpdate {
+    field: string;
+    updateMode: ValueUpdateMode; //tells if and how the new value can be edited/chosen (through a resource picker or with edit inline)
+    updateQuery?: string;
     valueType?: RDFTypesEnum.resource | RDFTypesEnum.literal;
     datatype?: string; //NT IRI representation
     classes?: string[]; //NT IRI representation
 }
-export interface StaticVectorViewDefinition extends CustomViewDefinition {
-}
-export interface DynamicVectorViewDefinition extends CustomViewDefinition {
-}
 
-export enum AdvSingleValueUpdateMode {
+export enum ValueUpdateMode {
     none = "none",
     picker = "picker",
     inline = "inline"
 }
 
 export enum CustomViewDefinitionKeys {
-    classes = "classes",
-    datatype = "datatype",
-    propertyChain = "propertyChain",
+    properties = "properties",
     retrieve = "retrieve",
     suggestedView = "suggestedView",
     update = "update",
-    updateMode = "updateMode",
-    valueType = "valueType",
 }
 
 export class CustomViewReference {

@@ -1,23 +1,30 @@
-import { Component, Input } from '@angular/core';
-import { ARTURIResource, RDFTypesEnum } from 'src/app/models/ARTResources';
-import { AdvSingleValueUpdateMode, AdvSingleValueViewDefinition, CustomViewModel, CustomViewVariables } from 'src/app/models/CustomViews';
-import { RDF } from 'src/app/models/Vocabulary';
-import { DatatypesServices } from 'src/app/services/datatypesServices';
-import { NTriplesUtil, ResourceUtils, SortAttribute } from 'src/app/utils/ResourceUtils';
+import { Component, Input, ViewChild } from '@angular/core';
+import { RDFTypesEnum } from 'src/app/models/ARTResources';
+import { AdvSingleValueViewDefinition, CustomViewModel, CustomViewVariables, ValueUpdateMode } from 'src/app/models/CustomViews';
+import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
+import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
-import { AbstractSparqlBasedViewEditor, VariableInfoStruct } from './abstractSparqlBasedViewEditor';
+import { AbstractCustomViewEditor } from './abstractCustomViewEditor';
+import { VariableInfoStruct } from './abstractSparqlBasedViewEditor';
+import { SingleValueEditor, SingleValueUpdateEnhanced } from './singleValueEditor';
 
 @Component({
     selector: 'adv-single-value-view-editor',
     templateUrl: "advSingleValueViewEditorComponent.html",
 })
-export class AdvSingleValueViewEditorComponent extends AbstractSparqlBasedViewEditor {
+export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor {
 
     @Input() cvDef: AdvSingleValueViewDefinition;
 
+    @ViewChild(SingleValueEditor) singleValueEditor: SingleValueEditor;
+    @ViewChild('retrieveYasgui', { static: false }) retrieveYasgui: YasguiComponent;
+
     model: CustomViewModel = CustomViewModel.adv_single_value;
 
-    
+    activeTab: SparqlTabEnum = "retrieve";
+
+    retrieveEditor: SparqlEditorStruct = { mode: QueryMode.query, query: "", valid: true };
+
     retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.value];
     retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:"
     retrieveVariablesInfo: VariableInfoStruct[] = [
@@ -28,6 +35,11 @@ export class AdvSingleValueViewEditorComponent extends AbstractSparqlBasedViewEd
         "    $resource $trigprop ?obj .\n" +
         "    ...\n" +
         "}";
+
+    retrievePlaceholdersInfo: VariableInfoStruct[] = [
+        { id: CustomViewVariables.resource, descrTranslationKey: "represents the resource being described in ResourceView where the Custom View is shown" },
+        { id: CustomViewVariables.trigprop, descrTranslationKey: "represents the predicate that will be associated to the Custom View" },
+    ];
 
 
     updateRequiredVariables: CustomViewVariables[] = [CustomViewVariables.value];
@@ -40,94 +52,123 @@ export class AdvSingleValueViewEditorComponent extends AbstractSparqlBasedViewEd
         "INSERT { ... }\n" +
         "WHERE { ... }\n";
 
+    singleValueData: SingleValueUpdateEnhanced = {
+        updateMode: ValueUpdateMode.none,
+    };
 
-    updateModes: { id: AdvSingleValueUpdateMode, translationKey: string }[] = [
-        { id: AdvSingleValueUpdateMode.none, translationKey: "No update" },
-        { id: AdvSingleValueUpdateMode.inline, translationKey: "Inline edit (NT format)" },
-        { id: AdvSingleValueUpdateMode.picker, translationKey: "Value picker" },
-    ]
-    updateMode: AdvSingleValueUpdateMode = AdvSingleValueUpdateMode.none;
+    updateQueryInfo: string;
 
-    valueTypes: { id: RDFTypesEnum, translationKey: string }[] = [
-        { id: null, translationKey: "Any" },
-        { id: RDFTypesEnum.resource, translationKey: "Resource" },
-        { id: RDFTypesEnum.literal, translationKey: "Literal" },
-    ];
-    valueType: RDFTypesEnum.resource | RDFTypesEnum.literal;
-
-    pickerClasses: ARTURIResource[] = []; //classes of picker, in case user wants restrict value selection
-
-    datatypes: ARTURIResource[];
-    restrictDatatype: boolean;
-    datatype: ARTURIResource = RDF.langString;
-
-
-    constructor(private datatypeService: DatatypesServices, basicModals: BasicModalServices) {
-        super(basicModals);
+    constructor(basicModals: BasicModalServices) {
+        super();
+        // super(basicModals);
     }
 
     ngOnInit() {
         super.ngOnInit();
-
-        this.datatypeService.getDatatypes().subscribe(
-            datatypes => {
-                this.datatypes = datatypes;
-                ResourceUtils.sortResources(this.datatypes, SortAttribute.show);
-                if (this.datatype) { //in case a datatype was selected, initialize the selection with the same dt from the datatypes list
-                    this.datatype = this.datatypes.find(d => d.equals(this.datatype));
-                }
-            }
-        )
+        this.updateQueryInfo = this.updateDescrIntro +
+            "<ul>" + 
+            this.updateVariablesInfo.map(v => "<li><code>" + v.id + "</code>: " + v.descrTranslationKey + "</li>") + 
+            "</ul>";
     }
 
     protected initCustomViewDef(): void {
         this.cvDef = {
             retrieve: this.retrieveQuerySkeleton,
-            updateMode: this.updateMode,
+            update: { 
+                field: "value",
+                updateMode: this.singleValueData.updateMode
+            },
             suggestedView: this.suggestedView,
         }
     }
 
-    protected initEditor(): void {
+    protected restoreEditor(): void {
         this.retrieveEditor.query = this.cvDef.retrieve;
         this.suggestedView = this.cvDef.suggestedView;
-        this.updateMode = this.cvDef.updateMode;
-        if (this.updateMode != AdvSingleValueUpdateMode.none) {
-            this.updateEditor.query = this.cvDef.update;
-            this.valueType = this.cvDef.valueType;
-            if (this.valueType == RDFTypesEnum.resource) {
-                this.pickerClasses = this.cvDef.classes ? this.cvDef.classes.map(c => NTriplesUtil.parseURI(c)) : null;
-            } else if (this.valueType == RDFTypesEnum.literal && this.cvDef.datatype) {
-                this.restrictDatatype = true;
-                this.datatype = NTriplesUtil.parseURI(this.cvDef.datatype);
-            }
+        this.singleValueData = {
+            updateMode: this.cvDef.update.updateMode,
+            updateData: { query: this.cvDef.update.updateQuery, mode: QueryMode.update, valid: true },
+            valueType: this.cvDef.update.valueType,
+            classes: this.cvDef.update.classes,
+            datatype: this.cvDef.update.datatype,
         }
         this.refreshYasguiEditors();
     }
 
-    onPickerClassesChanged(classes: ARTURIResource[]) {
-        this.pickerClasses = classes;
+    // switchTab(tabId: 'retrieve' | 'update'): void {
+    //     super.switchTab(tabId);
+    //     setTimeout(() => {
+    //         this.singleValueEditor.refreshYasguiEditor();
+    //     });
+    // }
+    switchTab(tabId: SparqlTabEnum) {
+        this.activeTab = tabId;
+        this.refreshYasguiEditors();
+    }
+
+    onRetrieveChanged(event: QueryChangedEvent) {
+        this.retrieveEditor.query = event.query;
+        this.retrieveEditor.mode = event.mode;
+        this.retrieveEditor.valid = event.valid;
         this.emitChanges();
+    }
+
+    onSingleValueDataChanged(data: SingleValueUpdateEnhanced) {
+        this.singleValueData = data;
+        this.emitChanges();
+    }
+
+    private refreshYasguiEditors() {
+        setTimeout(() => {
+            this.retrieveYasgui.forceContentUpdate();
+            this.singleValueEditor.refreshYasguiEditor();
+        });
     }
 
     emitChanges(): void {
         this.cvDef.retrieve = this.retrieveEditor.query;
         this.cvDef.suggestedView = this.suggestedView;
-        this.cvDef.updateMode = this.updateMode;
-        if (this.updateMode != AdvSingleValueUpdateMode.none) {
-            this.cvDef.update = this.updateEditor.query;
-            if (this.updateMode == AdvSingleValueUpdateMode.picker) { //if value is specified through a picker, provide restrictions
-                this.cvDef.valueType = this.valueType;
-                this.cvDef.classes = this.valueType == RDFTypesEnum.resource ? this.pickerClasses.map(c => c.toNT()) : null;
-                this.cvDef.datatype = this.valueType == RDFTypesEnum.literal ? this.datatype.toNT() : null;
+        // this.cvDef.updateMode = this.singleValueData.updateMode;
+        // if (this.singleValueData.updateMode != ValueUpdateMode.none) {
+        //     this.cvDef.update = this.singleValueData.updateData.query;
+        //     if (this.singleValueData.updateMode == ValueUpdateMode.picker) { //if value is specified through a picker, provide restrictions
+        //         this.cvDef.valueType = this.singleValueData.valueType;
+        //         this.cvDef.classes = this.singleValueData.valueType == RDFTypesEnum.resource ? this.singleValueData.classes : null;
+        //         this.cvDef.datatype = this.singleValueData.valueType == RDFTypesEnum.literal ? this.singleValueData.datatype : null;
+        //     }
+        // }
+        this.cvDef.update = { 
+            field: "value", 
+            updateMode: this.singleValueData.updateMode
+        };
+        if (this.singleValueData.updateMode != ValueUpdateMode.none) {
+            this.cvDef.update.updateQuery = this.singleValueData.updateData.query;
+            if (this.singleValueData.updateMode == ValueUpdateMode.picker) { //if value is specified through a picker, provide restrictions
+                this.cvDef.update.valueType = this.singleValueData.valueType;
+                this.cvDef.update.classes = this.singleValueData.valueType == RDFTypesEnum.resource ? this.singleValueData.classes : null;
+                this.cvDef.update.datatype = this.singleValueData.valueType == RDFTypesEnum.literal ? this.singleValueData.datatype : null;
             }
         }
         this.changed.emit(this.cvDef);
     }
 
     public isDataValid(): boolean {
+        //TODO put validation stuff from abstract sparql editor to a common utils class
+        /* Here I can call:
+        - for retrieve: a method in such utils class
+        - for update: a public method in the single-value-editor which in turn uses the method in the util class
+        */ 
         //true if retrieve info are ok and update is disabled or its data are ok
-        return this.isRetrieveOk() && (!this.updateMode || this.isUpdateOk());
+        // return this.isRetrieveOk() && (!this.updateMode || this.isUpdateOk());
+        return true;
     }
 
+}
+
+type SparqlTabEnum = "retrieve" | "update";
+
+interface SparqlEditorStruct {
+    query: string;
+    mode: QueryMode;
+    valid: boolean;
 }

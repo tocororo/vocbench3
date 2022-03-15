@@ -84,16 +84,16 @@ export class CustomViewsComponent {
     }
 
     private openCustomViewEditor(title: Translation, widgetRef?: string) {
-        const modalRef: NgbModalRef = this.modalService.open(CustomViewEditorModal, new ModalOptions('lg'));
+        const modalRef: NgbModalRef = this.modalService.open(CustomViewEditorModal, new ModalOptions('xl'));
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
         modalRef.componentInstance.existingWidgets = this.customViews;
         modalRef.componentInstance.ref = widgetRef;
         return modalRef.result;
     }
 
-    // /*
-    //  * ASSOCIATIONS
-    //  */
+    /*
+     * ASSOCIATIONS
+     */
 
     private initAssociations() {
         this.customViewsService.listAssociations().subscribe(

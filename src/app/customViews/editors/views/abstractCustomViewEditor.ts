@@ -21,7 +21,7 @@ export abstract class AbstractCustomViewEditor {
         if (this.cvDef == null) {
             this.initCustomViewDef();
         }
-        this.initEditor();
+        this.restoreEditor();
     }
 
 
@@ -39,7 +39,7 @@ export abstract class AbstractCustomViewEditor {
     /**
      * Restore the UI according the CV definition
      */
-    protected abstract initEditor(): void;
+    protected abstract restoreEditor(): void;
 
     /**
      * Uses update EventEmitter to propagate the updated CV def to parent component

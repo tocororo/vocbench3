@@ -68,7 +68,7 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         }
     }
 
-    protected initEditor(): void {
+    protected restoreEditor(): void {
         this.retrieveEditor.query = this.cvDef.retrieve;
         this.updateEditor.query = this.cvDef.update ? this.cvDef.update : "";
         this.suggestedView = this.cvDef.suggestedView;

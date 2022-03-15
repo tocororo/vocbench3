@@ -9,6 +9,7 @@ import { UIUtils } from "../../utils/UIUtils";
 import { AbstractCustomViewEditor } from "./views/abstractCustomViewEditor";
 import { AdvSingleValueViewEditorComponent } from "./views/advSingleValueViewEditorComponent";
 import { AreaViewEditorComponent } from "./views/areaViewEditorComponent";
+import { DatatypeCacheService } from "./views/datatypeCacheService";
 import { DynamicVectorViewEditorComponent } from "./views/dynamicVectorViewEditorComponent";
 import { PointViewEditorComponent } from "./views/pointViewEditorComponent";
 import { PropertyChainViewEditorComponent } from "./views/propertyChainViewEditorComponent";
@@ -72,7 +73,7 @@ export class CustomViewEditorModal {
 
     customViewDef: CustomViewDefinition;
 
-    constructor(private customViewService: CustomViewsServices, private basicModals: BasicModalServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) {
+    constructor(private customViewService: CustomViewsServices, private datatypeCache: DatatypeCacheService, private activeModal: NgbActiveModal, private elementRef: ElementRef) {
     }
 
     ngOnInit() {
@@ -125,7 +126,7 @@ export class CustomViewEditorModal {
                         this.selectedCategory = CustomViewCategory.statistical_series;
                     } else if (this.selectedModel == CustomViewModel.property_chain) {
                         let cvDef: PropertyChainViewDefinition = {
-                            propertyChain: patternConf.getPropertyValue(CustomViewDefinitionKeys.propertyChain),
+                            properties: patternConf.getPropertyValue(CustomViewDefinitionKeys.properties),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
                         }
                         this.customViewDef = cvDef;
@@ -135,21 +136,20 @@ export class CustomViewEditorModal {
                             retrieve: patternConf.getPropertyValue(CustomViewDefinitionKeys.retrieve),
                             update: patternConf.getPropertyValue(CustomViewDefinitionKeys.update),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
-                            updateMode: patternConf.getPropertyValue(CustomViewDefinitionKeys.updateMode),
-                            valueType: patternConf.getPropertyValue(CustomViewDefinitionKeys.valueType),
-                            classes: patternConf.getPropertyValue(CustomViewDefinitionKeys.classes),
-                            datatype: patternConf.getPropertyValue(CustomViewDefinitionKeys.datatype),
                         }
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.single_value;
                     } else if (this.selectedModel == CustomViewModel.static_vector) {
                         let cvDef: StaticVectorViewDefinition = {
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
+                            properties: patternConf.getPropertyValue(CustomViewDefinitionKeys.properties)
                         }
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.vector;
                     } else if (this.selectedModel == CustomViewModel.dynamic_vector) {
                         let cvDef: DynamicVectorViewDefinition = {
+                            retrieve: patternConf.getPropertyValue(CustomViewDefinitionKeys.retrieve),
+                            update: patternConf.getPropertyValue(CustomViewDefinitionKeys.update),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
                         }
                         this.customViewDef = cvDef;
@@ -159,6 +159,17 @@ export class CustomViewEditorModal {
                 }
             );
         }
+
+        /**
+         * Reset and reinitialize the datatype cache
+         * Note: datatypes are used for restricting value selection in single-value-editor (used in adv-single-value and dynamic-vector views).
+         * The initialization could have been done directly into such component and avoided to be done here
+         * (where they could be even not needed), but it could happen that in dynamic-vector, when restoring an existing view,
+         * single-value-editor is instanced multiple times (according the amount of values) and this could involve concurrent getDatatypes invocations.
+         * So, in order to prevent this (useless multiple datatype initializations), I prefer to initialize only once here.
+         */
+        this.datatypeCache.resetCache();
+        this.datatypeCache.getDatatypes().subscribe();
     }
 
     onCategoryChanged() {
@@ -174,7 +185,8 @@ export class CustomViewEditorModal {
     private adaptModalSize() {
         if (
             this.selectedModel == CustomViewModel.area || this.selectedModel == CustomViewModel.point || this.selectedModel == CustomViewModel.route ||
-            this.selectedModel == CustomViewModel.series || this.selectedModel == CustomViewModel.series_collection
+            this.selectedModel == CustomViewModel.series || this.selectedModel == CustomViewModel.series_collection || 
+            this.selectedModel == CustomViewModel.dynamic_vector
         ) {
             UIUtils.setFullSizeModal(this.elementRef);
         } else {

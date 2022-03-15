@@ -1,60 +1,37 @@
-import { Component, Input } from '@angular/core';
-import { ARTURIResource } from 'src/app/models/ARTResources';
-import { CustomViewModel, PropertyChainViewDefinition } from 'src/app/models/CustomViews';
+import { Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CustomViewModel } from 'src/app/models/CustomViews';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
-import { ModalType } from 'src/app/widget/modal/Modals';
-import { AbstractCustomViewEditor } from './abstractCustomViewEditor';
+import { AbstractPropertiesBasedViewEditor } from './abstractPropertiesBasedViewEditor';
 
 @Component({
     selector: 'property-chain-view-editor',
-    templateUrl: "propertyChainViewEditorComponent.html",
+    templateUrl: "propertiesBasedViewEditor.html",
 })
-export class PropertyChainViewEditorComponent extends AbstractCustomViewEditor {
-
-    @Input() cvDef: PropertyChainViewDefinition;
+export class PropertyChainViewEditorComponent extends AbstractPropertiesBasedViewEditor {
 
     model: CustomViewModel = CustomViewModel.property_chain;
 
-    propertyChain: ARTURIResource[];
+    propertyListLabel: string = "Property chain";
+    invalidPropListMsg: string = "Property chain must contain at least one proprety.";
+    allowDuplicates: boolean = true;
 
-    constructor(private basicModals: BasicModalServices) {
-        super()
+    infoHtml: string = `With this view, the object in the ResourceView will be rendered with a single value reached passing through a defined property chain.<br />
+    E.g.:
+    <code class="my-2" style="display: block;">
+        $resource $trigprop ?o1 .<br/>
+        ?o1 %prop1% ?o2 .<br/> 
+        ...<br/>
+        ?oN %propN ?RENDERED_VALUE .
+    </code>
+    <i>Note</i>: the property chain must start from the object of the triggering property, so such property doesn't have to be included in the chain.`;
+
+    constructor(basicModals: BasicModalServices, sanitizer: DomSanitizer) {
+        super(basicModals, sanitizer);
     }
 
     ngOnInit() {
         super.ngOnInit();
-    }
-
-    initCustomViewDef(): void {
-        this.propertyChain = [];
-        this.cvDef = {
-            propertyChain: [],
-            suggestedView: this.suggestedView
-        }
-    }
-
-    initEditor(): void {
-        this.propertyChain = this.cvDef.propertyChain.map(p => new ARTURIResource(p));
-        this.suggestedView = this.cvDef.suggestedView;
-    }
-
-    onPropChainChanged(properties: ARTURIResource[]) {
-        this.propertyChain = properties;
-        this.emitChanges();
-    }
-
-    emitChanges(): void {
-        this.cvDef.propertyChain = this.propertyChain.map(p => p.toNT());
-        this.cvDef.suggestedView = this.suggestedView;
-        this.changed.emit(this.cvDef);
-    }
-
-    public isDataValid(): boolean {
-        if (this.propertyChain.length == 0) {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "Property chain must contain at least one proprety." }, ModalType.warning);
-            return false;
-        }
-        return true;
     }
 
 }

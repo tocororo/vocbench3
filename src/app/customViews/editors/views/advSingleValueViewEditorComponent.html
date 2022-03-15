@@ -11,7 +11,7 @@
             <li class="nav-item" [ngClass]="{ active : activeTab == 'update' }">
                 <a class="nav-link" (click)="switchTab('update')">
                     Update
-                    <i *ngIf="updateMode != 'none' && !updateEditor.valid" class="fas fa-exclamation text-danger" [title]="'STATUS.ERROR'|translate"></i>
+                    <i *ngIf="singleValueData.updateMode != 'none' && !singleValueData.updateData.valid" class="fas fa-exclamation text-danger" [title]="'STATUS.ERROR'|translate"></i>
                 </a>
             </li>
         </ul>
@@ -36,50 +36,7 @@
             </div>
 
             <div [hidden]="activeTab != 'update'" class="vbox">
-
-                <div class="form-group row">
-                    <label class="col-form-label col-sm-2">Update mode:</label>
-                    <select class="form-control col-10" [(ngModel)]="updateMode" (ngModelChanged)="emitChanges()">
-                        <option *ngFor="let m of updateModes" [value]="m.id">
-                            {{m.translationKey|translate}}
-                        </option>
-                    </select>
-                </div>
-                <ng-container *ngIf="updateMode == 'picker'">
-                    <div class="form-group row">
-                        <label class="col-form-label col-sm-2">Value Type:</label>
-                        <select class="form-control col-10" style="flex: 1" [(ngModel)]="valueType">
-                            <option *ngFor="let t of valueTypes" [value]="t.id">{{t.translationKey|translate}}</option>
-                        </select>
-                    </div>
-                    <div *ngIf="valueType == 'resource'" class="form-group row">
-                        <label class="col-form-label col-sm-2">Classes:</label>
-                        <inline-resource-list-editor class="col-10 p-0" [resources]="pickerClasses" role="cls" (changed)="onPickerClassesChanged($event)"></inline-resource-list-editor>
-                    </div>
-                    <div *ngIf="valueType == 'literal'" class="form-group row">
-                        <label class="col-form-label col-sm-2">Datatype:</label>
-                        <div class="col-10 p-0 d-flex align-items-center">
-                            <input type="checkbox" [(ngModel)]="restrictDatatype">
-                            <select *ngIf="restrictDatatype" class="form-control ml-2" style="flex: 1" [(ngModel)]="datatype" (ngModelChange)="emitChanges()">
-                                <option *ngFor="let d of datatypes" [ngValue]="d">{{d.getShow()}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </ng-container>
-
-
-                <div *ngIf="updateMode != 'none'" class="mt-2">
-                    <div class="alert alert-warning mb-2">
-                        {{updateDescrIntro}}
-                        <ul>
-                            <li *ngFor="let v of updateVariablesInfo">
-                                <code>{{v.id}}</code>: {{v.descrTranslationKey|translate}};
-                            </li>
-                        </ul>
-                    </div>
-                    <yasgui #updateYasgui [query]="updateEditor.query" (querychange)="onUpdateChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
-                </div>
-
+                <single-value-editor [data]="singleValueData" [queryInfo]="updateQueryInfo" (dataChange)="onSingleValueDataChanged($event)"></single-value-editor>
             </div>
 
         </div>

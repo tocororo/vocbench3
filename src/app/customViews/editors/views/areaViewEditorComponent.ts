@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { CustomViewModel, CustomViewVariables, ViewsEnum } from 'src/app/models/CustomViews';
+import { CustomViewModel, CustomViewVariables } from 'src/app/models/CustomViews';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { AbstractSparqlBasedViewEditor, VariableInfoStruct } from './abstractSparqlBasedViewEditor';
 

@@ -9,12 +9,14 @@ import { CustomViewEditorModal } from '../customViews/editors/customViewEditorMo
 import { CvAssociationEditorModal } from '../customViews/editors/cvAssociationEditorModal';
 import { AdvSingleValueViewEditorComponent } from '../customViews/editors/views/advSingleValueViewEditorComponent';
 import { AreaViewEditorComponent } from '../customViews/editors/views/areaViewEditorComponent';
+import { DatatypeCacheService } from '../customViews/editors/views/datatypeCacheService';
 import { DynamicVectorViewEditorComponent } from '../customViews/editors/views/dynamicVectorViewEditorComponent';
 import { PointViewEditorComponent } from '../customViews/editors/views/pointViewEditorComponent';
 import { PropertyChainViewEditorComponent } from '../customViews/editors/views/propertyChainViewEditorComponent';
 import { RouteViewEditorComponent } from '../customViews/editors/views/routeViewEditorComponent';
 import { SeriesCollectionViewEditorComponent } from '../customViews/editors/views/seriesCollectionViewEditorComponent';
 import { SeriesViewEditorComponent } from '../customViews/editors/views/seriesViewEditorComponent';
+import { SingleValueEditor } from '../customViews/editors/views/singleValueEditor';
 import { StaticVectorViewEditorComponent } from '../customViews/editors/views/staticVectorViewEditorComponent';
 import { SharedModule } from './sharedModule';
 
@@ -24,10 +26,13 @@ import { SharedModule } from './sharedModule';
         DragDropModule,
         FormsModule,
         NgbDropdownModule,
+        // NgbNavModule,
         SharedModule,
         TranslateModule
     ],
-    providers: [],
+    providers: [
+        DatatypeCacheService
+    ],
     declarations: [
         CustomViewsComponent,
         CustomViewEditorModal,
@@ -42,6 +47,8 @@ import { SharedModule } from './sharedModule';
         SeriesViewEditorComponent,
         SeriesCollectionViewEditorComponent,
         StaticVectorViewEditorComponent,
+
+        SingleValueEditor
     ],
     exports: [CustomViewsComponent],
     entryComponents: [
