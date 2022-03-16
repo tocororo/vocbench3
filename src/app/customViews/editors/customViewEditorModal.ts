@@ -4,12 +4,10 @@ import { Reference } from "src/app/models/Configuration";
 import { AdvSingleValueViewDefinition, AreaViewDefinition, CustomViewCategory, CustomViewConst, CustomViewDefinition, CustomViewDefinitionKeys, CustomViewModel, CustomViewReference, DynamicVectorViewDefinition, PointViewDefinition, PropertyChainViewDefinition, RouteViewDefinition, SeriesCollectionViewDefinition, SeriesViewDefinition, StaticVectorViewDefinition } from "src/app/models/CustomViews";
 import { Scope, ScopeUtils } from "src/app/models/Plugins";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
-import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { AbstractCustomViewEditor } from "./views/abstractCustomViewEditor";
 import { AdvSingleValueViewEditorComponent } from "./views/advSingleValueViewEditorComponent";
 import { AreaViewEditorComponent } from "./views/areaViewEditorComponent";
-import { DatatypeCacheService } from "./views/datatypeCacheService";
 import { DynamicVectorViewEditorComponent } from "./views/dynamicVectorViewEditorComponent";
 import { PointViewEditorComponent } from "./views/pointViewEditorComponent";
 import { PropertyChainViewEditorComponent } from "./views/propertyChainViewEditorComponent";
@@ -73,7 +71,7 @@ export class CustomViewEditorModal {
 
     customViewDef: CustomViewDefinition;
 
-    constructor(private customViewService: CustomViewsServices, private datatypeCache: DatatypeCacheService, private activeModal: NgbActiveModal, private elementRef: ElementRef) {
+    constructor(private customViewService: CustomViewsServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) {
     }
 
     ngOnInit() {
@@ -159,17 +157,6 @@ export class CustomViewEditorModal {
                 }
             );
         }
-
-        /**
-         * Reset and reinitialize the datatype cache
-         * Note: datatypes are used for restricting value selection in single-value-editor (used in adv-single-value and dynamic-vector views).
-         * The initialization could have been done directly into such component and avoided to be done here
-         * (where they could be even not needed), but it could happen that in dynamic-vector, when restoring an existing view,
-         * single-value-editor is instanced multiple times (according the amount of values) and this could involve concurrent getDatatypes invocations.
-         * So, in order to prevent this (useless multiple datatype initializations), I prefer to initialize only once here.
-         */
-        this.datatypeCache.resetCache();
-        this.datatypeCache.getDatatypes().subscribe();
     }
 
     onCategoryChanged() {
@@ -186,7 +173,7 @@ export class CustomViewEditorModal {
         if (
             this.selectedModel == CustomViewModel.area || this.selectedModel == CustomViewModel.point || this.selectedModel == CustomViewModel.route ||
             this.selectedModel == CustomViewModel.series || this.selectedModel == CustomViewModel.series_collection || 
-            this.selectedModel == CustomViewModel.dynamic_vector
+            this.selectedModel == CustomViewModel.adv_single_value || this.selectedModel == CustomViewModel.dynamic_vector
         ) {
             UIUtils.setFullSizeModal(this.elementRef);
         } else {
@@ -196,7 +183,6 @@ export class CustomViewEditorModal {
 
 
     onCvDefChanged(cvDef: CustomViewDefinition) {
-        // console.log("onCvDefChanged", cvDef);
         this.customViewDef = cvDef;
     }
 
@@ -229,8 +215,6 @@ export class CustomViewEditorModal {
             //ref is the same provided as input (in edit mode) or built according the name entered by user (in create mode)
             let refParam = this.ref ? this.ref : ScopeUtils.serializeScope(Scope.PROJECT) + ":" + this.name; //store pattern at project level
             
-            console.log("create", refParam, this.customViewDef, this.selectedModel);
-
             //also for edit use createCustomView which overwrite the previous with the same ref
             this.customViewService.createCustomView(refParam, this.customViewDef, this.selectedModel).subscribe(
                 () => {

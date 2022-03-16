@@ -3,7 +3,6 @@ import { RDFTypesEnum } from 'src/app/models/ARTResources';
 import { AdvSingleValueViewDefinition, CustomViewModel, CustomViewVariables, ValueUpdateMode } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
 import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
-import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { AbstractCustomViewEditor } from './abstractCustomViewEditor';
 import { VariableInfoStruct } from './abstractSparqlBasedViewEditor';
 import { SingleValueEditor, SingleValueUpdateEnhanced } from './singleValueEditor';
@@ -11,6 +10,7 @@ import { SingleValueEditor, SingleValueUpdateEnhanced } from './singleValueEdito
 @Component({
     selector: 'adv-single-value-view-editor',
     templateUrl: "advSingleValueViewEditorComponent.html",
+    host: { class: "vbox" }
 })
 export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor {
 
@@ -58,9 +58,8 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
 
     updateQueryInfo: string;
 
-    constructor(basicModals: BasicModalServices) {
+    constructor() {
         super();
-        // super(basicModals);
     }
 
     ngOnInit() {

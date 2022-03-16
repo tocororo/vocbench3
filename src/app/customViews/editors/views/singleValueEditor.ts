@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, Output, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ARTURIResource, RDFTypesEnum } from 'src/app/models/ARTResources';
 import { ValueUpdateMode } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
 import { RDF } from 'src/app/models/Vocabulary';
+import { DatatypesServices } from 'src/app/services/datatypesServices';
 import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
-import { NTriplesUtil } from 'src/app/utils/ResourceUtils';
-import { DatatypeCacheService } from './datatypeCacheService';
+import { NTriplesUtil, ResourceUtils, SortAttribute } from 'src/app/utils/ResourceUtils';
 
 @Component({
     selector: 'single-value-editor',
@@ -46,7 +46,7 @@ export class SingleValueEditor {
     datatype: ARTURIResource = RDF.langString;
 
 
-    constructor(private datatypeCache: DatatypeCacheService, private sanitizer: DomSanitizer) {
+    constructor(private datatypeService: DatatypesServices, private sanitizer: DomSanitizer) {
     }
 
     ngOnInit() {
@@ -68,10 +68,10 @@ export class SingleValueEditor {
             this.emitChanges();
         }
 
-        console.log("init single-value-editor", this.data)
-        this.datatypeCache.getDatatypes().subscribe(
+        this.datatypeService.getDatatypes().subscribe(
             datatypes => {
                 this.datatypes = datatypes;
+                ResourceUtils.sortResources(this.datatypes, SortAttribute.show);
                 if (this.datatype != null) {
                     this.datatype = this.datatypes.find(d => d.equals(this.datatype));
                 }

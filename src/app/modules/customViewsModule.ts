@@ -9,7 +9,6 @@ import { CustomViewEditorModal } from '../customViews/editors/customViewEditorMo
 import { CvAssociationEditorModal } from '../customViews/editors/cvAssociationEditorModal';
 import { AdvSingleValueViewEditorComponent } from '../customViews/editors/views/advSingleValueViewEditorComponent';
 import { AreaViewEditorComponent } from '../customViews/editors/views/areaViewEditorComponent';
-import { DatatypeCacheService } from '../customViews/editors/views/datatypeCacheService';
 import { DynamicVectorViewEditorComponent } from '../customViews/editors/views/dynamicVectorViewEditorComponent';
 import { PointViewEditorComponent } from '../customViews/editors/views/pointViewEditorComponent';
 import { PropertyChainViewEditorComponent } from '../customViews/editors/views/propertyChainViewEditorComponent';
@@ -26,13 +25,10 @@ import { SharedModule } from './sharedModule';
         DragDropModule,
         FormsModule,
         NgbDropdownModule,
-        // NgbNavModule,
         SharedModule,
         TranslateModule
     ],
-    providers: [
-        DatatypeCacheService
-    ],
+    providers: [],
     declarations: [
         CustomViewsComponent,
         CustomViewEditorModal,

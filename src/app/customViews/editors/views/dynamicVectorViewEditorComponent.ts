@@ -1,5 +1,4 @@
 import { Component, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { RDFTypesEnum } from 'src/app/models/ARTResources';
 import { CustomViewModel, CustomViewVariables, DynamicVectorViewDefinition, SingleValueUpdate, ValueUpdateMode } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
 import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
@@ -92,7 +91,9 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
         let retrieveQuery = this.retrieveEditor.query;
         let select = retrieveQuery.substring(retrieveQuery.toLocaleLowerCase().indexOf("select"), retrieveQuery.toLocaleLowerCase().indexOf("where"));
         
-        let headersRegex: RegExp = /\?(\w+)_value\b/gi;
+        // let headersRegex: RegExp = /[\?|$](\w+)_value\b/gi;
+        let headersRegex: RegExp = /[\?|$]([a-zA-Z0-9_]+)_value\b/gi;
+        
         let matchArray: RegExpExecArray;
         while ((matchArray = headersRegex.exec(select)) !== null) {
             this.retrieveFields.push(matchArray[1]); //0 is the whole expression, 1 is the 1st group (any word between ? and _value)
