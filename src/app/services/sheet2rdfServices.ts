@@ -30,13 +30,14 @@ export class Sheet2RDFServices {
         return this.httpMgr.uploadFile(this.serviceName, "uploadSpreadsheet", data);
     }
 
-    uploadDBInfo(db_base_url: string, db_name: string, db_table: string, db_user: string, db_password: string, fsNamingStrategy?: string) {
+    uploadDBInfo(db_base_url: string, db_name: string, db_table: string, db_user: string, db_password: string, db_driverName: string, fsNamingStrategy?: string) {
         let data: STRequestParams = {
             db_base_url: db_base_url,
             db_name: db_name,
             db_table: db_table,
             db_user: db_user,
             db_password: db_password,
+            db_driverName: db_driverName,
             fsNamingStrategy: fsNamingStrategy
         };
         let options: VBRequestOptions = new VBRequestOptions({
@@ -45,6 +46,11 @@ export class Sheet2RDFServices {
             }]
         });
         return this.httpMgr.uploadFile(this.serviceName, "uploadDBInfo", data, options);
+    }
+
+    getSupportedDBDrivers(): Observable<string[]> {
+        let params: STRequestParams = {};
+        return this.httpMgr.doGet(this.serviceName, "getSupportedDBDrivers", params);
     }
 
     /**

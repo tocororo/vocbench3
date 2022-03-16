@@ -77,7 +77,9 @@ export class Sheet2RdfComponent {
     ];
     selectedInputSource: InputSource = this.inputSources[0].id;
 
-    dbInfo: DatabaseInfo = { db_base_url: null, db_name: null, db_table: null, db_user: null, db_password: null };
+    dbInfo: DatabaseInfo = { db_base_url: null, db_name: null, db_table: null, db_user: null, db_password: null, db_driverName: null };
+    dbDrivers: string[];
+
 
     constructor(private s2rdfService: Sheet2RDFServices, private codaService: CODAServices, private exportService: ExportServices, 
         private settingsService: SettingsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
@@ -103,6 +105,13 @@ export class Sheet2RdfComponent {
                 this.fsNamingStrategy = s2rdfSettings.namingStrategy;
             }
         );
+
+        this.s2rdfService.getSupportedDBDrivers().subscribe(
+            drivers => {
+                this.dbDrivers = drivers;
+                this.dbInfo.db_driverName = this.dbDrivers[0];
+            }
+        )
     }
 
     //use HostListener instead of ngOnDestroy since this component is reused and so it is never destroyed
@@ -136,7 +145,8 @@ export class Sheet2RdfComponent {
     }
 
     loadDbInfo() {
-        this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_table, this.dbInfo.db_user, this.dbInfo.db_password, this.fsNamingStrategy).subscribe(
+        this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_table, 
+            this.dbInfo.db_user, this.dbInfo.db_password, this.dbInfo.db_driverName, this.fsNamingStrategy).subscribe(
             () => {
                 this.resetAll();
                 this.initHeaders();
@@ -580,4 +590,5 @@ interface DatabaseInfo {
     db_table: string;
     db_user: string;
     db_password: string;
+    db_driverName: string;
 }

@@ -2168,7 +2168,8 @@
         },
         "DATABASE": {
             "DATABASE": "Database",
-            "DB_BASE_URL": "Base URL DB",
+            "DB_BASE_URL": "Base URL",
+            "DB_DRIVER": "Driver",
             "DB_NAME": "Nome DB",
             "DB_PASSWORD": "Password",
             "DB_TABLE": "Tabella",

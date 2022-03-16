@@ -8,38 +8,49 @@
                     <select class="form-control ml-2" [(ngModel)]="selectedInputSource" style="width: initial;">
                         <option *ngFor="let source of inputSources" [ngValue]="source.id">{{source.translationKey|translate}}</option>
                     </select>
-                    <div class="ml-3" style="flex: 1;">
-                        <div *ngIf="selectedInputSource=='spreadsheet'" class="d-flex align-items-center">
-                            <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"></file-picker>
-                            <button class="btn btn-light ml-2" (click)="loadSpreadsheet()" [disabled]="!spreadsheetFile">
-                                <span class="fas fa-redo" [title]="'ACTIONS.RELOAD'|translate"></span>
-                            </button>
-                        </div>
-                        <div *ngIf="selectedInputSource=='database'" class="d-flex" style="flex: 1">
-                            <div class="d-flex align-items-center" style="flex: 1">
-                                <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_BASE_URL'|translate}}:</label>
-                                <input class="form-control ml-1" [(ngModel)]="dbInfo.db_base_url">
-                            </div>
-                            <div class="d-flex align-items-center ml-2" style="flex: 1">
-                                <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_NAME'|translate}}:</label>
-                                <input class="form-control ml-1" [(ngModel)]="dbInfo.db_name">
-                            </div>
-                            <div class="d-flex align-items-center ml-2" style="flex: 1">
-                                <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_TABLE'|translate}}:</label>
-                                <input class="form-control ml-1" [(ngModel)]="dbInfo.db_table">
-                            </div>
-                            <div class="d-flex align-items-center ml-2" style="flex: 1">
-                                <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_USER'|translate}}:</label>
-                                <input class="form-control ml-1" [(ngModel)]="dbInfo.db_user">
-                            </div>
-                            <div class="d-flex align-items-center ml-2" style="flex: 1">
-                                <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_PASSWORD'|translate}}:</label>
-                                <password-input class="ml-1" [(ngModel)]="dbInfo.db_password"></password-input>
-                            </div>
-                            <button class="btn btn-light ml-2" (click)="loadDbInfo()" [disabled]="!dbInfo.db_base_url || !dbInfo.db_name || !dbInfo.db_table || !dbInfo.db_user || !dbInfo.db_password">
-                                <span *ngIf="!tablePreview" class="fas fa-check" [title]="'ACTIONS.CONFIRM'|translate"></span>
-                                <span *ngIf="tablePreview" class="fas fa-redo" [title]="'ACTIONS.RELOAD'|translate"></span>
-                            </button>
+                    <div class="card ml-3" style="flex: 1;">
+                        <div class="card-body d-flex align-items-center">
+
+                            <ng-container *ngIf="selectedInputSource=='spreadsheet'">
+                                <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"></file-picker>
+                                <button class="btn btn-light ml-2" (click)="loadSpreadsheet()" [disabled]="!spreadsheetFile">
+                                    <span class="fas fa-redo" [title]="'ACTIONS.RELOAD'|translate"></span>
+                                </button>
+                            </ng-container>
+
+                            <ng-container *ngIf="selectedInputSource=='database'" class="card-body d-flex" style="flex: 1">
+                                <div class="d-flex align-items-center" style="flex: 1">
+                                    <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_DRIVER'|translate}}:</label>
+                                    <select class="form-control ml-2" [(ngModel)]="dbInfo.db_driverName">
+                                        <option *ngFor="let d of dbDrivers">{{d}}</option>
+                                    </select>
+                                </div>
+                                <div class="d-flex align-items-center ml-2" style="flex: 1">
+                                    <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_BASE_URL'|translate}}:</label>
+                                    <input class="form-control ml-1" [(ngModel)]="dbInfo.db_base_url">
+                                </div>
+                                <div class="d-flex align-items-center ml-2" style="flex: 1">
+                                    <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_NAME'|translate}}:</label>
+                                    <input class="form-control ml-1" [(ngModel)]="dbInfo.db_name">
+                                </div>
+                                <div class="d-flex align-items-center ml-2" style="flex: 1">
+                                    <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_TABLE'|translate}}:</label>
+                                    <input class="form-control ml-1" [(ngModel)]="dbInfo.db_table">
+                                </div>
+                                <div class="d-flex align-items-center ml-2" style="flex: 1">
+                                    <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_USER'|translate}}:</label>
+                                    <input class="form-control ml-1" [(ngModel)]="dbInfo.db_user">
+                                </div>
+                                <div class="d-flex align-items-center ml-2" style="flex: 1">
+                                    <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_PASSWORD'|translate}}:</label>
+                                    <password-input class="ml-1" [(ngModel)]="dbInfo.db_password"></password-input>
+                                </div>
+                                <button class="btn btn-light ml-2" (click)="loadDbInfo()" [disabled]="!dbInfo.db_base_url || !dbInfo.db_name || !dbInfo.db_table || !dbInfo.db_user || !dbInfo.db_password">
+                                    <span *ngIf="!tablePreview" class="fas fa-check" [title]="'ACTIONS.CONFIRM'|translate"></span>
+                                    <span *ngIf="tablePreview" class="fas fa-redo" [title]="'ACTIONS.RELOAD'|translate"></span>
+                                </button>
+                            </ng-container>
+
                         </div>
                     </div>
                 </div>
