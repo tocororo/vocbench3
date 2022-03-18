@@ -1,0 +1,36 @@
+<div class="cv-table">
+    <table class="table table-sm">
+        <colgroup>
+            <col style="width: 1%">
+            <col *ngFor="let h of headers" [ngStyle]="{ 'width': 98/headers.length + '%' }">
+            <col style="width: 1%">
+        </colgroup>
+        <thead>
+            <tr>
+                <th></th>
+                <th *ngFor="let h of headers">
+                    {{h}}
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let view of views">
+                <td>
+                    <button class="btn btn-transparent btn-xs mr-2" (click)="openResource(view)" [title]="view.resource.toNT()">
+                        <i class="fas fa-arrow-alt-circle-right"></i>
+                    </button>
+                </td>
+                <td *ngFor="let v of view.values">
+                    <cv-value-renderer [value]="v" [subject]="view.resource" [readonly]="readonly" [rendering]="rendering" (update)="onUpdate()" (dblClick)="onValueDoubleClick(v)">
+                    </cv-value-renderer>
+                </td>
+                <td>
+                    <!-- <button class="btn btn-transparent btn-xs ml-2" [title]="'ACTIONS.DELETE'|translate" [disabled]="deleteRowDisabled" (click)="deleteRow(row)">
+                        <i class="fas fa-minus fa-sm"></i>
+                    </button> -->
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

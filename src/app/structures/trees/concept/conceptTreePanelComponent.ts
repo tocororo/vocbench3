@@ -123,7 +123,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     (schemes: ARTURIResource[]) => {
                         this.workingSchemes = schemes;
                         this.schemeChanged.emit(schemes)
-                    }
+                    },
+                    () => {}
                 )
             },
             () => {}

@@ -27,6 +27,8 @@ export class ClassIndividualTreeComponent {
     currentSchemes: ARTURIResource[];//the scheme selecte in the concept tree (only if selected class is skos:Concept)
     selectedInstance: ARTURIResource; //the instance (or concept) selected in the instance list (or concept tree)
 
+    showClassTree: boolean = true; //useful to hide the class tree when the selection is restricted to instances of only one class
+
     ngOnInit() {
         if (this.schemes === undefined) { //if @Input scheme is not provided at all, get it from project preference
             this.currentSchemes = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes;
@@ -42,6 +44,13 @@ export class ClassIndividualTreeComponent {
         if (changes['roots']) { //when roots changes, deselect eventals class and instance selected
             this.selectedClass = null;
             this.selectedInstance = null;
+            //when there is only one class, select it automatically and hide the class tree
+            if (this.roots && this.roots.length == 1) {
+                this.selectedClass = this.roots[0];
+                this.showClassTree = false;
+            } else {
+                this.showClassTree = true;
+            }
         }
     }
 

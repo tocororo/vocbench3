@@ -1,4 +1,6 @@
+import { CommaListExpression } from "typescript";
 import { Deserializer } from "../utils/Deserializer";
+import { NTriplesUtil } from "../utils/ResourceUtils";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFTypesEnum } from "./ARTResources";
 import { Configuration, Reference } from "./Configuration";
 import { Scope } from "./Plugins";
@@ -29,36 +31,29 @@ export interface PropertyChainViewDefinition extends PropertiesBasedViewDefiniti
 
 export interface AdvSingleValueViewDefinition extends CustomViewDefinition {
     retrieve: string;
-    update: SingleValueUpdate;
+    update: UpdateInfo;
 }
 
 export interface StaticVectorViewDefinition extends PropertiesBasedViewDefinition {}
 
 export interface DynamicVectorViewDefinition extends CustomViewDefinition {
     retrieve: string;
-    update: SingleValueUpdate[];
+    update: UpdateInfo[];
 }
 
-export interface SingleValueUpdate {
+export interface UpdateInfo {
     field: string;
-    updateMode: ValueUpdateMode; //tells if and how the new value can be edited/chosen (through a resource picker or with edit inline)
+    updateMode: UpdateMode; //tells if and how the new value can be edited/chosen (through a resource picker or with edit inline)
     updateQuery?: string;
     valueType?: RDFTypesEnum.resource | RDFTypesEnum.literal;
     datatype?: string; //NT IRI representation
     classes?: string[]; //NT IRI representation
 }
 
-export enum ValueUpdateMode {
+export enum UpdateMode {
     none = "none",
     picker = "picker",
     inline = "inline"
-}
-
-export enum CustomViewDefinitionKeys {
-    properties = "properties",
-    retrieve = "retrieve",
-    suggestedView = "suggestedView",
-    update = "update",
 }
 
 export class CustomViewReference {
@@ -80,7 +75,28 @@ export class CustomViewReference {
     }
 }
 
+// ============= ASSOCIATIONS =============
+
+export interface CustomViewAssociation {
+    ref: string; 
+    property: ARTURIResource;
+    customViewRef: CustomViewReference;
+}
+
+export class CustomViewAssociationDefinition {
+    property: ARTURIResource;
+    customViewRef: string;
+    defaultView: ViewsEnum;
+}
+
 // ==== stuff for editor
+
+export enum CustomViewDefinitionKeys {
+    properties = "properties",
+    retrieve = "retrieve",
+    suggestedView = "suggestedView",
+    update = "update",
+}
 
 export enum CustomViewCategory {
     single_value = "single_value",
@@ -152,112 +168,80 @@ export class CustomViewConst {
 }
 
 export enum CustomViewVariables {
-    latitude = "?latitude", //in area, route, point
-    location = "?location",  //in area, route, point
-    longitude = "?longitude", //in area, route, point
-    name = "?name", //in series, series_collection
-    route_id = "?route_id", //in area, route
-    series_id = "?series_id", //in series
-    series_label = "?series_label", //in series, series_collection
-    series_collection_id = "?series_collection_id", //in series_collection
-    series_name = "?series_name", //in series_collection
-    show = "?show", //in adv_single_value
-    value = "?value", //in series, series_collection, adv_single_value
-    value_label = "?value_label", //in series, series_collection
+    latitude = "latitude", //in area, route, point
+    location = "location",  //in area, route, point
+    longitude = "longitude", //in area, route, point
+    name = "name", //in series, series_collection
+    route_id = "route_id", //in area, route
+    series_id = "series_id", //in series
+    series_label = "series_label", //in series, series_collection
+    series_collection_id = "series_collection_id", //in series_collection
+    series_name = "series_name", //in series_collection
+    show = "show", //in adv_single_value
+    value = "value", //in series, series_collection, adv_single_value
+    value_label = "value_label", //in series, series_collection
     //reserved one
-    resource = "$resource",
-    trigprop = "$trigprop",
+    resource = "resource",
+    trigprop = "trigprop",
 }
-
-// ============= ASSOCIATIONS =============
-
-export interface CustomViewAssociation {
-    ref: string; 
-    property: ARTURIResource;
-    customViewRef: CustomViewReference;
-}
-
-export class CustomViewAssociationDefinition {
-    property: ARTURIResource;
-    customViewRef: string;
-    defaultView: ViewsEnum;
-}
-
 
 
 // ============= DATA =============
-
-
-export class CustomViewDataRecord {
-    
-    model: CustomViewModel;
-    bindingsList: BindingMapping[]; //list of mappings binding -> value
-
-    constructor(model: CustomViewModel) {
-        this.model = model;
-        this.bindingsList = [];
-    }
-
-    static parse(jsonData: any): CustomViewDataRecord {
-        let data: CustomViewDataRecord = new CustomViewDataRecord(jsonData.model);
-        for (let bindings of jsonData.bindingsList) {
-            let bindingsMap: BindingMapping = {}
-            for (let b in bindings) {
-                let value: ARTNode = Deserializer.createRDFNode(bindings[b]);
-                bindingsMap[b] = value;
-            }
-            data.bindingsList.push(bindingsMap);
-        }
-        return data;
-    }
-}
-
-interface BindingMapping {
-    [key: string]: ARTNode;
-}
 
 /**
  * Structures for data represented in ResView
  */
 export interface PredicateCustomView { 
     predicate: ARTURIResource;
-    data: CustomViewDataRecord[]
+    cvData: CustomViewData;
 }
 
-
-
+/**
+ * classes representing the different types of CV
+ */
 
 export abstract class AbstractView {
-    abstract getIdResource(): ARTResource;
-}
+    abstract category: CustomViewCategory;
+    abstract model: CustomViewModel;
 
-export class PointView extends AbstractView {
-    location: ARTResource;
-    latitude: ARTLiteral;
-    longitude: ARTLiteral;
-
-    getIdResource(): ARTResource {
-        return this.location;
+    resource: ARTNode; //resource/value described by the view
+    
+    constructor(resource: ARTNode) {
+        this.resource = resource;
     }
 }
 
+export class PointView extends AbstractView {
+    category: CustomViewCategory = CustomViewCategory.geospatial;
+    model: CustomViewModel = CustomViewModel.point;
+
+    location: ARTResource;
+    latitude: ARTLiteral;
+    longitude: ARTLiteral;
+}
+
 export abstract class AbstractMultiPointView extends AbstractView {
+    category: CustomViewCategory = CustomViewCategory.geospatial;
+
     routeId: ARTResource;
     locations: {
         location: ARTResource;
         latitude: ARTLiteral;
         longitude: ARTLiteral;
     }[] = [];
-
-    getIdResource(): ARTResource {
-        return this.routeId;
-    }
 }
 
-export class AreaView extends AbstractMultiPointView {}
-export class RouteView extends AbstractMultiPointView {}
+export class AreaView extends AbstractMultiPointView {
+    model: CustomViewModel = CustomViewModel.area;
+}
+export class RouteView extends AbstractMultiPointView {
+    model: CustomViewModel = CustomViewModel.route;
+}
 
 export class SeriesView extends AbstractView {
+    category: CustomViewCategory = CustomViewCategory.statistical_series;
+    model: CustomViewModel = CustomViewModel.series;
+
     series_id: ARTResource;
     series_label: string;
     value_label: string;
@@ -265,13 +249,12 @@ export class SeriesView extends AbstractView {
         name: ARTResource;
         value: ARTLiteral;
     }[] = [];
-
-    getIdResource(): ARTResource {
-        return this.series_id;
-    }
 }
 
 export class SeriesCollectionView extends AbstractView {
+    category: CustomViewCategory = CustomViewCategory.statistical_series;
+    model: CustomViewModel = CustomViewModel.series_collection;
+
     series_collection_id: ARTResource;
     series_label: string;
     value_label: string;
@@ -282,8 +265,113 @@ export class SeriesCollectionView extends AbstractView {
             value: ARTLiteral;
         }[];
     }[] = [];
+}
 
-    getIdResource(): ARTResource {
-        return this.series_collection_id;
+export abstract class AbstractSingleValueView extends AbstractView {
+    category: CustomViewCategory = CustomViewCategory.single_value;
+
+    value: CustomViewRenderedValue;
+}
+export class PropertyChainView extends AbstractSingleValueView {
+    model: CustomViewModel = CustomViewModel.property_chain;
+}
+export class AdvSingleValueView extends AbstractSingleValueView {
+    model: CustomViewModel = CustomViewModel.adv_single_value;
+}
+
+export abstract class AbstractVectorView extends AbstractView {
+    category: CustomViewCategory = CustomViewCategory.vector;
+
+    values: CustomViewRenderedValue[];
+}
+export class StaticVectorView extends AbstractVectorView {
+    model: CustomViewModel = CustomViewModel.static_vector;
+}
+export class DynamicVectorView extends AbstractVectorView {
+    model: CustomViewModel = CustomViewModel.dynamic_vector;
+}
+
+
+/* ====== response data ====== */
+
+
+export class CustomViewData {
+    model: CustomViewModel;
+    defaultView: ViewsEnum;
+    data: CustomViewObjectDescription[]; //one for each object of the triggering property $resource $trigprop ?object
+    updateMode: UpdateMode;
+
+    static parse(json: any) {
+        let d: CustomViewData = new CustomViewData();
+        d.model = json.model;
+        d.defaultView = json.defaultView,
+        d.data = json.data.map((d: any) => CustomViewObjectDescription.parse(json.model, d)),
+        d.updateMode = json.updateMode
+        return d;
+    }
+}
+
+export class CustomViewObjectDescription {
+    resource: ARTNode;
+    description: SparqlBasedValueDTO | //for sparql based views (charts and maps) 
+        CustomViewRenderedValue[] | //for vector views (static/dynamic) one for each property/header of the vector
+        CustomViewRenderedValue; //for single-value views
+
+    static parse(model: CustomViewModel, json: any): CustomViewObjectDescription {
+        let description: any;
+        if (
+            model == CustomViewModel.area || model == CustomViewModel.point || model == CustomViewModel.route || 
+            model == CustomViewModel.series || model == CustomViewModel.series_collection
+        ) {
+            description = SparqlBasedValueDTO.parse(json.description);
+        } else if (model == CustomViewModel.property_chain || model == CustomViewModel.adv_single_value) {
+            description = CustomViewRenderedValue.parse(json.description);
+        } else if (model == CustomViewModel.static_vector || model == CustomViewModel.dynamic_vector) {
+            description = json.description.map((d: any) => CustomViewRenderedValue.parse(d))
+        }
+        let d: CustomViewObjectDescription = {
+            resource: NTriplesUtil.parseNode(json.resource),
+            description: description
+        }
+        return d;
+    }
+}
+
+export class SparqlBasedValueDTO {
+    bindingsList: BindingMapping[];
+
+    constructor() {
+        this.bindingsList = [];
+    }
+
+    static parse(json: any): SparqlBasedValueDTO {
+        let dto: SparqlBasedValueDTO = new SparqlBasedValueDTO();
+        for (let bindings of json.bindingsList) {
+            let bindingsMap: BindingMapping = {}
+            for (let b in bindings) {
+                let value: ARTNode = NTriplesUtil.parseNode(bindings[b]);
+                bindingsMap[b] = value;
+            }
+            dto.bindingsList.push(bindingsMap);
+        }
+        return dto;
+    }
+}
+
+export interface BindingMapping {
+    [key: string]: ARTNode;
+}
+
+export class CustomViewRenderedValue {
+    field: string; //for vector tells
+    resource: ARTNode;
+    updateInfo: UpdateInfo; //tells how to update the value
+
+    static parse(json: any): CustomViewRenderedValue {
+        let v = new CustomViewRenderedValue();
+        v.field = json.field;
+        v.resource = json.resource ? NTriplesUtil.parseNode(json.resource) : null; //in case of table, a cell content, namely the value, can also be emtpy/null
+        v.updateInfo = json.updateInfo;
+        return v;
     }
 }

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { CustomViewModel, CustomViewVariables } from 'src/app/models/CustomViews';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { AbstractSparqlBasedViewEditor, VariableInfoStruct } from './abstractSparqlBasedViewEditor';
@@ -13,7 +12,7 @@ export class SeriesCollectionViewEditorComponent extends AbstractSparqlBasedView
 
     model: CustomViewModel = CustomViewModel.series_collection;
 
-    retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.series_id, CustomViewVariables.name, CustomViewVariables.value];
+    retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.series_collection_id, CustomViewVariables.series_name, CustomViewVariables.name, CustomViewVariables.value];
     updateRequiredVariables: CustomViewVariables[] = [CustomViewVariables.name, CustomViewVariables.value];
 
     retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:"

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ARTResource, ARTURIResource } from '../models/ARTResources';
+import { ARTNode, ARTResource, ARTURIResource } from '../models/ARTResources';
 import { Reference } from '../models/Configuration';
-import { CustomViewAssociation, CustomViewConfiguration, CustomViewDataRecord, CustomViewDefinition, CustomViewModel, ViewsEnum } from '../models/CustomViews';
+import { CustomViewAssociation, CustomViewConfiguration, CustomViewData, CustomViewDefinition, CustomViewModel, ViewsEnum } from '../models/CustomViews';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -118,29 +118,28 @@ export class CustomViewsServices {
         return this.httpMgr.doPost(this.serviceName, "deleteAssociation", params);
     }
 
-    // updateWidgetData(resource: ARTResource, predicate: ARTURIResource, bindings: Map<string, ARTNode>): Observable<void> {
-    //     let params = {
-    //         resource: resource,
-    //         predicate: predicate,
-    //         bindings: bindings
-    //     }
-    //     return this.httpMgr.doPost(this.serviceName, "updateWidgetData", params);
-    // }
-
 
     /* ============== DATA ============== */
 
-    getViewData(resource: ARTResource, property: ARTURIResource): Observable<CustomViewDataRecord[]> {
+    getViewData(resource: ARTResource, property: ARTURIResource): Observable<CustomViewData> {
         let params = {
             resource: resource,
             property: property
         }
         return this.httpMgr.doGet(this.serviceName, "getViewData", params).pipe(
             map(stResp => {
-                let records: CustomViewDataRecord[] = stResp.map((r: any) => CustomViewDataRecord.parse(r));
-                return records;
+                return CustomViewData.parse(stResp);
             })
         );
+    }
+
+    updateSparqlBasedData(resource: ARTResource, property: ARTURIResource, bindings: Map<string, ARTNode>): Observable<void> {
+        let params = {
+            resource: resource,
+            property: property,
+            bindings: bindings
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateSparqlBasedData", params);
     }
 
 }

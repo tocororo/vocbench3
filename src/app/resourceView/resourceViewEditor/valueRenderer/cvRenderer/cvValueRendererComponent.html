@@ -1,0 +1,39 @@
+<div *ngIf="value.resource" class="listItem">
+
+    <ng-container *ngIf="editInProgress; then editingBlock; else viewBlock"></ng-container>
+    
+    <ng-template #viewBlock>
+        <rdf-resource style="flex: 1;" [resource]="value.resource" [rendering]="rendering" [ngClass]="{ clickable: value.resource.isResource() }" 
+            (dblclick)="valueDblClick()" (link)="linkClick($event)">
+        </rdf-resource>
+    </ng-template>
+
+    <ng-template #editingBlock>
+        <div class="input-group input-group-sm" style="flex: 1;">
+            <textarea class="form-control" style="height: initial; resize: vertical;" rows="1" [(ngModel)]="resourceStringValue"></textarea>
+            <div class="input-group-append">
+                <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="confirmEdit()" [title]="'ACTIONS.CONFIRM'|translate">
+                    <span class="fas fa-check" style="color: green"></span>
+                </button>
+                <button class="btn btn-light" style="width:15px; padding: 0px;" (click)="cancelEdit()" [title]="'ACTIONS.CANCEL'|translate">
+                    <span class="fas fa-times" style="color: red"></span>
+                </button>
+            </div>
+        </div>
+    </ng-template>
+
+    <div *ngIf="value.updateInfo.updateMode != 'none'" class="btn-group" ngbDropdown>
+        <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle>
+            <span class="fas fa-caret-down fa-sm"></span>
+        </button>
+        <div class="dropdown-menu" ngbDropdownMenu>
+            <a class="dropdown-item" (click)="edit()">{{'ACTIONS.EDIT'|translate}}</a>
+            <!-- <a  class="dropdown-item" [ngClass]="{ disabled: !deleteAllowed }" (click)="delete()">{{'ACTIONS.DELETE'|translate}}</a> -->
+        </div>
+    </div>
+</div>
+
+
+
+<resource-picker style="display: none;" [config]="resPickerConf" (resourceChanged)="onResourcePicked($event)"></resource-picker>
+<literal-picker style="display: none;" [datatypes]="litPickerDatatypes" (literalChanged)="onLiteralPicked($event)"></literal-picker>

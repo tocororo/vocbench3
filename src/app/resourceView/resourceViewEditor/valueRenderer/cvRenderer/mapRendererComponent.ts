@@ -16,16 +16,12 @@ import { AbstractViewRendererComponent } from "./abstractViewRenderer";
     host: { class: "hbox" },
     styles: [`
         :host {
+            height: 300px;
             width: 100%;
         }
     `]
 })
 export class MapRendererComponent extends AbstractViewRendererComponent {
-
-    @Input() subject: ARTResource;
-    @Input() predicate: ARTURIResource;
-
-    @Output() update = new EventEmitter();
 
     //input data needs converted in point or set of points
     point: GeoPoint; //a point to be represented (with a marker) on the map
@@ -83,11 +79,11 @@ export class MapRendererComponent extends AbstractViewRendererComponent {
                     bindingsMap.set(CustomViewVariables.location, w.location);
                     bindingsMap.set(CustomViewVariables.latitude, w.latitude);
                     bindingsMap.set(CustomViewVariables.longitude, w.longitude);
-                    // this.visualizationWidgetsService.updateWidgetData(this.subject, this.predicate, bindingsMap).subscribe(
-                    //     () => {
-                    //         this.update.emit();
-                    //     }
-                    // )
+                    this.cvService.updateSparqlBasedData(this.subject, this.predicate, bindingsMap).subscribe(
+                        () => {
+                            this.update.emit();
+                        }
+                    )
                 },
                 () => {}
             );
@@ -122,7 +118,7 @@ export class MapRendererComponent extends AbstractViewRendererComponent {
             bindingsMap.set(CustomViewVariables.location, l.location);
             bindingsMap.set(CustomViewVariables.latitude, l.latitude);
             bindingsMap.set(CustomViewVariables.longitude, l.longitude);
-            // updateFn.push(this.visualizationWidgetsService.updateWidgetData(this.subject, this.predicate, bindingsMap));
+            updateFn.push(this.cvService.updateSparqlBasedData(this.subject, this.predicate, bindingsMap));
         }
         if (updateFn.length > 0) {
             forkJoin(updateFn).subscribe(() => {
@@ -141,13 +137,5 @@ export class MapRendererComponent extends AbstractViewRendererComponent {
         return modalRef.result;
     }
 
-
-    onMapDoubleClick() {
-        if (this.view instanceof PointView) {
-            this.onDoubleClick(this.view.location);    
-        } else if (this.view instanceof AbstractMultiPointView) {
-            this.onDoubleClick(this.view.routeId);
-        }
-    }
 
 }

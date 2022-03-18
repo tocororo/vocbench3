@@ -116,7 +116,7 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         let retrieveQuery = this.retrieveEditor.query;
         let select = retrieveQuery.substring(retrieveQuery.toLocaleLowerCase().indexOf("select"), retrieveQuery.indexOf("{")); //restrict the check on the returned variable in select 
         for (let v of this.retrieveRequiredReturnVariables) {
-            if (!select.includes(v + " ")) {
+            if (!select.includes("?" + v + " ")) {
                 this.basicModals.alert({ key: "STATUS.ERROR" }, "Required binding missing in Retrieve query: " + v, ModalType.warning);
                 return false;
             }
@@ -124,7 +124,7 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         //- placeholders
         let where = retrieveQuery.substring(retrieveQuery.toLocaleLowerCase().indexOf("where"), retrieveQuery.indexOf("}")); //restrict the check on the where clause
         for (let v of this.retrieveRequiredPlaceholders) {
-            if (!where.includes(v + " ")) {
+            if (!where.includes("$" + v + " ")) {
                 this.basicModals.alert({ key: "STATUS.ERROR" }, "Required placeholder missing in Retrieve query: " + v, ModalType.warning);
                 return false;
             }    
@@ -146,7 +146,7 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         let updateQuery = this.updateEditor.query;
         if (updateQuery && updateQuery.trim() != "") { //do the checks only if update is provided
             for (let v of this.updateRequiredVariables) {
-                if (!updateQuery.includes(v + " ")) {
+                if (!updateQuery.includes("?" + v + " ")) {
                     this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable in Update query: " + v, ModalType.warning);
                     return false;
                 }

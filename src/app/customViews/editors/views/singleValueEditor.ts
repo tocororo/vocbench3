@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ARTURIResource, RDFTypesEnum } from 'src/app/models/ARTResources';
-import { ValueUpdateMode } from 'src/app/models/CustomViews';
+import { UpdateMode } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
 import { RDF } from 'src/app/models/Vocabulary';
 import { DatatypesServices } from 'src/app/services/datatypesServices';
@@ -15,20 +15,20 @@ import { NTriplesUtil, ResourceUtils, SortAttribute } from 'src/app/utils/Resour
 })
 export class SingleValueEditor {
 
-    @Input() data: SingleValueUpdateEnhanced;
+    @Input() data: UpdateInfoEnhanced;
     @Input() queryInfo: string;
-    @Output() dataChange: EventEmitter<SingleValueUpdateEnhanced> = new EventEmitter();
+    @Output() dataChange: EventEmitter<UpdateInfoEnhanced> = new EventEmitter();
 
     @ViewChild(YasguiComponent, { static: false }) yasguiEditor: YasguiComponent;
 
     queryInfoSafe: SafeHtml;
 
-    updateModes: { id: ValueUpdateMode, translationKey: string }[] = [
-        { id: ValueUpdateMode.none, translationKey: "No update" },
-        { id: ValueUpdateMode.inline, translationKey: "Inline edit (NT format)" },
-        { id: ValueUpdateMode.picker, translationKey: "Value picker" },
+    updateModes: { id: UpdateMode, translationKey: string }[] = [
+        { id: UpdateMode.none, translationKey: "No update" },
+        { id: UpdateMode.inline, translationKey: "Inline edit (NT format)" },
+        { id: UpdateMode.picker, translationKey: "Value picker" },
     ]
-    updateMode: ValueUpdateMode = ValueUpdateMode.none;
+    updateMode: UpdateMode = UpdateMode.none;
 
     queryEditor: SparqlQueryData = { mode: QueryMode.update, query: "", valid: true };
 
@@ -52,7 +52,7 @@ export class SingleValueEditor {
     ngOnInit() {
         if (this.data) {
             this.updateMode = this.data.updateMode;
-            if (this.updateMode != ValueUpdateMode.none) {
+            if (this.updateMode != UpdateMode.none) {
                 this.queryEditor = this.data.updateData;
                 this.valueType = this.data.valueType;
                 if (this.valueType == RDFTypesEnum.resource) {
@@ -96,12 +96,12 @@ export class SingleValueEditor {
     }
 
     emitChanges(): void {
-        let emittedData: SingleValueUpdateEnhanced = {
+        let emittedData: UpdateInfoEnhanced = {
             updateMode: this.updateMode
         }
-        if (this.updateMode != ValueUpdateMode.none) {
+        if (this.updateMode != UpdateMode.none) {
             emittedData.updateData = this.queryEditor;
-            if (this.updateMode == ValueUpdateMode.picker) { //if value is specified through a picker, provide restrictions
+            if (this.updateMode == UpdateMode.picker) { //if value is specified through a picker, provide restrictions
                 emittedData.valueType = this.valueType;
                 emittedData.classes = this.valueType == RDFTypesEnum.resource ? this.pickerClasses.map(c => c.toNT()) : null;
                 emittedData.datatype = this.valueType == RDFTypesEnum.literal ? this.datatype.toNT() : null;
@@ -126,9 +126,9 @@ export interface SparqlQueryData {
     valid: boolean;
 }
 
-//extends SingleValueUpdate with updateData (containing further info like valid and mode) instead of the simple query (string)
-export interface SingleValueUpdateEnhanced {
-    updateMode: ValueUpdateMode; //tells if and how the new value can be edited/chosen (through a resource picker or with edit inline)
+//extends UpdateInfo with updateData (containing further info like valid and mode) instead of the simple query (string)
+export interface UpdateInfoEnhanced {
+    updateMode: UpdateMode; //tells if and how the new value can be edited/chosen (through a resource picker or with edit inline)
     updateData?: SparqlQueryData;
     valueType?: RDFTypesEnum.resource | RDFTypesEnum.literal;
     datatype?: string; //NT IRI representation

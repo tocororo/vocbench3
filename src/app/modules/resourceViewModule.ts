@@ -56,6 +56,7 @@ import { SuperPropertiesPartitionRenderer } from '../resourceView/resourceViewEd
 import { TopConceptsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/topConceptsPartitionRenderer';
 import { TypesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/typesPartitionRenderer';
 import { LexicalizationEnrichmentHelper } from '../resourceView/resourceViewEditor/partitionRenderer/lexicalizationEnrichmentHelper';
+import { PredicateCustomViewsRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/predicateCustomViewRenderer';
 import { PredicateObjectsRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/predicateObjectsRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceViewEditor/resourceRenameComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewEditor/resourceViewCtxMenu';
@@ -77,12 +78,14 @@ import { ResViewModalServices } from '../resourceView/resourceViewEditor/resView
 import { TimeMachineModal } from '../resourceView/resourceViewEditor/timeMachine/timeMachineModal';
 import { CustomFormTableCellComponent } from '../resourceView/resourceViewEditor/valueRenderer/cfValueTablePreview/customFormTableCellComponent';
 import { CustomFormValueTableComponent } from '../resourceView/resourceViewEditor/valueRenderer/cfValueTablePreview/customFormValueTableComponent';
+import { ChartsRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/chartsRendererComponent';
+import { MapRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/mapRendererComponent';
+import { SingleValueRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/singleValueRendererComponent';
+import { CvTableRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/cvTableRendererComponent';
+import { CvValueRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/cvValueRendererComponent';
 import { EditableResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/editableResourceComponent';
 import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/reifiedResourceComponent';
 import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/valueRenderer/resourceViewValueRenderer';
-import { ChartsRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/chartsRendererComponent';
-import { MapRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/mapRendererComponent';
-import { CustomViewRenderer } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/customViewRenderer';
 import { ResourceViewModal } from '../resourceView/resourceViewModal';
 import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
 import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
@@ -96,7 +99,6 @@ import { ResourceTripleEditorComponent } from '../resourceView/tripleEditor/reso
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
-import { PredicateCustomViewsRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/predicateCustomViewRenderer';
 
 @NgModule({
     imports: [
@@ -202,9 +204,11 @@ import { PredicateCustomViewsRenderer } from '../resourceView/resourceViewEditor
         ResViewSettingsModal,
         TimeMachineModal,
 
-        CustomViewRenderer,
         ChartsRendererComponent,
-        MapRendererComponent
+        MapRendererComponent,
+        SingleValueRendererComponent,
+        CvTableRendererComponent,
+        CvValueRendererComponent
     ],
     exports: [
         ResourceViewEditorComponent,

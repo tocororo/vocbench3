@@ -61,9 +61,6 @@ export class SeriesChartLegendComponent {
                     }
                 }
                 
-                this.chartData[this.chartData.indexOf(oldData)] = newData; //replace old with new value
-                this.chartData = this.chartData.slice(); //slice so that chartData is recognized as a new list and the chart is updated
-
                 this.dataChanged.emit({ old: oldData, new: newData });
             },
             () => {}

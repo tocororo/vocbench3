@@ -1,11 +1,11 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { RDFTypesEnum } from 'src/app/models/ARTResources';
-import { AdvSingleValueViewDefinition, CustomViewModel, CustomViewVariables, ValueUpdateMode } from 'src/app/models/CustomViews';
+import { AdvSingleValueViewDefinition, CustomViewModel, CustomViewVariables, UpdateMode } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
 import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
 import { AbstractCustomViewEditor } from './abstractCustomViewEditor';
 import { VariableInfoStruct } from './abstractSparqlBasedViewEditor';
-import { SingleValueEditor, SingleValueUpdateEnhanced } from './singleValueEditor';
+import { SingleValueEditor, UpdateInfoEnhanced } from './singleValueEditor';
 
 @Component({
     selector: 'adv-single-value-view-editor',
@@ -52,8 +52,8 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
         "INSERT { ... }\n" +
         "WHERE { ... }\n";
 
-    singleValueData: SingleValueUpdateEnhanced = {
-        updateMode: ValueUpdateMode.none,
+    singleValueData: UpdateInfoEnhanced = {
+        updateMode: UpdateMode.none,
     };
 
     updateQueryInfo: string;
@@ -66,7 +66,7 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
         super.ngOnInit();
         this.updateQueryInfo = this.updateDescrIntro +
             "<ul>" + 
-            this.updateVariablesInfo.map(v => "<li><code>" + v.id + "</code>: " + v.descrTranslationKey + "</li>") + 
+            this.updateVariablesInfo.map(v => "<li><code>?" + v.id + "</code>: " + v.descrTranslationKey + "</li>") + 
             "</ul>";
     }
 
@@ -94,12 +94,6 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
         this.refreshYasguiEditors();
     }
 
-    // switchTab(tabId: 'retrieve' | 'update'): void {
-    //     super.switchTab(tabId);
-    //     setTimeout(() => {
-    //         this.singleValueEditor.refreshYasguiEditor();
-    //     });
-    // }
     switchTab(tabId: SparqlTabEnum) {
         this.activeTab = tabId;
         this.refreshYasguiEditors();
@@ -112,7 +106,7 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
         this.emitChanges();
     }
 
-    onSingleValueDataChanged(data: SingleValueUpdateEnhanced) {
+    onSingleValueDataChanged(data: UpdateInfoEnhanced) {
         this.singleValueData = data;
         this.emitChanges();
     }
@@ -140,9 +134,9 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
             field: "value", 
             updateMode: this.singleValueData.updateMode
         };
-        if (this.singleValueData.updateMode != ValueUpdateMode.none) {
+        if (this.singleValueData.updateMode != UpdateMode.none) {
             this.cvDef.update.updateQuery = this.singleValueData.updateData.query;
-            if (this.singleValueData.updateMode == ValueUpdateMode.picker) { //if value is specified through a picker, provide restrictions
+            if (this.singleValueData.updateMode == UpdateMode.picker) { //if value is specified through a picker, provide restrictions
                 this.cvDef.update.valueType = this.singleValueData.valueType;
                 this.cvDef.update.classes = this.singleValueData.valueType == RDFTypesEnum.resource ? this.singleValueData.classes : null;
                 this.cvDef.update.datatype = this.singleValueData.valueType == RDFTypesEnum.literal ? this.singleValueData.datatype : null;

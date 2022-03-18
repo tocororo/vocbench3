@@ -86,7 +86,7 @@ export class ResourcePickerComponent {
         this.resourceChanged.emit(returnedRes);
     }
 
-    private pickLocalResource() {
+    pickLocalResource() {
         this.selectResourceType(VBContext.getWorkingProject()).subscribe(
             role => {
                 if (role != null) { //role is null if user canceled the selection
@@ -96,7 +96,7 @@ export class ResourcePickerComponent {
         )
     }
 
-    private pickExternalResource() {
+    pickExternalResource() {
         //project selection
         this.projectService.listProjects(VBContext.getWorkingProject(), true, true).subscribe(
             projects => {

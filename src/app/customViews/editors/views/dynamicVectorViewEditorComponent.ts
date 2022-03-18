@@ -1,9 +1,9 @@
 import { Component, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { CustomViewModel, CustomViewVariables, DynamicVectorViewDefinition, SingleValueUpdate, ValueUpdateMode } from 'src/app/models/CustomViews';
+import { CustomViewModel, CustomViewVariables, DynamicVectorViewDefinition, UpdateInfo, UpdateMode } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
 import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
 import { AbstractCustomViewEditor } from './abstractCustomViewEditor';
-import { SingleValueEditor, SingleValueUpdateEnhanced } from './singleValueEditor';
+import { SingleValueEditor, UpdateInfoEnhanced } from './singleValueEditor';
 
 @Component({
     selector: 'dynamic-vector-view-editor',
@@ -132,7 +132,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
         this.refreshYasguiEditors();
     }
 
-    onUpdateDataChanged(tab: UpdateTabStruct, data: SingleValueUpdateEnhanced) {
+    onUpdateDataChanged(tab: UpdateTabStruct, data: UpdateInfoEnhanced) {
         tab.singleValueData = data;
         setTimeout(() => {
             this.emitChanges();
@@ -143,7 +143,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
         //check if there is a tab which the single value editor is providing an update procedure with an invalid query 
         return this.updateTabs.some(t => {
             if (t.singleValueData != null) {
-                return t.singleValueData.updateMode != ValueUpdateMode.none && !t.singleValueData.updateData.valid
+                return t.singleValueData.updateMode != UpdateMode.none && !t.singleValueData.updateData.valid
             } else {
                 return false;
             }
@@ -154,13 +154,13 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     emitChanges(): void {
         this.cvDef.suggestedView = this.suggestedView;
         this.cvDef.retrieve = this.retrieveEditor.query;
-        let update: SingleValueUpdate[] = [];
+        let update: UpdateInfo[] = [];
         this.updateTabs.forEach(t => {
-            let updateValue: SingleValueUpdate = {
+            let updateValue: UpdateInfo = {
                 field: t.field,
                 updateMode: t.singleValueData.updateMode,
             }
-            if (updateValue.updateMode != ValueUpdateMode.none) {
+            if (updateValue.updateMode != UpdateMode.none) {
                 updateValue.updateQuery = t.singleValueData.updateData.query;
                 updateValue.valueType = t.singleValueData.valueType;
                 updateValue.classes = t.singleValueData.classes;
@@ -204,10 +204,5 @@ export interface VariableInfoStruct {
 
 interface UpdateTabStruct {
     field: string;
-    singleValueData: SingleValueUpdateEnhanced;
-    // updateMode: ValueUpdateMode;
-    // editor?: SparqlEditorStruct;
-    // valueType?: RDFTypesEnum.resource | RDFTypesEnum.literal;
-    // datatype?: string;
-    // classes?: string[];
+    singleValueData: UpdateInfoEnhanced;
 }

@@ -13,7 +13,7 @@ export class SeriesViewEditorComponent extends AbstractSparqlBasedViewEditor {
 
     model: CustomViewModel = CustomViewModel.series;
 
-    retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.series_collection_id, CustomViewVariables.series_name, CustomViewVariables.name, CustomViewVariables.value];
+    retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.series_id, CustomViewVariables.name, CustomViewVariables.value];
     updateRequiredVariables: CustomViewVariables[] = [CustomViewVariables.name, CustomViewVariables.value];
 
     retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:"

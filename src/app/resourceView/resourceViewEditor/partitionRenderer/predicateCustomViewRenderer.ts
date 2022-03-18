@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { AbstractView, AreaView, CustomViewModel, CustomViewVariables, PointView, PredicateCustomView, RouteView, SeriesCollectionView, SeriesView } from "src/app/models/CustomViews";
+import { AbstractView, AdvSingleValueView, AreaView, BindingMapping, CustomViewCategory, CustomViewModel, CustomViewRenderedValue, CustomViewVariables, DynamicVectorView, PointView, PredicateCustomView, PropertyChainView, RouteView, SeriesCollectionView, SeriesView, SparqlBasedValueDTO, StaticVectorView } from "src/app/models/CustomViews";
 import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
 
@@ -35,6 +35,8 @@ export class PredicateCustomViewsRenderer {
     predicate: ARTURIResource;
     customViews: AbstractView[];
 
+    category: CustomViewCategory;
+
     constructor() {}
 
     ngOnInit() {}
@@ -52,57 +54,70 @@ export class PredicateCustomViewsRenderer {
     private initCustomViewData() {
         //convert the data to a proper view structure according the model type
         this.customViews = [];
-        this.predicateCustomView.data.forEach(d => {
-            let view: AbstractView;
-            if (d.model == CustomViewModel.point) {
-                let locationDescr = d.bindingsList[0];
-                let v: PointView = new PointView();
-                v.location = <ARTResource>locationDescr[CustomViewVariables.location];
-                v.latitude = <ARTLiteral>locationDescr[CustomViewVariables.latitude];
-                v.longitude = <ARTLiteral>locationDescr[CustomViewVariables.longitude];
-                view = v;
-            } else if (d.model == CustomViewModel.area) {
-                let v: AreaView = new AreaView();
-                v.routeId = <ARTResource>d.bindingsList[0][CustomViewVariables.route_id]; //by construction route ID is the same for each record
-                d.bindingsList.forEach(b => {
+
+        if (this.predicateCustomView.cvData.model == CustomViewModel.point) {
+            this.predicateCustomView.cvData.data.forEach(d => {
+                let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
+                let v: PointView = new PointView(d.resource);
+                let pointDescr: BindingMapping = descr.bindingsList[0]; //for point, for sure there is only one BingingMapping which describes the only point
+                v.location = <ARTResource>pointDescr[CustomViewVariables.location];
+                v.latitude = <ARTLiteral>pointDescr[CustomViewVariables.latitude];
+                v.longitude = <ARTLiteral>pointDescr[CustomViewVariables.longitude];
+                this.customViews.push(v);
+            })
+        } else if (this.predicateCustomView.cvData.model == CustomViewModel.area) {
+            this.predicateCustomView.cvData.data.forEach(d => {
+                let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
+                let v: AreaView = new AreaView(d.resource);
+                v.routeId = <ARTResource>descr.bindingsList[0][CustomViewVariables.route_id]; //by construction route ID is the same for each record
+                descr.bindingsList.forEach(b => {
                     v.locations.push({
                         location: <ARTResource>b[CustomViewVariables.location],
                         latitude: <ARTLiteral>b[CustomViewVariables.latitude],
                         longitude: <ARTLiteral>b[CustomViewVariables.longitude]
                     })
                 });
-                view = v;
-            } else if (d.model == CustomViewModel.route) {
-                let v: RouteView = new RouteView();
-                v.routeId = <ARTResource>d.bindingsList[0][CustomViewVariables.route_id]; //by construction route ID is the same for each record
-                d.bindingsList.forEach(b => {
+                this.customViews.push(v);
+            })
+        } else if (this.predicateCustomView.cvData.model == CustomViewModel.route) {
+            this.predicateCustomView.cvData.data.forEach(d => {
+                let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
+                let v: RouteView = new RouteView(d.resource);
+                v.routeId = <ARTResource>descr.bindingsList[0][CustomViewVariables.route_id]; //by construction route ID is the same for each record
+                descr.bindingsList.forEach(b => {
                     v.locations.push({
                         location: <ARTResource>b[CustomViewVariables.location],
                         latitude: <ARTLiteral>b[CustomViewVariables.latitude],
                         longitude: <ARTLiteral>b[CustomViewVariables.longitude]
                     })
                 });
-                view = v;
-            } else if (d.model == CustomViewModel.series) {
-                let v: SeriesView = new SeriesView();
+                this.customViews.push(v);
+            })
+        } else if (this.predicateCustomView.cvData.model == CustomViewModel.series) {
+            this.predicateCustomView.cvData.data.forEach(d => {
+                let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
+                let v: SeriesView = new SeriesView(d.resource);
                 //series_id, series_label and value_label are supposed to be the same for all the data
-                v.series_id = <ARTResource>d.bindingsList[0][CustomViewVariables.series_id];
-                v.series_label = d.bindingsList[0][CustomViewVariables.series_label].getShow();
-                v.value_label = d.bindingsList[0][CustomViewVariables.value_label].getShow();
-                d.bindingsList.forEach(b => {
+                v.series_id = <ARTResource>descr.bindingsList[0][CustomViewVariables.series_id];
+                v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();
+                v.value_label = descr.bindingsList[0][CustomViewVariables.value_label].getShow();
+                descr.bindingsList.forEach(b => {
                     v.data.push({
                         name: <ARTResource>b[CustomViewVariables.name],
                         value: <ARTLiteral>b[CustomViewVariables.value]
                     })
                 });
-                view = v;
-            } else if (d.model == CustomViewModel.series_collection) {
-                let v: SeriesCollectionView = new SeriesCollectionView();
+                this.customViews.push(v);
+            })
+        } else if (this.predicateCustomView.cvData.model == CustomViewModel.series_collection) {
+            this.predicateCustomView.cvData.data.forEach(d => {
+                let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
+                let v: SeriesCollectionView = new SeriesCollectionView(d.resource);
                 //series_collection_id, series_label and value_label are supposed to be the same for all the data
-                v.series_collection_id = <ARTResource>d.bindingsList[0][CustomViewVariables.series_collection_id];
-                v.series_label = d.bindingsList[0][CustomViewVariables.series_label].getShow();
-                v.value_label = d.bindingsList[0][CustomViewVariables.value_label].getShow();
-                d.bindingsList.forEach(b => {
+                v.series_collection_id = <ARTResource>descr.bindingsList[0][CustomViewVariables.series_collection_id];
+                v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();
+                v.value_label = descr.bindingsList[0][CustomViewVariables.value_label].getShow();
+                descr.bindingsList.forEach(b => {
                     let seriesName = b[CustomViewVariables.series_name];
                     let data = {
                         name: <ARTResource>b[CustomViewVariables.name],
@@ -118,10 +133,40 @@ export class PredicateCustomViewsRenderer {
                         })
                     }
                 });
-                view = v;
-            }
-            this.customViews.push(view);
-        })
+                this.customViews.push(v);
+            })
+        } else if (this.predicateCustomView.cvData.model == CustomViewModel.property_chain) {
+            this.predicateCustomView.cvData.data.forEach(d => {
+                let descr: CustomViewRenderedValue = <CustomViewRenderedValue>d.description;
+                let v: PropertyChainView = new PropertyChainView(d.resource);
+                v.value = descr;
+                this.customViews.push(v);
+            });
+        } else if (this.predicateCustomView.cvData.model == CustomViewModel.adv_single_value) {
+            this.predicateCustomView.cvData.data.forEach(d => {
+                let descr: CustomViewRenderedValue = <CustomViewRenderedValue>d.description;
+                let v: AdvSingleValueView = new AdvSingleValueView(d.resource);
+                v.value = descr;
+                this.customViews.push(v);
+            });
+        } else if (this.predicateCustomView.cvData.model == CustomViewModel.static_vector) {
+            this.predicateCustomView.cvData.data.forEach(d => {
+                let descr: CustomViewRenderedValue[] = <CustomViewRenderedValue[]>d.description;
+                let v: StaticVectorView = new StaticVectorView(d.resource);
+                v.values = descr;
+                this.customViews.push(v);
+            });
+        } else if (this.predicateCustomView.cvData.model == CustomViewModel.dynamic_vector) {
+            this.predicateCustomView.cvData.data.forEach(d => {
+                let descr: CustomViewRenderedValue[] = <CustomViewRenderedValue[]>d.description;
+                let v: DynamicVectorView = new DynamicVectorView(d.resource);
+                v.values = descr;
+                this.customViews.push(v);
+            });
+        }
+
+        let v = this.customViews[0]; //for the same predicate, model and category are the same for each cv, so it's ok to take just the first
+        this.category = v.category;
     }
 
     private initActionsStatus() {

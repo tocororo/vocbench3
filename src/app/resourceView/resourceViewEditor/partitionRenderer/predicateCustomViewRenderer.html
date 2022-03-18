@@ -20,9 +20,19 @@
     
     <div class="card-body">
 
-        <ng-container *ngFor="let v of customViews">
-            <custom-view-renderer class="p-1" [subject]="resource" [predicate]="predicate" [view]="v" (update)="onObjectUpdate()" (doubleClick)="objectDblClick($event)">
-            </custom-view-renderer>
+        <ng-container [ngSwitch]="category">
+            <ng-container *ngSwitchCase="'geospatial'">
+                <map-renderer *ngFor="let v of customViews" [view]="v" [subject]="resource" [predicate]="predicate" [readonly]="readonly" (update)="onUpdate()" (doubleClick)="onDblClick($event)"></map-renderer>
+            </ng-container>
+            <ng-container *ngSwitchCase="'statistical_series'">
+                <charts-renderer *ngFor="let v of customViews" [view]="v" [subject]="resource" [predicate]="predicate" [readonly]="readonly" (update)="onUpdate()" (doubleClick)="onDblClick($event)"></charts-renderer>
+            </ng-container>
+            <ng-container *ngSwitchCase="'single_value'">
+                <single-value-renderer *ngFor="let v of customViews" [view]="v" [subject]="subject" [predicate]="predicate" [readonly]="readonly" (update)="onUpdate()" (doubleClick)="onDblClick($event)"></single-value-renderer>
+            </ng-container>
+            <ng-container *ngSwitchCase="'vector'">
+                <cv-table-renderer *ngSwitchCase="'vector'" [views]="customViews" [subject]="subject" [predicate]="predicate" [readonly]="readonly" (update)="onUpdate()" (doubleClick)="onDblClick($event)"></cv-table-renderer>
+            </ng-container>
         </ng-container>
 
     </div>

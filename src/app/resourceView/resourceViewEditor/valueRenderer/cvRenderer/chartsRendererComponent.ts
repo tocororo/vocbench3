@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { Component } from "@angular/core";
+import { ARTNode } from "src/app/models/ARTResources";
 import { CustomViewVariables, SeriesCollectionView, SeriesView, ViewsEnum } from "src/app/models/CustomViews";
-import { VisualizationWidgetsServices } from "src/app/services/visualizationWidgetsServices";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ChartData, ChartDataChangedEvent, ChartSeries } from "src/app/widget/charts/NgxChartsUtils";
 import { AbstractViewRendererComponent } from "./abstractViewRenderer";
 
@@ -9,14 +9,14 @@ import { AbstractViewRendererComponent } from "./abstractViewRenderer";
     selector: "charts-renderer",
     templateUrl: "./chartsRendererComponent.html",
     host: { class: "hbox" },
+    styles: [`
+        :host {
+            height: 300px;
+            width: 100%;
+        }
+    `]
 })
 export class ChartsRendererComponent extends AbstractViewRendererComponent {
-
-    @Input() subject: ARTResource;
-    @Input() predicate: ARTURIResource;
-
-    @Output() update = new EventEmitter();
-
 
     //input data needs to be converted in data compliant with charts
     series: ChartData[]; //a series of chart data 
@@ -31,7 +31,7 @@ export class ChartsRendererComponent extends AbstractViewRendererComponent {
 
     viewInitialized: boolean;
 
-    constructor(private visualizationWidgetsService: VisualizationWidgetsServices) {
+    constructor(private cvService: CustomViewsServices) {
         super()
     }
 
@@ -116,11 +116,9 @@ export class ChartsRendererComponent extends AbstractViewRendererComponent {
             bindingsMap.set(CustomViewVariables.name, updatedData.name);
             bindingsMap.set(CustomViewVariables.value, updatedData.value);
         }
-        this.visualizationWidgetsService.updateWidgetData(this.subject, this.predicate, bindingsMap).subscribe(
+        this.cvService.updateSparqlBasedData(this.subject, this.predicate, bindingsMap).subscribe(
             () => {
-                //temporarly I disable the emit event since the data is already updated locally in the view (and there is the animation that shows the variation)
-                //and there's no need to refresh the resource view
-                // this.update.emit();
+                this.update.emit();
             }
         )
     }
@@ -131,9 +129,6 @@ export class ChartsRendererComponent extends AbstractViewRendererComponent {
         setTimeout(() => {
             this.viewInitialized = true;
         });
-    }
-
-    edit() {
     }
 
 }

@@ -22,13 +22,13 @@
                     {{retrieveDescrIntro}}
                     <ul>
                         <li *ngFor="let v of retrieveVariablesInfo">
-                            <code>{{v.id}}</code>: {{v.descrTranslationKey|translate}};
+                            <code>?{{v.id}}</code>: {{v.descrTranslationKey|translate}};
                         </li>
                     </ul>
                     The query must also contain these placeholders:
                     <ul>
                         <li *ngFor="let v of retrievePlaceholdersInfo">
-                            <code>{{v.id}}</code>: {{v.descrTranslationKey|translate}};
+                            <code>${{v.id}}</code>: {{v.descrTranslationKey|translate}};
                         </li>
                     </ul>
                 </div>
@@ -40,7 +40,7 @@
                     {{updateDescrIntro}}
                     <ul>
                         <li *ngFor="let v of updateVariablesInfo">
-                            <code>{{v.id}}</code>: {{v.descrTranslationKey|translate}};
+                            <code>?{{v.id}}</code>: {{v.descrTranslationKey|translate}};
                         </li>
                     </ul>
                 </div>
