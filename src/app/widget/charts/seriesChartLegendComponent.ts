@@ -30,6 +30,7 @@ export class SeriesChartLegendComponent {
     @Input() chartData: ChartData[];
     @Input() activeEntries: ChartData[] = [];
     @Input() colorScheme: string;
+    @Input() readonly: boolean;
     @Output() dataChanged: EventEmitter<ChartDataChangedEvent> = new EventEmitter();
     @Output() activate: EventEmitter<ChartData> = new EventEmitter();
     @Output() deactivate: EventEmitter<ChartData> = new EventEmitter();

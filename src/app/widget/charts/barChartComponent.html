@@ -19,5 +19,5 @@
     </ngx-charts-bar-vertical>
 </div>
 
-<series-chart-legend [chartData]="chartData" [colorScheme]="colorScheme" [activeEntries]="activeEntries" 
+<series-chart-legend [chartData]="chartData" [colorScheme]="colorScheme" [activeEntries]="activeEntries" [readonly]="readonly"
     (activate)="onActivate($event)" (deactivate)="onDeactivate()" (dataChanged)="onDataChanged($event)"></series-chart-legend>

@@ -32,16 +32,14 @@ export class ChartsRendererComponent extends AbstractViewRendererComponent {
     viewInitialized: boolean;
 
     constructor(private cvService: CustomViewsServices) {
-        super()
+        super();
     }
 
     ngOnInit() {
         this.compliantViews = [];
         if (this.view instanceof SeriesView) {
-            this.compliantViews = [
-                ViewsEnum.bar, ViewsEnum.pie
-            ]
-        } else  if (this.view instanceof SeriesCollectionView) {
+            this.compliantViews = [ViewsEnum.bar, ViewsEnum.pie];
+        } else if (this.view instanceof SeriesCollectionView) {
             this.compliantViews = [ViewsEnum.line]
         }
         if (this.compliantViews.length > 0) {
@@ -103,14 +101,14 @@ export class ChartsRendererComponent extends AbstractViewRendererComponent {
         let bindingsMap: Map<string, ARTNode> = new Map();
         if (this.view instanceof SeriesView) {
             let updatedData = this.view.data.find(d => d.name.equals(event.old.extra.nameResource)); //get the changed data
-            updatedData.value.setValue(event.new.value+"");
+            updatedData.value.setValue(event.new.value + "");
             bindingsMap.set(CustomViewVariables.series_id, this.view.series_id);
             bindingsMap.set(CustomViewVariables.name, updatedData.name);
             bindingsMap.set(CustomViewVariables.value, updatedData.value);
         } else if (this.view instanceof SeriesCollectionView) {
             let updatedSeries = this.view.series.find(s => s.data.some(d => d.name.equals(event.old.extra.nameResource)))
             let updatedData = updatedSeries.data.find(d => d.name.equals(event.old.extra.nameResource));
-            updatedData.value.setValue(event.new.value+"");
+            updatedData.value.setValue(event.new.value + "");
             bindingsMap.set(CustomViewVariables.series_collection_id, this.view.series_collection_id);
             bindingsMap.set(CustomViewVariables.series_name, updatedSeries.series_name);
             bindingsMap.set(CustomViewVariables.name, updatedData.name);

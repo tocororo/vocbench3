@@ -1,8 +1,8 @@
 
 <ng-container *ngIf="viewInitialized && (series || seriesCollection)">
-    <bar-chart *ngIf="activeView=='bar'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></bar-chart>
-    <pie-chart *ngIf="activeView=='pie'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></pie-chart>
-    <line-chart *ngIf="activeView=='line'" [chartData]="seriesCollection" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></line-chart>
+    <bar-chart *ngIf="activeView=='bar'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [readonly]="readonly" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></bar-chart>
+    <pie-chart *ngIf="activeView=='pie'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [readonly]="readonly" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></pie-chart>
+    <line-chart *ngIf="activeView=='line'" [chartData]="seriesCollection" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [readonly]="readonly" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></line-chart>
 </ng-container>
 
 <select *ngIf="compliantViews.length > 1" class="form-control form-control-sm ml-2" style="width: initial;" [(ngModel)]="activeView" (ngModelChange)="onWidgetChanged()">

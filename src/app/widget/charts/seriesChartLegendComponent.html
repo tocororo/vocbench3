@@ -5,7 +5,7 @@
             <span class="legend-label ellipsable" [ngClass]="{ 'active': isLabelActive(d) }" [title]="d.name">
                 {{d.name}} 
             </span>
-            <button class="btn btn-xs btn-light ml-1" (click)="edit(d)">
+            <button *ngIf="!readonly" class="btn btn-xs btn-light ml-1" (click)="edit(d)">
                 <span class="fas fa-pencil-alt"></span>
             </button>
         </div>

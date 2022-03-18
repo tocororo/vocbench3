@@ -1,5 +1,5 @@
-<div style="width: 100%;">
-   <ngx-charts-line-chart
+<div style="width: 100%; max-width: 100%;">
+    <ngx-charts-line-chart
         [results]="chartData"
         [xAxis]="true"
         [yAxis]="true"
@@ -11,28 +11,27 @@
         [legend]="false"
         [scheme]="colorScheme"
         (dblclick)="onDoubleClick()"
-        (select)="onSelect($event)"
-    >
+        (select)="onSelect($event)">
 
-    <ng-template #tooltipTemplate let-model="model">
-        <span class="tooltip-label">{{model.name}}</span>
-        <span class="tooltip-val">{{model.value.toLocaleString()}}</span>
-    </ng-template>
+        <ng-template #tooltipTemplate let-model="model">
+            <span class="tooltip-label">{{model.name}}</span>
+            <span class="tooltip-val">{{model.value.toLocaleString()}}</span>
+        </ng-template>
 
-    <ng-template #seriesTooltipTemplate let-model="model">
-        <span class="tooltip-label">{{model[0].name}}</span>
-        <span class="tooltip-val">{{model[0].value.toLocaleString()}}</span>
-      </ng-template>
+        <ng-template #seriesTooltipTemplate let-model="model">
+            <span class="tooltip-label">{{model[0].name}}</span>
+            <span class="tooltip-val">{{model[0].value.toLocaleString()}}</span>
+        </ng-template>
 
     </ngx-charts-line-chart>
 </div>
 
-<div style="width: 250px;">
+<div *ngIf="!readonly" style="width: 250px;">
     <div class="p-2" style="background: #eee;">
         <div class="legend-entry" style="display: flex; align-items: center; width: 230px; height: 20px; font-size: 12px; margin: 0.5rem;">
             <ng-container *ngIf="selectedData">
                 <span class="ellipsable" style="cursor: pointer; flex: 1;" [title]="selectedData.name">
-                    {{selectedData.name}} 
+                    {{selectedData.name}}
                 </span>
                 <button class="btn btn-xs btn-light ml-1" (click)="edit()">
                     <span class="fas fa-pencil-alt"></span>

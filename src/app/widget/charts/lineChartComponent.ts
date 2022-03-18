@@ -14,6 +14,7 @@ export class LineChartComponent {
     @Input() xAxisLabel: string;
     @Input() yAxisLabel: string;
     @Input() chartData: ChartSeries[];
+    @Input() readonly: boolean;
     @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter; //emits the resource related to the double click graphic element. Null if double click on empty area
     @Output() dataChanged: EventEmitter<ChartDataChangedEvent> = new EventEmitter();
 

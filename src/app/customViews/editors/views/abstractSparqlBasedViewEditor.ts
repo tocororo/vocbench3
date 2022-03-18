@@ -133,6 +133,7 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
     }
 
     protected isUpdateOk(): boolean {
+        if (this.updateEditor.query == null || this.updateEditor.query.trim() == "") return true; //if not provided, just return true/valid
         //- syntactic check
         if (!this.updateEditor.valid) {
             this.basicModals.alert({ key: "STATUS.ERROR" }, "Update query contains syntactic error(s)", ModalType.warning);

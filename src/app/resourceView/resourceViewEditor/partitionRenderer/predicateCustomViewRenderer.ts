@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { AbstractView, AdvSingleValueView, AreaView, BindingMapping, CustomViewCategory, CustomViewModel, CustomViewRenderedValue, CustomViewVariables, DynamicVectorView, PointView, PredicateCustomView, PropertyChainView, RouteView, SeriesCollectionView, SeriesView, SparqlBasedValueDTO, StaticVectorView } from "src/app/models/CustomViews";
+import { AbstractView, AdvSingleValueView, AreaView, BindingMapping, CustomViewCategory, CustomViewModel, CustomViewRenderedValue, CustomViewVariables, DynamicVectorView, PointView, PredicateCustomView, PropertyChainView, RouteView, SeriesCollectionView, SeriesView, SparqlBasedValueDTO, StaticVectorView, UpdateMode } from "src/app/models/CustomViews";
 import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
 
@@ -59,7 +59,8 @@ export class PredicateCustomViewsRenderer {
             this.predicateCustomView.cvData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
                 let v: PointView = new PointView(d.resource);
-                let pointDescr: BindingMapping = descr.bindingsList[0]; //for point, for sure there is only one BingingMapping which describes the only point
+                v.readonly = descr.updateMode == UpdateMode.none;
+                let pointDescr: BindingMapping = descr.bindingsList[0]; //for sure there is only one BingingMapping which describes the only point
                 v.location = <ARTResource>pointDescr[CustomViewVariables.location];
                 v.latitude = <ARTLiteral>pointDescr[CustomViewVariables.latitude];
                 v.longitude = <ARTLiteral>pointDescr[CustomViewVariables.longitude];
@@ -69,6 +70,7 @@ export class PredicateCustomViewsRenderer {
             this.predicateCustomView.cvData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
                 let v: AreaView = new AreaView(d.resource);
+                v.readonly = descr.updateMode == UpdateMode.none;
                 v.routeId = <ARTResource>descr.bindingsList[0][CustomViewVariables.route_id]; //by construction route ID is the same for each record
                 descr.bindingsList.forEach(b => {
                     v.locations.push({
@@ -77,12 +79,14 @@ export class PredicateCustomViewsRenderer {
                         longitude: <ARTLiteral>b[CustomViewVariables.longitude]
                     })
                 });
+                v.readonly = descr.updateMode == UpdateMode.none;
                 this.customViews.push(v);
             })
         } else if (this.predicateCustomView.cvData.model == CustomViewModel.route) {
             this.predicateCustomView.cvData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
                 let v: RouteView = new RouteView(d.resource);
+                v.readonly = descr.updateMode == UpdateMode.none;
                 v.routeId = <ARTResource>descr.bindingsList[0][CustomViewVariables.route_id]; //by construction route ID is the same for each record
                 descr.bindingsList.forEach(b => {
                     v.locations.push({
@@ -97,6 +101,7 @@ export class PredicateCustomViewsRenderer {
             this.predicateCustomView.cvData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
                 let v: SeriesView = new SeriesView(d.resource);
+                v.readonly = descr.updateMode == UpdateMode.none;
                 //series_id, series_label and value_label are supposed to be the same for all the data
                 v.series_id = <ARTResource>descr.bindingsList[0][CustomViewVariables.series_id];
                 v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();
@@ -113,6 +118,7 @@ export class PredicateCustomViewsRenderer {
             this.predicateCustomView.cvData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
                 let v: SeriesCollectionView = new SeriesCollectionView(d.resource);
+                v.readonly = descr.updateMode == UpdateMode.none;
                 //series_collection_id, series_label and value_label are supposed to be the same for all the data
                 v.series_collection_id = <ARTResource>descr.bindingsList[0][CustomViewVariables.series_collection_id];
                 v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();

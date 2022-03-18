@@ -26,7 +26,7 @@ export class CustomViewEditorModal {
     @Input() ref: string;
     @Input() readOnly: boolean;
 
-    @ViewChild("pointEditor") areaEditor: AreaViewEditorComponent;
+    @ViewChild("areaEditor") areaEditor: AreaViewEditorComponent;
     @ViewChild("routeEditor") routeEditor: RouteViewEditorComponent;
     @ViewChild("pointEditor") pointEditor: PointViewEditorComponent;
     @ViewChild("seriesEditor") seriesEditor: SeriesViewEditorComponent;

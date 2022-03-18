@@ -1,6 +1,6 @@
 <leaflet-map [point]="point" [route]="route" [area]="area" (dblclick)="onDoubleClick()"></leaflet-map>
 
-<div class="dropdown float-right" style="align-self: flex-start;" ngbDropdown container="body">
+<!-- <div class="dropdown float-right" style="align-self: flex-start;" ngbDropdown container="body">
     <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="readonly" [title]="'ACTIONS.EDIT'|translate">
         <span class="fas fa-caret-down fa-sm"></span>
     </button>
@@ -9,4 +9,8 @@
             {{'ACTIONS.EDIT'|translate}}
         </a>
     </div>
-</div>
+</div> -->
+
+<button *ngIf="!readonly" class="btn btn-xs btn-transparent ml-2" style="align-self: flex-start;" (click)="edit()" [title]="'ACTIONS.EDIT'|translate">
+    <span class="fas fa-pencil-alt"></span>
+</button>

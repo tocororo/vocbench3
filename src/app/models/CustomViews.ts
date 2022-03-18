@@ -211,7 +211,16 @@ export abstract class AbstractView {
     }
 }
 
-export class PointView extends AbstractView {
+abstract class AbstractSparqlBasedView extends AbstractView {
+    /**
+     * tells if the view can be edited or not
+     * it is useful in this kind of views since there is no UpdateInfo in the described value, like in single-value and vector views,
+     * and the "updatable" of a value is determined just from the presence of the update query)
+     */
+    readonly: boolean;
+}
+
+export class PointView extends AbstractSparqlBasedView {
     category: CustomViewCategory = CustomViewCategory.geospatial;
     model: CustomViewModel = CustomViewModel.point;
 
@@ -220,7 +229,7 @@ export class PointView extends AbstractView {
     longitude: ARTLiteral;
 }
 
-export abstract class AbstractMultiPointView extends AbstractView {
+export abstract class AbstractMultiPointView extends AbstractSparqlBasedView {
     category: CustomViewCategory = CustomViewCategory.geospatial;
 
     routeId: ARTResource;
@@ -238,7 +247,7 @@ export class RouteView extends AbstractMultiPointView {
     model: CustomViewModel = CustomViewModel.route;
 }
 
-export class SeriesView extends AbstractView {
+export class SeriesView extends AbstractSparqlBasedView {
     category: CustomViewCategory = CustomViewCategory.statistical_series;
     model: CustomViewModel = CustomViewModel.series;
 
@@ -251,7 +260,7 @@ export class SeriesView extends AbstractView {
     }[] = [];
 }
 
-export class SeriesCollectionView extends AbstractView {
+export class SeriesCollectionView extends AbstractSparqlBasedView {
     category: CustomViewCategory = CustomViewCategory.statistical_series;
     model: CustomViewModel = CustomViewModel.series_collection;
 
@@ -299,14 +308,12 @@ export class CustomViewData {
     model: CustomViewModel;
     defaultView: ViewsEnum;
     data: CustomViewObjectDescription[]; //one for each object of the triggering property $resource $trigprop ?object
-    updateMode: UpdateMode;
 
     static parse(json: any) {
         let d: CustomViewData = new CustomViewData();
         d.model = json.model;
-        d.defaultView = json.defaultView,
-        d.data = json.data.map((d: any) => CustomViewObjectDescription.parse(json.model, d)),
-        d.updateMode = json.updateMode
+        d.defaultView = json.defaultView;
+        d.data = json.data.map((d: any) => CustomViewObjectDescription.parse(json.model, d));
         return d;
     }
 }
@@ -339,6 +346,7 @@ export class CustomViewObjectDescription {
 
 export class SparqlBasedValueDTO {
     bindingsList: BindingMapping[];
+    updateMode: UpdateMode;
 
     constructor() {
         this.bindingsList = [];
@@ -346,6 +354,7 @@ export class SparqlBasedValueDTO {
 
     static parse(json: any): SparqlBasedValueDTO {
         let dto: SparqlBasedValueDTO = new SparqlBasedValueDTO();
+        dto.updateMode = json.updateMode;
         for (let bindings of json.bindingsList) {
             let bindingsMap: BindingMapping = {}
             for (let b in bindings) {

@@ -1,6 +1,7 @@
 import { Directive, EventEmitter, Input, Output } from "@angular/core";
 import { ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { AbstractView } from "src/app/models/CustomViews";
+import { ResourcesServices } from "src/app/services/resourcesServices";
 
 @Directive()
 export abstract class AbstractViewRendererComponent {
@@ -18,6 +19,8 @@ export abstract class AbstractViewRendererComponent {
      * normalizes the input data in a format compliant for the view renderer
      */
     protected abstract processInput(): void;
+
+    constructor() {}
 
     /**
      * Emit a doubleClick event on the resource described in the CV (unless otherwise specified, e.g. a single data of a chart)
