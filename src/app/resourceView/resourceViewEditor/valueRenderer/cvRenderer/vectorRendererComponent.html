@@ -22,7 +22,7 @@
                     </button>
                 </td>
                 <td *ngFor="let v of view.values">
-                    <cv-value-renderer [value]="v" [subject]="view.resource" [readonly]="readonly" [rendering]="rendering" (update)="onUpdate()" (dblClick)="onValueDoubleClick(v)">
+                    <cv-value-renderer [value]="v" [subject]="view.resource" [readonly]="readonly" [rendering]="rendering" (update)="onUpdate(v, $event)" (dblClick)="onValueDoubleClick(v)">
                     </cv-value-renderer>
                 </td>
                 <td>

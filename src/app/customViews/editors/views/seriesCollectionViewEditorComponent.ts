@@ -42,9 +42,9 @@ export class SeriesCollectionViewEditorComponent extends AbstractSparqlBasedView
         "WHERE { ... }\n";
 
 
-    constructor(basicModals: BasicModalServices) {
-        super(basicModals);
-    }
+        constructor(basicModals: BasicModalServices) {
+            super(basicModals);
+        }
 
     ngOnInit() {
         super.ngOnInit();

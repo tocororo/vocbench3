@@ -18,20 +18,20 @@
         <div class="tab-content">
 
             <div [hidden]="activeMainTab != 'retrieve'" class="vbox">
-                <!-- <div class="alert alert-warning mb-2">
-                    {{retrieveDescrIntro}}
-                    <ul>
-                        <li *ngFor="let v of retrieveVariablesInfo">
-                            <code>{{v.id}}</code>: {{v.descrTranslationKey|translate}};
-                        </li>
-                    </ul>
+                <div class="alert alert-warning mb-2">
+                    This view can be used to represent tabular data in ResourceView.
+                    Each row of the table represents the description of a value of the triggering property.
+                    The fields to be represented for each row are determined by the Retrieve query.
+                    You can define arbitrary variables <code>?<i>field</i>_value</code> where <i>field</i> will be used also as header of the column.
+                    The query must retun all these field variables and also the one representing the object of the <code>$resource $trigprop</code> pair (e.g. <code>?obj</code> in <code>$resource $trigprop ?obj</code>);<br/>
+
                     The query must also contain these placeholders:
                     <ul>
                         <li *ngFor="let v of retrievePlaceholdersInfo">
-                            <code>{{v.id}}</code>: {{v.descrTranslationKey|translate}};
+                            <code>${{v.id}}</code>: {{v.descrTranslationKey|translate}};
                         </li>
                     </ul>
-                </div> -->
+                </div>
                 <yasgui #retrieveYasgui [query]="retrieveEditor.query" (querychange)="onRetrieveChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
 
                 <div class="d-flex align-items-center mt-2">

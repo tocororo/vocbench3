@@ -81,7 +81,7 @@ import { CustomFormValueTableComponent } from '../resourceView/resourceViewEdito
 import { ChartsRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/chartsRendererComponent';
 import { MapRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/mapRendererComponent';
 import { SingleValueRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/singleValueRendererComponent';
-import { CvTableRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/cvTableRendererComponent';
+import { VectorRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/vectorRendererComponent';
 import { CvValueRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/cvValueRendererComponent';
 import { EditableResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/editableResourceComponent';
 import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/reifiedResourceComponent';
@@ -207,7 +207,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         ChartsRendererComponent,
         MapRendererComponent,
         SingleValueRendererComponent,
-        CvTableRendererComponent,
+        VectorRendererComponent,
         CvValueRendererComponent
     ],
     exports: [

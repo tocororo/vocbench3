@@ -1,11 +1,14 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Observable } from "rxjs";
 import { ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { AbstractVectorView, CustomViewRenderedValue } from "src/app/models/CustomViews";
+import { AbstractVectorView, CustomViewRenderedValue, DynamicVectorView, StaticVectorView } from "src/app/models/CustomViews";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
+import { NTriplesUtil } from "src/app/utils/ResourceUtils";
 
 @Component({
-    selector: "cv-table-renderer",
-    templateUrl: "./cvTableRendererComponent.html",
+    selector: "vector-renderer",
+    templateUrl: "./vectorRendererComponent.html",
     styles: [`
         .cv-table {
             border: 1px solid #ddd;
@@ -16,7 +19,7 @@ import { ResourcesServices } from "src/app/services/resourcesServices";
         .cv-table tr { height: 36px }
     `],
 })
-export class CvTableRendererComponent {
+export class VectorRendererComponent {
 
     @Input() views: AbstractVectorView[];
     @Input() subject: ARTResource;
@@ -29,7 +32,7 @@ export class CvTableRendererComponent {
 
     headers: string[];
 
-    constructor(private resourcesService: ResourcesServices) {
+    constructor(private resourcesService: ResourcesServices, private cvService: CustomViewsServices) {
     }
 
     ngOnInit() {
@@ -65,8 +68,25 @@ export class CvTableRendererComponent {
         this.doubleClick.emit(value.resource);
     }
 
-    onUpdate() {
-        this.update.emit();
+    onUpdate(value: CustomViewRenderedValue, data: { old: ARTNode, new: ARTNode }) {
+
+        let updateFn: Observable<void>;
+
+        if (this.views[0] instanceof DynamicVectorView) {
+            let pivots: Map<string, ARTNode> = new Map();
+            for (let pivotName in value.pivots) {
+                pivots.set(pivotName, value.pivots[pivotName]);
+            }
+            updateFn = this.cvService.updateDynamicVectorData(this.subject, this.predicate, value.field, data.old, data.new, pivots)
+        } else if (this.views[0] instanceof StaticVectorView) {
+            updateFn = this.cvService.updateStaticVectorData(this.subject, this.predicate, NTriplesUtil.parseURI(value.field), data.old, data.new);
+        }
+        updateFn.subscribe(
+            () => {
+                this.update.emit();
+            }
+        )
+        
     }
 
 

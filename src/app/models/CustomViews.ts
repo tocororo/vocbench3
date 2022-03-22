@@ -4,11 +4,12 @@ import { NTriplesUtil } from "../utils/ResourceUtils";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFTypesEnum } from "./ARTResources";
 import { Configuration, Reference } from "./Configuration";
 import { Scope } from "./Plugins";
+import { QueryMode } from "./Sparql";
 
 
 // ============= VIEWS =============
 
-export class CustomViewConfiguration extends Configuration {}
+export class CustomViewConfiguration extends Configuration { }
 
 export interface CustomViewDefinition {
     suggestedView: ViewsEnum;
@@ -21,20 +22,20 @@ export interface PropertiesBasedViewDefinition extends CustomViewDefinition {
     properties: string[]; //list of properties in NT
 }
 
-export interface PointViewDefinition extends SparqlBasedCustomViewDefinition {}
-export interface AreaViewDefinition extends SparqlBasedCustomViewDefinition {}
-export interface RouteViewDefinition extends SparqlBasedCustomViewDefinition {}
-export interface SeriesViewDefinition extends SparqlBasedCustomViewDefinition {}
-export interface SeriesCollectionViewDefinition extends SparqlBasedCustomViewDefinition {}
+export interface PointViewDefinition extends SparqlBasedCustomViewDefinition { }
+export interface AreaViewDefinition extends SparqlBasedCustomViewDefinition { }
+export interface RouteViewDefinition extends SparqlBasedCustomViewDefinition { }
+export interface SeriesViewDefinition extends SparqlBasedCustomViewDefinition { }
+export interface SeriesCollectionViewDefinition extends SparqlBasedCustomViewDefinition { }
 
-export interface PropertyChainViewDefinition extends PropertiesBasedViewDefinition {}
+export interface PropertyChainViewDefinition extends PropertiesBasedViewDefinition { }
 
 export interface AdvSingleValueViewDefinition extends CustomViewDefinition {
     retrieve: string;
     update: UpdateInfo;
 }
 
-export interface StaticVectorViewDefinition extends PropertiesBasedViewDefinition {}
+export interface StaticVectorViewDefinition extends PropertiesBasedViewDefinition { }
 
 export interface DynamicVectorViewDefinition extends CustomViewDefinition {
     retrieve: string;
@@ -78,7 +79,7 @@ export class CustomViewReference {
 // ============= ASSOCIATIONS =============
 
 export interface CustomViewAssociation {
-    ref: string; 
+    ref: string;
     property: ARTURIResource;
     customViewRef: CustomViewReference;
 }
@@ -185,13 +186,30 @@ export enum CustomViewVariables {
     trigprop = "trigprop",
 }
 
+export interface CvSparqlEditorStruct {
+    query: string;
+    mode: QueryMode;
+    valid: boolean;
+}
+
+export class CvQueryUtils {
+
+    static getSelectReturnStatement(query: string): string {
+        return query.substring(query.toLocaleLowerCase().indexOf("select"), query.toLocaleLowerCase().indexOf("{"));
+    }
+
+    static getSelectWhereBlock(query: string): string {
+        return query.substring(query.toLocaleLowerCase().indexOf("where"));
+    }
+
+}
 
 // ============= DATA =============
 
 /**
  * Structures for data represented in ResView
  */
-export interface PredicateCustomView { 
+export interface PredicateCustomView {
     predicate: ARTURIResource;
     cvData: CustomViewData;
 }
@@ -205,7 +223,7 @@ export abstract class AbstractView {
     abstract model: CustomViewModel;
 
     resource: ARTNode; //resource/value described by the view
-    
+
     constructor(resource: ARTNode) {
         this.resource = resource;
     }
@@ -327,7 +345,7 @@ export class CustomViewObjectDescription {
     static parse(model: CustomViewModel, json: any): CustomViewObjectDescription {
         let description: any;
         if (
-            model == CustomViewModel.area || model == CustomViewModel.point || model == CustomViewModel.route || 
+            model == CustomViewModel.area || model == CustomViewModel.point || model == CustomViewModel.route ||
             model == CustomViewModel.series || model == CustomViewModel.series_collection
         ) {
             description = SparqlBasedValueDTO.parse(json.description);
@@ -374,13 +392,21 @@ export interface BindingMapping {
 export class CustomViewRenderedValue {
     field: string; //for vector tells
     resource: ARTNode;
+    pivots: BindingMapping;
     updateInfo: UpdateInfo; //tells how to update the value
 
     static parse(json: any): CustomViewRenderedValue {
         let v = new CustomViewRenderedValue();
         v.field = json.field;
         v.resource = json.resource ? NTriplesUtil.parseNode(json.resource) : null; //in case of table, a cell content, namely the value, can also be emtpy/null
+        let pivots: BindingMapping = {}
+        for (let pivotName in json.pivots) {
+            let value: ARTNode = NTriplesUtil.parseNode(json.pivots[pivotName]);
+            pivots[pivotName] = value;
+        }
+        v.pivots = pivots;
         v.updateInfo = json.updateInfo;
         return v;
     }
 }
+

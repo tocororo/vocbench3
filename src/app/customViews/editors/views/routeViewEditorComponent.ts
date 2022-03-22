@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { CustomViewModel, CustomViewVariables } from 'src/app/models/CustomViews';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { AbstractSparqlBasedViewEditor, VariableInfoStruct } from './abstractSparqlBasedViewEditor';
@@ -42,9 +41,9 @@ export class RouteViewEditorComponent extends AbstractSparqlBasedViewEditor {
         "WHERE { ... }\n";
 
 
-    constructor(basicModals: BasicModalServices) {
-        super(basicModals);
-    }
+        constructor(basicModals: BasicModalServices) {
+            super(basicModals);
+        }
 
     ngOnInit() {
         super.ngOnInit();

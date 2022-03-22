@@ -1,6 +1,5 @@
 import { Directive, Input, ViewChild } from '@angular/core';
-import { SafeHtml } from '@angular/platform-browser';
-import { CustomViewVariables, SparqlBasedCustomViewDefinition } from 'src/app/models/CustomViews';
+import { CustomViewVariables, CvQueryUtils, CvSparqlEditorStruct, SparqlBasedCustomViewDefinition } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
 import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
@@ -26,14 +25,14 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
 
     activeTab: SparqlTabEnum = "retrieve";
 
-    retrieveEditor: SparqlEditorStruct = { mode: QueryMode.query, query: "", valid: true };
+    retrieveEditor: CvSparqlEditorStruct = { mode: QueryMode.query, query: "", valid: true };
 
     abstract retrieveRequiredReturnVariables: CustomViewVariables[];
     abstract retrieveDescrIntro: string;
     abstract retrieveVariablesInfo: VariableInfoStruct[];
     abstract retrieveQuerySkeleton: string;
 
-    updateEditor: SparqlEditorStruct = { mode: QueryMode.update, query: "", valid: true };
+    updateEditor: CvSparqlEditorStruct = { mode: QueryMode.update, query: "", valid: true };
 
     abstract updateRequiredVariables: CustomViewVariables[];
     abstract updateDescrIntro: string;
@@ -114,18 +113,18 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         }
         //- variables
         let retrieveQuery = this.retrieveEditor.query;
-        let select = retrieveQuery.substring(retrieveQuery.toLocaleLowerCase().indexOf("select"), retrieveQuery.indexOf("{")); //restrict the check on the returned variable in select 
+        let select = CvQueryUtils.getSelectReturnStatement(retrieveQuery);
         for (let v of this.retrieveRequiredReturnVariables) {
             if (!select.includes("?" + v + " ")) {
-                this.basicModals.alert({ key: "STATUS.ERROR" }, "Required binding missing in Retrieve query: " + v, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, "Required variable ?" + v + " missing in Retrieve query.", ModalType.warning);
                 return false;
             }
         }
         //- placeholders
-        let where = retrieveQuery.substring(retrieveQuery.toLocaleLowerCase().indexOf("where"), retrieveQuery.indexOf("}")); //restrict the check on the where clause
+        let where = CvQueryUtils.getSelectWhereBlock(retrieveQuery);
         for (let v of this.retrieveRequiredPlaceholders) {
             if (!where.includes("$" + v + " ")) {
-                this.basicModals.alert({ key: "STATUS.ERROR" }, "Required placeholder missing in Retrieve query: " + v, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, "Required placeholder $" + v + " missing in Retrieve query.", ModalType.warning);
                 return false;
             }    
         }
@@ -145,12 +144,10 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         }
         // - variables
         let updateQuery = this.updateEditor.query;
-        if (updateQuery && updateQuery.trim() != "") { //do the checks only if update is provided
-            for (let v of this.updateRequiredVariables) {
-                if (!updateQuery.includes("?" + v + " ")) {
-                    this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable in Update query: " + v, ModalType.warning);
-                    return false;
-                }
+        for (let v of this.updateRequiredVariables) {
+            if (!updateQuery.includes("?" + v + " ")) {
+                this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable ?" + v + "in Update query.", ModalType.warning);
+                return false;
             }
         }
         return true;
@@ -173,12 +170,6 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         }
     }
 
-}
-
-interface SparqlEditorStruct {
-    query: string;
-    mode: QueryMode;
-    valid: boolean;
 }
 
 type SparqlTabEnum = "retrieve" | "update";

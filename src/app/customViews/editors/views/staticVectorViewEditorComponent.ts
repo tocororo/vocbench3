@@ -16,9 +16,9 @@ export class StaticVectorViewEditorComponent extends AbstractPropertiesBasedView
     invalidPropListMsg: string = "Headers list must contain at least one proprety.";
     allowDuplicates: boolean = false;
 
-    infoHtml: string = `With this view, the ResourceView will show a table.
+    infoHtml: string = `This view can be used to represent tabular data in ResourceView.
     Each row of the table represents the description of a value of the triggering property.
-    The values represented in the cells are determined by a list of properties which will be used also as table headers.`;
+    The values represented in the cells are determined by the list of properties which will be used also as table headers.`;
 
     constructor(basicModals: BasicModalServices, sanitizer: DomSanitizer) {
         super(basicModals, sanitizer);

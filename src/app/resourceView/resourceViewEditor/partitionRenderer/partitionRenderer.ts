@@ -444,16 +444,16 @@ export abstract class PartitionRenderer {
     }
 
     toggleCustomView() {
-        // this.showCustomView = !this.showCustomView;
-        // if (this.showCustomView) { //if CV enabled, remove the pred-obj-list for the predicate covered by CV
-        //     for (let i = this.predObjList.length-1; i >= 0; i--) {
-        //         if (this.predCustomViewList.some(pcv => pcv.predicate.equals(this.predObjList[i].getPredicate()))) {
-        //             this.predObjList.splice(i, 1);
-        //         }
-        //     }
-        // } else { //if CV disabled, restore all the pred-obj-list elements
-        //     this.predObjList = this.predicateObjectList.slice();
-        // }
+        this.showCustomView = !this.showCustomView;
+        if (this.showCustomView) { //if CV enabled, remove the pred-obj-list for the predicate covered by CV
+            for (let i = this.predObjList.length-1; i >= 0; i--) {
+                if (this.predCustomView.predicate.equals(this.predObjList[i].getPredicate())) {
+                    this.predObjList.splice(i, 1);
+                }
+            }
+        } else { //if CV disabled, restore all the pred-obj-list elements
+            this.predObjList = this.predicateObjectList.slice();
+        }
     }
 
 }

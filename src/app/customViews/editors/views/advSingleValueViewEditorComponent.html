@@ -19,7 +19,7 @@
 
             <div [hidden]="activeTab != 'retrieve'" class="vbox">
                 <div class="alert alert-warning mb-2">
-                    The retrieve query for this kind of widget must return the following variables:
+                    The retrieve query for this kind of view must return the following variables:
                     <ul>
                         <li *ngFor="let v of retrieveVariablesInfo">
                             <code>?{{v.id}}</code>: {{v.descrTranslationKey|translate}};

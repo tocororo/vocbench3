@@ -25,7 +25,7 @@ export class SingleValueEditor {
 
     updateModes: { id: UpdateMode, translationKey: string }[] = [
         { id: UpdateMode.none, translationKey: "No update" },
-        { id: UpdateMode.inline, translationKey: "Inline edit (NT format)" },
+        { id: UpdateMode.inline, translationKey: "Value edit (NT format)" },
         { id: UpdateMode.picker, translationKey: "Value picker" },
     ]
     updateMode: UpdateMode = UpdateMode.none;

@@ -39,9 +39,9 @@ export class PointViewEditorComponent extends AbstractSparqlBasedViewEditor {
 
     
 
-    constructor(basicModals: BasicModalServices) {
-        super(basicModals);
-    }
+        constructor(basicModals: BasicModalServices) {
+            super(basicModals);
+        }
 
     ngOnInit() {
         super.ngOnInit();

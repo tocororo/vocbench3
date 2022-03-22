@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource } from '../models/ARTResources';
 import { Reference } from '../models/Configuration';
-import { CustomViewAssociation, CustomViewConfiguration, CustomViewData, CustomViewDefinition, CustomViewModel, ViewsEnum } from '../models/CustomViews';
+import { BindingMapping, CustomViewAssociation, CustomViewConfiguration, CustomViewData, CustomViewDefinition, CustomViewModel, ViewsEnum } from '../models/CustomViews';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -141,5 +141,40 @@ export class CustomViewsServices {
         }
         return this.httpMgr.doPost(this.serviceName, "updateSparqlBasedData", params);
     }
+
+    updateSingleValueData(resource: ARTResource, property: ARTURIResource, oldValue: ARTNode, newValue: ARTNode, pivots?: Map<string, ARTNode>): Observable<void> {
+        let params = {
+            resource: resource,
+            property: property,
+            oldValue: oldValue,
+            newValue: newValue,
+            pivots: pivots
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateSingleValueData", params);
+    }
+
+    updateStaticVectorData(resource: ARTResource, property: ARTURIResource, fieldProperty: ARTURIResource, oldValue: ARTNode, newValue: ARTNode) {
+        let params = {
+            resource: resource,
+            property: property,
+            fieldProperty: fieldProperty,
+            oldValue: oldValue,
+            newValue: newValue,
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateStaticVectorData", params);
+    }
+
+    updateDynamicVectorData(resource: ARTResource, property: ARTURIResource, fieldName: string, oldValue: ARTNode, newValue: ARTNode, pivots: Map<string, ARTNode>) {
+        let params = {
+            resource: resource,
+            property: property,
+            fieldName: fieldName,
+            oldValue: oldValue,
+            newValue: newValue,
+            pivots: pivots
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateDynamicVectorData", params);
+    }
+
 
 }

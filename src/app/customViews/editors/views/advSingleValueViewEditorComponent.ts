@@ -1,8 +1,10 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { RDFTypesEnum } from 'src/app/models/ARTResources';
-import { AdvSingleValueViewDefinition, CustomViewModel, CustomViewVariables, UpdateMode } from 'src/app/models/CustomViews';
+import { AdvSingleValueViewDefinition, CustomViewModel, CustomViewVariables, CvQueryUtils, CvSparqlEditorStruct, UpdateMode } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
 import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
+import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { AbstractCustomViewEditor } from './abstractCustomViewEditor';
 import { VariableInfoStruct } from './abstractSparqlBasedViewEditor';
 import { SingleValueEditor, UpdateInfoEnhanced } from './singleValueEditor';
@@ -23,19 +25,20 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
 
     activeTab: SparqlTabEnum = "retrieve";
 
-    retrieveEditor: SparqlEditorStruct = { mode: QueryMode.query, query: "", valid: true };
+    retrieveEditor: CvSparqlEditorStruct = { mode: QueryMode.query, query: "", valid: true };
 
     retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.value];
     retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:"
     retrieveVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.value, descrTranslationKey: "The value to be represented" },
-        { id: CustomViewVariables.show, descrTranslationKey: "(Optional) Specifies how the value has to be shown" },
+        // { id: CustomViewVariables.show, descrTranslationKey: "(Optional) Specifies how the value has to be shown" },
     ];
     retrieveQuerySkeleton: string = "SELECT ?value WHERE {\n" +
         "    $resource $trigprop ?obj .\n" +
         "    ...\n" +
         "}";
 
+    retrieveRequiredPlaceholders: CustomViewVariables[] = [CustomViewVariables.resource, CustomViewVariables.trigprop];
     retrievePlaceholdersInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.resource, descrTranslationKey: "represents the resource being described in ResourceView where the Custom View is shown" },
         { id: CustomViewVariables.trigprop, descrTranslationKey: "represents the predicate that will be associated to the Custom View" },
@@ -58,7 +61,7 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
 
     updateQueryInfo: string;
 
-    constructor() {
+    constructor(private basicModals: BasicModalServices) {
         super();
     }
 
@@ -121,15 +124,6 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
     emitChanges(): void {
         this.cvDef.retrieve = this.retrieveEditor.query;
         this.cvDef.suggestedView = this.suggestedView;
-        // this.cvDef.updateMode = this.singleValueData.updateMode;
-        // if (this.singleValueData.updateMode != ValueUpdateMode.none) {
-        //     this.cvDef.update = this.singleValueData.updateData.query;
-        //     if (this.singleValueData.updateMode == ValueUpdateMode.picker) { //if value is specified through a picker, provide restrictions
-        //         this.cvDef.valueType = this.singleValueData.valueType;
-        //         this.cvDef.classes = this.singleValueData.valueType == RDFTypesEnum.resource ? this.singleValueData.classes : null;
-        //         this.cvDef.datatype = this.singleValueData.valueType == RDFTypesEnum.literal ? this.singleValueData.datatype : null;
-        //     }
-        // }
         this.cvDef.update = { 
             field: "value", 
             updateMode: this.singleValueData.updateMode
@@ -146,22 +140,58 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
     }
 
     public isDataValid(): boolean {
-        //TODO put validation stuff from abstract sparql editor to a common utils class
-        /* Here I can call:
-        - for retrieve: a method in such utils class
-        - for update: a public method in the single-value-editor which in turn uses the method in the util class
-        */ 
-        //true if retrieve info are ok and update is disabled or its data are ok
-        // return this.isRetrieveOk() && (!this.updateMode || this.isUpdateOk());
+        return this.isRetrieveOk() && this.isUpdateOk();
+    }
+
+    private isRetrieveOk(): boolean {
+        //- syntactic check
+        if (!this.retrieveEditor.valid) {
+            this.basicModals.alert({ key: "STATUS.ERROR" }, "Retrieve query contains syntactic error(s)", ModalType.warning);
+            return false;
+        }
+        //- variables
+        let retrieveQuery = this.retrieveEditor.query;
+        let select = CvQueryUtils.getSelectReturnStatement(retrieveQuery);
+        for (let v of this.retrieveRequiredReturnVariables) {
+            if (!select.includes("?" + v + " ")) {
+                this.basicModals.alert({ key: "STATUS.ERROR" }, "Required variable ?" + v + " missing in Retrieve query.", ModalType.warning);
+                return false;
+            }
+        }
+        //- placeholders
+        let where = CvQueryUtils.getSelectWhereBlock(retrieveQuery);
+        for (let v of this.retrieveRequiredPlaceholders) {
+            if (!where.includes("$" + v + " ")) {
+                this.basicModals.alert({ key: "STATUS.ERROR" }, "Required placeholder $" + v + " missing in Retrieve query.", ModalType.warning);
+                return false;
+            }    
+        }
         return true;
     }
+
+    private isUpdateOk(): boolean {
+        if (this.singleValueData.updateMode != UpdateMode.none) { //only if update is provided, do the checks on query
+            //semantic check
+            if (this.singleValueData.updateData.mode == QueryMode.query) {
+                this.basicModals.alert({ key: "STATUS.ERROR" }, "Update query cannot be a select/construct/ask query", ModalType.warning);
+                return false;
+            }
+            //syntactic check
+            if (!this.singleValueData.updateData.valid) {
+                this.basicModals.alert({ key: "STATUS.ERROR" }, "Update query contains syntactic error(s)", ModalType.warning);
+                return false;
+            }
+            for (let v of this.updateRequiredVariables) {
+                if (!this.singleValueData.updateData.query.includes("?" + v + " ")) {
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable ?" + v + "in Update query.", ModalType.warning);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
 }
 
 type SparqlTabEnum = "retrieve" | "update";
-
-interface SparqlEditorStruct {
-    query: string;
-    mode: QueryMode;
-    valid: boolean;
-}

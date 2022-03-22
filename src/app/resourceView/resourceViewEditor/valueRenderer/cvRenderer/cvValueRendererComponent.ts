@@ -25,7 +25,7 @@ export class CvValueRendererComponent {
     @ViewChild(LiteralPickerComponent) litPicker: LiteralPickerComponent;
     litPickerDatatypes: ARTURIResource[];
 
-    @Output() update = new EventEmitter(); //a change has been done => request to update the RV
+    @Output() update: EventEmitter<{old: ARTNode, new: ARTNode}> = new EventEmitter(); //a change has been done => request to update the RV
     @Output() dblClick: EventEmitter<void> = new EventEmitter(); //object dbl clicked
 
     editInProgress: boolean = false;
@@ -54,7 +54,8 @@ export class CvValueRendererComponent {
             } else if (this.value.updateInfo.valueType == RDFTypesEnum.literal) {
                 this.litPicker.pickLiteral();
             }
-            
+        } else { //widget (cannot be "none", since this option disables edit button)
+            this.editInline(); //TODO this edit is temporarly, what to do here?
         }
     }
 
@@ -68,6 +69,7 @@ export class CvValueRendererComponent {
             try {
                 let newValue: ARTNode = NTriplesUtil.parseNode(this.resourceStringValue);
                 console.log("emit an event to parent for requiring update of", this.value.resource, "with", newValue);
+                this.update.emit({ old: this.value.resource, new: newValue });
             } catch (error) {
                 this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: this.resourceStringValue + " is not a valid NT value" }, ModalType.warning);
                 return;
@@ -80,9 +82,11 @@ export class CvValueRendererComponent {
 
     onResourcePicked(res: ARTResource) {
         console.log("emit an event to parent for requiring update of", this.value.resource, "with", res);
+        this.update.emit({ old: this.value.resource, new: res });
     }
     onLiteralPicked(lit: ARTLiteral) {
         console.log("emit an event to parent for requiring update of", this.value.resource, "with", lit);
+        this.update.emit({ old: this.value.resource, new: lit });
     }
 
     valueDblClick() {
