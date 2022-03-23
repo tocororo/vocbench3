@@ -223,19 +223,21 @@ export abstract class AbstractView {
     abstract model: CustomViewModel;
 
     resource: ARTNode; //resource/value described by the view
+    defaultView: ViewsEnum;
 
-    constructor(resource: ARTNode) {
+    constructor(resource: ARTNode, defaultView: ViewsEnum) {
         this.resource = resource;
+        this.defaultView = defaultView;
     }
 }
 
-abstract class AbstractSparqlBasedView extends AbstractView {
+export abstract class AbstractSparqlBasedView extends AbstractView {
     /**
      * tells if the view can be edited or not
      * it is useful in this kind of views since there is no UpdateInfo in the described value, like in single-value and vector views,
      * and the "updatable" of a value is determined just from the presence of the update query)
      */
-    readonly: boolean;
+    allowEdit: boolean;
 }
 
 export class PointView extends AbstractSparqlBasedView {

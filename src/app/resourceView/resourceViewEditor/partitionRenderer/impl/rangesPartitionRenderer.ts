@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { forkJoin, Observable, of } from "rxjs";
-import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTBNode, ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -23,10 +22,10 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.ranges;
     addBtnImgSrc = "./assets/images/icons/actions/cls_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private manchService: ManchesterServices) {
-        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

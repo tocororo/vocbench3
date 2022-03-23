@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { SKOS } from "../../../../models/Vocabulary";
@@ -26,10 +25,10 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
     selectedMember: ARTResource;
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private skosService: SkosServices) {
-        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

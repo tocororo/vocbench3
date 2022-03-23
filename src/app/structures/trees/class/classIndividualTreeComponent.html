@@ -1,5 +1,5 @@
 <div class="hbox">
-    <class-tree-panel *ngIf="showClassTree" [roots]="roots" context="clsIndTree" (nodeSelected)="onTreeClassSelected($event)" [editable]="false" [projectCtx]="projectCtx">
+    <class-tree-panel [roots]="roots" context="clsIndTree" (nodeSelected)="onTreeClassSelected($event)" [editable]="false" [projectCtx]="projectCtx">
     </class-tree-panel>
 
     <!-- Show appropriate tree/list according to the selected class -->

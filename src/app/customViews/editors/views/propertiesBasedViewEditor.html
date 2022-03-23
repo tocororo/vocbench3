@@ -11,7 +11,7 @@
         </div>
         <div class="form-group row">
             <label class="col-form-label col-sm-2">Suggested view:</label>
-            <select class="form-control col-10" [(ngModel)]="suggestedView" [disabled]="availableViews.length == 1" (ngModelChanged)="emitChanges()">
+            <select class="form-control col-10" [(ngModel)]="suggestedView" [disabled]="availableViews.length == 1" (ngModelChange)="emitChanges()">
                 <option *ngFor="let v of availableViews" [value]="v.id">
                     {{v.translationKey|translate}}
                 </option>

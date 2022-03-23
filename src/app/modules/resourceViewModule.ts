@@ -56,7 +56,7 @@ import { SuperPropertiesPartitionRenderer } from '../resourceView/resourceViewEd
 import { TopConceptsPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/topConceptsPartitionRenderer';
 import { TypesPartitionRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/impl/typesPartitionRenderer';
 import { LexicalizationEnrichmentHelper } from '../resourceView/resourceViewEditor/partitionRenderer/lexicalizationEnrichmentHelper';
-import { PredicateCustomViewsRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/predicateCustomViewRenderer';
+import { CustomViewsRenderer } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/customViewRenderer';
 import { PredicateObjectsRenderer } from '../resourceView/resourceViewEditor/partitionRenderer/predicateObjectsRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceViewEditor/resourceRenameComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewEditor/resourceViewCtxMenu';
@@ -157,7 +157,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         MembersOrderedPartitionRenderer,
         MembersPartitionRenderer,
         NotesPartitionRenderer,
-        PredicateCustomViewsRenderer,
+        CustomViewsRenderer,
         PredicateObjectsRenderer,
         PropertiesPartitionRenderer,
         PropertyChainRenderer,

@@ -1,0 +1,22 @@
+<ng-container [ngSwitch]="category">
+    <ng-container *ngSwitchCase="'geospatial'">
+        <map-renderer *ngFor="let v of customViews" [view]="v" [subject]="subject" [predicate]="predicate" [partition]="partition" [readonly]="readonly" 
+            (update)="onUpdate()" (delete)="onDelete($event)" (doubleClick)="onDblClick($event)">
+        </map-renderer>
+    </ng-container>
+    <ng-container *ngSwitchCase="'statistical_series'">
+        <charts-renderer *ngFor="let v of customViews" [view]="v" [subject]="subject" [predicate]="predicate" [partition]="partition" [readonly]="readonly"
+            (update)="onUpdate()" (delete)="onDelete($event)" (doubleClick)="onDblClick($event)">
+        </charts-renderer>
+    </ng-container>
+    <ng-container *ngSwitchCase="'single_value'">
+        <single-value-renderer *ngFor="let v of customViews" [view]="v" [subject]="subject" [predicate]="predicate" [partition]="partition" [readonly]="readonly"
+            (update)="onUpdate()" (delete)="onDelete($event)" (doubleClick)="onDblClick($event)">
+        </single-value-renderer>
+    </ng-container>
+    <ng-container *ngSwitchCase="'vector'">
+        <vector-renderer *ngSwitchCase="'vector'" [views]="customViews" [subject]="subject" [predicate]="predicate" [partition]="partition" [readonly]="readonly"
+            (update)="onUpdate()" (delete)="onDelete($event)" (doubleClick)="onDblClick($event)">
+        </vector-renderer>
+    </ng-container>
+</ng-container>

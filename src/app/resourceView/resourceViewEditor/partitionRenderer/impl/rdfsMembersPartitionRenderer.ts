@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Observable, of } from 'rxjs';
-import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
@@ -22,9 +21,9 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.rdfsMembers;
     addBtnImgSrc = "./assets/images/icons/actions/property_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices) {
-        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

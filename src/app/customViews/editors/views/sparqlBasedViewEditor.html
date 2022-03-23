@@ -51,7 +51,7 @@
 
         <div class="d-flex align-items-center mt-3">
             <label class="text-nowrap">Suggested view:</label>
-            <select class="form-control ml-2" [(ngModel)]="suggestedView" [disabled]="availableViews.length == 1" (ngModelChanged)="emitChanges()">
+            <select class="form-control ml-2" [(ngModel)]="suggestedView" [disabled]="availableViews.length == 1" (ngModelChange)="emitChanges()">
                 <option *ngFor="let v of availableViews" [value]="v.id">
                     {{v.translationKey|translate}}
                 </option>

@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Observable, of } from 'rxjs';
-import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -20,10 +19,10 @@ export class FormBasedPreviewRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.formBasedPreview;
     addBtnImgSrc: any = null; //do not show the add icon
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         ) {
-        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

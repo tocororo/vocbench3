@@ -1,38 +1,38 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { AbstractView, AdvSingleValueView, AreaView, BindingMapping, CustomViewCategory, CustomViewModel, CustomViewRenderedValue, CustomViewVariables, DynamicVectorView, PointView, PredicateCustomView, PropertyChainView, RouteView, SeriesCollectionView, SeriesView, SparqlBasedValueDTO, StaticVectorView, UpdateMode } from "src/app/models/CustomViews";
-import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
-import { ResViewPartition } from "../../../models/ResourceView";
+import { AbstractView, AdvSingleValueView, AreaView, BindingMapping, CustomViewCategory, CustomViewData, CustomViewModel, CustomViewRenderedValue, CustomViewVariables, DynamicVectorView, PointView, PropertyChainView, RouteView, SeriesCollectionView, SeriesView, SparqlBasedValueDTO, StaticVectorView, UpdateMode } from "src/app/models/CustomViews";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
+import { ResViewPartition } from "../../../../models/ResourceView";
 
 @Component({
-    selector: "pred-custom-views-renderer",
-    templateUrl: "./predicateCustomViewRenderer.html",
+    selector: "custom-views-renderer",
+    templateUrl: "./customViewRenderer.html",
     styles: [`
         :host {
             display: block;
-            margin-bottom: 4px;
         }
     `]
     
 })
-export class PredicateCustomViewsRenderer {
+export class CustomViewsRenderer {
 
     /**
      * INPUTS / OUTPUTS
      */
 
-    @Input('pred-cv') predicateCustomView: PredicateCustomView;
-    @Input() resource: ARTResource; //resource described
+    @Input('cvData') customViewData: CustomViewData;
+    @Input() subject: ARTResource; //resource described
+    @Input() predicate: ARTURIResource;
     @Input() readonly: boolean;
     @Input() rendering: boolean;
     @Input() partition: ResViewPartition;
-    @Output() update = new EventEmitter();
+    @Output() update: EventEmitter<void> = new EventEmitter();
+    @Output() delete: EventEmitter<ARTNode> = new EventEmitter();
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     /**
      * ATTRIBUTES
      */
 
-    predicate: ARTURIResource;
     customViews: AbstractView[];
 
     category: CustomViewCategory;
@@ -42,11 +42,11 @@ export class PredicateCustomViewsRenderer {
     ngOnInit() {}
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['resource'] || changes['readonly']) {
+        if (changes['subject'] || changes['readonly']) {
             this.initActionsStatus();
         }
-        if (changes['predicateCustomView']) {
-            this.predicate = this.predicateCustomView.predicate;
+        if (changes['customViewData']) {
+            // this.predicate = this.predicateCustomView.predicate;
             this.initCustomViewData();
         }
     }
@@ -55,38 +55,22 @@ export class PredicateCustomViewsRenderer {
         //convert the data to a proper view structure according the model type
         this.customViews = [];
 
-        if (this.predicateCustomView.cvData.model == CustomViewModel.point) {
-            this.predicateCustomView.cvData.data.forEach(d => {
+        if (this.customViewData.model == CustomViewModel.point) {
+            this.customViewData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
-                let v: PointView = new PointView(d.resource);
-                v.readonly = descr.updateMode == UpdateMode.none;
+                let v: PointView = new PointView(d.resource, this.customViewData.defaultView);
+                v.allowEdit = descr.updateMode != UpdateMode.none;
                 let pointDescr: BindingMapping = descr.bindingsList[0]; //for sure there is only one BingingMapping which describes the only point
                 v.location = <ARTResource>pointDescr[CustomViewVariables.location];
                 v.latitude = <ARTLiteral>pointDescr[CustomViewVariables.latitude];
                 v.longitude = <ARTLiteral>pointDescr[CustomViewVariables.longitude];
                 this.customViews.push(v);
             })
-        } else if (this.predicateCustomView.cvData.model == CustomViewModel.area) {
-            this.predicateCustomView.cvData.data.forEach(d => {
+        } else if (this.customViewData.model == CustomViewModel.area) {
+            this.customViewData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
-                let v: AreaView = new AreaView(d.resource);
-                v.readonly = descr.updateMode == UpdateMode.none;
-                v.routeId = <ARTResource>descr.bindingsList[0][CustomViewVariables.route_id]; //by construction route ID is the same for each record
-                descr.bindingsList.forEach(b => {
-                    v.locations.push({
-                        location: <ARTResource>b[CustomViewVariables.location],
-                        latitude: <ARTLiteral>b[CustomViewVariables.latitude],
-                        longitude: <ARTLiteral>b[CustomViewVariables.longitude]
-                    })
-                });
-                v.readonly = descr.updateMode == UpdateMode.none;
-                this.customViews.push(v);
-            })
-        } else if (this.predicateCustomView.cvData.model == CustomViewModel.route) {
-            this.predicateCustomView.cvData.data.forEach(d => {
-                let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
-                let v: RouteView = new RouteView(d.resource);
-                v.readonly = descr.updateMode == UpdateMode.none;
+                let v: AreaView = new AreaView(d.resource, this.customViewData.defaultView);
+                v.allowEdit = descr.updateMode != UpdateMode.none;
                 v.routeId = <ARTResource>descr.bindingsList[0][CustomViewVariables.route_id]; //by construction route ID is the same for each record
                 descr.bindingsList.forEach(b => {
                     v.locations.push({
@@ -97,11 +81,26 @@ export class PredicateCustomViewsRenderer {
                 });
                 this.customViews.push(v);
             })
-        } else if (this.predicateCustomView.cvData.model == CustomViewModel.series) {
-            this.predicateCustomView.cvData.data.forEach(d => {
+        } else if (this.customViewData.model == CustomViewModel.route) {
+            this.customViewData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
-                let v: SeriesView = new SeriesView(d.resource);
-                v.readonly = descr.updateMode == UpdateMode.none;
+                let v: RouteView = new RouteView(d.resource, this.customViewData.defaultView);
+                v.allowEdit = descr.updateMode != UpdateMode.none;
+                v.routeId = <ARTResource>descr.bindingsList[0][CustomViewVariables.route_id]; //by construction route ID is the same for each record
+                descr.bindingsList.forEach(b => {
+                    v.locations.push({
+                        location: <ARTResource>b[CustomViewVariables.location],
+                        latitude: <ARTLiteral>b[CustomViewVariables.latitude],
+                        longitude: <ARTLiteral>b[CustomViewVariables.longitude]
+                    })
+                });
+                this.customViews.push(v);
+            })
+        } else if (this.customViewData.model == CustomViewModel.series) {
+            this.customViewData.data.forEach(d => {
+                let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
+                let v: SeriesView = new SeriesView(d.resource, this.customViewData.defaultView);
+                v.allowEdit = descr.updateMode != UpdateMode.none;
                 //series_id, series_label and value_label are supposed to be the same for all the data
                 v.series_id = <ARTResource>descr.bindingsList[0][CustomViewVariables.series_id];
                 v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();
@@ -114,11 +113,11 @@ export class PredicateCustomViewsRenderer {
                 });
                 this.customViews.push(v);
             })
-        } else if (this.predicateCustomView.cvData.model == CustomViewModel.series_collection) {
-            this.predicateCustomView.cvData.data.forEach(d => {
+        } else if (this.customViewData.model == CustomViewModel.series_collection) {
+            this.customViewData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
-                let v: SeriesCollectionView = new SeriesCollectionView(d.resource);
-                v.readonly = descr.updateMode == UpdateMode.none;
+                let v: SeriesCollectionView = new SeriesCollectionView(d.resource, this.customViewData.defaultView);
+                v.allowEdit = descr.updateMode != UpdateMode.none;
                 //series_collection_id, series_label and value_label are supposed to be the same for all the data
                 v.series_collection_id = <ARTResource>descr.bindingsList[0][CustomViewVariables.series_collection_id];
                 v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();
@@ -141,31 +140,31 @@ export class PredicateCustomViewsRenderer {
                 });
                 this.customViews.push(v);
             })
-        } else if (this.predicateCustomView.cvData.model == CustomViewModel.property_chain) {
-            this.predicateCustomView.cvData.data.forEach(d => {
+        } else if (this.customViewData.model == CustomViewModel.property_chain) {
+            this.customViewData.data.forEach(d => {
                 let descr: CustomViewRenderedValue = <CustomViewRenderedValue>d.description;
-                let v: PropertyChainView = new PropertyChainView(d.resource);
+                let v: PropertyChainView = new PropertyChainView(d.resource, this.customViewData.defaultView);
                 v.value = descr;
                 this.customViews.push(v);
             });
-        } else if (this.predicateCustomView.cvData.model == CustomViewModel.adv_single_value) {
-            this.predicateCustomView.cvData.data.forEach(d => {
+        } else if (this.customViewData.model == CustomViewModel.adv_single_value) {
+            this.customViewData.data.forEach(d => {
                 let descr: CustomViewRenderedValue = <CustomViewRenderedValue>d.description;
-                let v: AdvSingleValueView = new AdvSingleValueView(d.resource);
+                let v: AdvSingleValueView = new AdvSingleValueView(d.resource, this.customViewData.defaultView);
                 v.value = descr;
                 this.customViews.push(v);
             });
-        } else if (this.predicateCustomView.cvData.model == CustomViewModel.static_vector) {
-            this.predicateCustomView.cvData.data.forEach(d => {
+        } else if (this.customViewData.model == CustomViewModel.static_vector) {
+            this.customViewData.data.forEach(d => {
                 let descr: CustomViewRenderedValue[] = <CustomViewRenderedValue[]>d.description;
-                let v: StaticVectorView = new StaticVectorView(d.resource);
+                let v: StaticVectorView = new StaticVectorView(d.resource, this.customViewData.defaultView);
                 v.values = descr;
                 this.customViews.push(v);
             });
-        } else if (this.predicateCustomView.cvData.model == CustomViewModel.dynamic_vector) {
-            this.predicateCustomView.cvData.data.forEach(d => {
+        } else if (this.customViewData.model == CustomViewModel.dynamic_vector) {
+            this.customViewData.data.forEach(d => {
                 let descr: CustomViewRenderedValue[] = <CustomViewRenderedValue[]>d.description;
-                let v: DynamicVectorView = new DynamicVectorView(d.resource);
+                let v: DynamicVectorView = new DynamicVectorView(d.resource, this.customViewData.defaultView);
                 v.values = descr;
                 this.customViews.push(v);
             });
@@ -189,6 +188,9 @@ export class PredicateCustomViewsRenderer {
 
     onUpdate() {
         this.update.emit();
+    }
+    onDelete(res: ARTNode) {
+        this.delete.emit(res);
     }
     onDblClick(obj: ARTResource) {
         this.dblclickObj.emit(obj);

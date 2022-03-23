@@ -6,7 +6,7 @@
         
         <div class="hbox" style="align-items: center; flex: initial; margin-bottom: 5px;">
             <span class="fas fa-info-circle" style="top: 0" [title]="'ALIGNMENT.VALIDATION.SETTINGS.REJECTED_ALIGN_ACTION_INFO'|translate"></span>
-            <label style="white-space: nowrap; margin: 0px 3px;">{{'ALIGNMENT.VALIDATION.SETTINGS.REJECTED_ALIGN_ACTION'|translate}}Rejected alignment action:</label>
+            <label style="white-space: nowrap; margin: 0px 3px;">{{'ALIGNMENT.VALIDATION.SETTINGS.REJECTED_ALIGN_ACTION'|translate}}:</label>
             <select class="form-control" style="display: inline-block" [(ngModel)]="rejectedAlignmentAction">
                 <option *ngFor="let opt of rejectedAlignmentOptions" [value]="opt.value">{{opt.label}}</option>
             </select>

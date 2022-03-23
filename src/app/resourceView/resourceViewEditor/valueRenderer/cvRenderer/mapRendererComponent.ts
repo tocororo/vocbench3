@@ -1,14 +1,13 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Component, Input, SimpleChanges } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { TranslateService } from "@ngx-translate/core";
 import { forkJoin, Observable } from "rxjs";
-import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { AbstractMultiPointView, AreaView, CustomViewVariables, PointView, RouteView } from "src/app/models/CustomViews";
+import { AbstractMultiPointView, AbstractSparqlBasedView, AreaView, CustomViewVariables, PointView, RouteView } from "src/app/models/CustomViews";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { GeoPoint } from "src/app/widget/leafletMap/leafletMapComponent";
 import { LeafletMapModal } from "src/app/widget/leafletMap/leafletMapModal";
 import { ModalOptions, Translation } from "src/app/widget/modal/Modals";
-import { AbstractViewRendererComponent } from "./abstractViewRenderer";
+import { AbstractSingleViewRendererComponent } from "./abstractSingleViewRenderer";
 
 @Component({
     selector: "map-renderer",
@@ -18,10 +17,13 @@ import { AbstractViewRendererComponent } from "./abstractViewRenderer";
         :host {
             height: 300px;
             width: 100%;
+            padding: 3px;
         }
     `]
 })
-export class MapRendererComponent extends AbstractViewRendererComponent {
+export class MapRendererComponent extends AbstractSingleViewRendererComponent {
+
+    @Input() view: AbstractSparqlBasedView;
 
     //input data needs converted in point or set of points
     point: GeoPoint; //a point to be represented (with a marker) on the map
@@ -38,6 +40,15 @@ export class MapRendererComponent extends AbstractViewRendererComponent {
         }
     }
 
+    ngOnInit() {
+        super.ngOnInit();
+    }
+
+    protected initActionStatus(): void {
+        super.initActionStatus();
+        this.editAuthorized = this.editAuthorized && this.view.allowEdit;
+    }
+    
     processInput() {
         /**
          * here I need to detect if I need to draw a point or a polyline (route/area)

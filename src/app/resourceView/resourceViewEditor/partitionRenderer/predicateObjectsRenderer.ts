@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { CustomFormValueTable } from "src/app/models/CustomForms";
-import { CustomFormsServices } from "src/app/services/customFormsServices";
+import { CustomViewData } from "src/app/models/CustomViews";
+import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { Language } from "../../../models/LanguagesCountries";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../../models/ResourceView";
@@ -42,7 +42,9 @@ export class PredicateObjectsRenderer {
 
     predicate: ARTURIResource;
     objects: ARTNode[];
-    cfValueTables: CustomFormValueTable[];
+
+    showCustomView: boolean = true;
+    customView: CustomViewData;
 
     addDisabled: boolean = false;
     deleteAllDisabled: boolean = false;
@@ -52,7 +54,7 @@ export class PredicateObjectsRenderer {
     addExteranlResourceAllowed: boolean = false;
 
 
-    constructor(private cfService: CustomFormsServices) {}
+    constructor(private cvService: CustomViewsServices) {}
 
     ngOnInit() {}
 
@@ -62,23 +64,22 @@ export class PredicateObjectsRenderer {
         }
         if (changes['predicateObjects']) {
             this.predicate = this.predicateObjects.getPredicate();
-            this.objects = this.predicateObjects.getObjects();
+            this.objects = this.predicateObjects.getObjects().slice();
 
-            if (this.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)) {
-                let objs: ARTResource[] = <ARTResource[]>this.objects.filter(o => o instanceof ARTResource);
-                if (objs.length > 0) {
-                    this.cfService.getCustomFormValueTables(this.predicate, objs).subscribe(
-                        tables => {
-                            this.cfValueTables = tables;
-                            // here I need to filter out from objects those values covered in any table
+            if (this.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_VIEW)) { //predicate has a CV
+                this.cvService.getViewData(this.resource, this.predicate).subscribe( //retrieve data
+                    (cvData: CustomViewData) => {
+                        if (cvData.data.length > 0) { //if data is retrieved correctly, store it and remove the pred-obj
+                            this.customView = cvData;
+                            // here I need to filter out from objects those values covered by any CustomView
                             this.objects = this.objects.filter(o => //keep object if
-                                !tables.some(t => //there is no table
-                                    t.rows.some(r => r.describedObject.equals(o)) //containing the object
+                                !this.customView.data.some(d => //there is no CV that...
+                                    d.resource.equals(o) //describe such object
                                 )
                             );
                         }
-                    );
-                }
+                    }
+                )
             }
         }
     }
@@ -119,6 +120,19 @@ export class PredicateObjectsRenderer {
 
         this.addManuallyAllowed = !(this.partition in ResViewPartition) || ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1; //custom partition OR add manually foreseen
         this.addExteranlResourceAllowed = ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
+    }
+
+    toggleCustomView() {
+        this.showCustomView = !this.showCustomView;
+        if (this.showCustomView) { //if CV enabled, remove the resource covered by CV from objects list
+            for (let i = this.objects.length-1; i >= 0; i--) {
+                if (this.customView.data[0].resource.equals(this.objects[i])) {
+                    this.objects.splice(i, 1);
+                }
+            }
+        } else { //if CV disabled, restore all the objects
+            this.objects = this.predicateObjects.getObjects().slice();
+        }
     }
 
     /**

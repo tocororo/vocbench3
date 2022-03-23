@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { map } from 'rxjs/operators';
-import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -24,10 +23,10 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.members;
     addBtnImgSrc = "./assets/images/icons/actions/skosCollection_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private skosService: SkosServices, private eventHandler: VBEventHandler) {
-        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

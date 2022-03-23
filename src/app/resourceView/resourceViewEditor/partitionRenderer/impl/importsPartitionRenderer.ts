@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ImportFromDatasetCatalogModalReturnData } from "../../../../metadata/namespacesAndImports/importFromDatasetCatalogModal";
 import { ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ImportType } from "../../../../models/Metadata";
@@ -24,10 +23,10 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.imports;
     addBtnImgSrc = "./assets/images/icons/actions/ontologyProperty_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private metadataService: MetadataServices, private sharedModals: SharedModalServices) {
-        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

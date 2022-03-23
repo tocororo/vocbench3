@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { NewLexSenseCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newLexSenseCfModal";
 import { ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
@@ -10,7 +9,6 @@ import { PropertyServices } from "../../../../services/propertyServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { NewOntoLexicalizationCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
@@ -23,10 +21,10 @@ export class LexicalSensesPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.lexicalSenses;
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private ontolexService: OntoLexLemonServices) {
-        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

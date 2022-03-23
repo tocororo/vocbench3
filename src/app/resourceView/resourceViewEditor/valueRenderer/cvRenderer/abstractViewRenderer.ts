@@ -1,36 +1,42 @@
 import { Directive, EventEmitter, Input, Output } from "@angular/core";
 import { ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { AbstractView } from "src/app/models/CustomViews";
-import { ResourcesServices } from "src/app/services/resourcesServices";
+import { ResViewPartition } from "src/app/models/ResourceView";
+import { CRUDEnum, ResourceViewAuthEvaluator } from "src/app/utils/AuthorizationEvaluator";
 
 @Directive()
 export abstract class AbstractViewRendererComponent {
-    @Input() view: AbstractView;
+
     @Input() subject: ARTResource;
     @Input() predicate: ARTURIResource;
+    @Input() partition: ResViewPartition;
     @Input() readonly: boolean;
 
     @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter;
-    @Output() update = new EventEmitter();
+    @Output() update: EventEmitter<void> = new EventEmitter();
+    @Output() delete: EventEmitter<ARTNode> = new EventEmitter();
 
     editAuthorized: boolean = true;
+    deleteAuthorized: boolean = true;
+
+
+    constructor() { }
+
+    ngOnInit() {
+        this.initActionStatus();
+    }
+
+    protected initActionStatus(): void {
+        this.editAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.subject) && !this.readonly;
+        this.deleteAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject) && !this.readonly;
+    };
 
     /**
      * normalizes the input data in a format compliant for the view renderer
      */
     protected abstract processInput(): void;
 
-    constructor() {}
 
-    /**
-     * Emit a doubleClick event on the resource described in the CV (unless otherwise specified, e.g. a single data of a chart)
-     * @param res 
-     */
-    onDoubleClick(res?: ARTNode) {
-        if (res == null) { 
-            res = this.view.resource;
-        }
-        this.doubleClick.emit(res);
-    }
+    protected abstract deleteHandler(arg?: any): void;
+
 
 }

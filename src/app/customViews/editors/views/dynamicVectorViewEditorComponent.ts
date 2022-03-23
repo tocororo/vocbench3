@@ -219,10 +219,8 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
         }
         //- object: select must returns the object of the $resource $trigprop ?obj triple
         let matchArray: RegExpExecArray = this.OBJ_REGEX.exec(where);
-        console.log("match", matchArray);
         if (matchArray != null) {
             let objVar = matchArray[1];
-            console.log("obj", objVar);
             if (!select.includes("*") && !select.includes(objVar)) {
                 this.basicModals.alert({ key: "STATUS.ERROR" }, "Object variable " + objVar + ", of pair $resource $trigprop, not returned in Retrieve query", ModalType.warning);
                 return false;

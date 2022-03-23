@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Observable } from "rxjs";
-import { ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
+import { ARTNode, ARTResource } from "src/app/models/ARTResources";
 import { AbstractVectorView, CustomViewRenderedValue, DynamicVectorView, StaticVectorView } from "src/app/models/CustomViews";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { NTriplesUtil } from "src/app/utils/ResourceUtils";
+import { AbstractViewRendererComponent } from "./abstractViewRenderer";
 
 @Component({
     selector: "vector-renderer",
@@ -19,20 +20,14 @@ import { NTriplesUtil } from "src/app/utils/ResourceUtils";
         .cv-table tr { height: 36px }
     `],
 })
-export class VectorRendererComponent {
+export class VectorRendererComponent extends AbstractViewRendererComponent {
 
     @Input() views: AbstractVectorView[];
-    @Input() subject: ARTResource;
-    @Input() predicate: ARTURIResource;
-    @Input() readonly: boolean;
-
-    @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter;
-    @Output() update = new EventEmitter();
-
 
     headers: string[];
 
     constructor(private resourcesService: ResourcesServices, private cvService: CustomViewsServices) {
+        super()
     }
 
     ngOnInit() {
@@ -60,6 +55,10 @@ export class VectorRendererComponent {
         )
     }
 
+    processInput() {
+        //Nothing to do
+    }
+
     openResource(view: AbstractVectorView) {
         this.doubleClick.emit(view.resource);
     }
@@ -68,8 +67,11 @@ export class VectorRendererComponent {
         this.doubleClick.emit(value.resource);
     }
 
-    onUpdate(value: CustomViewRenderedValue, data: { old: ARTNode, new: ARTNode }) {
+    deleteHandler(view: AbstractVectorView) {
+        this.delete.emit(view.resource);
+    }
 
+    onUpdate(value: CustomViewRenderedValue, data: { old: ARTNode, new: ARTNode }) {
         let updateFn: Observable<void>;
 
         if (this.views[0] instanceof DynamicVectorView) {
@@ -85,8 +87,7 @@ export class VectorRendererComponent {
             () => {
                 this.update.emit();
             }
-        )
-        
+        );
     }
 
 

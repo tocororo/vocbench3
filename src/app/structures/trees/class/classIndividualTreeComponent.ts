@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { SKOS } from '../../../models/Vocabulary';
 import { TreeListContext } from "../../../utils/UIUtils";
 import { ProjectContext, VBContext } from "../../../utils/VBContext";
+import { ClassTreePanelComponent } from "./classTreePanelComponent";
 
 @Component({
     selector: "class-individual-tree",
@@ -23,11 +24,11 @@ export class ClassIndividualTreeComponent {
     /*in the future I might need an Output for selected class. In case, change nodeSelected in instanceSelected and
     create classSelected Output. (Memo: nodeSelected is to maintain the same Output of the other tree components)*/
 
+    @ViewChild(ClassTreePanelComponent, { static: true }) classTreePanelChild: ClassTreePanelComponent;
+
     selectedClass: ARTURIResource = null; //the class selected from class tree
     currentSchemes: ARTURIResource[];//the scheme selecte in the concept tree (only if selected class is skos:Concept)
     selectedInstance: ARTURIResource; //the instance (or concept) selected in the instance list (or concept tree)
-
-    showClassTree: boolean = true; //useful to hide the class tree when the selection is restricted to instances of only one class
 
     ngOnInit() {
         if (this.schemes === undefined) { //if @Input scheme is not provided at all, get it from project preference
@@ -44,12 +45,11 @@ export class ClassIndividualTreeComponent {
         if (changes['roots']) { //when roots changes, deselect eventals class and instance selected
             this.selectedClass = null;
             this.selectedInstance = null;
-            //when there is only one class, select it automatically and hide the class tree
+            //when there is only one class, select it automatically
             if (this.roots && this.roots.length == 1) {
-                this.selectedClass = this.roots[0];
-                this.showClassTree = false;
-            } else {
-                this.showClassTree = true;
+                setTimeout(() => { //give time to initialize child component (without this, openTreeAt in class tree generates error)
+                    this.classTreePanelChild.openTreeAt(this.roots[0]);
+                })
             }
         }
     }

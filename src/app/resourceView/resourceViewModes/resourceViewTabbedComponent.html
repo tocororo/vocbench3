@@ -4,7 +4,7 @@
         <li *ngFor="let t of tabs" class="nav-item" [ngClass]="{active : t.active}">
             <a (click)="selectTab(t, 'true')" class="nav-link" style="display: flex; align-items: center;">
                 <rdf-resource [resource]="t.resource"></rdf-resource>
-                <span class="far fa-times-circle" (click)="closeTab(t)" style="cursor: pointer; align-self: flex-start;"
+                <span class="far fa-times-circle" (click)="closeTab(t)" style="cursor: pointer;"
                     onmouseover="this.className='fas fa-times-circle';"
                     onmouseout="this.className='far fa-times-circle';">
                 </span>

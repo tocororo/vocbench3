@@ -1,16 +1,19 @@
 <leaflet-map [point]="point" [route]="route" [area]="area" (dblclick)="onDoubleClick()"></leaflet-map>
 
-<!-- <div class="dropdown float-right" style="align-self: flex-start;" ngbDropdown container="body">
-    <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="readonly" [title]="'ACTIONS.EDIT'|translate">
+<div class="dropdown float-right" style="align-self: flex-start;" ngbDropdown container="body">
+    <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="readonly">
         <span class="fas fa-caret-down fa-sm"></span>
     </button>
     <div class="dropdown-menu" ngbDropdownMenu>
-        <a class="dropdown-item" [ngClass]="{ disabled: !editAuthorized }" (click)="edit()">
+        <a class="dropdown-item" [ngClass]="{ disabled: !editAuthorized }" (click)="edit()" [title]="'ACTIONS.EDIT'|translate">
             {{'ACTIONS.EDIT'|translate}}
         </a>
+        <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized }" (click)="deleteHandler()" [title]="'ACTIONS.EDIT'|translate">
+            {{'ACTIONS.DELETE'|translate}}
+        </a>
     </div>
-</div> -->
+</div>
 
-<button *ngIf="!readonly" class="btn btn-xs btn-transparent ml-2" style="align-self: flex-start;" (click)="edit()" [title]="'ACTIONS.EDIT'|translate">
+<!-- <button *ngIf="!readonly" class="btn btn-xs btn-transparent ml-2" style="align-self: flex-start;" (click)="edit()" [title]="'ACTIONS.EDIT'|translate">
     <span class="fas fa-pencil-alt"></span>
-</button>
+</button> -->

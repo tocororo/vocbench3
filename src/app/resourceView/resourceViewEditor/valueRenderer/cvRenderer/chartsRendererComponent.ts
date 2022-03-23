@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { ARTNode } from "src/app/models/ARTResources";
-import { CustomViewVariables, SeriesCollectionView, SeriesView, ViewsEnum } from "src/app/models/CustomViews";
+import { AbstractSparqlBasedView, CustomViewVariables, SeriesCollectionView, SeriesView, ViewsEnum } from "src/app/models/CustomViews";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ChartData, ChartDataChangedEvent, ChartSeries } from "src/app/widget/charts/NgxChartsUtils";
-import { AbstractViewRendererComponent } from "./abstractViewRenderer";
+import { AbstractSingleViewRendererComponent } from "./abstractSingleViewRenderer";
 
 @Component({
     selector: "charts-renderer",
@@ -13,10 +13,16 @@ import { AbstractViewRendererComponent } from "./abstractViewRenderer";
         :host {
             height: 300px;
             width: 100%;
+            padding: 3px;
+        }
+        :host:hover {
+            background-color: #e5f3ff;
         }
     `]
 })
-export class ChartsRendererComponent extends AbstractViewRendererComponent {
+export class ChartsRendererComponent extends AbstractSingleViewRendererComponent {
+
+    @Input() view: AbstractSparqlBasedView;
 
     //input data needs to be converted in data compliant with charts
     series: ChartData[]; //a series of chart data 
@@ -36,6 +42,7 @@ export class ChartsRendererComponent extends AbstractViewRendererComponent {
     }
 
     ngOnInit() {
+        super.ngOnInit();
         this.compliantViews = [];
         if (this.view instanceof SeriesView) {
             this.compliantViews = [ViewsEnum.bar, ViewsEnum.pie];
@@ -43,7 +50,11 @@ export class ChartsRendererComponent extends AbstractViewRendererComponent {
             this.compliantViews = [ViewsEnum.line]
         }
         if (this.compliantViews.length > 0) {
-            this.activeView = this.compliantViews[0];
+            if (this.compliantViews.includes(this.view.defaultView)) {
+                this.activeView = this.view.defaultView;
+            } else {
+                this.activeView = this.compliantViews[0];
+            }
         }
 
         this.processInput();
@@ -53,6 +64,11 @@ export class ChartsRendererComponent extends AbstractViewRendererComponent {
         setTimeout(() => {
             this.viewInitialized = true;
         });
+    }
+
+    protected initActionStatus(): void {
+        super.initActionStatus();
+        this.editAuthorized = this.editAuthorized && this.view.allowEdit;
     }
 
     processInput() {

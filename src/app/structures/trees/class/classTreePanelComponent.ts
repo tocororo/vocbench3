@@ -32,7 +32,7 @@ import { ClassTreeSettingsModal } from "./classTreeSettingsModal";
 export class ClassTreePanelComponent extends AbstractTreePanel {
     @Input() roots: ARTURIResource[]; //root classes
 
-    @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
+    @ViewChild(ClassTreeComponent, { static: true }) viewChildTree: ClassTreeComponent;
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.cls;
     rendering: boolean = false; //override the value in AbstractPanel
@@ -107,15 +107,15 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     }
 
 
-    private isOpenIncrementalModelGraphEnabled() {
+    isOpenIncrementalModelGraphEnabled() {
         return this.isOpenGraphEnabled(GraphMode.modelOriented) && this.selectedNode != null && this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT);
     }
 
-    private openIncrementalGraph() {
+    openIncrementalGraph() {
         this.graphModals.openModelGraph(this.selectedNode, this.rendering);
     }
 
-    private openUmlGraph(){
+    openUmlGraph(){
         this.graphModals.openUmlGraph(this.rendering);
     }
 

@@ -22,18 +22,30 @@
         </div>
     </ng-template>
 
-    <button *ngIf="value.updateInfo.updateMode != 'none' && !editInProgress" class="btn btn-xs btn-transparent ml-2" (click)="edit()" [title]="'ACTIONS.EDIT'|translate">
-        <span class="fas fa-pencil-alt"></span>
-    </button>
+    <ng-container *ngIf="context == 'single_value'; then singleValueActions; else vectorActions"></ng-container>
 
-    <!-- <div *ngIf="value.updateInfo.updateMode != 'none'" class="btn-group" ngbDropdown>
-        <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle>
-            <span class="fas fa-caret-down fa-sm"></span>
-        </button>
-        <div class="dropdown-menu" ngbDropdownMenu>
-            <a class="dropdown-item" (click)="edit()">{{'ACTIONS.EDIT'|translate}}</a>
+    <ng-template #singleValueActions>
+        <div *ngIf="!editInProgress" class="dropdown float-right" style="align-self: flex-start;" ngbDropdown container="body">
+            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="readonly">
+                <span class="fas fa-caret-down fa-sm"></span>
+            </button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <a class="dropdown-item" [ngClass]="{ disabled: !editAuthorized }" (click)="edit()" [title]="'ACTIONS.EDIT'|translate">
+                    {{'ACTIONS.EDIT'|translate}}
+                </a>
+                <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized }" (click)="deleteHandler()" [title]="'ACTIONS.EDIT'|translate">
+                    {{'ACTIONS.DELETE'|translate}}
+                </a>
+            </div>
         </div>
-    </div> -->
+    </ng-template>
+
+    <ng-template #vectorActions>
+        <button *ngIf="!editInProgress" class="btn btn-xs btn-transparent ml-2" (click)="edit()" [title]="'ACTIONS.EDIT'|translate" [disabled]="!editAuthorized">
+            <span class="fas fa-pencil-alt"></span>
+        </button>
+    </ng-template>
+
 </div>
 
 

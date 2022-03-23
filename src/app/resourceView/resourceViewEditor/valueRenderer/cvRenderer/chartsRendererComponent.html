@@ -1,10 +1,27 @@
 
 <ng-container *ngIf="viewInitialized && (series || seriesCollection)">
-    <bar-chart *ngIf="activeView=='bar'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [readonly]="readonly" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></bar-chart>
-    <pie-chart *ngIf="activeView=='pie'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [readonly]="readonly" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></pie-chart>
-    <line-chart *ngIf="activeView=='line'" [chartData]="seriesCollection" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [readonly]="readonly" (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)"></line-chart>
+    <bar-chart *ngIf="activeView=='bar'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [readonly]="readonly || !editAuthorized" 
+        (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)">
+    </bar-chart>
+    <pie-chart *ngIf="activeView=='pie'" [chartData]="series" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [readonly]="readonly || !editAuthorized"
+        (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)">
+    </pie-chart>
+    <line-chart *ngIf="activeView=='line'" [chartData]="seriesCollection" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [readonly]="readonly || !editAuthorized"
+        (doubleClick)="onDoubleClick($event)" (dataChanged)="onDataChanged($event)">
+    </line-chart>
 </ng-container>
 
 <select *ngIf="compliantViews.length > 1" class="form-control form-control-sm ml-2" style="width: initial;" [(ngModel)]="activeView" (ngModelChange)="onWidgetChanged()">
     <option *ngFor="let v of compliantViews">{{v}}</option>
 </select>
+
+<div class="dropdown float-right" style="align-self: flex-start;" ngbDropdown container="body">
+    <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle [disabled]="readonly">
+        <span class="fas fa-caret-down fa-sm"></span>
+    </button>
+    <div class="dropdown-menu" ngbDropdownMenu>
+        <a class="dropdown-item" [ngClass]="{ disabled: !deleteAuthorized }" (click)="deleteHandler()" [title]="'ACTIONS.EDIT'|translate">
+            {{'ACTIONS.DELETE'|translate}}
+        </a>
+    </div>
+</div>

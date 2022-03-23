@@ -1,8 +1,7 @@
 import { Directive, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Observable } from 'rxjs';
 import { CustomForm, CustomFormValue } from "src/app/models/CustomForms";
-import { CustomViewData, PredicateCustomView } from "src/app/models/CustomViews";
-import { CustomViewsServices } from "src/app/services/customViewsServices";
+import { PredicateCustomView } from "src/app/models/CustomViews";
 import { PropertyServices } from "src/app/services/propertyServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
@@ -33,24 +32,20 @@ export abstract class PartitionRenderer {
     @Output() update = new EventEmitter(); //something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
-    protected predObjList: ARTPredicateObjects[]; //inner editable copy of predicateObjectList. This is the model referred in the view, the original is used to restore data when/if CV is switched off
-    // protected predCustomViewList: PredicateCustomView[];
     protected predCustomView: PredicateCustomView;
 
     protected resourcesService: ResourcesServices;
     protected propService: PropertyServices;
     protected cfService: CustomFormsServices;
-    protected cvService: CustomViewsServices;
     protected basicModals: BasicModalServices;
     protected creationModals: CreationModalServices;
     protected resViewModals: ResViewModalServices;
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices) {
         this.resourcesService = resourcesService;
         this.propService = propService;
         this.cfService = cfService;
-        this.cvService = cvService;
         this.basicModals = basicModals;
         this.creationModals = creationModals;
         this.resViewModals = resViewModals;
@@ -108,25 +103,6 @@ export abstract class PartitionRenderer {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] || changes['readonly']) {
             this.initActionsStatus();
-        }
-        if (changes['predicateObjectList']) { 
-            //initialize Custom View data (only for those predicates which has a CV associated)
-            this.predObjList = this.predicateObjectList.slice();
-            // this.predCustomViewList = [];
-            this.predCustomView = null;
-            for (let i = this.predObjList.length-1; i >= 0; i--) { //reverse iteration so I can remove items without "breaking" the loop
-                let poList = this.predObjList[i];
-                if (poList.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_VIEW)) { //predicate has a CV
-                    this.cvService.getViewData(this.resource, poList.getPredicate()).subscribe( //retrieve data
-                        (cvData: CustomViewData) => {
-                            if (cvData.data.length > 0) { //if data is retrieved correctly, store it and remove the pred-obj
-                                this.predCustomView = { predicate: poList.getPredicate(), cvData: cvData };
-                                this.predObjList.splice(i, 1);
-                            }
-                        }
-                    )
-                }
-            }
         }
     }
 
@@ -441,19 +417,6 @@ export abstract class PartitionRenderer {
      */
     protected renderAsReified(predicate: ARTURIResource, object: ARTNode): boolean {
         return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
-    }
-
-    toggleCustomView() {
-        this.showCustomView = !this.showCustomView;
-        if (this.showCustomView) { //if CV enabled, remove the pred-obj-list for the predicate covered by CV
-            for (let i = this.predObjList.length-1; i >= 0; i--) {
-                if (this.predCustomView.predicate.equals(this.predObjList[i].getPredicate())) {
-                    this.predObjList.splice(i, 1);
-                }
-            }
-        } else { //if CV disabled, restore all the pred-obj-list elements
-            this.predObjList = this.predicateObjectList.slice();
-        }
     }
 
 }

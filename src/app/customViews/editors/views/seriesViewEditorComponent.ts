@@ -28,7 +28,7 @@ export class SeriesViewEditorComponent extends AbstractSparqlBasedViewEditor {
         "    ...\n" +
         "}";
 
-    updateDescrIntro: string = "The update query for this kind of view must specify how to update a single value. " + 
+    updateDescrIntro: string = "The update query for this kind of view must specify how to update a single value. " +
         "This query can use the same variables and placeholders described in the Retrieve one. In particular:";
     updateVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.series_id, descrTranslationKey: "Will be bound to the resource representing the series" },
@@ -39,9 +39,9 @@ export class SeriesViewEditorComponent extends AbstractSparqlBasedViewEditor {
         "INSERT { ... }\n" +
         "WHERE { ... }\n";
 
-        constructor(basicModals: BasicModalServices) {
-            super(basicModals);
-        }
+    constructor(basicModals: BasicModalServices) {
+        super(basicModals);
+    }
 
     ngOnInit() {
         super.ngOnInit();

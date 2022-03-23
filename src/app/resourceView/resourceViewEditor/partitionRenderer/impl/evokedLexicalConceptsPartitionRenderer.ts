@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { NewConceptualizationCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newConceptualizationCfModal";
 import { ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
@@ -23,10 +22,10 @@ export class EvokedLexicalConceptsPartitionRenderer extends PartitionRenderSingl
     partition = ResViewPartition.evokedLexicalConcepts;
     addBtnImgSrc = "./assets/images/icons/actions/objectProperty_create.png";
 
-    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices, cvService: CustomViewsServices,
+    constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private ontolexService: OntoLexLemonServices) {
-        super(resourcesService, propService, cfService, cvService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {

@@ -22,13 +22,14 @@
                     </button>
                 </td>
                 <td *ngFor="let v of view.values">
-                    <cv-value-renderer [value]="v" [subject]="view.resource" [readonly]="readonly" [rendering]="rendering" (update)="onUpdate(v, $event)" (dblClick)="onValueDoubleClick(v)">
+                    <cv-value-renderer [value]="v" [subject]="subject" [partition]="partition" [readonly]="readonly" [rendering]="rendering" [context]="'vector'"
+                        (update)="onUpdate(v, $event)" (dblClick)="onValueDoubleClick(v)">
                     </cv-value-renderer>
                 </td>
                 <td>
-                    <!-- <button class="btn btn-transparent btn-xs ml-2" [title]="'ACTIONS.DELETE'|translate" [disabled]="deleteRowDisabled" (click)="deleteRow(row)">
+                    <button class="btn btn-transparent btn-xs ml-2" [title]="'ACTIONS.DELETE'|translate" [disabled]="!deleteAuthorized" (click)="deleteHandler(view)">
                         <i class="fas fa-minus fa-sm"></i>
-                    </button> -->
+                    </button>
                 </td>
             </tr>
         </tbody>

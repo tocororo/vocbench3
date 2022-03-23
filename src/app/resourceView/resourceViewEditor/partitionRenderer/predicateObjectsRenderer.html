@@ -1,5 +1,5 @@
 <div class="card card-alt">
-    
+
     <div class="card-header">
         <label style="flex: 1">{{predicate.getShow()}}</label>
         <div class="btn-group" ngbDropdown>
@@ -10,29 +10,35 @@
                 <span class="fas fa-caret-down fa-sm"></span>
             </button>
             <div class="dropdown-menu float-right" ngbDropdownMenu>
-                <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }"(click)="addManually()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
+                <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addManually()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
                 <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addExternalValue()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_FROM_ANOTHER_PROJ'|translate}}</a>
                 <a class="dropdown-item" [ngClass]="{ disabled: deleteAllDisabled }" (click)="removeAllValues()">{{'RESOURCE_VIEW.ACTIONS.DELETE_ALL_VALUES'|translate}}</a>
+                <div class="dropdown-divider"></div>
+                <a *ngIf="customView" class="dropdown-item" (click)="toggleCustomView()">
+                    Render Custom View
+                    <span *ngIf="showCustomView" class="fas fa-check"></span>
+                </a>
             </div>
         </div>
 
     </div>
-    
+
     <div class="card-body">
 
         <ng-container *ngFor="let obj of objects; let i = index">
             <resview-value-renderer *ngIf="showObject(i)"
-                [subject]="resource" [predicate]="predicate" [object]="obj" [rendering]="rendering" 
+                [subject]="resource" [predicate]="predicate" [object]="obj" [rendering]="rendering"
                 [readonly]="readonly" [partition]="partition"
-                (dblClick)="onDblClick($event)" (delete)="removeValue(obj)" (edit)="onEdit(obj)" 
+                (dblClick)="onDblClick($event)" (delete)="removeValue(obj)" (edit)="onEdit(obj)"
                 (update)="onUpdate()" (copyLocale)="onCopyLocale($event, obj)">
             </resview-value-renderer>
         </ng-container>
 
-        <cf-value-table *ngFor="let t of cfValueTables" class="my-1" 
-            [subject]="resource" [predicate]="predicate" [table]="t" [rendering]="rendering" [readonly]="readonly" [partition]="partition"
-            (update)="onUpdate()" (delete)="removeValue($event)" (dblClick)="onDblClick($event)">
-        </cf-value-table>
+        <ng-container *ngIf="showCustomView && customView">
+            <custom-views-renderer [cvData]="customView" [subject]="resource" [predicate]="predicate" [readonly]="readonly" [rendering]="rendering" [partition]="partition"
+                (dblclickObj)="onDblClick($event)" (delete)="removeValue($event)" (update)="onObjectUpdate()">
+            </custom-views-renderer>
+        </ng-container>
 
         <ng-container *ngIf="showAllButton()">
             <button class="btn btn-xs btn-light" style="width: 100%; color: #888; border-color: #ddd;" (click)="showAll()">

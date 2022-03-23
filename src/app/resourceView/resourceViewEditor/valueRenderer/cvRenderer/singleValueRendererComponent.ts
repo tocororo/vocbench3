@@ -1,15 +1,15 @@
 import { Component, Input } from "@angular/core";
 import { ARTNode, ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { AbstractSingleValueView, AdvSingleValueView, BindingMapping } from "src/app/models/CustomViews";
+import { AbstractSingleValueView, AdvSingleValueView } from "src/app/models/CustomViews";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ResourcesServices } from "src/app/services/resourcesServices";
-import { AbstractViewRendererComponent } from "./abstractViewRenderer";
+import { AbstractSingleViewRendererComponent } from "./abstractSingleViewRenderer";
 
 @Component({
     selector: "single-value-renderer",
     templateUrl: "./singleValueRendererComponent.html",
 })
-export class SingleValueRendererComponent extends AbstractViewRendererComponent {
+export class SingleValueRendererComponent extends AbstractSingleViewRendererComponent {
 
     @Input() view: AbstractSingleValueView;
 
@@ -19,6 +19,7 @@ export class SingleValueRendererComponent extends AbstractViewRendererComponent 
     }
 
     ngOnInit() {
+        super.ngOnInit()
         if (this.view.value.resource instanceof ARTResource) {
             //getResourcesInfo instead of getResourceDescription since the latter requires that the provided resource is locally defined (so prevent error in case of external reference)
             this.resourceService.getResourcesInfo([this.view.value.resource]).subscribe(
@@ -30,6 +31,7 @@ export class SingleValueRendererComponent extends AbstractViewRendererComponent 
     }
 
     protected processInput(): void {
+        //Nothing to do
     }
     
     onUpdate(data: { old: ARTNode, new: ARTNode }) {

@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { CustomViewRenderedValue, UpdateMode } from "src/app/models/CustomViews";
+import { ResViewPartition } from "src/app/models/ResourceView";
+import { CRUDEnum, ResourceViewAuthEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { NTriplesUtil } from "src/app/utils/ResourceUtils";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ModalType } from "src/app/widget/modal/Modals";
@@ -17,6 +19,13 @@ export class CvValueRendererComponent {
     @Input() rendering: boolean;
     @Input() subject: ARTResource; //described resource
     @Input() value: CustomViewRenderedValue;
+    @Input() partition: ResViewPartition;
+
+    /* useful for render the edit/delete actions in different way:
+    - in single value: both edit and delete are visible in a dropdown menu
+    - in vector: only edit is visible, the deletion of single value of a table is not allowed (currently) since I don't know the property which the value is attached to
+    */
+    @Input() context: CvValueRendererCtx = CvValueRendererCtx.single_value;
 
     //this is an hack for using the resource and literal pickers logic inside this component (I added the picker components in the template as hidden elements)
     @ViewChild(ResourcePickerComponent) resPicker: ResourcePickerComponent;
@@ -26,12 +35,15 @@ export class CvValueRendererComponent {
     litPickerDatatypes: ARTURIResource[];
 
     @Output() update: EventEmitter<{old: ARTNode, new: ARTNode}> = new EventEmitter(); //a change has been done => request to update the RV
+    @Output() delete: EventEmitter<void> = new EventEmitter(); //require a deletion of the current value to the parent component
     @Output() dblClick: EventEmitter<void> = new EventEmitter(); //object dbl clicked
 
     editInProgress: boolean = false;
     resourceStringValue: string;
     resourceStringValuePristine: string;
 
+    editAuthorized: boolean = true;
+    deleteAuthorized: boolean = true;
 
     constructor(private basicModals: BasicModalServices) { }
 
@@ -43,6 +55,11 @@ export class CvValueRendererComponent {
                 this.litPickerDatatypes = [NTriplesUtil.parseURI(this.value.updateInfo.datatype)];
             }
         }
+
+        //edit authorized if update mode is provided and edit capabilities are granted
+        this.editAuthorized = this.value.updateInfo.updateMode != UpdateMode.none && 
+            ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.subject) && !this.readonly ;
+        this.deleteAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject) && !this.readonly;
     }
 
     edit() {
@@ -68,7 +85,6 @@ export class CvValueRendererComponent {
         if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
             try {
                 let newValue: ARTNode = NTriplesUtil.parseNode(this.resourceStringValue);
-                console.log("emit an event to parent for requiring update of", this.value.resource, "with", newValue);
                 this.update.emit({ old: this.value.resource, new: newValue });
             } catch (error) {
                 this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: this.resourceStringValue + " is not a valid NT value" }, ModalType.warning);
@@ -81,12 +97,14 @@ export class CvValueRendererComponent {
     }
 
     onResourcePicked(res: ARTResource) {
-        console.log("emit an event to parent for requiring update of", this.value.resource, "with", res);
         this.update.emit({ old: this.value.resource, new: res });
     }
     onLiteralPicked(lit: ARTLiteral) {
-        console.log("emit an event to parent for requiring update of", this.value.resource, "with", lit);
         this.update.emit({ old: this.value.resource, new: lit });
+    }
+
+    deleteHandler() {
+        this.delete.emit();
     }
 
     valueDblClick() {
@@ -95,4 +113,9 @@ export class CvValueRendererComponent {
         }
     }
 
+}
+
+export enum CvValueRendererCtx {
+    single_value = "single_value",
+    vector = "vector"
 }
