@@ -32,13 +32,22 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     retrieveEditor: CvSparqlEditorStruct = { mode: QueryMode.query, query: "", valid: true };
     retrieveFields: string[] = []; //list of ?SOMETHING_value matched values
 
+    retrieveQuerySkeleton: string = "SELECT ?field_value ?obj WHERE {\n" +
+        "    $resource $trigprop ?obj .\n" +
+        "    ...\n" +
+        "}";
+
     updateRequiredVariables: CustomViewVariables[] = [CustomViewVariables.value];
+
+    updateDescrIntro: string = "An update query for this kind of view must specify how to update a single value for the current field. The value will be selected/entered according the Update mode selected above.<br/>" + 
+        "This query can use the same variables and placeholders described in the Retrieve one. In particular:";
+    updateVariablesInfo: VariableInfoStruct[] = [
+        { id: CustomViewVariables.value, descrTranslationKey: "Will be bound to the new value" },
+    ];
+    updateQueryInfo: string;
 
     updateTabs: UpdateTabStruct[] = [];
     activeUpdateTab: UpdateTabStruct;
-
-    private readonly FIELD_REGEX: RegExp = /[\?|$]([a-zA-Z0-9_]+)_value\b/gi;
-    private readonly OBJ_REGEX: RegExp = /\$resource\s*\$trigprop\s*([$|?][a-zA-Z0-9_]+)\s*\./gi;
 
     constructor(private basicModals: BasicModalServices) {
         super()
@@ -46,6 +55,13 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
 
     ngOnInit() {
         super.ngOnInit();
+        this.updateQueryInfo = this.updateDescrIntro +
+            "<ul>" + 
+            this.updateVariablesInfo.map(v => "<li><code>?" + v.id + "</code>: " + v.descrTranslationKey + "</li>") + 
+            "</ul>" + 
+            "It is possible to refer to any <code>$pivot</code> placeholder eventually defined into the Retrieve query.<br/>" + 
+            "It is recommended to use a dedicated placeholder <code>$oldValue</code> for referencing to the old value to be edited. " + 
+            "Such placeholder which will be bound to the edited value during an edit operation."; 
     }
 
     ngAfterViewInit() {
@@ -54,7 +70,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
 
     initCustomViewDef() {
         this.cvDef = {
-            retrieve: "",
+            retrieve: this.retrieveQuerySkeleton,
             update: [],
             suggestedView: this.suggestedView,
         }
@@ -99,22 +115,23 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     }
 
     private detectFields() {
-        this.retrieveFields = [];
+        this.retrieveFields = CvQueryUtils.listFieldVariables(this.retrieveEditor.query);
+        // this.retrieveFields = [];
 
-        let retrieveQuery = this.retrieveEditor.query;
-        let select = CvQueryUtils.getSelectReturnStatement(retrieveQuery);
+        // let retrieveQuery = this.retrieveEditor.query;
+        // let select = CvQueryUtils.getSelectReturnStatement(retrieveQuery);
 
-        let queryFragment: string;
-        if (select.includes("*")) {
-            queryFragment = CvQueryUtils.getSelectWhereBlock(retrieveQuery);
-        } else {
-            queryFragment = select;
-        }
-        let matchArray: RegExpExecArray;
-        while ((matchArray = this.FIELD_REGEX.exec(queryFragment)) !== null) {
-            this.retrieveFields.push(matchArray[1]); //0 is the whole expression, 1 is the 1st group (any word between ? and _value)
-        }
-        this.retrieveFields = this.retrieveFields.filter((s, idx, list) => list.indexOf(s) == idx); //remove eventual duplicates
+        // let queryFragment: string;
+        // if (select.includes("*")) {
+        //     queryFragment = CvQueryUtils.getSelectWhereBlock(retrieveQuery);
+        // } else {
+        //     queryFragment = select;
+        // }
+        // let matchArray: RegExpExecArray;
+        // while ((matchArray = CvQueryUtils.FIELD_REGEX.exec(queryFragment)) !== null) {
+        //     this.retrieveFields.push(matchArray[1]); //0 is the whole expression, 1 is the 1st group (any word between ? and _value)
+        // }
+        // this.retrieveFields = this.retrieveFields.filter((s, idx, list) => list.indexOf(s) == idx); //remove eventual duplicates
     }
 
 
@@ -203,32 +220,19 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
             return false;
         }
         let retrieveQuery = this.retrieveEditor.query;
-        let select = CvQueryUtils.getSelectReturnStatement(retrieveQuery);
-        let where = CvQueryUtils.getSelectWhereBlock(retrieveQuery);
-        //- fields: select must returns at least <field>_value variable
-        let missingFields: boolean;
-        //1) select returns *, look for fields in query
-        if (select.includes("*")) {
-            missingFields = !this.FIELD_REGEX.test(retrieveQuery); //if regex fails test against all the query, it means that no <field>-value is found
-        } else { //2) field returned in select?
-            missingFields = !this.FIELD_REGEX.test(select); //if regex fails test against select, it means that no <field>-value is returned
-        }
-        if (missingFields) {
+        //- fields: select must returns at least a <field>_value variable
+        if (this.retrieveFields.length == 0) {
             this.basicModals.alert({ key: "STATUS.ERROR" }, "No field variable (?<field>_value) returned by Retrieve query", ModalType.warning);
             return false;
         }
         //- object: select must returns the object of the $resource $trigprop ?obj triple
-        let matchArray: RegExpExecArray = this.OBJ_REGEX.exec(where);
-        if (matchArray != null) {
-            let objVar = matchArray[1];
-            if (!select.includes("*") && !select.includes(objVar)) {
-                this.basicModals.alert({ key: "STATUS.ERROR" }, "Object variable " + objVar + ", of pair $resource $trigprop, not returned in Retrieve query", ModalType.warning);
-                return false;
-            }
+        if (CvQueryUtils.getReturnedObjectVariable(retrieveQuery) == null) {
+            this.basicModals.alert({ key: "STATUS.ERROR" }, "Object variable of pair $resource $trigprop either not detected or not returned in Retrieve query", ModalType.warning);
+            return false;
         }
         //- placeholders
         for (let v of this.retrieveRequiredPlaceholders) {
-            if (!where.includes("$" + v + " ")) {
+            if (!CvQueryUtils.isPlaceholderInWhere(retrieveQuery, v)) {
                 this.basicModals.alert({ key: "STATUS.ERROR" }, "Required placeholder $" + v + " missing in Retrieve query.", ModalType.warning);
                 return false;
             }    
@@ -251,11 +255,12 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
                 }
                 //variables
                 for (let v of this.updateRequiredVariables) {
-                    if (!t.singleValueData.updateData.query.includes("?" + v + " ")) {
-                        this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable ?" + v + " in Update query of field " + t.field, ModalType.warning);
+                    if (!CvQueryUtils.isVariableUsed(t.singleValueData.updateData.query, "?" + v)) {
+                        this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable ?" + v + "in Update query of field " + t.field, ModalType.warning);
                         return false;
                     }
                 }
+                
             }
         }
         return true;

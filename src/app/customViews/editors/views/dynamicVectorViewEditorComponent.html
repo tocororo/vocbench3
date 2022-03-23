@@ -19,18 +19,30 @@
 
             <div [hidden]="activeMainTab != 'retrieve'" class="vbox">
                 <div class="alert alert-warning mb-2">
-                    This view can be used to represent tabular data in ResourceView.
-                    Each row of the table represents the description of a value of the triggering property.
-                    The fields to be represented for each row are determined by the Retrieve query.
-                    You can define arbitrary variables <code>?<i>field</i>_value</code> where <i>field</i> will be used also as header of the column.
-                    The query must retun all these field variables and also the one representing the object of the <code>$resource $trigprop</code> pair (e.g. <code>?obj</code> in <code>$resource $trigprop ?obj</code>);<br/>
-
-                    The query must also contain these placeholders:
+                    <p>
+                        This view can be used to represent tabular data in ResourceView.
+                        Each row of the table represents the description of a value of the triggering property.
+                        The fields to be represented for each row are determined by the Retrieve query.
+                        You can define arbitrary variables <code>?<i>field</i>_value</code> where <i>field</i> will be used also as header of the column.
+                    </p>
+                    <p>
+                        The query must retun:
+                    </p>
+                    <ul>
+                        <li>All the above mentioned field variables;</li>
+                        <li>The variable representing the object of the <code>$resource $trigprop</code> pair (e.g. <code>?obj</code> in <code>$resource $trigprop ?obj</code>).</li>
+                    </ul>
+                    <p>
+                        The query must also contain these placeholders:
+                    </p>
                     <ul>
                         <li *ngFor="let v of retrievePlaceholdersInfo">
                             <code>${{v.id}}</code>: {{v.descrTranslationKey|translate}};
                         </li>
                     </ul>
+                    <p>
+                        It is also possible to define an arbitrary amount of pivot placeholders (to name <code>$piovt</code>, <code>$pivot_1</code>, <code>$pivot_2</code>, ...) which can be used to define anchor points to be referenced in the Update query. Each pivot resource returned by the Retrieve query will be bound, to the related placeholder in the Update query, during an update operation. 
+                    </p>
                 </div>
                 <yasgui #retrieveYasgui [query]="retrieveEditor.query" (querychange)="onRetrieveChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
 
@@ -64,7 +76,9 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <single-value-editor *ngFor="let t of updateTabs" [hidden]="t != activeUpdateTab" [data]="t.singleValueData" (dataChange)="onUpdateDataChanged(t, $event)"></single-value-editor>
+                        <single-value-editor *ngFor="let t of updateTabs" [hidden]="t != activeUpdateTab" [data]="t.singleValueData" [queryInfo]="updateQueryInfo" 
+                            (dataChange)="onUpdateDataChanged(t, $event)">
+                        </single-value-editor>
                     </div>
                 </ng-template>
 
@@ -82,5 +96,5 @@
         </div>
 
     </div>
-    
+
 </div>

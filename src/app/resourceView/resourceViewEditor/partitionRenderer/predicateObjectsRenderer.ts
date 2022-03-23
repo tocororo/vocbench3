@@ -126,7 +126,7 @@ export class PredicateObjectsRenderer {
         this.showCustomView = !this.showCustomView;
         if (this.showCustomView) { //if CV enabled, remove the resource covered by CV from objects list
             for (let i = this.objects.length-1; i >= 0; i--) {
-                if (this.customView.data[0].resource.equals(this.objects[i])) {
+                if (this.customView.data.some(d => d.resource.equals(this.objects[i]))) {
                     this.objects.splice(i, 1);
                 }
             }

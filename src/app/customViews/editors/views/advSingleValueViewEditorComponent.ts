@@ -33,7 +33,7 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
         { id: CustomViewVariables.value, descrTranslationKey: "The value to be represented" },
         // { id: CustomViewVariables.show, descrTranslationKey: "(Optional) Specifies how the value has to be shown" },
     ];
-    retrieveQuerySkeleton: string = "SELECT ?value WHERE {\n" +
+    retrieveQuerySkeleton: string = "SELECT ?value ?obj WHERE {\n" +
         "    $resource $trigprop ?obj .\n" +
         "    ...\n" +
         "}";
@@ -46,11 +46,14 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
 
 
     updateRequiredVariables: CustomViewVariables[] = [CustomViewVariables.value];
-    updateDescrIntro: string = "The update query for this kind of view must specify how to update the value. The value will be selected/entered according the Update mode selected above. " + 
+
+    updateDescrIntro: string = "The update query for this kind of view must specify how to update the value. The value will be selected/entered according the Update mode selected above.<br/>" + 
         "This query can use the same variables and placeholders described in the Retrieve one. In particular:";
     updateVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.value, descrTranslationKey: "Will be bound to the new value" },
     ];
+    updateQueryInfo: string;
+
     updateQuerySkeleton: string = "DELETE { ... }\n" +
         "INSERT { ... }\n" +
         "WHERE { ... }\n";
@@ -59,7 +62,7 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
         updateMode: UpdateMode.none,
     };
 
-    updateQueryInfo: string;
+    
 
     constructor(private basicModals: BasicModalServices) {
         super();
@@ -70,7 +73,10 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
         this.updateQueryInfo = this.updateDescrIntro +
             "<ul>" + 
             this.updateVariablesInfo.map(v => "<li><code>?" + v.id + "</code>: " + v.descrTranslationKey + "</li>") + 
-            "</ul>";
+            "</ul>" + 
+            "It is possible to refer to any <code>$pivot</code> placeholder eventually defined into the Retrieve query.<br/>" + 
+            "It is recommended to use a dedicated placeholder <code>$oldValue</code> for referencing to the old value to be edited." + 
+            "Such placeholder which will be bound to the edited value during an edit operation.";
     }
 
     protected initCustomViewDef(): void {
@@ -151,17 +157,20 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
         }
         //- variables
         let retrieveQuery = this.retrieveEditor.query;
-        let select = CvQueryUtils.getSelectReturnStatement(retrieveQuery);
         for (let v of this.retrieveRequiredReturnVariables) {
-            if (!select.includes("?" + v + " ")) {
+            if (!CvQueryUtils.isVariableReturned(retrieveQuery, "?" + v)) {
                 this.basicModals.alert({ key: "STATUS.ERROR" }, "Required variable ?" + v + " missing in Retrieve query.", ModalType.warning);
                 return false;
             }
         }
+        //- object: select must returns the object of the $resource $trigprop ?obj triple
+        if (CvQueryUtils.getReturnedObjectVariable(retrieveQuery) == null) {
+            this.basicModals.alert({ key: "STATUS.ERROR" }, "Object variable of pair $resource $trigprop either not detected or not returned in Retrieve query", ModalType.warning);
+            return false;
+        }
         //- placeholders
-        let where = CvQueryUtils.getSelectWhereBlock(retrieveQuery);
         for (let v of this.retrieveRequiredPlaceholders) {
-            if (!where.includes("$" + v + " ")) {
+            if (!CvQueryUtils.isPlaceholderInWhere(retrieveQuery, v)) {
                 this.basicModals.alert({ key: "STATUS.ERROR" }, "Required placeholder $" + v + " missing in Retrieve query.", ModalType.warning);
                 return false;
             }    
@@ -182,7 +191,7 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
                 return false;
             }
             for (let v of this.updateRequiredVariables) {
-                if (!this.singleValueData.updateData.query.includes("?" + v + " ")) {
+                if (!CvQueryUtils.isVariableUsed(this.singleValueData.updateData.query, "?" + v)) {
                     this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable ?" + v + "in Update query.", ModalType.warning);
                     return false;
                 }

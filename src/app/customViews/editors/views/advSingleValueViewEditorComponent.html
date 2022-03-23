@@ -19,18 +19,26 @@
 
             <div [hidden]="activeTab != 'retrieve'" class="vbox">
                 <div class="alert alert-warning mb-2">
-                    The retrieve query for this kind of view must return the following variables:
+                    <p>
+                        The retrieve query for this kind of view must return the following variables:
+                    </p>
                     <ul>
                         <li *ngFor="let v of retrieveVariablesInfo">
                             <code>?{{v.id}}</code>: {{v.descrTranslationKey|translate}};
                         </li>
+                        <li>The variable representing the object of the <code>$resource $trigprop</code> pair (e.g. <code>?obj</code> in <code>$resource $trigprop ?obj</code>).</li>
                     </ul>
-                    The query must also contain these placeholders:
+                    <p>
+                        The query must contain these placeholders:
+                    </p>
                     <ul>
                         <li *ngFor="let v of retrievePlaceholdersInfo">
                             <code>${{v.id}}</code>: {{v.descrTranslationKey|translate}};
                         </li>
                     </ul>
+                    <p>
+                        It is also possible to define an arbitrary amount of pivot placeholders (to name <code>$piovt</code>, <code>$pivot_1</code>, <code>$pivot_2</code>, ...) which can be used to define anchor points to be referenced in the Update query. Each pivot resource returned by the Retrieve query will be bound, to the related placeholder in the Update query, during an update operation.
+                    </p>
                 </div>
                 <yasgui #retrieveYasgui [query]="retrieveEditor.query" (querychange)="onRetrieveChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
             </div>
@@ -51,5 +59,5 @@
         </div>
 
     </div>
-    
+
 </div>

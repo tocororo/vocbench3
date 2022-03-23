@@ -113,17 +113,20 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         }
         //- variables
         let retrieveQuery = this.retrieveEditor.query;
-        let select = CvQueryUtils.getSelectReturnStatement(retrieveQuery);
         for (let v of this.retrieveRequiredReturnVariables) {
-            if (!select.includes("?" + v + " ")) {
+            if (!CvQueryUtils.isVariableReturned(retrieveQuery, "?" + v)) {
                 this.basicModals.alert({ key: "STATUS.ERROR" }, "Required variable ?" + v + " missing in Retrieve query.", ModalType.warning);
                 return false;
             }
         }
+        //- object: select must returns the object of the $resource $trigprop ?obj triple
+        if (CvQueryUtils.getReturnedObjectVariable(retrieveQuery) == null) {
+            this.basicModals.alert({ key: "STATUS.ERROR" }, "Object variable of pair $resource $trigprop either not detected or not returned in Retrieve query", ModalType.warning);
+            return false;
+        }
         //- placeholders
-        let where = CvQueryUtils.getSelectWhereBlock(retrieveQuery);
         for (let v of this.retrieveRequiredPlaceholders) {
-            if (!where.includes("$" + v + " ")) {
+            if (!CvQueryUtils.isPlaceholderInWhere(retrieveQuery, v)) {
                 this.basicModals.alert({ key: "STATUS.ERROR" }, "Required placeholder $" + v + " missing in Retrieve query.", ModalType.warning);
                 return false;
             }    
@@ -132,7 +135,8 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
     }
 
     protected isUpdateOk(): boolean {
-        if (this.updateEditor.query == null || this.updateEditor.query.trim() == "") return true; //if not provided, just return true/valid
+        let updateQuery = this.updateEditor.query;
+        if (updateQuery == null || updateQuery.trim() == "") return true; //if not provided, just return true/valid
         //- syntactic check
         if (!this.updateEditor.valid) {
             this.basicModals.alert({ key: "STATUS.ERROR" }, "Update query contains syntactic error(s)", ModalType.warning);
@@ -143,9 +147,8 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
             return false;
         }
         // - variables
-        let updateQuery = this.updateEditor.query;
         for (let v of this.updateRequiredVariables) {
-            if (!updateQuery.includes("?" + v + " ")) {
+            if (!CvQueryUtils.isVariableUsed(updateQuery, "?" + v)) {
                 this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable ?" + v + "in Update query.", ModalType.warning);
                 return false;
             }

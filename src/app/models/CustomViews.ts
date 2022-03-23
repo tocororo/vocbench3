@@ -194,12 +194,121 @@ export interface CvSparqlEditorStruct {
 
 export class CvQueryUtils {
 
+    private static readonly VAR_REGEX: RegExp = /\?([a-zA-Z0-9_]+)_value\b/gi;
+    private static readonly OBJ_REGEX: RegExp = /\$resource\s*\$trigprop\s*([$|?][a-zA-Z0-9_]+)\s*\./gi;
+
+    public static readonly FIELD_REGEX: RegExp = /[\?|$]([a-zA-Z0-9_]+)_value\b/gi;
+
     static getSelectReturnStatement(query: string): string {
         return query.substring(query.toLocaleLowerCase().indexOf("select"), query.toLocaleLowerCase().indexOf("{"));
     }
 
     static getSelectWhereBlock(query: string): string {
         return query.substring(query.toLocaleLowerCase().indexOf("where"));
+    }
+
+    /**
+     * Returns true if varName is returned by query. This method take in account cases where
+     * select returns all variables (*) or specific ones
+     * @param query 
+     * @param varName name of the variable (handle var starting with ?, $ and neither of them)
+     * @returns 
+     */
+    static isVariableReturned(query: string, varName: string): boolean {
+        let queryFragment: string;
+        let select = this.getSelectReturnStatement(query);
+        if (select.includes("*")) {
+            queryFragment = this.getSelectWhereBlock(query);
+        } else {
+            queryFragment = select;
+        }
+        let varPattern = this.getNormalizedVarPattern(varName);
+        let regexp: RegExp = new RegExp(varPattern + "\\b", "gi");
+        return regexp.test(queryFragment)
+    }
+
+    /**
+     * Returns true if the placeholderName is used in the query where block
+     * @param query 
+     * @param placeholderName name of the placeholder, excluding the leading $
+     */
+    static isPlaceholderInWhere(query: string, placeholderName: string): boolean {
+        let where = this.getSelectWhereBlock(query);
+        let placeholderRegexp: RegExp = new RegExp("\\$" + placeholderName + "\\b", "gi");
+        return placeholderRegexp.test(where);
+    }
+
+    /**
+     * Returns true if the placeholderName is used in the query where block
+     * @param query 
+     * @param varName name of the placeholder, excluding the leading $
+     */
+    static isVariableUsed(query: string, varName: string): boolean {
+        let varPattern = this.getNormalizedVarPattern(varName);
+        let varRegexp: RegExp = new RegExp(varPattern + "\\b", "gi");
+        return varRegexp.test(query);
+    }
+
+    /**
+     * Returns the list of fields name detected from returned ?field_value variables
+     * @param query 
+     * @returns 
+     */
+    static listFieldVariables(query: string): string[] {
+        let fieldVars: string[] = [];
+
+        let queryFragment: string;
+        let select = CvQueryUtils.getSelectReturnStatement(query);
+        if (select.includes("*")) {
+            queryFragment = CvQueryUtils.getSelectWhereBlock(query);
+        } else {
+            queryFragment = select;
+        }
+
+        let matchArray: RegExpExecArray;
+        while ((matchArray = CvQueryUtils.FIELD_REGEX.exec(queryFragment)) !== null) {
+            fieldVars.push(matchArray[1]); //0 is the whole expression, 1 is the 1st group (any word between ? and _value)
+        }
+        fieldVars = fieldVars.filter((s, idx, list) => list.indexOf(s) == idx); //remove eventual duplicates
+        return fieldVars;
+    }
+
+    /**
+     * Returns the object variable in the triple $resource $trigprop ?obj. The object must be returned by select query
+     * If such variable is not detected, or it is not returned by the select, returns null.
+     * @param query 
+     * @returns 
+     */
+    static getReturnedObjectVariable(query: string): string {
+        let objVar: string;
+        let select = CvQueryUtils.getSelectReturnStatement(query);
+        let where = CvQueryUtils.getSelectWhereBlock(query);
+        let matchArray: RegExpExecArray = CvQueryUtils.OBJ_REGEX.exec(where);
+        if (matchArray != null) {
+            objVar = matchArray[1]; //group 1 is ?|$objVarName (including ? or $)
+        }
+        if (objVar != null && (select.includes("*") || this.isVariableReturned(query, objVar))) {
+            return objVar;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Given a varName, returns the normalized pattern for detecting the variable with
+     * - a leading $ or ? in case varName doesn't start with any of them
+     * - escaping $ or ? in case varName starts with one of them
+     * @param varName 
+     * @returns 
+     */
+    private static getNormalizedVarPattern(varName: string) {
+        let varPattern: string = varName;
+        if (varPattern.startsWith("?") || varPattern.startsWith("$")) {
+            varPattern = "\\" + varPattern; //start with ? or $ => escape it in patter
+        } else if (!varPattern.startsWith("$")) {
+            varPattern = "[?|$]" + varPattern; //not starting with ? nor $ => add them in or in the pattern 
+        }
+        return varPattern;
     }
 
 }
