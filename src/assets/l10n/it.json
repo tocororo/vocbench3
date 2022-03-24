@@ -579,14 +579,6 @@
                 "PEARL_ANNOTATIONS_INFERENCE": "Pearl annotations inference",
                 "WARNING_MSG": "Nota: qualora nessuna annotazione venga inferita, i due PEARL potrebbero non differire. Nonostante ciò, il processo di inferenza potrebbe applicare delle modifiche, come il riordinamento dei prefissi definiti e la rimozione di commenti.<br> E' possibile inoltre modificare il PEARL risultante prima di applicare le modifiche."
             },
-            "PREVIEW_FORM": {
-                "PREVIEW_FORM": "Anteprima",
-                "PREVIEW_FORM_INFO": "Specifica come visualizzare l'anteprima degli oggetti generati tramite questo CF",
-                "PROP_CHAIN": "Property chain",
-                "PROP_CHAIN_INFO": "L'anteprima è un singolor valore recuperato seguendo una property chain partendo dall'entry point del grafo generato",
-                "TABLE": "Tabella",
-                "TABLE_INFO": "Una anteprima a tabella le cui intestazioni sono determinate da una lista di proprietà"
-            },
             "REF_INFO": "In caso di typo Graph dovrebbe contenere una regola PEARL altrimenti, in caso di tipo Node, dovrebbe contenere un semplice projection operator PEARL",
             "SHAPE_SOURCE": "Shape sorgente"
         },
@@ -785,7 +777,6 @@
             "DELETE_TRANSLATION_SET": "Cancella TranslationSet",
             "EDIT_DATATYPE_RESTRICTIONS": "Modifica restrizioni datatype",
             "EDIT_MANCHESTER_EXPRESSION": "Modifica espressione Manchester",
-            "EDIT_PROPERTY_CHAIN": "Modifica property chain",
             "REIFY_PLAIN_SENSE": "Reifica senso",
             "REMOVE_FROM_SCHEME": "Rimuovi da schema",
             "SELECT_CLASS": "Seleziona classe",
@@ -1379,7 +1370,6 @@
         "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "Stai per impostare questa configurazione come default di sistema. Vuoi continuare?",
         "CONFIG_SYSTEM_DEFAULT_RESTORED": "Configurazione di sistema ripristinata",
         "CONFIG_SYSTEM_DEFAULT_SET": "Configurazione impostata come predefinita di sistema",
-        "CUSTOM_FORM_PROP_CHAIN_DESCR": "Scrivi la chain come sequenza di IRI separati da virgole (sono ammessi anche QName)",
         "DATA_CLEARED": "Tutti i dati sono stati cancellati con successo.",
         "DATA_IMPORTED": "Dati importati con successo",
         "DELETE_ALL_VALUES_CONFIRM": "Stai per eliminare tutti i valori per la proprietà {{property}}. Sei sicuro?",

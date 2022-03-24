@@ -574,14 +574,6 @@
                 "PEARL_ANNOTATIONS_INFERENCE": "Inférence des annotations PEARL",
                 "WARNING_MSG": "À noter : si aucune annotation n'a été inférée, les deux versions de PEARL peuvent être identiques. Malgré tout, le procéssus d'inférence peut avoir apporté des modifications, comme le réordonnancement des préfixes définis et la suppression de commentaires.<br> Il est également possible d'éditer le PEARL avant d'appliquer les changements."
             },
-            "PREVIEW_FORM": {
-                "PREVIEW_FORM": "Prévisualiser le formulaire",
-                "PREVIEW_FORM_INFO": "Spécifie comment afficher la prévisualisation du graphe générée par ce formulaire personnalisé",
-                "PROP_CHAIN": "Chaîne de propriété",
-                "PROP_CHAIN_INFO": "La prévisualisation est une valeur unique retrouvée en suivant une chaîne de propriété débutant au point d'entrée du graphe généré",
-                "TABLE": "Tableau",
-                "TABLE_INFO": "Une prévisualisation sous forme de tableau dont les en-têtes correspondent à une liste de propriétés"
-            },
             "REF_INFO": "En cas de type graphe, doit contenir une règle PEARL, en cas de type nœud, doit contenir simplement un opérateur de projection PEARL",
             "SHAPE_SOURCE": "Source de forme"
         },
@@ -780,7 +772,6 @@
             "DELETE_TRANSLATION_SET": "Supprimer un TranslationSet",
             "EDIT_DATATYPE_RESTRICTIONS": "Éditer les restrictions de type de donnée",
             "EDIT_MANCHESTER_EXPRESSION": "Éditer une expression de Manchester",
-            "EDIT_PROPERTY_CHAIN": "Éditer une chaine de propriétés",
             "REIFY_PLAIN_SENSE": "Réifier un sens",
             "REMOVE_FROM_SCHEME": "Supprimer du schéma",
             "SELECT_CLASS": "Sélectionner une classe",
@@ -1366,7 +1357,6 @@
         "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "Vous allez définir cette configuration comme valeur par défaut. Êtes-vous certain ?",
         "CONFIG_SYSTEM_DEFAULT_RESTORED": "Configuration du système restaurée",
         "CONFIG_SYSTEM_DEFAULT_SET": "Configuration définie comme valeur par défaut",
-        "CUSTOM_FORM_PROP_CHAIN_DESCR": "Saisissez la chaîne comme une suite d'IRIs séparés par des virgules (,) (les QNames sont également acceptés)",
         "DATA_CLEARED": "Toutes les données ont été supprimées avec succès.",
         "DATA_IMPORTED": "Données importées avec succès",
         "DELETE_ALL_VALUES_CONFIRM": "Vous êtes sur le point de supprimer toutes les valeurs de {{property}}. Êtes-vous certain ?",

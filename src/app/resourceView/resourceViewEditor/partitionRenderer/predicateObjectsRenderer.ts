@@ -66,7 +66,7 @@ export class PredicateObjectsRenderer {
             this.predicate = this.predicateObjects.getPredicate();
             this.objects = this.predicateObjects.getObjects().slice();
 
-            if (this.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_VIEW)) { //predicate has a CV
+            if (this.predicate.getAdditionalProperty(ResAttribute.CUSTOM_VIEW_MODEL) != null) { //predicate has a CV
                 this.cvService.getViewData(this.resource, this.predicate).subscribe( //retrieve data
                     (cvData: CustomViewData) => {
                         if (cvData.data.length > 0) { //if data is retrieved correctly, store it and remove the pred-obj

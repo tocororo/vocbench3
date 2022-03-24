@@ -1,4 +1,5 @@
 import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ShowInterpretation } from "../models/ARTResources";
+import { CustomViewModel } from "../models/CustomViews";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { VBContext } from "./VBContext";
 
@@ -62,9 +63,9 @@ export class Deserializer {
         if (hasCustomRange != undefined) {
             node.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, hasCustomRange);
         }
-        let hasCustomView: boolean = resJson[ResAttribute.HAS_CUSTOM_VIEW];
-        if (hasCustomView != undefined) {
-            node.setAdditionalProperty(ResAttribute.HAS_CUSTOM_VIEW, hasCustomView);
+        let customViewModel: CustomViewModel = resJson[ResAttribute.CUSTOM_VIEW_MODEL];
+        if (customViewModel != undefined) {
+            node.setAdditionalProperty(ResAttribute.CUSTOM_VIEW_MODEL, customViewModel);
         }
         let resourcePosition: string = resJson[ResAttribute.RESOURCE_POSITION];
         if (resourcePosition != undefined) {

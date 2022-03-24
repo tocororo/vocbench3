@@ -574,14 +574,6 @@
             "PEARL_ANNOTATIONS_INFERENCE": "Inferencia de anotaciones PEARL",
             "WARNING_MSG": "Nota: en caso de que no se haya inferido ninguna anotación, es posible que las dos PEARL no difieran en absoluto. De todos modos, el proceso de inferencia puede aplicar cambios, como reordenar las definiciones de prefijo y eliminar comentarios. <br> También es posible para editar el PEARL resultante antes de aplicar los cambios. "
          },
-         "PREVIEW_FORM": {
-            "PREVIEW_FORM": "Formulario de vista previa",
-            "PREVIEW_FORM_INFO": "Especifica cómo renderizar la vista previa del grafo generado por este formulario personalizado",
-            "PROP_CHAIN": "Cadena de propiedades",
-            "PROP_CHAIN_INFO": "La vista previa es un valor único recuperado siguiendo una cadena de propiedades a partir del punto de entrada del grafo generado",
-            "TABLE": "Tabla",
-            "TABLE_INFO": "Una vista previa tabular donde los encabezados están determinados por una lista de propiedades"
-         },
          "REF_INFO": "En el caso del tipo Grafo, esto debería contener una regla PEARL; de lo contrario, en el caso del tipo Nodo, debería contener simplemente un operador de proyección PEARL",
          "SHAPE_SOURCE": "Fuente de forma"
       },
@@ -780,7 +772,6 @@
          "DELETE_TRANSLATION_SET": "Eliminar conjunto de traducción",
          "EDIT_DATATYPE_RESTRICTIONS": "Editar restricciones de tipo de datos",
          "EDIT_MANCHESTER_EXPRESSION": "Editar expresión Manchester",
-         "EDIT_PROPERTY_CHAIN": "Editar cadena de propiedades",
          "REIFY_PLAIN_SENSE": "Reifica el sentido plano",
          "REMOVE_FROM_SCHEME": "Eliminar del esquema",
          "SELECT_CLASS": "Seleccionar clase",
@@ -1366,7 +1357,6 @@
       "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "Va a establecer esta configuración como predeterminada del sistema. ¿Está seguro?",
       "CONFIG_SYSTEM_DEFAULT_RESTORED": "Configuración del sistema restaurada",
       "CONFIG_SYSTEM_DEFAULT_SET": "Configuración establecida como predeterminada del sistema",
-      "CUSTOM_FORM_PROP_CHAIN_DESCR": "Escriba la cadena como una secuencia de IRI separados por comas (,) (también se aceptan QNames)",
       "DATA_CLEARED": "Todos los datos se borraron correctamente.",
       "DATA_IMPORTED": "Datos importados correctamente",
       "DELETE_ALL_VALUES_CONFIRM": "Está eliminando todos los valores de {{property}}. ¿Está seguro?",

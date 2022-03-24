@@ -64,7 +64,7 @@ export abstract class WizardField extends FeatureStructure {
     label: string;
     optional: boolean;
 
-    abstract enumeration: ARTNode[] = [];
+    abstract enumeration: ARTNode[];
 
     //annotation related
     collection: CollectionConstraint = new CollectionConstraint(); //(annotation @Collection)

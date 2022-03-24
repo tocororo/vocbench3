@@ -117,5 +117,6 @@ export enum DefEnrichmentType {
 export class DefinitionCustomRangeConfig {
     hasLiteralRange: boolean = true; //tells if the "standard" range is available (not replaced by the CR)
     hasCustomRange: boolean; //tells if CustomRange is available
+    propChainCustomView: boolean; //tells if definition prop has a prop-chain CV associated
     customForms?: CustomForm[]; //list of the available CFs
 }

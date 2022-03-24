@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, Output, QueryList, SimpleCh
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of, Subscription } from "rxjs";
 import { map } from 'rxjs/operators';
+import { CustomViewModel } from "src/app/models/CustomViews";
 import { VBEventHandler } from "src/app/utils/VBEventHandler";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { CustomForm } from "../../models/CustomForms";
@@ -205,7 +206,8 @@ export class TermViewComponent extends AbstractResourceView {
         let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition)); //get only skos:definition
         if (definitionPredObj) { //if there are definitions
             definitionPredObj.getObjects().forEach(def => { //collect those with language among the the rendering ones
-                if (renderingLangs[0] == Languages.ALL_LANG || renderingLangs.some(l => l.toLocaleLowerCase() == def.getAdditionalProperty(ResAttribute.LANG).toLocaleLowerCase())) {
+                let defLang: string = def.getAdditionalProperty(ResAttribute.LANG);
+                if (renderingLangs[0] == Languages.ALL_LANG || defLang != null && renderingLangs.some(l => l.toLocaleLowerCase() == defLang.toLocaleLowerCase())) {
                     this.definitions.push(def);
                 }
             });
@@ -213,7 +215,18 @@ export class TermViewComponent extends AbstractResourceView {
         this.definitions.sort((a: ARTNode, b: ARTNode) => { //sort by lang
             let langA: string = a.getAdditionalProperty(ResAttribute.LANG);
             let langB: string = b.getAdditionalProperty(ResAttribute.LANG);
-            return langA.localeCompare(langB);
+            if (langA != null && langB != null) {
+                return langA.localeCompare(langB);
+            } else if (langA != null) {
+                console.log(a, b, "-1");
+                return -1;
+            } else if (langB != null) {
+                console.log(a, b, "1");
+                return 1;
+            } else {
+                console.log(a, b, "0");
+                return 0;
+            }
         });
 
         //schemes
@@ -318,7 +331,10 @@ export class TermViewComponent extends AbstractResourceView {
     private initSkosDefinitionCustomRange(definitionPredObj: ARTPredicateObjects): Observable<void> {
         this.defCustomRangeConfig = new DefinitionCustomRangeConfig();
         if (definitionPredObj != null) {
-            this.defCustomRangeConfig.hasCustomRange = definitionPredObj.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE);
+            let skosDefPred: ARTURIResource = definitionPredObj.getPredicate();
+            this.defCustomRangeConfig.hasCustomRange = skosDefPred.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE);
+            let defCvModel: CustomViewModel = skosDefPred.getAdditionalProperty(ResAttribute.CUSTOM_VIEW_MODEL);
+            this.defCustomRangeConfig.propChainCustomView = defCvModel == CustomViewModel.property_chain;
             return of(null);
         } else {
             return this.propService.getRange(SKOS.definition).pipe(

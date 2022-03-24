@@ -574,14 +574,6 @@
                 "PEARL_ANNOTATIONS_INFERENCE": "PEARL-Annotationen ableiten",
                 "WARNING_MSG": "Hinweis: Falls keine Annotation abgeleitet wurde, unterscheiden sich die beiden PEARL-Dokumente möglicherweise überhaupt nicht. Jedoch kann der Inferenzprozess Änderungen vornehmen, z. B. Präfixdefinitionen neu ordnen oder Kommentare entfernen.<br> Es ist auch möglich, das resultierende PEARL-Dokument zu bearbeiten, bevor die Änderungen übernommen werden."
             },
-            "PREVIEW_FORM": {
-                "PREVIEW_FORM": "Vorschau-Formular",
-                "PREVIEW_FORM_INFO": "Geben Sie an, wie die Vorschau des von dieser CF generierten Graphen gerendert werden soll",
-                "PROP_CHAIN": "Property chain",
-                "PROP_CHAIN_INFO": "Die Vorschau ist ein einzelner Wert, zu dem man gelangt, wenn man vom Einstiegspunkt beginnend der Eigenschaftskette folgt",
-                "TABLE": "Tabelle",
-                "TABLE_INFO": "Eine tabellarische Vorschau, in der die Überschriften durch eine Liste von Eigenschaften bestimmt werden"
-            },
             "REF_INFO": "Im Falle eines Graphen sollte hier eine PEARL-Regel enthalten sein, bei einem Knoten einfach ein PEARL-Projektionsoperator",
             "SHAPE_SOURCE": "Shape-Quelle"
         },
@@ -778,7 +770,6 @@
             "DELETE_TRANSLATION_SET": "Translation-Set löschen",
             "EDIT_DATATYPE_RESTRICTIONS": "Datentyp-Restriktionen bearbeiten",
             "EDIT_MANCHESTER_EXPRESSION": "Manchester-Ausdruck bearbeiten",
-            "EDIT_PROPERTY_CHAIN": "Property-Chain bearbeiten",
             "REIFY_PLAIN_SENSE": "Einfache Bedeutung reifizieren",
             "REMOVE_FROM_SCHEME": "Aus dem Schema entfernen",
             "SELECT_CLASS": "Klasse auswählen",
@@ -1359,7 +1350,6 @@
         "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "Sie sind dabei, die aktuelle Konfiguration als Systemstandard festzulegen. Sind Sie sicher?",
         "CONFIG_SYSTEM_DEFAULT_RESTORED": "Systemkonfiguration wiederhergestellt",
         "CONFIG_SYSTEM_DEFAULT_SET": "Konfiguration als Systemstandard eingestellt",
-        "CUSTOM_FORM_PROP_CHAIN_DESCR": "Schreiben Sie die Kette als Folge von durch Kommas (,) getrennten IRIs (QNames werden ebenfalls akzeptiert).",
         "DATA_CLEARED": "Alle Daten wurden erfolgreich gelöscht.",
         "DATA_IMPORTED": "Daten erfolgreich importiert",
         "DELETE_ALL_VALUES_CONFIRM": "Sie löschen alle {{property}} -Werte. Sind Sie sicher?",

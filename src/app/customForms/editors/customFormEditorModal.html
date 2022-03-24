@@ -108,52 +108,6 @@
                 <span class="optionalCell">*</span>
             </div>
         </div>
-        <div *ngIf="type == 'graph'" class="entryRow">
-            <div class="hbox align-items-center">
-                <label class="entryLabel">
-                    {{'CUSTOM_FORMS.FORMS.PREVIEW_FORM.PREVIEW_FORM'|translate}}
-                    <span class="fas fa-info-circle" [title]="'CUSTOM_FORMS.FORMS.PREVIEW_FORM.PREVIEW_FORM_INFO'|translate"></span>
-                </label>
-                <div class="hbox align-items-center">
-
-                    <select class="form-control select-fa" style="width: initial;" [(ngModel)]="selectedPreviewForm" [disabled]="readOnly">
-                        <option *ngFor="let pf of previewForms" [ngValue]="pf" [title]="pf.infoTranslationKey|translate">
-                            {{pf.labelTranslationKey|translate}}
-                        </option>
-                    </select>
-                    <span *ngIf="selectedPreviewForm.value" class="fas fa-info-circle ml-1" [title]="selectedPreviewForm.infoTranslationKey|translate"></span>
-                    
-
-                    <ng-container *ngIf="selectedPreviewForm.value">
-                        <div class="hbox tile-group ml-2">
-                            <span *ngFor="let prop of previewProps" (click)="selectPreviewProp(prop)" 
-                                class="tile" [ngClass]="{selectedResource : selectedPreviewProp == prop}">
-                                <rdf-resource [resource]="prop"></rdf-resource>
-                                <span *ngIf="!readOnly" class="far fa-times-circle" (click)="removePropFromPreview(prop)"
-                                    style="cursor: pointer" onmouseover="this.className='fas fa-times-circle';"
-                                    onmouseout="this.className='far fa-times-circle';">
-                                </span>
-                                <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
-                            </span>
-                        </div>
-                        <div class="btn-group ml-2" ngbDropdown placement="top-right">
-                            <button class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown" [disabled]="readOnly" ngbDropdownToggle>
-                                <span class="fas fa-pencil-alt"></span>
-                            </button>
-                            <div class="dropdown-menu float-right" ngbDropdownMenu>
-                                <a class="dropdown-item" (click)="addPropToPreview()">{{'ACTIONS.ADD'|translate}}</a>
-                                <a class="dropdown-item" (click)="editPreviewProps()">{{'ACTIONS.EDIT_MANUALLY'|translate}}</a>
-                                <a class="dropdown-item" [ngClass]="{disabled : !selectedPreviewProp}" (click)="addPropToPreview('before')">{{'ACTIONS.ADD_BEFORE'|translate}}</a>
-                                <a class="dropdown-item" [ngClass]="{disabled : !selectedPreviewProp}" (click)="addPropToPreview('after')">{{'ACTIONS.ADD_AFTER'|translate}}</a>
-                                <a class="dropdown-item" [ngClass]="{disabled : disableMove('before')}" (click)="movePropInPreview('before')">{{'ACTIONS.MOVE_BEFORE'|translate}}</a>
-                                <a class="dropdown-item" [ngClass]="{disabled : disableMove('after')}" (click)="movePropInPreview('after')">{{'ACTIONS.MOVE_AFTER'|translate}}</a>
-                            </div>
-                        </div>
-                    </ng-container>
-                </div>
-                <span class="optionalCell"></span>
-            </div>
-        </div>
 
     </div>
     <div class="modal-footer">

@@ -82,8 +82,6 @@ export class CustomForm {
     private type: CustomFormType;
     private description: string;
     private ref: string;
-    private showPropertyChain: ARTURIResource[];
-    private previewTableProperties: ARTURIResource[];
     private level: CustomFormLevel;
 
     constructor(id: string, name?: string, description?: string) {
@@ -132,22 +130,6 @@ export class CustomForm {
         this.ref = ref;
     }
 
-    public getShowPropertyChain(): ARTURIResource[] {
-        return this.showPropertyChain;
-    }
-
-    public setShowPropertyChain(showPropertyChain: ARTURIResource[]) {
-        this.showPropertyChain = showPropertyChain;
-    }
-
-    public getPreviewTableProperties(): ARTURIResource[] {
-        return this.previewTableProperties;
-    }
-
-    public setPreviewTableProperties(properties: ARTURIResource[]) {
-        this.previewTableProperties = properties;
-    }
-
     public getLevel(): CustomFormLevel {
         return this.level;
     }
@@ -156,11 +138,6 @@ export class CustomForm {
         this.level = level;
     }
 
-}
-
-export enum PreviewForm {
-    propertyChain = "propertyChain",
-    table = "table"
 }
 
 export class FormField {

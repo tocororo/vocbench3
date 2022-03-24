@@ -36,7 +36,7 @@
 
         <ng-container *ngIf="showCustomView && customView">
             <custom-views-renderer [cvData]="customView" [subject]="resource" [predicate]="predicate" [readonly]="readonly" [rendering]="rendering" [partition]="partition"
-                (dblclickObj)="onDblClick($event)" (delete)="removeValue($event)" (update)="onObjectUpdate()">
+                (dblclickObj)="onDblClick($event)" (delete)="removeValue($event)" (update)="onUpdate()">
             </custom-views-renderer>
         </ng-container>
 

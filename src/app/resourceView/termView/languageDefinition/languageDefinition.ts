@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { CustomViewsServices } from 'src/app/services/customViewsServices';
 import { ARTLiteral, ARTNode, ARTResource } from '../../../models/ARTResources';
 import { CustomForm, CustomFormValue } from '../../../models/CustomForms';
 import { SKOS } from '../../../models/Vocabulary';
-import { CustomFormsServices } from '../../../services/customFormsServices';
 import { PropertyServices } from '../../../services/propertyServices';
 import { SkosServices } from '../../../services/skosServices';
 import { AuthorizationEvaluator } from '../../../utils/AuthorizationEvaluator';
@@ -35,7 +35,7 @@ export class LanguageDefinitionComponent {
     editDefAuthorized: boolean;
     deleteDefAuthorized: boolean;
 
-    constructor(public el: ElementRef, private skosService: SkosServices, private customFormsServices: CustomFormsServices,
+    constructor(public el: ElementRef, private skosService: SkosServices, private cvServices: CustomViewsServices, 
         private propService: PropertyServices, private resViewModals: ResViewModalServices, 
         private basicModals: BasicModalServices, private creationModals: CreationModalServices) { }
 
@@ -62,8 +62,9 @@ export class LanguageDefinitionComponent {
                 this.skosService.updateNote(this.resource, SKOS.definition, oldDefValue, newLitForm).subscribe(
                     () => this.update.emit()
                 )
-            } else if (oldDefValue.isResource() && this.defCrConfig.hasCustomRange) { // if reified
-                this.customFormsServices.updateReifiedResourceShow(this.resource, SKOS.definition, <ARTResource>oldDefValue, newLitForm).subscribe(
+            } else if (oldDefValue.isResource() && this.defCrConfig.propChainCustomView) { // if reified with a prop-chain CV associated to skos:definition
+                let oldLitForm: ARTLiteral = new ARTLiteral(oldDefValue.getShow(), null, this.lang);
+                this.cvServices.updateSingleValueData(this.resource, SKOS.definition, oldLitForm, newLitForm).subscribe(
                     () => this.update.emit()
                 )
             }

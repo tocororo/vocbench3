@@ -76,15 +76,12 @@ import { PropertyChainCreatorModal } from '../resourceView/resourceViewEditor/re
 import { RdfsMembersModal } from '../resourceView/resourceViewEditor/resViewModals/rdfsMembersModal';
 import { ResViewModalServices } from '../resourceView/resourceViewEditor/resViewModals/resViewModalServices';
 import { TimeMachineModal } from '../resourceView/resourceViewEditor/timeMachine/timeMachineModal';
-import { CustomFormTableCellComponent } from '../resourceView/resourceViewEditor/valueRenderer/cfValueTablePreview/customFormTableCellComponent';
-import { CustomFormValueTableComponent } from '../resourceView/resourceViewEditor/valueRenderer/cfValueTablePreview/customFormValueTableComponent';
 import { ChartsRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/chartsRendererComponent';
 import { MapRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/mapRendererComponent';
 import { SingleValueRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/singleValueRendererComponent';
 import { VectorRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/vectorRendererComponent';
 import { CvValueRendererComponent } from '../resourceView/resourceViewEditor/valueRenderer/cvRenderer/cvValueRendererComponent';
 import { EditableResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/editableResourceComponent';
-import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/valueRenderer/reifiedResourceComponent';
 import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/valueRenderer/resourceViewValueRenderer';
 import { ResourceViewModal } from '../resourceView/resourceViewModal';
 import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
@@ -137,8 +134,6 @@ import { TreeAndListModule } from "./treeAndListModule";
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 
         ConstituentsPartitionRenderer,
-        CustomFormTableCellComponent,
-        CustomFormValueTableComponent,
         CustomPartitionRenderer,
         DatatypeDefinitionPartitionRenderer,
         DenotationsPartitionRenderer,
@@ -164,7 +159,6 @@ import { TreeAndListModule } from "./treeAndListModule";
         PropertyFacetsPartitionRenderer,
         RangesPartitionRenderer,
         RdfsMembersPartitionRenderer,
-        ReifiedResourceComponent,
         ResourceRenameComponent,
         ResourceViewEditorComponent, 
         ResourceViewContextMenu,
