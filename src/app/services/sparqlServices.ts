@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ARTNode, ARTURIResource } from "../models/ARTResources";
 import { RDFFormat } from '../models/RDFFormat';
+import { FederatedEndpointSuggestion } from '../models/Sparql';
 import { HttpManager } from "../utils/HttpManager";
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class SparqlServices {
@@ -169,5 +171,17 @@ export class SparqlServices {
         }
         return this.httpMgr.downloadFile(this.serviceName, "exportQueryResultAsSpreadsheet", params, true);
     }
+
+    /**
+     * Obtain suggestions about endpoints to use in federated SPARQL queries
+     * @param query 
+     */
+    suggestEndpointsForFederation(query: string) : Observable<FederatedEndpointSuggestion[]> {
+        var params: any = {
+            query: query
+        };
+        return this.httpMgr.doGet(this.serviceName, "suggestEndpointsForFederation", params);
+    }
+
 
 }
