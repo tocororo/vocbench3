@@ -1,7 +1,8 @@
 import { Component, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { MemoizeContext, MemoizeData } from "src/app/models/Sheet2RDF";
+import { MemoizeData } from "src/app/models/Sheet2RDF";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
+import { Sheet2RdfContextService } from "../sheet2rdfContext";
 
 
 @Component({
@@ -16,11 +17,11 @@ export class MemoizationEditor {
     memoizeIds: string[];
     memoizeData: MemoizeData;
        
-    constructor(private basicModals: BasicModalServices) {}
+    constructor(private s2rdfCtx: Sheet2RdfContextService, private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         this.memoizeData = new MemoizeData();
-        this.memoizeIds = MemoizeContext.idList;
+        this.memoizeIds = this.s2rdfCtx.memoizeIdList;
     }
 
     addMap() {

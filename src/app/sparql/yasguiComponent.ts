@@ -1,11 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import * as $ from 'jquery';
-import { pipe } from 'rxjs';
 import * as YASQE from 'yasgui-yasqe';
 import { ARTURIResource } from '../models/ARTResources';
 import { PrefixMapping } from '../models/Metadata';
 import { SearchMode } from '../models/Properties';
-import { FederatedEndpointSuggestion, QueryChangedEvent } from '../models/Sparql';
+import { QueryChangedEvent } from '../models/Sparql';
 import { SearchServices } from '../services/searchServices';
 import { SparqlServices } from '../services/sparqlServices';
 import { VBContext } from '../utils/VBContext';

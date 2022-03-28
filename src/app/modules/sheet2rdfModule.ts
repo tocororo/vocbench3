@@ -13,6 +13,8 @@ import { Sheet2RdfSettingsModal } from '../sheet2rdf/s2rdfModals/sheet2rdfSettin
 import { SimpleGraphApplicationModal } from '../sheet2rdf/s2rdfModals/simpleGraphApplicationModal';
 import { SubjectHeaderEditorModal } from '../sheet2rdf/s2rdfModals/subjectHeaderEditorModal';
 import { Sheet2RdfComponent } from '../sheet2rdf/sheet2rdfComponent';
+import { Sheet2RdfContextService } from '../sheet2rdf/sheet2rdfContext';
+import { SheetManagerComponent } from '../sheet2rdf/sheetManagerComponent';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
@@ -28,12 +30,16 @@ import { SharedModule } from './sharedModule';
     declarations: [
         MemoizationEditor,
         Sheet2RdfComponent, 
+        SheetManagerComponent,
         //modal
         HeaderEditorModal, SubjectHeaderEditorModal, SimpleGraphApplicationModal, AdvancedGraphApplicationModal, NodeCreationModal, 
         Sheet2RdfSettingsModal
     ],
     exports: [
         Sheet2RdfComponent,
+    ],
+    providers: [
+        Sheet2RdfContextService
     ],
     entryComponents: [
         HeaderEditorModal, SubjectHeaderEditorModal, SimpleGraphApplicationModal, AdvancedGraphApplicationModal, NodeCreationModal,

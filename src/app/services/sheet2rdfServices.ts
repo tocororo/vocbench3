@@ -7,7 +7,7 @@ import { Configuration, Reference } from '../models/Configuration';
 import { PrefixMapping } from '../models/Metadata';
 import { RDFFormat } from "../models/RDFFormat";
 import { Pair } from '../models/Shared';
-import { Sheet2RdfDeserializer, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
+import { S2RDFModel, Sheet2RdfDeserializer, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { HttpManager, HttpServiceContext, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { ResourcesServices } from './resourcesServices';
 
@@ -53,12 +53,19 @@ export class Sheet2RDFServices {
         return this.httpMgr.doGet(this.serviceName, "getSupportedDBDrivers", params);
     }
 
-    /**
-     * Returns the header structures of the uploaded spreadsheet
-     */
-    getHeaders(): Observable<{ subject: SubjectHeader, headers: SimpleHeader[] }> {
+    listSheetNames(): Observable<string[]> {
         let params: STRequestParams = {};
-        return this.httpMgr.doGet(this.serviceName, "getHeaders", params).pipe(
+        return this.httpMgr.doGet(this.serviceName, "listSheetNames", params);
+    }
+
+    /**
+     * Returns the header structures of the given sheet
+     */
+    getSheetHeaders(sheetName: string): Observable<S2RDFModel> {
+        let params: STRequestParams = {
+            sheetName: sheetName
+        };
+        return this.httpMgr.doGet(this.serviceName, "getSheetHeaders", params).pipe(
             mergeMap(stResp => {
                 let subject: SubjectHeader = Sheet2RdfDeserializer.parseSubjectHeader(stResp.subject);
                 let headers: SimpleHeader[] = [];
@@ -71,18 +78,19 @@ export class Sheet2RDFServices {
                     return this.resourcesService.getResourceDescription(subject.graph.type).pipe(
                         map(annotatedRes => {
                             subject.graph.type = <ARTURIResource>annotatedRes;
-                            return { subject: subject, headers: headers };
+                            return { subjectHeader: subject, headers: headers };
                         })
                     );
                 } else {
-                    return of({ subject: subject, headers: headers });
+                    return of({ subjectHeader: subject, headers: headers });
                 }
             })
         );
     }
 
-    getHeaderFromId(headerId: string): Observable<SimpleHeader> {
+    getHeaderFromId(sheetName: string, headerId: string): Observable<SimpleHeader> {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId
         };
         return this.httpMgr.doGet(this.serviceName, "getHeaderFromId", params).pipe(
@@ -127,16 +135,18 @@ export class Sheet2RDFServices {
         );
     }
 
-    ignoreHeader(headerId: string, ignore: boolean) {
+    ignoreHeader(sheetName: string, headerId: string, ignore: boolean) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             ignore: ignore
         };
         return this.httpMgr.doPost(this.serviceName, "ignoreHeader", params);
     }
 
-    addSimpleGraphApplicationToHeader(headerId: string, property: ARTURIResource, nodeId: string, type?: ARTResource) {
+    addSimpleGraphApplicationToHeader(sheetName: string, headerId: string, property: ARTURIResource, nodeId: string, type?: ARTResource) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             property: property,
             nodeId: nodeId,
@@ -145,8 +155,9 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addSimpleGraphApplicationToHeader", params);
     }
 
-    addAdvancedGraphApplicationToHeader(headerId: string, graphPattern: string, nodeIds: string[], prefixMapping: { [key: string]: string }, defaultPredicate?: ARTURIResource) {
+    addAdvancedGraphApplicationToHeader(sheetName: string, headerId: string, graphPattern: string, nodeIds: string[], prefixMapping: { [key: string]: string }, defaultPredicate?: ARTURIResource) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             graphPattern: graphPattern,
             nodeIds: nodeIds,
@@ -156,8 +167,9 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addAdvancedGraphApplicationToHeader", params);
     }
 
-    updateSimpleGraphApplication(headerId: string, graphId: string, property: ARTURIResource, nodeId: string, type?: ARTResource) {
+    updateSimpleGraphApplication(sheetName: string, headerId: string, graphId: string, property: ARTURIResource, nodeId: string, type?: ARTResource) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             graphId: graphId,
             property: property,
@@ -167,8 +179,9 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateSimpleGraphApplication", params);
     }
 
-    updateAdvancedGraphApplication(headerId: string, graphId: string, graphPattern: string, nodeIds: string[], prefixMapping: { [key: string]: string }, defaultPredicate?: ARTURIResource) {
+    updateAdvancedGraphApplication(sheetName: string, headerId: string, graphId: string, graphPattern: string, nodeIds: string[], prefixMapping: { [key: string]: string }, defaultPredicate?: ARTURIResource) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             graphId: graphId,
             graphPattern: graphPattern,
@@ -179,8 +192,9 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateAdvancedGraphApplication", params);
     }
 
-    updateGraphApplicationDelete(headerId: string, graphId: string, deleteEnabled: boolean) {
+    updateGraphApplicationDelete(sheetName: string ,headerId: string, graphId: string, deleteEnabled: boolean) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             graphId: graphId,
             delete: deleteEnabled,
@@ -188,25 +202,28 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateGraphApplicationDelete", params);
     }
 
-    removeGraphApplicationFromHeader(headerId: string, graphId: string) {
+    removeGraphApplicationFromHeader(sheetName: string, headerId: string, graphId: string) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             graphId: graphId
         };
         return this.httpMgr.doPost(this.serviceName, "removeGraphApplicationFromHeader", params);
     }
 
-    isNodeIdAlreadyUsed(nodeId: string): Observable<boolean> {
+    isNodeIdAlreadyUsed(sheetName: string, nodeId: string): Observable<boolean> {
         let params: STRequestParams = {
+            sheetName: sheetName,
             nodeId: nodeId
         };
         return this.httpMgr.doGet(this.serviceName, "isNodeIdAlreadyUsed", params);
     }
 
-    addNodeToHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType,
+    addNodeToHeader(sheetName: string, headerId: string, nodeId: string, converterCapability: RDFCapabilityType,
         converterContract: string, converterDatatypeUri?: string, converterLanguage?: string,
         converterParams?: { [key: string]: any }, memoize?: boolean, memoizeId?: string) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             nodeId: nodeId,
             converterCapability: converterCapability,
@@ -220,10 +237,11 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addNodeToHeader", params);
     }
 
-    updateNodeInHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType,
+    updateNodeInHeader(sheetName: string, headerId: string, nodeId: string, converterCapability: RDFCapabilityType,
         converterContract: string, converterDatatypeUri?: string, converterLanguage?: string,
         converterParams?: { [key: string]: any }, memoize?: boolean, memoizeId?: string) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             nodeId: nodeId,
             converterCapability: converterCapability,
@@ -237,8 +255,9 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateNodeInHeader", params);
     }
 
-    renameNodeId(headerId: string, nodeId: string, newNodeId: String) {
+    renameNodeId(sheetName: string, headerId: string, nodeId: string, newNodeId: String) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             nodeId: nodeId,
             newNodeId: newNodeId
@@ -246,17 +265,19 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "renameNodeId", params);
     }
 
-    removeNodeFromHeader(headerId: string, nodeId: string) {
+    removeNodeFromHeader(sheetName: string, headerId: string, nodeId: string) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             nodeId: nodeId
         };
         return this.httpMgr.doPost(this.serviceName, "removeNodeFromHeader", params);
     }
 
-    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: { [key: string]: any }, type?: ARTResource,
+    updateSubjectHeader(sheetName: string, headerId: string, converterContract: string, converterParams?: { [key: string]: any }, type?: ARTResource,
         additionalPredObjs?: Pair<ARTURIResource, ARTNode>[], memoize?: boolean, memoizeId?: string) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
             converterContract: converterContract,
             converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
@@ -268,39 +289,57 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateSubjectHeader", params);
     }
 
-    updateSubjectHeaderAdditionalGraph(predicate: ARTURIResource, object: ARTNode) {
+    updateSubjectHeaderAdditionalGraph(sheetName: string, predicate: ARTURIResource, object: ARTNode) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             predicate: predicate,
             object: object
         };
         return this.httpMgr.doPost(this.serviceName, "updateSubjectHeaderAdditionalGraph", params);
     }
 
-    replicateMultipleHeader(headerId: string) {
+    replicateMultipleHeader(sheetName: string, headerId: string) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             headerId: headerId,
         };
         return this.httpMgr.doPost(this.serviceName, "replicateMultipleHeader", params);
     }
 
-    exportStatus() {
-        let params: STRequestParams = {};
-        return this.httpMgr.downloadFile(this.serviceName, "exportStatus", params);
+    exportSheetStatus(sheetName: string) {
+        let params: STRequestParams = {
+            sheetName: sheetName,
+        };
+        return this.httpMgr.downloadFile(this.serviceName, "exportSheetStatus", params);
     }
 
-    importStatus(statusFile: File) {
-        let data: any = {
+    importSheetStatus(sheetName: string, statusFile: File) {
+        let data: STRequestParams = {
+            sheetName: sheetName,
             statusFile: statusFile
         };
-        return this.httpMgr.uploadFile(this.serviceName, "importStatus", data);
+        return this.httpMgr.uploadFile(this.serviceName, "importSheetStatus", data);
+    }
+
+    exportGlobalStatus() {
+        let params: STRequestParams = {};
+        return this.httpMgr.downloadFile(this.serviceName, "exportGlobalStatus", params);
+    }
+
+    importGlobalStatus(statusFile: File) {
+        let data: STRequestParams = {
+            statusFile: statusFile
+        };
+        return this.httpMgr.uploadFile(this.serviceName, "importGlobalStatus", data);
     }
 
     /**
      * Returns a preview (first maxRows rows) of the spreadsheet uploaded
      * @param maxRows 
      */
-    getTablePreview(maxRows: number): Observable<{ returned: number, total: number, rows: TableRow[] }> {
+    getTablePreview(sheetName: string, maxRows: number): Observable<{ returned: number, total: number, rows: TableRow[] }> {
         let params: STRequestParams = {
+            sheetName: sheetName,
             maxRows: maxRows,
         };
         return this.httpMgr.doGet(this.serviceName, "getTablePreview", params);
@@ -309,8 +348,10 @@ export class Sheet2RDFServices {
     /**
      * Lets sheet2rdf generate the pearl and returns it
      */
-    getPearl(): Observable<string> {
-        let params: STRequestParams = {};
+    getPearl(sheetName: string): Observable<string> {
+        let params: STRequestParams = {
+            sheetName: sheetName
+        };
         return this.httpMgr.doGet(this.serviceName, "getPearl", params);
     }
 
@@ -318,8 +359,9 @@ export class Sheet2RDFServices {
      * Saves the pearl code
      * @param pearlCode 
      */
-    savePearl(pearlCode: string) {
+    savePearl(sheetName: string, pearlCode: string) {
         let data: any = {
+            sheetName: sheetName,
             pearlCode: pearlCode
         };
         return this.httpMgr.doPost(this.serviceName, "savePearl", data);
@@ -337,8 +379,9 @@ export class Sheet2RDFServices {
      * Returns the pearl code.
      * @param file 
      */
-    uploadPearl(file: File): Observable<string> {
+    uploadPearl(sheetName: string, file: File): Observable<string> {
         let data: any = {
+            sheetName: sheetName,
             file: file
         };
         return this.httpMgr.uploadFile(this.serviceName, "uploadPearl", data);
@@ -349,8 +392,9 @@ export class Sheet2RDFServices {
      * 'maxTableRows' of the datasheet
      * @param maxTableRows 
      */
-    getTriplesPreview(maxTableRows: number): Observable<{ returned: number, total: number, triples: TriplePreview[] }> {
+    getTriplesPreview(sheetName: string, maxTableRows: number): Observable<{ returned: number, total: number, triples: TriplePreview[] }> {
         let params: STRequestParams = {
+            sheetName: sheetName,
             maxTableRows: maxTableRows
         };
         return this.httpMgr.doGet(this.serviceName, "getTriplesPreview", params).pipe(
@@ -361,13 +405,16 @@ export class Sheet2RDFServices {
         );
     }
 
-    addTriples() {
-        let params: STRequestParams = {};
+    addTriples(sheetName: string) {
+        let params: STRequestParams = {
+            sheetName: sheetName
+        };
         return this.httpMgr.doGet(this.serviceName, "addTriples", params);
     }
 
-    exportTriples(outputFormat: RDFFormat) {
+    exportTriples(sheetName: string, outputFormat: RDFFormat) {
         let params: STRequestParams = {
+            sheetName: sheetName,
             outputFormat: outputFormat.name
         };
         return this.httpMgr.downloadFile(this.serviceName, "exportTriples", params);

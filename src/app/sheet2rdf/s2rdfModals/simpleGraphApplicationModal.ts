@@ -13,6 +13,7 @@ import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { Sheet2RdfContextService } from "../sheet2rdfContext";
 import { NodeCreationModal } from "./nodeCreationModal";
 
 @Component({
@@ -20,8 +21,8 @@ import { NodeCreationModal } from "./nodeCreationModal";
     templateUrl: "./simpleGraphApplicationModal.html",
 })
 export class SimpleGraphApplicationModal {
+    @Input() sheetName: string;
     @Input() header: SimpleHeader;
-    @Input() s2rdfModel: S2RDFModel;
     @Input() graphApplication?: SimpleGraphApplication; //optional graph application to edit. If not provided the modal create a new graph application
 
     property: ARTURIResource; //property used in graph section
@@ -55,14 +56,14 @@ export class SimpleGraphApplicationModal {
     availableNodes: NodeConversion[] = [];
     selectedNode: NodeConversion;
 
-    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices,
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService,
         private propService: PropertyServices, private resourceService: ResourcesServices,
         private browsingModals: BrowsingModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
         this.rangeTypes = [this.resourceRangeType, this.literalRangeType];
-        this.availableNodes.push(...this.header.nodes);
+        this.header.nodes.forEach(n => this.availableNodes.push(n));
 
         /**
          * If there is only a node available, check if it has a language/datatype. In case inizializes its selection.
@@ -283,13 +284,13 @@ export class SimpleGraphApplicationModal {
             lang = this.availableNodes[0].converter.language;
         }
         const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
+        modalRef.componentInstance.sheetName = this.sheetName;
         modalRef.componentInstance.header = this.header;
 		modalRef.componentInstance.editingNode = null;
         modalRef.componentInstance.constrainedRangeType = this.selectedRangeType.type;
         modalRef.componentInstance.constrainedLanguage = lang;
         modalRef.componentInstance.constrainedDatatype = dt;
         modalRef.componentInstance.headerNodes = this.availableNodes;
-        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         return modalRef.result.then(
             (node: NodeConversion) => {
                 this.availableNodes.push(node);
@@ -352,7 +353,7 @@ export class SimpleGraphApplicationModal {
         })
         //if it didn't exist, create it and then create/update the graph application
         if (!exist) {
-            this.s2rdfService.addNodeToHeader(this.header.id, this.selectedNode.nodeId, this.selectedNode.converter.type,
+            this.s2rdfService.addNodeToHeader(this.sheetName, this.header.id, this.selectedNode.nodeId, this.selectedNode.converter.type,
                 this.selectedNode.converter.contractUri, this.selectedNode.converter.datatypeUri, this.selectedNode.converter.language, this.selectedNode.converter.params,
                 this.selectedNode.memoize, this.selectedNode.memoizeId).subscribe(
                     resp => {
@@ -371,9 +372,9 @@ export class SimpleGraphApplicationModal {
         }
         let graphAppFn: Observable<any>;
         if (this.graphApplication == null) { //create mode
-            graphAppFn = this.s2rdfService.addSimpleGraphApplicationToHeader(this.header.id, this.property, this.selectedNode.nodeId, type);
+            graphAppFn = this.s2rdfService.addSimpleGraphApplicationToHeader(this.sheetName, this.header.id, this.property, this.selectedNode.nodeId, type);
         } else { //edit mode
-            graphAppFn = this.s2rdfService.updateSimpleGraphApplication(this.header.id, this.graphApplication.id, this.property, this.selectedNode.nodeId, type);
+            graphAppFn = this.s2rdfService.updateSimpleGraphApplication(this.sheetName, this.header.id, this.graphApplication.id, this.property, this.selectedNode.nodeId, type);
         }
         graphAppFn.subscribe(
             resp => {

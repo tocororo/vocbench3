@@ -8,6 +8,7 @@ import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { Sheet2RdfContextService } from "../sheet2rdfContext";
 import { AdvancedGraphApplicationModal } from "./advancedGraphApplicationModal";
 import { NodeCreationModal } from "./nodeCreationModal";
 import { SimpleGraphApplicationModal } from "./simpleGraphApplicationModal";
@@ -17,8 +18,10 @@ import { SimpleGraphApplicationModal } from "./simpleGraphApplicationModal";
     templateUrl: "./headerEditorModal.html",
 })
 export class HeaderEditorModal {
+    @Input() sheetName: string;
     @Input() headerId: string;
-    @Input() s2rdfModel: S2RDFModel;
+
+    private s2rdfModel: S2RDFModel;
 
     header: SimpleHeader;
 
@@ -29,17 +32,20 @@ export class HeaderEditorModal {
 
     private changed: boolean = false; //useful to keep trace of changes in order to ask to the user if he want to replicate the changes to multiple headers
 
-    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices, private modalService: NgbModal) {
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices,  private s2rdfCtx: Sheet2RdfContextService,
+        private basicModals: BasicModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
+        this.s2rdfModel = this.s2rdfCtx.sheetModelMap.get(this.sheetName);
+
         this.initHeader();
     }
 
     initHeader() {
         this.selectedGraph = null;
         this.selectedNode = null;
-        this.s2rdfService.getHeaderFromId(this.headerId).subscribe(
+        this.s2rdfService.getHeaderFromId(this.sheetName, this.headerId).subscribe(
             header => {
                 this.header = header;
                 if (!this.ignoreInitialized) {
@@ -53,7 +59,7 @@ export class HeaderEditorModal {
     }
 
     onIgnoreChange() {
-        this.s2rdfService.ignoreHeader(this.header.id, this.header.ignore).subscribe(
+        this.s2rdfService.ignoreHeader(this.sheetName, this.header.id, this.header.ignore).subscribe(
             () => {
                 this.initHeader();
                 this.changed = true;
@@ -78,7 +84,7 @@ export class HeaderEditorModal {
     addNode() {
         this.openNodeEditorModal(this.header, null, null, null, null, this.header.nodes).then(
             (newNode: NodeConversion) => {
-                this.s2rdfService.addNodeToHeader(this.header.id, newNode.nodeId, newNode.converter.type,
+                this.s2rdfService.addNodeToHeader(this.sheetName, this.header.id, newNode.nodeId, newNode.converter.type,
                     newNode.converter.contractUri, newNode.converter.datatypeUri, newNode.converter.language,
                     newNode.converter.params, newNode.memoize, newNode.memoizeId).subscribe(
                         () => {
@@ -95,7 +101,7 @@ export class HeaderEditorModal {
         this.basicModals.prompt({ key: "ACTIONS.RENAME_NODE" }, { value: "ID" }, null, node.nodeId, false, true).then(
             (newID: string) => {
                 if (newID != node.nodeId) {
-                    this.s2rdfService.renameNodeId(this.header.id, node.nodeId, newID).subscribe(
+                    this.s2rdfService.renameNodeId(this.sheetName, this.header.id, node.nodeId, newID).subscribe(
                         () => {
                             this.initHeader();
                             this.changed = true;
@@ -124,7 +130,7 @@ export class HeaderEditorModal {
         }
     }
     private removeNodeImpl() {
-        this.s2rdfService.removeNodeFromHeader(this.header.id, this.selectedNode.nodeId).subscribe(
+        this.s2rdfService.removeNodeFromHeader(this.sheetName, this.header.id, this.selectedNode.nodeId).subscribe(
             () => {
                 this.initHeader();
                 this.changed = true;
@@ -135,7 +141,7 @@ export class HeaderEditorModal {
     changeUriConverter(node: NodeConversion) {
         this.openNodeEditorModal(this.header, node, RangeType.resource, null, null, null).then(
             (updatedNode: NodeConversion) => {
-                this.s2rdfService.updateNodeInHeader(this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri,
+                this.s2rdfService.updateNodeInHeader(this.sheetName, this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri,
                     updatedNode.converter.datatypeUri, updatedNode.converter.language, updatedNode.converter.params, updatedNode.memoize, updatedNode.memoizeId).subscribe(
                         () => {
                             this.initHeader();
@@ -150,7 +156,7 @@ export class HeaderEditorModal {
     changeLiteralConverter(node: NodeConversion) {
         this.openNodeEditorModal(this.header, node, RangeType.literal, null, null, null).then(
             (updatedNode: NodeConversion) => {
-                this.s2rdfService.updateNodeInHeader(this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri,
+                this.s2rdfService.updateNodeInHeader(this.sheetName, this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri,
                     updatedNode.converter.datatypeUri, updatedNode.converter.language, updatedNode.converter.params, updatedNode.memoize, updatedNode.memoizeId).subscribe(
                         () => {
                             this.initHeader();
@@ -165,13 +171,13 @@ export class HeaderEditorModal {
     private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType,
         constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
         const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
+        modalRef.componentInstance.sheetName = this.sheetName;
         modalRef.componentInstance.header = header;
         modalRef.componentInstance.editingNode = editingNode;
         modalRef.componentInstance.constrainedRangeType = constrainedRangeType;
         modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
         modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
         modalRef.componentInstance.headerNodes = headerNodes;
-        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         return modalRef.result;
     }
 
@@ -235,8 +241,8 @@ export class HeaderEditorModal {
 
     private openSimpleGraphApplicationModal(header: SimpleHeader, graphApplication: SimpleGraphApplication) {
         const modalRef: NgbModalRef = this.modalService.open(SimpleGraphApplicationModal, new ModalOptions());
+        modalRef.componentInstance.sheetName = this.sheetName;
         modalRef.componentInstance.header = header;
-        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         modalRef.componentInstance.graphApplication = graphApplication;
         return modalRef.result;
     }
@@ -244,13 +250,12 @@ export class HeaderEditorModal {
     private openAdvancedGraphApplicationModal(header: SimpleHeader, graphApplication: AdvancedGraphApplication) {
         const modalRef: NgbModalRef = this.modalService.open(AdvancedGraphApplicationModal, new ModalOptions('lg'));
         modalRef.componentInstance.header = header;
-        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         modalRef.componentInstance.graphApplication = graphApplication;
         return modalRef.result;
     }
 
     removeGraph() {
-        this.s2rdfService.removeGraphApplicationFromHeader(this.header.id, this.selectedGraph.id).subscribe(
+        this.s2rdfService.removeGraphApplicationFromHeader(this.sheetName, this.header.id, this.selectedGraph.id).subscribe(
             resp => {
                 this.initHeader();
                 this.changed = true;
@@ -259,7 +264,7 @@ export class HeaderEditorModal {
     }
 
     onDeleteChange(graphApplication: GraphApplication) {
-        this.s2rdfService.updateGraphApplicationDelete(this.header.id, graphApplication.id, graphApplication.delete).subscribe();
+        this.s2rdfService.updateGraphApplicationDelete(this.sheetName, this.header.id, graphApplication.id, graphApplication.delete).subscribe();
     }
 
     ok() {
@@ -267,7 +272,7 @@ export class HeaderEditorModal {
             this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.UPDATE_MULTIPLE_HEADER_SAME_NAME_CONFIRM", params: { headerName: this.header.nameStruct.name } },
                 ModalType.warning).then(
                     confirm => {
-                        this.s2rdfService.replicateMultipleHeader(this.header.id).subscribe(
+                        this.s2rdfService.replicateMultipleHeader(this.sheetName, this.header.id).subscribe(
                             () => {
                                 this.activeModal.close();
                             }

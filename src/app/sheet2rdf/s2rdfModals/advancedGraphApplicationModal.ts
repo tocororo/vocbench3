@@ -16,6 +16,7 @@ import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { Sheet2RdfContextService } from "../sheet2rdfContext";
 import { NodeCreationModal } from "./nodeCreationModal";
 
 @Component({
@@ -23,9 +24,11 @@ import { NodeCreationModal } from "./nodeCreationModal";
     templateUrl: "./advancedGraphApplicationModal.html",
 })
 export class AdvancedGraphApplicationModal {
+    @Input() sheetName: string;
     @Input() header: SimpleHeader;
-    @Input() s2rdfModel: S2RDFModel;
     @Input() graphApplication?: AdvancedGraphApplication;
+
+    private s2rdfModel: S2RDFModel;
 
     //Nodes
     alreadyDefinedNodes: NodeConversion[] = []; //nodes already defined in the header
@@ -42,12 +45,14 @@ export class AdvancedGraphApplicationModal {
     defaultPredicate: ARTURIResource;
     private readonly PRED_PLACEHOLDER: string = "{{pred}}"
 
-    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices,
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
         private translateService: TranslateService) {
     }
 
     ngOnInit() {
+        this.s2rdfModel = this.s2rdfCtx.sheetModelMap.get(this.sheetName);
+
         this.header.nodes.forEach(n => {
             this.alreadyDefinedNodes.push(n);
         })
@@ -111,7 +116,7 @@ export class AdvancedGraphApplicationModal {
         }
     }
     private removeNodeImpl() {
-        this.s2rdfService.removeNodeFromHeader(this.header.id, this.selectedNode.nodeId).subscribe(
+        this.s2rdfService.removeNodeFromHeader(this.sheetName, this.header.id, this.selectedNode.nodeId).subscribe(
             resp => {
                 this.alreadyDefinedNodes.splice(this.alreadyDefinedNodes.indexOf(this.selectedNode), 1);
                 this.selectedNode = null;
@@ -140,13 +145,13 @@ export class AdvancedGraphApplicationModal {
     private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType,
         constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
         const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
+        modalRef.componentInstance.sheetName = this.sheetName;
         modalRef.componentInstance.header = header;
         modalRef.componentInstance.editingNode = editingNode;
         modalRef.componentInstance.constrainedRangeType = constrainedRangeType;
         modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
         modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
         modalRef.componentInstance.headerNodes = headerNodes;
-        modalRef.componentInstance.s2rdfModel = this.s2rdfModel;
         return modalRef.result;
     }
 
@@ -465,7 +470,7 @@ export class AdvancedGraphApplicationModal {
      * @param nodeId 
      */
     private getAdaptedNodeId(nodeId: string): Observable<string> {
-        return this.s2rdfService.isNodeIdAlreadyUsed(nodeId).pipe(
+        return this.s2rdfService.isNodeIdAlreadyUsed(this.sheetName, nodeId).pipe(
             mergeMap(used => {
                 if (used) {
                     let newId = nodeId + "_1";
@@ -504,7 +509,7 @@ export class AdvancedGraphApplicationModal {
                     //above check passed, now add the new nodes to the header (prevent to add nodes again to the header in case of update)
                     let addNodeFn: Observable<any>[] = [];
                     this.newDefinedNodes.forEach(n => {
-                        addNodeFn.push(this.s2rdfService.addNodeToHeader(this.header.id, n.nodeId, n.converter.type,
+                        addNodeFn.push(this.s2rdfService.addNodeToHeader(this.sheetName, this.header.id, n.nodeId, n.converter.type,
                             n.converter.contractUri, n.converter.datatypeUri, n.converter.language, n.converter.params, n.memoize, n.memoizeId));
                     });
 
@@ -549,10 +554,10 @@ export class AdvancedGraphApplicationModal {
         let graphAppFn: Observable<void>;
         if (this.graphApplication == null) { //creation mode
             graphAppFn = this.s2rdfService.addAdvancedGraphApplicationToHeader(
-                this.header.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
+                this.sheetName, this.header.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
         } else { //edit mode
             graphAppFn = this.s2rdfService.updateAdvancedGraphApplication(
-                this.header.id, this.graphApplication.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
+                this.sheetName, this.header.id, this.graphApplication.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
         }
         return graphAppFn;
     }

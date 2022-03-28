@@ -45,6 +45,7 @@ import { ValuePickerComponent } from '../widget/pickers/valuePicker/valuePickerC
 import { RdfResourceComponent } from '../widget/rdfResource/rdfResourceComponent';
 import { ResourceListComponent } from '../widget/rdfResource/resourceListComponent';
 import { ResourceListSelectionComponent } from '../widget/rdfResource/resourceListSelectionComponent';
+import { ResizableLayoutComponent } from '../widget/resizableLayout/resizableLayoutComponent';
 import { DataSizeRenderer } from '../widget/settingsRenderer/dataSizeRenderer';
 import { NestedSettingSetRendererComponent } from '../widget/settingsRenderer/nestedSettingsRendererComponent';
 import { SettingMapRendererComponent } from '../widget/settingsRenderer/settingMapRendererComponent';
@@ -97,6 +98,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         QueryParameterForm,
         RdfResourceComponent,
         ResizableDirective,
+        ResizableLayoutComponent,
         ResourceListComponent,
         ResourceListSelectionComponent,
         ResourcePickerComponent,
@@ -148,6 +150,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         QueryParameterForm,
         RdfResourceComponent,
         ResizableDirective,
+        ResizableLayoutComponent,
         ResourceListComponent,
         ResourceListSelectionComponent,
         ResourcePickerComponent,

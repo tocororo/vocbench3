@@ -1,0 +1,7 @@
+<div #maindiv [ngStyle]="{ 'flex': mainFlex }" class="vbox">
+    <ng-content select="[main]"></ng-content>
+</div>
+<div *ngIf="secondaryProvided()" [ngClass]="{ resizerX: orientation == 'H', resizerY: orientation == 'V' }" (mousedown)="onMousedown($event);"></div>
+<div #secondarydiv [ngStyle]="{ 'flex': secondaryProvided() ? secondaryFlex : 0 }" class="vbox">
+    <ng-content select="[secondary]"></ng-content>
+</div>

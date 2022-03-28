@@ -5,17 +5,20 @@ import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/conv
 import { ModalType, SelectionOption } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { Pair } from "../../models/Shared";
-import { CODAConverter, MemoizeData, NodeConversion, S2RDFModel, SimpleHeader, SubjectHeader } from "../../models/Sheet2RDF";
+import { CODAConverter, MemoizeData, NodeConversion, S2RDFModel, SimpleHeader } from "../../models/Sheet2RDF";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { Sheet2RdfContextService } from "../sheet2rdfContext";
 
 @Component({
     selector: "subject-header-editor-modal",
     templateUrl: "./subjectHeaderEditorModal.html",
 })
 export class SubjectHeaderEditorModal {
-    @Input() s2rdfModel: S2RDFModel;
+    @Input() sheetName: string;
+
+    s2rdfModel: S2RDFModel;
 
     selectedHeader: SimpleHeader;
 
@@ -28,11 +31,12 @@ export class SubjectHeaderEditorModal {
 
     additionalPredObjs: PredObjPair[];
 
-    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, 
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, 
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
     }
 
     ngOnInit() {
+        this.s2rdfModel = this.s2rdfCtx.sheetModelMap.get(this.sheetName);
         /**
          * restore the previous subject header choices
          */
@@ -176,7 +180,7 @@ export class SubjectHeaderEditorModal {
         //execute the update
         let memoizePar: boolean = this.memoizeData ? this.memoizeData.enabled : null;
         let memoizeIdPar: string = this.memoizeData ? this.memoizeData.id : null
-        this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contractUri, this.selectedConverter.params,
+        this.s2rdfService.updateSubjectHeader(this.sheetName, this.selectedHeader.id, this.selectedConverter.contractUri, this.selectedConverter.params,
             this.type, additionalPOParam, memoizePar, memoizeIdPar).subscribe(
             () => {
                 this.activeModal.close();

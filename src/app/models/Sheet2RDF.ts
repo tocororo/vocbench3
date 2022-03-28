@@ -133,11 +133,6 @@ export class MemoizeData {
     id: string = null;
 }
 
-export class MemoizeContext {
-    //list of ID for the memoization (this is stored only client side for the entire work session of s2rdf and it is retrieved from the header list)
-    static idList: string[] = [];
-}
-
 export class TableContent {
     public returned: number;
     public total: number;

@@ -7,6 +7,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 # 10.2.2 (dd-mm-yyyy)
   * Added SuperUser system role
   * Allowed SuperUser to create projects where it is automatically set as Project Manager
+  * Enabled multiple sheets management in Sheet2RDF
   * Added completion for endpoints to use in federated SPARQL queries
 
 # 10.2.1 (02-07-2022)

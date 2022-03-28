@@ -9,21 +9,24 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { CODAConverter, MemoizeData, NodeConversion, S2RDFModel, SimpleHeader } from "../../models/Sheet2RDF";
 import { RangeType } from "../../services/propertyServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { Sheet2RdfContextService } from "../sheet2rdfContext";
 
 @Component({
     selector: "node-creation-modal",
     templateUrl: "./nodeCreationModal.html",
 })
 export class NodeCreationModal {
+    @Input() sheetName: string;
     @Input() header: SimpleHeader;
     @Input() editingNode: NodeConversion;
     @Input() constrainedRangeType: RangeType;
     @Input() constrainedLanguage: string;
     @Input() constrainedDatatype: ARTURIResource;
     @Input() headerNodes: NodeConversion[]; //other nodes of the input header 
-        //(I don't use header.nodes, despite most of the time these nodes are the same, since they may differ. 
-        //E.g. when this modal is called from the AdvancedGraphApplication modal, nodes can be created contextually the definition of the AGA so they are not in the header yet)
-    @Input() s2rdfModel: S2RDFModel;
+    //(I don't use header.nodes, despite most of the time these nodes are the same, since they may differ. 
+    //E.g. when this modal is called from the AdvancedGraphApplication modal, nodes can be created contextually the definition of the AGA so they are not in the header yet)
+
+    private s2rdfModel: S2RDFModel;
 
     nodeId: string;
 
@@ -31,15 +34,17 @@ export class NodeCreationModal {
     memoizeData: MemoizeData = new MemoizeData();
     memoizedNodes: NodeConversion[];
 
-    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices) {
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, private basicModals: BasicModalServices) {
     }
 
     ngOnInit() {
         document.getElementById("toFocus").focus();
+        this.s2rdfModel = this.s2rdfCtx.sheetModelMap.get(this.sheetName);
+
         if (this.editingNode) {
             this.nodeId = this.editingNode.nodeId;
             this.selectedConverter = this.editingNode.converter;
-            this.memoizeData = { enabled:  this.editingNode.memoize, id: this.editingNode.memoizeId };
+            this.memoizeData = { enabled: this.editingNode.memoize, id: this.editingNode.memoizeId };
         }
         this.initMemoizedNodes();
     }
@@ -62,7 +67,7 @@ export class NodeCreationModal {
                 }
             }
             //if this code is reached, the id is not used locally in the header => check globally invoking the server
-            return this.s2rdfService.isNodeIdAlreadyUsed(nodeId);
+            return this.s2rdfService.isNodeIdAlreadyUsed(this.sheetName, nodeId);
         }
     }
 
@@ -105,20 +110,20 @@ export class NodeCreationModal {
                 description: "(Memoization map ID: " + (n.memoizeId ? n.memoizeId : "Default") + ")"
             }
         });
-        this.basicModals.select({key:"SHEET2RDF.HEADER_EDITOR.COPY_MEMOIZED_NODE_CONVERTER"}, {key:"SHEET2RDF.HEADER_EDITOR.SELECT_MEMOIZED_NODE"}, opts).then(
+        this.basicModals.select({ key: "SHEET2RDF.HEADER_EDITOR.COPY_MEMOIZED_NODE_CONVERTER" }, { key: "SHEET2RDF.HEADER_EDITOR.SELECT_MEMOIZED_NODE" }, opts).then(
             (opt: SelectionOption) => {
                 let selectedSourceMemoNode: NodeConversion = this.memoizedNodes.find(n => n.nodeId == opt.value);
-                this.memoizeData = { 
+                this.memoizeData = {
                     enabled: selectedSourceMemoNode.memoize,
                     id: selectedSourceMemoNode.memoizeId
                 }
                 this.selectedConverter = selectedSourceMemoNode.converter;
             },
-            () => {}
+            () => { }
         );
     }
 
-    
+
     /**
      * Ok is enabled if
      * - node id is provided (and it is valid)
@@ -126,7 +131,7 @@ export class NodeCreationModal {
      * - all the parameters (if any) of the converter signature are provided
      * - the further info of the default literal converter (if selected) are provided
      */
-     isOkEnabled() {
+    isOkEnabled() {
         let signatureOk: boolean = true;
         if (this.selectedConverter != null) {
             signatureOk = CODAConverter.isSignatureOk(this.selectedConverter);
@@ -142,10 +147,10 @@ export class NodeCreationModal {
         this.isNodeAlreadyInUse(this.nodeId).subscribe(
             used => {
                 if (used) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_USED_NODE_ID"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_USED_NODE_ID" }, ModalType.warning);
                     return;
                 }
-                let newNode: NodeConversion = { 
+                let newNode: NodeConversion = {
                     nodeId: this.nodeId,
                     converter: this.selectedConverter,
                     memoize: this.memoizeData ? this.memoizeData.enabled : false,

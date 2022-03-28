@@ -1,0 +1,29 @@
+:host {
+    margin: 0px; /* nullify the margin of the bootstrap row that interfere with the flex computation during the resize */
+}
+
+.resizerY, .resizerX {
+    display: flex;
+    justify-content: center;
+    margin: 2px;
+    padding: 3px;
+    border-radius: 3px;
+}
+.resizerY {
+    cursor: ns-resize;
+}
+.resizerX {
+    cursor: ew-resize;
+}
+.resizerY:hover, .resizerX:hover {
+    background-color: #dddddd;
+}
+.resizerY div, .resizerX div {
+    align-self: center;
+    opacity: 0.4;
+	filter: alpha(opacity=40);
+}
+.resizerY:hover div, .resizerY:hover div {
+    opacity: 0.9;
+    filter: alpha(opacity=90);
+}
