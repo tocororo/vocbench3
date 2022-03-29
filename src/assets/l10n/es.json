@@ -2139,6 +2139,7 @@
       "ACTIONS": {
          "EXPORT_MAPPING_STATUS": "Exportar estado de asignación",
          "LOAD_ADVANCED_GRAPH_APPLICATION": "Cargar aplicación de grafos avanzados",
+         "LOAD_MAPPING_STATUS": "Estado de asignación de carga",
          "SAVE_ADVANCED_GRAPH_APPLICATION": "Guardar aplicación de grafos avanzados"
       },
       "GRAPH_APPLICATIONS": {
@@ -2208,7 +2209,6 @@
             "SUBJECT_HEADER": "Encabezado utilizado para el mapeo del asunto",
             "VALID_CONFIGURATION": "Encabezado con al menos una configuración válida"
          },
-         "LOAD_STATUS": "Estado de asignación de carga",
          "PREVIEW": "Vista previa de la hoja de cálculo",
          "ROWS": "Filas",
          "SUBJECT_MAPPING": "Asignación de temas"

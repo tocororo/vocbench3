@@ -2132,6 +2132,7 @@
         "ACTIONS": {
             "EXPORT_MAPPING_STATUS": "Mapping-Status exportieren",
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Fortgeschrittene Graph-Anwendung laden",
+            "LOAD_MAPPING_STATUS": "Mapping-Status laden",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Fortgeschrittene Graph-Anwendung speichern"
         },
         "GRAPH_APPLICATIONS": {
@@ -2201,7 +2202,6 @@
                 "SUBJECT_HEADER": "Header für das Subject-Mapping",
                 "VALID_CONFIGURATION": "Header mit mindestens einer gültigen Konfiguration"
             },
-            "LOAD_STATUS": "Mapping-Status laden",
             "PREVIEW": "Spreadsheet-Vorschau",
             "ROWS": "Zeilen",
             "SUBJECT_MAPPING": "Subject-Mapping"

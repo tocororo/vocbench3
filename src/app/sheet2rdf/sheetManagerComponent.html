@@ -17,13 +17,13 @@
                     </button>
 
                     <button class="btn btn-light btn-xs" (click)="generatePearl()" [title]="'SHEET2RDF.PEARL.GENERATE_PEARL'|translate" [disabled]="!tablePreview">
-                        <span class="fas fa-play"></span>
+                        <span class="fas fa-play text-primary"></span>
                     </button>
 
                     <div class="btn-group btn-group-xs">
                         <!-- Workaround to show input file as simple <button> -->
                         <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" (click)="$event.target.value=null" accept=".json, text/plain" style="display:none">
-                        <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" [title]="'SHEET2RDF.SPREADSHEET.LOAD_STATUS'|translate" [disabled]="!tablePreview">
+                        <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" [title]="'SHEET2RDF.ACTIONS.LOAD_MAPPING_STATUS'|translate" [disabled]="!tablePreview">
                             <span class="fas fa-upload"></span>
                         </button>
                         <button class="btn btn-light" (click)="exportStatus()" [title]="'SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS'|translate" [disabled]="!tablePreview">
@@ -83,8 +83,8 @@
                     [title]="pearlValidation.details"></span>
 
                 <div class="btn-toolbar" role="toolbar">
-                    <button class="btn btn-light btn-xs" (click)="generateTriples()" [title]="'SHEET2RDF.TRIPLES.GENERATE_TRIPLES'|translate" [disabled]="!pearl">
-                        <span class="fas fa-play"></span>
+                    <button class="btn btn-light btn-xs" (click)="generateTriples().subscribe()" [title]="'SHEET2RDF.TRIPLES.GENERATE_TRIPLES'|translate" [disabled]="!pearl">
+                        <span class="fas fa-play text-success"></span>
                     </button>
                     <div class="btn-group btn-group-xs">
                         <!-- Workaround to show input file as simple <button> -->
@@ -99,7 +99,7 @@
                 </div>
             </div>
             <div class="card-body hbox">
-                <pearl-editor [(ngModel)]="pearl" (ngModelChange)="onPearlChange()" style="flex: 1;" [disabled]="!tablePreview">
+                <pearl-editor *ngIf="!hidden" [(ngModel)]="pearl" (ngModelChange)="onPearlChange()" style="flex: 1;" [disabled]="!tablePreview">
                 </pearl-editor>
                 <button class="btn btn-light btn-xs" (click)="insertConverter()" style="align-self: flex-end; margin-left: 4px;"
                     [title]="'SHEET2RDF.PEARL.INSERT_CONVERTER'|translate" [disabled]="!tablePreview">

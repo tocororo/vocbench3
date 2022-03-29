@@ -2152,8 +2152,11 @@
     },
     "SHEET2RDF": {
         "ACTIONS": {
+            "EXPORT_GLOBAL_MAPPING_STATUS": "Esporta Mapping Status globale",
             "EXPORT_MAPPING_STATUS": "Esporta Mapping Status",
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Carica Advanced Graph Application",
+            "LOAD_GLOBAL_MAPPING_STATUS": "Carica Mapping Status globale",
+            "LOAD_MAPPING_STATUS": "Carica Mapping Status",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Salva Advanced Graph Application"
         },
         "DATABASE": {
@@ -2232,7 +2235,6 @@
                 "SUBJECT_HEADER": "Header usato per il mapping del soggetto",
                 "VALID_CONFIGURATION": "Header con almeno una configurazione valida"
             },
-            "LOAD_STATUS": "Carica Mapping Status",
             "PREVIEW": "Anteprima spreadsheet",
             "ROWS": "Righe",
             "SUBJECT_MAPPING": "Mapping soggetto"

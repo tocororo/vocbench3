@@ -2152,8 +2152,11 @@
     },
     "SHEET2RDF": {
         "ACTIONS": {
-            "EXPORT_MAPPING_STATUS": "Export Mapping Status",
+            "EXPORT_GLOBAL_MAPPING_STATUS": "Export global Mapping Status",
+            "EXPORT_MAPPING_STATUS": "Export sheet Mapping Status",
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Load Advanced Graph Application",
+            "LOAD_GLOBAL_MAPPING_STATUS": "Load global Mapping Status",
+            "LOAD_MAPPING_STATUS": "Load sheet Mapping Status",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Save Advanced Graph Application"
         },
         "DATABASE": {
@@ -2212,6 +2215,7 @@
             "SUBJ_NODE_ID_INFO": "This value is readonly, 'subject' is a reserved keyword for the subject node"
         },
         "PEARL": {
+            "GENERATE_ALL_PEARL": "Generate Pearl for all sheets",
             "GENERATE_PEARL": "Generate Pearl",
             "INSERT_CONVERTER": "Insert converter"
         },
@@ -2232,7 +2236,6 @@
                 "SUBJECT_HEADER": "Header used for the subject mapping",
                 "VALID_CONFIGURATION": "Header with at least a valid configuration"
             },
-            "LOAD_STATUS": "Load Mapping Status",
             "PREVIEW": "Spreadsheet preview",
             "ROWS": "Rows",
             "SUBJECT_MAPPING": "Subject mapping"
@@ -2240,7 +2243,8 @@
         "TRIPLES": {
             "ADD_TRIPLES": "Add triples",
             "GENERATED_TRIPLES_PREVIEW": "Generated triples preview",
-            "GENERATE_TRIPLES": "Generate Triples"
+            "GENERATE_ALL_TRIPLES": "Generate triples for all sheets",
+            "GENERATE_TRIPLES": "Generate triples"
         }
     },
     "SKOS_DIFF": {

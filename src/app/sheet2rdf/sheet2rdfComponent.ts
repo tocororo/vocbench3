@@ -1,5 +1,6 @@
-import { Component, HostListener } from "@angular/core";
+import { Component, HostListener, QueryList, ViewChildren } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from "rxjs";
 import { ExtensionPointID, Scope } from "../models/Plugins";
 import { SettingsEnum } from "../models/Properties";
 import { FsNamingStrategy, S2RDFModel, Sheet2RdfSettings } from "../models/Sheet2RDF";
@@ -8,9 +9,10 @@ import { SettingsServices } from "../services/settingsServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { ModalOptions } from '../widget/modal/Modals';
+import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { Sheet2RdfSettingsModal } from "./s2rdfModals/sheet2rdfSettingsModal";
 import { Sheet2RdfContextService } from "./sheet2rdfContext";
+import { SheetManagerComponent } from "./sheetManagerComponent";
 
 @Component({
     selector: "s2rdf-component",
@@ -20,6 +22,8 @@ import { Sheet2RdfContextService } from "./sheet2rdfContext";
     },
 })
 export class Sheet2RdfComponent {
+
+    @ViewChildren('multiSheetEditor') sheetEditors: QueryList<SheetManagerComponent>;
 
     //preferences
     private useHeader: boolean = true; //currently not used
@@ -82,10 +86,6 @@ export class Sheet2RdfComponent {
         this.s2rdfService.closeSession().subscribe();
     }
 
-    /* ==========================================================
-     * SPREADSHEET HANDLERS
-     * ========================================================== */
-
 
     loadSpreadsheet() {
         this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
@@ -122,6 +122,41 @@ export class Sheet2RdfComponent {
     fileChangeEvent(file: File) {
         this.spreadsheetFile = file;
         this.loadSpreadsheet();
+    }
+
+    //== Global actions ==
+
+    generateAllPearl() {
+        this.sheetEditors.forEach(e => {
+            e.generatePearl()
+        });
+    }
+
+    generateAllTriples() {
+        for (let e of this.sheetEditors) {
+            if (e.pearl == null || e.pearlValidation == null || !e.pearlValidation.valid) {
+                this.basicModals.alert({ key: "STATUS.WARNING" }, "Sheet " + e.sheetName + " has incomplete or invalid Pearl code. Pleas fix the Pearl or exclude the sheet from the process, then retry.", ModalType.warning);
+                return;
+            }
+        }
+        let generateTriplesFn: Observable<void>[] = [];
+        this.sheetEditors.forEach(e => {
+            generateTriplesFn.push(e.generateTriples());
+        });
+        if (generateTriplesFn.length > 0) {
+            this.generateTriplesRecursively(generateTriplesFn);
+        }
+    }
+
+    private generateTriplesRecursively(generateTriplesFn: Observable<void>[]) {
+        if (generateTriplesFn.length == 0) return;
+        generateTriplesFn[0].subscribe(
+            () => {
+                generateTriplesFn.shift();
+                this.generateTriplesRecursively(generateTriplesFn);
+            }
+        )
+
     }
 
 

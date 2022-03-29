@@ -2138,6 +2138,7 @@
         "ACTIONS": {
             "EXPORT_MAPPING_STATUS": "Exporter le statut de correspondance",
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Charger l'application de graphe avancée",
+            "LOAD_MAPPING_STATUS": "Charger le statut de correspondance",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Sauvegarder l'application de graphe avancée"
         },
         "GRAPH_APPLICATIONS": {
@@ -2207,7 +2208,6 @@
                 "SUBJECT_HEADER": "En-tête utilisé pour la correspondance des sujets",
                 "VALID_CONFIGURATION": "En-tête comportant au moins une configuration valide"
             },
-            "LOAD_STATUS": "Charger le statut de correspondance",
             "PREVIEW": "Prévisualisation de la feuille de calcul",
             "ROWS": "Lignes",
             "SUBJECT_MAPPING": "Correspondance des sujets"

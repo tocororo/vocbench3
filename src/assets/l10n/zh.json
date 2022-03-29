@@ -2139,6 +2139,7 @@
         "ACTIONS": {
             "EXPORT_MAPPING_STATUS": "Export Mapping Status",
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Load Advanced Graph Application",
+            "LOAD_MAPPING_STATUS": "Load Mapping Status",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Save Advanced Graph Application"
         },
         "GRAPH_APPLICATIONS": {
@@ -2208,7 +2209,6 @@
                 "SUBJECT_HEADER": "Header used for the subject mapping",
                 "VALID_CONFIGURATION": "Header with at least a valid configuration"
             },
-            "LOAD_STATUS": "Load Mapping Status",
             "PREVIEW": "Spreadsheet preview",
             "ROWS": "Rows",
             "SUBJECT_MAPPING": "Subject mapping"

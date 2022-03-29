@@ -62,27 +62,53 @@
     </div>
 
     <div class="vbox mt-2">
-        <div *ngIf="sheetNames" class="btn-group btn-group-xs" style="position: absolute; right: 10px;">
-            <!-- Workaround to show input file as simple <button> -->
-            <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" (click)="$event.target.value=null" accept=".json, text/plain" style="display:none">
-            <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" [title]="'SHEET2RDF.SPREADSHEET.LOAD_STATUS'|translate">
-                <span class="fas fa-upload"></span>
-            </button>
-            <button class="btn btn-light" (click)="exportStatus()" [title]="'SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS'|translate">
-                <span class="fas fa-download"></span>
-            </button>
-        </div>
 
-        <ul class="nav nav-tabs" (click)="$event.preventDefault()">
-            <li *ngFor="let s of sheetNames" class="nav-item" [ngClass]="{ active : activeSheet == s }">
-                <a class="nav-link" (click)="activeSheet = s">
-                    {{s}}
-                </a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <sheet-manager *ngFor="let s of sheetNames" [sheetName]="s" [hidden]="activeSheet != s"></sheet-manager>
-        </div>
+        <ng-container *ngIf="!sheetNames; then emptyEditor; else editorsBlock"></ng-container>
+
+        <ng-template #emptyEditor>
+            <sheet-manager></sheet-manager>
+        </ng-template>
+
+        <ng-template #editorsBlock>
+            <ng-container *ngIf="sheetNames.length == 1; then singleSheet; else multiSheet"></ng-container>
+
+            <ng-template #singleSheet>
+                <sheet-manager [sheetName]="sheetNames[0]"></sheet-manager>
+            </ng-template>
+    
+            <ng-template #multiSheet>
+                <div style="position: absolute; right: 10px;">
+                    <button class="btn btn-sm btn-light" (click)="generateAllPearl()" [title]="'SHEET2RDF.PEARL.GENERATE_ALL_PEARL'|translate">
+                        <span class="fas fa-play text-primary"></span>
+                    </button>
+                    <button class="btn btn-sm btn-light ml-2" (click)="generateAllTriples()" [title]="'SHEET2RDF.TRIPLES.GENERATE_ALL_TRIPLES'|translate">
+                        <span class="fas fa-play text-success"></span>
+                    </button>
+                    <div class="btn-group btn-group-sm ml-2">
+                        <!-- Workaround to show input file as simple <button> -->
+                        <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" (click)="$event.target.value=null" accept=".json, text/plain" style="display:none">
+                        <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" [title]="'SHEET2RDF.ACTIONS.LOAD_GLOBAL_MAPPING_STATUS'|translate">
+                            <span class="fas fa-upload"></span>
+                        </button>
+                        <button class="btn btn-light" (click)="exportStatus()" [title]="'SHEET2RDF.ACTIONS.EXPORT_GLOBAL_MAPPING_STATUS'|translate">
+                            <span class="fas fa-download"></span>
+                        </button>
+                    </div>
+                </div>
+        
+                <ul class="nav nav-tabs" (click)="$event.preventDefault()">
+                    <li *ngFor="let s of sheetNames" class="nav-item" [ngClass]="{ active : activeSheet == s }">
+                        <a class="nav-link" (click)="activeSheet = s">
+                            {{s}}
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <sheet-manager #multiSheetEditor *ngFor="let s of sheetNames" [sheetName]="s" [hidden]="activeSheet != s"></sheet-manager>
+                </div>
+            </ng-template>
+        </ng-template>
+        
     </div>
 
 </div>

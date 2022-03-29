@@ -1,5 +1,7 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { Component, ElementRef, HostBinding, Input, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from "rxjs";
+import { map, mergeMap } from "rxjs/operators";
 import { PearlValidationResult } from "../models/Coda";
 import { RDFFormat } from "../models/RDFFormat";
 import { AdvancedGraphApplication, GraphApplication, S2RDFModel, SimpleGraphApplication, SimpleHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
@@ -50,6 +52,18 @@ import { Sheet2RdfContextService } from "./sheet2rdfContext";
 export class SheetManagerComponent {
 
     @Input() sheetName: string; //sheet name
+    @Input() hidden: boolean;
+
+    /**
+     * Due to a known issue with ngx-codemirror (https://github.com/scttcper/ngx-codemirror/issues/12)
+     * or more in general with codemirror (https://github.com/codemirror/CodeMirror/issues/5985 https://github.com/codemirror/CodeMirror/issues/61)
+     * I had to adopt this solution (see the logic in ngOnChanges): 
+     * - input hidden == true => host display style is set to "none"
+     * - input hidden == false => host display style is set to "flex"
+     * So that the current component is shown/hidden according hidden value.
+     * Moreover hidden is used with *ngIf to show/hide the codemirror editor.
+     */
+    @HostBinding("style.display") display: string = "flex";
 
     @ViewChild(PearlEditorComponent) viewChildCodemirror: PearlEditorComponent;
     @ViewChild('blockingDiv', { static: true }) private blockingDivElement: ElementRef;
@@ -76,23 +90,30 @@ export class SheetManagerComponent {
     truncatedTriples: number;
     totalTriples: number;
     triplesPreview: TriplePreview[];
-    alternateRowHelper: {[key: number]: number}; //support for alternating the style of the triples in the preview
+    alternateRowHelper: { [key: number]: number }; //support for alternating the style of the triples in the preview
     private selectedTriplePreviewRow: TriplePreview;
 
     exportFormats: RDFFormat[];
 
 
-    constructor(private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, private codaService: CODAServices, 
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
+    constructor(private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, private codaService: CODAServices,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.exportFormats = this.s2rdfCtx.exportFormats;
-        
-        this.s2rdfModel = new S2RDFModel();
-        this.s2rdfCtx.sheetModelMap.set(this.sheetName, this.s2rdfModel);
 
-        this.initHeaders();
-        this.initTablePreview();
+        this.s2rdfModel = new S2RDFModel();
+        if (this.sheetName != null) {
+            this.s2rdfCtx.sheetModelMap.set(this.sheetName, this.s2rdfModel);
+            this.initHeaders();
+            this.initTablePreview();
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['hidden']) {
+            this.display = this.hidden ? "none" : "flex";
+        }
     }
 
     /* ==========================================================
@@ -216,7 +237,7 @@ export class SheetManagerComponent {
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -227,7 +248,7 @@ export class SheetManagerComponent {
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -235,7 +256,7 @@ export class SheetManagerComponent {
         this.s2rdfService.exportSheetStatus(this.sheetName).subscribe(
             blob => {
                 let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({key:"SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS"}, null, exportLink, this.sheetName + " - status.json");
+                this.basicModals.downloadLink({ key: "SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS" }, null, exportLink, this.sheetName + " - status.json");
             }
         );
     }
@@ -299,11 +320,11 @@ export class SheetManagerComponent {
     }
 
     insertConverter() {
-        this.sharedModals.selectConverter({key:"ACTIONS.PICK_CONVERTER"}, null).then(
-            (converter: {projectionOperator: string, contractDesctiption: any }) => {
+        this.sharedModals.selectConverter({ key: "ACTIONS.PICK_CONVERTER" }, null).then(
+            (converter: { projectionOperator: string, contractDesctiption: any }) => {
                 this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
             },
-            () => {}
+            () => { }
         )
     }
 
@@ -318,22 +339,22 @@ export class SheetManagerComponent {
         this.selectedTriplePreviewRow = null;
     }
 
-    generateTriples() {
+    generateTriples(): Observable<void> {
         if (this.pearlValidation != null && !this.pearlValidation.valid) {
-            this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.PEARL_CODE_WITH_ERROR"}, ModalType.warning);
-            return;
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.PEARL_CODE_WITH_ERROR" }, ModalType.warning);
+            return of(null);
         } else {
-            this.invokeGetTriplesPreview();
+            return this.invokeGetTriplesPreview();
         }
     }
 
-    private invokeGetTriplesPreview() {
-        this.s2rdfService.savePearl(this.sheetName, this.pearl).subscribe(
-            () => {
+    private invokeGetTriplesPreview(): Observable<void> {
+        return this.s2rdfService.savePearl(this.sheetName, this.pearl).pipe(
+            mergeMap(() => {
                 this.resetTriplePreview();
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-                this.s2rdfService.getTriplesPreview(this.sheetName, this.maxSizePreviews).subscribe(
-                    triplesPreview => {
+                return this.s2rdfService.getTriplesPreview(this.sheetName, this.maxSizePreviews).pipe(
+                    map(triplesPreview => {
                         UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                         this.totalTriples = triplesPreview.total;
                         this.truncatedTriples = triplesPreview.returned;
@@ -344,9 +365,9 @@ export class SheetManagerComponent {
                         rows.forEach((r, idx) => {
                             this.alternateRowHelper[r] = idx;
                         })
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -360,7 +381,7 @@ export class SheetManagerComponent {
             for (let i = 0; i < this.tablePreview.length; i++) {
                 if (this.tablePreview[i].idx == this.selectedTriplePreviewRow.row) {
                     this.selectedTablePreviewRow = this.tablePreview[i];
-                    document.getElementById('tableRow'+this.selectedTablePreviewRow.idx).scrollIntoView({block: 'end', behavior: 'smooth'});
+                    document.getElementById('tableRow' + this.selectedTablePreviewRow.idx).scrollIntoView({ block: 'end', behavior: 'smooth' });
                 }
             }
         }
@@ -371,7 +392,7 @@ export class SheetManagerComponent {
         this.s2rdfService.addTriples(this.sheetName).subscribe(
             () => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.GENERATED_TRIPLES_ADDED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.GENERATED_TRIPLES_ADDED" });
             }
         )
 
@@ -381,7 +402,7 @@ export class SheetManagerComponent {
         this.s2rdfService.exportTriples(this.sheetName, format).subscribe(
             blob => {
                 let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_TRIPLES"}, null, exportLink, "triples." + format.defaultFileExtension);
+                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_TRIPLES" }, null, exportLink, "triples." + format.defaultFileExtension);
             }
         )
     }
