@@ -34,6 +34,10 @@ export class Sheet2RdfComponent {
     dbInfo: DatabaseInfo = { db_base_url: null, db_name: null, db_table: null, db_user: null, db_password: null, db_driverName: null };
     dbDrivers: string[];
 
+    spreadsheetFile: File;
+
+    s2rdfModel: S2RDFModel = new S2RDFModel();
+
     sheetNames: string[];
     activeSheet: string;
 
@@ -82,9 +86,6 @@ export class Sheet2RdfComponent {
      * SPREADSHEET HANDLERS
      * ========================================================== */
 
-    spreadsheetFile: File;
-
-    s2rdfModel: S2RDFModel = new S2RDFModel();
 
     loadSpreadsheet() {
         this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
@@ -127,8 +128,9 @@ export class Sheet2RdfComponent {
     exportStatus() {
         this.s2rdfService.exportGlobalStatus().subscribe(
             blob => {
-                var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({key:"SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS"}, null, exportLink, "s2rdf_status.json");
+                let exportLink = window.URL.createObjectURL(blob);
+                let fileName = (this.selectedInputSource == InputSource.spreadsheet ? this.spreadsheetFile.name : this.dbInfo.db_name) + " - status.json";
+                this.basicModals.downloadLink({key:"SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS"}, null, exportLink, fileName);
             }
         );
     }

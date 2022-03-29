@@ -234,8 +234,8 @@ export class SheetManagerComponent {
     exportStatus() {
         this.s2rdfService.exportSheetStatus(this.sheetName).subscribe(
             blob => {
-                var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({key:"SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS"}, null, exportLink, "s2rdf_status.json");
+                let exportLink = window.URL.createObjectURL(blob);
+                this.basicModals.downloadLink({key:"SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS"}, null, exportLink, this.sheetName + " - status.json");
             }
         );
     }
@@ -289,9 +289,9 @@ export class SheetManagerComponent {
     }
 
     exportPearl() {
-        var data = new Blob([this.pearl], { type: 'text/plain' });
-        var textFile = window.URL.createObjectURL(data);
-        var fileName = "pearl_export.pr";
+        let data = new Blob([this.pearl], { type: 'text/plain' });
+        let textFile = window.URL.createObjectURL(data);
+        let fileName = "pearl_export.pr";
         this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_PEARL" }, null, textFile, fileName).then(
             (done: any) => { window.URL.revokeObjectURL(textFile); },
             () => { }
@@ -357,7 +357,7 @@ export class SheetManagerComponent {
         } else {
             this.selectedTriplePreviewRow = row;
             //select the row in the table preview that has generated the triple selected
-            for (var i = 0; i < this.tablePreview.length; i++) {
+            for (let i = 0; i < this.tablePreview.length; i++) {
                 if (this.tablePreview[i].idx == this.selectedTriplePreviewRow.row) {
                     this.selectedTablePreviewRow = this.tablePreview[i];
                     document.getElementById('tableRow'+this.selectedTablePreviewRow.idx).scrollIntoView({block: 'end', behavior: 'smooth'});
@@ -380,7 +380,7 @@ export class SheetManagerComponent {
     exportTriplesAs(format: RDFFormat) {
         this.s2rdfService.exportTriples(this.sheetName, format).subscribe(
             blob => {
-                var exportLink = window.URL.createObjectURL(blob);
+                let exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_TRIPLES"}, null, exportLink, "triples." + format.defaultFileExtension);
             }
         )

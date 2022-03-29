@@ -62,6 +62,17 @@
     </div>
 
     <div class="vbox mt-2">
+        <div *ngIf="sheetNames" class="btn-group btn-group-xs" style="position: absolute; right: 10px;">
+            <!-- Workaround to show input file as simple <button> -->
+            <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" (click)="$event.target.value=null" accept=".json, text/plain" style="display:none">
+            <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" [title]="'SHEET2RDF.SPREADSHEET.LOAD_STATUS'|translate">
+                <span class="fas fa-upload"></span>
+            </button>
+            <button class="btn btn-light" (click)="exportStatus()" [title]="'SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS'|translate">
+                <span class="fas fa-download"></span>
+            </button>
+        </div>
+
         <ul class="nav nav-tabs" (click)="$event.preventDefault()">
             <li *ngFor="let s of sheetNames" class="nav-item" [ngClass]="{ active : activeSheet == s }">
                 <a class="nav-link" (click)="activeSheet = s">
