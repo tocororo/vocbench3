@@ -91,18 +91,7 @@ export class Sheet2RdfComponent {
     loadSpreadsheet() {
         this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
             () => {
-                this.resetAll();
-
-                this.s2rdfService.listSheetNames().subscribe(
-                    sheetNames => {
-                        if (sheetNames.length == 0) {
-                            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_SPREADSHEET" }, ModalType.warning);
-                            return;
-                        }
-                        this.sheets = sheetNames.map(s => { return { name: s, exclude: false } });
-                        this.activeSheet = this.sheets[0];
-                    }
-                );
+                this.initSheets();
             }
         );
     }
@@ -111,9 +100,24 @@ export class Sheet2RdfComponent {
         this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_tableList,
             this.dbInfo.db_user, this.dbInfo.db_password, this.dbInfo.db_driverName, this.fsNamingStrategy).subscribe(
                 () => {
-                    this.resetAll();
+                    this.initSheets();
                 }
             );
+    }
+
+    private initSheets() {
+        this.resetAll();
+
+        this.s2rdfService.listSheetNames().subscribe(
+            sheetNames => {
+                if (sheetNames.length == 0) {
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_SPREADSHEET" }, ModalType.warning);
+                    return;
+                }
+                this.sheets = sheetNames.map(s => { return { name: s, exclude: false } });
+                this.activeSheet = this.sheets[0];
+            }
+        );
     }
 
     private resetAll() {
@@ -124,7 +128,7 @@ export class Sheet2RdfComponent {
     }
 
     isLoadDbEnabled(): boolean {
-        return this.dbInfo.db_base_url != null && this.dbInfo.db_name != null && this.dbInfo.db_tableList.length > 0 && 
+        return this.dbInfo.db_base_url != null && this.dbInfo.db_name != null && this.dbInfo.db_tableList.length > 0 &&
             this.dbInfo.db_user != null && this.dbInfo.db_password != null;
     }
 

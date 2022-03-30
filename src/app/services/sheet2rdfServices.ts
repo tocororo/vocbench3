@@ -45,7 +45,7 @@ export class Sheet2RDFServices {
                 className: "it.uniroma2.art.sheet2rdf.exception.DBLocalizedException", action: 'warning'
             }]
         });
-        return this.httpMgr.uploadFile(this.serviceName, "uploadDBInfo", data, options);
+        return this.httpMgr.doPost(this.serviceName, "uploadDBInfo", data, options);
     }
 
     getSupportedDBDrivers(): Observable<string[]> {
