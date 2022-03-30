@@ -94,7 +94,7 @@
             <ng-container *ngIf="sheets.length == 1; then singleSheet; else multiSheet"></ng-container>
 
             <ng-template #singleSheet>
-                <sheet-manager [sheetName]="sheets[0]"></sheet-manager>
+                <sheet-manager [sheetName]="sheets[0].name"></sheet-manager>
             </ng-template>
     
             <ng-template #multiSheet>

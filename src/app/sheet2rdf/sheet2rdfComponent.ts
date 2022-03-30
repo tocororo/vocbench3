@@ -95,6 +95,10 @@ export class Sheet2RdfComponent {
 
                 this.s2rdfService.listSheetNames().subscribe(
                     sheetNames => {
+                        if (sheetNames.length == 0) {
+                            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_SPREADSHEET" }, ModalType.warning);
+                            return;
+                        }
                         this.sheets = sheetNames.map(s => { return { name: s, exclude: false } });
                         this.activeSheet = this.sheets[0];
                     }

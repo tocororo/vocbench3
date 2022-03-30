@@ -1443,6 +1443,7 @@
         "INVALID_REPO_ID": "Inserisci un ID repository valido",
         "INVALID_RETURN_TYPE": "Il tipo di ritorno fornito non è valido",
         "INVALID_SPARQL_QUERY": "La SPARQL query fornita non è valida",
+        "INVALID_SPREADSHEET": "Lo spreadsheet caricato non contiene sheet validi",
         "INVALID_TO_TIME_FORMAT": "Il parametro 'A' non rispetta il formato datetime yyyy-MM-ddThh:mm",
         "INVALID_VALUE_FOR_DATATYPE": "{{value}} non è un valore valido per il datatype indicato: {{datatype}}",
         "INVALID_VERSION_ID": "Inserisci un ID versione valido",
