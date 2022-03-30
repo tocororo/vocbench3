@@ -77,7 +77,8 @@ export class ResourceAlignmentModal {
                         this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: valueIRI}}, ModalType.warning);
                     }
                 }
-            }
+            },
+            () => {}
         );
     }
     

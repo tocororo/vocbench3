@@ -18,7 +18,7 @@ import { SheetManagerComponent } from "./sheetManagerComponent";
 @Component({
     selector: "s2rdf-component",
     templateUrl: "./sheet2rdfComponent.html",
-    host: { 
+    host: {
         class: "pageComponent",
     },
 })
@@ -36,7 +36,7 @@ export class Sheet2RdfComponent {
     ];
     selectedInputSource: InputSource = this.inputSources[0].id;
 
-    dbInfo: DatabaseInfo = { db_base_url: null, db_name: null, db_table: null, db_user: null, db_password: null, db_driverName: null };
+    dbInfo: DatabaseInfo = { db_base_url: null, db_name: null, db_tableList: [], db_user: null, db_password: null, db_driverName: null };
     dbDrivers: string[];
 
     spreadsheetFile: File;
@@ -47,8 +47,8 @@ export class Sheet2RdfComponent {
     activeSheet: SheetStruct;
 
 
-    constructor(private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, private exportService: ExportServices, 
-        private settingsService: SettingsServices, private basicModals: BasicModalServices, private modalService: NgbModal) {}
+    constructor(private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, private exportService: ExportServices,
+        private settingsService: SettingsServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
 
@@ -59,7 +59,7 @@ export class Sheet2RdfComponent {
                 this.s2rdfCtx.exportFormats = formats;
             }
         );
-        
+
         //init settings
         this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER).subscribe(
             settings => {
@@ -81,7 +81,7 @@ export class Sheet2RdfComponent {
     }
 
     //use HostListener instead of ngOnDestroy since this component is reused and so it is never destroyed
-    @HostListener('window:beforeunload', [ '$event' ])
+    @HostListener('window:beforeunload', ['$event'])
     beforeUnloadHandler(event: Event) {
         // close session server side
         this.s2rdfService.closeSession().subscribe();
@@ -95,7 +95,7 @@ export class Sheet2RdfComponent {
 
                 this.s2rdfService.listSheetNames().subscribe(
                     sheetNames => {
-                        this.sheets = sheetNames.map(s => { return { name: s, exclude: false }});
+                        this.sheets = sheetNames.map(s => { return { name: s, exclude: false } });
                         this.activeSheet = this.sheets[0];
                     }
                 );
@@ -104,12 +104,12 @@ export class Sheet2RdfComponent {
     }
 
     loadDbInfo() {
-        this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_table, 
+        this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_tableList,
             this.dbInfo.db_user, this.dbInfo.db_password, this.dbInfo.db_driverName, this.fsNamingStrategy).subscribe(
-            () => {
-                this.resetAll();
-            }
-        );
+                () => {
+                    this.resetAll();
+                }
+            );
     }
 
     private resetAll() {
@@ -117,6 +117,25 @@ export class Sheet2RdfComponent {
         this.sheets = null;
         this.s2rdfCtx.memoizeIdList = [];
         this.s2rdfCtx.sheetModelMap = new Map();
+    }
+
+    isLoadDbEnabled(): boolean {
+        return this.dbInfo.db_base_url != null && this.dbInfo.db_name != null && this.dbInfo.db_tableList.length > 0 && 
+            this.dbInfo.db_user != null && this.dbInfo.db_password != null;
+    }
+
+    addDbTable() {
+        this.basicModals.prompt({ key: "SHEET2RDF.DATABASE.DB_TABLES" }, { value: { key: "COMMONS.NAME" } }).then(
+            tableName => {
+                if (!this.dbInfo.db_tableList.includes(tableName)) {
+                    this.dbInfo.db_tableList.push(tableName);
+                }
+            }
+        )
+    }
+
+    removeDbTable(table: string) {
+        this.dbInfo.db_tableList.splice(this.dbInfo.db_tableList.indexOf(table), 1);
     }
 
     // Updates the file to load when user change file on from filepicker
@@ -147,7 +166,7 @@ export class Sheet2RdfComponent {
             multiActions.push(e.generateTriples());
         });
         if (multiActions.length > 0) {
-            concat(...multiActions).subscribe(() => {})
+            concat(...multiActions).subscribe(() => { })
         }
     }
 
@@ -162,11 +181,11 @@ export class Sheet2RdfComponent {
             concat(...multiActions)
                 .pipe(last()) //in order to execute the alert (in subscribe()) only for the last subscription 
                 .subscribe(
-                () => {
-                    this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.GENERATED_TRIPLES_ADDED" });
-                }
-            )
-            
+                    () => {
+                        this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.GENERATED_TRIPLES_ADDED" });
+                    }
+                )
+
         }
     }
 
@@ -184,7 +203,7 @@ export class Sheet2RdfComponent {
             blob => {
                 let exportLink = window.URL.createObjectURL(blob);
                 let fileName = (this.selectedInputSource == InputSource.spreadsheet ? this.spreadsheetFile.name : this.dbInfo.db_name) + " - status.json";
-                this.basicModals.downloadLink({key:"SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS"}, null, exportLink, fileName);
+                this.basicModals.downloadLink({ key: "SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS" }, null, exportLink, fileName);
             }
         );
     }
@@ -212,7 +231,7 @@ export class Sheet2RdfComponent {
                 this.fsNamingStrategy = newFsNamingStrategy;
                 this.loadSpreadsheet();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -228,7 +247,7 @@ enum InputSource {
 interface DatabaseInfo {
     db_base_url: string;
     db_name: string;
-    db_table: string;
+    db_tableList: string[];
     db_user: string;
     db_password: string;
     db_driverName: string;

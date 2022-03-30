@@ -2173,7 +2173,7 @@
             "DB_DRIVER": "Driver",
             "DB_NAME": "DB name",
             "DB_PASSWORD": "Password",
-            "DB_TABLE": "Table",
+            "DB_TABLES": "Tables",
             "DB_USER": "User"
         },
         "GRAPH_APPLICATIONS": {

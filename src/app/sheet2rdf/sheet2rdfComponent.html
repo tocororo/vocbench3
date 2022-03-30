@@ -34,8 +34,29 @@
                                     <input class="form-control ml-1" [(ngModel)]="dbInfo.db_name">
                                 </div>
                                 <div class="d-flex align-items-center ml-2" style="flex: 1">
-                                    <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_TABLE'|translate}}:</label>
-                                    <input class="form-control ml-1" [(ngModel)]="dbInfo.db_table">
+                                    <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_TABLES'|translate}}:</label>
+                                    <div class="input-group ml-1">
+                                        <input class="form-control" [value]="dbInfo.db_tableList.join(', ')" readonly>
+                                        <div class="input-group-append">
+                                            <div class="btn-group" style="flex: 1;" ngbDropdown autoClose="outside" placement="bottom-right">
+                                                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                                                    <span class="fas fa-pencil-alt"></span>
+                                                </button>
+                                                <div class="dropdown-menu" ngbDropdownMenu>
+                                                    <a *ngFor="let t of dbInfo.db_tableList" class="dropdown-item d-flex align-items-center">
+                                                        <span style="flex: 1;">{{t}}</span>
+                                                        <button class="btn btn-xs btn-light ml-2" (click)="removeDbTable(t)">
+                                                            <span class="far fa-trash-alt"></span>
+                                                        </button>
+                                                    </a>
+                                                    <div *ngIf="dbInfo.db_tableList.length > 0" class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" (click)="addDbTable()">
+                                                        {{'ACTIONS.ADD'|translate}}...
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="d-flex align-items-center ml-2" style="flex: 1">
                                     <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_USER'|translate}}:</label>
@@ -45,7 +66,7 @@
                                     <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_PASSWORD'|translate}}:</label>
                                     <password-input class="ml-1" [(ngModel)]="dbInfo.db_password"></password-input>
                                 </div>
-                                <button class="btn btn-light ml-2" (click)="loadDbInfo()" [disabled]="!dbInfo.db_base_url || !dbInfo.db_name || !dbInfo.db_table || !dbInfo.db_user || !dbInfo.db_password">
+                                <button class="btn btn-light ml-2" (click)="loadDbInfo()" [disabled]="!isLoadDbEnabled()">
                                     <span *ngIf="!tablePreview" class="fas fa-check" [title]="'ACTIONS.CONFIRM'|translate"></span>
                                     <span *ngIf="tablePreview" class="fas fa-redo" [title]="'ACTIONS.RELOAD'|translate"></span>
                                 </button>
@@ -100,7 +121,7 @@
                                     <button class="btn btn-sm btn-light px-1 dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                                         <span class="fas fa-caret-down fa-sm"></span>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu display="static">
+                                    <div class="dropdown-menu" ngbDropdownMenu display="static">
                                         <h6 class="dropdown-header">Include/exclude sheet</h6>
                                         <a *ngFor="let s of sheets" class="dropdown-item d-flex align-items-center" (click)="s.exclude = !s.exclude">
                                             <span [ngStyle]="{ 'text-decoration': s.exclude ? 'line-through' : 'none' }" style="flex: 1;">{{s.name}}</span>

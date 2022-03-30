@@ -34,10 +34,15 @@ export class BasicModalServices {
      * @param inputSanitized tells if the text in the input field should be sanitized (default false)
      * @return if the modal closes with ok returns a promise containing the input text
      */
-    prompt(title: TextOrTranslation, label?: { value: string, tooltip?: string }, msg?: TextOrTranslation, value?: string, inputOptional?: boolean, inputSanitized?: boolean): Promise<string> {
+    prompt(title: TextOrTranslation, label?: { value: TextOrTranslation, tooltip?: string }, msg?: TextOrTranslation, value?: string, inputOptional?: boolean, inputSanitized?: boolean): Promise<string> {
         const modalRef: NgbModalRef = this.modalService.open(PromptModal, new ModalOptions());
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        if (label != null) modalRef.componentInstance.label = label;
+        if (label != null) {
+            if (typeof label.value != "string") {
+                label.value = this.translateService.instant(label.value.key);
+            }
+            modalRef.componentInstance.label = label;
+        }
         if (msg != null) {
             modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
         }
