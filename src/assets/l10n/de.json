@@ -2130,7 +2130,11 @@
     },
     "SHEET2RDF": {
         "ACTIONS": {
+            "ADD_TRIPLES": "Tripel hinzufügen",
             "EXPORT_MAPPING_STATUS": "Mapping-Status exportieren",
+            "GENERATE_PEARL": "PEARL generieren",
+            "GENERATE_TRIPLES": "Triples generieren",
+            "INSERT_CONVERTER": "Konverter einfügen",
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Fortgeschrittene Graph-Anwendung laden",
             "LOAD_MAPPING_STATUS": "Mapping-Status laden",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Fortgeschrittene Graph-Anwendung speichern"
@@ -2181,10 +2185,6 @@
             "SUBJ_HEADER_INFO": "Überschrift festlegen, die für die Erstellung des Subjects verwendet wird",
             "SUBJ_NODE_ID_INFO": "Dieser Wert ist schreibgeschützt. 'Subject' ist ein reserviertes Schlüsselwort für den Subjekt-Knoten"
         },
-        "PEARL": {
-            "GENERATE_PEARL": "PEARL generieren",
-            "INSERT_CONVERTER": "Konverter einfügen"
-        },
         "SETTINGS": {
             "FS_NAMING": "FS-Benennung",
             "FS_NAMING_INFO": "Strategie zur Benennung der UIMA-Feature-Strukturen in Bezug auf die Header",
@@ -2207,9 +2207,7 @@
             "SUBJECT_MAPPING": "Subject-Mapping"
         },
         "TRIPLES": {
-            "ADD_TRIPLES": "Tripel hinzufügen",
-            "GENERATED_TRIPLES_PREVIEW": "Vorschau Generierte Triples",
-            "GENERATE_TRIPLES": "Triples generieren"
+            "GENERATED_TRIPLES_PREVIEW": "Vorschau Generierte Triples"
         }
     },
     "SKOS_DIFF": {

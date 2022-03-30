@@ -61,29 +61,57 @@
         </button>
     </div>
 
-    <div class="vbox mt-2">
+    <div class="vbox mt-2" style="position: relative;">
 
-        <ng-container *ngIf="!sheetNames; then emptyEditor; else editorsBlock"></ng-container>
+        <ng-container *ngIf="!sheets; then emptyEditor; else editorsBlock"></ng-container>
 
         <ng-template #emptyEditor>
             <sheet-manager></sheet-manager>
         </ng-template>
 
         <ng-template #editorsBlock>
-            <ng-container *ngIf="sheetNames.length == 1; then singleSheet; else multiSheet"></ng-container>
+            <ng-container *ngIf="sheets.length == 1; then singleSheet; else multiSheet"></ng-container>
 
             <ng-template #singleSheet>
-                <sheet-manager [sheetName]="sheetNames[0]"></sheet-manager>
+                <sheet-manager [sheetName]="sheets[0]"></sheet-manager>
             </ng-template>
     
             <ng-template #multiSheet>
-                <div style="position: absolute; right: 10px;">
-                    <button class="btn btn-sm btn-light" (click)="generateAllPearl()" [title]="'SHEET2RDF.PEARL.GENERATE_ALL_PEARL'|translate">
-                        <span class="fas fa-play text-primary"></span>
-                    </button>
-                    <button class="btn btn-sm btn-light ml-2" (click)="generateAllTriples()" [title]="'SHEET2RDF.TRIPLES.GENERATE_ALL_TRIPLES'|translate">
-                        <span class="fas fa-play text-success"></span>
-                    </button>
+
+                <div #multisheetToolbar class="d-flex" style="position: absolute; right: 0px; top: 0px;">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                {{'SHEET2RDF.ACTIONS.MULTISHEET_ACTIONS'|translate}}
+                            </div>
+                        </div>
+                        <div class="input-group-append">
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-light" (click)="generateAllPearl()" [title]="'SHEET2RDF.ACTIONS.GENERATE_ALL_PEARL'|translate">
+                                    <span class="fas fa-play text-primary"></span>
+                                </button>
+                                <button class="btn btn-light" (click)="generateAllTriples()" [title]="'SHEET2RDF.ACTIONS.GENERATE_ALL_TRIPLES'|translate">
+                                    <span class="fas fa-play text-success"></span>
+                                </button>
+                                <button class="btn btn-light" (click)="addAllTriples()" [title]="'SHEET2RDF.ACTIONS.ADD_ALL_TRIPLES'|translate">
+                                    <span class="fas fa-file-signature"></span>
+                                </button>
+                                <div class="btn-group" ngbDropdown autoClose="outside" placement="bottom-right" container="body">
+                                    <button class="btn btn-sm btn-light px-1 dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                                        <span class="fas fa-caret-down fa-sm"></span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu display="static">
+                                        <h6 class="dropdown-header">Include/exclude sheet</h6>
+                                        <a *ngFor="let s of sheets" class="dropdown-item d-flex align-items-center" (click)="s.exclude = !s.exclude">
+                                            <span [ngStyle]="{ 'text-decoration': s.exclude ? 'line-through' : 'none' }" style="flex: 1;">{{s.name}}</span>
+                                            <span [class]="'far fa-' + (s.exclude ? 'square' : 'check-square')"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="btn-group btn-group-sm ml-2">
                         <!-- Workaround to show input file as simple <button> -->
                         <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" (click)="$event.target.value=null" accept=".json, text/plain" style="display:none">
@@ -96,15 +124,15 @@
                     </div>
                 </div>
         
-                <ul class="nav nav-tabs" (click)="$event.preventDefault()">
-                    <li *ngFor="let s of sheetNames" class="nav-item" [ngClass]="{ active : activeSheet == s }">
+                <ul class="nav nav-tabs" [ngStyle]="{ 'padding-right': multisheetToolbar.clientWidth + 'px' }" (click)="$event.preventDefault()">
+                    <li *ngFor="let s of sheets" class="nav-item" [ngClass]="{ active : activeSheet == s }">
                         <a class="nav-link" (click)="activeSheet = s">
-                            {{s}}
+                            {{s.name}}
                         </a>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <sheet-manager #multiSheetEditor *ngFor="let s of sheetNames" [sheetName]="s" [hidden]="activeSheet != s"></sheet-manager>
+                    <sheet-manager #multiSheetEditor *ngFor="let s of sheets" [sheetName]="s.name" [hidden]="activeSheet != s"></sheet-manager>
                 </div>
             </ng-template>
         </ng-template>

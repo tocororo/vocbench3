@@ -1,6 +1,7 @@
 import { Component, HostListener, QueryList, ViewChildren } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from "rxjs";
+import { concat, Observable } from "rxjs";
+import { last } from 'rxjs/operators';
 import { ExtensionPointID, Scope } from "../models/Plugins";
 import { SettingsEnum } from "../models/Properties";
 import { FsNamingStrategy, S2RDFModel, Sheet2RdfSettings } from "../models/Sheet2RDF";
@@ -42,8 +43,8 @@ export class Sheet2RdfComponent {
 
     s2rdfModel: S2RDFModel = new S2RDFModel();
 
-    sheetNames: string[];
-    activeSheet: string;
+    sheets: SheetStruct[];
+    activeSheet: SheetStruct;
 
 
     constructor(private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, private exportService: ExportServices, 
@@ -94,8 +95,8 @@ export class Sheet2RdfComponent {
 
                 this.s2rdfService.listSheetNames().subscribe(
                     sheetNames => {
-                        this.sheetNames = sheetNames;
-                        this.activeSheet = sheetNames[0];
+                        this.sheets = sheetNames.map(s => { return { name: s, exclude: false }});
+                        this.activeSheet = this.sheets[0];
                     }
                 );
             }
@@ -113,7 +114,7 @@ export class Sheet2RdfComponent {
 
     private resetAll() {
         //restore initial state (in case there was a previous sheet loaded)
-        this.sheetNames = null;
+        this.sheets = null;
         this.s2rdfCtx.memoizeIdList = [];
         this.s2rdfCtx.sheetModelMap = new Map();
     }
@@ -127,38 +128,56 @@ export class Sheet2RdfComponent {
     //== Global actions ==
 
     generateAllPearl() {
-        this.sheetEditors.forEach(e => {
+        let globalActionEditors = this.getMultisheetActionEditors();
+        globalActionEditors.forEach(e => {
             e.generatePearl()
         });
     }
 
     generateAllTriples() {
-        for (let e of this.sheetEditors) {
+        let globalActionEditors = this.getMultisheetActionEditors();
+        for (let e of globalActionEditors) {
             if (e.pearl == null || e.pearlValidation == null || !e.pearlValidation.valid) {
                 this.basicModals.alert({ key: "STATUS.WARNING" }, "Sheet " + e.sheetName + " has incomplete or invalid Pearl code. Pleas fix the Pearl or exclude the sheet from the process, then retry.", ModalType.warning);
                 return;
             }
         }
-        let generateTriplesFn: Observable<void>[] = [];
-        this.sheetEditors.forEach(e => {
-            generateTriplesFn.push(e.generateTriples());
+        let multiActions: Observable<void>[] = [];
+        globalActionEditors.forEach(e => {
+            multiActions.push(e.generateTriples());
         });
-        if (generateTriplesFn.length > 0) {
-            this.generateTriplesRecursively(generateTriplesFn);
+        if (multiActions.length > 0) {
+            concat(...multiActions).subscribe(() => {})
         }
     }
 
-    private generateTriplesRecursively(generateTriplesFn: Observable<void>[]) {
-        if (generateTriplesFn.length == 0) return;
-        generateTriplesFn[0].subscribe(
-            () => {
-                generateTriplesFn.shift();
-                this.generateTriplesRecursively(generateTriplesFn);
-            }
-        )
+    addAllTriples() {
+        let globalActionEditors = this.getMultisheetActionEditors();
 
+        let multiActions: Observable<void>[] = [];
+        globalActionEditors.forEach(e => {
+            multiActions.push(e.addTriples(false));
+        });
+        if (multiActions.length > 0) {
+            concat(...multiActions)
+                .pipe(last()) //in order to execute the alert (in subscribe()) only for the last subscription 
+                .subscribe(
+                () => {
+                    this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.GENERATED_TRIPLES_ADDED" });
+                }
+            )
+            
+        }
     }
 
+    private getMultisheetActionEditors(): SheetManagerComponent[] {
+        //collect editor which are not exclude from global actions
+        let globalActionEditors = this.sheetEditors.filter(e => !this.sheets.find(s => s.name == e.sheetName).exclude);
+        if (globalActionEditors.length == 0) {
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "No sheet included in multi sheet action" }, ModalType.warning);
+        }
+        return globalActionEditors;
+    }
 
     exportStatus() {
         this.s2rdfService.exportGlobalStatus().subscribe(
@@ -174,10 +193,10 @@ export class Sheet2RdfComponent {
         this.s2rdfService.importGlobalStatus(statusFile).subscribe(
             () => {
                 //makes all sheet reset and reload
-                let tmp = this.sheetNames;
-                this.sheetNames = null;
+                let tmp = this.sheets;
+                this.sheets = null;
                 setTimeout(() => {
-                    this.sheetNames = tmp;
+                    this.sheets = tmp;
                 })
             }
         )
@@ -213,4 +232,9 @@ interface DatabaseInfo {
     db_user: string;
     db_password: string;
     db_driverName: string;
+}
+
+interface SheetStruct {
+    name: string;
+    exclude: boolean; //tells if editor is excluded from global actions
 }

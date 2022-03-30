@@ -16,7 +16,7 @@
                         {{'SHEET2RDF.SPREADSHEET.SUBJECT_MAPPING'|translate}}
                     </button>
 
-                    <button class="btn btn-light btn-xs" (click)="generatePearl()" [title]="'SHEET2RDF.PEARL.GENERATE_PEARL'|translate" [disabled]="!tablePreview">
+                    <button class="btn btn-light btn-xs" (click)="generatePearl()" [title]="'SHEET2RDF.ACTIONS.GENERATE_PEARL'|translate" [disabled]="!tablePreview">
                         <span class="fas fa-play text-primary"></span>
                     </button>
 
@@ -83,7 +83,7 @@
                     [title]="pearlValidation.details"></span>
 
                 <div class="btn-toolbar" role="toolbar">
-                    <button class="btn btn-light btn-xs" (click)="generateTriples().subscribe()" [title]="'SHEET2RDF.TRIPLES.GENERATE_TRIPLES'|translate" [disabled]="!pearl">
+                    <button class="btn btn-light btn-xs" (click)="generateTriples().subscribe()" [title]="'SHEET2RDF.ACTIONS.GENERATE_TRIPLES'|translate" [disabled]="!pearl">
                         <span class="fas fa-play text-success"></span>
                     </button>
                     <div class="btn-group btn-group-xs">
@@ -102,7 +102,7 @@
                 <pearl-editor *ngIf="!hidden" [(ngModel)]="pearl" (ngModelChange)="onPearlChange()" style="flex: 1;" [disabled]="!tablePreview">
                 </pearl-editor>
                 <button class="btn btn-light btn-xs" (click)="insertConverter()" style="align-self: flex-end; margin-left: 4px;"
-                    [title]="'SHEET2RDF.PEARL.INSERT_CONVERTER'|translate" [disabled]="!tablePreview">
+                    [title]="'SHEET2RDF.ACTIONS.INSERT_CONVERTER'|translate" [disabled]="!tablePreview">
                     <span class="fas fa-pencil-alt"></span>
                 </button>
             </div>
@@ -119,7 +119,7 @@
                 </span>
 
                 <div class="btn-toolbar" role="toolbar">
-                    <button class="btn btn-light btn-xs" (click)="addTriples()" [title]="'SHEET2RDF.TRIPLES.ADD_TRIPLES'|translate" [disabled]="!triplesPreview">
+                    <button class="btn btn-light btn-xs" (click)="addTriples().subscribe()" [title]="'SHEET2RDF.ACTIONS.ADD_TRIPLES'|translate" [disabled]="!triplesPreview">
                         <span class="fas fa-file-signature"></span>
                     </button>
 

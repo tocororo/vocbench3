@@ -681,7 +681,7 @@
                 },
                 "T_TYPE_OPT2_ADDENDA": [
                     "Dans ce cas SELECT doit retourner une seule variable plus des paramètres additionnels",
-					"pour les attributs additionnels"
+                    "pour les attributs additionnels"
                 ],
                 "T_TYPE_OTP1": "peut être n'importe lequel des types de paramètre acceptés ci-dessus (dans ce cas SELECT doit retourner une seule variable)"
             },
@@ -1087,7 +1087,7 @@
         "DESCRIPTION": "VocBench est une plateforme web multilingue et collaborative permettant de gérer des ontologies <a href=\"https://www.w3.org/TR/owl2-overview/\" target=\"_blank\">OWL</a>, des thesaurus <a href=\"https://www.w3.org/TR/skos-reference/\" target=\"_blank\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\" target=\"_blank\">XL</a>), des lexiques <a href=\"https://www.w3.org/2016/05/ontolex/\" target=\"_blank\">Ontolex-lemon</a> et des jeux de données RDF",
         "DEVELOPED_BY": {
             "TITLE": "VocBench 3 a été développé par",
-            "TOR_VERGATA_NAME": "l'Université de Rome \"Tor Vergata\"", 
+            "TOR_VERGATA_NAME": "l'Université de Rome \"Tor Vergata\"",
             "TOR_VERGATA_SUBTITLE": "Oggi, l´Ateneo del domani"
         },
         "FUNDED_BY": {
@@ -1102,7 +1102,7 @@
             "INFEUROPE_SUBTITLE": "Architecture begins where engineering ends",
             "TITLE": "Contrat géré par"
         },
-        "POWERED_BY": "VocBench s'appuie sur la plateforme d'acquisition et de gestion des connaissances <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a>", 
+        "POWERED_BY": "VocBench s'appuie sur la plateforme d'acquisition et de gestion des connaissances <a href=\"http://semanticturkey.uniroma2.it/\" target=\"_blank\">Semantic Turkey</a>",
         "PRIVACY_STATEMENT": {
             "LINK_TEXT": "charte de confidentialité",
             "READ_OUR": "Veuillez lire notre"
@@ -2136,7 +2136,11 @@
     },
     "SHEET2RDF": {
         "ACTIONS": {
+            "ADD_TRIPLES": "Ajouter des triplets",
             "EXPORT_MAPPING_STATUS": "Exporter le statut de correspondance",
+            "GENERATE_PEARL": "Générer Pearl",
+            "GENERATE_TRIPLES": "Générer des triplets",
+            "INSERT_CONVERTER": "Insérer le convertisseur",
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Charger l'application de graphe avancée",
             "LOAD_MAPPING_STATUS": "Charger le statut de correspondance",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Sauvegarder l'application de graphe avancée"
@@ -2187,10 +2191,6 @@
             "SUBJ_HEADER_INFO": "Définir l'en-tête utilisé pour la création du sujet",
             "SUBJ_NODE_ID_INFO": "Cette valeur est en lecture seule, 'sujet' est un mot-clé réservé au nœud sujet"
         },
-        "PEARL": {
-            "GENERATE_PEARL": "Générer Pearl",
-            "INSERT_CONVERTER": "Insérer le convertisseur"
-        },
         "SETTINGS": {
             "FS_NAMING": "Nommage FS",
             "FS_NAMING_INFO": "Stratégie à utiliser pour nommer les structures de fonctionnalités UIMA liées aux en-têtes",
@@ -2213,9 +2213,7 @@
             "SUBJECT_MAPPING": "Correspondance des sujets"
         },
         "TRIPLES": {
-            "ADD_TRIPLES": "Ajouter des triplets",
-            "GENERATED_TRIPLES_PREVIEW": "Générer la prévisualisation des triplets",
-            "GENERATE_TRIPLES": "Générer des triplets"
+            "GENERATED_TRIPLES_PREVIEW": "Générer la prévisualisation des triplets"
         }
     },
     "SKOS_DIFF": {

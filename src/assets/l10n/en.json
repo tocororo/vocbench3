@@ -2152,11 +2152,19 @@
     },
     "SHEET2RDF": {
         "ACTIONS": {
+            "ADD_ALL_TRIPLES": "Add triples for all sheets",
+            "ADD_TRIPLES": "Add triples",
             "EXPORT_GLOBAL_MAPPING_STATUS": "Export global Mapping Status",
             "EXPORT_MAPPING_STATUS": "Export sheet Mapping Status",
+            "GENERATE_ALL_PEARL": "Generate Pearl for all sheets",
+            "GENERATE_ALL_TRIPLES": "Generate triples for all sheets",
+            "GENERATE_PEARL": "Generate Pearl",
+            "GENERATE_TRIPLES": "Generate triples",
+            "INSERT_CONVERTER": "Insert converter",
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Load Advanced Graph Application",
             "LOAD_GLOBAL_MAPPING_STATUS": "Load global Mapping Status",
             "LOAD_MAPPING_STATUS": "Load sheet Mapping Status",
+            "MULTISHEET_ACTIONS": "Multi sheet actions",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Save Advanced Graph Application"
         },
         "DATABASE": {
@@ -2214,11 +2222,6 @@
             "SUBJ_HEADER_INFO": "Set the header used for the creation of the subject",
             "SUBJ_NODE_ID_INFO": "This value is readonly, 'subject' is a reserved keyword for the subject node"
         },
-        "PEARL": {
-            "GENERATE_ALL_PEARL": "Generate Pearl for all sheets",
-            "GENERATE_PEARL": "Generate Pearl",
-            "INSERT_CONVERTER": "Insert converter"
-        },
         "SETTINGS": {
             "FS_NAMING": "FS naming",
             "FS_NAMING_INFO": "Strategy to use for naming the UIMA Feature Structures related to the headers",
@@ -2241,10 +2244,7 @@
             "SUBJECT_MAPPING": "Subject mapping"
         },
         "TRIPLES": {
-            "ADD_TRIPLES": "Add triples",
-            "GENERATED_TRIPLES_PREVIEW": "Generated triples preview",
-            "GENERATE_ALL_TRIPLES": "Generate triples for all sheets",
-            "GENERATE_TRIPLES": "Generate triples"
+            "GENERATED_TRIPLES_PREVIEW": "Generated triples preview"
         }
     },
     "SKOS_DIFF": {

@@ -387,13 +387,15 @@ export class SheetManagerComponent {
         }
     }
 
-    addTriples() {
+    addTriples(alertOnComplete: boolean = true): Observable<void> {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.s2rdfService.addTriples(this.sheetName).subscribe(
-            () => {
+        return this.s2rdfService.addTriples(this.sheetName).pipe(
+            map(() => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.GENERATED_TRIPLES_ADDED" });
-            }
+                if (alertOnComplete) {
+                    this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.GENERATED_TRIPLES_ADDED" });
+                }
+            })
         )
 
     }

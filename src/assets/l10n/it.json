@@ -2152,11 +2152,19 @@
     },
     "SHEET2RDF": {
         "ACTIONS": {
+            "ADD_ALL_TRIPLES": "Aggiungi triple per ogni foglio",
+            "ADD_TRIPLES": "Aggiungi triple",
             "EXPORT_GLOBAL_MAPPING_STATUS": "Esporta Mapping Status globale",
             "EXPORT_MAPPING_STATUS": "Esporta Mapping Status",
+            "GENERATE_ALL_PEARL": "Genera Pearl per ogni foglio",
+            "GENERATE_ALL_TRIPLES": "Generat triple per ogni foglio",
+            "GENERATE_PEARL": "Genera Pearl",
+            "GENERATE_TRIPLES": "Genera triple",
+            "INSERT_CONVERTER": "Inserisci converter",
             "LOAD_ADVANCED_GRAPH_APPLICATION": "Carica Advanced Graph Application",
             "LOAD_GLOBAL_MAPPING_STATUS": "Carica Mapping Status globale",
             "LOAD_MAPPING_STATUS": "Carica Mapping Status",
+            "MULTISHEET_ACTIONS": "Azioni multi-sheet",
             "SAVE_ADVANCED_GRAPH_APPLICATION": "Salva Advanced Graph Application"
         },
         "DATABASE": {
@@ -2214,10 +2222,6 @@
             "SUBJ_HEADER_INFO": "Indica l'header usato per la creazione del soggetto",
             "SUBJ_NODE_ID_INFO": "Questo valore è in sola lettura, 'subject' è una keyword riservata per il nodo soggetto"
         },
-        "PEARL": {
-            "GENERATE_PEARL": "Genera Pearl",
-            "INSERT_CONVERTER": "Inserisci converter"
-        },
         "SETTINGS": {
             "FS_NAMING": "FS naming",
             "FS_NAMING_INFO": "Strategia da usare per assegnare i nomi alle Feature Structure UIMA relative agli header",
@@ -2240,9 +2244,7 @@
             "SUBJECT_MAPPING": "Mapping soggetto"
         },
         "TRIPLES": {
-            "ADD_TRIPLES": "Aggiungi triple",
-            "GENERATED_TRIPLES_PREVIEW": "Anteprima triple generate",
-            "GENERATE_TRIPLES": "Genera triple"
+            "GENERATED_TRIPLES_PREVIEW": "Anteprima triple generate"
         }
     },
     "SKOS_DIFF": {
