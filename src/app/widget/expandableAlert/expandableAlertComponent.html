@@ -1,0 +1,21 @@
+<div style="position: relative;">
+
+    <ng-container *ngIf="innerHTML; then innerHtmlBlock; else ngContentBlock"></ng-container>
+
+    <ng-template #innerHtmlBlock>
+        <div #alertDiv [ngClass]="{ 'collapsed': collapsed }" [class]="'alert alert-' + type" [innerHTML]="innerHTML">
+        </div>
+    </ng-template>
+
+    <ng-template #ngContentBlock>
+        <div #alertDiv [ngClass]="{ 'collapsed': collapsed }" [class]="'alert alert-' + type">
+            <ng-content></ng-content>
+        </div>
+    </ng-template>
+
+    <button class="btn btn-sm btn-transparent" style="position: absolute; top: 6px; right: 4px;" (click)="collapsed = !collapsed">
+        <i *ngIf="collapsed" class="fas fa-ellipsis-h"></i>
+        <i *ngIf="!collapsed" class="fas fa-angle-up"></i>
+    </button>
+
+</div>

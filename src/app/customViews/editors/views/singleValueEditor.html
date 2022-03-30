@@ -30,6 +30,6 @@
 
 
 <div *ngIf="updateMode != 'none'" class="vbox mt-2">
-    <div *ngIf="queryInfoSafe" class="alert alert-warning mb-2" [innerHTML]="queryInfoSafe"></div>
+    <expandable-alert *ngIf="queryInfoSafe" class="mb-2" [innerHTML]="queryInfoSafe"></expandable-alert>
     <yasgui [query]="queryEditor.query" (querychange)="onQueryChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
 </div>

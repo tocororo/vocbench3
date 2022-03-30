@@ -18,7 +18,7 @@
         <div class="tab-content">
 
             <div [hidden]="activeTab != 'retrieve'" class="vbox">
-                <div class="alert alert-warning mb-2">
+                <expandable-alert class="mb-2">
                     <p>
                         {{retrieveDescrIntro}}
                     </p>
@@ -36,19 +36,19 @@
                             <code>${{v.id}}</code>: {{v.descrTranslationKey|translate}};
                         </li>
                     </ul>
-                </div>
+                </expandable-alert>
                 <yasgui #retrieveYasgui [query]="retrieveEditor.query" (querychange)="onRetrieveChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
             </div>
 
             <div [hidden]="activeTab != 'update'" class="vbox">
-                <div class="alert alert-warning mb-2">
+                <expandable-alert class="mb-2">
                     {{updateDescrIntro}}
                     <ul>
                         <li *ngFor="let v of updateVariablesInfo">
                             <code>?{{v.id}}</code>: {{v.descrTranslationKey|translate}};
                         </li>
                     </ul>
-                </div>
+                </expandable-alert>
                 <yasgui #updateYasgui [query]="updateEditor.query" (querychange)="onUpdateChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
             </div>
 

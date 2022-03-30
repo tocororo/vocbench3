@@ -18,7 +18,7 @@
         <div class="tab-content">
 
             <div [hidden]="activeMainTab != 'retrieve'" class="vbox">
-                <div class="alert alert-warning mb-2">
+                <expandable-alert class="mb-2">
                     <p>
                         This view can be used to represent tabular data in ResourceView.
                         Each row of the table represents the description of a value of the triggering property.
@@ -43,7 +43,7 @@
                     <p>
                         It is also possible to define an arbitrary amount of pivot placeholders (to name <code>$piovt</code>, <code>$pivot_1</code>, <code>$pivot_2</code>, ...) which can be used to define anchor points to be referenced in the Update query. Each pivot resource returned by the Retrieve query will be bound, to the related placeholder in the Update query, during an update operation. 
                     </p>
-                </div>
+                </expandable-alert>
                 <yasgui #retrieveYasgui [query]="retrieveEditor.query" (querychange)="onRetrieveChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
 
                 <div class="d-flex align-items-center mt-2">

@@ -25,6 +25,7 @@ import { ListParamEditor } from '../widget/converterConfigurator/listParamEditor
 import { MapParamEditor } from '../widget/converterConfigurator/mapParamEditor';
 import { ResizableDirective } from "../widget/directives/resizableDirective";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
+import { ExpandableAlertComponent } from '../widget/expandableAlert/expandableAlertComponent';
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
 import { InlineEditableValue } from '../widget/inlineEditableValue/inlineEditableValue';
 import { InputEditableComponent } from '../widget/inputEditable/inputEditableComponent';
@@ -74,6 +75,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         DataSizeRenderer,
         DatatypePickerComponent,
         DatetimePickerComponent,
+        ExpandableAlertComponent,
         ExplainableTripleComponent,
         ExtensionConfiguratorComponent,
         FilePickerComponent,
@@ -128,6 +130,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         DataSizeRenderer,
         DatatypePickerComponent,
         DatetimePickerComponent,
+        ExpandableAlertComponent,
         ExplainableTripleComponent,
         ExtensionConfiguratorComponent,
         FilePickerComponent,
