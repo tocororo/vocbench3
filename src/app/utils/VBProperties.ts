@@ -6,6 +6,7 @@ import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID, Scope } from '../models/Plugins';
 import { AuthServiceMode, ClassTreePreference, ConceptTreePreference, InstanceListPreference, LexicalEntryListPreference, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, ResourceViewMode, ResourceViewPreference, ResourceViewProjectSettings, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
+import { Sheet2RdfSettings } from '../models/Sheet2RDF';
 import { AdministrationServices } from '../services/administrationServices';
 import { SettingsServices } from '../services/settingsServices';
 import { Cookie } from '../utils/Cookie';
@@ -128,6 +129,13 @@ export class VBProperties {
                     PreferencesUtils.mergePreference(projectPreferences.searchSettings, searchSettings);
                 }
                 this.initSearchSettingsCookie(projectPreferences); //other settings stored in cookies
+
+                //s2rdf
+                projectPreferences.sheet2RdfSettings = new Sheet2RdfSettings();
+                let s2rdfSettings: Sheet2RdfSettings = settings.getPropertyValue(SettingsEnum.sheet2rdfSettings);
+                if (s2rdfSettings != null) {
+                    PreferencesUtils.mergePreference(projectPreferences.sheet2RdfSettings, s2rdfSettings);
+                }
 
                 //notifications
                 let notificationStatusSetting = settings.getPropertyValue(SettingsEnum.notificationsStatus);

@@ -2,6 +2,7 @@ import { ARTURIResource, RDFResourceRolesEnum } from "./ARTResources";
 import { Language } from "./LanguagesCountries";
 import { Project } from "./Project";
 import { ResViewPartition } from "./ResourceView";
+import { Sheet2RdfSettings } from './Sheet2RDF';
 import { OWL, RDFS, SKOS } from "./Vocabulary";
 
 /**
@@ -27,6 +28,7 @@ export enum SettingsEnum {
     languages = "languages",
     lexEntryList = "lexEntryList",
     mail = "mail",
+    maxRowsTablePreview = "maxRowsTablePreview",
     notificationsStatus = "notificationsStatus",
     preload = "preload",
     privacyStatementAvailable = "privacyStatementAvailable",
@@ -238,6 +240,8 @@ export class ProjectPreferences {
     hideLiteralGraphNodes: boolean = true;
 
     searchSettings: SearchSettings;
+
+    sheet2RdfSettings: Sheet2RdfSettings;
 
     notificationStatus: NotificationStatus = NotificationStatus.no_notifications;
 }

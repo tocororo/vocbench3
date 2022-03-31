@@ -9,6 +9,7 @@ import { ExportServices } from "../services/exportServices";
 import { SettingsServices } from "../services/settingsServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { HttpServiceContext } from "../utils/HttpManager";
+import { VBContext } from '../utils/VBContext';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { Sheet2RdfSettingsModal } from "./s2rdfModals/sheet2rdfSettingsModal";
@@ -26,10 +27,6 @@ export class Sheet2RdfComponent {
 
     @ViewChildren('multiSheetEditor') sheetEditors: QueryList<SheetManagerComponent>;
 
-    //preferences
-    private useHeader: boolean = true; //currently not used
-    private fsNamingStrategy: FsNamingStrategy = FsNamingStrategy.columnNumericIndex;
-
     inputSources: { id: InputSource, translationKey: string }[] = [
         { id: InputSource.spreadsheet, translationKey: "SHEET2RDF.SPREADSHEET.FILE" },
         { id: InputSource.database, translationKey: "SHEET2RDF.DATABASE.DATABASE" },
@@ -46,9 +43,8 @@ export class Sheet2RdfComponent {
     sheets: SheetStruct[];
     activeSheet: SheetStruct;
 
-
     constructor(private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, private exportService: ExportServices,
-        private settingsService: SettingsServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
+        private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
 
@@ -57,18 +53,6 @@ export class Sheet2RdfComponent {
         this.exportService.getOutputFormats().subscribe(
             formats => {
                 this.s2rdfCtx.exportFormats = formats;
-            }
-        );
-
-        //init settings
-        this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER).subscribe(
-            settings => {
-                let s2rdfSettings: Sheet2RdfSettings = settings.getPropertyValue(SettingsEnum.sheet2rdfSettings);
-                if (s2rdfSettings == null) {
-                    s2rdfSettings = new Sheet2RdfSettings();
-                }
-                this.useHeader = s2rdfSettings.useHeaders;
-                this.fsNamingStrategy = s2rdfSettings.namingStrategy;
             }
         );
 
@@ -89,21 +73,22 @@ export class Sheet2RdfComponent {
 
 
     loadSpreadsheet() {
-        this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
+        let fsNamingStrategy = VBContext.getWorkingProjectCtx().getProjectPreferences().sheet2RdfSettings.namingStrategy;
+
+        let loadFn: Observable<void>;
+        if (this.selectedInputSource == InputSource.spreadsheet) {
+            loadFn = this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, fsNamingStrategy);
+        } else {
+            loadFn = this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_tableList,
+                this.dbInfo.db_user, this.dbInfo.db_password, this.dbInfo.db_driverName, fsNamingStrategy)
+        }
+        loadFn.subscribe(
             () => {
                 this.initSheets();
             }
         );
     }
 
-    loadDbInfo() {
-        this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_tableList,
-            this.dbInfo.db_user, this.dbInfo.db_password, this.dbInfo.db_driverName, this.fsNamingStrategy).subscribe(
-                () => {
-                    this.initSheets();
-                }
-            );
-    }
 
     private initSheets() {
         this.resetAll();
@@ -231,12 +216,10 @@ export class Sheet2RdfComponent {
 
     //======================
 
-    settings() {
+    openSettings() {
         const modalRef: NgbModalRef = this.modalService.open(Sheet2RdfSettingsModal, new ModalOptions());
-        modalRef.componentInstance.fsNamingStrategyInput = this.fsNamingStrategy;
         modalRef.result.then(
-            (newFsNamingStrategy: FsNamingStrategy) => {
-                this.fsNamingStrategy = newFsNamingStrategy;
+            () => { //fs naming strategy changed
                 this.loadSpreadsheet();
             },
             () => { }

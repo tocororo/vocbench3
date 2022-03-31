@@ -245,4 +245,5 @@ export enum FsNamingStrategy {
 export class Sheet2RdfSettings {
     useHeaders: boolean = true;
     namingStrategy: FsNamingStrategy = FsNamingStrategy.columnNumericIndex;
+    maxRowsTablePreview: number = 20;
 }

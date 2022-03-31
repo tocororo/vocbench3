@@ -1355,7 +1355,7 @@
         "CANNOT_RUN_SKOS_DIFFING_SAME_VERS": "Cannot compare two identical versions of the project",
         "CATALOG_CONNECTOR_NOT_CONFIGURED": "The catalog connector needs to be configured",
         "CHANGE_CLASS_TREE_ROOT_WARN": "Selecting a specific class as a root could hide newly created classes that are not subclasses of the chosen root.",
-        "CHANGE_S2RDF_SETTINGS_CONFIRM": "Changing the settings requires to re-initialize the model related to the current spreadsheet. All the changes applied to the headers will be discarder. Do you want to continue?",
+        "CHANGE_S2RDF_SETTINGS_CONFIRM": "Changing the FS naming strategy requires to re-initialize the model related to the current spreadsheet. All the changes applied to the headers will be discarder. Do you want to continue?",
         "CHANGE_USER_TYPE_ADMIN_TO_SUPER_CONFIRM": "You are downgrading {{user}} from administrator to super user. Are you sure?",
         "CHANGE_USER_TYPE_ADMIN_TO_USER_CONFIRM": "You are revoking administrator authority to {{user}}. Are you sure?",
         "CHANGE_USER_TYPE_SUPER_TO_ADMIN_CONFIRM": "You are promoting {{user}} from super user to administrator. Are you sure?",
@@ -2226,6 +2226,7 @@
         "SETTINGS": {
             "FS_NAMING": "FS naming",
             "FS_NAMING_INFO": "Strategy to use for naming the UIMA Feature Structures related to the headers",
+            "TABLE_PREVIEW_ROWS_LIMIT": "Max rows in table preview",
             "S2RDF_SETTINGS": "Sheet2RDF settings"
         },
         "SPREADSHEET": {

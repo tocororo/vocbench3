@@ -16,9 +16,17 @@
                         <span class="fas fa-info-circle" [title]="'SHEET2RDF.SETTINGS.FS_NAMING_INFO'|translate"></span>
                     </td>
                     <td>
-                        <select class="form-control form-control-sm" [(ngModel)]="fsNamingStrategy">
+                        <select class="form-control" [(ngModel)]="fsNamingStrategy">
                             <option *ngFor="let ns of fsNamingStrategies" [ngValue]="ns" [title]="ns.title">{{ns.show}}</option>
                         </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>{{'SHEET2RDF.SETTINGS.TABLE_PREVIEW_ROWS_LIMIT'|translate}}:</label>
+                    </td>
+                    <td>
+                        <input class="form-control" type="number" [(ngModel)]="maxRowsTablePreview" step="1" min="1">
                     </td>
                 </tr>
             </tbody>

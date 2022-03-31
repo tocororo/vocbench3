@@ -66,7 +66,7 @@
                                     <label class="text-nowrap">{{'SHEET2RDF.DATABASE.DB_PASSWORD'|translate}}:</label>
                                     <password-input class="ml-1" [(ngModel)]="dbInfo.db_password"></password-input>
                                 </div>
-                                <button class="btn btn-light ml-2" (click)="loadDbInfo()" [disabled]="!isLoadDbEnabled()">
+                                <button class="btn btn-light ml-2" (click)="loadSpreadsheet()" [disabled]="!isLoadDbEnabled()">
                                     <span *ngIf="!tablePreview" class="fas fa-check" [title]="'ACTIONS.CONFIRM'|translate"></span>
                                     <span *ngIf="tablePreview" class="fas fa-redo" [title]="'ACTIONS.RELOAD'|translate"></span>
                                 </button>
@@ -77,7 +77,7 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-sm btn-light" [title]="'COMMONS.SETTINGS'|translate" (click)="settings()">
+        <button class="btn btn-sm btn-light" [title]="'COMMONS.SETTINGS'|translate" (click)="openSettings()">
             <span class="fas fa-cog"></span>
         </button>
     </div>

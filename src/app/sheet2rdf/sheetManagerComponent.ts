@@ -8,6 +8,7 @@ import { AdvancedGraphApplication, GraphApplication, S2RDFModel, SimpleGraphAppl
 import { CODAServices } from "../services/codaServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { UIUtils } from "../utils/UIUtils";
+import { VBContext } from '../utils/VBContext';
 import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalOptions, ModalType } from '../widget/modal/Modals';
@@ -71,7 +72,6 @@ export class SheetManagerComponent {
     //== spreadsheet ==
     spreadsheetFile: File;
 
-    private maxSizePreviews: number = 20;
     truncatedRows: number;
     totalRows: number;
     s2rdfModel: S2RDFModel;
@@ -155,7 +155,8 @@ export class SheetManagerComponent {
 
     private initTablePreview() {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.s2rdfService.getTablePreview(this.sheetName, this.maxSizePreviews).subscribe(
+        let maxRows = VBContext.getWorkingProjectCtx().getProjectPreferences().sheet2RdfSettings.maxRowsTablePreview;
+        this.s2rdfService.getTablePreview(this.sheetName, maxRows).subscribe(
             table => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.truncatedRows = table.returned;
@@ -353,7 +354,8 @@ export class SheetManagerComponent {
             mergeMap(() => {
                 this.resetTriplePreview();
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-                return this.s2rdfService.getTriplesPreview(this.sheetName, this.maxSizePreviews).pipe(
+                let maxRows = VBContext.getWorkingProjectCtx().getProjectPreferences().sheet2RdfSettings.maxRowsTablePreview;
+                return this.s2rdfService.getTriplesPreview(this.sheetName, maxRows).pipe(
                     map(triplesPreview => {
                         UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                         this.totalTriples = triplesPreview.total;
