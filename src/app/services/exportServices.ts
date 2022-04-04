@@ -123,7 +123,8 @@ export class ExportServices {
         }
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [
-                { className: 'it.uniroma2.art.semanticturkey.services.core.ExportPreconditionViolationException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.services.core.export.NullGraphNotExportedException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.services.core.export.UnnamedGraphNotExportedException', action: 'skip' },
                 { className: 'it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongModelException', action: 'skip' },
                 { className: 'it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongLexModelException', action: 'skip' },
             ]

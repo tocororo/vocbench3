@@ -1,5 +1,6 @@
 import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
@@ -66,7 +67,8 @@ export class ExportDataComponent {
     
 
     constructor(private extensionService: ExtensionsServices, private exportService: ExportServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
+        private translateService: TranslateService) { }
 
     ngOnInit() {
         let baseURI: string = VBContext.getWorkingProject().getBaseURI();
@@ -609,8 +611,10 @@ export class ExportDataComponent {
                 this.exportSuccessHandler(data, deployerSpec == null);
             },
             (err: Error) => {
-                if (err.name.endsWith('ExportPreconditionViolationException')) {
-                    this.basicModals.confirm({key:"STATUS.WARNING"}, err.message + " Do you want to force the export?", ModalType.warning).then(
+                if (err.name.endsWith("NullGraphNotExportedException") || err.name.endsWith("UnnamedGraphNotExportedException")) {
+                    let msg = err.message;
+                    msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
                         yes => {
                             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                             this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline),  reformattingExporterSpec, deployerSpec, 

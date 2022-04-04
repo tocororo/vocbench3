@@ -102,7 +102,7 @@ export class LoadDataComponent {
         this.extensionService.getExtensions(ExtensionPointID.RDF_LIFTER_ID).subscribe(
             extensions => {
                 //sort extensions in order to force RDFDeserializingLifter in 1st position, so selected as default
-                extensions.sort((e1, e2) => { 
+                extensions.sort((e1, e2) => {
                     if (e1.id.includes("RDFDeserializingLifter")) {
                         return -1
                     } else if (e2.id.includes("RDFDeserializingLifter")) {
@@ -185,15 +185,13 @@ export class LoadDataComponent {
             formats => {
                 this.inputFormats = formats;
                 let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
-                this.inputFormats.forEach(f => 
+                this.inputFormats.forEach(f =>
                     f.fileExtensions.forEach(ext => {
-                        extList.push("."+ext);
+                        extList.push("." + ext);
                     })
-                ); 
+                );
                 //remove duplicated extensions
-                extList = extList.filter((item: string, pos: number) => {
-                    return extList.indexOf(item) == pos;
-                });
+                extList = extList.filter((item: string, pos: number) => extList.indexOf(item) == pos);
                 this.filePickerAccept = extList.join(",");
             }
         )
@@ -211,7 +209,7 @@ export class LoadDataComponent {
     showLoader(): boolean {
         return this.selectedLoader.target == LoaderTarget.repository || this.selectedLoader.target == LoaderTarget.stream
     }
-    
+
     onLoaderConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
         this.loaderStatus = statusEvent.status;
         this.loaderRelativeRef = statusEvent.relativeReference;
@@ -295,7 +293,7 @@ export class LoadDataComponent {
 
         for (var i = 0; i < this.transformersChain.length; i++) {
             if (this.transformersChain[i].status == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.TRANSFORMER_NOT_SAVED", params:{position: i+1}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.TRANSFORMER_NOT_SAVED", params: { position: i + 1 } }, ModalType.warning);
                 return;
             }
 
@@ -311,7 +309,7 @@ export class LoadDataComponent {
         let loaderSpec: { extensionID: string, configRef: string };
         if (this.selectedLoader.target != null) {
             if (this.loaderStatus == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.LOADER_NOT_SAVED"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.LOADER_NOT_SAVED" }, ModalType.warning);
                 return;
             }
             loaderSpec = {
@@ -325,23 +323,23 @@ export class LoadDataComponent {
             loaderSpec: loaderSpec
         }
 
-        this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_IMPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.IMPORTER, config).then(
+        this.sharedModals.storeConfiguration({ key: "ACTIONS.SAVE_IMPORTER_CHAIN_CONFIGURATION" }, ConfigurationComponents.IMPORTER, config).then(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIGURATION_SAVED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.CONFIGURATION_SAVED" });
             },
-            () => {}
+            () => { }
         );
     }
 
     loadChain() {
-        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_IMPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.IMPORTER).then(
+        this.sharedModals.loadConfiguration({ key: "ACTIONS.LOAD_IMPORTER_CHAIN_CONFIGURATION" }, ConfigurationComponents.IMPORTER).then(
             (conf: LoadConfigurationModalReturnData) => {
                 this.transformersChain = []; //reset the chain
                 let configurations: SettingsProp[] = conf.configuration.properties;
                 for (var i = 0; i < configurations.length; i++) {
                     if (configurations[i].name == "transformationPipeline") {
                         //value of a stored transformationPipeline (see loadConfiguration response)
-                        let chain: {extensionID: string, configRef: string}[] = configurations[i].value;
+                        let chain: { extensionID: string, configRef: string }[] = configurations[i].value;
                         //for each element of the pipeline append a transformer (so that a ExtensionConfiguratorComponent is instantiated for each one of them)
                         chain.forEach(() => {
                             this.appendTransformer();
@@ -365,12 +363,12 @@ export class LoadDataComponent {
                                 });
                             });
                             //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
-                            chain.forEach((extConf : {extensionID: string, configRef: string}, index: number) => {
+                            chain.forEach((extConf: { extensionID: string, configRef: string }, index: number) => {
                                 tranformerConfigurators[index].forceConfigurationByRef(extConf.extensionID, extConf.configRef);
                             });
                         });
                     } else if (configurations[i].name == "loaderSpec") {
-                        let loaderSpec: {extensionID: string, configRef: string} = configurations[i].value;
+                        let loaderSpec: { extensionID: string, configRef: string } = configurations[i].value;
                         if (loaderSpec != null) { //loader specified, select the target loader in the menu
                             let found: boolean = false;
                             //look among stream-target loader
@@ -386,7 +384,7 @@ export class LoadDataComponent {
                                 }
                             });
                             //loader not found among the stream-target loader, so the loader is repository sourced
-                            if (!found) { 
+                            if (!found) {
                                 //select the repository-sourced option in the menu
                                 this.loaderOptions.forEach(opt => {
                                     if (opt.target == LoaderTarget.repository) {
@@ -394,7 +392,7 @@ export class LoadDataComponent {
                                     }
                                 })
                             }
-                            
+
                             setTimeout(() => {
                                 this.loaderConfigurator.forceConfigurationByRef(loaderSpec.extensionID, loaderSpec.configRef);
                             });
@@ -438,21 +436,21 @@ export class LoadDataComponent {
         let rdfLifterSpec: PluginSpecification;
         let tranformationPipeline: TransformationStep[] = [];
         let validateImplicitlyPar: boolean = this.isValidationEnabled() ? this.validateImplicitly : null;
-        
+
         if (this.baseURI == null || this.baseURI.trim() == "") {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.BASEURI_REQUIRED"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.BASEURI_REQUIRED" }, ModalType.warning);
             return;
         }
 
         //input file collected only if no loader target available (load from file)
         if (this.selectedLoader.target == null) {
             if (this.fileToUpload == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.FILE_REQUIRED"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.FILE_REQUIRED" }, ModalType.warning);
                 return;
             }
             inputFilePar = this.fileToUpload;
         }
-        
+
         /**
          * formatPar and rdfLifterSpec collected if loader target is
          * - stream (custom source)
@@ -461,7 +459,7 @@ export class LoadDataComponent {
          */
         if (this.selectedLoader.target == null || this.selectedLoader.target == LoaderTarget.stream || this.selectedLoader.target == LoaderTarget.datasetCatalog) {
             if (this.selectedInputFormat == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.FORMAT_REQUIRED_NOT_DETECTED"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.FORMAT_REQUIRED_NOT_DETECTED" }, ModalType.warning);
                 return;
             }
             formatPar = this.selectedInputFormat.name;
@@ -471,7 +469,7 @@ export class LoadDataComponent {
             }
             if (this.selectedLifterConfig != null) {
                 if (this.selectedLifterConfig.requireConfiguration()) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.LIFTER_NOT_CONFIGURED"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.LIFTER_NOT_CONFIGURED" }, ModalType.warning);
                     return;
                 }
                 rdfLifterSpec.configType = this.selectedLifterConfig.type;
@@ -491,7 +489,7 @@ export class LoadDataComponent {
             }
             if (this.selectedLoaderConfig != null) { //normally the loader is not configurable
                 if (this.selectedLoaderConfig.requireConfiguration()) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.LOADER_NOT_CONFIGURED"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.LOADER_NOT_CONFIGURED" }, ModalType.warning);
                     return;
                 }
                 loaderSpec.configType = this.selectedLoaderConfig.type;
@@ -505,13 +503,13 @@ export class LoadDataComponent {
         }
 
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.inOutService.loadRDF(this.baseURI, this.selectedImportAllowance, inputFilePar, formatPar, loaderSpec, rdfLifterSpec, 
+        this.inOutService.loadRDF(this.baseURI, this.selectedImportAllowance, inputFilePar, formatPar, loaderSpec, rdfLifterSpec,
             JSON.stringify(tranformationPipeline), validateImplicitlyPar).subscribe(
-            stResp => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.DATA_IMPORTED"});
-            }
-        );
+                stResp => {
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.DATA_IMPORTED" });
+                }
+            );
     }
 
 }
@@ -533,14 +531,14 @@ class TransformerChainElement {
     }
 
     convertToTransformerPipelineStep(): TransformationStep {
-        let filterStep: TransformationStep = {filter: null};
+        let filterStep: TransformationStep = { filter: null };
         //filter: factoryId and properties
-        var filter: {factoryId: string, configuration: any} = {
+        var filter: { factoryId: string, configuration: any } = {
             factoryId: this.selectedFactory.id,
             configuration: null
         }
         var selectedConf: Settings = this.selectedConfiguration;
-        
+
         filter.configuration = selectedConf.getPropertiesAsMap();
         filterStep.filter = filter;
 

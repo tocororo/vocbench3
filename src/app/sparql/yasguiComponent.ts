@@ -63,7 +63,7 @@ export class YasguiComponent {
         if (YASQE.defaults.autocompleters.indexOf(this.SERVICE_COMPLETER_NAME) == -1) {
             YASQE.registerAutocompleter(this.SERVICE_COMPLETER_NAME,
                 (yasqe: any) => {
-                    return this.customServiceCompleter(yasqe, this.searchService);
+                    return this.customServiceCompleter(yasqe);
                 }
             );
         }
@@ -137,20 +137,20 @@ export class YasguiComponent {
                 return YASQE.Autocompleters.prefixes.isValidCompletionPosition(yasqe);
             },
             get: function (token: any, callback: any) { //callback is the function to which pass the suggested strings if get is async
-                var prefixArray: string[] = [];
+                let prefixArray: string[] = [];
                 //add the prefixes from the local triplestore
-                for (var i = 0; i < prefixMappings.length; i++) {
-                    var prNs = prefixMappings[i].prefix + ": <" + prefixMappings[i].namespace + ">";
+                for (let i = 0; i < prefixMappings.length; i++) {
+                    let prNs = prefixMappings[i].prefix + ": <" + prefixMappings[i].namespace + ">";
                     prefixArray.push(prNs);
                 }
                 prefixArray.sort();
                 if (fetchFromPrefixCC) {
                     //-----------copied from prefixes.js of yasgui-yasqe-----------
                     $.get(YASQE.Autocompleters.prefixes.fetchFrom, function (data) {
-                        for (var prefix in data) {
+                        for (let prefix in data) {
                             if (prefix == "bif")
                                 continue; // skip this one! see #231
-                            var completeString = prefix + ": <" + data[prefix] + ">";
+                            let completeString = prefix + ": <" + data[prefix] + ">";
                             prefixArray.push(completeString); // the array we want to store in localstorage
                         }
 
@@ -192,9 +192,9 @@ export class YasguiComponent {
                 }
                 searchService.searchResource(token.autocompletionString, ["property"], false, true, false, SearchMode.startsWith).subscribe(
                     (results: ARTURIResource[]) => {
-                        var resArray: string[] = [];
-                        for (var i = 0; i < results.length; i++) {
-                            var uri = results[i].getURI();
+                        let resArray: string[] = [];
+                        for (let i = 0; i < results.length; i++) {
+                            let uri = results[i].getURI();
                             //results may contains duplicate (properties with multiple roles), so add the uri only if not already in
                             if (resArray.indexOf(uri) == -1) {
                                 resArray.push(uri);
@@ -233,8 +233,8 @@ export class YasguiComponent {
                 if (token.autocompletionString.trim() != "") {
                     searchService.searchResource(token.autocompletionString, ["cls"], false, true, false, SearchMode.startsWith).subscribe(
                         (results: ARTURIResource[]) => {
-                            var resArray: string[] = [];
-                            for (var i = 0; i < results.length; i++) {
+                            let resArray: string[] = [];
+                            for (let i = 0; i < results.length; i++) {
                                 resArray.push(results[i].getURI());
                             }
                             callback(resArray);
@@ -259,7 +259,7 @@ export class YasguiComponent {
         }
     }
 
-    private customServiceCompleter(yasqe: any, searchService: SearchServices): any {
+    private customServiceCompleter(yasqe: any): any {
 
         let selectCallback = (completion, completionEl) => {
             // The show-hint addon of Code Mirror differentiates between the text shown in the completion menu
@@ -287,10 +287,10 @@ export class YasguiComponent {
         }
         return {
             isValidCompletionPosition: () => {
-                var token = yasqe.getCompleteToken();
+                let token = yasqe.getCompleteToken();
                 if (token.string.indexOf("_") == 0) return false;
-                var cur = yasqe.getCursor();
-                var previousToken = yasqe.getPreviousNonWsToken(cur.line, token);
+                let cur = yasqe.getCursor();
+                let previousToken = yasqe.getPreviousNonWsToken(cur.line, token);
                 if (previousToken != null && previousToken.string.toLowerCase() == "silent") {
                     previousToken = yasqe.getPreviousNonWsToken(cur.line, previousToken)
                 }
