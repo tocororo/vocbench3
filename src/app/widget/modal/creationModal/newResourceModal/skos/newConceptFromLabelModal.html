@@ -25,7 +25,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
+                <tr *ngIf="!hideStdResField">
                     <td class="text-right"><label>URI:</label></td>
                     <td>
                         <editable-ns-input [(ngModel)]="uri" [placeholder]="'DATA.COMMONS.LEAVE_EMPTY_FOR_RANDOM_URI'|translate">
@@ -91,7 +91,7 @@
             <scheme-selection (update)="onSchemesChanged($event)" [concept]="broader"></scheme-selection>
         </div>
 
-        <custom-form *ngIf="customFormId" [cfId]="customFormId" class="mt-2 pt-2 border-top"  [(ngModel)]="formFields"></custom-form>
+        <custom-form *ngIf="customFormId" [cfId]="customFormId" class="mt-2 pt-2 border-top" [(ngModel)]="formFields" (hideStdResField)="hideStdResField = true"></custom-form>
 
     </div>
     <div class="modal-footer">
