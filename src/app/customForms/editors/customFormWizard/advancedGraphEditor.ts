@@ -11,7 +11,7 @@ import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { VBContext } from "../../../utils/VBContext";
 import { ConverterConfigModal } from "./converterConfigModal";
-import { CustomFormWizardUtils, SessionFeature, StandardFormFeature, WizardAdvGraphEntry, WizardField, WizardNode, WizardNodeEntryPoint, WizardNodeFromField, WizardNodeUserCreated, WizardStatusUtils } from "./CustomFormWizard";
+import { CustomFormWizardUtils, SessionFeature, StandardFormFeature, WizardAdvGraphEntry, WizardField, WizardNode, WizardNodeResource, WizardNodeFromField, WizardNodeUserCreated, WizardStatusUtils } from "./CustomFormWizard";
 
 @Component({
     selector: "advanced-graph-editor",
@@ -50,7 +50,8 @@ export class AdvancedGraphEditor {
         this.sessionFeatures = [SessionFeature.user]; //available for both C.Range and C.Constructor
         //for custom constructor add the feature of stdForm
         if (!this.customRange) {
-            this.stdFormFeatures = StandardFormFeature.getStdFeatures(VBContext.getWorkingProject().getModelType(), VBContext.getWorkingProject().getLexicalizationModelType())
+            this.stdFormFeatures = StandardFormFeature.getStdFeatures(VBContext.getWorkingProject().getModelType(),
+                VBContext.getWorkingProject().getLexicalizationModelType(), this.customRange);
         }
 
         if (this.advGraph != null) { //edit mode, restore the status
@@ -208,8 +209,8 @@ export class AdvancedGraphEditor {
                     validation.usedNodes.forEach((nodeId, index, list) => {
                         list[index] = nodeId.substring(1); //removes the leading $
                     })
-                    if (this.customRange && validation.usedNodes.includes(WizardNodeEntryPoint.NodeID)) {
-                        validation.usedNodes.splice(validation.usedNodes.indexOf(WizardNodeEntryPoint.NodeID), 1);
+                    if (this.customRange && validation.usedNodes.includes(WizardNodeResource.NodeID)) {
+                        validation.usedNodes.splice(validation.usedNodes.indexOf(WizardNodeResource.NodeID), 1);
                     }
                     return validation;
                 }

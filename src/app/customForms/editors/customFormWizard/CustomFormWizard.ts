@@ -35,20 +35,25 @@ export class StandardFormFeature extends FeatureStructure {
     static readonly xlabel: StandardFormFeature = new StandardFormFeature("xlabel");
     static readonly lexicalForm: StandardFormFeature = new StandardFormFeature("lexicalForm");
     static readonly lexicon: StandardFormFeature = new StandardFormFeature("lexicon");
+    static readonly type: StandardFormFeature = new StandardFormFeature("type");
     // static readonly schemes: StandardFormFeature = new StandardFormFeature("schemes"); //still not used in ST
 
-    static getStdFeatures(model: string, lexModel: string): StandardFormFeature[] {
+    static getStdFeatures(model: string, lexModel: string, customRange: boolean): StandardFormFeature[] {
         let features: StandardFormFeature[] = [StandardFormFeature.resource];
-        if (model == OntoLex.uri) {
-            features.push(StandardFormFeature.lexicon);
-        }
-        if (lexModel == SKOS.uri) {
-            features.push(StandardFormFeature.labelLang);
-            features.push(StandardFormFeature.label);
-        } else if (lexModel == SKOSXL.uri) {
-            features.push(StandardFormFeature.labelLang);
-            features.push(StandardFormFeature.xlabel);
-            features.push(StandardFormFeature.lexicalForm);
+        if (!customRange) { 
+            //the following are available only in CC
+            features.push(StandardFormFeature.type);
+            if (model == OntoLex.uri) {
+                features.push(StandardFormFeature.lexicon);
+            }
+            if (lexModel == SKOS.uri) {
+                features.push(StandardFormFeature.labelLang);
+                features.push(StandardFormFeature.label);
+            } else if (lexModel == SKOSXL.uri) {
+                features.push(StandardFormFeature.labelLang);
+                features.push(StandardFormFeature.xlabel);
+                features.push(StandardFormFeature.lexicalForm);
+            }
         }
         features.sort((f1, f2) => f1.featureName.localeCompare(f2.featureName));
         return features;
@@ -194,7 +199,7 @@ export abstract class WizardNode {
     feature?: FeatureStructure; //feature in input to converter (if required)
     paramNode?: WizardNode; //optional node used as parameter of other nodes (ATM the only usage is with field with language user prompted, so with coda:langString converter)
 
-    entryPoint: boolean;
+    resourceNode: boolean; //tells if the node is the one identified with "resource" which is a reserved variable
     fromField: boolean;
     userCreated: boolean;
     advGraph: boolean;
@@ -245,11 +250,11 @@ export abstract class WizardNode {
 
 }
 
-export class WizardNodeEntryPoint extends WizardNode {
-    static readonly NodeID: string = "entryPoint";
+export class WizardNodeResource extends WizardNode {
+    static readonly NodeID: string = "resource";
     constructor() {
-        super(WizardNodeEntryPoint.NodeID);
-        this.entryPoint = true;
+        super(WizardNodeResource.NodeID);
+        this.resourceNode = true;
     }
 }
 export class WizardNodeFromField extends WizardNode {
@@ -430,8 +435,8 @@ export class WizardStatusUtils {
     //========== NODES ==============
 
     static restoreWizardNode(jsonStatus: any, fields: WizardField[]): WizardNode {
-        if (jsonStatus.entryPoint) {
-            return WizardStatusUtils.restoreWizardNodeEntryPoint(jsonStatus, fields);
+        if (jsonStatus.resourceNode) {
+            return WizardStatusUtils.restoreWizardNodeResource(jsonStatus, fields);
         } else if (jsonStatus.fromField) {
             return WizardStatusUtils.restoreWizardNodeFromField(jsonStatus, fields);
         } else { //jsonStatus.userCreated
@@ -439,8 +444,8 @@ export class WizardStatusUtils {
         }
     }
 
-    static restoreWizardNodeEntryPoint(jsonStatus: any, fields: WizardField[]): WizardNodeEntryPoint {
-        let n: WizardNodeEntryPoint = new WizardNodeEntryPoint();
+    static restoreWizardNodeResource(jsonStatus: any, fields: WizardField[]): WizardNodeResource {
+        let n: WizardNodeResource = new WizardNodeResource();
         n.paramNode = (jsonStatus.paramNode != null) ? this.restoreWizardNode(jsonStatus.paramNode, fields) : null;
         n.converterStatus = (jsonStatus.converterStatus != null) ? this.restoreConverterConfigStatus(jsonStatus.converterStatus) : null;
         if (n.converterStatus != null) {
@@ -500,6 +505,8 @@ export class WizardStatusUtils {
         } else { //feature null => it was not a feature related to a field; probably a feature builtin
             if (SessionFeature.user.featureName == featureJson.featureName) {
                 return SessionFeature.user;
+            } else if (StandardFormFeature.type.featureName == featureJson.featureName) {
+                return StandardFormFeature.type;
             } else if (StandardFormFeature.label.featureName == featureJson.featureName) {
                 return StandardFormFeature.label;
             } else if (StandardFormFeature.labelLang.featureName == featureJson.featureName) {

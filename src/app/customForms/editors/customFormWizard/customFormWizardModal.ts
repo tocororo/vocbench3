@@ -1,3 +1,4 @@
+import { ngModuleJitUrl } from '@angular/compiler';
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PrefixMapping } from "src/app/models/Metadata";
@@ -11,7 +12,7 @@ import { ConverterContractDescription, PearlValidationResult, RDFCapabilityType,
 import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { AdvancedGraphEditor } from "./advancedGraphEditor";
-import { ConstraintType, CustomFormWizardUtils, GraphEntrySerialization, GraphObjectType, LangConstraintType, WizardAdvGraphEntry, WizardField, WizardFieldLiteral, WizardFieldUri, WizardGraphEntry, WizardNode, WizardNodeEntryPoint, WizardNodeFromField, WizardStatus, WizardStatusUtils } from "./CustomFormWizard";
+import { ConstraintType, CustomFormWizardUtils, GraphEntrySerialization, GraphObjectType, LangConstraintType, WizardAdvGraphEntry, WizardField, WizardFieldLiteral, WizardFieldUri, WizardGraphEntry, WizardNode, WizardNodeResource, WizardNodeFromField, WizardStatus, WizardStatusUtils, StandardFormFeature } from "./CustomFormWizard";
 import { WizardFieldChangeEvent, WizardFieldEventType } from "./customFormWizardFieldsEditor";
 
 @Component({
@@ -52,9 +53,9 @@ export class CustomFormWizardModal {
         this.advGraphs = [];
 
         if (this.customRange) {
-            let entryPoint: WizardNodeEntryPoint = new WizardNodeEntryPoint();
-            this.nodes.push(entryPoint);
-            let g: WizardGraphEntry = new WizardGraphEntry(entryPoint);
+            let resourceNode: WizardNodeResource = new WizardNodeResource();
+            this.nodes.push(resourceNode);
+            let g: WizardGraphEntry = new WizardGraphEntry(resourceNode);
             this.graphs.push(g);
         }
 
@@ -370,9 +371,17 @@ export class CustomFormWizardModal {
     private checkData(): boolean {
         //check on FIELDS
         if (this.customRange && this.fields.length == 0) {
-            //in CustomRange at least a field is required (not in constructor where it can siply add info to the standard form)
-            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_EMPTY" }, ModalType.warning);
-            return false;
+            /*
+            In CustomRange at least a field is required (not in constructor where it can siply add info to the standard form).
+            Anyway it's not enough to check if no field is provided in order to conclude that the CF is not valid, 
+            in fact in CR also stdForm/resource can be exploited, which in such case results in a field prompted
+            (unlike CC where the stdForm/resource field is always available in the creation form).
+            So check if there is a node defined using stdForm/resource, only if not, report the issue.
+             */
+            if (!this.nodes.some(n => n.feature != null && n.feature == StandardFormFeature.resource)) {
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.FIELD_EMPTY" }, ModalType.warning);
+                return false;
+            }
         }
         for (let i = 0; i < this.fields.length; i++) {
             let field = this.fields[i];
@@ -444,7 +453,7 @@ export class CustomFormWizardModal {
             let g: WizardGraphEntry = this.graphs[i];
             if (this.customRange) {
                 //first usage of graph entry point node cannot be optional
-                if (i == 0 && g.subject instanceof WizardNodeEntryPoint && g.object instanceof WizardNodeFromField && g.object.fieldSeed.optional) {
+                if (i == 0 && g.subject instanceof WizardNodeResource && g.object instanceof WizardNodeFromField && g.object.fieldSeed.optional) {
                     this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.OPTIONAL_ENTRY_POINT_WARN", params: { id: g.subject.nodeId } }, ModalType.warning);
                     return false;
                 }

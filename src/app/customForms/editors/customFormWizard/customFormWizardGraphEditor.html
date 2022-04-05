@@ -29,7 +29,7 @@
                 <tr *ngFor="let g of graphs; let index=index">
                     <td class="text-center pl-2">{{index+1}}</td>
                     <td>
-                        <select class="form-control mx-1" [(ngModel)]="g.subject" [disabled]="g.subject?.entryPoint && index == 0" (ngModelChange)="onModelChange()">
+                        <select class="form-control mx-1" [(ngModel)]="g.subject" [disabled]="g.subject?.resourceNode && index == 0" (ngModelChange)="onModelChange()">
                             <option *ngFor="let n of nodes" [ngValue]="n">{{n.nodeId}}</option>
                         </select>
                     </td>
@@ -45,9 +45,7 @@
                             </select>
                             <div class="ml-3" style="flex: 1">
                                 <select *ngIf="g.object.type == 'node'" class="form-control" [(ngModel)]="g.object.node" (ngModelChange)="onModelChange()">
-                                    <ng-container *ngFor="let n of nodes">
-                                        <option *ngIf="!n.entryPoint" [ngValue]="n">{{n.nodeId}}</option>
-                                    </ng-container>
+                                    <option *ngFor="let n of nodes" [ngValue]="n">{{n.nodeId}}</option>
                                 </select>
                                 <value-picker *ngIf="g.object.type == 'value'" [value]="g.object.value" [editable]="true" (valueChanged)="onGraphObjectValueChange(g, $event)">
                                 </value-picker>

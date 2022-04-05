@@ -4,9 +4,11 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 10.2.2 (dd-mm-yyyy)
+# 11.0.0 (dd-mm-yyyy)
   * Added SuperUser system role
   * Allowed SuperUser to create projects where it is automatically set as Project Manager
+  * Introduced CustomView mechanism
+  * Improved management of CustomForm
   * Enabled multiple sheets management in Sheet2RDF
   * Added completion for endpoints to use in federated SPARQL queries
 

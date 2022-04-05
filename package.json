@@ -1,6 +1,6 @@
 {
   "name": "vocbench3",
-  "version": "10.2.2-SNAPSHOT",
+  "version": "11.0.0-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

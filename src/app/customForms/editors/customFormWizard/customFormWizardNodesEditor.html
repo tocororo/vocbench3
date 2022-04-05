@@ -29,7 +29,7 @@
                 <tr *ngFor="let n of nodes">
                     <td style="position: relative;">
                         <input class="form-control mx-1" [(ngModel)]="n.nodeId" (ngModelChange)="onModelChange()" [readonly]="!n.userCreated" sanitized>
-                        <span *ngIf="n.entryPoint" class="fas fa-info-circle" style="position: absolute; right: 6px; top: 11px;"
+                        <span *ngIf="n.resourceNode" class="fas fa-info-circle" style="position: absolute; right: 6px; top: 11px;"
                             [title]="'CUSTOM_FORMS.WIZARD.NODES.ENTRY_POINT_INFO'|translate"></span>
                     </td>
                     <td>

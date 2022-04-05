@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ARTNode, ARTURIResource } from "src/app/models/ARTResources";
-import { WizardGraphEntry, WizardNode, WizardNodeEntryPoint } from "./CustomFormWizard";
+import { WizardGraphEntry, WizardNode, WizardNodeResource } from "./CustomFormWizard";
 
 @Component({
     selector: "custom-form-wizard-graph-editor",
@@ -16,18 +16,18 @@ export class CustomFormWizardGraphEditor implements ControlValueAccessor {
     
     graphs: WizardGraphEntry[];
 
-    private entryPoint: WizardNodeEntryPoint; //this will be found/initialized only if dealing with CustomRange
+    private resourceNode: WizardNodeResource; //this will be found/initialized only if dealing with CustomRange
 
     constructor() { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['nodes'] && changes['nodes'].currentValue != null) {
-            this.entryPoint = this.nodes.find(n => n instanceof WizardNodeEntryPoint);
+            this.resourceNode = this.nodes.find(n => n instanceof WizardNodeResource);
         }
     }
 
     addGraph() {
-        let g: WizardGraphEntry = new WizardGraphEntry(this.entryPoint);
+        let g: WizardGraphEntry = new WizardGraphEntry(this.resourceNode);
         this.graphs.push(g);
         this.onModelChange();
     }

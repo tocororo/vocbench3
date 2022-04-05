@@ -7,7 +7,7 @@ import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/conv
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ModalOptions, ModalType } from "src/app/widget/modal/Modals";
 import { ConverterConfigModal } from "./converterConfigModal";
-import { SessionFeature, StandardFormFeature, WizardAdvGraphEntry, WizardField, WizardNode, WizardNodeEntryPoint, WizardNodeUserCreated } from "./CustomFormWizard";
+import { SessionFeature, StandardFormFeature, WizardAdvGraphEntry, WizardField, WizardNode, WizardNodeResource, WizardNodeUserCreated } from "./CustomFormWizard";
 
 @Component({
     selector: "custom-form-wizard-nodes-editor",
@@ -37,10 +37,8 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
 
     ngOnInit() {
         this.sessionFeatures = [SessionFeature.user]; //available for both C.Range and C.Constructor
-        //for custom constructor add the feature of stdForm
-        if (!this.customRange) {
-            this.stdFormFeatures = StandardFormFeature.getStdFeatures(VBContext.getWorkingProject().getModelType(), VBContext.getWorkingProject().getLexicalizationModelType())
-        }
+        this.stdFormFeatures = StandardFormFeature.getStdFeatures(VBContext.getWorkingProject().getModelType(),
+            VBContext.getWorkingProject().getLexicalizationModelType(), this.customRange);
     }
 
     addNode() {
@@ -78,7 +76,7 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
     editNodeConverter(node: WizardNode) {
         const modalRef: NgbModalRef = this.modalService.open(ConverterConfigModal, new ModalOptions('xl'));
         modalRef.componentInstance.converter = node.converterStatus != null ? node.converterStatus.converter : null;
-        modalRef.componentInstance.rangeType = (node instanceof WizardNodeEntryPoint) ? RangeType.resource : null; //in case of entry point, restrict the converter to those producing URI
+        modalRef.componentInstance.rangeType = (node instanceof WizardNodeResource) ? RangeType.resource : null; //in case of entry point, restrict the converter to those producing URI
         modalRef.result.then(
             (data: ConverterConfigStatus) => {
                 node.converterStatus = data;
