@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "src/app/models/ARTResources";
 import { Lexinfo, Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
-import { ResourceUtils, SortAttribute } from "src/app/utils/ResourceUtils";
 import { VBContext } from "src/app/utils/VBContext";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { ResourcePickerConfig } from "src/app/widget/pickers/valuePicker/resourcePickerComponent";

@@ -59,11 +59,12 @@ export class CustomFormsServices {
 
                 for (let i = 0; i < stResp.length; i++) {
                     let placeholderId = stResp[i].placeholderId;
+                    let featureName = stResp[i].featureName;
                     let type: FormFieldType = stResp[i].type == "literal" ? FormFieldType.literal : FormFieldType.uri;
                     let mandatory = stResp[i].mandatory;
                     let userPrompt = stResp[i].userPrompt;
                     let converter = stResp[i].converter.uri;
-                    let entry = new FormField(placeholderId, type, mandatory, userPrompt, converter);
+                    let entry = new FormField(placeholderId, type, converter, featureName, userPrompt, mandatory);
                     
                     //coda:langString could have an argument to specify the language through another entry 
                     if (converter == "http://art.uniroma2.it/coda/contracts/langString") {

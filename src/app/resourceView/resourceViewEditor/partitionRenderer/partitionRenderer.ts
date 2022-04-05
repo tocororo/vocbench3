@@ -231,8 +231,7 @@ export abstract class PartitionRenderer {
 
     protected enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
         this.resViewModals.enrichCustomForm({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, form.getId()).then(
-            (entryMap: any) => {
-                let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
+            (cfValue: CustomFormValue) => {
                 this.getAddPartitionAware(this.resource, predicate, cfValue).subscribe(() => this.update.emit());
             },
             () => { }

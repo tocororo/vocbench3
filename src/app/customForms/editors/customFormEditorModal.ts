@@ -5,7 +5,6 @@ import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { PearlValidationResult } from "../../models/Coda";
 import { CustomForm, CustomFormType, EditorMode } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResourcesServices } from "../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
@@ -48,8 +47,7 @@ export class CustomFormEditorModal {
     extractFromShaclAuthorized: boolean;
 
     constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
-        private resourceService: ResourcesServices, private cfService: CustomFormsServices, private translateService: TranslateService,
-        private elementRef: ElementRef) {
+        private cfService: CustomFormsServices, private translateService: TranslateService, private elementRef: ElementRef) {
     }
 
     ngOnInit() {

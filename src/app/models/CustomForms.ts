@@ -143,6 +143,7 @@ export class CustomForm {
 export class FormField {
     private mandatory: boolean;
     private placeholderId: string;
+    private featureName: FeatureNameEnum;
     private type: FormFieldType;
     private userPrompt: string;
     private converter: string;
@@ -154,12 +155,13 @@ export class FormField {
 
     public value: any;
 
-    constructor(placeholderId: string, type: FormFieldType, mandatory: boolean, userPrompt: string, converter: string) {
+    constructor(placeholderId: string, type: FormFieldType, converter: string, featureName: FeatureNameEnum, userPrompt: string, mandatory: boolean) {
         this.placeholderId = placeholderId;
         this.type = type;
-        this.mandatory = mandatory;
-        this.userPrompt = userPrompt;
         this.converter = converter;
+        this.featureName = featureName;
+        this.userPrompt = userPrompt;
+        this.mandatory = mandatory;
         this.annotations = [];
     }
 
@@ -173,6 +175,10 @@ export class FormField {
 
     public getType(): FormFieldType {
         return this.type;
+    }
+
+    public getFeatureName(): FeatureNameEnum {
+        return this.featureName;
     }
 
     public getUserPrompt(): string {
@@ -231,7 +237,7 @@ export class FormField {
     }
 
     public clone(): FormField {
-        let fieldClone: FormField = new FormField(this.placeholderId, this.type, this.mandatory, this.userPrompt, this.converter);
+        let fieldClone: FormField = new FormField(this.placeholderId, this.type, this.converter, this.featureName, this.userPrompt, this.mandatory);
         fieldClone.setAnnotations(this.annotations);
         fieldClone.setDatatype(this.datatype);
         fieldClone.setLang(this.lang);
@@ -240,6 +246,11 @@ export class FormField {
         return fieldClone;
     }
 
+}
+
+export enum FeatureNameEnum {
+    stdForm = "stdForm",
+    userPrompt = "userPrompt",
 }
 
 /**
@@ -271,10 +282,12 @@ export class FormFieldAnnotation {
 export class CustomFormValue {
     private customFormId: string;
     private userPromptMap: { [key: string]: any };
+    private stdFormMap: { [key: string]: any };
 
-    constructor(customFormId: string, userPromptMap: { [key: string]: any }) {
+    constructor(customFormId: string, userPromptMap: { [key: string]: any }, stdFormMap?: { [key: string]: any }) {
         this.customFormId = customFormId;
         this.userPromptMap = userPromptMap;
+        this.stdFormMap = stdFormMap;
     }
 
     public getCustomFormId(): string {
@@ -285,6 +298,9 @@ export class CustomFormValue {
         return this.userPromptMap;
     }
     
+    public getStdFormMap(): { [key: string]: any } {
+        return this.stdFormMap;
+    }
 }
 
 export class BrokenCFStructure {

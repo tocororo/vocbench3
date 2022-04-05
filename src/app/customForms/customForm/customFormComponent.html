@@ -6,8 +6,18 @@
             <col style="width: 1%;">
         </colgroup>
         <tbody>
+
+            <tr *ngIf="showStdFormResourceField">
+                <td class="text-right"><label>URI:</label></td>
+                <td>
+                    <editable-ns-input [(ngModel)]="standardResourceValue" (ngModelChange)="onStandardResourceFieldChanged()">
+                    </editable-ns-input>
+                </td>
+                <td></td>
+            </tr>
+
             <ng-container *ngFor="let field of formFields; let index = index;">
-                <tr *ngIf="!field.isDependency()">
+                <tr *ngIf="!field.isDependency() && field.getUserPrompt() != 'resource'">
                     <!--Form entry label-->
                     <td class="text-right"><label>{{field.getUserPrompt()}}:</label></td>
                     <!--Form entry field: depends on type (uri/literal) and optionally on datatype -->

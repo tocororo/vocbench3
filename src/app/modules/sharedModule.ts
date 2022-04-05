@@ -33,6 +33,7 @@ import { LangStringEditorComponent } from '../widget/langStringEditor/langString
 import { LanguageItemComponent } from '../widget/languageItem/languageItemComponent';
 import { LeafletMapComponent } from '../widget/leafletMap/leafletMapComponent';
 import { LeafletMapModal } from '../widget/leafletMap/leafletMapModal';
+import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
 import { PartitionFilterEditor } from '../widget/partitionFilterEditor/partitionFilterEditor';
 import { PasswordInputComponent } from '../widget/passwordInput/passwordInputComponent';
 import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
@@ -75,6 +76,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         DataSizeRenderer,
         DatatypePickerComponent,
         DatetimePickerComponent,
+        EditableNsInput,
         ExpandableAlertComponent,
         ExplainableTripleComponent,
         ExtensionConfiguratorComponent,
@@ -130,6 +132,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         DataSizeRenderer,
         DatatypePickerComponent,
         DatetimePickerComponent,
+        EditableNsInput,
         ExpandableAlertComponent,
         ExplainableTripleComponent,
         ExtensionConfiguratorComponent,

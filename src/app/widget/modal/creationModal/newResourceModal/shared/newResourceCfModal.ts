@@ -40,8 +40,13 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal {
     }
 
     isStandardFormDataValid(): boolean {
-        //valid uri provided or no check in case uri is optional
-        return (this.uri != null && this.uri.trim() != "") || this.uriOptional;
+        /* 
+        standard form valid if:
+        - uri is valid whereas is mandatory
+        - uri is optional 
+        - the URI field is override by the custom form (attr hideStdResField)
+        */
+        return (this.uri != null && this.uri.trim() != "") || this.uriOptional || this.hideStdResField;
     }
 
     okImpl() {

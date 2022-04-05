@@ -49,11 +49,11 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
                     (data: NewResourceWithLiteralCfModalReturnData) => {
                         if (predicate.getURI() == OntoLex.canonicalForm.getURI()) {
                             this.ontolexService.setCanonicalForm(<ARTURIResource>this.resource, data.literal, data.uriResource, data.cfValue).subscribe(
-                                stResp => this.update.emit(null)
+                                () => this.update.emit(null)
                             );
                         } else if (predicate.getURI() == OntoLex.otherForm.getURI()) {
                             this.ontolexService.addOtherForm(<ARTURIResource>this.resource, data.literal, data.uriResource, data.cfValue).subscribe(
-                                stResp => this.update.emit(null)
+                                () => this.update.emit(null)
                             );
                         }
                     },

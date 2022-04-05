@@ -17,7 +17,7 @@
                 <col>
             </colgroup>
             <tbody>
-                <tr>
+                <tr *ngIf="!hideStdResField">
                     <td class="text-right"><label>URI:</label></td>
                     <td>
                         <ng-container *ngIf="uriOptional; then uriOptionalBlock; else uriMandatoryBlock"></ng-container>
@@ -34,8 +34,7 @@
             </tbody>
         </table>
 
-        <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
-            [(ngModel)]="formFields"></custom-form>
+        <custom-form *ngIf="customFormId" [cfId]="customFormId" [(ngModel)]="formFields" (hideStdResField)="hideStdResField = true" [ngClass]="{'border-top mt-2 pt-2': !hideStdResField}"></custom-form>
 
     </div>
     <div class="modal-footer">

@@ -11,6 +11,8 @@ export abstract class AbstractCustomConstructorModal {
     //custom form
     formFields: FormField[] = [];
 
+    hideStdResField: boolean;
+
     /**
      * CONSTRUCTOR
      */
@@ -54,6 +56,7 @@ export abstract class AbstractCustomConstructorModal {
      * In case multiple cf are available, ask to the user which one to select
      */
     selectCustomForm() {
+        this.hideStdResField = false;
         this.cfService.getCustomConstructors(this.resourceClass).subscribe(
             customForms => {
                 if (customForms.length == 0) { //empty form collection
@@ -77,16 +80,16 @@ export abstract class AbstractCustomConstructorModal {
      * Collect the data in the custom form fields and return them as json map object
      */
     collectCustomFormData(): any {
-        var entryMap: {[key: string]: any} = {}; //{key: svalue, key: value,...}
-        for (var i = 0; i < this.formFields.length; i++) {
+        let entryMap: {[key: string]: any} = {}; //{key: svalue, key: value,...}
+        for (let i = 0; i < this.formFields.length; i++) {
             let entry = this.formFields[i];
             let value: any = entry['value'];
             let empty: boolean = false;
             try { if (value.trim() == "") { empty = true; } } catch (err) {} //entry value could be not a string, so the check is in a try-catch
             if (!empty) {
                 //add the entry only if not already in
-                var alreadyIn: boolean = false;
-                for (var key in entryMap) {
+                let alreadyIn: boolean = false;
+                for (let key in entryMap) {
                     if (key == entry.getUserPrompt()) {
                         alreadyIn = true;
                         break;
@@ -111,8 +114,8 @@ export abstract class AbstractCustomConstructorModal {
      * tha data are not valid or incomplete
      */
     isInputValid(): boolean {
-        var standardFormValid: boolean = this.isStandardFormDataValid();
-        var customFormValid: boolean = this.isCustomFormDataValid();
+        let standardFormValid: boolean = this.isStandardFormDataValid();
+        let customFormValid: boolean = this.isCustomFormDataValid();
         return (standardFormValid && customFormValid);
     }
 

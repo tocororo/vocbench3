@@ -42,8 +42,7 @@
             </tbody>
         </table>
 
-        <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
-            [(ngModel)]="formFields"></custom-form>
+        <custom-form *ngIf="customFormId" [cfId]="customFormId" class="mt-2 pt-2 border-top" [(ngModel)]="formFields"></custom-form>
 
     </div>
     <div class="modal-footer">

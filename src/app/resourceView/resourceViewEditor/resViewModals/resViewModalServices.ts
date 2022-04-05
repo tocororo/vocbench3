@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { CustomFormModal } from 'src/app/customForms/customForm/customFormModal';
+import { CustomFormValue } from 'src/app/models/CustomForms';
 import { ModalOptions, TextOrTranslation } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTNode, ARTResource, ARTURIResource } from '../../../models/ARTResources';
 import { Language } from '../../../models/LanguagesCountries';
@@ -63,7 +64,7 @@ export class ResViewModalServices {
      * @param cfId custom form ID
      * @param language optional language that if provided "suggests" to initialize each lang-picker to it
      */
-    enrichCustomForm(title: TextOrTranslation, cfId: string, language?: string) {
+    enrichCustomForm(title: TextOrTranslation, cfId: string, language?: string): Promise<CustomFormValue> {
         const modalRef: NgbModalRef = this.modalService.open(CustomFormModal, new ModalOptions());
         modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
 		modalRef.componentInstance.cfId = cfId;

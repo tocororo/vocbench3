@@ -1,9 +1,9 @@
-import { Component, forwardRef, Input, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, Output, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral } from "../../models/ARTResources";
 import { ConverterContractDescription } from "../../models/Coda";
-import { AnnotationName, FormField, FormFieldAnnotation } from "../../models/CustomForms";
+import { AnnotationName, FeatureNameEnum, FormField, FormFieldAnnotation, FormFieldType } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
@@ -23,9 +23,14 @@ export class CustomFormComponent implements ControlValueAccessor {
 
     @Input() cfId: string;
     @Input() lang: string;
+    @Input() customRange: boolean; //true if this form is for a CR (false if it is for a CC)
+
+    @Output() hideStdResField: EventEmitter<void> = new EventEmitter(); //inform parent standard form to hide the field for the resource (e.g. URI field)
 
     formFields: FormField[];
-    private submittedWithError: boolean = false;
+
+    showStdFormResourceField: boolean;
+    standardResourceValue: string;
 
     constructor(public cfService: CustomFormsServices, private basicModals: BasicModalServices) { }
 
@@ -39,7 +44,7 @@ export class CustomFormComponent implements ControlValueAccessor {
         this.cfService.getCustomFormRepresentation(this.cfId).subscribe(
             form => {
                 /*
-                    "Foreign" and "Collection" can be used in combo with other annotations so, here the entry annotations are sorted in order
+                    "Foreign" and "Collection" can be used in combo with other annotations, so here the entry annotations are sorted in order
                     to set at last position these annotations.
                     In this way, in the view I always take into account just the first annotation (if any) of each entry and then,
                     I look for the other annotations in order to use it in combo (according to compatibility, e.g. Foreign can be used
@@ -72,6 +77,45 @@ export class CustomFormComponent implements ControlValueAccessor {
                             }
                         }
                     }
+                });
+
+                /**
+                 * Handle resource placeholder
+                 */
+                form.forEach((field, index, self) => {
+                    if (field.getPlaceholderId() == "resource") { //reserved placeholder "resource"
+                        if (field.getType() == FormFieldType.uri) { //"resource uri ..."
+                            //1 - resource uri(...) . => No feature path
+                            if (field.getFeatureName() == null) {
+                                //Probably it used a converter which doesn't require an input feature (e.g. randIdGen) => don't show any field
+                                self.splice(index, 1);    
+                                if (!this.customRange) { 
+                                    //In CC the "standard" URI field must be omitted
+                                    this.hideStdResField.emit();
+                                }
+                            }
+                            //2 - resource uri(...) stdForm/resource . => StandardForm feature path
+                            if (field.getFeatureName() == FeatureNameEnum.stdForm && field.getUserPrompt() == "resource") {
+                                if (this.customRange) {
+                                    //in CR, it implies to show the URI input field
+                                    this.showStdFormResourceField = true;
+                                } else {
+                                    //in CC, it implies to not show anything since the input URI field is alrady foreseen in the standard form => remove the field
+                                    self.splice(index, 1);
+                                }
+                            }
+                            //3 - resource uri(...) userPrompt/foo . => UserPrompt feature path
+                            if (field.getFeatureName() == FeatureNameEnum.userPrompt) {
+                                if (!this.customRange) { 
+                                    //In CC the user promt replaces the "standard" URI field
+                                    this.hideStdResField.emit();
+                                }
+                            }
+                            
+                        } else { //resource used in combo with literal => invalid, remove the field from the form
+                            self.splice(index, 1);
+                        }
+                    }
                 })
 
                 this.formFields = form
@@ -88,7 +132,7 @@ export class CustomFormComponent implements ControlValueAccessor {
         );
     }
 
-    private onFormFieldChanged(formField: FormField) {
+    onFormFieldChanged(formField: FormField) {
         //when the value of a form field changes, update also the value to other form fields (if any) related to the same userPrompt
         this.formFields.forEach(f => {
             if (f != formField && f.getUserPrompt() == formField.getUserPrompt()) {
@@ -96,6 +140,11 @@ export class CustomFormComponent implements ControlValueAccessor {
             }
         })
         //then propagate changes
+        this.propagateChange(this.formFields);
+    }
+
+    onStandardResourceFieldChanged() {
+        this.formFields.find(f => f.getPlaceholderId() == "resource").value = this.standardResourceValue;
         this.propagateChange(this.formFields);
     }
 

@@ -204,8 +204,7 @@ export class LanguageBoxComponent {
      */
     private addCustomFormDefinition(cf: CustomForm) {
         this.resViewModals.enrichCustomForm({key:"DATA.ACTIONS.ADD_DEFINITION"}, cf.getId(), this.lang).then(
-            (entryMap: { [key: string]: any }) => {
-                let cfValue: CustomFormValue = new CustomFormValue(cf.getId(), entryMap);
+            (cfValue: CustomFormValue) => {
                 this.skosService.addNote(this.resource, SKOS.definition, cfValue).subscribe(
                     () => {
                         this.update.emit();

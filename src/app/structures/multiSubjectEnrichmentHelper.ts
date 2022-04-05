@@ -728,8 +728,7 @@ export class MultiSubjectEnrichmentHelper {
 
     private enrichWithCustomForm(subjects: ARTURIResource[], predicate: ARTURIResource, form: CustomForm) {
         this.resViewModals.enrichCustomForm({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, form.getId()).then(
-            (entryMap: any) => {
-                let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
+            (cfValue: CustomFormValue) => {
                 let addFunctions: MultiSubjectAddFunction[] = [];
                 subjects.forEach((s: ARTURIResource) => {
                     addFunctions.push({

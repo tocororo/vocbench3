@@ -39,7 +39,6 @@ import { PropertyTreeModal } from '../widget/modal/browsingModal/propertyTreeMod
 import { SchemeListModal } from '../widget/modal/browsingModal/schemeListModal/schemeListModal';
 import { CreationModalServices } from '../widget/modal/creationModal/creationModalServices';
 import { NewPlainLiteralModal } from '../widget/modal/creationModal/newPlainLiteralModal/newPlainLiteralModal';
-import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
 import { NewConceptualizationCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newConceptualizationCfModal';
 import { NewLexiconCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal';
 import { NewLexSenseCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexSenseCfModal';
@@ -97,7 +96,6 @@ import { UserModule } from './userModule';
         DatatypeListModal,
         DatetimePickerModal,
         DownloadModal,
-        EditableNsInput,
         FilePickerModal,
         HelperModal,
         InferenceExplanationModal,
