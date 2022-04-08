@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable, of } from 'rxjs';
@@ -30,7 +30,9 @@ export class AlignmentManagementComponent {
 
     @Input() overview: AlignmentOverview; //not used, useful in order to trigger the reload of the alignment cells when it changes
     @Input() leftProject: Project;
-    @Input() rightProject: Project;
+    @Input() rightProject: Project;c
+
+    @ViewChild('blockingDiv', { static: true }) private blockingDivElement: ElementRef;
 
     isEdoal: boolean;
 
@@ -78,7 +80,7 @@ export class AlignmentManagementComponent {
     }
 
     private updateRelationSymbols() {
-        for (var i = 0; i < this.overview.unknownRelations.length; i++) {
+        for (let i = 0; i < this.overview.unknownRelations.length; i++) {
             this.relationSymbols.push({
                 relation: this.overview.unknownRelations[i],
                 dlSymbol: this.overview.unknownRelations[i],
@@ -92,15 +94,19 @@ export class AlignmentManagementComponent {
      * Gets alignment cells so updates the tables 
      */
     private updateAlignmentCells() {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.alignmentService.listCells(this.page, this.alignmentPerPage).subscribe(
             map => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement)
                 this.totPage = map.totPage;
                 this.alignmentCellList = map.cells;
+                
+                if (this.alignmentCellList.length == 0) return; //no alignments => don't go further
+
                 //check if there is at least an unknown relation (could be a classname)
                 //useful to enlarge the progress bar in the view in order to contains the relation name
                 this.unknownRelation = false;
-                for (var i = 0; i < this.alignmentCellList.length; i++) {
+                for (let i = 0; i < this.alignmentCellList.length; i++) {
                     let relation = this.alignmentCellList[i].getRelation();
                     if (this.knownRelations.indexOf(relation) == -1) {
                         this.unknownRelation = true;
@@ -113,6 +119,7 @@ export class AlignmentManagementComponent {
                 //source dataset
                 computeRenderingFn.push(this.computeRendering(this.leftProject, "left"));
                 //target dataset
+                UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                 this.detectRightProject().subscribe(
                     () => {
                         if (this.rightProject != null) {
@@ -121,7 +128,7 @@ export class AlignmentManagementComponent {
 
                         forkJoin(computeRenderingFn).subscribe(
                             () => {
-                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen)
+                                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement)
                             }
                         );
                     }
@@ -254,9 +261,9 @@ export class AlignmentManagementComponent {
      * Returns the relation symbol rendered according to the show type in settings (relation, dlSymbol or text)
      */
     getRelationRendered(cell: AlignmentCell): string {
-        var result = cell.getRelation();
-        var rel = cell.getRelation();
-        for (var i = 0; i < this.relationSymbols.length; i++) {
+        let result = cell.getRelation();
+        let rel = cell.getRelation();
+        for (let i = 0; i < this.relationSymbols.length; i++) {
             if (this.relationSymbols[i].relation == rel) {
                 result = this.relationSymbols[i][this.showRelationType];
                 break;
@@ -349,7 +356,7 @@ export class AlignmentManagementComponent {
      * Opens a modal dialog to edit the settings
      */
     openSettings() {
-        var oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
+        let oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
         this.modalService.open(ValidationSettingsModal, new ModalOptions()).result.then(
             () => {
                 //update settings
@@ -393,33 +400,33 @@ export class AlignmentManagementComponent {
     }
 
     doQuickAction() {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         if (this.chosenQuickAction == this.qaAcceptAll) {
             this.alignmentService.acceptAllAlignment().subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 }
             )
         } else if (this.chosenQuickAction == this.qaAcceptAllAbove) {
             this.alignmentService.acceptAllAbove(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 }
             )
         } else if (this.chosenQuickAction == this.qaRejectAll) {
             this.alignmentService.rejectAllAlignment().subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 }
             )
         } else if (this.chosenQuickAction == this.qaRejectAllUnder) {
             this.alignmentService.rejectAllUnder(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 }
             )
         }
@@ -429,7 +436,7 @@ export class AlignmentManagementComponent {
      * Called after a quick action. Updates the list of the alignment cell
      */
     private updateAlignmentListAfterQuickAction(newAlignmentList: Array<AlignmentCell>) {
-        for (var i = 0; i < newAlignmentList.length; i++) {
+        for (let i = 0; i < newAlignmentList.length; i++) {
             //replace the updated alignment cell with the returned (keeping the "rendered" entities)
             let newCell = newAlignmentList[i];
             let cellToUpdateIdx = this.getIndexOfCell(newCell);
@@ -492,10 +499,10 @@ export class AlignmentManagementComponent {
      * calls the service to apply the validation and shows the report dialog.
      */
     private applyToDataset(deleteRejected: boolean) {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.alignmentService.applyValidation(deleteRejected).subscribe(
             report => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 //open report modal
                 const modalRef: NgbModalRef = this.modalService.open(ValidationReportModal, new ModalOptions('lg'));
                 modalRef.componentInstance.report = report;
@@ -505,10 +512,10 @@ export class AlignmentManagementComponent {
     }
 
     private applyToEdoalLinkset(deleteRejected: boolean) {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.alignmentService.applyValidationToEdoal(deleteRejected).subscribe(
             () => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.basicModals.alert({ key: "ALIGNMENT.ACTIONS.APPLY_TO_EDOAL" }, {key:"MESSAGES.ALL_CORRESPONDENCES_ADDED"});
             }
         );
@@ -517,7 +524,7 @@ export class AlignmentManagementComponent {
     export() {
         this.alignmentService.exportAlignment().subscribe(
             blob => {
-                var exportLink = window.URL.createObjectURL(blob);
+                let exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink({ key: "ALIGNMENT.ACTIONS.EXPORT_ALIGNMENT" }, {key:"MESSAGES.ALIGNMENT_VALIDATION_DATA_STORING_WARN"}, 
                     exportLink, "alignment.rdf");
             }

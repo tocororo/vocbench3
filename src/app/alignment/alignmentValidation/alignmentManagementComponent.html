@@ -11,7 +11,7 @@
         </button>
     </div>
 
-    <div class="card-body vbox scrollableContainer">
+    <div class="card-body vbox scrollableContainer blockingDivHost">
         
         <div class="scrollableContainer" style="border: 1px solid #ddd">
             <table class="table table-sm table-hoverable">
@@ -109,6 +109,15 @@
                 </button>
             </div>
         </div>
+
+        <div #blockingDiv class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="./assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+        
     </div>
     
     <div class="card-footer">
@@ -136,5 +145,5 @@
             </button>
         </span>
     </div>
-    
+
 </div>
