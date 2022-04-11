@@ -17,12 +17,12 @@ export class SelectionModal {
 
     headerStyle: string;
     msgStyle: string;
-    
+
     plainOptions: boolean; //tells if the options are plains or complex object (value+description)
     optionSelected: string | SelectionOption; //string or {string, string} object, according the input options list
     private size: number;
-    
-    constructor(public activeModal: NgbActiveModal) {}
+
+    constructor(public activeModal: NgbActiveModal) { }
 
     ngOnInit() {
         this.size = 20; //max size of the select element
@@ -34,18 +34,18 @@ export class SelectionModal {
 
         //based on the modal type set the css style of the message alert
         if (this.type == null) {
-			this.type = ModalType.info
-		}
-		if (this.type == ModalType.info) {
-			this.headerStyle = "modal-title text-info";
-			this.msgStyle = "alert alert-info";
-		} else if (this.type == ModalType.warning) {
-			this.headerStyle = "modal-title text-warning";
-			this.msgStyle = "alert alert-warning";
-		} else if (this.type == ModalType.error) {
-			this.headerStyle = "modal-title text-danger";
-			this.msgStyle = "alert alert-danger";
-		}
+            this.type = ModalType.info;
+        }
+        if (this.type == ModalType.info) {
+            this.headerStyle = "modal-title text-info";
+            this.msgStyle = "alert alert-info";
+        } else if (this.type == ModalType.warning) {
+            this.headerStyle = "modal-title text-warning";
+            this.msgStyle = "alert alert-warning";
+        } else if (this.type == ModalType.error) {
+            this.headerStyle = "modal-title text-danger";
+            this.msgStyle = "alert alert-danger";
+        }
 
     }
 

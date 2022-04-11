@@ -77,7 +77,7 @@ export class AppComponent {
      * Returns true if the current open project has history enabled
      */
     isProjectHistoryEnabled(): boolean {
-        var wProj: Project = VBContext.getWorkingProject();
+        let wProj: Project = VBContext.getWorkingProject();
         if (wProj != undefined) {
             return wProj.isHistoryEnabled();
         }
@@ -88,7 +88,7 @@ export class AppComponent {
      * Returns true if the current open project has validation enabled
      */
     isProjectValidationEnabled(): boolean {
-        var wProj: Project = VBContext.getWorkingProject();
+        let wProj: Project = VBContext.getWorkingProject();
         if (wProj != undefined) {
             return wProj.isValidationEnabled();
         }
@@ -124,6 +124,7 @@ export class AppComponent {
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy)
             );
         }
+        return false; //should never happen, no further model is available 
     }
 
     isMetadataVocAuthorized(): boolean {

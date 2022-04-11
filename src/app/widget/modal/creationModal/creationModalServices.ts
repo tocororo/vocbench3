@@ -3,7 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { LanguageConstraint } from '../../../models/LanguagesCountries';
-import { ModalOptions, TextOrTranslation } from '../Modals';
+import { ModalOptions, TextOrTranslation, TranslationUtils } from '../Modals';
 import { NewPlainLiteralModal } from "./newPlainLiteralModal/newPlainLiteralModal";
 import { NewConceptualizationCfModal } from './newResourceModal/ontolex/newConceptualizationCfModal';
 import { NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
@@ -32,7 +32,7 @@ export class CreationModalServices {
     newResourceCf(title: TextOrTranslation, cls: ARTURIResource, clsChangeable?: boolean, uriOptional?: boolean): Promise<NewResourceCfModalReturnData> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewResourceCfModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.cls = cls;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         if (uriOptional != null) modalRef.componentInstance.uriOptional = uriOptional;
@@ -53,7 +53,7 @@ export class CreationModalServices {
         lang?: string, langConstraints?: LanguageConstraint) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewResourceWithLiteralCfModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.cls = cls;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         if (literalLabel != null) modalRef.componentInstance.literalLabel = literalLabel;
@@ -75,7 +75,7 @@ export class CreationModalServices {
     newConceptCf(title: TextOrTranslation, broader?: ARTURIResource, schemes?: ARTURIResource[], cls?: ARTURIResource, clsChangeable?: boolean, lang?: string) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewConceptCfModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (broader != null) modalRef.componentInstance.broader = broader;
         if (schemes != null) modalRef.componentInstance.schemes = schemes;
         if (cls != null) modalRef.componentInstance.cls = cls;
@@ -92,7 +92,7 @@ export class CreationModalServices {
     newLexiconCf(title: TextOrTranslation, clsChangeable?: boolean) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewLexiconCfModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
     }
@@ -107,7 +107,7 @@ export class CreationModalServices {
     newOntoLexicalizationCf(title: TextOrTranslation, lexicalizationProp: ARTURIResource, clsChangeable?: boolean) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewOntoLexicalizationCfModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.lexicalizationProp = lexicalizationProp;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
@@ -122,7 +122,7 @@ export class CreationModalServices {
     newOntoLexSenseCf(title: TextOrTranslation, clsChangeable?: boolean): Promise<NewLexSenseCfModalReturnData> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewLexSenseCfModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
     }
@@ -138,7 +138,7 @@ export class CreationModalServices {
     newConceptualizationCf(title: TextOrTranslation, createSense: boolean, clsChangeable?: boolean) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewConceptualizationCfModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.createSense = createSense;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;
         return modalRef.result;
@@ -159,7 +159,7 @@ export class CreationModalServices {
         clsChangeable?: boolean, multivalueOpt?: { enabled: boolean, allowSameLang: boolean }) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewXLabelModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (value != null) modalRef.componentInstance.value = value;
         if (valueReadonly != null) modalRef.componentInstance.valueReadonly = valueReadonly;
         if (lang != null) modalRef.componentInstance.lang = lang;
@@ -184,7 +184,7 @@ export class CreationModalServices {
         langConstraints?: LanguageConstraint, multivalueOpt?: { enabled: boolean, allowSameLang: boolean }) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewPlainLiteralModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (value != null) modalRef.componentInstance.value = value;
         if (valueReadonly != null) modalRef.componentInstance.valueReadonly = valueReadonly;
         if (lang != null) modalRef.componentInstance.lang = lang;
@@ -208,7 +208,7 @@ export class CreationModalServices {
     newTypedLiteral(title: TextOrTranslation, predicate?: ARTURIResource, value?: ARTLiteral, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[], multivalue?: boolean, validation?: boolean): Promise<ARTLiteral[]> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewTypedLiteralModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (predicate != null) modalRef.componentInstance.predicate = predicate;
         if (value != null) modalRef.componentInstance.value = value;
         if (allowedDatatypes != null) modalRef.componentInstance.allowedDatatypes = allowedDatatypes;
@@ -229,7 +229,7 @@ export class CreationModalServices {
     newConceptFromLabel(title: TextOrTranslation, xLabel: ARTResource, cls: ARTURIResource, clsChangeable?: boolean, sibling?: ARTURIResource) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(NewConceptFromLabelModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.xLabel = xLabel;
         modalRef.componentInstance.cls = cls;
         if (clsChangeable != null) modalRef.componentInstance.clsChangeable = clsChangeable;

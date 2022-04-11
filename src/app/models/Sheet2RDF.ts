@@ -172,7 +172,7 @@ export class Sheet2RdfDeserializer {
         let additionalGraphs: SimpleGraphApplication[] = [];
         let additionalGraphsJson = json.additionalGraphs;
         additionalGraphsJson.forEach((gJson: any) => {
-            additionalGraphs.push(this.parseSimpleGraphApplication(gJson))
+            additionalGraphs.push(this.parseSimpleGraphApplication(gJson));
         });
 
         let h: SubjectHeader = {
@@ -181,7 +181,7 @@ export class Sheet2RdfDeserializer {
             node: node,
             graph: typeGraph,
             additionalGraphs: additionalGraphs
-        }
+        };
         return h;
     }
 
@@ -189,7 +189,7 @@ export class Sheet2RdfDeserializer {
         let nodes: NodeConversion[] = json.nodes;
         let graph: GraphApplication[] = [];
         json.graph.forEach((gJson: any) => {
-            graph.push(this.parseGraphApplication(gJson))
+            graph.push(this.parseGraphApplication(gJson));
         });
 
         let h: SimpleHeader = {
@@ -200,7 +200,7 @@ export class Sheet2RdfDeserializer {
             ignore: json.ignore,
             nodes: nodes,
             graph: graph
-        }
+        };
         return h;
     }
 

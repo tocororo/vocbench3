@@ -6,7 +6,7 @@ import { Project } from 'src/app/models/Project';
 import { ProjectSelectionModal } from 'src/app/project/projectListPanel/projectSelectionModal';
 import { Cookie } from 'src/app/utils/Cookie';
 import { VBContext } from 'src/app/utils/VBContext';
-import { ModalOptions, ModalType, SelectionOption, TextOrTranslation } from '../Modals';
+import { ModalOptions, ModalType, SelectionOption, TextOrTranslation, TranslationUtils } from '../Modals';
 import { AlertModal } from "./alertModal/alertModal";
 import { ConfirmCheckModal, ConfirmCheckOptions } from './confirmModal/confirmCheckModal';
 import { ConfirmModal } from './confirmModal/confirmModal';
@@ -36,16 +36,9 @@ export class BasicModalServices {
      */
     prompt(title: TextOrTranslation, label?: { value: TextOrTranslation, tooltip?: string }, msg?: TextOrTranslation, value?: string, inputOptional?: boolean, inputSanitized?: boolean): Promise<string> {
         const modalRef: NgbModalRef = this.modalService.open(PromptModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        if (label != null) {
-            if (typeof label.value != "string") {
-                label.value = this.translateService.instant(label.value.key);
-            }
-            modalRef.componentInstance.label = label;
-        }
-        if (msg != null) {
-            modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
-        }
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.label = TranslationUtils.translateObject(label, ["value"], this.translateService);
+        modalRef.componentInstance.message = TranslationUtils.getTranslatedText(msg, this.translateService);
         if (value != null) modalRef.componentInstance.value = value;
         if (inputOptional != null) modalRef.componentInstance.inputOptional = inputOptional;
         if (inputSanitized != null) modalRef.componentInstance.inputSanitized = inputSanitized;
@@ -66,7 +59,7 @@ export class BasicModalServices {
      */
     promptPrefixed(title: TextOrTranslation, prefix: string, label?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean, prefixEditable?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(PromptPrefixedModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.prefix = prefix;
         if (label != null) modalRef.componentInstance.label = label;
         if (value != null) modalRef.componentInstance.value = value;
@@ -84,7 +77,7 @@ export class BasicModalServices {
      */
     promptProperties(title: TextOrTranslation, properties: { [key: string]: string }, allowEmpty: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(PromptPropertiesModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.properties = properties;
         modalRef.componentInstance.allowEmpty = allowEmpty;
         return modalRef.result;
@@ -102,8 +95,8 @@ export class BasicModalServices {
     confirm(title: TextOrTranslation, msg: TextOrTranslation, type?: ModalType) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(ConfirmModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.message = TranslationUtils.getTranslatedText(msg, this.translateService);
         if (type != null) modalRef.componentInstance.type = type;
         return modalRef.result;
     }
@@ -119,8 +112,8 @@ export class BasicModalServices {
      */
     confirmCheck(title: TextOrTranslation, msg: TextOrTranslation, checkOpts: ConfirmCheckOptions[], type?: ModalType): Promise<ConfirmCheckOptions[]> {
         const modalRef: NgbModalRef = this.modalService.open(ConfirmCheckModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.message = TranslationUtils.getTranslatedText(msg, this.translateService);
         modalRef.componentInstance.checkOpts = checkOpts;
         if (type != null) modalRef.componentInstance.type = type;
         return modalRef.result;
@@ -141,7 +134,7 @@ export class BasicModalServices {
             let confCheckOpt: ConfirmCheckOptions = {
                 label: this.translateService.instant("COMMONS.DONT_ASK_AGAIN"),
                 value: false
-            }
+            };
             return this.confirmCheck(title, msg, [confCheckOpt], type).then(
                 (checkOpts: ConfirmCheckOptions[]) => {
                     if (checkOpts[0].value) {
@@ -150,7 +143,7 @@ export class BasicModalServices {
                 }
             );
         } else {
-            return new Promise((resolve, reject) => resolve());
+            return new Promise((resolve, reject) => { resolve(); });
         }
     }
 
@@ -165,8 +158,8 @@ export class BasicModalServices {
      */
     alert(title: TextOrTranslation, msg: TextOrTranslation, type?: ModalType, details?: string, checkboxLabel?: string): Promise<boolean> {
         const modalRef: NgbModalRef = this.modalService.open(AlertModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.message = TranslationUtils.getTranslatedText(msg, this.translateService);
         if (type != null) modalRef.componentInstance.type = type;
         if (details != null) modalRef.componentInstance.details = details;
         if (checkboxLabel != null) modalRef.componentInstance.checkboxLabel = checkboxLabel;
@@ -191,7 +184,7 @@ export class BasicModalServices {
                 }
             );
         } else {
-            return new Promise((resolve, reject) => resolve());
+            return new Promise((resolve, reject) => { resolve(); });
         }
     }
 
@@ -203,12 +196,10 @@ export class BasicModalServices {
      * {value: string, description: string}, where the description is shown on mouseover of the option value
      * @return if the modal closes with ok returns a promise containing the selected option
      */
-    select(title: TextOrTranslation, msg: TextOrTranslation, options: Array<string|SelectionOption>, type?: ModalType) {
+    select(title: TextOrTranslation, msg: TextOrTranslation, options: Array<string | SelectionOption>, type?: ModalType) {
         const modalRef: NgbModalRef = this.modalService.open(SelectionModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        if (msg != null) {
-            modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
-        }
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.message = TranslationUtils.getTranslatedText(msg, this.translateService);
         modalRef.componentInstance.options = options;
         if (type != null) modalRef.componentInstance.type = type;
         return modalRef.result;
@@ -216,10 +207,8 @@ export class BasicModalServices {
 
     selectProject(title: TextOrTranslation, msg: TextOrTranslation): Promise<Project> {
         const modalRef: NgbModalRef = this.modalService.open(ProjectSelectionModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        if (msg != null) {
-            modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
-        }
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.message = TranslationUtils.getTranslatedText(msg, this.translateService);
         return modalRef.result;
     }
 
@@ -232,10 +221,8 @@ export class BasicModalServices {
      */
     downloadLink(title: TextOrTranslation, msg: TextOrTranslation, downloadLink: string, fileName: string) {
         const modalRef: NgbModalRef = this.modalService.open(DownloadModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        if (msg != null) {
-            modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
-        }
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.message = TranslationUtils.getTranslatedText(msg, this.translateService);
         modalRef.componentInstance.downloadLink = downloadLink;
         modalRef.componentInstance.fileName = fileName;
         return modalRef.result;
@@ -250,10 +237,8 @@ export class BasicModalServices {
      */
     selectFile(title: TextOrTranslation, msg?: TextOrTranslation, accept?: string): Promise<File> {
         const modalRef: NgbModalRef = this.modalService.open(FilePickerModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        if (msg != null) {
-            modalRef.componentInstance.message = (typeof msg == "string") ? msg : this.translateService.instant(msg.key, msg.params);
-        }
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.message = TranslationUtils.getTranslatedText(msg, this.translateService);
         if (accept != null) modalRef.componentInstance.accept = accept;
         return modalRef.result;
     }
@@ -267,7 +252,7 @@ export class BasicModalServices {
      */
     selectCustomForm(title: TextOrTranslation, cfList: CustomForm[], hideNo?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(CustomFormSelectionModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.cfList = cfList;
         if (hideNo != null) modalRef.componentInstance.hideNo = hideNo;
         return modalRef.result;

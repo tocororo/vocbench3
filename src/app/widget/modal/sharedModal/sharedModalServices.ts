@@ -1,4 +1,4 @@
-import { Injectable, NgModuleRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { DatasetCatalogModal } from 'src/app/config/dataManagement/datasetCatalog/datasetCatalogModal';
@@ -17,7 +17,7 @@ import { User } from '../../../models/User';
 import { ProjectContext } from '../../../utils/VBContext';
 import { ResourcePickerConfig } from '../../pickers/valuePicker/resourcePickerComponent';
 import { ResourceSelectionModal } from '../basicModal/selectionModal/resourceSelectionModal';
-import { ModalOptions, TextOrTranslation } from '../Modals';
+import { ModalOptions, TextOrTranslation, TranslationUtils } from '../Modals';
 import { LoadConfigurationModal } from "./configurationStoreModal/loadConfigurationModal";
 import { StoreConfigurationModal } from "./configurationStoreModal/storeConfigurationModal";
 import { ConverterPickerModal } from "./converterPickerModal/converterPickerModal";
@@ -65,7 +65,7 @@ export class SharedModalServices {
      */
     selectRemoteRepository(title: TextOrTranslation, remoteRepoConfig: RemoteRepositoryAccessConfig) {
         const modalRef: NgbModalRef = this.modalService.open(RemoteRepoSelectionModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.repoConfig = remoteRepoConfig;
         return modalRef.result;
     }
@@ -92,7 +92,7 @@ export class SharedModalServices {
      */
     selectLanguages(title: TextOrTranslation, languages?: string[], radio?: boolean, projectAware?: boolean, projectCtx?: ProjectContext) {
         const modalRef: NgbModalRef = this.modalService.open(LanguageSelectorModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (languages != null) modalRef.componentInstance.languages = languages;
         if (radio != null) modalRef.componentInstance.radio = radio;
         if (projectAware != null) modalRef.componentInstance.projectAware = projectAware;
@@ -107,7 +107,7 @@ export class SharedModalServices {
      */
     selectConverter(title: TextOrTranslation, message?: string, capabilities?: RDFCapabilityType[]) {
         const modalRef: NgbModalRef = this.modalService.open(ConverterPickerModal, new ModalOptions('xl'));
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (message != null) modalRef.componentInstance.message = message;
         if (capabilities != null) modalRef.componentInstance.capabilities = capabilities;
         return modalRef.result;
@@ -124,7 +124,7 @@ export class SharedModalServices {
      */
     storeConfiguration(title: TextOrTranslation, configurationComponent: string, configurationObject: { [key: string]: any }, relativeRef?: string) {
         const modalRef: NgbModalRef = this.modalService.open(StoreConfigurationModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.configurationComponent = configurationComponent;
         modalRef.componentInstance.configurationObject = configurationObject;
         if (relativeRef != null) modalRef.componentInstance.relativeRef = relativeRef;
@@ -148,7 +148,7 @@ export class SharedModalServices {
      */
     loadConfiguration(title: TextOrTranslation, configurationComponent: string, allowLoad?: boolean, allowDelete?: boolean, additionalReferences?: Reference[]) {
         const modalRef: NgbModalRef = this.modalService.open(LoadConfigurationModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.configurationComponent = configurationComponent;
         if (allowLoad !== undefined) modalRef.componentInstance.allowLoad = allowLoad;
         if (allowDelete !== undefined) modalRef.componentInstance.allowDelete = allowDelete;
@@ -164,7 +164,7 @@ export class SharedModalServices {
      */
     pickResource(title: TextOrTranslation, config?: ResourcePickerConfig, editable?: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(ResourcePickerModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (config != null) modalRef.componentInstance.config = config;
         if (editable != null) modalRef.componentInstance.editable = editable;
         return modalRef.result;
@@ -172,7 +172,7 @@ export class SharedModalServices {
 
     pickDatetime(title: TextOrTranslation, date?: Date) {
         const modalRef: NgbModalRef = this.modalService.open(DatetimePickerModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.date = date;
         return modalRef.result;
     }
@@ -184,7 +184,7 @@ export class SharedModalServices {
      */
     importOntology(title: TextOrTranslation, importType: ImportType) {
         const modalRef: NgbModalRef = this.modalService.open(ImportOntologyModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.importType = importType;
         return modalRef.result;
     }
@@ -195,7 +195,7 @@ export class SharedModalServices {
      */
     importFromDatasetCatalog(title: TextOrTranslation) {
         const modalRef: NgbModalRef = this.modalService.open(ImportFromDatasetCatalogModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         return modalRef.result;
     }
 
@@ -208,7 +208,7 @@ export class SharedModalServices {
      */
     selectUser(title: TextOrTranslation, projectDependent?: boolean, unselectableUsers?: User[]) {
         const modalRef: NgbModalRef = this.modalService.open(UserSelectionModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (projectDependent != null) modalRef.componentInstance.projectDepending = projectDependent;
         if (unselectableUsers != null) modalRef.componentInstance.unselectableUsers = unselectableUsers;
         return modalRef.result;
@@ -233,7 +233,7 @@ export class SharedModalServices {
     prefixNamespace(title: TextOrTranslation, prefix?: string, namespace?: string, namespaceReadonly?: boolean,
         write?: boolean): Promise<PrefixNamespaceModalData> {
         const modalRef: NgbModalRef = this.modalService.open(PrefixNamespaceModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (prefix != null) modalRef.componentInstance.prefixInput = prefix;
         if (namespace != null) modalRef.componentInstance.namespaceInput = namespace;
         if (namespaceReadonly != null) modalRef.componentInstance.namespaceReadonly = namespaceReadonly;
@@ -249,7 +249,7 @@ export class SharedModalServices {
      */
     manchesterExpression(title: TextOrTranslation, expression?: string): Promise<ManchesterExprModalReturnData> {
         const modalRef: NgbModalRef = this.modalService.open(ManchesterExprModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (expression != null) modalRef.componentInstance.expression = expression;
         return modalRef.result;
     }
@@ -273,10 +273,8 @@ export class SharedModalServices {
      */
     selectResource(title: TextOrTranslation, message: TextOrTranslation, resourceList: ARTNode[], rendering?: boolean, multiselection?: boolean, emptySelectionAllowed?: boolean, selectedResources?: ARTNode[]): Promise<any[]> {
         const modalRef: NgbModalRef = this.modalService.open(ResourceSelectionModal, new ModalOptions());
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
-        if (message != null) {
-            modalRef.componentInstance.message = (typeof message == "string") ? message : this.translateService.instant(message.key, message.params);
-        }
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.message = TranslationUtils.getTranslatedText(message, this.translateService);
         modalRef.componentInstance.resourceList = resourceList;
         if (rendering != null) modalRef.componentInstance.rendering = rendering;
         if (multiselection != null) modalRef.componentInstance.multiselection = multiselection;
@@ -287,7 +285,7 @@ export class SharedModalServices {
 
     storageManager(title: TextOrTranslation, selectedFiles: string[], multiselection?: boolean): Promise<string[]> {
         const modalRef: NgbModalRef = this.modalService.open(StorageManagerModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.selectedFiles = selectedFiles;
         modalRef.componentInstance.multiselection = multiselection;
         return modalRef.result;

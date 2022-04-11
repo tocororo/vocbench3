@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { AlignmentOverview } from '../../models/Alignment';
+import { Project } from '../../models/Project';
 import { AlignmentServices } from '../../services/alignmentServices';
 import { EdoalServices } from '../../services/edoalServices';
 import { ProjectServices } from '../../services/projectServices';
 import { UIUtils } from '../../utils/UIUtils';
 import { AlignFromSource } from './alignFromSource';
-import { VBContext } from '../../utils/VBContext';
-import { Project } from '../../models/Project';
-import { EDOAL } from '../../models/Vocabulary';
 
 @Component({
     selector: 'alignment-file',
@@ -52,7 +50,7 @@ export class AlignFromFileComponent extends AlignFromSource {
                     rightProject = new Project(projects[1]);
                     this.loadAlignmentImpl(leftProject, rightProject);
                 }
-            )
+            );
         } else {
             this.loadAlignmentImpl();
         }

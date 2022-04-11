@@ -86,7 +86,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
      * @param datatype 
      */
     private initDatatype(datatype: ARTURIResource) {
-        let idx = this.datatypeList.findIndex(d => d.equals(datatype))
+        let idx = this.datatypeList.findIndex(d => d.equals(datatype));
         if (idx != -1) { //datatype found in datatype list => select it
             this.selectedDatatype = this.datatypeList[idx];
         }

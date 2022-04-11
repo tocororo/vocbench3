@@ -2,11 +2,8 @@ import { Component, HostListener, QueryList, ViewChildren } from "@angular/core"
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { concat, Observable } from "rxjs";
 import { last } from 'rxjs/operators';
-import { ExtensionPointID, Scope } from "../models/Plugins";
-import { SettingsEnum } from "../models/Properties";
-import { FsNamingStrategy, S2RDFModel, Sheet2RdfSettings } from "../models/Sheet2RDF";
+import { S2RDFModel } from "../models/Sheet2RDF";
 import { ExportServices } from "../services/exportServices";
-import { SettingsServices } from "../services/settingsServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
@@ -61,7 +58,7 @@ export class Sheet2RdfComponent {
                 this.dbDrivers = drivers;
                 this.dbInfo.db_driverName = this.dbDrivers[0];
             }
-        )
+        );
     }
 
     //use HostListener instead of ngOnDestroy since this component is reused and so it is never destroyed
@@ -80,7 +77,7 @@ export class Sheet2RdfComponent {
             loadFn = this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, fsNamingStrategy);
         } else {
             loadFn = this.s2rdfService.uploadDBInfo(this.dbInfo.db_base_url, this.dbInfo.db_name, this.dbInfo.db_tableList,
-                this.dbInfo.db_user, this.dbInfo.db_password, this.dbInfo.db_driverName, fsNamingStrategy)
+                this.dbInfo.db_user, this.dbInfo.db_password, this.dbInfo.db_driverName, fsNamingStrategy);
         }
         loadFn.subscribe(
             () => {
@@ -99,7 +96,7 @@ export class Sheet2RdfComponent {
                     this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_SPREADSHEET" }, ModalType.warning);
                     return;
                 }
-                this.sheets = sheetNames.map(s => { return { name: s, exclude: false } });
+                this.sheets = sheetNames.map(s => { return { name: s, exclude: false }; });
                 this.activeSheet = this.sheets[0];
             }
         );
@@ -124,7 +121,7 @@ export class Sheet2RdfComponent {
                     this.dbInfo.db_tableList.push(tableName);
                 }
             }
-        )
+        );
     }
 
     removeDbTable(table: string) {
@@ -142,7 +139,7 @@ export class Sheet2RdfComponent {
     generateAllPearl() {
         let globalActionEditors = this.getMultisheetActionEditors();
         globalActionEditors.forEach(e => {
-            e.generatePearl()
+            e.generatePearl();
         });
     }
 
@@ -159,7 +156,7 @@ export class Sheet2RdfComponent {
             multiActions.push(e.generateTriples());
         });
         if (multiActions.length > 0) {
-            concat(...multiActions).subscribe(() => { })
+            concat(...multiActions).subscribe(() => { });
         }
     }
 
@@ -177,7 +174,7 @@ export class Sheet2RdfComponent {
                     () => {
                         this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.GENERATED_TRIPLES_ADDED" });
                     }
-                )
+                );
 
         }
     }
@@ -209,9 +206,9 @@ export class Sheet2RdfComponent {
                 this.sheets = null;
                 setTimeout(() => {
                     this.sheets = tmp;
-                })
+                });
             }
-        )
+        );
     }
 
     //======================

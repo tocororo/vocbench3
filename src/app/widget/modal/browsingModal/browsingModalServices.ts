@@ -3,7 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ProjectContext } from '../../../utils/VBContext';
-import { ModalOptions, TextOrTranslation } from '../Modals';
+import { ModalOptions, TextOrTranslation, TranslationUtils } from '../Modals';
 import { ClassIndividualTreeModal } from "./classIndividualTreeModal/classIndividualTreeModal";
 import { ClassTreeModal } from "./classTreeModal/classTreeModal";
 import { CollectionTreeModal } from "./collectionTreeModal/collectionTreeModal";
@@ -33,7 +33,7 @@ export class BrowsingModalServices {
     browseClassTree(title: TextOrTranslation, roots?: ARTURIResource[], projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(ClassTreeModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (roots != null) modalRef.componentInstance.roots = roots;
         if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
@@ -48,7 +48,7 @@ export class BrowsingModalServices {
     browseClassIndividualTree(title: TextOrTranslation, classes?: ARTURIResource[], projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions('lg');
         const modalRef: NgbModalRef = this.modalService.open(ClassIndividualTreeModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (classes != null) modalRef.componentInstance.classes = classes;
         if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
@@ -63,7 +63,7 @@ export class BrowsingModalServices {
     browseInstanceList(title: TextOrTranslation, cls: ARTURIResource): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(InstanceListModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.cls = cls;
         return modalRef.result;
     }
@@ -78,7 +78,7 @@ export class BrowsingModalServices {
     browseConceptTree(title: TextOrTranslation, schemes?: ARTURIResource[], schemeChangeable?: boolean, projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(ConceptTreeModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (schemes != null) modalRef.componentInstance.schemes = schemes;
         if (schemeChangeable != null) modalRef.componentInstance.schemeChangeable = schemeChangeable;
         if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
@@ -93,7 +93,7 @@ export class BrowsingModalServices {
     browseCollectionTree(title: TextOrTranslation, projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(CollectionTreeModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
@@ -106,7 +106,7 @@ export class BrowsingModalServices {
     browseSchemeList(title: TextOrTranslation, projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(SchemeListModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
@@ -123,7 +123,7 @@ export class BrowsingModalServices {
     browsePropertyTree(title: TextOrTranslation, rootProperties?: ARTURIResource[], resource?: ARTURIResource, type?: RDFResourceRolesEnum, projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(PropertyTreeModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (rootProperties != null) modalRef.componentInstance.rootProperties = rootProperties;
         if (resource != null) modalRef.componentInstance.resource = resource;
         if (type != null) modalRef.componentInstance.type = type;
@@ -142,7 +142,7 @@ export class BrowsingModalServices {
         allowMultiselection?: boolean, projectCtx?: ProjectContext) {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(LexicalEntryListModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (lexicon != null) modalRef.componentInstance.lexicon = lexicon;
         if (lexiconChangeable != null) modalRef.componentInstance.lexiconChangeable = lexiconChangeable;
         if (editable != null) modalRef.componentInstance.editable = editable;
@@ -159,7 +159,7 @@ export class BrowsingModalServices {
     browseLexiconList(title: TextOrTranslation, projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(LexiconListModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
@@ -167,7 +167,7 @@ export class BrowsingModalServices {
     browseLexicalSense(title: TextOrTranslation, projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(LexicalSenseListModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (projectCtx != null) modalRef.componentInstance.projectCtx = projectCtx;
         return modalRef.result;
     }
@@ -175,7 +175,7 @@ export class BrowsingModalServices {
     browseTranslationSet(title: TextOrTranslation, editable?: boolean, deletable?: boolean, allowMultiselection?: boolean, projectCtx?: ProjectContext): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(TranslationSetModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (editable != null) modalRef.componentInstance.editable = editable;
         if (deletable != null) modalRef.componentInstance.deletable = deletable;
         if (allowMultiselection != null) modalRef.componentInstance.allowMultiselection = allowMultiselection;
@@ -191,7 +191,7 @@ export class BrowsingModalServices {
     browseDatatypeList(title: TextOrTranslation): Promise<ARTURIResource> {
         let _options: ModalOptions = new ModalOptions();
         const modalRef: NgbModalRef = this.modalService.open(DatatypeListModal, _options);
-        modalRef.componentInstance.title = (typeof title == "string") ? title : this.translateService.instant(title.key, title.params);
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         return modalRef.result;
     }
 

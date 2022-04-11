@@ -30,7 +30,7 @@ export class AlignmentManagementComponent {
 
     @Input() overview: AlignmentOverview; //not used, useful in order to trigger the reload of the alignment cells when it changes
     @Input() leftProject: Project;
-    @Input() rightProject: Project;c
+    @Input() rightProject: Project;
 
     @ViewChild('blockingDiv', { static: true }) private blockingDivElement: ElementRef;
 
@@ -97,10 +97,10 @@ export class AlignmentManagementComponent {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.alignmentService.listCells(this.page, this.alignmentPerPage).subscribe(
             map => {
-                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement)
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.totPage = map.totPage;
                 this.alignmentCellList = map.cells;
-                
+
                 if (this.alignmentCellList.length == 0) return; //no alignments => don't go further
 
                 //check if there is at least an unknown relation (could be a classname)
@@ -128,12 +128,12 @@ export class AlignmentManagementComponent {
 
                         forkJoin(computeRenderingFn).subscribe(
                             () => {
-                                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement)
+                                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                             }
                         );
                     }
                 );
-                
+
             }
         );
     }
@@ -155,12 +155,12 @@ export class AlignmentManagementComponent {
                         if (dataset == "left" && cell.getEntity1().equals(renderedResources[i])) {
                             cell.setEntity1(<ARTURIResource>renderedResources[i]);
                             break; //go to the next entity
-                        } else if (dataset == "right" &&  cell.getEntity2().equals(renderedResources[i])) {
+                        } else if (dataset == "right" && cell.getEntity2().equals(renderedResources[i])) {
                             cell.setEntity2(<ARTURIResource>renderedResources[i]);
                             break; //go to the next entity
                         }
-                    }           
-                })
+                    }
+                });
             })
         );
     }
@@ -221,13 +221,13 @@ export class AlignmentManagementComponent {
                                     //replace the accepted alignment cell with the returned one
                                     this.replaceAlignmentCell(resultCell);
                                 }
-                            )
+                            );
                         },
-                        () => {}
-                    )
+                        () => { }
+                    );
                 }
             }
-        )
+        );
     }
 
     /**
@@ -237,8 +237,8 @@ export class AlignmentManagementComponent {
     private selectMappingProperty(cell: AlignmentCell) {
         const modalRef: NgbModalRef = this.modalService.open(MappingPropertySelectionModal, new ModalOptions());
         modalRef.componentInstance.title = "Invalid relation";
-		modalRef.componentInstance.message = cell.getComment();
-		modalRef.componentInstance.resource = cell.getEntity1();
+        modalRef.componentInstance.message = cell.getComment();
+        modalRef.componentInstance.resource = cell.getEntity1();
         return modalRef.result;
     }
 
@@ -254,7 +254,7 @@ export class AlignmentManagementComponent {
                 resultCell.setEntity2(this.alignmentCellList[cellToUpdateIdx].getEntity2());
                 this.alignmentCellList[cellToUpdateIdx] = resultCell;
             }
-        )
+        );
     }
 
     /**
@@ -281,18 +281,18 @@ export class AlignmentManagementComponent {
     changeRelation(cell: AlignmentCell, relation: string) {
         //change relation only if user choses a relation different from the current
         if (cell.getRelation() != relation) {
-            this.basicModals.confirmCheckCookie({key:"ALIGNMENT.ACTIONS.CHANGE_RELATION"}, {key:"MESSAGES.ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM"}, 
+            this.basicModals.confirmCheckCookie({ key: "ALIGNMENT.ACTIONS.CHANGE_RELATION" }, { key: "MESSAGES.ALIGNMENT_RELATION_MANUALLY_SET_CONFIRM" },
                 Cookie.WARNING_ALIGN_VALIDATION_CHANGE_REL, ModalType.warning).then(
-                () => {
-                    this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
-                        resultCell => {//replace the alignment cell with the new one
-                            this.replaceAlignmentCell(resultCell);
-                        }
-                    )
-                },
-                () => { }
-            );
-            
+                    () => {
+                        this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
+                            resultCell => { //replace the alignment cell with the new one
+                                this.replaceAlignmentCell(resultCell);
+                            }
+                        );
+                    },
+                    () => { }
+                );
+
         }
     }
 
@@ -302,7 +302,7 @@ export class AlignmentManagementComponent {
      * Useful to populate the menu of the mapping properties.
      * Retrieves the suggested mapping properties and set them to the alignment cell.
      */
-    getSuggestedMappingProperties(cell: AlignmentCell) {
+    initSuggestedMappingProperties(cell: AlignmentCell) {
         //call the service only if suggested properties for the given cell is not yet initialized
         if (cell.getSuggestedMappingProperties() == null) {
             //mention is not a valid role in ST, so get the role with fallback to individual
@@ -312,14 +312,10 @@ export class AlignmentManagementComponent {
             }
             this.alignmentService.getSuggestedProperties(role, cell.getRelation()).subscribe(
                 props => {
-                    props
                     cell.setSuggestedMappingProperties(props);
                 }
             );
-        } else {
-            return cell.getSuggestedMappingProperties();
         }
-        
     }
 
     /**
@@ -329,7 +325,7 @@ export class AlignmentManagementComponent {
         //change property only if the user choses a property different from the current.
         if (property.getURI() != cell.getMappingProperty().getURI()) {
             this.alignmentService.changeMappingProperty(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), property).subscribe(
-                resultCell => {//replace the alignment cell with the new one
+                resultCell => { //replace the alignment cell with the new one
                     this.replaceAlignmentCell(resultCell);
                 }
             );
@@ -396,7 +392,7 @@ export class AlignmentManagementComponent {
 
     toggleRendering() {
         this.rendering = !this.rendering;
-        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_RENDERING, this.rendering+"");
+        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_RENDERING, this.rendering + "");
     }
 
     doQuickAction() {
@@ -407,28 +403,28 @@ export class AlignmentManagementComponent {
                     this.updateAlignmentListAfterQuickAction(cells);
                     UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 }
-            )
+            );
         } else if (this.chosenQuickAction == this.qaAcceptAllAbove) {
             this.alignmentService.acceptAllAbove(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
                     UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 }
-            )
+            );
         } else if (this.chosenQuickAction == this.qaRejectAll) {
             this.alignmentService.rejectAllAlignment().subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
                     UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 }
-            )
+            );
         } else if (this.chosenQuickAction == this.qaRejectAllUnder) {
             this.alignmentService.rejectAllUnder(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
                     UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 }
-            )
+            );
         }
     }
 
@@ -455,15 +451,15 @@ export class AlignmentManagementComponent {
         let message: Translation;
         if (this.isEdoal) {
             if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "ask") {
-                message = {key:"MESSAGES.ADD_ALIGNMENT_TO_EDOAL_CONFIRM"};
+                message = { key: "MESSAGES.ADD_ALIGNMENT_TO_EDOAL_CONFIRM" };
             } else {
-                message = {key:"MESSAGES.ADD_DELETE_ALIGNMENT_TO_EDOAL_CONFIRM"};
+                message = { key: "MESSAGES.ADD_DELETE_ALIGNMENT_TO_EDOAL_CONFIRM" };
             }
         } else {
             if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "ask") {
-                message = {key:"MESSAGES.ADD_ALIGNMENT_TO_ONTO_CONFIRM"};
+                message = { key: "MESSAGES.ADD_ALIGNMENT_TO_ONTO_CONFIRM" };
             } else {
-                message = {key:"MESSAGES.ADD_DELETE_ALIGNMENT_TO_ONTO_CONFIRM"};
+                message = { key: "MESSAGES.ADD_DELETE_ALIGNMENT_TO_ONTO_CONFIRM" };
             }
         }
 
@@ -472,11 +468,11 @@ export class AlignmentManagementComponent {
                 () => {
                     let deleteRejected = this.rejectedAlignmentAction == "delete";
                     if (this.isEdoal) {
-                        this.applyToEdoalLinkset(deleteRejected)
+                        this.applyToEdoalLinkset(deleteRejected);
                     } else {
                         this.applyToDataset(deleteRejected);
                     }
-                    
+
                 },
                 () => { }
             );
@@ -485,7 +481,7 @@ export class AlignmentManagementComponent {
             this.basicModals.confirmCheck({ key: "ALIGNMENT.ACTIONS.APPLY_VALIDATION" }, message, [{ label: checkLabel, value: false }], ModalType.warning).then(
                 (checkOpts: ConfirmCheckOptions[]) => {
                     if (this.isEdoal) {
-                        this.applyToEdoalLinkset(checkOpts[0].value)
+                        this.applyToEdoalLinkset(checkOpts[0].value);
                     } else {
                         this.applyToDataset(checkOpts[0].value);
                     }
@@ -508,7 +504,7 @@ export class AlignmentManagementComponent {
                 modalRef.componentInstance.report = report;
                 return modalRef.result;
             }
-        )
+        );
     }
 
     private applyToEdoalLinkset(deleteRejected: boolean) {
@@ -516,7 +512,7 @@ export class AlignmentManagementComponent {
         this.alignmentService.applyValidationToEdoal(deleteRejected).subscribe(
             () => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                this.basicModals.alert({ key: "ALIGNMENT.ACTIONS.APPLY_TO_EDOAL" }, {key:"MESSAGES.ALL_CORRESPONDENCES_ADDED"});
+                this.basicModals.alert({ key: "ALIGNMENT.ACTIONS.APPLY_TO_EDOAL" }, { key: "MESSAGES.ALL_CORRESPONDENCES_ADDED" });
             }
         );
     }
@@ -525,7 +521,7 @@ export class AlignmentManagementComponent {
         this.alignmentService.exportAlignment().subscribe(
             blob => {
                 let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ALIGNMENT.ACTIONS.EXPORT_ALIGNMENT" }, {key:"MESSAGES.ALIGNMENT_VALIDATION_DATA_STORING_WARN"}, 
+                this.basicModals.downloadLink({ key: "ALIGNMENT.ACTIONS.EXPORT_ALIGNMENT" }, { key: "MESSAGES.ALIGNMENT_VALIDATION_DATA_STORING_WARN" },
                     exportLink, "alignment.rdf");
             }
         );
@@ -548,7 +544,7 @@ export class AlignmentManagementComponent {
             () => {
                 HttpServiceContext.removeContextProject();
             },
-            () => {}
+            () => { }
         );
     }
 }
