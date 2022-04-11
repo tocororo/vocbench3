@@ -36,7 +36,7 @@ export class MappingPropertySelectionModal {
     }
 
     ok() {
-        var returnData: { property: ARTURIResource, setAsDefault: boolean } = { 
+        let returnData: { property: ARTURIResource, setAsDefault: boolean } = { 
             property: this.selectedProperty, setAsDefault: this.setAsDefault 
         };
         this.activeModal.close(returnData);

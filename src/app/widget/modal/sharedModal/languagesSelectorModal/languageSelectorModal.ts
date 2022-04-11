@@ -32,7 +32,7 @@ export class LanguageSelectorModal {
             initiallySelectedLanguages = initiallySelectedLanguages.slice(0, 1); // in case of radio behavior, only consider the first selected language
         }
 
-        for (var i = 0; i < languages.length; i++) {
+        for (let i = 0; i < languages.length; i++) {
             this.languageItems.push({
                 lang: languages[i], 
                 selected: initiallySelectedLanguages.indexOf(languages[i].tag) != -1
@@ -48,7 +48,7 @@ export class LanguageSelectorModal {
                 } else {
                     l.selected = false;
                 }
-            })
+            });
         } else {
             lang.selected = !lang.selected;
         }
@@ -59,8 +59,8 @@ export class LanguageSelectorModal {
     }
 
     ok() {
-        var activeLangs: string[] = [];
-        for (var i = 0; i < this.languageItems.length; i++) {
+        let activeLangs: string[] = [];
+        for (let i = 0; i < this.languageItems.length; i++) {
             if (this.languageItems[i].selected) {
                 activeLangs.push(this.languageItems[i].lang.tag);
             }

@@ -28,7 +28,7 @@ export class DanglingXLabelComponent {
         this.icvService.listDanglingXLabels().subscribe(
             labels => {
                 this.brokenLabelList = labels;
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
             },
             err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
         );
@@ -42,7 +42,7 @@ export class DanglingXLabelComponent {
             stResp => {
                 this.runIcv();
             }
-        )
+        );
     }
 
     /**
@@ -51,24 +51,23 @@ export class DanglingXLabelComponent {
      */
     assignLabel(xlabel: ARTResource) {
         //as pref alt or hidden?
-        var predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
-        this.sharedModals.selectResource({key:"DATA.ACTIONS.SELECT_LEXICALIZATION_PROPERTY"}, null, predOpts).then(
+        let predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
+        this.sharedModals.selectResource({ key: "DATA.ACTIONS.SELECT_LEXICALIZATION_PROPERTY" }, null, predOpts).then(
             (selectedPred: ARTURIResource[]) => {
                 let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
-                this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, activeSchemes, true).then(
+                this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_CONCEPT" }, activeSchemes, true).then(
                     (concept: any) => {
-                        var xlabelPred: ARTURIResource;
                         this.icvService.setDanglingXLabel(concept, selectedPred[0], xlabel).subscribe(
                             stResp => {
                                 this.runIcv();
                             }
-                        )
+                        );
                     },
                     () => { }
-                )
+                );
             },
             () => { }
-        )
+        );
     }
 
     /**
@@ -79,7 +78,7 @@ export class DanglingXLabelComponent {
             stResp => {
                 this.runIcv();
             }
-        )
+        );
     }
 
 }

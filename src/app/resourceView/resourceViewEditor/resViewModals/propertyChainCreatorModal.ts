@@ -24,7 +24,7 @@ export class PropertyChainCreatorModal {
     selectedTreeProperty: ARTURIResource;
     inverseProp: boolean = false;
 
-    propChain: PropertyChainItem[] = []
+    propChain: PropertyChainItem[] = [];
     selectedChainProperty: PropertyChainItem;
 
     private readonly inversePrefix: string = "INVERSE ";
@@ -65,7 +65,7 @@ export class PropertyChainCreatorModal {
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [this.rootProperty]).then(
             (selectedProp: any) => {
                 if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
                     this.enrichingProperty = selectedProp;
@@ -104,12 +104,12 @@ export class PropertyChainCreatorModal {
     }
 
     moveDown() {
-        var prevIndex = this.propChain.indexOf(this.selectedChainProperty);
+        let prevIndex = this.propChain.indexOf(this.selectedChainProperty);
         this.propChain.splice(prevIndex, 1); //remove from current position
         this.propChain.splice(prevIndex + 1, 0, this.selectedChainProperty);
     }
     moveUp() {
-        var prevIndex = this.propChain.indexOf(this.selectedChainProperty);
+        let prevIndex = this.propChain.indexOf(this.selectedChainProperty);
         this.propChain.splice(prevIndex, 1); //remove from current position
         this.propChain.splice(prevIndex - 1, 0, this.selectedChainProperty);
     }
@@ -130,7 +130,7 @@ export class PropertyChainCreatorModal {
 
     ok() {
         if (this.propChain.length < 2) {
-            this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.PROPERTY_CHAIN_NEEDS_AT_LEAST_TWO_PROPS"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.PROPERTY_CHAIN_NEEDS_AT_LEAST_TWO_PROPS" }, ModalType.warning);
             return;
         }
 
@@ -146,7 +146,7 @@ export class PropertyChainCreatorModal {
         let returnData: PropertyListCreatorModalReturnData = {
             property: this.enrichingProperty,
             chain: chain
-        }
+        };
         this.activeModal.close(returnData);
     }
 

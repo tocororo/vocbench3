@@ -64,7 +64,7 @@ export class NoTopConceptSchemeComponent {
     createTopConcept(scheme: ARTURIResource) {
         let vbActions = new VBActionFunctions(this.skosService, null, null, null, null, null, this.basicModals, this.creationModals, this.translateService);
         let createTopFn = vbActions.getFunction(VBActionsEnum.skosCreateTopConcept);
-        let fnCtx: VBActionFunctionCtx = { metaClass: SKOS.concept, loadingDivRef: this.blockingDivElement, schemes: [scheme] }
+        let fnCtx: VBActionFunctionCtx = { metaClass: SKOS.concept, loadingDivRef: this.blockingDivElement, schemes: [scheme] };
         createTopFn(fnCtx).subscribe(
             () => {
                 this.runIcv();
@@ -95,7 +95,7 @@ export class NoTopConceptSchemeComponent {
     deleteAllScheme() {
         this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.DELETE_SCHEMES_WITHOUT_TOP_WARN_CONFIRM" }).then(
             confirm => {
-                var deleteSchemeFnArray: any[] = [];
+                let deleteSchemeFnArray: any[] = [];
                 deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteConceptScheme(sc));
                 //call the collected functions and subscribe when all are completed
                 forkJoin(deleteSchemeFnArray).subscribe(

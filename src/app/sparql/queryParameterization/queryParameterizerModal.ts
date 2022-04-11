@@ -44,14 +44,14 @@ export class QueryParameterizerModal {
     private datatypes: ARTURIResource[];
 
     constructor(public activeModal: NgbActiveModal, private datatypeService: DatatypesServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices,  private creationModals: CreationModalServices) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private creationModals: CreationModalServices) {
     }
 
     ngOnInit() {
         if (this.variableBindings) { //edit mode
             let varBinds: VariableBindings = this.variableBindings;
             //restore variableBindings into bindings
-            for (var varName in varBinds) {
+            for (let varName in varBinds) {
                 let bs: BindingStruct;
                 let bindingType: BindingTypeStruct;
                 let datatype: ARTURIResource;
@@ -65,13 +65,13 @@ export class QueryParameterizerModal {
                             if (bt.value == BindingTypeEnum.constraint && bt.specialization == 'datatype') {
                                 bindingType = bt;
                             }
-                        })
+                        });
                     } else if (varBinds[varName].resourceRole != null) {
                         this.bindingTypes.forEach(bt => {
                             if (bt.value == BindingTypeEnum.constraint && bt.specialization == 'role') {
                                 bindingType = bt;
                             }
-                        })
+                        });
                         resourceRole = varBinds[varName].resourceRole;
                     }
                 } else { //assignment
@@ -79,7 +79,7 @@ export class QueryParameterizerModal {
                         if (bt.value == BindingTypeEnum.assignment) {
                             bindingType = bt;
                         }
-                    })
+                    });
                     value = varBinds[varName].value;
                 }
 
@@ -91,7 +91,7 @@ export class QueryParameterizerModal {
                     datatype: datatype,
                     resourceRole: resourceRole,
                     value: value
-                }
+                };
 
                 /**
                  * If the specialization is datatype, then I need to retrieve (asynchronously) the datatypes,
@@ -101,11 +101,11 @@ export class QueryParameterizerModal {
                     //init datatypes
                     this.initDatatypes().subscribe(
                         () => {
-                            datatype = this.datatypes[ResourceUtils.indexOfNode(this.datatypes, NTriplesUtil.parseURI(varBinds[varName].datatype))]
-                            bs.datatype = datatype
+                            datatype = this.datatypes[ResourceUtils.indexOfNode(this.datatypes, NTriplesUtil.parseURI(varBinds[varName].datatype))];
+                            bs.datatype = datatype;
                             this.bindings.push(bs);
                         }
-                    )
+                    );
                 } else { //specialization not datatype => simply push the bs
                     this.bindings.push(bs);
                 }
@@ -144,18 +144,18 @@ export class QueryParameterizerModal {
 
     setAssignemntValue(binding: BindingStruct, type: RDFTypesEnum) {
         if (type == RDFTypesEnum.resource) {
-            this.sharedModals.pickResource({key:"ACTIONS.SELECT_RESOURCE"}).then(
+            this.sharedModals.pickResource({ key: "ACTIONS.SELECT_RESOURCE" }).then(
                 (value: ARTNode) => {
                     binding.value = value.toNT();
                 },
-                () => {}
+                () => { }
             );
         } else if (type == RDFTypesEnum.literal) {
-            this.creationModals.newTypedLiteral({key:"DATA.ACTIONS.CREATE_LITERAL"}).then(
+            this.creationModals.newTypedLiteral({ key: "DATA.ACTIONS.CREATE_LITERAL" }).then(
                 (values: ARTLiteral[]) => {
                     binding.value = values[0].toNT();
                 },
-                () => {}
+                () => { }
             );
         }
     }
@@ -170,16 +170,16 @@ export class QueryParameterizerModal {
 
     ok() {
         let varBindings: VariableBindings = {};
-        for (var i = 0; i < this.bindings.length; i++) {
+        for (let i = 0; i < this.bindings.length; i++) {
             let b: BindingStruct = this.bindings[i];
 
             if (b.varName == null || b.varName.trim() == "") { //check if name is not set
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_BINDING_NAME", params:{position: i+1}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_BINDING_NAME", params: { position: i + 1 } }, ModalType.warning);
                 return;
             }
-            
+
             if (varBindings[b.varName] != null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.DUPLICATED_BINDING_NAME", params:{binding: b.varName}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.DUPLICATED_BINDING_NAME", params: { binding: b.varName } }, ModalType.warning);
                 return;
             }
 
@@ -187,29 +187,29 @@ export class QueryParameterizerModal {
                 bindingType: b.bindingType.value,
                 displayName: b.displayName,
                 description: b.description
-            }
+            };
             if (b.bindingType.value == BindingTypeEnum.assignment) {
-                if (b.value == null) {//check if type is assignment and the resource is not set
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_BINDING_PARAMETERIZATION_VALUE", params:{binding: b.varName}}, ModalType.warning);
+                if (b.value == null) { //check if type is assignment and the resource is not set
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_BINDING_PARAMETERIZATION_VALUE", params: { binding: b.varName } }, ModalType.warning);
                     return;
                 }
                 varBindings[b.varName].value = b.value;
             } else if (b.bindingType.value == BindingTypeEnum.constraint) {
                 if (b.bindingType.specialization == "role") {
                     if (b.resourceRole == null) { //check if type is constraint and the role is not set
-                        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_BINDING_PARAMETERIZATION_ROLE", params:{binding: b.varName}}, ModalType.warning);
+                        this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_BINDING_PARAMETERIZATION_ROLE", params: { binding: b.varName } }, ModalType.warning);
                         return;
-                    } 
+                    }
                     varBindings[b.varName].resourceRole = b.resourceRole;
                 } else if (b.bindingType.specialization == "datatype") {
                     if (b.datatype == null) { //check if type is constraint and the datatype is not set
-                        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_BINDING_PARAMETERIZATION_DATATYPE", params:{binding: b.varName}}, ModalType.warning);
+                        this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_BINDING_PARAMETERIZATION_DATATYPE", params: { binding: b.varName } }, ModalType.warning);
                         return;
-                    } 
+                    }
                     varBindings[b.varName].datatype = b.datatype.toNT();
                 }
             }
-        };
+        }
         this.activeModal.close(varBindings);
     }
 
@@ -230,7 +230,7 @@ class BindingStruct {
 }
 
 class BindingTypeStruct {
-    show: string; 
+    show: string;
     value: BindingTypeEnum;
-    specialization?: "role" | "datatype" //useful in case of type="constraint" to determine which is the value between role and datatype
+    specialization?: "role" | "datatype"; //useful in case of type="constraint" to determine which is the value between role and datatype
 }

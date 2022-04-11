@@ -11,7 +11,7 @@ export abstract class AbstractList extends AbstractStruct {
     abstract viewChildrenNode: QueryList<AbstractListNode>;
 
     protected pendingSearchRes: ARTURIResource; //searched resource that is waiting to be selected once the list is initialized
-    
+
     /**
      * ATTRIBUTES
      */
@@ -62,8 +62,8 @@ export abstract class AbstractList extends AbstractStruct {
         this.ensureNodeVisibility(node);
         setTimeout( //apply timeout in order to wait that the children node is rendered (in case the openPages has been increased)
             () => {
-                var childrenNodeComponent = this.viewChildrenNode.toArray();
-                for (var i = 0; i < childrenNodeComponent.length; i++) {
+                let childrenNodeComponent = this.viewChildrenNode.toArray();
+                for (let i = 0; i < childrenNodeComponent.length; i++) {
                     if (childrenNodeComponent[i].node.equals(node)) {
                         childrenNodeComponent[i].ensureVisible();
                         if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
@@ -79,25 +79,25 @@ export abstract class AbstractList extends AbstractStruct {
     //Nodes limitation management
     initialNodes: number = 150;
     nodeLimit: number = this.initialNodes;
-    increaseRate: number = this.initialNodes/5;
+    increaseRate: number = this.initialNodes / 5;
     onScroll() {
         let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
         // if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
         //consider a little buffer of 2px in order to prevent potential problems (see https://stackoverflow.com/a/32283147/5805661)
         if (Math.abs(scrollElement.scrollHeight - scrollElement.offsetHeight - scrollElement.scrollTop) < 2) {
             //bottom reached => increase max range if there are more roots to show
-            if (this.nodeLimit < this.list.length) { 
-                this.nodeLimit = this.nodeLimit + this.increaseRate;
+            if (this.nodeLimit < this.list.length) {
+                this.nodeLimit += this.increaseRate;
             }
-        } 
+        }
     }
     ensureNodeVisibility(resource: ARTURIResource) {
-        for (var i = 0; i < this.list.length; i++) {
+        for (let i = 0; i < this.list.length; i++) {
             if (this.list[i].equals(resource)) {
                 if (i >= this.nodeLimit) {
                     //update nodeLimit so that node at index i is within the range
-                    let scrollStep: number = ((i - this.nodeLimit)/this.increaseRate)+1;
-                    this.nodeLimit = this.nodeLimit + this.increaseRate*scrollStep;
+                    let scrollStep: number = ((i - this.nodeLimit) / this.increaseRate) + 1;
+                    this.nodeLimit += this.increaseRate * scrollStep;
                 }
                 this.pendingSearchRes = null; //if there was any pending search, reset it
                 return; //node found and visible

@@ -36,7 +36,7 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal {
 
     constructor(public activeModal: NgbActiveModal, private skosService: SkosServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
-        super(cfService, basicModals, browsingModals)
+        super(cfService, basicModals, browsingModals);
     }
 
     ngOnInit() {
@@ -90,12 +90,12 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal {
     }
 
     selectBroader() {
-        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}).then(
+        this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_CONCEPT" }).then(
             (concept: any) => {
                 this.broader = concept;
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     /**
@@ -107,13 +107,13 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal {
     }
 
     selectSibling() {
-        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}).then(
+        this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_CONCEPT" }).then(
             (concept: any) => {
                 this.sibling = concept;
                 this.updateBroaderOfSibling();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     /**
@@ -139,15 +139,15 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal {
     }
 
     okImpl() {
-        var entryMap: any = this.collectCustomFormData();
+        let entryMap: any = this.collectCustomFormData();
 
-        var returnedData: { uriResource: ARTURIResource, broader: ARTURIResource, cls: ARTURIResource, schemes: ARTURIResource[], cfValue: CustomFormValue } = {
+        let returnedData: { uriResource: ARTURIResource, broader: ARTURIResource, cls: ARTURIResource, schemes: ARTURIResource[], cfValue: CustomFormValue } = {
             uriResource: null,
             broader: null,
             cls: null,
             schemes: this.schemes,
             cfValue: null
-        }
+        };
         //Set URI only if not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);

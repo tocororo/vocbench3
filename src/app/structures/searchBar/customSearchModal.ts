@@ -4,7 +4,7 @@ import { ModalType } from 'src/app/widget/modal/Modals';
 import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { ARTNode, ARTResource } from "../../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
-import { SettingsProp, STProperties } from "../../models/Plugins";
+import { STProperties } from "../../models/Plugins";
 import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
 import { ConfigurationsServices } from "../../services/configurationsServices";
 import { SearchServices } from "../../services/searchServices";
@@ -18,7 +18,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
     templateUrl: "./customSearchModal.html"
 })
 export class CustomSearchModal {
-    @Input() searchParameterizationReference: string
+    @Input() searchParameterizationReference: string;
 
     @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
     @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
@@ -36,7 +36,7 @@ export class CustomSearchModal {
     detailsOn: boolean = false;
 
     constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices,
-        private configurationService: ConfigurationsServices, private searchService: SearchServices) {}
+        private configurationService: ConfigurationsServices, private searchService: SearchServices) { }
 
     ngOnInit() {
         this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, this.searchParameterizationReference).subscribe(
@@ -48,11 +48,11 @@ export class CustomSearchModal {
                  * "description": description of the parameterized query
                  */
                 let properties: STProperties[] = configuration.properties;
-                for (var i = 0; i < properties.length; i++) {
+                for (let i = 0; i < properties.length; i++) {
                     if (properties[i].name == "relativeReference") {
                         let storedQueryReference: string = properties[i].value;
                         if (storedQueryReference == null) {
-                            this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.REFERENCED_SPARQL_QUERY_NOT_EXISTING"}, ModalType.warning);
+                            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.REFERENCED_SPARQL_QUERY_NOT_EXISTING" }, ModalType.warning);
                             this.cancel();
                             return;
                         }
@@ -60,7 +60,7 @@ export class CustomSearchModal {
                         this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_STORE, storedQueryReference).subscribe(
                             (conf: Configuration) => {
                                 let confProps: ConfigurationProperty[] = conf.properties;
-                                for (var i = 0; i < confProps.length; i++) {
+                                for (let i = 0; i < confProps.length; i++) {
                                     if (confProps[i].name == "sparql") {
                                         this.query = confProps[i].value;
                                     } else if (confProps[i].name == "includeInferred") {
@@ -90,10 +90,9 @@ export class CustomSearchModal {
     }
 
     ok() {
-        let filled: boolean = true;
         for (let key of Array.from(this.bindingsMap.keys())) {
             if (this.bindingsMap.get(key) == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_VARIABLE_BINDING", params:{binding: key}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_VARIABLE_BINDING", params: { binding: key } }, ModalType.warning);
                 return;
             }
         }
@@ -103,10 +102,10 @@ export class CustomSearchModal {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND"}, ModalType.warning);
+                    this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND" }, ModalType.warning);
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
-                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, true).then(
+                    this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.TOT_RESULTS_FOUND", params: { count: searchResult.length } }, searchResult, true).then(
                         (selectedResources: ARTResource[]) => {
                             this.activeModal.close(selectedResources[0]);
                         },

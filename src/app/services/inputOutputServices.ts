@@ -28,10 +28,10 @@ export class InputOutputServices {
      */
     loadRDF(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, inputFile?: File, format?: string, 
         loaderSpec?: PluginSpecification, rdfLifterSpec?: PluginSpecification, transformationPipeline?: string, validateImplicitly?: boolean) {
-        var data: any = {
+        let data: any = {
             baseURI: baseURI,
             transitiveImportAllowance: transitiveImportAllowance,
-        }
+        };
         if (inputFile != null) {
             data.inputFile = inputFile;
         }
@@ -63,9 +63,9 @@ export class InputOutputServices {
      * @param fileName 
      */
     getParserFormatForFileName(fileName: string): Observable<string> {
-        var params: any = {
+        let params: any = {
             fileName: fileName
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getParserFormatForFileName", params);
     }
 
@@ -74,9 +74,9 @@ export class InputOutputServices {
      * @param fileName 
      */
     getWriterFormatForFileName(fileName: string) {
-        var params: any = {
+        let params: any = {
             fileName: fileName
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getWriterFormatForFileName", params);
     }
 
@@ -84,7 +84,7 @@ export class InputOutputServices {
      * Deletes all the data of the current project model
      */
     clearData() {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doPost(this.serviceName, "clearData", params);
     }
 
@@ -104,7 +104,7 @@ export class InputOutputServices {
                 }
                 //sort by name
                 formats.sort(
-                    function(a: DataFormat, b: DataFormat) {
+                    (a: DataFormat, b: DataFormat) => {
                         if (a.name < b.name) return -1;
                         if (a.name > b.name) return 1;
                         return 0;
@@ -119,11 +119,11 @@ export class InputOutputServices {
      * 
      */
     getInputRDFFormats(): Observable<RDFFormat[]> {
-        var params = {};
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getInputRDFFormats", params).pipe(
             map(stResp => {
-                var formats: RDFFormat[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let formats: RDFFormat[] = [];
+                for (let i = 0; i < stResp.length; i++) {
                     let name = stResp[i].name;
                     let charset = stResp[i].charset;
                     let fileExtensions = stResp[i].fileExtensions;
@@ -135,7 +135,7 @@ export class InputOutputServices {
                 }
                 //sort by name
                 formats.sort(
-                    function(a: RDFFormat, b: RDFFormat) {
+                    (a: RDFFormat, b: RDFFormat) => {
                         if (a.name < b.name) return -1;
                         if (a.name > b.name) return 1;
                         return 0;

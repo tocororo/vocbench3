@@ -14,11 +14,11 @@ export class MapleServices {
 
     /**
      * Profiles a mediation problem between the current project and the provided resource position (i.e.
-	 * another local project or remote dataset).
+     * another local project or remote dataset).
      * @param resourcePosition 
      */
     profileMediationProblem(resourcePosition: ResourcePosition) {
-        var params = {
+        let params = {
             resourcePosition: resourcePosition.serialize()
         };
         return this.httpMgr.doGet(this.serviceName, "profileMediationProblem", params);
@@ -26,12 +26,12 @@ export class MapleServices {
 
     /**
      * Profiles the problem of matching the provided resource in the current project against the provided
-	 * resource position (i.e. another local project or remote dataset).
+     * resource position (i.e. another local project or remote dataset).
      * @param sourceResource 
      * @param targetPosition 
      */
     profileSingleResourceMatchProblem(sourceResource: ARTURIResource, targetPosition: ResourcePosition) {
-        var params = {
+        let params = {
             sourceResource: sourceResource,
             targetPosition: targetPosition.serialize()
         };
@@ -43,7 +43,7 @@ export class MapleServices {
             leftDataset: leftDataset.getName(),
             rightDataset: rightDataset.getName(),
             options: options
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "profileMatchingProblemBetweenProjects", params);
     }
 
@@ -52,7 +52,7 @@ export class MapleServices {
      * Profiles the current project and stores its LIME metadata
      */
     profileProject() {
-        var params = {};
+        let params = {};
         return this.httpMgr.doPost(this.serviceName, "profileProject", params);
     }
 
@@ -60,7 +60,7 @@ export class MapleServices {
      * Determines whether LIME metadata for the current project are available
      */
     checkProjectMetadataAvailability(): Observable<boolean> {
-        var params = {};
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "checkProjectMetadataAvailability", params);
     }
 

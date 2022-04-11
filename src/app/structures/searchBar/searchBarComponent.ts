@@ -58,7 +58,7 @@ export class SearchBarComponent {
         if (this.searchStr != undefined && this.searchStr.trim() != "") {
             this.search.emit(this.searchStr);
         } else {
-            this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.ENTER_VALID_STRING_TO_SEARCH"}, ModalType.warning);
+            this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.ENTER_VALID_STRING_TO_SEARCH" }, ModalType.warning);
         }
     }
 
@@ -88,7 +88,7 @@ export class SearchBarComponent {
             (resource: ARTResource) => {
                 this.advancedSearchEvent.emit(resource);
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -103,10 +103,10 @@ export class SearchBarComponent {
                         //exploit the same event (and related handler) of advanced search
                         this.advancedSearchEvent.emit(resource);
                     },
-                    () => {}
+                    () => { }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -127,7 +127,7 @@ export class SearchBarComponent {
     private lastCompleterKey: string;
 
     onChangeSearch() {
-        if (this.searchStr.trim() == "" ) { 
+        if (this.searchStr.trim() == "") {
             this.completerData = [];
             return;
         }
@@ -154,13 +154,13 @@ export class SearchBarComponent {
             clsParam = this.cls;
         }
         let concTreePref = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
-        this.searchService.searchStringList(this.searchStr, [this.role], this.searchSettings.useLocalName, this.searchSettings.stringMatchMode, 
+        this.searchService.searchStringList(this.searchStr, [this.role], this.searchSettings.useLocalName, this.searchSettings.stringMatchMode,
             langsParam, includeLocales, schemesParam, concTreePref.multischemeMode, clsParam, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-            (results: string[]) => {
-                this.completerData = results.slice(0, 100);
-                this.isCompleterLoading = false;
-            }
-        );
+                (results: string[]) => {
+                    this.completerData = results.slice(0, 100);
+                    this.isCompleterLoading = false;
+                }
+            );
     }
 
 }

@@ -21,7 +21,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
     @Input() schemes: ARTURIResource[]; //in standard form
     @Input() cls: ARTURIResource;
     @Input() clsChangeable: boolean = true;
-    @Input() lang: string;  //in standard form
+    @Input() lang: string; //in standard form
 
     viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
@@ -67,7 +67,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
     }
 
     changeBroaderProp() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.broader]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [SKOS.broader]).then(
             (selectedProp: ARTURIResource) => {
                 this.broaderProp = selectedProp;
             },
@@ -81,16 +81,16 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
     }
 
     okImpl() {
-        var entryMap: any = this.collectCustomFormData();
+        let entryMap: any = this.collectCustomFormData();
 
-        var returnedData: NewConceptCfModalReturnData = {
+        let returnedData: NewConceptCfModalReturnData = {
             uriResource: null,
             label: new ARTLiteral(this.label, null, this.lang),
             cls: this.resourceClass,
             broaderProp: null,
             schemes: this.schemes,
             cfValue: null
-        }
+        };
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);
@@ -103,7 +103,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
         if (this.customFormId != null && entryMap != null) {
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
-        
+
         this.activeModal.close(returnedData);
     }
 
@@ -116,7 +116,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
 export class NewConceptCfModalReturnData {
     uriResource: ARTURIResource;
     label: ARTLiteral;
-    cls: ARTURIResource
+    cls: ARTURIResource;
     broaderProp: ARTURIResource;
     schemes: ARTURIResource[];
     cfValue: CustomFormValue;

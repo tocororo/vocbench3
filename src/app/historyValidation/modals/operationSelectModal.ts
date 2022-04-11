@@ -44,7 +44,6 @@ export class OperationSelectModal {
     onServClassChange() {
         if (this.selectedServiceClasses == this.NOT_SELECTED) {
             this.operations = [];
-            return;
         } else {
             this.servicesService.getServiceOperations(this.selectedExtensionPath, this.selectedServiceClasses).subscribe(
                 operations => {
@@ -69,7 +68,7 @@ export class OperationSelectModal {
             }
         });
         this.operationsToAdd.sort(
-            function (op1: string, op2: string) {
+            (op1: string, op2: string) => {
                 if (op1 > op2) return 1;
                 if (op1 < op2) return -1;
                 return 0;
@@ -82,7 +81,7 @@ export class OperationSelectModal {
      * @param operation
      */
     private removeOperations(operation: string) {
-        for (var i = 0; i < this.operationsToAdd.length; i++) {
+        for (let i = 0; i < this.operationsToAdd.length; i++) {
             if (this.operationsToAdd[i] == operation) {
                 this.operationsToAdd.splice(i, 1);
                 return;
@@ -99,19 +98,19 @@ export class OperationSelectModal {
      */
     private getOperationShow(operation: string, includeClass?: boolean) {
         if (includeClass) {
-            var show: string;
-            var splitted: string[] = operation.split("/");
+            let show: string;
+            let splitted: string[] = operation.split("/");
             show = splitted[splitted.length - 2];
             show += "/" + splitted[splitted.length - 1];
             return show;
         } else {
-            return operation.substring(operation.lastIndexOf("/")+1);
+            return operation.substring(operation.lastIndexOf("/") + 1);
         }
-        
+
     }
 
     onFilterChanged() {
-        for (var i = 0; i < this.operations.length; i++) {
+        for (let i = 0; i < this.operations.length; i++) {
             if (this.getOperationShow(this.operations[i].service).toLowerCase().includes(this.filterKey.toLowerCase())) {
                 this.operations[i].filtered = false;
             } else {
@@ -121,7 +120,7 @@ export class OperationSelectModal {
     }
 
     ok() {
-        var returnedOperations: ARTURIResource[] = [];
+        let returnedOperations: ARTURIResource[] = [];
 
         this.operationsToAdd.forEach(op => {
             returnedOperations.push(new ARTURIResource(op, this.getOperationShow(op, true)));

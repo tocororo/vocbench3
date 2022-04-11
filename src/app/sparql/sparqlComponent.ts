@@ -36,9 +36,9 @@ export class SparqlComponent {
             currentActiveTab.active = false;
         }
         let tab = { active: true, name: null, type: TabType.query, saved: false };
-        this.translateService.get("SPARQL.QUERY.UNNAMED_QUERY").subscribe(translation => tab.name = translation);
+        this.translateService.get("SPARQL.QUERY.UNNAMED_QUERY").subscribe(translation => { tab.name = translation; });
         this.tabs.push(tab);
-        
+
     }
 
     addParameterizationTab() {
@@ -47,7 +47,7 @@ export class SparqlComponent {
             currentActiveTab.active = false;
         }
         let tab = { active: true, name: null, type: TabType.parameterization, saved: false };
-        this.translateService.get("SPARQL.QUERY.UNNAMED_PARAMETERIZED_QUERY").subscribe(translation => tab.name = translation);
+        this.translateService.get("SPARQL.QUERY.UNNAMED_PARAMETERIZED_QUERY").subscribe(translation => { tab.name = translation; });
         this.tabs.push(tab);
     }
 
@@ -57,7 +57,7 @@ export class SparqlComponent {
     }
 
     private closeTab(t: Tab) {
-        var tabIdx = this.tabs.indexOf(t);
+        let tabIdx = this.tabs.indexOf(t);
         //if the closed tab is active, change the active tab (only if it wasn't the only open tab)
         if (t.active && this.tabs.length > 1) {
             if (tabIdx == this.tabs.length - 1) { //if the closed tab was the last one, active the previous
@@ -70,11 +70,7 @@ export class SparqlComponent {
     }
 
     private getActiveTab(): Tab {
-        for (var i = 0; i < this.tabs.length; i++) {
-            if (this.tabs[i].active) {
-                return this.tabs[i];
-            }
-        }
+        return this.tabs.find(t => t.active);
     }
 
 }

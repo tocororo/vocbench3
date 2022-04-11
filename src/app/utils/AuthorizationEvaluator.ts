@@ -1,5 +1,5 @@
 import Prolog from 'jsprolog';
-import { ARTResource, ARTNode, ResAttribute } from "../models/ARTResources";
+import { ARTNode, ARTResource, ResAttribute } from "../models/ARTResources";
 import { ResViewPartition } from "../models/ResourceView";
 import { User } from "../models/User";
 import { VBActionsEnum } from './VBActions';
@@ -9,7 +9,7 @@ export class AuthorizationEvaluator {
 
     private static prologEngine: any;
     private static resRole: string = "%resource_role%";
-    private static authCache: { [goal: string]: boolean } = {}
+    private static authCache: { [goal: string]: boolean } = {};
 
     public static actionAuthGoalMap: { [key: string]: string } = {
         [VBActionsEnum.administrationProjectManagement]: 'auth(pm(project,_), "CRUD").',
@@ -29,7 +29,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.classesGetClassTaxonomy]: 'auth(rdf(cls, taxonomy), "R").',
         [VBActionsEnum.classesGetInstances]: 'auth(rdf(cls, instances), "R").',
         [VBActionsEnum.classesRemoveClassAxiom]: 'auth(rdf(cls, taxonomy), "D").', //@PreAuthorize of removeOneOf/UnionOf/IntersectionOf...
-        [VBActionsEnum.collaboration]: 'auth(pm(project, collaboration), "CRUD").',  //generic for Collaboration (creation and assignment of CS project)
+        [VBActionsEnum.collaboration]: 'auth(pm(project, collaboration), "CRUD").', //generic for Collaboration (creation and assignment of CS project)
         [VBActionsEnum.customFormCreateFormMapping]: 'auth(cform(form, mapping), "C").',
         [VBActionsEnum.customFormCreateCollection]: 'auth(cform(formCollection, form), "C").',
         [VBActionsEnum.customFormCreateForm]: 'auth(cform(formCollection, form), "C").',
@@ -232,7 +232,7 @@ export class AuthorizationEvaluator {
 
     public static reset() {
         AuthorizationEvaluator.prologEngine = null;
-        AuthorizationEvaluator.authCache = {}
+        AuthorizationEvaluator.authCache = {};
     }
 
 
@@ -254,7 +254,7 @@ export class AuthorizationEvaluator {
      * @param langValue 
      */
     public static isGaolAuthorized(goal: string, resource?: ARTResource, langValue?: ARTNode): boolean {
-        var user: User = VBContext.getLoggedUser();
+        let user: User = VBContext.getLoggedUser();
         if (user == null) {
             return false;
         }
@@ -273,7 +273,7 @@ export class AuthorizationEvaluator {
                 return false;
             }
             //evaluate if the user capabilities satisfy the authorization requirement
-            if (goal.includes(AuthorizationEvaluator.resRole)) {//dynamic goal (depending on resource role)
+            if (goal.includes(AuthorizationEvaluator.resRole)) { //dynamic goal (depending on resource role)
                 if (resource != null) {
                     goal = goal.replace(AuthorizationEvaluator.resRole, resource.getRole());
                 } else {
@@ -329,15 +329,15 @@ export class AuthorizationEvaluator {
         chk_capability(rdf(SKOSELEMENT), CRUDV) :-
             capability(rdf(skos), CRUDV),
             vocabulary(SKOSELEMENT, skos).
-	
+        
         chk_capability(rdf(SKOSELEMENT,_), CRUDV) :-
             capability(rdf(skos), CRUDV),
             vocabulary(SKOSELEMENT, skos).
 
         chk_capability(rdf(ONTOLEXELEMENT), CRUDV) :-
-        	capability(rdf(ontolex), CRUDV),
-	        vocabulary(ONTOLEXELEMENT, ontolex).
-	
+            capability(rdf(ontolex), CRUDV),
+            vocabulary(ONTOLEXELEMENT, ontolex).
+        
         chk_capability(rdf(ONTOLEXELEMENT,_), CRUDV) :-
             capability(rdf(ontolex), CRUDV),
             vocabulary(ONTOLEXELEMENT, ontolex).
@@ -379,33 +379,33 @@ export class AuthorizationEvaluator {
             capability(rdf(lexicalization), CRUDV).
         
         chk_capability(rdf(ontolexForm,_), CRUDV) :-
-            capability(rdf(lexicalization), CRUDV).	
+            capability(rdf(lexicalization), CRUDV).
             
         chk_capability(rdf(ontolexLexicalEntry), CRUDV) :-
             capability(rdf(lexicalization), CRUDV).
         
         chk_capability(rdf(ontolexLexicalEntry,_), CRUDV) :-
-            capability(rdf(lexicalization), CRUDV).		
+            capability(rdf(lexicalization), CRUDV).
         
         chk_capability(rdf(limeLexicon), CRUDV) :-
             capability(rdf(lexicalization), CRUDV).
         
         chk_capability(rdf(limeLexicon,_), CRUDV) :-
-            capability(rdf(lexicalization), CRUDV).			
+            capability(rdf(lexicalization), CRUDV).
             
         chk_capability(rdf(_,notes), CRUDV) :-
             capability(rdf(notes), CRUDV).
 
-        chk_capability(rbac(_), CRUDV) :-	
-            chk_capability(rbac, CRUDV).	
-
-        chk_capability(rbac(_,_), CRUDV) :-	
+        chk_capability(rbac(_), CRUDV) :-
             chk_capability(rbac, CRUDV).
 
-        chk_capability(cform(_), CRUDV) :-	
-            chk_capability(cform, CRUDV).	
+        chk_capability(rbac(_,_), CRUDV) :-
+            chk_capability(rbac, CRUDV).
+
+        chk_capability(cform(_), CRUDV) :-
+            chk_capability(cform, CRUDV).
         
-        chk_capability(cform(_,_), CRUDV) :-	
+        chk_capability(cform(_,_), CRUDV) :-
             chk_capability(cform, CRUDV).
 
         resolveCRUDV(CRUDVRequest, CRUDV) :-
@@ -489,7 +489,7 @@ export class ResourceViewAuthEvaluator {
         [CRUDEnum.R]: (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value),
         [CRUDEnum.U]: (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value),
         [CRUDEnum.D]: (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource, value),
-    }
+    };
 
     /**
      * Mapping between resource view partition and authorization evaluation for each kind of action available in RV (CRUD)
@@ -683,7 +683,7 @@ export class ResourceViewAuthEvaluator {
         if (crudEvalMap != null) {
             evaluationFn = crudEvalMap[crud];
         } else { //probably a custom partition
-            evaluationFn =  this.customSectionEvalMap[crud];
+            evaluationFn = this.customSectionEvalMap[crud];
         }
         return evaluationFn(resource, value);
     }
@@ -695,7 +695,7 @@ export class ResourceViewAuthEvaluator {
 //workaroung for using enum as key (https://github.com/microsoft/TypeScript/issues/24220)
 //"?" for the key is because I don't want all the Enum values to be included forcefully
 type PartitionEvaluationMap = {
-    [key in ResViewPartition]?: CrudEvaluationMap 
+    [key in ResViewPartition]?: CrudEvaluationMap
 }
 type CrudEvaluationMap = {
     [key in CRUDEnum]?: EvaluationFn //"?" for the key is because I don't want all the Enum values to be included forcefully

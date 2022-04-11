@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
+import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { mergeMap } from 'rxjs/operators';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
@@ -26,7 +26,7 @@ export class ConceptTreeComponent extends AbstractTree {
     @Input() schemes: ARTURIResource[];
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme only when the scheme is the one used in the current concept tree
     @Output() switchMode = new EventEmitter<ConceptTreeVisualizationMode>(); //requires to the parent panel to switch mode
-    
+
 
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
@@ -52,7 +52,7 @@ export class ConceptTreeComponent extends AbstractTree {
         eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
-            (data: {concept: ARTURIResource, schemes: ARTURIResource[]}) => this.onTopConceptCreated(data.concept, data.schemes)));
+            (data: { concept: ARTURIResource, schemes: ARTURIResource[] }) => this.onTopConceptCreated(data.concept, data.schemes)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             (deletedConcept: ARTURIResource) => this.onTreeNodeDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
@@ -83,7 +83,7 @@ export class ConceptTreeComponent extends AbstractTree {
 
         let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
         this.visualizationMode = conceptTreePreference.visualization;
-        
+
         if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
             this.lastInitTimestamp = new Date().getTime();
             this.checkInitializationSafe().subscribe(
@@ -96,23 +96,23 @@ export class ConceptTreeComponent extends AbstractTree {
                         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
                         this.skosService.getTopConcepts(this.lastInitTimestamp, this.schemes, conceptTreePreference.multischemeMode,
                             broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                            data => {
-                                if (data.timestamp != this.lastInitTimestamp) { //the response is not about the last getTopConcepts request
-                                    return; //=> ignore it
+                                data => {
+                                    if (data.timestamp != this.lastInitTimestamp) { //the response is not about the last getTopConcepts request
+                                        return; //=> ignore it
+                                    }
+                                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                                    let topConcepts = data.concepts;
+                                    //sort by show if rendering is active, uri otherwise
+                                    ResourceUtils.sortResources(topConcepts, this.rendering ? SortAttribute.show : SortAttribute.value);
+                                    this.roots = topConcepts;
+                                    if (this.pendingSearchPath) {
+                                        this.openRoot(this.pendingSearchPath);
+                                    }
                                 }
-                                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                                let topConcepts = data.concepts;
-                                //sort by show if rendering is active, uri otherwise
-                                ResourceUtils.sortResources(topConcepts, this.rendering ? SortAttribute.show : SortAttribute.value);
-                                this.roots = topConcepts;
-                                if (this.pendingSearchPath) {
-                                    this.openRoot(this.pendingSearchPath);
-                                }
-                            }
-                        );
+                            );
                     }
-                }   
-            )
+                }
+            );
         } else if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased) {
             //reset list to empty
             this.forceList(null);
@@ -150,20 +150,20 @@ export class ConceptTreeComponent extends AbstractTree {
         if (safeness != null) { //found safeness in cache
             this.safeToGo = safeness;
             this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
-            return of(null)
+            return of(null);
         } else { //never initialized => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             return this.skosService.countTopConcepts(this.lastInitTimestamp, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
                 mergeMap(data => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                    let safeness = { safe: data.count < this.safeToGoLimit, count: data.count }; 
+                    let safeness = { safe: data.count < this.safeToGoLimit, count: data.count };
                     safeToGoMap[checksum] = safeness; //cache the safeness
                     if (data.timestamp != this.lastInitTimestamp) { //a newest request has been performed => stop this initialization
-                        return of(null)
+                        return of(null);
                     }
                     this.safeToGo = safeness;
                     this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
-                    return of(null)
+                    return of(null);
                 })
             );
         }
@@ -175,10 +175,10 @@ export class ConceptTreeComponent extends AbstractTree {
         let broaderProps: ARTURIResource[] = conceptTreePreference.broaderProps.map((prop: string) => new ARTURIResource(prop));
         let narrowerProps: ARTURIResource[] = conceptTreePreference.narrowerProps.map((prop: string) => new ARTURIResource(prop));
         let includeSubProps: boolean = conceptTreePreference.includeSubProps;
-        let checksum = "schemes:" + this.schemes.map(s => s.toNT()).join(",") + 
-            "&multischemeMode:" + multischemeMode + 
-            "&broaderProps:" + broaderProps + 
-            "&narrowerProps:" + narrowerProps + 
+        let checksum = "schemes:" + this.schemes.map(s => s.toNT()).join(",") +
+            "&multischemeMode:" + multischemeMode +
+            "&broaderProps:" + broaderProps +
+            "&narrowerProps:" + narrowerProps +
             "&includeSubProps:" + includeSubProps;
         return checksum;
     }
@@ -195,23 +195,23 @@ export class ConceptTreeComponent extends AbstractTree {
         let broaderProps: ARTURIResource[] = conceptTreePreference.broaderProps.map((prop: string) => new ARTURIResource(prop));
         let narrowerProps: ARTURIResource[] = conceptTreePreference.narrowerProps.map((prop: string) => new ARTURIResource(prop));
         let includeSubProps: boolean = conceptTreePreference.includeSubProps;
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, null, 
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, null,
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-            path => {
-                if (path.length == 0) {
-                    this.onTreeNodeNotFound(node);
-                    return;
-                };
-                //open tree from root to node
-                this.openRoot(path); 
-            }
-        );
+                path => {
+                    if (path.length == 0) {
+                        this.onTreeNodeNotFound(node);
+                        return;
+                    }
+                    //open tree from root to node
+                    this.openRoot(path);
+                }
+            );
     }
 
     //EVENT LISTENERS
 
     private onTopConceptCreated(concept: ARTURIResource, schemes: ARTURIResource[]) {
-        if (this.schemes == undefined) {//in no-scheme mode add to the root if it isn't already in
+        if (this.schemes == undefined) { //in no-scheme mode add to the root if it isn't already in
             if (!ResourceUtils.containsNode(this.roots, concept)) {
                 this.roots.unshift(concept);
                 if (this.context == TreeListContext.addPropValue) {
@@ -220,7 +220,7 @@ export class ConceptTreeComponent extends AbstractTree {
             }
         } else { //otherwise add the top concept only if it is added in a scheme currently active in the tree
             if (this.schemes != null) {
-                for (var i = 0; i < schemes.length; i++) {
+                for (let i = 0; i < schemes.length; i++) {
                     if (ResourceUtils.containsNode(this.schemes, schemes[i])) {
                         this.roots.unshift(concept);
                         if (this.context == TreeListContext.addPropValue) {
@@ -245,7 +245,7 @@ export class ConceptTreeComponent extends AbstractTree {
          * Decide what to do, at the moment a refresh is required in order to see the updated tree
          */
         // if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
-        //     for (var i = 0; i < this.roots.length; i++) {
+        //     for (let i = 0; i < this.roots.length; i++) {
         //         if (this.roots[i].getURI() == concept.getURI()) {
         //             this.roots.splice(i, 1);
         //             this.conceptRemovedFromScheme.emit(concept);
@@ -267,14 +267,14 @@ export class ConceptTreeComponent extends AbstractTree {
                     if (this.schemes.some(activeSc => activeSc.equals(s))) {
                         visible = true;
                     }
-                })
+                });
             } else { //mode AND, visible if belongs to every active scheme
                 visible = true;
                 this.schemes.forEach(actSc => {
                     if (!data.schemes.some(s => s.equals(actSc))) {
                         visible = false; //there is an active scheme which concept doesn't belong
                     }
-                })
+                });
             }
             if (visible) {
                 this.roots.push(data.resource);

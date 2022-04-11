@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { VBEventHandler } from "src/app/utils/VBEventHandler";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ClassTreePreference } from "../../../models/Properties";
@@ -50,7 +49,7 @@ export class ClassTreeSettingsModal {
         //init filter
         this.filterEnabled = clsTreePref.filter.enabled;
         let filteredClss: ARTURIResource[] = [];
-        for (var key in clsTreePref.filter.map) {
+        for (let key in clsTreePref.filter.map) {
             filteredClss.push(new ARTURIResource(key));
         }
         if (filteredClss.length > 0) {
@@ -58,9 +57,9 @@ export class ClassTreeSettingsModal {
                 resources => {
                     resources.forEach(r => {
                         this.filterMapRes.push({ cls: <ARTURIResource>r, subClasses: null });
-                    })
+                    });
                 }
-            )
+            );
         }
 
         //init show instances number
@@ -99,10 +98,10 @@ export class ClassTreeSettingsModal {
                     //temporarly reset the root class and the restore it (in order to trigger the change detection editable-input)
                     let oldRootClass = this.rootClass;
                     this.rootClass = null;
-                    setTimeout(() => this.rootClass = oldRootClass);
+                    setTimeout(() => { this.rootClass = oldRootClass; });
                 }
             }
-        )
+        );
 
     }
 
@@ -162,7 +161,7 @@ export class ClassTreeSettingsModal {
     }
 
     removeFilter() {
-        for (var i = 0; i < this.filterMapRes.length; i++) {
+        for (let i = 0; i < this.filterMapRes.length; i++) {
             if (this.filterMapRes[i].cls.getURI() == this.selectedFilteredClass.getURI()) {
                 this.selectedFilteredClass = null;
                 this.filterMapRes.splice(i, 1);
@@ -180,7 +179,7 @@ export class ClassTreeSettingsModal {
     }
 
     private getFilterMapEntry(cls: ARTURIResource): FilterMapEntry {
-        for (var i = 0; i < this.filterMapRes.length; i++) {
+        for (let i = 0; i < this.filterMapRes.length; i++) {
             if (this.filterMapRes[i].cls.getURI() == cls.getURI()) {
                 return this.filterMapRes[i];
             }
@@ -204,13 +203,13 @@ export class ClassTreeSettingsModal {
                 }
             }
             filterMap[f.cls.getURI()] = filteredSubClasses;
-        })
+        });
 
         //check if settings are changed
         let changed: boolean = JSON.stringify(this.pristineClassPref.filter.map) != JSON.stringify(filterMap) ||
             this.pristineClassPref.filter.enabled != this.filterEnabled ||
             this.pristineClassPref.rootClassUri != this.rootClass.getURI() ||
-            this.pristineClassPref.showInstancesNumber != this.showInstNumb
+            this.pristineClassPref.showInstancesNumber != this.showInstNumb;
 
         //only if the preferences changed close the dialog (so that the class tree refresh), otherwise cancel
         if (changed) {
@@ -220,7 +219,7 @@ export class ClassTreeSettingsModal {
             clsTreePrefs.showInstancesNumber = this.showInstNumb;
             this.vbProp.setClassTreePreferences(clsTreePrefs);
             this.activeModal.close();
-        } else {//for other changes simply dismiss the modal
+        } else { //for other changes simply dismiss the modal
             this.cancel();
         }
     }

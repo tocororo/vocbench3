@@ -42,12 +42,12 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
     initNamespaces() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listAlignedNamespaces(this.rolesToCheck).subscribe(
-            (ns: { count: number; namespace: string; locations: any [] }[]) => {
+            (ns: { count: number; namespace: string; locations: any[] }[]) => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 this.rolesUpdated = false;
                 this.namespaces = [];
                 ns.forEach(n => {
-                    this.namespaces.push({ 
+                    this.namespaces.push({
                         namespace: n.namespace,
                         count: n.count,
                         check: true,
@@ -56,7 +56,7 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
                         chosenResolutionLocation: null,
                         chosenResolutionOpt: null
                     });
-                })
+                });
                 //init resolutions
                 this.namespaces.forEach(ns => {
                     let resolutions: NsResolution = {};
@@ -65,10 +65,10 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
                     }
                     ns.locations.forEach(nsLocation => {
                         if (nsLocation.type == "local") {
-                            let option = { 
+                            let option = {
                                 show: "project: '" + nsLocation.name + "'",
                                 value: nsLocation.name
-                            }
+                            };
                             if (resolutions[nsLocation.type] == null) {
                                 resolutions[nsLocation.type] = [option];
                             } else {
@@ -76,10 +76,10 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
                             }
                         } else { //remote
                             if (nsLocation.sparqlEndpoint != null) {
-                                let option = { 
+                                let option = {
                                     show: "Endpoint: " + nsLocation.sparqlEndpoint,
                                     value: nsLocation.sparqlEndpoint
-                                }
+                                };
                                 if (resolutions[nsLocation.type] == null) {
                                     resolutions[nsLocation.type] = [option];
                                 } else {
@@ -111,25 +111,25 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
     executeIcv() {
         let nsParam: string[] = [];
         if (this.namespaces.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_ICV_ALIGNMENTS"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_ICV_ALIGNMENTS" }, ModalType.warning);
             return;
         }
-        for (var i = 0; i < this.namespaces.length; i++) {
+        for (let i = 0; i < this.namespaces.length; i++) {
             if (this.namespaces[i].check) {
                 nsParam.push(this.namespaces[i].namespace);
             }
         }
         if (nsParam.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_ICV_NAMESPACE"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_ICV_NAMESPACE" }, ModalType.warning);
             return;
         }
 
-        let mapParam: {[ns: string]: string} = {};
-        for (var i = 0; i < this.namespaces.length; i++) {
+        let mapParam: { [ns: string]: string } = {};
+        for (let i = 0; i < this.namespaces.length; i++) {
             if (this.namespaces[i].check) {
                 mapParam[this.namespaces[i].namespace] = this.namespaces[i].chosenResolutionLocation + ":" + this.namespaces[i].chosenResolutionOpt;
             }
-            
+
         }
 
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
@@ -140,12 +140,12 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
                 this.initPaging(this.brokenRecordList);
             }
         );
-    
+
     }
 
 
     checkAllNs(check: boolean) {
-        for (var i = 0; i < this.namespaces.length; i++) {
+        for (let i = 0; i < this.namespaces.length; i++) {
             this.namespaces[i].check = check;
         }
     }
@@ -160,7 +160,7 @@ class NsCheckItem {
     namespace: string;
     count: number;
     check: boolean;
-    locations: { 
+    locations: {
         type: "local" | "remote";
         name?: string; //in case of type local
         title?: string; //in case of type remote

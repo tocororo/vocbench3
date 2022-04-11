@@ -42,7 +42,7 @@ export class CollaborationProjSettingsModal {
                 let backendId = this.vbColl.getBackendId();
                 if (backendId != null) {
                     this.resettable = true;
-                    for (var i = 0; i < this.extensions.length; i++) {
+                    for (let i = 0; i < this.extensions.length; i++) {
                         if (this.extensions[i].id == backendId) {
                             this.selectedExtension = this.extensions[i];
                             break;
@@ -63,7 +63,7 @@ export class CollaborationProjSettingsModal {
     }
 
     reset() {
-        this.basicModals.confirm({key: "COLLABORATION.ACTIONS.RESET_COLLABORATION_SYSTEM"}, {key:"MESSAGES.DISABLE_COLLABORATION_SYSTEM_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "COLLABORATION.ACTIONS.RESET_COLLABORATION_SYSTEM" }, { key: "MESSAGES.DISABLE_COLLABORATION_SYSTEM_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.collaborationService.resetCollaborationOnProject().subscribe(
                     () => {
@@ -71,11 +71,11 @@ export class CollaborationProjSettingsModal {
                             () => this.activeModal.close()
                         );
                     }
-                )
-            }, 
-            () => {}
-        )
-        
+                );
+            },
+            () => { }
+        );
+
     }
 
     onExtensionChange() {
@@ -103,7 +103,7 @@ export class CollaborationProjSettingsModal {
                         this.vbColl.initCollaborationSystem();
                         this.activeModal.close();
                     }
-                )
+                );
             }
         );
     }

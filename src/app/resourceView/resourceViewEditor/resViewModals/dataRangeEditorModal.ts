@@ -14,7 +14,7 @@ export class DataRangeEditorModal {
     private datarangePristine: ARTLiteral[] = [];
     datarange: ARTLiteral[] = [];
 
-    constructor(public activeModal: NgbActiveModal, private propertyService: PropertyServices) {}
+    constructor(public activeModal: NgbActiveModal, private propertyService: PropertyServices) { }
 
     ngOnInit() {
         this.propertyService.getDatarangeLiterals(this.datarangeNode).subscribe(
@@ -22,19 +22,19 @@ export class DataRangeEditorModal {
                 this.datarange = datarange;
                 this.datarangePristine = datarange.slice(); //clone
             }
-        )
+        );
     }
 
     ok() {
         //check if the datarange list is changed
-        var changed: boolean = false;
+        let changed: boolean = false;
 
         if (this.datarange.length != this.datarangePristine.length) { //different length => there was a change for sure
             changed = true;
         } else { //same length => there could be a replace
             //two checks:
             //if every final list element is in pristine...
-            for (var i = 0; i < this.datarange.length; i++) {
+            for (let i = 0; i < this.datarange.length; i++) {
                 if (!ResourceUtils.containsNode(this.datarangePristine, this.datarange[i])) {
                     changed = true;
                     break;
@@ -42,7 +42,7 @@ export class DataRangeEditorModal {
             }
             if (!changed) {
                 //...and if every pristine list element is in final
-                for (var i = 0; i < this.datarangePristine.length; i++) {
+                for (let i = 0; i < this.datarangePristine.length; i++) {
                     if (!ResourceUtils.containsNode(this.datarange, this.datarangePristine[i])) {
                         changed = true;
                         break;
@@ -56,11 +56,11 @@ export class DataRangeEditorModal {
                 stResp => {
                     this.activeModal.close();
                 }
-            )
+            );
         } else {
             this.cancel();
         }
-        
+
     }
 
     cancel() {

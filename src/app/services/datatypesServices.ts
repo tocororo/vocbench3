@@ -21,7 +21,7 @@ export class DatatypesServices {
      * 
      */
     getDatatypes(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDatatypes", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -33,7 +33,7 @@ export class DatatypesServices {
      * 
      */
     getOWL2DatatypeMap(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getOWL2DatatypeMap", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -42,7 +42,7 @@ export class DatatypesServices {
     }
 
     getDeclaredDatatypes(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDeclaredDatatypes", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -55,7 +55,7 @@ export class DatatypesServices {
      * @param newDatatype 
      */
     createDatatype(newDatatype: ARTURIResource): Observable<ARTURIResource> {
-        var params: any = {
+        let params: any = {
             newDatatype: newDatatype
         };
         return this.httpMgr.doPost(this.serviceName, "createDatatype", params).pipe(
@@ -80,7 +80,7 @@ export class DatatypesServices {
      * @param datatype 
      */
     deleteDatatype(datatype: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             datatype: datatype
         };
         return this.httpMgr.doPost(this.serviceName, "deleteDatatype", params).pipe(
@@ -92,7 +92,7 @@ export class DatatypesServices {
     }
 
     getDatatypeRestrictions(): Observable<DatatypeRestrictionsMap> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDatatypeRestrictions", params).pipe(
             map(stResp => {
                 let dtRestrMap: DatatypeRestrictionsMap = new Map();
@@ -105,7 +105,7 @@ export class DatatypesServices {
     }
 
     getRestrictionDescription(restriction: ARTBNode): Observable<DatatypeRestrictionDescription> {
-        var params: any = {
+        let params: any = {
             restriction: restriction
         };
         return this.httpMgr.doGet(this.serviceName, "getRestrictionDescription", params).pipe(
@@ -116,7 +116,7 @@ export class DatatypesServices {
     }
 
     setDatatypeFacetsRestriction(datatype: ARTURIResource, base: ARTURIResource, facets: { [facet: string]: string }) {
-        var params: any = {
+        let params: any = {
             datatype: datatype,
             base: base,
             facets: JSON.stringify(facets),
@@ -125,7 +125,7 @@ export class DatatypesServices {
     }
 
     setDatatypeManchesterRestriction(datatype: ARTURIResource, manchExpr: string) {
-        var params: any = {
+        let params: any = {
             datatype: datatype,
             manchExpr: manchExpr,
         };
@@ -133,7 +133,7 @@ export class DatatypesServices {
     }
 
     setDatatypeEnumerationRestrictions(datatype: ARTURIResource, literals: ARTLiteral[]) {
-        var params: any = {
+        let params: any = {
             datatype: datatype,
             literals: literals,
         };
@@ -142,7 +142,7 @@ export class DatatypesServices {
 
 
     deleteDatatypeRestriction(datatype: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             datatype: datatype,
         };
         return this.httpMgr.doPost(this.serviceName, "deleteDatatypeRestriction", params);
@@ -163,9 +163,9 @@ export class DatatypesServices {
                 if (key == OWL.onDatatype.getURI()) {
                     facetsDescription.base = NTriplesUtil.parseURI(value);
                 } else if (key == XmlSchema.maxExclusive.getURI()) {
-                    facetsDescription.facets.maxExclusive = +NTriplesUtil.parseLiteral(value).getValue(); 
+                    facetsDescription.facets.maxExclusive = +NTriplesUtil.parseLiteral(value).getValue();
                 } else if (key == XmlSchema.maxInclusive.getURI()) {
-                    facetsDescription.facets.maxInclusive = +NTriplesUtil.parseLiteral(value).getValue(); 
+                    facetsDescription.facets.maxInclusive = +NTriplesUtil.parseLiteral(value).getValue();
                 } else if (key == XmlSchema.minExclusive.getURI()) {
                     facetsDescription.facets.minExclusive = +NTriplesUtil.parseLiteral(value).getValue();
                 } else if (key == XmlSchema.minInclusive.getURI()) {

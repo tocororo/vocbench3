@@ -27,11 +27,11 @@ export class CapabilityEditorModal {
     area: string;
     subjectScope: string;
     crudvStruct: { value: string, label: string, checked: boolean }[] = [
-        { value : "C", label: "Create", checked: false },
-        { value : "R", label: "Read", checked: false },
-        { value : "U", label: "Update", checked: false },
-        { value : "D", label: "Delete", checked: false },
-        { value : "V", label: "Validate", checked: false }
+        { value: "C", label: "Create", checked: false },
+        { value: "R", label: "Read", checked: false },
+        { value: "U", label: "Update", checked: false },
+        { value: "D", label: "Delete", checked: false },
+        { value: "V", label: "Validate", checked: false }
     ];
 
     constructor(public activeModal: NgbActiveModal) { }
@@ -54,7 +54,7 @@ export class CapabilityEditorModal {
             }
             
             //parse CRUDV
-            for (var i = 0; i < this.crudvList.length; i++) {
+            for (let i = 0; i < this.crudvList.length; i++) {
                 if (capabCrudv.toUpperCase().indexOf(this.crudvList[i]) != -1) {
                     this.setCRUDV(this.crudvList[i], true);
                 }
@@ -67,7 +67,7 @@ export class CapabilityEditorModal {
     }
 
     private setCRUDV(crudvValue: string, checked: boolean) {
-        for (var i = 0; i < this.crudvStruct.length; i++) {
+        for (let i = 0; i < this.crudvStruct.length; i++) {
             if (this.crudvStruct[i].value == crudvValue) {
                 this.crudvStruct[i].checked = checked;
                 return;
@@ -76,7 +76,7 @@ export class CapabilityEditorModal {
     }
 
     changeAllCrudvStatus(checked: boolean) {
-        for (var i = 0; i < this.crudvStruct.length; i++) {
+        for (let i = 0; i < this.crudvStruct.length; i++) {
             this.crudvStruct[i].checked = checked;
         }
         this.updateExtendedCapability();
@@ -84,9 +84,9 @@ export class CapabilityEditorModal {
 
     updateExtendedCapability() {
         let printCrudv: string = "";
-        for (var i = 0; i < this.crudvStruct.length; i++) {
+        for (let i = 0; i < this.crudvStruct.length; i++) {
             if (this.crudvStruct[i].checked) {
-                printCrudv = printCrudv + this.crudvStruct[i].value;
+                printCrudv += this.crudvStruct[i].value;
             }
         }
         if (this.subjectScope != null && this.subjectScope.trim() != "") {
@@ -98,7 +98,7 @@ export class CapabilityEditorModal {
     }
 
     isDataValid(): boolean {
-        for (var i = 0; i < this.crudvStruct.length; i++) {
+        for (let i = 0; i < this.crudvStruct.length; i++) {
             if (this.crudvStruct[i].checked) { //if there is at least one checked CRUDV
                 return true;
             }

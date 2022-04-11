@@ -48,7 +48,7 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         if (value == null) {
             prop.value = null;
         } else {
-            prop.value =  value;
+            prop.value = value;
         }
         this.propagateChange(this.prop);
     }
@@ -85,7 +85,7 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         let roles: RDFResourceRolesEnum[] = [];
         let constr: SettingsPropTypeConstraint[] = prop.type.constraints;
         if (constr != null) {
-            for (var i = 0; i < constr.length; i++) {
+            for (let i = 0; i < constr.length; i++) {
                 if (constr[i].type.endsWith("HasRole")) {
                     roles.push(<RDFResourceRolesEnum>constr[i].value);
                 }
@@ -105,7 +105,7 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         let constr: SettingsPropTypeConstraint[] = prop.type.constraints;
         let isLanguageTaggedString: boolean = false;
         if (constr != null) {
-            for (var i = 0; i < constr.length; i++) {
+            for (let i = 0; i < constr.length; i++) {
                 if (constr[i].type.endsWith("LanguageTaggedString")) {
                     isLanguageTaggedString = true;
                     break;

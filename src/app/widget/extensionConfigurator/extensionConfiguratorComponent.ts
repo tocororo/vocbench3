@@ -23,13 +23,13 @@ export class ExtensionConfiguratorComponent {
     private selectedConfiguration: Settings;
 
     private status: ExtensionConfigurationStatus;
-    
-    constructor(private configurationService: ConfigurationsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
+
+    constructor(private configurationService: ConfigurationsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.selectedExtension = this.extensions[0];
         this.extensionUpdated.emit(this.selectedExtension);
-        
+
         if (this.selectedExtension.configurations != null) {
             this.selectedConfiguration = this.selectedExtension.configurations[0];
             this.configurationUpdated.emit(this.selectedConfiguration);
@@ -63,8 +63,8 @@ export class ExtensionConfiguratorComponent {
                 //update the selected configuration...
                 this.selectedConfiguration = cfg;
                 //...and the configuration among the availables
-                var configs: Settings[] = this.selectedExtension.configurations;
-                for (var i = 0; i < configs.length; i++) {
+                let configs: Settings[] = this.selectedExtension.configurations;
+                for (let i = 0; i < configs.length; i++) {
                     if (configs[i].shortName == this.selectedConfiguration.shortName) {
                         configs[i] = this.selectedConfiguration;
                     }
@@ -82,21 +82,21 @@ export class ExtensionConfiguratorComponent {
 
     saveConfig() {
         let config: { [key: string]: any } = this.selectedConfiguration.getPropertiesAsMap(true);
-        this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_CONFIGURATION"}, this.selectedExtension.id, config).then(
+        this.sharedModals.storeConfiguration({ key: "ACTIONS.SAVE_CONFIGURATION" }, this.selectedExtension.id, config).then(
             (relativeRef: string) => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIGURATION_SAVED"});
-                
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.CONFIGURATION_SAVED" });
+
                 this.status = ExtensionConfigurationStatus.saved;
                 this.configStatusUpdated.emit({ status: this.status, relativeReference: relativeRef });
             },
-            () => {}
+            () => { }
         );
     }
 
     loadConfig() {
-        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_CONFIGURATION"}, this.selectedExtension.id).then(
+        this.sharedModals.loadConfiguration({ key: "ACTIONS.LOAD_CONFIGURATION" }, this.selectedExtension.id).then(
             (config: LoadConfigurationModalReturnData) => {
-                for (var i = 0; i < this.selectedExtension.configurations.length; i++) {
+                for (let i = 0; i < this.selectedExtension.configurations.length; i++) {
                     if (this.selectedExtension.configurations[i].type == config.configuration.type) {
                         this.selectedExtension.configurations[i] = config.configuration;
                         this.selectedConfiguration = this.selectedExtension.configurations[i];
@@ -107,7 +107,7 @@ export class ExtensionConfiguratorComponent {
                 this.status = ExtensionConfigurationStatus.saved;
                 this.configStatusUpdated.emit({ status: this.status, relativeReference: config.reference.relativeReference });
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -165,7 +165,7 @@ export class ExtensionConfiguratorComponent {
                 this.status = ExtensionConfigurationStatus.saved;
                 this.configStatusUpdated.emit({ status: this.status, relativeReference: configRef });
             }
-        )
+        );
     }
 
     private selectConfigOfSelectedExtension(config: Settings) {

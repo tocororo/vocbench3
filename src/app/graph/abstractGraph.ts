@@ -19,7 +19,7 @@ export abstract class AbstractGraph {
     protected linkAhead: Link; //link selected to bring ahead the other
 
     initialized: boolean = false; //true once the graph will be initialized (useful in order to not render the graph view until then)
-    
+
     protected abstract mode: GraphMode;
     protected options: GraphOptions = new GraphOptions(800, 400); //initial w & h (will be updated later)
 
@@ -45,7 +45,7 @@ export abstract class AbstractGraph {
         }
         this.linkAhead = null;
         this.elementSelected.emit(this.selectedElement);
-    };
+    }
 
     protected abstract onNodeDblClicked(node: Node): void;
 
@@ -63,7 +63,7 @@ export abstract class AbstractGraph {
         }
         this.linkAhead = <Link>this.selectedElement;
         this.elementSelected.emit(this.selectedElement);
-    };
+    }
 
     onBackgroundClicked() {
         this.selectedElement = null;
@@ -77,7 +77,7 @@ export abstract class AbstractGraph {
     }
 
     public getExportUrl(): string {
-        let svgDom: HTMLElement = this.svgElement.nativeElement; 
+        let svgDom: HTMLElement = this.svgElement.nativeElement;
         let clonedSvg: HTMLElement = <HTMLElement>svgDom.cloneNode(true);
 
         ExportGraphUtils.processDom(clonedSvg, svgDom);
@@ -86,8 +86,8 @@ export abstract class AbstractGraph {
         let source = serializer.serializeToString(clonedSvg);
         source = '<?xml version="1.0" standalone="no"?>\r\n' + source;//add xml declaration
         source = source.replace(/<!--[\s\S]*?-->/g, "");//remove comments
-        
-        var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source); //convert svg source to URI data scheme.
+
+        let url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source); //convert svg source to URI data scheme.
         return url;
 
 
@@ -103,11 +103,11 @@ export abstract class AbstractGraph {
         // let img = new Image();
         // img.src = 'data:image/svg+xml;base64,' + window.btoa(source);
 
-        // var canvas = document.createElement("canvas");
+        // let canvas = document.createElement("canvas");
         // document.body.appendChild(canvas);
         // canvas.getContext("2d").drawImage(img, 0, 0);
 
-        // var url = canvas.toDataURL("image/png");
+        // let url = canvas.toDataURL("image/png");
         // return url;
     }
 
@@ -116,7 +116,7 @@ export abstract class AbstractGraph {
 export enum GraphMode {
     dataOriented = "dataOriented",
     modelOriented = "modelOriented",
-    umlOriented= "umlOriented"
+    umlOriented = "umlOriented"
 }
 
 
@@ -131,7 +131,7 @@ class ExportGraphUtils {
         stop: ["stop-color"],
         text: ["font", "stroke", "stroke-width"]
     };
-    
+
     public static processDom(targetEl: HTMLElement, sourceEl: HTMLElement) {
         if (this.svgElementToProcess.indexOf(targetEl.tagName) != -1) { //if the element is one of the processingTagNames
             this.copyStyleAsInline(targetEl, sourceEl); //compy the computed style of the source as inline style in the target
@@ -139,7 +139,7 @@ class ExportGraphUtils {
         this.removeNgAttributes(targetEl);
         let targetChildren: HTMLCollection = targetEl.children;
         let sourceChildren: HTMLCollection = sourceEl.children;
-        for (var i = 0; i < targetChildren.length; i++) {
+        for (let i = 0; i < targetChildren.length; i++) {
             let targetChildEl: HTMLElement = <HTMLElement>targetChildren.item(i);
             let sourceChildEl: HTMLElement = <HTMLElement>sourceChildren.item(i);
             this.processDom(targetChildEl, sourceChildEl);
@@ -159,7 +159,7 @@ class ExportGraphUtils {
 
     private static removeNgAttributes(el: HTMLElement) {
         let attrs: NamedNodeMap = el.attributes;
-        for (let i = attrs.length-1; i >= 0; i--) {
+        for (let i = attrs.length - 1; i >= 0; i--) {
             let attr = attrs.item(i).name;
             if (attr.startsWith("_ng") || attr.startsWith("ng-")) {
                 el.removeAttribute(attr);

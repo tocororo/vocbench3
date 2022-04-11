@@ -57,10 +57,10 @@ export class FormCollEditorModal {
                     //get CF available
                     this.cfService.getAllCustomForms().subscribe(
                         cForms => {
-                            for (var i = 0; i < cForms.length; i++) {
+                            for (let i = 0; i < cForms.length; i++) {
                                 //add the CF in the available list only if it is not in the CF of the FormCollection
                                 let inColl: boolean = false;
-                                for (var j = 0; j < this.forms.length; j++) {
+                                for (let j = 0; j < this.forms.length; j++) {
                                     if (this.forms[j].getId() == cForms[i].getId()) {
                                         inColl = true;
                                         break;
@@ -72,11 +72,11 @@ export class FormCollEditorModal {
                                 }
                             }
                         },
-                        err => { this.activeModal.dismiss() }
+                        err => { this.activeModal.dismiss(); }
                     );
 
                 },
-                err => { this.activeModal.dismiss() }
+                err => { this.activeModal.dismiss(); }
             );
         } else {
             this.mode = EditorMode.create;
@@ -84,13 +84,13 @@ export class FormCollEditorModal {
                 cForms => {
                     this.formsAvailable = cForms;
                 },
-                err => { this.activeModal.dismiss() }
+                err => { this.activeModal.dismiss(); }
             );
         }
     }
 
     //========= ID Namespace-lock HANDLER =========
-    
+
     unlockNamespace() {
         this.namespaceLocked = !this.namespaceLocked;
         if (this.namespaceLocked) { //from free id to locked namespace
@@ -105,7 +105,7 @@ export class FormCollEditorModal {
         if (separatorIdx > 0) {
             this.fcPrefix = this.fcId.substring(0, separatorIdx + 1);
             this.fcShortId = this.fcId.substring(separatorIdx + 1);
-        } else {  //no . in the id => restore the original id
+        } else { //no . in the id => restore the original id
             this.fcShortId = null;
         }
     }
@@ -124,9 +124,7 @@ export class FormCollEditorModal {
     }
 
     selectFormAvailable(form: CustomForm) {
-        if (this.readOnly) {
-            return;
-        } else {
+        if (!this.readOnly) {
             if (this.selectedFormAvailable == form) {
                 this.selectedFormAvailable = null;
             } else {
@@ -154,11 +152,7 @@ export class FormCollEditorModal {
     }
 
     isFormAlreadyInCollection(form: CustomForm) {
-        for (var i = 0; i < this.forms.length; i++) {
-            this.forms[i].getId() == form.getId();
-            return true;
-        }
-        return false;
+        return this.forms.some(f => f.getId() == form.getId());
     }
 
     /**
@@ -177,23 +171,23 @@ export class FormCollEditorModal {
     }
 
     addSuggestionClass() {
-        this.browsingModals.browseClassTree({key:"CUSTOM_FORMS.ACTIONS.ADD_CLASS_AS_SUGGESTION"}).then(
+        this.browsingModals.browseClassTree({ key: "CUSTOM_FORMS.ACTIONS.ADD_CLASS_AS_SUGGESTION" }).then(
             cls => {
                 if (!ResourceUtils.containsNode(this.suggestions, cls)) {
                     this.suggestions.push(cls);
                 }
             }
-        )
+        );
     }
 
     addSuggestionProperty() {
-        this.browsingModals.browsePropertyTree({key:"CUSTOM_FORMS.ACTIONS.ADD_PROPERTY_AS_SUGGESTION"}).then(
+        this.browsingModals.browsePropertyTree({ key: "CUSTOM_FORMS.ACTIONS.ADD_PROPERTY_AS_SUGGESTION" }).then(
             prop => {
                 if (!ResourceUtils.containsNode(this.suggestions, prop)) {
                     this.suggestions.push(prop);
                 }
             }
-        )
+        );
     }
 
     removeSuggestion() {
@@ -203,17 +197,17 @@ export class FormCollEditorModal {
 
 
     isDataValid() {
-        var valid = true;
+        let valid = true;
         if (this.forms.length == 0) {
             valid = false;
-            this.errorMsg = "The FormCollection list is empty. Please add at least one CustomForm."
+            this.errorMsg = "The FormCollection list is empty. Please add at least one CustomForm.";
         }
         if (this.fcId == null) { //check only in create mode
             if (this.fcShortId == null) {
                 valid = false;
-                this.errorMsg = "The FormCollection ID is empty"
+                this.errorMsg = "The FormCollection ID is empty";
             } else if (!this.fcShortId.match(/^[a-zA-Z0-9.-_]+$/i)) { //invalid character
-                this.errorMsg = "The FormCollection ID is invalid (it may be empty or contain invalid characters). Please fix it."
+                this.errorMsg = "The FormCollection ID is invalid (it may be empty or contain invalid characters). Please fix it.";
                 valid = false;
             }
             if (this.existingFormColl.indexOf(this.fcPrefix + this.fcShortId) != -1) { //FC with the same id already exists
@@ -246,7 +240,7 @@ export class FormCollEditorModal {
                         }
                     );
                 }
-            )
+            );
         }
     }
 

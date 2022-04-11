@@ -33,7 +33,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_RANGE"}, this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue({ key: "DATA.ACTIONS.ADD_RANGE" }, this.resource, predicate, propChangeable).then(
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
@@ -100,7 +100,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
                 }
             },
             () => { }
-        )
+        );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
@@ -134,7 +134,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
                         } else {
                             this.getRemoveFunction(predicate, object).subscribe(
                                 stResp => this.update.emit()
-                            )
+                            );
                         }
                     }
                 );
@@ -142,18 +142,18 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
         } else { //object instanceof ARTURIResource => object is class or datatype
             this.getRemoveFunction(predicate, object).subscribe(
                 stResp => this.update.emit()
-            )
+            );
         }
     }
 
     //@override
     removeAllValues(predicate: ARTURIResource) {
-        for (var i = 0; i < this.predicateObjectList.length; i++) {
+        for (let i = 0; i < this.predicateObjectList.length; i++) {
             let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
             //collects all the suspicious class axioms, namely the range that are BNode
             let suspClassAxioms: ARTBNode[] = [];
             let notClassAxioms: ARTURIResource[] = [];
-            for (var j = 0; j < objList.length; j++) {
+            for (let j = 0; j < objList.length; j++) {
                 let object = objList[j];
                 if (object instanceof ARTBNode) {
                     suspClassAxioms.push(object);
@@ -164,18 +164,18 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
             if (suspClassAxioms.length > 0) { //there is at least a bnode, check if it is a class axiom
                 //collects the functions to do the checks
                 let isClassAxiomFnArray: any[] = [];
-                for (var j = 0; j < suspClassAxioms.length; j++) {
+                for (let j = 0; j < suspClassAxioms.length; j++) {
                     isClassAxiomFnArray.push(this.manchService.isClassAxiom(suspClassAxioms[j]));
                 }
                 let removeFnArray: any[] = [];
                 //collects the remove function for all the not class axioms ranges
-                for (var j = 0; j < notClassAxioms.length; j++) {
+                for (let j = 0; j < notClassAxioms.length; j++) {
                     removeFnArray.push(this.getRemoveFunction(predicate, notClassAxioms[j]));
                 }
                 //collects remove function for all the suspicious class axioms ranges
                 forkJoin(isClassAxiomFnArray).subscribe(
                     results => {
-                        for (var j = 0; j < results.length; j++) {
+                        for (let j = 0; j < results.length; j++) {
                             if (results[j]) { //is class axiom
                                 removeFnArray.push(this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, suspClassAxioms[j]));
                             } else { //not a class axiom
@@ -184,10 +184,10 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
                         }
                         this.removeAllRicursively(removeFnArray);
                     }
-                )
+                );
             } else { //all range are IRI, there's no need to check for class axioms
                 let removeFnArray: any[] = [];
-                for (var j = 0; j < objList.length; j++) {
+                for (let j = 0; j < objList.length; j++) {
                     removeFnArray.push(this.getRemoveFunction(predicate, objList[j]));
                 }
                 this.removeAllRicursively(removeFnArray);

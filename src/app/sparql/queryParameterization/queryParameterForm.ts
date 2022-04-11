@@ -36,14 +36,14 @@ export class QueryParameterForm {
      */
     private initBindingStruct() {
         this.bindingStructs = [];
-        setTimeout(() => { //let destroy the view, so that in case it is changed just the var names, the table is rebuilt with no UI problem
-            for (var varName in this.bindings) {
+        setTimeout(() => { //let destroy the view, so that in case it is changed just the let names, the table is rebuilt with no UI problem
+            for (let varName in this.bindings) {
                 let bs: BindingStruct = {
                     varName: varName,
                     displayName: this.bindings[varName].displayName,
                     description: this.bindings[varName].description,
                     bindingType: this.bindings[varName].bindingType
-                }
+                };
                 if (this.bindings[varName].bindingType == BindingTypeEnum.assignment) {
                     bs.value = NTriplesUtil.parseNode(this.bindings[varName].value);
                 } else if (this.bindings[varName].bindingType == BindingTypeEnum.constraint) {
@@ -77,7 +77,7 @@ export class QueryParameterForm {
                 this.bindings = updatedVarBindings;
                 this.paramsChange.emit(this.bindings);
             },
-            () => {}
+            () => { }
         );
     }
 

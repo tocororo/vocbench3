@@ -18,12 +18,12 @@ export class IndividualsServices {
      * @param individual
      */
     getNamedTypes(individual: ARTResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             individual: individual
         };
         return this.httpMgr.doGet(this.serviceName, "getNamedTypes", params, options).pipe(
             map(stResp => {
-                var types = Deserializer.createURIArray(stResp);
+                let types = Deserializer.createURIArray(stResp);
                 return types;
             })
         );
@@ -35,7 +35,7 @@ export class IndividualsServices {
      * @param type the type to add to the individual
      */
     addType(individual: ARTResource, type: ARTResource) {
-        var params: any = {
+        let params: any = {
             individual: individual,
             type: type,
         };
@@ -54,7 +54,7 @@ export class IndividualsServices {
      * @param type type to remove 
      */
     removeType(individual: ARTURIResource, type: ARTResource) {
-        var params: any = {
+        let params: any = {
             individual: individual,
             type: type,
         };

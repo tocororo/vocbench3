@@ -12,7 +12,7 @@ export class ExtensionsServices {
     constructor(private httpMgr: HttpManager) { }
 
     getExtensionPoints(scopes?: Scope): Observable<ExtensionPoint[]> {
-        var params: any = {};
+        let params: any = {};
         if (scopes != null) {
             params.scopes = scopes;
         }
@@ -24,31 +24,31 @@ export class ExtensionsServices {
                 }
                 return extPts;
             })
-        )
+        );
     }
 
     getExtensionPoint(identifier: string) {
-        var params: any = {
+        let params: any = {
             identifier: identifier
         };
-        return this.httpMgr.doGet(this.serviceName, "getExtensionPoint", params)
+        return this.httpMgr.doGet(this.serviceName, "getExtensionPoint", params);
     }
 
     getExtensions(extensionPointID: string): Observable<ExtensionFactory[]> {
-        var params: any = {
+        let params: any = {
             extensionPointID: extensionPointID
         };
         return this.httpMgr.doGet(this.serviceName, "getExtensions", params).pipe(
             map(stResp => {
                 let exts: ExtensionFactory[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                for (let i = 0; i < stResp.length; i++) {
                     let extFact: ExtensionFactory;
 
                     //distinguish between Configurable and NonConfigurable ExtensionFactory
                     let configColl: any[] = stResp[i].configurations;
                     if (configColl != null) {
                         let configurations: Settings[] = [];
-                        for (var j = 0; j < configColl.length; j++) {
+                        for (let j = 0; j < configColl.length; j++) {
                             configurations.push(Settings.parse(configColl[j]));
                         }
                         extFact = new ConfigurableExtensionFactory(stResp[i].id, stResp[i].name, stResp[i].description, 

@@ -40,7 +40,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     @Input() schemeChangeable: boolean = false; //if true, above the tree is shown a menu to select a scheme
     @Output() schemeChanged = new EventEmitter<ARTURIResource[]>(); //when dynamic scheme is changed (inform parent component in order to eventually reset a previous concept selection)
 
-    @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent
+    @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent;
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.concept;
 
@@ -50,7 +50,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     visualizationMode: ConceptTreeVisualizationMode;//this could be changed dynamically, so each time it is used, get it again from preferences
-    
+
     //for visualization searchBased
     lastSearch: string;
 
@@ -75,7 +75,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
 
         this.modelType = VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType();
-            
+
         //Initialize working schemes
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
             this.workingSchemes = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes;
@@ -83,12 +83,12 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             this.workingSchemes = this.schemes;
         }
     }
-    
+
     //top bar commands handlers
 
     getActionContext(): VBActionFunctionCtx {
         let metaClass: ARTURIResource = ResourceUtils.convertRoleToClass(this.panelRole, this.modelType);
-        let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildTree.blockDivElement, schemes: this.workingSchemes }
+        let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildTree.blockDivElement, schemes: this.workingSchemes };
         return actionCtx;
     }
 
@@ -122,12 +122,12 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 this.sharedModals.selectResource("Select scheme", null, schemes, this.rendering, true, true, this.workingSchemes).then(
                     (schemes: ARTURIResource[]) => {
                         this.workingSchemes = schemes;
-                        this.schemeChanged.emit(schemes)
+                        this.schemeChanged.emit(schemes);
                     },
-                    () => {}
-                )
+                    () => { }
+                );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -151,35 +151,35 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], searchSettings.useLocalName, searchSettings.useURI,
-            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme, 
+            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme,
             projPref.conceptTreePreferences.multischemeMode, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-            searchResult => {
-                UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                this.visualizationMode = projPref.conceptTreePreferences.visualization;
-                if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
-                    if (searchResult.length == 0) {
-                        this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
-                    } else { //1 or more results
-                        if (searchResult.length == 1) {
-                            this.selectSearchedResource(searchResult[0]);
-                        } else { //multiple results, ask the user which one select
-                            this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
-                                (selectedResources: ARTURIResource[]) => {
-                                    this.selectSearchedResource(selectedResources[0]);
-                                },
-                                () => { }
-                            );
+                searchResult => {
+                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+                    ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                    this.visualizationMode = projPref.conceptTreePreferences.visualization;
+                    if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
+                        if (searchResult.length == 0) {
+                            this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND_FOR", params: { text: searchedText } }, ModalType.warning);
+                        } else { //1 or more results
+                            if (searchResult.length == 1) {
+                                this.selectSearchedResource(searchResult[0]);
+                            } else { //multiple results, ask the user which one select
+                                this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.TOT_RESULTS_FOUND", params: { count: searchResult.length } }, searchResult, this.rendering).then(
+                                    (selectedResources: ARTURIResource[]) => {
+                                        this.selectSearchedResource(selectedResources[0]);
+                                    },
+                                    () => { }
+                                );
+                            }
                         }
+                    } else { //searchBased
+                        if (searchResult.length == 0) {
+                            this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND_FOR", params: { text: searchedText } }, ModalType.warning);
+                        }
+                        this.viewChildTree.forceList(searchResult);
                     }
-                } else { //searchBased
-                    if (searchResult.length == 0) {
-                        this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
-                    }
-                    this.viewChildTree.forceList(searchResult);
                 }
-            }
-        );
+            );
     }
 
     /**
@@ -195,7 +195,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 if (this.workingSchemes.length == 0) { //no scheme mode -> searched concept should be visible
                     isInActiveSchemes = true;
                 } else {
-                    for (var i = 0; i < schemes.length; i++) {
+                    for (let i = 0; i < schemes.length; i++) {
                         if (ResourceUtils.containsNode(this.workingSchemes, schemes[i])) {
                             isInActiveSchemes = true;
                             break;
@@ -206,15 +206,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     this.selectResourceVisualizationModeAware(resource);
                 } else {
                     if (schemes.length == 0) { //searched concept doesn't belong to any scheme => ask switch to no-scheme mode
-                        this.basicModals.confirm({key:"SEARCH.SEARCH"}, {key:"MESSAGES.SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_CONFIRM"}, ModalType.warning).then(
+                        this.basicModals.confirm({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_CONFIRM" }, ModalType.warning).then(
                             confirm => {
                                 this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), []); //update the active schemes
                                 setTimeout(() => {
                                     this.selectResourceVisualizationModeAware(resource);
                                 });
                             },
-                            cancel => {}
-                        )
+                            cancel => { }
+                        );
                     } else { //searched concept belongs to at least one scheme => ask to activate one of them
                         let message = this.translateService.instant("MESSAGES.SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_SELECT.BELONGS_TO_FOLLOWING");
                         if (schemes.length > 1) {
@@ -224,14 +224,14 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         }
                         this.resourceService.getResourcesInfo(schemes).subscribe(
                             schemes => {
-                                this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, message, schemes, this.rendering).then(
+                                this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, message, schemes, this.rendering).then(
                                     (schemes: ARTURIResource[]) => {
                                         this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(schemes[0])); //update the active schemes
                                         setTimeout(() => {
                                             this.selectResourceVisualizationModeAware(resource);
                                         });
                                     },
-                                    () => {}
+                                    () => { }
                                 );
                             }
                         );
@@ -249,7 +249,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             this.viewChildTree.forceList([resource]);
             setTimeout(() => {
                 this.viewChildTree.openRoot([resource]);
-            })
+            });
         }
     }
 
@@ -276,7 +276,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             () => {
                 this.viewChildTree.init();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -292,7 +292,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddMultipleToScheme);
     }
     private addToScheme() {
-        this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.SELECT_SCHEME"}).then(
+        this.browsingModals.browseSchemeList({ key: "DATA.ACTIONS.SELECT_SCHEME" }).then(
             scheme => {
                 const modalRef: NgbModalRef = this.modalService.open(AddToSchemeModal, new ModalOptions());
                 modalRef.componentInstance.title = "Add concepts to scheme";
@@ -300,8 +300,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 modalRef.componentInstance.scheme = scheme;
                 return modalRef.result;
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     //EVENT LISTENERS

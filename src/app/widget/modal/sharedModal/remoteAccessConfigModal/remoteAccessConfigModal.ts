@@ -17,21 +17,21 @@ export class RemoteAccessConfigModal {
 
     newConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
-    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private settingsService: SettingsServices) {}
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private settingsService: SettingsServices) { }
 
     ngOnInit() {
         this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM).subscribe(
             settings => {
                 this.savedConfigs = settings.getPropertyValue(SettingsEnum.remoteConfigs, []);
             }
-        )
+        );
     }
 
     createConfiguration() {
         //add the new configuration only if another config with the same url doesn't exist
-        for (var i = 0; i < this.savedConfigs.length; i++) {
+        for (let i = 0; i < this.savedConfigs.length; i++) {
             if (this.savedConfigs[i].serverURL == this.newConfig.serverURL) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.ALREADY_EXISTING_CONFIG_FOR_SERVER_URL"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.ALREADY_EXISTING_CONFIG_FOR_SERVER_URL" }, ModalType.warning);
                 return;
             }
         }
@@ -41,13 +41,13 @@ export class RemoteAccessConfigModal {
     }
 
     private deleteConfig(c: RemoteRepositoryAccessConfig) {
-        this.basicModals.confirm({key:"ACTIONS.DELETE_CONFIGURATION"}, {key:"MESSAGES.DELETE_CONFIG_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "ACTIONS.DELETE_CONFIGURATION" }, { key: "MESSAGES.DELETE_CONFIG_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.savedConfigs.splice(this.savedConfigs.indexOf(c), 1);
                 this.updateConfigurations();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
     private updateConfServerURL(conf: RemoteRepositoryAccessConfig, newValue: string) {
         conf.serverURL = newValue;

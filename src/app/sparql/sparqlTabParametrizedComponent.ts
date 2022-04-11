@@ -42,11 +42,11 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
     //LOAD/SAVE/PARAMETERIZE QUERY
 
     changeStoredQuery() {
-        this.sharedModals.loadConfiguration({key:"SPARQL.ACTIONS.LOAD_SPARQL_QUERY"}, ConfigurationComponents.SPARQL_STORE).then(
+        this.sharedModals.loadConfiguration({ key: "SPARQL.ACTIONS.LOAD_SPARQL_QUERY" }, ConfigurationComponents.SPARQL_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
                 let relativeRef = data.reference.relativeReference;
                 this.storedQueryReference = relativeRef;
-                this.storedQueryName = this.storedQueryReference.substring(this.storedQueryReference.indexOf(":")+1);
+                this.storedQueryName = this.storedQueryReference.substring(this.storedQueryReference.indexOf(":") + 1);
                 this.setLoadedQueryConf(data.configuration);
                 setTimeout(() => {
                     this.savedStatus.emit(false);
@@ -56,15 +56,15 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
     }
 
     loadConfiguration() {
-        this.sharedModals.loadConfiguration({key:"SPARQL.ACTIONS.LOAD_SPARQL_PARAMETERIZED_QUERY"}, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE).then(
+        this.sharedModals.loadConfiguration({ key: "SPARQL.ACTIONS.LOAD_SPARQL_PARAMETERIZED_QUERY" }, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
                 let relativeRef = data.reference.relativeReference;
                 this.parametrizationRef = relativeRef;
                 this.loadParameterizedQueryConfig(data.configuration);
 
-                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":")+1));
+                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":") + 1));
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -76,10 +76,10 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
          * "description": description of the parameterized query
          */
         let properties: SettingsProp[] = configuration.properties;
-        for (var i = 0; i < properties.length; i++) {
+        for (let i = 0; i < properties.length; i++) {
             if (properties[i].name == "relativeReference") {
                 this.storedQueryReference = properties[i].value;
-                this.storedQueryName = this.storedQueryReference.substring(this.storedQueryReference.indexOf(":")+1);
+                this.storedQueryName = this.storedQueryReference.substring(this.storedQueryReference.indexOf(":") + 1);
                 //load query
                 this.configurationsService.getConfiguration(ConfigurationComponents.SPARQL_STORE, this.storedQueryReference).subscribe(
                     (conf: Configuration) => {
@@ -87,7 +87,7 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
                         setTimeout(() => {
                             this.savedStatus.emit(true);
                         });
-                        
+
                     }
                 );
             } else if (properties[i].name == "variableBindings") {
@@ -108,7 +108,7 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
         let query: string;
         let includeInferred: boolean = false;
         let confProps: ConfigurationProperty[] = conf.properties;
-        for (var i = 0; i < confProps.length; i++) {
+        for (let i = 0; i < confProps.length; i++) {
             if (confProps[i].name == "sparql") {
                 query = confProps[i].value;
             } else if (confProps[i].name == "includeInferred") {
@@ -128,16 +128,16 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
             relativeReference: this.storedQueryReference,
             variableBindings: this.parameterization,
             description: this.description
-        }
-        this.sharedModals.storeConfiguration({key:"SPARQL.ACTIONS.SAVE_SPARQL_QUERY_PARAMETERIZATION"}, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, config, this.parametrizationRef).then(
+        };
+        this.sharedModals.storeConfiguration({ key: "SPARQL.ACTIONS.SAVE_SPARQL_QUERY_PARAMETERIZATION" }, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, config, this.parametrizationRef).then(
             (relativeRef: string) => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.QUERY_PARAMETERIZATION_SAVED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.QUERY_PARAMETERIZATION_SAVED" });
                 this.parametrizationRef = relativeRef;
-                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":")+1));
+                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":") + 1));
                 this.savedStatus.emit(true);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     onParametrizationsChange(parameterization: VariableBindings) {

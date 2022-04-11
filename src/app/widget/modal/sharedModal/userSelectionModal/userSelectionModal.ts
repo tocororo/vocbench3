@@ -47,7 +47,7 @@ export class UserSelectionModal {
     }
 
     private isUserSelectable(user: User): boolean {
-        for (var i = 0; i < this.unselectableUsers.length; i++) {
+        for (let i = 0; i < this.unselectableUsers.length; i++) {
             if (user.getEmail() == this.unselectableUsers[i].getEmail()) {
                 return false;
             }

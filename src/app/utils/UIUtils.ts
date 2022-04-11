@@ -1,8 +1,7 @@
-import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ARTResource } from "../models/ARTResources";
-import { OWL, RDF, XmlSchema } from "../models/Vocabulary";
-import { VBContext } from "./VBContext";
-import { ResAction } from "./RoleActionResolver";
 import { ElementRef } from "@angular/core";
+import { ARTLiteral, ARTNode, ARTResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { OWL, RDF, XmlSchema } from "../models/Vocabulary";
+import { ResAction } from "./RoleActionResolver";
 
 
 export class UIUtils {
@@ -46,7 +45,7 @@ export class UIUtils {
      */
     static stopAllLoadingDiv() {
         //hide all the blocking divs
-        for (var i = 0; i < UIUtils.pendingBlockingDiv.length; i++) {
+        for (let i = 0; i < UIUtils.pendingBlockingDiv.length; i++) {
             UIUtils.pendingBlockingDiv[i].style.display = "none";
         }
         UIUtils.pendingBlockingDiv = []; //empty the blocking div list
@@ -152,11 +151,11 @@ export class UIUtils {
     private static untypedIndividualImgSrc = "./assets/images/icons/res/untyped_individual.png"; 
 
     static getImageSrc(rdfResource: ARTNode): string {
-        var imgSrc: string;
+        let imgSrc: string;
         if (rdfResource instanceof ARTResource) {
-            var role: RDFResourceRolesEnum = rdfResource.getRole();
-            var deprecated: boolean = rdfResource.getAdditionalProperty(ResAttribute.DEPRECATED);
-            var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+            let role: RDFResourceRolesEnum = rdfResource.getRole();
+            let deprecated: boolean = rdfResource.getAdditionalProperty(ResAttribute.DEPRECATED);
+            let explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
                 rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
             if (role == RDFResourceRolesEnum.annotationProperty) {
                 imgSrc = this.propAnnotationImgSrc;
@@ -370,13 +369,13 @@ export class UIUtils {
             }
         }
         return imgSrc;
-    };
+    }
 
     static getRoleImageSrc(role: RDFResourceRolesEnum) {
         if (role == RDFResourceRolesEnum.concept) {
             return this.conceptImgSrc;
         } else if (role == RDFResourceRolesEnum.conceptScheme) {
-            return this.conceptSchemeImgSrc
+            return this.conceptSchemeImgSrc;
         } else if (role == RDFResourceRolesEnum.cls) {
             return this.classImgSrc;
         } else if (role == RDFResourceRolesEnum.individual) {
@@ -404,14 +403,14 @@ export class UIUtils {
 
     static getActionImageSrc(role: RDFResourceRolesEnum, action: ResAction): string {
         if (role == RDFResourceRolesEnum.vartransTranslationSet) { //translationSet has no actions icon => fallback to individual icons
-            role = RDFResourceRolesEnum.individual
+            role = RDFResourceRolesEnum.individual;
         }
         return "./assets/images/icons/actions/" + role + "_" + action + ".png";
     }
 
     static getFlagImgSrc(langTag: string): string {
         langTag = langTag != null ? langTag.toLowerCase() : null;
-        var imgSrc: string;
+        let imgSrc: string;
         if (langTag != null && this.availableFlagLang.indexOf(langTag) != -1) {
             imgSrc = "./assets/images/flags/flag_" + langTag + ".png";
         } else {
@@ -421,7 +420,7 @@ export class UIUtils {
     }
 
     static getDatatypeImgSrc(datatype: string): string {
-        var imgSrc: string;
+        let imgSrc: string;
         if (datatype == XmlSchema.dateTime.getURI() || datatype == XmlSchema.dateTimeStamp.getURI()) {
             imgSrc = "./assets/images/icons/res/datetime.png";
         } else if (datatype == XmlSchema.date.getURI()) {
@@ -438,7 +437,7 @@ export class UIUtils {
             datatype == XmlSchema.float.getURI() || datatype == XmlSchema.int.getURI() || datatype == XmlSchema.integer.getURI() || 
             datatype == XmlSchema.long.getURI() || datatype == XmlSchema.negativeInteger.getURI() || 
             datatype == XmlSchema.nonNegativeInteger.getURI() || datatype == XmlSchema.nonPositiveInteger.getURI() || 
-            datatype == XmlSchema.positiveInteger.getURI() ||  datatype == XmlSchema.short.getURI() || 
+            datatype == XmlSchema.positiveInteger.getURI() || datatype == XmlSchema.short.getURI() || 
             datatype == XmlSchema.unsignedByte.getURI() || datatype == XmlSchema.unsignedInt.getURI() || 
             datatype == XmlSchema.unsignedLong.getURI() || datatype == XmlSchema.unsignedShort.getURI()) {
             imgSrc = "./assets/images/icons/res/number.png";

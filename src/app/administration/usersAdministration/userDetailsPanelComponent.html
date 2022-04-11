@@ -5,7 +5,7 @@
             <div *ngIf="isUserActive()">
                 <label>{{'USER.USER_TYPE'|translate}}:</label>
                 <div class="btn-group ml-2" style="width: 80px;" ngbDropdown>
-                    <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                    <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="isChangeTypeButtonDisabled()">
                         <span *ngIf="user.isAdmin()">{{'ADMINISTRATION.USERS.ADMINISTRATOR'|translate}}</span>
                         <span *ngIf="user.isSuperUser()">{{'ADMINISTRATION.USERS.SUPER_USER'|translate}}</span>
                         <span *ngIf="!user.isSuperUser() && !user.isAdmin()">{{'USER.USER'|translate}}</span>

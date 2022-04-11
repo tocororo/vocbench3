@@ -23,7 +23,7 @@ export class SparqlServices {
      */
     evaluateQuery(query: string, includeInferred?: boolean, ql?: "SPARQL" | "SERQL", bindings?: Map<string, ARTNode>, maxExecTime?: number,
             defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
-        var params: any = {
+        let params: any = {
             query: query,
         };
         if (includeInferred != null) {
@@ -62,7 +62,7 @@ export class SparqlServices {
     executeUpdate(query: string, includeInferred?: boolean, ql?: "SPARQL" | "SERQL", bindings?: Map<string, ARTNode>, maxExecTime?: number,
             defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[], 
             defaultInsertGraph?: ARTURIResource, defaultRemoveGraphs?: ARTURIResource[]) {
-        var params: any = {
+        let params: any = {
             query: query,
         };
         if (includeInferred != null) {
@@ -106,7 +106,7 @@ export class SparqlServices {
     exportGraphQueryResultAsRdf(query: string, format: RDFFormat, includeInferred?: boolean, 
             filteringPipeline?: string, ql?: "SPARQL" | "SERQL", bindings?: any, maxExecTime?: number, 
             defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
-        var params: any = {
+        let params: any = {
             query: query,
             outputFormat: format.name
         };
@@ -147,7 +147,7 @@ export class SparqlServices {
      */
     exportQueryResultAsSpreadsheet(query: string, format: "xlsx" | "ods", includeInferred?: boolean, ql?: "SPARQL" | "SERQL",
             bindings?: any, maxExecTime?: number, defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
-        var params: any = {
+        let params: any = {
             query: query,
             format: format
         };
@@ -177,7 +177,7 @@ export class SparqlServices {
      * @param query 
      */
     suggestEndpointsForFederation(query: string) : Observable<FederatedEndpointSuggestion[]> {
-        var params: any = {
+        let params: any = {
             query: query
         };
         return this.httpMgr.doGet(this.serviceName, "suggestEndpointsForFederation", params);

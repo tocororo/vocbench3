@@ -1,4 +1,4 @@
-import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { SearchServices } from "../../../services/searchServices";
 import { SkosServices } from "../../../services/skosServices";
@@ -70,7 +70,7 @@ export class CollectionTreeComponent extends AbstractTree {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);
                     return;
-                };
+                }
                 //open tree from root to node
                 this.openRoot(path); 
             }
@@ -88,7 +88,7 @@ export class CollectionTreeComponent extends AbstractTree {
 
     private onNestedCollectionAdded(nested: ARTURIResource, container: ARTURIResource) {
         //if the nested was a root collection, then remove it from root (since it is no more a root by definition)
-        for (var i = 0; i < this.roots.length; i++) {
+        for (let i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getNominalValue() == nested.getURI()) {
                 this.roots.splice(i, 1);
                 break;

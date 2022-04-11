@@ -42,13 +42,13 @@ export class VersioningComponent {
         this.selectedVersion = null;
         this.versionsService.getVersions().subscribe(
             versions => {
-                this.versionList = [{ 
-                    versionId: "CURRENT", 
-                    dateTimeLocal: "---", 
-                    dateTime: null, 
-                    repositoryId: "---", 
-                    repositoryLocation: VBContext.getWorkingProject().isRepositoryRemote() ? RepositoryLocation.REMOTE : RepositoryLocation.LOCAL, 
-                    repositoryStatus: RepositoryStatus.INITIALIZED 
+                this.versionList = [{
+                    versionId: "CURRENT",
+                    dateTimeLocal: "---",
+                    dateTime: null,
+                    repositoryId: "---",
+                    repositoryLocation: VBContext.getWorkingProject().isRepositoryRemote() ? RepositoryLocation.REMOTE : RepositoryLocation.LOCAL,
+                    repositoryStatus: RepositoryStatus.INITIALIZED
                 }];
                 this.versionList = this.versionList.concat(versions);
 
@@ -78,12 +78,12 @@ export class VersioningComponent {
     }
 
     dump() {
-        this.basicModals.prompt({key:"ACTIONS.CREATE_VERSION_DUMP"}, { value: "Version ID" }).then(
+        this.basicModals.prompt({ key: "ACTIONS.CREATE_VERSION_DUMP" }, { value: "Version ID" }).then(
             (id: string) => {
                 this.createDump(id);
             },
             () => { }
-        )
+        );
     }
 
     dumpWithLocation() {
@@ -91,8 +91,8 @@ export class VersioningComponent {
             (data: DumpCreationModalReturnData) => {
                 this.createDump(data.versionId, data.repositoryAccess, data.repositoryId, data.repoConfigurerSpecification, data.backendType);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     private createDump(versionId: string, repositoryAccess?: RepositoryAccess, repositoryId?: string, repoConfigurerSpecification?: PluginSpecification, backendType?: BackendTypesEnum) {
@@ -112,7 +112,7 @@ export class VersioningComponent {
     }
 
     isActiveVersion(version: VersionInfo): boolean {
-        var activeVersion: VersionInfo = VBContext.getContextVersion();
+        let activeVersion: VersionInfo = VBContext.getContextVersion();
         if (activeVersion == null) {
             return this.versionList.indexOf(version) == 0;
         } else {
@@ -131,7 +131,7 @@ export class VersioningComponent {
     deleteVersion() {
         this.versionsService.deleteVersion(this.selectedVersion.versionId).subscribe(
             () => {
-                this.initVersions();        
+                this.initVersions();
             }
         );
     }

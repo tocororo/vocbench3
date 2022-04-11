@@ -6,11 +6,11 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 })
 export class MapParamEditor {
 
-    @Input() value: {[key: string]:any};
+    @Input() value: { [key: string]: any };
 
     @Output() valueChanged = new EventEmitter<any>();
 
-    map: {key: string, value: any}[] = [];
+    map: { key: string, value: any }[] = [];
 
     constructor() { }
 
@@ -18,14 +18,14 @@ export class MapParamEditor {
         if (this.value == null) {
             this.add();
         } else {
-            for (var key in this.value) {
-                this.map.push({key: key, value: this.value[key]});
+            for (let key in this.value) {
+                this.map.push({ key: key, value: this.value[key] });
             }
         }
     }
 
     private add() {
-        this.map.push({key: null, value: null});
+        this.map.push({ key: null, value: null });
     }
 
     private delete(index: number) {
@@ -44,7 +44,7 @@ export class MapParamEditor {
             if (entry.key != null && entry.key.trim() != "" || entry.value != null && entry.value.trim() != "") {
                 this.value[entry.key] = entry.value;
             }
-        })
+        });
         this.valueChanged.emit(this.value);
     }
 

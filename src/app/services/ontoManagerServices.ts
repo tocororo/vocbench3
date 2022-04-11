@@ -18,12 +18,12 @@ export class OntoManagerServices {
      * "namespace" (the namespace of the ontology)
      */
     getOntologyMirror(): Observable<OntologyMirror[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params).pipe(
             map(stResp => {
-                var mirrors: { file: string, baseURI: string }[] = [];
-                var mirrorNodeColl: any[] = stResp;
-                for (var i = 0; i < mirrorNodeColl.length; i++) {
+                let mirrors: { file: string, baseURI: string }[] = [];
+                let mirrorNodeColl: any[] = stResp;
+                for (let i = 0; i < mirrorNodeColl.length; i++) {
                     mirrors.push({ file: mirrorNodeColl[i].file, baseURI: mirrorNodeColl[i].baseURI });
                 }
                 return mirrors;
@@ -37,7 +37,7 @@ export class OntoManagerServices {
      * @param fileName name of the mirror file cached on server
      */
     deleteOntologyMirrorEntry(baseURI: string, cacheFileName: string) {
-        var params: any = {
+        let params: any = {
             baseURI: baseURI,
             cacheFileName: cacheFileName
         };
@@ -46,11 +46,11 @@ export class OntoManagerServices {
 
     /**
      * Updates an entry (and its associated physical file) from the Ontology Mirror. The entry can be updated
-	 * in three different ways (determined by the parameter updateType, differentiating in the source
-	 * of the updated ontology:
-	 *  - updateFromBaseURI: the source is retrieved from the supplied baseURI
-	 *  - updateFromAlternativeURL: the source is retrieved from the address hold by the parameter alternativeURL
-	 *  - updateFromFile: the source has been supplied in the request body (and mapped to the parameter inputFile)
+     * in three different ways (determined by the parameter updateType, differentiating in the source
+     * of the updated ontology:
+     *  - updateFromBaseURI: the source is retrieved from the supplied baseURI
+     *  - updateFromAlternativeURL: the source is retrieved from the address hold by the parameter alternativeURL
+     *  - updateFromFile: the source has been supplied in the request body (and mapped to the parameter inputFile)
      * @param updateType
      * @param baseURI baseURI of the ontology 
      * @param mirrorFileName the name of the ontology mirror file to update
@@ -58,8 +58,8 @@ export class OntoManagerServices {
      * @param inputFile file to update onto mirror. To provide only if srcLoc is "lf"
      */
     updateOntologyMirrorEntry(updateType: "updateFromBaseURI" | "updateFromAlternativeURL" | "updateFromFile",
-            baseURI: string, mirrorFileName: string, alternativeURL?: string, inputFile?: File) {
-        var params: any = {
+        baseURI: string, mirrorFileName: string, alternativeURL?: string, inputFile?: File) {
+        let params: any = {
             updateType: updateType,
             baseURI: baseURI,
             mirrorFileName: mirrorFileName,
@@ -68,7 +68,7 @@ export class OntoManagerServices {
             params.alternativeURL = alternativeURL;
         }
         if (inputFile != undefined) {
-            params.inputFile = inputFile
+            params.inputFile = inputFile;
         }
         if (updateType == "updateFromFile") {
             //in this case, the update is from a local file, so send the file with a POST

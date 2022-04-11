@@ -21,7 +21,7 @@ export class SchemeSelectionComponent {
     private schemeList: ARTURIResource[] = [];
     private selectedScheme: ARTURIResource;
 
-    constructor(private skosService: SkosServices, private browsingModals: BrowsingModalServices) {}
+    constructor(private skosService: SkosServices, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
         // this.initSchemeList(); //init in ngOnChanges
@@ -39,8 +39,8 @@ export class SchemeSelectionComponent {
                     if (this.schemes == null) {
                         this.schemes = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
                     }
-                    for (var i = 0; i < this.schemes.length; i++) {
-                        for (var j = 0; j < schemes.length; j++) {
+                    for (let i = 0; i < this.schemes.length; i++) {
+                        for (let j = 0; j < schemes.length; j++) {
                             if (this.schemes[i].getURI() == schemes[j].getURI()) {
                                 this.schemeList.push(schemes[j]);
                                 break;
@@ -57,7 +57,7 @@ export class SchemeSelectionComponent {
                     this.schemeList = schemes;
                     this.update.emit(this.schemeList);
                 }
-            )
+            );
         }
     }
 
@@ -68,7 +68,7 @@ export class SchemeSelectionComponent {
     }
 
     private addScheme() {
-        this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.ADD_SCHEME"}).then(
+        this.browsingModals.browseSchemeList({ key: "DATA.ACTIONS.ADD_SCHEME" }).then(
             (scheme: any) => {
                 //add the chosen scheme only if not already in list
                 if (!ResourceUtils.containsNode(this.schemeList, scheme)) {
@@ -76,7 +76,7 @@ export class SchemeSelectionComponent {
                     this.update.emit(this.schemeList);
                 }
             },
-            () => {}
+            () => { }
         );
     }
 

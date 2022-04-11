@@ -19,7 +19,7 @@ export class SkosxlServices {
      * @param lang
      */
     getPrefLabel(concept: ARTURIResource, lang: string) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             lang: lang
         };
@@ -40,7 +40,7 @@ export class SkosxlServices {
      */
     setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, checkExistingAltLabel?: boolean, checkExistingPrefLabel?: boolean,
             mode: string = RDFTypesEnum.uri) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             literal: literal,
             mode: mode,
@@ -48,7 +48,7 @@ export class SkosxlServices {
             checkExistingAltLabel: checkExistingAltLabel,
             checkExistingPrefLabel: checkExistingPrefLabel
         };
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [
                 { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException', action: 'skip' },
                 { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefPrefLabelClashException', action: 'skip' },
@@ -64,7 +64,7 @@ export class SkosxlServices {
      * @param xlabel label to remove
      */
     removePrefLabel(concept: ARTURIResource, xlabel: ARTResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             xlabel: xlabel,
         };
@@ -77,7 +77,7 @@ export class SkosxlServices {
      * @param lang
      */
     getAltLabels(concept: ARTURIResource, lang: string) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             lang: lang,
         };
@@ -96,7 +96,7 @@ export class SkosxlServices {
      * @param mode available values: uri or bnode
      */
     addAltLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, mode: string = RDFTypesEnum.uri) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             literal: literal,
             mode: mode,
@@ -119,7 +119,7 @@ export class SkosxlServices {
      * @param xlabel label to remove
      */
     removeAltLabel(concept: ARTURIResource, xlabel: ARTResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             xlabel: xlabel,
         };
@@ -134,7 +134,7 @@ export class SkosxlServices {
      * @param mode available values: uri or bnode
      */
     addHiddenLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, mode: string = RDFTypesEnum.uri) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             literal: literal,
             mode: mode,
@@ -156,7 +156,7 @@ export class SkosxlServices {
      * @param xlabel label to remove
      */
     removeHiddenLabel(concept: ARTURIResource, xlabel: ARTResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             xlabel: xlabel,
         };
@@ -170,7 +170,7 @@ export class SkosxlServices {
      * @param lang
      */
     changeLabelInfo(xlabel: ARTResource, literal: ARTLiteral) {
-        var params: any = {
+        let params: any = {
             xlabel: xlabel,
             literal: literal,
         };
@@ -183,7 +183,7 @@ export class SkosxlServices {
      * @param xLabel
      */
     prefToAtlLabel(concept: ARTURIResource, xLabel: ARTResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             xlabelURI: xLabel
         };
@@ -196,7 +196,7 @@ export class SkosxlServices {
      * @param xLabel
      */
     altToPrefLabel(concept: ARTURIResource, xLabel: ARTResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             xlabelURI: xLabel
         };

@@ -31,7 +31,7 @@ export class PearlEditorComponent implements ControlValueAccessor {
             indentWithTabs: true,
             lineWrapping: true,
             readOnly: this.disabled,
-            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+            viewportMargin: Infinity, //with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
                 //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
             extraKeys: {
                 "Ctrl-7": () => this.commentHandler(this.cmEditor)
@@ -58,8 +58,8 @@ export class PearlEditorComponent implements ControlValueAccessor {
      * (it is not included in codemirror.js, it is in comment.js)
      */
     private commentHandler(cm: any) {
-        var start = cm.cursorCoords(true, "local");
-        var end = cm.cursorCoords(false, "local");
+        let start = cm.cursorCoords(true, "local");
+        let end = cm.cursorCoords(false, "local");
         cm.toggleComment({ from: start, to: end });
     }
 

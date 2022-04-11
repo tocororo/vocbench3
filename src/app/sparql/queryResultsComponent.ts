@@ -43,7 +43,7 @@ export class QueryResultsComponent {
     private isGraphAuthorized: boolean;
 
     constructor(private sparqlService: SparqlServices, private modalService: NgbModal,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private graphModals: GraphModalServices) {}
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private graphModals: GraphModalServices) { }
 
     ngOnInit() {
         this.isGraphAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.graphRead);
@@ -55,7 +55,7 @@ export class QueryResultsComponent {
         this.pageCount = 1;
         this.pageSelector = [];
         this.pageSelectorOpt = null;
-        
+
         this.respSparqlJSON = this.queryResultResp.sparql;
         this.resultType = this.queryResultResp.resultType;
         if (this.queryResultResp.resultType == ResultType.tuple || this.queryResultResp.resultType == ResultType.graph) {
@@ -65,7 +65,7 @@ export class QueryResultsComponent {
             if ((<QueryResultBinding[]>this.queryResult).length > 0) {
                 this.pageCount = Math.ceil((<QueryResultBinding[]>this.queryResult).length / this.resultsLimit);
             }
-            
+
             for (let i = 0; i < this.pageCount; i++) {
                 this.pageSelector.push(i);
             }
@@ -101,16 +101,16 @@ export class QueryResultsComponent {
 
     openGraph() {
         if ((<QueryResultBinding[]>this.queryResult).length > 100) { //limit of triples
-            this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.TOO_MUCH_NODES_LINKS_WARN_CONFIRM"}, ModalType.warning).then(
+            this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.TOO_MUCH_NODES_LINKS_WARN_CONFIRM" }, ModalType.warning).then(
                 confirm => {
                     this.graphModals.openGraphQuertyResult(<GraphResultBindings[]><any>this.queryResult);
                 },
-                cancel => {}
-            )
+                cancel => { }
+            );
         } else {
             this.graphModals.openGraphQuertyResult(<GraphResultBindings[]><any>this.queryResult);
         }
-        
+
     }
 
     getBindingShow(binding: QueryResultBinding) {
@@ -119,7 +119,7 @@ export class QueryResultsComponent {
         } else if (binding.type == "bnode") {
             return "_:" + binding.value;
         } else if (binding.type == "literal") {
-            var show = "\"" + binding.value + "\"";
+            let show = "\"" + binding.value + "\"";
             if (binding['xml:lang']) {
                 show += "@" + binding['xml:lang'];
             }
@@ -152,21 +152,21 @@ export class QueryResultsComponent {
 
     exportAsCSV() {
         //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
-        var serialization = "";
-        var separator = ",";
+        let serialization = "";
+        let separator = ",";
 
         if (this.resultType == ResultType.tuple || this.resultType == ResultType.graph) {
             //headers
-            var headers = this.headers;
-            for (var i = 0; i < headers.length; i++) {
+            let headers = this.headers;
+            for (let i = 0; i < headers.length; i++) {
                 serialization += headers[i] + separator;
             }
             serialization = serialization.slice(0, -1); //remove last separator
             serialization += "\n"; //and add new line
             //results
-            var res: QueryResultBinding[] = <QueryResultBinding[]>this.queryResult;
-            for (var j = 0; j < res.length; j++) {
-                for (var i = 0; i < headers.length; i++) {
+            let res: QueryResultBinding[] = <QueryResultBinding[]>this.queryResult;
+            for (let j = 0; j < res.length; j++) {
+                for (let i = 0; i < headers.length; i++) {
                     if (res[j][headers[i]] != undefined) {
                         serialization += this.escapeForCSV(res[j][headers[i]]) + separator;
                     } else {
@@ -187,7 +187,7 @@ export class QueryResultsComponent {
      * Field is an object {value, type} like the bindings in the sparql response of tuple query
      */
     private escapeForCSV(field: any): string {
-        var value: string = field.value;
+        let value: string = field.value;
         /* Fields containing any of 
         " (QUOTATION MARK, code point 34),
         , (COMMA, code point 44),
@@ -207,22 +207,22 @@ export class QueryResultsComponent {
 
     exportAsTSV() {
         //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
-        var serialization = "";
-        var separator = "\t";
+        let serialization = "";
+        let separator = "\t";
 
         if (this.resultType == ResultType.tuple || this.resultType == ResultType.graph) {
             //headers
             //Variables are serialized in SPARQL syntax, using question mark ? character followed by the variable name
-            var headers = this.headers;
-            for (var i = 0; i < headers.length; i++) {
+            let headers = this.headers;
+            for (let i = 0; i < headers.length; i++) {
                 serialization += headers[i] + separator;
             }
             serialization = serialization.slice(0, -1); //remove last separator
             serialization += "\n"; //and add new line
             //results
-            var res: QueryResultBinding[] = <QueryResultBinding[]>this.queryResult;
-            for (var j = 0; j < res.length; j++) {
-                for (var i = 0; i < headers.length; i++) {
+            let res: QueryResultBinding[] = <QueryResultBinding[]>this.queryResult;
+            for (let j = 0; j < res.length; j++) {
+                for (let i = 0; i < headers.length; i++) {
                     if (res[j][headers[i]] != undefined) {
                         serialization += this.escapeForTSV(res[j][headers[i]]) + separator;
                     } else {
@@ -244,7 +244,7 @@ export class QueryResultsComponent {
      * if type is literal, it may contains an attribute "xml:lang" or "datatype"
      */
     private escapeForTSV(field: any): string {
-        var value: string = field.value;
+        let value: string = field.value;
         /* IRIs enclosed in <...>,
         literals are enclosed with double quotes "..." or single quotes ' ...' with optional @lang or ^^ for datatype.
         Tab, newline and carriage return characters (codepoints 0x09, 0x0A, 0x0D) are encoded as \t, \n and \r
@@ -273,7 +273,7 @@ export class QueryResultsComponent {
         this.sparqlService.exportQueryResultAsSpreadsheet(this.queryCache, format, this.inferred).subscribe(
             blob => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                var exportLink = window.URL.createObjectURL(blob);
+                let exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink({ key: "SPARQL.RESULTS.EXPORT_RESULTS" }, null, exportLink, "sparql_export." + format);
             }
         );
@@ -282,7 +282,7 @@ export class QueryResultsComponent {
     exportAsRdf() {
         const modalRef: NgbModalRef = this.modalService.open(ExportResultAsRdfModal, new ModalOptions());
         modalRef.componentInstance.query = this.queryCache;
-		modalRef.componentInstance.inferred = this.inferred;
+        modalRef.componentInstance.inferred = this.inferred;
         return modalRef.result;
     }
 
@@ -290,9 +290,9 @@ export class QueryResultsComponent {
      * Prepares a json or text file containing the given content and shows a modal to download it.
      */
     private downloadSavedResult(fileContent: string, type: "csv" | "tsv" | "json") {
-        var data = new Blob([fileContent], { type: 'text/plain' });
-        var textFile = window.URL.createObjectURL(data);
-        var fileName = "result." + type;
+        let data = new Blob([fileContent], { type: 'text/plain' });
+        let textFile = window.URL.createObjectURL(data);
+        let fileName = "result." + type;
         this.basicModals.downloadLink({ key: "SPARQL.RESULTS.EXPORT_RESULTS" }, null, textFile, fileName).then(
             done => { window.URL.revokeObjectURL(textFile); },
             () => { }

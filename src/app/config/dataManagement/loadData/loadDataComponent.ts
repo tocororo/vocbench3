@@ -104,13 +104,13 @@ export class LoadDataComponent {
                 //sort extensions in order to force RDFDeserializingLifter in 1st position, so selected as default
                 extensions.sort((e1, e2) => {
                     if (e1.id.includes("RDFDeserializingLifter")) {
-                        return -1
+                        return -1;
                     } else if (e2.id.includes("RDFDeserializingLifter")) {
-                        return 1
+                        return 1;
                     } else {
-                        return 0
+                        return 0;
                     }
-                })
+                });
                 this.lifters = extensions;
             }
         );
@@ -156,7 +156,7 @@ export class LoadDataComponent {
                         format => {
                             this.selectedInputFormat = this.inputFormats.find(f => f.name == format);
                         }
-                    )
+                    );
                 }
                 /**
                  * When using the dataset catalog, in order to load data, it needs to use:
@@ -194,7 +194,7 @@ export class LoadDataComponent {
                 extList = extList.filter((item: string, pos: number) => extList.indexOf(item) == pos);
                 this.filePickerAccept = extList.join(",");
             }
-        )
+        );
     }
 
     /** =====================================
@@ -207,7 +207,7 @@ export class LoadDataComponent {
      * repository or stream.
      */
     showLoader(): boolean {
-        return this.selectedLoader.target == LoaderTarget.repository || this.selectedLoader.target == LoaderTarget.stream
+        return this.selectedLoader.target == LoaderTarget.repository || this.selectedLoader.target == LoaderTarget.stream;
     }
 
     onLoaderConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
@@ -249,12 +249,12 @@ export class LoadDataComponent {
         this.selectedTransformerChainElement = null;
     }
     moveTransformerDown() {
-        var prevIndex = this.transformersChain.indexOf(this.selectedTransformerChainElement);
+        let prevIndex = this.transformersChain.indexOf(this.selectedTransformerChainElement);
         this.transformersChain.splice(prevIndex, 1); //remove from current position
         this.transformersChain.splice(prevIndex + 1, 0, this.selectedTransformerChainElement);
     }
     moveTransformerUp() {
-        var prevIndex = this.transformersChain.indexOf(this.selectedTransformerChainElement);
+        let prevIndex = this.transformersChain.indexOf(this.selectedTransformerChainElement);
         this.transformersChain.splice(prevIndex, 1); //remove from current position
         this.transformersChain.splice(prevIndex - 1, 0, this.selectedTransformerChainElement);
     }
@@ -275,7 +275,7 @@ export class LoadDataComponent {
      * Returns true if a plugin of the filter chain require edit of the configuration and it is not configured
      */
     requireConfiguration(filterChainEl: TransformerChainElement): boolean {
-        var conf: Settings = filterChainEl.selectedConfiguration;
+        let conf: Settings = filterChainEl.selectedConfiguration;
         if (conf != null && conf.requireConfiguration()) { //!= null required because selectedConfiguration could be not yet initialized
             return true;
         }
@@ -291,7 +291,7 @@ export class LoadDataComponent {
         //transformationPipeline
         let transformationPipeline: { extensionID: string, configRef: string }[] = [];
 
-        for (var i = 0; i < this.transformersChain.length; i++) {
+        for (let i = 0; i < this.transformersChain.length; i++) {
             if (this.transformersChain[i].status == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.TRANSFORMER_NOT_SAVED", params: { position: i + 1 } }, ModalType.warning);
                 return;
@@ -315,13 +315,13 @@ export class LoadDataComponent {
             loaderSpec = {
                 extensionID: this.selectedLoaderExtension.id,
                 configRef: this.loaderRelativeRef
-            }
+            };
         }
 
         let config: { [key: string]: any } = {
             transformationPipeline: transformationPipeline,
             loaderSpec: loaderSpec
-        }
+        };
 
         this.sharedModals.storeConfiguration({ key: "ACTIONS.SAVE_IMPORTER_CHAIN_CONFIGURATION" }, ConfigurationComponents.IMPORTER, config).then(
             () => {
@@ -336,7 +336,7 @@ export class LoadDataComponent {
             (conf: LoadConfigurationModalReturnData) => {
                 this.transformersChain = []; //reset the chain
                 let configurations: SettingsProp[] = conf.configuration.properties;
-                for (var i = 0; i < configurations.length; i++) {
+                for (let i = 0; i < configurations.length; i++) {
                     if (configurations[i].name == "transformationPipeline") {
                         //value of a stored transformationPipeline (see loadConfiguration response)
                         let chain: { extensionID: string, configRef: string }[] = configurations[i].value;
@@ -345,7 +345,7 @@ export class LoadDataComponent {
                             this.appendTransformer();
                         });
                         //...and force a configuration
-                        setTimeout(() => {  //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
+                        setTimeout(() => { //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
                             /**
                              * collect the ExtensionConfiguratorComponent for the transformators. This is necessary since
                              * there are also the ExtensionConfiguratorComponent for loader and lifter, so I need to ensure
@@ -379,7 +379,7 @@ export class LoadDataComponent {
                                         if (opt.target == LoaderTarget.stream) {
                                             this.selectedLoader = opt;
                                         }
-                                    })
+                                    });
                                     found = true;
                                 }
                             });
@@ -390,7 +390,7 @@ export class LoadDataComponent {
                                     if (opt.target == LoaderTarget.repository) {
                                         this.selectedLoader = opt;
                                     }
-                                })
+                                });
                             }
 
                             setTimeout(() => {
@@ -419,14 +419,6 @@ export class LoadDataComponent {
 
     private isValidationAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.validation);
-    }
-
-    isDataValid(): boolean {
-        if (this.fileToUpload == null) {
-            return false;
-        } else if (this.baseURI == null || this.baseURI.trim() == "") {
-            return false;
-        }
     }
 
     load() {
@@ -466,7 +458,7 @@ export class LoadDataComponent {
             //rdfLifterSpec
             rdfLifterSpec = {
                 factoryId: this.selectedLifterExtension.id,
-            }
+            };
             if (this.selectedLifterConfig != null) {
                 if (this.selectedLifterConfig.requireConfiguration()) {
                     this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.LIFTER_NOT_CONFIGURED" }, ModalType.warning);
@@ -486,7 +478,7 @@ export class LoadDataComponent {
         if (this.selectedLoader.target != null) {
             loaderSpec = {
                 factoryId: this.selectedLoaderExtension.id,
-            }
+            };
             if (this.selectedLoaderConfig != null) { //normally the loader is not configurable
                 if (this.selectedLoaderConfig.requireConfiguration()) {
                     this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.LOADER_NOT_CONFIGURED" }, ModalType.warning);
@@ -498,7 +490,7 @@ export class LoadDataComponent {
         }
 
         //tranformationPipeline
-        for (var i = 0; i < this.transformersChain.length; i++) {
+        for (let i = 0; i < this.transformersChain.length; i++) {
             tranformationPipeline.push(this.transformersChain[i].convertToTransformerPipelineStep());
         }
 
@@ -524,7 +516,7 @@ class TransformerChainElement {
     constructor(availableFactories: ConfigurableExtensionFactory[]) {
         //clone the available factories, so changing the configuration of one of them, doesn't change the default of the others
         let availableFactClone: ConfigurableExtensionFactory[] = [];
-        for (var i = 0; i < availableFactories.length; i++) {
+        for (let i = 0; i < availableFactories.length; i++) {
             availableFactClone.push(availableFactories[i].clone());
         }
         this.availableFactories = availableFactClone;
@@ -533,11 +525,11 @@ class TransformerChainElement {
     convertToTransformerPipelineStep(): TransformationStep {
         let filterStep: TransformationStep = { filter: null };
         //filter: factoryId and properties
-        var filter: { factoryId: string, configuration: any } = {
+        let filter: { factoryId: string, configuration: any } = {
             factoryId: this.selectedFactory.id,
             configuration: null
-        }
-        var selectedConf: Settings = this.selectedConfiguration;
+        };
+        let selectedConf: Settings = this.selectedConfiguration;
 
         filter.configuration = selectedConf.getPropertiesAsMap();
         filterStep.filter = filter;

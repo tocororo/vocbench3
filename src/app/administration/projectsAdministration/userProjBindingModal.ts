@@ -28,12 +28,12 @@ export class UserProjBindingModal {
             users => {
                 this.userList = users;
             }
-        )
+        );
         this.adminService.listRoles(this.project).subscribe(
             roles => {
                 this.roleList = roles;
             }
-        )
+        );
     }
 
     private selectUser(user: User) {
@@ -48,7 +48,7 @@ export class UserProjBindingModal {
     }
 
     private isUserAlreadyBound(user: User): boolean {
-        for (var i = 0; i < this.usersBound.length; i++) {
+        for (let i = 0; i < this.usersBound.length; i++) {
             if (user.getEmail() == this.usersBound[i].getEmail()) {
                 return true;
             }
@@ -57,7 +57,7 @@ export class UserProjBindingModal {
     }
 
     private selectRole(role: Role) {
-        var idx = this.selectedRoles.indexOf(role);
+        let idx = this.selectedRoles.indexOf(role);
         if (idx != -1) {
             this.selectedRoles.splice(idx, 1);
         } else {
@@ -70,8 +70,8 @@ export class UserProjBindingModal {
     }
     
     ok() {
-        var roleList: string[] = [];
-        for (var i = 0; i < this.selectedRoles.length; i++) {
+        let roleList: string[] = [];
+        for (let i = 0; i < this.selectedRoles.length; i++) {
             roleList.push(this.selectedRoles[i].getName());
         }
         this.activeModal.close({user: this.selectedUser, roles: roleList});

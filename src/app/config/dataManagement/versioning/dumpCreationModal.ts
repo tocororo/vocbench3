@@ -76,7 +76,7 @@ export class DumpCreationModal {
                             this.selectedRemoteRepoConfig = this.remoteRepoConfigs[0];
                         }
                     }
-                } else { 
+                } else {
                     //the remote config are refreshed when admin changes it, so it might happend that he deleted the previously available configs 
                     this.remoteRepoConfigs = [];
                     this.selectedRemoteRepoConfig = null;
@@ -114,11 +114,11 @@ export class DumpCreationModal {
 
     changeRemoteRepository() {
         if (this.selectedRemoteRepoConfig == null) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED" }, ModalType.warning);
             return;
         }
 
-        this.sharedModals.selectRemoteRepository({key:"ACTIONS.SELECT_REMOTE_REPO"}, this.selectedRemoteRepoConfig).then(
+        this.sharedModals.selectRemoteRepository({ key: "ACTIONS.SELECT_REMOTE_REPO" }, this.selectedRemoteRepoConfig).then(
             (repo: any) => {
                 this.repositoryId = (<Repository>repo).id;
             },
@@ -130,20 +130,20 @@ export class DumpCreationModal {
         //check if all the data is ok
         //valid version id
         if (this.versionId == null || this.versionId.trim() == "") {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_VERSION_ID"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_VERSION_ID" }, ModalType.warning);
             return;
         }
         //valid repository access configuration (in case of repository access remote)
         if (this.isSelectedRepoAccessRemote()) {
             if (this.selectedRemoteRepoConfig == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED" }, ModalType.warning);
                 return;
             }
         }
         //valid repo id (in case of remote repo accessing mode)
         if (!this.isSelectedRepoAccessCreateMode()) {
             if (this.repositoryId == null || this.repositoryId.trim() == "") {
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_REPO_ID"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_REPO_ID" }, ModalType.warning);
                 return;
             }
         }
@@ -152,36 +152,36 @@ export class DumpCreationModal {
             //check if repository configuration needs to be configured
             if (this.selectedRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_REQUIRED_PARAM_IN_REPO_ACCESS_CONFIG"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_REQUIRED_PARAM_IN_REPO_ACCESS_CONFIG" }, ModalType.warning);
                 return;
             }
         }
 
 
-        var repositoryAccess: RepositoryAccess = new RepositoryAccess(this.selectedRepositoryAccess);
+        let repositoryAccess: RepositoryAccess = new RepositoryAccess(this.selectedRepositoryAccess);
         //if the selected repo access is remote, add the configuration 
         if (this.isSelectedRepoAccessRemote()) {
             repositoryAccess.setConfiguration(this.selectedRemoteRepoConfig);
         }
 
-        var returnedData: DumpCreationModalReturnData = {
+        let returnedData: DumpCreationModalReturnData = {
             versionId: this.versionId,
             repositoryAccess: repositoryAccess,
             repositoryId: null,
             repoConfigurerSpecification: null,
             backendType: null
-        }
+        };
         //specify repository id only if it's in access mode (access existing remote)
         if (!this.isSelectedRepoAccessCreateMode()) {
             returnedData.repositoryId = this.repositoryId;
             returnedData.backendType = this.selectedRepoBackendType;
         } else { //prepare config of repo only if it is in creation mode
-            var repoConfigPluginSpecification: PluginSpecification;
+            let repoConfigPluginSpecification: PluginSpecification;
             repoConfigPluginSpecification = {
                 factoryId: this.selectedRepoExtension.id,
                 configType: this.selectedRepoConfig.type,
                 configuration: this.selectedRepoConfig.getPropertiesAsMap()
-            }
+            };
             returnedData.repoConfigurerSpecification = repoConfigPluginSpecification;
         }
         this.activeModal.close(returnedData);

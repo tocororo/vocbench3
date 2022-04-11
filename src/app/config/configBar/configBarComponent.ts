@@ -125,7 +125,7 @@ export class ConfigBarComponent {
             HttpManager.groupId + "/" + HttpManager.artifactId + "/";
         navigator.clipboard.writeText(baseUrl).then(() => {
             this.toastService.show(null, { key: "APP.TOP_BAR.ABOUT_MENU.WEB_API_COPIED" });
-        }, function (err) {});
+        }, (err) => {});
     }
 
     /* ===============================
@@ -179,7 +179,7 @@ export class ConfigBarComponent {
                     () => { }
                 );
             }
-        )
+        );
     }
 
     loadShaclShapes() {
@@ -189,10 +189,10 @@ export class ConfigBarComponent {
     exportShaclShapes() {
         this.shaclService.exportShapes().subscribe(
             blob => {
-                var exportLink = window.URL.createObjectURL(blob);
+                let exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink({ key: "SHACL.EXPORT_SHACL_SHAPES" }, null, exportLink, "shapes.ttl");
             }
-        )
+        );
     }
 
     clearShaclShapes() {

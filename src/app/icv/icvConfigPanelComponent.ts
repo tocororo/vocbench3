@@ -29,7 +29,7 @@ export class IcvConfigPanelComponent {
         if (this.checkLanguages) {
             this.languages = [];
             let projectLangs = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
-            for (var i = 0; i < projectLangs.length; i++) {
+            for (let i = 0; i < projectLangs.length; i++) {
                 this.languages.push({ lang: projectLangs[i], check: projectLangs[i].mandatory });
             }
             this.onLangsChange();
@@ -50,21 +50,21 @@ export class IcvConfigPanelComponent {
     }
 
     private checkAllRoles(check: boolean) {
-        for (var i = 0; i < this.roles.length; i++) {
+        for (let i = 0; i < this.roles.length; i++) {
             this.roles[i].check = check;
         }
         this.onRolesChange();
     }
 
     private checkAllLangs(check: boolean) {
-        for (var i = 0; i < this.languages.length; i++) {
+        for (let i = 0; i < this.languages.length; i++) {
             this.languages[i].check = check;
         }
         this.onLangsChange();
     }
 
     private checkAllLangsMandatory() {
-        for (var i = 0; i < this.languages.length; i++) {
+        for (let i = 0; i < this.languages.length; i++) {
             this.languages[i].check = this.languages[i].lang.mandatory;
         }
         this.onLangsChange();
@@ -72,7 +72,7 @@ export class IcvConfigPanelComponent {
 
     private onLangsChange() {
         let langsParam: string[] = [];
-        for (var i = 0; i < this.languages.length; i++) {
+        for (let i = 0; i < this.languages.length; i++) {
             if (this.languages[i].check) {
                 langsParam.push(this.languages[i].lang.tag);
             }
@@ -82,7 +82,7 @@ export class IcvConfigPanelComponent {
 
     private onRolesChange() {
         let rolesParam: RDFResourceRolesEnum[] = [];
-        for (var i = 0; i < this.roles.length; i++) {
+        for (let i = 0; i < this.roles.length; i++) {
             if (this.roles[i].check) {
                 rolesParam.push(this.roles[i].role);
             }

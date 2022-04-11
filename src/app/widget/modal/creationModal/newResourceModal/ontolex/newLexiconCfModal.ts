@@ -49,15 +49,15 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal {
     }
 
     okImpl() {
-        var entryMap: any = this.collectCustomFormData();
+        let entryMap: any = this.collectCustomFormData();
 
-        var returnedData: NewLexiconCfModalReturnData = {
+        let returnedData: NewLexiconCfModalReturnData = {
             uriResource: null,
             title: new ARTLiteral(this.lex_title, null, this.title_lang),
             language: this.lang,
             cls: null,
             cfValue: null
-        }
+        };
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);
@@ -70,7 +70,7 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal {
         if (this.customFormId != null && entryMap != null) {
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
-        
+
         this.activeModal.close(returnedData);
 
     }
@@ -84,7 +84,7 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal {
 export class NewLexiconCfModalReturnData {
     uriResource: ARTURIResource;
     title: ARTLiteral;
-    cls: ARTURIResource
+    cls: ARTURIResource;
     language: string;
     cfValue: CustomFormValue;
 }

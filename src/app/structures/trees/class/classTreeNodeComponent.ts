@@ -108,7 +108,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
                 this.filterEnabled &&
                 classTreePref.filter.map[this.node.getURI()] != null && 
                 classTreePref.filter.map[this.node.getURI()].indexOf(c.getURI()) != -1
-            )
+            );
         });
     }
 
@@ -136,7 +136,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
                  * AND
                  * subClassFilter disabled or child not filtered
                  */
-                for (var i = 0; i < this.children.length; i++) {
+                for (let i = 0; i < this.children.length; i++) {
                     let childFiltered: boolean = classTreeFilter.map[this.node.getURI()] != null && 
                         classTreeFilter.map[this.node.getURI()].indexOf(this.children[i].getURI()) != -1;
                     if ((this.showDeprecated || !this.children[i].isDeprecated()) && (!classTreeFilter.enabled || !childFiltered)) {
@@ -159,7 +159,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     //decrease numInst property when an instance of the current class is deleted
     private onInstanceDeleted(cls: ARTURIResource) {
         if (this.node.getURI() == cls.getURI()) {
-            var numInst = this.node.getAdditionalProperty(ResAttribute.NUM_INST);
+            let numInst = this.node.getAdditionalProperty(ResAttribute.NUM_INST);
             this.node.setAdditionalProperty(ResAttribute.NUM_INST, numInst - 1);
         }
     }
@@ -167,7 +167,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     //increase numInst property when an instance of the current class is created
     private onInstanceCreated(cls: ARTURIResource) {
         if (this.node.getURI() == cls.getURI()) {
-            var numInst = this.node.getAdditionalProperty(ResAttribute.NUM_INST);
+            let numInst = this.node.getAdditionalProperty(ResAttribute.NUM_INST);
             this.node.setAdditionalProperty(ResAttribute.NUM_INST, numInst + 1);
         }
     }

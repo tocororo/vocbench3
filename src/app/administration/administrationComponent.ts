@@ -13,7 +13,7 @@ export class AdministrationComponent {
     constructor() { }
 
     isAdmin(): boolean {
-        var user = VBContext.getLoggedUser();
+        let user = VBContext.getLoggedUser();
         if (user != null) {
             return user.isAdmin();
         }

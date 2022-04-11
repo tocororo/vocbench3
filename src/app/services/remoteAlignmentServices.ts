@@ -18,7 +18,7 @@ export class RemoteAlignmentServices {
     constructor(private httpMgr: HttpManager) { }
 
     listTasks(leftDataset: Project, allowReordering: boolean, rightDataset?: Project): Observable<RemoteAlignmentTask[]> {
-        var params: any = {
+        let params: any = {
             leftDataset: leftDataset.getName(),
             allowReordering: allowReordering
         };
@@ -58,16 +58,16 @@ export class RemoteAlignmentServices {
                         reason: result.reason,
                         startTime: result.startTime,
                         endTime: result.endTime
-                    }
+                    };
                     tasks.push(task);
                 });
                 return tasks;
             })
-        )
+        );
     }
 
     fetchAlignment(taskId: string): Observable<AlignmentOverview> {
-        var params: any = {
+        let params: any = {
             taskId: taskId
         };
         return this.httpMgr.doPost(this.serviceName, "fetchAlignment", params);
@@ -78,21 +78,21 @@ export class RemoteAlignmentServices {
      * @param alignmentPlan 
      */
     createTask(alignmentPlan: AlignmentPlan): Observable<string> {
-        var params: any = {
+        let params: any = {
             alignmentPlan: JSON.stringify(alignmentPlan)
         };
         return this.httpMgr.doPost(this.serviceName, "createTask", params);
     }
 
     deleteTask(id: string) {
-        var params: any = {
+        let params: any = {
             id: id
         };
         return this.httpMgr.doPost(this.serviceName, "deleteTask", params);
     }
 
     downloadAlignment(taskId: string): Observable<Blob> {
-        var params: any = {
+        let params: any = {
             taskId: taskId
         };
         return this.httpMgr.downloadFile(this.serviceName, "downloadAlignment", params);
@@ -115,7 +115,7 @@ export class RemoteAlignmentServices {
                         conversionException: stResp.settings.conversionException,
                         originalSchema: stResp.settings.originalSchema,
                         stProperties: Settings.parse(stResp.settings.stProperties)
-                    }
+                    };
                 }
                 let servMetadata: ServiceMetadataDTO = {    
                     service: stResp.service,
@@ -125,7 +125,7 @@ export class RemoteAlignmentServices {
                     contact: stResp.contact,
                     documentation: stResp.documentation,
                     settings: settings
-                }
+                };
                 return servMetadata;
             })
         );
@@ -139,19 +139,19 @@ export class RemoteAlignmentServices {
             map(stResp => {
                 let matchers: MatcherDTO[] = [];
                 for (let matcherJson of stResp) {
-                    let settings: SettingsDTO
+                    let settings: SettingsDTO;
                     if (matcherJson.settings) {
                         settings = {
                             conversionException: matcherJson.settings.conversionException,
                             originalSchema: matcherJson.settings.originalSchema,
                             stProperties: Settings.parse(matcherJson.settings.stProperties)
-                        }
+                        };
                     }
                     let m: MatcherDTO = {
                         description: matcherJson.description,
                         id: matcherJson.id,
                         settings: settings
-                    }
+                    };
                     matchers.push(m);
                 }
                 return matchers;

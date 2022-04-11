@@ -24,7 +24,7 @@ export class RolesAdministrationComponent {
     private capabilityList: string[];
     selectedCapability: string;
 
-    constructor(private adminService: AdministrationServices, private basicModals: BasicModalServices, private modalService: NgbModal, 
+    constructor(private adminService: AdministrationServices, private basicModals: BasicModalServices, private modalService: NgbModal,
         private translateService: TranslateService) { }
 
     ngOnInit() {
@@ -63,81 +63,81 @@ export class RolesAdministrationComponent {
         if (this.isProjectOpen()) {
             return "Create a new role";
         } else {
-            return "Custom roles can only be created in the context of a project;" + 
+            return "Custom roles can only be created in the context of a project;" +
                 " in order to create a new role access a project and then create the role for that project";
         }
     }
 
     createRole() {
-        this.basicModals.prompt({key:"ACTIONS.CREATE_ROLE"}, { value: "Role name" }, null, null, false, true).then(
-            (result: any) => {
+        this.basicModals.prompt({ key: "ACTIONS.CREATE_ROLE" }, { value: "Role name" }, null, null, false, true).then(
+            (result: string) => {
                 if (this.roleExists(result)) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.ALREADY_EXISTING_ROLE_NAME"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.ALREADY_EXISTING_ROLE_NAME" }, ModalType.warning);
                     return;
                 }
                 this.adminService.createRole(result).subscribe(
-                    stResp => {
+                    () => {
                         this.initRoles();
                     }
                 );
             },
             () => { }
-        )
+        );
     }
 
     deleteRole() {
         this.adminService.deleteRole(this.selectedRole.getName()).subscribe(
-            stResp => {
+            () => {
                 this.initRoles();
             }
-        )
+        );
     }
 
     importRole() {
         this.modalService.open(ImportRoleModal, new ModalOptions()).result.then(
             (data: any) => {
                 if (this.roleExists(data.name)) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.ALREADY_EXISTING_ROLE_NAME"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.ALREADY_EXISTING_ROLE_NAME" }, ModalType.warning);
                     return;
                 }
                 this.adminService.importRole(data.file, data.name).subscribe(
-                    stResp => {
+                    () => {
                         this.initRoles();
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
     exportRole() {
         this.adminService.exportRole(this.selectedRole.getName()).subscribe(
             blob => {
-                var exportLink = window.URL.createObjectURL(blob);
+                let exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink({ key: "ADMINISTRATION.ACTIONS.EXPORT_ROLE" }, null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
             }
-        )
+        );
     }
 
     cloneRole() {
-        this.basicModals.prompt({key:"ACTIONS.CLONE_ROLE"}, { value: "Role name" }, null, null, false, true).then(
+        this.basicModals.prompt({ key: "ACTIONS.CLONE_ROLE" }, { value: "Role name" }, null, null, false, true).then(
             (newRoleName: any) => {
                 if (this.roleExists(newRoleName)) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.ALREADY_EXISTING_ROLE_NAME"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.ALREADY_EXISTING_ROLE_NAME" }, ModalType.warning);
                     return;
                 }
                 this.adminService.cloneRole(this.selectedRole.getName(), newRoleName).subscribe(
-                    stResp => {
+                    () => {
                         this.initRoles();
                     }
                 );
             },
             () => { }
-        )
+        );
     }
 
     private roleExists(roleName: string): boolean {
-        for (var i = 0; i < this.roleList.length; i++) {
+        for (let i = 0; i < this.roleList.length; i++) {
             if (this.roleList[i].getName() == roleName) {
                 return true;
             }
@@ -150,26 +150,26 @@ export class RolesAdministrationComponent {
     }
 
     addCapability() {
-        this.openCapabilityEditorModal({key:"ADMINISTRATION.ACTIONS.ADD_CAPABILITY"}, null).then(
+        this.openCapabilityEditorModal({ key: "ADMINISTRATION.ACTIONS.ADD_CAPABILITY" }, null).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_CAPABILITY"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_CAPABILITY" }, ModalType.warning);
                     return;
                 }
                 this.adminService.addCapabilityToRole(this.selectedRole.getName(), capability).subscribe(
-                    stResp => {
+                    () => {
                         this.selectedCapability = null;
                         this.initCapabilities();
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
     removeCapability() {
         this.adminService.removeCapabilityFromRole(this.selectedRole.getName(), this.selectedCapability).subscribe(
-            stResp => {
+            () => {
                 this.selectedCapability = null;
                 this.initCapabilities();
             }
@@ -177,29 +177,29 @@ export class RolesAdministrationComponent {
     }
 
     editCapability() {
-        this.openCapabilityEditorModal({key:"ADMINISTRATION.ACTIONS.EDIT_CAPABILITY"}, this.selectedCapability).then(
+        this.openCapabilityEditorModal({ key: "ADMINISTRATION.ACTIONS.EDIT_CAPABILITY" }, this.selectedCapability).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_CAPABILITY"}, ModalType.warning).then();
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_CAPABILITY" }, ModalType.warning).then();
                     return;
                 }
                 this.adminService.updateCapabilityForRole(this.selectedRole.getName(), this.selectedCapability, capability).subscribe(
-                    stResp => {
+                    () => {
                         this.selectedCapability = null;
                         this.initCapabilities();
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
     private openCapabilityEditorModal(title: Translation, capability: string) {
         const modalRef: NgbModalRef = this.modalService.open(CapabilityEditorModal, new ModalOptions());
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
-		modalRef.componentInstance.capability = capability;
-        return modalRef.result
+        modalRef.componentInstance.capability = capability;
+        return modalRef.result;
     }
-    
+
 
 }

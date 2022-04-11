@@ -43,7 +43,7 @@ export class NewXLabelModal {
 
     changeClass() {
         let rootClass: ARTURIResource = SKOSXL.label;
-        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.CHANGE_CLASS"}, [rootClass]).then(
+        this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.CHANGE_CLASS" }, [rootClass]).then(
             (selectedClass: any) => {
                 this.labelClass = selectedClass;
             },
@@ -81,7 +81,7 @@ export class NewXLabelModal {
     }
 
     isOkWarningActive(): boolean {
-        return (this.values.length > 0 && this.value != null && this.value.trim() != "")
+        return (this.values.length > 0 && this.value != null && this.value.trim() != "");
     }
 
     /**
@@ -118,10 +118,10 @@ export class NewXLabelModal {
         } else {
             labels = [new ARTLiteral(this.value, null, this.lang)];
         }
-        var returnedData: NewXLabelModalReturnData = {
+        let returnedData: NewXLabelModalReturnData = {
             labels: labels,
             cls: this.labelClass
-        }
+        };
         this.activeModal.close(returnedData);
     }
 

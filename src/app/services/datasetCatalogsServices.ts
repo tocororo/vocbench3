@@ -5,7 +5,7 @@ import { ARTLiteral } from '../models/ARTResources';
 import { DatasetDescription, DatasetSearchFacets, DatasetSearchResult, DownloadDescription, SearchResultsPage } from '../models/Metadata';
 import { PluginSpecification } from '../models/Plugins';
 import { HttpManager } from "../utils/HttpManager";
-import { NTriplesUtil, ResourceUtils } from '../utils/ResourceUtils';
+import { NTriplesUtil } from '../utils/ResourceUtils';
 
 @Injectable()
 export class DatasetCatalogsServices {
@@ -21,8 +21,8 @@ export class DatasetCatalogsServices {
      * @param facets 
      * @param page 
      */
-    searchDataset(connectorSpec: PluginSpecification, query: string, facets: DatasetSearchFacets, page: number): Observable<SearchResultsPage<DatasetSearchResult>>{
-        var params: any = {
+    searchDataset(connectorSpec: PluginSpecification, query: string, facets: DatasetSearchFacets, page: number): Observable<SearchResultsPage<DatasetSearchResult>> {
+        let params: any = {
             connectorSpec: JSON.stringify(connectorSpec),
             query: query,
             facets: JSON.stringify(facets),
@@ -48,7 +48,7 @@ export class DatasetCatalogsServices {
                     dsr.score = c.score;
                     dsr.titles = titles;
                     content.push(dsr);
-                })
+                });
                 let resPage: SearchResultsPage<DatasetSearchResult> = {
                     content: content,
                     page: resp.page,
@@ -68,7 +68,7 @@ export class DatasetCatalogsServices {
      * @param datasetId 
      */
     describeDataset(connectorSpec: PluginSpecification, datasetId: string): Observable<DatasetDescription> {
-        var params: any = {
+        let params: any = {
             connectorSpec: JSON.stringify(connectorSpec),
             datasetId: datasetId
         };
@@ -102,5 +102,5 @@ export class DatasetCatalogsServices {
             })
         );
     }
-        
+
 }

@@ -51,14 +51,14 @@ export class NewResourceWithLiteralCfModal extends AbstractCustomConstructorModa
     }
 
     okImpl() {
-        var entryMap: any = this.collectCustomFormData();
+        let entryMap: any = this.collectCustomFormData();
 
-        var returnedData: NewResourceWithLiteralCfModalReturnData = {
+        let returnedData: NewResourceWithLiteralCfModalReturnData = {
             uriResource: null,
             literal: new ARTLiteral(this.label, null, this.lang),
             cls: this.resourceClass,
             cfValue: null
-        }
+        };
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);

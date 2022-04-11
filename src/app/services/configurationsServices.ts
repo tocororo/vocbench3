@@ -12,19 +12,19 @@ export class ConfigurationsServices {
     constructor(private httpMgr: HttpManager) { }
 
     getConfigurationManager(componentID: string): Observable<ConfigurationManager> {
-        var params = {
+        let params = {
             componentID: componentID
         };
         return this.httpMgr.doGet(this.serviceName, "getConfigurationManager", params);
     }
 
     getConfigurationManagers(): Observable<ConfigurationManager[]> {
-        var params = {};
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getConfigurationManagers", params);
     }
 
     getConfiguration(componentID: string, relativeReference: string): Observable<Configuration> {
-        var params = {
+        let params = {
             componentID: componentID,
             relativeReference: relativeReference
         };
@@ -36,13 +36,13 @@ export class ConfigurationsServices {
     }
 
     getConfigurationReferences(componentID: string): Observable<Reference[]> {
-        var params = {
+        let params = {
             componentID: componentID,
         };
         return this.httpMgr.doGet(this.serviceName, "getConfigurationReferences", params).pipe(
             map(stResp => {
                 let references: Reference[] = [];
-                for (var i = 0; i < stResp.length; i++) {
+                for (let i = 0; i < stResp.length; i++) {
                     references.push(Reference.deserialize(stResp[i]));
                 }
                 return references;
@@ -51,7 +51,7 @@ export class ConfigurationsServices {
     }
 
     storeConfiguration(componentID: string, relativeReference: string, configuration: ConfigurationDefinition) {
-        var params = {
+        let params = {
             componentID: componentID,
             relativeReference: relativeReference,
             configuration: JSON.stringify(configuration)
@@ -60,7 +60,7 @@ export class ConfigurationsServices {
     }
 
     deleteConfiguration(componentID: string, relativeReference: string) {
-        var params = {
+        let params = {
             componentID: componentID,
             relativeReference: relativeReference
         };

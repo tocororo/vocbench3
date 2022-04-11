@@ -9,7 +9,7 @@ export class GraphUtils {
         return {
             x: (node1.x + node2.x) / 2,
             y: (node1.y + node2.y) / 2
-        }
+        };
     }
 
     public static calculateNormalVector(node1: Node, node2: Node, length: number) {
@@ -19,12 +19,12 @@ export class GraphUtils {
         let nx = -dy;
         let ny = dx;
 
-        var vlength = Math.sqrt(nx * nx + ny * ny);
+        let vlength = Math.sqrt(nx * nx + ny * ny);
 
-        var ratio = vlength !== 0 ? length / vlength : 0;
+        let ratio = vlength !== 0 ? length / vlength : 0;
 
         return { "x": nx * ratio, "y": ny * ratio };
-    };
+    }
 
     /**
      * Returns the coordinates (x, y) of the intersection point between the link line and the border of the target node
@@ -50,7 +50,7 @@ export class GraphUtils {
 
             return { x: x, y: y };
         } else {
-            return { x: link.target.x, y: link.target.y }
+            return { x: link.target.x, y: link.target.y };
         }
     }
 
@@ -121,51 +121,48 @@ export class GraphUtils {
      */
     public static positionArrow(source: Point, target: Point, link: Link, isSubClassOf: boolean): { x: number, y: number, straightArrow: boolean, directionLeft?: boolean, directionRight?: boolean, isSubClassOf?: boolean } {
         let sign = Math.sign(source.x - target.x);// return 1 if positive and -1 if negative
-        if (sign == 0) {// questo è il caso in cui le x di target e source sono uguali
-            sign = -1 // gli assegno uno dei due a caso
+        if (sign == 0) { // questo è il caso in cui le x di target e source sono uguali
+            sign = -1; // gli assegno uno dei due a caso
         }
-        let dx;
-        let dy;
-        let straightArrow: boolean; // se true indica che sono del caso della freccia dritta(non spezzata)
-        let directionLeft: boolean = false; // serve a gestire le uscite delle frecce lato sinistro in modo che non esca da sopra o da sotto
-        let directionRight: boolean = false; // serve a gestire le uscite delle frecce lato destro in modo che non esca da sopra o da sotto
+        let dx: number;
+        let dy: number;
         let abs = Math.abs(source.y - target.y);//valore assoluto (lo uso per calcolarmi fino a che momento la freccia deve rimanere dritta)
         //caso freccia dritta(primi due if): sorgente a sinistra del target sign=1 e sorgente a destra del target sign=-1
         if ((sign === -1 && (((link.target.getNodeHeight() / 2) + 3) > abs))) { // qui il + 3 è per gestire la linea e la punta della freccia subito dopo che finisce di essere dritta la linea
             dx = (target.x - (link.target.getNodeWidth() / 2));
             dy = source.y;
 
-            return { x: dx, y: dy, straightArrow: true }
+            return { x: dx, y: dy, straightArrow: true };
         } else if ((sign === 1 && (((link.target.getNodeHeight() / 2) + 3) > abs))) {
             dx = (target.x + (link.target.getNodeWidth() / 2));
             dy = source.y;
 
-            return { x: dx, y: dy, straightArrow: true }
+            return { x: dx, y: dy, straightArrow: true };
 
-        } else if (sign === -1 && source.y >= target.y) {  // caso sorgente a sinistra e target a destra ( ma è più alto)
+        } else if (sign === -1 && source.y >= target.y) { // caso sorgente a sinistra e target a destra ( ma è più alto)
             dx = target.x;
             dy = (target.y + (link.target.getNodeHeight() / 2));
             if (isSubClassOf === true) { // nel caso di subClassOf voglio che la freccia esca sopra la classe sorgente 
                 dx = target.x;
                 dy = (target.y + (link.target.getNodeHeight() / 2));
-                return { x: dx, y: dy, straightArrow: false, isSubClassOf: true }
+                return { x: dx, y: dy, straightArrow: false, isSubClassOf: true };
             } else if (target.x >= (source.x + (link.source.getNodeWidth() / 2)) && target.x <= (source.x + link.source.getNodeWidth())) { // caso in cui la freccia esce a destra del sorgente(non può uscire da sopra) e si spezza due volte perchè il target si trova esattamente sopra di lui
                 dx = source.x + link.source.getNodeWidth();
-                return { x: dx, y: dy, straightArrow: false, directionRight: true }
+                return { x: dx, y: dy, straightArrow: false, directionRight: true };
             } else if (target.x <= (source.x + (link.source.getNodeWidth() / 2)) && target.x >= source.x) { // caso in cui la freccia esce a sinistra del sorgente(non può uscire da sopra) e si spezza due volte perchè il target si trova esattamente sopra di lui
-                dx = source.x
-                return { x: dx, y: dy, straightArrow: false, directionLeft: true }
+                dx = source.x;
+                return { x: dx, y: dy, straightArrow: false, directionLeft: true };
             }
-            return { x: dx, y: dy, straightArrow: false }
+            return { x: dx, y: dy, straightArrow: false };
         } else if (sign === 1 && source.y >= target.y) { // caso sorgente a destra e target a sinistra ( ma è più alto)
             dx = target.x;
             dy = (target.y + (link.target.getNodeHeight() / 2));
             if (isSubClassOf === true) { // nel caso di subClassOf voglio che la freccia esca sopra la classe sorgente 
                 dx = target.x;
                 dy = (target.y + (link.target.getNodeHeight() / 2));
-                return { x: dx, y: dy, straightArrow: false, isSubClassOf: true }
+                return { x: dx, y: dy, straightArrow: false, isSubClassOf: true };
             }
-            return { x: dx, y: dy, straightArrow: false }
+            return { x: dx, y: dy, straightArrow: false };
 
         } else if (sign === -1 && source.y < target.y) { // caso sorgente a sinistra e target a destra ( ma è più basso)
             dx = target.x;
@@ -173,24 +170,24 @@ export class GraphUtils {
             if (isSubClassOf === true) { // nel caso di subClassOf voglio che la freccia esca sotto la classe sorgente 
                 dx = target.x;
                 dy = (target.y - (link.target.getNodeHeight() / 2));
-                return { x: dx, y: dy, straightArrow: false, isSubClassOf: true }
+                return { x: dx, y: dy, straightArrow: false, isSubClassOf: true };
             } else if (target.x >= (source.x + (link.source.getNodeWidth() / 2)) && target.x <= (source.x + link.source.getNodeWidth())) { // caso in cui la freccia esce a destra del sorgente(non può uscire da sopra) e si spezza due volte perchè il target si trova esattamente sotto di lui
                 dx = source.x + link.source.getNodeWidth();
-                return { x: dx, y: dy, straightArrow: false, directionRight: true }
+                return { x: dx, y: dy, straightArrow: false, directionRight: true };
             } else if (target.x <= (source.x + link.source.getNodeWidth() / 2) && target.x >= source.x) { // caso in cui la freccia esce a sinistra del sorgente(non può uscire da sopra) e si spezza due volte perchè il target si trova esattamente sotto di lui
-                dx = source.x
-                return { x: dx, y: dy, straightArrow: false, directionLeft: true }
+                dx = source.x;
+                return { x: dx, y: dy, straightArrow: false, directionLeft: true };
             }
-            return { x: dx, y: dy, straightArrow: false }
+            return { x: dx, y: dy, straightArrow: false };
         } else if (sign === 1 && source.y < target.y) { // caso sorgente a destra e target a sinistra ( ma è più basso)
             dx = target.x;
             dy = (target.y - (link.target.getNodeHeight() / 2));
             if (isSubClassOf === true) { // nel caso di subClassOf voglio che la freccia esca sotto la classe sorgente 
                 dx = target.x;
                 dy = (target.y - (link.target.getNodeHeight() / 2));
-                return { x: dx, y: dy, straightArrow: false, isSubClassOf: true }
+                return { x: dx, y: dy, straightArrow: false, isSubClassOf: true };
             }
-            return { x: dx, y: dy, straightArrow: false }
+            return { x: dx, y: dy, straightArrow: false };
         }
 
 

@@ -16,7 +16,7 @@ export class FilterGraphsModal {
 
     // graph panel handlers
     areAllGraphDeselected(): boolean {
-        for (var i = 0; i < this.graphs.length; i++) {
+        for (let i = 0; i < this.graphs.length; i++) {
             if (this.graphs[i].checked) {
                 return false;
             }

@@ -38,32 +38,32 @@ export class NoSchemeConceptComponent {
      * Fixes concept by adding it to a scheme 
      */
     addToScheme(concept: ARTURIResource) {
-        this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.SELECT_SCHEME"}).then(
+        this.browsingModals.browseSchemeList({ key: "DATA.ACTIONS.SELECT_SCHEME" }).then(
             (scheme: any) => {
                 this.skosService.addConceptToScheme(concept, scheme).subscribe(
                     stResp => {
                         this.runIcv();
                     }
-                )
+                );
             },
             () => { }
-        )
+        );
     }
 
     /**
      * Fixes concepts by adding them all to a scheme
      */
     addAllToScheme() {
-        this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.SELECT_SCHEME"}).then(
+        this.browsingModals.browseSchemeList({ key: "DATA.ACTIONS.SELECT_SCHEME" }).then(
             (scheme: any) => {
                 this.icvService.addAllConceptsToScheme(scheme).subscribe(
                     stResp => {
                         this.runIcv();
                     }
-                )
+                );
             },
             () => { }
-        )
+        );
     }
 
     /**
@@ -81,7 +81,7 @@ export class NoSchemeConceptComponent {
      * Fixes concepts by deleting them all 
      */
     deleteAllConcept() {
-        var deleteConcFnArray: any[] = [];
+        let deleteConcFnArray: any[] = [];
         deleteConcFnArray = this.brokenConceptList.map((conc) => this.skosService.deleteConcept(conc));
         //call the collected functions and subscribe when all are completed
         forkJoin(deleteConcFnArray).subscribe(

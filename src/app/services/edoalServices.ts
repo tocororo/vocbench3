@@ -17,7 +17,7 @@ export class EdoalServices {
      * Pair of projects' names
      */
     getAlignedProjects(): Observable<string[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getAlignedProjects", params);
     }
 
@@ -25,7 +25,7 @@ export class EdoalServices {
      * Returns the align:Alignment resources defined in the current project
      */
     getAlignments(): Observable<ARTResource[]> {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getAlignments", params).pipe(
             map(stResp => {
                 return Deserializer.createResourceArray(stResp, ['correspondences']);
@@ -42,7 +42,7 @@ export class EdoalServices {
      * @param measure 
      */
     createCorrespondence(alignment: ARTResource, leftEntity: ARTURIResource, rightEntity: ARTURIResource, relation: string, measure: number): Observable<void> {
-        var params: any = {
+        let params: any = {
             alignment: alignment,
             leftEntity: leftEntity,
             rightEntity: rightEntity,
@@ -58,7 +58,7 @@ export class EdoalServices {
      * @param entity 
      */
     setLeftEntity(correspondence: ARTResource, entity: ARTURIResource): Observable<void> {
-        var params: any = {
+        let params: any = {
             correspondence: correspondence,
             entity: entity
         };
@@ -71,7 +71,7 @@ export class EdoalServices {
      * @param entity 
      */
     setRightEntity(correspondence: ARTResource, entity: ARTURIResource): Observable<void> {
-        var params: any = {
+        let params: any = {
             correspondence: correspondence,
             entity: entity
         };
@@ -84,7 +84,7 @@ export class EdoalServices {
      * @param relation 
      */
     setRelation(correspondence: ARTResource, relation: string): Observable<void> {
-        var params: any = {
+        let params: any = {
             correspondence: correspondence,
             relation: relation
         };
@@ -97,7 +97,7 @@ export class EdoalServices {
      * @param measure 
      */
     setMeasure(correspondence: ARTResource, measure: number): Observable<void> {
-        var params: any = {
+        let params: any = {
             correspondence: correspondence,
             measure: measure
         };
@@ -110,7 +110,7 @@ export class EdoalServices {
      * @param property 
      */
     setMappingProperty(correspondence: ARTResource, property: ARTURIResource): Observable<void> {
-        var params: any = {
+        let params: any = {
             correspondence: correspondence,
             property: property
         };
@@ -122,7 +122,7 @@ export class EdoalServices {
      * @param correspondence 
      */
     deleteCorrespondence(correspondence: ARTResource): Observable<void> {
-        var params: any = {
+        let params: any = {
             correspondence: correspondence,
         };
         return this.httpMgr.doPost(this.serviceName, "deleteCorrespondence", params);
@@ -135,7 +135,7 @@ export class EdoalServices {
      * @param pageSize 
      */
     getCorrespondences(alignment: ARTResource, page?: number, pageSize?: number): Observable<Correspondence[]> {
-        var params: any = {
+        let params: any = {
             alignment: alignment,
             page: page,
             pageSize: pageSize
@@ -156,16 +156,16 @@ export class EdoalServices {
                         measure: Deserializer.createRDFNodeArray(corrJson.measure),
                         relation: Deserializer.createRDFNodeArray(corrJson.relation),
                         mappingProperty: Deserializer.createURIArray(corrJson.mappingProperty)
-                    }
+                    };
                     correspondences.push(c);
-                })
+                });
                 return correspondences;
             })
         );
     }
 
     createAlignment(): Observable<ARTBNode> {
-        let params: any = {}
+        let params: any = {};
         return this.httpMgr.doPost(this.serviceName, "createAlignment", params).pipe(
             map(stResp => {
                 return Deserializer.createBlankNode(stResp);

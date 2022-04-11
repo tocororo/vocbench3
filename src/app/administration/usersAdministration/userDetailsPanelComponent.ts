@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from "rxjs";
-import { mergeMap, tap } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+import { map, mergeMap, tap } from "rxjs/operators";
 import { Cookie } from "src/app/utils/Cookie";
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { User, UserStatusEnum } from "../../models/User";
@@ -37,7 +37,7 @@ export class UserDetailsPanelComponent {
             this.basicModals.alert({ key: "STATUS.OPERATION_DENIED" }, { key: "MESSAGES.CANNOT_CHANGE_ADMIN_STATUS" }, ModalType.warning);
             return;
         }
-        var enabled = this.user.getStatus() == UserStatusEnum.ACTIVE;
+        let enabled = this.user.getStatus() == UserStatusEnum.ACTIVE;
         if (enabled) {
             this.userService.enableUser(this.user.getEmail(), false).subscribe(
                 user => {
@@ -49,27 +49,42 @@ export class UserDetailsPanelComponent {
                 user => {
                     this.user.setStatus(UserStatusEnum.ACTIVE);
                 }
-            )
+            );
         }
     }
 
+    isChangeTypeButtonDisabled() {
+        //user cannot change status to himself
+        return VBContext.getLoggedUser() && VBContext.getLoggedUser().getEmail() == this.user.getEmail();
+    }
+
     changeUserType(type?: UserType) {
-        let removeOldRoleFn: Observable<void>;
+        let removeOldRoleFn: Observable<boolean>; //boolean tells if the remove operation has gone well (e.g. if the only admin tries to remove itself, returns false)
         if (this.user.isAdmin() && type != "admin") {
             removeOldRoleFn = this.userService.listUsers().pipe(
                 mergeMap(users => {
-                    let adminCount = users.filter(u => u.isAdmin).length;
+                    let adminCount = users.filter(u => u.isAdmin()).length;
                     if (adminCount < 2) {
                         this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_REVOKE_ADMIN_AUTHORITY" }, ModalType.warning);
-                        return;
+                        return of(false);
                     } else {
-                        return this.administrationServices.removeAdministrator(this.user).pipe(tap(() => this.user.setAdmin(false)))
+                        return this.administrationServices.removeAdministrator(this.user).pipe(
+                            map(() => { 
+                                this.user.setAdmin(false);
+                                return true;
+                            })
+                        );
                     }
                 })
-            )
+            );
         }
         if (this.user.isSuperUser() && type != "su") {
-            removeOldRoleFn = this.administrationServices.removeSuperUser(this.user).pipe(tap(() => this.user.setSuperUser(false)));
+            removeOldRoleFn = this.administrationServices.removeSuperUser(this.user).pipe(
+                map(() => {
+                    this.user.setSuperUser(false);
+                    return true;
+                })
+            );
         }
 
         let setNewRoleFn: Observable<void>;
@@ -85,12 +100,12 @@ export class UserDetailsPanelComponent {
                 () => {
                     if (removeOldRoleFn) {
                         removeOldRoleFn.subscribe(
-                            () => {
-                                if (setNewRoleFn) {
+                            (success: boolean) => {
+                                if (success && setNewRoleFn != null) {
                                     setNewRoleFn.subscribe();
                                 }
                             }
-                        )
+                        );
                     } else {
                         if (setNewRoleFn) {
                             setNewRoleFn.subscribe();
@@ -109,19 +124,19 @@ export class UserDetailsPanelComponent {
             if (role == "su") {
                 msg = "MESSAGES.CHANGE_USER_TYPE_ADMIN_TO_SUPER_CONFIRM";
             } else if (role == null) {
-                msg = "MESSAGES.CHANGE_USER_TYPE_ADMIN_TO_USER_CONFIRM"
+                msg = "MESSAGES.CHANGE_USER_TYPE_ADMIN_TO_USER_CONFIRM";
             }
         } else if (this.user.isSuperUser()) {
             if (role == "admin") {
-                msg = "MESSAGES.CHANGE_USER_TYPE_SUPER_TO_ADMIN_CONFIRM"
+                msg = "MESSAGES.CHANGE_USER_TYPE_SUPER_TO_ADMIN_CONFIRM";
             } else if (role == null) {
-                msg = "MESSAGES.CHANGE_USER_TYPE_SUPER_TO_USER_CONFIRM"
+                msg = "MESSAGES.CHANGE_USER_TYPE_SUPER_TO_USER_CONFIRM";
             }
         } else { //nor admin or superuser
             if (role == "admin") {
-                msg = "MESSAGES.CHANGE_USER_TYPE_USER_TO_ADMIN_CONFIRM"
+                msg = "MESSAGES.CHANGE_USER_TYPE_USER_TO_ADMIN_CONFIRM";
             } else if (role == "su") {
-                msg = "MESSAGES.CHANGE_USER_TYPE_USER_TO_SUPER_CONFIRM"
+                msg = "MESSAGES.CHANGE_USER_TYPE_USER_TO_SUPER_CONFIRM";
             }
         }
         //other cases are not foreseen since this method is invoked only in role != user type

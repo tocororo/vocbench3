@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
-import { AbstractIcvComponent } from "../abstractIcvComponent";
+import { ARTLiteral, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
+import { IcvServices } from "../../services/icvServices";
+import { Deserializer } from "../../utils/Deserializer";
+import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum, ARTLiteral, ResAttribute } from "../../models/ARTResources";
-import { XmlSchema } from "../../models/Vocabulary";
-import { UIUtils } from "../../utils/UIUtils";
-import { Deserializer } from "../../utils/Deserializer";
-import { IcvServices } from "../../services/icvServices";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 
 @Component({
     selector: "conflictual-label-component",
@@ -37,7 +36,7 @@ export class ConflictualLabelComponent extends AbstractIcvComponent {
                     let labelRes: ARTLiteral = Deserializer.createLiteral(r.getAdditionalProperty("label"));
                     //looks for the record with the same label
                     let sameLabelRecord: { resources: ARTResource[], label: ARTLiteral|ARTResource };
-                    for (var i = 0; i < this.brokenRecordList.length; i++) {
+                    for (let i = 0; i < this.brokenRecordList.length; i++) {
                         if (this.brokenRecordList[i].label.getShow() == labelRes.getShow()) {
                             sameLabelRecord = this.brokenRecordList[i];
                             break;

@@ -18,7 +18,7 @@ export class InvokableReportersServices {
      * @param manchExpr manchester expression to check
      */
     compileReport(reporterReference: string, render?: boolean, includeTemplate?: boolean): Observable<Report> {
-        var params = {
+        let params = {
             reporterReference: reporterReference,
             render: render,
             includeTemplate: includeTemplate
@@ -41,7 +41,7 @@ export class InvokableReportersServices {
             reporterReference: reporterReference,
             targetMimeType: targetMimeType,
             deployerSpec: deployerSpec ? JSON.stringify(deployerSpec) : null
-        }
+        };
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [
                 { className: 'it.uniroma2.art.semanticturkey.services.core.InvokableReporterException', action: 'skip' },
@@ -51,7 +51,7 @@ export class InvokableReportersServices {
     }
 
     getConfigurationScopes(): Observable<Scope[]> {
-        let params = {}
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getConfigurationScopes", params);
     }
 
@@ -59,19 +59,19 @@ export class InvokableReportersServices {
      * 
      */
     getInvokableReporterForm(): Observable<InvokableReporter> {
-        let params = {}
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getInvokableReporterForm", params).pipe(
             map(stResp => {
                 return <InvokableReporter>InvokableReporter.parse(stResp);
             })
-        )
+        );
     }
 
     /**
      * 
      */
     getInvokableReporterIdentifiers(): Observable<Reference[]> {
-        let params = {}
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getInvokableReporterIdentifiers", params).pipe(
             map(stResp => {
                 let references: Reference[] = [];
@@ -87,9 +87,9 @@ export class InvokableReportersServices {
      * @param reference 
      */
     getInvokableReporter(reference: string): Observable<InvokableReporter> {
-        var params = {
+        let params = {
             reference: reference
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getInvokableReporter", params).pipe(
             map(stResp => {
                 return <InvokableReporter>InvokableReporter.parse(stResp);
@@ -106,7 +106,7 @@ export class InvokableReportersServices {
         let params = {
             reference: reference,
             definition: JSON.stringify(definition)
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "createInvokableReporter", params);
     }
 
@@ -117,7 +117,7 @@ export class InvokableReportersServices {
     deleteInvokableReporter(reference: string) {
         let params = {
             reference: reference,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteInvokableReporter", params);
     }
 
@@ -130,7 +130,7 @@ export class InvokableReportersServices {
         let params = {
             reference: reference,
             definition: JSON.stringify(definition)
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateInvokableReporter", params);
     }
 
@@ -145,7 +145,7 @@ export class InvokableReportersServices {
             reference: reference,
             section: JSON.stringify(section),
             index: index
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "addSectionToReporter", params);
     }
 
@@ -160,7 +160,7 @@ export class InvokableReportersServices {
             reference: reference,
             section: JSON.stringify(section),
             index: index
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateSectionInReporter", params);
     }
 
@@ -173,7 +173,7 @@ export class InvokableReportersServices {
         let params = {
             reference: reference,
             index: index
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "removeSectionFromReporter", params);
     }
 

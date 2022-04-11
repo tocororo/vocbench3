@@ -69,13 +69,13 @@ export class CustomFormConfigComponent {
         const modalRef: NgbModalRef = this.modalService.open(FormCollMappingModal, new ModalOptions());
         return modalRef.result.then(
             res => {
-                var resource: ARTURIResource = res.resource;
-                var formCollId: string = res.formCollection;
+                let resource: ARTURIResource = res.resource;
+                let formCollId: string = res.formCollection;
                 //check if selected property has not a FormCollection already assigned
-                for (var i = 0; i < this.cfConfigurationMap.length; i++) {
+                for (let i = 0; i < this.cfConfigurationMap.length; i++) {
                     if (this.cfConfigurationMap[i].getResource().getURI() == resource.getURI()) {
                         //already in a mapping
-                        this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.ALREADY_ASSIGNED_FORM_COLL_TO_RESOURCE", params:{resource: resource.getShow()}},
+                        this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.ALREADY_ASSIGNED_FORM_COLL_TO_RESOURCE", params: { resource: resource.getShow() } },
                             ModalType.warning);
                         return;
                     }
@@ -84,9 +84,9 @@ export class CustomFormConfigComponent {
                     stResp => {
                         this.initCFConfMap();
                     }
-                )
+                );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -132,14 +132,14 @@ export class CustomFormConfigComponent {
             () => {
                 this.initFormCollList();
             },
-            () => {}
+            () => { }
         );
     }
 
     editFormCollection() {
         this.openFormCollEditor(this.selectedFormColl.getId(), [], (this.selectedFormColl.getLevel() == CustomFormLevel.system)).then(
-            () => {},
-            () => {}
+            () => { },
+            () => { }
         );
     }
 
@@ -148,29 +148,29 @@ export class CustomFormConfigComponent {
         modalRef.componentInstance.id = id;
         modalRef.componentInstance.existingFormColl = existingFormColl;
         modalRef.componentInstance.readOnly = readOnly;
-        return modalRef.result
+        return modalRef.result;
     }
 
     deleteFormCollection() {
-        this.basicModals.confirm({key:"CUSTOM_FORMS.ACTIONS.DELETE_FORM_COLLECTION"}, {key:"MESSAGES.DELETE_FORM_COLLECTION_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "CUSTOM_FORMS.ACTIONS.DELETE_FORM_COLLECTION" }, { key: "MESSAGES.DELETE_FORM_COLLECTION_CONFIRM" }, ModalType.warning).then(
             confirm => {
                 this.customFormsService.deleteFormCollection(this.selectedFormColl.getId()).subscribe(
                     stResp => {
                         this.initCFConfMap();
                         this.initFormCollList();
                     }
-                )
+                );
             },
             () => { }
-        )
+        );
     }
 
     cloneFormCollection() {
-        this.basicModals.promptPrefixed({key:"CUSTOM_FORMS.ACTIONS.CLONE_FORM_COLLECTION"}, FormCollection.PREFIX, "ID", null, false, true, true).then(
+        this.basicModals.promptPrefixed({ key: "CUSTOM_FORMS.ACTIONS.CLONE_FORM_COLLECTION" }, FormCollection.PREFIX, "ID", null, false, true, true).then(
             (fcId: any) => {
-                for (var i = 0; i < this.formCollectionList.length; i++) {
+                for (let i = 0; i < this.formCollectionList.length; i++) {
                     if (this.formCollectionList[i].getId() == fcId) {
-                        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_FORM_COLLECTION_ID"}, ModalType.warning);
+                        this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_FORM_COLLECTION_ID" }, ModalType.warning);
                         return;
                     }
                 }
@@ -178,7 +178,7 @@ export class CustomFormConfigComponent {
                     stResp => {
                         this.initFormCollList();
                     }
-                )
+                );
             },
             () => { }
         );
@@ -187,20 +187,20 @@ export class CustomFormConfigComponent {
     exportFormCollection() {
         this.customFormsService.exportFormCollection(this.selectedFormColl.getId()).subscribe(
             blob => {
-                var exportLink = window.URL.createObjectURL(blob);
+                let exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink({ key: "CUSTOM_FORMS.ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedFormColl.getId() + ".xml");
             }
         );
     }
 
     importFormCollection() {
-        return this.openImportCfModal({key:"CUSTOM_FORMS.ACTIONS.IMPORT_FORM_COLLECTION"}, "FormCollection").then(
+        return this.openImportCfModal({ key: "CUSTOM_FORMS.ACTIONS.IMPORT_FORM_COLLECTION" }, "FormCollection").then(
             (data: ImportCfModalReturnData) => {
                 this.customFormsService.importFormCollection(data.file, data.id).subscribe(
                     () => {
                         this.initFormCollList();
                     }
-                )
+                );
             },
             () => { }
         );
@@ -228,8 +228,8 @@ export class CustomFormConfigComponent {
     }
 
     createCustomForm() {
-        var existingCustomFormIds: string[] = [];
-        for (var i = 0; i < this.customFormList.length; i++) {
+        let existingCustomFormIds: string[] = [];
+        for (let i = 0; i < this.customFormList.length; i++) {
             existingCustomFormIds.push(this.customFormList[i].getId());
         }
         return this.openCustomFormEditor(null, existingCustomFormIds, false).then(
@@ -254,11 +254,11 @@ export class CustomFormConfigComponent {
     }
 
     cloneCustomForm() {
-        this.basicModals.promptPrefixed({key:"CUSTOM_FORMS.ACTIONS.CLONE_CUSTOM_FORM"}, CustomForm.PREFIX, "ID", null, false, true, true).then(
+        this.basicModals.promptPrefixed({ key: "CUSTOM_FORMS.ACTIONS.CLONE_CUSTOM_FORM" }, CustomForm.PREFIX, "ID", null, false, true, true).then(
             (fcId: any) => {
-                for (var i = 0; i < this.customFormList.length; i++) {
+                for (let i = 0; i < this.customFormList.length; i++) {
                     if (this.customFormList[i].getId() == fcId) {
-                        this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_CUSTOM_FORM_ID"}, ModalType.warning);
+                        this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_CUSTOM_FORM_ID" }, ModalType.warning);
                         return;
                     }
                 }
@@ -266,7 +266,7 @@ export class CustomFormConfigComponent {
                     stResp => {
                         this.initCustomFormList();
                     }
-                )
+                );
             },
             () => { }
         );
@@ -277,24 +277,24 @@ export class CustomFormConfigComponent {
             result => {
                 if (result) { //selectedCustomForm belong to a CR
                     let deletEmptyCollCkeckOpt: ConfirmCheckOptions = { label: "Delete also FormCollection(s) left empty", value: true };
-                    this.basicModals.confirmCheck({key:"CUSTOM_FORMS.ACTIONS.DELETE_CUSTOM_FORM"}, "You are deleting a CustomForm that " +
+                    this.basicModals.confirmCheck({ key: "CUSTOM_FORMS.ACTIONS.DELETE_CUSTOM_FORM" }, "You are deleting a CustomForm that " +
                         "belongs to one or more FormCollection(s). Are you sure?", [deletEmptyCollCkeckOpt], ModalType.warning).then(
-                        (checkboxOpts: ConfirmCheckOptions[]) => {
-                            let deleteEmptyColl: boolean = checkboxOpts[0].value;
-                            this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId(), deleteEmptyColl).subscribe(
-                                stResp => {
-                                    if (deleteEmptyColl) { //if user chooses to delete also empty FormCollection
-                                        this.initCFConfMap();
-                                        this.initFormCollList();
+                            (checkboxOpts: ConfirmCheckOptions[]) => {
+                                let deleteEmptyColl: boolean = checkboxOpts[0].value;
+                                this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId(), deleteEmptyColl).subscribe(
+                                    stResp => {
+                                        if (deleteEmptyColl) { //if user chooses to delete also empty FormCollection
+                                            this.initCFConfMap();
+                                            this.initFormCollList();
+                                        }
+                                        this.initCustomFormList();
                                     }
-                                    this.initCustomFormList();
-                                }
-                            );
-                        },
-                        () => { }
+                                );
+                            },
+                            () => { }
                         );
                 } else { //selectedCustomForm does not belong to any FormCollection
-                    this.basicModals.confirm({key:"CUSTOM_FORMS.ACTIONS.DELETE_CUSTOM_FORM"}, {key:"MESSAGES.DELETE_CUSTOM_FORM_CONFIRM"}, ModalType.warning).then(
+                    this.basicModals.confirm({ key: "CUSTOM_FORMS.ACTIONS.DELETE_CUSTOM_FORM" }, { key: "MESSAGES.DELETE_CUSTOM_FORM_CONFIRM" }, ModalType.warning).then(
                         confirm => {
                             this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId()).subscribe(
                                 stResp => {
@@ -306,26 +306,26 @@ export class CustomFormConfigComponent {
                     );
                 }
             }
-        )
+        );
     }
 
     exportCustomForm() {
         this.customFormsService.exportCustomForm(this.selectedCustomForm.getId()).subscribe(
             blob => {
-                var exportLink = window.URL.createObjectURL(blob);
+                let exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink({ key: "CUSTOM_FORMS.ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedCustomForm.getId() + ".xml");
             }
         );
     }
 
     importCustomForm() {
-        this.openImportCfModal({key:"CUSTOM_FORMS.ACTIONS.IMPORT_CUSTOM_FORM"}, "CustomForm").then(
+        this.openImportCfModal({ key: "CUSTOM_FORMS.ACTIONS.IMPORT_CUSTOM_FORM" }, "CustomForm").then(
             (data: any) => {
                 this.customFormsService.importCustomForm(data.file, data.id).subscribe(
                     stResp => {
                         this.initCustomFormList();
                     }
-                )
+                );
             },
             () => { }
         );
@@ -334,7 +334,7 @@ export class CustomFormConfigComponent {
     private openImportCfModal(title: Translation, type: "CustomForm" | "FormCollection") {
         const modalRef: NgbModalRef = this.modalService.open(ImportCfModal, new ModalOptions());
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
-		modalRef.componentInstance.type = type;
+        modalRef.componentInstance.type = type;
         return modalRef.result;
     }
 

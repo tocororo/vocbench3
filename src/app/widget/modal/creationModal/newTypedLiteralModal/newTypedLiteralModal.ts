@@ -34,7 +34,7 @@ export class NewTypedLiteralModal {
 
     values: ARTLiteral[] = [];
 
-    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private dtValidator: DatatypeValidator) {}
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private dtValidator: DatatypeValidator) { }
 
     ngOnInit() {
         if (this.allowedDatatypes != null && this.dataRanges != null) {
@@ -52,7 +52,7 @@ export class NewTypedLiteralModal {
         //reset the input value if it has a datatype not allowed 
         if (this.value != null && this.allowedDatatypes != null && this.allowedDatatypes.length > 0) {
             if (!this.allowedDatatypes.some(d => d.getURI() == this.value.getDatatype())) {
-                this.value = null; 
+                this.value = null;
             }
         }
         //init datatype according the input value (if any)
@@ -67,9 +67,8 @@ export class NewTypedLiteralModal {
                 this.values.push(this.value);
                 this.value = null;
             } else {
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_VALUE_FOR_DATATYPE", params:{value: this.value.getValue(), datatype: this.datatype.getShow()}},
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_VALUE_FOR_DATATYPE", params: { value: this.value.getValue(), datatype: this.datatype.getShow() } },
                     ModalType.warning);
-                return;
             }
         } else { //selected dataRangeAspectSelector
             this.values.push(this.value);
@@ -81,7 +80,7 @@ export class NewTypedLiteralModal {
      * Add value enabled in case the adding value is not already been added in the values list
      */
     isAddValueEnabled() {
-        return this.value != null && this.value.getValue() != "" && !ResourceUtils.containsNode(this.values, this.value)
+        return this.value != null && this.value.getValue() != "" && !ResourceUtils.containsNode(this.values, this.value);
     }
 
     removeValue(value: ARTLiteral) {
@@ -89,8 +88,8 @@ export class NewTypedLiteralModal {
     }
 
     getDataRangePreview(dataRange: ARTLiteral[]): string {
-        var preview: string = "OneOf: [";
-        for (var i = 0; i < dataRange.length; i++) {
+        let preview: string = "OneOf: [";
+        for (let i = 0; i < dataRange.length; i++) {
             let v: ARTLiteral = dataRange[i];
             preview += JSON.stringify(v.getValue());
             let dtQname = ResourceUtils.getQName(v.getDatatype(), VBContext.getPrefixMappings());
@@ -98,7 +97,7 @@ export class NewTypedLiteralModal {
                 dtQname = "<" + v.getDatatype() + ">";
             }
             preview += "^^" + dtQname;
-            preview += ", "
+            preview += ", ";
             if (i == 2 && dataRange.length > 3) { //stops the preview at the third element (if there are more)
                 preview += "...";
                 break;
@@ -138,7 +137,7 @@ export class NewTypedLiteralModal {
                 if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                     //first validate
                     if (this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
-                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_VALUE_FOR_DATATYPE", params:{value: this.value.getValue(), datatype: this.datatype.getShow()}},
+                        this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_VALUE_FOR_DATATYPE", params: { value: this.value.getValue(), datatype: this.datatype.getShow() } },
                             ModalType.warning);
                         return;
                     }
@@ -151,7 +150,7 @@ export class NewTypedLiteralModal {
             if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                 //first validate
                 if (this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_VALUE_FOR_DATATYPE", params:{value: this.value.getValue(), datatype: this.datatype.getShow()}},
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_VALUE_FOR_DATATYPE", params: { value: this.value.getValue(), datatype: this.datatype.getShow() } },
                         ModalType.warning);
                     return;
                 }
@@ -162,7 +161,7 @@ export class NewTypedLiteralModal {
         }
         this.activeModal.close(literals);
     }
-    
+
 
     close() {
         this.activeModal.dismiss();

@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { SharedModule } from 'src/app/modules/sharedModule';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { ARTURIResource } from "../../models/ARTResources";
@@ -37,15 +36,15 @@ export class FormCollMappingModal {
     selectSuggested() {
         this.cfService.getFormCollection(this.selectedFormColl.getId()).subscribe(
             fc => {
-                var suggestions: ARTURIResource[] = fc.getSuggestions();
+                let suggestions: ARTURIResource[] = fc.getSuggestions();
                 if (suggestions.length == 0) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_RESOURCE_SUGGESTED_FOR_FORM_COLLECTION"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.NO_RESOURCE_SUGGESTED_FOR_FORM_COLLECTION" }, ModalType.warning);
                 } else {
-                    this.sharedModals.selectResource({key:"ACTIONS.SELECT_RESOURCE"}, null, suggestions).then(
+                    this.sharedModals.selectResource({ key: "ACTIONS.SELECT_RESOURCE" }, null, suggestions).then(
                         (res: ARTURIResource[]) => {
                             this.selectedResourceIri = res[0].getURI();
                         },
-                        () => {}
+                        () => { }
                     );
                 }
             }
@@ -53,21 +52,21 @@ export class FormCollMappingModal {
     }
 
     selectProperty() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }).then(
             (res: ARTURIResource) => {
                 this.selectedResourceIri = res.getURI();
             },
             () => { }
-        )
+        );
     }
 
     selectClass() {
-        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_CLASS"}, [RDF.property, OWL.class, OWL.thing]).then(
+        this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.SELECT_CLASS" }, [RDF.property, OWL.class, OWL.thing]).then(
             (res: ARTURIResource) => {
                 this.selectedResourceIri = res.getURI();
             },
             () => { }
-        )
+        );
     }
 
     selectFormColl(formColl: FormCollection) {
@@ -77,8 +76,8 @@ export class FormCollMappingModal {
     ok() {
         this.selectedResourceIri = this.selectedResourceIri.trim();
         if (!ResourceUtils.testIRI(this.selectedResourceIri)) {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: this.selectedResourceIri}}, ModalType.warning);
-            return
+            this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: this.selectedResourceIri } }, ModalType.warning);
+            return;
         }
         this.activeModal.close({ resource: new ARTURIResource(this.selectedResourceIri), formCollection: this.selectedFormColl.getId() });
     }
