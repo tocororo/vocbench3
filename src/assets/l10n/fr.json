@@ -332,9 +332,7 @@
             },
             "REMOTE_SYS": {
                 "CONFIG": {
-                    "DEFAULT_CHECK_INFO": "Cocher pour enregistrer la nouvelle configuration comme valeur par défaut",
                     "FORWARD_CREDENTIALS": "Transférer les informations d'identification",
-                    "FORWARD_CREDENTIALS_INFO": "Cocher pour transférer les informations permettant d'accéder aux jeux de données pertinents au service d'alignement distant",
                     "ID_INFO": "Identifiant de la configuration",
                     "REMOTE_ALIGN_SYS_CONFIG": "Configurations du système d'alignement distant"
                 },

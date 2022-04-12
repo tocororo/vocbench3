@@ -14,7 +14,7 @@ export class SettingsMgrConfigComponent {
 
     @ViewChild('blockingDiv', { static: false }) private blockingDivElement: ElementRef;
 
-    extPointMap: {[extPtId: string]: ExtensionPoint[]} = {} //map extension points with the SettingsManager implementations
+    extPointMap: { [extPtId: string]: ExtensionPoint[] } = {}; //map extension points with the SettingsManager implementations
     extPointIds: { id: string, shortId: string }[]; //IDs of the ext points (keys of the above map)
     selectedExtPoint: string; //identifies the selected tab
     selectedSettingsMgr: ExtensionPoint; //the SettingsManager selected among those in the selected ext point
@@ -22,7 +22,7 @@ export class SettingsMgrConfigComponent {
 
     selectedSettings: Settings;
 
-    constructor(private settingsService: SettingsServices, private basicModals: BasicModalServices) {}
+    constructor(private settingsService: SettingsServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.initSettingsManagers();
@@ -49,19 +49,19 @@ export class SettingsMgrConfigComponent {
                                 settingsMgrList.push(settingsMgr);
                             }
                             this.extPointMap[extPt] = settingsMgrList;
-                        })
+                        });
                     } else { //simply a SettingsManager (both interface and interfaces are null)
                         this.extPointMap[settingsMgr.id] = [settingsMgr];
                     }
-                })
+                });
                 //collect extension points ID and their shortened version, then sort them
-                this.extPointIds = Object.keys(this.extPointMap).map(extPt => { return { id: extPt, shortId: extPt.substring(extPt.lastIndexOf(".")+1)} });
+                this.extPointIds = Object.keys(this.extPointMap).map(extPt => { return { id: extPt, shortId: extPt.substring(extPt.lastIndexOf(".") + 1) }; });
                 this.extPointIds.sort((ep1, ep2) => ep1.shortId.toLocaleLowerCase().localeCompare(ep2.shortId.toLocaleLowerCase()));
                 //sort settings managers for every ext point
                 for (let extPt in this.extPointMap) {
                     this.extPointMap[extPt].sort((sm1, sm2) => {
-                        return sm1.getShortId().localeCompare(sm2.getShortId())
-                    })
+                        return sm1.getShortId().localeCompare(sm2.getShortId());
+                    });
                 }
                 //init the selection of the first ext point tab
                 this.selectExtensionPoint(this.extPointIds[0].id);
@@ -99,7 +99,7 @@ export class SettingsMgrConfigComponent {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.selectedSettings = settings;
             }
-        )
+        );
     }
 
     applyChanges() {
@@ -108,13 +108,13 @@ export class SettingsMgrConfigComponent {
         if (this.selectedScope == Scope.SYSTEM) {
             storeSettingsFn = this.settingsService.storeSettings(this.selectedSettingsMgr.id, this.selectedScope, settingsValue);
         } else {
-            storeSettingsFn = this.settingsService.storeSettingsDefault(this.selectedSettingsMgr.id, this.selectedScope, Scope.SYSTEM, settingsValue)
+            storeSettingsFn = this.settingsService.storeSettingsDefault(this.selectedSettingsMgr.id, this.selectedScope, Scope.SYSTEM, settingsValue);
         }
         storeSettingsFn.subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key: "MESSAGES.SETTING_SAVED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.SETTING_SAVED" });
             }
-        )
+        );
     }
 
 }

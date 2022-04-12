@@ -334,10 +334,9 @@
             },
             "REMOTE_SYS": {
                 "CONFIG": {
-                    "DEFAULT_CHECK_INFO": "If checked the new configuration is automatically set as default",
-                    "FORWARD_CREDENTIALS": "Forward credentials",
-                    "FORWARD_CREDENTIALS_INFO": "If checked the credentials for accessing relevant datasets are forwarded to the remote alignment service",
+                    "FORWARD_CREDENTIALS": "Forward triplestore credentials",
                     "ID_INFO": "Configuration ID",
+                    "NEW_ALIGN_SYS": "Associate new Alignment System",
                     "REMOTE_ALIGN_SYS_CONFIG": "Remote Alignment System configurations"
                 },
                 "CREATE_TASK": {

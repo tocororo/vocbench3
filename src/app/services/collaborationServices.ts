@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, skip } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ARTURIResource } from '../models/ARTResources';
 import { CollaborationSystemStatus, CollaborationUtils, Issue, IssuesStruct } from '../models/Collaboration';
 import { Settings } from '../models/Plugins';
@@ -226,7 +226,7 @@ export class CollaborationServices {
                     more: stResp.more,
                     numIssues: stResp.numIssues,
                     numPagesTotal: stResp.numPagesTotal
-                }
+                };
                 return issuesStruct;
             })
         );

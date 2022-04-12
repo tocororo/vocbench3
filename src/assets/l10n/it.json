@@ -334,10 +334,9 @@
             },
             "REMOTE_SYS": {
                 "CONFIG": {
-                    "DEFAULT_CHECK_INFO": "Se spuntato, la nuova configurazione sarà automaticamente settada di default",
-                    "FORWARD_CREDENTIALS": "Inoltro delle credenziali",
-                    "FORWARD_CREDENTIALS_INFO": "Se spuntato, le credenziali per l'accesso ai dataset rilevanti sono inoltrate al servizio di allineamento remoto",
+                    "FORWARD_CREDENTIALS": "Inoltra le credenziali del triplestore",
                     "ID_INFO": "ID configurazione",
+                    "NEW_ALIGN_SYS": "Associa nuovo sistema di allineamento",
                     "REMOTE_ALIGN_SYS_CONFIG": "Configurazione del sistema remoto d'allineamentio"
                 },
                 "CREATE_TASK": {

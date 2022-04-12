@@ -7,14 +7,39 @@
         <div class="card card-default">
             <div class="card-body table-responsive">
                 <table class="table table-sm">
+                    <colgroup>
+                        <col style="width: 1%;">
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col style="width: 150px;">
+                        <col style="width: 1%;">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th class="text-center">{{'STATUS.DEFAULT'|translate}}</th>
-                            <th class="text-center">ID</th>
-                            <th class="text-center">{{'COMMONS.CONFIG.SERVER_URL'|translate}}</th>
-                            <th class="text-center">{{'COMMONS.CONFIG.USERNAME'|translate}}</th>
-                            <th class="text-center">{{'COMMONS.CONFIG.PASSWORD'|translate}}</th>
-                            <th class="text-center">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</th>
+                            <th class="text-center">ID *</th>
+                            <th class="text-center">
+                                {{formDef['serverURL']?.displayName}}
+                                <span *ngIf="formDef['serverURL']?.required">*</span>
+                                <span *ngIf="formDef['serverURL']?.description" class="fas fa-info-circle ml-1" [title]="formDef['serverURL']?.description"></span>
+                            </th>
+                            <th class="text-center">
+                                {{formDef['username']?.displayName}}
+                                <span *ngIf="formDef['username']?.required">*</span>
+                                <span *ngIf="formDef['username']?.description" class="fas fa-info-circle ml-1" [title]="formDef['username']?.description"></span>
+                            </th>
+                            <th class="text-center">
+                                {{formDef['password']?.displayName}}
+                                <span *ngIf="formDef['password']?.required">*</span>
+                                <span *ngIf="formDef['password']?.description" class="fas fa-info-circle ml-1" [title]="formDef['password']?.description"></span>
+                            </th>
+                            <th class="text-center">
+                                {{formDef['forwardCredentials']?.displayName}}
+                                <span *ngIf="formDef['forwardCredentials']?.required">*</span>
+                                <span *ngIf="formDef['forwardCredentials']?.description" class="fas fa-info-circle ml-1" [title]="formDef['forwardCredentials']?.description"></span>
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -58,7 +83,7 @@
                 <table class="table table-sm table-borderless">
                     <tbody>
                         <tr>
-                            <td><label>{{'STATUS.NEW'|translate}}:</label></td>
+                            <td style="width: 150px;"><label>{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.NEW_ALIGN_SYS'|translate}}:</label></td>
                             <td>
                                 <input class="form-control" [(ngModel)]="newConfig.id" [placeholder]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.ID_INFO'|translate">
                             </td>
@@ -66,21 +91,15 @@
                                 <input class="form-control" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl:8080">
                             </td>
                             <td>
-                                <input class="form-control" [(ngModel)]="newConfig.username" [placeholder]="'COMMONS.CONFIG.USERNAME'|translate">
+                                <input class="form-control" [(ngModel)]="newConfig.username" [placeholder]="formDef['username']?.displayName">
                             </td>
                             <td>
-                                <input class="form-control" [(ngModel)]="newConfig.password" [placeholder]="'COMMONS.CONFIG.PASSWORD'|translate">
+                                <input class="form-control" [(ngModel)]="newConfig.password" [placeholder]="formDef['password']?.displayName">
                             </td>
-                            <td class="text-center">
-                                <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS_INFO'|translate">
+                            <td class="text-center" style="width: 130px;">
+                                <div class="form-check form-check-inline">
                                     <input class="form-check-input" id="forwardCredenialsCheck" type="checkbox" [(ngModel)]="newConfig.forwardCredentials">
-                                    <label class="form-check-label" for="forwardCredenialsCheck">{{'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.FORWARD_CREDENTIALS'|translate}}</label>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="form-check form-check-inline" [title]="'ALIGNMENT.VALIDATION.REMOTE_SYS.CONFIG.DEFAULT_CHECK_INFO'|translate">
-                                    <input class="form-check-input" id="defaultCheck" type="checkbox" [(ngModel)]="newConfig.default">
-                                    <label class="form-check-label" for="defaultCheck">{{'STATUS.DEFAULT'|translate}}</label>
+                                    <label class="form-check-label" for="forwardCredenialsCheck">{{formDef['forwardCredentials']?.displayName}}</label>
                                 </div>
                             </td>
                             <td>
@@ -97,6 +116,7 @@
 
     </div>
     <div class="modal-footer">
+        <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
         <button class="btn btn-primary btn-sm" (click)="ok()">{{'ACTIONS.CLOSE'|translate}}</button>
     </div>
 </div>

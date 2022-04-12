@@ -176,6 +176,15 @@ export class RemoteAlignmentServices {
         );
     }
 
+    getRemoteAlignmentServiceForm(): Observable<RemoteAlignmentServiceConfiguration> {
+        let params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getRemoteAlignmentServiceForm", params).pipe(
+            map(stResp => {
+                return Settings.parse(stResp);
+            })
+        );
+    }
+
     getDefaultRemoteAlignmentServiceId(): Observable<string> {
         let params = {};
         return this.httpMgr.doGet(this.serviceName, "getDefaultRemoteAlignmentServiceId", params);

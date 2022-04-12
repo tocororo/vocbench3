@@ -332,9 +332,7 @@
             },
             "REMOTE_SYS": {
                 "CONFIG": {
-                    "DEFAULT_CHECK_INFO": "Wenn diese Option aktiviert ist, wird die neue Konfiguration automatisch als Standard festgelegt.",
                     "FORWARD_CREDENTIALS": "Anmeldeinformationen weiterleiten",
-                    "FORWARD_CREDENTIALS_INFO": "Wenn diese Option aktiviert ist, werden die Anmeldeinformationen für den Zugriff auf relevante Datasets an den externen Alignment-Service weitergeleitet.",
                     "ID_INFO": "Konfigurations-ID",
                     "REMOTE_ALIGN_SYS_CONFIG": "Konfigurationen des externen Alignment-Systems"
                 },

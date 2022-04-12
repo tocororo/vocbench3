@@ -24,7 +24,7 @@ export class RemoteSystemSettingsModal {
 
     private changed: boolean = false;
 
-    constructor(public activeModal: NgbActiveModal, private remoteAlignmentService: RemoteAlignmentServices, private modalService: NgbModal) {}
+    constructor(public activeModal: NgbActiveModal, private remoteAlignmentService: RemoteAlignmentServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.isAdmin = VBContext.getLoggedUser().isAdmin();
@@ -33,6 +33,7 @@ export class RemoteSystemSettingsModal {
 
         this.initConfigs();
     }
+
 
     initConfigs() {
         //initialize the available configurations
@@ -47,7 +48,7 @@ export class RemoteSystemSettingsModal {
                         username: servConf.getPropertyValue("username"),
                         password: servConf.getPropertyValue("password"),
                         forwardCredentials: (servConf.getPropertyValue("forwardCredentials") === true)
-                    }
+                    };
                     this.savedConfigs.push(servConfDef);
                 }
                 this.savedConfigs.sort((c1, c2) => c1.id.localeCompare(c2.id));
@@ -57,7 +58,6 @@ export class RemoteSystemSettingsModal {
                         this.activeConfig = null;
                         if (pair != null) {
                             let confId: string = pair.first;
-                            let explicit: boolean = pair.second;
                             this.activeConfig = this.savedConfigs.find(c => c.id == confId);
                             if (this.activeConfig == null) {
                                 //the stored alignment service for the current project has been probably deleted => remove it
@@ -80,12 +80,12 @@ export class RemoteSystemSettingsModal {
     }
 
     administration() {
-        this.modalService.open(RemoteSystemConfigurationsAdministration, new ModalOptions('lg')).result.then(
+        this.modalService.open(RemoteSystemConfigurationsAdministration, new ModalOptions('xl')).result.then(
             () => {
                 this.changed = true;
                 this.initConfigs();
             }
-        )
+        );
     }
 
 

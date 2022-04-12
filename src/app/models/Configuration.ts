@@ -47,6 +47,7 @@ export class Reference {
         } else if (relativeRef.startsWith("factory:")) {
             return Scope.FACTORY;
         }
+        return null;
     }
     public static getRelativeReferenceIdentifier(relativeRef: string): string {
         return relativeRef.substring(relativeRef.indexOf(":")+1);

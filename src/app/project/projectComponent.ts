@@ -41,8 +41,7 @@ import { RemoteRepoEditorModal } from "./remoteRepositories/remoteRepoEditorModa
 })
 export class ProjectComponent extends AbstractProjectComponent implements OnInit {
 
-    private columnIDs: ProjectColumnId[] = [ProjectColumnId.accessed, ProjectColumnId.history, ProjectColumnId.lexicalization,
-    ProjectColumnId.location, ProjectColumnId.model, ProjectColumnId.name, ProjectColumnId.open, ProjectColumnId.validation];
+    private columnIDs: ProjectColumnId[] = [ProjectColumnId.accessed, ProjectColumnId.history, ProjectColumnId.lexicalization, ProjectColumnId.location, ProjectColumnId.model, ProjectColumnId.name, ProjectColumnId.open, ProjectColumnId.validation];
     private columnOrder: { [id: string]: { show: string, flex: number, order: number } };
 
     constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
@@ -60,8 +59,8 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         let customOrder: ProjectColumnId[] = this.getCustomColumnsSetting(); //this setting contains the (ordered) IDs of the columns to show
         customOrder.forEach((colId: ProjectColumnId, idx: number) => {
             let colStruct: ProjectTableColumnStruct = columns.find(c => c.id == colId); //retrieve the column struct
-            this.columnOrder[colId] = { show: colStruct.translationKey, order: idx, flex: colStruct.flex }
-        })
+            this.columnOrder[colId] = { show: colStruct.translationKey, order: idx, flex: colStruct.flex };
+        });
 
         super.initProjects();
     }
@@ -121,10 +120,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
             const modalRef: NgbModalRef = this.modalService.open(OpenAllProjReportModal, new ModalOptions('lg'));
             modalRef.componentInstance.report = report;
             modalRef.result.then(() => {
-                this.initProjects()
-            })
+                this.initProjects();
+            });
         } else {
-            this.initProjects()
+            this.initProjects();
         }
     }
 
@@ -152,7 +151,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     activateProject(project: Project) {
-        var workingProj = VBContext.getWorkingProject();
+        let workingProj = VBContext.getWorkingProject();
         if (workingProj == undefined || workingProj.getName() != project.getName()) {
             this.accessProject(project).subscribe();
         }
@@ -168,7 +167,6 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     deleteProject(project: Project) {
         if (project.isOpen()) {
             this.basicModals.alert({ key: "ACTIONS.DELETE_PROJECT" }, { key: "MESSAGES.PROJECT_OPEN_CLOSE_AND_RETRY" }, ModalType.warning);
-            return;
         } else {
             this.basicModals.confirm({ key: "ACTIONS.DELETE_PROJECT" }, { key: "MESSAGES.DELETE_PROJECT_CONFIRM", params: { project: project.getName() } }, ModalType.warning).then(
                 result => {
@@ -181,9 +179,9 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                                         this.deleteRemoteRepo(project, repositories);
                                     }
                                 }
-                            )
+                            );
                         }
-                    )
+                    );
                 },
                 () => { }
             );
@@ -245,7 +243,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         if (this.visualizationMode == ProjectViewMode.list) {
             projLength = this.projectList.length;
         } else {
-            this.projectDirs.forEach(dir => projLength = projLength + dir.projects.length);
+            this.projectDirs.forEach(dir => { projLength += dir.projects.length; });
         }
         if (projLength > 50) {
             this.basicModals.confirm({ key: "PROJECTS.ACL.ACL_MATRIX" }, { key: "MESSAGES.ACL_TOO_MUCH_PROJ_CONFIRM", params: { projCount: this.projectList.length } }, ModalType.warning).then(
@@ -253,7 +251,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                     this.openACLMatrix();
                 },
                 () => { }
-            )
+            );
         } else {
             this.openACLMatrix();
         }
@@ -279,7 +277,6 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         }
         const modalRef: NgbModalRef = this.modalService.open(RemoteRepoEditorModal, new ModalOptions());
         modalRef.componentInstance.project = project;
-        return modalRef.result;
     }
 
     editLabels(project: Project) {
@@ -297,10 +294,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                     () => {
                         project.setDescription(descr);
                     }
-                )
+                );
             },
             () => { }
-        )
+        );
     }
 
     editFacets(project: Project) {
@@ -323,7 +320,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                 facets => { //changed settings
                     this.initProjects();
                 },
-                () => { }  //nothing changed
+                () => { } //nothing changed
             );
         });
     }

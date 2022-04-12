@@ -332,9 +332,7 @@
             },
             "REMOTE_SYS": {
                 "CONFIG": {
-                    "DEFAULT_CHECK_INFO": "Si se marca, la nueva configuración se establece automáticamente como predeterminada",
                     "FORWARD_CREDENTIALS": "Reenviar credenciales",
-                    "FORWARD_CREDENTIALS_INFO": "Si se marca, las credenciales para acceder a los conjuntos de datos relevantes se reenvían al servicio de alineación remota",
                     "ID_INFO": "ID de configuración",
                     "REMOTE_ALIGN_SYS_CONFIG": "Configuraciones del sistema de alineación remota"
                 },

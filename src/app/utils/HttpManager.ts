@@ -37,10 +37,10 @@ export class HttpManager {
      * @param request the request name
      * @param params the parameters to send in the GET request (as url parameter). This parameter must be an object like:
      *  { 
-	 * 	   "urlParName1" : "urlParValue1",
-	 * 	   "urlParName2" : "urlParValue2",
-	 * 	   "urlParName3" : "urlParValue3",
-	 *  }
+     *     "urlParName1" : "urlParValue1",
+     *     "urlParName2" : "urlParValue2",
+     *     "urlParName3" : "urlParValue3",
+     *  }
      * @param options further options that overrides the default ones
      */
     doGet(service: string, request: string, params: STRequestParams, options?: VBRequestOptions) {
@@ -61,8 +61,8 @@ export class HttpManager {
 
         //execute request
         return this.http.get(url, httpOptions).pipe(
-            map(res => { 
-                return this.handleOkOrErrorResponse(res); 
+            map(res => {
+                return this.handleOkOrErrorResponse(res);
             }),
             catchError(error => {
                 return this.handleError(error, options.errorHandlers);
@@ -76,10 +76,10 @@ export class HttpManager {
      * @param request the request name
      * @param params the parameters to send in the POST request. This parameter must be an object like:
      *  { 
-	 * 	   "urlParName1" : "urlParValue1",
-	 * 	   "urlParName2" : "urlParValue2",
-	 * 	   "urlParName3" : "urlParValue3",
-	 *  }
+     *     "urlParName1" : "urlParValue1",
+     *     "urlParName2" : "urlParValue2",
+     *     "urlParName3" : "urlParValue3",
+     *  }
      * @param options further options that overrides the default ones
      */
     doPost(service: string, request: string, params: STRequestParams, options?: VBRequestOptions) {
@@ -103,8 +103,8 @@ export class HttpManager {
 
         //execute request
         return this.http.post(url, postData, httpOptions).pipe(
-            map(res => { 
-                return this.handleOkOrErrorResponse(res); 
+            map(res => {
+                return this.handleOkOrErrorResponse(res);
             }),
             catchError(error => {
                 return this.handleError(error, options.errorHandlers);
@@ -119,15 +119,15 @@ export class HttpManager {
      * @param request the request name
      * @param params the parameters to send in the POST request. This parameter must be an object like:
      *  { 
-	 * 	   "urlParName1" : "urlParValue1",
-	 * 	   "urlParName2" : "urlParValue2",
-	 * 	   "urlParName3" : "urlParValue3",
-	 *  }
+     *     "urlParName1" : "urlParValue1",
+     *     "urlParName2" : "urlParValue2",
+     *     "urlParName3" : "urlParValue3",
+     *  }
      * @param options further options that overrides the default ones
      */
     uploadFile(service: string, request: string, params: STRequestParams, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
-        
+
         let url: string = this.getRequestBaseUrl(service, request);
 
         //add ctx parameters
@@ -156,8 +156,8 @@ export class HttpManager {
 
         //execute request
         return this.http.post(url, formData, httpOptions).pipe(
-            map(res => { 
-                return this.handleOkOrErrorResponse(res); 
+            map(res => {
+                return this.handleOkOrErrorResponse(res);
             }),
             catchError(error => {
                 return this.handleError(error, options.errorHandlers);
@@ -171,16 +171,16 @@ export class HttpManager {
      * @param request the request name
      * @param params the parameters to send in the request. This parameter must be an object like:
      *  { 
-	 * 	   "urlParName1" : "urlParValue1",
-	 * 	   "urlParName2" : "urlParValue2",
-	 * 	   "urlParName3" : "urlParValue3",
-	 *  }
+     *     "urlParName1" : "urlParValue1",
+     *     "urlParName2" : "urlParValue2",
+     *     "urlParName3" : "urlParValue3",
+     *  }
      * @param post tells if the download is done via post-request (e.g. Export.export() service)
      * @param options further options that overrides the default ones
      */
     downloadFile(service: string, request: string, params: STRequestParams, post?: boolean, options?: VBRequestOptions): Observable<Blob> {
         options = this.defaultRequestOptions.merge(options);
-        
+
         let url: string = this.getRequestBaseUrl(service, request);
 
         if (post) {
@@ -200,10 +200,10 @@ export class HttpManager {
             };
 
             return this.http.post(url, postData, httpOptions).pipe(
-                map(res => { 
-                    return this.arrayBufferRespHandler(res); 
+                map(res => {
+                    return this.arrayBufferRespHandler(res);
                 }),
-                catchError(error => { 
+                catchError(error => {
                     return this.handleError(error, options.errorHandlers);
                 })
             );
@@ -221,7 +221,7 @@ export class HttpManager {
 
             //execute request
             return this.http.get(url, httpOptions).pipe(
-                map(res => { 
+                map(res => {
                     return this.arrayBufferRespHandler(res);
                 }),
                 catchError(error => {
@@ -283,7 +283,7 @@ export class HttpManager {
         //give priority to version in HttpServiceContext over version in ctx
         if (HttpServiceContext.getContextVersion() != undefined) {
             params += "ctx_version=" + encodeURIComponent(HttpServiceContext.getContextVersion().versionId) + "&";
-        } else if (VBContext.getContextVersion() != undefined) { 
+        } else if (VBContext.getContextVersion() != undefined) {
             params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().versionId) + "&";
         }
 
@@ -336,14 +336,14 @@ export class HttpManager {
                 }
                 strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(stringArray.join(",")));
             } else if (paramValue instanceof Map) {
-                let stringMap: {[key: string]: string} = {};
+                let stringMap: { [key: string]: string } = {};
                 paramValue.forEach((value: any, key: string) => {
                     if (value instanceof ARTURIResource || value instanceof ARTBNode || value instanceof ARTLiteral) {
                         stringMap[key] = value.toNT();
                     } else {
                         stringMap[key] = value;
                     }
-                })
+                });
                 strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(JSON.stringify(stringMap)));
             } else if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
                 strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent((<ARTNode>paramValue).toNT()));
@@ -386,14 +386,14 @@ export class HttpManager {
         if (err instanceof HttpErrorResponse) { //error thrown by the angular HttpClient get() or post()
             if (err.error instanceof ErrorEvent) { //A client-side or network error occurred
                 let errorMsg = "An error occurred:" + err.error.message;
-                this.basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, errorMsg, ModalType.error);
                 error.name = "Client Error";
                 error.message = errorMsg;
             } else { //The backend returned an unsuccessful response code. The response body may contain clues as to what went wrong.
                 let errorMsg: string;
                 if (!err.ok && err.status == 0 && err.statusText == "Unknown Error") { //attribute of error response in case of no backend response
                     errorMsg = "Connection with ST server (" + this.serverhost + ") has failed; please check your internet connection";
-                    this.basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, errorMsg, ModalType.error);
                     error.name = "ConnectionError";
                     error.message = errorMsg;
                 } else { //backend error response
@@ -407,20 +407,20 @@ export class HttpManager {
                         error.name = "UnauthorizedRequestError";
                         error.message = err.message;
 
-                        this.basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error).then(
+                        this.basicModals.alert({ key: "STATUS.ERROR" }, errorMsg, ModalType.error).then(
                             () => {
                                 if (err.status == 401) { ////in case user is not logged at all, reset context and redirect to home
                                     VBContext.resetContext();
                                     HttpServiceContext.resetContext();
                                     this.eventHandler.themeChangedEvent.emit();
                                     this.router.navigate(['/Home']);
-                                };
+                                }
                             },
-                            () => {}
+                            () => { }
                         );
                     } else if (status == 500 || status == 404) { //server error (e.g. out of memory)
                         let errorMsg = (err.statusText != null ? err.statusText : "Unknown response from the server") + " (status: " + err.status + ")";
-                        this.basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error);
+                        this.basicModals.alert({ key: "STATUS.ERROR" }, errorMsg, ModalType.error);
                         error.name = "ServerError";
                         error.message = errorMsg;
                     }
@@ -435,17 +435,17 @@ export class HttpManager {
                     if (errHandler) {
                         if (errHandler.action == 'warning') {
                             let errorMsg = error.message;
-                            this.basicModals.alert({key:"STATUS.WARNING"}, errorMsg, ModalType.warning);
+                            this.basicModals.alert({ key: "STATUS.WARNING" }, errorMsg, ModalType.warning);
                             handleErrorDefault = false; //handled with a simple warning alert, so skip the default "error" alert
                         } else if (errHandler.action == 'skip') {
                             handleErrorDefault = false; //simply skip the alert (it will be handled ad-hoc by the component that invoked the service)
                         }
                     }
-                } 
+                }
                 if (handleErrorDefault) { //if the alert should be shown
                     let errorMsg = error.message != null ? error.message : "Unknown response from the server";
                     let errorDetails = error.stack ? error.stack : error.name;
-                    this.basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error, errorDetails);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, errorMsg, ModalType.error, errorDetails);
                 }
             }
         }
@@ -465,7 +465,7 @@ export class HttpManager {
     private arrayBufferRespHandler(resp: HttpResponse<ArrayBuffer>) {
         let arrayBuffer = resp.body;
         let respContType = resp.headers.get("content-type");
-        if (respContType && respContType.includes(STResponseUtils.ContentType.applicationJson+";")) { //could be an error response
+        if (respContType && respContType.includes(STResponseUtils.ContentType.applicationJson + ";")) { //could be an error response
             //convert arrayBuffer to json object
             let respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
             let jsonResp = JSON.parse(respContentAsString);
@@ -496,7 +496,7 @@ export class HttpManager {
         let port: string = st_port ? st_port : location.port;
 
         let st_path: string = window['st_path']; //url path (optional)
-        
+
         let serverhost = protocol + "//" + host + ":" + port;
         if (st_path != null) {
             serverhost += "/" + st_path;
@@ -513,7 +513,7 @@ export class HttpServiceContext {
     private static ctxWGraph: ARTResource; // write graph temporarly used in some scenarios
     private static ctxForce: boolean; //true in order to force some operation (e.g. createConcept, addPrefLabel after rejection in validation)
     private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
-    
+
     //if true, the errors thrown by the service calls are intercepted and a modal is shown. Useful to set to false during multiple additions.
     private static interceptError: boolean = true;
 
@@ -586,7 +586,7 @@ export class HttpServiceContext {
             let chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             for (let i = 0; i < 16; i++) {
                 let idx = Math.round(Math.random() * (chars.length - 1));
-                token = token + chars[idx];
+                token += chars[idx];
             }
             this.sessionToken = token;
         }
@@ -635,7 +635,7 @@ export class VBRequestOptions {
 
     errorHandlers: ExceptionHandlerInfo[];
     ctxProject: Project;
-    
+
     constructor({ errorHandlers, ctxProject }: VBRequestOptionsArgs = {}) {
         this.errorHandlers = errorHandlers != null ? errorHandlers : null;
         this.ctxProject = ctxProject != null ? ctxProject : null;
@@ -661,7 +661,7 @@ export class VBRequestOptions {
             return null;
         }
     }
-    
+
 }
 
 //inspired by angular RequestOptionsArgs
