@@ -67,17 +67,17 @@ export class RdfResourceComponent {
         this.renderingLabel = ResourceUtils.getRendering(this.resource, this.rendering);
     }
 
-	/**
-	 * Initializes the source of the icon image
-	 */
+    /**
+     * Initializes the source of the icon image
+     */
     private initImgSrc() {
         this.imgSrc = UIUtils.getImageSrc(this.resource);
     }
 
     /**
-	 * Returns the language tag of the current resource in order to show it as title of resource icon (flag)
-	 */
-     private initLang(): void {
+     * Returns the language tag of the current resource in order to show it as title of resource icon (flag)
+     */
+    private initLang(): void {
         //reset
         this.language = null;
         //init
@@ -95,9 +95,9 @@ export class RdfResourceComponent {
         }
     }
 
-	/**
-	 * Initializes the class of the resource text: green if the resource is in the staging-add-graph, red if it's in the staging-remove-graph
-	 */
+    /**
+     * Initializes the class of the resource text: green if the resource is in the staging-add-graph, red if it's in the staging-remove-graph
+     */
     private initRenderingClass() {
         this.renderingClass = "";
         if (this.resource instanceof ARTResource) {
@@ -133,14 +133,14 @@ export class RdfResourceComponent {
                 if (this.language != null) {
                     this.natureTooltip = this.language.tag;
                 } else if (this.datatype != null) {
-                    this.natureTooltip = this.datatype.toNT();    
+                    this.natureTooltip = this.datatype.toNT();
                 }
             }
         } else if (this.resource instanceof ARTLiteral) {
             if (this.language != null) {
                 this.natureTooltip = this.language.tag;
             } else if (this.datatype != null) {
-                this.natureTooltip = this.datatype.toNT();    
+                this.natureTooltip = this.datatype.toNT();
             }
         }
     }
@@ -156,7 +156,7 @@ export class RdfResourceComponent {
         } else { // otherwise, it is a resource, possibly with an additional property dataType (as it could be from a custom form preview)
             dtIri = this.resource.getAdditionalProperty(ResAttribute.DATA_TYPE);
         }
-        
+
         if (dtIri != null) { //if there is a datatype
             let show: string = ResourceUtils.getQName(dtIri, VBContext.getPrefixMappings());
             this.datatype = new ARTURIResource(dtIri, show, RDFResourceRolesEnum.dataRange);
@@ -173,15 +173,15 @@ export class RdfResourceComponent {
         return this.datatype;
     }
 
-	/**
-	 * If the resource is a literal with a link, splits the literal value so it can be rendered with different elements
-	 * like <span> for plain text (even elements of array) or <a> for url (odd elements)
-	 */
+    /**
+     * If the resource is a literal with a link, splits the literal value so it can be rendered with different elements
+     * like <span> for plain text (even elements of array) or <a> for url (odd elements)
+     */
     private initLiteralWithLink() {
         this.literalWithLink = false;
         if (this.resource instanceof ARTLiteral) {
             let value = this.resource.getValue();
-            let regexToken = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-][_.\w-!#$%&'*+-/=?^_`.{|}~]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
+            let regexToken = /(((ftp|https?):\/\/)[-\w@:%_+.~#?,&//=]+)|((mailto:)?[_.\w-][_.\w-!#$%&'*+-/=?^_`.{|}~]+@([\w][\w-]+\.)+[a-zA-Z]{2,3})/g;
             let urlArray: string[] = [];
 
             let matchArray: RegExpExecArray;
@@ -261,7 +261,7 @@ export class RdfResourceComponent {
             ];
 
             let show = this.resource.getShow();
-            show = show.replace(/([\{\[\(\}\]\)])/g, " $1 ").replace(/\s+/g, " ").trim(); //add spaces before and after brackets, remove multiple spaces, remove ending space
+            show = show.replace(/([{[(}\])])/g, " $1 ").replace(/\s+/g, " ").trim(); //add spaces before and after brackets, remove multiple spaces, remove ending space
             let splitted: string[] = show.split(" ");
             this.manchExprStruct = [];
             splitted.forEach((s, idx, array) => {
@@ -278,7 +278,7 @@ export class RdfResourceComponent {
                     this.manchExprStruct.push({ token: " ", class: "" });
                 }
 
-            })
+            });
         }
     }
 

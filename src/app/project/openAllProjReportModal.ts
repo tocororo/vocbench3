@@ -20,7 +20,7 @@ export class OpenAllProjReportModal {
             this.failReports.push({
                 offensiveElemId: projId,
                 exception: this.report[projId]
-            })
+            });
         }
     }
 

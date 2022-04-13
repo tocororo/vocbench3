@@ -444,7 +444,7 @@ export class HttpManager {
                 }
                 if (handleErrorDefault) { //if the alert should be shown
                     let errorMsg = error.message != null ? error.message : "Unknown response from the server";
-                    let errorDetails = error.stack ? error.stack : error.name;
+                    let errorDetails = error.stack;
                     this.basicModals.alert({ key: "STATUS.ERROR" }, errorMsg, ModalType.error, errorDetails);
                 }
             }

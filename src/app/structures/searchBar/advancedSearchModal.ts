@@ -28,7 +28,7 @@ export class AdvancedSearchModal {
         { show: "Not deprecated", value: StatusFilter.NOT_DEPRECATED },
         { show: "Only deprecated", value: StatusFilter.ONLY_DEPRECATED }
         //UNDER_VALIDATION and UNDER_VALIDATION_FOR_DEPRECATION only if project has validation active
-    ]
+    ];
     selectedStatus: StatusFilter = this.statuses[0].value;
 
     //search mode use URI/LocalName
@@ -44,7 +44,7 @@ export class AdvancedSearchModal {
         { labelTranslationKey: "SEARCH.SETTINGS.FUZZY", value: SearchMode.fuzzy }
     ];
     activeStringMatchMode: SearchMode;
-    
+
 
     restrictLang: boolean = false;
     includeLocales: boolean = false;
@@ -64,7 +64,7 @@ export class AdvancedSearchModal {
 
     constructor(public activeModal: NgbActiveModal, private searchService: SearchServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private browsingModals: BrowsingModalServices,
-        private creationModals: CreationModalServices) {}
+        private creationModals: CreationModalServices) { }
 
     ngOnInit() {
         let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
@@ -91,11 +91,11 @@ export class AdvancedSearchModal {
     }
 
     selectRestrictionLanguages() {
-        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGES"}, this.languages, false, true).then(
+        this.sharedModals.selectLanguages({ key: "ACTIONS.SELECT_LANGUAGES" }, this.languages, false, true).then(
             (langs: string[]) => {
                 this.languages = langs;
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -112,7 +112,7 @@ export class AdvancedSearchModal {
     }
 
     addType(group: ARTURIResource[]) {
-        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_CLASS"}).then(
+        this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.SELECT_CLASS" }).then(
             (type: ARTURIResource) => {
                 group.push(type);
             }
@@ -141,7 +141,7 @@ export class AdvancedSearchModal {
     }
 
     private addScheme(group: ARTURIResource[]) {
-        this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.SELECT_SCHEME"}).then(
+        this.browsingModals.browseSchemeList({ key: "DATA.ACTIONS.SELECT_SCHEME" }).then(
             (scheme: ARTURIResource) => {
                 group.push(scheme);
             }
@@ -155,7 +155,7 @@ export class AdvancedSearchModal {
     private updateScheme(group: ARTURIResource[], index: number, scheme: ARTURIResource) {
         group[index] = scheme;
     }
-    
+
     /** ===================== 
      * Ingoing links management
      * ===================== */
@@ -173,11 +173,11 @@ export class AdvancedSearchModal {
     }
 
     addIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }) {
-        this.sharedModals.pickResource({key:"ACTIONS.SELECT_RESOURCE"}).then(
+        this.sharedModals.pickResource({ key: "ACTIONS.SELECT_RESOURCE" }).then(
             (value: ARTNode) => {
                 group.second.push(value);
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -207,18 +207,18 @@ export class AdvancedSearchModal {
 
     addOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, type: RDFTypesEnum) {
         if (type == RDFTypesEnum.resource) {
-            this.sharedModals.pickResource({key:"ACTIONS.SELECT_RESOURCE"}).then(
+            this.sharedModals.pickResource({ key: "ACTIONS.SELECT_RESOURCE" }).then(
                 (value: ARTNode) => {
                     group.second.push(value);
                 },
-                () => {}
+                () => { }
             );
         } else if (type == RDFTypesEnum.literal) {
-            this.creationModals.newTypedLiteral({key:"DATA.ACTIONS.CREATE_LITERAL"}).then(
+            this.creationModals.newTypedLiteral({ key: "DATA.ACTIONS.CREATE_LITERAL" }).then(
                 (values: ARTLiteral[]) => {
                     group.second.push(values[0]);
                 },
-                () => {}
+                () => { }
             );
         }
     }
@@ -266,7 +266,7 @@ export class AdvancedSearchModal {
                 if (type != null) {
                     g.push(type);
                 }
-            })
+            });
             if (g.length > 0) {
                 typesParam.push(g);
             }
@@ -282,7 +282,7 @@ export class AdvancedSearchModal {
                 if (scheme != null) {
                     g.push(scheme);
                 }
-            })
+            });
             if (g.length > 0) {
                 schemesParam.push(g);
             }
@@ -339,23 +339,23 @@ export class AdvancedSearchModal {
         }
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.useNotes, this.activeStringMatchMode, 
+        this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.useNotes, this.activeStringMatchMode,
             this.selectedStatus, langsPar, includeLocalesPar, typesParam, schemesParam, ingoingParam, outgoingLinksParam, outgoingSearchParam).subscribe(
-            searchResult => {
-                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND"}, ModalType.warning);
-                } else { //1 or more results
-                    ResourceUtils.sortResources(searchResult, SortAttribute.show);
-                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, true).then(
-                        (selectedResources: ARTResource[]) => {
-                            this.activeModal.close(selectedResources[0]);
-                        },
-                        () => { }
-                    );
+                searchResult => {
+                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND" }, ModalType.warning);
+                    } else { //1 or more results
+                        ResourceUtils.sortResources(searchResult, SortAttribute.show);
+                        this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.TOT_RESULTS_FOUND", params: { count: searchResult.length } }, searchResult, true).then(
+                            (selectedResources: ARTResource[]) => {
+                                this.activeModal.close(selectedResources[0]);
+                            },
+                            () => { }
+                        );
+                    }
                 }
-            }
-        );
+            );
 
     }
 

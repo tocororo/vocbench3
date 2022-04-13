@@ -50,7 +50,7 @@ export class RepositoriesServices {
     deleteRemoteRepositories(remoteRepositories: RemoteRepositorySummary[]): Observable<ExceptionDAO[]> {
         let params: any = {
             remoteRepositories: JSON.stringify(remoteRepositories)
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteRemoteRepositories", params).pipe(
             map(stResp => {
                 let exceptions: ExceptionDAO[] = [];
@@ -61,7 +61,7 @@ export class RepositoriesServices {
                             message: stResp[i].message,
                             type: stResp[i].type,
                             stacktrace: stResp[i].stacktrace
-                        }
+                        };
                     }
                     exceptions.push(ex); //in case the repository at position i has been
                 }
@@ -76,7 +76,7 @@ export class RepositoriesServices {
             repositoryID: repositoryID,
             username: username,
             password: password,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "restartRemoteRepository", params);
     }
 

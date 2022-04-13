@@ -147,8 +147,8 @@ export class STResponseUtils {
     }
 
     /**
-	 * Returns the exception message
-	 */
+     * Returns the exception message
+     */
     private static getExceptionMessage(stResp: any): string {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("msg")[0].textContent;
@@ -158,8 +158,8 @@ export class STResponseUtils {
     }
 
     /**
-	 * Returns the exception name
-	 */
+     * Returns the exception name
+     */
     private static getExceptionName(stResp: any): string {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("stresponse")[0].getAttribute("exception");
@@ -169,8 +169,8 @@ export class STResponseUtils {
     }
 
     /**
-	 * Returns the exception stack trace
-	 */
+     * Returns the exception stack trace
+     */
     private static getExceptionStackTrace(stResp: any): string {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("stackTrace")[0].textContent;
@@ -179,9 +179,9 @@ export class STResponseUtils {
         }
     }
 
-	/**
-	 * Checks if the response is an exception response
-	 */
+    /**
+     * Checks if the response is an exception response
+     */
     private static isError(stResp: any): boolean {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("stresponse")[0].getAttribute("type") == "error";
@@ -194,9 +194,9 @@ export class STResponseUtils {
         }
     }
 
-	/**
-	 * Returns the exception message
-	 */
+    /**
+     * Returns the exception message
+     */
     private static getErrorMessage(stResp: any): string {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("msg")[0].textContent;
@@ -205,9 +205,9 @@ export class STResponseUtils {
         }
     }
 
-	/**
-	 * Checks if the response is a fail response
-	 */
+    /**
+     * Checks if the response is a fail response
+     */
     private static isFail(stResp: any): boolean {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("reply")[0].getAttribute("status") == "fail";
@@ -221,9 +221,9 @@ export class STResponseUtils {
 
     }
 
-	/**
-	 * Returns the fail message
-	 */
+    /**
+     * Returns the fail message
+     */
     private static getFailMessage(stResp: any): string {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("reply")[0].textContent;

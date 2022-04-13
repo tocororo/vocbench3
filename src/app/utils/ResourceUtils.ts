@@ -17,7 +17,7 @@ export class ResourceUtils {
         if (attribute == SortAttribute.show) {
             let collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
             list.sort(
-                function (r1: ARTNode, r2: ARTNode) {
+                (r1: ARTNode, r2: ARTNode) => {
                     //if both resources have language tag (literals or reified resources with lang), sort according lang
                     if (r1.getAdditionalProperty(ResAttribute.LANG) != null && r2.getAdditionalProperty(ResAttribute.LANG) != null) {
                         if (r1.getAdditionalProperty(ResAttribute.LANG) < r2.getAdditionalProperty(ResAttribute.LANG)) return -1;
@@ -31,11 +31,9 @@ export class ResourceUtils {
             );
         }
         if (attribute == SortAttribute.value) {
-            list.sort(
-                function (r1: ARTNode, r2: ARTNode) {
-                    return r1.getNominalValue().localeCompare(r2.getNominalValue());
-                }
-            );
+            list.sort((r1: ARTNode, r2: ARTNode) => {
+                return r1.getNominalValue().localeCompare(r2.getNominalValue());
+            });
         }
     }
 
@@ -61,7 +59,7 @@ export class ResourceUtils {
      * @param resource 
      * @param rendering 
      */
-    static getRendering(resource: ARTNode, rendering: boolean) {
+    static getRendering(resource: ARTNode, rendering: boolean): string {
         if (resource instanceof ARTURIResource) {
             if (rendering) {
                 return resource.getShow();
@@ -84,8 +82,8 @@ export class ResourceUtils {
             } else {
                 return value;
             }
-            
         }
+        return resource.getNominalValue();
     }
 
     static isQName(nTripleQName: string, prefixMapping: PrefixMapping[]): boolean {
@@ -115,6 +113,7 @@ export class ResourceUtils {
                     return new ARTURIResource(mapping.namespace + localName);
                 }
             }
+            return null;
         } else {
             throw new Error("Not a legal N-Triples QName: " + nTripleQName);
         }
@@ -300,11 +299,15 @@ export class NTriplesUtil {
         let node: ARTNode;
         try {
             node = NTriplesUtil.parseResource(nTripleNode);
-        } catch (err) {}
+        } catch (err) {
+            console.error(err);
+        }
         if (node == null) {
             try {
                 node = NTriplesUtil.parseLiteral(nTripleNode);
-            } catch (err) {}
+            } catch (err) {
+                console.error(err);
+            }
         }
         if (node == null) {
             throw new Error("Not a legal value N-Triples representation: " + nTripleNode);
@@ -316,18 +319,22 @@ export class NTriplesUtil {
         let node: ARTResource;
         try {
             node = NTriplesUtil.parseURI(nTripleNode);
-        } catch (err) {}
+        } catch (err) {
+            console.error(err);
+        }
         if (node == null) {
             try {
                 node = NTriplesUtil.parseBNode(nTripleNode);
-            } catch (err) {}
+            } catch (err) {
+                console.error(err);
+            }
         }
         if (node == null) {
             throw new Error("Not a legal resource N-Triples representation: " + nTripleNode);
         }
         return node;
     }
-    
+
     static parseBNode(nTriplesBNode: string): ARTBNode {
         if (nTriplesBNode.startsWith("_:")) {
             return new ARTBNode(nTriplesBNode);
@@ -371,7 +378,7 @@ export class NTriplesUtil {
                 }
 
                 // Get label
-                let label: string = nTriplesLiteral.substring(0, endLabelIdx+1); //quotes included
+                let label: string = nTriplesLiteral.substring(0, endLabelIdx + 1); //quotes included
                 label = JSON.parse(label);
 
                 if (startLangIdx != -1) {
@@ -394,12 +401,12 @@ export class NTriplesUtil {
     }
 
     /**
-	 * Finds the end of the label in a literal string. This method takes into account that characters can be
-	 * escaped using backslashes.
+     * Finds the end of the label in a literal string. This method takes into account that characters can be
+     * escaped using backslashes.
      * Code inspired by org.eclipse.rdf4j.rio.ntriples.NTripleUtils#parseLiteral()
      * 
-	 * @return The index of the double quote ending the label, or <tt>-1</tt> if it could not be found.
-	 */
+     * @return The index of the double quote ending the label, or <tt>-1</tt> if it could not be found.
+     */
     private static findEndOfLabel(nTriplesLiteral: string): number {
         // First character of literal is guaranteed to be a double
         // quote, start search at second character.

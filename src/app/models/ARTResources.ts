@@ -2,7 +2,7 @@ export abstract class ARTNode {
 
     protected tripleGraphs: ARTURIResource[] = []; //graphs where the triple (which the resource respresents the object) is defined
 
-    constructor() { };
+    constructor() { }
 
     isResource(): boolean {
         return false;
@@ -72,7 +72,7 @@ export abstract class ARTResource extends ARTNode {
         super();
         this.show = show;
         if (role != null) { this.role = role; }
-    };
+    }
 
     isResource(): boolean {
         return true;
@@ -160,7 +160,7 @@ export class ARTURIResource extends ARTResource {
 
     isURIResource(): boolean {
         return true;
-    };
+    }
 
     getBaseURI() {
         if (this.uri.lastIndexOf("#") > -1) {
@@ -180,11 +180,11 @@ export class ARTURIResource extends ARTResource {
 
     getNominalValue(): string {
         return this.uri;
-    };
+    }
 
     toNT(): string {
         return "<" + this.uri + ">";
-    };
+    }
 
     clone(): ARTURIResource {
         let cloneRes = new ARTURIResource(this.uri, this.show, this.role);
@@ -214,15 +214,15 @@ export class ARTBNode extends ARTResource {
 
     isBNode(): boolean {
         return true;
-    };
+    }
 
     getNominalValue(): string {
         return this.id;
-    };
+    }
 
     toNT(): string {
         return this.getNominalValue();
-    };
+    }
 
     clone(): ARTBNode {
         let cloneRes = new ARTBNode(this.id, this.show, this.role);
@@ -252,33 +252,33 @@ export class ARTLiteral extends ARTNode {
     }
     getValue(): string {
         return this.value;
-    };
+    }
 
     setDatatype(datatype: string) {
         this.datatype = datatype;
     }
     getDatatype(): string {
         return this.datatype;
-    };
+    }
 
     setLang(lang: string) {
         this.lang = lang;
     }
     getLang(): string {
         return this.lang;
-    };
+    }
 
     isLiteral(): boolean {
         return true;
-    };
+    }
 
     isTypedLiteral(): boolean {
         return this.datatype != null;
-    };
+    }
 
     getNominalValue(): string {
         return this.toNT();
-    };
+    }
 
     getShow(): string {
         return this.value;
@@ -292,7 +292,7 @@ export class ARTLiteral extends ARTNode {
             nt += "^^<" + this.datatype + ">";
         }
         return nt;
-    };
+    }
 
     clone(): ARTLiteral {
         let cloneRes = new ARTLiteral(this.value);
@@ -316,11 +316,11 @@ export class ARTPredicateObjects {
 
     getPredicate(): ARTURIResource {
         return this.predicate;
-    };
+    }
 
     getObjects(): ARTNode[] {
         return this.objects;
-    };
+    }
 }
 
 export class ResAttribute {

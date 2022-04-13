@@ -8,7 +8,7 @@ import { CreationModalServices } from '../../modal/creationModal/creationModalSe
     templateUrl: './literalPickerComponent.html',
 })
 export class LiteralPickerComponent {
-    
+
     @Input() literal: ARTLiteral;
     @Input() plain: boolean = true; //if true, the component allows to create/pick plain literal
     @Input() typed: boolean = true; //if true, the component allows to create/pick typed literal
@@ -38,13 +38,13 @@ export class LiteralPickerComponent {
     }
 
     pickLiteral() {
-        this.creationModals.newTypedLiteral({key:"DATA.ACTIONS.CREATE_LITERAL"}, null, null, this.datatypes).then(
+        this.creationModals.newTypedLiteral({ key: "DATA.ACTIONS.CREATE_LITERAL" }, null, null, this.datatypes).then(
             (values: ARTLiteral[]) => {
                 this.literal = values[0];
                 this.literalNT = this.literal.toNT();
                 this.literalChanged.emit(this.literal);
             },
-            () => {}
+            () => { }
         );
     }
 

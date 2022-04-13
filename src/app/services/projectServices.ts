@@ -22,11 +22,11 @@ export class ProjectServices {
     /**
      * Gets the current available projects in ST
      * @param consumer
-	 * @param requestedAccessLevel
-	 * @param requestedLockLevel
-	 * @param userDependent if true, returns only the projects accessible by the logged user 
-	 * 		(the user has a role assigned in it)
-	 * @param onlyOpen if true, return only the open projects
+     * @param requestedAccessLevel
+     * @param requestedLockLevel
+     * @param userDependent if true, returns only the projects accessible by the logged user 
+     *      (the user has a role assigned in it)
+     * @param onlyOpen if true, return only the open projects
      * @return an array of Project
      */
     listProjects(consumer?: Project, userDependent?: boolean, onlyOpen?: boolean): Observable<Project[]> {
@@ -34,14 +34,14 @@ export class ProjectServices {
             consumer: consumer != null ? consumer.getName() : "SYSTEM",
             userDependent: userDependent,
             onlyOpen: onlyOpen
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "listProjects", params).pipe(
             map(stResp => {
                 let projCollJson: any[] = stResp;
                 let projectList: Project[] = [];
                 projCollJson.forEach(pJson => {
                     projectList.push(Project.deserialize(pJson));
-                })
+                });
                 //sort by name
                 projectList.sort((p1, p2) => p1.getName().toLocaleLowerCase().localeCompare(p2.getName().toLocaleLowerCase()));
                 return projectList;
@@ -49,7 +49,7 @@ export class ProjectServices {
         );
     }
 
-    retrieveProjects(bagOf?: string, orQueryList?: {[key: string]: any}[][], userDependent?: boolean, onlyOpen?: boolean): Observable<Multimap<Project>> {
+    retrieveProjects(bagOf?: string, orQueryList?: { [key: string]: any }[][], userDependent?: boolean, onlyOpen?: boolean): Observable<Multimap<Project>> {
         let params = {
             bagOf: bagOf,
             orQueryList: orQueryList ? JSON.stringify(orQueryList) : null,
@@ -78,14 +78,14 @@ export class ProjectServices {
             consumer: consumer != null ? consumer.getName() : "SYSTEM",
             requestedAccessLevel: requestedAccessLevel,
             requestedLockLevel: requestedLockLevel
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getProjectInfo", params).pipe(
             map(stResp => {
                 return Project.deserialize(stResp);
             })
         );
     }
-        
+
 
     /**
      * Accesses to the given project
@@ -106,7 +106,7 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "accessProject", params, options);
     }
 
-    accessAllProjects(consumer?: Project, requestedAccessLevel?: AccessLevel, requestedLockLevel?: LockLevel, onlyProjectsAtStartup?: boolean): Observable<{[key: string]: ExceptionDAO }> {
+    accessAllProjects(consumer?: Project, requestedAccessLevel?: AccessLevel, requestedLockLevel?: LockLevel, onlyProjectsAtStartup?: boolean): Observable<{ [key: string]: ExceptionDAO }> {
         let params = {
             consumer: consumer != null ? consumer.getName() : null,
             requestedAccessLevel: requestedAccessLevel,
@@ -174,7 +174,7 @@ export class ProjectServices {
         shaclEnabled?: boolean, shaclSettings?: Map<string, any>, trivialInferenceEnabled?: boolean,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance,
         openAtStartup?: boolean, globallyAccessible?: boolean, label?: ARTLiteral) {
-        
+
         let params: any = {
             consumer: "SYSTEM",
             projectName: projectName,
@@ -192,7 +192,7 @@ export class ProjectServices {
             coreBackendType: coreBackendType,
             supportRepoSailConfigurerSpecification: (supportRepoSailConfigurerSpecification) ? JSON.stringify(supportRepoSailConfigurerSpecification) : null,
             supportBackendType: supportBackendType,
-            leftDataset: leftDataset, 
+            leftDataset: leftDataset,
             rightDataset: rightDataset,
             uriGeneratorSpecification: (uriGeneratorSpecification) ? JSON.stringify(uriGeneratorSpecification) : null,
             renderingEngineSpecification: (renderingEngineSpecification) ? JSON.stringify(renderingEngineSpecification) : null,
@@ -256,7 +256,7 @@ export class ProjectServices {
      * Returns a map of pairs name-value of the project's properties
      * @param project 
      */
-    getProjectPropertyMap(project: Project): Observable<{name: string, value: string}[]> {
+    getProjectPropertyMap(project: Project): Observable<{ name: string, value: string }[]> {
         let params = {
             projectName: project.getName()
         };
@@ -279,14 +279,14 @@ export class ProjectServices {
      * 
      */
     getAccessStatusMap(): Observable<AccessStatus[]> {
-        let params = { };
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params).pipe(
             map(stResp => {
                 let aclMap: AccessStatus[] = [];
                 let projectJsonColl: any[] = stResp;
                 projectJsonColl.forEach(projAclJson => {
                     aclMap.push(this.parseAccessStatus(projAclJson));
-                })
+                });
                 aclMap.sort((m1, m2) => m1.name.toLocaleLowerCase().localeCompare(m2.name.toLocaleLowerCase()));
                 return aclMap;
             })
@@ -320,10 +320,10 @@ export class ProjectServices {
                 acquiredACLLevel: null
             };
             if (consumersJsonColl[j].availableACLLevel != null) {
-                consumer.availableACLLevel = <AccessLevel> consumersJsonColl[j].availableACLLevel;
+                consumer.availableACLLevel = <AccessLevel>consumersJsonColl[j].availableACLLevel;
             }
             if (consumersJsonColl[j].acquiredACLLevel != null) {
-                consumer.acquiredACLLevel = <AccessLevel> consumersJsonColl[j].acquiredACLLevel;
+                consumer.acquiredACLLevel = <AccessLevel>consumersJsonColl[j].acquiredACLLevel;
             }
             consumers.push(consumer);
         }
@@ -332,10 +332,10 @@ export class ProjectServices {
         //lock node
         let lockNode = projAclJson.lock;
         let projectLock: LockStatus = {
-            availableLockLevel: <LockLevel> lockNode.availableLockLevel,
+            availableLockLevel: <LockLevel>lockNode.availableLockLevel,
             lockingConsumer: null,
             acquiredLockLevel: null
-        }
+        };
         if (lockNode.lockingConsumer != null && lockNode.acquiredLockLevel != null) {
             projectLock.lockingConsumer = lockNode.lockingConsumer;
             projectLock.acquiredLockLevel = lockNode.acquiredLockLevel;
@@ -381,7 +381,7 @@ export class ProjectServices {
     updateUniversalAccessLevel(accessLevel?: AccessLevel) {
         let params: any = {
             accessLevel: accessLevel
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateUniversalAccessLevel", params);
     }
 
@@ -434,23 +434,23 @@ export class ProjectServices {
     public handleMissingChangetrackierSailError(error: Error, basicModals: BasicModalServices) {
         if (error.name.endsWith("ProjectAccessException") || error.name.endsWith("RepositoryException")) {
             let msg = error.message;
-            let errMsgPattern = "\.*Unsupported Sail type: (\.+)";
+            let errMsgPattern = ".*Unsupported Sail type: (.+)";
             let msgMatch = msg.match(errMsgPattern);
             if (msgMatch != null) {
-                let sailMap: {[key:string]: { feature: string, jar: string }} = {
-                    ["http://semanticturkey.uniroma2.it/sail/trivialinferencer"]: { feature: "Trivial Inference", jar: "st-trivial-inference-sail.jar" },
-                    ["http://semanticturkey.uniroma2.it/sail/changetracker"]: { feature: "History and Validation", jar: "st-changetracking-sail.jar" },
-                }
+                let sailMap: { [key: string]: { feature: string, jar: string } } = {
+                    "http://semanticturkey.uniroma2.it/sail/trivialinferencer": { feature: "Trivial Inference", jar: "st-trivial-inference-sail.jar" },
+                    "http://semanticturkey.uniroma2.it/sail/changetracker": { feature: "History and Validation", jar: "st-changetracking-sail.jar" },
+                };
                 let missingSailUrl = msgMatch[1];
                 let missingSail = sailMap[missingSailUrl];
-                let message = "The sail required for the " + missingSail.feature + " feature " + 
-                    "is reported to be missing from the triple store; please contact the administrator in order to " + 
+                let message = "The sail required for the " + missingSail.feature + " feature " +
+                    "is reported to be missing from the triple store; please contact the administrator in order to " +
                     "have the " + missingSail.jar + " bundle deployed within the triple store connected for this project";
-                basicModals.alert({key:"STATUS.ERROR"}, message, ModalType.error, error.name + ": " + error.message);
+                basicModals.alert({ key: "STATUS.ERROR" }, message, ModalType.error, error.name + ": " + error.message);
             } else {
                 let errorMsg = error.message != null ? error.message : "Unknown response from the server";
-                let errorDetails = error.stack ? error.stack : error.name;
-                basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error, errorDetails);
+                let errorDetails = error.stack;
+                basicModals.alert({ key: "STATUS.ERROR" }, errorMsg, ModalType.error, errorDetails);
             }
         }
     }
@@ -491,7 +491,7 @@ export class ProjectServices {
         }
         return this.httpMgr.doPost(this.serviceName, "modifyRepositoryAccessCredentials", params);
     }
-    
+
     /**
      * 
      * @param project 
@@ -501,7 +501,7 @@ export class ProjectServices {
      * @param newUsername 
      * @param newPassword 
      */
-    batchModifyRepostoryAccessCredentials(project: Project, serverURL: string, matchUsername?: boolean, 
+    batchModifyRepostoryAccessCredentials(project: Project, serverURL: string, matchUsername?: boolean,
         currentUsername?: string, newUsername?: string, newPassword?: string) {
         let params: any = {
             projectName: project.getName(),
@@ -612,7 +612,7 @@ export class ProjectServices {
         let params = {
             projectName: project.getName(),
             facets: JSON.stringify(facets.getPropertiesAsMap())
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "setProjectFacets", params);
     }
 
@@ -621,7 +621,7 @@ export class ProjectServices {
      * 
      */
     getCustomProjectFacetsSchema(): Observable<Settings> {
-        let params = {}
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getCustomProjectFacetsSchema", params).pipe(
             map(stResp => {
                 return Settings.parse(stResp);
@@ -641,7 +641,7 @@ export class ProjectServices {
     }
 
     getProjectFacetsForm(): Observable<Settings> {
-        let params = {}
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getProjectFacetsForm", params).pipe(
             map(stResp => {
                 return Settings.parse(stResp);
@@ -696,7 +696,7 @@ export class ProjectServices {
                 let config = {
                     factoryID: stResp[0],
                     settings: Settings.parse(stResp[1])
-                }
+                };
                 return config;
             })
         );
@@ -719,7 +719,7 @@ export class ProjectServices {
                 let config = {
                     factoryID: stResp[0],
                     settings: Settings.parse(stResp[1])
-                }
+                };
                 return config;
             })
         );
@@ -748,7 +748,7 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "setOpenAtStartup", params);
     }
 
-    setProjectLabels(project: Project, labels: {[key: string]: string}) {
+    setProjectLabels(project: Project, labels: { [key: string]: string }) {
         let params = {
             projectName: project.getName(),
             labels: JSON.stringify(labels)

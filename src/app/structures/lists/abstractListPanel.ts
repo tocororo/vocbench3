@@ -39,7 +39,7 @@ export abstract class AbstractListPanel extends AbstractPanel {
             done => {
                 if (act.conditions.post.deselectOnComplete) {
                     this.selectedNode = null;
-                };
+                }
             },
             cancel => {}
         );

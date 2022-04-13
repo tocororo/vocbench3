@@ -54,8 +54,8 @@ export class CustomFormComponent implements ControlValueAccessor {
                     f.getAnnotations().sort((a1: FormFieldAnnotation, a2: FormFieldAnnotation) => {
                         if (a1.name == AnnotationName.Foreign || a1.name == AnnotationName.Collection) return 1;
                         else return -1;
-                    })
-                })
+                    });
+                });
 
                 /*
                 Handle a special case: annotation DataOneOf can be use to limit the values of a node to a given set.
@@ -88,8 +88,8 @@ export class CustomFormComponent implements ControlValueAccessor {
                             //1 - resource uri(...) . => No feature path
                             if (field.getFeatureName() == null) {
                                 //Probably it used a converter which doesn't require an input feature (e.g. randIdGen) => don't show any field
-                                self.splice(index, 1);    
-                                if (!this.customRange) { 
+                                self.splice(index, 1);
+                                if (!this.customRange) {
                                     //In CC the "standard" URI field must be omitted
                                     this.hideStdResField.emit();
                                 }
@@ -106,26 +106,26 @@ export class CustomFormComponent implements ControlValueAccessor {
                             }
                             //3 - resource uri(...) userPrompt/foo . => UserPrompt feature path
                             if (field.getFeatureName() == FeatureNameEnum.userPrompt) {
-                                if (!this.customRange) { 
+                                if (!this.customRange) {
                                     //In CC the user promt replaces the "standard" URI field
                                     this.hideStdResField.emit();
                                 }
                             }
-                            
+
                         } else { //resource used in combo with literal => invalid, remove the field from the form
                             self.splice(index, 1);
                         }
                     }
-                })
+                });
 
-                this.formFields = form
+                this.formFields = form;
                 /*initialize formEntries in order to adapt it to the view set checked at true to
                 all formEntries. (It wouldn't be necessary for all the entries but just for those optional*/
                 this.propagateChange(this.formFields);
             },
             (err: Error) => {
                 if (err.name.endsWith("PRParserException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR", params:{cfId: this.cfId}},
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR", params: { cfId: this.cfId } },
                         ModalType.warning, err.message);
                 }
             }
@@ -138,7 +138,7 @@ export class CustomFormComponent implements ControlValueAccessor {
             if (f != formField && f.getUserPrompt() == formField.getUserPrompt()) {
                 f.value = formField.value;
             }
-        })
+        });
         //then propagate changes
         this.propagateChange(this.formFields);
     }

@@ -28,8 +28,8 @@ export class ResourceListSelectionComponent {
             this.nodeList.push({
                 resource: r,
                 selected: this.selectedResources && this.selectedResources.length > 0 && this.selectedResources.some(sr => sr.equals(r))
-            })
-        })
+            });
+        });
         if (!this.multiselection && this.selectedResources && this.selectedResources.length > 1) {
             //multiselection disabled, but selected resources more than 1 -> leave only the first selected
             let firstChecked: boolean = false;
@@ -59,7 +59,7 @@ export class ResourceListSelectionComponent {
                 if (r != node) {
                     r.selected = false;
                 }
-            })
+            });
         }
         this.emitSelection();
     }
@@ -69,9 +69,9 @@ export class ResourceListSelectionComponent {
         this.nodeList.forEach(r => {
             if (r.selected) {
                 selectedRes.push(r.resource);
-            };
+            }
         });
-        this.nodeSelected.emit(selectedRes)
+        this.nodeSelected.emit(selectedRes);
     }
 
 
@@ -84,7 +84,7 @@ export class ResourceListSelectionComponent {
         if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
             //bottom reached => increase max range if there are more roots to show
             if (this.resLimit < this.resources.length) {
-                this.resLimit = this.resLimit + this.increaseRate;
+                this.resLimit += this.increaseRate;
             }
         }
     }

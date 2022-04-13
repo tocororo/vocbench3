@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ResourcePickerConfig } from "src/app/widget/pickers/valuePicker/resourcePickerComponent";
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
+import { ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 
 @Component({
     selector: "resource-picker-modal",

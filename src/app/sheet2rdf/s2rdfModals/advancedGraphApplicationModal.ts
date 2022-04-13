@@ -43,7 +43,7 @@ export class AdvancedGraphApplicationModal {
 
     graphPattern: string;
     defaultPredicate: ARTURIResource;
-    private readonly PRED_PLACEHOLDER: string = "{{pred}}"
+    private readonly PRED_PLACEHOLDER: string = "{{pred}}";
 
     constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
@@ -55,7 +55,7 @@ export class AdvancedGraphApplicationModal {
 
         this.header.nodes.forEach(n => {
             this.alreadyDefinedNodes.push(n);
-        })
+        });
         this.s2rdfService.getPrefixMappings().subscribe(
             mapping => {
                 this.globalPrefixMappings = mapping;
@@ -100,7 +100,6 @@ export class AdvancedGraphApplicationModal {
             this.newDefinedNodes.splice(this.newDefinedNodes.indexOf(this.selectedNode), 1);
             this.selectedNode = null;
         } else { //node already defined in the header => check if it is used by some other graph application
-            let used: boolean = false;
             let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
             //TODO allow to forcing the deletion a referenced node or not allow at all? 
             if (referenced) { //cannot delete a node used by a graph application
@@ -210,7 +209,7 @@ export class AdvancedGraphApplicationModal {
              * do not add the mapping and replace the prefix in the pattern?
              */
             if (!this.globalPrefixMappings.some((gp: PrefixMapping) => gp.prefix == prefix && gp.namespace == mappings[prefix])) {
-                this.localPrefixMappings.push({ prefix: prefix, namespace: mappings[prefix], explicit: true })
+                this.localPrefixMappings.push({ prefix: prefix, namespace: mappings[prefix], explicit: true });
             }
         }
     }
@@ -246,8 +245,8 @@ export class AdvancedGraphApplicationModal {
             if (h.id == this.header.id) return;
             h.nodes.forEach(n => {
                 pearl += n.nodeId + " uri " + this.header.pearlFeature + " .\n"; //converter and FS are just mockup
-            })
-        })
+            });
+        });
         // - nodes of this graph application
         this.alreadyDefinedNodes.forEach(n => {
             pearl += n.nodeId + " " + n.converter.type + " " + this.header.pearlFeature + " .\n";
@@ -274,7 +273,7 @@ export class AdvancedGraphApplicationModal {
                 } else {
                     validation.usedNodes.forEach((nodeId, index, list) => {
                         list[index] = nodeId.substring(1); //removes the leading $
-                    })
+                    });
                     if (validation.usedNodes.includes("subject")) {
                         validation.usedNodes.splice(validation.usedNodes.indexOf("subject"), 1);
                     }
@@ -312,7 +311,7 @@ export class AdvancedGraphApplicationModal {
                             return;
                         }
                     }
-                    let prefixMappingToStore: { [key: string]: string } = {}
+                    let prefixMappingToStore: { [key: string]: string } = {};
 
                     validation.usedPrefixes.forEach(prefix => {
                         let namespace: string;
@@ -329,7 +328,7 @@ export class AdvancedGraphApplicationModal {
                             });
                         }
                         prefixMappingToStore[prefix] = namespace;
-                    })
+                    });
                     let config: { [key: string]: any } = {
                         pattern: this.graphPattern,
                         nodes: nodesToStore,
@@ -366,7 +365,7 @@ export class AdvancedGraphApplicationModal {
                                 conf => {
                                     this.setLoadedGraphApplication(conf);
                                 }
-                            )
+                            );
                         }
                     },
                     () => { }
@@ -440,7 +439,7 @@ export class AdvancedGraphApplicationModal {
                                 }
                             }
                         }
-                    })
+                    });
                 });
 
                 /**
@@ -455,9 +454,9 @@ export class AdvancedGraphApplicationModal {
                         n.converter.contractUri == ConverterContractDescription.NAMESPACE + "default" && n.converter.type == RDFCapabilityType.literal &&
                         n.converter.language != null && this.header.nameStruct.lang != null
                     ) {
-                        n.converter.language = this.header.nameStruct.lang
+                        n.converter.language = this.header.nameStruct.lang;
                     }
-                })
+                });
 
                 this.newDefinedNodes = nodesToRestore;
             }

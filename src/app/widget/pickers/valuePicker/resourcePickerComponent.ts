@@ -16,9 +16,9 @@ import { ModalType } from '../../modal/Modals';
     styles: [":host { display: block; }"]
 })
 export class ResourcePickerComponent {
-    
+
     @Input() resource: ARTURIResource;
-    
+
     @Input() disabled: boolean = false;
     @Input() editable: boolean = false; //tells if the URI can be manually edited
     @Input() size: string;
@@ -90,10 +90,10 @@ export class ResourcePickerComponent {
         this.selectResourceType(VBContext.getWorkingProject()).subscribe(
             role => {
                 if (role != null) { //role is null if user canceled the selection
-                    this.openSelectionResource(role, VBContext.getWorkingProjectCtx());    
+                    this.openSelectionResource(role, VBContext.getWorkingProjectCtx());
                 }
             }
-        )
+        );
     }
 
     pickExternalResource() {
@@ -101,15 +101,15 @@ export class ResourcePickerComponent {
         this.projectService.listProjects(VBContext.getWorkingProject(), true, true).subscribe(
             projects => {
                 if (this.config.projects != null) { //if project limits are provided, filter the projects list
-                    projects = projects.filter(p => this.config.projects.indexOf(p.getName()) != -1)
+                    projects = projects.filter(p => this.config.projects.indexOf(p.getName()) != -1);
                 }
-                
+
                 if (projects.length == 0) {
-                    this.basicModals.alert({key: "ACTIONS.PICK_RESOURCE"}, {key:"MESSAGES.NO_ACCESS_GRANTED_TO_ANY_PROJECT"}, ModalType.warning);
+                    this.basicModals.alert({ key: "ACTIONS.PICK_RESOURCE" }, { key: "MESSAGES.NO_ACCESS_GRANTED_TO_ANY_PROJECT" }, ModalType.warning);
                     return;
                 }
                 let options = projects.map(p => p.getName());
-                this.basicModals.select({key: "ACTIONS.PICK_RESOURCE"}, {key:"ACTIONS.SELECT_PROJECT"}, options).then(
+                this.basicModals.select({ key: "ACTIONS.PICK_RESOURCE" }, { key: "ACTIONS.SELECT_PROJECT" }, options).then(
                     projName => {
                         //initialize the context of the selected external project
                         let externalProject: Project = projects.find(p => p.getName() == projName);
@@ -131,14 +131,14 @@ export class ResourcePickerComponent {
                             }
                         );
                     },
-                    () => {}
+                    () => { }
                 );
             }
-        )
+        );
     }
 
     private selectResourceType(project: Project): Observable<RDFResourceRolesEnum> {
-        let resourceTypes: {[key: string]: RDFResourceRolesEnum} = {
+        let resourceTypes: { [key: string]: RDFResourceRolesEnum } = {
             "Class": RDFResourceRolesEnum.cls,
             "Individual": RDFResourceRolesEnum.individual,
             "Concept": RDFResourceRolesEnum.concept,
@@ -164,7 +164,7 @@ export class ResourcePickerComponent {
             return of(resourceTypes[options[0]]);
         } else {
             return from(
-                this.basicModals.select({key: "ACTIONS.PICK_RESOURCE"}, {key:"ACTIONS.SELECT_RESOURCE_TYPE_TO_PICK"}, options).then(
+                this.basicModals.select({ key: "ACTIONS.PICK_RESOURCE" }, { key: "ACTIONS.SELECT_RESOURCE_TYPE_TO_PICK" }, options).then(
                     (role: string) => {
                         return resourceTypes[role];
                     },
@@ -172,20 +172,20 @@ export class ResourcePickerComponent {
                         return null;
                     }
                 )
-            ); 
+            );
         }
     }
 
     private openSelectionResource(role: RDFResourceRolesEnum, projectCtx: ProjectContext) {
         if (role == RDFResourceRolesEnum.cls) {
-            this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_CLASS"}, null, projectCtx).then(
+            this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.SELECT_CLASS" }, null, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.individual) {
-            this.browsingModals.browseClassIndividualTree({key:"DATA.ACTIONS.SELECT_INSTANCE"}, this.config.classes, projectCtx).then(
+            this.browsingModals.browseClassIndividualTree({ key: "DATA.ACTIONS.SELECT_INSTANCE" }, this.config.classes, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
@@ -193,65 +193,65 @@ export class ResourcePickerComponent {
             );
         } else if (role == RDFResourceRolesEnum.concept) {
             let activeSchemes: ARTURIResource[] = projectCtx.getProjectPreferences().activeSchemes;
-            this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, activeSchemes, true, projectCtx).then(
+            this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_CONCEPT" }, activeSchemes, true, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.conceptScheme) {
-            this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.SELECT_SCHEME"}, projectCtx).then(
+            this.browsingModals.browseSchemeList({ key: "DATA.ACTIONS.SELECT_SCHEME" }, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.skosCollection) {
-            this.browsingModals.browseCollectionTree({key:"DATA.ACTIONS.SELECT_COLLECTION"}, projectCtx).then(
+            this.browsingModals.browseCollectionTree({ key: "DATA.ACTIONS.SELECT_COLLECTION" }, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
-        } else if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty || 
+        } else if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty ||
             role == RDFResourceRolesEnum.datatypeProperty || role == RDFResourceRolesEnum.objectProperty || role == RDFResourceRolesEnum.ontologyProperty) {
             let propType: RDFResourceRolesEnum = (role != RDFResourceRolesEnum.property) ? role : null; //specify a property type only if it's not the generic "property"
-            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, null, null, propType, projectCtx).then(
+            this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, null, null, propType, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.limeLexicon) {
-            this.browsingModals.browseLexiconList({key:"DATA.ACTIONS.SELECT_LEXICON"}, projectCtx).then(
+            this.browsingModals.browseLexiconList({ key: "DATA.ACTIONS.SELECT_LEXICON" }, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}, null, true, false, false, false, projectCtx).then(
+            this.browsingModals.browseLexicalEntryList({ key: "DATA.ACTIONS.SELECT_LEXICAL_ENTRY" }, null, true, false, false, false, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.ontolexLexicalSense) {
-            this.browsingModals.browseLexicalSense({key:"DATA.ACTIONS.SELECT_LEXICAL_SENSE"}, projectCtx).then(
+            this.browsingModals.browseLexicalSense({ key: "DATA.ACTIONS.SELECT_LEXICAL_SENSE" }, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.vartransTranslationSet) {
-            this.browsingModals.browseTranslationSet({key:"DATA.ACTIONS.SELECT_TRANSLATION_SET"}, false, false, false, projectCtx).then(
+            this.browsingModals.browseTranslationSet({ key: "DATA.ACTIONS.SELECT_TRANSLATION_SET" }, false, false, false, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
                 () => { }
             );
         }
-        
+
         //Other type of resource will be added when necessary
     }
 
@@ -275,10 +275,10 @@ export class ResourcePickerComponent {
             } else if (modelType == RDFS.uri || modelType == OWL.uri) {
                 return role == RDFResourceRolesEnum.cls || role == RDFResourceRolesEnum.individual || role == RDFResourceRolesEnum.property;
             } else if (modelType == SKOS.uri) {
-                return role == RDFResourceRolesEnum.cls || role == RDFResourceRolesEnum.individual || role == RDFResourceRolesEnum.property || 
+                return role == RDFResourceRolesEnum.cls || role == RDFResourceRolesEnum.individual || role == RDFResourceRolesEnum.property ||
                     role == RDFResourceRolesEnum.concept || role == RDFResourceRolesEnum.conceptScheme || role == RDFResourceRolesEnum.skosCollection;
             }
-            return true; 
+            return true;
         }
     }
 

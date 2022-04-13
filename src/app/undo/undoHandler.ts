@@ -30,27 +30,27 @@ export class UndoHandler {
 
         //perform UNDO only if active element is not a textarea or input (with type text)
         let activeEl: Element = document.activeElement;
-        let tagName: string = activeEl.tagName.toLowerCase()
+        let tagName: string = activeEl.tagName.toLowerCase();
         if (tagName != "textarea" && (tagName != "input" || activeEl.getAttribute("type") != "text")) {
             this.undoService.undo().subscribe(
                 (commit: CommitInfo) => {
                     this.eventHandler.operationUndoneEvent.emit(commit);
                     let operation: string = commit.operation.getShow();
-                    this.toastService.show({ key: "UNDO.OPERATION_UNDONE" }, { key: "UNDO.OPERATION_UNDONE_INFO", params: { operation: operation} });
+                    this.toastService.show({ key: "UNDO.OPERATION_UNDONE" }, { key: "UNDO.OPERATION_UNDONE_INFO", params: { operation: operation } });
                     this.restoreOldStatus(commit);
                 },
                 (error: Error) => {
-                    if (error.name.endsWith("RepositoryException") && 
+                    if (error.name.endsWith("RepositoryException") &&
                         error.message.includes("Empty undo stack") ||
                         error.message.includes("The performer of the last operation does not match the agent for whom undo has been requested")
                     ) { //empty undo stack or different user
                         let sailExc: string = "SailException: "; //after this exception starts the message
                         let errorMsg: string = error.message.substring(error.message.indexOf(sailExc) + sailExc.length);
-                        this.toastService.show({ key: "STATUS.WARNING"}, errorMsg, new ToastOpt({ toastClass: "bg-warning", textClass: "text-body" }));
+                        this.toastService.show({ key: "STATUS.WARNING" }, errorMsg, new ToastOpt({ toastClass: "bg-warning", textClass: "text-body" }));
                     } else {
                         let errorMsg = error.message != null ? error.message : "Unknown response from the server";
-                        let errorDetails = error.stack ? error.stack : error.name;
-                        this.basicModals.alert({key:"STATUS.ERROR"}, errorMsg, ModalType.error, errorDetails);
+                        let errorDetails = error.stack;
+                        this.basicModals.alert({ key: "STATUS.ERROR" }, errorMsg, ModalType.error, errorDetails);
                     }
                 }
             );
@@ -65,7 +65,7 @@ export class UndoHandler {
                     //validation doesn't affect this event, the created resource will be removed
                     this.eventHandler.resourceCreatedUndoneEvent.emit(r);
                 }
-            })
+            });
         }
         if (commit.deleted != null) {
             if (VBContext.getWorkingProjectCtx().getProject().isValidationEnabled()) {
@@ -74,7 +74,7 @@ export class UndoHandler {
                     this.resourceService.getResourceDescription(r).subscribe(
                         res => this.eventHandler.resourceUpdatedEvent.emit(res)
                     );
-                })
+                });
             } else { //in case of validation disabled emit a dedicated event for each structure
                 commit.deleted.forEach(r => {
                     if (operationId.endsWith("Classes/deleteClass")) {
@@ -85,7 +85,7 @@ export class UndoHandler {
                                         res => this.eventHandler.classDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, parents: superClasses })
                                     );
                                 }
-                            )
+                            );
                         }
                     } else if (operationId.endsWith("Classes/deleteInstance")) {
                         this.individualService.getNamedTypes(r).subscribe(
@@ -94,7 +94,7 @@ export class UndoHandler {
                                     res => this.eventHandler.instanceDeletedUndoneEvent.emit({ resource: res, types: types })
                                 );
                             }
-                        )
+                        );
                     } else if (operationId.endsWith("Datatypes/deleteDatatype")) {
                         this.resourceService.getResourceDescription(r).subscribe(
                             res => this.eventHandler.datatypeDeletedUndoneEvent.emit(<ARTURIResource>res)
@@ -106,7 +106,7 @@ export class UndoHandler {
                                     res => this.eventHandler.lexEntryDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, lexicons: lexicons })
                                 );
                             }
-                        )
+                        );
                     } else if (operationId.endsWith("OntoLexLemon/deleteLexicon")) {
                         this.resourceService.getResourceDescription(r).subscribe(
                             res => this.eventHandler.lexiconDeletedUndoneEvent.emit(<ARTURIResource>res)
@@ -122,7 +122,7 @@ export class UndoHandler {
                                     res => this.eventHandler.propertyDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, parents: superProps })
                                 );
                             }
-                        )
+                        );
                     } else if (operationId.endsWith("SKOS/deleteCollection")) {
                         this.skosService.getSuperCollections(<ARTURIResource>r).subscribe(
                             superColls => {
@@ -130,9 +130,9 @@ export class UndoHandler {
                                     res => this.eventHandler.collectionDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, parents: superColls })
                                 );
                             }
-                        )
+                        );
                     } else if (operationId.endsWith("SKOS/deleteConcept")) {
-                       this.skosService.getSchemesOfConcept(<ARTURIResource>r).subscribe(
+                        this.skosService.getSchemesOfConcept(<ARTURIResource>r).subscribe(
                             (schemes: ARTURIResource[]) => {
                                 let concTreePref = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
                                 let broaderProps: ARTURIResource[] = concTreePref.broaderProps.map((prop: string) => new ARTURIResource(prop));
@@ -140,19 +140,19 @@ export class UndoHandler {
                                 this.skosService.getBroaderConcepts(<ARTURIResource>r, schemes, concTreePref.multischemeMode, broaderProps, narrowerProps, concTreePref.includeSubProps).subscribe(
                                     (broaders: ARTURIResource[]) => {
                                         this.resourceService.getResourceDescription(r).subscribe(
-                                            res => this.eventHandler.conceptDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, schemes: schemes, parents: broaders})
+                                            res => this.eventHandler.conceptDeletedUndoneEvent.emit({ resource: <ARTURIResource>res, schemes: schemes, parents: broaders })
                                         );
-                                        
+
                                     }
-                                )
+                                );
                             }
-                       );
+                        );
                     } else if (operationId.endsWith("SKOS/deleteConceptScheme")) {
                         this.resourceService.getResourceDescription(r).subscribe(
                             res => this.eventHandler.schemeDeletedUndoneEvent.emit(<ARTURIResource>res)
                         );
                     }
-                })
+                });
             }
         }
         if (commit.modified != null) {
@@ -161,7 +161,7 @@ export class UndoHandler {
                 this.resourceService.getResourceDescription(r).subscribe(
                     res => this.eventHandler.resourceUpdatedEvent.emit(res)
                 );
-            })
+            });
         }
 
     }

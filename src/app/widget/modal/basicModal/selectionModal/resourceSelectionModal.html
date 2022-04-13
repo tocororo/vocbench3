@@ -3,7 +3,7 @@
         <h3 class="modal-title text-info">{{title}}</h3>
     </div>
     <div class="modal-body vbox">
-        <div class="alert alert-info" *ngIf="message">
+        <div *ngIf="message" class="alert alert-info">
             {{message}}
         </div>
         <div class="card card-default vbox" style="margin-top: 5px;">

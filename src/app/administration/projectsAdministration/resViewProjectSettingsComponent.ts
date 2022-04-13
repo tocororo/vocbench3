@@ -25,7 +25,7 @@ export class ResViewProjectSettingsComponent {
     isActiveProject: boolean; //useful to decide if allow properties addition through properties tree or manually
 
     //templates
-    templates: {[key: string]: { enabled: ResViewPartition[], disabled: ResViewPartition[] }} = {}; //for each role list of enabled and disabled partitions
+    templates: { [key: string]: { enabled: ResViewPartition[], disabled: ResViewPartition[] } } = {}; //for each role list of enabled and disabled partitions
 
     roles: RDFResourceRolesEnum[];
     selectedRole: RDFResourceRolesEnum;
@@ -36,7 +36,7 @@ export class ResViewProjectSettingsComponent {
     private rvSettingTimer: number; //in order to do not fire too much close requests to update rv settings
 
     //custom sections
-    customSections: {[key: string]: ARTURIResource[]}; //ResViewPartition -> properties
+    customSections: { [key: string]: ARTURIResource[] }; //ResViewPartition -> properties
     customSectionsIDs: string[];
 
     selectedCustomSection: string;
@@ -134,17 +134,17 @@ export class ResViewProjectSettingsComponent {
     movePartitionUp(role: RDFResourceRolesEnum) {
         let idx = this.templates[role].enabled.indexOf(this.selectedEnabledPartition);
         if (idx > 0) {
-            let oldP = this.templates[role].enabled[idx-1];
-            this.templates[role].enabled[idx-1] = this.selectedEnabledPartition;
+            let oldP = this.templates[role].enabled[idx - 1];
+            this.templates[role].enabled[idx - 1] = this.selectedEnabledPartition;
             this.templates[role].enabled[idx] = oldP;
         }
         this.updateResViewSettingsWithTimeout();
     }
     movePartitionDown(role: RDFResourceRolesEnum) {
         let idx = this.templates[role].enabled.indexOf(this.selectedEnabledPartition);
-        if (idx < this.templates[role].enabled.length-1) {
-            let oldP = this.templates[role].enabled[idx+1];
-            this.templates[role].enabled[idx+1] = this.selectedEnabledPartition;
+        if (idx < this.templates[role].enabled.length - 1) {
+            let oldP = this.templates[role].enabled[idx + 1];
+            this.templates[role].enabled[idx + 1] = this.selectedEnabledPartition;
             this.templates[role].enabled[idx] = oldP;
         }
         this.updateResViewSettingsWithTimeout();
@@ -160,14 +160,14 @@ export class ResViewProjectSettingsComponent {
     }
 
     renameCustomSection() {
-        this.basicModals.prompt({key:"ADMINISTRATION.PROJECTS.RES_VIEW.RENAME_CUSTOM_SECTION"}, null, null, this.selectedCustomSection).then(
+        this.basicModals.prompt({ key: "ADMINISTRATION.PROJECTS.RES_VIEW.RENAME_CUSTOM_SECTION" }, null, null, this.selectedCustomSection).then(
             sectionName => {
-                let newSectionName: ResViewPartition = <ResViewPartition> sectionName;
+                let newSectionName: ResViewPartition = <ResViewPartition>sectionName;
                 if (newSectionName == this.selectedCustomSection) { //not changed
                     return;
                 }
                 if (Object.keys(this.templates).includes(newSectionName)) { //changed but section with the same name already exists
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.ALREADY_EXISTING_SECTION"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.ALREADY_EXISTING_SECTION" }, ModalType.warning);
                     return;
                 }
                 //move the managed properties to the new section, then remove the old one
@@ -175,7 +175,7 @@ export class ResViewProjectSettingsComponent {
                 this.customSections[newSectionName] = props;
                 delete this.customSections[this.selectedCustomSection];
                 this.customSectionsIDs = Object.keys(this.customSections);
-                
+
                 //rename the custom section also in the template
                 for (let role in this.templates) {
                     //check if it is among the enabled
@@ -183,13 +183,13 @@ export class ResViewProjectSettingsComponent {
                         if (section == this.selectedCustomSection) {
                             list[index] = newSectionName;
                         }
-                    })
+                    });
                     //check if it is among the disabled
                     this.templates[role].disabled.forEach((section, index, list) => {
                         if (section == this.selectedCustomSection) {
                             list[index] = newSectionName;
                         }
-                    })
+                    });
                 }
 
                 //update the selections
@@ -198,15 +198,15 @@ export class ResViewProjectSettingsComponent {
                 this.selectedCustomSection = newSectionName;
                 this.updateResViewSettings();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     addCustomSection() {
-        this.basicModals.prompt({key:"ADMINISTRATION.PROJECTS.RES_VIEW.CREATE_CUSTOM_SECTION"}).then(
+        this.basicModals.prompt({ key: "ADMINISTRATION.PROJECTS.RES_VIEW.CREATE_CUSTOM_SECTION" }).then(
             customSectionName => {
                 if (Object.keys(this.templates).includes(customSectionName)) { //section with the same name already exists
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.ALREADY_EXISTING_SECTION"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.ALREADY_EXISTING_SECTION" }, ModalType.warning);
                     return;
                 }
                 this.customSections[customSectionName] = [];
@@ -218,8 +218,8 @@ export class ResViewProjectSettingsComponent {
                 }
                 this.updateResViewSettings();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     deleteCustomSection() {
@@ -252,26 +252,26 @@ export class ResViewProjectSettingsComponent {
 
     addManagedProperty() {
         if (this.isActiveProject) {
-            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}).then(
+            this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }).then(
                 (prop: ARTURIResource) => {
                     if (!this.customSections[this.selectedCustomSection].some(p => p.equals(prop))) { //if not already in
                         this.customSections[this.selectedCustomSection].push(prop);
                         this.updateResViewSettings();
                     }
                 },
-                () => {}
-            )
+                () => { }
+            );
         } else {
-            this.basicModals.prompt({key:"DATA.ACTIONS.ADD_PROPERTY"}, {value: "IRI"}).then(
+            this.basicModals.prompt({ key: "DATA.ACTIONS.ADD_PROPERTY" }, { value: "IRI" }).then(
                 valueIRI => {
                     let prop: ARTURIResource;
                     if (ResourceUtils.testIRI(valueIRI)) { //valid iri (e.g. "http://test")
                         prop = new ARTURIResource(valueIRI);
                     } else { //not an IRI, try to parse as NTriples
                         try {
-                            prop = NTriplesUtil.parseURI(valueIRI)
+                            prop = NTriplesUtil.parseURI(valueIRI);
                         } catch (error) { //neither a valid ntriple iri (e.g. "<http://test>")
-                            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: valueIRI}}, ModalType.warning);
+                            this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: valueIRI } }, ModalType.warning);
                             return;
                         }
                     }
@@ -280,8 +280,8 @@ export class ResViewProjectSettingsComponent {
                         this.updateResViewSettings();
                     }
                 },
-                () => {}
-            )
+                () => { }
+            );
         }
     }
 
@@ -299,9 +299,9 @@ export class ResViewProjectSettingsComponent {
      */
     updateResViewSettingsWithTimeout() {
         clearTimeout(this.rvSettingTimer);
-        this.rvSettingTimer = window.setTimeout(() => { this.updateResViewSettings() }, 1000);
+        this.rvSettingTimer = window.setTimeout(() => { this.updateResViewSettings(); }, 1000);
     }
-    
+
 
     private updateResViewSettings() {
         let rvSettings: ResourceViewProjectSettings = this.getResViewProjectSettings();
@@ -312,25 +312,25 @@ export class ResViewProjectSettingsComponent {
                     VBContext.getWorkingProjectCtx().getProjectSettings().resourceView = rvSettings;
                 }
             }
-        )
+        );
     }
 
     setAsSystemDefault() {
-        this.basicModals.confirm({key:"ACTIONS.SET_AS_SYSTEM_DEFAULT"}, {key:"MESSAGES.CONFIG_SET_SYSTEM_DEFAULT_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "ACTIONS.SET_AS_SYSTEM_DEFAULT" }, { key: "MESSAGES.CONFIG_SET_SYSTEM_DEFAULT_CONFIRM" }, ModalType.warning).then(
             () => {
                 let rvSettings: ResourceViewProjectSettings = this.getResViewProjectSettings();
                 this.settingsService.storeSettingDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, Scope.SYSTEM, SettingsEnum.resourceView, rvSettings).subscribe(
                     () => {
-                        this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIG_SYSTEM_DEFAULT_SET"});
+                        this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.CONFIG_SYSTEM_DEFAULT_SET" });
                     }
-                )
+                );
             },
-            () => {}
+            () => { }
         );
     }
 
     restoreSystemDefault() {
-        this.basicModals.confirm({key:"ACTIONS.RESTORE_SYSTEM_DEFAULT"}, {key:"MESSAGES.CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "ACTIONS.RESTORE_SYSTEM_DEFAULT" }, { key: "MESSAGES.CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM" }, ModalType.warning).then(
             () => {
                 let rvSettings: ResourceViewProjectSettings = null;
                 this.settingsService.storeSettingForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, SettingsEnum.resourceView, rvSettings, this.project).subscribe(
@@ -342,25 +342,25 @@ export class ResViewProjectSettingsComponent {
                                 settings => {
                                     this.rvSettings = settings.getPropertyValue(SettingsEnum.resourceView);
                                     this.initResViewSettings();
-                                    this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIG_SYSTEM_DEFAULT_RESTORED"});
+                                    this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.CONFIG_SYSTEM_DEFAULT_RESTORED" });
                                 }
                             );
                         }
                     }
-                )
+                );
             },
-            () => {}
+            () => { }
         );
     }
 
     private getResViewProjectSettings(): ResourceViewProjectSettings {
-        let customSections: {[key: string]: CustomSection} = {}; //map name -> CustomSection
+        let customSections: { [key: string]: CustomSection } = {}; //map name -> CustomSection
         for (let csId in this.customSections) {
             customSections[csId] = {
                 matchedProperties: this.customSections[csId].map(p => p.toNT())
-            }
+            };
         }
-        let templates: {[key: string]: ResViewPartition[]} = {}; //map role -> sections
+        let templates: { [key: string]: ResViewPartition[] } = {}; //map role -> sections
         for (let role in this.templates) {
             templates[role] = this.templates[role].enabled;
         }
