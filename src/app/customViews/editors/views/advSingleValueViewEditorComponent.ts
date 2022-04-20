@@ -28,7 +28,7 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
     retrieveEditor: CvSparqlEditorStruct = { mode: QueryMode.query, query: "", valid: true };
 
     retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.value];
-    retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:"
+    retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:";
     retrieveVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.value, descrTranslationKey: "The value to be represented" },
         // { id: CustomViewVariables.show, descrTranslationKey: "(Optional) Specifies how the value has to be shown" },
@@ -87,7 +87,7 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
                 updateMode: this.singleValueData.updateMode
             },
             suggestedView: this.suggestedView,
-        }
+        };
     }
 
     protected restoreEditor(): void {
@@ -99,7 +99,7 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
             valueType: this.cvDef.update.valueType,
             classes: this.cvDef.update.classes,
             datatype: this.cvDef.update.datatype,
-        }
+        };
         this.refreshYasguiEditors();
     }
 

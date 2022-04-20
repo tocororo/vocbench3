@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CustomViewAssociation, CustomViewConfiguration, CustomViewConst, CustomViewDefinition, CustomViewDefinitionKeys, CustomViewReference, ViewsEnum } from "src/app/models/CustomViews";
+import { CustomViewAssociation, CustomViewConfiguration, CustomViewConst, CustomViewDefinitionKeys, CustomViewReference, ViewsEnum } from "src/app/models/CustomViews";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
@@ -32,13 +32,13 @@ export class CvAssociationEditorModal {
             refs => {
                 this.customViews = refs.map(ref => CustomViewReference.parseCustomViewReference(ref));
             }
-        )
+        );
     }
 
     onPropertySelected(property: ARTURIResource) {
         //check if an association for the given predicate already exists
         if (this.existingAssociations.some(a => a.property.equals(property))) {
-            this.basicModals.alert({ key: "STATUS.WARNING" }, "The selected property has already a Custom View associated.", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "CUSTOM_VIEWS.MESSAGES.ALREADY_ASSOCIATED_PROPERTY" }, ModalType.warning);
         } else {
             this.selectedProperty = property;
         }
@@ -49,9 +49,9 @@ export class CvAssociationEditorModal {
         this.customViewsService.getCustomView(ref.reference).subscribe(
             (cv: CustomViewConfiguration) => {
                 this.availableViews = CustomViewConst.modelToViewMap[CustomViewConst.classNameToModelMap[cv.type]];
-                this.defaultView = cv.getPropertyValue(CustomViewDefinitionKeys.suggestedView)
+                this.defaultView = cv.getPropertyValue(CustomViewDefinitionKeys.suggestedView);
             }
-        )
+        );
     }
 
     isDataValid(): boolean {

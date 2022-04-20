@@ -64,7 +64,7 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
             retrieve: this.retrieveQuerySkeleton,
             update: this.updateQuerySkeleton,
             suggestedView: this.suggestedView,
-        }
+        };
     }
 
     protected restoreEditor(): void {
@@ -108,26 +108,26 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
     protected isRetrieveOk(): boolean {
         //- syntactic check
         if (!this.retrieveEditor.valid) {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, "Retrieve query contains syntactic error(s)", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.RETRIEVE_QUERY_SYNTAX_ERROR" }, ModalType.warning);
             return false;
         }
         //- variables
         let retrieveQuery = this.retrieveEditor.query;
         for (let v of this.retrieveRequiredReturnVariables) {
             if (!CvQueryUtils.isVariableReturned(retrieveQuery, "?" + v)) {
-                this.basicModals.alert({ key: "STATUS.ERROR" }, "Required variable ?" + v + " missing in Retrieve query.", ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.MISSING_REQUIRED_VARIABLE", params: { var: v } }, ModalType.warning);
                 return false;
             }
         }
         //- object: select must returns the object of the $resource $trigprop ?obj triple
         if (CvQueryUtils.getReturnedObjectVariable(retrieveQuery) == null) {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, "Object variable of pair $resource $trigprop either not detected or not returned in Retrieve query", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.OBJ_VAR_NOT_DETECTED" }, ModalType.warning);
             return false;
         }
         //- placeholders
         for (let v of this.retrieveRequiredPlaceholders) {
             if (!CvQueryUtils.isPlaceholderInWhere(retrieveQuery, v)) {
-                this.basicModals.alert({ key: "STATUS.ERROR" }, "Required placeholder $" + v + " missing in Retrieve query.", ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.MISSING_REQUIRED_PLACEHOLDER", params: { ph: v } }, ModalType.warning);
                 return false;
             }    
         }
@@ -139,17 +139,17 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         if (updateQuery == null || updateQuery.trim() == "") return true; //if not provided, just return true/valid
         //- syntactic check
         if (!this.updateEditor.valid) {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, "Update query contains syntactic error(s)", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.UPDATE_QUERY_SINTAX_ERROR" }, ModalType.warning);
             return false;
         }
         if (this.updateEditor.mode == QueryMode.query) {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, "Update query cannot be a select/construct/ask query", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.UPDATE_QUERY_INVALID_TYPE" }, ModalType.warning);
             return false;
         }
         // - variables
         for (let v of this.updateRequiredVariables) {
             if (!CvQueryUtils.isVariableUsed(updateQuery, "?" + v)) {
-                this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable ?" + v + "in Update query.", ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.UPDATE_QUERY_MISSING_VAR", params: { var: v } }, ModalType.warning);
                 return false;
             }
         }
@@ -164,12 +164,12 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
         if (this.retrieveYasgui && this.retrieveEditor.query != null) {
             setTimeout(() => { //prevent ExpressionChangedAfterItHasBeenCheckedError
                 this.retrieveYasgui.forceContentUpdate();
-            })
+            });
         }
         if (this.updateYasgui && this.updateEditor.query != null) {
             setTimeout(() => { //prevent ExpressionChangedAfterItHasBeenCheckedError
                 this.updateYasgui.forceContentUpdate();
-            })
+            });
         }
     }
 

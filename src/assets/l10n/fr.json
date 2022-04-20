@@ -463,6 +463,7 @@
             "TRUE": "Vrai",
             "YES": "Oui"
         },
+        "CATEGORY": "Catégorie",
         "CONFIG": {
             "CONFIGURATION": "Configuration",
             "CONFIGURATION_REQUIRED": "Configuration nécessaire",
@@ -490,6 +491,7 @@
         "MANDATORY": "Obligatoire",
         "MANDATORY_FIELD": "Champs obligatoires",
         "MODE": "Modalité",
+        "MODEL": "Modèle",
         "NAME": "Nom",
         "NODE": "Nœud",
         "NODES": "Nœuds",
@@ -1705,7 +1707,6 @@
             "HISTORY": "Historique",
             "LEXICALIZATION": "Lexicalisation",
             "LEXICALIZATION_MODEL": "Modèle de lexicalisation",
-            "MODEL": "Modèle",
             "PROJECT": "Projet",
             "PROJECTS": "Projets",
             "REPOSITORY_ID": "ID de l'entrepôt",
@@ -1943,7 +1944,6 @@
             "DISABLED_UNDER_VALIDATION": "L'onglet Code a été désactivé car cette ressource - ou une partie de sa description - est en cours de validation"
         },
         "LEX_VIEW": {
-            "CATEGORY": "Catégorie",
             "PRONUNCIATION": "Prononciation",
             "REFERENCE": "Référence",
             "RELATED": "Corrélé",

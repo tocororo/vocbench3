@@ -27,7 +27,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap><label>{{'RESOURCE_VIEW.LEX_VIEW.CATEGORY'|translate}}:</label></td>
+                    <td nowrap><label>{{'COMMONS.CATEGORY'|translate}}:</label></td>
                     <td>
                         <select class="form-control" [(ngModel)]="selectedCategory" [title]="selectedCategory?.toNT()" [disabled]="translation">
                             <option *ngFor="let c of categories" [ngValue]="c" [title]="c.toNT()">{{c.getLocalName()}}</option>

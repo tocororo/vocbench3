@@ -463,6 +463,7 @@
             "TRUE": "Verdadero",
             "YES": "Si"
         },
+        "CATEGORY": "Categoría",
         "CONFIG": {
             "CONFIGURATION": "Configuración",
             "CONFIGURATION_REQUIRED": "Configuración requerida",
@@ -490,6 +491,7 @@
         "MANDATORY": "Obligatorio",
         "MANDATORY_FIELD": "Campo obligatorio",
         "MODE": "Modo",
+        "MODEL": "Modelo",
         "NAME": "Nombre",
         "NODE": "Nodo",
         "NODES": "Nodos",
@@ -1706,7 +1708,6 @@
             "HISTORY": "Historia",
             "LEXICALIZATION": "Lexicalización",
             "LEXICALIZATION_MODEL": "Modelo de lexicalización",
-            "MODEL": "Modelo",
             "PROJECT": "Proyecto",
             "PROJECTS": "Proyectos",
             "REPOSITORY_ID": "ID del repositorio",
@@ -1944,7 +1945,6 @@
             "DISABLED_UNDER_VALIDATION": "La pestaña Vista de código se ha deshabilitado porque este recurso, o parte de su descripción, está en proceso de validación"
         },
         "LEX_VIEW": {
-            "CATEGORY": "Categoría",
             "PRONUNCIATION": "Pronunciación",
             "REFERENCE": "Referencia",
             "RELATED": "Relacionado",

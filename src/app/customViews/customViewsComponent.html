@@ -1,12 +1,12 @@
 <div class="card card-default vbox">
     <div class="card-header">
-        <label style="flex: 1;">Custom Views:</label>
+        <label style="flex: 1;">{{'CUSTOM_VIEWS.CUSTOM_VIEWS'|translate}}:</label>
     </div>
     <div class="card-body vbox">
 
         <div class="card card-alt vbox">
             <div class="card-header">
-                <label style="flex: 1">Views:</label>
+                <label style="flex: 1">{{'CUSTOM_VIEWS.VIEWS'|translate}}:</label>
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-light" [title]="'ACTIONS.CREATE'|translate" (click)="createCustomView()" [disabled]="!createCustomViewAuthorized">
@@ -39,7 +39,7 @@
 
         <div class="card card-alt vbox mt-2">
             <div class="card-header">
-                <label style="flex: 1">Property associations:</label>
+                <label style="flex: 1">{{'CUSTOM_VIEWS.PROPERTY_ASSOCIATIONS'|translate}}:</label>
                 <div class="btn-group btn-group-xs">
                     <button class="btn btn-light" [title]="'ACTIONS.CREATE'|translate" (click)="createAssociation()" [disabled]="!createAssociationAuthorized">
                         <span class="fas fa-plus"></span>
@@ -53,8 +53,8 @@
                 <table class="table table-sm table-borderless table-hoverable">
                     <thead style="border-bottom: 1px solid #ddd;">
                         <tr>
-                            <th>Property</th>
-                            <th>Custom View</th>
+                            <th>{{'DATA.PROPERTY.PROPERTY'|translate}}</th>
+                            <th>{{'CUSTOM_VIEWS.CUSTOM_VIEW'|translate}}</th>
                         </tr>
                     </thead>
                     <tbody>

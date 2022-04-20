@@ -1,5 +1,5 @@
 <div class="form-group row">
-    <label class="col-form-label col-sm-2">Update mode:</label>
+    <label class="col-form-label col-sm-2">{{'CUSTOM_VIEWS.UPDATE_MODES.UPDATE_MODE'|translate}}:</label>
     <select class="form-control col-10" [(ngModel)]="updateMode" (ngModelChange)="emitChanges()">
         <option *ngFor="let m of updateModes" [value]="m.id">
             {{m.translationKey|translate}}

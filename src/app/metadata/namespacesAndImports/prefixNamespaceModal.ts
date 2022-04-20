@@ -17,12 +17,12 @@ export class PrefixNamespaceModal {
     @Input() namespaceReadonly: boolean;
     //tells if the services for changing/adding the mapping should be invoked by the dialog. If false, the dialog simply returns the mapping
     @Input() write: boolean;
-    
+
     prefix: string;
     namespace: string;
 
-    constructor(public activeModal: NgbActiveModal, private metadataService: MetadataServices, 
-        private basicModals: BasicModalServices, private httpClient: HttpClient) {}
+    constructor(public activeModal: NgbActiveModal, private metadataService: MetadataServices,
+        private basicModals: BasicModalServices, private httpClient: HttpClient) { }
 
     ngOnInit() {
         this.prefix = this.prefixInput;
@@ -67,7 +67,7 @@ export class PrefixNamespaceModal {
             }
         );
     }
-    
+
     /**
      * Useful to enable/disable ok button. Inputs are valid if they are not null and if one of them is changed
      */
@@ -89,18 +89,18 @@ export class PrefixNamespaceModal {
             }
             editFn.subscribe(
                 () => {
-                    this.activeModal.close({prefix: this.prefix, namespace: this.namespace});
+                    this.activeModal.close({ prefix: this.prefix, namespace: this.namespace });
                 },
                 (error: Error) => {
                     if (error.name.endsWith("InvalidPrefixException")) {
-                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_PREFIX"}, ModalType.warning);
+                        this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_PREFIX" }, ModalType.warning);
                     }
                 }
             );
         } else { //simply close the dialog and returns the mapping
-            this.activeModal.close({prefix: this.prefix, namespace: this.namespace});
+            this.activeModal.close({ prefix: this.prefix, namespace: this.namespace });
         }
-        
+
     }
 
     cancel() {

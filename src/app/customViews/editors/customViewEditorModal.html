@@ -9,11 +9,11 @@
             <input class="form-control col-10" [(ngModel)]="name" [disabled]="ref || readOnly">
         </div>
         <div class="form-group row">
-            <label class="col-form-label col-sm-2">Category</label>
+            <label class="col-form-label col-sm-2">{{'COMMONS.CATEGORY'|translate}}</label>
             <select class="form-control col-4" style="flex: 1" [(ngModel)]="selectedCategory" (ngModelChange)="onCategoryChanged()">
                 <option *ngFor="let c of categories" [value]="c.id">{{c.translationKey|translate}}</option>
             </select>
-            <label class="col-form-label col-sm-2">Model</label>
+            <label class="col-form-label col-sm-2">{{'COMMONS.MODEL'|translate}}</label>
             <select class="form-control col-4" [(ngModel)]="selectedModel" (ngModelChange)="onModelChanged()" [disabled]="!selectedCategory">
                 <option *ngFor="let m of models[selectedCategory]" [value]="m.id">{{m.translationKey|translate}}</option>
             </select>

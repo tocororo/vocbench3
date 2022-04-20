@@ -460,12 +460,14 @@
         "USER_CONFIG": "User configuration"
     },
     "COMMONS": {
+        "ANY": "Any",
         "BOOLEAN": {
             "FALSE": "False",
             "NO": "No",
             "TRUE": "True",
             "YES": "Yes"
         },
+        "CATEGORY": "Category",
         "CONFIG": {
             "CONFIGURATION": "Configuration",
             "CONFIGURATION_REQUIRED": "Configuration required",
@@ -495,6 +497,7 @@
         "MANDATORY": "Mandatory",
         "MANDATORY_FIELD": "Mandatory field",
         "MODE": "Mode",
+        "MODEL": "Model",
         "NAME": "Name",
         "NODE": "Node",
         "NODES": "Nodes",
@@ -697,6 +700,71 @@
             "SERVICE_NAME": "Service name",
             "SERVICE_NAME_INFO": "The name used to group all operations defined by this custom service"
         }
+    },
+    "CUSTOM_VIEWS": {
+        "ACTIONS": {
+            "ADD_ASSOCIATION": "Add property association",
+            "CREATE_CUSTOM_VIEW": "Create Custom View",
+            "DELETE_ASSOCIATION": "Delete property association",
+            "DELETE_CUSTOM_VIEW": "Delete Custom View",
+            "EDIT_CUSTOM_VIEW": "Edit Custom View"
+        },
+        "CUSTOM_VIEW": "Custom View",
+        "CUSTOM_VIEWS": "Custom Views",
+        "DEFAULT_VIEW": "Default view",
+        "MESSAGES": {
+            "ALREADY_ASSOCIATED_PROPERTY": "The selected property has already a Custom View associated.",
+            "DELETE_CUSTOM_VIEW_ASSOCIATION_CONFIRM": "You are deleting the selected association. Are you sure?",
+            "DELETE_CUSTOM_VIEW_CONFIRM": "You are deleting the selected Custom View. Are you sure?",
+            "FIELD_UPDATE_QUERY_INVALID_TYPE": "Update query of field {{field}} cannot be a select/construct/ask query",
+            "FIELD_UPDATE_QUERY_MISSING_VAR": "Unable to find variable ?{{var}} in Update query of field {{field}}",
+            "FIELD_UPDATE_QUERY_SINTAX_ERROR": "Update query of field {{field}} contains syntactic error(s)",
+            "MISSING_REQUIRED_PLACEHOLDER": "Required placeholder ${{ph}} missing in Retrieve query.",
+            "MISSING_REQUIRED_VARIABLE": "Required variable ?{{var}} missing in Retrieve query.",
+            "NO_FIELD_VARIABLE_IN_RETRIEVE": "No field variable (?<field>_value) returned by Retrieve query",
+            "OBJ_VAR_NOT_DETECTED": "Object variable of pair $resource $trigprop either not detected or not returned in Retrieve query",
+            "RETRIEVE_QUERY_SYNTAX_ERROR": "Retrieve query contains syntactic error(s)",
+            "UPDATE_QUERY_INVALID_TYPE": "Update query cannot be a select/construct/ask query",
+            "UPDATE_QUERY_MISSING_VAR": "Unable to find variable ?{{var}} in Update query",
+            "UPDATE_QUERY_SINTAX_ERROR": "Update query contains syntactic error(s)"
+        },
+        "MODELS": {
+            "GEOSPATIAL": {
+                "AREA": "Area",
+                "GEOSPATIAL": "Geospatial",
+                "MAP": "Map",
+                "POINT": "Point",
+                "ROUTE": "Route"
+            },
+            "SINGLE_VALUE": {
+                "ADV_SINGLE_VALUE": "Advanced single value view",
+                "PROPERTY_CHAIN": "Property chain",
+                "SINGLE_VALUE": "Single value"
+            },
+            "STATISTICAL_SERIES": {
+                "BAR_CHART": "Bar chart",
+                "LINE_CHART": "Line chart",
+                "PIE_CHART": "Pie chart",
+                "SERIES": "Series",
+                "SERIES_COLLECTION": "Series collection",
+                "STATISTICAL_SERIES": "Statistical Series"
+            },
+            "VECTOR": {
+                "DYNAMIC_CUSTOMIZABLE": "Dynamic Customizable Vector Model",
+                "PREFEFINED_STATIC": "Predefined Static Vector Model",
+                "TABLE": "Table",
+                "VECTOR": "Vector"
+            }
+        },
+        "PROPERTY_ASSOCIATIONS": "Property associations",
+        "SUGGESTED_VIEW": "Suggested view",
+        "UPDATE_MODES": {
+            "NO_UPDATE": "No update",
+            "UPDATE_MODE": "Update mode",
+            "VALUE_EDIT": "Value edit (NT format)",
+            "VALUE_PICKER": "Value picker"
+        },
+        "VIEWS": "Views"
     },
     "DATA": {
         "ACTIONS": {
@@ -1722,7 +1790,6 @@
             "HISTORY": "History",
             "LEXICALIZATION": "Lexicalization",
             "LEXICALIZATION_MODEL": "Lexicalization Model",
-            "MODEL": "Model",
             "PROJECT": "Project",
             "PROJECTS": "Projects",
             "REPOSITORY_ID": "Repository ID",
@@ -1735,6 +1802,7 @@
         "RESOURCE": {
             "DEPRECATED": "Deprecated",
             "LABEL": "Label",
+            "LITERAL": "Literal",
             "OBJECT": "Object",
             "PREDICATE": "Predicate",
             "RESOURCE": "Resource",
@@ -1960,7 +2028,6 @@
             "DISABLED_UNDER_VALIDATION": "The Code view tab has been disabled as this resource - or part of its description - is under validation"
         },
         "LEX_VIEW": {
-            "CATEGORY": "Category",
             "PRONUNCIATION": "Pronunciation",
             "REFERENCE": "Reference",
             "RELATED": "Related",
@@ -2080,6 +2147,7 @@
             "ADD_RESOURCE": "Add resource",
             "ADD_SET_OF_VALUES": "Add set of values",
             "ADVANCED_SEARCH": "Advanced Search",
+            "INCOMPLETE_FILTER_WARN": "Incomplete filter detected in {{filter}} (missing predicate or values). Please, fix it or remove it.",
             "INGOING_LINKS": "Ingoing links",
             "OUTGOING_LINKS": "Outgoing links",
             "SCHEMES": "Schemes",

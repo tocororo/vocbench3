@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
 import { SearchMode, SearchSettings, StatusFilter } from "../../models/Properties";
@@ -64,7 +65,7 @@ export class AdvancedSearchModal {
 
     constructor(public activeModal: NgbActiveModal, private searchService: SearchServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private browsingModals: BrowsingModalServices,
-        private creationModals: CreationModalServices) { }
+        private creationModals: CreationModalServices, private translateService: TranslateService) { }
 
     ngOnInit() {
         let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
@@ -291,56 +292,82 @@ export class AdvancedSearchModal {
             schemesParam = null;
         }
 
+
         //filter out links without property or with null values
-        let ingoingParam: { first: ARTURIResource, second: ARTNode[] }[] = [];
+        let incompleteIngoingLinksFilter: boolean;
+        let ingoingLinksParam: { first: ARTURIResource, second: ARTNode[] }[] = [];
         this.ingoingLinks.forEach((pair: { first: ARTURIResource, second: ARTNode[] }) => {
-            if (pair.first != null) {
-                let values: ARTNode[] = [];
-                pair.second.forEach((v: ARTNode) => {
-                    if (v != null) {
-                        values.push(v);
-                    }
-                });
-                if (values.length > 0) {
-                    ingoingParam.push({ first: pair.first, second: values });
+            let predicate = pair.first;
+            let values: ARTNode[] = [];
+            pair.second.forEach((v: ARTNode) => {
+                if (v != null) {
+                    values.push(v);
                 }
-            }
+            });
+            if (predicate != null && values.length != 0) { //filter ok
+                ingoingLinksParam.push({ first: pair.first, second: values });
+            } else if (predicate != null && values.length == 0 || predicate == null && values.length != 0) {
+                //incomplete filter: provided predicate but not values, or provided values but not predicate
+                incompleteIngoingLinksFilter = true;
+            } //other cases (empty filters) are ignored
         });
-        if (ingoingParam.length == 0) {
-            ingoingParam = null;
+        if (incompleteIngoingLinksFilter) {
+            this.basicModals.alert({ key: "COMMONS.STATUS.WARNING" }, { key: "SEARCH.ADV_SEARCH.INCOMPLETE_FILTER_WARN", params: { filter: this.translateService.instant("SEARCH.ADV_SEARCH.INGOING_LINKS") }}, ModalType.warning);
+            return;
+        }
+        if (ingoingLinksParam.length == 0) {
+            ingoingLinksParam = null;
         }
 
+
+        let incompleteOutgoingLinksFilter: boolean;
         let outgoingLinksParam: { first: ARTURIResource, second: ARTNode[] }[] = [];
         this.outgoingLinksValue.forEach((pair: { first: ARTURIResource, second: ARTNode[] }) => {
-            if (pair.first != null) {
-                let values: ARTNode[] = [];
-                pair.second.forEach((v: ARTNode) => {
-                    if (v != null) {
-                        values.push(v);
-                    }
-                });
-                if (values.length > 0) {
-                    outgoingLinksParam.push({ first: pair.first, second: values });
+            let predicate = pair.first;
+            let values: ARTNode[] = [];
+            pair.second.forEach((v: ARTNode) => {
+                if (v != null) {
+                    values.push(v);
                 }
-            }
+            });
+            if (predicate != null && values.length != 0) { //filter ok
+                outgoingLinksParam.push({ first: pair.first, second: values });
+            } else if (predicate != null && values.length == 0 || predicate == null && values.length != 0) {
+                //incomplete filter: provided predicate but not values, or provided values but not predicate
+                incompleteOutgoingLinksFilter = true;
+            } //other cases (empty filters) are ignored
         });
+        if (incompleteOutgoingLinksFilter) {
+            this.basicModals.alert({ key: "COMMONS.STATUS.WARNING" }, { key: "SEARCH.ADV_SEARCH.INCOMPLETE_FILTER_WARN", params: { filter: this.translateService.instant("SEARCH.ADV_SEARCH.OUTGOING_LINKS") }}, ModalType.warning);
+            return;
+        }
         if (outgoingLinksParam.length == 0) {
             outgoingLinksParam = null;
         }
 
+        let incompleteOutgoingSearchFilter: boolean;
         let outgoingSearchParam: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[] = [];
         this.outgoingLinksFreeText.forEach((triple: { predicate: ARTURIResource, searchString: string, mode: SearchMode }) => {
             if (triple.predicate != null && triple.searchString != null && triple.searchString.trim() != "") {
-                outgoingSearchParam.push(triple);
-            }
+                outgoingSearchParam.push({ predicate: triple.predicate, searchString: triple.searchString, mode: triple.mode });
+            } else if (
+                (triple.predicate != null && (triple.searchString == null || triple.searchString.trim() == "")) || //predicate provided, value null
+                (triple.predicate == null && triple.searchString != null && triple.searchString.trim() != "") //value provided, predicate null
+            ) {
+                incompleteOutgoingSearchFilter = true;
+            } //other cases (empty filters) are ignored
         });
+        if (incompleteOutgoingSearchFilter) {
+            this.basicModals.alert({ key: "COMMONS.STATUS.WARNING" }, { key: "SEARCH.ADV_SEARCH.INCOMPLETE_FILTER_WARN", params: { filter: this.translateService.instant("SEARCH.ADV_SEARCH.OUTGOING_LINKS") }}, ModalType.warning);
+            return;
+        }
         if (outgoingSearchParam.length == 0) {
             outgoingSearchParam = null;
         }
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.useNotes, this.activeStringMatchMode,
-            this.selectedStatus, langsPar, includeLocalesPar, typesParam, schemesParam, ingoingParam, outgoingLinksParam, outgoingSearchParam).subscribe(
+            this.selectedStatus, langsPar, includeLocalesPar, typesParam, schemesParam, ingoingLinksParam, outgoingLinksParam, outgoingSearchParam).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                     if (searchResult.length == 0) {

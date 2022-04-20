@@ -15,7 +15,7 @@ export class AreaViewEditorComponent extends AbstractSparqlBasedViewEditor {
     retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.route_id, CustomViewVariables.location, CustomViewVariables.latitude, CustomViewVariables.longitude];
     updateRequiredVariables: CustomViewVariables[] = [CustomViewVariables.location, CustomViewVariables.latitude, CustomViewVariables.longitude];
 
-    retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:"
+    retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:";
     retrieveVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.route_id, descrTranslationKey: "The resource representing the route/perimeter of the area" },
         { id: CustomViewVariables.location, descrTranslationKey: "A resource representing a single point of the area perimeter" },

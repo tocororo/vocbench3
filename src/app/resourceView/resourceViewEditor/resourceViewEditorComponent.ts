@@ -119,13 +119,13 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     valueFilterLangEnabled: boolean;
 
     collaborationAvailable: boolean = false;
-    private issuesStruct: { btnClass: string; issues: Issue[] } = { 
+    private issuesStruct: { btnClass: string; issues: Issue[] } = {
         btnClass: "", issues: null
     };
 
     //time machine/versioning
     timeActionsEnabled: boolean = false; //tells if the "clock" icon (for versioning and time machine) should be visible 
-        //hidden if the @Input() projectCtx or atTime != null, namely RV showing external resource, or showing a resource at a different time)
+    //hidden if the @Input() projectCtx or atTime != null, namely RV showing external resource, or showing a resource at a different time)
     timeMachineAvailable: boolean = false; //tells if the conditions for the time machine are satisfied (history enabled)
     versionList: VersionInfo[];
     private activeVersion: VersionInfo;
@@ -135,8 +135,8 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     settingsAvailable: boolean = true;
 
-    constructor(resViewService: ResourceViewServices, modalService: NgbModal, 
-        private versionService: VersionsServices, private resourcesService: ResourcesServices, private collaborationService: CollaborationServices, 
+    constructor(resViewService: ResourceViewServices, modalService: NgbModal,
+        private versionService: VersionsServices, private resourcesService: ResourcesServices, private collaborationService: CollaborationServices,
         private metadataRegistryService: MetadataRegistryServices, private notificationsService: NotificationServices,
         private eventHandler: VBEventHandler, private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
         private basicModals: BasicModalServices, private collabModals: CollaborationModalServices) {
@@ -166,7 +166,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
         if (changes['resource'] && changes['resource'].currentValue) {
             //if not the first change, avoid to refresh res view if resource is not changed
-            if (!changes['resource'].firstChange) { 
+            if (!changes['resource'].firstChange) {
                 let prevRes: ARTResource = changes['resource'].previousValue;
                 if (prevRes.getNominalValue() == this.resource.getNominalValue()) {
                     return;
@@ -210,11 +210,11 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
         this.unauthorizedResource = false;
         if (this.resource.getRole() != RDFResourceRolesEnum.mention && this.resource.getRole() != RDFResourceRolesEnum.individual) {
-            this.unauthorizedResource = !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceViewGetResourceView, this.resource)
+            this.unauthorizedResource = !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceViewGetResourceView, this.resource);
         }
         this.disabled = this.unauthorizedResource;
         if (this.unauthorizedResource) return;
-        
+
 
         this.showInferredPristine = this.showInferred;
         if (this.activeVersion != null) {
@@ -275,7 +275,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         }
 
         //time machine available on local IRI resource and in projects with history enabled (no need to check projectCtx, since if it is provided, clock button is already hidden via timeActionsEnabled)
-        this.timeMachineAvailable = this.resource.isURIResource() && this.resourcePosition.isLocal() && 
+        this.timeMachineAvailable = this.resource.isURIResource() && this.resourcePosition.isLocal() &&
             VBContext.getWorkingProject().isHistoryEnabled() &&
             VBContext.getWorkingProjectCtx().getProjectSettings().timeMachineEnabled;
 
@@ -343,23 +343,23 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         if (Object.keys(this.partitionOrder).length == 0) { //template not provided => init a default
             [
                 ResViewPartition.types, ResViewPartition.classaxioms, ResViewPartition.topconceptof, ResViewPartition.schemes,
-                ResViewPartition.broaders,ResViewPartition.superproperties, ResViewPartition.equivalentProperties, 
+                ResViewPartition.broaders, ResViewPartition.superproperties, ResViewPartition.equivalentProperties,
                 ResViewPartition.disjointProperties, ResViewPartition.subPropertyChains, ResViewPartition.constituents,
                 ResViewPartition.subterms, ResViewPartition.domains, ResViewPartition.ranges, ResViewPartition.facets,
                 ResViewPartition.datatypeDefinitions, ResViewPartition.lexicalizations, ResViewPartition.lexicalForms,
-                ResViewPartition.lexicalSenses, ResViewPartition.denotations, ResViewPartition.evokedLexicalConcepts, 
+                ResViewPartition.lexicalSenses, ResViewPartition.denotations, ResViewPartition.evokedLexicalConcepts,
                 ResViewPartition.notes, ResViewPartition.members, ResViewPartition.membersOrdered, ResViewPartition.labelRelations,
                 ResViewPartition.formRepresentations, ResViewPartition.formBasedPreview, ResViewPartition.imports,
                 ResViewPartition.rdfsMembers, ResViewPartition.properties
             ].forEach((partition, idx) => {
                 this.partitionOrder[partition] = idx;
-            })
+            });
         }
         if (rvSettings.customSections) {
             this.customSections = Object.keys(rvSettings.customSections);
             this.customSections.forEach(section => {
                 this.resViewSections[section] = this.initPartition(<ResViewPartition>section, partitionFilter, true);
-            })
+            });
         }
 
         if (
@@ -459,7 +459,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         let facetsPartitionJson: any = this.resViewResponse[partition];
         if (
             facetsPartitionJson != null &&
-            ResourceViewAuthEvaluator.isAuthorized(partition, CRUDEnum.R, this.resource) && 
+            ResourceViewAuthEvaluator.isAuthorized(partition, CRUDEnum.R, this.resource) &&
             partitionFilter.indexOf(partition) == -1
         ) {
             // this.parseFacetsPartition(facetsPartitionJson);
@@ -470,7 +470,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                     name: facetName,
                     value: facetsPartitionJson[facetName].value,
                     explicit: facetsPartitionJson[facetName].explicit
-                })
+                });
             }
             //parse inverseOf partition in facets
             poList = Deserializer.createPredicateObjectsList(facetsPartitionJson.inverseOf);
@@ -492,7 +492,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         let partitionJson: any = this.resViewResponse[partition];
         if (
             partitionJson != null &&
-            ResourceViewAuthEvaluator.isAuthorized(partition, CRUDEnum.R, this.resource) && 
+            ResourceViewAuthEvaluator.isAuthorized(partition, CRUDEnum.R, this.resource) &&
             partitionFilter.indexOf(ResViewPartition.membersOrdered) == -1
         ) {
             poList = Deserializer.createPredicateObjectsList(partitionJson);
@@ -619,7 +619,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 if (o instanceof ARTURIResource && o.getRole() == RDFResourceRolesEnum.mention) { //if it is a URI mention
                     foreignResources.push(o);
                 }
-            })
+            });
         });
         if (foreignResources.length > 0) {
             //retrieve the position of the foreign resources
@@ -701,7 +701,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                                     }
                                 });
                             });
-                        }
+                        };
                         i.src = url;
                     });
                 }
@@ -799,12 +799,12 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             }
         );
     }
-    
+
     assertInferredStatements() {
         let assertFn: MultiActionFunction[] = [];
         for (let p in this.resViewSections) {
             if (p == ResViewPartition.lexicalizations) continue; //lexicalizations not assertable
-            let poList: ARTPredicateObjects[] = this.resViewSections[p]
+            let poList: ARTPredicateObjects[] = this.resViewSections[p];
             if (poList == null) continue; //predicate object list null for the current resource (partition not foreseen for the resource role)
             poList.forEach((predObjs: ARTPredicateObjects) => {
                 predObjs.getObjects().forEach((obj: ARTNode) => {
@@ -814,17 +814,17 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                             value: obj
                         });
                     }
-                })
-            })
+                });
+            });
         }
-        
+
         if (assertFn.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_INFERRED_STATEMENTS_TO_ASSERT"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.NO_INFERRED_STATEMENTS_TO_ASSERT" }, ModalType.warning);
         } else {
             let onComplete = () => { //when the assert of all the statements is completed, stop the loading and rebuild the ResView
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 this.buildResourceView(this.resource);
-            }
+            };
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             MultipleActionHelper.executeActions(assertFn, MultiActionType.addition, this.basicModals, null, null, onComplete);
         }
@@ -838,7 +838,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 this.issuesStruct = {
                     btnClass: "",
                     issues: null
-                }
+                };
                 if (issues.length > 0) {
                     /* Iterate over the issues and add the classes for styling the button of the collaboration system menu
                      * - black (no class applied) if there are no issues
@@ -867,11 +867,11 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             },
             (err: Error) => {
                 if (this.collaborationAvailable) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING"}, ModalType.error, err.stack);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING" }, ModalType.error, err.stack);
                     this.vbCollaboration.setWorking(false);
                 }
             }
-        )
+        );
     }
 
     createIssue() {
@@ -886,7 +886,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -902,8 +902,8 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                     },
                 );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     unassignIssue(issue: Issue) {
@@ -911,7 +911,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             () => {
                 this.initCollaboration();
             }
-        )
+        );
     }
 
     private onCollaborationSystemStatusChange() {
@@ -935,7 +935,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             metadataDataset => {
                 this.buildResourceView(this.resource);
             }
-        )
+        );
     }
 
     /**

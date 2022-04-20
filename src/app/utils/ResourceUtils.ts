@@ -299,18 +299,12 @@ export class NTriplesUtil {
         let node: ARTNode;
         try {
             node = NTriplesUtil.parseResource(nTripleNode);
-        } catch (err) {
-            console.error(err);
-        }
-        if (node == null) {
+        } catch (e1) {
             try {
                 node = NTriplesUtil.parseLiteral(nTripleNode);
-            } catch (err) {
-                console.error(err);
+            } catch (e2) {
+                throw new Error("Not a legal value N-Triples representation: " + nTripleNode);
             }
-        }
-        if (node == null) {
-            throw new Error("Not a legal value N-Triples representation: " + nTripleNode);
         }
         return node;
     }
@@ -319,18 +313,12 @@ export class NTriplesUtil {
         let node: ARTResource;
         try {
             node = NTriplesUtil.parseURI(nTripleNode);
-        } catch (err) {
-            console.error(err);
-        }
-        if (node == null) {
+        } catch (e1) {
             try {
                 node = NTriplesUtil.parseBNode(nTripleNode);
-            } catch (err) {
-                console.error(err);
+            } catch (e2) {
+                throw new Error("Not a legal resource N-Triples representation: " + nTripleNode);
             }
-        }
-        if (node == null) {
-            throw new Error("Not a legal resource N-Triples representation: " + nTripleNode);
         }
         return node;
     }

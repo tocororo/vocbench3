@@ -21,7 +21,7 @@ export abstract class AbstractPropertiesBasedViewEditor extends AbstractCustomVi
     
     infoHtmlSafe: SafeHtml;
 
-    basicModals: BasicModalServices
+    basicModals: BasicModalServices;
     sanitizer: DomSanitizer;
     constructor(basicModals: BasicModalServices, sanitizer: DomSanitizer) {
         super();
@@ -40,7 +40,7 @@ export abstract class AbstractPropertiesBasedViewEditor extends AbstractCustomVi
         this.cvDef = {
             properties: [],
             suggestedView: this.suggestedView
-        }
+        };
     }
 
     restoreEditor(): void {

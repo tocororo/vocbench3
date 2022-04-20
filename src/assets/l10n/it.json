@@ -460,12 +460,14 @@
         "USER_CONFIG": "Configurazione utente"
     },
     "COMMONS": {
+        "ANY": "Qualsiasi",
         "BOOLEAN": {
             "FALSE": "Falso",
             "NO": "No",
             "TRUE": "Vero",
             "YES": "Sì"
         },
+        "CATEGORY": "Categoria",
         "CONFIG": {
             "CONFIGURATION": "Configurazione",
             "CONFIGURATION_REQUIRED": "Configurazione necessaria",
@@ -495,6 +497,7 @@
         "MANDATORY": "Obbligatorio",
         "MANDATORY_FIELD": "Campo obbligatorio",
         "MODE": "Modalità",
+        "MODEL": "Modello",
         "NAME": "Nome",
         "NODE": "Nodo",
         "NODES": "Nodi",
@@ -697,6 +700,71 @@
             "SERVICE_NAME": "Nome servizio",
             "SERVICE_NAME_INFO": "Il nome usato per raggruppare le operazioni definite da questo Custom Service"
         }
+    },
+    "CUSTOM_VIEWS": {
+        "ACTIONS": {
+            "ADD_ASSOCIATION": "Aggiungi property association",
+            "CREATE_CUSTOM_VIEW": "Crea Custom View",
+            "DELETE_ASSOCIATION": "Cancella property association",
+            "DELETE_CUSTOM_VIEW": "Elimina Custom View",
+            "EDIT_CUSTOM_VIEW": "Modifica Custom View"
+        },
+        "CUSTOM_VIEW": "Custom View",
+        "CUSTOM_VIEWS": "Custom Views",
+        "DEFAULT_VIEW": "Vista predefinita",
+        "MESSAGES": {
+            "ALREADY_ASSOCIATED_PROPERTY": "La proprietà selezionata ha già un Custom View associato.",
+            "DELETE_CUSTOM_VIEW_ASSOCIATION_CONFIRM": "Stai per eliminare l'associazione selezionata. Sei sicuro?",
+            "DELETE_CUSTOM_VIEW_CONFIRM": "Stai per eliminare il CustomView selezionato. Sei sicuro?",
+            "FIELD_UPDATE_QUERY_INVALID_TYPE": "L'update query del campo {{field}} non può essere una select/construct/ask",
+            "FIELD_UPDATE_QUERY_MISSING_VAR": "Non è stata trovata la variabile ?{{var}} nella Update query del campo {{field}}",
+            "FIELD_UPDATE_QUERY_SINTAX_ERROR": "L'Update query del campo {{field}} contiene errori sintattici",
+            "MISSING_REQUIRED_PLACEHOLDER": "Placeholder ${{ph}} mancante nella Retrieve query.",
+            "MISSING_REQUIRED_VARIABLE": "Variabile ?{{var}} mancante nella Retrieve query.",
+            "NO_FIELD_VARIABLE_IN_RETRIEVE": "Nessuna variabile campo (?<field>_value) ritornata dalla Retrieve query",
+            "OBJ_VAR_NOT_DETECTED": "Variabile oggetto della coppia $resource $trigprop non rilevata o non ritornata nella Retrieve query",
+            "RETRIEVE_QUERY_SYNTAX_ERROR": "Retrieve query contiene errori sintattici",
+            "UPDATE_QUERY_INVALID_TYPE": "Update query non può essere una select/construct/ask query",
+            "UPDATE_QUERY_MISSING_VAR": "Non è stata trovata la variabile ?{{var}} nella Update query",
+            "UPDATE_QUERY_SINTAX_ERROR": "L'Update query contiente errori sintattici"
+        },
+        "MODELS": {
+            "GEOSPATIAL": {
+                "AREA": "Area",
+                "GEOSPATIAL": "Geospaziale",
+                "MAP": "Mappa",
+                "POINT": "Punto",
+                "ROUTE": "Tracciato"
+            },
+            "SINGLE_VALUE": {
+                "ADV_SINGLE_VALUE": "Visualizzazione avanzata di un singolo valore",
+                "PROPERTY_CHAIN": "Property chain",
+                "SINGLE_VALUE": "Valore singolo"
+            },
+            "STATISTICAL_SERIES": {
+                "BAR_CHART": "Grafico a barre",
+                "LINE_CHART": "Grafico a linee",
+                "PIE_CHART": "Grafico a torta",
+                "SERIES": "Serie",
+                "SERIES_COLLECTION": "Colleczione di serie",
+                "STATISTICAL_SERIES": "Serie statistica"
+            },
+            "VECTOR": {
+                "DYNAMIC_CUSTOMIZABLE": "Modello vettoriale dinamico personalizzabile",
+                "PREFEFINED_STATIC": "Modello vettoriale statico predefinito",
+                "TABLE": "Tabella",
+                "VECTOR": "Vettore"
+            }
+        },
+        "PROPERTY_ASSOCIATIONS": "Property associations",
+        "SUGGESTED_VIEW": "Vista consigliata",
+        "UPDATE_MODES": {
+            "NO_UPDATE": "Nessun update",
+            "UPDATE_MODE": "Modalità di update",
+            "VALUE_EDIT": "Modifica del valore (formato NT)",
+            "VALUE_PICKER": "Selezione del valore"
+        },
+        "VIEWS": "Viste"
     },
     "DATA": {
         "ACTIONS": {
@@ -1722,7 +1790,6 @@
             "HISTORY": "Storico",
             "LEXICALIZATION": "Lessicalizzazione",
             "LEXICALIZATION_MODEL": "Modello di lessicalizzazione",
-            "MODEL": "Modello",
             "PROJECT": "Progetto",
             "PROJECTS": "Progetti",
             "REPOSITORY_ID": "ID repository",
@@ -1735,6 +1802,7 @@
         "RESOURCE": {
             "DEPRECATED": "Deprecato",
             "LABEL": "Etichetta",
+            "LITERAL": "Letterale",
             "OBJECT": "Oggetto",
             "PREDICATE": "Predicato",
             "RESOURCE": "Risorsa",
@@ -1960,7 +2028,6 @@
             "DISABLED_UNDER_VALIDATION": "Il tab Code è stato disabilitato in quanto questa risorsa - o parte della sua descrizione - è sotto validazione"
         },
         "LEX_VIEW": {
-            "CATEGORY": "Categoria",
             "PRONUNCIATION": "Pronuncia",
             "REFERENCE": "Reference",
             "RELATED": "Correlati",
@@ -2080,6 +2147,7 @@
             "ADD_RESOURCE": "Aggiungi risorsa",
             "ADD_SET_OF_VALUES": "Aggiungi insieme di valori",
             "ADVANCED_SEARCH": "Ricerca avanzata",
+            "INCOMPLETE_FILTER_WARN": "Rilevato filtro incompleto in {{filter}} (predicato o valori mancanti). Si prega di correggere o di rimuoverlo.",
             "INGOING_LINKS": "Link entranti",
             "OUTGOING_LINKS": "Link uscenti",
             "SCHEMES": "Schemi",

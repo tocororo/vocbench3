@@ -13,7 +13,7 @@ export class PointViewEditorComponent extends AbstractSparqlBasedViewEditor {
     model: CustomViewModel = CustomViewModel.point;
 
     retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.location, CustomViewVariables.latitude, CustomViewVariables.longitude];
-    retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:"
+    retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:";
     retrieveVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.location, descrTranslationKey: "The resource representing the point" },
         { id: CustomViewVariables.latitude, descrTranslationKey: "The latitude of the location. This is supposed to be bound to a literal numeric value (likely an xsd:double)" },
@@ -26,7 +26,7 @@ export class PointViewEditorComponent extends AbstractSparqlBasedViewEditor {
 
 
     updateRequiredVariables: CustomViewVariables[] = [CustomViewVariables.location, CustomViewVariables.latitude, CustomViewVariables.longitude];
-    updateDescrIntro: string = "The update query for this kind of view must specify how to update the location coordinates. " + 
+    updateDescrIntro: string = "The update query for this kind of view must specify how to update the location coordinates. " +
         "This query can use the same variables and placeholders described in the Retrieve one. In particular:";
     updateVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.location, descrTranslationKey: "Will be bound to the resource representing the point" },
@@ -37,11 +37,11 @@ export class PointViewEditorComponent extends AbstractSparqlBasedViewEditor {
         "INSERT { ... }\n" +
         "WHERE { ... }\n";
 
-    
 
-        constructor(basicModals: BasicModalServices) {
-            super(basicModals);
-        }
+
+    constructor(basicModals: BasicModalServices) {
+        super(basicModals);
+    }
 
     ngOnInit() {
         super.ngOnInit();

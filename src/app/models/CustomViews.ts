@@ -1,5 +1,3 @@
-import { CommaListExpression } from "typescript";
-import { Deserializer } from "../utils/Deserializer";
 import { NTriplesUtil } from "../utils/ResourceUtils";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFTypesEnum } from "./ARTResources";
 import { Configuration, Reference } from "./Configuration";
@@ -72,7 +70,7 @@ export class CustomViewReference {
             reference: reference,
             scope: Reference.getRelativeReferenceScope(reference),
             name: Reference.getRelativeReferenceIdentifier(reference)
-        }
+        };
     }
 }
 
@@ -146,31 +144,31 @@ export class CustomViewConst {
         "it.uniroma2.art.semanticturkey.config.customview.AdvSingleValueView": CustomViewModel.adv_single_value,
         "it.uniroma2.art.semanticturkey.config.customview.StaticVectorView": CustomViewModel.static_vector,
         "it.uniroma2.art.semanticturkey.config.customview.DynamicVectorView": CustomViewModel.dynamic_vector,
-    }
+    };
 
     /**
      * Mapping between the model of CV and the available view types
      */
     static readonly modelToViewMap: { [model: string]: { id: ViewsEnum, translationKey: string }[] } = {
-        [CustomViewModel.adv_single_value]: [{ id: ViewsEnum.single_value, translationKey: "Single value" }],
-        [CustomViewModel.property_chain]: [{ id: ViewsEnum.single_value, translationKey: "Single value" }],
-        [CustomViewModel.static_vector]: [{ id: ViewsEnum.table, translationKey: "Table" }],
-        [CustomViewModel.dynamic_vector]: [{ id: ViewsEnum.table, translationKey: "Table" }],
-        [CustomViewModel.point]: [{ id: ViewsEnum.map, translationKey: "Map" }],
-        [CustomViewModel.area]: [{ id: ViewsEnum.map, translationKey: "Map" }],
-        [CustomViewModel.route]: [{ id: ViewsEnum.map, translationKey: "Map" }],
+        [CustomViewModel.adv_single_value]: [{ id: ViewsEnum.single_value, translationKey: "CUSTOM_VIEWS.MODELS.SINGLE_VALUE.SINGLE_VALUE" }],
+        [CustomViewModel.property_chain]: [{ id: ViewsEnum.single_value, translationKey: "CUSTOM_VIEWS.MODELS.SINGLE_VALUE.SINGLE_VALUE" }],
+        [CustomViewModel.static_vector]: [{ id: ViewsEnum.table, translationKey: "CUSTOM_VIEWS.MODELS.VECTOR.TABLE" }],
+        [CustomViewModel.dynamic_vector]: [{ id: ViewsEnum.table, translationKey: "CUSTOM_VIEWS.MODELS.VECTOR.TABLE" }],
+        [CustomViewModel.point]: [{ id: ViewsEnum.map, translationKey: "CUSTOM_VIEWS.MODELS.GEOSPATIAL.MAP" }],
+        [CustomViewModel.area]: [{ id: ViewsEnum.map, translationKey: "CUSTOM_VIEWS.MODELS.GEOSPATIAL.MAP" }],
+        [CustomViewModel.route]: [{ id: ViewsEnum.map, translationKey: "CUSTOM_VIEWS.MODELS.GEOSPATIAL.MAP" }],
         [CustomViewModel.series]: [
-            { id: ViewsEnum.bar, translationKey: "Bar chart" },
-            { id: ViewsEnum.pie, translationKey: "Pie chart" }
+            { id: ViewsEnum.bar, translationKey: "CUSTOM_VIEWS.MODELS.STATISTICAL_SERIES.BAR_CHART" },
+            { id: ViewsEnum.pie, translationKey: "CUSTOM_VIEWS.MODELS.STATISTICAL_SERIES.PIE_CHART" }
         ],
-        [CustomViewModel.series_collection]: [{ id: ViewsEnum.line, translationKey: "Line chart" }]
-    }
+        [CustomViewModel.series_collection]: [{ id: ViewsEnum.line, translationKey: "CUSTOM_VIEWS.MODELS.STATISTICAL_SERIES.LINE_CHART" }]
+    };
 
 }
 
 export enum CustomViewVariables {
     latitude = "latitude", //in area, route, point
-    location = "location",  //in area, route, point
+    location = "location", //in area, route, point
     longitude = "longitude", //in area, route, point
     name = "name", //in series, series_collection
     route_id = "route_id", //in area, route
@@ -197,7 +195,7 @@ export class CvQueryUtils {
     private static readonly VAR_REGEX: RegExp = /\?([a-zA-Z0-9_]+)_value\b/gi;
     private static readonly OBJ_REGEX: RegExp = /\$resource\s*\$trigprop\s*([$|?][a-zA-Z0-9_]+)\s*\./gi;
 
-    public static readonly FIELD_REGEX: RegExp = /[\?|$]([a-zA-Z0-9_]+)_value\b/gi;
+    public static readonly FIELD_REGEX: RegExp = /[?|$]([a-zA-Z0-9_]+)_value\b/gi;
 
     static getSelectReturnStatement(query: string): string {
         return query.substring(query.toLocaleLowerCase().indexOf("select"), query.toLocaleLowerCase().indexOf("{"));
@@ -224,7 +222,7 @@ export class CvQueryUtils {
         }
         let varPattern = this.getNormalizedVarPattern(varName);
         let regexp: RegExp = new RegExp(varPattern + "\\b", "gi");
-        return regexp.test(queryFragment)
+        return regexp.test(queryFragment);
     }
 
     /**
@@ -463,12 +461,12 @@ export class CustomViewObjectDescription {
         } else if (model == CustomViewModel.property_chain || model == CustomViewModel.adv_single_value) {
             description = CustomViewRenderedValue.parse(json.description);
         } else if (model == CustomViewModel.static_vector || model == CustomViewModel.dynamic_vector) {
-            description = json.description.map((d: any) => CustomViewRenderedValue.parse(d))
+            description = json.description.map((d: any) => CustomViewRenderedValue.parse(d));
         }
         let d: CustomViewObjectDescription = {
             resource: NTriplesUtil.parseNode(json.resource),
             description: description
-        }
+        };
         return d;
     }
 }
@@ -485,7 +483,7 @@ export class SparqlBasedValueDTO {
         let dto: SparqlBasedValueDTO = new SparqlBasedValueDTO();
         dto.updateMode = json.updateMode;
         for (let bindings of json.bindingsList) {
-            let bindingsMap: BindingMapping = {}
+            let bindingsMap: BindingMapping = {};
             for (let b in bindings) {
                 let value: ARTNode = NTriplesUtil.parseNode(bindings[b]);
                 bindingsMap[b] = value;
@@ -510,7 +508,7 @@ export class CustomViewRenderedValue {
         let v = new CustomViewRenderedValue();
         v.field = json.field;
         v.resource = json.resource ? NTriplesUtil.parseNode(json.resource) : null; //in case of table, a cell content, namely the value, can also be emtpy/null
-        let pivots: BindingMapping = {}
+        let pivots: BindingMapping = {};
         for (let pivotName in json.pivots) {
             let value: ARTNode = NTriplesUtil.parseNode(json.pivots[pivotName]);
             pivots[pivotName] = value;

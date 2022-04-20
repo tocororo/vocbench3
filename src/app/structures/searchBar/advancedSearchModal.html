@@ -176,12 +176,6 @@
                     <div class="hbox" style="align-items: center; margin: 3px 0;">
                         <div class="card card-default" style="flex: 1;">
                             <div class="card-body">
-                                <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                    <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
-                                    <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true"
-                                        (resourceChanged)="updatePropIngoing(group, $event)">
-                                    </resource-picker>
-                                </div>
                                 <div class="hbox tile-group">
                                     <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
                                         <span class="tile">
@@ -199,6 +193,12 @@
                                             <span class="fas fa-plus"></span>
                                         </button>
                                     </div>
+                                </div>
+                                <div class="d-flex align-items-center mt-2">
+                                    <label style="margin-right: 4px;">{{'MODELS.RESOURCE.PREDICATE'|translate}}:</label>
+                                    <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true"
+                                        (resourceChanged)="updatePropIngoing(group, $event)">
+                                    </resource-picker>
                                 </div>
                             </div>
                         </div>

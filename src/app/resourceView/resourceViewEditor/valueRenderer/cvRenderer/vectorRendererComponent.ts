@@ -27,7 +27,7 @@ export class VectorRendererComponent extends AbstractViewRendererComponent {
     headers: string[];
 
     constructor(private resourcesService: ResourcesServices, private cvService: CustomViewsServices) {
-        super()
+        super();
     }
 
     ngOnInit() {
@@ -39,7 +39,7 @@ export class VectorRendererComponent extends AbstractViewRendererComponent {
                 if (v.resource instanceof ARTResource && !resToAnnotate.some(r => r.equals(v.resource))) {
                     resToAnnotate.push(v.resource);
                 }
-            })
+            });
         });
         this.resourcesService.getResourcesInfo(resToAnnotate).subscribe(
             annValues => {
@@ -49,10 +49,10 @@ export class VectorRendererComponent extends AbstractViewRendererComponent {
                         if (annotated != null) {
                             self[i].resource = annotated;
                         }
-                    })
-                })
+                    });
+                });
             }
-        )
+        );
     }
 
     processInput() {
@@ -79,7 +79,7 @@ export class VectorRendererComponent extends AbstractViewRendererComponent {
             for (let pivotName in value.pivots) {
                 pivots.set(pivotName, value.pivots[pivotName]);
             }
-            updateFn = this.cvService.updateDynamicVectorData(this.subject, this.predicate, value.field, data.old, data.new, pivots)
+            updateFn = this.cvService.updateDynamicVectorData(this.subject, this.predicate, value.field, data.old, data.new, pivots);
         } else if (this.views[0] instanceof StaticVectorView) {
             updateFn = this.cvService.updateStaticVectorData(this.subject, this.predicate, NTriplesUtil.parseURI(value.field), data.old, data.new);
         }

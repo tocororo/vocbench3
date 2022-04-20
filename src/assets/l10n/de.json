@@ -463,6 +463,7 @@
             "TRUE": "Wahr",
             "YES": "Ja"
         },
+        "CATEGORY": "Kategorie",
         "CONFIG": {
             "CONFIGURATION": "Konfiguration",
             "CONFIGURATION_REQUIRED": "Konfiguration erforderlich",
@@ -490,6 +491,7 @@
         "MANDATORY": "Verpflichtend",
         "MANDATORY_FIELD": "Pflichtfeld",
         "MODE": "Modus",
+        "MODEL": "Modell",
         "NAME": "Name",
         "NODE": "Knoten",
         "NODES": "Knoten",
@@ -1700,7 +1702,6 @@
             "HISTORY": "Historie",
             "LEXICALIZATION": "Lexikalisierung",
             "LEXICALIZATION_MODEL": "Lexikalisierungsmodell",
-            "MODEL": "Modell",
             "PROJECT": "Projekt",
             "PROJECTS": "Projekte",
             "REPOSITORY_ID": "Repository-ID",
@@ -1938,7 +1939,6 @@
             "DISABLED_UNDER_VALIDATION": "Die Registerkarte \"Codeansicht\" wurde deaktiviert, da diese Ressource - oder ein Teil ihrer Beschreibung - überprüft wird."
         },
         "LEX_VIEW": {
-            "CATEGORY": "Kategorie",
             "PRONUNCIATION": "Aussprache",
             "RELATED": "Verwandte",
             "SEMANTIC_REFERENCE": "Semantische Referenz",

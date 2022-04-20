@@ -463,6 +463,7 @@
             "TRUE": "True",
             "YES": "Yes"
         },
+        "CATEGORY": "Category",
         "CONFIG": {
             "CONFIGURATION": "Configuration",
             "CONFIGURATION_REQUIRED": "Configuration required",
@@ -490,6 +491,7 @@
         "MANDATORY": "Mandatory",
         "MANDATORY_FIELD": "Mandatory field",
         "MODE": "Mode",
+        "MODEL": "模型",
         "NAME": "Name",
         "NODE": "Node",
         "NODES": "Nodes",
@@ -1706,7 +1708,6 @@
             "HISTORY": "历史",
             "LEXICALIZATION": "Lexicalization",
             "LEXICALIZATION_MODEL": "词汇化",
-            "MODEL": "模型",
             "PROJECT": "Project",
             "PROJECTS": "项目名称",
             "REPOSITORY_ID": "Repository ID",
@@ -1944,7 +1945,6 @@
             "DISABLED_UNDER_VALIDATION": "The Code view tab has been disabled as this resource - or part of its description - is under validation"
         },
         "LEX_VIEW": {
-            "CATEGORY": "Category",
             "PRONUNCIATION": "Pronunciation",
             "REFERENCE": "Reference",
             "RELATED": "Related",

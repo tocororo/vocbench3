@@ -17,7 +17,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     @Input() cvDef: DynamicVectorViewDefinition;
 
     @ViewChild(YasguiComponent) yasguiEditor: YasguiComponent;
-    @ViewChildren(SingleValueEditor) singleValueEditors: QueryList<SingleValueEditor>
+    @ViewChildren(SingleValueEditor) singleValueEditors: QueryList<SingleValueEditor>;
 
     model: CustomViewModel = CustomViewModel.dynamic_vector;
 
@@ -39,7 +39,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
 
     updateRequiredVariables: CustomViewVariables[] = [CustomViewVariables.value];
 
-    updateDescrIntro: string = "An update query for this kind of view must specify how to update a single value for the current field. The value will be selected/entered according the Update mode selected above.<br/>" + 
+    updateDescrIntro: string = "An update query for this kind of view must specify how to update a single value for the current field. The value will be selected/entered according the Update mode selected above.<br/>" +
         "This query can use the same variables and placeholders described in the Retrieve one. In particular:";
     updateVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.value, descrTranslationKey: "Will be bound to the new value" },
@@ -50,18 +50,18 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     activeUpdateTab: UpdateTabStruct;
 
     constructor(private basicModals: BasicModalServices) {
-        super()
+        super();
     }
 
     ngOnInit() {
         super.ngOnInit();
         this.updateQueryInfo = this.updateDescrIntro +
-            "<ul>" + 
-            this.updateVariablesInfo.map(v => "<li><code>?" + v.id + "</code>: " + v.descrTranslationKey + "</li>") + 
-            "</ul>" + 
-            "It is possible to refer to any <code>$pivot</code> placeholder eventually defined into the Retrieve query.<br/>" + 
-            "It is recommended to use a dedicated placeholder <code>$oldValue</code> for referencing to the old value to be edited. " + 
-            "Such placeholder which will be bound to the edited value during an edit operation."; 
+            "<ul>" +
+            this.updateVariablesInfo.map(v => "<li><code>?" + v.id + "</code>: " + v.descrTranslationKey + "</li>") +
+            "</ul>" +
+            "It is possible to refer to any <code>$pivot</code> placeholder eventually defined into the Retrieve query.<br/>" +
+            "It is recommended to use a dedicated placeholder <code>$oldValue</code> for referencing to the old value to be edited. " +
+            "Such placeholder which will be bound to the edited value during an edit operation.";
     }
 
     ngAfterViewInit() {
@@ -73,8 +73,8 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
             retrieve: this.retrieveQuerySkeleton,
             update: [],
             suggestedView: this.suggestedView,
-        }
-    };
+        };
+    }
 
     restoreEditor() {
         this.retrieveEditor.query = this.cvDef.retrieve;
@@ -90,8 +90,8 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
                 }
             };
             this.updateTabs.push(tab);
-        })
-        this.activeUpdateTab = this.updateTabs[0]
+        });
+        this.activeUpdateTab = this.updateTabs[0];
         this.suggestedView = this.cvDef.suggestedView;
         this.refreshYasguiEditors();
     }
@@ -116,22 +116,6 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
 
     private detectFields() {
         this.retrieveFields = CvQueryUtils.listFieldVariables(this.retrieveEditor.query);
-        // this.retrieveFields = [];
-
-        // let retrieveQuery = this.retrieveEditor.query;
-        // let select = CvQueryUtils.getSelectReturnStatement(retrieveQuery);
-
-        // let queryFragment: string;
-        // if (select.includes("*")) {
-        //     queryFragment = CvQueryUtils.getSelectWhereBlock(retrieveQuery);
-        // } else {
-        //     queryFragment = select;
-        // }
-        // let matchArray: RegExpExecArray;
-        // while ((matchArray = CvQueryUtils.FIELD_REGEX.exec(queryFragment)) !== null) {
-        //     this.retrieveFields.push(matchArray[1]); //0 is the whole expression, 1 is the 1st group (any word between ? and _value)
-        // }
-        // this.retrieveFields = this.retrieveFields.filter((s, idx, list) => list.indexOf(s) == idx); //remove eventual duplicates
     }
 
 
@@ -140,7 +124,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     private initUpdateEditors() {
         if (this.updateTabs.length != 0) { //update editors were already initialized before
             //check if all the editors initialized before has a field which is still valid
-            for (let i = this.updateTabs.length-1; i >= 0; i--) {
+            for (let i = this.updateTabs.length - 1; i >= 0; i--) {
                 let t = this.updateTabs[i];
                 if (!this.retrieveFields.includes(t.field)) { //no field with the one in the current tab => remove tab 
                     this.updateTabs.splice(i, 1);
@@ -151,7 +135,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
                 if (!this.updateTabs.some(t => t.field == f)) { //no tab for the current field => init tab
                     this.updateTabs.push({ field: f, singleValueData: null });
                 }
-            })
+            });
             if (!this.updateTabs.includes(this.activeUpdateTab)) { //previous active tab doesn't exist anymore => active the first tab
                 this.activeUpdateTab = this.updateTabs[0];
             }
@@ -180,7 +164,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
         //check if there is a tab which the single value editor is providing an update procedure with an invalid query 
         return this.updateTabs.some(t => {
             if (t.singleValueData != null) {
-                return t.singleValueData.updateMode != UpdateMode.none && !t.singleValueData.updateData.valid
+                return t.singleValueData.updateMode != UpdateMode.none && !t.singleValueData.updateData.valid;
             } else {
                 return false;
             }
@@ -196,7 +180,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
             let updateValue: UpdateInfo = {
                 field: t.field,
                 updateMode: t.singleValueData.updateMode,
-            }
+            };
             if (updateValue.updateMode != UpdateMode.none) {
                 updateValue.updateQuery = t.singleValueData.updateData.query;
                 updateValue.valueType = t.singleValueData.valueType;
@@ -204,7 +188,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
                 updateValue.datatype = t.singleValueData.datatype;
             }
             update.push(updateValue);
-        })
+        });
         this.cvDef.update = update;
         this.changed.emit(this.cvDef);
     }
@@ -216,26 +200,26 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     private isRetrieveOk(): boolean {
         //- syntactic check
         if (!this.retrieveEditor.valid) {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, "Retrieve query contains syntactic error(s)", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.RETRIEVE_QUERY_SYNTAX_ERROR" }, ModalType.warning);
             return false;
         }
         let retrieveQuery = this.retrieveEditor.query;
         //- fields: select must returns at least a <field>_value variable
         if (this.retrieveFields.length == 0) {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, "No field variable (?<field>_value) returned by Retrieve query", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.NO_FIELD_VARIABLE_IN_RETRIEVE" }, ModalType.warning);
             return false;
         }
         //- object: select must returns the object of the $resource $trigprop ?obj triple
         if (CvQueryUtils.getReturnedObjectVariable(retrieveQuery) == null) {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, "Object variable of pair $resource $trigprop either not detected or not returned in Retrieve query", ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.OBJ_VAR_NOT_DETECTED" }, ModalType.warning);
             return false;
         }
         //- placeholders
         for (let v of this.retrieveRequiredPlaceholders) {
             if (!CvQueryUtils.isPlaceholderInWhere(retrieveQuery, v)) {
-                this.basicModals.alert({ key: "STATUS.ERROR" }, "Required placeholder $" + v + " missing in Retrieve query.", ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.MISSING_REQUIRED_PLACEHOLDER", params: { ph: v } }, ModalType.warning);
                 return false;
-            }    
+            }
         }
         return true;
     }
@@ -246,21 +230,21 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
             if (t.singleValueData.updateMode != UpdateMode.none) {
                 //syntactic check
                 if (!t.singleValueData.updateData.valid) {
-                    this.basicModals.alert({ key: "STATUS.ERROR" }, "Update query of field " + t.field + " contains syntactic error(s)", ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.FIELD_UPDATE_QUERY_SINTAX_ERROR", params: { field: t.field } }, ModalType.warning);
                     return false;
                 }
                 if (t.singleValueData.updateData.mode == QueryMode.query) {
-                    this.basicModals.alert({ key: "STATUS.ERROR" }, "Update query of field " + t.field + " cannot be a select/construct/ask query", ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.FIELD_UPDATE_QUERY_INVALID_TYPE", params: { field: t.field } }, ModalType.warning);
                     return false;
                 }
                 //variables
                 for (let v of this.updateRequiredVariables) {
                     if (!CvQueryUtils.isVariableUsed(t.singleValueData.updateData.query, "?" + v)) {
-                        this.basicModals.alert({ key: "STATUS.ERROR" }, "Unable to find variable ?" + v + "in Update query of field " + t.field, ModalType.warning);
+                        this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "CUSTOM_VIEWS.MESSAGES.FIELD_UPDATE_QUERY_MISSING_VAR", params: { field: t.field, var: v } }, ModalType.warning);
                         return false;
                     }
                 }
-                
+
             }
         }
         return true;

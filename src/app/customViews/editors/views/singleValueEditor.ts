@@ -24,18 +24,18 @@ export class SingleValueEditor {
     queryInfoSafe: SafeHtml;
 
     updateModes: { id: UpdateMode, translationKey: string }[] = [
-        { id: UpdateMode.none, translationKey: "No update" },
-        { id: UpdateMode.inline, translationKey: "Value edit (NT format)" },
-        { id: UpdateMode.picker, translationKey: "Value picker" },
-    ]
+        { id: UpdateMode.none, translationKey: "CUSTOM_VIEWS.UPDATE_MODES.NO_UPDATE" },
+        { id: UpdateMode.inline, translationKey: "CUSTOM_VIEWS.UPDATE_MODES.VALUE_EDIT" },
+        { id: UpdateMode.picker, translationKey: "CUSTOM_VIEWS.UPDATE_MODES.VALUE_PICKER" },
+    ];
     updateMode: UpdateMode = UpdateMode.none;
 
     queryEditor: SparqlQueryData = { mode: QueryMode.update, query: "", valid: true };
 
     valueTypes: { id: RDFTypesEnum.literal | RDFTypesEnum.resource, translationKey: string }[] = [
-        { id: null, translationKey: "Any" },
-        { id: RDFTypesEnum.resource, translationKey: "Resource" },
-        { id: RDFTypesEnum.literal, translationKey: "Literal" },
+        { id: null, translationKey: "COMMONS.ANY" },
+        { id: RDFTypesEnum.resource, translationKey: "MODELS.RESOURCE.RESOURCE" },
+        { id: RDFTypesEnum.literal, translationKey: "MODELS.RESOURCE.LITERAL" },
     ];
     valueType: RDFTypesEnum.literal | RDFTypesEnum.resource = this.valueTypes[0].id;
 
@@ -98,7 +98,7 @@ export class SingleValueEditor {
     emitChanges(): void {
         let emittedData: UpdateInfoEnhanced = {
             updateMode: this.updateMode
-        }
+        };
         if (this.updateMode != UpdateMode.none) {
             emittedData.updateData = this.queryEditor;
             if (this.updateMode == UpdateMode.picker) { //if value is specified through a picker, provide restrictions
@@ -107,7 +107,7 @@ export class SingleValueEditor {
                 emittedData.datatype = this.valueType == RDFTypesEnum.literal ? this.datatype.toNT() : null;
             }
         }
-        this.dataChange.emit(emittedData)
+        this.dataChange.emit(emittedData);
     }
 
     public refreshYasguiEditor() {

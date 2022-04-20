@@ -40,33 +40,33 @@ export class CustomViewEditorModal {
     name: string;
 
     categories: { id: CustomViewCategory, translationKey: string }[] = [
-        { id: CustomViewCategory.single_value, translationKey: "Single value" },
-        { id: CustomViewCategory.vector, translationKey: "Vector" },
-        { id: CustomViewCategory.geospatial, translationKey: "Geospatial" },
-        { id: CustomViewCategory.statistical_series, translationKey: "Statistical series" }
+        { id: CustomViewCategory.single_value, translationKey: "CUSTOM_VIEWS.MODELS.SINGLE_VALUE.SINGLE_VALUE" },
+        { id: CustomViewCategory.vector, translationKey: "CUSTOM_VIEWS.MODELS.VECTOR.VECTOR" },
+        { id: CustomViewCategory.geospatial, translationKey: "CUSTOM_VIEWS.MODELS.GEOSPATIAL.GEOSPATIAL" },
+        { id: CustomViewCategory.statistical_series, translationKey: "CUSTOM_VIEWS.MODELS.STATISTICAL_SERIES.STATISTICAL_SERIES" }
     ];
     selectedCategory: CustomViewCategory;
 
     //Mapping between categories and the admitted models
     models: { [category: string]: { id: CustomViewModel, translationKey: string }[] } = {
         [CustomViewCategory.single_value]: [
-            { id: CustomViewModel.property_chain, translationKey: "Property chain" },
-            { id: CustomViewModel.adv_single_value, translationKey: "Advanced single value view" },
+            { id: CustomViewModel.property_chain, translationKey: "CUSTOM_VIEWS.MODELS.SINGLE_VALUE.PROPERTY_CHAIN" },
+            { id: CustomViewModel.adv_single_value, translationKey: "CUSTOM_VIEWS.MODELS.SINGLE_VALUE.ADV_SINGLE_VALUE" },
         ],
         [CustomViewCategory.vector]: [
-            { id: CustomViewModel.static_vector, translationKey: "Predefined Static Vector Model" },
-            { id: CustomViewModel.dynamic_vector, translationKey: "Dynamic Customizable Vector Model" },
+            { id: CustomViewModel.static_vector, translationKey: "CUSTOM_VIEWS.MODELS.VECTOR.PREFEFINED_STATIC" },
+            { id: CustomViewModel.dynamic_vector, translationKey: "CUSTOM_VIEWS.MODELS.VECTOR.DYNAMIC_CUSTOMIZABLE" },
         ],
         [CustomViewCategory.geospatial]: [
-            { id: CustomViewModel.point, translationKey: "Point" },
-            { id: CustomViewModel.area, translationKey: "Area" },
-            { id: CustomViewModel.route, translationKey: "Route" },
+            { id: CustomViewModel.point, translationKey: "CUSTOM_VIEWS.MODELS.GEOSPATIAL.POINT" },
+            { id: CustomViewModel.area, translationKey: "CUSTOM_VIEWS.MODELS.GEOSPATIAL.AREA" },
+            { id: CustomViewModel.route, translationKey: "CUSTOM_VIEWS.MODELS.GEOSPATIAL.ROUTE" },
         ],
         [CustomViewCategory.statistical_series]: [
-            { id: CustomViewModel.series, translationKey: "Series" },
-            { id: CustomViewModel.series_collection, translationKey: "Series collection" },
+            { id: CustomViewModel.series, translationKey: "CUSTOM_VIEWS.MODELS.STATISTICAL_SERIES.SERIES" },
+            { id: CustomViewModel.series_collection, translationKey: "CUSTOM_VIEWS.MODELS.STATISTICAL_SERIES.SERIES_COLLECTION" },
         ]
-    }
+    };
     selectedModel: CustomViewModel;
 
     customViewDef: CustomViewDefinition;
@@ -87,7 +87,7 @@ export class CustomViewEditorModal {
                             retrieve: patternConf.getPropertyValue(CustomViewDefinitionKeys.retrieve),
                             update: patternConf.getPropertyValue(CustomViewDefinitionKeys.update),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
-                        }
+                        };
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.geospatial;
                     } else if (this.selectedModel == CustomViewModel.area) {
@@ -95,7 +95,7 @@ export class CustomViewEditorModal {
                             retrieve: patternConf.getPropertyValue(CustomViewDefinitionKeys.retrieve),
                             update: patternConf.getPropertyValue(CustomViewDefinitionKeys.update),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
-                        }
+                        };
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.geospatial;
                     } else if (this.selectedModel == CustomViewModel.route) {
@@ -103,7 +103,7 @@ export class CustomViewEditorModal {
                             retrieve: patternConf.getPropertyValue(CustomViewDefinitionKeys.retrieve),
                             update: patternConf.getPropertyValue(CustomViewDefinitionKeys.update),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
-                        }
+                        };
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.geospatial;
                     } else if (this.selectedModel == CustomViewModel.series) {
@@ -111,7 +111,7 @@ export class CustomViewEditorModal {
                             retrieve: patternConf.getPropertyValue(CustomViewDefinitionKeys.retrieve),
                             update: patternConf.getPropertyValue(CustomViewDefinitionKeys.update),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
-                        }
+                        };
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.statistical_series;
                     } else if (this.selectedModel == CustomViewModel.series_collection) {
@@ -119,14 +119,14 @@ export class CustomViewEditorModal {
                             retrieve: patternConf.getPropertyValue(CustomViewDefinitionKeys.retrieve),
                             update: patternConf.getPropertyValue(CustomViewDefinitionKeys.update),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
-                        }
+                        };
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.statistical_series;
                     } else if (this.selectedModel == CustomViewModel.property_chain) {
                         let cvDef: PropertyChainViewDefinition = {
                             properties: patternConf.getPropertyValue(CustomViewDefinitionKeys.properties),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
-                        }
+                        };
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.single_value;
                     } else if (this.selectedModel == CustomViewModel.adv_single_value) {
@@ -134,14 +134,14 @@ export class CustomViewEditorModal {
                             retrieve: patternConf.getPropertyValue(CustomViewDefinitionKeys.retrieve),
                             update: patternConf.getPropertyValue(CustomViewDefinitionKeys.update),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
-                        }
+                        };
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.single_value;
                     } else if (this.selectedModel == CustomViewModel.static_vector) {
                         let cvDef: StaticVectorViewDefinition = {
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
                             properties: patternConf.getPropertyValue(CustomViewDefinitionKeys.properties)
-                        }
+                        };
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.vector;
                     } else if (this.selectedModel == CustomViewModel.dynamic_vector) {
@@ -149,11 +149,11 @@ export class CustomViewEditorModal {
                             retrieve: patternConf.getPropertyValue(CustomViewDefinitionKeys.retrieve),
                             update: patternConf.getPropertyValue(CustomViewDefinitionKeys.update),
                             suggestedView: patternConf.getPropertyValue(CustomViewDefinitionKeys.suggestedView),
-                        }
+                        };
                         this.customViewDef = cvDef;
                         this.selectedCategory = CustomViewCategory.vector;
                     }
-                    this.adaptModalSize()
+                    this.adaptModalSize();
                 }
             );
         }
@@ -166,7 +166,7 @@ export class CustomViewEditorModal {
 
     onModelChanged() {
         this.customViewDef = null; //model changed => cvDef is invalid now
-        this.adaptModalSize()
+        this.adaptModalSize();
     }
 
     private adaptModalSize() {

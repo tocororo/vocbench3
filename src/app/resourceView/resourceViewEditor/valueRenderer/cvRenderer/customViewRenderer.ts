@@ -11,7 +11,7 @@ import { ResViewPartition } from "../../../../models/ResourceView";
             display: block;
         }
     `]
-    
+
 })
 export class CustomViewsRenderer {
 
@@ -37,9 +37,9 @@ export class CustomViewsRenderer {
 
     category: CustomViewCategory;
 
-    constructor() {}
+    constructor() { }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['subject'] || changes['readonly']) {
@@ -65,7 +65,7 @@ export class CustomViewsRenderer {
                 v.latitude = <ARTLiteral>pointDescr[CustomViewVariables.latitude];
                 v.longitude = <ARTLiteral>pointDescr[CustomViewVariables.longitude];
                 this.customViews.push(v);
-            })
+            });
         } else if (this.customViewData.model == CustomViewModel.area) {
             this.customViewData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
@@ -77,10 +77,10 @@ export class CustomViewsRenderer {
                         location: <ARTResource>b[CustomViewVariables.location],
                         latitude: <ARTLiteral>b[CustomViewVariables.latitude],
                         longitude: <ARTLiteral>b[CustomViewVariables.longitude]
-                    })
+                    });
                 });
                 this.customViews.push(v);
-            })
+            });
         } else if (this.customViewData.model == CustomViewModel.route) {
             this.customViewData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
@@ -92,10 +92,10 @@ export class CustomViewsRenderer {
                         location: <ARTResource>b[CustomViewVariables.location],
                         latitude: <ARTLiteral>b[CustomViewVariables.latitude],
                         longitude: <ARTLiteral>b[CustomViewVariables.longitude]
-                    })
+                    });
                 });
                 this.customViews.push(v);
-            })
+            });
         } else if (this.customViewData.model == CustomViewModel.series) {
             this.customViewData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
@@ -109,10 +109,10 @@ export class CustomViewsRenderer {
                     v.data.push({
                         name: <ARTResource>b[CustomViewVariables.name],
                         value: <ARTLiteral>b[CustomViewVariables.value]
-                    })
+                    });
                 });
                 this.customViews.push(v);
-            })
+            });
         } else if (this.customViewData.model == CustomViewModel.series_collection) {
             this.customViewData.data.forEach(d => {
                 let descr: SparqlBasedValueDTO = <SparqlBasedValueDTO>d.description;
@@ -126,20 +126,20 @@ export class CustomViewsRenderer {
                     let seriesName = b[CustomViewVariables.series_name];
                     let data = {
                         name: <ARTResource>b[CustomViewVariables.name],
-                        value:  <ARTLiteral>b[CustomViewVariables.value]
+                        value: <ARTLiteral>b[CustomViewVariables.value]
                     };
                     let series = v.series.find(s => s.series_name.equals(seriesName));
                     if (series) {
-                        series.data.push(data)
+                        series.data.push(data);
                     } else {
                         v.series.push({
                             series_name: seriesName,
                             data: [data]
-                        })
+                        });
                     }
                 });
                 this.customViews.push(v);
-            })
+            });
         } else if (this.customViewData.model == CustomViewModel.property_chain) {
             this.customViewData.data.forEach(d => {
                 let descr: CustomViewRenderedValue = <CustomViewRenderedValue>d.description;

@@ -119,7 +119,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     changeSchemeSelection() {
         this.skosService.getAllSchemes(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             schemes => {
-                this.sharedModals.selectResource("Select scheme", null, schemes, this.rendering, true, true, this.workingSchemes).then(
+                this.sharedModals.selectResource({ key: "DATA.ACTIONS.SELECT_SCHEME" }, null, schemes, this.rendering, true, true, this.workingSchemes).then(
                     (schemes: ARTURIResource[]) => {
                         this.workingSchemes = schemes;
                         this.schemeChanged.emit(schemes);

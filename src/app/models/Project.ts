@@ -45,7 +45,7 @@ export class Project {
         let name = this.name;
         //returns the label only if explicity required through the arg, if rendering is enabled and if label in the given language exists
         if (labelRequired && ProjectLabelCtx.renderingEnabled && this.labels[ProjectLabelCtx.language]) {
-            name = this.labels[ProjectLabelCtx.language]
+            name = this.labels[ProjectLabelCtx.language];
         }
         return name;
     }
@@ -267,12 +267,12 @@ export class AccessStatus {
 export class ConsumerACL {
     name: string;
     availableACLLevel: AccessLevel;
-    acquiredACLLevel: AccessLevel
+    acquiredACLLevel: AccessLevel;
 }
 export class LockStatus {
     public availableLockLevel: LockLevel;
     public lockingConsumer: string;
-    public acquiredLockLevel: LockLevel
+    public acquiredLockLevel: LockLevel;
 }
 
 export enum AccessLevel {
@@ -298,7 +298,7 @@ export class RepositorySummary {
     public id: string;
     public description: string;
     public backendType: string;
-    public remoteRepoSummary: RemoteRepositorySummary
+    public remoteRepoSummary: RemoteRepositorySummary;
 }
 export class RemoteRepositorySummary {
     public serverURL: string;
@@ -328,7 +328,7 @@ export class RepositoryAccess {
     public stringify(): string {
         let repoAccess: any = {
             "@type": this.type,
-        }
+        };
         //if the repository access is remote, add the configuration
         if (this.type == RepositoryAccessType.CreateRemote || this.type == RepositoryAccessType.AccessExistingRemote) {
             repoAccess.serverURL = this.configuration.serverURL;
@@ -363,7 +363,7 @@ export class PreloadedDataSummary {
             preloadedDataFile: json.preloadedDataFile,
             preloadedDataFormat: json.preloadedDataFormat,
             warnings: json.warnings
-        }
+        };
     }
 }
 
@@ -422,7 +422,7 @@ export class ProjectUtils {
             { id: ProjectColumnId.name, translationKey: "COMMONS.NAME", show: true, flex: 3, mandatory: true },
             { id: ProjectColumnId.open, translationKey: "PROJECTS.OPEN_CLOSE", show: true, flex: 1, mandatory: true },
             { id: ProjectColumnId.accessed, translationKey: "PROJECTS.ACCESSED", show: true, flex: 1, mandatory: true },
-            { id: ProjectColumnId.model, translationKey: "MODELS.PROJECT.MODEL", show: true, flex: 1 },
+            { id: ProjectColumnId.model, translationKey: "COMMONS.MODEL", show: true, flex: 1 },
             { id: ProjectColumnId.lexicalization, translationKey: "MODELS.PROJECT.LEXICALIZATION", show: true, flex: 1 },
             { id: ProjectColumnId.history, translationKey: "MODELS.PROJECT.HISTORY", show: true, flex: 1 },
             { id: ProjectColumnId.validation, translationKey: "MODELS.PROJECT.VALIDATION", show: true, flex: 1 },
@@ -444,7 +444,7 @@ export class ProjectUtils {
     public static projectFacetsTranslationStruct: { facet: ProjectFacets, translationKey: string }[] = [
         { facet: ProjectFacets.prjHistoryEnabled, translationKey: "MODELS.PROJECT.HISTORY" },
         { facet: ProjectFacets.prjLexModel, translationKey: "MODELS.PROJECT.LEXICALIZATION" },
-        { facet: ProjectFacets.prjModel, translationKey: "MODELS.PROJECT.MODEL" },
+        { facet: ProjectFacets.prjModel, translationKey: "COMMONS.MODEL" },
         { facet: ProjectFacets.prjValidationEnabled, translationKey: "MODELS.PROJECT.VALIDATION" }
     ];
 

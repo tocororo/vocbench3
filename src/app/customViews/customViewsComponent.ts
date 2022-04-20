@@ -28,7 +28,7 @@ export class CustomViewsComponent {
     deleteAssociationAuthorized: boolean;
 
     constructor(private customViewsService: CustomViewsServices, private basicModals: BasicModalServices,
-         private modalService: NgbModal, private translateService: TranslateService) { }
+        private modalService: NgbModal, private translateService: TranslateService) { }
 
     ngOnInit() {
         this.initCustomViews();
@@ -57,21 +57,21 @@ export class CustomViewsComponent {
     }
 
     createCustomView() {
-        this.openCustomViewEditor({ key: "Create Custom View" }).then(
+        this.openCustomViewEditor({ key: "CUSTOM_VIEWS.ACTIONS.CREATE_CUSTOM_VIEW" }).then(
             () => this.initCustomViews(),
-            () => {}
+            () => { }
         );
     }
 
     editCustomView() {
-        this.openCustomViewEditor({key:"Edit Custom View"}, this.selectedCustomView.reference).then(
+        this.openCustomViewEditor({ key: "CUSTOM_VIEWS.ACTIONS.EDIT_CUSTOM_VIEW" }, this.selectedCustomView.reference).then(
             () => this.initCustomViews(),
-            () => {}
+            () => { }
         );
     }
 
     deleteCustomView() {
-        this.basicModals.confirm("Delete Custom View", "You are deleting Custom View, are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({ key: "CUSTOM_VIEWS.ACTIONS.DELETE_CUSTOM_VIEW" }, { key: "CUSTOM_VIEWS.MESSAGES.DELETE_CUSTOM_VIEW_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.customViewsService.deleteCustomView(this.selectedCustomView.reference).subscribe(
                     () => {
@@ -79,7 +79,7 @@ export class CustomViewsComponent {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -105,27 +105,27 @@ export class CustomViewsComponent {
     }
 
     createAssociation() {
-        this.openAssociationEditor({key: "Add property association"}).then(
+        this.openAssociationEditor({ key: "CUSTOM_VIEWS.ACTIONS.ADD_ASSOCIATION" }).then(
             () => this.initAssociations(),
-            () => {}
+            () => { }
         );
     }
 
     deleteAssociation() {
-        this.basicModals.confirm("Delete association", "You are deleting association, are you sure?", ModalType.warning).then(
+        this.basicModals.confirm({ key: "CUSTOM_VIEWS.ACTIONS.DELETE_ASSOCIATION" }, { key: "CUSTOM_VIEWS.MESSAGES.DELETE_CUSTOM_VIEW_ASSOCIATION_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.customViewsService.deleteAssociation(this.selectedAssociation.ref).subscribe(
                     () => this.initAssociations()
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
     private openAssociationEditor(title: Translation) {
         const modalRef: NgbModalRef = this.modalService.open(CvAssociationEditorModal, new ModalOptions());
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
-		modalRef.componentInstance.existingAssociations = this.associations;
+        modalRef.componentInstance.existingAssociations = this.associations;
         return modalRef.result;
     }
 

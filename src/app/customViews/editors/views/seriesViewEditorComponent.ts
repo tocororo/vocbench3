@@ -15,7 +15,7 @@ export class SeriesViewEditorComponent extends AbstractSparqlBasedViewEditor {
     retrieveRequiredReturnVariables: CustomViewVariables[] = [CustomViewVariables.series_id, CustomViewVariables.name, CustomViewVariables.value];
     updateRequiredVariables: CustomViewVariables[] = [CustomViewVariables.name, CustomViewVariables.value];
 
-    retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:"
+    retrieveDescrIntro: string = "The retrieve query for this kind of view must return the following variables:";
     retrieveVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.series_id, descrTranslationKey: "The resource representing the series" },
         { id: CustomViewVariables.series_label, descrTranslationKey: "(optional) Where admitted, this value is used for identifying the X axis in the chart" },

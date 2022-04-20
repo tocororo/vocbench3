@@ -9,7 +9,7 @@ import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResource
 import { Language, Languages } from "../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
-import { ExpressionCheckResponse, ManchesterServices } from "../../../services/manchesterServices";
+import { ManchesterServices } from "../../../services/manchesterServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { RefactorServices } from "../../../services/refactorServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -79,8 +79,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
         private manchesterService: ManchesterServices, private refactorService: RefactorServices, private skosService: SkosServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
-        private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices, 
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices,
+        private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices,
         private rvModalService: ResViewModalServices, private dtValidator: DatatypeValidator,
         private translateService: TranslateService, private modalService: NgbModal) {
         super();
@@ -172,7 +172,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
         );
 
         this.isInferred = ResourceUtils.isTripleInferred(this.resource);
-        
+
         if (this.isInferred) {
             this.isRepoGDB = VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("graphdb:") || VBContext.getWorkingProjectCtx().getRepoBackend().startsWith("owlim:");
         }
@@ -195,13 +195,13 @@ export class EditableResourceComponent extends AbstractResViewResource {
         this.bulkEditAuthorized = this.editAuthorized && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdatePredicateObject);
         this.bulkDeleteAuthorized = this.deleteAuthorized && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemovePredicateObject);
 
-		/**
-		 * Copy to locales option is available only in lexicalizations, notes and properties partitions
-		 * (currenlty only for simplicity, I will see later if it can be enabled also in other partitions) if:
-		 * - in lexicalizations if the value is a plain literal or an xlabel with a language
-		 * - in notes if the value is a plain literal with a language
-		 * - in proeprties if the value is a plain literal with a language
-		 */
+        /**
+         * Copy to locales option is available only in lexicalizations, notes and properties partitions
+         * (currenlty only for simplicity, I will see later if it can be enabled also in other partitions) if:
+         * - in lexicalizations if the value is a plain literal or an xlabel with a language
+         * - in notes if the value is a plain literal with a language
+         * - in proeprties if the value is a plain literal with a language
+         */
         if (
             this.resource.getAdditionalProperty(ResAttribute.LANG) != null && (
                 (this.partition == ResViewPartition.properties && this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) || //plain in notes
@@ -216,15 +216,15 @@ export class EditableResourceComponent extends AbstractResViewResource {
             if (userAssignedLangs.length == 0 && VBContext.getLoggedUser().isAdmin()) {
                 intersection = projectLangs; //admin with no lang assigned => assign all project langs
             } else {
-                intersection = projectLangs.filter((pl: Language) => { 
-                    return userAssignedLangs.find(ul => ul.toLocaleLowerCase() == pl.tag.toLocaleLowerCase())
+                intersection = projectLangs.filter((pl: Language) => {
+                    return userAssignedLangs.find(ul => ul.toLocaleLowerCase() == pl.tag.toLocaleLowerCase());
                 });
             }
             let locales = Languages.getLocales(intersection, this.resource.getAdditionalProperty(ResAttribute.LANG));
             this.copyLocalesAction = {
                 available: locales.length > 0,
                 locales: locales
-            }
+            };
         }
 
     }
@@ -233,7 +233,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     editLiteral() {
         if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
-            this.resourceStringValue = this.resource.getShow()
+            this.resourceStringValue = this.resource.getShow();
         } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral || this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) {
             this.resourceStringValue = (<ARTLiteral>this.resource).getValue();
         }
@@ -245,15 +245,15 @@ export class EditableResourceComponent extends AbstractResViewResource {
         if (this.editActionScenario == EditActionScenarioEnum.partition) {
             this.editOutput.emit();
         } else if (this.editActionScenario == EditActionScenarioEnum.manchesterDescr) {
-            this.sharedModals.manchesterExpression({key:"DATA.ACTIONS.EDIT_MANCHESTER_EXPRESSION"}, this.resource.getShow()).then(
+            this.sharedModals.manchesterExpression({ key: "DATA.ACTIONS.EDIT_MANCHESTER_EXPRESSION" }, this.resource.getShow()).then(
                 (data: ManchesterExprModalReturnData) => {
                     if (data.expression == this.resource.getShow()) return; //if expression didn't change, don't do nothing
                     this.manchesterService.updateExpression(data.expression, <ARTBNode>this.resource, data.skipSemCheck).subscribe(
                         () => { this.update.emit(); }
                     );
                 },
-                () => {}
-            )
+                () => { }
+            );
         } else { //default
             //special case: resource is a data range => don't edit inline dataranges, but open the editor instead
             if (this.resource instanceof ARTBNode && this.resource.getRole() == RDFResourceRolesEnum.dataRange) {
@@ -271,16 +271,16 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             * special case: if range is literal and has restriction (datarange), allow to edit only with datarange
                             */
                             if (
-                                this.ranges != null && this.ranges.type == RDFTypesEnum.literal && 
+                                this.ranges != null && this.ranges.type == RDFTypesEnum.literal &&
                                 this.ranges.rangeCollection != null && this.ranges.rangeCollection.dataRanges != null
                             ) {
-                                this.creationModals.newTypedLiteral({key:"ACTIONS.EDIT_X", params:{x: this.predicate.getShow()}}, this.predicate, null,
+                                this.creationModals.newTypedLiteral({ key: "ACTIONS.EDIT_X", params: { x: this.predicate.getShow() } }, this.predicate, null,
                                     this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges, false, true).then(
-                                    (literals: ARTLiteral[]) => {
-                                        this.updateTriple(this.subject, this.predicate, this.resource, literals[0]);
-                                    },
-                                    () => { }
-                                );
+                                        (literals: ARTLiteral[]) => {
+                                            this.updateTriple(this.subject, this.predicate, this.resource, literals[0]);
+                                        },
+                                        () => { }
+                                    );
                             } else {
                                 this.computeResourceStringValue();
                                 this.editInProgress = true;
@@ -340,7 +340,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                 } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral) {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, (<ARTLiteral>this.resource).getDatatype(), null);
                     if (!this.isTypedLiteralValid(newValue)) {
-                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_VALUE_FOR_DATATYPE", params:{value: newValue.getValue(), datatype: newValue.getDatatype()}},
+                        this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_VALUE_FOR_DATATYPE", params: { value: newValue.getValue(), datatype: newValue.getDatatype() } },
                             ModalType.warning);
                         this.cancelEdit();
                         return;
@@ -360,17 +360,17 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     let newValue: ARTNode = this.parseEditedValue();
                     //check consistency of the new value
                     if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params:{property: this.predicate.getShow()}},
+                        this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params: { property: this.predicate.getShow() } },
                             ModalType.warning).then(
-                            confirm => {
-                                this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
-                                    stResp => this.update.emit()
-                                );
-                            },
-                            reject => { this.cancelEdit(); }
-                        );
+                                confirm => {
+                                    this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
+                                        stResp => this.update.emit()
+                                    );
+                                },
+                                reject => { this.cancelEdit(); }
+                            );
                     } else {
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.BULK_EDIT_CONFIRM"}).then(
+                        this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.BULK_EDIT_CONFIRM" }).then(
                             () => {
                                 this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
                                     stResp => this.update.emit()
@@ -382,7 +382,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         );
                     }
                 } catch (err) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, err.message, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, err.message, ModalType.warning);
                     this.cancelEdit();
                 }
             } else if (this.editInProgress) {
@@ -390,11 +390,11 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     let newValue: ARTNode = this.parseEditedValue();
                     //check consistency of the new value
                     if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params:{property: this.predicate.getShow()}}, 
+                        this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params: { property: this.predicate.getShow() } },
                             ModalType.warning).then(
-                            confirm => { this.updateTriple(this.subject, this.predicate, this.resource, newValue); },
-                            reject => { this.cancelEdit(); }
-                        );
+                                confirm => { this.updateTriple(this.subject, this.predicate, this.resource, newValue); },
+                                reject => { this.cancelEdit(); }
+                            );
                     } else {
                         if (this.partition == ResViewPartition.notes) {
                             this.updateNote(this.subject, this.predicate, <ARTLiteral>this.resource, newValue);
@@ -403,7 +403,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         }
                     }
                 } catch (err) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, err.message, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, err.message, ModalType.warning);
                     this.cancelEdit();
                 }
             }
@@ -437,10 +437,10 @@ export class EditableResourceComponent extends AbstractResViewResource {
         if (this.rangeType == RDFTypesEnum.literal && !newValue.isLiteral()) {
             return true;
         } else if (this.rangeType == RDFTypesEnum.resource) {
-			/**
-			 * special case: if range of property is resource, it is still compliant with literal newValue in case 
-			 * in rangeCollection there is rdfs:Literal
-			 */
+            /**
+             * special case: if range of property is resource, it is still compliant with literal newValue in case 
+             * in rangeCollection there is rdfs:Literal
+             */
             if (ResourceUtils.containsNode(this.ranges.rangeCollection.resources, RDFS.literal) && newValue.isLiteral()) {
                 return false;
             }
@@ -453,8 +453,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     private updateTriple(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTNode, newValue: ARTNode) {
         this.resourcesService.updateTriple(subject, predicate, oldValue, newValue).subscribe(
-            stResp => {
-                this.cancelEdit;
+            () => {
+                this.cancelEdit();
                 /** Event propagated to the resView that refreshes.
                  * I cannot simply update the rdf-resource since the URI of the resource
                  * in the predicate objects list stored in the partition render is still the same */
@@ -476,8 +476,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
      */
     private updateNote(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTNode, newValue: ARTNode) {
         this.skosService.updateNote(subject, predicate, oldValue, newValue).subscribe(
-            stResp => {
-                this.cancelEdit;
+            () => {
+                this.cancelEdit();
                 this.update.emit();
             }
         );
@@ -496,8 +496,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
      */
     private updateLexicalization(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTLiteral, newValue: ARTLiteral) {
         this.resourcesService.updateLexicalization(subject, predicate, oldValue, newValue).subscribe(
-            stResp => {
-                this.cancelEdit;
+            () => {
+                this.cancelEdit();
                 this.update.emit();
             }
         );
@@ -518,19 +518,19 @@ export class EditableResourceComponent extends AbstractResViewResource {
     //====== "Replace with existing resource" HANDLER =====
 
     private replace() {
-        this.rvModalService.addPropertyValue({key:"ACTIONS.REPLACE"}, this.subject, this.predicate, false, null, false).then(
+        this.rvModalService.addPropertyValue({ key: "ACTIONS.REPLACE" }, this.subject, this.predicate, false, null, false).then(
             (data: any) => {
                 this.updateTriple(this.subject, this.predicate, this.resource, data.value[0]);
             },
             () => { }
-        )
+        );
     }
 
     //====== "Spawn new concept from this xLabel" HANDLER =====
 
     private spawnNewConceptWithLabel() {
         //here I can cast resource since this method is called only on object with role "xLabel" that are ARTResource
-        this.creationModals.newConceptFromLabel({key:"RESOURCE_VIEW.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL"}, <ARTResource>this.resource, SKOS.concept, true, <ARTURIResource>this.subject).then(
+        this.creationModals.newConceptFromLabel({ key: "RESOURCE_VIEW.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL" }, <ARTResource>this.resource, SKOS.concept, true, <ARTURIResource>this.subject).then(
             data => {
                 let oldConcept: ARTURIResource = <ARTURIResource>this.subject;
                 this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, data.schemes, oldConcept,
@@ -547,10 +547,10 @@ export class EditableResourceComponent extends AbstractResViewResource {
     //====== "Move xLabel to another concept" HANDLER =====
 
     private moveLabelToConcept() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_LEXICALIZATION_PROPERTY"}, [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_LEXICALIZATION_PROPERTY" }, [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel]).then(
             predicate => {
                 let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
-                this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, activeSchemes, false).then(
+                this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_CONCEPT" }, activeSchemes, false).then(
                     newConcept => {
                         this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept).subscribe(
                             stResp => {
@@ -559,7 +559,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             (err: Error) => {
                                 if (err.name.endsWith("PrefPrefLabelClashException")) {
                                     let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                                    this.basicModals.confirm({key:"STATUS.OPERATION_DENIED"}, msg, ModalType.warning).then(
+                                    this.basicModals.confirm({ key: "STATUS.OPERATION_DENIED" }, msg, ModalType.warning).then(
                                         confirm => {
                                             this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept, true).subscribe(
                                                 stResp => {
@@ -571,13 +571,13 @@ export class EditableResourceComponent extends AbstractResViewResource {
                                     );
                                 }
                             }
-                        )
+                        );
                     },
                     () => { }
-                )
+                );
             },
             () => { }
-        )
+        );
     }
 
     //====== "Assert/Explain inferred statement" HANDLER =====
@@ -587,7 +587,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
             stResp => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     explainInferred() {
@@ -598,7 +598,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
             object: this.resource,
             tripleScope: this.resource.getAdditionalProperty(ResAttribute.TRIPLE_SCOPE),
             graphs: this.resource.getTripleGraphs()
-        }
+        };
         modalRef.componentInstance.triple = triple;
     }
 
@@ -610,13 +610,13 @@ export class EditableResourceComponent extends AbstractResViewResource {
                 this.copyLocaleOutput.emit(locales);
             },
             () => { }
-        )
+        );
     }
 
     //====== "Delete" HANDLER =====
 
     private bulkDelete() {
-        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.BULK_DELETE_CONFIRM"}).then(
+        this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.BULK_DELETE_CONFIRM" }).then(
             () => {
                 this.resourcesService.removePredicateObject(this.predicate, this.resource).subscribe(
                     stResp => {
