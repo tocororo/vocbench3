@@ -4,7 +4,7 @@
         <expandable-alert class="mb-2" [innerHTML]="infoHtmlSafe"></expandable-alert>
 
         <div class="form-group row">
-            <label class="col-form-label col-sm-2">{{propertyListLabel}}</label>
+            <label class="col-form-label col-sm-2">{{propListLabelTranslationKey|translate}}</label>
             <inline-resource-list-editor class="col-10 p-0" [resources]="properties" role="property" [ordered]="true" [allowDuplicates]="allowDuplicates" (changed)="onPropertiesChanged($event)">
             </inline-resource-list-editor>
         </div>

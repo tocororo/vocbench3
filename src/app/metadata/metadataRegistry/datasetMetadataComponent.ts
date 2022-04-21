@@ -67,7 +67,7 @@ export class DatasetMetadataComponent {
             if (ResourceUtils.testIRI(newValue)) {
                 sparqlEndpoint = new ARTURIResource(newValue);
             } else { //invalid IRI
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: newValue}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: newValue } }, ModalType.warning);
                 //restore old id
                 let backupId: string = this.dataset.sparqlEndpointMetadata.id;
                 this.dataset.sparqlEndpointMetadata.id = null + "new";
@@ -86,43 +86,39 @@ export class DatasetMetadataComponent {
 
     updateDerefSystem(newValue: string) {
         let dereferenciablePar: boolean;
-        let newDereferenciable: string;
         if (newValue == this.dereferUnknown) {
             dereferenciablePar = null;
-            newDereferenciable = null;
         } else if (newValue == this.dereferYes) {
             dereferenciablePar = true;
-            newDereferenciable = SemanticTurkey.standardDereferenciation;
         } else if (newValue == this.dereferNo) {
             dereferenciablePar = false;
-            newDereferenciable = SemanticTurkey.noDereferenciation;
         } else { //custom choice, available only if it was already the dereferenciationSystem, so it wasn't canged
             return;
         }
         this.metadataRegistryService.setDereferenciability(new ARTURIResource(this.dataset.identity), dereferenciablePar).subscribe(
-            stResp => {
+            () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     updateSparqlLimitations() {
         if (this.sparqlLimitations) {
-            this.metadataRegistryService.setSPARQLEndpointLimitation(new ARTURIResource(this.dataset.sparqlEndpointMetadata.id), 
+            this.metadataRegistryService.setSPARQLEndpointLimitation(new ARTURIResource(this.dataset.sparqlEndpointMetadata.id),
                 new ARTURIResource(SemanticTurkey.noAggregation)).subscribe(
-                stResp => {
-                    this.update.emit();
-                }
-            );
+                    stResp => {
+                        this.update.emit();
+                    }
+                );
         } else {
-            this.metadataRegistryService.removeSPARQLEndpointLimitation(new ARTURIResource(this.dataset.sparqlEndpointMetadata.id), 
+            this.metadataRegistryService.removeSPARQLEndpointLimitation(new ARTURIResource(this.dataset.sparqlEndpointMetadata.id),
                 new ARTURIResource(SemanticTurkey.noAggregation)).subscribe(
-                stResp => {
-                    this.update.emit();
-                }
-            );
+                    stResp => {
+                        this.update.emit();
+                    }
+                );
         }
-        
+
     }
 
 }

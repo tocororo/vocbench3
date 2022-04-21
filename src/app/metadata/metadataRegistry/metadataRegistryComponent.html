@@ -29,27 +29,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let c of catalogs" (click)="selectCatalog(c)" [ngClass]="{ 'table-primary': selectedCatalog == c }">
+                    <tr *ngFor="let r of catalogRecords" (click)="selectCatalogRecord(r)" [ngClass]="{ 'table-primary': selectedCatalogRecord == r }">
                         <td>
-                            <label *ngIf="c.abstractDataset.title">{{c.abstractDataset.title}}:</label>
-                            {{c.abstractDataset.uriSpace}}
+                            <label *ngIf="r.abstractDataset.title">{{r.abstractDataset.title}}:</label>
+                            {{r.abstractDataset.uriSpace}}
                         </td>
-                        <td class="text-center">{{c.issued}}</td>
-                        <td class="text-center">{{c.modified}}</td>
+                        <td class="text-center">{{r.issued}}</td>
+                        <td class="text-center">{{r.modified}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div *ngIf="catalogDataset" class="card card-default vbox ml-2" style="flex: 2;">
+    <div *ngIf="catalogRecordDataset" class="card card-default vbox ml-2" style="flex: 2;">
         <div class="card-header">
             <label>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label>
         </div>
         <div class="card-body hbox">
 
             <div class="vbox">
-                <dataset-metadata [dataset]="catalogDataset" [ngClass]="{ activePanel : catalogDataset == selectedDataset?.dataset }" 
+                <dataset-metadata [dataset]="catalogRecordDataset" [ngClass]="{ activePanel : catalogRecordDataset == selectedDataset?.dataset }" 
                     (click)="selectCatalogDataset()" (update)="onDatasetUpdate()">
                 </dataset-metadata>
                 <!-- Other versions -->
@@ -58,7 +58,7 @@
                         <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.OTHER_VERSIONS'|translate}}:</label>
                         <div class="btn-group btn-group-xs">
                             <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.ADD_DATASET_VERSION'|translate" (click)="addDatasetVersion()"
-                                [disabled]="!catalogDataset || !isAddDatasetAuthorized()">
+                                [disabled]="!catalogRecordDataset || !isAddDatasetAuthorized()">
                                 <span class="fas fa-plus"></span>
                             </button>
                             <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_DATASET_VERSION'|translate" (click)="deleteDatasetVersion()"
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="card-body scrollableContainer">
-                        <dataset-metadata *ngFor="let v of selectedCatalog?.versions" [dataset]="v" class="mb-1"
+                        <dataset-metadata *ngFor="let v of selectedCatalogRecord?.versions" [dataset]="v" class="mb-1"
                             (click)="selectVersion(v)" [ngClass]="{ activePanel : v == selectedDataset?.dataset }" version="true"
                             (update)="onVersionUpdate()">
                         </dataset-metadata>
@@ -107,7 +107,7 @@
                     </div>
                     <div class="card-body scrollableContainer">
                         <lexicalization-set-metadata *ngFor="let ls of lexicalizationSets" style="margin-bottom: 2px;"
-                            [lexicalizationSetMetadata]="ls" [dataset]="selectedCatalog?.abstractDataset"
+                            [lexicalizationSetMetadata]="ls" [dataset]="selectedCatalogRecord?.abstractDataset"
                             (click)="selectedLexicalizationSet = ls" [ngClass]="{ activePanel : ls == selectedLexicalizationSet }">
                         </lexicalization-set-metadata>
                     </div>

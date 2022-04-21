@@ -12,8 +12,8 @@ export class PropertyChainViewEditorComponent extends AbstractPropertiesBasedVie
 
     model: CustomViewModel = CustomViewModel.property_chain;
 
-    propertyListLabel: string = "Property chain";
-    invalidPropListMsg: string = "Property chain must contain at least one proprety.";
+    propListLabelTranslationKey: string = "CUSTOM_VIEWS.MODELS.SINGLE_VALUE.PROPERTY_CHAIN";
+    invalidPropListMsgTranslationKey: string = "CUSTOM_VIEWS.MESSAGES.INVALID_PROP_CHAIN";
     allowDuplicates: boolean = true;
 
     infoHtml: string = `With this view, the object in the ResourceView will be rendered with a single value reached passing through a defined property chain.<br />

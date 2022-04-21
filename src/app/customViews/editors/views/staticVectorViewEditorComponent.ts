@@ -12,8 +12,8 @@ export class StaticVectorViewEditorComponent extends AbstractPropertiesBasedView
 
     model: CustomViewModel = CustomViewModel.static_vector;
 
-    propertyListLabel: string = "Headers";
-    invalidPropListMsg: string = "Headers list must contain at least one proprety.";
+    propListLabelTranslationKey: string = "CUSTOM_VIEWS.MODELS.VECTOR.HEADERS";
+    invalidPropListMsgTranslationKey: string = "CUSTOM_VIEWS.MESSAGES.INVALID_HEADERS_LIST";
     allowDuplicates: boolean = false;
 
     infoHtml: string = `This view can be used to represent tabular data in ResourceView.

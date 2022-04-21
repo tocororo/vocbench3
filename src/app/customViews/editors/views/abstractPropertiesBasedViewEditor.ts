@@ -13,8 +13,8 @@ export abstract class AbstractPropertiesBasedViewEditor extends AbstractCustomVi
 
     properties: ARTURIResource[];
 
-    abstract propertyListLabel: string;
-    abstract invalidPropListMsg: string;
+    abstract propListLabelTranslationKey: string;
+    abstract invalidPropListMsgTranslationKey: string;
     abstract allowDuplicates: boolean; //tells if property list can contains duplicates (e.g. static-vector doesn't allow duplicated headers, prop-chain allows duplicated props)
 
     abstract infoHtml: string;
@@ -61,7 +61,7 @@ export abstract class AbstractPropertiesBasedViewEditor extends AbstractCustomVi
 
     public isDataValid(): boolean {
         if (this.properties.length == 0) {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: this.invalidPropListMsg }, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: this.invalidPropListMsgTranslationKey }, ModalType.warning);
             return false;
         }
         return true;

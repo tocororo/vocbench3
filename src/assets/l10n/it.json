@@ -719,6 +719,8 @@
             "FIELD_UPDATE_QUERY_INVALID_TYPE": "L'update query del campo {{field}} non può essere una select/construct/ask",
             "FIELD_UPDATE_QUERY_MISSING_VAR": "Non è stata trovata la variabile ?{{var}} nella Update query del campo {{field}}",
             "FIELD_UPDATE_QUERY_SINTAX_ERROR": "L'Update query del campo {{field}} contiene errori sintattici",
+            "INVALID_HEADERS_LIST": "La lista delle intestazioni deve contenere almeno una proprietà.",
+            "INVALID_PROP_CHAIN": "La property chain deve contenere almeno una proprietà.",
             "MISSING_REQUIRED_PLACEHOLDER": "Placeholder ${{ph}} mancante nella Retrieve query.",
             "MISSING_REQUIRED_VARIABLE": "Variabile ?{{var}} mancante nella Retrieve query.",
             "NO_FIELD_VARIABLE_IN_RETRIEVE": "Nessuna variabile campo (?<field>_value) ritornata dalla Retrieve query",
@@ -739,7 +741,7 @@
             "SINGLE_VALUE": {
                 "ADV_SINGLE_VALUE": "Visualizzazione avanzata di un singolo valore",
                 "PROPERTY_CHAIN": "Property chain",
-                "SINGLE_VALUE": "Valore singolo"
+                "SINGLE_VALUE": "Singolo valore"
             },
             "STATISTICAL_SERIES": {
                 "BAR_CHART": "Grafico a barre",
@@ -751,6 +753,7 @@
             },
             "VECTOR": {
                 "DYNAMIC_CUSTOMIZABLE": "Modello vettoriale dinamico personalizzabile",
+                "HEADERS": "Intestazioni",
                 "PREFEFINED_STATIC": "Modello vettoriale statico predefinito",
                 "TABLE": "Tabella",
                 "VECTOR": "Vettore"
@@ -762,7 +765,8 @@
             "NO_UPDATE": "Nessun update",
             "UPDATE_MODE": "Modalità di update",
             "VALUE_EDIT": "Modifica del valore (formato NT)",
-            "VALUE_PICKER": "Selezione del valore"
+            "VALUE_PICKER": "Selezione del valore",
+            "VALUE_TYPE": "Tipo valore"
         },
         "VIEWS": "Viste"
     },

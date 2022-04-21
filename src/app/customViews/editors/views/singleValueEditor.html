@@ -8,17 +8,17 @@
 </div>
 <ng-container *ngIf="updateMode == 'picker'">
     <div class="form-group row">
-        <label class="col-form-label col-sm-2">Value Type:</label>
+        <label class="col-form-label col-sm-2">{{'CUSTOM_VIEWS.UPDATE_MODES.VALUE_TYPE'|translate}}:</label>
         <select class="form-control col-10" style="flex: 1" [(ngModel)]="valueType">
             <option *ngFor="let t of valueTypes" [value]="t.id">{{t.translationKey|translate}}</option>
         </select>
     </div>
     <div *ngIf="valueType == 'resource'" class="form-group row">
-        <label class="col-form-label col-sm-2">Classes:</label>
+        <label class="col-form-label col-sm-2">{{'DATA.CLASS.CLASSES'|translate}}:</label>
         <inline-resource-list-editor class="col-10 p-0" [resources]="pickerClasses" role="cls" (changed)="onPickerClassesChanged($event)"></inline-resource-list-editor>
     </div>
     <div *ngIf="valueType == 'literal'" class="form-group row">
-        <label class="col-form-label col-sm-2">Datatype:</label>
+        <label class="col-form-label col-sm-2">{{'DATA.DATATYPE.DATATYPE'|translate}}:</label>
         <div class="col-10 p-0 d-flex align-items-center">
             <input type="checkbox" [(ngModel)]="restrictDatatype">
             <select *ngIf="restrictDatatype" class="form-control ml-2" style="flex: 1" [(ngModel)]="datatype" (ngModelChange)="emitChanges()">

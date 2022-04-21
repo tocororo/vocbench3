@@ -719,6 +719,8 @@
             "FIELD_UPDATE_QUERY_INVALID_TYPE": "Update query of field {{field}} cannot be a select/construct/ask query",
             "FIELD_UPDATE_QUERY_MISSING_VAR": "Unable to find variable ?{{var}} in Update query of field {{field}}",
             "FIELD_UPDATE_QUERY_SINTAX_ERROR": "Update query of field {{field}} contains syntactic error(s)",
+            "INVALID_HEADERS_LIST": "Headers list must contain at least one proprety.",
+            "INVALID_PROP_CHAIN": "Property chain must contain at least one proprety.",
             "MISSING_REQUIRED_PLACEHOLDER": "Required placeholder ${{ph}} missing in Retrieve query.",
             "MISSING_REQUIRED_VARIABLE": "Required variable ?{{var}} missing in Retrieve query.",
             "NO_FIELD_VARIABLE_IN_RETRIEVE": "No field variable (?<field>_value) returned by Retrieve query",
@@ -751,6 +753,7 @@
             },
             "VECTOR": {
                 "DYNAMIC_CUSTOMIZABLE": "Dynamic Customizable Vector Model",
+                "HEADERS": "Headers",
                 "PREFEFINED_STATIC": "Predefined Static Vector Model",
                 "TABLE": "Table",
                 "VECTOR": "Vector"
@@ -762,7 +765,8 @@
             "NO_UPDATE": "No update",
             "UPDATE_MODE": "Update mode",
             "VALUE_EDIT": "Value edit (NT format)",
-            "VALUE_PICKER": "Value picker"
+            "VALUE_PICKER": "Value picker",
+            "VALUE_TYPE": "Value type"
         },
         "VIEWS": "Views"
     },
