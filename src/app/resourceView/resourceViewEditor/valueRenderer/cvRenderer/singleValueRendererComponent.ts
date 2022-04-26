@@ -19,7 +19,7 @@ export class SingleValueRendererComponent extends AbstractSingleViewRendererComp
     }
 
     ngOnInit() {
-        super.ngOnInit()
+        super.ngOnInit();
         if (this.view.value.resource instanceof ARTResource) {
             //getResourcesInfo instead of getResourceDescription since the latter requires that the provided resource is locally defined (so prevent error in case of external reference)
             this.resourceService.getResourcesInfo([this.view.value.resource]).subscribe(
@@ -45,7 +45,7 @@ export class SingleValueRendererComponent extends AbstractSingleViewRendererComp
             () => {
                 this.update.emit();
             }
-        )
+        );
         
     }
 

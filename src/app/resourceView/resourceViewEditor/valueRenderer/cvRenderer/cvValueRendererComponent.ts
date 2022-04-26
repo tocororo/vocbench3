@@ -50,7 +50,7 @@ export class CvValueRendererComponent {
     ngOnInit() {
         if (this.value.updateInfo.updateMode == UpdateMode.picker) {
             if (this.value.updateInfo.valueType == RDFTypesEnum.resource && this.value.updateInfo.classes != null) {
-                this.resPickerConf = { roles: [RDFResourceRolesEnum.individual], classes: this.value.updateInfo.classes.map(c => NTriplesUtil.parseURI(c)) }
+                this.resPickerConf = { roles: [RDFResourceRolesEnum.individual], classes: this.value.updateInfo.classes.map(c => NTriplesUtil.parseURI(c)) };
             } else if (this.value.updateInfo.valueType == RDFTypesEnum.literal && this.value.updateInfo.datatype != null) {
                 this.litPickerDatatypes = [NTriplesUtil.parseURI(this.value.updateInfo.datatype)];
             }
@@ -58,8 +58,8 @@ export class CvValueRendererComponent {
 
         //edit authorized if update mode is provided and edit capabilities are granted
         this.editAuthorized = this.value.updateInfo.updateMode != UpdateMode.none && 
-            ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.subject) && !this.readonly ;
-        this.deleteAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject) && !this.readonly;
+            ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.subject, this.value.resource) && !this.readonly;
+        this.deleteAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject, this.value.resource) && !this.readonly;
     }
 
     edit() {
@@ -88,7 +88,6 @@ export class CvValueRendererComponent {
                 this.update.emit({ old: this.value.resource, new: newValue });
             } catch (error) {
                 this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: this.resourceStringValue + " is not a valid NT value" }, ModalType.warning);
-                return;
             }
         }
     }

@@ -75,8 +75,8 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
             this.updateVariablesInfo.map(v => "<li><code>?" + v.id + "</code>: " + v.descrTranslationKey + "</li>") + 
             "</ul>" + 
             "It is possible to refer to any <code>$pivot</code> placeholder eventually defined into the Retrieve query.<br/>" + 
-            "It is recommended to use a dedicated placeholder <code>$oldValue</code> for referencing to the old value to be edited." + 
-            "Such placeholder which will be bound to the edited value during an edit operation.";
+            "It is strongly recommended to use a dedicated placeholder <code>$oldValue</code> for referencing to the old value to be edited." + 
+            "Such placeholder will be bound to the edited value during an edit operation.";
     }
 
     protected initCustomViewDef(): void {

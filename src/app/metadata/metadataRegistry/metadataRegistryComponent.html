@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <button class="btn btn-light" [title]="'ACTIONS.DELETE_DATASET'|translate" (click)="deleteCatalogRecord()"
-                    [disabled]="!selectedCatalog || !isRemoveDatasetAuthorized()">
+                    [disabled]="!selectedCatalogRecord || !isRemoveDatasetAuthorized()">
                     <span class="fas fa-minus"></span>
                 </button>
             </div>
