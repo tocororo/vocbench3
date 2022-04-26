@@ -55,14 +55,14 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     }
 
     getActionContext(): VBActionFunctionCtx {
-        let actionCtx: VBActionFunctionCtx = { metaClass: this.cls, loadingDivRef: this.viewChildList.blockDivElement }
+        let actionCtx: VBActionFunctionCtx = { metaClass: this.cls, loadingDivRef: this.viewChildList.blockDivElement };
         return actionCtx;
     }
 
     //@Override
     isActionDisabled(action: ActionDescription) {
         //In addition to the cross-panel conditions, in this case the actions are disabled if the panel has no input cls
-        return super.isActionDisabled(action) || !this.cls
+        return super.isActionDisabled(action) || !this.cls;
     }
 
     refresh() {
@@ -92,12 +92,12 @@ export class InstanceListPanelComponent extends AbstractListPanel {
 
         let searchFn: Observable<ARTURIResource[]>;
         if (this.extendSearchToAllIndividuals()) {
-            searchFn = this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.individual], searchSettings.useLocalName, 
+            searchFn = this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.individual], searchSettings.useLocalName,
                 searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null, null,
                 VBRequestOptions.getRequestOptions(this.projectCtx));
         } else { //search only in current class
-            searchFn = this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, 
+            searchFn = this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName,
+                searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales,
                 VBRequestOptions.getRequestOptions(this.projectCtx));
         }
         UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
@@ -105,7 +105,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
+                    this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND_FOR", params: { text: searchedText } }, ModalType.warning);
                     return;
                 }
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -113,7 +113,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                     if (searchResult.length == 1) {
                         this.selectSearchedResource(searchResult[0]);
                     } else { //multiple results, ask the user which one select
-                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
+                        this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.TOT_RESULTS_FOUND", params: { count: searchResult.length } }, searchResult, this.rendering).then(
                             (selectedResources: ARTURIResource[]) => {
                                 this.selectSearchedResource(selectedResources[0]);
                             },
@@ -151,9 +151,9 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                                 }
                             } //cls == null means that user has canceled the operation
                         }
-                    )
+                    );
                 }
-            )
+            );
         } else {
             this.viewChildList.openListAt(resource);
         }
@@ -175,7 +175,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
         } else {
             if (types.length == 1) {
                 return from(
-                    this.basicModals.confirm({key:"SEARCH.SEARCH"}, {key:"MESSAGES.SWITCH_CLASS_FOR_SEARCHED_INSTANCE_CONFIRM", params:{cls: types[0].getShow()}}, ModalType.warning).then(
+                    this.basicModals.confirm({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.SWITCH_CLASS_FOR_SEARCHED_INSTANCE_CONFIRM", params: { cls: types[0].getShow() } }, ModalType.warning).then(
                         () => { //confirmed => switch class
                             return types[0];
                         },
@@ -186,7 +186,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                 );
             } else { //multiple types
                 return from(
-                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.SWITCH_CLASS_FOR_SEARCHED_INSTANCE_SELECT"}, types, this.rendering).then(
+                    this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.SWITCH_CLASS_FOR_SEARCHED_INSTANCE_SELECT" }, types, this.rendering).then(
                         (res: ARTURIResource[]) => { //selected => switch class
                             return res[0];
                         },
@@ -230,7 +230,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                 }
                 this.refresh();
             },
-            () => {}
+            () => { }
         );
     }
 

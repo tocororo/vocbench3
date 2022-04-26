@@ -6,6 +6,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from 
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { Cookie } from '../utils/Cookie';
 import { ActionDescription, RoleActionResolver } from "../utils/RoleActionResolver";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBActionFunctionCtx, VBActionsEnum } from "../utils/VBActions";
@@ -79,7 +80,7 @@ export abstract class AbstractPanel {
         this.multiEnrichment = multiEnrichment;
 
         this.eventSubscriptions.push(eventHandler.showDeprecatedChangedEvent.subscribe(
-            (showDeprecated: boolean) => this.showDeprecated = showDeprecated));
+            (showDeprecated: boolean) => { this.showDeprecated = showDeprecated; }));
     }
 
     /**
@@ -87,6 +88,10 @@ export abstract class AbstractPanel {
      */
 
     ngOnInit() {
+        let renderingCookie = Cookie.getCookie(Cookie.STRUCTURE_RENDERING + this.panelRole);
+        if (renderingCookie == "true" || renderingCookie == "false") { //update rendering only if cookie is set and it's a valid boolean (otherwise keeps the default declared in the panel)
+            this.rendering = Cookie.getCookie(Cookie.STRUCTURE_RENDERING + this.panelRole) == "true";
+        }
         this.showDeprecated = this.vbProp.getShowDeprecated();
         this.panelActions = this.actionResolver.getActionsForRole(this.panelRole);
 
@@ -100,10 +105,16 @@ export abstract class AbstractPanel {
     //actions
     abstract refresh(): void;
 
+    switchRendering() {
+        this.rendering = !this.rendering;
+        //updated cookie
+        Cookie.setCookie(Cookie.STRUCTURE_RENDERING + this.panelRole, this.rendering+"");
+    }
+
     /**
      * returns the action context to be used during the execution of the action
      */
-    abstract getActionContext(role?: RDFResourceRolesEnum): VBActionFunctionCtx; 
+    abstract getActionContext(role?: RDFResourceRolesEnum): VBActionFunctionCtx;
     /**
      * Executes an action
      * @param act 
@@ -136,11 +147,11 @@ export abstract class AbstractPanel {
             this.readonly ||
             !action.conditions.pre.selectionRequired && !AuthorizationEvaluator.isAuthorized(action.id) ||
             action.conditions.pre.selectionRequired && (
-                !this.selectedNode || 
+                !this.selectedNode ||
                 (action.conditions.pre.explicitRequired && !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT)) ||
                 !AuthorizationEvaluator.isAuthorized(action.id, this.selectedNode)
             )
-        )
+        );
 
     }
 
@@ -152,7 +163,7 @@ export abstract class AbstractPanel {
     protected openDataGraph() {
         this.graphModals.openDataGraph(this.selectedNode, this.rendering);
     }
-    
+
     protected openModelGraph() {
         this.graphModals.openModelGraph(null, this.rendering);
     }
@@ -181,7 +192,7 @@ export abstract class AbstractPanel {
                 return this.selectedNode != null;
             } else { //model oriented
                 return true;
-            }    
+            }
         }
     }
 

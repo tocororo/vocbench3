@@ -38,7 +38,7 @@ export class TranslationSetListPanelComponent extends AbstractListPanel {
     }
 
     getActionContext(): VBActionFunctionCtx {
-        let actionCtx: VBActionFunctionCtx = { metaClass: Vartrans.TranslationSet, loadingDivRef: this.viewChildList.blockDivElement }
+        let actionCtx: VBActionFunctionCtx = { metaClass: Vartrans.TranslationSet, loadingDivRef: this.viewChildList.blockDivElement };
         return actionCtx;
     }
 
@@ -56,27 +56,27 @@ export class TranslationSetListPanelComponent extends AbstractListPanel {
             searchLangs = searchSettings.languages;
             includeLocales = searchSettings.includeLocales;
         }
-        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.vartransTranslationSet], searchSettings.useLocalName, 
+        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.vartransTranslationSet], searchSettings.useLocalName,
             searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null, null,
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-            searchResult => {
-                if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
-                } else { //1 or more results
-                    if (searchResult.length == 1) {
-                        this.openAt(searchResult[0]);
-                    } else { //multiple results, ask the user which one select
-                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
-                            (selectedResources: ARTURIResource[]) => {
-                                this.openAt(selectedResources[0]);
-                            },
-                            () => { }
-                        );
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND_FOR", params: { text: searchedText } }, ModalType.warning);
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.openAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                            this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.TOT_RESULTS_FOUND", params: { count: searchResult.length } }, searchResult, this.rendering).then(
+                                (selectedResources: ARTURIResource[]) => {
+                                    this.openAt(selectedResources[0]);
+                                },
+                                () => { }
+                            );
+                        }
                     }
                 }
-            }
-        );
+            );
     }
 
     public openAt(node: ARTURIResource) {

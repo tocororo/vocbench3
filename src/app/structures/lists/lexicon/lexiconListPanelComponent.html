@@ -10,8 +10,8 @@
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-light btn-xs" [title]="'COMMONS.RENDERING'|translate" (click)="rendering=!rendering" [ngClass]="{ active: rendering }">
-                <span class="fas fa-font"></span>
+            <button class="btn btn-light btn-xs" [title]="'COMMONS.RENDERING'|translate" (click)="switchRendering()" [ngClass]="{ active: rendering }">
+                <span class="fas fa-font btn-bright"></span>
             </button>
             <button class="btn btn-light btn-xs" [title]="'ACTIONS.REFRESH'|translate" (click)="refresh()">
                 <span class="fas fa-redo"></span>

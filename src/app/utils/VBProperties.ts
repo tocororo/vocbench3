@@ -84,7 +84,7 @@ export class VBProperties {
                 let graphPartitionFilterPref = settings.getPropertyValue(SettingsEnum.graphViewPartitionFilter);
                 if (graphPartitionFilterPref == null) { //initialize with the only lexicalization partition for each role
                     graphPartitionFilterPref = {};
-                    for (let role in RDFResourceRolesEnum) { 
+                    for (let role in RDFResourceRolesEnum) {
                         graphPartitionFilterPref[role] = [ResViewPartition.lexicalizations];
                     }
                 }
@@ -143,16 +143,16 @@ export class VBProperties {
                     projectPreferences.notificationStatus = notificationStatusSetting;
                 }
             })
-        )
+        );
         // this is called separately since it is about a different plugin
         let getPUSettingsRenderingEngine = this.settingsService.getSettings(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
             map(settings => {
                 projectCtx.getProjectPreferences().renderingLanguagesPreference = settings.getPropertyValue(SettingsEnum.languages).split(",");
             })
-        )
+        );
         return forkJoin([
-            getPUSettingsRenderingEngine, 
-            getPUSettingsCore, 
+            getPUSettingsRenderingEngine,
+            getPUSettingsCore,
         ]);
     }
 
@@ -162,16 +162,16 @@ export class VBProperties {
         } else {
             projectCtx.getProjectPreferences().activeSchemes = schemes;
         }
-        this.eventHandler.schemeChangedEvent.emit({schemes: schemes, project: projectCtx.getProject() });
+        this.eventHandler.schemeChangedEvent.emit({ schemes: schemes, project: projectCtx.getProject() });
         let schemesPropValue: string[] = schemes.map(s => s.toNT());
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeSchemes, schemesPropValue, new VBRequestOptions({ctxProject: projectCtx.getProject()})).subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeSchemes, schemesPropValue, new VBRequestOptions({ ctxProject: projectCtx.getProject() })).subscribe();
     }
 
     setActiveLexicon(projectCtx: ProjectContext, lexicon: ARTURIResource) {
         projectCtx.getProjectPreferences().activeLexicon = lexicon;
         this.eventHandler.lexiconChangedEvent.emit({ lexicon: lexicon, project: projectCtx.getProject() });
         let lexiconUri: string = lexicon != null ? lexicon.toNT() : null;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeLexicon, lexiconUri, new VBRequestOptions({ctxProject: projectCtx.getProject()})).subscribe();
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeLexicon, lexiconUri, new VBRequestOptions({ ctxProject: projectCtx.getProject() })).subscribe();
     }
 
     getShowFlags(): boolean {
@@ -190,7 +190,7 @@ export class VBProperties {
     setProjectTheme(theme: number) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId = theme;
         this.eventHandler.themeChangedEvent.emit(theme);
-        let value = (theme == 0) ? null : theme+""; //theme 0 is the default one, so remove the preference
+        let value = (theme == 0) ? null : theme + ""; //theme 0 is the default one, so remove the preference
         this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.projectTheme, value).subscribe();
     }
 
@@ -268,7 +268,7 @@ export class VBProperties {
         return this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER).pipe(
             map(settings => {
                 let resViewSettings: ResourceViewPreference = settings.getPropertyValue(SettingsEnum.resourceView);
-                let filter: PartitionFilterPreference = {}
+                let filter: PartitionFilterPreference = {};
                 if (resViewSettings != null && resViewSettings.resViewPartitionFilter != null) {
                     filter = resViewSettings.resViewPartitionFilter;
                 }
@@ -322,7 +322,7 @@ export class VBProperties {
                 }
                 VBContext.setSystemSettings(systemSettings);
             })
-        )
+        );
     }
 
     setExperimentalFeaturesEnabled(enabled: boolean) {
@@ -365,10 +365,10 @@ export class VBProperties {
 
                 projectSettings.timeMachineEnabled = settings.getPropertyValue(SettingsEnum.timeMachineEnabled);
             })
-        )
+        );
     }
 
-    
+
     /* =============================
     ==== PREFERENCES IN COOKIES ====
     ============================= */
@@ -489,7 +489,7 @@ export class VBProperties {
         return cookieValue != "false"; //default true
     }
 
-    
+
     private initSearchSettingsCookie(preferences: ProjectPreferences) {
         let searchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_STRING_MATCH_MODE);
         if (searchModeCookie != null) {
@@ -521,11 +521,11 @@ export class VBProperties {
         let oldSearchSettings: SearchSettings = projectCtx.getProjectPreferences().searchSettings;
 
         Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, settings.stringMatchMode);
-        Cookie.setCookie(Cookie.SEARCH_USE_URI, settings.useURI+"");
-        Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, settings.useLocalName+"");
-        Cookie.setCookie(Cookie.SEARCH_USE_NOTES, settings.useNotes+"");
-        Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"");
-        Cookie.setCookie(Cookie.SEARCH_EXTEND_ALL_INDIVIDUALS, settings.extendToAllIndividuals+"");
+        Cookie.setCookie(Cookie.SEARCH_USE_URI, settings.useURI + "");
+        Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, settings.useLocalName + "");
+        Cookie.setCookie(Cookie.SEARCH_USE_NOTES, settings.useNotes + "");
+        Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme + "");
+        Cookie.setCookie(Cookie.SEARCH_EXTEND_ALL_INDIVIDUALS, settings.extendToAllIndividuals + "");
 
         let changed: boolean = oldSearchSettings.languages != settings.languages ||
             oldSearchSettings.languages != settings.languages ||
@@ -535,7 +535,7 @@ export class VBProperties {
 
         if (changed) {
             //the properties stored as cookie (e.g. useURI, useLocalName, ...) will be simply ignored server side, so I can pass here the whole searchSettings object
-            this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.searchSettings, settings, 
+            this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.searchSettings, settings,
                 new VBRequestOptions({ ctxProject: projectCtx.getProject() })).subscribe();
         }
         projectCtx.getProjectPreferences().searchSettings = settings;

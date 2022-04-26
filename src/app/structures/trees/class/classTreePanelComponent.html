@@ -11,7 +11,7 @@
         <div style="flex: 1"></div>
 
         <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-light btn-xs" [title]="'COMMONS.RENDERING'|translate" (click)="rendering=!rendering" [ngClass]="{ active: rendering }">
+            <button class="btn btn-light btn-bright btn-xs" [title]="'COMMONS.RENDERING'|translate" (click)="switchRendering()" [ngClass]="{ active: rendering }">
                 <span class="fas fa-font"></span>
             </button>
             <button class="btn btn-light btn-xs" [title]="'ACTIONS.REFRESH'|translate" (click)="refresh()">

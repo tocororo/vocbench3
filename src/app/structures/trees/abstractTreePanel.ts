@@ -23,7 +23,7 @@ export abstract class AbstractTreePanel extends AbstractPanel {
      * ATTRIBUTES
      */
 
-    
+
 
     /**
      * CONSTRUCTOR
@@ -42,16 +42,16 @@ export abstract class AbstractTreePanel extends AbstractPanel {
 
     executeAction(act: ActionDescription, role?: RDFResourceRolesEnum) {
         if (act.conditions.pre.selectionRequired && act.conditions.pre.childlessRequired && this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
-            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.OPERATION_DENIED_ON_NODE_WITH_CHILDREN"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.OPERATION_DENIED" }, { key: "MESSAGES.OPERATION_DENIED_ON_NODE_WITH_CHILDREN" }, ModalType.warning);
             return;
         }
         act.function(this.getActionContext(role), this.selectedNode).subscribe(
             done => {
                 if (act.conditions.post.deselectOnComplete) {
                     this.selectedNode = null;
-                };
+                }
             },
-            cancel => {}
+            cancel => { }
         );
     }
 

@@ -20,6 +20,7 @@ export class Cookie {
 
     public static MANCH_EXPR_SKIP_SEMANTIC_CHECK = "manchester.skip_semantic_check";
 
+    public static STRUCTURE_RENDERING = "tree_list.rendering_"; //the role of the structure is appended as suffix to the cookie name (e.g. tree_list.rendering_concept)
     public static SHOW_DEPRECATED = "tree_list.show_deprecated";
 
     public static ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE = "alignment_validation.alignment_per_page";
@@ -72,13 +73,13 @@ export class Cookie {
         return (result === null) ? null : myWindow.unescape(result[1]);
     }
 
-     /**
-      * Save the Cookie
-      * @param name 
-      * @param value 
-      * @param attrs 
-      */
-      public static setCookie(name: string, value: string, project?: Project, user?: User, attrs?: CookieAttr) {
+    /**
+     * Save the Cookie
+     * @param name 
+     * @param value 
+     * @param attrs 
+     */
+    public static setCookie(name: string, value: string, project?: Project, user?: User, attrs?: CookieAttr) {
         if (value == null) {
             this.deleteCookie(name, project, user);
             return;
@@ -97,7 +98,7 @@ export class Cookie {
         let expires = (attrs && attrs.expires) ? attrs.expires : 365 * 10; //default 10 years
         let dtExpires = new Date(new Date().getTime() + expires * 1000 * 60 * 60 * 24);
         cookieStr += 'expires=' + dtExpires.toUTCString() + ';';
-        
+
         let path: string = (attrs && attrs.path) ? attrs.path : null;
         if (path) {
             cookieStr += "path=" + path + ";";
@@ -125,5 +126,5 @@ export class Cookie {
  */
 export interface CookieAttr {
     expires?: number;
-    path?: string; 
+    path?: string;
 }

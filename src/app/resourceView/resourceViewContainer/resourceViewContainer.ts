@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
-import { ResourceViewPreference, ResourceViewType } from '../../models/Properties';
+import { ResourceViewType } from '../../models/Properties';
 import { OntoLex, SKOS } from "../../models/Vocabulary";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../../utils/VBActions";
@@ -19,6 +19,7 @@ export class ResourceViewTabContainer {
 
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+    @Output() renderingChanged: EventEmitter<boolean> = new EventEmitter();
 
     private resourceViewStruct: ResViewStruct = { type: ResourceViewType.resourceView, show: "ResView" };
     private termViewStruct: ResViewStruct = { type: ResourceViewType.termView, show: "TermView" };
@@ -38,15 +39,15 @@ export class ResourceViewTabContainer {
             this.rViews = [this.resourceViewStruct];
             //add the term view if available
             if (this.resource.getRole() == RDFResourceRolesEnum.concept && VBContext.getWorkingProject().getModelType() == SKOS.uri) {
-                this.rViews.push(this.termViewStruct)
+                this.rViews.push(this.termViewStruct);
             }
             //add the lexicographer view if available
             if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry && VBContext.getWorkingProject().getModelType() == OntoLex.uri) {
-                this.rViews.push(this.lexicographerViewStruct)
+                this.rViews.push(this.lexicographerViewStruct);
             }
             //add the source code editor if available
             if (this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesGetResourceTriplesDescription, this.resource)) {
-                this.rViews.push(this.sourceCodeStruct)
+                this.rViews.push(this.sourceCodeStruct);
             }
 
             this.initActiveView(changes['resource'].previousValue);
@@ -75,7 +76,7 @@ export class ResourceViewTabContainer {
             if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
                 this.activeView = rvPrefs.lastLexEntryType;
                 if (this.activeView == null) { //null if last selection was not set => set the default
-                    this.activeView = rvPrefs.defaultLexEntryType
+                    this.activeView = rvPrefs.defaultLexEntryType;
                 }
             }
         }
@@ -106,13 +107,18 @@ export class ResourceViewTabContainer {
      * EVENT LISTENERS
      */
 
-    private onObjectDblClick(object: ARTResource) {
+    onObjectDblClick(object: ARTResource) {
         this.dblclickObj.emit(object);
     }
 
-    private onResourceUpdate(res: ARTResource) {
+    onResourceUpdate(res: ARTResource) {
         this.update.emit(res);
     }
+
+    onRenderingChanged(rendering: boolean) {
+        this.renderingChanged.emit(rendering);
+    }
+
 
 }
 

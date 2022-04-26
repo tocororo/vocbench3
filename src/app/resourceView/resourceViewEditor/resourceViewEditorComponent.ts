@@ -57,6 +57,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     @Input() atTime: Date; //java.time.ZonedDateTime
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
+    @Output() renderingChanged: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
     private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
@@ -162,6 +163,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         let projPref: ProjectPreferences = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences();
         this.showInferred = projPref.resViewPreferences.inference;
         this.rendering = projPref.resViewPreferences.rendering;
+        this.renderingChanged.emit(this.rendering);
         this.valueFilterLangEnabled = projPref.filterValueLang.enabled;
 
         if (changes['resource'] && changes['resource'].currentValue) {
@@ -726,6 +728,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     switchRendering() {
         this.rendering = !this.rendering;
         this.vbProp.setRenderingInResourceView(this.rendering);
+        this.renderingChanged.emit(this.rendering); //useful to reflect the rendering of the resource in the tab (in case the RV is in a tab)
     }
 
     switchValueFilterLang() {

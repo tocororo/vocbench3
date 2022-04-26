@@ -11,11 +11,11 @@ import { AbstractResViewVisualizationMode } from "./abstractResViewVisualization
 })
 export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMode {
 
-    tabs: Array<Tab> = [];
-    private sync: boolean = false;
-
     //emits event when a tab is selected, useful to keep in sync tabbed ResView and trees/lists
     @Output() tabSelect: EventEmitter<ARTResource> = new EventEmitter();
+
+    tabs: Array<Tab> = [];
+    private sync: boolean = false;
 
     constructor(eventHandler: VBEventHandler) {
         super(eventHandler);
@@ -31,7 +31,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
     selectResource(resource: ARTResource) {
         let tab = this.getTabWithResource(resource);
         if (tab != null) { //resource already open in a tab => select it
-            this.selectTab(tab)
+            this.selectTab(tab);
         } else { //resource not yet open in a tab => open it
             this.addTab(resource);
         }
@@ -88,7 +88,8 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
         this.deactivateCurrentActiveTab();
         this.tabs.push({
             resource: resource,
-            active: true
+            active: true,
+            rendering: true
         });
     }
 
@@ -166,4 +167,5 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
 class Tab {
     resource: ARTResource;
     active: boolean;
+    rendering: boolean; //rendering status in the ResView: useful for keep it in sync with the rdf-resource in the tab
 }
