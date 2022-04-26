@@ -1,9 +1,10 @@
 <div class="card vbox">
     <div class="card-header hbox" style="flex: initial">
         <label style="flex: 1">{{settings?.shortName}}</label>
-        <div *ngIf="scope">
+        <ng-content></ng-content>
+        <div *ngIf="scope" class="ml-3">
             <label>scope:</label>
-            <span>{{scope}}</span>
+            <span class="ml-1">{{scope}}</span>
         </div>
     </div>
     <div class="card-body" class="scrollableContainer">

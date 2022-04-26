@@ -73,6 +73,7 @@
         "HIDE_FILTERS": "Nascondi filtri",
         "IMPORT": "Importa",
         "INSERT_VALUE_MANUALLY": "Inserisci valore manualmente",
+        "KEEP": "Mantieni",
         "LOAD": "Carica",
         "LOAD_CONFIGURATION": "Carica configurazione",
         "LOAD_DATA": "Carica dati",
@@ -86,6 +87,7 @@
         "MOVE_BEFORE": "Sposta prima",
         "MOVE_DOWN": "Sposta giù",
         "MOVE_UP": "Sposta su",
+        "OVERRIDE": "Sovrascrivi",
         "PICK_CONVERTER": "Seleziona converter",
         "PICK_RESOURCE": "Seleziona risorsa",
         "PROFILE_PROJECT": "Profila progetto",
@@ -1694,7 +1696,13 @@
             }
         },
         "METADATA_VOCABULARIES": {
-            "METADATA_VOCABULARY": "Vocabolario dei metadati"
+            "IMPORTED_VALUE": "Value importato",
+            "IMPORT_FROM_MDR": "Importa dati dal MetadataRegistry",
+            "MESSAGES": {
+                "IMPORT_CONFLICTS_DETECTED": "Sono stati rilevati conflitti tra i dati importati e quelli pre-esistenti. Si prega di scegliere se tenere i valori precedenti o se sovrascriverli."
+            },
+            "METADATA_VOCABULARY": "Vocabolario dei metadati",
+            "PREVIOUS_VALUE": "Valore precedente"
         },
         "NAMESPACES_AND_IMPORTS": {
             "ACTIONS": {

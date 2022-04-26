@@ -73,6 +73,7 @@
         "HIDE_FILTERS": "Hide filters",
         "IMPORT": "Import",
         "INSERT_VALUE_MANUALLY": "Insert value manually",
+        "KEEP": "Keep",
         "LOAD": "Load",
         "LOAD_CONFIGURATION": "Load configuration",
         "LOAD_DATA": "Load data",
@@ -86,6 +87,7 @@
         "MOVE_BEFORE": "Move before",
         "MOVE_DOWN": "Move down",
         "MOVE_UP": "Move up",
+        "OVERRIDE": "Override",
         "PICK_CONVERTER": "Pick converter",
         "PICK_RESOURCE": "Pick resource",
         "PROFILE_PROJECT": "Profile project",
@@ -1694,7 +1696,13 @@
             }
         },
         "METADATA_VOCABULARIES": {
-            "METADATA_VOCABULARY": "Metadata Vocabulary"
+            "IMPORTED_VALUE": "Imported value",
+            "IMPORT_FROM_MDR": "Import data from MetadataRegistry",
+            "MESSAGES": {
+                "IMPORT_CONFLICTS_DETECTED": "Conflicts between imported and pre-existing data have been detected. Please, choose if you want to keep the previous values or if you want to override them."
+            },
+            "METADATA_VOCABULARY": "Metadata Vocabulary",
+            "PREVIOUS_VALUE": "Previous value"
         },
         "NAMESPACES_AND_IMPORTS": {
             "ACTIONS": {

@@ -1,0 +1,52 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'METADATA.METADATA_VOCABULARIES.IMPORT_FROM_MDR'|translate}}</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="alert alert-warning">
+            {{'METADATA.METADATA_VOCABULARIES.MESSAGES.IMPORT_CONFLICTS_DETECTED'|translate}}
+        </div>
+        
+        <table class="table table-sm mt-2">
+            <thead>
+                <tr>
+                    <th>{{'DATA.PROPERTY.PROPERTY'|translate}}</th>
+                    <th>{{'METADATA.METADATA_VOCABULARIES.PREVIOUS_VALUE'|translate}}</th>
+                    <th>{{'METADATA.METADATA_VOCABULARIES.IMPORTED_VALUE'|translate}}</th>
+                    <th>{{'ACTIONS.ACTION'|translate}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let c of conflicts">
+                    <td [title]="c.old.description">
+                        <ng-container *ngIf="c.old.displayName; then displayName; else noDisplayName"></ng-container>
+                        <ng-template #displayName>
+                            {{c.old.displayName}}
+                        </ng-template>
+                        <ng-template #noDisplayName>
+                            {{c.old.name}}
+                        </ng-template>
+                    </td>
+                    <td>
+                        <setting-prop-renderer [disabled]="true" [ngModel]="c.old"></setting-prop-renderer>
+                    </td>
+                    <td>
+                        <setting-prop-renderer [disabled]="true" [ngModel]="c.new"></setting-prop-renderer>
+                    </td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="c.choice">
+                            <option value="keep">{{'ACTIONS.KEEP'|translate}}</option>
+                            <option value="override">{{'ACTIONS.OVERRIDE'|translate}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+</div>

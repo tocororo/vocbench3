@@ -10,6 +10,7 @@ import { MetadataRegistryComponent } from "../metadata/metadataRegistry/metadata
 import { NewCatalogRecordModal } from '../metadata/metadataRegistry/newCatalogRecordModal';
 import { NewDatasetVersionModal } from '../metadata/metadataRegistry/newDatasetVersionModal';
 import { NewEmbeddedLexicalizationModal } from '../metadata/metadataRegistry/newEmbeddedLexicalizationModal';
+import { ConflictResolverModal } from '../metadata/metadataVocabularies/conflictResolverModal';
 import { MetadataVocabulariesComponent } from "../metadata/metadataVocabularies/metadataVocabulariesComponent";
 import { ImportFromDatasetCatalogModal } from '../metadata/namespacesAndImports/importFromDatasetCatalogModal';
 import { ImportOntologyModal } from '../metadata/namespacesAndImports/importOntologyModal';
@@ -31,18 +32,31 @@ import { SharedModule } from './sharedModule';
         TranslateModule
     ],
     declarations: [
+        DatasetMetadataComponent,
+        ImportTreeComponent, 
+        ImportTreeNodeComponent,
+        LexicalizationSetMetadataComponent,
+        MetadataRegistryComponent, 
         MetadataVocabulariesComponent,
         NamespacesAndImportsComponent,
-        MetadataRegistryComponent, DatasetMetadataComponent, LexicalizationSetMetadataComponent,
-        ImportTreeComponent, ImportTreeNodeComponent,
         //modals
-        ImportOntologyModal, ImportFromDatasetCatalogModal, OntologyMirrorModal, NewCatalogRecordModal, NewDatasetVersionModal,
+        ConflictResolverModal,
+        ImportOntologyModal,
+        ImportFromDatasetCatalogModal,
+        OntologyMirrorModal,
+        NewCatalogRecordModal,
+        NewDatasetVersionModal,
         NewEmbeddedLexicalizationModal
     ],
     exports: [],
     providers: [],
     entryComponents: [
-        ImportOntologyModal, ImportFromDatasetCatalogModal, OntologyMirrorModal, NewCatalogRecordModal,  NewDatasetVersionModal, 
+        ConflictResolverModal,
+        ImportOntologyModal, 
+        ImportFromDatasetCatalogModal,
+        OntologyMirrorModal,
+        NewCatalogRecordModal,
+        NewDatasetVersionModal, 
         NewEmbeddedLexicalizationModal
     ]
 })

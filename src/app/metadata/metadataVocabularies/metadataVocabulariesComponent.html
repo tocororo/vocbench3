@@ -27,14 +27,18 @@
             </settings-renderer-panel>
 
             <!-- Settings of the exporter implementation -->
-            <settings-renderer-panel *ngFor="let s of settingsStructs" [(ngModel)]="s.settings" [scope]="s.scope"></settings-renderer-panel>
+            <settings-renderer-panel *ngFor="let s of settingsStructs" [(ngModel)]="s.settings" [scope]="s.scope">
+                <button class="btn btn-xs btn-light" (click)="importSettingsFromMDR(s)" [title]="'METADATA.METADATA_VOCABULARIES.IMPORT_FROM_MDR'|translate">
+                    <b>MDR</b>
+                </button>
+            </settings-renderer-panel>
         </div>
 
     </div>
     
     <div class="card-footer">
         <span class="float-left">(*) {{'COMMONS.MANDATORY_FIELD'|translate}}</span>
-        <button type="submit" class="btn btn-light float-right" (click)="saveSettings()" [disabled]="!settingsStructs">{{'ACTIONS.SAVE'|translate}}</button>
+        <button type="submit" class="btn btn-info float-right" (click)="saveSettings()" [disabled]="!settingsStructs">{{'ACTIONS.SAVE'|translate}}</button>
         <div class="col-sm-2 float-right">
             <div class="input-group">
                 <select class="form-control" [(ngModel)]="selectedExportFormat">
