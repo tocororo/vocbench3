@@ -28,8 +28,8 @@
 
             <!-- Settings of the exporter implementation -->
             <settings-renderer-panel *ngFor="let s of settingsStructs" [(ngModel)]="s.settings" [scope]="s.scope">
-                <button class="btn btn-xs btn-light" (click)="importSettingsFromMDR(s)" [title]="'METADATA.METADATA_VOCABULARIES.IMPORT_FROM_MDR'|translate">
-                    <b>MDR</b>
+                <button class="btn btn-xs btn-light" (click)="importSettingsFromMDR(s)" [title]="'METADATA.METADATA_VOCABULARIES.IMPORT_FROM_MDR_INFO'|translate">
+                    <b>{{'METADATA.METADATA_VOCABULARIES.IMPORT_FROM_MDR'|translate}}</b>
                 </button>
             </settings-renderer-panel>
         </div>

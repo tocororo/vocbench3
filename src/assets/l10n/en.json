@@ -1697,7 +1697,8 @@
         },
         "METADATA_VOCABULARIES": {
             "IMPORTED_VALUE": "Imported value",
-            "IMPORT_FROM_MDR": "Import data from MetadataRegistry",
+            "IMPORT_FROM_MDR": "Import from MDR",
+            "IMPORT_FROM_MDR_INFO": "Import data from MetadataRegistry",
             "MESSAGES": {
                 "IMPORT_CONFLICTS_DETECTED": "Conflicts between imported and pre-existing data have been detected. Please, choose if you want to keep the previous values or if you want to override them."
             },
