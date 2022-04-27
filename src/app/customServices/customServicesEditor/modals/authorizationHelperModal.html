@@ -19,12 +19,12 @@
                         <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.RESTRICTION'|translate}}</label>
                         <div class="col-sm-10">
                             <select class="form-control" [(ngModel)]="selectedTypeRestriction" (ngModelChange)="update()">
-                                <option *ngFor="let r of typeRestrictions">{{r|translate}}</option>
+                                <option *ngFor="let r of typeRestrictions" [value]="r.restriction">{{r.translationKey|translate}}</option>
                             </select>
                         </div>
                     </div>
             
-                    <div *ngIf="selectedTypeRestriction==typeRestrictionType" class="form-group row">
+                    <div *ngIf="selectedTypeRestriction=='type'" class="form-group row">
                         <label class="col-form-label col-sm-2">{{'COMMONS.TYPE'|translate}}</label>
                         <div class="col-sm-10">
                             <select class="form-control" [(ngModel)]="selectedType" (ngModelChange)="update()">
@@ -32,7 +32,7 @@
                             </select>
                         </div>
                     </div>
-                    <div *ngIf="selectedTypeRestriction==typeRestrictionParam" class="form-group row">
+                    <div *ngIf="selectedTypeRestriction=='param'" class="form-group row">
                         <label class="col-form-label col-sm-2">{{'CUSTOM_SERVICES.AUTH_HELPER.PARAMETER'|translate}}</label>
                         <div class="col-sm-10">
                             <select *ngIf="parameters?.length > 0; else noParamTypeBlock" class="form-control" style="font-family: monospace;"
@@ -46,7 +46,7 @@
                             </ng-template>
                         </div>
                     </div>
-                    <div *ngIf="selectedTypeRestriction!=typeRestrictionNone && (selectedType || selectedParamType)" class="form-group row">
+                    <div *ngIf="selectedTypeRestriction!='none' && (selectedType || selectedParamType)" class="form-group row">
                         <label class="col-form-label col-sm-2">
                             {{'COMMONS.SCOPE'|translate}}
                             <span class="fas fa-info-circle" [title]="'CUSTOM_SERVICES.AUTH_HELPER.SCOPE_INFO'|translate"></span>

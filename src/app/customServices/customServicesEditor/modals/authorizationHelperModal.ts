@@ -19,21 +19,17 @@ export class AuthorizationHelperModal {
      * The following are not shown in the UI, so the rdf selection is hardcoded
      */
     private areas: AreaStruct[] = [
-        { value: "rdf", label: "RDF", description: "Editing of content data"},
-        // { value: "rbac", label: "RBAC", description: "Role Based Access Control management"},
-        // { value: "pm", label: "PM", description: "Project management"},
-        // { value: "um", label: "UM", description: "User management"},
-        // { value: "cform", label: "CFORM", description: "Custom Form management"},
-        // { value: "sys", label: "SYS", description: "System administration"}
+        { value: "rdf", label: "RDF", description: "Editing of content data" },
     ];
     private selectedArea: AreaStruct = this.areas[0];
 
     //type restriction
-    readonly typeRestrictionNone: string = "CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.RESTRICTION_NONE";
-    readonly typeRestrictionType: string = "CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.RESTRICTION_TO_SPECIFIC_TYPE";
-    readonly typeRestrictionParam: string = "CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.RESTRICTION_TO_PARAMETER_TYPE";
-    typeRestrictions: string[] = [this.typeRestrictionNone, this.typeRestrictionType, this.typeRestrictionParam];
-    selectedTypeRestriction: string = this.typeRestrictionNone;
+    typeRestrictions: { restriction: TypeRestriction, translationKey: string }[] = [
+        { restriction: TypeRestriction.none, translationKey: "CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.RESTRICTION_NONE" },
+        { restriction: TypeRestriction.type, translationKey: "CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.RESTRICTION_TO_SPECIFIC_TYPE" },
+        { restriction: TypeRestriction.param, translationKey: "CUSTOM_SERVICES.AUTH_HELPER.TYPE_RESTR.RESTRICTION_TO_PARAMETER_TYPE" }
+    ];
+    selectedTypeRestriction: TypeRestriction = TypeRestriction.none;
     selectedType: RDFResourceRolesEnum;
     selectedParamType: string;
 
@@ -64,7 +60,7 @@ export class AuthorizationHelperModal {
     readonly langRequirementNone: string = "CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.REQUIRE_NONE";
     readonly langRequirementLang: string = "CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.REQUIRE_SPECIFIC_LANG";
     readonly langRequirementParam: string = "CUSTOM_SERVICES.AUTH_HELPER.LANG_REQUIREMENT.REQUIRE_PARAMETER_LANG";
-    langRequirements: string[] = [ this.langRequirementNone, this.langRequirementLang, this.langRequirementParam];
+    langRequirements: string[] = [this.langRequirementNone, this.langRequirementLang, this.langRequirementParam];
     selectedLangRequirement: string = this.langRequirementNone;
     private selectedLang: Language;
     private selectedParamLang: string;
@@ -73,11 +69,11 @@ export class AuthorizationHelperModal {
 
     //crudv restriction
     crudvStruct: { value: string, label: string, checked: boolean }[] = [
-        { value : "C", label: "Create", checked: false },
-        { value : "R", label: "Read", checked: false },
-        { value : "U", label: "Update", checked: false },
-        { value : "D", label: "Delete", checked: false },
-        { value : "V", label: "Validate", checked: false }
+        { value: "C", label: "Create", checked: false },
+        { value: "R", label: "Read", checked: false },
+        { value: "U", label: "Update", checked: false },
+        { value: "D", label: "Delete", checked: false },
+        { value: "V", label: "Validate", checked: false }
     ];
 
     //validation pattern
@@ -144,7 +140,7 @@ export class AuthorizationHelperModal {
 
             if (authMatch == null) {
                 //cannot parse the input authorizations
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.CANNOT_PARSE_AUTH", params:{auth: this.authorization}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.CANNOT_PARSE_AUTH", params: { auth: this.authorization } }, ModalType.warning);
             } else {
                 /* 
                 * authMatch should contain 7 groups:
@@ -158,17 +154,17 @@ export class AuthorizationHelperModal {
                 */
                 //restore type restriction form
                 if (authMatch[1] != null) { //param specified for the @typeof annotation
-                    this.selectedTypeRestriction = this.typeRestrictionParam;
+                    this.selectedTypeRestriction = TypeRestriction.param;
                     //restore the selected parameter
                     if (this.parameters != null) {
                         this.selectedParamType = this.parameters.find(p => p == authMatch[1]);
                     }
                 } else if (authMatch[2] != null) { //type specified
-                    this.selectedTypeRestriction = this.typeRestrictionType;
+                    this.selectedTypeRestriction = TypeRestriction.type;
                     //restore the selected type
                     this.selectedType = this.roles.find(r => r == authMatch[2]);
                 } else { //none type restriction
-                    this.selectedTypeRestriction = this.typeRestrictionNone;
+                    this.selectedTypeRestriction = TypeRestriction.none;
                 }
                 if (authMatch[3] != null) { //scope provided
                     this.scope = authMatch[3];
@@ -184,7 +180,7 @@ export class AuthorizationHelperModal {
                 } else if (authMatch[5] != null) { //langTag specified
                     this.selectedLangRequirement = this.langRequirementLang;
                     //restore the selected lang
-                    this.selectedLang = this.languages.find(l => l.tag == authMatch[5])
+                    this.selectedLang = this.languages.find(l => l.tag == authMatch[5]);
                 } else { //none lang requirement
                     this.selectedLangRequirement = this.langRequirementNone;
                 }
@@ -192,8 +188,8 @@ export class AuthorizationHelperModal {
                 //restore the CRUDV
                 let matchedCrudv = authMatch[6];
                 this.crudvStruct.forEach(s => {
-                    s.checked = matchedCrudv.toUpperCase().indexOf(s.value) != -1
-                })
+                    s.checked = matchedCrudv.toUpperCase().indexOf(s.value) != -1;
+                });
             }
         }
 
@@ -208,10 +204,10 @@ export class AuthorizationHelperModal {
     private updateSerialization() {
         this.authSerialization = this.selectedArea.value; //rdf
         //type of rdf()
-        if (this.selectedTypeRestriction != this.typeRestrictionNone) {
+        if (this.selectedTypeRestriction != TypeRestriction.none) {
             this.authSerialization += "(";
             //type
-            if (this.selectedTypeRestriction == this.typeRestrictionParam) { //using param
+            if (this.selectedTypeRestriction == TypeRestriction.param) { //using param
                 this.authSerialization += "@typeof(";
                 if (this.selectedParamType != null) {
                     this.authSerialization += "#" + this.selectedParamType;
@@ -219,7 +215,7 @@ export class AuthorizationHelperModal {
                     this.authSerialization += "?";
                 }
                 this.authSerialization += ")";
-            } else if (this.selectedTypeRestriction == this.typeRestrictionType) { //selecting a role
+            } else if (this.selectedTypeRestriction == TypeRestriction.type) { //selecting a role
                 if (this.selectedType != null) {
                     this.authSerialization += this.selectedType;
                 } else {
@@ -237,7 +233,7 @@ export class AuthorizationHelperModal {
             this.authSerialization += ", { lang: ";
             if (this.selectedLangRequirement == this.langRequirementParam) { //using param
                 this.authSerialization += "@langof(";
-                if (this.selectedParamLang != null) { 
+                if (this.selectedParamLang != null) {
                     this.authSerialization += "#" + this.selectedParamLang;
                 } else {
                     this.authSerialization += "?";
@@ -272,14 +268,14 @@ export class AuthorizationHelperModal {
     private updateAuthValid() {
         let errors: string[] = [];
         //check on type restriction
-        if (this.selectedTypeRestriction == this.typeRestrictionParam && this.selectedParamType == null) {
+        if (this.selectedTypeRestriction == TypeRestriction.param && this.selectedParamType == null) {
             errors.push("A parameter for the type restriction has not been selected");
-        } else if (this.selectedTypeRestriction == this.typeRestrictionType && this.selectedType == null) {
+        } else if (this.selectedTypeRestriction == TypeRestriction.type && this.selectedType == null) {
             errors.push("A type for the type restriction has not been selected");
         }
-        if (this.selectedTypeRestriction != this.typeRestrictionNone && this.selectedParamType != null || this.selectedType != null) { //scope enabled
+        if (this.selectedTypeRestriction != TypeRestriction.none && this.selectedParamType != null || this.selectedType != null) { //scope enabled
             if (this.scope != null && this.scope.trim() != "") {
-                if (!new RegExp("^"+this.scopePattern+"$").test(this.scope)) {
+                if (!new RegExp("^" + this.scopePattern + "$").test(this.scope)) {
                     errors.push("Provided scope value is invalid");
                 }
             }
@@ -311,11 +307,17 @@ export class AuthorizationHelperModal {
     cancel() {
         this.activeModal.dismiss();
     }
-    
+
 }
 
 class AreaStruct {
     value: string;
     label: string;
-    description: string; 
+    description: string;
+}
+
+enum TypeRestriction {
+    none = "none",
+    param = "param",
+    type = "type",
 }
