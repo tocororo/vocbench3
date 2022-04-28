@@ -44,10 +44,14 @@
                         It is also possible to define an arbitrary amount of pivot placeholders (to name <code>$piovt</code>, <code>$pivot_1</code>, <code>$pivot_2</code>, ...) which can be used to define anchor points to be referenced in the Update query. Each pivot resource returned by the Retrieve query will be bound, to the related placeholder in the Update query, during an update operation. 
                     </p>
                 </expandable-alert>
-                <yasgui #retrieveYasgui [query]="retrieveEditor.query" (querychange)="onRetrieveChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
+
+                <div class="vbox" style="position: relative;">
+                    <button class="btn btn-light btn-xs" style="position: absolute; top: 0px; right: 0px;" (click)="suggestFromCF()">{{'CUSTOM_VIEWS.ACTIONS.SUGGEST_FROM_CF'|translate}}</button>
+                    <yasgui [query]="retrieveEditor.query" (querychange)="onRetrieveChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
+                </div>
 
                 <div class="d-flex align-items-center mt-2">
-                    <label class="text-nowrap">Detected fields:</label>
+                    <label class="text-nowrap">{{'CUSTOM_VIEWS.MODELS.VECTOR.DETECTED_FIELDS'|translate}}:</label>
                     <div class="form-control ml-2">
                         <code *ngFor="let f of retrieveFields" class="mr-2">{{f}}</code>
                     </div>
@@ -61,7 +65,7 @@
                 <ng-container *ngIf="updateTabs.length == 0; then noUpdateBlock; else updateTabsBlock;"></ng-container>
 
                 <ng-template #noUpdateBlock>
-                    No field detected in Retrieve query sparql
+                    {{'CUSTOM_VIEWS.MESSAGES.NO_FIELDS_DETECTED_IN_RETRIEVE'|translate}}
                 </ng-template>
 
                 <ng-template #updateTabsBlock>

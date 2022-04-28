@@ -27,7 +27,9 @@ export class ExpandableAlertComponent {
 
     ngAfterViewInit() {
         //if alert exceed 100px, auto collapse it
-        this.collapsed = this.alertDiv.nativeElement.clientHeight > 100;
+        setTimeout(() => {
+            this.collapsed = this.alertDiv.nativeElement.clientHeight > 100;
+        });
     }
 
 }

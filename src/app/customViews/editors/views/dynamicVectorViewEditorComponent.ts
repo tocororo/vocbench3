@@ -1,9 +1,14 @@
 import { Component, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { CustomFormPickerModal } from 'src/app/customForms/editors/customFormPickerModal';
+import { CustomForm } from 'src/app/models/CustomForms';
 import { CustomViewModel, CustomViewVariables, CvQueryUtils, CvSparqlEditorStruct, DynamicVectorViewDefinition, UpdateInfo, UpdateMode } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
+import { CustomViewsServices } from 'src/app/services/customViewsServices';
 import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
-import { ModalType } from 'src/app/widget/modal/Modals';
+import { ModalOptions, ModalType, TranslationUtils } from 'src/app/widget/modal/Modals';
 import { AbstractCustomViewEditor } from './abstractCustomViewEditor';
 import { SingleValueEditor, UpdateInfoEnhanced } from './singleValueEditor';
 
@@ -49,7 +54,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     updateTabs: UpdateTabStruct[] = [];
     activeUpdateTab: UpdateTabStruct;
 
-    constructor(private basicModals: BasicModalServices) {
+    constructor(private customViewService: CustomViewsServices, private basicModals: BasicModalServices, private modalService: NgbModal, private translateService: TranslateService) {
         super();
     }
 
@@ -116,6 +121,21 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
 
     private detectFields() {
         this.retrieveFields = CvQueryUtils.listFieldVariables(this.retrieveEditor.query);
+    }
+
+    suggestFromCF() {
+        const modalRef: NgbModalRef = this.modalService.open(CustomFormPickerModal, new ModalOptions());
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText({ key: "ACTIONS.SELECT_CUSTOM_FORM" }, this.translateService);
+        modalRef.result.then(
+            (cf: CustomForm) => {
+                this.customViewService.suggestDynamicVectorCVFromCustomForm(cf.getId()).subscribe(
+                    query => {
+                        this.retrieveEditor.query = query;
+                        this.refreshYasguiEditors();
+                    }
+                );
+            }
+        );
     }
 
 

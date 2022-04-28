@@ -11,7 +11,6 @@ import { OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { AlignmentServices } from "../../services/alignmentServices";
 import { MapleServices } from "../../services/mapleServices";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
-import { ProjectServices } from "../../services/projectServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { NTriplesUtil } from "../../utils/ResourceUtils";
@@ -57,7 +56,7 @@ export class AssistedSearchModal {
     private activeStringMatchMode: SearchMode;
 
     translationParams: { datasetUriSpace: string, projName: string };
-    
+
     constructor(public activeModal: NgbActiveModal, private alignmentService: AlignmentServices,
         private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices,
         private basicModals: BasicModalServices, private modalService: NgbModal) {
@@ -96,7 +95,7 @@ export class AssistedSearchModal {
             finalize(() => HttpServiceContext.removeContextProject())
         ).subscribe(
             resp => {
-                HttpServiceContext.removeContextProject()
+                HttpServiceContext.removeContextProject();
                 this.profileMediation();
             }
         );
@@ -119,7 +118,7 @@ export class AssistedSearchModal {
                 finalize(() => HttpServiceContext.removeContextProject())
             ).subscribe(
                 available => {
-                    HttpServiceContext.removeContextProject()
+                    HttpServiceContext.removeContextProject();
                     this.projectMetadataAvailabilityMap.set(this.selectedProject, available);
                     this.profileMediationLocalProject();
                 }
@@ -141,7 +140,7 @@ export class AssistedSearchModal {
         ).subscribe(
             resp => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                HttpServiceContext.removeContextProject()
+                HttpServiceContext.removeContextProject();
                 this.projectMetadataAvailabilityMap.set(this.selectedProject, true);
                 this.profileMediation();
             }
@@ -169,7 +168,7 @@ export class AssistedSearchModal {
                     this.datasetMetadataAvailabilityMap.set(this.selectedDataset, lexSet.length > 0);
                     this.profileMediationRemoteDataset();
                 }
-            )
+            );
         }
     }
 
@@ -180,7 +179,7 @@ export class AssistedSearchModal {
             () => {
                 this.initRemoteDatasets();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -198,7 +197,7 @@ export class AssistedSearchModal {
 
     private profileMediation() {
         this.pairedLexicalizationSets = null;
-        
+
         let resourcePosition: ResourcePosition;
         if (this.targetPosition == ResourcePositionEnum.local) {
             resourcePosition = new LocalResourcePosition(this.selectedProject.getName());
@@ -249,7 +248,7 @@ export class AssistedSearchModal {
         });
         return checkedSearchModes;
     }
-    
+
     /**
      * Ok is clickable when there is at least a shared lexicalization checked.
      * Check also if a project is selected (in case of local project target) 
@@ -268,14 +267,14 @@ export class AssistedSearchModal {
             if (l.checked) {
                 ok = true;
             }
-        })
+        });
         return ok;
     }
 
     private selectSearchResult(searchResult: ARTURIResource[]) {
         const modalRef: NgbModalRef = this.modalService.open(AssistedSearchResultModal, new ModalOptions());
         modalRef.componentInstance.title = "Select search result";
-		modalRef.componentInstance.resourceList = searchResult;
+        modalRef.componentInstance.resourceList = searchResult;
         return modalRef.result;
     }
 
@@ -287,7 +286,7 @@ export class AssistedSearchModal {
     }
 
     ok() {
-        let resourcePosition: string = this.targetPosition + ":" + 
+        let resourcePosition: string = this.targetPosition + ":" +
             ((this.targetPosition == ResourcePositionEnum.local) ? this.selectedProject.getName() : this.selectedDataset.identity);
 
         let langsToLexModel: Map<string, ARTURIResource> = new Map();
@@ -304,7 +303,7 @@ export class AssistedSearchModal {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND"}, ModalType.warning);
+                    this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND" }, ModalType.warning);
                 } else {
                     this.selectSearchResult(searchResult).then(
                         (selectedResource: ARTURIResource) => {
@@ -313,19 +312,19 @@ export class AssistedSearchModal {
                     );
                 }
             },
-            () => {}
+            () => { }
         );
     }
-    
+
     cancel() {
         this.activeModal.dismiss();
     }
 
     private updateTranslationParams() {
-        this.translationParams = { 
-            datasetUriSpace: this.selectedDataset != null ? this.selectedDataset.uriSpace : null, 
+        this.translationParams = {
+            datasetUriSpace: this.selectedDataset != null ? this.selectedDataset.uriSpace : null,
             projName: this.selectedProject != null ? this.selectedProject.getName() : null
-        }
+        };
     }
 
 }

@@ -114,6 +114,7 @@
         "SEARCH": "Cerca",
         "SELECT": "Seleziona",
         "SELECT_CONSTRUCTOR": "Seleziona constructor",
+        "SELECT_CUSTOM_FORM": "Seleziona un Custom Form",
         "SELECT_CUSTOM_RANGE": "Seleziona un Custom Range",
         "SELECT_EXISTING_RESOURCE": "Seleziona risorsa esistente",
         "SELECT_EXTERNAL_RESOURCE": "Seleziona risorsa esterna",
@@ -709,7 +710,8 @@
             "CREATE_CUSTOM_VIEW": "Crea Custom View",
             "DELETE_ASSOCIATION": "Cancella property association",
             "DELETE_CUSTOM_VIEW": "Elimina Custom View",
-            "EDIT_CUSTOM_VIEW": "Modifica Custom View"
+            "EDIT_CUSTOM_VIEW": "Modifica Custom View",
+            "SUGGEST_FROM_CF": "Suggerisci da CF"
         },
         "CUSTOM_VIEW": "Custom View",
         "CUSTOM_VIEWS": "Custom Views",
@@ -725,6 +727,8 @@
             "INVALID_PROP_CHAIN": "La property chain deve contenere almeno una proprietà.",
             "MISSING_REQUIRED_PLACEHOLDER": "Placeholder ${{ph}} mancante nella Retrieve query.",
             "MISSING_REQUIRED_VARIABLE": "Variabile ?{{var}} mancante nella Retrieve query.",
+            "MULTIPLE_PLACEHOLDERS_IN_PEARL_GRAPH": "Il CustomForm scelto ha più placeholder che appaiono come oggetti in triple della sezione graph del PEARL. Seleziona quello che si desidera usare per renderizzare il valore tramite CustomView",
+            "NO_FIELDS_DETECTED_IN_RETRIEVE": "Nessun campo rilevato nella Retrieve query",
             "NO_FIELD_VARIABLE_IN_RETRIEVE": "Nessuna variabile campo (?<field>_value) ritornata dalla Retrieve query",
             "OBJ_VAR_NOT_DETECTED": "Variabile oggetto della coppia $resource $trigprop non rilevata o non ritornata nella Retrieve query",
             "RETRIEVE_QUERY_SYNTAX_ERROR": "Retrieve query contiene errori sintattici",
@@ -754,6 +758,7 @@
                 "STATISTICAL_SERIES": "Serie statistica"
             },
             "VECTOR": {
+                "DETECTED_FIELDS": "Campi rilevati",
                 "DYNAMIC_CUSTOMIZABLE": "Modello vettoriale dinamico personalizzabile",
                 "HEADERS": "Intestazioni",
                 "PREFEFINED_STATIC": "Modello vettoriale statico predefinito",

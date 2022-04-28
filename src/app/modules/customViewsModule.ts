@@ -17,6 +17,7 @@ import { SeriesCollectionViewEditorComponent } from '../customViews/editors/view
 import { SeriesViewEditorComponent } from '../customViews/editors/views/seriesViewEditorComponent';
 import { SingleValueEditor } from '../customViews/editors/views/singleValueEditor';
 import { StaticVectorViewEditorComponent } from '../customViews/editors/views/staticVectorViewEditorComponent';
+import { SuggestFromCfValueSelectionModal } from '../customViews/editors/views/suggestFromCfValueSelectionModal';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
@@ -33,7 +34,6 @@ import { SharedModule } from './sharedModule';
         CustomViewsComponent,
         CustomViewEditorModal,
         CvAssociationEditorModal,
-
         AdvSingleValueViewEditorComponent,
         AreaViewEditorComponent,
         DynamicVectorViewEditorComponent,
@@ -43,13 +43,14 @@ import { SharedModule } from './sharedModule';
         SeriesViewEditorComponent,
         SeriesCollectionViewEditorComponent,
         StaticVectorViewEditorComponent,
-
-        SingleValueEditor
+        SingleValueEditor,
+        SuggestFromCfValueSelectionModal
     ],
     exports: [CustomViewsComponent],
     entryComponents: [
         CustomViewEditorModal,
         CvAssociationEditorModal,
+        SuggestFromCfValueSelectionModal
     ]
 })
 export class CustomViewsModule { }

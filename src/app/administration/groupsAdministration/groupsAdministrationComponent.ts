@@ -45,11 +45,11 @@ export class GroupsAdministrationComponent {
     }
 
     createGroup() {
-        this.openGroupEditor({key:"ADMINISTRATION.ACTIONS.CREATE_GROUP"}).then(
+        this.openGroupEditor({ key: "ADMINISTRATION.ACTIONS.CREATE_GROUP" }).then(
             data => {
                 this.initGroups();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -62,20 +62,20 @@ export class GroupsAdministrationComponent {
     }
 
     editGroup() {
-        this.openGroupEditor({key:"ADMINISTRATION.ACTIONS.EDIT_GROUP"}, this.selectedGroup).then(
+        this.openGroupEditor({ key: "ADMINISTRATION.ACTIONS.EDIT_GROUP" }, this.selectedGroup).then(
             (updatedGroup: UsersGroup) => {
                 this.initGroups(updatedGroup);
             },
-            () => {}
+            () => { }
         );
     }
 
     private openGroupEditor(title: Translation, group?: UsersGroup) {
         const modalRef: NgbModalRef = this.modalService.open(GroupEditorModal, new ModalOptions());
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
-		modalRef.componentInstance.group = group;
+        modalRef.componentInstance.group = group;
         return modalRef.result;
     }
-    
+
 
 }

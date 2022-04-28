@@ -700,6 +700,11 @@ button.resViewPartitionAddBtn:disabled  {
     cursor: pointer;
 }
 
+/* Disable CSS effect applied on hover */
+.no-hover {
+    pointer-events: none;
+}
+
 lang-pref {
     display: flex;
     flex: 1;

@@ -43,10 +43,10 @@ export class CustomFormEditorModal {
     descriptionTextareaRows: number = 3; //3 by default, dynamically computed in edit mode
     type: CustomFormType = "graph";
     ref: string;
-    
+
     extractFromShaclAuthorized: boolean;
 
-    constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
+    constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices,
         private cfService: CustomFormsServices, private translateService: TranslateService, private elementRef: ElementRef) {
     }
 
@@ -63,11 +63,11 @@ export class CustomFormEditorModal {
                     this.description = cf.getDescription();
                     this.ref = cf.getRef();
 
-                    let lineBreakCount = (this.description.match(/\n/g)||[]).length;
+                    let lineBreakCount = (this.description.match(/\n/g) || []).length;
                     this.descriptionTextareaRows = lineBreakCount + 2;
                 },
-                err => { this.activeModal.dismiss() }
-            )
+                err => { this.activeModal.dismiss(); }
+            );
         } else {
             this.mode = EditorMode.create;
         }
@@ -82,12 +82,12 @@ export class CustomFormEditorModal {
     // ============= PEARL handler ================
 
     pickConverter() {
-        this.sharedModals.selectConverter({key:"ACTIONS.PICK_CONVERTER"}, null).then(
-            (converter: {projectionOperator: string, contractDesctiption: any }) => {
+        this.sharedModals.selectConverter({ key: "ACTIONS.PICK_CONVERTER" }, null).then(
+            (converter: { projectionOperator: string, contractDesctiption: any }) => {
                 this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     inferAnnotations() {
@@ -95,7 +95,7 @@ export class CustomFormEditorModal {
             (result: PearlValidationResult) => {
                 if (!result.valid) {
                     let msg = this.translateService.instant("MESSAGES.CANNOT_INFER_PEARL_ANNOTATIONS");
-                    this.basicModals.alert({key:"STATUS.ERROR"}, msg + "\n" + result.details, ModalType.error);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, msg + "\n" + result.details, ModalType.error);
                     return;
                 }
                 this.cfService.inferPearlAnnotations(this.ref).subscribe(
@@ -105,18 +105,18 @@ export class CustomFormEditorModal {
                             () => {
                                 this.ref = annotatedPearl;
                             },
-                            () => {}
-                        )
+                            () => { }
+                        );
                     }
                 );
             }
-        )
+        );
     }
 
     private openInferenceValidationModal(newPearl: string) {
         const modalRef: NgbModalRef = this.modalService.open(PearlInferenceValidationModal, new ModalOptions('xl'));
         modalRef.componentInstance.oldPearl = this.ref;
-		modalRef.componentInstance.newPearl = newPearl;
+        modalRef.componentInstance.newPearl = newPearl;
         return modalRef.result;
     }
 
@@ -126,8 +126,8 @@ export class CustomFormEditorModal {
             pearl => {
                 this.ref = pearl;
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     openWizard(customRange: boolean) {
@@ -140,7 +140,7 @@ export class CustomFormEditorModal {
             pearl => {
                 this.ref = pearl;
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -160,7 +160,7 @@ export class CustomFormEditorModal {
         if (separatorIdx > 0) {
             this.cfPrefix = this.cfId.substring(0, separatorIdx + 1);
             this.cfShortId = this.cfId.substring(separatorIdx + 1);
-        } else {  //no . in the id => restore the original id
+        } else { //no . in the id => restore the original id
             this.cfShortId = null;
         }
     }
@@ -168,17 +168,17 @@ export class CustomFormEditorModal {
     ok() {
         //check if input data is valid
         if (this.name == null || this.name.trim() == "" || this.ref == null || this.ref.trim() == "") {
-            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key: "MESSAGES.FILL_ALL_REQUIRED_FIELDS"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.FILL_ALL_REQUIRED_FIELDS" }, ModalType.warning);
             return;
         }
 
         if (this.cfId == null) { //check only in create mode
             if (this.cfShortId == null || !this.cfShortId.match(/^[a-zA-Z0-9.-_]+$/i)) { //invalid character
-                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key: "MESSAGES.INVALID_CUSTOM_FORM_ID"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.INVALID_CUSTOM_FORM_ID" }, ModalType.warning);
                 return;
             }
             if (this.existingForms.indexOf(this.cfPrefix + this.cfShortId) != -1) { //CRE with the same id already exists
-                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key: "MESSAGES.ALREADY_EXISTING_CUSTOM_FORM_ID"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.ALREADY_EXISTING_CUSTOM_FORM_ID" }, ModalType.warning);
                 return;
             }
         }
@@ -187,7 +187,7 @@ export class CustomFormEditorModal {
         this.cfService.validatePearl(this.ref, this.type).subscribe(
             (result: PearlValidationResult) => {
                 if (!result.valid) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, result.details, ModalType.error);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, result.details, ModalType.error);
                     return;
                 }
                 if (this.description == null) { //set empty definition if it is not provided (prevent setting "undefined" as definition of CRE)

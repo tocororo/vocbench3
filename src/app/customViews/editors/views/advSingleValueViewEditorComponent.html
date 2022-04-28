@@ -20,14 +20,8 @@
             <div [hidden]="activeTab != 'retrieve'" class="vbox">
                 <expandable-alert class="mb-2">
                     <p>
-                        The retrieve query for this kind of view must return the following variables:
+                        The retrieve query for this kind of view needs to retrieve the single value to render.
                     </p>
-                    <ul>
-                        <li *ngFor="let v of retrieveVariablesInfo">
-                            <code>?{{v.id}}</code>: {{v.descrTranslationKey|translate}};
-                        </li>
-                        <li>The variable representing the object of the <code>$resource $trigprop</code> pair (e.g. <code>?obj</code> in <code>$resource $trigprop ?obj</code>).</li>
-                    </ul>
                     <p>
                         The query must contain these placeholders:
                     </p>
@@ -40,7 +34,12 @@
                         It is also possible to define an arbitrary amount of pivot placeholders (to name <code>$piovt</code>, <code>$pivot_1</code>, <code>$pivot_2</code>, ...) which can be used to define anchor points to be referenced in the Update query. Each pivot resource returned by the Retrieve query will be bound, to the related placeholder in the Update query, during an update operation.
                     </p>
                 </expandable-alert>
-                <yasgui #retrieveYasgui [query]="retrieveEditor.query" (querychange)="onRetrieveChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
+
+                <div class="vbox" style="position: relative;">
+                    <button class="btn btn-light btn-xs" style="position: absolute; top: 0px; right: 0px;" (click)="suggestFromCF()">{{'CUSTOM_VIEWS.ACTIONS.SUGGEST_FROM_CF'|translate}}</button>
+                    <yasgui #retrieveYasgui [query]="retrieveEditor.query" (querychange)="onRetrieveChanged($event)" [readonly]="readonly" hideButtons="true"></yasgui>
+                </div>
+
             </div>
 
             <div [hidden]="activeTab != 'update'" class="vbox">

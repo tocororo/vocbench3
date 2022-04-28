@@ -40,7 +40,7 @@ export abstract class AbstractCustomConstructorModal {
      * Called by changeClass, that just invoke this method passing the root class
      */
     changeClassWithRoot(rootClass: ARTURIResource) {
-        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.CHANGE_CLASS"}, [rootClass]).then(
+        this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.CHANGE_CLASS" }, [rootClass]).then(
             (selectedClass: any) => {
                 if ((<ARTURIResource>selectedClass).getURI() != this.resourceClass.getURI()) {
                     this.resourceClass = selectedClass;
@@ -80,12 +80,12 @@ export abstract class AbstractCustomConstructorModal {
      * Collect the data in the custom form fields and return them as json map object
      */
     collectCustomFormData(): any {
-        let entryMap: {[key: string]: any} = {}; //{key: svalue, key: value,...}
+        let entryMap: { [key: string]: any } = {}; //{key: svalue, key: value,...}
         for (let i = 0; i < this.formFields.length; i++) {
             let entry = this.formFields[i];
             let value: any = entry['value'];
             let empty: boolean = false;
-            try { if (value.trim() == "") { empty = true; } } catch (err) {} //entry value could be not a string, so the check is in a try-catch
+            try { if (value.trim() == "") { empty = true; } } catch (err) { } //entry value could be not a string, so the check is in a try-catch
             if (!empty) {
                 //add the entry only if not already in
                 let alreadyIn: boolean = false;
@@ -135,7 +135,7 @@ export abstract class AbstractCustomConstructorModal {
     ok() {
         let constraintViolatedMsg = CustomFormUtils.isFormConstraintOk(this.formFields);
         if (constraintViolatedMsg != null) {
-            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, constraintViolatedMsg, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, constraintViolatedMsg, ModalType.warning);
             return;
         }
         this.okImpl();

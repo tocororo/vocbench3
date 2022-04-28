@@ -1,0 +1,42 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body vbox">
+
+        <div class="card card-default vbox">
+            <div class="card-header">
+                <label style="flex: 1"></label>
+                <button class="btn btn-xs btn-light" (click)="showCustomForm()" [disabled]="!selectedCustomForm">
+                    <span class="fas fa-eye"></span>
+                </button>
+            </div>
+            <div class="card-body vbox">
+                <div class="scrollableContainer">
+                    <table class="table table-sm table-borderless table-hoverable">
+                        <tbody>
+                            <tr *ngFor="let cForm of customForms" (click)="selectedCustomForm = cForm" [ngClass]="{ 'table-primary': cForm == selectedCustomForm, grayText: cForm.getLevel() == 'system' }">
+                                <td>{{cForm.getId()}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <span class="btn btn-light btn-xs float-right no-hover grayText">
+                    {{'CUSTOM_FORMS.CONFIG.SYSTEM_LEVEL_ELEM'|translate}}
+                </span>
+                <span class="btn btn-light btn-xs float-right no-hover">
+                    {{'CUSTOM_FORMS.CONFIG.PROJECT_LEVEL_ELEM'|translate}}
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedCustomForm">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+</div>

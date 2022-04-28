@@ -112,6 +112,7 @@
         "SEARCH": "Rechercher",
         "SELECT": "Sélectionner",
         "SELECT_CONSTRUCTOR": "Sélectionner un constructor",
+        "SELECT_CUSTOM_FORM": "Sélectionner un Custom Form",
         "SELECT_CUSTOM_RANGE": "Sélectionner un Custom Range",
         "SELECT_EXISTING_RESOURCE": "Sélectionner une ressource existante",
         "SELECT_EXTERNAL_RESOURCE": "Sélectionner une ressource externe",

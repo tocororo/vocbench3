@@ -18,10 +18,6 @@ export class CustomFormSelectionModal {
 
     constructor(public activeModal: NgbActiveModal) {}
 
-    private selectCF(cf: CustomForm) {
-        this.selectedCF = cf;
-    }
-
     ok() {
         this.activeModal.close(this.selectedCF);
     }

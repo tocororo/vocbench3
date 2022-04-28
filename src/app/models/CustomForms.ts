@@ -348,7 +348,7 @@ export class CustomFormUtils {
                 if (field.isMandatory() && (value == null || emptyString || emptyList)) {
                     valid = false;
                 }
-            })
+            });
         }
         return valid;
     }
@@ -375,7 +375,7 @@ export class CustomFormUtils {
                     }
                 }
             }
-        };
+        }
         return null; //if this code is reached, none constraint has been violated
     }
 
@@ -396,7 +396,7 @@ export class CustomFormValueTable {
                 let pred: ARTURIResource = Deserializer.createURI(poPair[0]);
                 let obj: ARTNode = poPair[1] ? Deserializer.createRDFNode(poPair[1]) : null;
                 row.cells.push({ pred: pred, value: obj });
-            })
+            });
             table.rows.push(row);
         }
         return table;

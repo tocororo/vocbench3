@@ -11,6 +11,7 @@ import { CustomFormModal } from '../customForms/customForm/customFormModal';
 import { CustomFormConfigComponent } from '../customForms/customFormConfComponent';
 import { BrokenCFStructReportModal } from '../customForms/editors/brokenCFStructReportModal';
 import { CustomFormEditorModal } from '../customForms/editors/customFormEditorModal';
+import { CustomFormPickerModal } from '../customForms/editors/customFormPickerModal';
 import { AdvancedGraphEditor } from '../customForms/editors/customFormWizard/advancedGraphEditor';
 import { ConstraintValuesSelector } from '../customForms/editors/customFormWizard/constraintValuesSelector';
 import { ConverterConfigModal } from '../customForms/editors/customFormWizard/converterConfigModal';
@@ -50,6 +51,7 @@ import { Sheet2RdfModule } from './sheet2rdfModule';
         CustomFormField,
         CustomFormFieldList,
         CustomFormModal,
+        CustomFormPickerModal,
         CustomFormWizardFieldsEditor,
         CustomFormWizardGraphEditor,
         CustomFormWizardNodesEditor,
@@ -64,13 +66,15 @@ import { Sheet2RdfModule } from './sheet2rdfModule';
     ],
     exports: [
         CustomFormConfigComponent,
-        CustomFormComponent //exported since is used in vbModalModule (creation dialogs)
+        CustomFormComponent, //exported since is used in vbModalModule (creation dialogs)
+        CustomFormPickerModal,
     ], 
     entryComponents: [
         AdvancedGraphEditor,
         BrokenCFStructReportModal,
         CustomFormEditorModal,
         CustomFormModal,
+        CustomFormPickerModal,
         CustomFormWizardModal,
         ExtractFromShaclModal,
         FormCollMappingModal,

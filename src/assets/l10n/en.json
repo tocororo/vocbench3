@@ -114,6 +114,7 @@
         "SEARCH": "Search",
         "SELECT": "Select",
         "SELECT_CONSTRUCTOR": "Select constructor",
+        "SELECT_CUSTOM_FORM": "Select a Custom Form",
         "SELECT_CUSTOM_RANGE": "Select a Custom Range",
         "SELECT_EXISTING_RESOURCE": "Select existing resource",
         "SELECT_EXTERNAL_RESOURCE": "Select external resource",
@@ -709,7 +710,8 @@
             "CREATE_CUSTOM_VIEW": "Create Custom View",
             "DELETE_ASSOCIATION": "Delete property association",
             "DELETE_CUSTOM_VIEW": "Delete Custom View",
-            "EDIT_CUSTOM_VIEW": "Edit Custom View"
+            "EDIT_CUSTOM_VIEW": "Edit Custom View",
+            "SUGGEST_FROM_CF": "Suggest from CF"
         },
         "CUSTOM_VIEW": "Custom View",
         "CUSTOM_VIEWS": "Custom Views",
@@ -725,6 +727,8 @@
             "INVALID_PROP_CHAIN": "Property chain must contain at least one proprety.",
             "MISSING_REQUIRED_PLACEHOLDER": "Required placeholder ${{ph}} missing in Retrieve query.",
             "MISSING_REQUIRED_VARIABLE": "Required variable ?{{var}} missing in Retrieve query.",
+            "MULTIPLE_PLACEHOLDERS_IN_PEARL_GRAPH": "The chosen CustomForm has multiple placeholders that appear as objects in triples of the PEARL graph section. Please, select the one you want to use to render the value via the CustomView",
+            "NO_FIELDS_DETECTED_IN_RETRIEVE": "No field detected in Retrieve query sparql",
             "NO_FIELD_VARIABLE_IN_RETRIEVE": "No field variable (?<field>_value) returned by Retrieve query",
             "OBJ_VAR_NOT_DETECTED": "Object variable of pair $resource $trigprop either not detected or not returned in Retrieve query",
             "RETRIEVE_QUERY_SYNTAX_ERROR": "Retrieve query contains syntactic error(s)",
@@ -754,6 +758,7 @@
                 "STATISTICAL_SERIES": "Statistical Series"
             },
             "VECTOR": {
+                "DETECTED_FIELDS": "Detected fields",
                 "DYNAMIC_CUSTOMIZABLE": "Dynamic Customizable Vector Model",
                 "HEADERS": "Headers",
                 "PREFEFINED_STATIC": "Predefined Static Vector Model",

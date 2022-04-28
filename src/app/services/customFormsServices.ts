@@ -65,7 +65,7 @@ export class CustomFormsServices {
                     let userPrompt = stResp[i].userPrompt;
                     let converter = stResp[i].converter.uri;
                     let entry = new FormField(placeholderId, type, converter, featureName, userPrompt, mandatory);
-                    
+
                     //coda:langString could have an argument to specify the language through another entry 
                     if (converter == "http://art.uniroma2.it/coda/contracts/langString") {
                         let argUserPrompt = stResp[i].converter.arg.userPrompt;
@@ -76,7 +76,7 @@ export class CustomFormsServices {
                             entry.setConverterArg({ lang: argLang });
                         }
                     }
-                    
+
                     if (type == "literal") {
                         let datatype = stResp[i].datatype;
                         if (datatype != undefined) {
@@ -90,32 +90,32 @@ export class CustomFormsServices {
                     stResp[i].annotations.forEach((ann: CustomFormRepresentationRespRecord) => {
                         let ffa: FormFieldAnnotation;
                         let annName: AnnotationName = ann.name;
-                        if (annName == AnnotationName.DataOneOf) { 
+                        if (annName == AnnotationName.DataOneOf) {
                             //arg: "value" that is a list of Literal
                             let annValue: ARTLiteral[] = [];
                             ann.value.forEach((av: string) => {
                                 annValue.push(NTriplesUtil.parseLiteral(av));
-                            })
-                            ffa = { name: annName, value: annValue }
+                            });
+                            ffa = { name: annName, value: annValue };
                         } else if (annName == AnnotationName.ObjectOneOf || annName == AnnotationName.RangeList) {
                             //arg: "value" that is a list of IRI
                             let annValue: ARTURIResource[] = [];
                             ann.value.forEach((av: string) => {
                                 annValue.push(NTriplesUtil.parseURI(av));
-                            })
-                            ffa = { name: annName, value: annValue }
+                            });
+                            ffa = { name: annName, value: annValue };
                         } else if (annName == AnnotationName.Range) {
                             //arg: "value" that is an IRI
                             let annValue: ARTURIResource = NTriplesUtil.parseURI(ann.value[0]);
-                            ffa = { name: annName, value: annValue }
+                            ffa = { name: annName, value: annValue };
                         } else if (annName == AnnotationName.Foreign) {
                             //arg: "value" that is a String
                             let annValue: string = ann.value[0];
-                            ffa = { name: annName, value: annValue }
+                            ffa = { name: annName, value: annValue };
                         } else if (annName == AnnotationName.Role) {
                             //arg: "value" that is a list of String
-                            let annValue: string[] = ann.value
-                            ffa = { name: annName, value: annValue }
+                            let annValue: string[] = ann.value;
+                            ffa = { name: annName, value: annValue };
                         } else if (annName == AnnotationName.Collection) {
                             //arg: "min" and "max" that are int
                             let annMin: number = ann.min ? ann.min[0] : null;
@@ -169,13 +169,11 @@ export class CustomFormsServices {
                     fcMappings.push(new FormCollectionMapping(formCollection, resource, mappingNode.replace));
                 }
                 //sort by resource uri
-                fcMappings.sort(
-                    function (a: FormCollectionMapping, b: FormCollectionMapping) {
-                        if (a.getResource().getURI() < b.getResource().getURI()) return -1;
-                        if (a.getResource().getURI() > b.getResource().getURI()) return 1;
-                        return 0;
-                    }
-                );
+                fcMappings.sort((a: FormCollectionMapping, b: FormCollectionMapping) => {
+                    if (a.getResource().getURI() < b.getResource().getURI()) return -1;
+                    if (a.getResource().getURI() > b.getResource().getURI()) return 1;
+                    return 0;
+                });
                 return fcMappings;
             })
         );
@@ -211,9 +209,9 @@ export class CustomFormsServices {
     }
 
     /**
-	 * Update the replaceRanges attribute of a property-CR mapping for the given property
-	 * @param property
-	 * @param replaceRanges
+     * Update the replaceRanges attribute of a property-CR mapping for the given property
+     * @param property
+     * @param replaceRanges
      */
     updateReplace(resource: ARTURIResource, replace: boolean) {
         let params: any = {
@@ -240,13 +238,11 @@ export class CustomFormsServices {
                     fc.setLevel(stResp[i].level);
                     formCollections.push(fc);
                 }
-                formCollections.sort(
-                    function (a: FormCollection, b: FormCollection) {
-                        if (a.getId() < b.getId()) return -1;
-                        if (a.getId() > b.getId()) return 1;
-                        return 0;
-                    }
-                );
+                formCollections.sort((a: FormCollection, b: FormCollection) => {
+                    if (a.getId() < b.getId()) return -1;
+                    if (a.getId() > b.getId()) return 1;
+                    return 0;
+                });
                 return formCollections;
             })
         );
@@ -271,19 +267,17 @@ export class CustomFormsServices {
                     cf.setLevel(stResp.forms[i].level);
                     forms.push(cf);
                 }
-                forms.sort(
-                    function (a: CustomForm, b: CustomForm) {
-                        if (a.getId() < b.getId()) return -1;
-                        if (a.getId() > b.getId()) return 1;
-                        return 0;
-                    }
-                );
+                forms.sort((a: CustomForm, b: CustomForm) => {
+                    if (a.getId() < b.getId()) return -1;
+                    if (a.getId() > b.getId()) return 1;
+                    return 0;
+                });
                 formColl.setForms(forms);
 
                 let suggestions: ARTURIResource[] = Deserializer.createURIArray(stResp.suggestions);
                 ResourceUtils.sortResources(suggestions, SortAttribute.value);
                 formColl.setSuggestions(suggestions);
-                
+
                 return formColl;
             })
         );
@@ -383,13 +377,11 @@ export class CustomFormsServices {
                     customForms.push(cf);
                 }
                 //sort
-                customForms.sort(
-                    function (a: CustomForm, b: CustomForm) {
-                        if (a.getId() < b.getId()) return -1;
-                        if (a.getId() > b.getId()) return 1;
-                        return 0;
-                    }
-                );
+                customForms.sort((a: CustomForm, b: CustomForm) => {
+                    if (a.getId() < b.getId()) return -1;
+                    if (a.getId() > b.getId()) return 1;
+                    return 0;
+                });
                 return customForms;
             })
         );
@@ -413,13 +405,11 @@ export class CustomFormsServices {
                         cf.setDescription(stResp.forms[i].description);
                         forms.push(cf);
                     }
-                    forms.sort(
-                        function (a: CustomForm, b: CustomForm) {
-                            if (a.getName() < b.getName()) return -1;
-                            if (a.getName() > b.getName()) return 1;
-                            return 0;
-                        }
-                    )
+                    forms.sort((a: CustomForm, b: CustomForm) => {
+                        if (a.getName() < b.getName()) return -1;
+                        if (a.getName() > b.getName()) return 1;
+                        return 0;
+                    });
                 }
                 return forms;
             })
@@ -603,7 +593,7 @@ export class CustomFormsServices {
                         level: stResp[i].level,
                         file: stResp[i].file,
                         reason: stResp[i].reason
-                    }) 
+                    });
                 }
 
                 //sort by: level then type

@@ -1,0 +1,23 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body vbox">
+
+        <div class="alert alert-warning">
+            {{'CUSTOM_VIEWS.MESSAGES.MULTIPLE_PLACEHOLDERS_IN_PEARL_GRAPH'|translate}}
+        </div>
+
+        <select class="form-control mt-2" [(ngModel)]="selectedCandidate" style="font-family: monospace;">
+            <option *ngFor="let v of valueCandidates">{{v}}</option>
+        </select>
+
+        <pearl-editor class="mt-2" [ngModel]="pearl" [disabled]="true">
+        </pearl-editor>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+</div>

@@ -37,7 +37,7 @@ export class PropertyEnrichmentHelper {
     public static getPropertyEnrichmentInfo(predicate: ARTURIResource, propService: PropertyServices, basicModals: BasicModalServices): Observable<PropertyEnrichmentInfo> {
         return propService.getRange(predicate).pipe(
             mergeMap(range => {
-                var ranges = range.ranges;
+                let ranges = range.ranges;
                 let customForms: CustomForm[];
                 if (range.formCollection != null) {
                     let forms = range.formCollection.getForms();
@@ -61,13 +61,13 @@ export class PropertyEnrichmentHelper {
                             dataRanges: dataRanges
                         });
                     } else if (ranges.type == RangeType.undetermined) {
-                        var options = [RDFTypesEnum.resource, RDFTypesEnum.literal];
+                        let options = [RDFTypesEnum.resource, RDFTypesEnum.literal];
                         return from(
-                            basicModals.select({key:"DATA.ACTIONS.SELECT_RANGE_TYPE"}, null, options).then(
+                            basicModals.select({ key: "DATA.ACTIONS.SELECT_RANGE_TYPE" }, null, options).then(
                                 (selectedRange: any) => {
                                     if (selectedRange == RDFTypesEnum.resource) {
-                                        return { type: EnrichmentType.resource }
-                                    } else if (selectedRange == RDFTypesEnum.literal) {
+                                        return { type: EnrichmentType.resource };
+                                    } else { //if (selectedRange == RDFTypesEnum.literal) {
                                         return { type: EnrichmentType.literal };
                                     }
                                 },
@@ -77,7 +77,7 @@ export class PropertyEnrichmentHelper {
                             )
                         );
                     } else if (ranges.type == "inconsistent") {
-                        basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.INCONSISTENT_PROPERTY_ERROR", params:{property: predicate.getShow()}}, ModalType.warning);
+                        basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INCONSISTENT_PROPERTY_ERROR", params: { property: predicate.getShow() } }, ModalType.warning);
                         return of({ type: null });
                     }
                 }
@@ -85,7 +85,7 @@ export class PropertyEnrichmentHelper {
                  * both "classic" and custom range
                  */
                 else if (ranges != undefined && customForms != undefined) {
-                    var rangeOptions: CustomForm[] = [];
+                    let rangeOptions: CustomForm[] = [];
                     //classic ranges (this is a workaround to use selection CF modal with classic range as well)
                     if (ranges.type == RangeType.resource) {
                         rangeOptions.push(new CustomForm(RDFTypesEnum.resource, RDFTypesEnum.resource));
@@ -103,14 +103,14 @@ export class PropertyEnrichmentHelper {
                         basicModals.selectCustomForm({ key: "DATA.ACTIONS.SELECT_RANGE" }, rangeOptions).then(
                             (selectedCF: CustomForm) => {
                                 //check if selected range is one of the customs
-                                for (var i = 0; i < customForms.length; i++) {
+                                for (let i = 0; i < customForms.length; i++) {
                                     if ((<CustomForm>selectedCF).getId() == customForms[i].getId()) {
                                         return { type: EnrichmentType.customForm, form: customForms[i] };
                                     }
                                 }
                                 if (selectedCF.getId() == RDFTypesEnum.resource) {
                                     return { type: EnrichmentType.resource };
-                                } else if (selectedCF.getId() == RDFTypesEnum.literal) {
+                                } else { // if (selectedCF.getId() == RDFTypesEnum.literal) {
                                     return { type: EnrichmentType.literal };
                                 }
                             },

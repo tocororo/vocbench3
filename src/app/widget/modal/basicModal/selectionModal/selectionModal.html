@@ -1,6 +1,6 @@
 <div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
     <div class="modal-header" cdkDragHandle>
-        <h3 [class]="headerStyle">{{title}}</h3>
+        <h3 class="modal-title">{{title}}</h3>
     </div>
     <div class="modal-body vbox mb-2">
         <div *ngIf="message" [class]="msgStyle + ' mb-2'">

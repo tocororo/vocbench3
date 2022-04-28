@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource } from '../models/ARTResources';
 import { Reference } from '../models/Configuration';
-import { BindingMapping, CustomViewAssociation, CustomViewConfiguration, CustomViewData, CustomViewDefinition, CustomViewModel, ViewsEnum } from '../models/CustomViews';
+import { CustomViewAssociation, CustomViewConfiguration, CustomViewData, CustomViewDefinition, CustomViewModel, ViewsEnum } from '../models/CustomViews';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -19,10 +19,10 @@ export class CustomViewsServices {
      * 
      */
     getViewsIdentifiers(): Observable<string[]> {
-        let params = {}
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getViewsIdentifiers", params).pipe(
             map(refs => {
-                return refs.sort((r1: string, r2: string) => r1.localeCompare(r2))
+                return refs.sort((r1: string, r2: string) => r1.localeCompare(r2));
             })
         );
     }
@@ -34,7 +34,7 @@ export class CustomViewsServices {
     getCustomView(reference: string): Observable<CustomViewConfiguration> {
         let params = {
             reference: reference
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getCustomView", params).pipe(
             map(stResp => {
                 return <CustomViewConfiguration>CustomViewConfiguration.parse(stResp);
@@ -47,17 +47,38 @@ export class CustomViewsServices {
             reference: reference,
             definition: JSON.stringify(definition),
             model: model
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "createCustomView", params);
     }
 
     deleteCustomView(reference: string) {
         let params = {
             reference: reference,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteCustomView", params);
     }
 
+    suggestDynamicVectorCVFromCustomForm(cfId: string): Observable<string> {
+        let params = {
+            cfId: cfId,
+        };
+        return this.httpMgr.doGet(this.serviceName, "suggestDynamicVectorCVFromCustomForm", params);
+    }
+
+    suggestAdvSingleValueCVFromCustomForm(cfId: string, chosenPh?: string): Observable<string> {
+        let params = {
+            cfId: cfId,
+            chosenPh: chosenPh
+        };
+        return this.httpMgr.doGet(this.serviceName, "suggestAdvSingleValueCVFromCustomForm", params);
+    }
+
+    getValueCandidates(cfId: string): Observable<string[]> {
+        let params = {
+            cfId: cfId,
+        };
+        return this.httpMgr.doGet(this.serviceName, "getValueCandidates", params);
+    }
 
 
     /* ============== ASSOCIATIONS ============== */
@@ -69,7 +90,7 @@ export class CustomViewsServices {
         let params = {};
         return this.httpMgr.doGet(this.serviceName, "listAssociations", params).pipe(
             map(stResp => {
-                let associations: CustomViewAssociation[] = []
+                let associations: CustomViewAssociation[] = [];
                 stResp.forEach((a: { ref: string, property: string, customViewRef: string }) => {
                     associations.push({
                         ref: a.ref,
@@ -79,8 +100,8 @@ export class CustomViewsServices {
                             name: Reference.getRelativeReferenceIdentifier(a.customViewRef),
                             scope: Reference.getRelativeReferenceScope(a.customViewRef)
                         }
-                    })
-                })
+                    });
+                });
                 associations.sort((a1: CustomViewAssociation, a2: CustomViewAssociation) => {
                     if (a1.property.equals(a2.property)) { //in case of same prop, sort by reference
                         return a1.customViewRef.reference.localeCompare(a2.customViewRef.reference);
@@ -103,7 +124,7 @@ export class CustomViewsServices {
             property: property,
             customViewRef: customViewRef,
             defaultView: defaultView
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "addAssociation", params);
     }
 
@@ -114,7 +135,7 @@ export class CustomViewsServices {
     deleteAssociation(reference: string) {
         let params = {
             reference: reference,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteAssociation", params);
     }
 
@@ -125,7 +146,7 @@ export class CustomViewsServices {
         let params = {
             resource: resource,
             property: property
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getViewData", params).pipe(
             map(stResp => {
                 return CustomViewData.parse(stResp);
@@ -138,7 +159,7 @@ export class CustomViewsServices {
             resource: resource,
             property: property,
             bindings: bindings
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateSparqlBasedData", params);
     }
 
@@ -149,7 +170,7 @@ export class CustomViewsServices {
             oldValue: oldValue,
             newValue: newValue,
             pivots: pivots
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateSingleValueData", params);
     }
 
@@ -160,7 +181,7 @@ export class CustomViewsServices {
             fieldProperty: fieldProperty,
             oldValue: oldValue,
             newValue: newValue,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateStaticVectorData", params);
     }
 
@@ -172,7 +193,7 @@ export class CustomViewsServices {
             oldValue: oldValue,
             newValue: newValue,
             pivots: pivots
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateDynamicVectorData", params);
     }
 

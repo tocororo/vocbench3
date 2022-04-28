@@ -15,7 +15,6 @@ export class SelectionModal {
     @Input() options: Array<string | SelectionOption>;
     @Input() type: ModalType;
 
-    headerStyle: string;
     msgStyle: string;
 
     plainOptions: boolean; //tells if the options are plains or complex object (value+description)
@@ -37,13 +36,10 @@ export class SelectionModal {
             this.type = ModalType.info;
         }
         if (this.type == ModalType.info) {
-            this.headerStyle = "modal-title text-info";
             this.msgStyle = "alert alert-info";
         } else if (this.type == ModalType.warning) {
-            this.headerStyle = "modal-title text-warning";
             this.msgStyle = "alert alert-warning";
         } else if (this.type == ModalType.error) {
-            this.headerStyle = "modal-title text-danger";
             this.msgStyle = "alert alert-danger";
         }
 
