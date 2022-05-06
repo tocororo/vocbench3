@@ -134,7 +134,8 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
                         this.refreshYasguiEditors();
                     }
                 );
-            }
+            },
+            () => {}
         );
     }
 

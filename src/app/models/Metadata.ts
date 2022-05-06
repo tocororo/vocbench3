@@ -32,7 +32,7 @@ export enum ImportType {
     fromLocalFile = "fromLocalFile",
     fromOntologyMirror = "fromOntologyMirror",
     toOntologyMirror = "toOntologyMirror"
-};
+}
 
 export enum TransitiveImportMethodAllowance {
     web = "web",
@@ -69,7 +69,7 @@ export class DatasetMetadata {
             dereferenciationSystem: datasetMetadataJson.dereferenciationSystem,
             sparqlEndpointMetadata: sparqlEndpointMetadata,
             versionInfo: datasetMetadataJson.versionInfo
-        }
+        };
     }
 }
 
@@ -84,7 +84,7 @@ export class CatalogRecord {
         let versions: DatasetMetadata[];
         if (catalogRecordJson.versions) {
             versions = [];
-            for (var i = 0; i < catalogRecordJson.versions.length; i++) {
+            for (let i = 0; i < catalogRecordJson.versions.length; i++) {
                 versions.push(DatasetMetadata.deserialize(catalogRecordJson.versions[i]));
             }
         }
@@ -94,7 +94,7 @@ export class CatalogRecord {
             modified: catalogRecordJson.modified,
             abstractDataset: DatasetMetadata.deserialize(catalogRecordJson.abstractDataset),
             versions: versions
-        }
+        };
     }
 }
 
@@ -106,11 +106,11 @@ export class SparqlEndpointMetadata {
             return {
                 id: NTriplesUtil.parseURI(metadataJson['@id']).getURI(),
                 limitations: metadataJson.limitations
-            }
+            };
         } else {
-            return { id: null, limitations: null }
+            return { id: null, limitations: null };
         }
-        
+
     }
 }
 
@@ -129,7 +129,7 @@ export class LexicalizationSetMetadata {
 
 export class ConnectorsID {
     public static LOVConnector_ID: string = "it.uniroma2.art.semanticturkey.extension.impl.metadatarepository.lov.LOVConnector";
-    public static LODCloudConnector_ID: string = "it.uniroma2.art.semanticturkey.extension.impl.metadatarepository.lodcloud.LODCloudConnector"
+    public static LODCloudConnector_ID: string = "it.uniroma2.art.semanticturkey.extension.impl.metadatarepository.lodcloud.LODCloudConnector";
 }
 
 export abstract class AbstractDataset implements Descriptable {
@@ -214,14 +214,14 @@ export class DownloadDescription implements Descriptable {
 }
 
 export class DatasetSearchResult extends AbstractDataset {
-	score: number;
+    score: number;
 }
 
 export class SearchResultsPage<T> {
     totalResults: number;
-	pageSize: number;
-	page: number;
-	tail: boolean;
+    pageSize: number;
+    page: number;
+    tail: boolean;
     content: T[];
     facetAggregations: FacetAggregation[];
 }
@@ -264,8 +264,8 @@ class DescriptionHelper {
                         prefTitle = descripted.titles[j];
                         break langLoop;
                     }
-                };
-            };
+                }
+            }
         }
         return prefTitle;
     }
@@ -278,8 +278,8 @@ class DescriptionHelper {
                         prefDescription = descripted.descriptions[j];
                         break langLoop;
                     }
-                };
-            };
+                }
+            }
         }
         return prefDescription;
     }

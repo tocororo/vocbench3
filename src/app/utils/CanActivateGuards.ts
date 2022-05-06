@@ -40,7 +40,7 @@ export class AuthGuard implements CanActivate, CanLoad {
                         return false;
                     }
                 })
-            )
+            );
         }
     }
 }
@@ -70,7 +70,7 @@ export class AdminGuard implements CanActivate {
                         return false;
                     }
                 })
-            )
+            );
         }
     }
 }
@@ -96,7 +96,7 @@ export class SuperUserGuard implements CanActivate {
                         return false;
                     }
                 })
-            )
+            );
         }
     }
 }
@@ -199,7 +199,7 @@ export class SystemSettingsGuard implements CanActivate, CanLoad {
 @Injectable()
 export class AsyncGuardResolver implements CanActivate {
 
-    constructor(private router: Router, private userService: UserServices, private vbProp: VBProperties) {}
+    constructor(private router: Router, private userService: UserServices, private vbProp: VBProperties) { }
 
     private route: ActivatedRouteSnapshot;
     private state: RouterStateSnapshot;
@@ -212,7 +212,7 @@ export class AsyncGuardResolver implements CanActivate {
         if (this.route.data && this.route.data.guards && this.route.data.guards.length > 0) {
             //if a guards list has been provided in data, execute the guards
             return this.executeGuards();
-        } else { 
+        } else {
             //otherwise (no guards), view can be activated 
             //(this should never happens since it makes no sense to set AsyncGuardResolver as guard if not check needs to be done)
             return of(true);
@@ -235,32 +235,33 @@ export class AsyncGuardResolver implements CanActivate {
                     }
                 }
             })
-        )
+        );
     }
 
     //Create an instance of the guard and fire canActivate method returning the Observable
     private getGuard(guardKey: VBGuards): Observable<boolean> {
         let guard: AuthGuard | AdminGuard | PMGuard | ProjectGuard | SystemSettingsGuard;
         switch (guardKey) {
-            case VBGuards.AuthGuard:
-                guard = new AuthGuard(this.router, this.userService);
-                break;
-            case VBGuards.AdminGuard:
-                guard = new AdminGuard(this.router, this.userService);
-                break;
-            case VBGuards.PMGuard: 
-                guard = new PMGuard();
-            case VBGuards.ProjectGuard:
-                guard = new ProjectGuard(this.router);
-                break;
-            case VBGuards.SuperUserGuard:
-                guard = new SuperUserGuard(this.router, this.userService);
-                break;
-            case VBGuards.SystemSettingsGuard:
-                guard = new SystemSettingsGuard(this.vbProp);
-                break;
-            default:
-                break; //should never happen
+        case VBGuards.AuthGuard:
+            guard = new AuthGuard(this.router, this.userService);
+            break;
+        case VBGuards.AdminGuard:
+            guard = new AdminGuard(this.router, this.userService);
+            break;
+        case VBGuards.PMGuard:
+            guard = new PMGuard();
+            break;
+        case VBGuards.ProjectGuard:
+            guard = new ProjectGuard(this.router);
+            break;
+        case VBGuards.SuperUserGuard:
+            guard = new SuperUserGuard(this.router, this.userService);
+            break;
+        case VBGuards.SystemSettingsGuard:
+            guard = new SystemSettingsGuard(this.vbProp);
+            break;
+        default:
+            break; //should never happen
         }
         return guard.canActivate();
     }

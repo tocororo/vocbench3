@@ -47,7 +47,7 @@ export abstract class AbstractNode {
                     this.node = res;
                 }
             }
-        ))
+        ));
     }
 
     /**

@@ -8,7 +8,6 @@ import { VBActionsEnum } from "../utils/VBActions";
 import { VBContext } from "../utils/VBContext";
 
 @Component({
-    // selector: "li[user-menu]", //what is this? used to avoid css style breaking (use <li user-menu ...></li>)
     selector: "ul[user-menu]", //what is this? used to avoid css style breaking (use <li user-menu ...></li>)
     //see http://stackoverflow.com/questions/34707029/angular-2-semantic-ui-component-encapsulation-breaks-style
     templateUrl: "./userMenuComponent.html",
@@ -45,7 +44,7 @@ export class UserMenuComponent {
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement) &&
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement)
             )
-        )
+        );
 
         //notifications entry visible if project open and the notifications are active
         this.isNotificationsVisible = false;

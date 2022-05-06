@@ -57,7 +57,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
     ngAfterViewInit() {
         //if the resource is new (just created), make it visible in the view
         if (this.node.getAdditionalProperty(ResAttribute.NEW)) {
-            this.treeNodeElement.nativeElement.scrollIntoView({block: 'end', behavior: 'smooth'});
+            this.treeNodeElement.nativeElement.scrollIntoView({ block: 'end', behavior: 'smooth' });
             this.node.deleteAdditionalProperty(ResAttribute.NEW);
         }
     }
@@ -96,10 +96,10 @@ export abstract class AbstractTreeNode extends AbstractNode {
     }
 
     /**
-	 * Function called when "+" button is clicked.
-	 * Gets a node as parameter and retrieves with an http call the children of the node,
-	 * then expands the subtree div.
-	 */
+     * Function called when "+" button is clicked.
+     * Gets a node as parameter and retrieves with an http call the children of the node,
+     * then expands the subtree div.
+     */
     expandNode(): Observable<any> {
         this.nodeExpandStart.emit();
         return this.expandNodeImpl().pipe(
@@ -115,14 +115,14 @@ export abstract class AbstractTreeNode extends AbstractNode {
     abstract expandNodeImpl(): Observable<any>;
 
     /**
-   	 * Function called when "-" button is clicked.
-   	 * Collapse the subtree div.
-   	 */
+     * Function called when "-" button is clicked.
+     * Collapse the subtree div.
+     */
     private collapseNode() {
         this.open = false;
         this.children.forEach((c: ARTURIResource) => {
-            this.nodeChecked.emit({node: c, checked: false}); //uncheck all the children
-        })
+            this.nodeChecked.emit({ node: c, checked: false }); //uncheck all the children
+        });
         this.children = [];
     }
 
@@ -136,7 +136,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
         if (path.length == 0) { //this is the last node of the path. Focus it in the tree
             this.selectNode();
             setTimeout(() => { //give time to update the view (after selectNode the res view could make reduce the size of the tree)
-                this.treeNodeElement.nativeElement.scrollIntoView({block: 'end', behavior: 'smooth'});
+                this.treeNodeElement.nativeElement.scrollIntoView({ block: 'end', behavior: 'smooth' });
             });
         } else {
             if (!this.open) { //if node is close, expand itself
@@ -148,7 +148,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
                                 this.expandChild(path);
                             }
                         );
-                        
+
                     }
                 );
             } else {
@@ -162,14 +162,14 @@ export abstract class AbstractTreeNode extends AbstractNode {
         if (!this.showDeprecated) {
             for (let i = 0; i < this.children.length; i++) {
                 if (this.children[i].getURI() == path[0].getURI() && this.children[i].isDeprecated()) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH", params:{resource: path[path.length-1].getShow()}},
+                    this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH", params: { resource: path[path.length - 1].getShow() } },
                         ModalType.warning);
                     return;
                 }
             }
         }
         let nodeChildren = this.viewChildrenNode.toArray();
-        for (let i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
+        for (let i = 0; i < nodeChildren.length; i++) { //for every ConceptTreeNodeComponent child
             if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
                 //let the child node expand the remaining path
                 path.splice(0, 1);
@@ -179,14 +179,14 @@ export abstract class AbstractTreeNode extends AbstractNode {
         }
         //if this line is reached it means that the first node of the path has not been found
         if (this.context == TreeListContext.dataPanel) {
-            this.basicModals.confirm({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM", params:{resource: path[path.length-1].getShow()}}, ModalType.warning).then(
-                confirm => { 
-                    this.sharedModals.openResourceView(path[path.length-1], false);
+            this.basicModals.confirm({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM", params: { resource: path[path.length - 1].getShow() } }, ModalType.warning).then(
+                confirm => {
+                    this.sharedModals.openResourceView(path[path.length - 1], false);
                 },
-                cancel => {}
+                cancel => { }
             );
         } else {
-            this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE", params:{resource: path[path.length-1].getShow()}}, ModalType.warning);
+            this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE", params: { resource: path[path.length - 1].getShow() } }, ModalType.warning);
         }
     }
 
@@ -287,11 +287,11 @@ export abstract class AbstractTreeNode extends AbstractNode {
             if (c.node.equals(child)) {
                 c.selectNode();
             }
-        })
+        });
     }
 
     onParentAdded(parent: ARTResource, child: ARTResource) {
-        if (this.node.equals(parent)) {//if the parent is the current node
+        if (this.node.equals(parent)) { //if the parent is the current node
             this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
             //if it was open add the child to the visible children (if not laready among them)
             if (this.open && !this.children.some(c => c.equals(child))) {

@@ -49,15 +49,15 @@ export class NotificationsComponent {
                                 annotatedRes: annotatedRes.find(aRes => n.resource == aRes.toNT()),
                                 roleShow: ResourceUtils.getResourceRoleLabel(n.role),
                                 timestampShow: Deserializer.parseDateTime(n.timestamp)
-                            }
+                            };
                             this.notifications.push(enrichedNotification);
-                        })
+                        });
                         //sort by date from newest to oldest
                         this.notifications.sort((n1, n2) => {
                             return -n1.timestamp.getTime() - n2.timestamp.getTime();
                         });
                     }
-                )
+                );
                 
             }
         );
@@ -68,7 +68,7 @@ export class NotificationsComponent {
             () => {
                 this.init();
             }
-        )
+        );
     }
 
     settings() {

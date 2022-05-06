@@ -47,7 +47,7 @@ export class ChartsRendererComponent extends AbstractSingleViewRendererComponent
         if (this.view instanceof SeriesView) {
             this.compliantViews = [ViewsEnum.bar, ViewsEnum.pie];
         } else if (this.view instanceof SeriesCollectionView) {
-            this.compliantViews = [ViewsEnum.line]
+            this.compliantViews = [ViewsEnum.line];
         }
         if (this.compliantViews.length > 0) {
             if (this.compliantViews.includes(this.view.defaultView)) {
@@ -84,9 +84,9 @@ export class ChartsRendererComponent extends AbstractSingleViewRendererComponent
                         valueDatatype: d.value.getDatatype(),
                         nameResource: d.name
                     }
-                }
+                };
                 return cd;
-            })
+            });
         } else if (this.view instanceof SeriesCollectionView) {
             this.xAxisLabel = this.view.series_label;
             this.yAxisLabel = this.view.value_label;
@@ -101,7 +101,7 @@ export class ChartsRendererComponent extends AbstractSingleViewRendererComponent
                             valueDatatype: d.value.getDatatype(),
                             nameResource: d.name
                         }
-                    }
+                    };
                     return cd;
                 });
                 let chartSeries: ChartSeries = {
@@ -109,7 +109,7 @@ export class ChartsRendererComponent extends AbstractSingleViewRendererComponent
                     series: series,
                 };
                 this.seriesCollection.push(chartSeries);
-            })
+            });
         }
     }
 
@@ -122,7 +122,7 @@ export class ChartsRendererComponent extends AbstractSingleViewRendererComponent
             bindingsMap.set(CustomViewVariables.name, updatedData.name);
             bindingsMap.set(CustomViewVariables.value, updatedData.value);
         } else if (this.view instanceof SeriesCollectionView) {
-            let updatedSeries = this.view.series.find(s => s.data.some(d => d.name.equals(event.old.extra.nameResource)))
+            let updatedSeries = this.view.series.find(s => s.data.some(d => d.name.equals(event.old.extra.nameResource)));
             let updatedData = updatedSeries.data.find(d => d.name.equals(event.old.extra.nameResource));
             updatedData.value.setValue(event.new.value + "");
             bindingsMap.set(CustomViewVariables.series_collection_id, this.view.series_collection_id);
@@ -134,7 +134,7 @@ export class ChartsRendererComponent extends AbstractSingleViewRendererComponent
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     onWidgetChanged() {

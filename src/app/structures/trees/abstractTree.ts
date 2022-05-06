@@ -107,7 +107,7 @@ export abstract class AbstractTree extends AbstractStruct {
                     }
                 }
                 //if this line is reached it means that the first node of the path has not been found
-                this.onTreeNodeNotFound(path[path.length-1]);
+                this.onTreeNodeNotFound(path[path.length - 1]);
             });
         } else {
             /* 
@@ -121,7 +121,7 @@ export abstract class AbstractTree extends AbstractStruct {
             if (this.structRole == RDFResourceRolesEnum.concept) {
                 this.pendingSearchPath = path;
             } else {
-                this.onTreeNodeNotFound(path[path.length-1]);
+                this.onTreeNodeNotFound(path[path.length - 1]);
             }
         }
     }
@@ -160,7 +160,7 @@ export abstract class AbstractTree extends AbstractStruct {
         for (let i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getURI() == node.getNominalValue()) {
                 //remove it independently from validation (when enabled, the "undo" of a creation doesn't mark the node as staged-del, but simply cancels the creation, so removes it)
-                this.roots.splice(i, 1); 
+                this.roots.splice(i, 1);
                 break;
             }
         }
@@ -169,17 +169,17 @@ export abstract class AbstractTree extends AbstractStruct {
     //Root limitation management
     initialRoots: number = 150;
     rootLimit: number = this.initialRoots;
-    private increaseRate: number = this.initialRoots/5;
+    private increaseRate: number = this.initialRoots / 5;
     onScroll() {
         let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
         // if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
         //consider a little buffer of 2px in order to prevent potential problems (see https://stackoverflow.com/a/32283147/5805661)
         if (Math.abs(scrollElement.scrollHeight - scrollElement.offsetHeight - scrollElement.scrollTop) < 2) {
             //bottom reached => increase max range if there are more roots to show
-            if (this.rootLimit < this.roots.length) { 
-                this.rootLimit = this.rootLimit + this.increaseRate;
+            if (this.rootLimit < this.roots.length) {
+                this.rootLimit += this.increaseRate;
             }
-        } 
+        }
     }
     /**
      * Ensures that the root of the searched path is visible.
@@ -192,8 +192,8 @@ export abstract class AbstractTree extends AbstractStruct {
             if (this.roots[i].getURI() == resource.getURI()) {
                 if (i >= this.rootLimit) {
                     //update rootLimit so that node at index i is within the range
-                    let scrollStep: number = ((i - this.rootLimit)/this.increaseRate)+1;
-                    this.rootLimit = this.rootLimit + this.increaseRate*scrollStep;
+                    let scrollStep: number = ((i - this.rootLimit) / this.increaseRate) + 1;
+                    this.rootLimit += this.increaseRate * scrollStep;
                 }
                 //if there was any pending search, reset it
                 if (this.pendingSearchPath) {
@@ -208,16 +208,16 @@ export abstract class AbstractTree extends AbstractStruct {
 
     onTreeNodeNotFound(node: ARTURIResource) {
         if (this.context == TreeListContext.dataPanel) {
-            this.basicModals.confirm({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM", params:{resource: node.getShow()}}, ModalType.warning).then(
-                confirm => { 
+            this.basicModals.confirm({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_RES_VIEW_MODAL_CONFIRM", params: { resource: node.getShow() } }, ModalType.warning).then(
+                confirm => {
                     this.sharedModals.openResourceView(node, false);
                 },
-                cancel => {}
+                cancel => { }
             );
         } else {
-            this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE", params:{resource: node.getShow()}}, ModalType.warning);
+            this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE", params: { resource: node.getShow() } }, ModalType.warning);
         }
-        
+
     }
 
 }

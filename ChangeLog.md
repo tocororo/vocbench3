@@ -9,8 +9,11 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Allowed SuperUser to create projects where it is automatically set as Project Manager
   * Introduced CustomView mechanism
   * Improved management of CustomForm
-  * Enabled multiple sheets management in Sheet2RDF
+  * In Sheet2RDF enabled multiple sheets management and implemented support for DB connection
   * Added completion for endpoints to use in federated SPARQL queries
+  * Added possibility to import Metadata Vocabularies data from MetadataRegistry
+  * Made persistent the rendering status in data trees/lists
+  * Minor bugfixes and UI issues
 
 # 10.2.1 (02-07-2022)
   * Added checkbox for ignoring semantic checks in Manchester editor

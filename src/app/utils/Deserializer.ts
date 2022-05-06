@@ -104,7 +104,7 @@ export class Deserializer {
         }
         let schemesAttr: string = resJson[ResAttribute.SCHEMES];
         if (schemesAttr != undefined) {
-            let schemes: ARTURIResource[] = []
+            let schemes: ARTURIResource[] = [];
             if (schemesAttr != "") {
                 let splittedSchemes: string[] = schemesAttr.split(",");
                 for (let s of splittedSchemes) {
@@ -198,7 +198,7 @@ export class Deserializer {
         }
 
         //optional properties
-        this.parseNodeOptionalProperties(literal, artLiteralRes, additionalAttr)
+        this.parseNodeOptionalProperties(literal, artLiteralRes, additionalAttr);
 
         return artLiteralRes;
     }
@@ -232,7 +232,7 @@ export class Deserializer {
      * creates an array of only ARTURIResource from a json result
      */
     public static createURIArray(result: Array<any>, additionalAttr?: string[]): ARTURIResource[] {
-        let uriResourceArray: ARTURIResource[] = new Array();
+        let uriResourceArray: ARTURIResource[] = [];
         for (let r of result) {
             uriResourceArray.push(this.createURI(r, additionalAttr));
         }
@@ -256,7 +256,7 @@ export class Deserializer {
     }
 
     public static createRDFNodeArray(nodeArray: any, additionalAttr?: string[]) {
-        let collectionArray: ARTNode[] = new Array();
+        let collectionArray: ARTNode[] = [];
         for (let node of nodeArray) {
             collectionArray.push(this.createRDFNode(node, additionalAttr));
         }
@@ -274,9 +274,9 @@ export class Deserializer {
         }
         poLists.sort((po1, po2) => {
             return po1.getPredicate().getShow().localeCompare(po2.getPredicate().getShow());
-        })
+        });
         return poLists;
-    };
+    }
 
     /**
      * Parses a datetime formatted like 2017-05-29T08:34:35.641+0000 and return it formatted as "<date> <time>" accordin to the local format

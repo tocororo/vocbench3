@@ -39,7 +39,7 @@ export abstract class AbstractStruct {
         this.eventHandler = eventHandler;
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.init()));
         this.eventSubscriptions.push(eventHandler.refreshTreeListEvent.subscribe((roles: RDFResourceRolesEnum[]) => {
-                if (roles.indexOf(this.structRole) != -1) this.init()
+            if (roles.indexOf(this.structRole) != -1) this.init();
         }));
         this.eventSubscriptions.push(eventHandler.resourceUpdatedEvent.subscribe(
             (res: ARTResource) => {
@@ -48,7 +48,7 @@ export abstract class AbstractStruct {
                     this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true); //restore the selected attr
                 }
             }
-        ))
+        ));
     }
 
     /**
@@ -81,7 +81,7 @@ export abstract class AbstractStruct {
                 this.checkedNodes.splice(nodeIdx, 1);
             }
         }
-        this.nodeChecked.emit(this.checkedNodes)
+        this.nodeChecked.emit(this.checkedNodes);
     }
 
 }

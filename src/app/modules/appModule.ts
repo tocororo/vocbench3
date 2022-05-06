@@ -53,9 +53,17 @@ import { TreeAndListModule } from './treeAndListModule';
 import { UserModule } from './userModule';
 import { VBModalModule } from './vbModalModule';
 
-export function HttpLoaderFactory(http: HttpClient) {
+// export function HttpLoaderFactory(http: HttpClient) {
+//     return new TranslateHttpLoader(http, "./assets/l10n/");
+// }
+/*
+The above is the configuration written in the doc (https://github.com/ngx-translate/core#configuration),
+but I had to rewrite it as follow since it gave the eslint issue:
+"Expected a function expression. eslint (func-style)"
+*/
+let HttpLoaderFactory = (http: HttpClient) => {
     return new TranslateHttpLoader(http, "./assets/l10n/");
-}
+};
 
 @NgModule({
     imports: [

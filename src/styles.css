@@ -1,11 +1,32 @@
 @import url('app/widget/codemirror/manchesterEditor/manchester.css');
 
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     font-size: 11px;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     /* line-height: 1; */
+}
+
+/* Scrollbar customization */
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: auto;
+}
+/* Chrome, Edge, and Safari */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: white;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 20px;
+    border: 3px solid white;
 }
 
 /* Splash screen style - BEGIN */
@@ -18,6 +39,7 @@ html, body {
     height: 100%;
     background-image: linear-gradient(to right, #1e4387, #00b5e9);
 }
+
 .logo-container {
     position: relative;
     height: 300px;
@@ -27,19 +49,23 @@ html, body {
     align-items: center;
     justify-content: center;
 }
-.logo-container > span {
+
+.logo-container>span {
     position: absolute;
     color: #fff;
     font-size: 14px;
     font-weight: bold;
     top: 280px;
 }
-.loader, .loader:after {
+
+.loader,
+.loader:after {
     border-radius: 50%;
     width: 230px;
     height: 230px;
     font-size: 6px;
-  }
+}
+
 .loader {
     border-top: 0.01em solid #fff;
     border-right: 0.4em solid #fff;
@@ -51,30 +77,36 @@ html, body {
     -webkit-animation: load8 2.0s infinite linear;
     animation: load8 2.0s infinite linear;
 }
+
 @-webkit-keyframes load8 {
     0% {
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
 }
+
 @keyframes load8 {
     0% {
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
 }
+
 /* Splash screen style - END */
 
 .blockingDivHost {
-    position: relative; /* to allow blockDiv with absolute position inside these divs */
+    position: relative;
+    /* to allow blockDiv with absolute position inside these divs */
 }
 
 /* Div visible only in some scenario when there is need to block event from user */
@@ -84,12 +116,14 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2000; /* Blocking div z-index > of .modal z-index (1000+) */
+    z-index: 2000;
+    /* Blocking div z-index > of .modal z-index (1000+) */
     text-align: center;
     color: black;
     font-size: 13px;
 }
-.blockingDiv > .loadingDiv {
+
+.blockingDiv>.loadingDiv {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -100,7 +134,7 @@ html, body {
     background: linear-gradient(#FFFFFF, #CACACA);
 }
 
-.blockingDiv > .loadingDiv > div {
+.blockingDiv>.loadingDiv>div {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -120,11 +154,11 @@ app {
 }
 
 li.disabled {
-    cursor: not-allowed;    
+    cursor: not-allowed;
 }
 
 /*Disable events when user clicks on a disabled link*/
-li.disabled > a {
+li.disabled>a {
     pointer-events: none;
 }
 
@@ -138,7 +172,7 @@ config-bar {
     background: #7180AB;
     border-top: 1px solid #C5D5E4;
     color: white;
-    padding: 3px 20px;    
+    padding: 3px 20px;
 }
 
 .bottom-bar a {
@@ -174,10 +208,19 @@ code {
     font-size: inherit;
 }
 
-.project-row:first-of-type { border-top: 1px solid #ddd; }
-.project-row { border-bottom: 1px solid #ddd; }
+.project-row:first-of-type {
+    border-top: 1px solid #ddd;
+}
 
-resource-list, class-individual-tree, scheme-selection, data-range-editor, import-tree {
+.project-row {
+    border-bottom: 1px solid #ddd;
+}
+
+resource-list,
+class-individual-tree,
+scheme-selection,
+data-range-editor,
+import-tree {
     display: flex;
     flex: 1;
     min-height: 0;
@@ -186,29 +229,33 @@ resource-list, class-individual-tree, scheme-selection, data-range-editor, impor
 
 /* Note: in order to work, the div with this class needs to be placed into a display:flex container */
 .scrollableContainer {
-    padding: 6px; /* the same of the card-body */
+    padding: 6px;
+    /* the same of the card-body */
     overflow: auto;
     flex: 1;
     min-height: 0;
     display: flex;
     flex-flow: column;
 }
+
 /* restore the modal-body padding when scrollableContainer is applied to the same div */
 .modal-body.scrollableContainer {
     padding: 10px;
 }
 
-button > rdf-resource {
+button>rdf-resource {
     vertical-align: middle;
 }
 
 /* Ellipsis of the content of a rdf-resource in a button, in a navigation tab (ResView tabs), and in a .card-header (heading of ResView) */
 /* button > rdf-resource > span, .nav-tabs rdf-resource > span,
 .card-header rdf-resource > span, .tile rdf-resource > span { */
-button > rdf-resource span, .nav-tabs rdf-resource span,
-.card-header rdf-resource span, .tile rdf-resource span {
-	max-width: 200px;
-	overflow: hidden;
+button>rdf-resource span,
+.nav-tabs rdf-resource span,
+.card-header rdf-resource span,
+.tile rdf-resource span {
+    max-width: 200px;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap !important;
 }
@@ -218,15 +265,18 @@ button > rdf-resource span, .nav-tabs rdf-resource span,
     color: #3c763d !important;
     border-color: #d6e9c6 !important;
 }
+
 .proposedRemoveRes {
     background-color: #f2dede !important;
     color: #a94442 !important;
     border-color: #ebccd1 !important;
 }
+
 .proposedAddTriple {
     color: green !important;
     font-style: italic !important;
 }
+
 .proposedRemoveTriple {
     color: darkred !important;
     text-decoration: line-through !important;
@@ -235,6 +285,7 @@ button > rdf-resource span, .nav-tabs rdf-resource span,
 .imported {
     background-color: #ffffee
 }
+
 .inferred {
     background-color: #eff0ff
 }
@@ -285,22 +336,25 @@ editable-resource {
     margin: 2px 0px;
     display: flex;
     align-items: center;
-    position: relative; /* for positioning 'absolute' children (instNum label in classTreeNode) */
+    position: relative;
+    /* for positioning 'absolute' children (instNum label in classTreeNode) */
 }
+
 .treeNode .expandCollapseBtnContainer {
     min-width: 16px;
 }
+
 .treeNode rdf-resource {
     flex: 1;
     min-height: 24px;
 }
 
-.expandCollapseBtnContainer > img {
+.expandCollapseBtnContainer>img {
     cursor: pointer;
 }
 
 .subTree {
-	padding-left:15px;
+    padding-left: 15px;
 }
 
 .listNodeItem {
@@ -314,20 +368,20 @@ editable-resource {
 }
 
 .listNodeItem rdf-resource {
-	border-radius: 2px;
-	flex: 1;
+    border-radius: 2px;
+    flex: 1;
 }
 
-input[type="image"]:disabled  {
-	opacity: 0.5;
+input[type="image"]:disabled {
+    opacity: 0.5;
 }
 
-img.disabled  {
-	opacity: 0.5;
+img.disabled {
+    opacity: 0.5;
 }
 
 /* table which rows are colored when hovered */
-.table-hoverable tbody tr:hover td { 
+.table-hoverable tbody tr:hover td {
     background-color: #e5f3ff !important;
 }
 
@@ -335,15 +389,22 @@ img.disabled  {
 .table-hoverable tbody tr:hover .table-hoverable.table-hoverable-nested td {
     background-color: transparent !important;
 }
+
 .table-hoverable tbody tr:hover .table-hoverable tr:hover td {
     background-color: #e5f3ff !important;
 }
 
-.table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
+.table-borderless tbody tr td,
+.table-borderless tbody tr th,
+.table-borderless thead tr th {
     border: none;
 }
-.table-primary, .table-primary>td, .table-primary>th {
-    background-color: #cde8ff; /* different than the default in bootstrap, in order to match the listItem:active color */
+
+.table-primary,
+.table-primary>td,
+.table-primary>th {
+    background-color: #cde8ff;
+    /* different than the default in bootstrap, in order to match the listItem:active color */
 }
 
 .listItem {
@@ -353,23 +414,28 @@ img.disabled  {
     display: flex;
     align-items: center;
 }
+
 .listItem:hover {
     background-color: #e5f3ff;
 }
+
 .listItem.active {
     background-color: #cde8ff;
 }
+
 .listItem.disabled {
     cursor: not-allowed;
     color: #999;
     pointer-events: none;
 }
+
 .listItem.disabled.active {
     background-color: #eee !important;
 }
+
 .listItem rdf-resource {
-	border-radius: 2px;
-	flex: 1;
+    border-radius: 2px;
+    flex: 1;
 }
 
 .groupPanel {
@@ -378,6 +444,7 @@ img.disabled  {
     margin: 8px 0 5px;
     position: relative;
 }
+
 .groupPanel-heading {
     display: flex;
     align-items: center;
@@ -387,17 +454,25 @@ img.disabled  {
     left: 6px;
     right: 8px;
 }
+
 .groupPanel-heading .groupPanel-heading-content {
     /* labels, buttons, or other elements that should be placed on the heading*/
     padding: 0px 2px;
     background: white;
 }
+
 .groupPanel-add-btn {
-    position: absolute; top: -2px; right: 12px;
+    position: absolute;
+    top: -2px;
+    right: 12px;
 }
+
 .groupPanel-dropdown-btn {
-    position: absolute; top: 0px; right: -2px;
+    position: absolute;
+    top: 0px;
+    right: -2px;
 }
+
 .groupPanel-body {
     padding: 12px 4px 4px;
 }
@@ -410,6 +485,7 @@ img.disabled  {
 input.ng-invalid.submitted {
     border-left: 4px solid #a94442;
 }
+
 input.invalid {
     background: #ffaaaa;
 }
@@ -428,6 +504,7 @@ input[type=number]::-webkit-outer-spin-button {
     position: relative;
     overflow: hidden;
 }
+
 .btn-file input[type=file] {
     position: absolute;
     top: 0;
@@ -449,14 +526,16 @@ input[type=number]::-webkit-outer-spin-button {
     background: transparent;
     border: 1px transparent;
     opacity: 0.4;
-	filter: alpha(opacity=40);
+    filter: alpha(opacity=40);
     color: #000000;
 }
+
 .btn-transparent:hover {
     opacity: 0.9;
     background: #f7f7f7;
-	filter: alpha(opacity=90);
+    filter: alpha(opacity=90);
 }
+
 .btn-transparent:disabled {
     opacity: 0.15 !important;
     filter: alpha(opacity=15) !important;
@@ -468,23 +547,31 @@ input[type=number]::-webkit-outer-spin-button {
     background: #dddddd33;
     transition: all 0.3s ease-out;
 }
-.btn-faded:hover:enabled, .btn-faded:focus:enabled, .btn-faded:active:enabled {
-    background: #ccc !important; /*important in order to "win" over the backgroung in btn-group:hover>btn-faded*/
+
+.btn-faded:hover:enabled,
+.btn-faded:focus:enabled,
+.btn-faded:active:enabled {
+    background: #ccc !important;
+    /*important in order to "win" over the backgroung in btn-group:hover>btn-faded*/
     transition: all 0.4s ease-in;
 }
+
 .btn-faded:focus {
     outline: none;
 }
-.btn-faded > .fas, .btn-faded > .far {
+
+.btn-faded>.fas,
+.btn-faded>.far {
     color: #fff;
 }
 
 /* btn-bright to apply at those button that when active/pressed, the text/icon inside is colored in a bright blue */
-.btn-bright.active .fas, .btn-bright.active .far  {
+.btn-bright.active .fas,
+.btn-bright.active .far {
     color: #4285f4;
 }
 
-.btn-group:hover > .btn-faded {
+.btn-group:hover>.btn-faded {
     background: #eee;
     transition: all 0.4s ease-in;
 }
@@ -492,6 +579,7 @@ input[type=number]::-webkit-outer-spin-button {
 .btn-light {
     border-color: #ccc !important;
 }
+
 /**
  * Progress bars text in Bootstrap are centered according the progress bar, not the "background" bar. This classes fix.
  */
@@ -501,33 +589,40 @@ input[type=number]::-webkit-outer-spin-button {
     background-color: #d9534f;
     height: 16px;
 }
-.progress > .progress-bar > .progress-value {
+
+.progress>.progress-bar>.progress-value {
     position: absolute;
     display: block;
     width: 100%;
     color: white;
     white-space: nowrap;
 }
+
 .large-progress {
     min-width: 130px;
 }
- 
-.CodeMirror { 
-    border: 1px solid #ddd; /*Border of textare of CodeMirror (just in the editors, because in yasqe there is already)*/
-    height: auto; 
+
+.CodeMirror {
+    border: 1px solid #ddd;
+    /*Border of textare of CodeMirror (just in the editors, because in yasqe there is already)*/
+    height: auto;
     flex: 1;
 }
+
 /* height auto in CodeMirror let the textarea of codemirror fill the available space.
 With the following classes is possible to limit the height of the editor to the given max-height */
-.CodeMirror-sm .CodeMirror-scroll { 
-    max-height: 200px !important; 
+.CodeMirror-sm .CodeMirror-scroll {
+    max-height: 200px !important;
 }
-.CodeMirror-md .CodeMirror-scroll { 
-    max-height: 300px !important; 
+
+.CodeMirror-md .CodeMirror-scroll {
+    max-height: 300px !important;
 }
-.CodeMirror-lg .CodeMirror-scroll { 
-    max-height: 400px !important; 
+
+.CodeMirror-lg .CodeMirror-scroll {
+    max-height: 400px !important;
 }
+
 .CodeMirror-scroll {
     min-height: 100px;
     margin-right: 0px;
@@ -538,23 +633,32 @@ ngx-codemirror.disabled .CodeMirror {
     background: #eee;
 }
 
-.cm-s-default .cm-variable-4 { color: #c00 }
+.cm-s-default .cm-variable-4 {
+    color: #c00
+}
 
 /*Reset height to auto when codemirror is fullscreen*/
-.CodeMirror.CodeMirror-fullscreen { height: auto !important }
+.CodeMirror.CodeMirror-fullscreen {
+    height: auto !important
+}
+
 /* It is necessary to visualize hints form  */
 .CodeMirror-hints {
     z-index: 1000000 !important;
 }
-.CodeMirror-hints li{
+
+.CodeMirror-hints li {
     border-radius: 0px !important;
 }
+
 /* it is necessary to visualize a divisor inside hints window */
-.hint-separator { 
-    border-top: 1px solid rgb(220, 220, 220) ;
+.hint-separator {
+    border-top: 1px solid rgb(220, 220, 220);
 }
 
-.cm-mustache {color: #0ca;}
+.cm-mustache {
+    color: #0ca;
+}
 
 .yasqe {
     display: flex;
@@ -563,12 +667,22 @@ ngx-codemirror.disabled .CodeMirror {
     min-height: 0;
     min-width: 0;
 }
+
 /*To put codemirror in fullscreen in front of the menubar (default z-index 7 made the textarea behind the navbar)*/
-.yasqe .CodeMirror-fullscreen { z-index: 999 !important; }
+.yasqe .CodeMirror-fullscreen {
+    z-index: 999 !important;
+}
+
 /* Reposition the fullscreen button */
-.yasqe .yasqe_buttons { top: 4px; right: 6px !important;} 
+.yasqe .yasqe_buttons {
+    top: 4px;
+    right: 6px !important;
+}
+
 /* To hide fullscreen button when yasqe is in readonly mode */
-.yasqe-hide-btns .yasqe_buttons { display: none; }
+.yasqe-hide-btns .yasqe_buttons {
+    display: none;
+}
 
 /* Reduce lateral margin of the buttons that contain img in btn-group in card header (usually button for tree/list managment) */
 .card-header .btn-group>.btn>img {
@@ -577,51 +691,57 @@ ngx-codemirror.disabled .CodeMirror {
 }
 
 /* Button to add/remove elements in ResourceView partitions */
-.transparentBtn:hover, .transparentBtn:focus {
-	color: #000000;
-	text-decoration: none;
-	cursor: pointer;
-	opacity: 0.9;
-	filter: alpha(opacity=90);
+.transparentBtn:hover,
+.transparentBtn:focus {
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0.9;
+    filter: alpha(opacity=90);
 }
+
 button.transparentBtn {
     width: 18px;
     height: 18px;
     float: right;
     font-size: 14px;
-	font-weight: bold;
-	line-height: 1;
-	color: #000000;
-	text-shadow: 0 1px 0 #ffffff;
-	opacity: 0.4;
-	filter: alpha(opacity=40);
-	padding: 0;
-	cursor: pointer;
-	background: transparent;
-	border: 0;
+    font-weight: bold;
+    line-height: 1;
+    color: #000000;
+    text-shadow: 0 1px 0 #ffffff;
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
     -webkit-appearance: none;
     appearance: none;
 }
-button.transparentBtn:disabled  {
-	opacity: 0.2;
+
+button.transparentBtn:disabled {
+    opacity: 0.2;
     filter: alpha(opacity=20);
     cursor: default;
 }
 
 button.predObjRenderPanelBtn {
     color: #000000;
-	opacity: 0.5;
+    opacity: 0.5;
     filter: alpha(opacity=50);
     line-height: 1;
 }
+
 button.predObjRenderPanelBtn:disabled {
     opacity: 0.2;
     filter: alpha(opacity=20);
     cursor: default;
 }
-button.predObjRenderPanelBtn:hover:enabled, button.predObjRenderPanelBtn:focus:enabled {
+
+button.predObjRenderPanelBtn:hover:enabled,
+button.predObjRenderPanelBtn:focus:enabled {
     color: #000000;
-	opacity: 0.9;
+    opacity: 0.9;
     filter: alpha(opacity=90);
     cursor: pointer;
 }
@@ -635,8 +755,9 @@ button.resViewPartitionAddBtn {
     -webkit-appearance: none;
     appearance: none;
 }
-button.resViewPartitionAddBtn:disabled  {
-	opacity: 0.2;
+
+button.resViewPartitionAddBtn:disabled {
+    opacity: 0.2;
     filter: alpha(opacity=20);
     cursor: default;
 }
@@ -644,6 +765,7 @@ button.resViewPartitionAddBtn:disabled  {
 .grayText {
     color: #999;
 }
+
 .greenText {
     color: green;
 }
@@ -659,28 +781,37 @@ button.resViewPartitionAddBtn:disabled  {
     display: none;
 }
 
-.sliderY, .sliderX {
+.sliderY,
+.sliderX {
     display: flex;
     justify-content: center;
     margin: 2px;
     padding: 3px;
     border-radius: 3px;
 }
+
 .sliderY {
     cursor: ns-resize;
 }
+
 .sliderX {
     cursor: ew-resize;
 }
-.sliderY:hover, .sliderX:hover {
+
+.sliderY:hover,
+.sliderX:hover {
     background-color: #dddddd;
 }
-.sliderY div, .sliderX div {
+
+.sliderY div,
+.sliderX div {
     align-self: center;
     opacity: 0.4;
-	filter: alpha(opacity=40);
+    filter: alpha(opacity=40);
 }
-.sliderY:hover div, .sliderY:hover div {
+
+.sliderY:hover div,
+.sliderY:hover div {
     opacity: 0.9;
     filter: alpha(opacity=90);
 }
@@ -689,9 +820,11 @@ button.resViewPartitionAddBtn:disabled  {
 .arrow-left {
     transform: rotate(90deg);
 }
+
 .arrow-up {
     transform: rotate(180deg);
 }
+
 .arrow-right {
     transform: rotate(270deg);
 }
@@ -717,12 +850,12 @@ textarea {
 }
 
 .avatarContainer {
-    background-size:cover;
-    background-position:50% 50%;
+    background-size: cover;
+    background-position: 50% 50%;
     border-radius: 4px;
 }
 
-.tile-group { 
+.tile-group {
     min-height: 28px;
     border: 1px solid #ccc;
     border-radius: 3px;
@@ -730,14 +863,14 @@ textarea {
     flex-wrap: wrap;
 }
 
-.tile { 
+.tile {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
     border-radius: 3px;
     padding: 2px 4px;
     background: #fff;
-    margin: 2px; 
+    margin: 2px;
     white-space: nowrap;
 }
 
@@ -746,9 +879,11 @@ textarea {
     border: 1px solid #ccc;
     background-color: #eee;
     padding: 2px 10px;
-    min-height: 28px; /* height of form-control-sm. Override if this class is used with a different input- size */
+    min-height: 28px;
+    /* height of form-control-sm. Override if this class is used with a different input- size */
     max-height: 140px;
-    height: initial; /* override the height of the form-control-sm */
+    height: initial;
+    /* override the height of the form-control-sm */
     overflow: auto;
 }
 
@@ -756,7 +891,8 @@ textarea {
 .alert-multiline.alert-dismissible {
     position: relative
 }
-.alert-multiline.alert-dismissible > .close {
+
+.alert-multiline.alert-dismissible>.close {
     position: absolute;
     top: 4px;
     right: 6px;
@@ -768,18 +904,22 @@ textarea {
     text-overflow: ellipsis;
     white-space: nowrap !important;
 }
-.ellipsable > label {
+
+.ellipsable>label {
     display: inline;
 }
 
 .form-control-editable {
-    background-color: #fdfdfd22; /* ending two digits represent the opacity */
+    background-color: #fdfdfd22;
+    /* ending two digits represent the opacity */
     border: 1px solid #fbfbfb;
 }
+
 .form-control-editable:hover {
     background-color: #f7f7f799;
     border: 1px solid #f4f4f4 !important;
 }
+
 .form-control-editable:disabled {
     background-color: #f4f4f4;
     cursor: not-allowed;
@@ -804,27 +944,82 @@ textarea {
 /* Navigation bar START */
 
 /* Theme 0 */
-.bg-theme-0 { background-color: #1e4387; }
-.bg-theme-alt-0, .navbar.bg-theme-0 .nav-item.active > .nav-link, .navbar.bg-theme-0 .nav-item:hover > .nav-link { background-color: #7486ab; }
+.bg-theme-0 {
+    background-color: #1e4387;
+}
+
+.bg-theme-alt-0,
+.navbar.bg-theme-0 .nav-item.active>.nav-link,
+.navbar.bg-theme-0 .nav-item:hover>.nav-link {
+    background-color: #7486ab;
+}
+
 /* Theme 1 */
-.bg-theme-1 { background-color: #283e4a; }
-.bg-theme-alt-1, .navbar.bg-theme-1 .nav-item.active > .nav-link, .navbar.bg-theme-1 .nav-item:hover > .nav-link { background-color: #75c6f7; }
+.bg-theme-1 {
+    background-color: #283e4a;
+}
+
+.bg-theme-alt-1,
+.navbar.bg-theme-1 .nav-item.active>.nav-link,
+.navbar.bg-theme-1 .nav-item:hover>.nav-link {
+    background-color: #75c6f7;
+}
+
 /* Theme 2 */
-.bg-theme-2 { background-color: #1da1f2; }
-.bg-theme-alt-2, .navbar.bg-theme-2 .nav-item.active > .nav-link, .navbar.bg-theme-2 .nav-item:hover > .nav-link { background-color: #75c6f7; }
+.bg-theme-2 {
+    background-color: #1da1f2;
+}
+
+.bg-theme-alt-2,
+.navbar.bg-theme-2 .nav-item.active>.nav-link,
+.navbar.bg-theme-2 .nav-item:hover>.nav-link {
+    background-color: #75c6f7;
+}
+
 /* Theme 3 */
-.bg-theme-3 { background-color: #367c36; }
-.bg-theme-alt-3, .navbar.bg-theme-3 .nav-item.active > .nav-link, .navbar.bg-theme-3 .nav-item:hover > .nav-link { background-color: #5cb85c; }
+.bg-theme-3 {
+    background-color: #367c36;
+}
+
+.bg-theme-alt-3,
+.navbar.bg-theme-3 .nav-item.active>.nav-link,
+.navbar.bg-theme-3 .nav-item:hover>.nav-link {
+    background-color: #5cb85c;
+}
+
 /* Theme 4 */
-.bg-theme-4 { background-color: #5f5f5f; }
-.bg-theme-alt-4, .navbar.bg-theme-4 .nav-item.active > .nav-link, .navbar.bg-theme-4 .nav-item:hover > .nav-link { background-color: #5f5f5f; }
+.bg-theme-4 {
+    background-color: #5f5f5f;
+}
+
+.bg-theme-alt-4,
+.navbar.bg-theme-4 .nav-item.active>.nav-link,
+.navbar.bg-theme-4 .nav-item:hover>.nav-link {
+    background-color: #5f5f5f;
+}
+
 /* Theme 5 */
-.bg-theme-5 { background-color: #cc181e; }
-.bg-theme-alt-5, .navbar.bg-theme-5 .nav-item.active > .nav-link, .navbar.bg-theme-5 .nav-item:hover > .nav-link { background-color: #ec5f64; }
+.bg-theme-5 {
+    background-color: #cc181e;
+}
+
+.bg-theme-alt-5,
+.navbar.bg-theme-5 .nav-item.active>.nav-link,
+.navbar.bg-theme-5 .nav-item:hover>.nav-link {
+    background-color: #ec5f64;
+}
+
 /* Theme 6 */
-.bg-theme-6 { background-color: #6f5499; }
-.bg-theme-alt-6, .navbar.bg-theme-6 .nav-item.active > .nav-link, .navbar.bg-theme-6 .nav-item:hover > .nav-link { background-color: #a08cc0; }
-        
+.bg-theme-6 {
+    background-color: #6f5499;
+}
+
+.bg-theme-alt-6,
+.navbar.bg-theme-6 .nav-item.active>.nav-link,
+.navbar.bg-theme-6 .nav-item:hover>.nav-link {
+    background-color: #a08cc0;
+}
+
 .navbar-dark .navbar-nav .nav-link {
     color: white;
 }
@@ -834,7 +1029,8 @@ nav {
 }
 
 .navbar {
-    min-height: 44px; /* Required in order to keep the navbar to the same height event when menu item are not loaded yet */
+    min-height: 44px;
+    /* Required in order to keep the navbar to the same height event when menu item are not loaded yet */
     padding: 0rem 1rem;
     color: white;
 }
@@ -848,7 +1044,8 @@ nav {
     margin-right: 1px;
 }
 
-.navbar .nav-item.active > .nav-link, .navbar .nav-item:hover > .nav-link {
+.navbar .nav-item.active>.nav-link,
+.navbar .nav-item:hover>.nav-link {
     color: black;
 }
 
@@ -856,7 +1053,9 @@ nav {
 /* Navigation bar END */
 
 
-.btn-toolbar>.btn, .btn-toolbar>.btn-group, .btn-toolbar>.input-group {
+.btn-toolbar>.btn,
+.btn-toolbar>.btn-group,
+.btn-toolbar>.input-group {
     margin-left: 5px;
 }
 
@@ -865,49 +1064,67 @@ nav {
     margin-bottom: 0px;
 }
 
-.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+.table>tbody>tr>td,
+.table>tbody>tr>th,
+.table>tfoot>tr>td,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>thead>tr>th {
     vertical-align: middle;
 }
 
-.table > tbody > tr:first-child > td {
+.table>tbody>tr:first-child>td {
     border-top: none;
 }
 
-.card { margin-bottom: 0px; }
+.card {
+    margin-bottom: 0px;
+}
+
 .card-header {
     display: flex;
     align-items: center;
     padding: 5px;
-    min-height: 32px; /* header height changes according the content: only label 27.5px, buttons/toolbar 31.5px. Align to 32px */
+    min-height: 32px;
+    /* header height changes according the content: only label 27.5px, buttons/toolbar 31.5px. Align to 32px */
     background: linear-gradient(#FFFFFF, #CACACA);
     border-color: #BFBFBF;
 }
+
 .card-body {
     padding: 6px;
 }
+
 .card-footer {
     padding: 6px;
 }
+
 .card-footer>.btn {
     margin-left: .5rem;
 }
 
-.card-alt { border-color: #ddd; }
-.card-alt > .card-header {
+.card-alt {
+    border-color: #ddd;
+}
+
+.card-alt>.card-header {
     background: linear-gradient(#fff, #eee);
     border-bottom: 1px solid #ccc;
 }
 
-label { 
+label {
     font-weight: bold;
     margin-bottom: 0px;
 }
 
-.form-check-inline .form-check-input, .form-check-input {
+.form-check-inline .form-check-input,
+.form-check-input {
     margin-top: .1rem;
     margin-left: -2rem;
 }
-.form-check, .form-check.form-check-inline {
+
+.form-check,
+.form-check.form-check-inline {
     padding-left: 2rem;
 }
 
@@ -921,8 +1138,9 @@ label {
     padding: 8px;
 }
 
-.dropup .dropdown-toggle::after, .dropdown-toggle::after {
-    display:none;
+.dropup .dropdown-toggle::after,
+.dropdown-toggle::after {
+    display: none;
 }
 
 .dropdown-menu>li>a {
@@ -936,6 +1154,7 @@ label {
 .popover {
     max-width: 500px;
 }
+
 .popover-body {
     max-height: 200px;
     overflow-y: auto;
@@ -943,11 +1162,13 @@ label {
 }
 
 /*not available in bootstrap*/
-.btn-group-xs .btn, .btn-xs {
+.btn-group-xs .btn,
+.btn-xs {
     padding: 1px 5px;
     line-height: 1.5;
     border-radius: .3rem;
 }
+
 .form-control-xs {
     height: calc(1.5em + .25rem + 2px);
     padding: .25rem .5rem;
@@ -980,7 +1201,7 @@ label {
     margin-right: 2px;
 }
 
-.nav-tabs .nav-item.active > .nav-link  {
+.nav-tabs .nav-item.active>.nav-link {
     background-color: rgb(255, 255, 255);
     border-width: 1px;
     border-style: solid;
@@ -1001,14 +1222,17 @@ resource-view-tabbed .nav-item {
     width: 600px;
     max-width: 600px;
 }
+
 .modal-full.modal-dialog {
     width: 95% !important;
     max-width: 95% !important;
 }
+
 .modal-lg {
     width: 900px !important;
     max-width: initial;
 }
+
 .modal-xl {
     width: 1140px !important;
     max-width: initial;
@@ -1016,16 +1240,20 @@ resource-view-tabbed .nav-item {
 
 /* Following modal classe overrides are in order to avoid that modals exceed window height */
 .modal-header {
-    display: block; /* override the flex */
+    display: block;
+    /* override the flex */
 }
+
 .modal-title {
     display: inline-block
 }
+
 .modal-body {
     display: flex;
     flex-flow: column;
     min-height: 0;
 }
+
 .modal-footer {
     display: block;
     text-align: right;
@@ -1035,7 +1263,7 @@ resource-view-tabbed .nav-item {
 The following rules ensure that the dialogs fill (at max) up to 95% of the video height (95vh).
 In order to let the content of the modal fill the available space (independently from its content), invoke UIUtils.setFullSizeModal()
 */
-ngb-modal-window.modal { 
+ngb-modal-window.modal {
     /* .modal selector is added in order to increse the specifity of the rule 
         and override the display: block of the d-block class applied to ngb-modal-window */
     display: flex !important;
@@ -1043,19 +1271,22 @@ ngb-modal-window.modal {
     min-height: 0;
     min-width: 0;
 }
+
 .modal-content {
     display: flex !important;
     flex-flow: column;
     min-height: 0;
     min-width: 0;
 }
-.modal-content > * {
+
+.modal-content>* {
     display: flex;
     flex-flow: column;
     flex: 1;
     min-height: 0;
     min-width: 0;
 }
+
 .modal-dialog {
     margin: 15px auto;
     display: flex !important;
@@ -1064,4 +1295,5 @@ ngb-modal-window.modal {
     min-height: 0;
     min-width: 0;
 }
+
 /* modals END */

@@ -55,7 +55,7 @@ export class AddPropertyValueModal {
     private inverseProp: boolean = false; //for properties selection (when viewType is propertyTree and showInversePropertyCheckbox is true)
     private datarange: ARTLiteral[];
 
-    constructor(public activeModal: NgbActiveModal, private propService: PropertyServices, 
+    constructor(public activeModal: NgbActiveModal, private propService: PropertyServices,
         private browsingModals: BrowsingModalServices, private elementRef: ElementRef) {
     }
 
@@ -67,21 +67,21 @@ export class AddPropertyValueModal {
     }
 
     ngAfterViewInit() {
-        UIUtils.setFullSizeModal(this.elementRef)
+        UIUtils.setFullSizeModal(this.elementRef);
     }
 
     changeAspectSelector(selector: AspectSelector) {
         this.selectedAspectSelector = selector;
         //update the modal flex according the selector: if manchester expr there's no need to fill the whole window
         if (this.selectedAspectSelector == this.manchExprAspectSelector) {
-            UIUtils.setFullSizeModal(this.elementRef, false)
+            UIUtils.setFullSizeModal(this.elementRef, false);
         } else {
-            UIUtils.setFullSizeModal(this.elementRef)
+            UIUtils.setFullSizeModal(this.elementRef);
         }
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [this.rootProperty]).then(
             (selectedProp: any) => {
                 if (!this.enrichingProperty.equals(selectedProp)) {
                     this.enrichingProperty = selectedProp;
@@ -115,9 +115,7 @@ export class AddPropertyValueModal {
 
         this.propService.getRange(property).subscribe(
             range => {
-                var ranges = range.ranges;
-                var formCollection = range.formCollection; //not used, this modal allow just to pick existing resource
-
+                let ranges = range.ranges;
                 /**
                  * range undefined (the property has a custom range that replace the classic)
                  * => default view classAndIndividual (same as ranges.type undetermined)
@@ -128,10 +126,10 @@ export class AddPropertyValueModal {
                     this.viewType = ViewType.classAndIndividual;
                 } else if (ranges.type == RangeType.resource) {
                     //class, concept, conceptScheme, collection, resourcelist, instance, class individual
-                    var rangeCollection: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
+                    let rangeCollection: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
                     if (rangeCollection != null) {
                         if (rangeCollection.length == 1) {
-                            var rangeClass: ARTURIResource = rangeCollection[0];
+                            let rangeClass: ARTURIResource = rangeCollection[0];
                             if (rangeClass.equals(RDFS.class) || rangeClass.equals(OWL.class)) {
                                 this.viewType = ViewType.classTree;
                                 this.rootsForClsTree = null;
@@ -165,7 +163,7 @@ export class AddPropertyValueModal {
                     }
                 }
             }
-        )
+        );
     }
 
     /**
@@ -289,13 +287,13 @@ export class AddPropertyValueModal {
                 property: this.enrichingProperty,
                 value: this.manchExpr,
                 skipSemCheck: this.skipSemCheck
-            }
+            };
             this.activeModal.close(returnedData);
         } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
             let returnedData: AddPropertyValueModalReturnData = {
                 property: this.enrichingProperty,
                 value: this.datarange,
-            }
+            };
             this.activeModal.close(returnedData);
         } else { //treeListAspectSelector
             let values: ARTURIResource[]; //selected resource or checked resources
@@ -308,7 +306,7 @@ export class AddPropertyValueModal {
             let returnedData: AddPropertyValueModalReturnData = {
                 property: this.enrichingProperty,
                 value: values
-            }
+            };
             if (this.showInversePropertyCheckbox) {
                 returnedData.inverseProperty = this.inverseProp;
             }
@@ -337,8 +335,8 @@ export class AddPropertyValueModalReturnData {
 enum ViewType {
     classTree = "classTree",
     conceptTree = "conceptTree",
-    propertyTree = "propertyTree", 
-    schemeList = "schemeList", 
+    propertyTree = "propertyTree",
+    schemeList = "schemeList",
     datatypeList = "datatypeList",
     classAndIndividual = "classAndIndividual"
 }

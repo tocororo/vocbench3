@@ -28,7 +28,7 @@ export class TimeMachineModal {
     commitDate: Date; //from commit
     pickedDate: Date; //picked manually
 
-    constructor(private historyService: HistoryServices, private sharedModals: SharedModalServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) {}
+    constructor(private historyService: HistoryServices, private sharedModals: SharedModalServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) { }
 
     ngOnInit() {
         this.commits = [];
@@ -39,9 +39,9 @@ export class TimeMachineModal {
                         this.commits = commits;
                         this.commits.sort((c1, c2) => c1.endTime.getTime() - c2.endTime.getTime());
                     }
-                )
+                );
             }
-        )
+        );
     }
 
     ngAfterViewInit() {
@@ -50,7 +50,7 @@ export class TimeMachineModal {
 
     pickDate() {
         let selectedDate: Date = this.commitDate ? this.commitDate : this.pickedDate;
-        this.sharedModals.pickDatetime({key: "RESOURCE_VIEW.TIME_MACHINE.SELECT_DATE"}, selectedDate).then(
+        this.sharedModals.pickDatetime({ key: "RESOURCE_VIEW.TIME_MACHINE.SELECT_DATE" }, selectedDate).then(
             date => {
                 this.pickedDate = date;
                 //reset stuff about commit
@@ -59,8 +59,8 @@ export class TimeMachineModal {
                 this.sliderCommit = null;
                 this.selectedCommit = null;
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     selectCommit(commit: CommitInfo) {
@@ -69,12 +69,12 @@ export class TimeMachineModal {
         this.updateSelectedCommit();
     }
     previousCommit() {
-        this.commitSlideIdx = this.commitSlideIdx-1;
+        this.commitSlideIdx -= 1;
         this.updatePreviewedCommit();
         this.updateSelectedCommit();
     }
     nextCommit() {
-        this.commitSlideIdx = this.commitSlideIdx+1;
+        this.commitSlideIdx += 1;
         this.updatePreviewedCommit();
         this.updateSelectedCommit();
     }
@@ -82,7 +82,7 @@ export class TimeMachineModal {
     /**
      * Update the slider commit during the "sliding" (useful for the preview of the date)
      */
-     updatePreviewedCommit() {
+    updatePreviewedCommit() {
         this.sliderCommit = this.commits[this.commitSlideIdx];
     }
 
@@ -94,7 +94,7 @@ export class TimeMachineModal {
         this.commitDate = this.selectedCommit.endTime;
         this.pickedDate = null;
     }
-    
+
 
     ok() {
         this.activeModal.close();

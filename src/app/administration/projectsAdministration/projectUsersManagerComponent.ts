@@ -28,7 +28,7 @@ import { UserProjBindingModal } from "./userProjBindingModal";
 })
 export class ProjectUsersManagerComponent {
 
-    @Input() project: Project
+    @Input() project: Project;
 
     usersBound: User[]; //list of User bound to selected project 
     selectedUser: User; //user selected in the list of bound users
@@ -43,7 +43,7 @@ export class ProjectUsersManagerComponent {
     private availableLanguages: Language[]; //the languages that are shown in the "Available languages" panel, those who is possible to assign to user
     //this might be a subset of projectLanguages (if filterProficiencies is active)
     private puLanguages: Language[]; //languages assigned to the user in the selected project
-    selectedLangs: Language[];  //languages selected in available lang list (availableLanguages)
+    selectedLangs: Language[]; //languages selected in available lang list (availableLanguages)
     selectedUserLangs: Language[]; //selected langs in the list of the languages assigned to the selectedUser in the selectedProject
     private filterProficiencies: boolean = false;
 
@@ -77,9 +77,9 @@ export class ProjectUsersManagerComponent {
                                 break;
                             }
                         }
-                        if (userFound != null) {//selected user found among the users bound to project, select it
+                        if (userFound != null) { //selected user found among the users bound to project, select it
                             this.selectUser(userFound);
-                        } else {//selected user not found among the users bound to project, reset it
+                        } else { //selected user not found among the users bound to project, reset it
                             this.selectedUser = null;
                         }
                     }
@@ -101,7 +101,7 @@ export class ProjectUsersManagerComponent {
                     Languages.sortLanguages(this.projectLanguages);
                     this.initAvailableLanguages();
                 }
-            )
+            );
         }
     }
 
@@ -134,7 +134,7 @@ export class ProjectUsersManagerComponent {
                     }
                     this.puTemplate = partitionFilter;
                 }
-            )
+            );
         }
     }
 
@@ -150,7 +150,7 @@ export class ProjectUsersManagerComponent {
                     stResp => {
                         this.usersBound.push(user);
                     }
-                )
+                );
             },
             () => { }
         );
@@ -184,8 +184,10 @@ export class ProjectUsersManagerComponent {
     cloneSettings() {
         this.basicModals.selectProject({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "ACTIONS.SELECT_TARGET_PROJECT" }).then(
             (targetProj: Project) => {
-                this.basicModals.confirm({ key: "ACTIONS.DUPLICATE_SETTINGS" }, { key: "MESSAGES.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM", 
-                    params: { user: this.selectedUser.getShow(), project: targetProj.getName(true) } },
+                this.basicModals.confirm({ key: "ACTIONS.DUPLICATE_SETTINGS" }, {
+                    key: "MESSAGES.DUPLICATE_SETTINGS_TO_ANOTHER_PROJ_CONFIRM",
+                    params: { user: this.selectedUser.getShow(), project: targetProj.getName(true) }
+                },
                     ModalType.warning).then(
                         () => {
                             //clone binding-related settings (roles, group, language)
@@ -198,10 +200,10 @@ export class ProjectUsersManagerComponent {
                             //clone template
                             this.updateTemplate(targetProj);
                         }
-                    )
+                    );
             },
             () => { }
-        )
+        );
     }
 
     //=========== ROLES ===========
@@ -290,7 +292,7 @@ export class ProjectUsersManagerComponent {
                 this.puBinding.setGroup(this.selectedGroup);
                 this.selectedGroup = null;
             }
-        )
+        );
     }
 
     removeGroup() {
@@ -350,7 +352,7 @@ export class ProjectUsersManagerComponent {
                 puLang['proficiency'] = this.isProficiencyLang(lang.tag);
                 this.puLanguages.push(puLang);
             }
-        })
+        });
         Languages.sortLanguages(this.puLanguages);
     }
 
@@ -381,7 +383,7 @@ export class ProjectUsersManagerComponent {
     addLanguage() {
         this.selectedLangs.forEach(l => {
             this.puBinding.addLanguage(l.tag);
-        })
+        });
         this.updateLanguagesOfUserInProject();
     }
 
@@ -406,7 +408,7 @@ export class ProjectUsersManagerComponent {
     removeLanguage() {
         this.selectedUserLangs.forEach(l => {
             this.puBinding.removeLanguage(l.tag);
-        })
+        });
         this.updateLanguagesOfUserInProject();
     }
 
@@ -470,13 +472,13 @@ export class ProjectUsersManagerComponent {
                     this.updateTemplate();
                 }
             }
-        )
+        );
     }
 
     storeTemplate() {
         let config: { [key: string]: any } = {
             template: this.puTemplate
-        }
+        };
         this.sharedModals.storeConfiguration({ key: "ACTIONS.SAVE_TEMPLATE" }, ConfigurationComponents.TEMPLATE_STORE, config);
     }
 
@@ -484,7 +486,7 @@ export class ProjectUsersManagerComponent {
         if (project == null) {
             project = this.project;
         }
-        
+
         this.resViewPref.resViewPartitionFilter = this.puTemplate;
         this.settingsService.storeSettingForProjectAdministration(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.resourceView, this.resViewPref, project, this.selectedUser).subscribe(
             () => {
@@ -496,7 +498,7 @@ export class ProjectUsersManagerComponent {
                     this.vbProp.refreshResourceViewPartitionFilter().subscribe();
                 }
             }
-        )
+        );
     }
 
 

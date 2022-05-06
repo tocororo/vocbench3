@@ -1,6 +1,6 @@
 import { Component, Input, QueryList, ViewChildren } from "@angular/core";
 import { map } from 'rxjs/operators';
-import { ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { ConceptTreePreference, MultischemeMode } from "../../../models/Properties";
 import { SkosServices } from "../../../services/skosServices";
 import { VBRequestOptions } from "../../../utils/HttpManager";
@@ -96,14 +96,14 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
                         if (this.schemes.some(activeSc => activeSc.equals(s))) {
                             visible = true;
                         }
-                    })
+                    });
                 } else { //mode AND, visible if belongs to every active scheme
                     visible = true;
                     this.schemes.forEach(actSc => {
                         if (!data.schemes.some(s => s.equals(actSc))) {
                             visible = false; //there is an active scheme which concept doesn't belong
                         }
-                    })
+                    });
                 }
                 if (visible) {
                     this.onChildCreated(this.node, data.resource);
