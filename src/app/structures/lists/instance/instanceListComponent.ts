@@ -96,7 +96,7 @@ export class InstanceListComponent extends AbstractList {
                             );
                         }
                     }
-                )
+                );
             } else { //search based
                 //reset to empty list and check for pending search
                 this.forceList(null);
@@ -154,7 +154,7 @@ export class InstanceListComponent extends AbstractList {
         if (safeness != null) { //found safeness in cache
             this.safeToGo = safeness;
             this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
-            return of(null)
+            return of(null);
         } else { //never initialized => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             return this.getNumberOfInstances(this.cls).pipe(
@@ -164,7 +164,7 @@ export class InstanceListComponent extends AbstractList {
                     safeToGoMap[checksum] = safeness; //cache the safeness
                     this.safeToGo = safeness;
                     this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
-                    return of(null)
+                    return of(null);
                 })
             );
         }

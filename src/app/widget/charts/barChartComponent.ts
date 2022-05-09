@@ -37,7 +37,7 @@ export class BarChartComponent extends AbstractSeriesChartComponent {
             } else { //secondClick has been set to true in onSelect(), so the double click has been done on a bar => do nothing, just reset secondClick
                 this.secondClick = false;
             }
-        })
+        });
     }
 
     onSelect(data: ChartData) {

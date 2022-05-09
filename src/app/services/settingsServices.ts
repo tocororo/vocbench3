@@ -60,7 +60,7 @@ export class SettingsServices {
      * @param scope 
      * @param settings 
      */
-     storeSettings(componentID: string, scope: Scope, settings: any) {
+    storeSettings(componentID: string, scope: Scope, settings: any) {
         let params = {
             componentID: componentID,
             scope: scope,
@@ -77,7 +77,7 @@ export class SettingsServices {
      * @param propertyValue 
      * @returns 
      */
-     storeSetting(componentID: string, scope: Scope, propertyName: string, propertyValue: any, options?: VBRequestOptions) {
+    storeSetting(componentID: string, scope: Scope, propertyName: string, propertyValue: any, options?: VBRequestOptions) {
         let params = {
             componentID: componentID,
             scope: scope,
@@ -115,7 +115,7 @@ export class SettingsServices {
      * @param settings 
      * @returns 
      */
-     storeSettingsDefault(componentID: string, scope: Scope, defaultScope: Scope, settings: any) {
+    storeSettingsDefault(componentID: string, scope: Scope, defaultScope: Scope, settings: any) {
         let params = {
             componentID: componentID,
             scope: scope,
@@ -151,13 +151,13 @@ export class SettingsServices {
             scope: scope,
             projectName: project.getName(),
             userIri: user != null ? user.getIri() : null,
-            groupIri: group != null ? group.iri: null,
+            groupIri: group != null ? group.iri : null,
         };
         return this.httpMgr.doGet(this.serviceName, "getSettingsForProjectAdministration", params).pipe(
             map(stResp => {
                 return Settings.parse(stResp);
             })
-        )
+        );
     }
 
     storeSettingForProjectAdministration(componentID: string, scope: Scope, propertyName: string, propertyValue: any, project: Project, user?: User, group?: UsersGroup) {
@@ -168,7 +168,7 @@ export class SettingsServices {
             propertyValue: JSON.stringify(propertyValue),
             projectName: project.getName(),
             userIri: user != null ? user.getIri() : null,
-            groupIri: group != null ? group.iri: null,
+            groupIri: group != null ? group.iri : null,
         };
         return this.httpMgr.doPost(this.serviceName, "storeSettingForProjectAdministration", params);
     }

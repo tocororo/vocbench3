@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
+import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFS } from "../../../models/Vocabulary";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -76,7 +76,7 @@ export class PropertyTreeComponent extends AbstractTree {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
-            )
+            );
         } else if (this.resource) {
             this.propertyService.getRelevantPropertiesForResource(this.resource, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 relevantProps => {
@@ -86,7 +86,7 @@ export class PropertyTreeComponent extends AbstractTree {
                         if (p.equals(RDFS.comment)) {
                             commentFound = true;
                         }
-                    })
+                    });
                     if (!commentFound) {
                         relevantProps.push(RDFS.comment);
                     }
@@ -165,7 +165,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);
                     return;
-                };
+                }
                 //open tree from root to node
                 this.openRoot(path); 
             }

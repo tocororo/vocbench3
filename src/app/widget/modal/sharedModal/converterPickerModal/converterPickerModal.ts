@@ -63,7 +63,7 @@ export class ConverterPickerModal {
          * allowed capabilities is only uri (no other capabilities) => constrained to uri
          */
         if (this.capabilities != null &&
-            ((this.capabilities.length > 0 && this.capabilities.indexOf(RDFCapabilityType.node) == -1 && this.capabilities.indexOf(RDFCapabilityType.uri) == -1 ) ||
+            ((this.capabilities.length > 0 && this.capabilities.indexOf(RDFCapabilityType.node) == -1 && this.capabilities.indexOf(RDFCapabilityType.uri) == -1) ||
             (this.capabilities.length == 1 && this.capabilities[0] == RDFCapabilityType.uri))
          ) {
             this.concerterTypeConstrained = true;

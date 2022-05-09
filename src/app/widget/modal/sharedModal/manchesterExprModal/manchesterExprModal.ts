@@ -25,7 +25,7 @@ export class ManchesterExprModal {
         let returnData: ManchesterExprModalReturnData = {
             expression: this.expression,
             skipSemCheck: this.skipSemCheck
-        }
+        };
         this.activeModal.close(returnData);
     }
 

@@ -149,8 +149,8 @@ export class SheetManagerComponent {
                 if (n.memoize && n.memoizeId != null && !this.s2rdfCtx.memoizeIdList.includes(n.memoizeId)) {
                     this.s2rdfCtx.memoizeIdList.push(n.memoizeId);
                 }
-            })
-        })
+            });
+        });
     }
 
     private initTablePreview() {
@@ -163,7 +163,7 @@ export class SheetManagerComponent {
                 this.totalRows = table.total;
                 this.tablePreview = table.rows;
             }
-        )
+        );
     }
 
     private initHeaderCssClass(header: SimpleHeader) {
@@ -267,7 +267,7 @@ export class SheetManagerComponent {
             () => {
                 this.initHeaders();
             }
-        )
+        );
     }
 
     /* ==========================================================
@@ -277,7 +277,7 @@ export class SheetManagerComponent {
     onPearlChange() {
         //reset the previous timeout and set it again
         clearTimeout(this.pearlValidationTimer);
-        this.pearlValidationTimer = window.setTimeout(() => { this.checkPearl() }, 1000);
+        this.pearlValidationTimer = window.setTimeout(() => { this.checkPearl(); }, 1000);
     }
 
     generatePearl() {
@@ -295,14 +295,14 @@ export class SheetManagerComponent {
             pearl => {
                 this.pearl = pearl;
             }
-        )
+        );
     }
 
     private checkPearl() {
         if (this.pearl == undefined) {
             this.pearlValidation = { valid: true };
             return;
-        };
+        }
         this.codaService.validatePearl(this.pearl).subscribe(
             valid => {
                 this.pearlValidation = valid;
@@ -326,7 +326,7 @@ export class SheetManagerComponent {
                 this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
             },
             () => { }
-        )
+        );
     }
 
     /* ==========================================================
@@ -366,7 +366,7 @@ export class SheetManagerComponent {
                         this.alternateRowHelper = {};
                         rows.forEach((r, idx) => {
                             this.alternateRowHelper[r] = idx;
-                        })
+                        });
                     })
                 );
             })
@@ -398,7 +398,7 @@ export class SheetManagerComponent {
                     this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.GENERATED_TRIPLES_ADDED" });
                 }
             })
-        )
+        );
 
     }
 
@@ -408,7 +408,7 @@ export class SheetManagerComponent {
                 let exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_TRIPLES" }, null, exportLink, "triples." + format.defaultFileExtension);
             }
-        )
+        );
     }
 
 

@@ -56,7 +56,7 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal {
             uriResource: null,
             cls: this.resourceClass,
             cfValue: null
-        }
+        };
         //Set URI only if localName is not empty (this case is possible only if uriOptional is false)
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);

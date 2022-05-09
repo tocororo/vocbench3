@@ -1,4 +1,4 @@
-import { ARTURIResource, RDFResourceRolesEnum } from "./ARTResources";
+import { ARTURIResource } from "./ARTResources";
 import { Language } from "./LanguagesCountries";
 import { Project } from "./Project";
 import { ResViewPartition } from "./ResourceView";
@@ -54,12 +54,12 @@ export class PreferencesUtils {
             if (settingsProperty[prop] != null) {
                 localPref[prop] = settingsProperty[prop];
             }
-        })
+        });
     }
 }
 
 export class ResourceViewPreference {
-    mode: ResourceViewMode = ResourceViewMode.tabbed; 
+    mode: ResourceViewMode = ResourceViewMode.tabbed;
     syncTabs: boolean = false; //in tabbed mode allows to keep sync'd the resource in the active tab with the same resource in the tree/list
     defaultConceptType: ResourceViewType = ResourceViewType.resourceView; //tells the RV type to be open by default for concepts
     lastConceptType: ResourceViewType;
@@ -87,8 +87,8 @@ export enum ResourceViewType { //used for set a default type of resource view fo
 }
 
 export class ResourceViewProjectSettings {
-    customSections: {[key: string]: CustomSection} = {}; //map name -> CustomSection
-    templates: {[key: string]: ResViewPartition[]} = {}; //map role -> sections
+    customSections: { [key: string]: CustomSection } = {}; //map name -> CustomSection
+    templates: { [key: string]: ResViewPartition[] } = {}; //map role -> sections
 }
 
 export class CustomSection {
@@ -122,7 +122,7 @@ export enum StatusFilter {
     UNDER_VALIDATION = "UNDER_VALIDATION",
     UNDER_VALIDATION_FOR_DEPRECATION = "UNDER_VALIDATION_FOR_DEPRECATION",
     ANYTHING = "ANYTHING",
-} 
+}
 
 export class ClassTreePreference {
     rootClassUri: string;
@@ -137,7 +137,7 @@ export class ClassTreePreference {
 }
 export class ClassTreeFilter {
     enabled: boolean = true;
-    map:  { [key: string]: string[] } = {}; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
+    map: { [key: string]: string[] } = {}; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
 }
 
 export class ConceptTreePreference {
@@ -156,8 +156,8 @@ export class ConceptTreePreference {
  * checksum: string - it is a representation of the request params (it could be a concat of the params serialization)
  * safe: boolean tells if the tree/list is safe to be initialized, namely if the amount of elements (root/items) are under a safety limit
  */
-export interface SafeToGoMap { [checksum: string]: SafeToGo };
-export interface SafeToGo { safe: boolean, count?: number };
+export interface SafeToGoMap { [checksum: string]: SafeToGo }
+export interface SafeToGo { safe: boolean, count?: number }
 
 export enum ConceptTreeVisualizationMode {
     searchBased = "searchBased",
@@ -275,14 +275,14 @@ export class ProjectCreationPreferences {
 }
 
 export class VisualizationModeTranslation {
-    static translationMap: {[key: string]: string} = {
+    static translationMap: { [key: string]: string } = {
         [ConceptTreeVisualizationMode.hierarchyBased]: "DATA.COMMONS.VISUALIZATION_MODE.HIERARCHY_BASED",
         [ConceptTreeVisualizationMode.searchBased]: "DATA.COMMONS.VISUALIZATION_MODE.SEARCH_BASED",
         [LexEntryVisualizationMode.indexBased]: "DATA.COMMONS.VISUALIZATION_MODE.INDEX_BASED",
         [LexEntryVisualizationMode.searchBased]: "DATA.COMMONS.VISUALIZATION_MODE.SEARCH_BASED",
         [InstanceListVisualizationMode.searchBased]: "DATA.COMMONS.VISUALIZATION_MODE.SEARCH_BASED",
         [InstanceListVisualizationMode.standard]: "DATA.COMMONS.VISUALIZATION_MODE.STANDARD"
-    }
+    };
 }
 
 export enum AuthServiceMode {

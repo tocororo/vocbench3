@@ -11,7 +11,7 @@ export abstract class AbstractViewRendererComponent {
     @Input() partition: ResViewPartition;
     @Input() readonly: boolean;
 
-    @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter;
+    @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter();
     @Output() update: EventEmitter<void> = new EventEmitter();
     @Output() delete: EventEmitter<ARTNode> = new EventEmitter();
 
@@ -28,7 +28,7 @@ export abstract class AbstractViewRendererComponent {
     protected initActionStatus(): void {
         this.editAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.subject) && !this.readonly;
         this.deleteAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject) && !this.readonly;
-    };
+    }
 
     /**
      * normalizes the input data in a format compliant for the view renderer

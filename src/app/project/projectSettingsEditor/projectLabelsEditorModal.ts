@@ -32,7 +32,7 @@ export class ProjectLabelsEditorModal {
     private updatePendingLangs() {
         this.pendingLangs = VBContext.getSystemSettings().languages
             .filter((l: Language) => !this.labels.some(label => label.lang == l.tag)) //keep only those language not already in labels list
-            .map((l: Language) => l.tag) //get only the tag
+            .map((l: Language) => l.tag); //get only the tag
     }
 
     addLabel() {
@@ -70,13 +70,13 @@ export class ProjectLabelsEditorModal {
         let labelMap: { [lang: string]: string } = {};
         this.labels.forEach(l => {
             labelMap[l.lang] = l.label;
-        })
+        });
         this.projectService.setProjectLabels(this.project, labelMap).subscribe(
             () => {
                 this.project.setLabels(labelMap);
                 this.activeModal.close();
             }
-        )
+        );
     }
 
     cancel() {

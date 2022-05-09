@@ -14,11 +14,11 @@ export class ConfirmModal extends AbstractConfirmModal {
     }
 
     ok() {
-		this.activeModal.close();
-	}
+        this.activeModal.close();
+    }
 
-	close() {
-		this.activeModal.dismiss();
-	}
+    close() {
+        this.activeModal.dismiss();
+    }
 
 }

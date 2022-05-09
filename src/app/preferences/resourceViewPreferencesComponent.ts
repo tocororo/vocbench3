@@ -18,14 +18,14 @@ export class ResourceViewPreferencesComponent {
     private rvConceptTypes: ResViewTypeOpt[] = [
         { type: ResourceViewType.resourceView, showTranslationKey: "RESOURCE_VIEW.TYPES.DETAILED", descrTranslationKey: "RESOURCE_VIEW.TYPES.DETAILED_DESCR" },
         { type: ResourceViewType.termView, showTranslationKey: "RESOURCE_VIEW.TYPES.TERMINOLOGIST", descrTranslationKey: "RESOURCE_VIEW.TYPES.TERMINOLOGIST_DESCR" }
-    ]
+    ];
     private selectedRvConceptType: ResViewTypeOpt;
 
     rvLexEntryTypeSelectorAvailable: boolean;
     private rvLexEntryTypes: ResViewTypeOpt[] = [
         { type: ResourceViewType.resourceView, showTranslationKey: "RESOURCE_VIEW.TYPES.DETAILED", descrTranslationKey: "RESOURCE_VIEW.TYPES.DETAILED_DESCR" },
         { type: ResourceViewType.lexicographerView, showTranslationKey: "RESOURCE_VIEW.TYPES.LEXICOGRAPHER", descrTranslationKey: "RESOURCE_VIEW.TYPES.LEXICOGRAPHER_DESCR" }
-    ]
+    ];
     private selectedRvLexEntryType: ResViewTypeOpt;
 
     displayImg: boolean;

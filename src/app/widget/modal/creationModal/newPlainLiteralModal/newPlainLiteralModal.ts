@@ -12,7 +12,7 @@ export class NewPlainLiteralModal {
     @Input() value: string;
     @Input() valueReadonly: boolean = false;
     @Input() lang: string;
-    @Input() langReadonly: boolean = false
+    @Input() langReadonly: boolean = false;
     @Input() langConstraints: LanguageConstraint = { constrain: false, locale: true };
     @Input() multivalueOpt: { enabled: boolean, allowSameLang: boolean } = { enabled: false, allowSameLang: true };
 
@@ -66,7 +66,7 @@ export class NewPlainLiteralModal {
     }
 
     isOkWarningActive(): boolean {
-        return (this.values.length > 0 && this.value != null && this.value.trim() != "")
+        return (this.values.length > 0 && this.value != null && this.value.trim() != "");
     }
 
     /**

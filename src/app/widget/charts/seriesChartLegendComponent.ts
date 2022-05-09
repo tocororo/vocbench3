@@ -54,12 +54,12 @@ export class SeriesChartLegendComponent {
                 let newData: ChartData = {
                     name: oldData.name,
                     value: Number(newValue.getValue())
-                }
+                };
                 if (oldData.extra) {
                     newData.extra = {
                         nameResource: oldData.extra.nameResource,
                         valueDatatype: newValue.getDatatype()
-                    }
+                    };
                 }
                 
                 this.dataChanged.emit({ old: oldData, new: newData });

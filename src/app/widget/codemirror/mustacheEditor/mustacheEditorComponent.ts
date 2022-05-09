@@ -7,16 +7,16 @@ import * as CodeMirror from 'codemirror';
     selector: 'mustache-editor',
     templateUrl: "mustacheEditorComponent.html",
     providers: [{
-         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MustacheEditorComponent), multi: true,
+        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MustacheEditorComponent), multi: true,
     }],
     host: { class: "vbox" }
 })
 
 export class MustacheEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
-    
+
     @ViewChild('cmEditor') private cmEditorView: CodemirrorComponent;
-    
+
     private cmEditor: CodeMirror.EditorFromTextArea;
 
     code: string;
@@ -25,14 +25,14 @@ export class MustacheEditorComponent implements ControlValueAccessor {
     constructor() { }
 
     ngOnInit() {
-        this.editorConfig = { 
+        this.editorConfig = {
             lineNumbers: true,
             mode: "mustache",
             lineWrapping: true,
             readOnly: this.disabled,
-            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-                //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-        }
+            viewportMargin: Infinity, //with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+            //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+        };
     }
 
     ngAfterViewInit() {

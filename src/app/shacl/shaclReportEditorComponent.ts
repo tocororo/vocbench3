@@ -1,4 +1,4 @@
-import { Component, forwardRef, HostListener, SimpleChanges } from '@angular/core';
+import { Component, forwardRef, HostListener } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import * as CodeMirror from 'codemirror';
@@ -39,12 +39,12 @@ export class ShaclReportEditorComponent extends TurtleEditorComponent {
                 if (t.string.startsWith("<") && t.string.endsWith(">")) {
                     let res = new ARTURIResource(t.string);
                     if (res.getURI().startsWith(VBContext.getWorkingProject().getDefaultNamespace())) { //local resource
-                        let from: CodeMirror.Position = { ch: t.start, line: i }
-                        let to: CodeMirror.Position = { ch: t.end, line: i }
+                        let from: CodeMirror.Position = { ch: t.start, line: i };
+                        let to: CodeMirror.Position = { ch: t.end, line: i };
                         this.cmEditor.markText(from, to, { css: "cursor: pointer; background-color: #fdff8c;", title: this.translateService.instant("SHACL.CLICK_TO_INSPECT") });
                     }
                 }
-            })
+            });
         }
     }
 

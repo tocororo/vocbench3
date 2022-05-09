@@ -15,7 +15,7 @@ export class LineChartComponent {
     @Input() yAxisLabel: string;
     @Input() chartData: ChartSeries[];
     @Input() readonly: boolean;
-    @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter; //emits the resource related to the double click graphic element. Null if double click on empty area
+    @Output() doubleClick: EventEmitter<ARTNode> = new EventEmitter(); //emits the resource related to the double click graphic element. Null if double click on empty area
     @Output() dataChanged: EventEmitter<ChartDataChangedEvent> = new EventEmitter();
 
     /*
@@ -49,12 +49,12 @@ export class LineChartComponent {
                 let newData: ChartData = {
                     name: oldData.name,
                     value: Number(newValue.getValue())
-                }
+                };
                 if (oldData.extra) {
                     newData.extra = {
                         nameResource: oldData.extra.nameResource,
                         valueDatatype: newValue.getDatatype()
-                    }
+                    };
                 }
                 editingSeries.series[editingSeries.series.indexOf(oldData)] = newData; //replace old with new value
                 this.chartData = this.chartData.slice(); //slice so that chartData is recognized as a new list and the chart is updated
@@ -85,7 +85,7 @@ export class LineChartComponent {
             } else { //secondClick has been set to true in onSelect(), so the double click has been done on a bar => do nothing, just reset secondClick
                 this.secondClick = false;
             }
-        })
+        });
     }
 
     onSelect(data: SelectEventData) {

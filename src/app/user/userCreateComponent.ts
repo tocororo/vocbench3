@@ -16,7 +16,7 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 export class UserCreateComponent implements ControlValueAccessor {
 
     @Input() constraint: UserConstraint;
-    @Input() registration: boolean // true if this component is used inside registration form
+    @Input() registration: boolean; // true if this component is used inside registration form
 
     authServMode: AuthServiceMode;
 

@@ -42,7 +42,7 @@ export class ListParamEditor {
             if (v != null && v.trim() != "") {
                 this.value.push(v);
             }
-        })
+        });
         this.valueChanged.emit(this.value);
     }
 

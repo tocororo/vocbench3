@@ -13,10 +13,10 @@ export class D3Service {
      * A method to bind a pan and zoom behaviour to an svg element 
      */
     applyZoomableBehaviour(svgElement: any, containerElement: any) {
-        let svg;
+        let svg: d3.Selection<any, any, null, undefined>;
         let container: d3.Selection<any, any, null, undefined>;
-        let zoomed;
-        let zoom;
+        let zoomed: { (): void };
+        let zoom: d3.ZoomBehavior<Element, any>;
 
         svg = d3.select(svgElement);
         container = d3.select(containerElement);

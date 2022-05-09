@@ -82,7 +82,7 @@ export class RefactorServices {
     replaceBaseURI(targetBaseURI: string, sourceBaseURI?: string) {
         let params: any = {
             targetBaseURI: new ARTURIResource(targetBaseURI)
-        }
+        };
         if (sourceBaseURI != undefined) {
             params.sourceBaseURI = new ARTURIResource(sourceBaseURI);
         }
@@ -99,7 +99,7 @@ export class RefactorServices {
     }
 
     migrateDefaultGraphToBaseURIGraph(clearDestinationGraph?: boolean) {
-        let params: any = {}
+        let params: any = {};
         if (clearDestinationGraph != undefined) {
             params.clearDestinationGraph = clearDestinationGraph;
         }
@@ -118,14 +118,14 @@ export class RefactorServices {
      * @param broaderConcept broader of the new created concept (if null the concept will be a top)
      * @param customFormValue custom form that set additional info to the concept
      */
-    spawnNewConceptFromLabel(xLabel: ARTResource, conceptSchemes: ARTURIResource[], oldConcept?: ARTURIResource, 
-        newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
-		customFormValue?: CustomFormValue) {
+    spawnNewConceptFromLabel(xLabel: ARTResource, conceptSchemes: ARTURIResource[], oldConcept?: ARTURIResource,
+        newConcept?: ARTURIResource, broaderConcept?: ARTURIResource,
+        customFormValue?: CustomFormValue) {
 
         let params: any = {
             xLabel: xLabel,
             conceptSchemes: conceptSchemes,
-        }
+        };
         if (oldConcept != undefined) {
             params.oldConcept = oldConcept;
         }
@@ -148,11 +148,11 @@ export class RefactorServices {
                     map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         if (broaderConcept != null) { //created narrower
-                            this.eventHandler.narrowerCreatedEvent.emit({narrower: <ARTURIResource>resource, broader: broaderConcept});
+                            this.eventHandler.narrowerCreatedEvent.emit({ narrower: <ARTURIResource>resource, broader: broaderConcept });
                             return resource;
                         } else { //created topConcept
-                            this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>resource, schemes: conceptSchemes});
-                            return {concept: <ARTURIResource>resource, schemes: conceptSchemes};
+                            this.eventHandler.topConceptCreatedEvent.emit({ concept: <ARTURIResource>resource, schemes: conceptSchemes });
+                            return { concept: <ARTURIResource>resource, schemes: conceptSchemes };
                         }
                     })
                 );
@@ -169,14 +169,14 @@ export class RefactorServices {
      * @param force set to true to create a new prefLabel for the targetResource even if this creates a conflict 
      * with another prefLabel belonging to a third resource
      */
-    moveXLabelToResource(sourceResource: ARTResource, predicate: ARTURIResource, xLabel: ARTResource, 
+    moveXLabelToResource(sourceResource: ARTResource, predicate: ARTURIResource, xLabel: ARTResource,
         targetResource: ARTResource, force?: boolean) {
         let params: any = {
             sourceResource: sourceResource,
             predicate: predicate,
             xLabel: xLabel,
             targetResource: targetResource
-        }
+        };
         if (force != undefined) {
             params.force = force;
         }

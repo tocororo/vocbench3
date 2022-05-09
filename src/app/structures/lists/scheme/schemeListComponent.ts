@@ -75,7 +75,7 @@ export class SchemeListComponent extends AbstractList {
     }
 
     onListNodeDeleted(node: ARTURIResource) {
-        for (let i = 0; i < this.list.length; i++) {//Update the schemeList
+        for (let i = 0; i < this.list.length; i++) { //Update the schemeList
             if (this.list[i].scheme.getURI() == node.getURI()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
@@ -132,8 +132,8 @@ export class SchemeListComponent extends AbstractList {
             if (this.list[i].scheme.getURI() == resource.getURI()) {
                 if (i >= this.nodeLimit) {
                     //update nodeLimit so that node at index i is within the range
-                    let scrollStep: number = ((i - this.nodeLimit)/this.increaseRate)+1;
-                    this.nodeLimit = this.nodeLimit + this.increaseRate*scrollStep;
+                    let scrollStep: number = ((i - this.nodeLimit) / this.increaseRate) + 1;
+                    this.nodeLimit += this.increaseRate * scrollStep;
                 }
                 break;
             }
@@ -174,7 +174,7 @@ export class SchemeListComponent extends AbstractList {
 
 
     private onSchemeChanged(schemes: ARTURIResource[]) {
-        this.list.forEach((s: SchemeListItem) => s.checked = ResourceUtils.containsNode(schemes, s.scheme));
+        this.list.forEach((s: SchemeListItem) => { s.checked = ResourceUtils.containsNode(schemes, s.scheme); });
     }
 
 }

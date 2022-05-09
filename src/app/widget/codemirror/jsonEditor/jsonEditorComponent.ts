@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, forwardRef, Input, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
 
@@ -6,7 +6,7 @@ import * as CodeMirror from 'codemirror';
     selector: 'json-editor',
     templateUrl: "jsonEditorComponent.html",
     providers: [{
-         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => JsonEditorComponent), multi: true,
+        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => JsonEditorComponent), multi: true,
     }],
     host: { class: "vbox" }
 })
@@ -21,16 +21,16 @@ export class JsonEditorComponent implements ControlValueAccessor {
     constructor() { }
 
     ngOnInit() {
-        this.editorConfig = { 
+        this.editorConfig = {
             lineNumbers: this.lineNumbers,
             mode: "application/json",
             lineWrapping: true,
             readOnly: this.disabled,
             // matchBrackets: true,
             // autoCloseBrackets: true,
-            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-                //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-        }
+            viewportMargin: Infinity, //with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+            //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+        };
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -42,7 +42,7 @@ export class JsonEditorComponent implements ControlValueAccessor {
     onCodeChange() {
         this.propagateChange(this.code);
     }
-    
+
 
     //---- method of ControlValueAccessor and Validator interfaces ----
     /**

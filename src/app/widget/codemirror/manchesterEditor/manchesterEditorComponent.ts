@@ -49,7 +49,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
             indentWithTabs: true,
             lineWrapping: true,
             readOnly: this.disabled,
-            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+            viewportMargin: Infinity, //with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
                                     //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
             extraKeys: { "Ctrl-Space": "autocomplete" },
             //unfortunately @types/codemirror seems to not recognize hints types, so I need to provide the hintOptions as done in ngAfterViewInit
@@ -58,7 +58,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
             //         return this.asyncHintFunction();
             //     }
             // }
-        }
+        };
 
         this.skipSemanticCheck = Cookie.getCookie(Cookie.MANCH_EXPR_SKIP_SEMANTIC_CHECK) == "true";
         this.skipSemCheckEmitter.emit(this.skipSemanticCheck);
@@ -70,21 +70,21 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
             hint: (cm: CodeMirror.Editor, callback: (hints: any) => any) => {
                 return this.asyncHintFunction();
             }
-        }
+        };
         this.editorConfig['hintOptions'] = hintOptions;
     }
 
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['disabled']) {
-            this.editorConfig.readOnly = changes['disabled'].currentValue
+            this.editorConfig.readOnly = changes['disabled'].currentValue;
         }
     }
 
     onCodeChange() {
         clearTimeout(this.codeValidationTimer);
         this.propagateChange(null); //in order to prevent that OK is enabled in the meantime an expr check is performed
-        this.codeValidationTimer = window.setTimeout(() => { this.validateExpression(this.code) }, 1000);
+        this.codeValidationTimer = window.setTimeout(() => { this.validateExpression(this.code); }, 1000);
     }
 
     onSkipSemCheckChange() {
@@ -120,7 +120,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                 for (let i = start; i <= end; i++) {
                     if (curLine.charAt(i) == ":") {
                         start = i + 1;
-                        break
+                        break;
                     }
                 }
                 return this.searchServices.searchURIList(word, SearchMode.startsWith, 200).pipe(
@@ -132,13 +132,13 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                                 from: CodeMirror.Pos(cur.line, start),
                                 to: CodeMirror.Pos(cur.line, end),
                                 list: results
-                            }
+                            };
                         }
                         return {
                             from: CodeMirror.Pos(cur.line, start),
                             to: CodeMirror.Pos(cur.line, end),
                             list: results.sort()
-                        }
+                        };
                     })
                 ).toPromise();
             } else { // here it looks for between keywords and prefixes
@@ -151,57 +151,57 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         if (results.length > 0 && filterKeywords.length > 0) { //  case in which you need to add a separator in hints windows ( first keyword and then prefixes)
                             filterKeywords.forEach(value => {
                                 if (value == "SOME" || value == "ONLY" || value == "VALUE" || value == "MIN" || value == "MAX" || value == "EXACTLY" || value == "SELF") {
-                                    list.push({ text: value, className: "quantifier" })
+                                    list.push({ text: value, className: "quantifier" });
                                 } else if (value == "LANGRANGE" || value == "LENGTH" || value == "MAXLENGTH" || value == "MINLENGTH" || value == "PATTERN" || value == "<" || value == "<=" || value == ">" || value == ">=") {
-                                    list.push({ text: value, className: "facet" })
+                                    list.push({ text: value, className: "facet" });
                                 } else if (value == "AND" || value == "OR" || value == "NOT" || value == "THAT") {
-                                    list.push({ text: value, className: "conjuction" })
+                                    list.push({ text: value, className: "conjuction" });
                                 }
 
-                            })
+                            });
                             results.sort().forEach(value => {
                                 if (results.indexOf(value) == 0) { // check to verify if it is the first element of array
-                                    list.push({ text: value + ":", className: "hint-separator" }) // add separator because start prefixes. Add also ":" to each value of result array
+                                    list.push({ text: value + ":", className: "hint-separator" }); // add separator because start prefixes. Add also ":" to each value of result array
                                 } else {
-                                    list.push({ text: value + ":" })
+                                    list.push({ text: value + ":" });
                                 }
                                 //list.push({ text: value + ":" })
-                            })
+                            });
                             return {
                                 from: CodeMirror.Pos(cur.line, start),
                                 to: CodeMirror.Pos(cur.line, end),
                                 list: list
-                            }
+                            };
 
                         } else { // case only eighter keywords or prefixes
                             if (filterKeywords.length > 0) {
                                 filterKeywords.forEach(value => {
                                     if (value == "SOME" || value == "ONLY" || value == "VALUE" || value == "MIN" || value == "MAX" || value == "EXACTLY" || value == "SELF" || value == "INVERSE") {
-                                        list.push({ text: value, className: "quantifier" })
+                                        list.push({ text: value, className: "quantifier" });
                                     } else if (value == "LANGRANGE" || value == "LENGTH" || value == "MAXLENGTH" || value == "MINLENGTH" || value == "PATTERN" || value == "<" || value == "<=" || value == ">" || value == ">=") {
-                                        list.push({ text: value, className: "facet" })
+                                        list.push({ text: value, className: "facet" });
                                     } else if (value == "AND" || value == "OR" || value == "NOT" || value == "THAT") {
-                                        list.push({ text: value, className: "conjuction" })
+                                        list.push({ text: value, className: "conjuction" });
                                     }
 
-                                })
+                                });
                             } else if (results.length > 0) {
                                 results.sort().forEach(value => {
-                                    list.push({ text: value + ":" })
-                                })
+                                    list.push({ text: value + ":" });
+                                });
                             }
 
                             let obj = {
                                 from: CodeMirror.Pos(cur.line, start),
                                 to: CodeMirror.Pos(cur.line, end),
                                 list: list
-                            }
+                            };
                             if (obj.list.length > 0) {
-                                return obj
+                                return obj;
                             }
                         }
                     })
-                ).toPromise()
+                ).toPromise();
             }
         }
     }
@@ -213,30 +213,30 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
      */
     errorMarks(response: ObjectError[]) {
         this.markers.forEach(value => { // it cleans words that have been marked (useful when applying changes to underlined words) 
-            value.clear()
-        })
+            value.clear();
+        });
         response.forEach(value => {
             if (value.type == "semantic") {
-                let pattern = value.qname + "\\b|" + value.iri // regex checks if there are some word in text editor which match with any uri or qname if this happens takes its position with "positionWord"
+                let pattern = value.qname + "\\b|" + value.iri; // regex checks if there are some word in text editor which match with any uri or qname if this happens takes its position with "positionWord"
                 // let positionWord = this.cmEditor.getDoc().getSearchCursor(new RegExp(pattern)); // it takes word position
                 let positionWord = (<any>this.cmEditor.getDoc()).getSearchCursor(new RegExp(pattern)); // it takes word position
                 for (let i = 0; i <= value.occurrence; i++) {
                     positionWord.findNext();// it takes match in text editor
                 }
-                let marker = this.cmEditor.getDoc().markText(positionWord.from(), positionWord.to(), { className: "underline", title: value.msg }) //it underlines word that match
+                let marker = this.cmEditor.getDoc().markText(positionWord.from(), positionWord.to(), { className: "underline", title: value.msg }); //it underlines word that match
                 this.markers.push(marker);// insert word into array that contains matched and underlined words
             } else {
                 let startWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence); // it takes the position from word start ch
-                let endWord = value.occurrence + value.offendingTerm.length //it calculates ch of the word end ( -1 because we just are on the first character)
+                let endWord = value.occurrence + value.offendingTerm.length; //it calculates ch of the word end ( -1 because we just are on the first character)
                 let endWordPosition = this.cmEditor.getDoc().posFromIndex(endWord); // it takes the position of the last character of the word
                 let detailsExpectedTokens = value.expectedTokens.join("\n");
                 if (value.offendingTerm == "<EOF>") {
                     let startWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence - 1); // it takes the position from word start ch
                     let endWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence);
-                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }) //it underlines word that match
+                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }); //it underlines word that match
                     this.markers.push(marker);// insert word into array that contains matched and underlined words
                 } else {
-                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }) //it underlines word that match
+                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }); //it underlines word that match
                     this.markers.push(marker);// insert word into array that contains matched and underlined words
                 }
             }
@@ -252,13 +252,13 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
         } else if (this.context == ManchesterCtx.datatypeEnumeration) {
             validationFn = this.manchesterService.checkLiteralEnumerationExpression(code);
         } else {
-            validationFn = this.manchesterService.checkExpression(code, this.skipSemanticCheck)
+            validationFn = this.manchesterService.checkExpression(code, this.skipSemanticCheck);
         }
         validationFn.subscribe(
             (checkResp: ExpressionCheckResponse) => {
                 if (code != "") {
                     this.codeValid = checkResp.valid;
-                    this.errorMarks(checkResp.details)
+                    this.errorMarks(checkResp.details);
                     if (this.codeValid) {
                         this.propagateChange(code);
                     } else {
@@ -267,7 +267,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         this.propagateChange(null); //in invalid case, it propagates a null expression
                     }
                 } else {
-                    this.codeValid = true // it's useful to update alert icon on view(manchesterEditorComponent html) when a user deletes all inside editor 
+                    this.codeValid = true; // it's useful to update alert icon on view(manchesterEditorComponent html) when a user deletes all inside editor 
                 }
             }
         );

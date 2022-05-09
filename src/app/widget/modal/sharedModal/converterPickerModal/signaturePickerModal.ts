@@ -29,8 +29,8 @@ export class SignaturePickerModal {
         this.signatureList = this.signatures.filter(s => {
             return (s.getReturnType().endsWith("IRI") && this.capabilityType == RDFCapabilityType.uri) ||
                 (s.getReturnType().endsWith("Literal") && this.capabilityType == RDFCapabilityType.literal) ||
-                s.getReturnType().endsWith("Value")
-        })
+                s.getReturnType().endsWith("Value");
+        });
         this.selectedSignature = this.selected;
     }
 

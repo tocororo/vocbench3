@@ -119,7 +119,7 @@ export class InlineResourceListEditor {
     editManually() {
         let serializedResList: string = this.resources.map(p => {
             let qname = p.getAdditionalProperty(ResAttribute.QNAME);
-            return qname ? qname : p.getURI()
+            return qname ? qname : p.getURI();
         }).join(", ");
 
         this.basicModals.prompt({ key: "Edit resources list" }, null, { key: "Write the list as sequence of comma (,) separated IRIs (QNames are accepted as well)" }, serializedResList, true).then(
@@ -140,14 +140,14 @@ export class InlineResourceListEditor {
                         (err: Error) => {
                             this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "Invalid resources list: " + err.message }, ModalType.warning);
                         }
-                    )
+                    );
                 } else {
                     this.resources = [];
                     this.changed.emit(this.resources);
                 }
             },
             () => { }
-        )
+        );
     }
 
 }

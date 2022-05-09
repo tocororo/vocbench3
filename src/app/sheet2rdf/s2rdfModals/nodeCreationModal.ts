@@ -98,8 +98,8 @@ export class NodeCreationModal {
                         sourceNodes.push(n);
                     }
                 }
-            })
-        })
+            });
+        });
         this.memoizedNodes = sourceNodes.length > 0 ? sourceNodes : null;
     }
 
@@ -108,7 +108,7 @@ export class NodeCreationModal {
             return {
                 value: n.nodeId,
                 description: "(Memoization map ID: " + (n.memoizeId ? n.memoizeId : "Default") + ")"
-            }
+            };
         });
         this.basicModals.select({ key: "SHEET2RDF.HEADER_EDITOR.COPY_MEMOIZED_NODE_CONVERTER" }, { key: "SHEET2RDF.HEADER_EDITOR.SELECT_MEMOIZED_NODE" }, opts).then(
             (opt: SelectionOption) => {
@@ -116,7 +116,7 @@ export class NodeCreationModal {
                 this.memoizeData = {
                     enabled: selectedSourceMemoNode.memoize,
                     id: selectedSourceMemoNode.memoizeId
-                }
+                };
                 this.selectedConverter = selectedSourceMemoNode.converter;
             },
             () => { }
@@ -155,7 +155,7 @@ export class NodeCreationModal {
                     converter: this.selectedConverter,
                     memoize: this.memoizeData ? this.memoizeData.enabled : false,
                     memoizeId: (this.memoizeData && this.memoizeData.enabled) ? this.memoizeData.id : null,
-                }
+                };
                 this.activeModal.close(newNode);
             }
         );

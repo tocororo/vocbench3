@@ -53,7 +53,7 @@ export class NotificationsPreferencesComponent {
             () => {
                 this.initWatchingResources().subscribe();
             }
-        )
+        );
     }
 
     private initNotificationMatrix(): Observable<void> {
@@ -63,7 +63,7 @@ export class NotificationsPreferencesComponent {
                 this.roleStructs = Object.keys(this.preferences)
                     .map(r => {
                         let role: RDFResourceRolesEnum = <RDFResourceRolesEnum>r;
-                        return { role: role, show: ResourceUtils.getResourceRoleLabel(role) }
+                        return { role: role, show: ResourceUtils.getResourceRoleLabel(role) };
                     })
                     .sort((rs1, rs2) => rs1.show.localeCompare(rs2.show));
                 //prepare the table struct based on the response
@@ -74,7 +74,7 @@ export class NotificationsPreferencesComponent {
                             creation: this.preferences[rs.role].indexOf(Action.creation) != -1,
                             deletion: this.preferences[rs.role].indexOf(Action.deletion) != -1,
                             update: this.preferences[rs.role].indexOf(Action.update) != -1,
-                        }
+                        };
                     }
                 );
             })
@@ -90,7 +90,7 @@ export class NotificationsPreferencesComponent {
                     if (res instanceof ARTURIResource) {
                         resources.push(res);
                     }
-                })
+                });
                 if (resources.length > 0) {
                     this.resourceService.getResourcesInfo(resources).subscribe(
                         annotatedRes => {
@@ -130,19 +130,19 @@ export class NotificationsPreferencesComponent {
     private updateAllNotifications() {
         let pref: NotificationPreferences = {};
         for (let role in this.notificationTable) {
-            let activeAction: Action[] = []
+            let activeAction: Action[] = [];
             if (this.notificationTable[role].creation) {
-                activeAction.push(Action.creation)
+                activeAction.push(Action.creation);
             }
             if (this.notificationTable[role].deletion) {
-                activeAction.push(Action.deletion)
+                activeAction.push(Action.deletion);
             }
             if (this.notificationTable[role].update) {
-                activeAction.push(Action.update)
+                activeAction.push(Action.update);
             }
             pref[role] = activeAction;
         }
-        this.notificationsService.storeNotificationPreferences(pref).subscribe()
+        this.notificationsService.storeNotificationPreferences(pref).subscribe();
     }
 
     private updateNotificationPref(role: RDFResourceRolesEnum, action: Action) {
@@ -156,7 +156,7 @@ export class NotificationsPreferencesComponent {
             () => {
                 this.watchingResources.splice(this.watchingResources.indexOf(resource), 1);
             }
-        )
+        );
     }
 
 }

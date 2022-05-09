@@ -24,7 +24,7 @@ export class GraphServices {
                 }
                 return this.enrichGraphModelRecords(plainModel);
             })
-        )
+        );
     }
 
     expandGraphModelNode(resource: ARTURIResource): Observable<GraphModelRecord[]> {
@@ -86,7 +86,7 @@ export class GraphServices {
             if (record.target.isURIResource() && !unannotatedIRIs.some(iri => iri.equals(record.target))) { //if IRI and not yet in list
                 unannotatedIRIs.push(<ARTURIResource>record.target);
             }
-        })
+        });
 
         if (unannotatedIRIs.length == 0) {
             return of([]);
@@ -151,6 +151,6 @@ class PlainGraphModelRecord { //not annotated
             target: NTriplesUtil.parseResource(recordJson.target),
             classAxiom: recordJson.classAxiom,
             rangeDatatype: recordJson.rangeDatatype
-        }
+        };
     }
 }

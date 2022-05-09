@@ -31,9 +31,9 @@ import { SharedModule } from './sharedModule';
     imports: [
         CommonModule,
         DragDropModule,
-        FormsModule, 
+        FormsModule,
         NgbDropdownModule,
-        SharedModule, 
+        SharedModule,
         PreferencesModule,
         TranslateModule
     ],
@@ -41,12 +41,12 @@ import { SharedModule } from './sharedModule';
         LinkComponent, NodeModelComponent, DataNodeComponent, DraggableDirective, ZoomableDirective,
         ModelGraphPanel, DataGraphPanel, ModelGraphComponent, DataGraphComponent,
         ForceControlPanel, ResourceDetailsPanel,
-        UmlGraphComponent,UmlGraphPanel,UmlNodeComponent,UmlLinkComponent,
+        UmlGraphComponent, UmlGraphPanel, UmlNodeComponent, UmlLinkComponent,
         //modals
         GraphModal, LinksFilterModal, DataGraphSettingsModal
     ],
     exports: [],
-    providers: [ D3Service, GraphModalServices ],
+    providers: [D3Service, GraphModalServices],
     entryComponents: [
         GraphModal, LinksFilterModal, DataGraphSettingsModal
     ]

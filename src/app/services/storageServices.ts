@@ -14,21 +14,21 @@ export class StorageServices {
     list(dir: string): Observable<DirectoryEntryInfo[]> {
         let params = {
             dir: dir,
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "list", params);
     }
 
     createDirectory(dir: string): Observable<void> {
         let params = {
             dir: dir,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "createDirectory", params);
     }
 
     deleteDirectory(dir: string): Observable<void> {
         let params = {
             dir: dir,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteDirectory", params);
     }
     
@@ -37,7 +37,7 @@ export class StorageServices {
             data: data,
             path: path,
             overwrite: overwrite,
-        }
+        };
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [
                 { className: 'java.nio.file.FileAlreadyExistsException', action: 'skip' },
@@ -49,14 +49,14 @@ export class StorageServices {
     deleteFile(path: string): Observable<void> {
         let params = {
             path: path,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteFile", params);
     }
 
     getFile(path: string): Observable<Blob> {
         let params = {
             path: path,
-        }
+        };
         return this.httpMgr.downloadFile(this.serviceName, "getFile", params);
     }
 

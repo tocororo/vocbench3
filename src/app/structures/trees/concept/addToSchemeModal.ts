@@ -37,7 +37,7 @@ export class AddToSchemeModal {
         this.translationParam = {
             concept: this.concept != null ? this.concept.getShow() : null,
             scheme: this.scheme != null ? this.scheme.getShow() : null,
-        }
+        };
     }
 
     isOkEnabled() {
@@ -65,7 +65,7 @@ export class AddToSchemeModal {
             if (s.checked) {
                 filterSchemes.push(s.scheme);
             }
-        })
+        });
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.skosService.addMultipleConceptsToScheme(this.scheme, this.concept, null, broaderProps, narrowerProps,

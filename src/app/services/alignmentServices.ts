@@ -20,11 +20,11 @@ export class AlignmentServices {
 
     /**
      * Returns the available alignment properties depending on the project and resource type (property,
-	 * or concept, or class,...).
-	 * @param role role of the resource to align
-	 * @param allMappingProps if false returns just the mapping properties available for the current resource and
-	 * model type; if true returns all the mapping properties independently from the model type
-	 * @return a collection of properties
+     * or concept, or class,...).
+     * @param role role of the resource to align
+     * @param allMappingProps if false returns just the mapping properties available for the current resource and
+     * model type; if true returns all the mapping properties independently from the model type
+     * @return a collection of properties
      */
     getMappingProperties(role: RDFResourceRolesEnum, allMappingProps: boolean) {
         let params: STRequestParams = {
@@ -68,7 +68,7 @@ export class AlignmentServices {
             inputFile: file,
             leftProject: leftProject ? leftProject.getName() : null,
             rightProject: rightProject ? rightProject.getName() : null
-        }
+        };
         return this.httpMgr.uploadFile(this.serviceName, "loadAlignment", data);
     }
 
@@ -81,11 +81,11 @@ export class AlignmentServices {
      * @param range number of cells of each page.
      * @return returns an object containing "cells" (an array of AlignmentCell), "page" and "totPage"
      */
-    listCells(pageIdx?: number, range?: number): Observable<{page: number, totPage: number, cells: AlignmentCell[]}> {
+    listCells(pageIdx?: number, range?: number): Observable<{ page: number, totPage: number, cells: AlignmentCell[] }> {
         let params: STRequestParams = {};
         if (pageIdx != undefined && range != undefined) {
-            params.pageIdx = pageIdx,
-                params.range = range
+            params.pageIdx = pageIdx;
+            params.range = range;
         }
         return this.httpMgr.doGet(this.serviceName, "listCells", params).pipe(
             map(stResp => {
@@ -290,7 +290,7 @@ export class AlignmentServices {
                         entity2: stResp[i].entity2,
                         property: stResp[i].property,
                         action: stResp[i].action
-                    }
+                    };
                     cells.push(c);
                 }
                 return cells;
@@ -365,7 +365,7 @@ export class AlignmentServices {
         }
         let c = new AlignmentCell(entity1, entity2, measure, relation);
         if (mappingProperty != undefined) {
-            c.setMappingProperty(mappingProperty)
+            c.setMappingProperty(mappingProperty);
         }
         if (status != undefined) {
             c.setStatus(status);
@@ -385,7 +385,7 @@ export class AlignmentServices {
      * @param langToLexModel map langForTheSearch - LexModel
      * @param searchModeList 
      */
-    searchResources(inputRes: ARTURIResource, resourcePosition: string, rolesArray: RDFResourceRolesEnum[], 
+    searchResources(inputRes: ARTURIResource, resourcePosition: string, rolesArray: RDFResourceRolesEnum[],
         langToLexModel?: Map<string, ARTURIResource>, searchModeList?: SearchMode[]): Observable<ARTURIResource[]> {
 
         let params: STRequestParams = {
@@ -397,7 +397,7 @@ export class AlignmentServices {
         };
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [{
-                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+                className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
             }]
         });
         return this.httpMgr.doGet(this.serviceName, "searchResources", params, options).pipe(

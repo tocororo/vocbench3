@@ -445,7 +445,7 @@ export class OntoLexLemonServices {
             sublexicalEntry: sublexicalEntry
         };
         if (property != null) {
-            params.property = property
+            params.property = property;
         }
         return this.httpMgr.doPost(this.serviceName, "addSubterm", params);
     }
@@ -462,7 +462,7 @@ export class OntoLexLemonServices {
             sublexicalEntry: sublexicalEntry
         };
         if (property != null) {
-            params.property = property
+            params.property = property;
         }
         return this.httpMgr.doPost(this.serviceName, "removeSubterm", params);
     }
@@ -476,7 +476,7 @@ export class OntoLexLemonServices {
             createSense: createSense,
             lexicalSenseCls: lexicalSenseCls,
             customFormValue: customFormValue
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "addConceptualization", params);
     }
 
@@ -484,7 +484,7 @@ export class OntoLexLemonServices {
         let params = {
             lexicalEntry: lexicalEntry,
             concept: concept,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "removePlainConceptualization", params);
     }
 
@@ -492,7 +492,7 @@ export class OntoLexLemonServices {
         let params = {
             lexicalEntry: lexicalEntry,
             concept: concept,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "removeConceptualization", params);
     }
 
@@ -501,7 +501,7 @@ export class OntoLexLemonServices {
         let params = {
             lexicalSense: lexicalSense,
             removePlain: removePlain,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "removeSense", params);
     }
 
@@ -510,7 +510,7 @@ export class OntoLexLemonServices {
             resource: resource,
             value: value,
             lexicon: lexicon
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "addDefinition", params);
     }
 
@@ -519,7 +519,7 @@ export class OntoLexLemonServices {
             resource: resource,
             value: value,
             lexicon: lexicon
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "removeDefinition", params);
     }
 
@@ -529,7 +529,7 @@ export class OntoLexLemonServices {
             value: value,
             newValue: newValue,
             lexicon: lexicon
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateDefinition", params);
     }
 
@@ -540,7 +540,7 @@ export class OntoLexLemonServices {
             newReference: newReference,
             deletePlain: deletePlain,
             createPlain: createPlain
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "setReference", params);
     }
 
@@ -549,7 +549,7 @@ export class OntoLexLemonServices {
             lexicalSense: lexicalSense,
             newConcept: newConcept,
             createPlain: createPlain
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "addConcept", params);
     }
 
@@ -558,14 +558,14 @@ export class OntoLexLemonServices {
             lexicalSense: lexicalSense,
             concept: concept,
             deletePlain: deletePlain
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "removeConcept", params);
     }
 
     getLexicalRelationCategories(lexicon?: ARTResource): Observable<ARTURIResource[]> {
         let params = {
             lexicon: lexicon,
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getLexicalRelationCategories", params).pipe(
             map(resp => {
                 return Deserializer.createURIArray(resp);
@@ -576,7 +576,7 @@ export class OntoLexLemonServices {
     getSenseRelationCategories(lexicon?: ARTResource): Observable<ARTURIResource[]> {
         let params = {
             lexicon: lexicon,
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getSenseRelationCategories", params).pipe(
             map(resp => {
                 return Deserializer.createURIArray(resp);
@@ -587,7 +587,7 @@ export class OntoLexLemonServices {
     getConceptualRelationCategories(lexicon?: ARTResource): Observable<ARTURIResource[]> {
         let params = {
             lexicon: lexicon,
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getConceptualRelationCategories", params).pipe(
             map(resp => {
                 return Deserializer.createURIArray(resp);
@@ -604,21 +604,21 @@ export class OntoLexLemonServices {
             relationClass: relationClass,
             category: category,
             translationSet: translationSet,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "createLexicoSemanticRelation", params);
     }
 
     deleteLexicalRelation(relation: ARTResource) {
         let params = {
             relation: relation,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteLexicalRelation", params);
     }
 
     deleteSenseRelation(relation: ARTResource) {
         let params = {
             relation: relation,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteSenseRelation", params);
     }
 
@@ -626,7 +626,7 @@ export class OntoLexLemonServices {
         let params = {
             newTranslationSet: newTranslationSet,
             customFormValue: customFormValue
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "createTranslationSet", params).pipe(
             map(stResp => {
                 return Deserializer.createURI(stResp);
@@ -641,11 +641,11 @@ export class OntoLexLemonServices {
                     })
                 );
             })
-        );;
+        );
     }
 
     getTranslationSets(): Observable<ARTResource[]> {
-        let params = {}
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "getTranslationSets", params).pipe(
             map(stResp => {
                 return Deserializer.createResourceArray(stResp);
@@ -656,7 +656,7 @@ export class OntoLexLemonServices {
     deleteTranslationSet(translationSet: ARTURIResource): Observable<void> {
         let params = {
             translationSet: translationSet,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteTranslationSet", params).pipe(
             map(stResp => {
                 this.eventHandler.translationSetDeletedEvent.emit(translationSet);

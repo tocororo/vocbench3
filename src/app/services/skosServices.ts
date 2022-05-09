@@ -41,7 +41,7 @@ export class SkosServices {
                 return {
                     concepts: Deserializer.createURIArray(stResp),
                     timestamp: timestamp
-                }
+                };
             })
         );
     }
@@ -70,7 +70,7 @@ export class SkosServices {
                 return {
                     count: stResp,
                     timestamp: timestamp
-                }
+                };
             })
         );
     }
@@ -369,10 +369,10 @@ export class SkosServices {
         };
         if (newScheme != undefined) {
             params.newScheme = newScheme;
-        };
+        }
         if (schemeCls != undefined) {
             params.schemeCls = schemeCls;
-        };
+        }
         if (checkExistingAltLabel != null) {
             params.checkExistingAltLabel = checkExistingAltLabel;
         }

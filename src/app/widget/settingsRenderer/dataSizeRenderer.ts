@@ -14,7 +14,7 @@ export class DataSizeRenderer implements ControlValueAccessor {
     
     size: number;
     units: DataSizeUnits[] = [DataSizeUnits.B, DataSizeUnits.kB, DataSizeUnits.MB, DataSizeUnits.GB, DataSizeUnits.TB, 
-        DataSizeUnits.KiB, DataSizeUnits.MiB, DataSizeUnits.GiB, DataSizeUnits.TiB]
+        DataSizeUnits.KiB, DataSizeUnits.MiB, DataSizeUnits.GiB, DataSizeUnits.TiB];
     unit: DataSizeUnits = this.units[0];
 
     value: string;

@@ -3,51 +3,51 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from '../../Modals';
 
 @Component({
-	selector: "alert-modal",
-	templateUrl: "./alertModal.html",
-	styleUrls: ['../../modals.css']
+    selector: "alert-modal",
+    templateUrl: "./alertModal.html",
+    styleUrls: ['../../modals.css']
 })
 export class AlertModal {
 
-	@Input() title: string;
-	@Input() message: string;
-	@Input() type: ModalType;
-	@Input() details: string;
-	@Input() checkboxLabel: string;
+    @Input() title: string;
+    @Input() message: string;
+    @Input() type: ModalType;
+    @Input() details: string;
+    @Input() checkboxLabel: string;
 
-	titleClass: string;
-	alertClass: string;
+    titleClass: string;
+    alertClass: string;
 
-	detailsCollapsed: boolean = true;
+    detailsCollapsed: boolean = true;
 
-	checkbox: boolean = false;
+    checkbox: boolean = false;
 
-	constructor(public activeModal: NgbActiveModal) { }
+    constructor(public activeModal: NgbActiveModal) { }
 
-	ngOnInit() {
-		//based on the modal type set the css style of the message alert
+    ngOnInit() {
+        //based on the modal type set the css style of the message alert
 
-		if (this.type == null) {
-			this.type = ModalType.info
-		}
-		if (this.type == ModalType.info) {
-			this.titleClass = "text-info";
-			this.alertClass = "alert alert-info";
-		} else if (this.type == ModalType.warning) {
-			this.titleClass = "text-warning";
-			this.alertClass = "alert alert-warning";
-		} else if (this.type == ModalType.error) {
-			this.titleClass = "text-danger";
-			this.alertClass = "alert alert-danger";
-		}
-	}
+        if (this.type == null) {
+            this.type = ModalType.info;
+        }
+        if (this.type == ModalType.info) {
+            this.titleClass = "text-info";
+            this.alertClass = "alert alert-info";
+        } else if (this.type == ModalType.warning) {
+            this.titleClass = "text-warning";
+            this.alertClass = "alert alert-warning";
+        } else if (this.type == ModalType.error) {
+            this.titleClass = "text-danger";
+            this.alertClass = "alert alert-danger";
+        }
+    }
 
-	ok() {
-		this.activeModal.close(this.checkbox);
-	}
+    ok() {
+        this.activeModal.close(this.checkbox);
+    }
 
-	close() {
-		this.activeModal.dismiss();
-	}
+    close() {
+        this.activeModal.dismiss();
+    }
 
 }

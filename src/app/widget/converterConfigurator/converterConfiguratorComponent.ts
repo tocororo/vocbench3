@@ -139,7 +139,7 @@ export class ConverterConfiguratorComponent {
                 // this.signatureParams.find(p => p.name == paramName).value = this.converter.params[paramName];    
                 if (paramName == 'xRole') {
                     if (this.xRoles.includes(paramValue)) { //well-known xRole => assign to xRoleSelection the value
-                        paramInSignature[this.XROLE_SEL_ATTR] = paramValue
+                        paramInSignature[this.XROLE_SEL_ATTR] = paramValue;
                     } else { //other value => assign to xRoleSelection the "other" option
                         paramInSignature[this.XROLE_SEL_ATTR] = this.xRoleOther;
                     }
@@ -186,7 +186,7 @@ export class ConverterConfiguratorComponent {
                 } else if ((this.rangeType == RangeType.literal) && returnType.endsWith(".Literal")) {
                     this.availableSignatures.push(s);
                 }
-            })
+            });
             this.selectSignature(this.availableSignatures[0], false);
         }
         if (emitUpdate) {

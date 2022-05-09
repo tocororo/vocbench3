@@ -10,7 +10,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class DatetimePickerComponent {
 
-    datetime: Date
+    datetime: Date;
 
     inFirefox: boolean; //12-7-2021: firefox does not support <input type="datetime-local"> (see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local)
     dateStr: string;
@@ -49,14 +49,14 @@ export class DatetimePickerComponent {
 
     onDatePickerChange() {
         if (this.timeStr != null) {
-            this.datetime = new Date(this.dateStr + "T" + this.timeStr)
+            this.datetime = new Date(this.dateStr + "T" + this.timeStr);
             this.propagateChange(this.datetime);
         }
     }
 
     onTimePickerChange() {
         if (this.dateStr != null) {
-            this.datetime = new Date(this.dateStr + "T" + this.timeStr)
+            this.datetime = new Date(this.dateStr + "T" + this.timeStr);
             this.propagateChange(this.datetime);
         }
     }

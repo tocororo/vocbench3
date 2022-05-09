@@ -31,7 +31,7 @@ export class MapRendererComponent extends AbstractSingleViewRendererComponent {
     area: GeoPoint[];
 
     constructor(private cvService: CustomViewsServices, private modalService: NgbModal, private translateService: TranslateService) {
-        super()
+        super();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -48,7 +48,7 @@ export class MapRendererComponent extends AbstractSingleViewRendererComponent {
         super.initActionStatus();
         this.editAuthorized = this.editAuthorized && this.view.allowEdit;
     }
-    
+
     processInput() {
         /**
          * here I need to detect if I need to draw a point or a polyline (route/area)
@@ -56,25 +56,25 @@ export class MapRendererComponent extends AbstractSingleViewRendererComponent {
          */
         if (this.view instanceof PointView) {
             this.point = {
-                location: this.view.location, 
-                lat: Number.parseFloat(this.view.latitude.getShow()), 
+                location: this.view.location,
+                lat: Number.parseFloat(this.view.latitude.getShow()),
                 lng: Number.parseFloat(this.view.longitude.getShow())
-            }
+            };
         } else if (this.view instanceof RouteView) {
             this.route = this.view.locations.map(l => {
-                return { 
-                    location: l.location, 
-                    lat: Number.parseFloat(l.latitude.getShow()), 
+                return {
+                    location: l.location,
+                    lat: Number.parseFloat(l.latitude.getShow()),
                     lng: Number.parseFloat(l.longitude.getShow())
-                } 
+                };
             });
         } else if (this.view instanceof AreaView) {
             this.area = this.view.locations.map(l => {
-                return { 
-                    location: l.location, 
-                    lat: Number.parseFloat(l.latitude.getShow()), 
+                return {
+                    location: l.location,
+                    lat: Number.parseFloat(l.latitude.getShow()),
                     lng: Number.parseFloat(l.longitude.getShow())
-                } 
+                };
             });
         }
     }
@@ -82,10 +82,10 @@ export class MapRendererComponent extends AbstractSingleViewRendererComponent {
     edit() {
         if (this.view instanceof PointView) {
             let w = <PointView>this.view;
-            this.openMapModal({ key: "Edit point"}).then(
+            this.openMapModal({ key: "Edit point" }).then(
                 (point: GeoPoint) => {
-                    w.latitude.setValue(point.lat+"");
-                    w.longitude.setValue(point.lng+"");
+                    w.latitude.setValue(point.lat + "");
+                    w.longitude.setValue(point.lng + "");
                     let bindingsMap = new Map();
                     bindingsMap.set(CustomViewVariables.location, w.location);
                     bindingsMap.set(CustomViewVariables.latitude, w.latitude);
@@ -94,17 +94,17 @@ export class MapRendererComponent extends AbstractSingleViewRendererComponent {
                         () => {
                             this.update.emit();
                         }
-                    )
+                    );
                 },
-                () => {}
+                () => { }
             );
         } else { //area or route
             let title: string = this.area ? "Edit area" : "Edit route";
-            this.openMapModal({ key: title}).then(
+            this.openMapModal({ key: title }).then(
                 (points: GeoPoint[]) => {
                     this.updateMultiplePoints(points);
                 },
-                () => {}
+                () => { }
             );
         }
     }
@@ -116,11 +116,11 @@ export class MapRendererComponent extends AbstractSingleViewRendererComponent {
         w.locations.forEach(l => {
             let point = newPoints.find(p => p.location.equals(l.location));
             if (point.lat != Number(l.latitude.getShow()) || point.lng != Number(l.longitude.getShow())) {
-                l.latitude.setValue(point.lat+"");
-                l.longitude.setValue(point.lng+"");
+                l.latitude.setValue(point.lat + "");
+                l.longitude.setValue(point.lng + "");
                 updatedLocations.push(l);
             }
-        })
+        });
 
         let updateFn: Observable<void>[] = [];
         for (let l of updatedLocations) {
@@ -134,15 +134,15 @@ export class MapRendererComponent extends AbstractSingleViewRendererComponent {
         if (updateFn.length > 0) {
             forkJoin(updateFn).subscribe(() => {
                 this.update.emit();
-            })
+            });
         }
     }
 
-    private openMapModal(title: Translation): Promise<GeoPoint|GeoPoint[]> {
+    private openMapModal(title: Translation): Promise<GeoPoint | GeoPoint[]> {
         const modalRef: NgbModalRef = this.modalService.open(LeafletMapModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = this.translateService.instant(title.key);
         modalRef.componentInstance.edit = true;
-		modalRef.componentInstance.point = this.point;
+        modalRef.componentInstance.point = this.point;
         modalRef.componentInstance.route = this.route;
         modalRef.componentInstance.area = this.area;
         return modalRef.result;

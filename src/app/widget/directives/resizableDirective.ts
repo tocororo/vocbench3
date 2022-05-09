@@ -112,5 +112,3 @@ export class ResizableDirective {
 
 
 }
-
-interface MousePosition { x: number, y: number }

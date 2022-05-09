@@ -118,12 +118,12 @@ export class ImportOntologyModal {
                 //local file required, other param optional
                 return this.localFile != null && //localFile provided
                     (!this.baseURICheck || this.baseURI != null && this.baseURI.trim() != "") && //baseURI not checked, or checked and valid
-                    (!this.mirrorFileCheck || this.mirrorFile != null && this.mirrorFile.trim() != "") //mirrorFile not checked, or checked and valid
+                    (!this.mirrorFileCheck || this.mirrorFile != null && this.mirrorFile.trim() != ""); //mirrorFile not checked, or checked and valid
             } else {
                 //baseURI and localFile required, other optional
                 return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
                     this.localFile != null && //localFile provided
-                    (!this.mirrorFileCheck || this.mirrorFile != null && this.mirrorFile.trim() != "") //mirrorFile not checked, or checked and valid
+                    (!this.mirrorFileCheck || this.mirrorFile != null && this.mirrorFile.trim() != ""); //mirrorFile not checked, or checked and valid
             }
         } else if (this.importType == ImportType.fromOntologyMirror) {
             //available only import (not repair)
@@ -140,7 +140,7 @@ export class ImportOntologyModal {
                     altURL: this.altURLCheck ? this.altURL : null,
                     rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
                     transitiveImportAllowance: this.selectedImportAllowance
-                }
+                };
                 this.activeModal.close(returnData);
             } else { //repair
                 let returnData: RepairFromWebData = {
@@ -148,7 +148,7 @@ export class ImportOntologyModal {
                     altURL: this.altURLCheck ? this.altURL : null,
                     rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
                     transitiveImportAllowance: this.selectedImportAllowance
-                }
+                };
                 this.activeModal.close(returnData);
             }
         } else if (this.importType == ImportType.fromWebToMirror) {
@@ -159,7 +159,7 @@ export class ImportOntologyModal {
                     mirrorFile: this.mirrorFile,
                     rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
                     transitiveImportAllowance: this.selectedImportAllowance
-                }
+                };
                 this.activeModal.close(returnData);
             } else { //repair
                 let returnData: RepairFromWebToMirrorData = {
@@ -168,7 +168,7 @@ export class ImportOntologyModal {
                     mirrorFile: this.mirrorFile,
                     rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
                     transitiveImportAllowance: this.selectedImportAllowance
-                }
+                };
                 this.activeModal.close(returnData);
             }
         } else if (this.importType == ImportType.fromLocalFile) {
@@ -178,7 +178,7 @@ export class ImportOntologyModal {
                     localFile: this.localFile,
                     mirrorFile: this.mirrorFileCheck ? this.mirrorFile : null,
                     transitiveImportAllowance: this.selectedImportAllowance
-                }
+                };
                 this.activeModal.close(returnData);
             } else { //repair
                 let returnData: RepairFromLocalFileData = {
@@ -186,7 +186,7 @@ export class ImportOntologyModal {
                     localFile: this.localFile,
                     mirrorFile: this.mirrorFileCheck ? this.mirrorFile : null,
                     transitiveImportAllowance: this.selectedImportAllowance
-                }
+                };
                 this.activeModal.close(returnData);
             }
         } else if (this.importType == ImportType.fromOntologyMirror) {
@@ -194,7 +194,7 @@ export class ImportOntologyModal {
             let returnData: ImportFromMirrorData = {
                 mirror: this.selectedMirror,
                 transitiveImportAllowance: this.selectedImportAllowance
-            }
+            };
             this.activeModal.close(returnData);
         }
     }

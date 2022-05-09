@@ -57,7 +57,7 @@ export class InlineEditableValue {
             proposedAddTriple: false,
             proposedRemoveRes: false,
             proposedRemoveTriple: false
-        }
+        };
         //init statuses
         if (this.value instanceof ARTResource) {
             if (ResourceUtils.isResourceInStagingAdd(this.value)) {
@@ -93,10 +93,10 @@ export class InlineEditableValue {
             this.textareaRows = 1;
         }
         this.editInProgress = true;
-        setTimeout(() => {  //wait to initialize the textarea
+        setTimeout(() => { //wait to initialize the textarea
             //set the cursor at the end of the content
             (<HTMLTextAreaElement>this.textarea.nativeElement).focus();
-        })
+        });
     }
 
     onKeydown(event: KeyboardEvent) {

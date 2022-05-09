@@ -7,32 +7,32 @@ import * as CodeMirror from 'codemirror';
     selector: 'turtle-editor',
     templateUrl: "turtleEditorComponent.html",
     providers: [{
-         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => TurtleEditorComponent), multi: true,
+        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => TurtleEditorComponent), multi: true,
     }],
     host: { class: "vbox" }
 })
 
 export class TurtleEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
-    
+
     @ViewChild('cmEditor') private cmEditorView: CodemirrorComponent;
-    
+
     cmEditor: CodeMirror.EditorFromTextArea;
 
     code: string;
     editorConfig: CodeMirror.EditorConfiguration;
-    
+
     constructor() { }
 
     ngOnInit() {
-        this.editorConfig = { 
+        this.editorConfig = {
             lineNumbers: true,
             mode: "text/turtle",
             lineWrapping: true,
             readOnly: this.disabled,
-            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-                //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-        }
+            viewportMargin: Infinity, //with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+            //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+        };
     }
 
     ngAfterViewInit() {

@@ -61,8 +61,8 @@ export class Sense {
     reference: ARTResource[];
     concept: ConceptReference[];
     related: SenseRelation[];
-	translations: SenseRelation[];
-	terminologicallyRelated: SenseRelation[];
+    translations: SenseRelation[];
+    terminologicallyRelated: SenseRelation[];
 
     public static parse(json: any): Sense {
         let s: Sense = new Sense();
@@ -72,7 +72,7 @@ export class Sense {
         }
         if (json.definition) {
             s.definition = Deserializer.createRDFNodeArray(json.definition);
-            s.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()))
+            s.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()));
         }
         if (json.reference != null) { //might be null in plain sense
             s.reference = Deserializer.createResourceArray(json.reference);
@@ -155,7 +155,7 @@ export class EntryReference {
     nature: ResourceNature[];
     scope: TripleScopes;
     lemma: Form[];
-    
+
     public static parse(json: any): EntryReference {
         let r: EntryReference = new EntryReference();
         r.id = ParsingUtils.parseResourceId(json.id);
@@ -183,7 +183,7 @@ export class ConceptReference {
         c.id.setAdditionalProperty(ResAttribute.TRIPLE_SCOPE, c.scope);
         if (json.definition) {
             c.definition = Deserializer.createRDFNodeArray(json.definition);
-            c.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()))
+            c.definition.sort((d1, d2) => d1.getShow().toLocaleLowerCase().localeCompare(d2.getShow().toLocaleLowerCase()));
         }
         return c;
     }
@@ -192,7 +192,7 @@ export class ConceptReference {
 export class Constituent {
     id: ARTResource;
     correspondingLexicalEntry: EntryReference[];
-	features: ARTPredicateObjects[];
+    features: ARTPredicateObjects[];
 
     public static parse(json: any): Constituent {
         let c: Constituent = new Constituent();
@@ -221,7 +221,7 @@ class ParsingUtils {
 }
 
 export class LexicalResourceUtils {
-    
+
     static isInStaging(resourceWithNature: ResourceWithNature): boolean {
         return this.isInStagingAdd(resourceWithNature) || this.isInStagingRemove(resourceWithNature);
     }
@@ -243,7 +243,7 @@ export class LexicalResourceUtils {
     }
 
     static isTripleInStaging(resourceWithScope: ResourceWithScope): boolean {
-        return this.isTripleInStagingAdd(resourceWithScope) || this.isTripleInStagingRemove(resourceWithScope)
+        return this.isTripleInStagingAdd(resourceWithScope) || this.isTripleInStagingRemove(resourceWithScope);
     }
     static isTripleInStagingAdd(resourceWithScope: ResourceWithScope): boolean {
         return resourceWithScope.scope == TripleScopes.staged;

@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, Input, HostBinding } from '@angular/core';
 
 @Component({
-	selector: 'resizable-layout',
+    selector: 'resizable-layout',
     templateUrl: './resizableLayoutComponent.html',
     styleUrls: ['./resizableLayoutComponent.css'],
     host: {
@@ -26,7 +26,7 @@ export class ResizableLayoutComponent {
      * - the size of the main div related the secondary. By default the main-secondary ratio is 2:4 (namely the main is half the secondary).
      */
 
-    @Input() orientation: "H"|"V"; //determines if the layout can be resized horizontally or vertically
+    @Input() orientation: "H" | "V"; //determines if the layout can be resized horizontally or vertically
     @Input() mainFlex: number = 2;
 
     //the following are used in order to set dinamically the host class (see https://stackoverflow.com/a/34643330/5805661)
@@ -44,14 +44,14 @@ export class ResizableLayoutComponent {
     private dragging: boolean = false;
     private startMousedown: number;
 
-    constructor() {}
+    constructor() { }
 
     ngOnInit() {
         this.horizontalLayout = (this.orientation == "H");
         this.verticalLayout = (this.orientation == "V");
         //fix the input mainFlex if out of admitted range 1:16
         if (this.mainFlex < this.minFlex) {
-            this.mainFlex = this.minFlex
+            this.mainFlex = this.minFlex;
         } else if (this.mainFlex > this.maxFlex) {
             this.mainFlex = this.maxFlex;
         }
@@ -65,11 +65,11 @@ export class ResizableLayoutComponent {
     }
     private onMouseup() {
         if (this.dragging) { //remove listener on mousemove
-            this.onMousemove = (event: MouseEvent) => {};
+            this.onMousemove = (event: MouseEvent) => { };
             this.dragging = false;
         }
     }
-    private onMousemove(event: MouseEvent) {}
+    private onMousemove(event: MouseEvent) { }
     private draggingHandler(event: MouseEvent) {
         if (this.orientation == "H") {
             let endMousedownX = event.clientX;
@@ -83,7 +83,7 @@ export class ResizableLayoutComponent {
              * leftDivWidth:rightDivWidth = mainFlex:secondaryFlex
              * secondaryFlex is fixed, main and secondary divWidth are retrieved => compute mainFlex
              */
-            this.mainFlex = (leftDivWidth-diffX)/(rightDivWidth+diffX)*this.secondaryFlex;
+            this.mainFlex = (leftDivWidth - diffX) / (rightDivWidth + diffX) * this.secondaryFlex;
 
             //ensure that leftFlex stays between min and max flex
             if (this.mainFlex > this.maxFlex) {
@@ -106,7 +106,7 @@ export class ResizableLayoutComponent {
              * leftDivWidth:rightDivWidth = mainFlex:secondaryFlex
              * secondaryFlex is fixed, main and secondary divWidth are retrieved => compute mainFlex
              */
-            this.mainFlex = (topDivHeight-diffY)/(bottomDivHeight+diffY)*this.secondaryFlex;
+            this.mainFlex = (topDivHeight - diffY) / (bottomDivHeight + diffY) * this.secondaryFlex;
 
             //ensure that leftFlex stays between min and max flex
             if (this.mainFlex > this.maxFlex) {

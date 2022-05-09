@@ -4,7 +4,6 @@ import { Observable, of } from "rxjs";
 import { map } from "rxjs/operators";
 import { ExtensionPointID, Scope } from "src/app/models/Plugins";
 import { Project } from "src/app/models/Project";
-import { User } from "src/app/models/User";
 import { SettingsServices } from "src/app/services/settingsServices";
 import { VBContext } from "src/app/utils/VBContext";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
@@ -104,7 +103,7 @@ export class PartitionFilterEditor {
                     map(settings => {
                         this.templates = settings.getPropertyValue(SettingsEnum.resourceView).templates;
                     })
-                )
+                );
             } else if (this.ctx == PartitionFilterEditorCtx.User) { //the template is edited in the User template editor => use the system default template
                 this.templates = {};
                 return this.settingsService.getSettingsDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT, Scope.SYSTEM).pipe(
@@ -159,7 +158,7 @@ export class PartitionFilterEditor {
                     rps.partitions.forEach(p => {
                         p.checked = true;
                     });
-                })
+                });
                 this.updatePref();
             },
             () => { }
@@ -179,7 +178,7 @@ export class PartitionFilterEditor {
                 pref[rps.role.id + ""] = partitionsPref;
             }
         });
-        this.propagateChange(pref)
+        this.propagateChange(pref);
     }
 
 

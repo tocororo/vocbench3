@@ -108,7 +108,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
             mergeMap(range => {
                 return of(RangeResponse.isRangeCompliant(range, value));
             })
-        )
+        );
     }
 
     editHandler(predicate: ARTURIResource, object: ARTNode) {
@@ -133,9 +133,9 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
                         () => {
                             addFn.subscribe(
                                 () => this.update.emit()
-                            )
+                            );
                         }
-                    )
+                    );
                 },
                 () => { }
             );
@@ -207,7 +207,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
             } else if (predicate.getURI() == OWL.oneOf.getURI()) {
                 return this.clsService.removeOneOf(<ARTURIResource>this.resource, <ARTBNode>object);
             }
-        } else {//predicate is some subProperty of a root property
+        } else { //predicate is some subProperty of a root property
             return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }

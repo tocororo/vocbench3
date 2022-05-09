@@ -4,7 +4,7 @@ import { ARTURIResource } from "./ARTResources";
 export class User {
     private email: string;
     private givenName: string;
-    private familyName: string
+    private familyName: string;
     private iri: ARTURIResource;
     private phone: string;
     private address: string;
@@ -163,7 +163,7 @@ export class User {
      * @param resp could be a "data" element of a response (containing a "user" element)
      * or directly a "user" element
      */
-     static parse(userJson: any): User {
+    static parse(userJson: any): User {
         if (userJson.email == null) { //user object is empty (scenario: getUser with no logged user)
             return null;
         }
@@ -196,7 +196,7 @@ export class User {
             let cp: { [iri: string]: string } = {};
             userJson.customProperties.forEach((cpJson: any) => {
                 cp[cpJson.iri] = cpJson.value;
-            })
+            });
             user.setCustomProperties(cp);
         }
         return user;
@@ -221,7 +221,7 @@ export class ProjectUserBinding {
         this.group = group;
         this.groupLimitations = groupLimitations;
         if (languages != undefined) {
-            this.languages = languages
+            this.languages = languages;
         }
     }
 
@@ -237,10 +237,10 @@ export class ProjectUserBinding {
         this.userEmail = userEmail;
     }
 
-    getUserEmail(): string  {
+    getUserEmail(): string {
         return this.userEmail;
     }
-    
+
     setRoles(roles: string[]) {
         this.roles = roles;
     }
@@ -270,7 +270,7 @@ export class ProjectUserBinding {
     }
 
     setGroupLimitations(limitations: boolean) {
-        this.groupLimitations = limitations
+        this.groupLimitations = limitations;
     }
 
     isSubjectToGroupLimitations(): boolean {
@@ -347,7 +347,7 @@ export class UsersGroup {
     }
 
     public static deserialize(usersGroupJson: any): UsersGroup {
-        return new UsersGroup(new ARTURIResource(usersGroupJson.iri), usersGroupJson.shortName, usersGroupJson.fullName, 
+        return new UsersGroup(new ARTURIResource(usersGroupJson.iri), usersGroupJson.shortName, usersGroupJson.fullName,
             usersGroupJson.description, usersGroupJson.webPage, usersGroupJson.logoUrl);
     }
 
@@ -399,8 +399,8 @@ export class UserForm {
     customProperties: { [iri: string]: string } = {};
 
     static emailRegexp = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    static standardFields: string[] = ["E-mail","Password","Confirm password","Given name","Family name","Phone","Office address",
-        "Affiliation","Personal URL","User IRI","Avatar URL","Language proficiencies"]
+    static standardFields: string[] = ["E-mail", "Password", "Confirm password", "Given name", "Family name", "Phone", "Office address",
+        "Affiliation", "Personal URL", "User IRI", "Avatar URL", "Language proficiencies"];
 
     constructor() { }
 
@@ -427,11 +427,11 @@ export class UserFormOptionalField {
     public static AFFILIATION_IRI: string = "http://www.w3.org/ns/org#memberOf";
     public static URL_IRI: string = "http://semanticturkey.uniroma2.it/puvoc#url";
 
-    public static fieldLabelMap: {iri: string, translationKey: string}[] = [
-        {iri: UserFormOptionalField.ADDRESS_IRI, translationKey: "MODELS.USER.OFFICE_ADDRESS"},
-        {iri: UserFormOptionalField.PHONE_IRI, translationKey: "MODELS.USER.PHONE"},
-        {iri: UserFormOptionalField.AFFILIATION_IRI, translationKey: "MODELS.USER.AFFILIATION"},
-        {iri: UserFormOptionalField.URL_IRI, translationKey: "MODELS.USER.PERSONAL_URL"}
+    public static fieldLabelMap: { iri: string, translationKey: string }[] = [
+        { iri: UserFormOptionalField.ADDRESS_IRI, translationKey: "MODELS.USER.OFFICE_ADDRESS" },
+        { iri: UserFormOptionalField.PHONE_IRI, translationKey: "MODELS.USER.PHONE" },
+        { iri: UserFormOptionalField.AFFILIATION_IRI, translationKey: "MODELS.USER.AFFILIATION" },
+        { iri: UserFormOptionalField.URL_IRI, translationKey: "MODELS.USER.PERSONAL_URL" }
     ];
     public static getOptionalFieldLabel(field: UserFormOptionalField): string {
         return UserFormOptionalField.fieldLabelMap.find(entry => entry.iri == field.iri).translationKey;

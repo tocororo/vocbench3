@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Observable } from "rxjs";
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
-import { LexicalResourceUtils } from "src/app/models/LexicographerView";
 import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { ResourceUtils } from "src/app/utils/ResourceUtils";
@@ -49,7 +48,7 @@ export class MorphosyntacticPropComponent {
                 props => {
                     this.properties = props;
                 }
-            )
+            );
         }
 
         this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.resource) && !this.readonly;
@@ -63,7 +62,7 @@ export class MorphosyntacticPropComponent {
             proposedAddTriple: false,
             proposedRemoveRes: false,
             proposedRemoveTriple: false
-        }
+        };
         //init statuses
         if (ResourceUtils.isResourceInStagingAdd(this.value)) {
             this.ngClassValue.proposedAddRes = true;
@@ -104,7 +103,7 @@ export class MorphosyntacticPropComponent {
                 () => {
                     this.update.emit();
                 }
-            )
+            );
         }
     }
 
@@ -144,7 +143,7 @@ export class MorphosyntacticPropComponent {
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     //CACHE UTILS

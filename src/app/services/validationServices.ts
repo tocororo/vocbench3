@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
-import { CommitInfo, ParameterInfo, SortingDirection } from "../models/History";
+import { CommitInfo, SortingDirection } from "../models/History";
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -68,15 +68,6 @@ export class ValidationServices {
         return this.httpMgr.doGet(this.serviceName, "getCommits", params).pipe(
             map(stResp => {
                 return this.parseCommitInfoList(stResp);
-            })
-        );
-        return this.httpMgr.doGet(this.serviceName, "getCommits", params).pipe(
-            map(stResp => {
-                let commits: CommitInfo[] = [];
-                for (let commitJson of stResp) {
-                    commits.push(CommitInfo.parse(commitJson));
-                }
-                return commits;
             })
         );
     }

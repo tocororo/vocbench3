@@ -7,7 +7,6 @@ import { Project } from '../models/Project';
 import { AuthServiceMode } from '../models/Properties';
 import { User, UserFormFields } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
-import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
 
@@ -23,7 +22,7 @@ export class UserServices {
      * Returns null if no user is logged (response contains empty user object).
      */
     getUser(): Observable<User> {
-        let params: STRequestParams = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getUser", params).pipe(
             map(stResp => {
                 /*
@@ -51,7 +50,7 @@ export class UserServices {
                         //Once logged, he will be recognized as first user/admin and registration form will prompted with prefilled data
                         //(see UserResolver.resolve())
                     }
-                    return null
+                    return null;
                 }
             })
         );
@@ -61,7 +60,7 @@ export class UserServices {
      * Lists all the registered users
      */
     listUsers(): Observable<User[]> {
-        let params: STRequestParams = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "listUsers", params).pipe(
             map(stResp => {
                 let users: User[] = this.parseUsersArray(stResp);
@@ -79,7 +78,7 @@ export class UserServices {
      * since the latter is accessed only by the admin that doesn't require authorization check and has no capabilities
      */
     listUserCapabilities(): Observable<string[]> {
-        let params: STRequestParams = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", params).pipe(
             map(stResp => {
                 AuthorizationEvaluator.initEvalutator(stResp);
@@ -95,7 +94,7 @@ export class UserServices {
     listUsersBoundToProject(project: Project): Observable<User[]> {
         let params: STRequestParams = {
             projectName: project.getName()
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).pipe(
             map(stResp => {
                 let users: User[] = this.parseUsersArray(stResp);
@@ -114,7 +113,7 @@ export class UserServices {
     listProjectsBoundToUser(userIri: ARTURIResource): Observable<string[]> {
         let params: STRequestParams = {
             userIri: userIri
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "listProjectsBoundToUser", params);
     }
 
@@ -151,12 +150,12 @@ export class UserServices {
             languageProficiencies: languageProficiencies,
             customProperties: JSON.stringify(convertedCustomProps),
             vbHostAddress: this.getVbHostAddress()
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "registerUser", params).pipe(
             map(stResp => {
                 return User.parse(stResp);
             })
-        );;
+        );
     }
 
     verifyUserEmail(email: string, token: string) {
@@ -164,7 +163,7 @@ export class UserServices {
             email: email,
             token: token,
             vbHostAddress: this.getVbHostAddress()
-        }
+        };
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [
                 { className: 'it.uniroma2.art.semanticturkey.user.EmailVerificationExpiredException', action: 'skip' },
@@ -177,7 +176,7 @@ export class UserServices {
         let params = {
             email: email,
             token: token,
-        }
+        };
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [
                 { className: 'it.uniroma2.art.semanticturkey.user.UserActivationExpiredException', action: 'skip' },
@@ -207,7 +206,7 @@ export class UserServices {
             phone: phone,
             languageProficiencies: languageProficiencies,
             customProperties: JSON.stringify(convertedCustomProps)
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "createUser", params).pipe(
             map(stResp => {
                 return User.parse(stResp);
@@ -224,7 +223,7 @@ export class UserServices {
         let params: STRequestParams = {
             email: email,
             givenName: givenName,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateUserGivenName", params).pipe(
             map(stResp => {
                 return User.parse(stResp);
@@ -241,7 +240,7 @@ export class UserServices {
         let params: STRequestParams = {
             email: email,
             familyName: familyName,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateUserFamilyName", params).pipe(
             map(stResp => {
                 return User.parse(stResp);
@@ -258,7 +257,7 @@ export class UserServices {
         let params: STRequestParams = {
             email: email,
             newEmail: newEmail,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateUserEmail", params).pipe(
             map(stResp => {
                 return User.parse(stResp);
@@ -274,7 +273,7 @@ export class UserServices {
     updateUserPhone(email: string, phone?: string): Observable<User> {
         let params: STRequestParams = {
             email: email,
-        }
+        };
         if (phone != null) {
             params.phone = phone;
         }
@@ -293,7 +292,7 @@ export class UserServices {
     updateUserAddress(email: string, address?: string): Observable<User> {
         let params: STRequestParams = {
             email: email,
-        }
+        };
         if (address != null) {
             params.address = address;
         }
@@ -312,7 +311,7 @@ export class UserServices {
     updateUserAffiliation(email: string, affiliation?: string): Observable<User> {
         let params: STRequestParams = {
             email: email,
-        }
+        };
         if (affiliation != null) {
             params.affiliation = affiliation;
         }
@@ -331,7 +330,7 @@ export class UserServices {
     updateUserUrl(email: string, url?: string): Observable<User> {
         let params: STRequestParams = {
             email: email,
-        }
+        };
         if (url != null) {
             params.url = url;
         }
@@ -350,7 +349,7 @@ export class UserServices {
     updateUserAvatarUrl(email: string, avatarUrl?: string): Observable<User> {
         let params: STRequestParams = {
             email: email,
-        }
+        };
         if (avatarUrl != null) {
             params.avatarUrl = avatarUrl;
         }
@@ -370,7 +369,7 @@ export class UserServices {
         let params: STRequestParams = {
             email: email,
             languageProficiencies: languageProficiencies,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateUserLanguageProficiencies", params).pipe(
             map(stResp => {
                 return User.parse(stResp);
@@ -389,7 +388,7 @@ export class UserServices {
             email: email,
             property: property,
             value: value
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateUserCustomField", params).pipe(
             map(stResp => {
                 return User.parse(stResp);
@@ -406,7 +405,7 @@ export class UserServices {
         let params: STRequestParams = {
             email: email,
             enabled: enabled,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "enableUser", params).pipe(
             map(stResp => {
                 return User.parse(stResp);
@@ -421,7 +420,7 @@ export class UserServices {
     deleteUser(email: string) {
         let params: STRequestParams = {
             email: email
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "deleteUser", params);
     }
 
@@ -436,7 +435,7 @@ export class UserServices {
             email: email,
             oldPassword: oldPassword,
             newPassword: newPassword
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "changePassword", params);
     }
 
@@ -448,7 +447,7 @@ export class UserServices {
         let params: STRequestParams = {
             email: email,
             password: password
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "forcePassword", params);
     }
 
@@ -460,7 +459,7 @@ export class UserServices {
         let params: STRequestParams = {
             email: email,
             vbHostAddress: this.getVbHostAddress()
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "forgotPassword", params);
     }
 
@@ -473,7 +472,7 @@ export class UserServices {
         let params: STRequestParams = {
             email: email,
             token: token
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "resetPassword", params);
     }
 
@@ -482,7 +481,7 @@ export class UserServices {
      */
 
     getUserFormFields(): Observable<UserFormFields> {
-        let params: STRequestParams = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getUserFormFields", params);
     }
 
@@ -490,14 +489,14 @@ export class UserServices {
         let params: STRequestParams = {
             field: field,
             visibility: visibility
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateUserFormOptionalFieldVisibility", params);
     }
 
     addUserFormCustomField(field: string) {
         let params: STRequestParams = {
             field: field,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "addUserFormCustomField", params);
     }
 
@@ -505,7 +504,7 @@ export class UserServices {
         let params: STRequestParams = {
             field1: field1,
             field2: field2
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "swapUserFormCustomFields", params);
     }
 
@@ -514,20 +513,20 @@ export class UserServices {
             fieldIri: fieldIri,
             label: label,
             description: description
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "updateUserFormCustomField", params);
     }
 
     removeUserFormCustomField(field: ARTURIResource) {
         let params: STRequestParams = {
             field: field,
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "removeUserFormCustomField", params);
     }
 
 
     private getVbHostAddress(): string {
-        return location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname
+        return location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname;
     }
 
 

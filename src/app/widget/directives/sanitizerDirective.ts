@@ -36,9 +36,9 @@ export class SanitizerDirective {
     }
 
     /**
-	 * Sanitizes the input text replacing the white space with underscore.
-	 * @param text the input text to sanitize
-	 */
+     * Sanitizes the input text replacing the white space with underscore.
+     * @param text the input text to sanitize
+     */
     sanitize(text: string) {
         //'g' = global match (find all matches, doesn't stop after 1st match)
         text = text.replace(new RegExp(this.sourceChar, 'g'), this.targetChar);
@@ -62,10 +62,11 @@ export class SanitizerDirective {
             // Set the new textbox content
             let contentBeforeSpace = txtContent.slice(0, start);
             let contentAfterSpace = txtContent.slice(end);
-            let updatedText = contentBeforeSpace + transformedText + contentAfterSpace
+            let updatedText = contentBeforeSpace + transformedText + contentAfterSpace;
             inputElement.value = updatedText;
             // Move the cursor
-            inputElement.selectionStart = inputElement.selectionEnd = start + transformedText.length;
+            inputElement.selectionStart = start + transformedText.length;
+            inputElement.selectionEnd = start + transformedText.length;
 
             event.preventDefault();//prevent the default ctrl+v keypress listener
 
@@ -93,7 +94,8 @@ export class SanitizerDirective {
                 let updatedText = contentBeforeSpace + transformedChar + contentAfterSpace;
                 inputElement.value = updatedText;
                 // Move the cursor
-                inputElement.selectionStart = inputElement.selectionEnd = start + 1;
+                inputElement.selectionStart = start + 1;
+                inputElement.selectionEnd = start + 1;
                 event.preventDefault();//prevent the default keypress listener
 
                 this.ngModelChange.emit(updatedText);

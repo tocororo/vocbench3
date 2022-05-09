@@ -9,7 +9,7 @@ import { LexViewCache } from "../LexViewChache";
     templateUrl: "./constituentComponent.html",
     host: { class: "d-block" }
 })
-export class ConstituentComponent{
+export class ConstituentComponent {
     @Input() readonly: boolean = false;
     @Input() constituent: Constituent;
     @Input() lexViewCache: LexViewCache;
@@ -18,8 +18,8 @@ export class ConstituentComponent{
     pendingFacet: boolean;
 
     addFacetAuthorized: boolean;
-    
-    constructor() {}
+
+    constructor() { }
 
     ngOnInit() {
         this.addFacetAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.constituent.id) && !this.readonly;

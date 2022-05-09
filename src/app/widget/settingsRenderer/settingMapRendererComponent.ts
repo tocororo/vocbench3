@@ -56,7 +56,7 @@ export class SettingMapRendererComponent {
                     this.value[entry.key] = entry.value;
                 }
             }
-        })
+        });
         if (Object.keys(this.value).length == 0) { //if empty map, emit null value
             this.value = null;
         }

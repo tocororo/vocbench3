@@ -34,13 +34,13 @@ export class LeafletMapModal {
         }
         if (this.route) {
             this.mapRoute = this.route.map(p => {
-                return { location: p.location, lat: p.lat, lng: p.lng }
-            })
+                return { location: p.location, lat: p.lat, lng: p.lng };
+            });
         }
         if (this.area) {
             this.mapArea = this.area.map(p => {
-                return { location: p.location, lat: p.lat, lng: p.lng }
-            })
+                return { location: p.location, lat: p.lat, lng: p.lng };
+            });
         }
         
     }

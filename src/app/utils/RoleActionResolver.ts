@@ -234,8 +234,8 @@ export class RoleActionResolver {
         //common
         {
             actionId: VBActionsEnum.resourcesSetDeprecated,
-            roles: [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, 
-                RDFResourceRolesEnum.dataRange, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.limeLexicon, 
+            roles: [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme,
+                RDFResourceRolesEnum.dataRange, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.limeLexicon,
                 RDFResourceRolesEnum.limeLexicon, RDFResourceRolesEnum.ontolexLexicalEntry, RDFResourceRolesEnum.property,
                 RDFResourceRolesEnum.skosCollection],
             conditions: { pre: { selectionRequired: true, childlessRequired: false, explicitRequired: true }, post: { deselectOnComplete: false } },
@@ -265,8 +265,8 @@ export class RoleActionResolver {
                     icon: UIUtils.getActionImageSrc(role, s.resAction),
                     function: this.vbFunctions.getFunction(s.actionId),
                     capability: AuthorizationEvaluator.actionAuthGoalMap[s.actionId],
-                }
-                this.translateService.get(s.actionTranslationKey).subscribe(translation => a.title = translation);
+                };
+                this.translateService.get(s.actionTranslationKey).subscribe(translation => { a.title = translation; });
                 actions.push(a);
             }
         });
@@ -315,5 +315,5 @@ export class ActionConditions {
     };
     post: {
         deselectOnComplete?: boolean; //tells if the selected resource (if required is true) should be deselected once the action is done
-    }
+    };
 }

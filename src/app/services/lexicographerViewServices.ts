@@ -28,9 +28,9 @@ export class LexicographerViewServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getMorphosyntacticProperties", params).pipe(
             map(stResp => {
-               let props = Deserializer.createURIArray(stResp);
-               ResourceUtils.sortResources(props, SortAttribute.value);
-               return props;
+                let props = Deserializer.createURIArray(stResp);
+                ResourceUtils.sortResources(props, SortAttribute.value);
+                return props;
             })
         );
     }

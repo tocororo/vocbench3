@@ -11,9 +11,9 @@ export class CustomService extends Configuration {
     id?: string; //not in the configuration object, but useful to keep trace of the id
 }
 
-export class Operation extends Configuration {}
+export class Operation extends Configuration { }
 
-export class CustomOperation extends Configuration {}
+export class CustomOperation extends Configuration { }
 
 export class CustomOperationDefinition {
     '@type': string;
@@ -65,10 +65,10 @@ export class TypeUtils {
         public static String: string = "java.lang.String";
         public static TupleQueryResult: string = "TupleQueryResult";
         public static void: string = "void";
-    }
+    };
 
     static getRdf4jTypes(): string[] {
-        return [ TypeUtils.Types.IRI, TypeUtils.Types.Literal, TypeUtils.Types.Resource, TypeUtils.Types.RDFValue ];
+        return [TypeUtils.Types.IRI, TypeUtils.Types.Literal, TypeUtils.Types.Resource, TypeUtils.Types.RDFValue];
     }
 
     /**
@@ -88,8 +88,8 @@ export class TypeUtils {
             TypeUtils.Types.String,
             TypeUtils.Types.TupleQueryResult,
             TypeUtils.Types.void,
-        ]
-        types = types.concat(TypeUtils.getRdf4jTypes())
+        ];
+        types = types.concat(TypeUtils.getRdf4jTypes());
         this.sortTypes(types);
         return types;
     }
@@ -98,7 +98,7 @@ export class TypeUtils {
      * Types which require arguments
      */
     static getGenericTypes(): string[] {
-        return [ 
+        return [
             TypeUtils.Types.AnnotatedValue,
             TypeUtils.Types.List,
             TypeUtils.Types.Map
@@ -137,7 +137,7 @@ export class TypeUtils {
                 TypeUtils.Types.Map,
                 TypeUtils.Types.short,
                 TypeUtils.Types.String
-            ].concat(TypeUtils.getRdf4jTypes())
+            ].concat(TypeUtils.getRdf4jTypes());
         }
         this.sortTypes(args);
         return args;
@@ -153,13 +153,13 @@ export class TypeUtils {
         let typePrettyPrint: string;
         typePrettyPrint = type.name;
         if (typePrettyPrint.indexOf(".") > 0) { //prevent cases like: "java.lang.String"
-            typePrettyPrint = typePrettyPrint.substr(typePrettyPrint.lastIndexOf(".")+1);
+            typePrettyPrint = typePrettyPrint.substr(typePrettyPrint.lastIndexOf(".") + 1);
         }
         if (TypeUtils.getGenericTypes().indexOf(type.name) != -1) {
             if (type.typeArguments != null) {
                 let argsPrettyPrints = type.typeArguments.map(arg => {
                     if (arg == null) {
-                        return "?"
+                        return "?";
                     } else {
                         return this.serializeType(arg);
                     }
@@ -180,8 +180,11 @@ export class TypeUtils {
         if (TypeUtils.getGenericTypes().indexOf(type.name) != -1) { //is generic => check if its args are valid
             if (type.typeArguments != null) {
                 for (let arg of type.typeArguments) {
-                    return TypeUtils.isOperationTypeValid(arg);
+                    if (!TypeUtils.isOperationTypeValid(arg)) {
+                        return false;
+                    }
                 }
+                return true;
             } else {
                 return false;
             }

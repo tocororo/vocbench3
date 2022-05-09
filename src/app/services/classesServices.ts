@@ -17,7 +17,7 @@ export class ClassesServices {
 
     /**
      * takes a list of classes and return their description as if they were roots for a tree
-	 * (so more, role, explicit etc...)
+     * (so more, role, explicit etc...)
      * @param classList
      */
     getClassesInfo(classList: ARTURIResource[], options?: VBRequestOptions): Observable<ARTURIResource[]> {
@@ -34,7 +34,7 @@ export class ClassesServices {
     /**
      * Returns a list of ARTURIResource subClasses of the given class
      * @param superClass class of which retrieve its subClasses
-	 */
+     */
     getSubClasses(superClass: ARTURIResource, numInst: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         let params: any = {
             superClass: superClass,
@@ -60,7 +60,7 @@ export class ClassesServices {
 
     /**
      * Returns the (explicit) instances of the class cls.
-	 * @param cls
+     * @param cls
      */
     getInstances(cls: ARTURIResource, options?: VBRequestOptions): Observable<ARTResource[]> {
         let params: any = {
@@ -188,7 +188,7 @@ export class ClassesServices {
         };
         return this.httpMgr.doPost(this.serviceName, "deleteInstance", params).pipe(
             map(stResp => {
-                this.eventHandler.instanceDeletedEvent.emit({instance: instance, cls: cls});
+                this.eventHandler.instanceDeletedEvent.emit({ instance: instance, cls: cls });
                 return stResp;
             })
         );
@@ -207,7 +207,7 @@ export class ClassesServices {
         };
         return this.httpMgr.doPost(this.serviceName, "addSuperCls", params).pipe(
             map(stResp => {
-                this.eventHandler.superClassAddedEvent.emit({subClass: cls, superClass: supercls});
+                this.eventHandler.superClassAddedEvent.emit({ subClass: cls, superClass: supercls });
                 return stResp;
             })
         );
@@ -227,20 +227,20 @@ export class ClassesServices {
         };
         return this.httpMgr.doPost(this.serviceName, "removeSuperCls", params).pipe(
             map(stResp => {
-                this.eventHandler.superClassRemovedEvent.emit({superClass: supercls, subClass: cls});
+                this.eventHandler.superClassRemovedEvent.emit({ superClass: supercls, subClass: cls });
                 return stResp;
             })
         );
     }
-    
+
     /**
      * Adds a collection of class as intersectionOf a class.
      * @param cls the resource whose the enriching the intersectionOf
      * @param clsDescriptions collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
      */
     addIntersectionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
-        let collNodeArray = new Array<string>();
-        for (let i=0; i<collectionNode.length; i++) {
+        let collNodeArray: string[] = [];
+        for (let i = 0; i < collectionNode.length; i++) {
             if (collectionNode[i] instanceof ARTBNode) {
                 //getShow because getNominalValue returns "_:"+id and in this case, since the ARTBNode is
                 //created manually, the id is the expression (something like :A and :B) so the nominal value
@@ -256,7 +256,7 @@ export class ClassesServices {
         };
         return this.httpMgr.doPost(this.serviceName, "addIntersectionOf", params);
     }
-    
+
     /**
      * Removes an intersectionOf class axiom
      * @param cls class to which remove the intersectionOf axiom
@@ -269,15 +269,15 @@ export class ClassesServices {
         };
         return this.httpMgr.doPost(this.serviceName, "removeIntersectionOf", params);
     }
-    
+
     /**
      * Adds a collection of class as unionOf a class.
      * @param cls the resource whose the enriching the unionOf
      * @param collectionNode collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
      */
     addUnionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
-        let collNodeArray = new Array<string>();
-        for (let i=0; i<collectionNode.length; i++) {
+        let collNodeArray: string[] = [];
+        for (let i = 0; i < collectionNode.length; i++) {
             if (collectionNode[i] instanceof ARTBNode) {
                 //getShow because getNominalValue returns "_:"+id and in this case, since the ARTBNode is
                 //created manually, the id is the expression (something like :A and :B) so the nominal value
@@ -306,7 +306,7 @@ export class ClassesServices {
         };
         return this.httpMgr.doPost(this.serviceName, "removeUnionOf", params);
     }
-    
+
     /**
      * Adds a collection of instances as oneOf a class.
      * @param cls the resource whose the enriching the unionOf

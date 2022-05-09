@@ -45,7 +45,7 @@ export class LoadConfigurationModal {
                 this.selectedRef = null;
                 this.initReferences();
             }
-        )
+        );
     }
 
     ok() {
@@ -53,7 +53,7 @@ export class LoadConfigurationModal {
             let returnData: LoadConfigurationModalReturnData = {
                 configuration: null,
                 reference: this.selectedRef
-            }
+            };
             this.activeModal.close(returnData);
         } else {
             //selected reference is from the additionals => do not load the configuration, but let handling it to the component that opened the modal
@@ -61,7 +61,7 @@ export class LoadConfigurationModal {
                 let returnData: LoadConfigurationModalReturnData = {
                     configuration: null,
                     reference: this.selectedRef
-                }
+                };
                 this.activeModal.close(returnData);
             } else {
                 this.configurationService.getConfiguration(this.configurationComponent, this.selectedRef.relativeReference).subscribe(
@@ -69,7 +69,7 @@ export class LoadConfigurationModal {
                         let returnData: LoadConfigurationModalReturnData = {
                             configuration: conf,
                             reference: this.selectedRef
-                        }
+                        };
                         this.activeModal.close(returnData);
                     }
                 );

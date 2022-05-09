@@ -23,7 +23,7 @@ export class AdministrationServices {
     setAdministrator(user: User) {
         let params: STRequestParams = {
             email: user.getEmail(),
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "setAdministrator", params);
     }
 
@@ -35,7 +35,7 @@ export class AdministrationServices {
     removeAdministrator(user: User) {
         let params: STRequestParams = {
             email: user.getEmail(),
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "removeAdministrator", params);
     }
 
@@ -47,7 +47,7 @@ export class AdministrationServices {
     setSuperUser(user: User) {
         let params: STRequestParams = {
             email: user.getEmail(),
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "setSuperUser", params);
     }
 
@@ -59,7 +59,7 @@ export class AdministrationServices {
     removeSuperUser(user: User) {
         let params: STRequestParams = {
             email: user.getEmail(),
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "removeSuperUser", params);
     }
 
@@ -70,7 +70,7 @@ export class AdministrationServices {
     testEmailConfig(mailTo: string) {
         let params: STRequestParams = {
             mailTo: mailTo
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "testEmailConfig", params);
     }
 

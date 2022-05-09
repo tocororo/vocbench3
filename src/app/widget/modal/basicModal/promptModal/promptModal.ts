@@ -16,7 +16,7 @@ export class PromptModal {
     @Input() inputSanitized: boolean = false;
 
     constructor(public activeModal: NgbActiveModal) { }
-    
+
     ngOnInit() {
     }
 
@@ -33,13 +33,13 @@ export class PromptModal {
     }
 
     ok() {
-		if (this.inputOptional || this.isInputValid()) {
-			this.activeModal.close(this.value);
-		}
-	}
+        if (this.inputOptional || this.isInputValid()) {
+            this.activeModal.close(this.value);
+        }
+    }
 
-	close() {
-		this.activeModal.dismiss();
-	}
+    close() {
+        this.activeModal.dismiss();
+    }
 
 }

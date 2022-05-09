@@ -43,7 +43,7 @@ export class PromptPrefixedModal {
         if (separatorIdx > 0) {
             this.prefix = this.expandedTxt.substring(0, separatorIdx + 1);
             this.prefixedTxt = this.expandedTxt.substring(separatorIdx + 1);
-        } else {  //no . in the id => restore the original id
+        } else { //no . in the id => restore the original id
             this.prefixedTxt = null;
         }
     }

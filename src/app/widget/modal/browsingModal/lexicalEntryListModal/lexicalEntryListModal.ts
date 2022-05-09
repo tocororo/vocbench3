@@ -40,7 +40,7 @@ export class LexicalEntryListModal {
                     lex => {
                         this.activeLexicon = <ARTURIResource>lex;
                     }
-                )
+                );
             }
         }
     }
@@ -62,7 +62,7 @@ export class LexicalEntryListModal {
                 this.activeLexicon = lexicon;
             },
             () => {}
-        )
+        );
     }
 
     isOkEnabled() {

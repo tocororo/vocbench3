@@ -131,11 +131,10 @@ export class LangPickerComponent implements ControlValueAccessor {
      */
     writeValue(obj: string) {
         if (this.languageList.length > 0) { //if language list is already init, get the lang from this list
-            this.language = this.languageList.find(l => l.tag == obj)
+            this.language = this.languageList.find(l => l.tag == obj);
         } else { //otherwise get the lang from the system languages
-            this.language = VBContext.getSystemSettings().languages.find(l => l.tag == obj)
+            this.language = VBContext.getSystemSettings().languages.find(l => l.tag == obj);
         }
-        
     }
     /**
      * Set the function to be called when the control receives a change event.

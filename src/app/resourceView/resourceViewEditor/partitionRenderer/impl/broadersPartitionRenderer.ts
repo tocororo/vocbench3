@@ -83,9 +83,9 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        if (this.rootProperty.getURI() == predicate.getURI()) {// removing a skos:broader relation
+        if (this.rootProperty.getURI() == predicate.getURI()) { // removing a skos:broader relation
             return this.skosService.removeBroaderConcept(<ARTURIResource>this.resource, <ARTURIResource>object);
-        } else {//predicate is some subProperty of skos:broader
+        } else { //predicate is some subProperty of skos:broader
             return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }

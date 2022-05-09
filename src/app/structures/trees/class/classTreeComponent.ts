@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
+import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -52,7 +52,7 @@ export class ClassTreeComponent extends AbstractTree {
             clsTreeRoots = [new ARTURIResource(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.rootClassUri)];
         }
 
-        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement)
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.clsService.getClassesInfo(clsTreeRoots, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             roots => {
                 //sort by show if rendering is active, uri otherwise
@@ -77,7 +77,7 @@ export class ClassTreeComponent extends AbstractTree {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);
                     return;
-                };
+                }
                 this.openRoot(path);
             }
         );

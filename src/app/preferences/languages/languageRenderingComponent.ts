@@ -31,8 +31,8 @@ export class LanguageRenderingComponent {
                     lang: pl,
                     active: false,
                     position: null
-                })
-            })
+                });
+            });
         } else {
             //set as selected renderingLangs only the listed by the preference
             this.noLangItem.active = renderingLanguagesPref.includes(Languages.NO_LANG_TAG);
@@ -41,8 +41,8 @@ export class LanguageRenderingComponent {
                     lang: pl,
                     active: (renderingLanguagesPref.indexOf(pl.tag) != -1), //active if the language is among the listed in preferences
                     position: null
-                })
-            })
+                });
+            });
             //set the positions according to the preference order
             let position: number = 1;
             renderingLanguagesPref.forEach(langPref => {
@@ -51,9 +51,9 @@ export class LanguageRenderingComponent {
                         langItem.position = position;
                         return;
                     }
-                })
+                });
                 position++;
-            })
+            });
         }
     }
 
@@ -92,7 +92,7 @@ export class LanguageRenderingComponent {
 
         activeLangs.forEach(l => {
             preferenceLangs.push(l.lang.tag);
-        })
+        });
         if (preferenceLangs.length == 0) {
             preferenceLangs.push(Languages.ALL_LANG);
         }
@@ -183,7 +183,7 @@ export class LanguageRenderingComponent {
             //...and shift the position of the languages that follow the deactivated
             for (let i = 0; i < this.renderingLanguages.length; i++) {
                 if (this.renderingLanguages[i].position > deactivatedPosition) {
-                    this.renderingLanguages[i].position = this.renderingLanguages[i].position-1;
+                    this.renderingLanguages[i].position -=1;
                 }
             }
 
@@ -204,7 +204,7 @@ export class LanguageRenderingComponent {
     }
 
     private countActiveLangs(): number {
-        let activeLangs: number = 0
+        let activeLangs: number = 0;
         for (let i = 0; i < this.renderingLanguages.length; i++) {
             if (this.renderingLanguages[i].active) {
                 activeLangs++;

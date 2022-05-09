@@ -192,7 +192,7 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateAdvancedGraphApplication", params);
     }
 
-    updateGraphApplicationDelete(sheetName: string ,headerId: string, graphId: string, deleteEnabled: boolean) {
+    updateGraphApplicationDelete(sheetName: string, headerId: string, graphId: string, deleteEnabled: boolean) {
         let params: STRequestParams = {
             sheetName: sheetName,
             headerId: headerId,
@@ -255,13 +255,13 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateNodeInHeader", params);
     }
 
-    renameNodeId(sheetName: string, headerId: string, nodeId: string, newNodeId: String) {
+    renameNodeId(sheetName: string, headerId: string, nodeId: string, newNodeId: string) {
         let params: STRequestParams = {
             sheetName: sheetName,
             headerId: headerId,
             nodeId: nodeId,
             newNodeId: newNodeId
-        }
+        };
         return this.httpMgr.doPost(this.serviceName, "renameNodeId", params);
     }
 
@@ -397,12 +397,7 @@ export class Sheet2RDFServices {
             sheetName: sheetName,
             maxTableRows: maxTableRows
         };
-        return this.httpMgr.doGet(this.serviceName, "getTriplesPreview", params).pipe(
-            map(stResp => {
-                stResp.returned;
-                return stResp;
-            })
-        );
+        return this.httpMgr.doGet(this.serviceName, "getTriplesPreview", params);
     }
 
     addTriples(sheetName: string) {
@@ -487,7 +482,7 @@ export class Sheet2RDFServices {
                     } else { //plain string
                         serializedArray.push(v);
                     }
-                })
+                });
                 paramValue = JSON.stringify(serializedArray);
             } else if (typeof paramValue == "object") { //object => map
                 paramValue = this.getMapSerialization(paramValue);

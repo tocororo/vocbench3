@@ -34,8 +34,8 @@ export class StorageManagerModal {
         this.selectedEntries = this.selectedFiles.splice(0);
 
         this.scopes = [Scope.SYSTEM, Scope.PROJECT, Scope.USER, Scope.PROJECT_USER].map(s => {
-            return { scope: s, rootPath: ScopeUtils.serializeScope(s) + ":/" }
-        })
+            return { scope: s, rootPath: ScopeUtils.serializeScope(s) + ":/" };
+        });
         this.selectedScope = this.scopes[0];
         this.onScopeChanged();
     }
@@ -65,7 +65,7 @@ export class StorageManagerModal {
                     } else {
                         return 1;
                     }
-                })
+                });
                 this.dirEntries = entries.map(d => {
                     let fullPath: string = this.path;
                     if (!fullPath.endsWith("/")) {
@@ -77,7 +77,7 @@ export class StorageManagerModal {
                         name: d.name,
                         type: d.type
                     };
-                })
+                });
             }
         );
     }
@@ -132,11 +132,11 @@ export class StorageManagerModal {
                         if (entry.startsWith(this.selectedEntry.fullPath)) {
                             list.splice(idx, 1);
                         }
-                    })
+                    });
                 }
                 this.listEntries();
             }
-        )
+        );
     }
 
     createDir() {
@@ -149,7 +149,7 @@ export class StorageManagerModal {
                 newDirPath += name;
                 this.storageServices.createDirectory(newDirPath).subscribe(
                     () => {
-                        this.listEntries()
+                        this.listEntries();
                     }
                 );
             }
@@ -173,7 +173,7 @@ export class StorageManagerModal {
                     }
                 );
             }
-        )
+        );
     }
 
     private createFile(file: File, path: string, overwrite: boolean = false): Observable<boolean> {
@@ -190,7 +190,7 @@ export class StorageManagerModal {
                                     map(() => {
                                         return true;
                                     })
-                                )
+                                );
                             },
                             () => {
                                 return of(false);
@@ -198,7 +198,7 @@ export class StorageManagerModal {
                         )
                     ).pipe(
                         mergeMap(done => done)
-                    )
+                    );
                 } else {
                     return of(false);
                 }

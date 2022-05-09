@@ -7,32 +7,32 @@ import * as CodeMirror from 'codemirror';
     selector: 'ntriple-editor',
     templateUrl: "nTripleEditorComponent.html",
     providers: [{
-         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => NTripleEditorComponent), multi: true,
+        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => NTripleEditorComponent), multi: true,
     }],
     host: { class: "vbox" }
 })
 
 export class NTripleEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
-    
+
     @ViewChild('cmEditor') private cmEditorView: CodemirrorComponent;
-    
+
     private cmEditor: CodeMirror.EditorFromTextArea;
 
     code: string;
     editorConfig: CodeMirror.EditorConfiguration;
-    
+
     constructor() { }
 
     ngOnInit() {
-        this.editorConfig = { 
+        this.editorConfig = {
             lineNumbers: true,
             mode: "ntriples",
             lineWrapping: true,
             readOnly: this.disabled,
-            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-                //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-        }
+            viewportMargin: Infinity, //with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+            //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+        };
     }
 
     ngAfterViewInit() {

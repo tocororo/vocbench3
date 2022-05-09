@@ -65,7 +65,7 @@ export class NewConceptualizationCfModal extends AbstractCustomConstructorModal 
             createPlain: this.createPlainCheck,
             createSense: this.createSenseCheck,
             cfValue: null
-        }
+        };
         //set class only if not the default
         if (this.resourceClass.getURI() != OntoLex.lexicalSense.getURI()) {
             returnedData.cls = this.resourceClass;
@@ -87,6 +87,6 @@ export class NewConceptualizationCfModalReturnData {
     linkedResource: ARTURIResource; //lexicalEntry or reference
     createPlain?: boolean;
     createSense?: boolean;
-    cls: ARTURIResource
+    cls: ARTURIResource;
     cfValue: CustomFormValue;
 }

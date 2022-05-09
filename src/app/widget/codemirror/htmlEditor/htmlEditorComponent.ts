@@ -6,30 +6,30 @@ import * as CodeMirror from 'codemirror';
     selector: 'html-editor',
     templateUrl: "htmlEditorComponent.html",
     providers: [{
-         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => HtmlEditorComponent), multi: true,
+        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => HtmlEditorComponent), multi: true,
     }],
     host: { class: "vbox" }
 })
 
 export class HtmlEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
-    
+
     editorConfig: CodeMirror.EditorConfiguration;
     code: string;
 
     constructor() { }
 
     ngOnInit() {
-        this.editorConfig = { 
+        this.editorConfig = {
             lineNumbers: true,
             mode: "text/html",
-            indentUnit : 4,
+            indentUnit: 4,
             indentWithTabs: true,
             lineWrapping: true,
             readOnly: this.disabled,
-            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-                //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-        }
+            viewportMargin: Infinity, //with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+            //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+        };
     }
 
     ngOnChanges(changes: SimpleChanges) {

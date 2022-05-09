@@ -32,7 +32,7 @@ export class HeaderEditorModal {
 
     private changed: boolean = false; //useful to keep trace of changes in order to ask to the user if he want to replicate the changes to multiple headers
 
-    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices,  private s2rdfCtx: Sheet2RdfContextService,
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService,
         private basicModals: BasicModalServices, private modalService: NgbModal) {
     }
 
@@ -110,11 +110,10 @@ export class HeaderEditorModal {
                 }
             },
             () => { }
-        )
+        );
     }
 
     removeNode() {
-        let used: boolean = false;
         //check if the node is used by some graph application
         let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
         //TODO allow to forcing the deletion a referenced node or not allow at all? 
@@ -147,7 +146,7 @@ export class HeaderEditorModal {
                             this.initHeader();
                             this.changed = true;
                         }
-                    )
+                    );
             },
             () => { }
         );
@@ -162,7 +161,7 @@ export class HeaderEditorModal {
                             this.initHeader();
                             this.changed = true;
                         }
-                    )
+                    );
             },
             () => { }
         );
@@ -260,7 +259,7 @@ export class HeaderEditorModal {
                 this.initHeader();
                 this.changed = true;
             }
-        )
+        );
     }
 
     onDeleteChange(graphApplication: GraphApplication) {
@@ -276,12 +275,12 @@ export class HeaderEditorModal {
                             () => {
                                 this.activeModal.close();
                             }
-                        )
+                        );
                     },
                     () => {
                         this.activeModal.close();
                     }
-                )
+                );
         } else {
             this.activeModal.close();
         }

@@ -34,7 +34,7 @@ export abstract class AbstractProjectComponent {
     protected dtValidator: DatatypeValidator;
     protected modalService: NgbModal;
     protected translateService: TranslateService;
-    constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices, 
+    constructor(projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
         vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, modalService: NgbModal, translateService: TranslateService) {
         this.projectService = projectService;
         this.userService = userService;
@@ -77,7 +77,7 @@ export abstract class AbstractProjectComponent {
             projects => {
                 this.projectList = projects;
             }
-        )
+        );
     }
 
     /**
@@ -105,7 +105,7 @@ export abstract class AbstractProjectComponent {
                     pd.open = !collapsedDirs.includes(pd.dir);
                 });
                 //init dir displayName (e.g.: prjLexModel and prjModel have values that can be written as RDFS, OWL, SKOS...)
-                this.projectDirs.forEach(pd => pd.dirDisplayName = pd.dir); //init with the same dir as default
+                this.projectDirs.forEach(pd => { pd.dirDisplayName = pd.dir; }); //init with the same dir as default
                 let bagOfFacet = this.getCurrentFacetBagOf();
                 if (bagOfFacet == ProjectFacets.prjLexModel || bagOfFacet == ProjectFacets.prjModel) {
                     this.projectDirs.forEach(pd => {
@@ -113,8 +113,8 @@ export abstract class AbstractProjectComponent {
                     });
                 }
             }
-        )
-    };
+        );
+    }
 
     protected accessProject(project: Project) {
         VBContext.setWorkingProject(project);
@@ -138,7 +138,7 @@ export abstract class AbstractProjectComponent {
     }
 
     protected toggleDirectory(projectDir: ProjectDirEntry) {
-        projectDir.open = !projectDir.open
+        projectDir.open = !projectDir.open;
         //update collapsed directories cookie
         this.storeCollpasedDirectoriesCookie();
     }
@@ -150,18 +150,18 @@ export abstract class AbstractProjectComponent {
                 let dirNameValue = pd.dir != null ? pd.dir : "null";
                 collapsedDirs.push(dirNameValue);
             }
-        })
+        });
         let cds: CollapsedDirStore = {
             facet: this.getCurrentFacetBagOf(),
             dirs: collapsedDirs
-        }
+        };
         Cookie.setCookie(Cookie.PROJECT_COLLAPSED_DIRS, JSON.stringify(cds));
     }
 
     protected retrieveCollapsedDirectoriesCookie(): string[] {
         let collapsedDirs: string[] = [];
         let cds: CollapsedDirStore;
-        let collapsedDirsCookie: string = Cookie.getCookie(Cookie.PROJECT_COLLAPSED_DIRS)
+        let collapsedDirsCookie: string = Cookie.getCookie(Cookie.PROJECT_COLLAPSED_DIRS);
         if (collapsedDirsCookie != null) {
             try { //cookie might be not parsed, in case return empty list
                 cds = JSON.parse(collapsedDirsCookie);
@@ -171,7 +171,7 @@ export abstract class AbstractProjectComponent {
                         if (dir == "null") list[index] = null;
                     });
                 }
-            } catch {}
+            } catch { }
         }
         return collapsedDirs;
     }
@@ -183,7 +183,7 @@ export abstract class AbstractProjectComponent {
 
     switchRendering() {
         this.rendering = !this.rendering;
-        Cookie.setCookie(Cookie.PROJECT_RENDERING, this.rendering+"");
+        Cookie.setCookie(Cookie.PROJECT_RENDERING, this.rendering + "");
         ProjectLabelCtx.renderingEnabled = this.rendering;
     }
 
@@ -193,7 +193,7 @@ export abstract class AbstractProjectComponent {
             () => { //changed settings
                 this.initProjects();
             },
-            () => {} //nothing changed
+            () => { } //nothing changed
         );
     }
 

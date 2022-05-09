@@ -58,11 +58,11 @@ export class ProjectACLModal {
                                 title: this.getAccessLevelTitle(project, consumer, acl, projectAcl.lock),
                                 class: this.getAccessLevelClass(project, consumer, acl, projectAcl.lock)
                             },
-                        }
+                        };
                         row.cols.push(col);
-                    })
+                    });
                     this.aclTable.push(row);
-                })
+                });
             }
         );
     }
@@ -98,7 +98,7 @@ export class ProjectACLModal {
             } else {
                 title += " doesn't grant any";
             }
-            title +=  " access to '" + consumer + "'";
+            title += " access to '" + consumer + "'";
             //acquired
             if (acl.acquiredACLLevel != null) {
                 title += "\nAcquired Access Level: Project '" + project + "' is accessed by '" + consumer + "'";
@@ -186,7 +186,7 @@ export class ProjectACLModal {
 class AclTableRow {
     project: string;
     lock: LockCell;
-    cols: AclTableCol[]
+    cols: AclTableCol[];
 }
 class LockCell {
     status: LockStatus;

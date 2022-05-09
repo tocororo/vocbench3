@@ -52,7 +52,7 @@ export class LexicalEntryListComponent extends AbstractList {
             (lexEntry: ARTURIResource) => this.onListNodeDeleted(lexEntry)));
         this.eventSubscriptions.push(eventHandler.lexEntryDeletedUndoneEvent.subscribe(
             (data: LexEntryDeleteUndoData) => this.onEntryDeletedUndone(data)
-        ))
+        ));
     }
 
     ngOnInit() {
@@ -124,7 +124,7 @@ export class LexicalEntryListComponent extends AbstractList {
         if (safeness != null) { //found safeness in cache
             this.safeToGo = safeness;
             this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
-            return of(null)
+            return of(null);
         } else { //never initialized/cahced => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             return this.ontolexService.countLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
@@ -134,7 +134,7 @@ export class LexicalEntryListComponent extends AbstractList {
                     safeToGoMap[checksum] = safeness; //cache the safeness
                     this.safeToGo = safeness;
                     this.translationParam = { count: this.safeToGo.count, safeToGoLimit: this.safeToGoLimit };
-                    return of(null)
+                    return of(null);
                 })
             );
         }
@@ -152,7 +152,7 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     onListNodeCreated(node: ARTURIResource) {
-        if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization = LexEntryVisualizationMode.indexBased) {
+        if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization == LexEntryVisualizationMode.indexBased) {
             if (node.getShow().toLocaleLowerCase().startsWith(this.index.toLocaleLowerCase())) {
                 this.list.unshift(node);
                 if (this.context == TreeListContext.addPropValue) {
@@ -195,7 +195,7 @@ export class LexicalEntryListComponent extends AbstractList {
                 index => {
                     let toAdd: boolean;
                     if (this.index.length == 1) {
-                        toAdd = this.index.toLocaleUpperCase() == index[0].toLocaleUpperCase()
+                        toAdd = this.index.toLocaleUpperCase() == index[0].toLocaleUpperCase();
                     } else if (this.index.length == 2) {
                         toAdd = index.toLocaleUpperCase() == this.index.toLocaleUpperCase();
                     }
@@ -203,7 +203,7 @@ export class LexicalEntryListComponent extends AbstractList {
                         this.list.push(data.resource);
                     }
                 }
-            )
+            );
         }
     }
 

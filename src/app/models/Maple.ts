@@ -1,10 +1,9 @@
-import { ARTURIResource } from "./ARTResources";
 import { Settings } from "./Plugins";
 
 export class AlignmentPlan {
     scenarioDefinition: ScenarioDefinition;
     settings?: any;
-	matcherDefinition?: MatcherDefinitionDTO;
+    matcherDefinition?: MatcherDefinitionDTO;
 }
 
 export class ScenarioDefinition {
@@ -36,18 +35,18 @@ export class MatcherDTO {
 
 export class SettingsDTO {
     originalSchema: any;
-	stProperties: Settings;
-	conversionException: string;
+    stProperties: Settings;
+    conversionException: string;
 }
 
 export class ServiceMetadataDTO {
     service: string;
-	version: string;
-	status: string;
-	specs: string[]; //URL
-	contact?: ServiceMetadataContact;
-	documentation?: string; //URL
-	settings?: SettingsDTO;
+    version: string;
+    status: string;
+    specs: string[]; //URL
+    contact?: ServiceMetadataContact;
+    documentation?: string; //URL
+    settings?: SettingsDTO;
 }
 
 export class ServiceMetadataContact {
@@ -138,4 +137,4 @@ export class Lexicon extends Dataset {
 }
 export class VoidDataset extends Dataset { }
 
-export class ProfilerOptions {}
+export class ProfilerOptions { }
