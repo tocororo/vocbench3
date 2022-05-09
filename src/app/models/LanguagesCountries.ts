@@ -43,13 +43,11 @@ export class Languages {
     static priorityLangs = ["en", "fr", "it", "es", "de"];
     
     static sortLanguages(languages: Language[]) {
-        languages.sort(
-            function (l1: Language, l2: Language) {
-                if (l1.tag > l2.tag) return 1;
-                if (l1.tag < l2.tag) return -1;
-                return 0;
-            }
-        );
+        languages.sort((l1: Language, l2: Language) => {
+            if (l1.tag > l2.tag) return 1;
+            if (l1.tag < l2.tag) return -1;
+            return 0;
+        });
     }
 
     static containsLanguage(languages: Language[], lang: Language): boolean {
@@ -95,7 +93,7 @@ export class Languages {
         for (let i = 0; i < tags.length; i++) {
             let lang: Language = Languages.getLanguageFromTag(tags[i]);
             if (lang != null) {
-                languages.push(lang)
+                languages.push(lang);
             }
         }
         return languages;

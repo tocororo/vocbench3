@@ -102,13 +102,13 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     private sortPredicates(order: string[]) {
-        return function (a: ARTPredicateObjects, b: ARTPredicateObjects) {
+        return (a: ARTPredicateObjects, b: ARTPredicateObjects) => {
             let indexPredA = order.indexOf(a.getPredicate().getURI());
             let indexPredB = order.indexOf(b.getPredicate().getURI());
             if (indexPredA == -1) return 1;
             else if (indexPredB == -1) return -1;
             else return indexPredA - indexPredB;
-        }
+        };
     }
 
     //not used since this partition doesn't allow manual add operation
@@ -155,7 +155,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 } else if (data.type == EnrichmentType.customForm) { //if a custom form has been defined, use it
                     this.enrichWithCustomForm(predicate, data.form);
                 } else { //otherwise (default case, where type is "resource" and rangeCollection is [skosxl:Label]) use the proper enrichment service
-                    this.enrichWithLabel(predicate)
+                    this.enrichWithLabel(predicate);
                 }
             }
         );
@@ -175,12 +175,12 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 (data: NewOntoLexicalizationCfModalReturnData) => {
                     this.ontolexService.addLexicalization(data.linkedResource, this.resource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
                         stResp => {
-                            this.update.emit()
+                            this.update.emit();
                         }
                     );
                 },
                 () => { }
-            )
+            );
         } else { //Not SKOSXL lexicalization
             let prefLabelPred: boolean = predicate.equals(SKOS.prefLabel);
             this.creationModals.newPlainLiteral({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
@@ -217,7 +217,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
             } else if (predicate.equals(OntoLex.isDenotedBy)) {
                 return this.ontolexService.removePlainLexicalization(<ARTResource>object, this.resource);
             }
-        } else {//predicate is some subProperty of a root property
+        } else { //predicate is some subProperty of a root property
             return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }
@@ -232,7 +232,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
             } else if (value instanceof ARTURIResource) { //skosxl label
                 labels.push(new ARTLiteral(value.getShow(), null, l.tag));
             }
-        })
+        });
         this.addMultipleValues(predicate, labels);
     }
 
@@ -271,14 +271,14 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                         ((err.error.name.endsWith("PrefPrefLabelClashException") || err.error.name.endsWith("PrefAltLabelClashException")) && prefLabelClashMode == PrefLabelClashMode.warning) || 
                         err.error.name.endsWith("BlacklistForbiddendException")
                     ) {
-                        this.lexicalizationEnrichmentHelper.handleForceAddLexicalizationError(err.error, <ARTURIResource>this.resource, predicate, <ARTLiteral>err.value, cls, checkClash, checkClash, false, { eventEmitter: this.update })
+                        this.lexicalizationEnrichmentHelper.handleForceAddLexicalizationError(err.error, <ARTURIResource>this.resource, predicate, <ARTLiteral>err.value, cls, checkClash, checkClash, false, { eventEmitter: this.update });
                     } else { //other error that cannot be handled with a "force action"
                         this.handleSingleMultiAddError(err);
                     }
                 } else {
                     this.handleMultipleMultiAddError(errors);
                 }
-            }
+            };
         } else { //rdfs:label (or maybe a custom property) for which doens't exist a dedicated service
             labels.forEach((label: ARTLiteral) => {
                 addFunctions.push({

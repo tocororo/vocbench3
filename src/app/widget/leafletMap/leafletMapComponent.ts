@@ -80,7 +80,7 @@ export class LeafletMapComponent {
 
         let pointLatLng: VbLatLng = new VbLatLng(this.point.location, this.point.lat, this.point.lng);
         this.marker = L.marker(pointLatLng);
-        this.marker.addTo(this.map)
+        this.marker.addTo(this.map);
 
         let popup: L.Popup = L.popup({ closeButton: false });
         popup.setContent(
@@ -98,7 +98,7 @@ export class LeafletMapComponent {
         if (this.edit) {
             this.map.on('click', (e: L.LeafletMouseEvent) => {
                 this.onClickListener(e);
-            })
+            });
         }
     }
 
@@ -113,18 +113,18 @@ export class LeafletMapComponent {
         this.polyline = L.polyline(polylinePoints);
         this.polyline.bindPopup("Route");
         this.polyline.addTo(this.map);
-        this.polyline.on('popupopen', function (e: L.PopupEvent) {
+        this.polyline.on('popupopen', (e: L.PopupEvent) => {
             let popup = e.popup;
             popup.setContent(
                 "<table><tbody>" +
                 "<tr><td><b>Lat:</b></td><td>" + popup.getLatLng().lat + "</td></tr>" +
                 "<tr><td><b>Long:</b></td><td>" + popup.getLatLng().lng + "</td></tr>" +
                 "</tbody></table>"
-            )
+            );
         });
 
         //center map
-        this.map.fitBounds(this.polyline.getBounds(), { padding: [10, 10] })
+        this.map.fitBounds(this.polyline.getBounds(), { padding: [10, 10] });
 
         if (this.edit) {
             this.registerPointsDragListener(this.polyline);
@@ -141,18 +141,18 @@ export class LeafletMapComponent {
         this.polygon = L.polygon(polygonPoints, { color: 'blue' });
         this.polygon.bindPopup("Route");
         this.polygon.addTo(this.map);
-        this.polygon.on('popupopen', function (e: L.PopupEvent) {
+        this.polygon.on('popupopen', (e: L.PopupEvent) => {
             let popup = e.popup;
             popup.setContent(
                 "<table><tbody>" +
                 "<tr><td><b>Lat:</b></td><td>" + popup.getLatLng().lat + "</td></tr>" +
                 "<tr><td><b>Long:</b></td><td>" + popup.getLatLng().lng + "</td></tr>" +
                 "</tbody></table>"
-            )
+            );
         });
 
         //center map
-        this.map.fitBounds(this.polygon.getBounds(), { padding: [10, 10] })
+        this.map.fitBounds(this.polygon.getBounds(), { padding: [10, 10] });
 
         if (this.edit) {
             this.registerPointsDragListener(this.polygon);
@@ -178,7 +178,7 @@ export class LeafletMapComponent {
             this.addMarkerPopup(m);
             m.addTo(this.map);
             pathMarkers.push(m);
-        })
+        });
         //register drag handler for each marker
         pathMarkers.forEach(m => {
             m.on('dragstart', () => {
@@ -193,19 +193,19 @@ export class LeafletMapComponent {
                 */
                 this.draggingPoint = points.find(p => p.location.toNT() == m['location']);
                 this.draggingPointInitialPos = new VbLatLng(this.draggingPoint.location, this.draggingPoint.lat, this.draggingPoint.lng);
-            })
+            });
             m.on('drag', () => {
                 this.draggingPoint.lat = m.getLatLng().lat;
                 this.draggingPoint.lng = m.getLatLng().lng;
                 polygonOrPolyline.redraw(); //update the polyline/polygon with the new coords
-            })
+            });
             m.on('dragend', () => {
                 //when drag ends emit an event
                 let oldPoint: GeoPoint = { location: this.draggingPointInitialPos.location, lat: this.draggingPointInitialPos.lat, lng: this.draggingPointInitialPos.lng };
                 let newPoint: GeoPoint = { location: this.draggingPointInitialPos.location, lat: this.draggingPoint.lat, lng: this.draggingPoint.lng };
                 this.routePointChanged.emit({ old: oldPoint, new: newPoint });
-            })
-        })
+            });
+        });
     }
 
 
@@ -226,9 +226,9 @@ export class LeafletMapComponent {
 
         this.pointChanged.emit({ 
             old: this.point, 
-            new : { location: this.point.location, lat: e.latlng.lat, lng: e.latlng.lng } }
-        );
-    };
+            new: { location: this.point.location, lat: e.latlng.lat, lng: e.latlng.lng } 
+        });
+    }
 
     private addMarkerPopup(marker: L.Marker) {
         let popup: L.Popup = L.popup({ closeButton: false });

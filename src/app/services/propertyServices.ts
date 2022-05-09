@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomForm, CustomFormValue, FormCollection } from "../models/CustomForms";
 import { RDFS } from "../models/Vocabulary";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { ResourceUtils } from '../utils/ResourceUtils';
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ResourcesServices } from "./resourcesServices";
@@ -22,7 +22,7 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getTopProperties", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -35,7 +35,7 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopRDFProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getTopRDFProperties", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -48,7 +48,7 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopObjectProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getTopObjectProperties", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -61,7 +61,7 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopDatatypeProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getTopDatatypeProperties", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -74,7 +74,7 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopAnnotationProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getTopAnnotationProperties", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -87,7 +87,7 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopOntologyProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {}
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getTopOntologyProperties", params, options).pipe(
             map(stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -101,7 +101,7 @@ export class PropertyServices {
      * @return an array of subProperties
      */
     getSubProperties(property: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {
+        let params: STRequestParams = {
             superProperty: property
         };
         return this.httpMgr.doGet(this.serviceName, "getSubProperties", params, options).pipe(
@@ -124,11 +124,11 @@ export class PropertyServices {
 
     /**
      * takes a list of Properties and return their description as if they were roots for a tree
-	 * (so more, role, explicit etc...)
+     * (so more, role, explicit etc...)
      * @param properties
      */
     getPropertiesInfo(properties: ARTURIResource[], options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {
+        let params: STRequestParams = {
             propList: properties
         };
         return this.httpMgr.doGet(this.serviceName, "getPropertiesInfo", params, options).pipe(
@@ -140,12 +140,12 @@ export class PropertyServices {
 
     /**
      * Retrieves all types of res, then all properties having their domain on any of the types for res.
-	 * Note that it provides only root properties (e.g. if both rdfs:label and skos:prefLabel,
-	 * which is a subProperty of rdfs:label, have domain = one of the types of res, then only rdfs:label is returned)
+     * Note that it provides only root properties (e.g. if both rdfs:label and skos:prefLabel,
+     * which is a subProperty of rdfs:label, have domain = one of the types of res, then only rdfs:label is returned)
      * @param resource service returns properties that have as domain the type of this resource 
      */
     getRelevantPropertiesForResource(resource: ARTResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {
+        let params: STRequestParams = {
             res: resource
         };
         return this.httpMgr.doGet(this.serviceName, "getRelevantPropertiesForResource", params, options).pipe(
@@ -169,20 +169,20 @@ export class PropertyServices {
      * - formCollection, an optional FormCollection object only if the property has form collection associated
      */
     getRange(property: ARTURIResource): Observable<RangeResponse> {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
         };
         return this.httpMgr.doGet(this.serviceName, "getRange", params).pipe(
             map(stResp => {
                 let range: RangeResponse = { ranges: null, formCollection: null };
-                
+
                 let ranges: any;
                 if (stResp.ranges) {
                     let respRanges = stResp.ranges;
                     ranges = {};
                     ranges.type = respRanges.type;
                     if (respRanges.rangeCollection) {
-                        let rangeCollection: { resources: ARTURIResource[], dataRanges: (ARTLiteral[])[]} = {
+                        let rangeCollection: { resources: ARTURIResource[], dataRanges: (ARTLiteral[])[] } = {
                             resources: null,
                             dataRanges: null
                         };
@@ -191,7 +191,7 @@ export class PropertyServices {
                         for (let i = 0; i < respRanges.rangeCollection.length; i++) {
                             let rngCollElem = respRanges.rangeCollection[i];
                             if (typeof rngCollElem == "string") {
-                                rangeResources.push(new ARTURIResource(rngCollElem, null, null));    
+                                rangeResources.push(new ARTURIResource(rngCollElem, null, null));
                             } else if (rngCollElem.oneOf != null) { //typeof rngCollElem == "object" => is a datarange
                                 let dataRange: ARTLiteral[] = Deserializer.createLiteralArray(rngCollElem.oneOf);
                                 rangeDataRanges.push(dataRange);
@@ -220,13 +220,11 @@ export class PropertyServices {
                         cf.setDescription(respFormColl.forms[i].description);
                         forms.push(cf);
                     }
-                    forms.sort(
-                        function (a: CustomForm, b: CustomForm) {
-                            if (a.getName() < b.getName()) return -1;
-                            if (a.getName() > b.getName()) return 1;
-                            return 0;
-                        }
-                    )
+                    forms.sort((a: CustomForm, b: CustomForm) => {
+                        if (a.getName() < b.getName()) return -1;
+                        if (a.getName() > b.getName()) return 1;
+                        return 0;
+                    });
                     formCollection.setForms(forms);
 
                     range.formCollection = formCollection;
@@ -246,9 +244,9 @@ export class PropertyServices {
      * @param customFormValue custom form that set additional info to the property
      * @return the new property
      */
-    createProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, superProperty?: ARTURIResource, 
-            customFormValue?: CustomFormValue) {
-        let params: any = {
+    createProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, superProperty?: ARTURIResource,
+        customFormValue?: CustomFormValue) {
+        let params: STRequestParams = {
             propertyType: propertyType,
             newProperty: newProperty
         };
@@ -284,7 +282,7 @@ export class PropertyServices {
      * @param property 
      */
     deleteProperty(property: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property
         };
         return this.httpMgr.doPost(this.serviceName, "deleteProperty", params).pipe(
@@ -302,7 +300,7 @@ export class PropertyServices {
      * @param superProperty the superProperty to add
      */
     addSuperProperty(property: ARTURIResource, superProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             superProperty: superProperty,
         };
@@ -331,7 +329,7 @@ export class PropertyServices {
      * @param superProperty the superProperty to remove
      */
     removeSuperProperty(property: ARTURIResource, superProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             superProperty: superProperty,
         };
@@ -350,7 +348,7 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     addEquivalentProperty(property: ARTURIResource, equivalentProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             equivalentProperty: equivalentProperty,
         };
@@ -370,7 +368,7 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     removeEquivalentProperty(property: ARTURIResource, equivalentProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             equivalentProperty: equivalentProperty,
         };
@@ -387,7 +385,7 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     addPropertyDisjointWith(property: ARTURIResource, disjointProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             disjointProperty: disjointProperty,
         };
@@ -407,7 +405,7 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     removePropertyDisjointWith(property: ARTURIResource, disjointProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             disjointProperty: disjointProperty,
         };
@@ -424,7 +422,7 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     addInverseProperty(property: ARTURIResource, inverseProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             inverseProperty: inverseProperty,
         };
@@ -444,7 +442,7 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     removeInverseProperty(property: ARTURIResource, inverseProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             inverseProperty: inverseProperty,
         };
@@ -460,7 +458,7 @@ export class PropertyServices {
      * @param domain the domain class of the property
      */
     addPropertyDomain(property: ARTURIResource, domain: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             domain: domain
         };
@@ -473,7 +471,7 @@ export class PropertyServices {
      * @param domain the domain class of the property
      */
     removePropertyDomain(property: ARTURIResource, domain: ARTResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             domain: domain,
         };
@@ -486,7 +484,7 @@ export class PropertyServices {
      * @param range the range class of the property
      */
     addPropertyRange(property: ARTURIResource, range: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             range: range
         };
@@ -499,7 +497,7 @@ export class PropertyServices {
      * @param range the range class of the property
      */
     removePropertyRange(property: ARTURIResource, range: ARTResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             range: range,
         };
@@ -513,7 +511,7 @@ export class PropertyServices {
      * @param predicate (optional subproperty of rdfs:range)
      */
     setDataRange(property: ARTURIResource, literals: ARTLiteral[], predicate?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             literals: literals,
         };
@@ -529,7 +527,7 @@ export class PropertyServices {
      * @param datarange 
      */
     removeDataranges(property: ARTURIResource, datarange: ARTBNode) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             datarange: datarange,
         };
@@ -542,7 +540,7 @@ export class PropertyServices {
      * @param literals 
      */
     updateDataranges(datarange: ARTBNode, literals: ARTLiteral[]) {
-        let params: any = {
+        let params: STRequestParams = {
             datarange: datarange,
             literals: literals,
         };
@@ -554,7 +552,7 @@ export class PropertyServices {
      * @param datarange 
      */
     getDatarangeLiterals(datarange: ARTBNode): Observable<ARTLiteral[]> {
-        let params: any = {
+        let params: STRequestParams = {
             datarange: datarange
         };
         return this.httpMgr.doGet(this.serviceName, "getDatarangeLiterals", params).pipe(
@@ -569,7 +567,7 @@ export class PropertyServices {
      * @param properties 
      */
     getInverseProperties(properties: ARTURIResource[]) {
-        let params: any = {
+        let params: STRequestParams = {
             properties: properties
         };
         return this.httpMgr.doGet(this.serviceName, "getInverseProperties", params).pipe(
@@ -586,7 +584,7 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     addPropertyChainAxiom(property: ARTURIResource, chainedProperties: string, linkingPredicate?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             chainedProperties: chainedProperties,
         };
@@ -603,7 +601,7 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     removePropertyChainAxiom(property: ARTURIResource, chain: ARTResource, linkingPredicate?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             chain: chain,
         };
@@ -621,7 +619,7 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     updatePropertyChainAxiom(property: ARTURIResource, replacedChain: ARTResource, chainedProperties: string, linkingPredicate?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             property: property,
             replacedChain: replacedChain,
             chainedProperties: chainedProperties,
@@ -644,7 +642,7 @@ export enum RangeType {
 export class RangeResponse {
     ranges: {
         type: RangeType,
-        rangeCollection: { 
+        rangeCollection: {
             resources: ARTURIResource[],
             dataRanges: (ARTLiteral[])[]
         }

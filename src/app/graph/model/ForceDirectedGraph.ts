@@ -52,19 +52,19 @@ export class ForceDirectedGraph {
     }
 
     public updateForces() {
-        let chargeForce: d3.ForceManyBody<{}> = this.simulation.force('charge'); //repulsion (if strength negative), attraction (if positive) among nodes
+        let chargeForce: d3.ForceManyBody<any> = this.simulation.force('charge'); //repulsion (if strength negative), attraction (if positive) among nodes
         chargeForce
             // .strength(this.options.forces.charge.strength) 
-            .strength((node: Node) => this.getCharge(node, this.links)) 
+            .strength((node: Node) => this.getCharge(node, this.links))
             .distanceMin(this.options.forces.charge.distanceMin)
             .distanceMax(this.options.forces.charge.distanceMax);
-        
-        let collideForce: d3.ForceCollide<{}> = this.simulation.force('collide'); //avoid collision between nodes in the given radius
+
+        let collideForce: d3.ForceCollide<any> = this.simulation.force('collide'); //avoid collision between nodes in the given radius
         collideForce
             .strength(this.options.forces.collide.strength)
             .radius(this.options.forces.collide.radius);
 
-        let linkForce: d3.ForceLink<{}, Link> = this.simulation.force('link');
+        let linkForce: d3.ForceLink<any, Link> = this.simulation.force('link');
         linkForce
             .strength(this.options.forces.link.strength)
             .distance(this.options.forces.link.distance);
@@ -77,7 +77,7 @@ export class ForceDirectedGraph {
             if (l.source == node) charge++;
             if (l.target == node) charge++;
         });
-        return charge*-50;
+        return charge * -50;
     }
 
     private initNodes() {
@@ -91,7 +91,7 @@ export class ForceDirectedGraph {
          */
         if (this.links.length > 0 && this.links[0].res != null) {
             //resets all the offsets: useful since once the links are changed, some links could be no more overlapped
-            this.links.forEach(l => l.offset = 0);
+            this.links.forEach(l => { l.offset = 0; });
 
             //set offset for overlapping links (offsets are balanced around the 0, e.g. if 5 links => -2,-1,0,1,2)
             let overlappingLinkGroups = this.getOverlappingLinkGroups();
@@ -115,19 +115,19 @@ export class ForceDirectedGraph {
                 if (group.length == 1) {
                     group[0].offset = -1; //offset -1 in order to avoid multiplication by 0 when computing the control point of the loop
                 } else {
-                    for (let i = 0, x = group.length-1; i < group.length; i++, x--) {
+                    for (let i = 0, x = group.length - 1; i < group.length; i++, x--) {
                         let offset: number; //-1, 1, -2, 2, -3, 3, ...
                         if (x % 2 == 0) { //even index
-                            offset = -x/2 - 1;
+                            offset = -x / 2 - 1;
                         } else { //odd index
-                            offset = x/2 + 0.5;
+                            offset = x / 2 + 0.5;
                         }
                         group[i].offset = offset;
                     }
                 }
             });
         }
-        let linkForce: d3.ForceLink<{}, Link> = this.simulation.force('link');
+        let linkForce: d3.ForceLink<any, Link> = this.simulation.force('link');
         linkForce.links(this.links);
     }
 
@@ -146,7 +146,7 @@ export class ForceDirectedGraph {
             if (link1.source == link1.target) continue; //if loop, ignore it
             if (yetInOverlapping.indexOf(link1) != -1) continue; //link already considered as overlapped, so ignore it
             //starting from the following link, looks for overlapping links
-            for (let j = i+1; j < this.links.length; j++) {
+            for (let j = i + 1; j < this.links.length; j++) {
                 let link2: Link = this.links[j];
                 if (GraphUtils.areLinksOverlapped(link1, link2)) {
                     overlappingGroup.push(link2);
@@ -180,7 +180,7 @@ export class ForceDirectedGraph {
             loopingGroup.push(link1);
             yetInLooping.push(link1);
             //starting from the following link, looks for overlapping links
-            for (let j = i+1; j < this.links.length; j++) {
+            for (let j = i + 1; j < this.links.length; j++) {
                 let link2: Link = this.links[j];
                 if (GraphUtils.areLinksOverlapped(link1, link2)) {
                     loopingGroup.push(link2);
@@ -188,7 +188,7 @@ export class ForceDirectedGraph {
                 }
             }
             // inizialize loop flag (useful for uml nodes)
-            loopingGroup.forEach(l=>l.loop=true);
+            loopingGroup.forEach(l => { l.loop = true; });
             linkGroups.push(loopingGroup);
         }
         return linkGroups;
@@ -239,7 +239,7 @@ export class ForceDirectedGraph {
             if (l.source.res.equals(source) && l.target.res.equals(target) && l.res.equals(property)) {
                 return l;
             }
-        };
+        }
         return null;
     }
 
@@ -287,7 +287,7 @@ export class GraphOptions {
         this.width = width;
         this.height = height;
         if (forces) {
-            this.forces = forces
+            this.forces = forces;
         } else {
             this.forces = new GraphForces();
         }

@@ -101,60 +101,60 @@ export class MultiSubjectEnrichmentHelper {
                 });
                 //handle the property according the partition 
                 switch (handlingPartition) {
-                    case ResViewPartition.broaders:
-                        return this.broaderHandler(subjects, selectedProp);
-                    case ResViewPartition.classaxioms:
-                        return this.classAxiomsHandler(subjects, selectedProp);
-                    case ResViewPartition.constituents:
-                        return this.constituentsHandler(subjects, selectedProp);
-                    case ResViewPartition.denotations:
-                        return this.denotationsHandler(subjects, selectedProp);
-                    case ResViewPartition.disjointProperties:
-                        return this.disjointPropertiesHandler(subjects, selectedProp);
-                    case ResViewPartition.domains:
-                        return this.domainsPropertiesHandler(subjects, selectedProp);
-                    case ResViewPartition.equivalentProperties:
-                        return this.equivalentPropertiesHandler(subjects, selectedProp);
-                    case ResViewPartition.evokedLexicalConcepts:
-                        return this.evokedLexicalConceptsHandler(subjects, selectedProp);
-                    case ResViewPartition.facets:
-                        return null;
-                    case ResViewPartition.formRepresentations:
-                        /**
-                         * this partition is available only for lexical forms that are not visible in a dedicated treePanel,
-                         * so it should not be possible to handle in a dedicated way for multiple lexical form
-                         */
-                        return this.otherPropertiesHandler(subjects, selectedProp);
-                    case ResViewPartition.imports:
-                        return this.unavailableOperation(selectedProp);
-                    case ResViewPartition.labelRelations:
-                        return this.labelRelationsHandler(subjects, selectedProp);
-                    case ResViewPartition.lexicalForms:
-                        return this.lexicalFormsHandler(subjects, selectedProp);
-                    case ResViewPartition.lexicalSenses:
-                        return this.lexicalSensesHandler(subjects, selectedProp);
-                    case ResViewPartition.lexicalizations:
-                        return this.lexicalizationsHandler(subjects, selectedProp);
-                    case ResViewPartition.members:
-                        return this.membersHandler(subjects, selectedProp);
-                    case ResViewPartition.notes:
-                        return this.notesHandler(subjects, selectedProp);
-                    case ResViewPartition.ranges:
-                        return this.rangesHandler(subjects, selectedProp);
-                    case ResViewPartition.schemes:
-                        return this.schemesHandler(subjects, selectedProp);
-                    case ResViewPartition.subPropertyChains:
-                        return this.subPropertyChainsHandler(subjects, selectedProp);
-                    case ResViewPartition.subterms:
-                        return this.subtermsHandler(subjects, selectedProp);
-                    case ResViewPartition.superproperties:
-                        return this.superpropertiesHandler(subjects, selectedProp);
-                    case ResViewPartition.topconceptof:
-                        return this.topconceptofHandler(subjects, selectedProp);
-                    case ResViewPartition.types:
-                        return this.typesHandler(subjects, selectedProp);
-                    default:
-                        return this.otherPropertiesHandler(subjects, selectedProp);
+                case ResViewPartition.broaders:
+                    return this.broaderHandler(subjects, selectedProp);
+                case ResViewPartition.classaxioms:
+                    return this.classAxiomsHandler(subjects, selectedProp);
+                case ResViewPartition.constituents:
+                    return this.constituentsHandler(subjects, selectedProp);
+                case ResViewPartition.denotations:
+                    return this.denotationsHandler(subjects, selectedProp);
+                case ResViewPartition.disjointProperties:
+                    return this.disjointPropertiesHandler(subjects, selectedProp);
+                case ResViewPartition.domains:
+                    return this.domainsPropertiesHandler(subjects, selectedProp);
+                case ResViewPartition.equivalentProperties:
+                    return this.equivalentPropertiesHandler(subjects, selectedProp);
+                case ResViewPartition.evokedLexicalConcepts:
+                    return this.evokedLexicalConceptsHandler(subjects, selectedProp);
+                case ResViewPartition.facets:
+                    return null;
+                case ResViewPartition.formRepresentations:
+                    /**
+                     * this partition is available only for lexical forms that are not visible in a dedicated treePanel,
+                     * so it should not be possible to handle in a dedicated way for multiple lexical form
+                     */
+                    return this.otherPropertiesHandler(subjects, selectedProp);
+                case ResViewPartition.imports:
+                    return this.unavailableOperation(selectedProp);
+                case ResViewPartition.labelRelations:
+                    return this.labelRelationsHandler(subjects, selectedProp);
+                case ResViewPartition.lexicalForms:
+                    return this.lexicalFormsHandler(subjects, selectedProp);
+                case ResViewPartition.lexicalSenses:
+                    return this.lexicalSensesHandler(subjects, selectedProp);
+                case ResViewPartition.lexicalizations:
+                    return this.lexicalizationsHandler(subjects, selectedProp);
+                case ResViewPartition.members:
+                    return this.membersHandler(subjects, selectedProp);
+                case ResViewPartition.notes:
+                    return this.notesHandler(subjects, selectedProp);
+                case ResViewPartition.ranges:
+                    return this.rangesHandler(subjects, selectedProp);
+                case ResViewPartition.schemes:
+                    return this.schemesHandler(subjects, selectedProp);
+                case ResViewPartition.subPropertyChains:
+                    return this.subPropertyChainsHandler(subjects, selectedProp);
+                case ResViewPartition.subterms:
+                    return this.subtermsHandler(subjects, selectedProp);
+                case ResViewPartition.superproperties:
+                    return this.superpropertiesHandler(subjects, selectedProp);
+                case ResViewPartition.topconceptof:
+                    return this.topconceptofHandler(subjects, selectedProp);
+                case ResViewPartition.types:
+                    return this.typesHandler(subjects, selectedProp);
+                default:
+                    return this.otherPropertiesHandler(subjects, selectedProp);
                 }
             },
             () => { }

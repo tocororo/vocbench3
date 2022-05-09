@@ -32,13 +32,11 @@ export class ServicesServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getServiceClasses", params).pipe(
             map(stResp => {
-                stResp.sort(
-                    function (sc1: string, sc2: string) {
-                        if (sc1 > sc2) return 1;
-                        if (sc1 < sc2) return -1;
-                        return 0;
-                    }
-                );
+                stResp.sort((sc1: string, sc2: string) => {
+                    if (sc1 > sc2) return 1;
+                    if (sc1 < sc2) return -1;
+                    return 0;
+                });
                 return stResp;
             })
         );

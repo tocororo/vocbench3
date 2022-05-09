@@ -8,7 +8,7 @@ import { ProjectServices } from "../services/projectServices";
     templateUrl: "./projectPropertiesModal.html",
 })
 export class ProjectPropertiesModal {
-    @Input() project: Project
+    @Input() project: Project;
 
     propertyList: { name: string, value: string }[] = [];
     
@@ -17,12 +17,12 @@ export class ProjectPropertiesModal {
     ngOnInit() {
         this.projectService.getProjectPropertyMap(this.project).subscribe(
             propList => {
-                propList.sort(function (p1: { name: string, value: string }, p2: { name: string, value: string }) {
+                propList.sort((p1: { name: string, value: string }, p2: { name: string, value: string }) => {
                     return p1.name.localeCompare(p2.name);
                 });
                 this.propertyList = propList;
             }
-        )
+        );
     }
     
     ok() {
