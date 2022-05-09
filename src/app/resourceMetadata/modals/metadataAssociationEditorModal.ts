@@ -19,12 +19,12 @@ export class MetadataAssociationEditorModal {
     private selectedPattern: PatternStruct;
 
     private roles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.undetermined, RDFResourceRolesEnum.annotationProperty, RDFResourceRolesEnum.cls,
-        RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.dataRange, 
-        RDFResourceRolesEnum.datatypeProperty, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.limeLexicon, 
+        RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.dataRange,
+        RDFResourceRolesEnum.datatypeProperty, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.limeLexicon,
         RDFResourceRolesEnum.objectProperty, RDFResourceRolesEnum.ontolexForm, RDFResourceRolesEnum.ontolexLexicalEntry,
         RDFResourceRolesEnum.ontolexLexicalSense, RDFResourceRolesEnum.ontology, RDFResourceRolesEnum.ontologyProperty,
-        RDFResourceRolesEnum.property, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.skosOrderedCollection, 
-        RDFResourceRolesEnum.xLabel]
+        RDFResourceRolesEnum.property, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.skosOrderedCollection,
+        RDFResourceRolesEnum.xLabel];
     resourceTypes: RoleStruct[];
     private selectedType: RoleStruct;
 
@@ -34,14 +34,14 @@ export class MetadataAssociationEditorModal {
     }
 
     ngOnInit() {
-        this.resourceTypes = this.roles.map(r => { 
-            return { role: r, show: ResourceUtils.getResourceRoleLabel(r, true) }
-        })
+        this.resourceTypes = this.roles.map(r => {
+            return { role: r, show: ResourceUtils.getResourceRoleLabel(r, true) };
+        });
         this.resourceMetadataService.getPatternIdentifiers().subscribe(
             refs => {
                 this.patterns = refs.map(ref => ResourceMetadataUtils.convertReferenceToPatternStruct(ref));
             }
-        )
+        );
     }
 
     isDataValid(): boolean {
@@ -51,7 +51,7 @@ export class MetadataAssociationEditorModal {
     ok() {
         //check if the same association already exists
         if (this.existingAssociations.some(a => a.role == this.selectedType.role && a.pattern.reference == this.selectedPattern.reference)) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_METADATA_ASSOCIATION"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_METADATA_ASSOCIATION" }, ModalType.warning);
             return;
         }
         this.resourceMetadataService.addAssociation(this.selectedType.role, this.selectedPattern.reference).subscribe(

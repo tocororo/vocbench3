@@ -52,7 +52,7 @@ export class SearchSettingsModal {
     //individual panel search
     private extendsToAllIndividuals: boolean = false;
 
-    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private sharedModals: SharedModalServices) {}
+    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.settingsForConceptPanel = (this.role == RDFResourceRolesEnum.concept);
@@ -73,12 +73,12 @@ export class SearchSettingsModal {
     }
 
     selectRestrictionLanguages() {
-        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGES"}, this.languages, false, true, this.projectCtx).then(
+        this.sharedModals.selectLanguages({ key: "ACTIONS.SELECT_LANGUAGES" }, this.languages, false, true, this.projectCtx).then(
             (langs: string[]) => {
                 this.languages = langs;
                 this.updateSettings();
             },
-            () => {}
+            () => { }
         );
     }
 

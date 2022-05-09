@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
-import { NodeConversion, S2RDFModel, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
+import { NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
 import { RDF, RDFS } from "../../models/Vocabulary";
 import { PropertyServices, RangeResponse, RangeType } from "../../services/propertyServices";
 import { ResourcesServices } from "../../services/resourcesServices";
@@ -87,7 +87,7 @@ export class SimpleGraphApplicationModal {
                 if (n.nodeId == this.graphApplication.nodeId) {
                     this.selectedNode = n;
                 }
-            })
+            });
         }
     }
 
@@ -95,13 +95,13 @@ export class SimpleGraphApplicationModal {
      * Browse the property tree in order to select a property
      */
     changeProperty() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }).then(
             (property: ARTURIResource) => {
                 this.property = property;
                 this.updateHeaderPropertyRange();
             },
             () => { }
-        )
+        );
     }
 
     /**
@@ -177,15 +177,15 @@ export class SimpleGraphApplicationModal {
                                     this.assertedType = this.assertableTypes[typeIdx];
                                 } else { //type not in the assertableTypes list (probably the user added it manually)
                                     this.assertableTypes.push(<ARTResource>type);
-                                    this.assertedType = this.assertableTypes[this.assertableTypes.length-1];
+                                    this.assertedType = this.assertableTypes[this.assertableTypes.length - 1];
                                 }
                             }
                         }
 
                     }
-                )
+                );
             }
-        )
+        );
     }
 
     private annotateRangeCollection(rangeResp: RangeResponse): Observable<void> {
@@ -195,7 +195,7 @@ export class SimpleGraphApplicationModal {
                 map(annotated => {
                     this.rangeCollection = <ARTURIResource[]>annotated;
                 })
-            )
+            );
         } else {
             return of(null);
         }
@@ -214,7 +214,7 @@ export class SimpleGraphApplicationModal {
      * state a class membership of the node in the graph section)
      */
     private addAssertedType() {
-        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_CLASS"}, this.rangeCollection).then(
+        this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.SELECT_CLASS" }, this.rangeCollection).then(
             (cls: ARTURIResource) => {
                 if (!ResourceUtils.containsNode(this.assertableTypes, cls)) {
                     this.assertableTypes.push(cls);
@@ -271,7 +271,7 @@ export class SimpleGraphApplicationModal {
 
     addNode() {
         let dt: ARTURIResource = (this.selectedRangeType.type == RangeType.literal) ? this.datatype : null;
-        let lang: string
+        let lang: string;
         /**
          * If there is only a node available, check if it has a language.
          * This operation is useful for presetting the language in the node creation form when it is inferred from the header name.
@@ -286,7 +286,7 @@ export class SimpleGraphApplicationModal {
         const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
         modalRef.componentInstance.sheetName = this.sheetName;
         modalRef.componentInstance.header = this.header;
-		modalRef.componentInstance.editingNode = null;
+        modalRef.componentInstance.editingNode = null;
         modalRef.componentInstance.constrainedRangeType = this.selectedRangeType.type;
         modalRef.componentInstance.constrainedLanguage = lang;
         modalRef.componentInstance.constrainedDatatype = dt;
@@ -329,7 +329,7 @@ export class SimpleGraphApplicationModal {
                         err = "the chosen datatype (" + this.datatype.getShow() + ") is not the same of the selected node";
                     }
                 }
-            } 
+            }
         }
         if (err != null) {
             return "The selected node is not compliant with the choices made: " + err;
@@ -350,7 +350,7 @@ export class SimpleGraphApplicationModal {
             if (n.nodeId == this.selectedNode.nodeId) {
                 exist = true;
             }
-        })
+        });
         //if it didn't exist, create it and then create/update the graph application
         if (!exist) {
             this.s2rdfService.addNodeToHeader(this.sheetName, this.header.id, this.selectedNode.nodeId, this.selectedNode.converter.type,
@@ -398,7 +398,7 @@ export class SimpleGraphApplicationModal {
                     resources[i] = <ARTURIResource>annotated[ResourceUtils.indexOfNode(annotated, resources[i])];
                 }
             })
-        )
+        );
     }
 
 }

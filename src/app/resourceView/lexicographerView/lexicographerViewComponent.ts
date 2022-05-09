@@ -74,7 +74,7 @@ export class LexicographerViewComponent {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
             //if not the first change, avoid to refresh res view if resource is not changed
-            if (!changes['resource'].firstChange) { 
+            if (!changes['resource'].firstChange) {
                 let prevRes: ARTResource = changes['resource'].previousValue;
                 if (prevRes.getNominalValue() == this.resource.getNominalValue()) {
                     return;
@@ -113,7 +113,7 @@ export class LexicographerViewComponent {
 
                 this.lexEntry = LexicalEntry.parse(resp);
                 this.update.emit(this.lexEntry.id);
-                
+
                 this.lemma = this.lexEntry.lemma;
                 this.sortForms(this.lemma);
 
@@ -145,23 +145,23 @@ export class LexicographerViewComponent {
     private sortForms(forms: Form[]) {
         //sort forms according the written rep
         forms.sort((f1, f2) => {
-            return f1.writtenRep[0].getShow().localeCompare(f2.writtenRep[0].getShow())
-        })
+            return f1.writtenRep[0].getShow().localeCompare(f2.writtenRep[0].getShow());
+        });
         //sort also the morphosyntactic properties
         forms.forEach(f => {
             //by predicate
             f.morphosyntacticProps.sort((mp1, mp2) => {
                 return mp1.getPredicate().getLocalName().toLocaleLowerCase().localeCompare(mp2.getPredicate().getLocalName().toLocaleLowerCase());
-            })
+            });
             //and for each of them sort the objects
             f.morphosyntacticProps.forEach(mp => {
                 mp.getObjects().sort((o1, o2) => {
                     return o1.getNominalValue().toLocaleLowerCase().localeCompare(o2.getNominalValue().toLocaleLowerCase());
-                })
-            })
-        })
+                });
+            });
+        });
     }
-    
+
     private sortSenses(senses: Sense[]) {
         senses.sort((s1, s2) => {
             /*
@@ -170,19 +170,19 @@ export class LexicographerViewComponent {
             */
             if (s1.reference != null && s2.reference != null) { //try to compare senses with reference
                 if (s1.reference.length != 0 && s2.reference.length != 0) {
-                    return s1.reference[0].getShow().localeCompare(s2.reference[0].getShow())
+                    return s1.reference[0].getShow().localeCompare(s2.reference[0].getShow());
                 } else if (s1.reference.length != 0 && s2.reference.length == 0) {
-                    return 1
-                } else if (s1.reference.length == 0 && s2.reference.length != 0) {
-                    return -1
+                    return 1;
+                } else { //if (s1.reference.length == 0 && s2.reference.length != 0) {
+                    return -1;
                 }
             } else if (s1.concept != null && s2.concept != null) { //try to compare senses with concept
                 if (s1.concept.length != 0 && s2.concept.length != 0) {
-                    return s1.concept[0].id.getNominalValue().localeCompare(s2.concept[0].id.getNominalValue())
+                    return s1.concept[0].id.getNominalValue().localeCompare(s2.concept[0].id.getNominalValue());
                 } else if (s1.concept.length != 0 && s2.concept.length == 0) {
-                    return 1
-                } else if (s1.concept.length == 0 && s2.concept.length != 0) {
-                    return -1
+                    return 1;
+                } else { //if (s1.concept.length == 0 && s2.concept.length != 0) {
+                    return -1;
                 }
             } else if (s1.id != null && s2.id != null) { //try to compare by id
                 return s1.id.getNominalValue().localeCompare(s2.id.getNominalValue());
@@ -207,22 +207,22 @@ export class LexicographerViewComponent {
                 this.pendingOtherForm = null;
                 this.buildLexicographerView();
             }
-        )
+        );
     }
 
     //==== Subterm and constituents ====
 
     addSubterm() {
-        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
+        this.browsingModals.browseLexicalEntryList({ key: "DATA.ACTIONS.SELECT_LEXICAL_ENTRY" }).then(
             (targetEntry: ARTURIResource) => {
                 this.ontolexService.addSubterm(<ARTURIResource>this.lexEntry.id, targetEntry).subscribe(
                     () => {
                         this.buildLexicographerView();
                     }
-                )
+                );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     setConstituents() {
@@ -232,13 +232,13 @@ export class LexicographerViewComponent {
                     this.buildLexicographerView();
                 }
             }
-        )
+        );
     }
 
     //==== Relations ====
 
     addRelated() {
-        this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_RELATED_LEX_ENTRY"}, this.lexEntry.id).then(
+        this.lexViewModals.createRelation({ key: "DATA.ACTIONS.ADD_RELATED_LEX_ENTRY" }, this.lexEntry.id).then(
             (data: LexicoRelationModalReturnData) => {
                 let addRelationFn: Observable<void>;
                 if (data.reified) {
@@ -252,12 +252,12 @@ export class LexicographerViewComponent {
                     }
                 );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     addTranslation() {
-        this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_TRANSLATION"}, this.lexEntry.id, true).then(
+        this.lexViewModals.createRelation({ key: "DATA.ACTIONS.ADD_TRANSLATION" }, this.lexEntry.id, true).then(
             (data: LexicoRelationModalReturnData) => {
                 let addRelationFn: Observable<void>;
                 if (data.reified) {
@@ -271,14 +271,14 @@ export class LexicographerViewComponent {
                     }
                 );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     //==== Senses ====
-    
+
     addLexicalization() {
-        this.creationModals.newOntoLexicalizationCf({key:"DATA.ACTIONS.ADD_LEXICAL_SENSE"}, OntoLex.sense, false).then(
+        this.creationModals.newOntoLexicalizationCf({ key: "DATA.ACTIONS.ADD_LEXICAL_SENSE" }, OntoLex.sense, false).then(
             (data: NewOntoLexicalizationCfModalReturnData) => {
                 this.ontolexService.addLexicalization(this.resource, data.linkedResource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
                     () => {
@@ -286,20 +286,20 @@ export class LexicographerViewComponent {
                     }
                 );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     addConceptualization() {
-        this.creationModals.newConceptualizationCf({key:"DATA.ACTIONS.ADD_CONCEPTUALIZATION"}, true, false).then(
+        this.creationModals.newConceptualizationCf({ key: "DATA.ACTIONS.ADD_CONCEPTUALIZATION" }, true, false).then(
             (data: NewConceptualizationCfModalReturnData) => {
                 this.ontolexService.addConceptualization(this.resource, data.linkedResource, data.createPlain, true, data.cls, data.cfValue).subscribe(
                     () => {
                         this.buildLexicographerView();
                     }
-                )
+                );
             }
-        )
+        );
     }
 
     //==== Utils ====

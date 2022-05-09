@@ -23,7 +23,7 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
     private createPlainCheck: boolean = true;
     private createSenseCheck: boolean = true;
 
-    pickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.property, 
+    pickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.property,
         RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.skosCollection];
 
     /**
@@ -64,11 +64,11 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
     }
 
     pickLexicalEntry() {
-        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.SELECT_LEXICAL_ENTRY"}).then(
+        this.browsingModals.browseLexicalEntryList({ key: "DATA.ACTIONS.SELECT_LEXICAL_ENTRY" }).then(
             (lexEntry: ARTURIResource) => {
                 this.linkedResource = lexEntry.getURI();
             }
-        )
+        );
     }
 
     updateLinkedRes(res: ARTURIResource) {
@@ -92,7 +92,7 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
             createSense: this.createSenseCheck,
             cls: this.resourceClass,
             cfValue: null
-        }
+        };
         //set class only if not the default
         if (this.resourceClass.getURI() != OntoLex.lexicalSense.getURI()) {
             returnedData.cls = this.resourceClass;
@@ -114,6 +114,6 @@ export class NewOntoLexicalizationCfModalReturnData {
     linkedResource: ARTURIResource; //lexicalEntry or reference
     createPlain: boolean;
     createSense: boolean;
-    cls: ARTURIResource
+    cls: ARTURIResource;
     cfValue: CustomFormValue;
 }

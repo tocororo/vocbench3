@@ -31,21 +31,21 @@ export class DatatypeDefinitionPartitionRenderer extends PartitionRenderSingleRo
     }
 
     add() {
-        this.resViewModals.setDatatypeFacets({key:"DATA.ACTIONS.SET_DATATYPE_RESTRICTIONS"}, <ARTURIResource> this.resource).then(
+        this.resViewModals.setDatatypeFacets({ key: "DATA.ACTIONS.SET_DATATYPE_RESTRICTIONS" }, <ARTURIResource>this.resource).then(
             () => {
                 this.update.emit();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     editHandler(predicate: ARTURIResource, object: ARTNode) {
         //here I can force the cast to ARTBNode since I am sure that all the object handled in this partition are Bnode
-        this.resViewModals.setDatatypeFacets({key:"DATA.ACTIONS.EDIT_DATATYPE_RESTRICTIONS"}, <ARTURIResource>this.resource, <ARTBNode>object).then(
+        this.resViewModals.setDatatypeFacets({ key: "DATA.ACTIONS.EDIT_DATATYPE_RESTRICTIONS" }, <ARTURIResource>this.resource, <ARTBNode>object).then(
             () => {
                 this.update.emit();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -63,7 +63,7 @@ export class DatatypeDefinitionPartitionRenderer extends PartitionRenderSingleRo
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        return this.datatypeService.deleteDatatypeRestriction(<ARTURIResource> this.resource);
+        return this.datatypeService.deleteDatatypeRestriction(<ARTURIResource>this.resource);
     }
 
 }

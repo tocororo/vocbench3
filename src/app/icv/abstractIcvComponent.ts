@@ -1,4 +1,4 @@
-import { Component, Directive } from "@angular/core";
+import { Directive } from "@angular/core";
 import { ARTNode, ARTResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalType } from '../widget/modal/Modals';
@@ -38,16 +38,17 @@ export abstract class AbstractIcvComponent {
     protected doPreRunCheck(): boolean {
         if (this.checkRoles) {
             if (this.rolesToCheck.length == 0) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_ICV_RESOURCE_TYPE"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_ICV_RESOURCE_TYPE" }, ModalType.warning);
                 return true;
             }
         }
         if (this.checkLanguages) {
             if (this.langsToCheck.length == 0) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_ICV_LANGUAGE"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_ICV_LANGUAGE" }, ModalType.warning);
                 return true;
             }
         }
+        return false;
     }
 
     protected initPaging(records: any[]) {
@@ -62,7 +63,7 @@ export abstract class AbstractIcvComponent {
             this.sharedModals.openResourceView(res, false);
         }
     }
-    
+
     private isResource(res: ARTNode): boolean {
         return res.isResource();
     }
@@ -75,7 +76,7 @@ export abstract class AbstractIcvComponent {
             return;
         }
         this.executeIcv();
-    };
+    }
 
     /**
      * Execute the check

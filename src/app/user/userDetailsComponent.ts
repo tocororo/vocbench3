@@ -46,7 +46,7 @@ export class UserDetailsComponent {
             user => {
                 this.updateUser(user);
             }
-        )
+        );
     }
 
     updateFamilyName(newFamilyName: string) {
@@ -54,7 +54,7 @@ export class UserDetailsComponent {
             user => {
                 this.updateUser(user);
             }
-        )
+        );
     }
 
     updateEmail(newEmail: string) {
@@ -62,11 +62,11 @@ export class UserDetailsComponent {
             user => {
                 this.updateUser(user);
             }
-        )
+        );
     }
 
     changePwd() {
-        this.modalService.open(ChangePasswordModal, new ModalOptions())
+        this.modalService.open(ChangePasswordModal, new ModalOptions());
     }
 
     /**
@@ -82,8 +82,11 @@ export class UserDetailsComponent {
             return this.user.getAffiliation();
         } else if (field.iri == UserFormOptionalField.PHONE_IRI) {
             return this.user.getPhone();
+        } else {
+            return null;
         }
     }
+
     updateOptionalFieldValue(field: UserFormOptionalField, value: string) {
         if (field.iri == UserFormOptionalField.URL_IRI) {
             this.updateUrl(value);
@@ -104,7 +107,7 @@ export class UserDetailsComponent {
             user => {
                 this.updateUser(user);
             }
-        )
+        );
     }
 
     updateAddress(newAddress: string) {
@@ -112,7 +115,7 @@ export class UserDetailsComponent {
             user => {
                 this.updateUser(user);
             }
-        )
+        );
     }
 
     updateAffiliation(newAffiliation: string) {
@@ -120,7 +123,7 @@ export class UserDetailsComponent {
             user => {
                 this.updateUser(user);
             }
-        )
+        );
     }
 
     updateUrl(newUrl: string) {
@@ -128,7 +131,7 @@ export class UserDetailsComponent {
             user => {
                 this.updateUser(user);
             }
-        )
+        );
     }
 
     /**
@@ -140,11 +143,11 @@ export class UserDetailsComponent {
             user => {
                 this.updateUser(user);
             }
-        )
+        );
     }
 
     editLanguages() {
-        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGES"}, this.user.getLanguageProficiencies()).then(
+        this.sharedModals.selectLanguages({ key: "ACTIONS.SELECT_LANGUAGES" }, this.user.getLanguageProficiencies()).then(
             langs => {
                 this.userService.updateUserLanguageProficiencies(this.user.getEmail(), langs).subscribe(
                     user => {
@@ -152,7 +155,7 @@ export class UserDetailsComponent {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -179,7 +182,7 @@ export class UserDetailsComponent {
     /**
      * Write a new value to the element.
      */
-     writeValue(obj: User) {
+    writeValue(obj: User) {
         if (obj) {
             this.user = obj;
         }
@@ -201,5 +204,5 @@ export class UserDetailsComponent {
     // we use it to emit changes back to the parent
     private propagateChange = (_: any) => { };
 
-    
+
 }

@@ -108,7 +108,7 @@ export class CreateProjectComponent {
      */
     repositoryAccessList: RepositoryAccessType[] = [
         RepositoryAccessType.CreateLocal, RepositoryAccessType.CreateRemote, RepositoryAccessType.AccessExistingRemote
-    ]
+    ];
     selectedRepositoryAccess: RepositoryAccessType = this.repositoryAccessList[0];
 
     //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
@@ -232,15 +232,17 @@ export class CreateProjectComponent {
 
 
         this.resourceTypes = [RDFResourceRolesEnum.undetermined, RDFResourceRolesEnum.annotationProperty, RDFResourceRolesEnum.cls,
-            RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.dataRange, 
-            RDFResourceRolesEnum.datatypeProperty, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.limeLexicon, 
+            RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.dataRange,
+            RDFResourceRolesEnum.datatypeProperty, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.limeLexicon,
             RDFResourceRolesEnum.objectProperty, RDFResourceRolesEnum.ontolexForm, RDFResourceRolesEnum.ontolexLexicalEntry,
             RDFResourceRolesEnum.ontolexLexicalSense, RDFResourceRolesEnum.ontology, RDFResourceRolesEnum.ontologyProperty,
-            RDFResourceRolesEnum.property, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.skosOrderedCollection, 
-            RDFResourceRolesEnum.xLabel].map(r => { 
-                return { role: r, show: ResourceUtils.getResourceRoleLabel(r, true) 
+            RDFResourceRolesEnum.property, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.skosOrderedCollection,
+            RDFResourceRolesEnum.xLabel].map(r => {
+                return {
+                    role: r, show: ResourceUtils.getResourceRoleLabel(r, true)
+                };
             }
-        })
+        );
 
         //init available remote repo access configurations
         this.initRemoteRepoAccessConfigurations();
@@ -353,7 +355,7 @@ export class CreateProjectComponent {
                 });
                 this.filePickerAccept = extList.join(",");
             }
-        )
+        );
     }
 
     preloadFromUri() {
@@ -387,7 +389,7 @@ export class CreateProjectComponent {
                         }
                     );
                 } else {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CANNOT_PRELOAD_DATA_FROM_DATASET"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_PRELOAD_DATA_FROM_DATASET" }, ModalType.warning);
                 }
             },
             () => { }
@@ -399,13 +401,13 @@ export class CreateProjectComponent {
             let message: string = "";
             summary.warnings.forEach(w => {
                 message += w.message + "\n";
-            })
-            this.basicModals.alert({key:"STATUS.WARNING"}, message, ModalType.warning);
+            });
+            this.basicModals.alert({ key: "STATUS.WARNING" }, message, ModalType.warning);
         }
         this.preloadedData = {
             summary: summary,
             option: this.selectedPreloadOpt
-        }
+        };
         if (summary.baseURI != null) {
             this.baseUri = summary.baseURI;
             this.baseUriForced = true;
@@ -513,7 +515,7 @@ export class CreateProjectComponent {
                             this.selectedRemoteRepoConfig = this.remoteRepoConfigs[0];
                         }
                     }
-                } else { 
+                } else {
                     //the remote config are refreshed when admin changes it, so it might happend that he deleted the previously available configs 
                     this.remoteRepoConfigs = [];
                     this.selectedRemoteRepoConfig = null;
@@ -524,7 +526,7 @@ export class CreateProjectComponent {
 
     onRepoAccessChange() {
         if (this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote) {
-            this.onProjectNameChange()
+            this.onProjectNameChange();
         }
     }
 
@@ -557,7 +559,7 @@ export class CreateProjectComponent {
 
     changeRemoteRepository(repoType: "data" | "support") {
         if (this.selectedRemoteRepoConfig == null) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED" }, ModalType.warning);
             return;
         }
 
@@ -586,7 +588,7 @@ export class CreateProjectComponent {
             (pattern: PatternStruct) => {
                 metadataAssociation.pattern = pattern;
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -624,28 +626,28 @@ export class CreateProjectComponent {
 
         //check project name
         if (!this.projectName || this.projectName.trim() == "") {
-            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.MISSING_OR_INVALID_PROJECT_NAME"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.MISSING_OR_INVALID_PROJECT_NAME" }, ModalType.warning);
             return;
         }
 
         //check preloading data
         if (this.selectedPreloadOpt != this.preloadOptNone && this.preloadedData == null) {
-            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, 
-                {key:"MESSAGES.MISSING_PRELOAD_DATA_SELECT_NO_PRELOAD", params:{doNotPreloadOpt: this.translateService.instant(this.preloadOptNone)}},
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" },
+                { key: "MESSAGES.MISSING_PRELOAD_DATA_SELECT_NO_PRELOAD", params: { doNotPreloadOpt: this.translateService.instant(this.preloadOptNone) } },
                 ModalType.warning);
-            return
+            return;
         }
 
         //check baseURI
         if (!this.baseUri || this.baseUri.trim() == "" || !ResourceUtils.testIRI(this.baseUri)) {
-            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.MISSING_OR_INVALID_BASEURI"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.MISSING_OR_INVALID_BASEURI" }, ModalType.warning);
             return;
         }
 
         //check EDOAL projects
         if (this.isEdoalProject()) {
             if (this.leftProject == null || this.rightProject == null) {
-                this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.MISSING_LEFT_RIGHT_DATASET"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.MISSING_LEFT_RIGHT_DATASET" }, ModalType.warning);
                 return;
             }
         }
@@ -658,7 +660,7 @@ export class CreateProjectComponent {
         if (this.isSelectedRepoAccessRemote()) {
             //check if configuration is set
             if (this.selectedRemoteRepoConfig == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.REMOTE_REPO_ACCESS_CONFIG_NOT_SELECTED" }, ModalType.warning);
                 return;
             }
             repositoryAccess.setConfiguration(this.selectedRemoteRepoConfig);
@@ -667,13 +669,13 @@ export class CreateProjectComponent {
         /**
          * Prepare core repo parameters
          */
-        let coreRepoSailConfigurerSpecification: PluginSpecification
+        let coreRepoSailConfigurerSpecification: PluginSpecification;
         //prepare config of core repo only if it is in creation mode
         if (this.isSelectedRepoAccessCreateMode()) {
             //check if data repository configuration needs to be configured
             if (this.selectedDataRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_DATA_REPO_CONFIG"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_DATA_REPO_CONFIG" }, ModalType.warning);
                 return;
             }
 
@@ -681,7 +683,7 @@ export class CreateProjectComponent {
                 factoryId: this.selectedDataRepoExtension.id,
                 configType: this.selectedDataRepoConfig.type,
                 configuration: this.selectedDataRepoConfig.getPropertiesAsMap()
-            }
+            };
         }
 
         /**
@@ -691,12 +693,12 @@ export class CreateProjectComponent {
         //supportRepoId is mandatory, in this way avoid to pass it as null (possible in came the user changes the title with remote repoAccess)
         let supportRepoIdPar = (this.supportRepoId != null) ? this.supportRepoId : this.projectName + "_support";
 
-        let supportRepoSailConfigurerSpecification: PluginSpecification
+        let supportRepoSailConfigurerSpecification: PluginSpecification;
         //prepare config of core repo only if it is in creation mode and one of history and validation is enabled
         if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
             if (this.selectedSupportRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_HISTORY_VALIDATION_REPO_CONFIG"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_HISTORY_VALIDATION_REPO_CONFIG" }, ModalType.warning);
                 return;
             }
 
@@ -704,7 +706,7 @@ export class CreateProjectComponent {
                 factoryId: this.selectedSupportRepoExtension.id,
                 configType: this.selectedSupportRepoConfig.type,
                 configuration: this.selectedSupportRepoConfig.getPropertiesAsMap()
-            }
+            };
         }
 
         //backend types
@@ -733,13 +735,13 @@ export class CreateProjectComponent {
             //check if uriGenerator plugin needs to be configured
             if (this.selectedUriGenExtensionConf?.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_URI_GENERATOR_CONFIG"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_URI_GENERATOR_CONFIG" }, ModalType.warning);
                 return;
             }
             uriGeneratorSpecification = {
                 factoryId: this.selectedUriGenExtension.id,
                 configuration: this.selectedUriGenExtensionConf?.getPropertiesAsMap(true)
-            }
+            };
         }
 
         /**
@@ -750,14 +752,14 @@ export class CreateProjectComponent {
             //check if uriGenerator plugin needs to be configured
             if (this.selectedRendEngExtensionConf?.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_RENDERING_ENGINE_CONFIG"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_RENDERING_ENGINE_CONFIG" }, ModalType.warning);
                 return;
             }
 
             renderingEngineSpecification = {
                 factoryId: this.selectedRendEngExtension.id,
                 configuration: this.selectedRendEngExtensionConf.getPropertiesAsMap(true)
-            }
+            };
         }
 
         /**
@@ -769,9 +771,9 @@ export class CreateProjectComponent {
         if (this.preloadedData) {
             preloadedDataFileName = this.preloadedData.summary.preloadedDataFile;
             if (this.preloadedData.option == PreloadOpt.FROM_LOCAL_FILE) {
-                preloadedDataFormat = this.selectedInputFormat.name
+                preloadedDataFormat = this.selectedInputFormat.name;
             } else {
-                preloadedDataFormat = this.preloadedData.summary.preloadedDataFormat
+                preloadedDataFormat = this.preloadedData.summary.preloadedDataFormat;
             }
             transitiveImportAllowance = this.selectedImportAllowance;
         }
@@ -782,7 +784,7 @@ export class CreateProjectComponent {
         let metadataAssociationsPar: Pair<RDFResourceRolesEnum, string>[];
         if (this.useResourceMetadata) { //resource metadata enabled => check if data is ok
             if (this.metadataAssociations.some(a => a.role == null || a.pattern == null)) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_METADATA_PATTERN_ASSOCIATION"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_METADATA_PATTERN_ASSOCIATION" }, ModalType.warning);
                 return;
             }
             metadataAssociationsPar = this.metadataAssociations.map(ma => {
@@ -797,11 +799,11 @@ export class CreateProjectComponent {
         if (this.enableSHACL && this.isSelectedRepoAccessCreateMode()) {
             shaclSettingsPar = new Map();
             if (this.shaclSettings.requireConfiguration()) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_SHACL_VALIDATION_CONFIG"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_SHACL_VALIDATION_CONFIG" }, ModalType.warning);
                 return;
             }
             this.shaclSettings.properties.forEach(p => {
-                shaclSettingsPar.set(p.name, p.value)
+                shaclSettingsPar.set(p.name, p.value);
             });
         }
 
@@ -818,7 +820,7 @@ export class CreateProjectComponent {
             this.openAtStartup, this.globallyAccessible, this.projectLabel).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                    this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PROJECT_CREATED"}).then(
+                    this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.PROJECT_CREATED" }).then(
                         () => {
                             //redirect admin to Projects page, superuser to Home
                             if (this.isAdmin) {
@@ -826,7 +828,7 @@ export class CreateProjectComponent {
                             } else {
                                 this.router.navigate(['/Home']);
                             }
-                            
+
                         }
                     );
                 },
@@ -845,7 +847,7 @@ enum PreloadOpt {
     FROM_DATASET_CATALOG = "PROJECTS.PRELOAD.OPT.FROM_DATASET_CATALOG"
 }
 
-interface MetadataAssociationStruct { 
+interface MetadataAssociationStruct {
     role: RoleStruct;
     pattern: PatternStruct;
 }

@@ -52,7 +52,7 @@ export class MetadataPatternEditorModal {
 
     private onPearlChanged(pearlEditor: PearlEditorStruct) {
         clearTimeout(pearlEditor.timer);
-        pearlEditor.timer = window.setTimeout(() => { this.validatePearl(pearlEditor) }, 1000);
+        pearlEditor.timer = window.setTimeout(() => { this.validatePearl(pearlEditor); }, 1000);
     }
 
     private validatePearl(pearlEditor: PearlEditorStruct) {
@@ -74,12 +74,12 @@ export class MetadataPatternEditorModal {
     ok() {
         //check if at least one pearl is provided
         if (!this.pearlEditors.some(ps => ps.code != null && ps.code.trim() != "")) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.METADATA_PATTERN_REQUIRED"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.METADATA_PATTERN_REQUIRED" }, ModalType.warning);
             return;
         }
         //check if pattern are valid
         if (this.pearlEditors.some(p => !p.validation.valid)) {
-            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.INVALID_METADATA_PATTERN"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.INVALID_METADATA_PATTERN" }, ModalType.warning);
             return;
         }
 
@@ -104,11 +104,11 @@ export class MetadataPatternEditorModal {
                 () => {
                     this.activeModal.close();
                 }
-            )
+            );
         } else { //create
             //in creation check if a pattern with the same name exists
             if (this.existingPatterns.some(p => p.name == this.name)) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_METADATA_PATTERN_NAME"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_METADATA_PATTERN_NAME" }, ModalType.warning);
                 return;
             }
             let ref = ScopeUtils.serializeScope(Scope.PROJECT) + ":" + this.name; //store pattern at project level
@@ -116,7 +116,7 @@ export class MetadataPatternEditorModal {
                 () => {
                     this.activeModal.close();
                 }
-            )
+            );
         }
     }
 

@@ -68,14 +68,14 @@ export class NoLabelResourceComponent {
         let checkExistingPrefLabel: boolean = clashLabelMode != PrefLabelClashMode.allow; //if not "allow" (forbid or warning) enable the check
 
         if (this.lexicalizationModel == SKOS.uri) {
-            this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: SKOS.prefLabel.getShow()}}).then(
+            this.creationModals.newPlainLiteral({ key: "ACTIONS.ADD_X", params: { x: SKOS.prefLabel.getShow() } }).then(
                 (literal: ARTLiteral[]) => {
                     this.setPrefLabel(resource, literal[0], clashLabelMode, null, null, checkExistingPrefLabel);
                 },
                 () => { }
             );
         } else if (this.lexicalizationModel == SKOSXL.uri) {
-            this.creationModals.newXLabel({key: "ACTIONS.ADD_X", params:{x: SKOSXL.prefLabel.getShow()}}).then(
+            this.creationModals.newXLabel({ key: "ACTIONS.ADD_X", params: { x: SKOSXL.prefLabel.getShow() } }).then(
                 (data: NewXLabelModalReturnData) => {
                     this.setPrefLabel(resource, data.labels[0], clashLabelMode, data.cls, null, checkExistingPrefLabel);
                 },
@@ -100,29 +100,29 @@ export class NoLabelResourceComponent {
                     let msg = err.message;
                     if (clashLabelMode == PrefLabelClashMode.warning) { //mode warning => ask user if he wants to force the operation
                         msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                        this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                             confirm => {
                                 this.setPrefLabel(resource, label, clashLabelMode, labelCls, null, false);
                             },
-                            reject => {}
+                            reject => { }
                         );
                     } else { //mode forbid => just show the error message
-                        this.basicModals.alert({key:"STATUS.WARNING"}, msg, ModalType.warning)
+                        this.basicModals.alert({ key: "STATUS.WARNING" }, msg, ModalType.warning);
                     }
                 } else if (err.name.endsWith("PrefAltLabelClashException")) {
                     let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                    this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                         confirm => {
                             this.setPrefLabel(resource, label, clashLabelMode, labelCls, false);
                         },
-                        reject => {}
+                        reject => { }
                     );
                 } else {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, err.message, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, err.message, ModalType.warning);
                 }
             }
 
-        )
+        );
     }
 
     onResourceClick(res: ARTResource) {

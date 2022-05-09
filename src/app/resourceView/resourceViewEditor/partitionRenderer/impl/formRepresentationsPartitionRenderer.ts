@@ -39,18 +39,18 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
         this.getLexiconLang().subscribe(
             lang => {
                 this.lexiconLang = lang;
-                this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, false, this.lexiconLang, false, { constrain: true, locale: true }, { enabled: true, allowSameLang: false }).then(
+                this.creationModals.newPlainLiteral({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, null, false, this.lexiconLang, false, { constrain: true, locale: true }, { enabled: true, allowSameLang: false }).then(
                     (literals: ARTLiteral[]) => {
                         let addFunctions: MultiActionFunction[] = [];
                         literals.forEach((literal: ARTLiteral) => {
-                            addFunctions.push({ 
-                                function: this.ontolexService.addFormRepresentation(this.resource, literal, predicate), 
+                            addFunctions.push({
+                                function: this.ontolexService.addFormRepresentation(this.resource, literal, predicate),
                                 value: literal
                             });
                         });
                         this.addMultiple(addFunctions);
                     },
-                    () => {}
+                    () => { }
                 );
             }
         );
@@ -66,11 +66,11 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
+            this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [this.rootProperty]).then(
                 selectedProp => {
                     return selectedProp;
                 },
-                () => { return null }
+                () => { return null; }
             )
         );
     }
@@ -82,13 +82,13 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         this.getRemoveFunction(predicate, object).subscribe(
             stResp => {
-                this.update.emit(null)
+                this.update.emit(null);
             }
         );
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        return this.ontolexService.removeFormRepresentation(this.resource, <ARTLiteral> object, predicate);
+        return this.ontolexService.removeFormRepresentation(this.resource, <ARTLiteral>object, predicate);
     }
 
 }

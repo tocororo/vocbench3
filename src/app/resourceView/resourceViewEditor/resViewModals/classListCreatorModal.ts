@@ -50,7 +50,7 @@ export class ClassListCreatorModal {
      * Validates the manchester expression and then adds it to the classList
      */
     addExpressionToList() {
-        this.sharedModals.manchesterExpression({key:"DATA.ACTIONS.ADD_MANCHESTER_EXPRESSION"}).then(
+        this.sharedModals.manchesterExpression({ key: "DATA.ACTIONS.ADD_MANCHESTER_EXPRESSION" }).then(
             (data: ManchesterExprModalReturnData) => {
                 //check if the expression is already in the list
                 for (let i = 0; i < this.classList.length; i++) {
@@ -65,7 +65,7 @@ export class ClassListCreatorModal {
                 this.classList.push(exprCls);
                 this.duplicateResource = null;
             },
-            () => {}
+            () => { }
         );
     }
 

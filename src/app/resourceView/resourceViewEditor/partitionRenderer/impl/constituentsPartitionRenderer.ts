@@ -33,15 +33,15 @@ export class ConstituentsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.createConstituentList({key:"DATA.ACTIONS.CREATE_CONSTITUENTS_LIST"}).then(
+        this.resViewModals.createConstituentList({ key: "DATA.ACTIONS.CREATE_CONSTITUENTS_LIST" }).then(
             (data: ConstituentListCreatorModalReturnData) => {
                 this.ontolexService.setLexicalEntryConstituents(<ARTURIResource>this.resource, data.list, data.ordered).subscribe(
                     () => {
                         this.update.emit();
                     }
-                )
+                );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -50,7 +50,7 @@ export class ConstituentsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        this.basicModals.confirm({key:"DATA.ACTIONS.DELETE_CONSTITUENT"}, {key:"MESSAGES.DELETE_CONSTITUENT_WARN_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "DATA.ACTIONS.DELETE_CONSTITUENT" }, { key: "MESSAGES.DELETE_CONSTITUENT_WARN_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.getRemoveFunction(predicate, object).subscribe(
                     stResp => {
@@ -58,7 +58,7 @@ export class ConstituentsPartitionRenderer extends PartitionRenderSingleRoot {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 

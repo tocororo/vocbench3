@@ -19,9 +19,9 @@ export class AddManuallyValueModal {
     enrichingProperty: ARTURIResource;
 
     inputTxt: string;
-    
 
-    constructor(public activeModal: NgbActiveModal, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) {}
+
+    constructor(public activeModal: NgbActiveModal, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.rootProperty = this.property;
@@ -29,7 +29,7 @@ export class AddManuallyValueModal {
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [this.rootProperty]).then(
             (selectedProp: any) => {
                 this.enrichingProperty = selectedProp;
             },
@@ -52,7 +52,7 @@ export class AddManuallyValueModal {
                 throw new Error("Not a valid N-Triples representation: " + this.inputTxt);
             }
         } catch (err) {
-            this.basicModals.alert({key:"STATUS.INVALID_DATA"}, err, ModalType.error);
+            this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, err, ModalType.error);
             return;
         }
         this.activeModal.close({ value: value, property: this.enrichingProperty });

@@ -33,7 +33,7 @@ export class UmlGraphComponent extends AbstractGraph {
     private nodeLimit: number = 50; //if the number of nodes exceeds this limit show warning to user.
     private linksCache: Link[] = []; // contiene i link che verranno nascosti/mostrati in base alla variabile bool hide
 
-    constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, 
+    constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef,
         protected basicModals: BasicModalServices, private graphService: GraphServices) {
         super(d3Service, elementRef, ref, basicModals);
     }
@@ -56,14 +56,14 @@ export class UmlGraphComponent extends AbstractGraph {
                 this.updateForces(f);
                 let graph = this.convertModelToGraph(graphModel);
                 if (graph.nodes.length > this.nodeLimit) {
-                    this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.TOO_MUCH_NODES_GRAPH_WARN_CONFIRM", params:{nodesCount: graph.nodes.length}},
+                    this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.TOO_MUCH_NODES_GRAPH_WARN_CONFIRM", params: { nodesCount: graph.nodes.length } },
                         ModalType.warning
                     ).then(
                         confirm => {
                             this.mergeGraph(graph);
                         },
                         cancel => { }
-                    )
+                    );
                 } else {
                     this.mergeGraph(graph);
                 }
@@ -81,12 +81,12 @@ export class UmlGraphComponent extends AbstractGraph {
      */
     private mergeGraph(graph: { links: UmlLink[], nodes: UmlNode[] }) {
         graph.nodes.forEach(n => {
-            this.graph.addNode(n)
-        })
+            this.graph.addNode(n);
+        });
         graph.links.forEach(l => {
-            this.graph.addLink(l)
-        })
-       
+            this.graph.addLink(l);
+        });
+
         this.graph.update();
     }
 
@@ -96,16 +96,16 @@ export class UmlGraphComponent extends AbstractGraph {
         let linkClicked: Link;
         this.graph.getLinks().forEach(l => {
             if (l.source == node && l.res.equals(prop.property) && l.target.res.equals(prop.range)) {
-                linkClicked = l
+                linkClicked = l;
             }
-        })
+        });
         if (linkClicked != null) {
-            this.onLinkClicked(linkClicked)
+            this.onLinkClicked(linkClicked);
 
         } else {
             this.selectedElement = null;
             this.linkAhead = null;
-            this.elementSelected.emit(prop)
+            this.elementSelected.emit(prop);
             this.selectedProp = { node: node, prop: prop };
         }
 
@@ -120,8 +120,8 @@ export class UmlGraphComponent extends AbstractGraph {
         }
         this.linkAhead = <Link>this.selectedElement;
         this.elementSelected.emit(this.selectedElement);
-        this.selectedProp = { node: (<UmlLink>link).source, prop: new PropInfo(link.res, <ARTURIResource>link.target.res) }
-    };
+        this.selectedProp = { node: (<UmlLink>link).source, prop: new PropInfo(link.res, <ARTURIResource>link.target.res) };
+    }
 
     protected onNodeClicked(node: Node) {
         this.selectedProp = null;
@@ -133,7 +133,7 @@ export class UmlGraphComponent extends AbstractGraph {
         this.activeRemove = true;
         this.linkAhead = null;
         this.elementSelected.emit(this.selectedElement);
-    };
+    }
 
 
     /* ============== ACTIONS ============== */
@@ -145,15 +145,15 @@ export class UmlGraphComponent extends AbstractGraph {
             if (linksToRemove.indexOf(l) == -1) {
                 linksToRemove.push(l);
             }
-        })
+        });
         linksToRemove.forEach(l => {
             this.graph.removeLink(l);
 
-        })
+        });
         this.linksCache = this.linksCache.filter(l => {
-            return !l.source.res.equals(node.res) && !l.target.res.equals(node.res)
-        })
-        this.graph.removeNode(node)
+            return !l.source.res.equals(node.res) && !l.target.res.equals(node.res);
+        });
+        this.graph.removeNode(node);
         this.selectedElement = null;
         this.elementSelected.emit(this.selectedElement);
         this.graph.update();
@@ -162,7 +162,7 @@ export class UmlGraphComponent extends AbstractGraph {
 
     addNode(res: ARTURIResource) {
         if (this.graph.getNode(res)) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE", params:{resource: res.getShow()}}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE", params: { resource: res.getShow() } }, ModalType.warning);
             return;
         }
         this.graphService.expandGraphModelNode(res).subscribe(
@@ -172,7 +172,7 @@ export class UmlGraphComponent extends AbstractGraph {
                 if (this.hideArrow) {
                     this.linksCache.forEach(l => {
                         this.graph.removeLink(l);
-                    })
+                    });
                 }
                 //once the graph is updated, select the new added node, so it is highlighted and well visible
                 this.onNodeClicked(graphTemp.nodes[0]);
@@ -183,12 +183,12 @@ export class UmlGraphComponent extends AbstractGraph {
     private updateArrows() {
         if (this.hideArrow === true) {
             this.linksCache.forEach(l => {
-                this.graph.removeLink(l)
-            })
+                this.graph.removeLink(l);
+            });
         } else {
             this.linksCache.forEach(l => {
-                this.graph.addLink(l)
-            })
+                this.graph.addLink(l);
+            });
         }
         this.graph.update();
     }
@@ -201,8 +201,8 @@ export class UmlGraphComponent extends AbstractGraph {
     private convertModelToGraph(graphModel: GraphModelRecord[]): { links: UmlLink[], nodes: UmlNode[] } {
         let links: UmlLink[] = [];
         let nodes: UmlNode[] = [];
-        
-        
+
+
         //set the nodes and the links according the model
         graphModel.forEach(record => {
             /**
@@ -211,7 +211,7 @@ export class UmlGraphComponent extends AbstractGraph {
              * - che ha come range un datatype e dominio! da OWL thing
              * aggiungiamo la property al nodo ma non creiamo il link
              */
-            
+
             if (
                 (!record.source.equals(OWL.thing) && record.target.equals(OWL.thing)) ||
                 (record.target.getAdditionalProperty("isDatatype") && !record.source.equals(OWL.thing))
@@ -222,7 +222,7 @@ export class UmlGraphComponent extends AbstractGraph {
                     node = new UmlNode(record.source);
                     nodes.push(node);
                 }
-                node.listPropInfo.push(new PropInfo(record.link, record.target))
+                node.listPropInfo.push(new PropInfo(record.link, record.target));
             } else // case domain!=thing   range!=thing and range!=datatype (vediamo sia nodo che link)
                 if ((!record.target.getAdditionalProperty("isDatatype") &&
                     !record.source.equals(OWL.thing) &&
@@ -244,12 +244,12 @@ export class UmlGraphComponent extends AbstractGraph {
                     links.push(new UmlLink(nodeSource, nodeTarget, record.link));
                 }
         });
-        
+
         links.forEach(l => {
             if (!l.res.equals(RDFS.subClassOf)) {
                 this.linksCache.push(l);
             }
-        })
+        });
         return { links: links, nodes: nodes };
     }
 
@@ -272,20 +272,20 @@ export class UmlGraphComponent extends AbstractGraph {
                 newNode.fx = anyNode.fx - 20;
                 newNode.fy = anyNode.fy - 20;
             } else {
-                newNode.fx = 80
-                newNode.fy = 40
+                newNode.fx = 80;
+                newNode.fy = 40;
             }
         }
 
         graphModel.forEach(record => {
             //verifico le property da mettere dentro il nodo e i link da aggiungere 
             if (record.source.equals(res)) {
-                newNode.listPropInfo.push(new PropInfo(record.link, record.target))
+                newNode.listPropInfo.push(new PropInfo(record.link, record.target));
                 let nodeTarget;
                 if (record.target.equals(record.source)) {
                     nodeTarget = newNode;
                 } else {
-                    nodeTarget = this.graph.getNode(record.target)
+                    nodeTarget = this.graph.getNode(record.target);
                 }
                 if (nodeTarget != null) {
                     linksToAdd.push(new UmlLink(newNode, nodeTarget, record.link));
@@ -298,13 +298,13 @@ export class UmlGraphComponent extends AbstractGraph {
                 }
             }
         });
-        nodesToAdd.push(newNode)
+        nodesToAdd.push(newNode);
         linksToAdd.forEach(l => {
             if (!l.res.equals(RDFS.subClassOf)) {
                 this.linksCache.push(l);
 
             }
-        })
+        });
         return { links: linksToAdd, nodes: nodesToAdd };
     }
 

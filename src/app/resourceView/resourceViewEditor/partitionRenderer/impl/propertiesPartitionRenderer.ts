@@ -32,7 +32,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
-        private browsingModals: BrowsingModalServices, private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper, 
+        private browsingModals: BrowsingModalServices, private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper,
         private translateService: TranslateService) {
         super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
@@ -60,7 +60,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                     } else if (data.type == EnrichmentType.customForm) { //if a custom form has been defined, use it
                         this.enrichWithCustomForm(predicate, data.form);
                     } else { //otherwise (default case, where type is "resource" and rangeCollection is [skosxl:Label]) use the proper enrichment service
-                        this.enrichWithLabel(predicate)
+                        this.enrichWithLabel(predicate);
                     }
                 }
             );
@@ -72,15 +72,15 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     private enrichWithLabel(predicate: ARTURIResource) {
         if (predicate.equals(SKOSXL.prefLabel) || predicate.equals(SKOSXL.altLabel) || predicate.equals(SKOSXL.hiddenLabel)) { //SKOSXL
             let prefLabelPred: boolean = predicate.equals(SKOSXL.prefLabel);
-            this.creationModals.newXLabel({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+            this.creationModals.newXLabel({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (data: NewXLabelModalReturnData) => {
                     this.addMultipleLabelValues(predicate, data.labels, data.cls);
                 },
-                () => {}
+                () => { }
             );
         } else { //SKOS or RDFS
             let prefLabelPred: boolean = predicate.equals(SKOS.prefLabel);
-            this.creationModals.newPlainLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+            this.creationModals.newPlainLiteral({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (labels: ARTLiteral[]) => {
                     this.addMultipleLabelValues(predicate, labels);
                 },
@@ -114,22 +114,22 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                 if (errors.length == 1) { //if only one error, try to handle it
                     let err: MultiActionError = errors[0];
                     if (
-                        ((err.error.name.endsWith("PrefPrefLabelClashException") || err.error.name.endsWith("PrefAltLabelClashException")) && prefLabelClashMode == PrefLabelClashMode.warning) || 
+                        ((err.error.name.endsWith("PrefPrefLabelClashException") || err.error.name.endsWith("PrefAltLabelClashException")) && prefLabelClashMode == PrefLabelClashMode.warning) ||
                         err.error.name.endsWith("BlacklistForbiddendException")
                     ) {
-                        this.lexicalizationEnrichmentHelper.handleForceAddLexicalizationError(err.error, <ARTURIResource>this.resource, predicate, <ARTLiteral>err.value, cls, checkClash, checkClash, false, { eventEmitter: this.update })
+                        this.lexicalizationEnrichmentHelper.handleForceAddLexicalizationError(err.error, <ARTURIResource>this.resource, predicate, <ARTLiteral>err.value, cls, checkClash, checkClash, false, { eventEmitter: this.update });
                     } else { //other error that cannot be handled with a "force action"
                         this.handleSingleMultiAddError(err);
                     }
                 } else {
                     this.handleMultipleMultiAddError(errors);
                 }
-            }
+            };
         } else { //rdfs:label (or maybe a custom property) for which doens't exist a dedicated service
             labels.forEach((label: ARTLiteral) => {
-                addFunctions.push({ 
+                addFunctions.push({
                     function: this.resourcesService.addValue(this.resource, predicate, label),
-                    value: label 
+                    value: label
                 });
             });
         }
@@ -138,11 +138,11 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, null, <ARTURIResource>this.resource).then(
+            this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, null, <ARTURIResource>this.resource).then(
                 selectedProp => {
-                    return selectedProp
+                    return selectedProp;
                 },
-                () => { return null }
+                () => { return null; }
             )
         );
     }
@@ -152,7 +152,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
             mergeMap(range => {
                 return of(RangeResponse.isRangeCompliant(range, value));
             })
-        )
+        );
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
@@ -171,11 +171,11 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
         let value: ARTLiteral = <ARTLiteral>eventData.value;
         eventData.locales.forEach(l => {
             let newValue: ARTLiteral = new ARTLiteral(value.getValue(), null, l.tag);
-            addFunctions.push({ 
-                function: this.resourcesService.addValue(<ARTURIResource>this.resource, predicate, newValue), 
-                value: newValue 
+            addFunctions.push({
+                function: this.resourcesService.addValue(<ARTURIResource>this.resource, predicate, newValue),
+                value: newValue
             });
-        })
+        });
         this.addMultiple(addFunctions);
     }
 

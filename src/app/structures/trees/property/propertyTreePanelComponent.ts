@@ -45,7 +45,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
 
     getActionContext(role?: RDFResourceRolesEnum): VBActionFunctionCtx {
         let metaClass: ARTURIResource = role ? this.convertRoleToClass(role) : this.convertRoleToClass(this.selectedNode.getRole());
-        let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildTree.blockDivElement }
+        let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildTree.blockDivElement };
         return actionCtx;
     }
 
@@ -64,28 +64,28 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
             includeLocales = searchSettings.includeLocales;
         }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], searchSettings.useLocalName, 
+        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], searchSettings.useLocalName,
             searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null, null,
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-            searchResult => {
-                UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
-                } else { //1 or more results
-                    if (searchResult.length == 1) {
-                        this.openTreeAt(searchResult[0]);
-                    } else { //multiple results, ask the user which one select
-                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
-                            (selectedResources: ARTURIResource[]) => {
-                                this.openTreeAt(selectedResources[0]);
-                            },
-                            () => { }
-                        );
+                searchResult => {
+                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND_FOR", params: { text: searchedText } }, ModalType.warning);
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.openTreeAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                            this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.TOT_RESULTS_FOUND", params: { count: searchResult.length } }, searchResult, this.rendering).then(
+                                (selectedResources: ARTURIResource[]) => {
+                                    this.openTreeAt(selectedResources[0]);
+                                },
+                                () => { }
+                            );
+                        }
                     }
                 }
-            }
-        );
+            );
     }
 
     openTreeAt(resource: ARTURIResource) {

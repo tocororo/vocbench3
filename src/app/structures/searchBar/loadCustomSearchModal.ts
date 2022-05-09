@@ -23,7 +23,7 @@ export class LoadCustomSearchModal {
     selectedRef: Reference;
 
     constructor(public activeModal: NgbActiveModal, private settingsService: SettingsServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.settingsService.getSettingsScopes(ConfigurationComponents.CUSTOM_SEARCH_STORE).subscribe(
@@ -32,7 +32,7 @@ export class LoadCustomSearchModal {
                 this.selectedScope = this.scopes[0];
                 this.initReferences();
             }
-        )
+        );
     }
 
     initReferences() {
@@ -47,18 +47,18 @@ export class LoadCustomSearchModal {
                         if (refs != null) {
                             refs.forEach(r => {
                                 let scope: Scope = Reference.getRelativeReferenceScope(r.substring(0, r.indexOf(":")));
-                                let id = r.substring(r.indexOf(":")+1);
+                                let id = r.substring(r.indexOf(":") + 1);
                                 this.references.push(new Reference(null, null, id, r)); //project and user null, they are not necessary
                             });
                         }
                     }
-                })
+                });
             }
         );
     }
 
     add() {
-        this.sharedModals.loadConfiguration({key:"SPARQL.ACTIONS.SELECT_STORED_SPARQL_PARAMETERIZED_QUERY"}, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, false, false).then(
+        this.sharedModals.loadConfiguration({ key: "SPARQL.ACTIONS.SELECT_STORED_SPARQL_PARAMETERIZED_QUERY" }, ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, false, false).then(
             (data: LoadConfigurationModalReturnData) => {
                 let ref: string = data.reference.relativeReference;
                 let alreadyIn: boolean = false;
@@ -68,7 +68,7 @@ export class LoadCustomSearchModal {
                     }
                 });
                 if (alreadyIn) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.STORED_PARAMETERIZED_QUERY_ALREADY_ADDED", params:{ref: ref}}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.STORED_PARAMETERIZED_QUERY_ALREADY_ADDED", params: { ref: ref } }, ModalType.warning);
                     return;
                 }
 
@@ -90,8 +90,8 @@ export class LoadCustomSearchModal {
                     }
                 );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     private selectReference(reference: Reference) {

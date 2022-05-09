@@ -65,7 +65,7 @@ export class ProjSettingsEditorModal {
         concat(...asyncInitializationFn).pipe(
             toArray()
         ).subscribe();
-        
+
         this.openAtStartup = this.project.getOpenAtStartup();
     }
 
@@ -83,7 +83,7 @@ export class ProjSettingsEditorModal {
         this.projectService.setBlacklistingEnabled(this.project, this.blacklisting).subscribe(
             () => {
                 this.project.setBlacklistingEnabled(this.blacklisting);
-                this.checkRepositoryRestart()
+                this.checkRepositoryRestart();
             }
         );
     }
@@ -97,7 +97,7 @@ export class ProjSettingsEditorModal {
                 map(validation => {
                     this.shaclValidationEnabled = validation;
                 })
-            )
+            );
         } else {
             return of(null);
         }
@@ -107,7 +107,7 @@ export class ProjSettingsEditorModal {
         this.shaclValidationEnabled = !this.shaclValidationEnabled;
         this.projectService.setSHACLValidationEnabled(this.project, this.shaclValidationEnabled).subscribe(
             () => {
-                this.checkRepositoryRestart()
+                this.checkRepositoryRestart();
             }
         );
     }
@@ -126,12 +126,12 @@ export class ProjSettingsEditorModal {
                                 this.repoService.restartRemoteRepository(r.remoteRepoSummary.serverURL, r.remoteRepoSummary.repositoryId, r.remoteRepoSummary.username, r.remoteRepoSummary.password)
                             );
                         }
-                    })
+                    });
                     if (restartFn.length > 0) {
                         forkJoin(restartFn).subscribe();
                     }
                 }
-            )
+            );
         }
     }
 
@@ -143,14 +143,14 @@ export class ProjSettingsEditorModal {
             map(changeTrackerSetup => {
                 this.changeTrackerSetup = changeTrackerSetup;
             })
-        )
+        );
     }
 
     changeUndo() {
         this.undoEnabled = !this.undoEnabled;
         this.projectService.setUndoEnabled(this.project, this.undoEnabled).subscribe(
             () => {
-                this.checkRepositoryRestart()
+                this.checkRepositoryRestart();
             }
         );
     }
@@ -172,7 +172,7 @@ export class ProjSettingsEditorModal {
                     map(config => {
                         return this.rendEngConfigurator.forceConfiguration(config.factoryID, config.settings);
                     })
-                )
+                );
             })
         );
     }
@@ -180,17 +180,17 @@ export class ProjSettingsEditorModal {
     updateRenderingEngine() {
         //check if configuration needs to be configured
         if (this.selectedRendEngExtensionConf.requireConfiguration()) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_RENDERING_ENGINE_CONFIG"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_RENDERING_ENGINE_CONFIG" }, ModalType.warning);
             return;
         }
         let pluginSpec: PluginSpecification = {
             factoryId: this.selectedRendEngExtension.id,
             configType: this.selectedRendEngExtensionConf.type,
             configuration: this.selectedRendEngExtensionConf.getPropertiesAsMap()
-        }
+        };
         this.projectService.updateRenderingEngineConfiguration(this.project, pluginSpec).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.RENDERING_ENGINE_CONFIG_UPDATED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.RENDERING_ENGINE_CONFIG_UPDATED" });
             }
         );
     }
@@ -205,7 +205,7 @@ export class ProjSettingsEditorModal {
                     map(config => {
                         return this.uriGenConfigurator.forceConfiguration(config.factoryID, config.settings);
                     })
-                )
+                );
             })
         );
     }
@@ -213,17 +213,17 @@ export class ProjSettingsEditorModal {
     updateUriGenerator() {
         //check if configuration needs to be configured
         if (this.selectedUriGenExtensionConf.requireConfiguration()) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.MISSING_URI_GENERATOR_CONFIG"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_URI_GENERATOR_CONFIG" }, ModalType.warning);
             return;
         }
         let pluginSpec: PluginSpecification = {
             factoryId: this.selectedUriGenExtension.id,
             configType: this.selectedUriGenExtensionConf.type,
             configuration: this.selectedUriGenExtensionConf.getPropertiesAsMap()
-        }
+        };
         this.projectService.updateURIGeneratorConfiguration(this.project, pluginSpec).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.URI_GENERATOR_CONFIG_UPDATED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.URI_GENERATOR_CONFIG_UPDATED" });
             }
         );
     }

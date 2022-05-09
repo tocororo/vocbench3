@@ -1,7 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { RDFFormat } from "src/app/models/RDFFormat";
-import { RDF } from "src/app/models/Vocabulary";
 import { ExportServices } from "src/app/services/exportServices";
 import { VBEventHandler } from "src/app/utils/VBEventHandler";
 import { ModalType } from 'src/app/widget/modal/Modals';
@@ -58,7 +57,7 @@ export class ResourceTripleEditorComponent {
                     }
                 }
                 if (this.format == null) { //in case it has not been set (e.g. if cookie-stored format was not valid)
-                    this.format = this.rdfFormats.find(f => f.name == "Turtle"); 
+                    this.format = this.rdfFormats.find(f => f.name == "Turtle");
                 }
                 this.initDescription();
             }
@@ -97,12 +96,12 @@ export class ResourceTripleEditorComponent {
 
     applyChanges() {
         if (VBContext.getWorkingProject().isValidationEnabled()) {
-            this.basicModals.alertCheckCookie({key: "RESOURCE_VIEW.CODE_EDITOR.CODE_EDITOR"}, { key: "MESSAGES.CODE_EDITOR_VALIDATION_IGNORED_WARN" }, 
+            this.basicModals.alertCheckCookie({ key: "RESOURCE_VIEW.CODE_EDITOR.CODE_EDITOR" }, { key: "MESSAGES.CODE_EDITOR_VALIDATION_IGNORED_WARN" },
                 Cookie.WARNING_CODE_CHANGE_VALIDATION).then(
-                () => {
-                    this.applyChangesImpl();
-                }
-            );
+                    () => {
+                        this.applyChangesImpl();
+                    }
+                );
         } else {
             this.applyChangesImpl();
         }
@@ -118,7 +117,7 @@ export class ResourceTripleEditorComponent {
             },
             (err: Error) => {
                 if (err.name.endsWith("IllegalArgumentException")) {
-                    this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.CANNOT_EDIT_DIFFERENT_RESOURCE_CODE"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.OPERATION_DENIED" }, { key: "MESSAGES.CANNOT_EDIT_DIFFERENT_RESOURCE_CODE" }, ModalType.warning);
                 }
             }
         );

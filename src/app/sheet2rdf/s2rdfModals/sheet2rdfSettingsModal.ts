@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExtensionPointID, Scope } from "src/app/models/Plugins";
 import { SettingsServices } from "src/app/services/settingsServices";
@@ -25,7 +25,7 @@ export class Sheet2RdfSettingsModal {
 
     maxRowsTablePreview: number;
 
-    constructor(public activeModal: NgbActiveModal, private settingsService: SettingsServices, private basicModals: BasicModalServices) {}
+    constructor(public activeModal: NgbActiveModal, private settingsService: SettingsServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.s2rdfSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().sheet2RdfSettings;
@@ -43,11 +43,11 @@ export class Sheet2RdfSettingsModal {
         let maxRowsChanged: boolean = this.maxRowsTablePreview != this.s2rdfSettings.maxRowsTablePreview;
         if (namingStrategyChanged || maxRowsChanged) {
             if (namingStrategyChanged) {
-                this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.CHANGE_S2RDF_SETTINGS_CONFIRM"}, ModalType.warning).then(
+                this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.CHANGE_S2RDF_SETTINGS_CONFIRM" }, ModalType.warning).then(
                     () => { //confirmed
                         this.updateSettingsAndClose(true);
                     },
-                    () => {}
+                    () => { }
                 );
             } else { //only max row changed
                 this.updateSettingsAndClose(false);
@@ -72,9 +72,9 @@ export class Sheet2RdfSettingsModal {
                 } else {
                     this.cancel();
                 }
-                
+
             }
-        )
+        );
     }
 
     cancel() {

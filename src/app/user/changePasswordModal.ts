@@ -15,7 +15,7 @@ export class ChangePasswordModal {
     newPwd: string;
     newPwdConfirm: string;
 
-    constructor(public activeModal: NgbActiveModal, private userService: UserServices, private authService: AuthServices, 
+    constructor(public activeModal: NgbActiveModal, private userService: UserServices, private authService: AuthServices,
         private basicModals: BasicModalServices) {
     }
 
@@ -35,20 +35,20 @@ export class ChangePasswordModal {
     ok() {
         this.userService.changePassword(VBContext.getLoggedUser().getEmail(), this.oldPwd, this.newPwd).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PASSWORD_CHANGED_LOGGING_OUT"}).then(
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.PASSWORD_CHANGED_LOGGING_OUT" }).then(
                     () => {
                         this.authService.logout().subscribe(
                             () => {
                                 this.activeModal.close();
                             }
                         );
-                        
+
                     }
-                )
-                
+                );
+
             }
-        )
-        
+        );
+
     }
 
     cancel() {

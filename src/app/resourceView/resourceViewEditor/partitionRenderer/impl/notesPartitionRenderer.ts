@@ -40,11 +40,11 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
+            this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [this.rootProperty]).then(
                 selectedProp => {
                     return selectedProp;
                 },
-                () => { return null }
+                () => { return null; }
             )
         );
     }
@@ -60,11 +60,11 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
         let value: ARTLiteral = <ARTLiteral>eventData.value;
         eventData.locales.forEach(l => {
             let note: ARTLiteral = new ARTLiteral(value.getValue(), null, l.tag);
-            addFunctions.push({ 
-                function: this.getAddPartitionAware(<ARTURIResource>this.resource, predicate, note), 
-                value: note 
+            addFunctions.push({
+                function: this.getAddPartitionAware(<ARTURIResource>this.resource, predicate, note),
+                value: note
             });
-        })
+        });
         this.addMultiple(addFunctions);
     }
 

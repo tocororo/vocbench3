@@ -52,7 +52,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     visualizationMode: LexEntryVisualizationMode;
 
     //for visualization indexBased
-    private alphabet: string[] = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+    private alphabet: string[] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
     private firstDigitIndex: string = this.alphabet[0];
     private secondDigitIndex: string = this.alphabet[0];
     index: string;
@@ -86,7 +86,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
          * store it in a temp variable and then set to the workingLexicon (in case of lexiconChangeable, the workingLexicon would be
          * subscribed from the active lexicon in the lexicon list)
          */
-        let activeLexicon: ARTURIResource; 
+        let activeLexicon: ARTURIResource;
         if (this.lexicon == undefined) { //if @Input is not provided, get the lexicon from the preferences
             activeLexicon = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeLexicon;
         } else { //if @Input lexicon is provided, initialize the tree with this lexicon
@@ -129,8 +129,8 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     }
 
     getActionContext(): VBActionFunctionCtx {
-        let actionCtx: VBActionFunctionCtx = { 
-            metaClass: OntoLex.lexicalEntry, loadingDivRef: this.viewChildList.blockDivElement, 
+        let actionCtx: VBActionFunctionCtx = {
+            metaClass: OntoLex.lexicalEntry, loadingDivRef: this.viewChildList.blockDivElement,
             lexicon: { res: this.workingLexicon, lang: this.lexiconLang }
         };
         return actionCtx;
@@ -139,7 +139,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     //@Override
     isActionDisabled(action: ActionDescription) {
         //In addition to the cross-panel conditions, in this case the actions are disabled if the panel is in no-lexicon mode
-        return super.isActionDisabled(action) || !this.workingLexicon
+        return super.isActionDisabled(action) || !this.workingLexicon;
     }
 
     doSearch(searchedText: string) {
@@ -156,29 +156,29 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
         this.searchService.searchLexicalEntry(searchedText, searchSettings.useLocalName, searchSettings.useURI, searchSettings.useNotes,
             searchSettings.stringMatchMode, [this.workingLexicon], searchLangs, includeLocales, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-            searchResult => {
-                UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
-                if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
-                    return;
-                }
-                ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
-                    if (searchResult.length == 1) {
-                        this.selectSearchedResource(searchResult[0]);
-                    } else { //multiple results, ask the user which one select
-                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
-                            (selectedResources: ARTURIResource[]) => {
-                                this.selectSearchedResource(selectedResources[0]);
-                            },
-                            () => { }
-                        );
+                searchResult => {
+                    UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND_FOR", params: { text: searchedText } }, ModalType.warning);
+                        return;
                     }
-                } else { //searchBased
-                    this.viewChildList.forceList(searchResult);
+                    ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                    if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
+                        if (searchResult.length == 1) {
+                            this.selectSearchedResource(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.TOT_RESULTS_FOUND", params: { count: searchResult.length } }, searchResult, this.rendering).then(
+                                (selectedResources: ARTURIResource[]) => {
+                                    this.selectSearchedResource(selectedResources[0]);
+                                },
+                                () => { }
+                            );
+                        }
+                    } else { //searchBased
+                        this.viewChildList.forceList(searchResult);
+                    }
                 }
-            }
-        );
+            );
     }
 
     /**
@@ -199,18 +199,18 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     } else {
                         message += " " + this.translateService.instant("MESSAGES.SWITCH_LEXICON_FOR_SEARCHED_ENTRY_SELECT.LEXICON");
                     }
-                    this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, message, lexicons, this.rendering).then(
+                    this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, message, lexicons, this.rendering).then(
                         (lexicons: ARTURIResource[]) => {
                             this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), lexicons[0]); //update the active lexicon
                             setTimeout(() => { //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset
                                 this.selectSearchedResource(resource); //then open the list on the searched resource
                             });
                         },
-                        () => {}
+                        () => { }
                     );
                 }
             }
-        )
+        );
     }
 
     public selectSearchedResource(resource: ARTURIResource) {
@@ -293,7 +293,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                 }
                 this.viewChildList.init();
             },
-            () => {}
+            () => { }
         );
     }
 

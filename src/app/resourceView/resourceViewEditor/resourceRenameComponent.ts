@@ -79,16 +79,16 @@ export class ResourceRenameComponent {
         //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
         if (this.namespaceLocked) { //just the namespace has changed
             if (this.localName.trim() == "") {
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_LOCAL_NAME"}, ModalType.warning);
-                this.cancelRename()
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_LOCAL_NAME" }, ModalType.warning);
+                this.cancelRename();
                 return;
             }
             newUri = (<ARTURIResource>this.resource).getBaseURI() + this.localName;
         } else { //complete renaming (ns + localName)
             newUri = this.totalRenameInput.nativeElement.value;
             if (newUri.trim() == "") {
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: newUri}}, ModalType.warning);
-                this.cancelRename()
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: newUri } }, ModalType.warning);
+                this.cancelRename();
                 return;
             }
         }
@@ -115,8 +115,8 @@ export class ResourceRenameComponent {
     copyToClipboard() {
         //this method is called by clicking on a button visible only if the resource is a URIResource, so cast is safe
         navigator.clipboard.writeText((<ARTURIResource>this.resource).getURI()).then(() => {
-            this.toastService.show({key:"STATUS.OPERATION_DONE"}, { key: "MESSAGES.RESOURCE_URI_COPIED_IN_CLIPBOARD" });
-        }, function (err) {});
+            this.toastService.show({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.RESOURCE_URI_COPIED_IN_CLIPBOARD" });
+        }, (err) => { });
     }
 
 }

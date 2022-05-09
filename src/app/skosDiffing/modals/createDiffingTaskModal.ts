@@ -38,7 +38,7 @@ export class CreateDiffingTaskModal {
         //reset both datasets
         this.leftDataset = {};
         this.rightDataset = {};
-        
+
         if (this.mode == DiffingMode.projects) {
             if (this.projects == null) { //init projects list for target dataset
                 this.projectService.listProjects(VBContext.getWorkingProject(), false, true).subscribe(
@@ -56,23 +56,23 @@ export class CreateDiffingTaskModal {
             if (this.versions == null) {
                 this.versionsService.getVersions().subscribe(
                     versions => {
-                        this.versions = [{ 
-                            versionId: "CURRENT", 
-                            dateTimeLocal: "---", 
-                            dateTime: null, 
-                            repositoryId: null, 
-                            repositoryLocation: null, 
-                            repositoryStatus: RepositoryStatus.INITIALIZED 
+                        this.versions = [{
+                            versionId: "CURRENT",
+                            dateTimeLocal: "---",
+                            dateTime: null,
+                            repositoryId: null,
+                            repositoryLocation: null,
+                            repositoryStatus: RepositoryStatus.INITIALIZED
                         }];
                         this.versions = this.versions.concat(versions);
                         //init the left dataset to the current version
                         this.leftDataset.version = this.versions[0];
                     }
-                )
+                );
             } else {
                 this.leftDataset.version = this.versions[0];
             }
-            
+
         }
     }
 
@@ -83,7 +83,7 @@ export class CreateDiffingTaskModal {
             return this.leftDataset.project != null && this.rightDataset.project != null &&
                 this.leftDataset.version != null && this.rightDataset.version != null;
         }
-        
+
     }
 
     ok() {
@@ -95,12 +95,12 @@ export class CreateDiffingTaskModal {
         }
         if (this.mode == DiffingMode.projects) {
             if (!this.leftDataset.project.isRepositoryRemote()) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_PROJ", params:{project: this.leftDataset.project.getName()}},
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_PROJ", params: { project: this.leftDataset.project.getName() } },
                     ModalType.warning);
                 return;
             }
             if (!this.rightDataset.project.isRepositoryRemote()) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_PROJ", params:{project: this.rightDataset.project.getName()}},
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_PROJ", params: { project: this.rightDataset.project.getName() } },
                     ModalType.warning);
                 return;
             }
@@ -112,32 +112,32 @@ export class CreateDiffingTaskModal {
         } else { //versions
             //check if selected versions are different
             if (this.leftDataset.version == this.rightDataset.version) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_SAME_VERS"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RUN_SKOS_DIFFING_SAME_VERS" }, ModalType.warning);
                 return;
             }
             //check if selected versions are remote
             if ((this.leftDataset.version.repositoryId == null || this.leftDataset.version.repositoryId == null) && !this.leftDataset.project.isRepositoryRemote()) {
                 //current version of a local project
-                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS", params:{project: "CURRENT"}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS", params: { project: "CURRENT" } }, ModalType.warning);
                 return;
             }
             if (this.leftDataset.version.repositoryId != null && this.leftDataset.version.repositoryLocation != RepositoryLocation.REMOTE) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS", params:{project: this.leftDataset.version.versionId}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS", params: { project: this.leftDataset.version.versionId } }, ModalType.warning);
                 return;
             }
             if (this.rightDataset.version.repositoryId != null && this.rightDataset.version.repositoryLocation != RepositoryLocation.REMOTE) {
-                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS", params:{project: this.rightDataset.version.versionId}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RUN_SKOS_DIFFING_NO_SPARQL_ENDPOINT_VERS", params: { project: this.rightDataset.version.versionId } }, ModalType.warning);
                 return;
             }
-            this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project, 
+            this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project,
                 this.leftDataset.version.repositoryId, this.rightDataset.version.repositoryId, langs).subscribe(
-                taskId => {
-                    this.activeModal.close(taskId);
-                }
-            );
+                    taskId => {
+                        this.activeModal.close(taskId);
+                    }
+                );
         }
     }
-    
+
     cancel() {
         this.activeModal.dismiss();
     }

@@ -65,12 +65,12 @@ export class EdoalComponent {
     pageSelectorOpt: number;
 
     constructor(private edoalService: EdoalServices, private alignmentService: AlignmentServices, private projectService: ProjectServices, private resourcesService: ResourcesServices,
-        private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
+        private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.initProjects();
     }
-    
+
     initProjects() {
         this.edoalService.getAlignedProjects().subscribe(
             projects => {
@@ -131,9 +131,9 @@ export class EdoalComponent {
         } else if (project.getModelType() == OWL.uri) {
             hiddenTabs.push(RDFResourceRolesEnum.dataRange);
         } else if (project.getModelType() == SKOS.uri) {
-            hiddenTabs.push(...[RDFResourceRolesEnum.cls, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange])
+            hiddenTabs.push(...[RDFResourceRolesEnum.cls, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange]);
         } else if (project.getModelType() == OntoLex.uri) {
-            hiddenTabs.push(...[RDFResourceRolesEnum.cls,  RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme,
+            hiddenTabs.push(...[RDFResourceRolesEnum.cls, RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme,
                 RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange]);
         }
         return hiddenTabs;
@@ -145,8 +145,8 @@ export class EdoalComponent {
                 // this.alignemnts = alignemnts;
                 //paging handler
                 let totCorrespondences = this.alignemnts[0].getAdditionalProperty('correspondences');
-                this.totPage = Math.floor(totCorrespondences/this.pageSize);
-                if (totCorrespondences % this.pageSize > 0){
+                this.totPage = Math.floor(totCorrespondences / this.pageSize);
+                if (totCorrespondences % this.pageSize > 0) {
                     this.totPage++;
                 }
 
@@ -157,14 +157,14 @@ export class EdoalComponent {
 
                 this.listCorrespondences();
             }
-        )
+        );
     }
 
     private ensureExistingAlignment(): Observable<void> {
         return this.edoalService.getAlignments().pipe(
             mergeMap(alignments => {
                 if (alignments.length > 0) {
-                    this.alignemnts = alignments
+                    this.alignemnts = alignments;
                     return of(null);
                 } else {
                     return this.edoalService.createAlignment().pipe(
@@ -175,10 +175,10 @@ export class EdoalComponent {
                                 })
                             );
                         })
-                    )
+                    );
                 }
             })
-        )
+        );
     }
 
     /** ======================
@@ -196,13 +196,13 @@ export class EdoalComponent {
                     c.mappingProperty.forEach(mp => {
                         mp.setShow(ResourceUtils.getQName(mp.getURI(), VBContext.getPrefixMappings()));
                     });
-                })
+                });
                 this.renderCorrespondences();
                 this.selectedCorrespondence = null;
             },
             (err: Error) => {
                 if (err.name.endsWith("IndexingLanguageNotFound")) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_LANG_DETECTED_IN_EDOAL_ALIGNMENT", params:{projName: this.leftProjCtx.getProject().getName()}},
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.NO_LANG_DETECTED_IN_EDOAL_ALIGNMENT", params: { projName: this.leftProjCtx.getProject().getName() } },
                         ModalType.warning);
                 }
             }
@@ -228,7 +228,7 @@ export class EdoalComponent {
                                 c.leftEntity[0] = r;
                             }
                         });
-                    })
+                    });
                 }
             );
             HttpServiceContext.setContextProject(this.rightProjCtx.getProject());
@@ -242,7 +242,7 @@ export class EdoalComponent {
                                 c.rightEntity[0] = r;
                             }
                         });
-                    })
+                    });
                 }
             );
         }
@@ -258,7 +258,7 @@ export class EdoalComponent {
 
     addCorrespondence() {
         if (this.measure < 0 || this.measure > 1) {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_ALIGNMENT_MEASURE"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_ALIGNMENT_MEASURE" }, ModalType.warning);
             return;
         }
         this.edoalService.createCorrespondence(this.alignemnts[0], this.leftSelectedResource, this.rightSelectedResource, this.selectedRelation.relation, this.measure).subscribe(
@@ -289,7 +289,7 @@ export class EdoalComponent {
             () => {
                 this.listCorrespondences();
             }
-        )
+        );
     }
 
     changeMeasure(correspondence: Correspondence) {
@@ -303,7 +303,7 @@ export class EdoalComponent {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -312,7 +312,7 @@ export class EdoalComponent {
             () => {
                 this.listCorrespondences();
             }
-        )
+        );
     }
 
     /**

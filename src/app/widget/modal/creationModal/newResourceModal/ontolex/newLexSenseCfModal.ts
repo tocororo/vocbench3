@@ -24,7 +24,7 @@ export class NewLexSenseCfModal extends AbstractCustomConstructorModal {
     //standard form
     linkedResource: string;
 
-    pickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.property, 
+    pickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.property,
         RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.skosCollection];
 
     constructor(public activeModal: NgbActiveModal, cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
@@ -41,11 +41,11 @@ export class NewLexSenseCfModal extends AbstractCustomConstructorModal {
     }
 
     pickLexicalConcept() {
-        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}).then(
+        this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT" }).then(
             (res: ARTURIResource) => {
                 this.linkedResource = res.getURI();
             }
-        )
+        );
     }
 
     updateLinkedRes(res: ARTURIResource) {
@@ -69,7 +69,7 @@ export class NewLexSenseCfModal extends AbstractCustomConstructorModal {
             createPlain: this.createPlainCheck,
             cls: this.resourceClass,
             cfValue: null
-        }
+        };
         //set class only if not the default
         if (this.resourceClass.getURI() != OntoLex.lexicalSense.getURI()) {
             returnedData.cls = this.resourceClass;
@@ -91,7 +91,7 @@ export class NewLexSenseCfModalReturnData {
     linkedResource: ARTURIResource; //lexicalEntry or reference
     nature: PromptedResourceNature;
     createPlain: boolean;
-    cls: ARTURIResource
+    cls: ARTURIResource;
     cfValue: CustomFormValue;
 }
 

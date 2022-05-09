@@ -30,7 +30,7 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_LABEL_RELATION"}, this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue({ key: "DATA.ACTIONS.ADD_LABEL_RELATION" }, this.resource, predicate, propChangeable).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
@@ -44,8 +44,8 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
                 });
                 this.addMultiple(addFunctions);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
@@ -55,7 +55,7 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         this.getRemoveFunction(predicate, object).subscribe(
             stResp => this.update.emit()
-        )
+        );
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {

@@ -22,7 +22,7 @@ export class RdfsMembersModal {
 
     selectedConstituent: ARTURIResource;
 
-    constructor(public activeModal: NgbActiveModal, private browsingModals: BrowsingModalServices) {}
+    constructor(public activeModal: NgbActiveModal, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
         this.updateRdfNProp();
@@ -37,7 +37,7 @@ export class RdfsMembersModal {
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [this.rootProperty]).then(
             (selectedProp: any) => {
                 if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
                     this.enrichingProperty = selectedProp;
@@ -48,7 +48,7 @@ export class RdfsMembersModal {
     }
 
     ok() {
-        this.activeModal.close({property: this.enrichingProperty, value: this.selectedConstituent});
+        this.activeModal.close({ property: this.enrichingProperty, value: this.selectedConstituent });
     }
 
     cancel() {

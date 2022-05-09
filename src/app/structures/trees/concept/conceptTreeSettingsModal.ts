@@ -24,7 +24,7 @@ export class ConceptTreeSettingsModal {
     visualizationModes: { value: ConceptTreeVisualizationMode, labelTranslationKey: string }[] = [
         { value: ConceptTreeVisualizationMode.hierarchyBased, labelTranslationKey: VisualizationModeTranslation.translationMap[ConceptTreeVisualizationMode.hierarchyBased] },
         { value: ConceptTreeVisualizationMode.searchBased, labelTranslationKey: VisualizationModeTranslation.translationMap[ConceptTreeVisualizationMode.searchBased] }
-    ]
+    ];
 
     private safeToGoLimit: number;
 
@@ -32,7 +32,7 @@ export class ConceptTreeSettingsModal {
 
     private broaderProps: ARTURIResource[] = [];
     private narrowerProps: ARTURIResource[] = [];
-    private includeSubProps: boolean
+    private includeSubProps: boolean;
     private syncInverse: boolean;
 
     private selectedBroader: ARTURIResource;
@@ -45,7 +45,7 @@ export class ConceptTreeSettingsModal {
     private selectedMultischemeMode: MultischemeMode;
 
     constructor(public activeModal: NgbActiveModal, private resourceService: ResourcesServices, private propService: PropertyServices,
-        private settingsService: SettingsServices, private vbProp: VBProperties, private browsingModals: BrowsingModalServices) {}
+        private settingsService: SettingsServices, private vbProp: VBProperties, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
         let conceptTreePref: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
@@ -54,7 +54,7 @@ export class ConceptTreeSettingsModal {
         this.selectedMultischemeMode = conceptTreePref.multischemeMode;
 
         this.safeToGoLimit = conceptTreePref.safeToGoLimit;
-        
+
         this.baseBroaderProp = conceptTreePref.baseBroaderProp;
 
         //init broader properties
@@ -70,14 +70,14 @@ export class ConceptTreeSettingsModal {
 
         this.userGroup = VBContext.getProjectUserBinding().getGroup();
         //in case of userGroup get the baseBroaderProp of the group
-        if (this.userGroup != null) { 
+        if (this.userGroup != null) {
 
             this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_GROUP).subscribe(
                 settings => {
                     let concTreePref: ConceptTreePreference = settings.getPropertyValue(SettingsEnum.conceptTree);
                     this.userGroupBaseBroaderProp = (concTreePref != null) ? conceptTreePref.baseBroaderProp : null;
                 }
-            )
+            );
         }
     }
 
@@ -118,11 +118,11 @@ export class ConceptTreeSettingsModal {
         if (this.userGroup != null) {
             rootBroader = new ARTURIResource(this.userGroupBaseBroaderProp);
         }
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [rootBroader]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [rootBroader]).then(
             (prop: ARTURIResource) => {
                 this.baseBroaderProp = prop.getURI();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -131,7 +131,7 @@ export class ConceptTreeSettingsModal {
      */
 
     addBroader() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.broader]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [SKOS.broader]).then(
             (prop: ARTURIResource) => {
                 if (!ResourceUtils.containsNode(this.broaderProps, prop)) {
                     this.broaderProps.push(prop);
@@ -141,12 +141,12 @@ export class ConceptTreeSettingsModal {
                     }
                 }
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     addNarrower() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.narrower]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [SKOS.narrower]).then(
             (prop: ARTURIResource) => {
                 if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {
                     this.narrowerProps.push(prop);
@@ -156,8 +156,8 @@ export class ConceptTreeSettingsModal {
                     }
                 }
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     removeBroader() {
@@ -216,7 +216,7 @@ export class ConceptTreeSettingsModal {
                         }
                     });
                 }
-            )
+            );
         }
         if (this.narrowerProps.length > 0) {
             this.propService.getInverseProperties(this.narrowerProps).subscribe(
@@ -230,7 +230,7 @@ export class ConceptTreeSettingsModal {
                         }
                     });
                 }
-            )
+            );
         }
     }
 
@@ -261,7 +261,7 @@ export class ConceptTreeSettingsModal {
                     this.syncInverse = concTreePref.syncInverse != false;
                 }
             }
-        )
+        );
     }
 
 
@@ -302,7 +302,7 @@ export class ConceptTreeSettingsModal {
             //eventually check if every property in the pristine collection is still in the current collection (properties removed?)...
             if (!changedNarrowerProps) {
                 //there is some property in the pristine narrowerProps that is not in the new narrowerProps list
-                changedNarrowerProps = this.pristineConcPref.narrowerProps.some(np => !ResourceUtils.containsNode(this.narrowerProps, new ARTURIResource(np)))
+                changedNarrowerProps = this.pristineConcPref.narrowerProps.some(np => !ResourceUtils.containsNode(this.narrowerProps, new ARTURIResource(np)));
             }
             //...and finally check if every property in the current was in the pristine (properties added?)
             if (!changedNarrowerProps) {

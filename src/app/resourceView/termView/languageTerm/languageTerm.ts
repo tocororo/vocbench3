@@ -72,14 +72,14 @@ export class LanguageTermComponent {
                     let newLitForm: ARTLiteral = new ARTLiteral(newValue, null, this.term.lang);
                     this.resourcesService.updateLexicalization(<ARTResource>this.term.object, SKOSXL.literalForm, oldLitForm, newLitForm).subscribe(
                         stResp => this.update.emit()
-                    )
+                    );
                 }
             } else if (this.lexicalizationModelType == SKOS.uri) {
                 if (oldValue != newValue) {
                     let newLitForm: ARTLiteral = new ARTLiteral(newValue, null, this.term.lang);
                     this.resourcesService.updateLexicalization(<ARTResource>this.resource, this.term.predicate, <ARTLiteral>this.term.object, newLitForm).subscribe(
                         stResp => this.update.emit()
-                    )
+                    );
                 }
             }
         } else { // case add a new term
@@ -90,7 +90,7 @@ export class LanguageTermComponent {
                 } else if (this.term.predicate.equals(SKOSXL.altLabel)) {
                     this.skosxlService.addAltLabel(<ARTURIResource>this.resource, newLitForm).subscribe(
                         () => this.update.emit()
-                    )
+                    );
                 }
             } else if (this.lexicalizationModelType == SKOS.uri) {
                 let newLitForm: ARTLiteral = new ARTLiteral(newValue, null, this.term.lang);
@@ -99,7 +99,7 @@ export class LanguageTermComponent {
                 } else if (this.term.predicate.equals(SKOS.altLabel)) {
                     this.skosService.addAltLabel(<ARTURIResource>this.resource, newLitForm).subscribe(
                         () => this.update.emit()
-                    )
+                    );
                 }
             }
         }
@@ -119,14 +119,14 @@ export class LanguageTermComponent {
         }
         setPrefLabelFn.subscribe(
             () => {
-                this.update.emit()
+                this.update.emit();
             },
             (err: Error) => {
                 if (err.name.endsWith("PrefPrefLabelClashException")) {
                     let msg = err.message;
                     if (prefLabelClashMode == PrefLabelClashMode.warning) { //mode warning => ask user if he wants to force the operation
                         msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                        this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                             confirm => {
                                 this.setPrefLabel(resource, label, null, false);
                             },
@@ -135,11 +135,11 @@ export class LanguageTermComponent {
                             }
                         );
                     } else { //mode forbid => just show the error message
-                        this.basicModals.alert({key:"STATUS.WARNING"}, msg, ModalType.warning)
+                        this.basicModals.alert({ key: "STATUS.WARNING" }, msg, ModalType.warning);
                     }
                 } else if (err.name.endsWith("PrefAltLabelClashException")) {
                     let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                    this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                         confirm => {
                             this.setPrefLabel(resource, label, false);
                         },
@@ -148,12 +148,12 @@ export class LanguageTermComponent {
                         }
                     );
                 } else {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, err.message, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, err.message, ModalType.warning);
                     this.delete.emit();
                 }
             }
 
-        )
+        );
     }
 
 

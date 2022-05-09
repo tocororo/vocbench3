@@ -31,8 +31,8 @@ export class SkosDiffingComponent {
 
     private versions: VersionInfo[];
 
-    constructor(private diffingService: SkosDiffingServices, private versionsService: VersionsServices, 
-        private basicModals: BasicModalServices, private modalService: NgbModal) {}
+    constructor(private diffingService: SkosDiffingServices, private versionsService: VersionsServices,
+        private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.listTasks();
@@ -61,14 +61,14 @@ export class SkosDiffingComponent {
                                     let leftVers = this.versions.find(v => v.repositoryId == t.rightDataset.versionRepoId);
                                     t.rightDataset.versionId = (leftVers != null) ? leftVers.versionId : t.rightDataset.versionRepoId;
                                 }
-                            })
+                            });
                         }
                     );
                 }
             },
             (err: Error) => {
                 this.serverDown = true;
-                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.SKOS_DIFFING_SERVER_NOT_RESPONDING"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.SKOS_DIFFING_SERVER_NOT_RESPONDING" }, ModalType.warning);
             }
         );
     }
@@ -81,7 +81,7 @@ export class SkosDiffingComponent {
                 map(versions => {
                     this.versions = versions;
                 })
-            )
+            );
         }
     }
 
@@ -89,7 +89,7 @@ export class SkosDiffingComponent {
         if (this.selectedTask == task) {
             this.selectedTask = null;
         } else {
-            this.selectedTask = task
+            this.selectedTask = task;
         }
     }
 
@@ -98,7 +98,7 @@ export class SkosDiffingComponent {
             () => {
                 this.listTasks();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -123,7 +123,7 @@ export class SkosDiffingComponent {
 
 }
 
-export interface TaskResultFormatStruct { 
-    label: string; 
+export interface TaskResultFormatStruct {
+    label: string;
     value: string;
 }

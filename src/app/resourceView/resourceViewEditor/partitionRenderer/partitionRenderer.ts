@@ -117,13 +117,13 @@ export abstract class PartitionRenderer {
             this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.resource);
         this.addExteranlResourceAllowed = ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
         this.addManuallyAllowed = !(this.partition in ResViewPartition) || ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1; //custom partition OR add manually foreseen
-        
+
     }
 
     /**
      * Listener of add event fired by "+" or "add value (manually)" buttons (manually parameter true)
      */
-    addHandler(predicate?: ARTURIResource, action?: AddAction) {//manually becomes type: "default"|manuelly|remote
+    addHandler(predicate?: ARTURIResource, action?: AddAction) { //manually becomes type: "default"|manuelly|remote
         if (!predicate) {
             this.getPredicateToEnrich().subscribe(
                 predicate => {
@@ -137,7 +137,7 @@ export abstract class PartitionRenderer {
                         }
                     }
                 }
-            )
+            );
         } else {
             if (action == AddAction.manually) {
                 this.addManually(predicate, false);
@@ -148,7 +148,7 @@ export abstract class PartitionRenderer {
             }
         }
     }
-    
+
     /**
      * Should allow to enrich a property by opening a modal and selecting a value.
      * It can get an optional parameter "property".
@@ -187,31 +187,31 @@ export abstract class PartitionRenderer {
                                 stResp => this.update.emit()
                             );
                         } else { //value type not compliant with predicate range
-                            this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params:{property: property.getShow()}},
+                            this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.VALUE_TYPE_PROPERTY_RANGE_INCONSISTENT_CONFIRM", params: { property: property.getShow() } },
                                 ModalType.warning).then(
-                                confirm => {
-                                    this.resourcesService.addValue(this.resource, property, value).subscribe(
-                                        stResp => this.update.emit()
-                                    );
-                                },
-                                reject => {}
-                            );
+                                    confirm => {
+                                        this.resourcesService.addValue(this.resource, property, value).subscribe(
+                                            stResp => this.update.emit()
+                                        );
+                                    },
+                                    reject => { }
+                                );
                         }
                     }
-                )
+                );
             },
-            () => {}
+            () => { }
         );
     }
 
     private addExternal(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.browseExternalResource({key:"ACTIONS.SELECT_EXTERNAL_RESOURCE"}, predicate, propChangeable).then(
+        this.resViewModals.browseExternalResource({ key: "ACTIONS.SELECT_EXTERNAL_RESOURCE" }, predicate, propChangeable).then(
             (data: BrowseExternalResourceModalReturnData) => {
                 this.resourcesService.addValue(this.resource, data.property, data.resource).subscribe(
                     stResp => this.update.emit()
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -226,23 +226,23 @@ export abstract class PartitionRenderer {
                     this.enrichWithCustomForm(predicate, data.form);
                 }
             }
-        )
+        );
     }
 
     protected enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
-        this.resViewModals.enrichCustomForm({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, form.getId()).then(
+        this.resViewModals.enrichCustomForm({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, form.getId()).then(
             (cfValue: CustomFormValue) => {
                 this.getAddPartitionAware(this.resource, predicate, cfValue).subscribe(() => this.update.emit());
             },
             () => { }
-        )
+        );
     }
 
     /**
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
-     protected enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        this.creationModals.newTypedLiteral({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, predicate, null, allowedDatatypes, dataRanges, true, true).then(
+    protected enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
+        this.creationModals.newTypedLiteral({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, predicate, null, allowedDatatypes, dataRanges, true, true).then(
             (literals: ARTLiteral[]) => {
                 let addFunctions: MultiActionFunction[] = [];
                 literals.forEach((l: ARTLiteral) => {
@@ -260,8 +260,8 @@ export abstract class PartitionRenderer {
     /**
      * Opens a modal to enrich the predicate with a resource 
      */
-     protected enrichWithResource(predicate: ARTURIResource) {
-        this.resViewModals.addPropertyValue({key: "ACTIONS.ADD_X", params:{x: predicate.getShow()}}, this.resource, predicate, false).then(
+    protected enrichWithResource(predicate: ARTURIResource) {
+        this.resViewModals.addPropertyValue({ key: "ACTIONS.ADD_X", params: { x: predicate.getShow() } }, this.resource, predicate, false).then(
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
@@ -275,7 +275,7 @@ export abstract class PartitionRenderer {
                 this.addMultiple(addFunctions);
             },
             () => { }
-        )
+        );
     }
 
     /**
@@ -286,7 +286,7 @@ export abstract class PartitionRenderer {
      * @param predicate 
      * @param value 
      */
-     protected getAddPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue): Observable<void> {
+    protected getAddPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue): Observable<void> {
         return this.resourcesService.addValue(resource, predicate, value);
     }
 
@@ -310,10 +310,10 @@ export abstract class PartitionRenderer {
      */
     protected removeHandler(predicate: ARTURIResource, object?: ARTNode) {
         if (object == null) {
-            this.basicModals.confirm({key: "ACTIONS.DELETE_ALL_VALUES"}, {key:"MESSAGES.DELETE_ALL_VALUES_CONFIRM", params:{property: predicate.getShow()}}, ModalType.warning).then(
+            this.basicModals.confirm({ key: "ACTIONS.DELETE_ALL_VALUES" }, { key: "MESSAGES.DELETE_ALL_VALUES_CONFIRM", params: { property: predicate.getShow() } }, ModalType.warning).then(
                 yes => this.removeAllValues(predicate),
                 no => { }
-            )
+            );
         } else {
             this.removePredicateObject(predicate, object);
         }
@@ -331,7 +331,7 @@ export abstract class PartitionRenderer {
                     deleteFunctions.push({
                         function: this.getRemoveFunction(predicate, v),
                         value: v
-                    })
+                    });
                 });
                 MultipleActionHelper.executeActions(deleteFunctions, MultiActionType.deletion, this.basicModals, null, null, () => this.update.emit());
             }
@@ -349,7 +349,7 @@ export abstract class PartitionRenderer {
      */
     protected getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (
-            predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource() && 
+            predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource() &&
             !object.getAdditionalProperty(ResAttribute.NOT_REIFIED)
         ) {
             return this.cfService.removeReifiedResource(this.resource, predicate, object);
@@ -403,7 +403,7 @@ export abstract class PartitionRenderer {
      * Fired when an object in a subPanel is double clicked. It should simply emit a objectDblClick event.
      */
     protected objectDblClick(obj: ARTNode) {
-        if (obj.isResource()) {//emit double click only for resources (not for ARTLiteral that cannot be described in a ResView)
+        if (obj.isResource()) { //emit double click only for resources (not for ARTLiteral that cannot be described in a ResView)
             this.dblclickObj.emit(<ARTResource>obj);
         }
     }

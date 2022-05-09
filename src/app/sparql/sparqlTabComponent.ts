@@ -28,33 +28,33 @@ export class SparqlTabComponent extends AbstractSparqlTabComponent {
     //LOAD/SAVE/PARAMETERIZE QUERY
 
     loadConfiguration() {
-        this.sharedModals.loadConfiguration({key:"SPARQL.ACTIONS.LOAD_SPARQL_QUERY"}, ConfigurationComponents.SPARQL_STORE).then(
+        this.sharedModals.loadConfiguration({ key: "SPARQL.ACTIONS.LOAD_SPARQL_QUERY" }, ConfigurationComponents.SPARQL_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
                 let relativeRef = data.reference.relativeReference;
                 this.storedQueryReference = relativeRef;
-                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":")+1));
+                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":") + 1));
                 this.setLoadedQueryConf(data.configuration);
                 this.savedStatus.emit(true);
             },
-            () => {}
+            () => { }
         );
     }
 
     saveConfiguration() {
-        let queryConfig: { [key: string]: any} = {
+        let queryConfig: { [key: string]: any } = {
             sparql: this.query,
             type: this.queryMode,
             includeInferred: this.inferred
-        }
-        this.sharedModals.storeConfiguration({key:"SPARQL.ACTIONS.SAVE_SPARQL_QUERY"}, ConfigurationComponents.SPARQL_STORE, queryConfig, this.storedQueryReference).then(
+        };
+        this.sharedModals.storeConfiguration({ key: "SPARQL.ACTIONS.SAVE_SPARQL_QUERY" }, ConfigurationComponents.SPARQL_STORE, queryConfig, this.storedQueryReference).then(
             (relativeRef: string) => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.QUERY_SAVED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.QUERY_SAVED" });
                 this.storedQueryReference = relativeRef;
-                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":")+1));
+                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":") + 1));
                 this.savedStatus.emit(true);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
 

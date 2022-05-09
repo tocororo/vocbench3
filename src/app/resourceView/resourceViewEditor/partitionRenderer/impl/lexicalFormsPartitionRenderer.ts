@@ -38,14 +38,14 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (!this.isKnownProperty(predicate)) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.UNHANDLED_LEXICAL_FORM_PROPERTY", params:{property: predicate.getShow()}}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.UNHANDLED_LEXICAL_FORM_PROPERTY", params: { property: predicate.getShow() } }, ModalType.warning);
             return;
         }
 
         this.getLexiconLang().subscribe(
             lang => {
                 this.lexiconLang = lang;
-                this.creationModals.newResourceWithLiteralCf({key: "ACTIONS.CREATE_X", params: {x: predicate.getShow()}}, OntoLex.form, true, "Written rep", this.lexiconLang, { constrain: true, locale: true }).then(
+                this.creationModals.newResourceWithLiteralCf({ key: "ACTIONS.CREATE_X", params: { x: predicate.getShow() } }, OntoLex.form, true, "Written rep", this.lexiconLang, { constrain: true, locale: true }).then(
                     (data: NewResourceWithLiteralCfModalReturnData) => {
                         if (predicate.getURI() == OntoLex.canonicalForm.getURI()) {
                             this.ontolexService.setCanonicalForm(<ARTURIResource>this.resource, data.literal, data.uriResource, data.cfValue).subscribe(
@@ -57,7 +57,7 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
                             );
                         }
                     },
-                    () => {}
+                    () => { }
                 );
             }
         );
@@ -74,11 +74,11 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return from(
-            this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
+            this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, this.rootProperties).then(
                 (selectedProp: any) => {
                     return selectedProp;
                 },
-                () => {}
+                () => { }
             )
         );
     }
@@ -90,7 +90,7 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         this.getRemoveFunction(predicate, object).subscribe(
             stResp => this.update.emit()
-        )
+        );
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {

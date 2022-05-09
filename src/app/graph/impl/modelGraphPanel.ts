@@ -22,7 +22,7 @@ export class ModelGraphPanel extends AbstractGraphPanel {
         { property: OWL.equivalentClass, show: false },
         { property: RDFS.subClassOf, show: true }
     ];
-    
+
     constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(basicModals, browsingModals);
     }
@@ -32,17 +32,17 @@ export class ModelGraphPanel extends AbstractGraphPanel {
     }
 
     addNode() {
-        this.browsingModals.browseClassTree({key:"ACTIONS.ADD_NODE"}).then(
+        this.browsingModals.browseClassTree({ key: "ACTIONS.ADD_NODE" }).then(
             (cls: ARTURIResource) => {
                 if (!cls.getAdditionalProperty(ResAttribute.EXPLICIT)) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED", params:{resource: cls.getShow()}},
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED", params: { resource: cls.getShow() } },
                         ModalType.warning);
                     return;
                 }
                 this.viewChildGraph.addNode(cls);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
 }

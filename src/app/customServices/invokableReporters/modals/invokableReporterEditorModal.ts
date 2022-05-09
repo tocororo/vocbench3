@@ -48,14 +48,14 @@ export class InvokableReporterEditorModal {
                     this.scopes = cfgMgr.configurationScopes;
                     this.selectedScope = cfgMgr.scope;
                 }
-            )
+            );
         } else { //edit
             this.id = this.reporterRef.identifier;
             this.invokableReporterService.getInvokableReporter(this.reporterRef.relativeReference).subscribe(
                 reporter => {
                     this.initForm(reporter);
                 }
-            )
+            );
         }
     }
 
@@ -80,12 +80,12 @@ export class InvokableReporterEditorModal {
                         sourcePath: f,
                         destinationPath: "resources/" + f.substring(f.lastIndexOf("/") + 1),
                         required: true
-                    }
-                })
+                    };
+                });
                 this.form.additionalFiles.value = additionalFiles;
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     removeAdditionalFile(file: AdditionalFile) {
@@ -124,14 +124,14 @@ export class InvokableReporterEditorModal {
             let reference = ScopeUtils.serializeScope(this.selectedScope) + ":" + this.id;
             //check if id is not duplicated
             if (this.existingReporters.some(r => r.relativeReference == reference)) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_INVOKABLE_REPORTER_ID"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_INVOKABLE_REPORTER_ID" }, ModalType.warning);
                 return;
             }
             this.invokableReporterService.createInvokableReporter(reference, reporterDef).subscribe(
                 () => {
                     this.activeModal.close();
                 }
-            )
+            );
         } else { //edit
             this.invokableReporterService.updateInvokableReporter(this.reporterRef.relativeReference, reporterDef).subscribe(
                 () => {
@@ -139,7 +139,7 @@ export class InvokableReporterEditorModal {
                 }
             );
         }
-        
+
     }
 
     cancel() {

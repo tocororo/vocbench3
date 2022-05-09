@@ -34,15 +34,15 @@ export class EvokedLexicalConceptsPartitionRenderer extends PartitionRenderSingl
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (predicate.getURI() == this.rootProperty.getURI()) {
-            this.creationModals.newConceptualizationCf({key:"DATA.ACTIONS.ADD_CONCEPTUALIZATION"}, false, false).then(
+            this.creationModals.newConceptualizationCf({ key: "DATA.ACTIONS.ADD_CONCEPTUALIZATION" }, false, false).then(
                 (data: NewConceptualizationCfModalReturnData) => {
                     this.ontolexService.addConceptualization(this.resource, data.linkedResource, true, data.createSense, data.cls, data.cfValue).subscribe(
                         () => {
-                            this.update.emit()
+                            this.update.emit();
                         }
                     );
                 },
-                () => {}
+                () => { }
             );
         } else {
             this.enrichProperty(predicate);

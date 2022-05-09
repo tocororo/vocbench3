@@ -40,19 +40,19 @@ export class ResourceViewContextMenu {
     ngOnInit() {
         //init the menu items
         this.isSetDeprecatedDisabled = (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) || 
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) ||
             !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesSetDeprecated, this.resource)
         );
         this.isAlignDisabled = (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) || 
-		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentAddAlignment, this.resource)
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) ||
+            !AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentAddAlignment, this.resource)
         );
         this.isSpawnFromLabelDisabled = (
-            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
-		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel, null, this.resource)
+            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+            !AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel, null, this.resource)
         );
         this.isAssertInferredDisabled = (
-            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
             !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.resource)
         );
         this.isGraphAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.graphRead);
@@ -83,16 +83,16 @@ export class ResourceViewContextMenu {
     }
 
     private spawnNewConceptWithLabel() {
-        this.creationModals.newConceptFromLabel({key:"RESOURCE_VIEW.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL"}, this.resource, SKOS.concept).then(
+        this.creationModals.newConceptFromLabel({ key: "RESOURCE_VIEW.ACTIONS.SPAWN_CONCEPT_FROM_XLABEL" }, this.resource, SKOS.concept).then(
             data => {
                 //from the resView of the xLabel I don't know the concept to which it belongs, 
                 //so oldConcept in spawnNewConceptFromLabel request is null and lets the server find the oldConcept
                 this.refactorService.spawnNewConceptFromLabel(this.resource, data.schemes, null,
                     data.uriResource, data.broader, data.cfValue).subscribe(
-                    stResp => {
-                        this.update.emit();
-                    }
-                );
+                        stResp => {
+                            this.update.emit();
+                        }
+                    );
             },
             () => { }
         );

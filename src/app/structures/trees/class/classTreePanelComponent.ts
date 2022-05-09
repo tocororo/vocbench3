@@ -58,7 +58,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     //Top Bar commands handlers
 
     getActionContext(): VBActionFunctionCtx {
-        let actionCtx: VBActionFunctionCtx = { metaClass: this.creatingClassType, loadingDivRef: this.viewChildTree.blockDivElement }
+        let actionCtx: VBActionFunctionCtx = { metaClass: this.creatingClassType, loadingDivRef: this.viewChildTree.blockDivElement };
         return actionCtx;
     }
 
@@ -80,25 +80,25 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], searchSettings.useLocalName, searchSettings.useURI,
             searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null, null,
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-            searchResult => {
-                UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
-                } else { //1 or more results
-                    if (searchResult.length == 1) {
-                        this.openTreeAt(searchResult[0]);
-                    } else { //multiple results, ask the user which one select
-                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
-                            (selectedResources: ARTURIResource[]) => {
-                                this.openTreeAt(selectedResources[0]);
-                            },
-                            () => { }
-                        );
+                searchResult => {
+                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND_FOR", params: { text: searchedText } }, ModalType.warning);
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.openTreeAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                            this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.TOT_RESULTS_FOUND", params: { count: searchResult.length } }, searchResult, this.rendering).then(
+                                (selectedResources: ARTURIResource[]) => {
+                                    this.openTreeAt(selectedResources[0]);
+                                },
+                                () => { }
+                            );
+                        }
                     }
                 }
-            }
-        );
+            );
     }
 
     //this is public so it can be invoked from classIndividualTreePanelComponent
@@ -115,7 +115,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         this.graphModals.openModelGraph(this.selectedNode, this.rendering);
     }
 
-    openUmlGraph(){
+    openUmlGraph() {
         this.graphModals.openUmlGraph(this.rendering);
     }
 
@@ -131,5 +131,5 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
             }
         );
     }
-    
+
 }

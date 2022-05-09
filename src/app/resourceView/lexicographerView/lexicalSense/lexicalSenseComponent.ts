@@ -45,7 +45,7 @@ export class LexicalSenseComponent {
     addTranslationAuthorized: boolean;
 
     constructor(private ontolexService: OntoLexLemonServices, private resourceService: ResourcesServices,
-        private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices, private lexViewModals: LexViewModalService) {}
+        private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices, private lexViewModals: LexViewModalService) { }
 
     ngOnInit() {
         let langAuthorized = VBContext.getLoggedUser().isAdmin() || VBContext.getProjectUserBinding().getLanguages().find(l => l.toLocaleLowerCase() == this.lang.toLocaleLowerCase());
@@ -58,7 +58,7 @@ export class LexicalSenseComponent {
         this.addConceptAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddConcept) && !this.readonly;
         this.setReferenceAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetReference) && !this.readonly;
         //reification requires auth for addConceptualization/Lexicalization if the sense is plain with concept or with reference
-        this.reifySenseAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddConceptualization, this.entry.id) && 
+        this.reifySenseAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddConceptualization, this.entry.id) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization, this.entry.id) && !this.readonly;
 
         //TODO server side this service has a temp preauthorized, keep it updated when it will be changed
@@ -79,65 +79,65 @@ export class LexicalSenseComponent {
                     () => {
                         this.update.emit();
                     }
-                )
+                );
             } else if (this.sense.reference != null) {
                 this.ontolexService.removePlainLexicalization(this.entry.id, this.sense.reference[0]).subscribe(
                     () => {
                         this.update.emit();
                     }
-                )
+                );
             }
         }
     }
 
     reifyPlainSense() {
         if (this.sense.concept != null) {
-            this.browsingModals.browseConceptTree({key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}, null, true).then(
+            this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT" }, null, true).then(
                 lexConc => {
                     this.ontolexService.addConceptualization(this.entry.id, lexConc, false, true).subscribe(
                         () => {
                             this.update.emit();
                         }
-                    )
+                    );
                 },
-                () => {}
+                () => { }
             );
         } else if (this.sense.reference != null) {
             this.ontolexService.addLexicalization(this.entry.id, this.sense.reference[0], false, true).subscribe(
                 () => {
                     this.update.emit();
                 }
-            )
+            );
         }
     }
 
     //CONCEPT
-    
+
     setConcept() {
-        this.browsingModals.browseConceptTree({key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT"}, null, true).then(
+        this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_LEXICAL_CONCEPT" }, null, true).then(
             lexConc => {
                 this.ontolexService.addConcept(this.sense.id, lexConc, true).subscribe(
                     () => {
                         this.update.emit();
                     }
-                )
+                );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     //REFERENCE
 
     setReference() {
-        this.creationModals.newOntoLexicalizationCf({key:"DATA.ACTIONS.SET_REFERENCE"}, OntoLex.sense, false).then(
+        this.creationModals.newOntoLexicalizationCf({ key: "DATA.ACTIONS.SET_REFERENCE" }, OntoLex.sense, false).then(
             (data: NewOntoLexicalizationCfModalReturnData) => {
                 this.ontolexService.setReference(this.sense.id, data.linkedResource, true, data.createPlain).subscribe(
                     () => {
-                        this.update.emit()
+                        this.update.emit();
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -151,9 +151,9 @@ export class LexicalSenseComponent {
         let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
         this.ontolexService.addDefinition(this.sense.id, def, lexicon).subscribe(
             () => {
-                this.update.emit();        
+                this.update.emit();
             }
-        )
+        );
     }
     onPendingDefCanceled() {
         this.pendingDef = false;
@@ -162,7 +162,7 @@ export class LexicalSenseComponent {
     //RELATIONS 
 
     addRelation() {
-        this.lexViewModals.createRelation({key:'DATA.ACTIONS.ADD_RELATED_SENSE'}, this.sense.id).then(
+        this.lexViewModals.createRelation({ key: 'DATA.ACTIONS.ADD_RELATED_SENSE' }, this.sense.id).then(
             (data: LexicoRelationModalReturnData) => {
                 let addRelationFn: Observable<void>;
                 if (data.reified) {
@@ -176,12 +176,12 @@ export class LexicalSenseComponent {
                     }
                 );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     addTranslation() {
-        this.lexViewModals.createRelation({key: "DATA.ACTIONS.ADD_TRANSLATION"}, this.sense.id, true).then(
+        this.lexViewModals.createRelation({ key: "DATA.ACTIONS.ADD_TRANSLATION" }, this.sense.id, true).then(
             (data: LexicoRelationModalReturnData) => {
                 let addRelationFn: Observable<void>;
                 if (data.reified) {
@@ -195,8 +195,8 @@ export class LexicalSenseComponent {
                     }
                 );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     /**

@@ -29,14 +29,14 @@ export class LanguageDefinitionComponent {
     @Input() defCrConfig: DefinitionCustomRangeConfig;
     @Output() delete: EventEmitter<void> = new EventEmitter();
     @Output() update = new EventEmitter();
-    
+
     //action auth
     addDefAuthorized: boolean;
     editDefAuthorized: boolean;
     deleteDefAuthorized: boolean;
 
-    constructor(public el: ElementRef, private skosService: SkosServices, private cvServices: CustomViewsServices, 
-        private propService: PropertyServices, private resViewModals: ResViewModalServices, 
+    constructor(public el: ElementRef, private skosService: SkosServices, private cvServices: CustomViewsServices,
+        private propService: PropertyServices, private resViewModals: ResViewModalServices,
         private basicModals: BasicModalServices, private creationModals: CreationModalServices) { }
 
 
@@ -61,18 +61,18 @@ export class LanguageDefinitionComponent {
             if (oldDefValue.isLiteral()) { // if standard
                 this.skosService.updateNote(this.resource, SKOS.definition, oldDefValue, newLitForm).subscribe(
                     () => this.update.emit()
-                )
+                );
             } else if (oldDefValue.isResource() && this.defCrConfig.propChainCustomView) { // if reified with a prop-chain CV associated to skos:definition
                 let oldLitForm: ARTLiteral = new ARTLiteral(oldDefValue.getShow(), null, this.lang);
                 this.cvServices.updateSingleValueData(this.resource, SKOS.definition, oldLitForm, newLitForm).subscribe(
                     () => this.update.emit()
-                )
+                );
             }
         } else if (newDefValue != null) { // new case (for sure a plain def since reified is added through modal)
             let newLitForm: ARTLiteral = new ARTLiteral(newDefValue, null, this.lang);
             this.skosService.addNote(this.resource, SKOS.definition, newLitForm).subscribe(
                 () => this.update.emit()
-            )
+            );
         }
     }
 
@@ -112,9 +112,9 @@ export class LanguageDefinitionComponent {
                     () => {
                         this.update.emit();
                     }
-                )
+                );
             }
-        )
+        );
     }
 
     /**
@@ -122,13 +122,13 @@ export class LanguageDefinitionComponent {
      * @param cf 
      */
     private addCustomFormDefinition(cf: CustomForm) {
-        this.resViewModals.enrichCustomForm({key:"DATA.ACTIONS.ADD_DEFINITION"}, cf.getId(), this.lang).then(
+        this.resViewModals.enrichCustomForm({ key: "DATA.ACTIONS.ADD_DEFINITION" }, cf.getId(), this.lang).then(
             (cfValue: CustomFormValue) => {
                 this.skosService.addNote(this.resource, SKOS.definition, cfValue).subscribe(
                     () => {
                         this.update.emit();
                     }
-                )
+                );
             },
             () => { }
         );

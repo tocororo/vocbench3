@@ -34,7 +34,7 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_TYPE"}, this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue({ key: "DATA.ACTIONS.ADD_TYPE" }, this.resource, predicate, propChangeable).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
@@ -52,7 +52,7 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
                         addFunctions.push({
                             function: this.resourcesService.addValue(this.resource, prop, v).pipe(
                                 map(stResp => {
-                                    this.eventHandler.typeAddedEvent.emit({resource: this.resource, type: v});
+                                    this.eventHandler.typeAddedEvent.emit({ resource: this.resource, type: v });
                                 })
                             ),
                             value: v
@@ -61,8 +61,8 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
                 }
                 this.addMultiple(addFunctions);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
@@ -74,17 +74,17 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
             stResp => {
                 if (this.rootProperty.getURI() != predicate.getURI()) {
                     //=> emits typeRemovedEvent cause it has not been fired by the generic service (removeValue)
-                    this.eventHandler.typeRemovedEvent.emit({resource: this.resource, type: <ARTResource>object});
+                    this.eventHandler.typeRemovedEvent.emit({ resource: this.resource, type: <ARTResource>object });
                 }
                 this.update.emit(null);
             }
-        )
+        );
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (this.rootProperty.getURI() == predicate.getURI()) { //removing rdf:type relation
             return this.individualService.removeType(<ARTURIResource>this.resource, <ARTResource>object);
-        } else {//predicate is some subProperty of rdf:type
+        } else { //predicate is some subProperty of rdf:type
             return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }

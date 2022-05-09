@@ -24,7 +24,7 @@ import { Node } from "../model/Node";
     styleUrls: ['../graph.css']
 })
 export class DataGraphComponent extends AbstractGraph {
-    @Output() elementSelected = new EventEmitter<Link|Node>();
+    @Output() elementSelected = new EventEmitter<Link | Node>();
 
     protected mode = GraphMode.dataOriented;
 
@@ -46,7 +46,7 @@ export class DataGraphComponent extends AbstractGraph {
 
     addNode(res: ARTURIResource) {
         if (this.graph.getNode(res)) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE", params:{resource: res.getShow()}}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_GRAPH_NODE_FOR_RESOURCE", params: { resource: res.getShow() } }, ModalType.warning);
             return;
         }
 
@@ -124,7 +124,7 @@ export class DataGraphComponent extends AbstractGraph {
                                 this.onNodeClicked(node);
                             }
                         },
-                        () => {}
+                        () => { }
                     );
                 } else {
                     let links: Link[] = this.convertPredObjListMapToLinks(node, predObjListMap, []);
@@ -140,7 +140,7 @@ export class DataGraphComponent extends AbstractGraph {
 
     protected closeNode(node: Node) {
         this.deleteSubtree(node);
-        
+
         let sourceDataNode = <DataNode>node;
         if (sourceDataNode.isPending()) {
             this.graph.removeNode(sourceDataNode); //remove the node from the graph
@@ -150,7 +150,7 @@ export class DataGraphComponent extends AbstractGraph {
         node.open = false;
     }
 
-    
+
     private appendLinks(expandedNode: Node, links: Link[]) {
         links.forEach(l => {
 
@@ -194,7 +194,7 @@ export class DataGraphComponent extends AbstractGraph {
                     this.graph.removeNode(targetDataNode); //remove the node from the graph
                     recursivelyClosingNodes.push(targetDataNode); //add to the list of nodes to recursively close
                 }
-            })
+            });
             //call recursively the deletion of the subtree for the deleted node)
             recursivelyClosingNodes.forEach(n => {
                 this.deleteSubtree(n);

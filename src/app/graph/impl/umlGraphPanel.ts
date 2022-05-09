@@ -18,7 +18,7 @@ import { UmlGraphComponent } from './umlGraphComponent';
 export class UmlGraphPanel extends AbstractGraphPanel {
 
     @ViewChild(UmlGraphComponent) viewChildGraph: UmlGraphComponent;
-    
+
     resourceToDescribe: ARTNode;
     isHideArrows: boolean = false;
     activeRemove: boolean = false;
@@ -36,17 +36,17 @@ export class UmlGraphPanel extends AbstractGraphPanel {
 
 
     addNode() {
-        this.browsingModals.browseClassTree({key:"ACTIONS.ADD_NODE"}).then(
+        this.browsingModals.browseClassTree({ key: "ACTIONS.ADD_NODE" }).then(
             (cls: ARTURIResource) => {
                 if (!cls.getAdditionalProperty(ResAttribute.EXPLICIT)) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED", params:{resource: cls.getShow()}},
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED", params: { resource: cls.getShow() } },
                         ModalType.warning);
                     return;
                 }
                 this.viewChildGraph.addNode(cls);
             },
             () => { }
-        )
+        );
     }
 
     removeNode() {
@@ -59,11 +59,11 @@ export class UmlGraphPanel extends AbstractGraphPanel {
         this.resourceToDescribe = null;
         if (element != null) {
             if (element instanceof Node) {
-                this.selectedElement = element
+                this.selectedElement = element;
                 this.activeRemove = true;
                 this.resourceToDescribe = element.res;
             } else if (element instanceof Link) {
-                this.selectedElement = element
+                this.selectedElement = element;
                 this.resourceToDescribe = element.res;
             } else {
                 this.resourceToDescribe = element.property;
@@ -71,9 +71,9 @@ export class UmlGraphPanel extends AbstractGraphPanel {
         }
 
     }
-    updateArrows(){
-        this.isHideArrows=!this.isHideArrows
-        
+    updateArrows() {
+        this.isHideArrows = !this.isHideArrows;
+
     }
 
     // hideArrows() {

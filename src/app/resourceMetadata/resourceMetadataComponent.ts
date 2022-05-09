@@ -61,16 +61,16 @@ export class ResourceMetadataComponent {
     }
 
     createPattern() {
-        this.openPatternEditor({key:"RESOURCE_METADATA.ACTIONS.CREATE_METADATA_PATTERN"}).then(
+        this.openPatternEditor({ key: "RESOURCE_METADATA.ACTIONS.CREATE_METADATA_PATTERN" }).then(
             () => this.initPatterns(),
-            () => {}
+            () => { }
         );
     }
 
     editPattern() {
-        this.openPatternEditor({key:"RESOURCE_METADATA.ACTIONS.EDIT_METADATA_PATTERN"}, this.selectedPattern.reference).then(
+        this.openPatternEditor({ key: "RESOURCE_METADATA.ACTIONS.EDIT_METADATA_PATTERN" }, this.selectedPattern.reference).then(
             () => this.initPatterns(),
-            () => {}
+            () => { }
         );
     }
 
@@ -81,7 +81,7 @@ export class ResourceMetadataComponent {
             message += this.translateService.instant("MESSAGES.DELETE_METADATA_PATTERN_CONFIRM.USED_IN_ASSOCIATION") + ".\n";
         }
         message += this.translateService.instant("MESSAGES.DELETE_METADATA_PATTERN_CONFIRM.CONTINUE");
-        this.basicModals.confirm({key:"RESOURCE_METADATA.ACTIONS.DELETE_METADATA_PATTERN"}, message, ModalType.warning).then(
+        this.basicModals.confirm({ key: "RESOURCE_METADATA.ACTIONS.DELETE_METADATA_PATTERN" }, message, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
                     () => {
@@ -92,15 +92,15 @@ export class ResourceMetadataComponent {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
     clonePattern() {
-        this.basicModals.prompt({key:"RESOURCE_METADATA.ACTIONS.CLONE_METADATA_PATTERN"}, { value: "Name", tooltip: "The name of the new pattern" }).then(
+        this.basicModals.prompt({ key: "RESOURCE_METADATA.ACTIONS.CLONE_METADATA_PATTERN" }, { value: "Name", tooltip: "The name of the new pattern" }).then(
             (patternName: string) => {
                 if (this.patterns.some(p => p.name == patternName)) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_METADATA_PATTERN_NAME"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_METADATA_PATTERN_NAME" }, ModalType.warning);
                     return;
                 }
                 this.resourceMetadataService.clonePattern(this.selectedPattern.reference, patternName).subscribe(
@@ -116,14 +116,14 @@ export class ResourceMetadataComponent {
     importPattern() {
         const modalRef: NgbModalRef = this.modalService.open(ImportPatternModal, new ModalOptions());
         modalRef.componentInstance.title = "Import Metadata Pattern";
-		modalRef.componentInstance.existingPatterns = this.patterns;
+        modalRef.componentInstance.existingPatterns = this.patterns;
         modalRef.result.then(
             (data: { file: File, name: string }) => {
                 this.resourceMetadataService.importPattern(data.file, data.name).subscribe(
                     () => {
                         this.initPatterns();
                     }
-                )
+                );
             },
             () => { }
         );
@@ -135,27 +135,27 @@ export class ResourceMetadataComponent {
                 let url = window.URL.createObjectURL(pattern);
                 this.basicModals.downloadLink({ key: "RESOURCE_METADATA.ACTIONS.EXPORT_METADATA_PATTERN" }, null, url, this.selectedPattern.name + ".cfg");
             }
-        )
+        );
     }
 
     importPatternFromLibrary() {
-        this.openPatterLibrary({key:"RESOURCE_METADATA.ACTIONS.IMPORT_SHARED_METADATA_PATTERN"}).then(
+        this.openPatterLibrary({ key: "RESOURCE_METADATA.ACTIONS.IMPORT_SHARED_METADATA_PATTERN" }).then(
             pattern => {
                 this.initPatterns();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     storePatternInLibrary() {
-        this.openPatterLibrary({key:"RESOURCE_METADATA.ACTIONS.SHARE_METADATA_PATTERN"}, this.selectedPattern);
+        this.openPatterLibrary({ key: "RESOURCE_METADATA.ACTIONS.SHARE_METADATA_PATTERN" }, this.selectedPattern);
     }
 
     private openPatternEditor(title: Translation, patternRef?: string) {
         let readonly: boolean = (patternRef != null) ? patternRef.startsWith("factory") : false;
         const modalRef: NgbModalRef = this.modalService.open(MetadataPatternEditorModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
-		modalRef.componentInstance.existingPatterns = this.patterns;
+        modalRef.componentInstance.existingPatterns = this.patterns;
         modalRef.componentInstance.ref = patternRef;
         modalRef.componentInstance.readOnly = readonly;
         return modalRef.result;
@@ -164,8 +164,8 @@ export class ResourceMetadataComponent {
     private openPatterLibrary(title: Translation, patternToShare?: PatternStruct) {
         const modalRef: NgbModalRef = this.modalService.open(MetadataPatternLibraryModal, new ModalOptions());
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
-		modalRef.componentInstance.patternToShare = patternToShare;
-		modalRef.componentInstance.existinPatterns = this.patterns;
+        modalRef.componentInstance.patternToShare = patternToShare;
+        modalRef.componentInstance.existinPatterns = this.patterns;
         return modalRef.result;
     }
 
@@ -176,35 +176,35 @@ export class ResourceMetadataComponent {
             associations => {
                 this.associations = associations;
                 this.associations.forEach(a => {
-                    a['roleLabel'] = ResourceUtils.getResourceRoleLabel(a.role, true)
-                })
+                    a['roleLabel'] = ResourceUtils.getResourceRoleLabel(a.role, true);
+                });
                 this.selectedAssociation = null;
             }
         );
     }
 
     createAssociation() {
-        this.openAssociationEditor({key:"RESOURCE_METADATA.ACTIONS.CREATE_METADATA_ASSOCIATION"}).then(
+        this.openAssociationEditor({ key: "RESOURCE_METADATA.ACTIONS.CREATE_METADATA_ASSOCIATION" }).then(
             () => this.initAssociations(),
-            () => {}
+            () => { }
         );
     }
 
     deleteAssociation() {
-        this.basicModals.confirm({key:"RESOURCE_METADATA.ACTIONS.DELETE_METADATA_ASSOCIATION"}, {key:"MESSAGES.DELETE_METADATA_PATTERN_ASSOCIATION_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "RESOURCE_METADATA.ACTIONS.DELETE_METADATA_ASSOCIATION" }, { key: "MESSAGES.DELETE_METADATA_PATTERN_ASSOCIATION_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deleteAssociation(this.selectedAssociation.ref).subscribe(
                     () => this.initAssociations()
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
     private openAssociationEditor(title: Translation) {
         const modalRef: NgbModalRef = this.modalService.open(MetadataAssociationEditorModal, new ModalOptions());
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
-		modalRef.componentInstance.existingAssociations = this.associations;
+        modalRef.componentInstance.existingAssociations = this.associations;
         return modalRef.result;
     }
 

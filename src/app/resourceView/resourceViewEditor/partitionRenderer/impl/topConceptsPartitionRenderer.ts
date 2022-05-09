@@ -34,7 +34,7 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
 
     //add as top concept
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.SET_AS_TOP_CONCEPT"}, this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue({ key: "DATA.ACTIONS.SET_AS_TOP_CONCEPT" }, this.resource, predicate, propChangeable).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
@@ -47,7 +47,7 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
                 });
                 this.addMultiple(addFunctions);
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -60,17 +60,17 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
             stResp => {
                 if (this.rootProperty.getURI() != predicate.getURI()) {
                     //=> emits conceptRemovedAsTopConceptEvent cause it has not been fired by the generic service (removeValue)
-                    this.eventHandler.conceptRemovedAsTopConceptEvent.emit({concept: <ARTURIResource>this.resource, scheme: <ARTURIResource>object});
+                    this.eventHandler.conceptRemovedAsTopConceptEvent.emit({ concept: <ARTURIResource>this.resource, scheme: <ARTURIResource>object });
                 }
                 this.update.emit();
             }
-        )
+        );
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:topConceptOf relation
             return this.skosService.removeTopConcept(<ARTURIResource>this.resource, <ARTURIResource>object);
-        } else {//predicate is some subProperty of skos:topConceptOf
+        } else { //predicate is some subProperty of skos:topConceptOf
             return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }

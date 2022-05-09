@@ -39,11 +39,11 @@ export class CustomPartitionRenderer extends PartitionRendererMultiRoot {
             return of(this.rootProperties[0]);
         } else {
             return from(
-                this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, this.rootProperties).then(
+                this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, this.rootProperties).then(
                     (selectedProp: ARTURIResource) => {
                         return selectedProp;
                     },
-                    () => { 
+                    () => {
                         return null;
                     }
                 )

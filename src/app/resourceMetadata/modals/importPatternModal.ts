@@ -28,7 +28,7 @@ export class ImportPatternModal {
 
     ok() {
         if (this.existingPatterns.some(p => p.name == this.name)) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.ALREADY_EXISTING_METADATA_PATTERN_NAME"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.ALREADY_EXISTING_METADATA_PATTERN_NAME" }, ModalType.warning);
             return;
         }
         this.activeModal.close({ file: this.file, name: this.name });

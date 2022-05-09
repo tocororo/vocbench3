@@ -25,7 +25,7 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
     constructor(resourcesService: ResourcesServices, propService: PropertyServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, creationModals: CreationModalServices, resViewModals: ResViewModalServices,
         private skosService: SkosServices, private eventHandler: VBEventHandler) {
-            super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
+        super(resourcesService, propService, cfService, basicModals, creationModals, resViewModals);
     }
 
     ngOnInit() {
@@ -34,7 +34,7 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
 
     //add as top concept
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_TO_SCHEME"}, this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue({ key: "DATA.ACTIONS.ADD_TO_SCHEME" }, this.resource, predicate, propChangeable).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
@@ -58,7 +58,7 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
                 this.addMultiple(addFunctions);
             },
             () => { }
-        )
+        );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
@@ -72,15 +72,15 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
                     //=> emits conceptRemovedFromSchemeEvent cause it has not been fired by the generic service (removeValue)
                     this.eventHandler.conceptRemovedFromSchemeEvent.emit({ concept: <ARTURIResource>this.resource, scheme: <ARTURIResource>object });
                 }
-                this.update.emit(null)
+                this.update.emit(null);
             }
         );
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        if (this.rootProperty.getURI() == predicate.getURI()) {// removing a skos:inScheme relation
+        if (this.rootProperty.getURI() == predicate.getURI()) { // removing a skos:inScheme relation
             return this.skosService.removeConceptFromScheme(<ARTURIResource>this.resource, <ARTURIResource>object);
-        } else {//predicate is some subProperty of skos:inScheme
+        } else { //predicate is some subProperty of skos:inScheme
             return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }

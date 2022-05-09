@@ -52,17 +52,17 @@ export class DanglingConceptComponent {
                         }
                         let brokenConceptOfScheme: BrokenConceptEntry = this.brokenConceptMap.find(e => e.scheme.equals(scheme));
                         if (brokenConceptOfScheme == null) {
-                            brokenConceptOfScheme = { scheme: scheme, concepts: [c] }
+                            brokenConceptOfScheme = { scheme: scheme, concepts: [c] };
                             this.brokenConceptMap.push(brokenConceptOfScheme);
                         } else {
                             brokenConceptOfScheme.concepts.push(c);
                         }
-                    })
+                    });
                     //sort also the schemes
                     this.brokenConceptMap.sort(((e1: BrokenConceptEntry, e2: BrokenConceptEntry) => {
                         return e1.scheme.getShow().localeCompare(e2.scheme.getShow());
-                    }))
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
+                    }));
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 }
             );
         } else {
@@ -70,11 +70,11 @@ export class DanglingConceptComponent {
                 concepts => {
                     ResourceUtils.sortResources(concepts, SortAttribute.show);
                     this.brokenConceptList = concepts;
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 }
             );
         }
-        
+
     }
 
     /**
@@ -96,20 +96,20 @@ export class DanglingConceptComponent {
             stResp => {
                 this.runIcv();
             }
-        )
+        );
     }
 
     /**
      * Fixes concept by selecting a broader concept
      */
     private selectBroader(concept: ARTURIResource, scheme: ARTURIResource) {
-        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, [scheme], true).then(
+        this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_CONCEPT" }, [scheme], true).then(
             (broader: any) => {
                 this.skosService.addBroaderConcept(concept, broader).subscribe(
                     stResp => {
                         this.runIcv();
                     }
-                )
+                );
             },
             () => { }
         );
@@ -119,13 +119,13 @@ export class DanglingConceptComponent {
      * Fixes all concepts by selecting a broader concept for them all 
      */
     private selectBroaderForAll() {
-        this.browsingModals.browseConceptTree({key:"DATA.ACTIONS.SELECT_CONCEPT"}, [this.selectedScheme], false).then(
+        this.browsingModals.browseConceptTree({ key: "DATA.ACTIONS.SELECT_CONCEPT" }, [this.selectedScheme], false).then(
             (broader: any) => {
                 this.icvService.setBroaderForAllDangling(this.selectedScheme, broader).subscribe(
                     stResp => {
                         this.runIcv();
                     }
-                )
+                );
             },
             () => { }
         );
@@ -135,7 +135,7 @@ export class DanglingConceptComponent {
      * Fixes concept by removing the concept from the current scheme 
      */
     private removeFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
-        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.REMOVE_DANGLING_FROM_SCHEME_WARN_CONFIRM"}).then(
+        this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.REMOVE_DANGLING_FROM_SCHEME_WARN_CONFIRM" }).then(
             result => {
                 this.skosService.removeConceptFromScheme(concept, scheme).subscribe(
                     data => {
@@ -151,7 +151,7 @@ export class DanglingConceptComponent {
      * Fixes concepts by removing them all from the current scheme 
      */
     private removeAllFromScheme() {
-        this.basicModals.confirm({key:"STATUS.WARNING"}, {key:"MESSAGES.REMOVE_DANGLINGS_FROM_SCHEME_WARN_CONFIRM"}).then(
+        this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.REMOVE_DANGLINGS_FROM_SCHEME_WARN_CONFIRM" }).then(
             result => {
                 this.icvService.removeAllDanglingFromScheme(this.selectedScheme).subscribe(
                     stResp => {
@@ -171,7 +171,7 @@ export class DanglingConceptComponent {
             stResp => {
                 this.runIcv();
             }
-        )
+        );
     }
 
     /**
@@ -182,7 +182,7 @@ export class DanglingConceptComponent {
             stResp => {
                 this.runIcv();
             }
-        )
+        );
     }
 
     private onResourceClick(res: ARTURIResource) {
@@ -194,5 +194,5 @@ export class DanglingConceptComponent {
 
 class BrokenConceptEntry {
     scheme: ARTURIResource;
-    concepts: ARTURIResource[]
+    concepts: ARTURIResource[];
 }

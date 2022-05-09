@@ -31,7 +31,7 @@ export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRo
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_DISJOINT_PROPERTY"}, this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue({ key: "DATA.ACTIONS.ADD_DISJOINT_PROPERTY" }, this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let inverse: boolean = data.inverseProperty;
@@ -46,8 +46,8 @@ export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRo
                 });
                 this.addMultiple(addFunctions);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {

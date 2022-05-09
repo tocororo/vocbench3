@@ -54,7 +54,7 @@ export class LexViewCache {
                                 }
                                 return values;
                             })
-                        )
+                        );
                     } else { //range selection canceled
                         return of([]);
                     }
@@ -83,7 +83,7 @@ export class LexViewCache {
                         //in case multiple range class are specified, ask user to select the range
                         //TODO what if simply retrieve the instances of all the classes?
                         return from(
-                            this.sharedModals.selectResource({key:"DATA.ACTIONS.SELECT_RANGE"}, null, rangeColl).then(
+                            this.sharedModals.selectResource({ key: "DATA.ACTIONS.SELECT_RANGE" }, null, rangeColl).then(
                                 (selectedRange: ARTURIResource[]) => {
                                     return { cls: selectedRange[0], storeInCache: false };
                                 },
@@ -91,7 +91,7 @@ export class LexViewCache {
                                     return null;
                                 }
                             )
-                        )
+                        );
                     }
                 } else {
                     return of(null); //no range collection

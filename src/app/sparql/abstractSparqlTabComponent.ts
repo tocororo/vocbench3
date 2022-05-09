@@ -27,7 +27,7 @@ export abstract class AbstractSparqlTabComponent {
     storedQueryReference: string;
 
     private sampleQuery: string = "SELECT * WHERE {\n    ?s ?p ?o .\n} LIMIT 10";
-    
+
     queryInProgress: boolean = false;
     queryValid: boolean = true;
     queryTime: string;
@@ -63,7 +63,7 @@ export abstract class AbstractSparqlTabComponent {
 
         if (this.queryMode == QueryMode.query) {
             if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlEvaluateQuery)) {
-                this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.UNAUTHORIZED_SPARQL_QUERY"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DENIED" }, { key: "MESSAGES.UNAUTHORIZED_SPARQL_QUERY" });
                 return;
             }
             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -75,7 +75,7 @@ export abstract class AbstractSparqlTabComponent {
             );
         } else { //queryMode "update"
             if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlExecuteUpdate)) {
-                this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.UNAUTHORIZED_SPARQL_UPDATE"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DENIED" }, { key: "MESSAGES.UNAUTHORIZED_SPARQL_UPDATE" });
                 return;
             }
             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);

@@ -17,7 +17,7 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
     @Input() disabled: boolean = false;
     @Input() lang: Language; //language (can be initially set)
     stringValue: string; // string value of the literal
-    
+
     private literalValue: ARTLiteral; // the rdf:langString being edited (the model) 
 
     public constructor(private sharedModals: SharedModalServices) {
@@ -39,7 +39,7 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
 
     editLanguage() {
         if (this.disabled) return;
-        this.sharedModals.selectLanguages({key:"ACTIONS.SELECT_LANGUAGE"}, (this.lang ? [this.lang.tag] : []), true, false).then(
+        this.sharedModals.selectLanguages({ key: "ACTIONS.SELECT_LANGUAGE" }, (this.lang ? [this.lang.tag] : []), true, false).then(
             langs => {
                 this.lang = Languages.getLanguageFromTag(langs[0]);
                 this.onModelChanged();

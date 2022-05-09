@@ -56,17 +56,17 @@ export class LoginComponent {
     }
 
     forgotPassword() {
-        this.basicModals.prompt({key:"USER.PASSWORD.FORGOT_PASSWORD"}, { value: "E-mail" }, {key:"MESSAGES.PASSWORD_RESET_INSERT_EMAIL"}).then(
+        this.basicModals.prompt({ key: "USER.PASSWORD.FORGOT_PASSWORD" }, { value: "E-mail" }, { key: "MESSAGES.PASSWORD_RESET_INSERT_EMAIL" }).then(
             (email: string) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.userService.forgotPassword(email.trim()).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({key:"USER.PASSWORD.FORGOT_PASSWORD"}, {key:"MESSAGES.PASSWORD_RESET_INSTRUCTION_SENT"});
+                        this.basicModals.alert({ key: "USER.PASSWORD.FORGOT_PASSWORD" }, { key: "MESSAGES.PASSWORD_RESET_INSTRUCTION_SENT" });
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 

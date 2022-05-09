@@ -114,7 +114,7 @@ export class NamespacesAndImportsComponent {
         if (this.bind) {
             this.namespace = this.baseURI;
             if (!(this.baseURI.endsWith("/") || this.baseURI.endsWith("#"))) {
-                this.namespace = this.namespace + "#";
+                this.namespace += "#";
             }
         }
     }
@@ -164,24 +164,24 @@ export class NamespacesAndImportsComponent {
                 map(() => {
                     this.refreshDefaultNamespace();
                 })
-            )
+            );
             let updateBaseUriFn = this.refactorService.replaceBaseURI(this.baseURI).pipe(
                 map(() => {
                     this.refreshBaseURI();
                 })
-            )
+            );
 
-            if (this.baseURI != this.pristineBaseURI && this.namespace != this.pristineNamespace) {//changed both baseURI and namespace
-                this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.SAVE_BASEURI_NS_CHANGE_CONFIRM"}, ModalType.warning).then(
+            if (this.baseURI != this.pristineBaseURI && this.namespace != this.pristineNamespace) { //changed both baseURI and namespace
+                this.basicModals.confirm({ key: "DATA_MANAGEMENT.REFACTOR.REFACTOR" }, { key: "MESSAGES.SAVE_BASEURI_NS_CHANGE_CONFIRM" }, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         forkJoin([updateNsFn, updateBaseUriFn]).subscribe(
                             () => {
                                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.BASEURI_AND_NAMESPACE_UPDATED"});
+                                this.basicModals.alert({ key: "DATA_MANAGEMENT.REFACTOR.REFACTOR" }, { key: "MESSAGES.BASEURI_AND_NAMESPACE_UPDATED" });
                                 this.nsBaseURISubmitted = true;
                             }
-                        )
+                        );
                     },
                     rejected => {
                         //restore both
@@ -191,29 +191,29 @@ export class NamespacesAndImportsComponent {
                     }
                 );
             } else if (this.baseURI != this.pristineBaseURI) { //changed only baseURI
-                this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.SAVE_BASEURI_CHANGE_CONFIRM"}, ModalType.warning).then(
+                this.basicModals.confirm({ key: "DATA_MANAGEMENT.REFACTOR.REFACTOR" }, { key: "MESSAGES.SAVE_BASEURI_CHANGE_CONFIRM" }, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         updateBaseUriFn.subscribe(
                             () => {
                                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.BASEURI_UPDATED"});
+                                this.basicModals.alert({ key: "DATA_MANAGEMENT.REFACTOR.REFACTOR" }, { key: "MESSAGES.BASEURI_UPDATED" });
                                 this.nsBaseURISubmitted = true;
                             }
-                        )
+                        );
                     },
                     rejected => {
                         //restore baseURI
                         this.baseURI = this.pristineBaseURI;
                         this.nsBaseURISubmitted = true;
                     }
-                )
-            } else if (this.namespace != this.pristineNamespace) {//changed only namespace
-                this.basicModals.confirm({key:"ACTIONS.SAVE_CHANGES"}, {key:"MESSAGES.SAVE_NS_CHANGE_CONFIRM"}, ModalType.warning).then(
+                );
+            } else if (this.namespace != this.pristineNamespace) { //changed only namespace
+                this.basicModals.confirm({ key: "ACTIONS.SAVE_CHANGES" }, { key: "MESSAGES.SAVE_NS_CHANGE_CONFIRM" }, ModalType.warning).then(
                     confirm => {
                         updateNsFn.subscribe(
                             () => {
-                                this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.NAMESPACE_UPDATED"});
+                                this.basicModals.alert({ key: "DATA_MANAGEMENT.REFACTOR.REFACTOR" }, { key: "MESSAGES.NAMESPACE_UPDATED" });
                                 this.nsBaseURISubmitted = true;
                             }
                         );
@@ -223,10 +223,10 @@ export class NamespacesAndImportsComponent {
                         this.namespace = this.pristineNamespace;
                         this.nsBaseURISubmitted = true;
                     }
-                )
+                );
             }
         } else {
-            this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.INVALID_NAMESPACE_AND_BASEURI"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_NAMESPACE_AND_BASEURI" }, ModalType.warning);
         }
     }
 
@@ -247,12 +247,12 @@ export class NamespacesAndImportsComponent {
      * Adds a new prefix namespace mapping
      */
     addMapping() {
-        this.sharedModals.prefixNamespace({key:"ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING"}, null, null, false, true).then(
+        this.sharedModals.prefixNamespace({ key: "ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING" }, null, null, false, true).then(
             (mapping: PrefixNamespaceModalData) => {
                 this.refreshNSPrefixMappings();
             },
             () => { }
-        )
+        );
     }
 
     /**
@@ -263,19 +263,19 @@ export class NamespacesAndImportsComponent {
             () => {
                 this.refreshNSPrefixMappings();
             }
-        )
+        );
     }
 
     /**
      * Changes the prefix of a prefix namespace mapping
      */
     changeMapping() {
-        this.sharedModals.prefixNamespace({key:"ACTIONS.EDIT_MAPPING"}, this.selectedMapping.prefix, this.selectedMapping.namespace, true, true).then(
+        this.sharedModals.prefixNamespace({ key: "ACTIONS.EDIT_MAPPING" }, this.selectedMapping.prefix, this.selectedMapping.namespace, true, true).then(
             (mapping: PrefixNamespaceModalData) => {
                 this.refreshNSPrefixMappings();
             },
             () => { }
-        )
+        );
     }
 
     //======= IMPORTS MANAGEMENT =======
@@ -285,7 +285,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromWeb() {
-        this.sharedModals.importOntology({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_WEB"}, ImportType.fromWeb).then(
+        this.sharedModals.importOntology({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_WEB" }, ImportType.fromWeb).then(
             (data: ImportFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -296,10 +296,10 @@ export class NamespacesAndImportsComponent {
                         this.refreshNSPrefixMappings();
                         this.refreshBaseUriResView();
                     }
-                )
+                );
             },
             () => { }
-        )
+        );
     }
 
     /**
@@ -307,7 +307,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromWebToMirror() {
-        this.sharedModals.importOntology({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_WEB_TO_MIRROR"}, ImportType.fromWebToMirror).then(
+        this.sharedModals.importOntology({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_WEB_TO_MIRROR" }, ImportType.fromWebToMirror).then(
             (data: ImportFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -318,10 +318,10 @@ export class NamespacesAndImportsComponent {
                         this.refreshNSPrefixMappings();
                         this.refreshBaseUriResView();
                     }
-                )
+                );
             },
             () => { }
-        )
+        );
     }
 
     /**
@@ -329,7 +329,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromLocalFile() {
-        this.sharedModals.importOntology({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_LOCAL_FILE"}, ImportType.fromLocalFile).then(
+        this.sharedModals.importOntology({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_LOCAL_FILE" }, ImportType.fromLocalFile).then(
             (data: ImportFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
@@ -340,10 +340,10 @@ export class NamespacesAndImportsComponent {
                         this.refreshNSPrefixMappings();
                         this.refreshBaseUriResView();
                     }
-                )
+                );
             },
             () => { }
-        )
+        );
     }
 
     /**
@@ -351,7 +351,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     importFromOntologyMirror() {
-        this.sharedModals.importOntology({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_ONTOLOGY_MIRROR"}, ImportType.fromOntologyMirror).then(
+        this.sharedModals.importOntology({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_ONTOLOGY_MIRROR" }, ImportType.fromOntologyMirror).then(
             (data: ImportFromMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
@@ -362,7 +362,7 @@ export class NamespacesAndImportsComponent {
                         this.refreshNSPrefixMappings();
                         this.refreshBaseUriResView();
                     }
-                )
+                );
             },
             () => { }
         );
@@ -373,7 +373,7 @@ export class NamespacesAndImportsComponent {
      * Once done refreshes the imports list and the namespace prefix mapping
      */
     importFromDatasetCatalog() {
-        this.sharedModals.importFromDatasetCatalog({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_DATASET_CATALOG"}).then(
+        this.sharedModals.importFromDatasetCatalog({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.IMPORT_FROM_DATASET_CATALOG" }).then(
             (data: ImportFromDatasetCatalogModalReturnData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.ontologyIRI, data.transitiveImportAllowance, data.dataDump, data.rdfFormat).subscribe(
@@ -386,14 +386,14 @@ export class NamespacesAndImportsComponent {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
     /**
      * Removes the given imported ontology, then update the prefix namespace mapping and the imports list
      */
-    removeImport(importedOntology: {id: string, status: string, imports: any[]}) {
+    removeImport(importedOntology: { id: string, status: string, imports: any[] }) {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.metadataService.removeImport(importedOntology.id).subscribe(
             stResp => {
@@ -418,7 +418,7 @@ export class NamespacesAndImportsComponent {
                     this.refreshImports();
                 }
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -449,7 +449,7 @@ export class NamespacesAndImportsComponent {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRemoveNsPrefixMapping);
     }
     isChangeNsPrefixMappingAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataChangeNsPrefixMapping);   
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataChangeNsPrefixMapping);
     }
     isBaseuriNsEditAuthorized(): boolean {
         return (

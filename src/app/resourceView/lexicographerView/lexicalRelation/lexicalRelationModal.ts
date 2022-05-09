@@ -30,12 +30,12 @@ export class LexicalRelationModal {
     reified: boolean = true;
 
     resourcePickerConfig: ResourcePickerConfig = {};
-    
-    constructor(private activeModal: NgbActiveModal, private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices) {}
-    
+
+    constructor(private activeModal: NgbActiveModal, private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices) { }
+
     ngOnInit() {
         let role: RDFResourceRolesEnum = this.sourceEntity.getRole();
-        this.resourcePickerConfig = { roles: [role] }
+        this.resourcePickerConfig = { roles: [role] };
 
         if (this.translation) {
             if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
@@ -62,13 +62,13 @@ export class LexicalRelationModal {
     }
 
     pickTranslationSet() {
-        this.browsingModals.browseTranslationSet({key:"DATA.ACTIONS.SELECT_TRANSLATION_SET"}, true, true).then(
+        this.browsingModals.browseTranslationSet({ key: "DATA.ACTIONS.SELECT_TRANSLATION_SET" }, true, true).then(
             res => {
                 this.translationSet = res;
             }
-        )
+        );
     }
-    
+
     isOkClickable(): boolean {
         return this.selectedCategory != null && this.targetEntity != null;
     }
@@ -81,11 +81,11 @@ export class LexicalRelationModal {
         };
         if (this.reified) {
             returnData.undirectional = this.undirectional;
-            returnData.tranlsationSet = this.translation ? this.translationSet: null;
+            returnData.tranlsationSet = this.translation ? this.translationSet : null;
         }
         this.activeModal.close(returnData);
     }
-    
+
     cancel() {
         this.activeModal.dismiss();
     }

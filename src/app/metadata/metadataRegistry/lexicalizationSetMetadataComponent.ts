@@ -44,7 +44,7 @@ export class LexicalizationSetMetadataComponent {
                 if (this.lexicalizationSetMetadata.lexicalizationModel == lexModel.iri) {
                     this.lexicalizationModel = lexModel.label;
                 }
-            })
+            });
 
             this.language = this.lexicalizationSetMetadata.language;
             this.references = this.lexicalizationSetMetadata.references;
@@ -58,7 +58,7 @@ export class LexicalizationSetMetadataComponent {
     updateLexiconDataset(newValue: string) {
         if (newValue != this.lexiconDataset) {
             if (!ResourceUtils.testIRI(newValue)) {
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: newValue}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: newValue } }, ModalType.warning);
                 //restore old value
                 this.lexiconDataset = newValue;
                 setTimeout(() => {
@@ -82,7 +82,7 @@ export class LexicalizationSetMetadataComponent {
         if (newValue != this.language) {
             let langRegexp = new RegExp("^[a-z]{2,3}(?:-[A-Z]{2,3}(?:-[a-zA-Z]{4})?)?$");
             if (!langRegexp.test(newValue)) {
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_LANG_TAG", params:{lang: this.language}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_LANG_TAG", params: { lang: this.language } }, ModalType.warning);
                 //restore old value
                 this.language = newValue;
                 setTimeout(() => {
@@ -144,22 +144,22 @@ export class LexicalizationSetMetadataComponent {
                     lexiconDatasetPar = new ARTURIResource(this.lexiconDataset);
                 }
 
-                this.metadataRegistryService.addEmbeddedLexicalizationSet(new ARTURIResource(this.dataset.identity), 
+                this.metadataRegistryService.addEmbeddedLexicalizationSet(new ARTURIResource(this.dataset.identity),
                     new ARTURIResource(lexicalizationModelPar), this.language, new ARTURIResource(this.lexicalizationSetMetadata.identity),
                     lexiconDatasetPar, this.references, this.lexicalEntries, this.lexicalizations, this.percentage, this.avgNumOfLexicalizations).subscribe(
-                    stResp => {
-                        this.lexicalizationSetMetadata.lexiconDataset = this.lexiconDataset;
-                        this.lexicalizationSetMetadata.lexicalizationModel = lexicalizationModelPar;
-                        this.lexicalizationSetMetadata.language = this.language;
-                        this.lexicalizationSetMetadata.references = this.references;
-                        this.lexicalizationSetMetadata.lexicalEntries = this.lexicalEntries;
-                        this.lexicalizationSetMetadata.lexicalizations = this.lexicalizations;
-                        this.lexicalizationSetMetadata.percentage = this.percentage;
-                        this.lexicalizationSetMetadata.avgNumOfLexicalizations = this.avgNumOfLexicalizations;
-                    }
-                )
+                        stResp => {
+                            this.lexicalizationSetMetadata.lexiconDataset = this.lexiconDataset;
+                            this.lexicalizationSetMetadata.lexicalizationModel = lexicalizationModelPar;
+                            this.lexicalizationSetMetadata.language = this.language;
+                            this.lexicalizationSetMetadata.references = this.references;
+                            this.lexicalizationSetMetadata.lexicalEntries = this.lexicalEntries;
+                            this.lexicalizationSetMetadata.lexicalizations = this.lexicalizations;
+                            this.lexicalizationSetMetadata.percentage = this.percentage;
+                            this.lexicalizationSetMetadata.avgNumOfLexicalizations = this.avgNumOfLexicalizations;
+                        }
+                    );
             }
-        )
+        );
     }
 
 

@@ -42,12 +42,12 @@ export class BrokenDefinitionComponent extends AbstractIcvComponent {
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.note]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [SKOS.note]).then(
             property => {
                 this.noteProperty = property;
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
 }

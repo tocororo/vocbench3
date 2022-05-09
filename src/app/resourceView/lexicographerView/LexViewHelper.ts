@@ -16,17 +16,17 @@ export class LexViewHelper {
 
     setConstituents(sourceEntry: ARTResource): Observable<boolean> {
         return from(
-            this.resViewModals.createConstituentList({key:"DATA.ACTIONS.CREATE_CONSTITUENTS_LIST"}).then(
+            this.resViewModals.createConstituentList({ key: "DATA.ACTIONS.CREATE_CONSTITUENTS_LIST" }).then(
                 (data: ConstituentListCreatorModalReturnData) => {
                     return this.ontolexService.setLexicalEntryConstituents(<ARTURIResource>sourceEntry, data.list, data.ordered).pipe(
                         map(() => true)
-                    )
+                    );
                 },
                 () => of(false)
             )
         ).pipe( //for flattening Observable<Observable<boolean>> returned above
             mergeMap(done => done)
-        )
+        );
     }
 
 }

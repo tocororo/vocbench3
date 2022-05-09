@@ -31,7 +31,7 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_SUPERPROPERTY"}, this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue({ key: "DATA.ACTIONS.ADD_SUPERPROPERTY" }, this.resource, predicate, propChangeable).then(
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let inverse: boolean = data.inverseProperty;
@@ -47,7 +47,7 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
                 this.addMultiple(addFunctions);
             },
             () => { }
-        )
+        );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {

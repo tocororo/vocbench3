@@ -27,7 +27,7 @@ export class ImportTreeNodeComponent {
     }
 
     repairFromLocalFile() {
-        this.openImportModal({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_LOCAL_FILE"}, ImportType.fromLocalFile).then(
+        this.openImportModal({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_LOCAL_FILE" }, ImportType.fromLocalFile).then(
             (data: RepairFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.getFromLocalFile(data.baseURI, data.localFile, data.transitiveImportAllowance, data.mirrorFile).subscribe(
@@ -35,14 +35,14 @@ export class ImportTreeNodeComponent {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
                     }
-                )
+                );
             },
             () => { }
         );
     }
 
     repairFromWeb() {
-        this.openImportModal({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_WEB"}, ImportType.fromWeb).then(
+        this.openImportModal({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_WEB" }, ImportType.fromWeb).then(
             (data: RepairFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.downloadFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -50,23 +50,23 @@ export class ImportTreeNodeComponent {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
                     }
-                )
+                );
             },
             () => { }
         );
     }
 
     repairFromWebToMirror() {
-        this.openImportModal({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_WEB_TO_MIRROR"}, ImportType.fromWebToMirror).then(
+        this.openImportModal({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.REPAIR_FROM_WEB_TO_MIRROR" }, ImportType.fromWebToMirror).then(
             (data: RepairFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.downloadFromWebToMirror(
                     data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
-                    () => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.update.emit();
-                    }
-                )
+                        () => {
+                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                            this.update.emit();
+                        }
+                    );
             },
             () => { }
         );
@@ -86,8 +86,8 @@ export class ImportTreeNodeComponent {
     private openImportModal(title: Translation, importType: ImportType): Promise<ImportOntologyReturnData> {
         const modalRef: NgbModalRef = this.modalService.open(ImportOntologyModal, new ModalOptions());
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
-		modalRef.componentInstance.importType = importType;
-		modalRef.componentInstance.baseUriInput = this.import.id;
+        modalRef.componentInstance.importType = importType;
+        modalRef.componentInstance.baseUriInput = this.import.id;
         return modalRef.result;
     }
 

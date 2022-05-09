@@ -46,20 +46,20 @@ export class MetadataPatternLibraryModal {
                 this.patterns = refs.map(ref => ResourceMetadataUtils.convertReferenceToPatternStruct(ref));
                 this.selectedPattern = null;
             }
-        )
+        );
     }
 
     deletePattern() {
-        this.basicModals.confirm({key:"RESOURCE_METADATA.ACTIONS.DELETE_METADATA_PATTERN"}, {key:"MESSAGES.DELETE_SHARED_METADATA_PATTERN_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "RESOURCE_METADATA.ACTIONS.DELETE_METADATA_PATTERN" }, { key: "MESSAGES.DELETE_SHARED_METADATA_PATTERN_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
                     () => {
                         this.initLibrary();
                     }
-                )
+                );
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     private storePatternInLibraryImpl() {
@@ -90,25 +90,25 @@ export class MetadataPatternLibraryModal {
         if (this.patternToShare != null) { //sharing pattern => store the same pattern at system level
             //check if there is another shared pattern with the given name
             if (this.patterns.some(p => p.name == this.name)) {
-                this.basicModals.confirm(this.title, {key:"MESSAGES.REPLACE_SHARED_METADATA_PATTERN_CONFIRM"}, ModalType.warning).then(
+                this.basicModals.confirm(this.title, { key: "MESSAGES.REPLACE_SHARED_METADATA_PATTERN_CONFIRM" }, ModalType.warning).then(
                     () => this.storePatternInLibraryImpl(),
-                    () => {}
-                )
+                    () => { }
+                );
             } else {
                 this.storePatternInLibraryImpl();
             }
         } else { //import shared pattern => clone the same pattern at project level
             //check if there is another project pattern with the same name
             if (this.existinPatterns.some(p => p.name == this.name)) {
-                this.basicModals.confirm(this.title, {key:"MESSAGES.REPLACE_METADATA_PATTERN_CONFIRM"}, ModalType.warning).then(
+                this.basicModals.confirm(this.title, { key: "MESSAGES.REPLACE_METADATA_PATTERN_CONFIRM" }, ModalType.warning).then(
                     () => this.importPatternImpl(),
-                    () => {}
-                )
+                    () => { }
+                );
             } else {
                 this.importPatternImpl();
             }
         }
-        
+
     }
 
     cancel() {

@@ -30,13 +30,13 @@ export class ResetPasswordComponent {
         this.userService.resetPassword(this.email, this.token).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PASSWORD_RESET"}).then(
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.PASSWORD_RESET" }).then(
                     confirm => {
                         this.router.navigate(["/Home"]);
                     }
-                )
+                );
             }
-        )
+        );
     }
 
 }

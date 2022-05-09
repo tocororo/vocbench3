@@ -20,10 +20,10 @@ export class HistoryFilterComponent {
     @Input() toTime: string;
     //Useful in order to hide Performers filter from Validation page when user is not validator (it is forced to see only its commits) */
     @Input() hidePerformers: boolean;
-    
+
     @Output() apply: EventEmitter<{ operations: ARTURIResource[], performers: User[], fromTime: string, toTime: string }> = new EventEmitter();
 
-    constructor(private modalService: NgbModal, private sharedModals: SharedModalServices, private basicModals: BasicModalServices) {}
+    constructor(private modalService: NgbModal, private sharedModals: SharedModalServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         if (this.operations == null) {
@@ -41,7 +41,7 @@ export class HistoryFilterComponent {
                     }
                 });
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -50,7 +50,7 @@ export class HistoryFilterComponent {
     }
 
     private selectOperationPerformer() {
-        this.sharedModals.selectUser({key:"ACTIONS.SELECT_USER"}, true).then(
+        this.sharedModals.selectUser({ key: "ACTIONS.SELECT_USER" }, true).then(
             (user: User) => {
                 for (let i = 0; i < this.performers.length; i++) {
                     if (this.performers[i].getIri().equals(user.getIri())) {
@@ -59,7 +59,7 @@ export class HistoryFilterComponent {
                 }
                 this.performers.push(user);
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -70,11 +70,11 @@ export class HistoryFilterComponent {
     applyFilter() {
         let timeRegexp: RegExp = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$");
         if (this.fromTime != null && !timeRegexp.test(this.fromTime)) {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_FROM_TIME_FORMAT"}, ModalType.error);
+            this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_FROM_TIME_FORMAT" }, ModalType.error);
             return;
         }
         if (this.toTime != null && !timeRegexp.test(this.toTime)) {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_TO_TIME_FORMAT"}, ModalType.error);
+            this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_TO_TIME_FORMAT" }, ModalType.error);
             return;
         }
         this.apply.emit({ operations: this.operations, performers: this.performers, fromTime: this.fromTime, toTime: this.toTime });

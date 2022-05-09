@@ -29,18 +29,18 @@ export class LoadShapesModal {
                 this.selectedInputFormat = this.inputFormats.find(f => f.name == "Turtle"); //init turtle
 
                 let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
-                this.inputFormats.forEach(f => 
+                this.inputFormats.forEach(f =>
                     f.fileExtensions.forEach(ext => {
-                        extList.push("."+ext);
+                        extList.push("." + ext);
                     })
-                ); 
+                );
                 //remove duplicated extensions
                 extList = extList.filter((item: string, pos: number) => {
                     return extList.indexOf(item) == pos;
                 });
                 this.filePickerAccept = extList.join(",");
             }
-        )
+        );
     }
 
     fileChangeEvent(file: File) {
@@ -49,18 +49,18 @@ export class LoadShapesModal {
             formatName => {
                 this.selectedInputFormat = this.inputFormats.find(f => f.name == formatName);
             }
-        )
+        );
     }
 
     ok() {
 
         this.shaclService.loadShapes(this.file, this.selectedInputFormat, this.clearExisting).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.SHACL_SHAPES_LOADED"}).then(
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.SHACL_SHAPES_LOADED" }).then(
                     () => {
                         this.activeModal.close();
                     }
-                )
+                );
             }
         );
     }

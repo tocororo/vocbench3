@@ -28,7 +28,7 @@ export class TabsetPanelComponent {
 
     @Input() projectCtx: ProjectContext;
     @Input() hiddenTabs: RDFResourceRolesEnum[];
-    @Input() readonly: boolean = false;    
+    @Input() readonly: boolean = false;
     @Input() editable: boolean = true;
     @Output() nodeSelected = new EventEmitter<ARTResource>();
 
@@ -47,10 +47,10 @@ export class TabsetPanelComponent {
 
     private selectedResource: ARTResource;
 
-    private showTabCache: {[key: string]: boolean} = {};
+    private showTabCache: { [key: string]: boolean } = {};
 
     private ONTO_TYPE: string;
-    
+
     tabs: { role: RDFResourceRolesEnum, label: string, translationKey: string }[] = [
         { role: RDFResourceRolesEnum.cls, label: "Class", translationKey: 'DATA.CLASS.CLASS' },
         { role: RDFResourceRolesEnum.concept, label: "Concept", translationKey: 'DATA.CONCEPT.CONCEPT' },
@@ -115,7 +115,7 @@ export class TabsetPanelComponent {
         if (this.readonly || !this.editable) {
             this.allowMultiselection = false;
         }
-        
+
     }
 
     private onNodeSelected(node: ARTResource) {
@@ -136,7 +136,7 @@ export class TabsetPanelComponent {
                     this.viewChildSchemePanel.openAt(<ARTURIResource>resource);
                 } else if (resRole == RDFResourceRolesEnum.skosCollection || resRole == RDFResourceRolesEnum.skosOrderedCollection) {
                     this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
-                } else if (resRole == RDFResourceRolesEnum.property || resRole == RDFResourceRolesEnum.annotationProperty || 
+                } else if (resRole == RDFResourceRolesEnum.property || resRole == RDFResourceRolesEnum.annotationProperty ||
                     resRole == RDFResourceRolesEnum.datatypeProperty || resRole == RDFResourceRolesEnum.objectProperty ||
                     resRole == RDFResourceRolesEnum.ontologyProperty) {
                     this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
@@ -172,10 +172,10 @@ export class TabsetPanelComponent {
         if (this.showTabCache[tab] == null) {
             let show: boolean = false;
             if (tab == RDFResourceRolesEnum.cls) { //always visible, except if explicitly hidden
-                show = this.isTabAuthorized(tab) && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1); 
+                show = this.isTabAuthorized(tab) && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
             } else if (tab == RDFResourceRolesEnum.concept) { //visible for skos and ontolex projects, except if explicitly hidden
                 show = (
-                    this.isTabAuthorized(tab) && 
+                    this.isTabAuthorized(tab) &&
                     (this.isProjectSKOS() || this.isProjectOntolex()) &&
                     (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
                 );
@@ -220,7 +220,7 @@ export class TabsetPanelComponent {
             return this.isSchemeAuthorized();
         } else if (tab == RDFResourceRolesEnum.skosCollection) {
             return this.isCollectionAuthorized();
-        } else if (tab == RDFResourceRolesEnum.property) { 
+        } else if (tab == RDFResourceRolesEnum.property) {
             return this.isPropertyAuthorized();
         } else if (tab == RDFResourceRolesEnum.limeLexicon) {
             return this.isLexiconAuthorized();
@@ -263,7 +263,7 @@ export class TabsetPanelComponent {
         let tabToActivate: RDFResourceRolesEnum;
         if (resource.isURIResource()) {
             let role = resource.getRole();
-            if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty || 
+            if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty ||
                 role == RDFResourceRolesEnum.datatypeProperty || role == RDFResourceRolesEnum.objectProperty ||
                 role == RDFResourceRolesEnum.ontologyProperty) {
                 tabToActivate = RDFResourceRolesEnum.property;
@@ -282,10 +282,10 @@ export class TabsetPanelComponent {
             } else if (role == RDFResourceRolesEnum.dataRange) {
                 tabToActivate = RDFResourceRolesEnum.dataRange;
             } else {
-                this.sharedModals.openResourceView(resource, false);    
+                this.sharedModals.openResourceView(resource, false);
             }
         } else { //BNode are not in trees or lists => open in modal
-            this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_FOCUSABLE_RES_VIEW_MODAL", params:{resource: resource.getShow()}}, ModalType.warning).then(
+            this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.RESOURCE_NOT_FOCUSABLE_RES_VIEW_MODAL", params: { resource: resource.getShow() } }, ModalType.warning).then(
                 () => {
                     this.sharedModals.openResourceView(resource, false);
                 }
@@ -303,7 +303,7 @@ export class TabsetPanelComponent {
                     } else if (tabToActivate == RDFResourceRolesEnum.concept) {
                         this.viewChildConceptPanel.selectSearchedResource(<ARTURIResource>resource);
                     } else if (tabToActivate == RDFResourceRolesEnum.conceptScheme) {
-                        this.viewChildSchemePanel.openAt(<ARTURIResource>resource)
+                        this.viewChildSchemePanel.openAt(<ARTURIResource>resource);
                     } else if (tabToActivate == RDFResourceRolesEnum.limeLexicon) {
                         this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
                     } else if (tabToActivate == RDFResourceRolesEnum.ontolexLexicalEntry) {
@@ -315,7 +315,7 @@ export class TabsetPanelComponent {
                     }
                 });
             } else { //if not visible, open resource in modal
-                this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.RESOURCE_NOT_FOCUSABLE_RES_VIEW_MODAL", params:{resource: resource.getShow()}}, ModalType.warning).then(
+                this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.RESOURCE_NOT_FOCUSABLE_RES_VIEW_MODAL", params: { resource: resource.getShow() } }, ModalType.warning).then(
                     () => {
                         this.sharedModals.openResourceView(resource, false);
                     }

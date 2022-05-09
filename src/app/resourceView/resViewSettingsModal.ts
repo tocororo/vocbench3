@@ -20,7 +20,7 @@ export class ResViewSettingsModal {
     template: PartitionFilterPreference;
 
     constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private settingsService: SettingsServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.initTemplate();
@@ -31,7 +31,7 @@ export class ResViewSettingsModal {
     }
 
     loadTemplate() {
-        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE, true, false).then(
+        this.sharedModals.loadConfiguration({ key: "ACTIONS.LOAD_TEMPLATE" }, ConfigurationComponents.TEMPLATE_STORE, true, false).then(
             (conf: LoadConfigurationModalReturnData) => {
                 let templateProp: STProperties = conf.configuration.properties.find(p => p.name == "template");
                 if (templateProp != null) {
@@ -39,18 +39,18 @@ export class ResViewSettingsModal {
                     this.updateTemplate();
                 }
             }
-        )
+        );
     }
 
     storeTemplate() {
         let config: { [key: string]: any } = {
             template: this.template
-        }
-        this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE, config);
+        };
+        this.sharedModals.storeConfiguration({ key: "ACTIONS.SAVE_TEMPLATE" }, ConfigurationComponents.TEMPLATE_STORE, config);
     }
 
     setUserDefault() {
-        this.basicModals.confirm({key: "ACTIONS.SET_AS_DEFAULT"}, {key:"MESSAGES.SET_DEFAULT_TEMPLATE_FOR_ALL_PROJ_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "ACTIONS.SET_AS_DEFAULT" }, { key: "MESSAGES.SET_DEFAULT_TEMPLATE_FOR_ALL_PROJ_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.settingsService.getSettingsDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, Scope.USER).subscribe(
                     settings => {
@@ -61,18 +61,18 @@ export class ResViewSettingsModal {
                         resViewPref.resViewPartitionFilter = this.template;
                         this.settingsService.storeSettingDefault(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, Scope.USER, SettingsEnum.resourceView, resViewPref).subscribe();
                     }
-                )
+                );
             },
-            () => {}
-        )
-        
+            () => { }
+        );
+
     }
 
     /**
      * Reset the preference to the default, namely remove set the PUSettings, so if there is a default it is retrieved through the fallback
      */
     restoreDefault() {
-        this.basicModals.confirm({key:"ACTIONS.RESTORE_DEFAULT"}, {key:"MESSAGES.RESTORE_DEFAULT_TEMPLATE_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "ACTIONS.RESTORE_DEFAULT" }, { key: "MESSAGES.RESTORE_DEFAULT_TEMPLATE_CONFIRM" }, ModalType.warning).then(
             () => {
                 let resViewPrefs: ResourceViewPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences;
                 resViewPrefs.resViewPartitionFilter = null;
@@ -84,11 +84,11 @@ export class ResViewSettingsModal {
                             () => {
                                 this.initTemplate();
                             }
-                        )
+                        );
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 

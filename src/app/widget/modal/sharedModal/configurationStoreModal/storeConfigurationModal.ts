@@ -24,7 +24,7 @@ export class StoreConfigurationModal {
     references: Reference[];
     private selectedRef: Reference;
 
-    constructor(public activeModal: NgbActiveModal, private configurationsService: ConfigurationsServices, private basicModals: BasicModalServices) {}
+    constructor(public activeModal: NgbActiveModal, private configurationsService: ConfigurationsServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.configurationsService.getConfigurationManager(this.configurationComponent).subscribe(
@@ -33,7 +33,7 @@ export class StoreConfigurationModal {
                 this.selectedScope = this.scopes[0];
 
                 if (this.relativeRef) {
-                    this.identifier = this.relativeRef.substring(this.relativeRef.indexOf(":")+1);
+                    this.identifier = this.relativeRef.substring(this.relativeRef.indexOf(":") + 1);
                     this.selectedScope = Reference.getRelativeReferenceScope(this.relativeRef);
                 }
             }
@@ -55,7 +55,7 @@ export class StoreConfigurationModal {
     ok() {
         let idRegexp = new RegExp("^[\\w\\s\.,-]+$"); //regexp for validating id (id will be the name of the file storing the configuration)
         if (!idRegexp.test(this.identifier)) {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.NOT_ALLOWED_CHARS_IN_ID"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.NOT_ALLOWED_CHARS_IN_ID" }, ModalType.warning);
             return;
         }
 

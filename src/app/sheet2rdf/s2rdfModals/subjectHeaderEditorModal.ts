@@ -31,7 +31,7 @@ export class SubjectHeaderEditorModal {
 
     additionalPredObjs: PredObjPair[];
 
-    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, 
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
     }
 
@@ -54,19 +54,19 @@ export class SubjectHeaderEditorModal {
         //converter
         if (this.s2rdfModel.subjectHeader.node.converter != null) {
             this.selectedConverter = this.s2rdfModel.subjectHeader.node.converter;
-            this.memoizeData = { enabled: this.s2rdfModel.subjectHeader.node.memoize, id: this.s2rdfModel.subjectHeader.node.memoizeId }
+            this.memoizeData = { enabled: this.s2rdfModel.subjectHeader.node.memoize, id: this.s2rdfModel.subjectHeader.node.memoizeId };
         }
         //additional po
         this.additionalPredObjs = [];
         this.s2rdfModel.subjectHeader.additionalGraphs.forEach(g => {
             this.additionalPredObjs.push({ predicate: g.property, object: g.value });
-        })
+        });
 
         this.initMemoizedNodes();
     }
 
     changeType() {
-        this.browsingModals.browseClassTree({key:"DATA.ACTIONS.SELECT_CLASS"}).then(
+        this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.SELECT_CLASS" }).then(
             (cls: ARTURIResource) => {
                 this.type = cls;
             }
@@ -98,8 +98,8 @@ export class SubjectHeaderEditorModal {
                         sourceNodes.push(n);
                     }
                 }
-            })
-        })
+            });
+        });
         this.memoizedNodes = sourceNodes.length > 0 ? sourceNodes : null;
     }
 
@@ -108,18 +108,18 @@ export class SubjectHeaderEditorModal {
             return {
                 value: n.nodeId,
                 description: "(Memoization map ID: " + (n.memoizeId ? n.memoizeId : "Default") + ")"
-            }
+            };
         });
-        this.basicModals.select({key:"SHEET2RDF.HEADER_EDITOR.COPY_MEMOIZED_NODE_CONVERTER"}, {key:"SHEET2RDF.HEADER_EDITOR.SELECT_MEMOIZED_NODE"}, opts).then(
+        this.basicModals.select({ key: "SHEET2RDF.HEADER_EDITOR.COPY_MEMOIZED_NODE_CONVERTER" }, { key: "SHEET2RDF.HEADER_EDITOR.SELECT_MEMOIZED_NODE" }, opts).then(
             (opt: SelectionOption) => {
                 let selectedSourceMemoNode: NodeConversion = this.memoizedNodes.find(n => n.nodeId == opt.value);
-                this.memoizeData = { 
+                this.memoizeData = {
                     enabled: selectedSourceMemoNode.memoize,
                     id: selectedSourceMemoNode.memoizeId
-                }
+                };
                 this.selectedConverter = selectedSourceMemoNode.converter;
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -157,7 +157,7 @@ export class SubjectHeaderEditorModal {
             signatureOk = CODAConverter.isSignatureOk(this.selectedConverter);
         }
         return (
-            this.selectedHeader != null && 
+            this.selectedHeader != null &&
             (!this.assertType || this.type) &&
             this.selectedConverter != null &&
             signatureOk
@@ -168,7 +168,7 @@ export class SubjectHeaderEditorModal {
         //check that there are no additional PO pending
         for (let po of this.additionalPredObjs) {
             if (po.predicate == null || po.object == null) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.INCOMPLETE_PRED_OBJ_PAIR"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_PRED_OBJ_PAIR" }, ModalType.warning);
                 return;
             }
         }
@@ -179,13 +179,13 @@ export class SubjectHeaderEditorModal {
         });
         //execute the update
         let memoizePar: boolean = this.memoizeData ? this.memoizeData.enabled : null;
-        let memoizeIdPar: string = this.memoizeData ? this.memoizeData.id : null
+        let memoizeIdPar: string = this.memoizeData ? this.memoizeData.id : null;
         this.s2rdfService.updateSubjectHeader(this.sheetName, this.selectedHeader.id, this.selectedConverter.contractUri, this.selectedConverter.params,
             this.type, additionalPOParam, memoizePar, memoizeIdPar).subscribe(
-            () => {
-                this.activeModal.close();
-            }
-        );
+                () => {
+                    this.activeModal.close();
+                }
+            );
     }
 
     cancel() {

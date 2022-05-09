@@ -40,7 +40,7 @@ export class RegistrationComponent {
             if (constraintEmail) {
                 let constraintGivenName = this.activeRoute.snapshot.queryParams['givenName'];
                 let constraintFamilyName = this.activeRoute.snapshot.queryParams['familyName'];
-                this.constraintUser = {email: constraintEmail, givenName: constraintGivenName, familyName: constraintFamilyName};
+                this.constraintUser = { email: constraintEmail, givenName: constraintGivenName, familyName: constraintFamilyName };
             } else { //data about the SAML user are not provided. Probably the page has been accessed manually. Redirect to Home
                 this.router.navigate(["/Home"]);
             }
@@ -69,7 +69,7 @@ export class RegistrationComponent {
         }
         if (this.userForm.urlAsIri && (this.userForm.url == null || this.userForm.url.trim() == "")) {
             this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.USER_IRI_PERSONAL_URL_INCONSISTENT" }, ModalType.warning);
-            return
+            return;
         }
         //check email
         if (!UserForm.isValidEmail(this.userForm.email)) {
@@ -96,40 +96,40 @@ export class RegistrationComponent {
         this.userService.registerUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName, userIri,
             this.userForm.address, this.userForm.affiliation, this.userForm.url, this.userForm.avatarUrl, this.userForm.phone,
             this.userForm.languageProficiencies, this.userForm.customProperties).subscribe(
-            () => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                let message: Translation;
-                if (this.firstAccess) {
-                    message = {key:"MESSAGES.USER_ADMINISTRATOR_CREATED"};
-                } else {
-                    if (VBContext.getSystemSettings().emailVerification && this.authServMode == AuthServiceMode.Default) {
-                        //inform user that email verification is required
-                        message = {key:"MESSAGES.USER_CREATED_VERIFY_EMAIL"};
+                () => {
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    let message: Translation;
+                    if (this.firstAccess) {
+                        message = { key: "MESSAGES.USER_ADMINISTRATOR_CREATED" };
                     } else {
-                        //inform user that registration is completed and the account waits to be activated
-                        message = {key:"MESSAGES.USER_CREATED_WAIT_ACTIVATION"};
-                    }
-                }
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, message).then(
-                    () => {
-                        if (this.firstAccess) {
-                            //in case first access, the admin has been registered
-                            if (this.authServMode == AuthServiceMode.Default) { //login and redirect to sys config
-                                this.authService.login(this.userForm.email, this.userForm.password).subscribe(
-                                    () => {
-                                        this.router.navigate(["/Sysconfig"]);
-                                    }
-                                );
-                            } else { //SAML: simply redirect to sys config (registered user is automatically set server side)
-                                this.router.navigate(["/Sysconfig"]);
-                            }
+                        if (VBContext.getSystemSettings().emailVerification && this.authServMode == AuthServiceMode.Default) {
+                            //inform user that email verification is required
+                            message = { key: "MESSAGES.USER_CREATED_VERIFY_EMAIL" };
                         } else {
-                            this.router.navigate(['/Home']);
+                            //inform user that registration is completed and the account waits to be activated
+                            message = { key: "MESSAGES.USER_CREATED_WAIT_ACTIVATION" };
                         }
                     }
-                );
-            }
-        );
+                    this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, message).then(
+                        () => {
+                            if (this.firstAccess) {
+                                //in case first access, the admin has been registered
+                                if (this.authServMode == AuthServiceMode.Default) { //login and redirect to sys config
+                                    this.authService.login(this.userForm.email, this.userForm.password).subscribe(
+                                        () => {
+                                            this.router.navigate(["/Sysconfig"]);
+                                        }
+                                    );
+                                } else { //SAML: simply redirect to sys config (registered user is automatically set server side)
+                                    this.router.navigate(["/Sysconfig"]);
+                                }
+                            } else {
+                                this.router.navigate(['/Home']);
+                            }
+                        }
+                    );
+                }
+            );
     }
 
     private downloadPrivacyStatement() {

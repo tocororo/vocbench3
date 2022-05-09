@@ -32,7 +32,7 @@ export class LanguageBoxComponent {
     @Input() readonly: boolean;
     @Output() update = new EventEmitter();
     @Output() delete = new EventEmitter(); //requires the parent to delete this component
-    
+
     langForFlag: Language;
     definitions: ARTNode[]; // it is useful for method onDefinitionEdited
     terms: TermStructView[]; // it is used to assign each term if it's a prefLabel or not
@@ -48,12 +48,12 @@ export class LanguageBoxComponent {
     addLabelAuthorized: boolean;
 
     constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private customFormsServices: CustomFormsServices, private propService: PropertyServices, private resViewModals: ResViewModalServices, 
+        private customFormsServices: CustomFormsServices, private propService: PropertyServices, private resViewModals: ResViewModalServices,
         private basicModals: BasicModalServices, private creationModals: CreationModalServices) { }
 
     ngOnInit() {
         this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's useful to understand project lexicalization
-        this.langForFlag = Languages.getLanguageFromTag(this.lang)
+        this.langForFlag = Languages.getLanguageFromTag(this.lang);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -82,14 +82,14 @@ export class LanguageBoxComponent {
                 if (po.getPredicate().equals(SKOS.definition)) {
                     if (po.getObjects().length != 0) {
                         po.getObjects().forEach(d => {
-                            this.definitions.push(d)
-                        })
+                            this.definitions.push(d);
+                        });
                     }
                 }
             });
         }
         if (this.definitions.length == 0) { // it creates empty box definition when user adds a new language
-            this.definitions.push(null)
+            this.definitions.push(null);
         }
         this.updateEmptyDef();
     }
@@ -101,19 +101,19 @@ export class LanguageBoxComponent {
                 if (po.getPredicate().equals(SKOSXL.prefLabel) || po.getPredicate().equals(SKOS.prefLabel)) {
                     if (po.getObjects().length != 0) {
                         po.getObjects().forEach(obj => {
-                            this.terms.push({ object: obj, predicate: po.getPredicate(), isPrefLabel: true, lang: this.lang })
-                        })
+                            this.terms.push({ object: obj, predicate: po.getPredicate(), isPrefLabel: true, lang: this.lang });
+                        });
                     } else { //  always insert a prefLabel first both if there are no objects with a prefLabel predicate and if there are only objects with an altLabel type predicate
-                        this.terms.push({ predicate: po.getPredicate(), isPrefLabel: true, lang: this.lang })
+                        this.terms.push({ predicate: po.getPredicate(), isPrefLabel: true, lang: this.lang });
                     }
                 } else if (po.getPredicate().equals(SKOSXL.altLabel) || po.getPredicate().equals(SKOS.altLabel)) {
                     if (po.getObjects().length != 0) {
                         po.getObjects().forEach(obj => {
-                            this.terms.push({ object: obj, predicate: po.getPredicate(), isPrefLabel: false, lang: this.lang })
-                        })
+                            this.terms.push({ object: obj, predicate: po.getPredicate(), isPrefLabel: false, lang: this.lang });
+                        });
                     }
                 }
-            })
+            });
         }
 
         this.updateEmptyTerm();
@@ -150,7 +150,7 @@ export class LanguageBoxComponent {
                             this.update.emit();
                         }
                     }
-                )
+                );
             }
         }
     }
@@ -179,7 +179,7 @@ export class LanguageBoxComponent {
      * Add a new empty box definition
      */
     private addInlineDefinition() {
-        this.definitions.push(null)
+        this.definitions.push(null);
         this.updateEmptyDef();
     }
 
@@ -187,15 +187,15 @@ export class LanguageBoxComponent {
      * Open a modal for entering a new plain definition
      */
     private addPlainDefinition() {
-        this.creationModals.newPlainLiteral({key:"DATA.ACTIONS.ADD_DEFINITION"}, null, false, this.lang, true).then(
+        this.creationModals.newPlainLiteral({ key: "DATA.ACTIONS.ADD_DEFINITION" }, null, false, this.lang, true).then(
             (literalDef: ARTLiteral) => {
                 this.skosService.addNote(this.resource, SKOS.definition, literalDef).subscribe(
                     () => {
                         this.update.emit();
                     }
-                )
+                );
             }
-        )
+        );
     }
 
     /**
@@ -203,13 +203,13 @@ export class LanguageBoxComponent {
      * @param cf 
      */
     private addCustomFormDefinition(cf: CustomForm) {
-        this.resViewModals.enrichCustomForm({key:"DATA.ACTIONS.ADD_DEFINITION"}, cf.getId(), this.lang).then(
+        this.resViewModals.enrichCustomForm({ key: "DATA.ACTIONS.ADD_DEFINITION" }, cf.getId(), this.lang).then(
             (cfValue: CustomFormValue) => {
                 this.skosService.addNote(this.resource, SKOS.definition, cfValue).subscribe(
                     () => {
                         this.update.emit();
                     }
-                )
+                );
             },
             () => { }
         );
@@ -217,23 +217,23 @@ export class LanguageBoxComponent {
 
     // it needs to add ontolex part
     addTermBox() {
-        if (this.terms.some(term => term.predicate.equals(SKOSXL.prefLabel) || term.predicate.equals(SKOS.prefLabel))) { 
+        if (this.terms.some(term => term.predicate.equals(SKOSXL.prefLabel) || term.predicate.equals(SKOS.prefLabel))) {
             // it means that already there is a prefLabel predicate => so add an altLabel (with SKOS and SKOSXL)
             if (this.lexicalizationModelType == SKOSXL.uri) {
-                this.terms.push({ predicate: SKOSXL.altLabel, lang: this.lang })
+                this.terms.push({ predicate: SKOSXL.altLabel, lang: this.lang });
                 this.updateEmptyTerm();
             } else if (this.lexicalizationModelType == SKOS.uri) {
-                this.terms.push({ predicate: SKOS.altLabel, lang: this.lang })
+                this.terms.push({ predicate: SKOS.altLabel, lang: this.lang });
                 this.updateEmptyTerm();
             }
         } else { // contrary
             if (this.lexicalizationModelType == SKOSXL.uri) {
-                this.terms.push({ predicate: SKOSXL.prefLabel, isPrefLabel: true, lang: this.lang })
-                this.sortPredicates(this.terms)
+                this.terms.push({ predicate: SKOSXL.prefLabel, isPrefLabel: true, lang: this.lang });
+                this.sortPredicates(this.terms);
                 this.updateEmptyTerm();
             } else if (this.lexicalizationModelType == SKOS.uri) {
-                this.terms.push({ predicate: SKOS.prefLabel, isPrefLabel: true, lang: this.lang })
-                this.sortPredicates(this.terms)
+                this.terms.push({ predicate: SKOS.prefLabel, isPrefLabel: true, lang: this.lang });
+                this.sortPredicates(this.terms);
                 this.updateEmptyTerm();
             }
         }
@@ -257,7 +257,7 @@ export class LanguageBoxComponent {
                     return -1;
                 }
                 return 0;
-            })
+            });
         } else if (this.lexicalizationModelType == SKOSXL.uri) {
             list.sort((second: TermStructView, first: TermStructView) => {
                 if (first.predicate.equals(SKOSXL.prefLabel) && second.predicate.equals(SKOSXL.altLabel)) {
@@ -267,7 +267,7 @@ export class LanguageBoxComponent {
                     return -1;
                 }
                 return 0;
-            })
+            });
 
         } else if (this.lexicalizationModelType == OntoLex.uri) {
             // ontolex
@@ -289,7 +289,7 @@ export class LanguageBoxComponent {
         } else { // case in which a box is deleted and conteins a term with value
             this.terms.forEach(term => {
                 if (term == termToDelete) {
-                    if (this.definitions.length == 1 && this.definitions.some(def => def == null) && this.terms.length == 1) {  
+                    if (this.definitions.length == 1 && this.definitions.some(def => def == null) && this.terms.length == 1) {
                         //it means that if there is only one term box( with a value inside) and one empty definition then delete only term box instead of all (with refresh)
                         let serviceInvocation: Observable<any>;
                         if (term.predicate.equals(SKOSXL.prefLabel)) {
@@ -304,13 +304,13 @@ export class LanguageBoxComponent {
                         if (serviceInvocation != null) {
                             serviceInvocation.subscribe(
                                 () => {
-                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                    this.terms.splice(this.terms.indexOf(termToDelete), 1);
                                     this.updateEmptyTerm();
                                     // if (this.terms.length == 0) {
                                     //     this.displayRemoveButtonOnFlag = true
                                     // }
                                 }
-                            )
+                            );
                         }
                     } else {
                         let serviceInvocation: Observable<any>;
@@ -331,7 +331,7 @@ export class LanguageBoxComponent {
                     }
                 }
 
-            })
+            });
 
         }
 

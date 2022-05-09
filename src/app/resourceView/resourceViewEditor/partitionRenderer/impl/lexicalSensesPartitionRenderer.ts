@@ -33,7 +33,7 @@ export class LexicalSensesPartitionRenderer extends PartitionRenderSingleRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (predicate.getURI() == this.rootProperty.getURI()) {
-            this.creationModals.newOntoLexSenseCf({key:"DATA.ACTIONS.ADD_LEXICAL_SENSE"}, false).then(
+            this.creationModals.newOntoLexSenseCf({ key: "DATA.ACTIONS.ADD_LEXICAL_SENSE" }, false).then(
                 (data: NewLexSenseCfModalReturnData) => {
                     let addFn: Observable<any>;
                     if (data.nature == 'reference') {
@@ -43,12 +43,12 @@ export class LexicalSensesPartitionRenderer extends PartitionRenderSingleRoot {
                     }
                     addFn.subscribe(
                         () => {
-                            this.update.emit()
+                            this.update.emit();
                         }
                     );
                 },
-                () => {}
-            )
+                () => { }
+            );
         } else {
             this.enrichProperty(predicate);
         }

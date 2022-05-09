@@ -45,7 +45,7 @@ export class NewEmbeddedLexicalizationModal {
             if (ResourceUtils.testIRI(this.lexicalizationSet)) {
                 lexicalizationSetPar = new ARTURIResource(this.lexicalizationSet);
             } else {
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: this.lexicalizationSet}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: this.lexicalizationSet } }, ModalType.warning);
                 return;
             }
         }
@@ -53,24 +53,24 @@ export class NewEmbeddedLexicalizationModal {
             if (ResourceUtils.testIRI(this.lexiconDataset)) {
                 lexiconDatasetPar = new ARTURIResource(this.lexiconDataset);
             } else {
-                this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_IRI", params:{iri: this.lexiconDataset}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: this.lexiconDataset } }, ModalType.warning);
                 return;
             }
         }
 
         let langRegexp = new RegExp("^[a-z]{2,3}(?:-[A-Z]{2,3}(?:-[a-zA-Z]{4})?)?$");
         if (!langRegexp.test(this.language)) {
-            this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_LANG_TAG", params:{lang: this.language}}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_LANG_TAG", params: { lang: this.language } }, ModalType.warning);
             return;
         }
 
-        this.metadataRegistryService.addEmbeddedLexicalizationSet(new ARTURIResource(this.catalogRecordIdentity), 
-            new ARTURIResource(this.lexicalizationModel), this.language, lexicalizationSetPar, lexiconDatasetPar, 
+        this.metadataRegistryService.addEmbeddedLexicalizationSet(new ARTURIResource(this.catalogRecordIdentity),
+            new ARTURIResource(this.lexicalizationModel), this.language, lexicalizationSetPar, lexiconDatasetPar,
             this.references, this.lexicalEntries, this.lexicalizations, this.percentage, this.avgNumOfLexicalizations).subscribe(
-            stReps => {
-                this.activeModal.close();
-            }
-        );
+                stReps => {
+                    this.activeModal.close();
+                }
+            );
     }
 
     cancel() {

@@ -13,12 +13,12 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 export class OntologyMirrorModal {
 
     @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
-    
+
     mirrorList: { file: string, baseURI: string }[]; //array of {file: string, namespace: string}
 
     private changed: boolean = false;
 
-    constructor(public activeModal: NgbActiveModal, private ontoMgrService: OntoManagerServices, private basicModals: BasicModalServices) {}
+    constructor(public activeModal: NgbActiveModal, private ontoMgrService: OntoManagerServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.refreshOntoMirror();
@@ -37,7 +37,7 @@ export class OntologyMirrorModal {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromWebWithUri(mirror: { file: string, baseURI: string }) {
-        this.basicModals.prompt({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_ONTO_MIRROR_FROM_WEB"}, { value: "BaseURI" }).then(
+        this.basicModals.prompt({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_ONTO_MIRROR_FROM_WEB" }, { value: "BaseURI" }).then(
             (newBaseURI: any) => {
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                 this.ontoMgrService.updateOntologyMirrorEntry("updateFromBaseURI", newBaseURI, mirror.file).subscribe(
@@ -56,7 +56,7 @@ export class OntologyMirrorModal {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromWebFromAltUrl(mirror: { file: string, baseURI: string }) {
-        this.basicModals.prompt({key:"METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_ONTO_MIRROR_FROM_ALT_URL"}, { value: "URL" }).then(
+        this.basicModals.prompt({ key: "METADATA.NAMESPACES_AND_IMPORTS.ACTIONS.UPDATE_ONTO_MIRROR_FROM_ALT_URL" }, { value: "URL" }).then(
             (url: any) => {
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                 this.ontoMgrService.updateOntologyMirrorEntry("updateFromAlternativeURL", mirror.baseURI, mirror.file, url).subscribe(
@@ -82,7 +82,7 @@ export class OntologyMirrorModal {
                     stResp => {
                         UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                     }
-                )
+                );
             },
             () => { }
         );

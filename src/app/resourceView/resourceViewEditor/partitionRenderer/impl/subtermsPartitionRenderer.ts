@@ -33,8 +33,8 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.browsingModals.browseLexicalEntryList({key:"DATA.ACTIONS.ADD_SUBTERM"}, null, true, true, false, true).then(
-            (values: ARTURIResource[]|ARTURIResource) => { //array if multiple selected, one value otherwise
+        this.browsingModals.browseLexicalEntryList({ key: "DATA.ACTIONS.ADD_SUBTERM" }, null, true, true, false, true).then(
+            (values: ARTURIResource[] | ARTURIResource) => { //array if multiple selected, one value otherwise
                 let addFunctions: MultiActionFunction[] = [];
                 if (values instanceof ARTURIResource) {
                     values = [values];
@@ -47,8 +47,8 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
                 });
                 this.addMultiple(addFunctions);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
@@ -58,7 +58,7 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         this.getRemoveFunction(predicate, object).subscribe(
             stResp => {
-                this.update.emit()
+                this.update.emit();
             }
         );
     }

@@ -41,7 +41,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, sharedModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
     }
-    
+
     ngOnInit() {
         super.ngOnInit();
         this.modelType = VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType();
@@ -51,7 +51,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
     getActionContext(): VBActionFunctionCtx {
         let metaClass: ARTURIResource = ResourceUtils.convertRoleToClass(this.panelRole, this.modelType);
-        let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildList.blockDivElement }
+        let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildList.blockDivElement };
         return actionCtx;
     }
 
@@ -63,27 +63,27 @@ export class SchemeListPanelComponent extends AbstractListPanel {
             searchLangs = searchSettings.languages;
             includeLocales = searchSettings.includeLocales;
         }
-        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], searchSettings.useLocalName, 
+        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], searchSettings.useLocalName,
             searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null, null,
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-            searchResult => {
-                if (searchResult.length == 0) {
-                    this.basicModals.alert({key:"SEARCH.SEARCH"}, {key:"MESSAGES.NO_RESULTS_FOUND_FOR", params:{text: searchedText}}, ModalType.warning);
-                } else { //1 or more results
-                    if (searchResult.length == 1) {
-                        this.openAt(searchResult[0]);
-                    } else { //multiple results, ask the user which one select
-                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.sharedModals.selectResource({key:"SEARCH.SEARCH"}, {key:"MESSAGES.TOT_RESULTS_FOUND", params:{count: searchResult.length}}, searchResult, this.rendering).then(
-                            (selectedResources: ARTURIResource[]) => {
-                                this.openAt(selectedResources[0]);
-                            },
-                            () => { }
-                        );
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.NO_RESULTS_FOUND_FOR", params: { text: searchedText } }, ModalType.warning);
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.openAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                            this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.TOT_RESULTS_FOUND", params: { count: searchResult.length } }, searchResult, this.rendering).then(
+                                (selectedResources: ARTURIResource[]) => {
+                                    this.openAt(selectedResources[0]);
+                                },
+                                () => { }
+                            );
+                        }
                     }
                 }
-            }
-        );
+            );
     }
 
     openAt(node: ARTURIResource) {
@@ -112,23 +112,23 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
     private addAllConcepts() {
         //message to warn the user that in case of a lot of concept the process could be long?
-        this.basicModals.confirm({key:"DATA.ACTIONS.ADD_CONCEPT_TO_SCHEME"}, {key:"MESSAGES.ADD_ALL_CONCEPT_TO_SCHEME_CONFIRM", params:{scheme: this.selectedNode.getShow()}},
+        this.basicModals.confirm({ key: "DATA.ACTIONS.ADD_CONCEPT_TO_SCHEME" }, { key: "MESSAGES.ADD_ALL_CONCEPT_TO_SCHEME_CONFIRM", params: { scheme: this.selectedNode.getShow() } },
             ModalType.warning).then(
-            confirm => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.skosService.addMultipleConceptsToScheme(this.selectedNode).subscribe(
-                    stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        if (ResourceUtils.containsNode(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes, this.selectedNode)) {
-                            //in case the target scheme is active emit refreshTreeEvent so that the concept tree refreshes
-                            this.eventHandler.refreshTreeListEvent.emit([RDFResourceRolesEnum.concept]);
+                confirm => {
+                    UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                    this.skosService.addMultipleConceptsToScheme(this.selectedNode).subscribe(
+                        stResp => {
+                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                            if (ResourceUtils.containsNode(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes, this.selectedNode)) {
+                                //in case the target scheme is active emit refreshTreeEvent so that the concept tree refreshes
+                                this.eventHandler.refreshTreeListEvent.emit([RDFResourceRolesEnum.concept]);
+                            }
                         }
-                    }
-                );
-            },
-            () => {}
-        );
-        
+                    );
+                },
+                () => { }
+            );
+
     }
 
     refresh() {

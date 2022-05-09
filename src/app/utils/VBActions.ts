@@ -284,41 +284,41 @@ export class VBActionFunctions {
 
         this.actionsFunctionMap = new Map([
             //cls
-            [ VBActionsEnum.classesCreateClass, this.classesCreateClass ],
-            [ VBActionsEnum.classesCreateSubClass, this.classesCreateSubClass ],
-            [ VBActionsEnum.classesDeleteClass, this.classesDeleteClass ],
+            [VBActionsEnum.classesCreateClass, this.classesCreateClass],
+            [VBActionsEnum.classesCreateSubClass, this.classesCreateSubClass],
+            [VBActionsEnum.classesDeleteClass, this.classesDeleteClass],
             //concept
-            [ VBActionsEnum.skosCreateTopConcept, this.skosCreateTopConcept ],
-            [ VBActionsEnum.skosCreateNarrowerConcept, this.skosCreateNarrowerConcept ],
-            [ VBActionsEnum.skosDeleteConcept, this.skosDeleteConcept ],
+            [VBActionsEnum.skosCreateTopConcept, this.skosCreateTopConcept],
+            [VBActionsEnum.skosCreateNarrowerConcept, this.skosCreateNarrowerConcept],
+            [VBActionsEnum.skosDeleteConcept, this.skosDeleteConcept],
             //conceptScheme
-            [ VBActionsEnum.skosCreateScheme, this.skosCreateScheme ],
-            [ VBActionsEnum.skosDeleteScheme, this.skosDeleteScheme ],
+            [VBActionsEnum.skosCreateScheme, this.skosCreateScheme],
+            [VBActionsEnum.skosDeleteScheme, this.skosDeleteScheme],
             //dataRange
-            [ VBActionsEnum.datatypesCreateDatatype, this.datatypesCreateDatatype ],
-            [ VBActionsEnum.datatypesDeleteDatatype, this.datatypesDeleteDatatype ],
+            [VBActionsEnum.datatypesCreateDatatype, this.datatypesCreateDatatype],
+            [VBActionsEnum.datatypesDeleteDatatype, this.datatypesDeleteDatatype],
             //individual
-            [ VBActionsEnum.classesCreateIndividual, this.classesCreateIndividual ],
-            [ VBActionsEnum.classesDeleteIndividual, this.classesDeleteIndividual ],
+            [VBActionsEnum.classesCreateIndividual, this.classesCreateIndividual],
+            [VBActionsEnum.classesDeleteIndividual, this.classesDeleteIndividual],
             //limeLexicon
-            [ VBActionsEnum.ontolexCreateLexicon, this.ontolexCreateLexicon ],
-            [ VBActionsEnum.ontolexDeleteLexicon, this.ontolexDeleteLexicon ],
+            [VBActionsEnum.ontolexCreateLexicon, this.ontolexCreateLexicon],
+            [VBActionsEnum.ontolexDeleteLexicon, this.ontolexDeleteLexicon],
             //ontolexLexicalEntry
-            [ VBActionsEnum.ontolexCreateLexicalEntry, this.ontolexCreateLexicalEntry ],
-            [ VBActionsEnum.ontolexDeleteLexicalEntry, this.ontolexDeleteLexicalEntry ],
+            [VBActionsEnum.ontolexCreateLexicalEntry, this.ontolexCreateLexicalEntry],
+            [VBActionsEnum.ontolexDeleteLexicalEntry, this.ontolexDeleteLexicalEntry],
             //property
-            [ VBActionsEnum.propertiesCreateProperty, this.propertiesCreateProperty ],
-            [ VBActionsEnum.propertiesCreateSubProperty, this.propertiesCreateSubProperty ],
-            [ VBActionsEnum.propertiesDeleteProperty, this.propertiesDeleteProperty ],
+            [VBActionsEnum.propertiesCreateProperty, this.propertiesCreateProperty],
+            [VBActionsEnum.propertiesCreateSubProperty, this.propertiesCreateSubProperty],
+            [VBActionsEnum.propertiesDeleteProperty, this.propertiesDeleteProperty],
             //skosCollection
-            [ VBActionsEnum.skosCreateCollection, this.skosCreateTopCollection ],
-            [ VBActionsEnum.skosCreateSubCollection, this.skosCreateSubCollection ],
-            [ VBActionsEnum.skosDeleteCollection, this.skosDeleteCollection ],
+            [VBActionsEnum.skosCreateCollection, this.skosCreateTopCollection],
+            [VBActionsEnum.skosCreateSubCollection, this.skosCreateSubCollection],
+            [VBActionsEnum.skosDeleteCollection, this.skosDeleteCollection],
             //translationSet
-            [ VBActionsEnum.ontolexCreateTranslationSet, this.ontolexCreateTranslationSet ],
-            [ VBActionsEnum.ontolexDeleteTranslationSet, this.ontolexDeleteTranslationSet ],
+            [VBActionsEnum.ontolexCreateTranslationSet, this.ontolexCreateTranslationSet],
+            [VBActionsEnum.ontolexDeleteTranslationSet, this.ontolexDeleteTranslationSet],
             //commons
-            [ VBActionsEnum.resourcesSetDeprecated, this.resourcesSetDeprecated ]
+            [VBActionsEnum.resourcesSetDeprecated, this.resourcesSetDeprecated]
         ]);
     }
 
@@ -332,7 +332,7 @@ export class VBActionFunctions {
 
     private classesCreateClass = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_CLASS"}, ctx.metaClass).then(
+            this.creationModals.newResourceCf({ key: "DATA.ACTIONS.CREATE_CLASS" }, ctx.metaClass).then(
                 (data: NewResourceCfModalReturnData) => {
                     let superClass: ARTURIResource = OWL.thing;
                     if (data.cls.getURI() == RDFS.class.getURI()) {
@@ -346,14 +346,14 @@ export class VBActionFunctions {
                         }
                     );
                 },
-                () => { observer.error(null) }
+                () => { observer.error(null); }
             );
         });
-    }
+    };
 
     private classesCreateSubClass = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_SUBCLASS"}, ctx.metaClass).then(
+            this.creationModals.newResourceCf({ key: "DATA.ACTIONS.CREATE_SUBCLASS" }, ctx.metaClass).then(
                 (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.classesService.createClass(data.uriResource, parent, data.cls, data.cfValue).subscribe(
@@ -363,14 +363,14 @@ export class VBActionFunctions {
                         }
                     );
                 },
-                () => { observer.error(null) }
+                () => { observer.error(null); }
             );
         });
-    }
+    };
 
     private classesDeleteClass = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
-            UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);;
+            UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
             this.classesService.deleteClass(deletingResource).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -378,7 +378,7 @@ export class VBActionFunctions {
                 }
             );
         });
-    }
+    };
 
     /**
      * Concepts
@@ -386,18 +386,18 @@ export class VBActionFunctions {
 
     private skosCreateTopConcept = (ctx: VBActionFunctionCtx) => {
         return this.createConcept(ctx);
-    }
+    };
 
     private skosCreateNarrowerConcept = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return this.createConcept(ctx, parent);
-    }
+    };
 
     private createConcept(ctx: VBActionFunctionCtx, parent?: ARTURIResource) {
 
         let creationModalTitleKey: string = parent ? "DATA.ACTIONS.CREATE_NARROWER_CONCEPT" : "DATA.ACTIONS.CREATE_CONCEPT";
 
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newConceptCf({key:creationModalTitleKey}, parent, ctx.schemes, ctx.metaClass, true).then(
+            this.creationModals.newConceptCf({ key: creationModalTitleKey }, parent, ctx.schemes, ctx.metaClass, true).then(
                 (data: NewConceptCfModalReturnData) => {
                     let clashLabelMode: PrefLabelClashMode = VBContext.getWorkingProjectCtx().getProjectSettings().prefLabelClashMode;
                     let checkClash: boolean = clashLabelMode != PrefLabelClashMode.allow; //if not "allow" (forbid or warning) enable the check
@@ -420,7 +420,7 @@ export class VBActionFunctions {
 
         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
         this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, broaderProp, data.cfValue, checkAlt, checkPref).subscribe(
-            () => { 
+            () => {
                 UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                 HttpServiceContext.setContextForce(false); //remove the ctx_force param
                 observer.next(null);
@@ -428,7 +428,7 @@ export class VBActionFunctions {
             (err: Error) => {
                 if (err.name.endsWith('PrefAltLabelClashException')) {
                     let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                    this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                         confirm => {
                             this.createConceptImpl(ctx, data, observer, parent, false, checkPref, forceBlacklist);
                         },
@@ -440,7 +440,7 @@ export class VBActionFunctions {
                     let msg = err.message;
                     if (clashLabelMode == PrefLabelClashMode.warning) { //mode warning => ask user if he wants to force the operation
                         msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                        this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                        this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                             confirm => {
                                 this.createConceptImpl(ctx, data, observer, parent, checkAlt, false, forceBlacklist);
                             },
@@ -449,19 +449,19 @@ export class VBActionFunctions {
                             }
                         );
                     } else { //mode forbid => just show the error message
-                        this.basicModals.alert({key:"STATUS.WARNING"}, msg, ModalType.warning)
+                        this.basicModals.alert({ key: "STATUS.WARNING" }, msg, ModalType.warning);
                         observer.error(null);
                     }
                 } else if (err.name.endsWith('BlacklistForbiddendException')) {
                     let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                    this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                         confirm => {
                             this.createConceptImpl(ctx, data, observer, parent, checkAlt, checkPref, true);
                         },
                         reject => {
                             observer.error(null);
                         }
-                    )
+                    );
                 }
             }
         );
@@ -477,7 +477,7 @@ export class VBActionFunctions {
                 }
             );
         });
-    }
+    };
 
     /**
      * ConceptScheme
@@ -485,7 +485,7 @@ export class VBActionFunctions {
 
     private skosCreateScheme = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf({key:"DATA.ACTIONS.CREATE_SCHEME"}, ctx.metaClass, true).then(
+            this.creationModals.newResourceWithLiteralCf({ key: "DATA.ACTIONS.CREATE_SCHEME" }, ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue).subscribe(
@@ -496,7 +496,7 @@ export class VBActionFunctions {
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
                                 let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                                this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue, false).subscribe(
@@ -515,7 +515,7 @@ export class VBActionFunctions {
                 cancel => { observer.error(null); }
             );
         });
-    }
+    };
 
     private skosDeleteScheme = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
@@ -530,7 +530,7 @@ export class VBActionFunctions {
                             },
                         );
                     } else {
-                        this.basicModals.confirm({key: "DATA.ACTIONS.DELETE_SCHEME"}, {key:"MESSAGES.NOT_EMPTY_SCHEME_DANGLING_CONCEPT_WARN_CONFIRM"}, ModalType.warning).then(
+                        this.basicModals.confirm({ key: "DATA.ACTIONS.DELETE_SCHEME" }, { key: "MESSAGES.NOT_EMPTY_SCHEME_DANGLING_CONCEPT_WARN_CONFIRM" }, ModalType.warning).then(
                             confirm => {
                                 UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                 this.skosService.deleteConceptScheme(deletingResource).subscribe(
@@ -546,7 +546,7 @@ export class VBActionFunctions {
                 }
             );
         });
-    }
+    };
 
     /**
      * dataRange
@@ -554,7 +554,7 @@ export class VBActionFunctions {
 
     private datatypesCreateDatatype = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_DATATYPE"}, RDFS.datatype, false).then(
+            this.creationModals.newResourceCf({ key: "DATA.ACTIONS.CREATE_DATATYPE" }, RDFS.datatype, false).then(
                 (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.datatypeService.createDatatype(data.uriResource).subscribe(
@@ -567,7 +567,7 @@ export class VBActionFunctions {
                 cancel => { observer.error(null); }
             );
         });
-    }
+    };
 
     private datatypesDeleteDatatype = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
@@ -577,17 +577,17 @@ export class VBActionFunctions {
                     UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                     observer.next(null);
                 }
-            )
+            );
         });
-    }
-    
+    };
+
     /**
      * inidividual
      */
 
     private classesCreateIndividual = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf({key:"DATA.ACTIONS.CREATE_INSTANCE"}, ctx.metaClass, false).then(
+            this.creationModals.newResourceCf({ key: "DATA.ACTIONS.CREATE_INSTANCE" }, ctx.metaClass, false).then(
                 (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.classesService.createInstance(data.uriResource, ctx.metaClass, data.cfValue).subscribe(
@@ -598,10 +598,10 @@ export class VBActionFunctions {
                         (err: Error) => {
                             if (err.name.endsWith('TransactionSystemException')) {
                                 if (err.stack.includes("ShaclSailValidationException")) {
-                                    this.basicModals.alert({key:"STATUS.WARNING"}, {key: "MESSAGES.SHACL_VIOLATION_ERROR"}, ModalType.warning, err.message);
+                                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.SHACL_VIOLATION_ERROR" }, ModalType.warning, err.message);
                                     observer.error(null);
                                 } else {
-                                    this.basicModals.alert({key:"STATUS.ERROR"}, err.message, ModalType.error, err.stack);
+                                    this.basicModals.alert({ key: "STATUS.ERROR" }, err.message, ModalType.error, err.stack);
                                     observer.error(null);
                                 }
                             }
@@ -611,7 +611,7 @@ export class VBActionFunctions {
                 cancel => { observer.error(null); }
             );
         });
-    }
+    };
     private classesDeleteIndividual = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -620,9 +620,9 @@ export class VBActionFunctions {
                     UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                     observer.next(null);
                 }
-            )
+            );
         });
-    }
+    };
 
     /**
      * limeLexicon
@@ -630,7 +630,7 @@ export class VBActionFunctions {
 
     private ontolexCreateLexicon = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newLexiconCf({key:"DATA.ACTIONS.CREATE_LEXICON"}).then(
+            this.creationModals.newLexiconCf({ key: "DATA.ACTIONS.CREATE_LEXICON" }).then(
                 (res: NewLexiconCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.ontolexService.createLexicon(res.language, res.uriResource, res.title, res.cfValue).subscribe(
@@ -643,7 +643,7 @@ export class VBActionFunctions {
                 cancel => { observer.error(null); }
             );
         });
-    }
+    };
     private ontolexDeleteLexicon = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -654,7 +654,7 @@ export class VBActionFunctions {
                 }
             );
         });
-    }
+    };
 
     /**
      * ontolexLexicalEntry
@@ -662,21 +662,21 @@ export class VBActionFunctions {
 
     private ontolexCreateLexicalEntry = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf({key:"DATA.ACTIONS.CREATE_LEX_ENTRY"}, OntoLex.lexicalEntry, true, "Canonical Form",
+            this.creationModals.newResourceWithLiteralCf({ key: "DATA.ACTIONS.CREATE_LEX_ENTRY" }, OntoLex.lexicalEntry, true, "Canonical Form",
                 ctx.lexicon.lang, { constrain: true, locale: true }).then(
-                (data: NewResourceWithLiteralCfModalReturnData) => {
-                    UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
-                    this.ontolexService.createLexicalEntry(data.literal, ctx.lexicon.res, data.uriResource, data.cls, data.cfValue).subscribe(
-                        stResp => {
-                            UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
-                            observer.next(null);
-                        }
-                    );
-                },
-                cancel => { observer.error(null); }
-            );
+                    (data: NewResourceWithLiteralCfModalReturnData) => {
+                        UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
+                        this.ontolexService.createLexicalEntry(data.literal, ctx.lexicon.res, data.uriResource, data.cls, data.cfValue).subscribe(
+                            stResp => {
+                                UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
+                                observer.next(null);
+                            }
+                        );
+                    },
+                    cancel => { observer.error(null); }
+                );
         });
-    }
+    };
 
     private ontolexDeleteLexicalEntry = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
@@ -688,7 +688,7 @@ export class VBActionFunctions {
                 }
             );
         });
-    }
+    };
 
 
     /**
@@ -697,7 +697,7 @@ export class VBActionFunctions {
 
     private propertiesCreateProperty = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf({key:"DATA.ACTIONS.CREATE_PROPERTY"}, ctx.metaClass, false).then(
+            this.creationModals.newResourceCf({ key: "DATA.ACTIONS.CREATE_PROPERTY" }, ctx.metaClass, false).then(
                 (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.propertyService.createProperty(data.cls, data.uriResource, null, data.cfValue).subscribe(
@@ -710,10 +710,10 @@ export class VBActionFunctions {
                 cancel => { observer.error(null); }
             );
         });
-    }
+    };
     private propertiesCreateSubProperty = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf({key:"DATA.ACTIONS.CREATE_SUBPROPERTY"}, ctx.metaClass, false).then(
+            this.creationModals.newResourceCf({ key: "DATA.ACTIONS.CREATE_SUBPROPERTY" }, ctx.metaClass, false).then(
                 (data: NewResourceCfModalReturnData) => {
                     this.propertyService.createProperty(data.cls, data.uriResource, parent, data.cfValue).subscribe(
                         stResp => {
@@ -725,7 +725,7 @@ export class VBActionFunctions {
                 cancel => { observer.error(null); }
             );
         });
-    }
+    };
     private propertiesDeleteProperty = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -734,40 +734,40 @@ export class VBActionFunctions {
                     UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                     observer.next(null);
                 }
-            )
+            );
         });
-    }
+    };
 
     /**
      * SkosCollection
      */
     private skosCreateTopCollection = (ctx: VBActionFunctionCtx) => {
         return this.skosCreateCollection(ctx);
-    }
+    };
 
     private skosCreateSubCollection = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return this.skosCreateCollection(ctx, parent);
-    }
+    };
 
     private skosCreateCollection(ctx: VBActionFunctionCtx, parent?: ARTURIResource) {
         let creationModalTitleKey: string = parent == null ? "DATA.ACTIONS.CREATE_COLLECTION" : "DATA.ACTIONS.CREATE_NESTED_COLLECTION";
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf({key: creationModalTitleKey}, ctx.metaClass, true).then(
+            this.creationModals.newResourceWithLiteralCf({ key: creationModalTitleKey }, ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue).subscribe(
                         () => {
-                            UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement),
+                            UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                             observer.next(null);
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
                                 let msg = err.message + " " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                                this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
+                                this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
                                     confirm => {
                                         this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue, false).subscribe(
                                             stResp => {
-                                                UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement),
+                                                UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                                                 observer.next(null);
                                             }
                                         );
@@ -775,7 +775,7 @@ export class VBActionFunctions {
                                     cancel => { observer.error(null); }
                                 );
                             } else if (err.name.endsWith("PrefPrefLabelClashException")) {
-                                this.basicModals.alert({key:"STATUS.WARNING"}, err.message, ModalType.warning);
+                                this.basicModals.alert({ key: "STATUS.WARNING" }, err.message, ModalType.warning);
                                 observer.error(null);
                             }
                         }
@@ -805,7 +805,7 @@ export class VBActionFunctions {
                 );
             }
         });
-    }
+    };
 
     /**
      * TranslationSet
@@ -813,7 +813,7 @@ export class VBActionFunctions {
 
     private ontolexCreateTranslationSet = (ctx: VBActionFunctionCtx) => {
         return new Observable((observer: Observer<void>) => {
-            this.creationModals.newResourceCf({key: "DATA.ACTIONS.CREATE_TRANSLATION_SET"}, Vartrans.TranslationSet, false, true).then(
+            this.creationModals.newResourceCf({ key: "DATA.ACTIONS.CREATE_TRANSLATION_SET" }, Vartrans.TranslationSet, false, true).then(
                 (data: NewResourceCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                     this.ontolexService.createTranslationSet(data.uriResource, data.cfValue).subscribe(
@@ -826,7 +826,7 @@ export class VBActionFunctions {
                 () => { observer.error(null); }
             );
         });
-    }
+    };
 
     private ontolexDeleteTranslationSet = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
         return new Observable((observer: Observer<void>) => {
@@ -836,9 +836,9 @@ export class VBActionFunctions {
                     UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
                     observer.next(null);
                 }
-            )
+            );
         });
-    }
+    };
 
     /**
      * Common
@@ -846,7 +846,7 @@ export class VBActionFunctions {
 
     private resourcesSetDeprecated = (ctx: VBActionFunctionCtx, resource: ARTURIResource) => {
         return this.resourceService.setDeprecated(resource);
-    }
+    };
 
 }
 
@@ -858,5 +858,5 @@ export class VBActionFunctionCtx {
     lexicon?: {
         res: ARTURIResource;
         lang: string;
-    }
+    };
 }
