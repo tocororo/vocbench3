@@ -79,12 +79,12 @@ export class CreateRemoteAlignmentTaskModal {
                 * so initialize the settings to manually enter through the json-editor */
                 if (this.serviceMetadata.settings) {
                     this.serviceMetadata.settings['settingsJson'] = JSON.stringify({});
-                     //add also the schema to show to the user
+                    //add also the schema to show to the user
                     this.serviceMetadata.settings['originalSchemaJson'] = JSON.stringify(this.serviceMetadata.settings.originalSchema, null, 2);
                 }
             }
         );
-        
+
     }
 
     //========== Datasets handlers ===========
@@ -93,7 +93,7 @@ export class CreateRemoteAlignmentTaskModal {
         this.rightProjectStruct = new AlignedProjectStruct();
         this.rightProjectStruct.project = this.selectedRightProject;
         this.initProjectStruct(this.rightProjectStruct);
-        
+
         //reset the status of alignment
         this.alignmentScenario = null;
         this.matchers = null;
@@ -113,17 +113,17 @@ export class CreateRemoteAlignmentTaskModal {
 
     profileProject(projStruct: AlignedProjectStruct) {
         if (projStruct.profileAvailable) {
-            this.basicModals.confirm({key: "ACTIONS.PROFILE_PROJECT"}, {key:"MESSAGES.PROFILE_PROJECT_REFRESH_CONFIRM", params:{project: projStruct.project.getName()}},
+            this.basicModals.confirm({ key: "ACTIONS.PROFILE_PROJECT" }, { key: "MESSAGES.PROFILE_PROJECT_REFRESH_CONFIRM", params: { project: projStruct.project.getName() } },
                 ModalType.warning).then(
-                () => {
-                    this.profileProjectImpl(projStruct);
-                },
-                () => {}
-            )
+                    () => {
+                        this.profileProjectImpl(projStruct);
+                    },
+                    () => { }
+                );
         } else {
             this.profileProjectImpl(projStruct);
         }
-        
+
     }
     private profileProjectImpl(projStruct: AlignedProjectStruct) {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
@@ -144,7 +144,7 @@ export class CreateRemoteAlignmentTaskModal {
         return (
             this.leftProjectStruct.profileAvailable &&
             this.rightProjectStruct != null && this.rightProjectStruct.profileAvailable
-        )
+        );
     }
 
     profileMatching() {
@@ -168,10 +168,10 @@ export class CreateRemoteAlignmentTaskModal {
                             lexicon: s.lexicon,
                             lexiconDataset: <Lexicon>this.alignmentScenario.supportDatasets.find(d => d["@id"] == s.lexicon),
                             language: null,
-                        }
-                        syn.language = Languages.getLanguageFromTag(syn.lexiconDataset.languageTag)
+                        };
+                        syn.language = Languages.getLanguageFromTag(syn.lexiconDataset.languageTag);
                         synonymizers.push(syn);
-                    })
+                    });
                     let rp: ResolvedPairing = {
                         score: p.score,
                         scoreRound: Math.round((p.score + Number.EPSILON) * 1000) / 1000,
@@ -185,9 +185,9 @@ export class CreateRemoteAlignmentTaskModal {
                         language: null,
                         checked: false,
                         selectedSynonymizer: null
-                    }
-                    rp.language = Languages.getLanguageFromTag(rp.sourceLexicalizationSet.languageTag)
-                    this.refinablePairings.push(rp)
+                    };
+                    rp.language = Languages.getLanguageFromTag(rp.sourceLexicalizationSet.languageTag);
+                    this.refinablePairings.push(rp);
                 });
                 //initialize as selected pairing the one with the highest score
                 if (this.refinablePairings.length > 0) {
@@ -215,7 +215,7 @@ export class CreateRemoteAlignmentTaskModal {
     onPairingSelectionChange() {
         //when a pairing is selected/deselected, the matchers listed (if any) could be outdated
         if (this.matchers != null) {
-            let pairingSignature = this.refinablePairings.map(p => p.checked+"").join(",");
+            let pairingSignature = this.refinablePairings.map(p => p.checked + "").join(",");
             this.outdatedMatchers = (this.lastPairingSignatureForMatchers != pairingSignature);
         }
     }
@@ -225,10 +225,10 @@ export class CreateRemoteAlignmentTaskModal {
     searchMatchers() {
         let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
         if (scenarioDef.pairings.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.PAIRING_SELECTION_REQUIRED"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.PAIRING_SELECTION_REQUIRED" }, ModalType.warning);
             return;
         }
-        this.lastPairingSignatureForMatchers = this.refinablePairings.map(p => p.checked+"").join(",");
+        this.lastPairingSignatureForMatchers = this.refinablePairings.map(p => p.checked + "").join(",");
         this.remoteAlignmentService.searchMatchers(scenarioDef).subscribe(
             matchers => {
                 this.matchers = matchers;
@@ -272,13 +272,13 @@ export class CreateRemoteAlignmentTaskModal {
                     source: p.source,
                     target: p.target,
                     synonymizer: null
-                }
+                };
                 if (p.selectedSynonymizer != null) {
                     let synonymizer: Synonymizer = {
                         score: p.selectedSynonymizer.score,
                         conceptualizationSet: p.selectedSynonymizer.conceptualizationSet,
                         lexicon: p.selectedSynonymizer.lexicon
-                    }
+                    };
                     pairing.synonymizer = synonymizer;
                 }
                 pairings.push(pairing);
@@ -290,7 +290,7 @@ export class CreateRemoteAlignmentTaskModal {
             supportDatasets: this.alignmentScenario.supportDatasets,
             pairings: pairings,
             alignmentChains: this.alignmentScenario.alignmentChains
-        }
+        };
     }
 
 
@@ -301,8 +301,8 @@ export class CreateRemoteAlignmentTaskModal {
             newSettings => {
                 this.serviceMetadata.settings.stProperties = newSettings;
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     isOkEnabled() {
@@ -317,25 +317,18 @@ export class CreateRemoteAlignmentTaskModal {
          * - matcherDefinition (optionally)
          */
         let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
-        /*the following check seems to be no more needed in VB 10.0 given the introduction of the new tool of alignment-bootstrapping.
-        I leave it commented in case it will have to be restored later */
-        // if (scenarioDef.pairings.length == 0) {
-        //     this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.PAIRING_SELECTION_REQUIRED"}, ModalType.warning);
-        //     return;
-        // }
-        
         let matcherDefinition: MatcherDefinitionDTO;
         if (this.selectedMatcher != null) { //if a matcher is selected, create its definition
             let matcherSettings: any;
             if (this.selectedMatcher.settings != null) { //if settings are available
                 if (this.selectedMatcher.settings.stProperties != null) { //get them from the stProperties
-                    matcherSettings = this.selectedMatcher.settings.stProperties.getPropertiesAsMap()
+                    matcherSettings = this.selectedMatcher.settings.stProperties.getPropertiesAsMap();
                 } else { //or from the originalSchema
                     let parsedSettings: any;
                     try {
                         parsedSettings = JSON.parse(this.selectedMatcher.settings['settingsJson']);
                     } catch (err) {
-                        this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.CANNOT_PARSE_JSON_MATCHER_CONFIGURATION"}, ModalType.warning);
+                        this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.CANNOT_PARSE_JSON_MATCHER_CONFIGURATION" }, ModalType.warning);
                         return;
                     }
                     matcherSettings = parsedSettings;
@@ -344,7 +337,7 @@ export class CreateRemoteAlignmentTaskModal {
             matcherDefinition = {
                 id: this.selectedMatcher.id,
                 settings: matcherSettings
-            }
+            };
         }
 
         let serviceSettings: any;
@@ -356,7 +349,7 @@ export class CreateRemoteAlignmentTaskModal {
                 try {
                     parsedSettings = JSON.parse(this.serviceMetadata.settings['settingsJson']);
                 } catch (err) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.CANNOT_PARSE_JSON_METADATA_SETTING"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.CANNOT_PARSE_JSON_METADATA_SETTING" }, ModalType.warning);
                     return;
                 }
                 serviceSettings = parsedSettings;
@@ -367,14 +360,14 @@ export class CreateRemoteAlignmentTaskModal {
             scenarioDefinition: scenarioDef,
             matcherDefinition: matcherDefinition,
             settings: serviceSettings,
-        }
+        };
         this.remoteAlignmentService.createTask(alignmentPlan).subscribe(
             taskId => {
                 this.activeModal.close(taskId);
             }
         );
     }
-    
+
     cancel() {
         this.activeModal.dismiss();
     }

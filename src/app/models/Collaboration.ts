@@ -103,7 +103,7 @@ export class CollaborationUtils {
 
     public static parseIssues(json: any[]): Issue[] {
         let issues: Issue[] = [];
-        for (var i = 0; i < json.length; i++) {
+        for (let i = 0; i < json.length; i++) {
             issues.push(CollaborationUtils.parseIssue(json[i]));
         }
         return issues;

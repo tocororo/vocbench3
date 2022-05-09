@@ -57,7 +57,7 @@ export class BrowseExternalResourceModal {
             this.checkPropertyRangeResource(this.enrichingProperty).subscribe(
                 allowsResource => {
                     if (!allowsResource) {
-                        this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES", params:{property: this.enrichingProperty.getShow()}},
+                        this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES", params: { property: this.enrichingProperty.getShow() } },
                             ModalType.warning);
                         this.cancel();
                     }
@@ -68,9 +68,9 @@ export class BrowseExternalResourceModal {
         this.projService.listProjects(VBContext.getWorkingProject(), false, true).subscribe(
             projects => {
                 //keep only the projects different from the current
-                for (var i = 0; i < projects.length; i++) {
+                for (let i = 0; i < projects.length; i++) {
                     if (projects[i].isOpen() && projects[i].getName() != VBContext.getWorkingProject().getName()) {
-                        this.projectList.push(projects[i])
+                        this.projectList.push(projects[i]);
                     }
                 }
                 this.restoreLastProject();
@@ -122,7 +122,7 @@ export class BrowseExternalResourceModal {
                             this.schemes = (activeSchemes != null) ? activeSchemes.map(s => new ARTURIResource(s)) : null;
                             this.restoreLastType();
                         }
-                    )
+                    );
                 } else {
                     this.restoreLastType();
                 }
@@ -136,7 +136,7 @@ export class BrowseExternalResourceModal {
     }
 
     changeProperty() {
-        this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [this.rootProperty]).then(
+        this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [this.rootProperty]).then(
             (selectedProp: ARTURIResource) => {
                 if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
                     this.checkPropertyRangeResource(selectedProp).subscribe(
@@ -144,7 +144,7 @@ export class BrowseExternalResourceModal {
                             if (allowsResource) {
                                 this.enrichingProperty = selectedProp;
                             } else {
-                                this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES", params:{property: selectedProp.getShow()}},
+                                this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES", params: { property: selectedProp.getShow() } },
                                     ModalType.warning);
                             }
                         }
@@ -161,7 +161,7 @@ export class BrowseExternalResourceModal {
     private checkPropertyRangeResource(property: ARTURIResource): Observable<boolean> {
         return this.propService.getRange(property).pipe(
             map(range => {
-                var ranges = range.ranges;
+                let ranges = range.ranges;
                 if (range != undefined) {
                     let rangeCollection: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
                     if (
@@ -186,7 +186,7 @@ export class BrowseExternalResourceModal {
     /**
      * Listener called when it's aligning concept and the scheme in the concept tree is changed
      */
-     onConceptTreeSchemeChange() {
+    onConceptTreeSchemeChange() {
         this.remoteResource = null;
     }
 

@@ -32,22 +32,22 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.basicModals.confirm({key:"DATA.ACTIONS.ADD_MEMBER"}, {key:"MESSAGES.EDIT_RDF_MEMBER_WARN_CONFIRM"}, ModalType.warning).then(
+            this.basicModals.confirm({ key: "DATA.ACTIONS.ADD_MEMBER" }, { key: "MESSAGES.EDIT_RDF_MEMBER_WARN_CONFIRM" }, ModalType.warning).then(
                 confirm => {
                     this.resViewModals.addRdfsMembers(predicate, propChangeable).then(
                         (data: RdfsMembersModalReturnData) => {
-                            var prop: ARTURIResource = data.property;
-                            var member: ARTURIResource = data.value;
+                            let prop: ARTURIResource = data.property;
+                            let member: ARTURIResource = data.value;
                             this.resourcesService.addValue(this.resource, prop, member).subscribe(
-                                stResp =>{
+                                stResp => {
                                     this.update.emit(null);
                                 }
                             );
                         },
-                        () => {}
+                        () => { }
                     );
                 },
-                cancel => {}
+                cancel => { }
             );
         }
     }
@@ -59,7 +59,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         //warning message only when deleting members of lexical entry
         if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.basicModals.confirm({key:"ACTIONS.DELETE_MEMBER"}, {key:"MESSAGES.DELETE_RDF_MEMBER_WARN_CONFIRM"}, ModalType.warning).then(
+            this.basicModals.confirm({ key: "ACTIONS.DELETE_MEMBER" }, { key: "MESSAGES.DELETE_RDF_MEMBER_WARN_CONFIRM" }, ModalType.warning).then(
                 confirm => {
                     this.getRemoveFunction(predicate, object).subscribe(
                         stResp => {
@@ -67,7 +67,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
                         }
                     );
                 },
-                cancel => {}
+                cancel => { }
             );
         } else {
             this.getRemoveFunction(predicate, object).subscribe(

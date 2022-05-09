@@ -16,7 +16,7 @@ export class ForcePasswordModal {
 
     password: string;
 
-    constructor(public activeModal: NgbActiveModal, private userService: UserServices, private authService: AuthServices, 
+    constructor(public activeModal: NgbActiveModal, private userService: UserServices, private authService: AuthServices,
         private basicModals: BasicModalServices) {
     }
 
@@ -31,7 +31,7 @@ export class ForcePasswordModal {
     ok() {
         this.userService.forcePassword(this.user.getEmail(), this.password).subscribe(
             stResp => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PASSWORD_CHANGED"}).then(
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.PASSWORD_CHANGED" }).then(
                     () => {
                         this.activeModal.close();
                     }

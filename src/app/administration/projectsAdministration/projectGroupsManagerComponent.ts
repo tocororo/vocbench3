@@ -46,7 +46,7 @@ export class ProjectGroupsManagerComponent {
     translationParam: { projName: string } = { projName: "" };
 
     constructor(private groupsService: UsersGroupsServices, private settingsService: SettingsServices,
-        private resourceService: ResourcesServices, private propService: PropertyServices, 
+        private resourceService: ResourcesServices, private propService: PropertyServices,
         private browsingModals: BrowsingModalServices, private vbProp: VBProperties) { }
 
     ngOnInit() {
@@ -54,7 +54,7 @@ export class ProjectGroupsManagerComponent {
             groups => {
                 this.groups = groups;
             }
-        )
+        );
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -70,6 +70,8 @@ export class ProjectGroupsManagerComponent {
         if (this.project != null) {
             let modelType = this.project.getModelType();
             return modelType == SKOS.uri || modelType == OntoLex.uri;
+        } else {
+            return false;
         }
     }
 
@@ -91,9 +93,9 @@ export class ProjectGroupsManagerComponent {
             map(settings => {
                 this.broaderProps = [];
                 this.narrowerProps = [];
-                
+
                 this.concTreePref = settings.getPropertyValue(SettingsEnum.conceptTree);
-                
+
                 if (this.concTreePref != null) {
                     this.baseBroaderProp = this.concTreePref.baseBroaderProp;
                     if (this.baseBroaderProp == null) {
@@ -131,7 +133,7 @@ export class ProjectGroupsManagerComponent {
                 } else {
                     this.concTreePref = new ConceptTreePreference();
                 }
-                
+
             })
         );
 
@@ -166,7 +168,7 @@ export class ProjectGroupsManagerComponent {
                 }
             }
         );
-        
+
     }
 
     selectGroup(group: UsersGroup) {
@@ -185,13 +187,13 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         this.baseBroaderProp = prop.getURI();
                         this.updateGroupSetting();
                     },
-                    () => {}
+                    () => { }
                 );
             }
         );
@@ -205,7 +207,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.broaderProps, prop)) {
@@ -217,12 +219,12 @@ export class ProjectGroupsManagerComponent {
                                     () => {
                                         this.updateGroupSetting();
                                     }
-                                )
+                                );
                             }
                         }
                     },
-                    () => {}
-                )
+                    () => { }
+                );
             }
         );
     }
@@ -231,7 +233,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browsePropertyTree({key:"DATA.ACTIONS.SELECT_PROPERTY"}, [SKOS.narrower], null, null, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [SKOS.narrower], null, null, this.lastBrowsedProjectCtx).then(
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {
@@ -243,12 +245,12 @@ export class ProjectGroupsManagerComponent {
                                     () => {
                                         this.updateGroupSetting();
                                     }
-                                )
+                                );
                             }
                         }
                     },
-                    () => {}
-                )
+                    () => { }
+                );
             }
         );
     }
@@ -317,7 +319,7 @@ export class ProjectGroupsManagerComponent {
                         () => {
                             this.updateGroupSetting();
                         }
-                    ); 
+                    );
                 }
             );
         }
@@ -378,7 +380,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browseSchemeList({key:"DATA.ACTIONS.SELECT_SCHEME"}, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browseSchemeList({ key: "DATA.ACTIONS.SELECT_SCHEME" }, this.lastBrowsedProjectCtx).then(
                     (scheme: ARTURIResource) => {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.ownedSchemes, scheme)) {
@@ -386,7 +388,7 @@ export class ProjectGroupsManagerComponent {
                             this.groupsService.addOwnedSchemeToGroup(this.project, this.selectedGroup.iri, scheme).subscribe();
                         }
                     },
-                    () => {}
+                    () => { }
                 );
             }
         );

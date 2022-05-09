@@ -63,7 +63,7 @@ export class DatasetCatalogModal {
     }
 
     onExtensionConfigUpdated(config: Configuration) {
-        this.extensionConfig = config
+        this.extensionConfig = config;
         this.clearResults();
     }
 
@@ -121,7 +121,7 @@ export class DatasetCatalogModal {
             datasetDescription => {
                 this.selectedDatasetDescription = datasetDescription;
             }
-        )
+        );
     }
 
     requireConfigurationConnector() {
@@ -131,11 +131,11 @@ export class DatasetCatalogModal {
         return false;
     }
 
-    private buildConnectorSpecification() : PluginSpecification {
-        let connectorSpec: PluginSpecification= { factoryId: this.selectedExtension.id };
+    private buildConnectorSpecification(): PluginSpecification {
+        let connectorSpec: PluginSpecification = { factoryId: this.selectedExtension.id };
         if (this.extensionConfig != null) {
             if (this.requireConfigurationConnector()) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CATALOG_CONNECTOR_NOT_CONFIGURED"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CATALOG_CONNECTOR_NOT_CONFIGURED" }, ModalType.warning);
                 return;
             }
             if (this.extensionConfig != null) {
@@ -144,7 +144,6 @@ export class DatasetCatalogModal {
             }
         }
         return connectorSpec;
-
     }
 
     prevPage() {
@@ -157,12 +156,12 @@ export class DatasetCatalogModal {
     }
 
     toggleFacet(facet: FacetAggregation, bucket: Bucket) {
-        let searchFacet = this.lastSearchFacets[facet.name]
+        let searchFacet = this.lastSearchFacets[facet.name];
         if (!searchFacet) {
             searchFacet = {
                 facetDisplayName: facet.displayName,
                 items: {}
-            }
+            };
             this.lastSearchFacets[facet.name] = searchFacet;
         }
 
@@ -190,7 +189,7 @@ export class DatasetCatalogModal {
     private selectDataDump(): Promise<DownloadDescription> {
         const modalRef: NgbModalRef = this.modalService.open(DataDumpSelectorModal, new ModalOptions('lg'));
         modalRef.componentInstance.message = "The selected dataset catalog has multiple data dumps. Please select the one to use from this list.";
-		modalRef.componentInstance.dataDumps = this.selectedDatasetDescription.dataDumps;
+        modalRef.componentInstance.dataDumps = this.selectedDatasetDescription.dataDumps;
         return modalRef.result;
     }
 
@@ -200,14 +199,14 @@ export class DatasetCatalogModal {
                 connectorId: this.selectedExtension.id,
                 dataset: this.selectedDatasetDescription,
                 dataDump: null
-            }
+            };
             this.activeModal.close(returnData);
         } else if (this.selectedDatasetDescription.dataDumps.length == 1) {
             let returnData: DatasetCatalogModalReturnData = {
                 connectorId: this.selectedExtension.id,
                 dataset: this.selectedDatasetDescription,
                 dataDump: this.selectedDatasetDescription.dataDumps[0]
-            }
+            };
             this.activeModal.close(returnData);
         } else { //multiple data dumps
             this.selectDataDump().then(
@@ -216,7 +215,7 @@ export class DatasetCatalogModal {
                         connectorId: this.selectedExtension.id,
                         dataset: this.selectedDatasetDescription,
                         dataDump: dump
-                    }
+                    };
                     this.activeModal.close(returnData);
                 },
                 () => { }

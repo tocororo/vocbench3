@@ -9,7 +9,7 @@ import { CustomForm } from "../../models/CustomForms";
 import { VersionInfo } from "../../models/History";
 import { Language, Languages } from '../../models/LanguagesCountries';
 import { ResViewPartition } from '../../models/ResourceView';
-import { OntoLex, SKOS, SKOSXL } from '../../models/Vocabulary';
+import { SKOS, SKOSXL } from '../../models/Vocabulary';
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceViewServices } from '../../services/resourceViewServices';
 import { Deserializer } from '../../utils/Deserializer';
@@ -58,8 +58,8 @@ export class TermViewComponent extends AbstractResourceView {
 
     ellipsedResShow: boolean; //tells if the show of the resource has been truncated since it was too long
     broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
-    definitions: ARTNode[] = [];  // contains object with definitions predicate (skos:definition) and its lang
-    schemes: ARTNode[] = [];  // schemes where the concept belongs to
+    definitions: ARTNode[] = []; // contains object with definitions predicate (skos:definition) and its lang
+    schemes: ARTNode[] = []; // schemes where the concept belongs to
     private languages: LangStructView[] = []; // it is used to assign flag status(active/disabled) to flags list (top page under first box)
 
     private defCustomRangeConfig: DefinitionCustomRangeConfig; //tells if skos:definition is mapped to CustomRange
@@ -110,7 +110,7 @@ export class TermViewComponent extends AbstractResourceView {
      */
     public buildResourceView(res: ARTResource) {
         this.userAssignedLangs = VBContext.getProjectUserBinding().getLanguages();
-        this.allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting // all language to manage case in which user is admin without flags assigned
+        this.allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting; // all language to manage case in which user is admin without flags assigned
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         if (this.activeVersion != null) {
             HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
@@ -180,25 +180,25 @@ export class TermViewComponent extends AbstractResourceView {
                             nodes.push(obj);
                             let predObj = new ARTPredicateObjects(predicate, nodes);
                             this.langStruct[lang].push(predObj);
-                            this.sortPredicates(this.langStruct[lang])
+                            this.sortPredicates(this.langStruct[lang]);
                         } else { // case in which objects with that predicate already exist and I can add others (example: I can have more altLabel)
-                            if (!this.langStruct[lang].some(item => { return item.getObjects().some(o => o.equals(obj)) })) { // I check if the object I am analyzing is not present
+                            if (!this.langStruct[lang].some(item => { return item.getObjects().some(o => o.equals(obj)); })) { // I check if the object I am analyzing is not present
                                 this.langStruct[lang].forEach(item => {
                                     if (item.getPredicate().equals(predicate)) {
                                         item.getObjects().push(obj);
                                     }
-                                })
+                                });
                             }
                         }
 
                     }
-                })
+                });
 
-            })
+            });
         }
 
         //definitions
-        this.definitions = []
+        this.definitions = [];
         let renderingLangs = VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference;
         let notesColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.notes, true);
 
@@ -237,8 +237,8 @@ export class TermViewComponent extends AbstractResourceView {
                 if (!this.schemes.some(s => s.equals(scheme))) { //prevent duplicate in case a scheme is linked multiple time with the concept through subProp of skos:inScheme
                     this.schemes.push(scheme);
                 }
-            })
-        })
+            });
+        });
 
         //init info about skos:definition custom range
         this.initSkosDefinitionCustomRange(definitionPredObj).subscribe(
@@ -270,13 +270,13 @@ export class TermViewComponent extends AbstractResourceView {
                 //now that lexicalizations and definitions are initialized, initialize the languages list too
                 this.initLanguages();
             }
-        )
+        );
 
         //init every partition (except those already initialized) just for detecting if the resource description is under validation
         if (VBContext.getWorkingProject().isValidationEnabled()) {
             for (let p in ResViewPartition) {
                 if (p != ResViewPartition.broaders && p != ResViewPartition.lexicalizations && p != ResViewPartition.notes) {
-                    this.initPartition(this.resViewResponse[p], false)
+                    this.initPartition(this.resViewResponse[p], false);
                 }
             }
         }
@@ -369,7 +369,7 @@ export class TermViewComponent extends AbstractResourceView {
                     return -1;
                 }
                 return 0;
-            })
+            });
         } else if (this.lexicalizationModelType == SKOSXL.uri) {
             list.sort((second: ARTPredicateObjects, first: ARTPredicateObjects) => {
                 if (first.getPredicate().equals(SKOSXL.prefLabel) && second.getPredicate().equals(SKOSXL.altLabel)) {
@@ -379,10 +379,8 @@ export class TermViewComponent extends AbstractResourceView {
                     return -1;
                 }
                 return 0;
-            })
+            });
 
-        } else if (this.lexicalizationModelType == OntoLex.uri) {
-            // ontolex
         }
 
     }
@@ -412,43 +410,43 @@ export class TermViewComponent extends AbstractResourceView {
 
     private sortObjects(predObjList: ARTPredicateObjects[]) {
         let attribute: SortAttribute = SortAttribute.show;
-        for (var i = 0; i < predObjList.length; i++) {
+        for (let i = 0; i < predObjList.length; i++) {
             let objList: ARTNode[] = predObjList[i].getObjects();
             ResourceUtils.sortResources(<ARTResource[]>objList, attribute);
         }
     }
 
     /**
-     * This method initializes the languages ​​to be displayed in the list of flags as follows:
+     * This method initializes the languages to be displayed in the list of flags as follows:
      * 1) first those for which there is a value received from the server
      * 2) then those assigned to the user (filtered in such a way that there are no duplicates with those of point 1)
-     * If the user is an Admin type and there are no languages ​​assigned to the user, then all languages ​​are taken, always putting first those that have a value
+     * If the user is an Admin type and there are no languages assigned to the user, then all languages are taken, always putting first those that have a value
      */
     private initLanguages() {
         this.langsWithValue = Object.keys(this.langStruct).sort();
-        this.languages = []
+        this.languages = [];
         let langListFromServer = this.langsWithValue;
         if (langListFromServer.length != 0) {
             langListFromServer.forEach(lang => {
-                this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: false })
-            })
+                this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: false });
+            });
         }
         if (!this.readonly) { //add further languages (those for adding new boxes) only if the TermView is not in readonly mode
             if (VBContext.getLoggedUser().isAdmin() && this.userAssignedLangs.length == 0) {
-                this.allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting
+                this.allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting;
                 this.allProjectLangs.forEach(lang => {
                     if (!langListFromServer.some(l => l == lang.tag)) {
-                        this.languages.push({ lang: lang, disabled: true })
+                        this.languages.push({ lang: lang, disabled: true });
                     }
-                })
+                });
             } else {
                 if (this.userAssignedLangs.length != 0) {
                     this.userAssignedLangs.sort();
                     this.userAssignedLangs.forEach(lang => {
                         if (!langListFromServer.some(l => l.toLocaleLowerCase() == lang.toLocaleLowerCase())) {
-                            this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: true })
+                            this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: true });
                         }
-                    })
+                    });
                 }
             }
         }
@@ -466,7 +464,7 @@ export class TermViewComponent extends AbstractResourceView {
                 if (l.lang == flagClicked.lang.tag) {
                     l.el.nativeElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
                 }
-            })
+            });
         } else if (this.userAssignedLangs.some(l => l.toLocaleLowerCase() == flagClicked.lang.tag.toLocaleLowerCase()) || this.allProjectLangs.some(l => l == flagClicked.lang)) { //(2) 
             for (let i = 0; i < this.languages.length; i++) {
                 if (this.languages[i] == flagClicked) {
@@ -479,10 +477,9 @@ export class TermViewComponent extends AbstractResourceView {
                 predObj = new ARTPredicateObjects(SKOS.prefLabel, nodes);
             } else if (this.lexicalizationModelType == SKOSXL.uri) {
                 predObj = new ARTPredicateObjects(SKOSXL.prefLabel, nodes);
-            } else if (this.lexicalizationModelType == OntoLex.uri) {
             }
             this.langStruct[flagClicked.lang.tag] = [];
-            this.langStruct[flagClicked.lang.tag].push(predObj)
+            this.langStruct[flagClicked.lang.tag].push(predObj);
             this.langsWithValue = Object.keys(this.langStruct); // here there is not .sort() because so it manteins actual order
         }
     }

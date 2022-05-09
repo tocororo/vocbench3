@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
-import { OntologyImport } from "../../../models/Metadata"
+import { OntologyImport } from "../../../models/Metadata";
 
 @Component({
     selector: "import-tree",
@@ -14,7 +14,7 @@ export class ImportTreeComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['imports'] && changes['imports'].currentValue) {
-            for (var i = 0; i < this.imports.length; i++) {
+            for (let i = 0; i < this.imports.length; i++) {
                 this.imports[i]['root'] = true;
             }
         }

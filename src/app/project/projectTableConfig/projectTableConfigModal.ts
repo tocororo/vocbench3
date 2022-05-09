@@ -53,12 +53,12 @@ export class ProjectTableConfigModal {
                     if (p.name == "customFacets") {
                         let customFacetsProps: STProperties[] = p.type.schema.properties;
                         customFacetsProps.forEach(cf => {
-                            this.facets.push({ name: cf.name, displayName: cf.displayName })
-                        })
+                            this.facets.push({ name: cf.name, displayName: cf.displayName });
+                        });
                     } else {
-                        this.facets.push({ name: p.name, displayName: p.displayName })
+                        this.facets.push({ name: p.name, displayName: p.displayName });
                     }
-                })
+                });
                 //now the built-in (e.g. lex model, history, ...)
                 this.projectService.getFacetsAndValue().subscribe(
                     facetsAndValues => {
@@ -85,7 +85,7 @@ export class ProjectTableConfigModal {
                             this.selectedFacet = this.facets[0].name;
                         }
                     }
-                )
+                );
             }
         );
     }
@@ -139,12 +139,12 @@ export class ProjectTableConfigModal {
     }
 
     moveUp() {
-        var idx = this.columns.indexOf(this.selectedColumn);
+        let idx = this.columns.indexOf(this.selectedColumn);
         this.columns.splice(idx-1, 0, this.columns.splice(idx, 1)[0]);
     }
 
     moveDown() {
-        var idx = this.columns.indexOf(this.selectedColumn);
+        let idx = this.columns.indexOf(this.selectedColumn);
         this.columns.splice(idx+1, 0, this.columns.splice(idx, 1)[0]);
     }
 

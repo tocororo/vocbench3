@@ -33,11 +33,11 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue({key:"DATA.ACTIONS.ADD_DOMAIN"}, this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue({ key: "DATA.ACTIONS.ADD_DOMAIN" }, this.resource, predicate, propChangeable).then(
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let value: any = data.value; //value can be class(es) or a manchester Expression
-                
+
                 if (typeof value == "string") {
                     this.manchService.createRestriction(<ARTURIResource>this.resource, prop, value, data.skipSemCheck).subscribe(
                         stResp => this.update.emit(null)
@@ -62,8 +62,8 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
                     this.addMultiple(addFunctions);
                 }
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
@@ -86,25 +86,25 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
                     } else {
                         this.getRemoveFunction(predicate, object).subscribe(
                             stResp => this.update.emit()
-                        )
+                        );
                     }
                 }
-            )
+            );
         } else { //removing a domain class
             this.getRemoveFunction(predicate, object).subscribe(
                 stResp => this.update.emit()
-            )
+            );
         }
     }
 
     //@override
     removeAllValues(predicate: ARTURIResource) {
-        for (var i = 0; i < this.predicateObjectList.length; i++) {
+        for (let i = 0; i < this.predicateObjectList.length; i++) {
             let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
             //collects all the suspicious class axioms, namely the domains that are BNode
             let suspClassAxioms: ARTBNode[] = [];
             let notClassAxioms: ARTURIResource[] = [];
-            for (var j = 0; j < objList.length; j++) {
+            for (let j = 0; j < objList.length; j++) {
                 let object = objList[j];
                 if (object instanceof ARTBNode) {
                     suspClassAxioms.push(object);
@@ -115,18 +115,18 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
             if (suspClassAxioms.length > 0) { //there is at least a bnode, check if it is a class axiom
                 //collects the functions to do the checks
                 let isClassAxiomFnArray: any[] = [];
-                for (var j = 0; j < suspClassAxioms.length; j++) {
+                for (let j = 0; j < suspClassAxioms.length; j++) {
                     isClassAxiomFnArray.push(this.manchService.isClassAxiom(suspClassAxioms[j]));
                 }
                 let removeFnArray: any[] = [];
                 //collects the remove function for all the not class axioms domains
-                for (var j = 0; j < notClassAxioms.length; j++) {
+                for (let j = 0; j < notClassAxioms.length; j++) {
                     removeFnArray.push(this.getRemoveFunction(predicate, notClassAxioms[j]));
                 }
                 //collects remove function for all the suspicious class axioms domains
                 forkJoin(isClassAxiomFnArray).subscribe(
                     results => {
-                        for (var j = 0; j < results.length; j++) {
+                        for (let j = 0; j < results.length; j++) {
                             if (results[j]) { //is class axiom
                                 removeFnArray.push(this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, suspClassAxioms[j]));
                             } else { //not a class axiom
@@ -135,10 +135,10 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
                         }
                         this.removeAllRicursively(removeFnArray);
                     }
-                )
+                );
             } else { //all range are IRI, there's no need to check for class axioms
                 let removeFnArray: any[] = [];
-                for (var j = 0; j < objList.length; j++) {
+                for (let j = 0; j < objList.length; j++) {
                     removeFnArray.push(this.getRemoveFunction(predicate, objList[j]));
                 }
                 this.removeAllRicursively(removeFnArray);

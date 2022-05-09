@@ -13,7 +13,7 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 @Component({
     selector: 'issue-list',
     templateUrl: './issueListComponent.html',
-    host: { 
+    host: {
         class: "blockingDivHost vbox",
     }
 })
@@ -30,8 +30,8 @@ export class IssueListComponent {
     private page: number = 0;
     private totPage: number;
 
-    constructor(private collaborationService: CollaborationServices, private resourceService: ResourcesServices, private vbCollaboration: VBCollaboration, 
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
+    constructor(private collaborationService: CollaborationServices, private resourceService: ResourcesServices, private vbCollaboration: VBCollaboration,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.listIssues();
@@ -51,9 +51,9 @@ export class IssueListComponent {
             (err: Error) => {
                 //in case listIssues throws an exception set the "working" flag to false
                 if (err.name.endsWith("ConnectException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RETRIEVE_ISSUES_CONNECTION_FAILED"}, ModalType.warning, err.name + " " + err.message);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RETRIEVE_ISSUES_CONNECTION_FAILED" }, ModalType.warning, err.name + " " + err.message);
                 } else if (err.name.endsWith("CollaborationBackendException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RETRIEVE_ISSUES_LOGIN_FAILED"}, ModalType.warning, err.stack);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RETRIEVE_ISSUES_LOGIN_FAILED" }, ModalType.warning, err.stack);
                 }
                 this.vbCollaboration.setWorking(false);
             }

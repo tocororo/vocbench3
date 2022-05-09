@@ -19,7 +19,7 @@ export class CustomServicesPageComponent {
     createServiceAuthorized: boolean;
     deleteServiceAuthorized: boolean;
 
-    constructor(private customServService: CustomServiceServices, private basicModals: BasicModalServices, 
+    constructor(private customServService: CustomServiceServices, private basicModals: BasicModalServices,
         private customServiceModals: CustomServiceModalServices) { }
 
     ngOnInit() {
@@ -34,7 +34,7 @@ export class CustomServicesPageComponent {
             ids => {
                 this.serviceIds = ids;
             }
-        )
+        );
     }
 
     private selectService(id: string) {
@@ -45,25 +45,25 @@ export class CustomServicesPageComponent {
 
 
     createService() {
-        this.customServiceModals.openCustomServiceEditor({key:"CUSTOM_SERVICES.ACTIONS.CREATE_CUSTOM_SERVICE"}).then(
+        this.customServiceModals.openCustomServiceEditor({ key: "CUSTOM_SERVICES.ACTIONS.CREATE_CUSTOM_SERVICE" }).then(
             () => {
                 this.initServices();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     deleteService() {
-        this.basicModals.confirm({key:"CUSTOM_SERVICES.ACTIONS.DELETE_CUSTOM_SERVICE"}, {key:"MESSAGES.DELETE_CUSTOM_SERVICE_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "CUSTOM_SERVICES.ACTIONS.DELETE_CUSTOM_SERVICE" }, { key: "MESSAGES.DELETE_CUSTOM_SERVICE_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.customServService.deleteCustomService(this.selectedServiceId).subscribe(
                     () => {
                         this.selectedServiceId = null;
                         this.initServices();
                     }
-                )
+                );
             }
-        )
+        );
     }
 
     reload() {
@@ -71,7 +71,7 @@ export class CustomServicesPageComponent {
             () => {
                 this.initServices();
             }
-        )
+        );
     }
 
 }

@@ -16,7 +16,7 @@ export class CustomFormModal {
     @Input() language?: string;
 
     formFields: FormField[] = [];
-    
+
     constructor(public activeModal: NgbActiveModal, public cfService: CustomFormsServices, public browsingModals: BrowsingModalServices,
         private basicModals: BasicModalServices) {
     }
@@ -31,19 +31,19 @@ export class CustomFormModal {
     ok() {
         let constraintViolatedMsg = CustomFormUtils.isFormConstraintOk(this.formFields);
         if (constraintViolatedMsg != null) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, constraintViolatedMsg, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, constraintViolatedMsg, ModalType.warning);
             return;
         }
 
-        
-        let userPromptMap: {[key: string]: any} = {};
-        let stdFormMap: {[key: string]: any} = {};
+
+        let userPromptMap: { [key: string]: any } = {};
+        let stdFormMap: { [key: string]: any } = {};
         for (let i = 0; i < this.formFields.length; i++) {
             let entry = this.formFields[i];
 
             let value: any = entry.value;
             let empty: boolean = false;
-            try { if (value.trim() == "") { empty = true; } } catch (err) {} //entry value could be not a string, so the check is in a try-catch
+            try { if (value.trim() == "") { empty = true; } } catch (err) { } //entry value could be not a string, so the check is in a try-catch
 
             if (!empty) {
                 // //add the entry only if not already in
@@ -66,5 +66,5 @@ export class CustomFormModal {
     cancel() {
         this.activeModal.dismiss();
     }
-    
+
 }

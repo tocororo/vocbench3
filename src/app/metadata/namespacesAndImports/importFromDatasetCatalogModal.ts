@@ -1,7 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
-import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { DatasetCatalogModal, DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
 import { RDFFormat } from "../../models/RDFFormat";
@@ -41,7 +40,7 @@ export class ImportFromDatasetCatalogModal {
                 this.ontologyIRI = (data.dataset.ontologyIRI != null) ? data.dataset.ontologyIRI.getURI() : null;
                 this.dataDump = data.dataDump.accessURL;
                 if (this.dataDump != null) {
-                    let ext: string = this.dataDump.substring(this.dataDump.lastIndexOf(".")+1);
+                    let ext: string = this.dataDump.substring(this.dataDump.lastIndexOf(".") + 1);
                     this.formats.forEach(f => {
                         if (f.defaultFileExtension == ext) {
                             this.rdfFormat = f;
@@ -49,7 +48,7 @@ export class ImportFromDatasetCatalogModal {
                     });
                 }
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -57,7 +56,7 @@ export class ImportFromDatasetCatalogModal {
         this.inOutService.getInputRDFFormats().subscribe(
             formats => {
                 this.formats = formats;
-                for (var i = 0; i < this.formats.length; i++) {
+                for (let i = 0; i < this.formats.length; i++) {
                     if (this.formats[i].name == "RDF/XML") { //select RDF/XML as default
                         this.rdfFormat = this.formats[i];
                         break;
@@ -69,7 +68,7 @@ export class ImportFromDatasetCatalogModal {
 
     ok() {
         if (this.ontologyIRI == null) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.CANNOT_IMPORT_DATASET_MISSING_ONTO_IRI"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_IMPORT_DATASET_MISSING_ONTO_IRI" }, ModalType.warning);
             return;
         }
 
@@ -82,7 +81,7 @@ export class ImportFromDatasetCatalogModal {
             dataDump: dataDumpPar,
             rdfFormat: formatPar,
             transitiveImportAllowance: this.selectedImportAllowance
-        }
+        };
         this.activeModal.close(returnData);
     }
 
@@ -96,6 +95,5 @@ export class ImportFromDatasetCatalogModalReturnData {
     ontologyIRI: string;
     dataDump: string;
     rdfFormat: RDFFormat;
-    transitiveImportAllowance: TransitiveImportMethodAllowance
-
+    transitiveImportAllowance: TransitiveImportMethodAllowance;
 }

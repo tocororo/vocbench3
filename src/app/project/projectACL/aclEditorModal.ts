@@ -18,7 +18,7 @@ export class ACLEditorModal {
     @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
     consumers: ConsumerACL[];
-    lock: {availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel};
+    lock: { availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel };
 
     private nullAccessLevel: AccessLevel = null;
     private accessLevels: AccessLevel[] = [AccessLevel.R, AccessLevel.RW];
@@ -29,7 +29,7 @@ export class ACLEditorModal {
 
     private update: boolean = false;
 
-    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private basicModals: BasicModalServices) {}
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.initAccessStatus();
@@ -44,18 +44,18 @@ export class ACLEditorModal {
                 this.lock = projACL.lock;
                 this.universalACLLevel = projACL.universalACLLevel;
             }
-        )
+        );
     }
 
     onAccessLevelChange(consumer: ConsumerACL, newLevel: AccessLevel) {
         let oldLevel: AccessLevel = consumer.availableACLLevel;
         let message: Translation;
         if (newLevel == this.nullAccessLevel) {
-            message = {key:"MESSAGES.ACL_REVOKE_ACCESS_CONFIRM", params:{project: this.project.getName(true), consumer: consumer.name}};
+            message = { key: "MESSAGES.ACL_REVOKE_ACCESS_CONFIRM", params: { project: this.project.getName(true), consumer: consumer.name } };
         } else {
-            message = {key:"MESSAGES.ACL_CHANGE_ACCESS_CONFIRM", params:{project: this.project.getName(true), level: newLevel, consumer: consumer.name}};
+            message = { key: "MESSAGES.ACL_CHANGE_ACCESS_CONFIRM", params: { project: this.project.getName(true), level: newLevel, consumer: consumer.name } };
         }
-        this.basicModals.confirm({key:"PROJECTS.ACTIONS.UPDATE_ACCESS_LEVEL"}, message, ModalType.warning).then(
+        this.basicModals.confirm({ key: "PROJECTS.ACTIONS.UPDATE_ACCESS_LEVEL" }, message, ModalType.warning).then(
             () => {
                 let updateFn: Observable<void>;
                 if (VBContext.getLoggedUser().isAdmin()) {
@@ -81,11 +81,11 @@ export class ACLEditorModal {
         let oldLevel: AccessLevel = this.universalACLLevel;
         let message: Translation;
         if (newLevel == this.nullAccessLevel) {
-            message = {key:"MESSAGES.ACL_REVOKE_UNIVERSAL_ACCESS_CONFIRM", params:{project: this.project.getName(true)}};
+            message = { key: "MESSAGES.ACL_REVOKE_UNIVERSAL_ACCESS_CONFIRM", params: { project: this.project.getName(true) } };
         } else {
-            message = {key:"MESSAGES.ACL_CHANGE_UNIVERSAL_ACCESS_CONFIRM", params:{project: this.project.getName(true), level: newLevel}};
+            message = { key: "MESSAGES.ACL_CHANGE_UNIVERSAL_ACCESS_CONFIRM", params: { project: this.project.getName(true), level: newLevel } };
         }
-        this.basicModals.confirm({key:"PROJECTS.ACTIONS.UPDATE_ACCESS_LEVEL"}, message, ModalType.warning).then(
+        this.basicModals.confirm({ key: "PROJECTS.ACTIONS.UPDATE_ACCESS_LEVEL" }, message, ModalType.warning).then(
             () => { //confirmed
                 let updateFn: Observable<void>;
                 if (VBContext.getLoggedUser().isAdmin()) {
@@ -107,8 +107,8 @@ export class ACLEditorModal {
     }
 
     onLockLevelChange(newLevel: LockLevel) {
-        var oldLevel: LockLevel = this.lock.availableLockLevel;
-        this.basicModals.confirm({key:"PROJECTS.ACTIONS.UPDATE_LOCK_LEVEL"}, {key:"MESSAGES.ACL_CHANGE_LOCK_CONFIRM", params:{level: newLevel}}, ModalType.warning).then(
+        let oldLevel: LockLevel = this.lock.availableLockLevel;
+        this.basicModals.confirm({ key: "PROJECTS.ACTIONS.UPDATE_LOCK_LEVEL" }, { key: "MESSAGES.ACL_CHANGE_LOCK_CONFIRM", params: { level: newLevel } }, ModalType.warning).then(
             () => {
                 let updateFn: Observable<void>;
                 if (VBContext.getLoggedUser().isAdmin()) {
@@ -133,7 +133,7 @@ export class ACLEditorModal {
     showConsumer(consumer: ConsumerACL): boolean {
         return this.filterProject == null || consumer.name.toLocaleUpperCase().indexOf(this.filterProject.toLocaleUpperCase()) != -1;
     }
-    
+
     ok() {
         this.activeModal.close(this.update);
     }

@@ -19,19 +19,19 @@ export class ServiceInvocationComponent {
 
     editInvocationAuthorized: boolean;
 
-    constructor(private invokableReporterModals: InvokableReporterModalServices) {}
+    constructor(private invokableReporterModals: InvokableReporterModalServices) { }
 
     ngOnInit() {
         this.editInvocationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterSectionUpdate);
     }
-    
+
     editInvocation() {
-        this.invokableReporterModals.openServiceInvocationEditor({key:"INVOKABLE_REPORTERS.ACTIONS.EDIT_SERVICE_INVOCATION"}, this.invocation.reporterRef, { def: this.invocation, idx: this.idx }).then(
+        this.invokableReporterModals.openServiceInvocationEditor({ key: "INVOKABLE_REPORTERS.ACTIONS.EDIT_SERVICE_INVOCATION" }, this.invocation.reporterRef, { def: this.invocation, idx: this.idx }).then(
             () => {
                 this.update.emit();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
 }

@@ -45,13 +45,11 @@ export class ExportServices {
                     formats.push(new RDFFormat(name, charset, fileExtensions, standardURI, mimetypes, defaultMIMEType, defaultFileExtension));
                 }
                 //sort by name
-                formats.sort(
-                    function(a: RDFFormat, b: RDFFormat) {
-                        if (a.name < b.name) return -1;
-                        if (a.name > b.name) return 1;
-                        return 0;
-                    }
-                );
+                formats.sort((a: RDFFormat, b: RDFFormat) => {
+                    if (a.name < b.name) return -1;
+                    if (a.name > b.name) return 1;
+                    return 0;
+                });
                 return formats;
             })
         );
@@ -72,13 +70,11 @@ export class ExportServices {
                     formats.push(DataFormat.parse(f));
                 }
                 //sort by name
-                formats.sort(
-                    function(a: DataFormat, b: DataFormat) {
-                        if (a.name < b.name) return -1;
-                        if (a.name > b.name) return 1;
-                        return 0;
-                    }
-                );
+                formats.sort((a: DataFormat, b: DataFormat) => {
+                    if (a.name < b.name) return -1;
+                    if (a.name > b.name) return 1;
+                    return 0;
+                });
                 return formats;
             })
         );
@@ -97,10 +93,10 @@ export class ExportServices {
      * @param outputFormat the output format. If it does not support graphs, the exported graph are
      *  merged into a single graph
      * @param force if true tells the service to proceed despite the presence of triples in the null
-	 *  context or in graphs named by blank nodes. Otherwise, under this conditions the service
-	 *  would fail, so that available information is not silently ignored
+     *  context or in graphs named by blank nodes. Otherwise, under this conditions the service
+     *  would fail, so that available information is not silently ignored
      */
-    export(graphs: ARTURIResource[], filteringPipeline: string, reformattingExporterSpec?: PluginSpecification, 
+    export(graphs: ARTURIResource[], filteringPipeline: string, reformattingExporterSpec?: PluginSpecification,
         deployerSpec?: PluginSpecification, includeInferred?: boolean, outputFormat?: string, force?: boolean): Observable<Blob | any> {
         let params: any = {
             graphs: graphs,
@@ -136,7 +132,7 @@ export class ExportServices {
             //deployer used => the result of the export is deployed, so no file returned
             return this.httpMgr.doPost(this.serviceName, "export", params, options);
         }
-        
-    }   
+
+    }
 
 }

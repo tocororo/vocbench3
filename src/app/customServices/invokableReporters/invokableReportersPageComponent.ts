@@ -20,7 +20,7 @@ export class InvokableReportersPageComponent {
     createReporterAuthorized: boolean;
     deleteReporterAuthorized: boolean;
 
-    constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices, 
+    constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices,
         private basicModals: BasicModalServices) { }
 
     ngOnInit() {
@@ -43,24 +43,24 @@ export class InvokableReportersPageComponent {
     }
 
     createReporter() {
-        this.invokableReporterModals.openInvokableReporterEditor({key:"INVOKABLE_REPORTERS.ACTIONS.CREATE_INVOKABLE_REPORT"}, this.reporters).then(
+        this.invokableReporterModals.openInvokableReporterEditor({ key: "INVOKABLE_REPORTERS.ACTIONS.CREATE_INVOKABLE_REPORT" }, this.reporters).then(
             () => {
                 this.initReporters();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     deleteReporter() {
-        this.basicModals.confirm({key:"INVOKABLE_REPORTERS.ACTIONS.DELETE_INVOKABLE_REPORT"}, {key:"MESSAGES.DELETE_INVOKABLE_REPORT_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "INVOKABLE_REPORTERS.ACTIONS.DELETE_INVOKABLE_REPORT" }, { key: "MESSAGES.DELETE_INVOKABLE_REPORT_CONFIRM" }, ModalType.warning).then(
             () => {
                 this.invokableReporterService.deleteInvokableReporter(this.selectedReporter.relativeReference).subscribe(
                     () => {
                         this.initReporters();
                     }
-                )
+                );
             }
-        )
+        );
     }
 
 }

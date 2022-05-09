@@ -23,18 +23,18 @@ export class CustomOperationComponent {
 
     private editOperationAuthorized: boolean;
 
-    constructor(private customServiceModals: CustomServiceModalServices) {}
+    constructor(private customServiceModals: CustomServiceModalServices) { }
 
     ngOnInit() {
         this.editOperationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceOperationUpdate);
     }
-    
+
     ngOnChanges(changes: SimpleChanges) {
         if (changes['operation'].currentValue) {
             this.returns = TypeUtils.serializeType(this.operation.returns);
             if (this.operation.parameters != null) {
                 this.parameters = this.operation.parameters.map(p => {
-                    return { prettyPrint: TypeUtils.serializeParameter(p), required: p.required }
+                    return { prettyPrint: TypeUtils.serializeParameter(p), required: p.required };
                 });
             }
 
@@ -42,19 +42,19 @@ export class CustomOperationComponent {
             if (this.isSparql) {
                 setTimeout(() => { //give time to init yasgui component
                     this.viewChildYasgui.forceContentUpdate();
-                })
+                });
             }
-            
+
         }
     }
 
     private editOperation() {
-        this.customServiceModals.openCustomOperationEditor({key:"CUSTOM_SERVICES.ACTIONS.EDIT_CUSTOM_OPERATION"}, this.operation.serviceId, this.operation).then(
-            ()=> {
+        this.customServiceModals.openCustomOperationEditor({ key: "CUSTOM_SERVICES.ACTIONS.EDIT_CUSTOM_OPERATION" }, this.operation.serviceId, this.operation).then(
+            () => {
                 this.update.emit();
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
 }

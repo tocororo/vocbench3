@@ -37,11 +37,11 @@ export class ConstituentListCreatorModal {
     }
 
     moveUp() {
-        var idx = this.list.indexOf(this.selectedConstituentTarget);
+        let idx = this.list.indexOf(this.selectedConstituentTarget);
         this.list.splice(idx-1, 0, this.list.splice(idx, 1)[0]);
     }
     moveDown() {
-        var idx = this.list.indexOf(this.selectedConstituentTarget);
+        let idx = this.list.indexOf(this.selectedConstituentTarget);
         this.list.splice(idx+1, 0, this.list.splice(idx, 1)[0]);
     }
 

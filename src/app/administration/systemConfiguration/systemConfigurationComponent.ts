@@ -73,7 +73,7 @@ export class SystemConfigurationComponent {
     codaProvisioningEnabled: boolean = false;
 
 
-    constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties, 
+    constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties,
         private settingsService: SettingsServices, private notificationsService: NotificationServices, private codaService: CODAServices,
         private basicModals: BasicModalServices, private translateService: TranslateService, public sanitizer: DomSanitizer, private router: Router) { }
 
@@ -92,7 +92,7 @@ export class SystemConfigurationComponent {
             enabled => {
                 this.codaProvisioningEnabled = enabled;
             }
-        )
+        );
     }
 
     private initSystemSettings() {
@@ -127,7 +127,7 @@ export class SystemConfigurationComponent {
                 this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault;
                 this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault;
             }
-        )
+        );
     }
 
     /* ============================
@@ -146,7 +146,7 @@ export class SystemConfigurationComponent {
     updateDataFolder() {
         this.adminService.setDataDir(this.stDataFolder).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.ST_DATA_FOLDER_UPDATED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.ST_DATA_FOLDER_UPDATED" });
                 this.stDataFolderPristine = this.stDataFolder;
             }
         );
@@ -155,7 +155,7 @@ export class SystemConfigurationComponent {
     updateProfilerThreshold() {
         this.adminService.setPreloadProfilerThreshold(this.profilerThreshold).subscribe(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.PRELOAD_PROFILER_THRESHOLD_UPDATED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.PRELOAD_PROFILER_THRESHOLD_UPDATED" });
                 this.profilerThresholdPristine = this.profilerThreshold;
             }
         );
@@ -183,28 +183,28 @@ export class SystemConfigurationComponent {
             () => {
                 this.initSystemSettings();
             }
-        )
+        );
     }
 
     testEmailConfig() {
         if (this.isEmailConfigChanged()) {
-            this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, {key:"MESSAGES.EMAIL_CONFIG_CHANGED_SUBMIT_FIRST"}, ModalType.warning);
+            this.basicModals.alert({ key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST" }, { key: "MESSAGES.EMAIL_CONFIG_CHANGED_SUBMIT_FIRST" }, ModalType.warning);
             return;
         }
 
-        this.basicModals.prompt({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, { value: "Mail to" }, {key:"MESSAGES.EMAIL_CONFIG_TEST_DESCR"},
+        this.basicModals.prompt({ key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST" }, { value: "Mail to" }, { key: "MESSAGES.EMAIL_CONFIG_TEST_DESCR" },
             VBContext.getLoggedUser().getEmail()).then(
-            mailTo => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.adminService.testEmailConfig(mailTo).subscribe(
-                    () => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST"}, {key:"MESSAGES.EMAIL_CONFIG_WORKS_FINE"});
-                    }
-                );
-            },
-            () => { }
-        );
+                mailTo => {
+                    UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                    this.adminService.testEmailConfig(mailTo).subscribe(
+                        () => {
+                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                            this.basicModals.alert({ key: "ADMINISTRATION.SYSTEM.EMAIL.EMAIL_CONFIG_TEST" }, { key: "MESSAGES.EMAIL_CONFIG_WORKS_FINE" });
+                        }
+                    );
+                },
+                () => { }
+            );
     }
 
     isEmailConfigChanged(): boolean {
@@ -236,7 +236,7 @@ export class SystemConfigurationComponent {
                     cronDefinition = {
                         expression: null,
                         zone: null
-                    }
+                    };
                 }
                 //convert the cron expression into hour of the day
                 if (cronDefinition.expression != null) {
@@ -248,14 +248,14 @@ export class SystemConfigurationComponent {
 
                 // this.cronExprTest = cronDefinition.expression; //uncomment for test
             }
-        )
+        );
     }
 
     updateNotificationSchedule() {
         let cronDefinition: CronDefinition = {
             expression: "0 0 " + this.cronHourOfDay + " * * *",
             zone: this.timezone
-        }
+        };
         this.notificationsService.scheduleNotificationDigest(cronDefinition).subscribe(
             () => {
                 this.initNotificationsConfig();
@@ -295,7 +295,7 @@ export class SystemConfigurationComponent {
                     this.selectedCustomField = this.customFormFields.find(f => f.iri == this.selectedCustomField.iri);
                 }
             }
-        )
+        );
     }
 
     getOptionalFieldLabel(field: UserFormOptionalField): string {
@@ -308,7 +308,7 @@ export class SystemConfigurationComponent {
             () => {
                 this.initFields();
             }
-        )
+        );
     }
 
     renameCustomField(index: number, newValue: string) {
@@ -316,11 +316,11 @@ export class SystemConfigurationComponent {
         let duplicatedCustomField: boolean = this.customFormFields.some(f => f.label.toLocaleLowerCase() == newValue.toLocaleLowerCase());
         let duplicatedStandardField: boolean = UserForm.standardFields.some(f => f.toLocaleLowerCase() == newValue.toLocaleLowerCase());
         if (duplicatedCustomField || duplicatedStandardField) {
-            let message = this.translateService.instant("MESSAGES.REGISTRATION_FORM_FIELD_ALREADY_DEFINED.FIELD_ALREADY_DEFINED", {fieldName: newValue});
+            let message = this.translateService.instant("MESSAGES.REGISTRATION_FORM_FIELD_ALREADY_DEFINED.FIELD_ALREADY_DEFINED", { fieldName: newValue });
             if (duplicatedStandardField) {
                 message += " " + this.translateService.instant("MESSAGES.REGISTRATION_FORM_FIELD_ALREADY_DEFINED.IN_STANDARD_FORM");
             }
-            this.basicModals.alert({key:"STATUS.WARNING"}, message, ModalType.warning).then(
+            this.basicModals.alert({ key: "STATUS.WARNING" }, message, ModalType.warning).then(
                 () => { //restore the old value
                     //temporary replace the .label at the edited index, so that the ngOnChanges will be fired in the input-edit component
                     this.customFormFields[index] = { iri: null, label: "" };
@@ -466,13 +466,13 @@ class MailSettings {
         address: string,
         password: string,
         alias: string,
-    }
+    };
 }
 
 class PreloadSettings {
     profiler: {
         threshold: string
-    }
+    };
 
     public static defaultThreshold = "0 B";
 

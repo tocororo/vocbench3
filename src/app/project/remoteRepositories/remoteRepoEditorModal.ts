@@ -10,7 +10,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
     templateUrl: "./remoteRepoEditorModal.html",
 })
 export class RemoteRepoEditorModal {
-    @Input() project: Project
+    @Input() project: Project;
 
     private pristineRepoSummaries: RepositorySummary[];
     repoSummaries: RepositorySummary[];
@@ -19,7 +19,7 @@ export class RemoteRepoEditorModal {
     private BATCH_ATTR: string = "batch";
     private MATCH_USERNAME_ATTR: string = "matchUsername";
 
-    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private basicModals: BasicModalServices, 
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private basicModals: BasicModalServices,
         private translateService: TranslateService) { }
 
     ngOnInit() {
@@ -33,7 +33,7 @@ export class RemoteRepoEditorModal {
                 this.repoSummaries = repos;
                 if (this.repoSummaries.length > 1) {
                     this.allowBatchModify = true;
-                    for (var i = 0; i < this.repoSummaries.length; i++) {
+                    for (let i = 0; i < this.repoSummaries.length; i++) {
                         this.repoSummaries[i][this.BATCH_ATTR] = true;
                         this.repoSummaries[i][this.MATCH_USERNAME_ATTR] = true;
                     }
@@ -48,12 +48,12 @@ export class RemoteRepoEditorModal {
             this.projectService.batchModifyRepostoryAccessCredentials(this.project, repo.remoteRepoSummary.serverURL,
                 repo[this.MATCH_USERNAME_ATTR], oldUsername, repo.remoteRepoSummary.username, repo.remoteRepoSummary.password).subscribe(
                     () => {
-                        let msg: string = this.translateService.instant("MESSAGES.REPO_CREDENTIALS_BATCH_UPDATED.CREDENTIALS_OF_SERVER_URL", {serverUrl: repo.remoteRepoSummary.serverURL});
+                        let msg: string = this.translateService.instant("MESSAGES.REPO_CREDENTIALS_BATCH_UPDATED.CREDENTIALS_OF_SERVER_URL", { serverUrl: repo.remoteRepoSummary.serverURL });
                         if (repo[this.MATCH_USERNAME_ATTR]) {
-                            msg += " " + this.translateService.instant("MESSAGES.REPO_CREDENTIALS_BATCH_UPDATED.AND_USERNAME", {username: oldUsername});
+                            msg += " " + this.translateService.instant("MESSAGES.REPO_CREDENTIALS_BATCH_UPDATED.AND_USERNAME", { username: oldUsername });
                         }
                         msg += " " + this.translateService.instant("MESSAGES.REPO_CREDENTIALS_BATCH_UPDATED.UPDATED");
-                        this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, msg);
+                        this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, msg);
                         this.initRepos();
                     }
                 );
@@ -61,7 +61,7 @@ export class RemoteRepoEditorModal {
             this.projectService.modifyRepositoryAccessCredentials(this.project, repo.id,
                 repo.remoteRepoSummary.username, repo.remoteRepoSummary.password).subscribe(
                     () => {
-                        this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.REPO_CREDENTIALS_UPDATED", params:{repoId: repo.remoteRepoSummary.repositoryId}});
+                        this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.REPO_CREDENTIALS_UPDATED", params: { repoId: repo.remoteRepoSummary.repositoryId } });
                     }
                 );
         }

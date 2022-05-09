@@ -52,7 +52,7 @@ export class CustomServiceComponent {
                     name: this.service.getProperty("name"),
                     description: this.service.getProperty("description"),
                     operations: this.service.getProperty("operations")
-                }
+                };
                 if (restoreOperation) {
                     //try to restore the selected operation (if any)
                     if (this.selectedOperation != null) {
@@ -63,11 +63,11 @@ export class CustomServiceComponent {
                 } else {
                     this.selectedOperation = null;
                 }
-                
+
             }
-        )
+        );
     }
-    
+
     private updateName(newName: string) {
         let updatedService: CustomServiceDefinition = { name: newName, description: this.form.description.value, operations: this.form.operations.value };
         this.customServService.updateCustomService(this.id, updatedService).subscribe(
@@ -93,12 +93,12 @@ export class CustomServiceComponent {
     }
 
     private createOperation() {
-        this.customServiceModals.openCustomOperationEditor({key:"CUSTOM_SERVICES.ACTIONS.CREATE_CUSTOM_OPERATION"}, this.service.id).then(
+        this.customServiceModals.openCustomOperationEditor({ key: "CUSTOM_SERVICES.ACTIONS.CREATE_CUSTOM_OPERATION" }, this.service.id).then(
             () => { //operation created => require update
                 this.initCustomService(true);
             },
             () => { }
-        )
+        );
     }
 
     private deleteOperation() {
@@ -119,7 +119,7 @@ export class CustomServiceComponent {
             () => {
                 this.initCustomService(true);
             }
-        )
+        );
     }
 
 }

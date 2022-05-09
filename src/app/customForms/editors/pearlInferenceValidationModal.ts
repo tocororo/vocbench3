@@ -13,7 +13,7 @@ export class PearlInferenceValidationModal {
     @Input() oldPearl: string;
     @Input() newPearl: string;
 
-    constructor(public activeModal: NgbActiveModal, private cfService: CustomFormsServices, private basicModals: BasicModalServices) {}
+    constructor(public activeModal: NgbActiveModal, private cfService: CustomFormsServices, private basicModals: BasicModalServices) { }
 
 
     ok() {
@@ -22,16 +22,16 @@ export class PearlInferenceValidationModal {
                 if (result.valid) {
                     this.activeModal.close(this.newPearl);
                 } else {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, result.details, ModalType.error);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, result.details, ModalType.error);
                     return;
                 }
             }
         );
-        
+
     }
 
     cancel() {
         this.activeModal.dismiss();
     }
-    
+
 }

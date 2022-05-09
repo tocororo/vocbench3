@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
-import { ConfigurableExtensionFactory, DeploySource, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, STProperties, TransformationStep } from "../../../models/Plugins";
+import { ConfigurableExtensionFactory, DeploySource, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, STProperties, TransformationStep } from "../../../models/Plugins";
 import { DataFormat } from "../../../models/RDFFormat";
 import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
@@ -62,9 +62,9 @@ export class ExportDataComponent {
         { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.SAVE_TO_FILE", source: null },
         { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.DEPLOY_TO_TRIPLE_STORE", source: DeploySource.repository },
         { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.USE_CUSTOM_DEPLOYER", source: DeploySource.stream }
-    ]
+    ];
     selectedDeployment = this.deploymentOptions[0];
-    
+
 
     constructor(private extensionService: ExtensionsServices, private exportService: ExportServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
@@ -74,11 +74,9 @@ export class ExportDataComponent {
         let baseURI: string = VBContext.getWorkingProject().getBaseURI();
         this.exportService.getNamedGraphs().subscribe(
             graphs => {
-                graphs.sort(
-                    function(g1: ARTURIResource, g2: ARTURIResource) {
-                        return g1.getURI().localeCompare(g2.getURI());
-                    }
-                );
+                graphs.sort((g1: ARTURIResource, g2: ARTURIResource) => {
+                    return g1.getURI().localeCompare(g2.getURI());
+                });
                 for (let i = 0; i < graphs.length; i++) {
                     this.exportGraphs.push(new GraphStruct(graphs[i].getURI() == baseURI, graphs[i])); //set checked the project baseURI
                 }
@@ -94,15 +92,15 @@ export class ExportDataComponent {
         this.extensionService.getExtensions(ExtensionPointID.REFORMATTING_EXPORTER_ID).subscribe(
             extensions => {
                 //sort extensions in order to force RDFSerializingExporter in 1st position, so selected as default
-                extensions.sort((e1, e2) => { 
+                extensions.sort((e1, e2) => {
                     if (e1.id.includes("RDFSerializingExporter")) {
-                        return -1
+                        return -1;
                     } else if (e2.id.includes("RDFSerializingExporter")) {
-                        return 1
+                        return 1;
                     } else {
-                        return 0
+                        return 0;
                     }
-                })
+                });
                 this.reformatters = extensions;
             }
         );
@@ -150,7 +148,7 @@ export class ExportDataComponent {
                     this.filtersChain[i].filterGraphs.push(new GraphStruct(false, graphStruct.graph));
                 }
             }
-        } else {//graph is now unselected
+        } else { //graph is now unselected
             //if now no graph is selected, add them all to the filterGraphs array of the filterChain elements
             if (this.areAllGraphDeselected()) {
                 for (let i = 0; i < this.filtersChain.length; i++) {
@@ -220,8 +218,8 @@ export class ExportDataComponent {
 
     configureGraphs(filterChainEl: TransformerChainElement) {
         this.openGraphSelectionModal(filterChainEl.filterGraphs).then(
-            res => {},
-            () => {}
+            res => { },
+            () => { }
         );
     }
 
@@ -295,7 +293,7 @@ export class ExportDataComponent {
      * Returns true if the reformatter requires edit of the configuration and it is not configured
      */
     private requireConfigurationFormatter(): boolean {
-        if (this.selectedReformatterConfig != null) {//check required because config could be not yet initialized
+        if (this.selectedReformatterConfig != null) { //check required because config could be not yet initialized
             return this.selectedReformatterConfig.requireConfiguration();
         }
         return false;
@@ -312,13 +310,13 @@ export class ExportDataComponent {
         //When a deployer source is specified (so a deployer is used)
         return this.selectedDeployment.source != null;
     }
-    
+
     onDeployerConfigUpdated(config: Settings) {
         setTimeout(() => { //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
             this.selectedDeployerConfig = config;
         });
     }
-    
+
     onDeployerConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
         this.deployerStatus = statusEvent.status;
         this.deployerRelativeRef = statusEvent.relativeReference;
@@ -349,7 +347,7 @@ export class ExportDataComponent {
 
         for (let i = 0; i < this.filtersChain.length; i++) {
             if (this.filtersChain[i].status == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.FILTER_NOT_SAVED", params:{position: i+1}}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.FILTER_NOT_SAVED", params: { position: i + 1 } }, ModalType.warning);
                 return;
             }
 
@@ -364,9 +362,9 @@ export class ExportDataComponent {
                 if (g.checked) {
                     transfStepGraphs.push(g.graph.toNT());
                 }
-            })
+            });
 
-            let transfPipelineStepPair: any[] = [ transfStepConfig, transfStepGraphs ]; //pair [configuration, graphs]
+            let transfPipelineStepPair: any[] = [transfStepConfig, transfStepGraphs]; //pair [configuration, graphs]
 
             transformationPipeline.push(transfPipelineStepPair);
         }
@@ -375,26 +373,26 @@ export class ExportDataComponent {
         let deployerSpec: { extensionID: string, configRef: string };
         if (this.useDeployer()) {
             if (this.deployerStatus == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.DEPLOYER_NOT_SAVED"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.DEPLOYER_NOT_SAVED" }, ModalType.warning);
                 return;
             }
             deployerSpec = {
                 extensionID: this.selectedDeployerExtension.id,
                 configRef: this.deployerRelativeRef
-            }
+            };
         }
 
         //reformatter (sempre in deployerSpec?)
         let reformattingExporterSpec: { extensionID: string, configRef: string };
         if (this.useReformatter()) {
             if (this.reformatterStatus == ExtensionConfigurationStatus.unsaved) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.REFORMETTER_CONFIG_NOT_SAVED"}, ModalType.warning);
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.REFORMETTER_CONFIG_NOT_SAVED" }, ModalType.warning);
                 return;
             }
             reformattingExporterSpec = {
                 extensionID: this.selectedReformatterExtension.id,
                 configRef: this.reformatterRelativeRef
-            }
+            };
         }
 
 
@@ -404,29 +402,29 @@ export class ExportDataComponent {
             includeInferred: this.includeInferred,
             deployerSpec: deployerSpec,
             reformattingExporterSpec: reformattingExporterSpec
-        }
+        };
 
-        this.sharedModals.storeConfiguration({key: "ACTIONS.SAVE_EXPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.EXPORTER, config).then(
+        this.sharedModals.storeConfiguration({ key: "ACTIONS.SAVE_EXPORTER_CHAIN_CONFIGURATION" }, ConfigurationComponents.EXPORTER, config).then(
             () => {
-                this.basicModals.alert({key:"STATUS.OPERATION_DONE"}, {key:"MESSAGES.CONFIGURATION_SAVED"});
+                this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.CONFIGURATION_SAVED" });
             },
-            () => {}
+            () => { }
         );
     }
 
     loadChain() {
-        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_EXPORTER_CHAIN_CONFIGURATION"}, ConfigurationComponents.EXPORTER).then(
+        this.sharedModals.loadConfiguration({ key: "ACTIONS.LOAD_EXPORTER_CHAIN_CONFIGURATION" }, ConfigurationComponents.EXPORTER).then(
             (conf: LoadConfigurationModalReturnData) => {
                 this.filtersChain = []; //reset the chain
                 let configurations: STProperties[] = conf.configuration.properties;
 
-                let deployerSpec: {extensionID: string, configRef: string};
-                let reformattingExporterSpec: {extensionID: string, configRef: string};
+                let deployerSpec: { extensionID: string, configRef: string };
+                let reformattingExporterSpec: { extensionID: string, configRef: string };
 
                 for (let i = 0; i < configurations.length; i++) {
                     if (configurations[i].name == "transformationPipeline") {
                         //value of a stored transformationPipeline (see loadConfiguration response)
-                        let chain: [{extensionID: string, configRef: string}, string[]][] = configurations[i].value;
+                        let chain: [{ extensionID: string, configRef: string }, string[]][] = configurations[i].value;
 
                         if (chain.length > 0) {
                             //for each element of the pipeline append a filter (so that a ExtensionConfiguratorComponent is instantiated for each one of them)
@@ -435,7 +433,7 @@ export class ExportDataComponent {
                             });
 
                             //...and force a configuration
-                            setTimeout(() => {  //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
+                            setTimeout(() => { //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
                                 /**
                                  * collect the ExtensionConfiguratorComponent for the transformators. This is necessary since
                                  * there are also the ExtensionConfiguratorComponent for deployer and serializer, so I need to ensure
@@ -453,7 +451,7 @@ export class ExportDataComponent {
                                     });
                                 });
                                 //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
-                                chain.forEach((c : [{extensionID: string, configRef: string}, string[]], index: number) => {
+                                chain.forEach((c: [{ extensionID: string, configRef: string }, string[]], index: number) => {
                                     let extConfPair = c[0];
                                     tranformerConfigurators[index].forceConfigurationByRef(extConfPair.extensionID, extConfPair.configRef);
 
@@ -469,7 +467,7 @@ export class ExportDataComponent {
                         let graphs: string[] = configurations[i].value;
                         this.exportGraphs.forEach((gs: GraphStruct) => {
                             gs.checked = graphs.indexOf(gs.graph.toNT()) != -1;
-                        })
+                        });
                     } else if (configurations[i].name == "includeInferred") {
                         this.includeInferred = configurations[i].value;
                     } else if (configurations[i].name == "deployerSpec") {
@@ -482,7 +480,7 @@ export class ExportDataComponent {
                 /**
                  * Restore the deployment: deployer + reformatter
                  */
-                if (deployerSpec != null && reformattingExporterSpec != null) {//both deployer and reformatter provided => stream-sourced deployment
+                if (deployerSpec != null && reformattingExporterSpec != null) { //both deployer and reformatter provided => stream-sourced deployment
                     this.deploymentOptions.forEach(opt => {
                         if (opt.source == DeploySource.stream) {
                             this.selectedDeployment = opt;
@@ -493,7 +491,7 @@ export class ExportDataComponent {
                         this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
                         this.deployerConfigurator.forceConfigurationByRef(deployerSpec.extensionID, deployerSpec.configRef);
                     });
-                } else if (deployerSpec != null) {  //only deployer specified => repository-sourced deployment
+                } else if (deployerSpec != null) { //only deployer specified => repository-sourced deployment
                     this.deploymentOptions.forEach(opt => {
                         if (opt.source == DeploySource.repository) {
                             this.selectedDeployment = opt;
@@ -518,7 +516,7 @@ export class ExportDataComponent {
         );
     }
 
-    private restoreReformatter(reformattingExporterSpec: {extensionID: string, configRef: string}) {
+    private restoreReformatter(reformattingExporterSpec: { extensionID: string, configRef: string }) {
         //look among the reformatters
         this.reformatters.forEach((reformatter: ExtensionFactory) => {
             if (reformatter.id == reformattingExporterSpec.extensionID) {
@@ -527,10 +525,10 @@ export class ExportDataComponent {
                     if (opt.source == DeploySource.stream) {
                         this.selectedDeployment = opt;
                     }
-                })
+                });
             }
         });
-        
+
         setTimeout(() => {
             this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
         });
@@ -546,7 +544,7 @@ export class ExportDataComponent {
         //check if every filter has been configured
         for (let i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
-                this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.EXPORT_FILTER_NOT_CONFIGURED", params:{filterName: this.filtersChain[i].selectedFactory.name}},
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.EXPORT_FILTER_NOT_CONFIGURED", params: { filterName: this.filtersChain[i].selectedFactory.name } },
                     ModalType.warning);
                 return;
             }
@@ -567,7 +565,7 @@ export class ExportDataComponent {
         }
 
         //reformattingExporterSpec && outputFormat
-        let reformattingExporterSpec: PluginSpecification
+        let reformattingExporterSpec: PluginSpecification;
         let outputFormat: string;
         //if doesn't use a deployer or use a deployer with stream source
         if (this.selectedDeployment.source == null || this.selectedDeployment.source == DeploySource.stream) {
@@ -576,7 +574,7 @@ export class ExportDataComponent {
             };
             if (this.selectedReformatterConfig != null) {
                 if (this.requireConfigurationFormatter()) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.REFORMATTING_EXPORTER_NOT_CONFIGURED", params:{exporterName: this.selectedReformatterConfig.shortName}},
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.REFORMATTING_EXPORTER_NOT_CONFIGURED", params: { exporterName: this.selectedReformatterConfig.shortName } },
                         ModalType.warning);
                     return;
                 }
@@ -586,16 +584,16 @@ export class ExportDataComponent {
 
             outputFormat = this.selectedExportFormat.name;
         }
-        
+
         //deployerSpec
         let deployerSpec: PluginSpecification;
         if (this.selectedDeployment.source != null) {
             deployerSpec = {
                 factoryId: this.selectedDeployerExtension.id
-            }
+            };
             if (this.selectedDeployerConfig != null) {
                 if (this.requireConfigurationDeployer()) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.DEPLOYER_NOT_CONFIGURED"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.DEPLOYER_NOT_CONFIGURED" }, ModalType.warning);
                     return;
                 }
                 deployerSpec.configType = this.selectedDeployerConfig.type;
@@ -604,34 +602,34 @@ export class ExportDataComponent {
         }
 
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), reformattingExporterSpec, deployerSpec, 
+        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), reformattingExporterSpec, deployerSpec,
             this.includeInferred, outputFormat).subscribe(
-            (data: any | Blob) => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.exportSuccessHandler(data, deployerSpec == null);
-            },
-            (err: Error) => {
-                if (err.name.endsWith("NullGraphNotExportedException") || err.name.endsWith("UnnamedGraphNotExportedException")) {
-                    let msg = err.message;
-                    msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
-                    this.basicModals.confirm({key:"STATUS.WARNING"}, msg, ModalType.warning).then(
-                        yes => {
-                            UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                            this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline),  reformattingExporterSpec, deployerSpec, 
-                                this.includeInferred, outputFormat, true).subscribe(
-                                (data: any | Blob) => {
-                                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                    this.exportSuccessHandler(data, deployerSpec == null);
-                                },
-                            );
-                        },
-                        no => {}
-                    );
-                } else if (err.name.endsWith("ReformattingWrongModelException") || err.name.endsWith("ReformattingWrongModelException")) {
-                    this.basicModals.alert({key:"STATUS.WARNING"}, err.message, ModalType.warning);
+                (data: any | Blob) => {
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    this.exportSuccessHandler(data, deployerSpec == null);
+                },
+                (err: Error) => {
+                    if (err.name.endsWith("NullGraphNotExportedException") || err.name.endsWith("UnnamedGraphNotExportedException")) {
+                        let msg = err.message;
+                        msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
+                        this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
+                            yes => {
+                                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                                this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), reformattingExporterSpec, deployerSpec,
+                                    this.includeInferred, outputFormat, true).subscribe(
+                                        (data: any | Blob) => {
+                                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                                            this.exportSuccessHandler(data, deployerSpec == null);
+                                        },
+                                    );
+                            },
+                            no => { }
+                        );
+                    } else if (err.name.endsWith("ReformattingWrongModelException") || err.name.endsWith("ReformattingWrongModelException")) {
+                        this.basicModals.alert({ key: "STATUS.WARNING" }, err.message, ModalType.warning);
+                    }
                 }
-            }
-        );
+            );
     }
 
     /**
@@ -648,9 +646,9 @@ export class ExportDataComponent {
             if (this.selectedExportFormat.name == "XLSX") {
                 ext = "xlsx";
             }
-            this.basicModals.downloadLink({key: "ACTIONS.EXPORT_DATA" }, null, exportLink, "export." + ext);
+            this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_DATA" }, null, exportLink, "export." + ext);
         } else {
-            this.basicModals.alert({key: "ACTIONS.EXPORT_DATA" }, {key:"MESSAGES.EXPORT_RESULT_DEPLOYED"});
+            this.basicModals.alert({ key: "ACTIONS.EXPORT_DATA" }, { key: "MESSAGES.EXPORT_RESULT_DEPLOYED" });
         }
     }
 
@@ -659,17 +657,17 @@ export class ExportDataComponent {
      * =====================================*/
 
     private collectCheckedGraphStructures(): GraphStruct[] {
-        let graphs: GraphStruct[] = []
+        let graphs: GraphStruct[] = [];
         if (this.areAllGraphDeselected()) {
             for (let i = 0; i < this.exportGraphs.length; i++) {
-                graphs.push({checked: false, graph: this.exportGraphs[i].graph});
-            }    
+                graphs.push({ checked: false, graph: this.exportGraphs[i].graph });
+            }
         } else {
             for (let i = 0; i < this.exportGraphs.length; i++) {
                 if (this.exportGraphs[i].checked) {
-                    graphs.push({checked: false, graph: this.exportGraphs[i].graph});
+                    graphs.push({ checked: false, graph: this.exportGraphs[i].graph });
                 }
-            }   
+            }
         }
         return graphs;
     }
@@ -707,14 +705,14 @@ class TransformerChainElement {
     }
 
     convertToFilteringPipelineStep(): TransformationStep {
-        let filterStep: TransformationStep = {filter: null};
+        let filterStep: TransformationStep = { filter: null };
         //filter: factoryId and properties
-        let filter: {factoryId: string, configuration: any} = {
+        let filter: { factoryId: string, configuration: any } = {
             factoryId: this.selectedFactory.id,
             configuration: null
-        }
+        };
         let selectedConf: Settings = this.selectedConfiguration;
-        
+
         filter.configuration = selectedConf.getPropertiesAsMap();
         filterStep.filter = filter;
         //graphs to which apply the filter

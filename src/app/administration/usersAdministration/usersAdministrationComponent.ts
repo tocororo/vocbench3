@@ -44,7 +44,7 @@ export class UsersAdministrationComponent {
 
     private userDetailsAspect: string = "Details";
     private rvTemplateAspect: string = "Template";
-    private aspectSelectors: string[] = [this.userDetailsAspect, this.rvTemplateAspect]
+    private aspectSelectors: string[] = [this.userDetailsAspect, this.rvTemplateAspect];
     selectedAspectSelector: string = this.aspectSelectors[0];
 
     private userProjects: string[]; //project assigned to the user
@@ -84,9 +84,9 @@ export class UsersAdministrationComponent {
         } else if (sortBy == UserSort.email_desc) {
             this.users.sort((u1, u2) => u2.getGivenName().localeCompare(u1.getGivenName()));
         } else if (sortBy == UserSort.registered_asc) {
-            this.users.sort((u1, u2) => u1.getRegistrationDate() > u2.getRegistrationDate() ? 1 : -1);
+            this.users.sort((u1, u2) => { return u1.getRegistrationDate() > u2.getRegistrationDate() ? 1 : -1; });
         } else if (sortBy == UserSort.registered_desc) {
-            this.users.sort((u1, u2) => u1.getRegistrationDate() > u2.getRegistrationDate() ? -1 : 1);
+            this.users.sort((u1, u2) => { return u1.getRegistrationDate() > u2.getRegistrationDate() ? -1 : 1; });
         }
     }
 
@@ -111,7 +111,7 @@ export class UsersAdministrationComponent {
             res => {
                 this.initUserList();
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -140,11 +140,11 @@ export class UsersAdministrationComponent {
                 }
                 this.userTemplate = this.userResViewPref.resViewPartitionFilter;
             }
-        )
+        );
     }
 
     loadTemplate() {
-        this.sharedModals.loadConfiguration({key:"ACTIONS.LOAD_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE).then(
+        this.sharedModals.loadConfiguration({ key: "ACTIONS.LOAD_TEMPLATE" }, ConfigurationComponents.TEMPLATE_STORE).then(
             (conf: LoadConfigurationModalReturnData) => {
                 let templateProp: SettingsProp = conf.configuration.properties.find(p => p.name == "template");
                 if (templateProp != null) {
@@ -152,14 +152,14 @@ export class UsersAdministrationComponent {
                     this.updateTemplate();
                 }
             }
-        )
+        );
     }
 
     storeTemplate() {
         let config: { [key: string]: any } = {
             template: this.userTemplate
-        }
-        this.sharedModals.storeConfiguration({key:"ACTIONS.SAVE_TEMPLATE"}, ConfigurationComponents.TEMPLATE_STORE, config);
+        };
+        this.sharedModals.storeConfiguration({ key: "ACTIONS.SAVE_TEMPLATE" }, ConfigurationComponents.TEMPLATE_STORE, config);
     }
 
     private updateTemplate() {
@@ -171,7 +171,7 @@ export class UsersAdministrationComponent {
                     this.vbProp.refreshResourceViewPartitionFilter().subscribe();
                 }
             }
-        )
+        );
     }
 
 }

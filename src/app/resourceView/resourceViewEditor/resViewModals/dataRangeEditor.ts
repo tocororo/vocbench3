@@ -21,7 +21,7 @@ export class DataRangeEditor implements ControlValueAccessor {
     }
 
     add() {
-        for (var i = 0; i < this.datarange.length; i++) {
+        for (let i = 0; i < this.datarange.length; i++) {
             if (this.datarange[i].getValue() == this.value.getValue() && this.datarange[i].getDatatype() == this.value.getDatatype()) {
                 return; //datarange already in list => do not add
             }

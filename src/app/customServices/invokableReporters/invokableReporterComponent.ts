@@ -30,7 +30,7 @@ export class InvokableReporterComponent {
 
     reportFormats: ReportFormatStruct[] = [
         { label: "HTML", value: null }, { label: "PDF", value: "application/pdf" }
-    ]
+    ];
     selectedReportFormat: ReportFormatStruct = this.reportFormats[0];
 
     /* despite invokable repotrers exploit the Settings standard, I cannot use the renderer since I have to 
@@ -55,7 +55,7 @@ export class InvokableReporterComponent {
     deploymentOptions: { translationKey: string, source: DeploySource }[] = [
         { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.SAVE_TO_FILE", source: null },
         { translationKey: "DATA_MANAGEMENT.EXPORT.DEPLOY.USE_CUSTOM_DEPLOYER", source: DeploySource.stream }
-    ]
+    ];
     selectedDeployment = this.deploymentOptions[0];
 
     constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices,
@@ -91,12 +91,12 @@ export class InvokableReporterComponent {
                     filename: this.reporter.getProperty("filename"),
                     additionalFiles: this.reporter.getProperty("additionalFiles"),
                     mimeType: this.reporter.getProperty("mimeType")
-                }
+                };
                 this.additionalFilesPreview = this.form.additionalFiles.value != null ? this.form.additionalFiles.value.map(f => f.destinationPath).join(", ") : null;
                 if (restoreInvocation) {
                     //try to restore the selected service invocation (if any)
                     if (this.selectedServiceInvocationIdx != null && this.form.sections.value != null && this.form.sections.value.length > this.selectedServiceInvocationIdx) {
-                        this.selectServiceInvocation(this.selectedServiceInvocationIdx)
+                        this.selectServiceInvocation(this.selectedServiceInvocationIdx);
                     } else {
                         this.selectedServiceInvocation = null;
                     }
@@ -109,12 +109,12 @@ export class InvokableReporterComponent {
     }
 
     edit() {
-        this.invokableReporterModals.openInvokableReporterEditor({key:"INVOKABLE_REPORTERS.ACTIONS.EDIT_INVOKABLE_REPORT"}, [], this.ref).then(
+        this.invokableReporterModals.openInvokableReporterEditor({ key: "INVOKABLE_REPORTERS.ACTIONS.EDIT_INVOKABLE_REPORT" }, [], this.ref).then(
             () => {
                 this.initReporter(true);
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     selectServiceInvocation(index: number) {
@@ -125,20 +125,20 @@ export class InvokableReporterComponent {
     }
 
     createServiceInvocation() {
-        this.invokableReporterModals.openServiceInvocationEditor({key:"INVOKABLE_REPORTERS.ACTIONS.CREATE_SERVICE_INVOCATION"}, this.ref).then(
+        this.invokableReporterModals.openServiceInvocationEditor({ key: "INVOKABLE_REPORTERS.ACTIONS.CREATE_SERVICE_INVOCATION" }, this.ref).then(
             () => { //operation created => require update
                 this.initReporter(true);
             },
             () => { }
-        )
+        );
     }
 
     deleteServiceInvocation() {
         this.invokableReporterService.removeSectionFromReporter(this.ref.relativeReference, this.selectedServiceInvocationIdx).subscribe(
             () => {
-                this.initReporter(false)
+                this.initReporter(false);
             }
-        )
+        );
     }
 
     onServiceInvocationUpdate() {
@@ -155,7 +155,7 @@ export class InvokableReporterComponent {
             this.selectedDeployerConfig = config;
         });
     }
-    
+
     onDeployerConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
         this.deployerStatus = statusEvent.status;
         this.deployerRelativeRef = statusEvent.relativeReference;
@@ -176,7 +176,7 @@ export class InvokableReporterComponent {
 
     compileAndShowReport() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_SERVICE_INVOCATION_PROVIDED"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.NO_SERVICE_INVOCATION_PROVIDED" }, ModalType.warning);
         } else {
             UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.invokableReporterService.compileReport(this.ref.relativeReference, false).subscribe(
@@ -193,7 +193,7 @@ export class InvokableReporterComponent {
 
     compileAndDeploy() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
-            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.NO_SERVICE_INVOCATION_PROVIDED"}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.NO_SERVICE_INVOCATION_PROVIDED" }, ModalType.warning);
         } else {
             let reporterRef: string = this.ref.relativeReference;
             let mimeType: string = this.selectedReportFormat.value;
@@ -203,10 +203,10 @@ export class InvokableReporterComponent {
                 if (this.selectedDeployment.source != null) {
                     deployerSpec = {
                         factoryId: this.selectedDeployerExtension.id
-                    }
+                    };
                     if (this.selectedDeployerConfig != null) {
                         if (this.requireConfigurationDeployer()) {
-                            this.basicModals.alert({key:"STATUS.WARNING"}, {key:"MESSAGES.DEPLOYER_NOT_CONFIGURED"}, ModalType.warning);
+                            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.DEPLOYER_NOT_CONFIGURED" }, ModalType.warning);
                             return;
                         }
                         deployerSpec.configType = this.selectedDeployerConfig.type;
@@ -230,9 +230,9 @@ export class InvokableReporterComponent {
 
     private compilationErrorHandler(error: Error) {
         if (error.name.endsWith("InvokableReporterException") && error.message.includes("AccessDeniedException")) { //not enough privileges
-            this.basicModals.alert({key:"STATUS.OPERATION_DENIED"}, {key:"MESSAGES.NO_PERMISSION_FOR_SERVICE_INVOCATION"}, ModalType.error, error.message);
+            this.basicModals.alert({ key: "STATUS.OPERATION_DENIED" }, { key: "MESSAGES.NO_PERMISSION_FOR_SERVICE_INVOCATION" }, ModalType.error, error.message);
         } else { //if not due to access denied show in error modal
-            this.basicModals.alert({key:"STATUS.ERROR"}, error.message, ModalType.error, error.stack);
+            this.basicModals.alert({ key: "STATUS.ERROR" }, error.message, ModalType.error, error.stack);
         }
     }
 
@@ -244,8 +244,8 @@ export class InvokableReporterForm {
     description: InvokableReporterFormEntry<string>;
     sections: InvokableReporterFormEntry<ServiceInvocationDefinition[]>;
     template: InvokableReporterFormEntry<string>;
-    filename: InvokableReporterFormEntry<string>
-    additionalFiles: InvokableReporterFormEntry<AdditionalFile[]>
+    filename: InvokableReporterFormEntry<string>;
+    additionalFiles: InvokableReporterFormEntry<AdditionalFile[]>;
     mimeType: InvokableReporterFormEntry<string>;
 }
 
@@ -253,7 +253,7 @@ export class InvokableReporterFormEntry<T> extends SettingsProp {
     value: T;
 }
 
-export interface ReportFormatStruct { 
-    label: string; 
+export interface ReportFormatStruct {
+    label: string;
     value: string;
 }

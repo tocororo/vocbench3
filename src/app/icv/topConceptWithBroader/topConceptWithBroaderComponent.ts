@@ -30,8 +30,8 @@ export class TopConceptWithBroaderComponent {
     }
 
     removeBroaders(record: any) {
-        var concept = record.concept;
-        var scheme = record.scheme;
+        let concept = record.concept;
+        let scheme = record.scheme;
         this.icvService.removeBroadersToConcept(concept, scheme).subscribe(
             stResp => {
                 this.runIcv();
@@ -40,8 +40,8 @@ export class TopConceptWithBroaderComponent {
     }
 
     removeAsTopConceptOf(record: any) {
-        var concept = record.concept;
-        var scheme = record.scheme;
+        let concept = record.concept;
+        let scheme = record.scheme;
         this.skosService.removeTopConcept(concept, scheme).subscribe(
             stResp => {
                 this.runIcv();

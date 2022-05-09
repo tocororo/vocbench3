@@ -293,7 +293,7 @@ export class WizardGraphEntry {
 
     constructor(subject: WizardNode) {
         this.subject = subject;
-        this.object = { type: GraphObjectType.node }
+        this.object = { type: GraphObjectType.node };
     }
 
     getSerialization(prefixMapping: PrefixMapping[]): GraphEntrySerialization {
@@ -340,7 +340,7 @@ export class WizardGraphEntry {
         let ges: GraphEntrySerialization = {
             triples: triples,
             optional: optional
-        }
+        };
         return ges;
     }
 }
@@ -392,7 +392,7 @@ export class WizardStatusUtils {
             nodes: nodes,
             graphs: graphs,
             advGraphs: advGraphs
-        }
+        };
         return status;
     }
 
@@ -400,9 +400,9 @@ export class WizardStatusUtils {
 
     static restoreWizardField(jsonStatus): WizardField {
         if (jsonStatus.type == "literal") {
-            return WizardStatusUtils.restoreWizardFieldLiteral(jsonStatus)
+            return WizardStatusUtils.restoreWizardFieldLiteral(jsonStatus);
         } else { //jsonStatus.type == "uri"
-            return WizardStatusUtils.restoreWizardFieldUri(jsonStatus)
+            return WizardStatusUtils.restoreWizardFieldUri(jsonStatus);
         }
     }
 
@@ -410,8 +410,8 @@ export class WizardStatusUtils {
         let field: WizardFieldLiteral = new WizardFieldLiteral(jsonStatus.label);
         field.collection = jsonStatus.collection;
         field.constraint = jsonStatus.constraint;
-        field.datatype = jsonStatus.datatype != null ? Deserializer.createURI(jsonStatus.datatype) : null,
-            field.enumeration = Deserializer.createLiteralArray(jsonStatus.enumeration);
+        field.datatype = jsonStatus.datatype != null ? Deserializer.createURI(jsonStatus.datatype) : null;
+        field.enumeration = Deserializer.createLiteralArray(jsonStatus.enumeration);
         field.featureName = jsonStatus.featureName;
         field.label = jsonStatus.label;
         field.languageConstraint = jsonStatus.languageConstraint;
@@ -494,7 +494,7 @@ export class WizardStatusUtils {
             converter: conv,
             converterDesc: ConverterContractDescription.parse(jsonStatus.converterDesc),
             signatureDesc: SignatureDescription.parse(jsonStatus.signatureDesc)
-        }
+        };
         return c;
     }
 
@@ -532,7 +532,7 @@ export class WizardStatusUtils {
         let objType: GraphObjectType = jsonStatus.object.type;
         let graphObj: WizardGraphEntryObject = {
             type: objType
-        }
+        };
         if (objType == GraphObjectType.node) {
             let oNode: WizardNode;
             if (jsonStatus.object.node != null) { //node might be not assigned
@@ -544,7 +544,7 @@ export class WizardStatusUtils {
             if (jsonStatus.object.value != null) { //value might be not assigned
                 oValue = Deserializer.createRDFNode(jsonStatus.object.value);
             }
-            graphObj.value = oValue
+            graphObj.value = oValue;
         }
         g.object = graphObj;
         return g;

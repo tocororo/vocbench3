@@ -10,7 +10,7 @@ import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { PartitionRenderer } from "./partitionRenderer";
 
 @Directive()
-export abstract class PartitionRendererMultiRoot extends PartitionRenderer  {
+export abstract class PartitionRendererMultiRoot extends PartitionRenderer {
 
     /**
      * ATTRIBUTES
@@ -46,7 +46,7 @@ export abstract class PartitionRendererMultiRoot extends PartitionRenderer  {
 
     //used in removePredicateObject to know if the removing object is about a well known property
     isKnownProperty(predicate: ARTURIResource): boolean {
-        for (var i = 0; i < this.knownProperties.length; i++) {
+        for (let i = 0; i < this.knownProperties.length; i++) {
             if (this.knownProperties[i].getURI() == predicate.getURI()) {
                 return true;
             }

@@ -77,14 +77,14 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         this.getRemoveFunction(predicate, object).subscribe(
             stResp => this.update.emit()
-        )
+        );
     }
 
     removeAllValues(predicate: ARTURIResource) {
         let removeFnArray: any[] = [];
-        for (var i = 0; i < this.predicateObjectList.length; i++) {
+        for (let i = 0; i < this.predicateObjectList.length; i++) {
             let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
-            for (var j = 0; j < objList.length; j++) {
+            for (let j = 0; j < objList.length; j++) {
                 removeFnArray.push(this.getRemoveFunction(predicate, objList[j]));
             }
         }
@@ -94,7 +94,7 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:member relation
             return this.skosService.removeFromCollection(this.resource, <ARTResource>object);
-        } else {//predicate is some subProperty of skos:member
+        } else { //predicate is some subProperty of skos:member
             return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }

@@ -2,7 +2,6 @@ import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { map } from 'rxjs/operators';
 import { PrefixMapping } from "src/app/models/Metadata";
-import { SKOS, SKOSXL } from "src/app/models/Vocabulary";
 import { Sheet2RDFServices } from "src/app/services/sheet2rdfServices";
 import { UIUtils } from "src/app/utils/UIUtils";
 import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/converterConfiguratorComponent";
@@ -11,7 +10,7 @@ import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { SharedModalServices } from "src/app/widget/modal/sharedModal/sharedModalServices";
 import { VBContext } from "../../../utils/VBContext";
 import { ConverterConfigModal } from "./converterConfigModal";
-import { CustomFormWizardUtils, SessionFeature, StandardFormFeature, WizardAdvGraphEntry, WizardField, WizardNode, WizardNodeResource, WizardNodeFromField, WizardNodeUserCreated, WizardStatusUtils } from "./CustomFormWizard";
+import { CustomFormWizardUtils, SessionFeature, StandardFormFeature, WizardAdvGraphEntry, WizardField, WizardNode, WizardNodeFromField, WizardNodeResource, WizardNodeUserCreated, WizardStatusUtils } from "./CustomFormWizard";
 
 @Component({
     selector: "advanced-graph-editor",
@@ -22,7 +21,7 @@ export class AdvancedGraphEditor {
     @Input() advGraph: WizardAdvGraphEntry; //if provided, works in edit mode
     @Input() fields: WizardField[]; //used for selecting the seed field of the graph pattern
     @Input() nodes: WizardNode[]; //nodes defined in the wizard, they can be referred in the pattern
-        //(N.B.: in case there are references, the AdvG cannot be exported, since the description of an AdvG must be self-suffice and not depending on external factors not defined in it)
+    //(N.B.: in case there are references, the AdvG cannot be exported, since the description of an AdvG must be self-suffice and not depending on external factors not defined in it)
 
     @ViewChild('prefixnstable') prefixNsTableElement: ElementRef;
     globalPrefixMappings: PrefixMapping[] = [];
@@ -46,7 +45,7 @@ export class AdvancedGraphEditor {
     ngOnInit() {
         this.globalPrefixMappings = VBContext.getWorkingProjectCtx().getPrefixMappings();
         this.newNodes = [];
-     
+
         this.sessionFeatures = [SessionFeature.user]; //available for both C.Range and C.Constructor
         //for custom constructor add the feature of stdForm
         if (!this.customRange) {
@@ -61,7 +60,7 @@ export class AdvancedGraphEditor {
             this.advGraph.nodes.forEach(n => {
                 //serialize and restore the node in order to clone them and to prevent that changes on them are permanent even if the dialog is closed with "Close" button
                 this.newNodes.push(WizardStatusUtils.restoreWizardNode(JSON.parse(JSON.stringify(n)), this.fields));
-            })
+            });
             this.graphPattern = this.advGraph.pattern;
         }
     }
@@ -71,7 +70,7 @@ export class AdvancedGraphEditor {
     }
 
     onFieldChange() {
-        this.selectedFieldNodes = <WizardNodeFromField[]> this.nodes.filter(n => n instanceof WizardNodeFromField && n.fieldSeed == this.selectedField);
+        this.selectedFieldNodes = <WizardNodeFromField[]>this.nodes.filter(n => n instanceof WizardNodeFromField && n.fieldSeed == this.selectedField);
     }
 
     /*
@@ -88,19 +87,19 @@ export class AdvancedGraphEditor {
     }
 
     addMapping() {
-        this.sharedModals.prefixNamespace({key:"ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING"}).then(
+        this.sharedModals.prefixNamespace({ key: "ACTIONS.ADD_PREFIX_NAMESPACE_MAPPING" }).then(
             (mapping: { prefix: string, namespace: string }) => {
                 //check if the prefix or the namespace are not already defined
                 if (
-                    this.globalPrefixMappings.some(m => m.prefix == mapping.prefix) || 
+                    this.globalPrefixMappings.some(m => m.prefix == mapping.prefix) ||
                     this.localPrefixMappings.some(m => m.prefix == mapping.prefix)
                 ) {
-                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.ALREADY_DEFINED_MAPPING_WITH_PREFIX"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.ALREADY_DEFINED_MAPPING_WITH_PREFIX" }, ModalType.warning);
                 } else if (
-                    this.globalPrefixMappings.some(m => m.namespace == mapping.namespace) || 
+                    this.globalPrefixMappings.some(m => m.namespace == mapping.namespace) ||
                     this.localPrefixMappings.some(m => m.namespace == mapping.namespace)
                 ) {
-                    this.basicModals.alert({key:"STATUS.INVALID_DATA"}, {key:"MESSAGES.ALREADY_DEFINED_MAPPING_WITH_NAMESPACE"}, ModalType.warning);
+                    this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "MESSAGES.ALREADY_DEFINED_MAPPING_WITH_NAMESPACE" }, ModalType.warning);
                 } else { //not used => add it
                     let newMapping = { prefix: mapping.prefix, namespace: mapping.namespace, explicit: true };
                     this.localPrefixMappings.push(newMapping);
@@ -117,11 +116,11 @@ export class AdvancedGraphEditor {
         this.localPrefixMappings.splice(this.localPrefixMappings.indexOf(this.selectedMapping), 1);
         this.selectedMapping = null;
     }
-    
+
     /**
      * Adds the given mappings into localPrefixMappings
      */
-    private restorePrefixNsMappings(mappings: {[prefix: string]: string}) {
+    private restorePrefixNsMappings(mappings: { [prefix: string]: string }) {
         for (let prefix in mappings) {
             /** 
              * If the mappings is not already in the globalPrefixMappings, add it into the localPrefixMappings.
@@ -129,7 +128,7 @@ export class AdvancedGraphEditor {
              * do not add the mapping and replace the prefix in the pattern?
              */
             if (!this.globalPrefixMappings.some((gp: PrefixMapping) => gp.prefix == prefix && gp.namespace == mappings[prefix])) {
-                this.localPrefixMappings.push({ prefix: prefix, namespace: mappings[prefix], explicit: true })
+                this.localPrefixMappings.push({ prefix: prefix, namespace: mappings[prefix], explicit: true });
             }
         }
     }
@@ -203,12 +202,12 @@ export class AdvancedGraphEditor {
         return this.s2rdfService.validateGraphPattern(pearl).pipe(
             map(validation => {
                 if (!validation.valid) {
-                    this.basicModals.alert({key:"STATUS.INVALID_VALUE"}, {key:"MESSAGES.INVALID_GRAPH_PATTERN"}, ModalType.warning, validation.details);
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_GRAPH_PATTERN" }, ModalType.warning, validation.details);
                     return validation;
                 } else {
                     validation.usedNodes.forEach((nodeId, index, list) => {
                         list[index] = nodeId.substring(1); //removes the leading $
-                    })
+                    });
                     if (this.customRange && validation.usedNodes.includes(WizardNodeResource.NodeID)) {
                         validation.usedNodes.splice(validation.usedNodes.indexOf(WizardNodeResource.NodeID), 1);
                     }
@@ -226,7 +225,7 @@ export class AdvancedGraphEditor {
         //check on newNodes:
         for (let n1 of this.newNodes) {
             //check duplicated id in the newNodes and nodes list
-            if (this.newNodes.some(n2 => n1 != n2 && n1.nodeId == n2.nodeId) || this.nodes.some(n2 => n1.nodeId == n2.nodeId)) { 
+            if (this.newNodes.some(n2 => n1 != n2 && n1.nodeId == n2.nodeId) || this.nodes.some(n2 => n1.nodeId == n2.nodeId)) {
                 this.basicModals.alert({ key: "STATUS.INVALID_DATA" }, { key: "CUSTOM_FORMS.WIZARD.MESSAGES.NODE_MULTIPLE_ID", params: { id: n1.nodeId } }, ModalType.warning);
                 return;
             }
@@ -246,23 +245,23 @@ export class AdvancedGraphEditor {
                     validation.usedNodes.forEach(nId => {
                         let n = this.nodes.find(n => n.nodeId == nId); //search in already defined nodes
                         if (n != null) {
-                            referencedNodes.push(n)
+                            referencedNodes.push(n);
                         } else {
                             n = this.newNodes.find(n => n.nodeId == nId); //search in new defined nodes
                             if (n != null) {
-                                advGrNodes.push(n)
+                                advGrNodes.push(n);
                             }
                         }
-                    })
+                    });
 
-                    let advGrMappings: {[key: string]: string} = {}; //prefix mapping defined locally in this adv-g
+                    let advGrMappings: { [key: string]: string } = {}; //prefix mapping defined locally in this adv-g
                     validation.usedPrefixes.forEach(prefix => {
                         for (let m of this.localPrefixMappings) {
                             if (m.prefix == prefix) {
                                 advGrMappings[prefix] = m.namespace;
                                 break;
                             }
-                        };
+                        }
                     });
 
                     let returnData: WizardAdvGraphEntry = {
@@ -271,11 +270,11 @@ export class AdvancedGraphEditor {
                         referencedNodes: referencedNodes,
                         prefixMapping: advGrMappings,
                         pattern: this.graphPattern
-                    }
+                    };
                     this.activeModal.close(returnData);
                 }
             }
-        )
+        );
     }
 
     cancel() {

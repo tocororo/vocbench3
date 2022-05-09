@@ -16,7 +16,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 export class RefactorComponent {
 
     private lexicalizationModel: string; //RDFS, SKOS, SKOS-XL
-    
+
     private reifyNotes: boolean = false; //used in skos->skoxl
     private flattenNotes: boolean = false; //used in skosxl->skos
 
@@ -35,48 +35,48 @@ export class RefactorComponent {
     }
 
     skosToSkosxl() {
-        this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.SKOS_TO_SKOSXL"}, {key:"MESSAGES.LONG_PROCESS_WARN_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "DATA_MANAGEMENT.REFACTOR.SKOS_TO_SKOSXL" }, { key: "MESSAGES.LONG_PROCESS_WARN_CONFIRM" }, ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.SKOStoSKOSXL(this.reifyNotes).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.REFACTORING_COMPLETED"});
+                        this.basicModals.alert({ key: "DATA_MANAGEMENT.REFACTOR.REFACTOR" }, { key: "MESSAGES.REFACTORING_COMPLETED" });
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
     skosxlToSkos() {
-        this.basicModals.confirm({key:"DATA_MANAGEMENT.REFACTOR.SKOSXL_TO_SKOS"}, {key:"MESSAGES.LONG_PROCESS_WARN_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "DATA_MANAGEMENT.REFACTOR.SKOSXL_TO_SKOS" }, { key: "MESSAGES.LONG_PROCESS_WARN_CONFIRM" }, ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.SKOSXLtoSKOS(this.flattenNotes).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.REFACTORING_COMPLETED"});
+                        this.basicModals.alert({ key: "DATA_MANAGEMENT.REFACTOR.REFACTOR" }, { key: "MESSAGES.REFACTORING_COMPLETED" });
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
     //TODO: some event in order to destroy the data component
     migrateData() {
-        this.basicModals.confirm({key:"ACTIONS.MIGRATE_DATA_TO_BASEURI_GRAPH"}, {key:"MESSAGES.LONG_PROCESS_WARN_CONFIRM"}, ModalType.warning).then(
+        this.basicModals.confirm({ key: "ACTIONS.MIGRATE_DATA_TO_BASEURI_GRAPH" }, { key: "MESSAGES.LONG_PROCESS_WARN_CONFIRM" }, ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.migrateDefaultGraphToBaseURIGraph().subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert({key:"DATA_MANAGEMENT.REFACTOR.REFACTOR"}, {key:"MESSAGES.REFACTORING_COMPLETED"});
+                        this.basicModals.alert({ key: "DATA_MANAGEMENT.REFACTOR.REFACTOR" }, { key: "MESSAGES.REFACTORING_COMPLETED" });
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 

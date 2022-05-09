@@ -18,7 +18,7 @@ export class CollaborationProjectModal {
     projects: any[] = [];
     selectedProject: any;
 
-    constructor(public activeModal: NgbActiveModal, private collaborationService: CollaborationServices, 
+    constructor(public activeModal: NgbActiveModal, private collaborationService: CollaborationServices,
         private vbCollaboration: VBCollaboration, private basicModals: BasicModalServices) {
     }
 
@@ -36,9 +36,9 @@ export class CollaborationProjectModal {
             },
             (err: Error) => {
                 if (err.name.endsWith("ConnectException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RETRIEVE_ISSUES_CONNECTION_FAILED"}, ModalType.error, err.name + " " + err.message);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RETRIEVE_ISSUES_CONNECTION_FAILED" }, ModalType.error, err.name + " " + err.message);
                 } else if (err.name.endsWith("CollaborationBackendException")) {
-                    this.basicModals.alert({key:"STATUS.ERROR"}, {key:"MESSAGES.CANNOT_RETRIEVE_ISSUES_LOGIN_FAILED"}, ModalType.error, err.stack);
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.CANNOT_RETRIEVE_ISSUES_LOGIN_FAILED" }, ModalType.error, err.stack);
                 }
                 this.vbCollaboration.setWorking(false);
                 this.activeModal.dismiss();
@@ -48,10 +48,10 @@ export class CollaborationProjectModal {
 
     createProject() {
         let projectProps: { [key: string]: string } = {};
-        this.headers.forEach((h: string) => 
-            projectProps[h] = null
-        );
-        this.basicModals.promptProperties({key:"ACTIONS.CREATE_PROJECT"}, projectProps, false).then(
+        this.headers.forEach((h: string) => {
+            projectProps[h] = null;
+        });
+        this.basicModals.promptProperties({ key: "ACTIONS.CREATE_PROJECT" }, projectProps, false).then(
             props => {
                 this.collaborationService.createProject(props).subscribe(
                     stResp => {
@@ -59,7 +59,7 @@ export class CollaborationProjectModal {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -81,5 +81,5 @@ export class CollaborationProjectModal {
     cancel() {
         this.activeModal.dismiss();
     }
- 
+
 }
