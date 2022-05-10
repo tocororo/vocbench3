@@ -1,0 +1,19 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'ACTIONS.IMPORT'|translate}}</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="d-flex align-items-center mb-3">
+            <label>Name:</label>
+            <input class="form-control ml-2" [(ngModel)]="name">
+        </div>
+
+        <file-picker (fileChanged)="fileChangeEvent($event)" accept=".cfg"></file-picker>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+</div>

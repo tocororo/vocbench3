@@ -18,6 +18,12 @@
                         <button class="btn btn-light" [title]="'ACTIONS.EDIT'|translate" (click)="editCustomView()" [disabled]="!selectedCustomView || !modifyCustomViewAuthorized">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
+                        <button class="btn btn-light" [title]="'ACTIONS.EXPORT'|translate" (click)="exportCustomView()" [disabled]="!selectedCustomView">
+                            <span class="fas fa-download"></span>
+                        </button>
+                        <button class="btn btn-light" [title]="'ACTIONS.IMPORT'|translate" (click)="importCustomView()" [disabled]="!createCustomViewAuthorized">
+                            <span class="fas fa-upload"></span>
+                        </button>
                     </div>
                 </div>
             </div>

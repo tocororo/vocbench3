@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource } from '../models/ARTResources';
 import { Reference } from '../models/Configuration';
 import { CustomViewAssociation, CustomViewConfiguration, CustomViewData, CustomViewDefinition, CustomViewModel, ViewsEnum } from '../models/CustomViews';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, STRequestParams } from "../utils/HttpManager";
 
 @Injectable()
 export class CustomViewsServices {
@@ -51,6 +51,15 @@ export class CustomViewsServices {
         return this.httpMgr.doPost(this.serviceName, "createCustomView", params);
     }
 
+    updateCustomView(reference: string, definition: CustomViewDefinition, model: CustomViewModel): Observable<void> {
+        let params = {
+            reference: reference,
+            definition: JSON.stringify(definition),
+            model: model
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateCustomView", params);
+    }
+
     deleteCustomView(reference: string) {
         let params = {
             reference: reference,
@@ -78,6 +87,21 @@ export class CustomViewsServices {
             cfId: cfId,
         };
         return this.httpMgr.doGet(this.serviceName, "getValueCandidates", params);
+    }
+
+    exportCustomView(reference: string) {
+        let params = {
+            reference: reference
+        };
+        return this.httpMgr.downloadFile(this.serviceName, "exportCustomView", params);
+    }
+
+    importCustomView(inputFile: File, reference: string) {
+        let data: STRequestParams = {
+            inputFile: inputFile,
+            reference: reference,
+        };
+        return this.httpMgr.uploadFile(this.serviceName, "importCustomView", data);
     }
 
 

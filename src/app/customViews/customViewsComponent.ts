@@ -5,8 +5,10 @@ import { CustomViewAssociation, CustomViewReference } from "src/app/models/Custo
 import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ModalOptions, ModalType, Translation } from "src/app/widget/modal/Modals";
+import { Scope, ScopeUtils } from '../models/Plugins';
 import { CustomViewEditorModal } from "./editors/customViewEditorModal";
 import { CvAssociationEditorModal } from "./editors/cvAssociationEditorModal";
+import { ImportCustomViewModal, ImportCvModalReturnData } from './editors/importCustomViewModal';
 
 @Component({
     selector: "custom-views-component",
@@ -86,9 +88,34 @@ export class CustomViewsComponent {
     private openCustomViewEditor(title: Translation, widgetRef?: string) {
         const modalRef: NgbModalRef = this.modalService.open(CustomViewEditorModal, new ModalOptions('xl'));
         modalRef.componentInstance.title = this.translateService.instant(title.key, title.params);
-        modalRef.componentInstance.existingWidgets = this.customViews;
+        modalRef.componentInstance.existingCV = this.customViews;
         modalRef.componentInstance.ref = widgetRef;
         return modalRef.result;
+    }
+
+
+    exportCustomView() {
+        this.customViewsService.exportCustomView(this.selectedCustomView.reference).subscribe(
+            blob => {
+                let exportLink = window.URL.createObjectURL(blob);
+                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT" }, null, exportLink, this.selectedCustomView.name + ".cfg");
+            }
+        );
+    }
+
+    importCustomView() {
+        const modalRef: NgbModalRef = this.modalService.open(ImportCustomViewModal, new ModalOptions());
+        modalRef.componentInstance.existingCV = this.customViews;
+        modalRef.result.then(
+            (data: ImportCvModalReturnData) => {
+                this.customViewsService.importCustomView(data.file, ScopeUtils.serializeScope(Scope.PROJECT) + ":" + data.name).subscribe(
+                    () => {
+                        this.initCustomViews();
+                    }
+                );
+            },
+            () => { }
+        );
     }
 
     /*

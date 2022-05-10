@@ -718,6 +718,7 @@
         "DEFAULT_VIEW": "Vista predefinita",
         "MESSAGES": {
             "ALREADY_ASSOCIATED_PROPERTY": "La proprietà selezionata ha già un Custom View associato.",
+            "ALREADY_EXISTING_CUSTOM_VIEW": "Esiste già un CustomView con lo stesso nome.",
             "DELETE_CUSTOM_VIEW_ASSOCIATION_CONFIRM": "Stai per eliminare l'associazione selezionata. Sei sicuro?",
             "DELETE_CUSTOM_VIEW_CONFIRM": "Stai per eliminare il CustomView selezionato. Sei sicuro?",
             "FIELD_UPDATE_QUERY_INVALID_TYPE": "L'update query del campo {{field}} non può essere una select/construct/ask",

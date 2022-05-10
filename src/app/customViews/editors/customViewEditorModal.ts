@@ -1,9 +1,12 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
 import { Reference } from "src/app/models/Configuration";
 import { AdvSingleValueViewDefinition, AreaViewDefinition, CustomViewCategory, CustomViewConst, CustomViewDefinition, CustomViewDefinitionKeys, CustomViewModel, CustomViewReference, DynamicVectorViewDefinition, PointViewDefinition, PropertyChainViewDefinition, RouteViewDefinition, SeriesCollectionViewDefinition, SeriesViewDefinition, StaticVectorViewDefinition } from "src/app/models/CustomViews";
 import { Scope, ScopeUtils } from "src/app/models/Plugins";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
+import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { UIUtils } from "../../utils/UIUtils";
 import { AbstractCustomViewEditor } from "./views/abstractCustomViewEditor";
 import { AdvSingleValueViewEditorComponent } from "./views/advSingleValueViewEditorComponent";
@@ -71,7 +74,7 @@ export class CustomViewEditorModal {
 
     customViewDef: CustomViewDefinition;
 
-    constructor(private customViewService: CustomViewsServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) {
+    constructor(private customViewService: CustomViewsServices, private basicModals: BasicModalServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) {
     }
 
     ngOnInit() {
@@ -214,9 +217,18 @@ export class CustomViewEditorModal {
         if (activeEditor.isDataValid()) {
             //ref is the same provided as input (in edit mode) or built according the name entered by user (in create mode)
             let refParam = this.ref ? this.ref : ScopeUtils.serializeScope(Scope.PROJECT) + ":" + this.name; //store pattern at project level
-            
-            //also for edit use createCustomView which overwrite the previous with the same ref
-            this.customViewService.createCustomView(refParam, this.customViewDef, this.selectedModel).subscribe(
+
+            let storeCvFn: Observable<void>;
+            if (this.ref == null) { //create mode
+                if (this.existingCV.some(cv => cv.name == this.name)) {
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "CUSTOM_VIEWS.MESSAGES.ALREADY_EXISTING_CUSTOM_VIEW" }, ModalType.warning);
+                    return;
+                }
+                storeCvFn = this.customViewService.createCustomView(refParam, this.customViewDef, this.selectedModel);
+            } else {
+                storeCvFn = this.customViewService.updateCustomView(refParam, this.customViewDef, this.selectedModel);
+            }
+            storeCvFn.subscribe(
                 () => {
                     this.activeModal.close();
                 }

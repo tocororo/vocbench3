@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CustomViewsComponent } from '../customViews/customViewsComponent';
 import { CustomViewEditorModal } from '../customViews/editors/customViewEditorModal';
 import { CvAssociationEditorModal } from '../customViews/editors/cvAssociationEditorModal';
+import { ImportCustomViewModal } from '../customViews/editors/importCustomViewModal';
 import { AdvSingleValueViewEditorComponent } from '../customViews/editors/views/advSingleValueViewEditorComponent';
 import { AreaViewEditorComponent } from '../customViews/editors/views/areaViewEditorComponent';
 import { DynamicVectorViewEditorComponent } from '../customViews/editors/views/dynamicVectorViewEditorComponent';
@@ -37,6 +38,7 @@ import { SharedModule } from './sharedModule';
         AdvSingleValueViewEditorComponent,
         AreaViewEditorComponent,
         DynamicVectorViewEditorComponent,
+        ImportCustomViewModal,
         PointViewEditorComponent,
         PropertyChainViewEditorComponent,
         RouteViewEditorComponent,
@@ -50,6 +52,7 @@ import { SharedModule } from './sharedModule';
     entryComponents: [
         CustomViewEditorModal,
         CvAssociationEditorModal,
+        ImportCustomViewModal,
         SuggestFromCfValueSelectionModal
     ]
 })
