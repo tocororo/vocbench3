@@ -13,7 +13,7 @@ import { WizardGraphEntry, WizardNode, WizardNodeResource } from "./CustomFormWi
 })
 export class CustomFormWizardGraphEditor implements ControlValueAccessor {
     @Input() nodes: WizardNode[];
-    
+
     graphs: WizardGraphEntry[];
 
     private resourceNode: WizardNodeResource; //this will be found/initialized only if dealing with CustomRange
@@ -56,7 +56,7 @@ export class CustomFormWizardGraphEditor implements ControlValueAccessor {
     /**
      * Write a new value to the element.
      */
-     writeValue(obj: WizardGraphEntry[]) {
+    writeValue(obj: WizardGraphEntry[]) {
         if (obj) {
             this.graphs = obj;
         } else {

@@ -60,8 +60,8 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
                 () => {
                     this.removeImpl(node);
                 },
-                () => {}
-            )
+                () => { }
+            );
         } else {
             this.removeImpl(node);
         }
@@ -96,7 +96,7 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
     /**
      * Write a new value to the element.
      */
-     writeValue(obj: WizardNode[]) {
+    writeValue(obj: WizardNode[]) {
         if (obj) {
             this.nodes = obj;
         } else {

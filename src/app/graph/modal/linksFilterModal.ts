@@ -8,7 +8,7 @@ import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
     templateUrl: "./linksFilterModal.html"
 })
 export class LinksFilterModal {
-    @Input() predObjListMap: { [partition: string]: ARTPredicateObjects[] }
+    @Input() predObjListMap: { [partition: string]: ARTPredicateObjects[] };
 
     filters: LinkFilter[];
     totalObjCount: number = 0;
@@ -27,8 +27,8 @@ export class LinksFilterModal {
             if (predicates.length > 0) {
                 this.filters.push({
                     partition: { id: <ResViewPartition>p, labelTranslationKey: ResViewUtils.getResourceViewPartitionLabelTranslationKey(<ResViewPartition>p) },
-                    predicates: predicates }
-                );
+                    predicates: predicates 
+                });
             }
         }
     }
@@ -36,14 +36,14 @@ export class LinksFilterModal {
     private checkAll(filter: LinkFilter, check: boolean) {
         filter.predicates.forEach(p => {
             p.checked = check;
-        })
+        });
     }
 
     private getPartitionCount(filter: LinkFilter): number {
         let count = 0;
         filter.predicates.forEach(p => {
             if (p.checked) count += p.count;
-        })
+        });
         return count;
     }
 

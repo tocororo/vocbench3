@@ -39,7 +39,7 @@ export class InlineDefinitionComponent {
         let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
         this.ontolexService.removeDefinition(this.resource, this.definition, lexicon).subscribe(
             () => this.update.emit()
-        )
+        );
     }
 
     onDefinitionEdited(newValue: string) {
@@ -47,7 +47,7 @@ export class InlineDefinitionComponent {
         let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
         this.ontolexService.updateDefinition(this.resource, this.definition, newDef, lexicon).subscribe(
             () => this.update.emit()
-        )
+        );
     }
 
 

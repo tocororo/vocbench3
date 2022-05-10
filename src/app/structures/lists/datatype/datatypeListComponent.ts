@@ -62,7 +62,7 @@ export class DatatypeListComponent extends AbstractList {
     private getDatatyepsRespHandler(datatypes: ARTURIResource[]) {
         //sort by show if rendering is active, uri otherwise
         ResourceUtils.sortResources(datatypes, this.rendering ? SortAttribute.show : SortAttribute.value);
-        this.list = datatypes
+        this.list = datatypes;
         UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
     }
 

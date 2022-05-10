@@ -37,7 +37,7 @@ export class ClassIndividualTreeComponent {
             this.currentSchemes = this.schemes;
         }
         if (this.context == undefined) { //if not overwritten from a parent component (e.g. addPropertyValueModal), set its default
-            this.context = TreeListContext.clsIndTree
+            this.context = TreeListContext.clsIndTree;
         }
     }
 
@@ -49,7 +49,7 @@ export class ClassIndividualTreeComponent {
             if (this.roots && this.roots.length == 1) {
                 setTimeout(() => { //give time to initialize child component (without this, openTreeAt in class tree generates error)
                     this.classTreePanelChild.openTreeAt(this.roots[0]);
-                })
+                });
             }
         }
     }

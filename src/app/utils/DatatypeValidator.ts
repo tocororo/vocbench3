@@ -48,7 +48,7 @@ export class DatatypeValidator {
             map(dtRestrinctions => {
                 this.userDefinedDatatypeRestrictions = dtRestrinctions;
             })
-        )
+        );
     }
 
     public isValidableType(type: ARTURIResource): boolean {

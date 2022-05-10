@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { RefinablePairing, Synonymizer, Pairing } from '../../../models/Maple';
+import { RefinablePairing, Synonymizer } from '../../../models/Maple';
 
 @Component({
     selector: 'maple-pairing',

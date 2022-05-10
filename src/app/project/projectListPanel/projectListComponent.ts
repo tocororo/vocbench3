@@ -26,7 +26,7 @@ export class ProjectListComponent {
             projects => {
                 this.projects = projects;
             }
-        )
+        );
     }
 
     selectProject(project: Project) {

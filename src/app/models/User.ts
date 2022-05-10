@@ -398,7 +398,7 @@ export class UserForm {
     //custom
     customProperties: { [iri: string]: string } = {};
 
-    static emailRegexp = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    static emailRegexp = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
     static standardFields: string[] = ["E-mail", "Password", "Confirm password", "Given name", "Family name", "Phone", "Office address",
         "Affiliation", "Personal URL", "User IRI", "Avatar URL", "Language proficiencies"];
 

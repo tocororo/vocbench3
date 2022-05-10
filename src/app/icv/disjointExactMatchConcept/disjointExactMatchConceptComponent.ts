@@ -1,12 +1,10 @@
 import { Component } from "@angular/core";
-import { AbstractIcvComponent } from "../abstractIcvComponent";
-import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { ARTResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { VBContext } from "../../utils/VBContext";
-import { UIUtils } from "../../utils/UIUtils";
+import { ARTResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
-import { AbstractClassPart } from "@angular/compiler/src/output/output_ast";
+import { UIUtils } from "../../utils/UIUtils";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 
 @Component({
     selector: "disjoint-exact-match-component",

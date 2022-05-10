@@ -10,16 +10,16 @@ import { VBActionsEnum } from "src/app/utils/VBActions";
     templateUrl: "./subtermComponent.html",
     host: { class: "d-block" }
 })
-export class SubtermComponent{
+export class SubtermComponent {
     @Input() readonly: boolean = false;
     @Input() entry: LexicalEntry;
     @Input() subterm: EntryReference;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<void> = new EventEmitter(); //something changed, request to update
-    
+
     deleteAuthorized: boolean;
 
-    constructor(private ontolexService: OntoLexLemonServices) {}
+    constructor(private ontolexService: OntoLexLemonServices) { }
 
     ngOnInit() {
         this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveSubterm) && !this.readonly && !LexicalResourceUtils.isTripleInStaging(this.subterm);
@@ -30,7 +30,7 @@ export class SubtermComponent{
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     onDblClick() {

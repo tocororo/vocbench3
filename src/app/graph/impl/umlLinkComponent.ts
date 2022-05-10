@@ -8,7 +8,7 @@ import { UmlLink } from './../model/UmlLink';
 
 
 
-@Component({ 
+@Component({
     selector: '[uml-link]',
     templateUrl: './umlLinkComponent.html',
 
@@ -20,11 +20,11 @@ export class UmlLinkComponent {
     @Input() selected: boolean = false;
     @ViewChild('textEl') textElement: ElementRef;
     @Input() isHideArrows: boolean;
-    withMarker: boolean = true
+    withMarker: boolean = true;
     black: boolean = true;
     white: boolean;
-    arrowClass: String = "";
-   
+    arrowClass: string = "";
+
 
     ngOnInit() {
         this.initLinkStyle();
@@ -35,14 +35,14 @@ export class UmlLinkComponent {
         if (this.link.res != null) {
 
             if (this.link.isReflexive()) {
-                this.withMarker = false
-                this.black = false
+                this.withMarker = false;
+                this.black = false;
             }
             if (this.link.res.equals(RDFS.subClassOf)) {
                 this.arrowClass = "subClassArrow";
-                this.white = true
-                this.withMarker = false
-                this.black = false
+                this.white = true;
+                this.withMarker = false;
+                this.black = false;
             } else {
                 let role: RDFResourceRolesEnum = this.link.getRole();
                 this.arrowClass = role + "Arrow";
@@ -57,63 +57,62 @@ export class UmlLinkComponent {
 
         let source: Point = new Point(this.link.source.x, this.link.source.y);
         let target: Point = new Point(this.link.target.x, this.link.target.y);
-        let isSubClassOf:boolean=false;
+        let isSubClassOf: boolean = false;
         //M is the starting point of the arrow line
         let path: string = "M" + source.x + " " + source.y; //path start
         if (this.link.loop && this.link.offset != 0) {
-            let newCord: number = 0;
             for (let tmp of this.link.source.listPropInfo) {
                 if (tmp.property.equals(this.link.res) && tmp.range.equals(this.link.target.res)) {
                     // il -3 è il padding che va dal lato del rettangolo fino all'inizio della proprietà
-                    path = path + " " + "M" + (source.x + (tmp.x - 3)) + " " + (source.y + tmp.y + 9);
-                    source.x = (source.x + (tmp.x - 3));
+                    path = path + " M" + (source.x + (tmp.x - 3)) + " " + (source.y + tmp.y + 9);
+                    source.x += (tmp.x - 3);
                     source.y = (source.y + tmp.y + 9);
-                    path = path + " " + "L" + (source.x - 12) + " " + source.y;
-                    source.x = (source.x - 12);
-                    path = path + " " + "L" + source.x + " " + (source.y - 5);
-                    path = path + " " + "L" + (source.x + 12) + " " + (source.y - 5);
+                    path = path + " L" + (source.x - 12) + " " + source.y;
+                    source.x -= 12;
+                    path = path + " L" + source.x + " " + (source.y - 5);
+                    path = path + " L" + (source.x + 12) + " " + (source.y - 5);
 
                 }
             }
         } else {
             //retrieve the PropInfo of the source node related to the current link
             let propInfo = this.link.source.listPropInfo.find(pi => {
-                return pi.property.equals(this.link.res) && pi.range.equals(this.link.target.res)
-            })
+                return pi.property.equals(this.link.res) && pi.range.equals(this.link.target.res);
+            });
             if (propInfo != null) { //found
                 let endpoint;
-                if(propInfo.property.equals(RDFS.subClassOf)){
-                    isSubClassOf=true;
+                if (propInfo.property.equals(RDFS.subClassOf)) {
+                    isSubClassOf = true;
                 }
                 /*
                 from the center to the edge of the node (to bring the arrow out of the resource to which it refers).
                 the -3 is the padding that goes from the side of the rect to the beginning of the property
                 */
-                path = path + " " + "M" + (source.x + (propInfo.x - 3)) + " " + (source.y + propInfo.y + 7);
-                source.x = source.x + (propInfo.x - 3);
+                path = path + " M" + (source.x + (propInfo.x - 3)) + " " + (source.y + propInfo.y + 7);
+                source.x += (propInfo.x - 3);
                 source.y = source.y + propInfo.y + 7;
                 //endpoint = GraphUtils.positionArrow(source, target, this.link );
-                endpoint = GraphUtils.positionArrow(source, target, this.link, isSubClassOf ); 
-                
-                 if (endpoint.directionRight === true) {
-                    path = path + " " + "M" + endpoint.x + " " + source.y;
-                    path = path + " " + "L" + (endpoint.x + ((this.link.target.getNodeWidth()/2) + 5)) + " " + source.y
-                    source.x = endpoint.x + (this.link.target.getNodeWidth()/2) + 5
+                endpoint = GraphUtils.positionArrow(source, target, this.link, isSubClassOf);
 
-                    path = path + " " + "L" + source.x + " " + this.link.target.y;
-                    path = path + " " + "L" + (target.x + this.link.target.getNodeWidth() / 2) + " " + this.link.target.y;
+                if (endpoint.directionRight === true) {
+                    path = path + " M" + endpoint.x + " " + source.y;
+                    path = path + " L" + (endpoint.x + ((this.link.target.getNodeWidth() / 2) + 5)) + " " + source.y;
+                    source.x = endpoint.x + (this.link.target.getNodeWidth() / 2) + 5;
+
+                    path = path + " L" + source.x + " " + this.link.target.y;
+                    path = path + " L" + (target.x + this.link.target.getNodeWidth() / 2) + " " + this.link.target.y;
                     return path;
 
-                } else if(endpoint.directionLeft === true){
-                    path = path + " " + "M" + endpoint.x + " " + source.y;
-                    path = path + " " + "L" + (endpoint.x - ((this.link.target.getNodeWidth()/2) + 5)) + " " + source.y
-                    source.x = endpoint.x - ((this.link.target.getNodeWidth()/2) + 5)
-                    path = path + " " + "L" + source.x + " " + this.link.target.y;
-                    path = path + " " + "L" + (target.x - this.link.target.getNodeWidth() / 2) + " " + this.link.target.y;
+                } else if (endpoint.directionLeft === true) {
+                    path = path + " M" + endpoint.x + " " + source.y;
+                    path = path + " L" + (endpoint.x - ((this.link.target.getNodeWidth() / 2) + 5)) + " " + source.y;
+                    source.x = endpoint.x - ((this.link.target.getNodeWidth() / 2) + 5);
+                    path = path + " L" + source.x + " " + this.link.target.y;
+                    path = path + " L" + (target.x - this.link.target.getNodeWidth() / 2) + " " + this.link.target.y;
                     return path;
                 }
 
-                 if (endpoint.straightArrow === false || endpoint.isSubClassOf=== true ) {
+                if (endpoint.straightArrow === false || endpoint.isSubClassOf === true) {
                     path = path + " " + endpoint.x + " " + source.y;
 
                 }

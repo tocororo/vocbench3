@@ -241,7 +241,7 @@ export class ResourcesServices {
      * @param iriList
      * @return
      */
-     validateIRIList(iriList: string): Observable<ARTURIResource[]> {
+    validateIRIList(iriList: string): Observable<ARTURIResource[]> {
         let params = {
             iriList: iriList
         };
@@ -256,5 +256,5 @@ export class ResourcesServices {
             })
         );
     }
-    
+
 }

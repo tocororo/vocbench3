@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
-import { AbstractIcvComponent } from "../abstractIcvComponent";
+import { ARTLiteral, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
+import { IcvServices } from "../../services/icvServices";
+import { Deserializer } from "../../utils/Deserializer";
+import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum, ARTLiteral, ResAttribute } from "../../models/ARTResources";
-import { UIUtils } from "../../utils/UIUtils";
-import { Deserializer } from "../../utils/Deserializer";
-import { IcvServices } from "../../services/icvServices";
-import { literal } from "@angular/compiler/src/output/output_ast";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 
 @Component({
     selector: "extra-space-label-component",

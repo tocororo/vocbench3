@@ -17,7 +17,7 @@ export abstract class AbstractGraphPanel {
     isLock: boolean = false;
     forces: GraphForces;
     
-    protected basicModals: BasicModalServices
+    protected basicModals: BasicModalServices;
     protected browsingModals: BrowsingModalServices;
     constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         this.basicModals = basicModals;

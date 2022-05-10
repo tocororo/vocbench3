@@ -22,7 +22,7 @@ import { CustomServiceModalServices } from "../../customServicesEditor/modals/cu
 export class ServiceInvocationEditorModal {
     @Input() title: string;
     @Input() invokableReporterRef: Reference;
-    @Input() serviceInvocation: { def: ServiceInvocationDefinition, idx: number }
+    @Input() serviceInvocation: { def: ServiceInvocationDefinition, idx: number };
 
     label: string;
     description: string;
@@ -74,7 +74,7 @@ export class ServiceInvocationEditorModal {
                                             () => {
                                                 this.restoreOperationAndParams(invocationDef);
                                             }
-                                        )
+                                        );
                                     }
                                 );
                             }
@@ -87,7 +87,7 @@ export class ServiceInvocationEditorModal {
                                     () => {
                                         this.restoreOperationAndParams(invocationDef);
                                     }
-                                )
+                                );
                             }
                         );
                     }
@@ -97,7 +97,7 @@ export class ServiceInvocationEditorModal {
                     this.initServiceList().subscribe();
                 }
             }
-        )
+        );
     }
 
     ngAfterViewInit() {
@@ -108,7 +108,7 @@ export class ServiceInvocationEditorModal {
      * Restore the selected operation and its parameters
      * @param invocationDef 
      */
-     private restoreOperationAndParams(invocationDef: ServiceInvocationDefinition) {
+    private restoreOperationAndParams(invocationDef: ServiceInvocationDefinition) {
         //in the service invocation it is stored the operation name (eg. countTopConcepts) 
         //for the "standard" services, getServiceOperations returns the operation IRI 
         //(e.g. http://semanticturkey.uniroma2.it/services/it.uniroma2.art.semanticturkey/st-core-services/SKOS/countTopConcepts)
@@ -116,7 +116,7 @@ export class ServiceInvocationEditorModal {
         let operationIdToRestore: string = invocationDef.operation;
         if (invocationDef.extensionPath != null && invocationDef.extensionPath != this.CUSTOM_SERVICE_PATH) {
             operationIdToRestore = this.operations.find(o => o.id.endsWith(invocationDef.service + "/" + invocationDef.operation)).id;
-        } 
+        }
         this.selectOperation(operationIdToRestore).subscribe(
             () => {
                 //restore the arguments in the parameters struct
@@ -153,9 +153,9 @@ export class ServiceInvocationEditorModal {
             }
             return getServiceClassFn.pipe(
                 map(classes => {
-                    this.pathServiceMap[this.selectedExtPath] = classes.map(c => { return { id: c, show: c.substring(c.lastIndexOf(".") + 1) } });
+                    this.pathServiceMap[this.selectedExtPath] = classes.map(c => { return { id: c, show: c.substring(c.lastIndexOf(".") + 1) }; });
                 })
-            )
+            );
         } else {
             return of(null);
         }
@@ -194,13 +194,13 @@ export class ServiceInvocationEditorModal {
                         description: conf.getPropertyValue("description"),
                         operations: conf.getPropertyValue("operations")
                     };
-                    this.operations = this.selectedService.operations.map(o => { return { id: o.name, show: o.name } });
+                    this.operations = this.selectedService.operations.map(o => { return { id: o.name, show: o.name }; });
                 })
-            )
+            );
         } else {
             return this.servicesService.getServiceOperations(this.selectedExtPath, serviceId).pipe(
                 map(operations => {
-                    this.operations = operations.map(o => { return { id: o, show: o.substring(o.lastIndexOf("/") + 1) } });
+                    this.operations = operations.map(o => { return { id: o, show: o.substring(o.lastIndexOf("/") + 1) }; });
                 })
             );
         }
@@ -229,7 +229,7 @@ export class ServiceInvocationEditorModal {
                         };
                         this.initParameters();
                     })
-                )
+                );
             }
         }
     }
@@ -239,7 +239,7 @@ export class ServiceInvocationEditorModal {
         if (this.selectedOperation.parameters != null) {
             this.selectedOperation.parameters.forEach(p => {
                 this.parameters.push({ param: p, show: TypeUtils.serializeParameter(p), value: null });
-            })
+            });
         }
     }
 
@@ -266,12 +266,12 @@ export class ServiceInvocationEditorModal {
             for (let p of this.parameters) {
                 if (p.param.required && (p.value == null || p.value.trim() == "")) {
                     this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.MISSING_REQUIRED_PARAM", params: { param: p.param.name } }, ModalType.warning);
-                    return false; //a required param is not set
+                    return; //a required param is not set
                 }
             }
         }
         let argsMap: { [key: string]: string } = {};
-        this.parameters.forEach(p => argsMap[p.param.name] = p.value);
+        this.parameters.forEach(p => { argsMap[p.param.name] = p.value; });
 
         let serviceInvocationDef: ServiceInvocationDefinition = {
             label: this.label,
@@ -280,22 +280,22 @@ export class ServiceInvocationEditorModal {
             extensionPath: this.selectedExtPath,
             service: this.selectedServiceId,
             // operation: this.selectedOperation.name, //TODO restore this line in place of the following when the suffix Published will be removed from getServiceOperationAsCustomService response
-            operation: this.selectedOperation.name.endsWith("Published") ? this.selectedOperation.name.substring(0, this.selectedOperation.name.length-9) : this.selectedOperation.name,
+            operation: this.selectedOperation.name.endsWith("Published") ? this.selectedOperation.name.substring(0, this.selectedOperation.name.length - 9) : this.selectedOperation.name,
             arguments: argsMap,
-        }
+        };
         if (this.serviceInvocation == null) { //create
             this.invokableReporterService.addSectionToReporter(this.invokableReporterRef.relativeReference, serviceInvocationDef).subscribe(
                 () => {
                     this.activeModal.close();
                 }
-            )
+            );
         } else { //edit
             this.invokableReporterService.updateSectionInReporter(this.invokableReporterRef.relativeReference, serviceInvocationDef,
                 this.serviceInvocation.idx).subscribe(
                     () => {
                         this.activeModal.close();
                     }
-                )
+                );
         }
     }
 

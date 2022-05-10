@@ -67,7 +67,7 @@ export class VBCollaboration {
                 () => {
                     this.eventHandler.collaborationSystemStatusChanged.emit();
                 }
-            )
+            );
         }
     }
 

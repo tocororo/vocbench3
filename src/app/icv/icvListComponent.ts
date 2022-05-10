@@ -270,7 +270,6 @@ export class IcvListComponent {
     private checkPrecondition(icvElem: ICVElement) {
         let lexicalization = VBContext.getWorkingProject().getLexicalizationModelType();
         let model = VBContext.getWorkingProject().getModelType();
-        let location = VBContext.getWorkingProject().getRepositoryLocation().location;
         /*
         ICV is available if:
         - authorized

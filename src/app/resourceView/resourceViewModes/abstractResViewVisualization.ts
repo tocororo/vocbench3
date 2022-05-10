@@ -18,7 +18,7 @@ export abstract class AbstractResViewVisualizationMode {
     constructor(eventHandler: VBEventHandler) {
         this.eventHandler = eventHandler;
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => {
-            this.onRefreshDataBroadcast()
+            this.onRefreshDataBroadcast();
         }));
     }
 

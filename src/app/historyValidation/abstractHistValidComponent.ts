@@ -137,7 +137,7 @@ export abstract class AbstractHistValidComponent {
             performersIRI = [];
             this.performers.forEach((p: User) => {
                 performersIRI.push(p.getIri());
-            })
+            });
         }
         return performersIRI;
     }

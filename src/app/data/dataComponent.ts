@@ -23,7 +23,7 @@ export class DataComponent {
 
     //{ read: ElementRef } to specify to get the element instead of the component (see https://stackoverflow.com/q/45921819/5805661)
     @ViewChild('treePanel') private treePanelRef: ElementRef; 
-    @ViewChild('resViewPanel',  { read: ElementRef }) private resViewPanelRef: ElementRef;
+    @ViewChild('resViewPanel', { read: ElementRef }) private resViewPanelRef: ElementRef;
 
     private eventSubscriptions: Subscription[] = [];
 

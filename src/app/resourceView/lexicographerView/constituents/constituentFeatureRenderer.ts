@@ -40,7 +40,7 @@ export class constituentFeatureRenderer {
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
 }

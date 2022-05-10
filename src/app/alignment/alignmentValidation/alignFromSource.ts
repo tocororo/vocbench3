@@ -16,7 +16,7 @@ export abstract class AlignFromSource implements OnInit {
     rightProject: Project;
 
     protected edoalService: EdoalServices;
-    protected projectService: ProjectServices
+    protected projectService: ProjectServices;
     constructor(edoalService: EdoalServices, projectService: ProjectServices) {
         this.edoalService = edoalService;
         this.projectService = projectService;

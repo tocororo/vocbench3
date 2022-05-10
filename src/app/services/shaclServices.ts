@@ -13,7 +13,7 @@ export class ShaclServices {
 
     /**
      * Loads SHACL shapes into the SHACL Shape Graph associated with the contextual project. Existing shapes
-	 * are deleted by default, but this behavior can be overridden.
+     * are deleted by default, but this behavior can be overridden.
      * @param shapesFile 
      * @param fileFormat 
      * @param clearExisting 
@@ -29,7 +29,7 @@ export class ShaclServices {
 
     /**
      * Exports the shapes currently stored in the SHACL Shape Graph associated with the contextual project.
-	 * The output format is by default pretty printed TURTLE, but this behavior can be overridden.
+     * The output format is by default pretty printed TURTLE, but this behavior can be overridden.
      * @param rdfFormat 
      * @param exporterConfiguration 
      */
@@ -43,7 +43,7 @@ export class ShaclServices {
 
     /**
      * Delete existing shapes. This operation clears the SHACL Shape Graph associated with the contextual
-	 * project.
+     * project.
      */
     clearShapes(): Observable<void> {
         let params: STRequestParams = {};

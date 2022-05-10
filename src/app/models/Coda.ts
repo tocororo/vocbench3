@@ -161,7 +161,7 @@ export class ConverterUtils {
                     } else {
                         paramsSerializations.push("\"" + sp.getName() + "\"");
                     }
-                })
+                });
             } else { //serialize the actual parameters
                 signatureParams.forEach(sp => {
                     if (sp.getType().startsWith("java.util.Map")) {
@@ -198,7 +198,7 @@ export class ConverterUtils {
                             paramsSerializations.push(JSON.stringify(value));
                         }
                     }
-                })
+                });
             }
             params = paramsSerializations.join(", ");
         }

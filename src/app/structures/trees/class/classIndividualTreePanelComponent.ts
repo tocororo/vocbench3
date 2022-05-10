@@ -35,7 +35,7 @@ export class ClassIndividualTreePanelComponent {
 
     //{ read: ElementRef } to specify to get the element instead of the component (see https://stackoverflow.com/q/45921819/5805661)
     @ViewChild('clsPanel', { read: ElementRef }) private classPanelRef: ElementRef; 
-    @ViewChild('instPanel',  { read: ElementRef }) private instancePanelRef: ElementRef;
+    @ViewChild('instPanel', { read: ElementRef }) private instancePanelRef: ElementRef;
 
     @ViewChild(ClassTreePanelComponent) viewChildTree: ClassTreePanelComponent;
     @ViewChild(InstanceListPanelComponent) viewChildInstanceList: InstanceListPanelComponent;
@@ -72,7 +72,7 @@ export class ClassIndividualTreePanelComponent {
                     //center instanceList to the individual
                     this.viewChildInstanceList.openAt(resource);
                 }
-            )
+            );
         }
     }
 

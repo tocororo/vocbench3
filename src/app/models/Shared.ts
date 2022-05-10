@@ -1,7 +1,7 @@
 import { Deserializer } from "../utils/Deserializer";
 import { ARTNode, ARTResource, ARTURIResource, TripleScopes } from "./ARTResources";
 
-export class Pair<S,T> {
+export class Pair<S, T> {
     first: S;
     second: T;
 }
@@ -10,7 +10,7 @@ export class Pair<S,T> {
  * Map which value is a list of given type T
  */
 export interface Multimap<T> {
-    [key:string]: T[]
+    [key: string]: T[]
 }
 
 export class Triple {
@@ -29,6 +29,6 @@ export class Triple {
             object: Deserializer.createRDFNode(tJson.object),
             graphs: graphs,
             tripleScope: tJson.tripleScope
-        }
+        };
     }
 }

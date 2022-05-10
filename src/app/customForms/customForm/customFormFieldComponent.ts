@@ -47,7 +47,7 @@ export class CustomFormField implements ControlValueAccessor {
         /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
         (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
         window.setTimeout(() => {
-            formFieldConvArgumentPh.value = newLang
+            formFieldConvArgumentPh.value = newLang;
             this.propagateChange(this.field);
         });
     }

@@ -30,7 +30,7 @@ export class HistoryServices {
             timeLowerBound: timeLowerBound,
             timeUpperBound: timeUpperBound,
             limit: limit
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getCommitSummary", params).pipe(
             map(stResp => {
                 return stResp;
@@ -123,7 +123,7 @@ export class HistoryServices {
                     removals: removals,
                     additionsTruncated: additionsTruncated,
                     removalsTruncated: removalsTruncated
-                }
+                };
 
                 return commitDelta;
             })

@@ -42,7 +42,7 @@ export class SearchServices {
         };
         options = new VBRequestOptions({
             errorHandlers: [{
-                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+                className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
             }]
         }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, options).pipe(
@@ -77,7 +77,7 @@ export class SearchServices {
         };
         options = new VBRequestOptions({
             errorHandlers: [{
-                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+                className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
             }]
         }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, options).pipe(
@@ -114,7 +114,7 @@ export class SearchServices {
         };
         options = new VBRequestOptions({
             errorHandlers: [{
-                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+                className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
             }]
         }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchLexicalEntry", params, options).pipe(
@@ -137,8 +137,8 @@ export class SearchServices {
      * @param options 
      * @return an array of resources
      */
-    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, 
-        broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, 
+    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode,
+        broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean,
         root?: ARTURIResource, options?: VBRequestOptions) {
         let params: STRequestParams = {
             role: role,
@@ -190,7 +190,7 @@ export class SearchServices {
         };
         options = new VBRequestOptions({
             errorHandlers: [{
-                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+                className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
             }]
         }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchStringList", params, options);
@@ -221,20 +221,20 @@ export class SearchServices {
         };
         options = new VBRequestOptions({
             errorHandlers: [{
-                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+                className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
             }]
         }).merge(options);
         return this.httpMgr.doGet(this.serviceName, "searchURIList", params, options);
     }
 
 
-  /**
-   * 
-   * @param searchString 
-   * @param searchMode 
-   * @param options 
-   */
-    searchPrefix(searchString: string, searchMode: SearchMode,options?: VBRequestOptions): Observable<string[]> {
+    /**
+     * 
+     * @param searchString 
+     * @param searchMode 
+     * @param options 
+     */
+    searchPrefix(searchString: string, searchMode: SearchMode, options?: VBRequestOptions): Observable<string[]> {
         let params: STRequestParams = {
             searchString: searchString,
             searchMode: searchMode
@@ -280,7 +280,7 @@ export class SearchServices {
         }
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [{
-                    className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
+                className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
             }]
         });
         return this.httpMgr.doPost(this.serviceName, "advancedSearch", params, options).pipe(
@@ -293,10 +293,10 @@ export class SearchServices {
     private serializeListOfList(lists: ARTURIResource[][]): string {
         let listSerialization: string[][] = [];
         lists.forEach((list: ARTURIResource[]) => {
-            let l: string[] = []
+            let l: string[] = [];
             list.forEach((res: ARTURIResource) => {
                 l.push(res.toNT());
-            })
+            });
             listSerialization.push(l);
         });
         return JSON.stringify(listSerialization);
@@ -313,7 +313,7 @@ export class SearchServices {
             let secondSerialization: string[] = [];
             link.second.forEach((res: ARTNode) => {
                 secondSerialization.push(res.toNT());
-            })
+            });
             linksSerialization.push([link.first.toNT(), secondSerialization]);
         });
         return JSON.stringify(linksSerialization);

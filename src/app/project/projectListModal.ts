@@ -56,7 +56,7 @@ export class ProjectListModal extends AbstractProjectComponent {
         this.activeModal.close();
         this.router.navigate(['/Home']).then(
             () => {
-                this.accessProject(this.selectedProject).subscribe()
+                this.accessProject(this.selectedProject).subscribe();
             }
         );
     }

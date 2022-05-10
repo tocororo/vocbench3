@@ -67,11 +67,11 @@ export class IcvServices {
     /**
      * Returns a list of skos:Concept that are topConcept but have a broader 
      */
-    listTopConceptsWithBroader(): Observable<{concept: ARTURIResource, scheme: ARTURIResource}[]> {
+    listTopConceptsWithBroader(): Observable<{ concept: ARTURIResource, scheme: ARTURIResource }[]> {
         let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listTopConceptsWithBroader", params).pipe(
             map(stResp => {
-                let records: {concept: ARTURIResource, scheme: ARTURIResource}[] = [];
+                let records: { concept: ARTURIResource, scheme: ARTURIResource }[] = [];
                 for (let i = 0; i < stResp.length; i++) {
                     records.push({
                         concept: new ARTURIResource(stResp[i].concept, stResp[i].concept, RDFResourceRolesEnum.concept),
@@ -127,7 +127,7 @@ export class IcvServices {
      * Return a list of <triples> that are redundant from the hierarchical point of view
      * @param sameScheme tells if the check should be performed considering just the concept in the same scheme
      */
-    listConceptsHierarchicalRedundancies(sameScheme?: boolean): Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource}[]> {
+    listConceptsHierarchicalRedundancies(sameScheme?: boolean): Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[]> {
         let params: any = {};
         if (sameScheme != null) {
             params.sameScheme = sameScheme;
@@ -140,7 +140,7 @@ export class IcvServices {
                         subject: Deserializer.createURI(stResp[i].subject),
                         predicate: Deserializer.createURI(stResp[i].predicate),
                         object: Deserializer.createURI(stResp[i].object)
-                    }
+                    };
                     redundancies.push(r);
                 }
                 return redundancies;
@@ -346,8 +346,8 @@ export class IcvServices {
      * @param checkLocalRes 
      * @param checkRemoteRes 
      */
-    listBrokenAlignments(nsToLocationMap: { [ns: string]: string }, rolesArray: RDFResourceRolesEnum[]): 
-            Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource}[]> {
+    listBrokenAlignments(nsToLocationMap: { [ns: string]: string }, rolesArray: RDFResourceRolesEnum[]):
+        Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[]> {
         let params: any = {
             nsToLocationMap: JSON.stringify(nsToLocationMap),
             rolesArray: rolesArray
@@ -360,7 +360,7 @@ export class IcvServices {
                         subject: Deserializer.createURI(stResp[i].subject),
                         predicate: Deserializer.createURI(stResp[i].predicate),
                         object: Deserializer.createURI(stResp[i].object, ["deprecated"])
-                    }
+                    };
                     brokenAlignments.push(a);
                 }
                 return brokenAlignments;
@@ -373,8 +373,8 @@ export class IcvServices {
      * @param rolesArray 
      * @param property 
      */
-    listBrokenDefinitions(rolesArray: RDFResourceRolesEnum[], property: ARTURIResource): 
-            Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource}[]> {
+    listBrokenDefinitions(rolesArray: RDFResourceRolesEnum[], property: ARTURIResource):
+        Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[]> {
         let params: any = {
             rolesArray: rolesArray,
             property: property
@@ -387,7 +387,7 @@ export class IcvServices {
                         subject: Deserializer.createURI(stResp[i].subject),
                         predicate: Deserializer.createURI(stResp[i].predicate),
                         object: Deserializer.createURI(stResp[i].object)
-                    }
+                    };
                     brokenDefs.push(def);
                 }
                 return brokenDefs;
@@ -437,7 +437,6 @@ export class IcvServices {
      * @param broader
      */
     setBroaderForAllDangling(scheme: ARTURIResource, broader: ARTURIResource) {
-        let conceptsUri: string[] = []
         let params: any = {
             scheme: scheme,
             broader: broader

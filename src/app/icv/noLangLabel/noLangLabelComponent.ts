@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { AbstractIcvComponent } from "../abstractIcvComponent";
+import { ARTLiteral, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { XmlSchema } from "../../models/Vocabulary";
+import { IcvServices } from "../../services/icvServices";
+import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum, ARTLiteral } from "../../models/ARTResources";
-import { XmlSchema } from "../../models/Vocabulary";
-import { UIUtils } from "../../utils/UIUtils";
-import { IcvServices } from "../../services/icvServices";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 
 @Component({
     selector: "no-lang-label-component",

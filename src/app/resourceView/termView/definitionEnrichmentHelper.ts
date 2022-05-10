@@ -71,7 +71,7 @@ export class DefinitionEnrichmentHelper {
                                     return { type: null };
                                 }
                             )
-                        )
+                        );
                     }
                 }
             })

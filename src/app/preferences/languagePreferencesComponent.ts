@@ -6,7 +6,7 @@ import { Component } from "@angular/core";
 })
 export class LanguagePreferencesComponent {
 
-    private panels: string[] = ["rendering", "editing", "valuefilter"]
+    private panels: string[] = ["rendering", "editing", "valuefilter"];
     activePanel: string = this.panels[0];
 
     constructor() { }

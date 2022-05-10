@@ -37,7 +37,7 @@ export class ConstituentListComponent {
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     resourceDblClick(res: ARTResource) {

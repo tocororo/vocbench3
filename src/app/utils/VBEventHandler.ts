@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { CommitInfo } from '../models/History';
 import { Project } from '../models/Project';
@@ -129,7 +128,7 @@ export class VBEventHandler {
 }
 
 class VBEventEmitter<T> extends EventEmitter<T> {
-    private eventName: string
+    private eventName: string;
     private onlyIfProjectNotChanged: boolean; //if true the event is fired only if project is not changed
 
     /**

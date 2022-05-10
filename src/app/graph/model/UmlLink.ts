@@ -1,9 +1,8 @@
+import { ARTURIResource } from '../../models/ARTResources';
 import { RDFResourceRolesEnum } from './../../models/ARTResources';
 import { Link } from './Link';
-import * as d3 from 'd3';
 import { Node } from "./Node";
 import { UmlNode } from './UmlNode';
-import { ARTURIResource } from '../../models/ARTResources';
 
 
 export class UmlLink extends Link {
@@ -36,8 +35,7 @@ export class UmlLink extends Link {
 
 
     constructor(source: Node, target: Node, res: ARTURIResource) {
-
-        super(source, target, res)
+        super(source, target, res);
     }
 
 
@@ -49,7 +47,7 @@ export class UmlLink extends Link {
         return this.res.getRole();
     }
 
-    isReflexive(){
+    isReflexive() {
         return this.res.getAdditionalProperty("reflexive");
     }
 

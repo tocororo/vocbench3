@@ -16,7 +16,7 @@ export class LexicalEntryListSettingsModal {
     visualizationModes: { value: LexEntryVisualizationMode, labelTranslationKey: string }[] = [
         { value: LexEntryVisualizationMode.indexBased, labelTranslationKey: VisualizationModeTranslation.translationMap[LexEntryVisualizationMode.indexBased] },
         { value: LexEntryVisualizationMode.searchBased, labelTranslationKey: VisualizationModeTranslation.translationMap[LexEntryVisualizationMode.searchBased] }
-    ]
+    ];
 
     private safeToGoLimit: number;
 

@@ -47,7 +47,7 @@ export class ProjectSettingsComponent {
         //init all available system languages
         let systemLanguages: Language[] = VBContext.getSystemSettings().languages;
         this.languageItems = systemLanguages.map(l => {
-            return { lang: l, active: false }
+            return { lang: l, active: false };
         });
         //if project was already set
         if (this.project != null) { 
@@ -82,7 +82,7 @@ export class ProjectSettingsComponent {
                 //time machine
                 this.initTimeMachineSetting(settings);
             }
-        )
+        );
     }
 
     /* =====================
@@ -142,7 +142,7 @@ export class ProjectSettingsComponent {
                     }
                 }
             }
-        )
+        );
     }
 
     /* =====================
@@ -179,7 +179,7 @@ export class ProjectSettingsComponent {
                     VBContext.getWorkingProjectCtx().getProjectSettings().prefLabelClashMode = this.labelClashOptSelected.mode;
                 }
             }
-        )
+        );
     }
 
     //time machine
@@ -198,7 +198,7 @@ export class ProjectSettingsComponent {
                     VBContext.getWorkingProjectCtx().getProjectSettings().timeMachineEnabled = this.timeMachineEnabled;
                 }
             }
-        )
+        );
     }
 
 }

@@ -53,7 +53,7 @@ export class ConceptReferenceComponent {
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     addDefinition() {
@@ -66,7 +66,7 @@ export class ConceptReferenceComponent {
             () => {
                 this.update.emit();        
             }
-        )
+        );
     }
     onPendingDefCanceled() {
         this.pendingDef = false;

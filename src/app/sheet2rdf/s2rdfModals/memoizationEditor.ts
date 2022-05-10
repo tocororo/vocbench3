@@ -34,7 +34,7 @@ export class MemoizationEditor {
                 this.onModelChange();
             },
             () => {}
-        )
+        );
     }
 
     onModelChange() {

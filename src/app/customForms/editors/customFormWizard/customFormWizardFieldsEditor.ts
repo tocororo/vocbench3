@@ -35,7 +35,7 @@ export class CustomFormWizardFieldsEditor {
                 this.datatypes = datatypes;
                 ResourceUtils.sortResources(this.datatypes, SortAttribute.show);
             }
-        )
+        );
     }
 
     //Changes on fields list
@@ -48,7 +48,7 @@ export class CustomFormWizardFieldsEditor {
         }
 
         let f = new WizardFieldUri(fieldLabel);
-        this.fields.push(f)
+        this.fields.push(f);
         this.emitChangeEvent(f, WizardFieldEventType.created);
     }
     addFieldLiteral() {
@@ -60,7 +60,7 @@ export class CustomFormWizardFieldsEditor {
         }
 
         let f = new WizardFieldLiteral(fieldLabel);
-        this.fields.push(f)
+        this.fields.push(f);
         this.emitChangeEvent(f, WizardFieldEventType.created);
     }
 
@@ -71,7 +71,7 @@ export class CustomFormWizardFieldsEditor {
                     this.removeImpl();
                 },
                 () => {}
-            )
+            );
         } else {
             this.removeImpl();
         }
@@ -89,13 +89,13 @@ export class CustomFormWizardFieldsEditor {
     }
     onCollMinChange() {
         if (this.selectedField.collection.min > this.selectedField.collection.max) {
-            this.selectedField.collection.max = this.selectedField.collection.min
+            this.selectedField.collection.max = this.selectedField.collection.min;
         }
         this.onFieldChange(this.selectedField);
     }
     onCollMaxChange() {
         if (this.selectedField.collection.max < this.selectedField.collection.min) {
-            this.selectedField.collection.min = this.selectedField.collection.max
+            this.selectedField.collection.min = this.selectedField.collection.max;
         }
         this.onFieldChange(this.selectedField);
     }

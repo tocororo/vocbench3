@@ -39,7 +39,7 @@ export class CustomFormFieldList implements ControlValueAccessor {
             if (f.value != null && f.value.trim() != "") {
                 fieldValue.push(<string>f.value);
             }
-        })
+        });
         this.field.value = fieldValue;
         this.propagateChange(this.field);
     }

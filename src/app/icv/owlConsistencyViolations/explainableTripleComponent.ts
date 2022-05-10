@@ -46,7 +46,7 @@ export class ExplainableTripleComponent {
                     this.explanation = {
                         ruleName: stResp.ruleName,
                         premises: premises
-                    }
+                    };
                 }
             );
         }
@@ -66,13 +66,13 @@ export class ExplainableTripleComponent {
                 mergeMap(
                     isAxiom => {
                         if (isAxiom) {
-                            return this.manchesterService.removeExpression(<ARTURIResource>triple.subject, triple.predicate, triple.object)
+                            return this.manchesterService.removeExpression(<ARTURIResource>triple.subject, triple.predicate, triple.object);
                         } else {
                             return this.resourceService.removeValue(triple.subject, triple.predicate, triple.object);
                         }
                     }
                 )
-            )
+            );
         } else {
             return this.resourceService.removeValue(triple.subject, triple.predicate, triple.object);
         }

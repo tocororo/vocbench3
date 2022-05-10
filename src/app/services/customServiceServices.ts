@@ -38,14 +38,14 @@ export class CustomServiceServices {
     getCustomService(id: string): Observable<CustomService> {
         let params: any = {
             id: id
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "getCustomService", params).pipe(
             map(stResp => {
                 let config = <CustomService>CustomService.parse(stResp);
                 config.id = id; //useful to keep trace of id in case of future update
                 let operations: CustomOperationDefinition[] = config.getPropertyValue("operations");
                 if (operations != null) {
-                    operations.forEach(o => o.serviceId = id); //add the service id to each operation (useful when the operation is edited)
+                    operations.forEach(o => { o.serviceId = id; }); //add the service id to each operation (useful when the operation is edited)
                     operations.sort((o1, o2) => o1.name.localeCompare(o2.name)); //sort operations
                 }
                 return config;
@@ -100,7 +100,7 @@ export class CustomServiceServices {
                 let configs: Configuration[] = [];
                 stResp.forEach((c: any) => {
                     configs.push(Configuration.parse(c));
-                })
+                });
                 return configs;
             })
         );
@@ -158,7 +158,7 @@ export class CustomServiceServices {
         return this.httpMgr.doPost(this.serviceName, "reloadCustomService", params);
     }
 
-    
+
     reloadCustomServices(): Observable<void> {
         let params: any = {};
         return this.httpMgr.doPost(this.serviceName, "reloadCustomServices", params);

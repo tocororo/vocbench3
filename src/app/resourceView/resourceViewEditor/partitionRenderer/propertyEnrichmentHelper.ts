@@ -124,7 +124,7 @@ export class PropertyEnrichmentHelper {
                  * only custom range
                  */
                 else if (ranges == undefined && customForms != undefined) {
-                    if (customForms.length == 1) {//just one CREntry => prompt the CR form without asking to choose which CRE to use
+                    if (customForms.length == 1) { //just one CREntry => prompt the CR form without asking to choose which CRE to use
                         return of({ type: EnrichmentType.customForm, form: customForms[0] });
                     } else if (customForms.length > 1) { //multiple CREntry => ask which one to use
                         //prepare the range options with the custom range entries

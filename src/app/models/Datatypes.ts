@@ -85,7 +85,7 @@ export class DatatypeUtils {
         XmlSchema.dateTime,
         XmlSchema.time,
         XmlSchema.string,
-    ]
+    ];
 
     /**
      * Standard restrictions defined by the xsd scheme
@@ -100,10 +100,10 @@ export class DatatypeUtils {
         [XmlSchema.anyURI.getURI(), {}],
         [XmlSchema.base64Binary.getURI(), { pattern: "((([A-Za-z0-9+/] ?){4})*(([A-Za-z0-9+/] ?){3}[A-Za-z0-9+/]|([A-Za-z0-9+/] ?){2}[AEIMQUYcgkosw048] ?=|[A-Za-z0-9+/] ?[AQgw] ?= ?=))?" }],
         [XmlSchema.boolean.getURI(), {}],
-        [XmlSchema.byte.getURI(), { minInclusive: -128, maxInclusive: 128, pattern: "[\-+]?[0-9]+" }],
+        [XmlSchema.byte.getURI(), { minInclusive: -128, maxInclusive: 128, pattern: "[-+]?[0-9]+" }],
         [XmlSchema.date.getURI(), {}],
         [XmlSchema.dateTime.getURI(), {}],
-        [XmlSchema.dateTimeStamp.getURI(), { pattern: ".*(Z|(\+|-)[0-9][0-9]:[0-9][0-9])" }],
+        [XmlSchema.dateTimeStamp.getURI(), { pattern: ".*(Z|(+|-)[0-9][0-9]:[0-9][0-9])" }],
         [XmlSchema.dayTimeDuration.getURI(), {}], //unknown pattern [^YM]*(T.*)?
         [XmlSchema.decimal.getURI(), {}],
         [XmlSchema.double.getURI(), {}],
@@ -120,29 +120,29 @@ export class DatatypeUtils {
         [XmlSchema.ID.getURI(), {}], //unknown pattern \i\c* ∩ [\i-[:]][\c-[:]]*
         [XmlSchema.IDREF.getURI(), {}], //unknown pattern \i\c* ∩ [\i-[:]][\c-[:]]*
         [XmlSchema.IDREFS.getURI(), {}],
-        [XmlSchema.int.getURI(), { minInclusive: -2147483648, maxInclusive: 2147483647, pattern: "[\-+]?[0-9]+" }],
-        [XmlSchema.integer.getURI(), { pattern: "[\-\+]?[0-9]+" }],
+        [XmlSchema.int.getURI(), { minInclusive: -2147483648, maxInclusive: 2147483647, pattern: "[-+]?[0-9]+" }],
+        [XmlSchema.integer.getURI(), { pattern: "[-+]?[0-9]+" }],
         [XmlSchema.language.getURI(), { pattern: "[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*" }],
-        [XmlSchema.long.getURI(), { minInclusive: -9223372036854775808, maxInclusive: 9223372036854775807, pattern: "[\-+]?[0-9]+" }],
+        [XmlSchema.long.getURI(), { minInclusive: -9223372036854775808, maxInclusive: 9223372036854775807, pattern: "[-+]?[0-9]+" }],
         [XmlSchema.Name.getURI(), { pattern: "[_:A-Za-z][-._:A-Za-z0-9]*" }],
         [XmlSchema.NCName.getURI(), {}], //unknown pattern \i\c* ∩ [\i-[:]][\c-[:]]*
-        [XmlSchema.negativeInteger.getURI(), { maxInclusive: -1, pattern: "[\-+]?[0-9]+" }],
+        [XmlSchema.negativeInteger.getURI(), { maxInclusive: -1, pattern: "[-+]?[0-9]+" }],
         [XmlSchema.NMTOKEN.getURI(), {}],
         [XmlSchema.NMTOKENS.getURI(), {}],
-        [XmlSchema.nonNegativeInteger.getURI(), { minInclusive: 0, pattern: "[\-+]?[0-9]+" }],
-        [XmlSchema.nonPositiveInteger.getURI(), { maxInclusive: 0, pattern: "[\-+]?[0-9]+" }],
+        [XmlSchema.nonNegativeInteger.getURI(), { minInclusive: 0, pattern: "[-+]?[0-9]+" }],
+        [XmlSchema.nonPositiveInteger.getURI(), { maxInclusive: 0, pattern: "[-+]?[0-9]+" }],
         [XmlSchema.normalizedString.getURI(), {}],
         [XmlSchema.NOTATION.getURI(), {}],
-        [XmlSchema.positiveInteger.getURI(), { minInclusive: 1, pattern: "^[\-+]?[0-9]+$" }],
+        [XmlSchema.positiveInteger.getURI(), { minInclusive: 1, pattern: "^[-+]?[0-9]+$" }],
         [XmlSchema.QName.getURI(), {}],
-        [XmlSchema.short.getURI(), { minInclusive: -32768, maxInclusive: 32767, pattern: "[\-+]?[0-9]+" }],
+        [XmlSchema.short.getURI(), { minInclusive: -32768, maxInclusive: 32767, pattern: "[-+]?[0-9]+" }],
         [XmlSchema.string.getURI(), {}],
         [XmlSchema.time.getURI(), {}],
         [XmlSchema.token.getURI(), {}],
-        [XmlSchema.unsignedByte.getURI(), { minInclusive: 0, maxInclusive: 255, pattern: "[\-+]?[0-9]+" }],
-        [XmlSchema.unsignedInt.getURI(), { minInclusive: 0, maxInclusive: 4294967295, pattern: "[\-+]?[0-9]+" }],
-        [XmlSchema.unsignedLong.getURI(), { minInclusive: 0, maxInclusive: 18446744073709551615, pattern: "[\-+]?[0-9]+" }],
-        [XmlSchema.unsignedShort.getURI(), { minInclusive: 0, maxInclusive: 65535, pattern: "[\-+]?[0-9]+" }],
+        [XmlSchema.unsignedByte.getURI(), { minInclusive: 0, maxInclusive: 255, pattern: "[-+]?[0-9]+" }],
+        [XmlSchema.unsignedInt.getURI(), { minInclusive: 0, maxInclusive: 4294967295, pattern: "[-+]?[0-9]+" }],
+        [XmlSchema.unsignedLong.getURI(), { minInclusive: 0, maxInclusive: 18446744073709551615, pattern: "[-+]?[0-9]+" }],
+        [XmlSchema.unsignedShort.getURI(), { minInclusive: 0, maxInclusive: 65535, pattern: "[-+]?[0-9]+" }],
         [XmlSchema.yearMonthDuration.getURI(), { pattern: "-?P((([0-9]+Y)([0-9]+M)?)|([0-9]+M))" }],
     ]);
 
@@ -150,7 +150,7 @@ export class DatatypeUtils {
      * Restrictions not defined explicitly in the standards, but defined accordingly their description
      */
     public static notStandardRestrictionsMap: Map<string, ConstrainingFacets> = new Map([
-        [OWL.rational.getURI(), { pattern: "[\-+]?[0-9]+(/[1-9][0-9]*)*" }], //https://www.w3.org/TR/owl2-syntax/#Real_Numbers.2C_Decimal_Numbers.2C_and_Integers
+        [OWL.rational.getURI(), { pattern: "[-+]?[0-9]+(/[1-9][0-9]*)*" }], //https://www.w3.org/TR/owl2-syntax/#Real_Numbers.2C_Decimal_Numbers.2C_and_Integers
     ]);
 
 }

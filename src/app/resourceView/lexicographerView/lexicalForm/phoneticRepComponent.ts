@@ -38,7 +38,7 @@ export class PhoneticRepComponent {
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     deleteRep() {
@@ -46,7 +46,7 @@ export class PhoneticRepComponent {
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     confirmCreation(value: string) {

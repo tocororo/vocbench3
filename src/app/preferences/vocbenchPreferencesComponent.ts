@@ -18,7 +18,7 @@ export class VocbenchPreferencesComponent {
 
     ngOnInit() {
         //no need to call the service to get the following preferences, since they are already initialized when user accessed the project
-        this.showFlags = this.properties.getShowFlags()
+        this.showFlags = this.properties.getShowFlags();
         let projThemePref = VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId;
         this.themes.forEach(t => {
             if (t == projThemePref) { this.selectedTheme = t; }

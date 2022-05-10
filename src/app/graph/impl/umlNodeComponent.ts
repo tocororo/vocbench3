@@ -25,7 +25,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
     // private lineSeparetorPercentage: number;
 
     constructor(protected changeDetectorRef: ChangeDetectorRef) {
-        super(changeDetectorRef)
+        super(changeDetectorRef);
     }
 
 
@@ -108,7 +108,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
      * @param prop 
      */
     private showPropSubClass(prop: PropInfo) {
-        return !prop.property.equals(RDFS.subClassOf)
+        return !prop.property.equals(RDFS.subClassOf);
     }
 
 
@@ -118,7 +118,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
 
     //@override
     protected updateShow() {
-        this.updateShowImpl(false)
+        this.updateShowImpl(false);
     }
 
     private updateShowImpl(renderingChange: boolean) {
@@ -131,12 +131,12 @@ export class UmlNodeComponent extends AbstractGraphNode {
         //update show class name
         this.show = ResourceUtils.getRendering(this.node.res, this.rendering);
         this.changeDetectorRef.detectChanges(); //fire change detection in order to update the textEl that contains "show"
-        let dimImgClass = 14
+        let dimImgClass = 14;
         this.normalizedShow = this.show;
         // take localName from uri off
         for (let i = this.show.length; i >= 0; i--) {
             if ((this.show[i] == "/" || this.show[i] == "#") && this.show.startsWith("htt")) {
-                localName = this.show.substring(this.show.length, i)
+                localName = this.show.substring(this.show.length, i);
                 break;
             }
         }
@@ -146,7 +146,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
             if (textElementWidth > nodeWidth) {
                 //230= 250(max width decided) - 20(6 padding, 14 img)
                 if (textElementWidth > 230) {
-                    nodeWidth = 230
+                    nodeWidth = 230;
                     let ratio = textElementWidth / nodeWidth;
                     let truncateAt = Math.floor(this.normalizedShow.length / ratio);
                     this.normalizedShow = this.normalizedShow.substring(0, truncateAt);
@@ -154,11 +154,11 @@ export class UmlNodeComponent extends AbstractGraphNode {
                         this.normalizedShow = this.normalizedShow.substring(0, this.normalizedShow.length - (3 + localName.length)) + "..." + localName;
                     }
                     if (!renderingChange) {
-                        this.measures.width = 250
+                        this.measures.width = 250;
                     }
                     nodeWidth = this.measures.width - 6 - dimImgClass;
 
-                } else {// textElementWidth <= 230) 
+                } else { // textElementWidth <= 230) 
                     let extraRightSide = textElementWidth - this.measures.width;
                     if (!renderingChange) {
                         this.measures.width = this.measures.width + extraRightSide + 6 + dimImgClass;
@@ -180,11 +180,11 @@ export class UmlNodeComponent extends AbstractGraphNode {
         for (let i = 0; i < this.node.listPropInfo.length; i++) {
             if (!this.node.listPropInfo[i].property.equals(RDFS.subClassOf)) {
                 let p = this.node.listPropInfo[i];
-                property = ResourceUtils.getRendering(p.property, this.rendering)
+                property = ResourceUtils.getRendering(p.property, this.rendering);
                 // take localName from Prop off
                 for (let i = property.length; i >= 0; i--) {
                     if ((property[i] == "/" || property[i] == "#") && property.startsWith("htt")) {
-                        localNameProp = property.substring(property.length, i)
+                        localNameProp = property.substring(property.length, i);
                         break;
                     }
                 }
@@ -192,7 +192,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
                 // take localName from Range off
                 for (let i = range.length; i >= 0; i--) {
                     if ((range[i] == "/" || range[i] == "#") && range.startsWith("htt")) {
-                        localNameRange = range.substring(range.length, i)
+                        localNameRange = range.substring(range.length, i);
                         break;
                     }
                 }
@@ -206,7 +206,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
                     if (textElementWidth > nodeWidth) {
                         if (textElementWidth > 222) {
                             if (!renderingChange) {
-                                this.measures.width = 250
+                                this.measures.width = 250;
                             }
                             nodeWidth = this.measures.width - 6 - dimImg - 10;
                             let ratio = textElementWidth / nodeWidth;
@@ -222,7 +222,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
                             } else {
                                 let ratio = textElementWidth / nodeWidth;
                                 let truncateAt = Math.floor(p.normalizedShow.length / ratio);
-                                let propLength = this.updatePropLength(property, range, truncateAt, localNameProp, localNameRange)
+                                let propLength = this.updatePropLength(property, range, truncateAt, localNameProp, localNameRange);
                                 property = propLength.property;
                                 range = propLength.range;
                                 p.normalizedShow = property + ": " + range;
@@ -250,16 +250,16 @@ export class UmlNodeComponent extends AbstractGraphNode {
         if (property.length < range.length) {
             let newTruncateAt = Math.floor(truncateAt / 3); // total space = 3/3 so property has 1/3 and range 2/3
             if (property.length <= newTruncateAt) {
-                let addSpaceToRange = newTruncateAt - property.length
-                newTruncateAt = (newTruncateAt * 2) + addSpaceToRange // calculate for the range
+                let addSpaceToRange = newTruncateAt - property.length;
+                newTruncateAt = (newTruncateAt * 2) + addSpaceToRange; // calculate for the range
             } else {
                 property = property.substring(0, newTruncateAt);
                 if (property.length > localNameProp.length) {
                     property = property.substring(0, property.length - (3 + localNameProp.length)) + "..." + localNameProp;
                 } else if (property.length == localNameProp.length) {
-                    property = localNameProp
+                    property = localNameProp;
                 } else {
-                    property = localNameProp
+                    property = localNameProp;
                     if (property.length > 3) {
                         property = property.substring(0, property.length - 3) + "...";
                     } else if (property.length == 3) {
@@ -268,16 +268,16 @@ export class UmlNodeComponent extends AbstractGraphNode {
                         property = property.substring(0, property.length - 1) + ".";
                     }
                 }
-                newTruncateAt = (newTruncateAt * 2); // calculate for the range
+                newTruncateAt *= 2; // calculate for the range
             }
-            if (range.length > newTruncateAt - 2) {  // -2 is for added " :" between property and range 
+            if (range.length > newTruncateAt - 2) { // -2 is for added " :" between property and range 
                 range = range.substring(0, newTruncateAt - 2);
                 if (range.length > localNameRange.length) {
                     range = range.substring(0, (newTruncateAt - 2) - (3 + localNameRange.length)) + "..." + localNameRange;
                 } else if (range.length == localNameRange.length) {
-                    range = localNameRange
+                    range = localNameRange;
                 } else {
-                    range = localNameRange
+                    range = localNameRange;
                     if (range.length > 3) {
                         range = range.substring(0, range.length - 3) + "...";
                     } else if (range.length == 3) {
@@ -297,9 +297,9 @@ export class UmlNodeComponent extends AbstractGraphNode {
                 if (property.length > localNameProp.length) {
                     property = property.substring(0, property.length - (3 + localNameProp.length)) + "..." + localNameProp;
                 } else if (property.length == localNameProp.length) {
-                    property = localNameProp
+                    property = localNameProp;
                 } else {
-                    property = localNameProp
+                    property = localNameProp;
                     if (property.length > 3) {
                         property = property.substring(0, property.length - 3) + "...";
                     } else if (property.length == 3) {
@@ -312,9 +312,9 @@ export class UmlNodeComponent extends AbstractGraphNode {
                 if (range.length > localNameRange.length) {
                     range = range.substring(0, range.length - (3 + localNameRange.length)) + "..." + localNameRange;
                 } else if (range.length == localNameRange.length) {
-                    range = localNameRange
+                    range = localNameRange;
                 } else {
-                    range = localNameRange
+                    range = localNameRange;
                     if (range.length > 3) {
                         range = range.substring(0, range.length - 3) + "...";
                     } else if (range.length == 3) {
@@ -328,8 +328,8 @@ export class UmlNodeComponent extends AbstractGraphNode {
         } else {
             let newTruncateAt = Math.floor(truncateAt / 3); // total space = 3/3 so property has 2/3 and range 1/3
             if (range.length <= newTruncateAt) { // first calculate range so can see if there is space to add to property
-                let addSpaceToProperty = newTruncateAt - range.length
-                newTruncateAt = (newTruncateAt * 2) + addSpaceToProperty // calculate for the property
+                let addSpaceToProperty = newTruncateAt - range.length;
+                newTruncateAt = (newTruncateAt * 2) + addSpaceToProperty; // calculate for the property
             } else {
                 range = range.substring(0, newTruncateAt);
                 if (range.length > localNameRange.length) {
@@ -346,16 +346,16 @@ export class UmlNodeComponent extends AbstractGraphNode {
                         range = range.substring(0, range.length - 1) + ".";
                     }
                 }
-                newTruncateAt = (newTruncateAt * 2); // calculate for the property
+                newTruncateAt *= 2; // calculate for the property
             }
-            if (property.length > newTruncateAt - 2) {  //-2 is for added ": "
+            if (property.length > newTruncateAt - 2) { //-2 is for added ": "
                 property = property.substring(0, newTruncateAt - 2);
                 if (property.length > localNameProp.length) {
                     property = property.substring(0, (newTruncateAt - 2) - (3 + localNameProp.length)) + "..." + localNameProp;
                 } else if (property.length == localNameProp.length) {
-                    property = localNameProp
+                    property = localNameProp;
                 } else {
-                    property = localNameProp
+                    property = localNameProp;
                     if (property.length > 3) {
                         property = property.substring(0, property.length - 3) + "...";
                     } else if (property.length == 3) {
@@ -367,7 +367,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
 
             }
         }
-        return { property: property, range: range }
+        return { property: property, range: range };
     }
 
 

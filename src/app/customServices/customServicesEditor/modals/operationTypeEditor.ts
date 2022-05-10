@@ -1,7 +1,6 @@
 import { Component, forwardRef, Input } from "@angular/core";
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { OperationType, TypeUtils } from "../../../models/CustomService";
-import { type } from "os";
 
 @Component({
     selector: "type-editor",
@@ -59,8 +58,8 @@ export class OperationTypeEditor implements ControlValueAccessor {
         if (args != null) {
             this.genericArgsList = [];
             args.forEach(arg => {
-                this.genericArgsList.push({ name: arg, arg: null })
-            })
+                this.genericArgsList.push({ name: arg, arg: null });
+            });
         } else {
             this.genericArgsList = null;
         }
@@ -77,7 +76,7 @@ export class OperationTypeEditor implements ControlValueAccessor {
             let args: OperationType[] = [];
             this.genericArgsList.forEach(a => {
                 args.push(a.arg);
-            })
+            });
             oType.typeArguments = args;
         }
         this.type = oType;
@@ -98,8 +97,8 @@ export class OperationTypeEditor implements ControlValueAccessor {
             if (args != null) {
                 this.genericArgsList = [];
                 args.forEach((arg: string, i: number) => {
-                    this.genericArgsList.push({ name: arg, arg: this.type.typeArguments[i] })
-                })
+                    this.genericArgsList.push({ name: arg, arg: this.type.typeArguments[i] });
+                });
             } else {
                 this.genericArgsList = null;
             }

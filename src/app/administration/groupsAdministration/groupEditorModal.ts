@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { UsersGroup } from "../../models/User";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
 

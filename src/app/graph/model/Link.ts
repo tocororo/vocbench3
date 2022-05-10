@@ -25,7 +25,7 @@ export class Link implements d3.SimulationLinkDatum<Node> {
         this.source = source;
         this.target = target;
         this.res = res;
-        this.classAxiom = classAxiom
+        this.classAxiom = classAxiom;
         this.openBy = [];
     }
 

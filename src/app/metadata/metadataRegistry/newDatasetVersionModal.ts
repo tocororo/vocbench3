@@ -29,7 +29,7 @@ export class NewDatasetVersionModal {
             stReps => {
                 this.activeModal.close();
             }
-        )
+        );
     }
 
     cancel() {

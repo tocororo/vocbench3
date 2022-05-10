@@ -136,7 +136,7 @@ export class DatasetCatalogModal {
         if (this.extensionConfig != null) {
             if (this.requireConfigurationConnector()) {
                 this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CATALOG_CONNECTOR_NOT_CONFIGURED" }, ModalType.warning);
-                return;
+                return null;
             }
             if (this.extensionConfig != null) {
                 connectorSpec.configType = this.extensionConfig.type;

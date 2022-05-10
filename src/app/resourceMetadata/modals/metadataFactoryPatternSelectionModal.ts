@@ -30,7 +30,7 @@ export class MetadataFactoryPatternSelectionModal {
     showPattern() {
         const modalRef: NgbModalRef = this.modalService.open(MetadataPatternEditorModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = "Metadata Pattern";
-		modalRef.componentInstance.existingPatterns = [];
+        modalRef.componentInstance.existingPatterns = [];
         modalRef.componentInstance.ref = this.selectedPattern.reference;
         modalRef.componentInstance.readOnly = true;
         return modalRef.result;

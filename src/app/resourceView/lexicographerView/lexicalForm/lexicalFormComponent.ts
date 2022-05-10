@@ -56,7 +56,7 @@ export class LexicalFormComponent {
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     deleteForm() {
@@ -65,7 +65,7 @@ export class LexicalFormComponent {
             () => {
                 this.update.emit();
             }
-        )
+        );
     }
 
     /**

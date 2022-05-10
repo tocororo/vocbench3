@@ -79,7 +79,7 @@ export class CollaborationComponent {
                 this.initIssueList();
             },
             () => {}
-        )
+        );
     }
 
     openUserConfig() {

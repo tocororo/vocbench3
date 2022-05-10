@@ -14,14 +14,14 @@ export class AlignmentValidationComponent {
     alignmentSources: string[] = [this.sourceFile, this.sourceRemoteSystem];
     selectedSource: string;
 
-    constructor(private alignmentService: AlignmentServices) {}
+    constructor(private alignmentService: AlignmentServices) { }
 
     ngOnInit() {
         HttpServiceContext.initSessionToken();
     }
 
     //use HostListener instead of ngOnDestroy since this component is reused and so it is never destroyed
-    @HostListener('window:beforeunload', [ '$event' ])
+    @HostListener('window:beforeunload', ['$event'])
     beforeUnloadHandler(event: Event) {
         // close session server side
         this.alignmentService.closeSession().subscribe();

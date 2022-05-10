@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { AbstractIcvComponent } from "../abstractIcvComponent";
+import { ARTResource } from "../../models/ARTResources";
+import { Language, Languages } from "../../models/LanguagesCountries";
+import { IcvServices } from "../../services/icvServices";
+import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { ARTResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { Language, Languages } from "../../models/LanguagesCountries";
-import { UIUtils } from "../../utils/UIUtils";
-import { IcvServices } from "../../services/icvServices";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 
 @Component({
     selector: "multiple-pref-label-component",
@@ -34,7 +34,7 @@ export class MultiplePrefLabelComponent extends AbstractIcvComponent {
                 resources.forEach(r => {
                     let langs: Language[] = Languages.fromTagsToLanguages(r.getAdditionalProperty("duplicateLang").split(","));
                     this.brokenRecordList.push({ resource: r, langs: langs });
-                })
+                });
 
                 this.initPaging(this.brokenRecordList);
             }

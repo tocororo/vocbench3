@@ -43,11 +43,11 @@ export class LexEntryComponent {
         //get the canonical form
         let l: Form;
         if (this.entry.lemma.length == 1) {
-            l = this.entry.lemma[0]
+            l = this.entry.lemma[0];
         } else if (this.entry.lemma.length > 1) { //probably in validation
             l = this.entry.lemma.find(lem => LexicalResourceUtils.isInStagingAdd(lem));
             if (l == null) { //no lemma in addition => get the first one
-                l = this.entry.lemma[0]
+                l = this.entry.lemma[0];
             }
         }
         if (l != null) {

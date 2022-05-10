@@ -29,6 +29,6 @@ export class ResourceMetadataUtils {
             reference: reference,
             scope: Reference.getRelativeReferenceScope(reference),
             name: Reference.getRelativeReferenceIdentifier(reference)
-        }
+        };
     }
 }

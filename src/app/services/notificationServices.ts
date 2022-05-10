@@ -101,7 +101,7 @@ export class NotificationServices {
                         action: nJson.action,
                         role: nJson.role,
                         timestamp: new Date(nJson.timestamp)
-                    }
+                    };
                     notifications.push(n);
                 }
                 return notifications;

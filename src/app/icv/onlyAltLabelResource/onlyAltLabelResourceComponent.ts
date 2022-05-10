@@ -1,14 +1,11 @@
 import { Component } from "@angular/core";
-import { AbstractIcvComponent } from "../abstractIcvComponent";
+import { ARTResource } from "../../models/ARTResources";
+import { Language, Languages } from "../../models/LanguagesCountries";
+import { IcvServices } from "../../services/icvServices";
+import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { Language, Languages } from "../../models/LanguagesCountries";
-import { ARTResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { SKOS, OWL } from "../../models/Vocabulary";
-import { VBContext } from "../../utils/VBContext";
-import { VBProperties } from "../../utils/VBProperties";
-import { UIUtils } from "../../utils/UIUtils";
-import { IcvServices } from "../../services/icvServices";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 
 @Component({
     selector: "only-alt-label-resource-component",

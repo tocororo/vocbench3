@@ -69,7 +69,7 @@ export class LexicalizationEnrichmentHelper {
                     (err: Error) => this.handleForceAddLexicalizationError(err, resource, predicate, value, cls, checkAlt, checkPref, forceBlacklist)
                 );
             }
-        )
+        );
     }
 
 

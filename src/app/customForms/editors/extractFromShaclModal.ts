@@ -58,7 +58,7 @@ export class ExtractFromShaclModal {
             formatName => {
                 this.selectedInputFormat = this.inputFormats.find(f => f.name == formatName);
             }
-        )
+        );
     }
 
     isOkEnabled(): boolean {
@@ -78,19 +78,19 @@ export class ExtractFromShaclModal {
                 pearl => {
                     this.activeModal.close(pearl);
                 }
-            )
+            );
         } else if (this.selectedSource == this.sourceGraph) {
             this.shaclService.extractCFfromShapesGraph(this.cls).subscribe(
                 pearl => {
                     this.activeModal.close(pearl);
                 }
-            )
+            );
         } else if (this.selectedSource == this.sourceUrl) {
             this.shaclService.extractCFfromShapeURL(this.cls, this.shapeUrl, this.selectedInputFormat).subscribe(
                 pearl => {
                     this.activeModal.close(pearl);
                 }
-            )
+            );
         }
     }
 
