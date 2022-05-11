@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { forkJoin } from "rxjs";
 import { ModalOptions, TranslationUtils } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
-import { CatalogRecord, DatasetMetadata, LexicalizationSetMetadata } from "../../models/Metadata";
+import { CatalogRecord, CatalogRecord2, DatasetMetadata, LexicalizationSetMetadata } from "../../models/Metadata";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -27,6 +27,7 @@ export class MetadataRegistryComponent {
 
     catalogRecords: CatalogRecord[]; //list of catalog (shown to the left)
     selectedCatalogRecord: CatalogRecord; //selected catalog. Contains the dataset metadata (which is also retrieved and stored in catalogRecordDataset var) and the other versions
+    selectedCatalogRecord2: CatalogRecord2;
     catalogRecordDataset: DatasetMetadata; //metadata of the selected record
     selectedDataset: { dataset: DatasetMetadata, isVersion?: boolean }; //can be the catalogRecordDataset itself or one of its version
 
@@ -71,6 +72,13 @@ export class MetadataRegistryComponent {
             this.lexicalizationSets = [];
             this.initSelectedCatalogDataset();
         }
+    }
+
+    onCatalogSelected(catalogRecord: CatalogRecord2) {
+        this.selectedCatalogRecord2 = catalogRecord;
+        setTimeout(() => {
+            this.initEmbeddedLexicalizationSets();
+        });
     }
 
     /**
@@ -195,8 +203,16 @@ export class MetadataRegistryComponent {
      */
 
     private initEmbeddedLexicalizationSets() {
+        // UIUtils.startLoadingDiv(this.lexSetBlockDivElement.nativeElement);
+        // this.metadataRegistryService.getEmbeddedLexicalizationSets(new ARTURIResource(this.selectedDataset.dataset.identity)).subscribe(
+        //     sets => {
+        //         UIUtils.stopLoadingDiv(this.lexSetBlockDivElement.nativeElement);
+        //         this.lexicalizationSets = sets;
+        //         this.selectedLexicalizationSet = null;
+        //     }
+        // );
         UIUtils.startLoadingDiv(this.lexSetBlockDivElement.nativeElement);
-        this.metadataRegistryService.getEmbeddedLexicalizationSets(new ARTURIResource(this.selectedDataset.dataset.identity)).subscribe(
+        this.metadataRegistryService.getEmbeddedLexicalizationSets(this.selectedCatalogRecord2.dataset.identity).subscribe(
             sets => {
                 UIUtils.stopLoadingDiv(this.lexSetBlockDivElement.nativeElement);
                 this.lexicalizationSets = sets;

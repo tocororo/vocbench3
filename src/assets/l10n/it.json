@@ -2039,6 +2039,7 @@
             "SHOW_HIDE_INFERRED": "Mostra/nascondi informazioni inferite",
             "SHOW_IN_DATA_GRAPH": "Mostra in un grafo orientato ai dati",
             "SPAWN_CONCEPT_FROM_XLABEL": "Crea un nuovo concetto da xLabel",
+            "TOGGLE_CUSTOM_VIEW": "Visualizza Custom View",
             "TOGGLE_NOTIFICATIONS": "Abilita/disabilita notifiche su questa risorsa",
             "TOGGLE_VALUE_FILTER_LANG": "Abilita/disabilita il filtro-valori sulle lingue"
         },

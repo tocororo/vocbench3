@@ -1,4 +1,4 @@
-import {ARTURIResource, RDFResourceRolesEnum} from "./ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "./ARTResources";
 
 export class RDF {
     public static uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns";
@@ -255,7 +255,7 @@ export class OntoLex {
 export class Lexinfo {
     public static uri = "http://www.lexinfo.net/ontology/3.0/lexinfo";
     public static namespace = Lexinfo.uri + "#";
-    
+
     public static morphosyntacticProperty = new ARTURIResource(Lexinfo.namespace + "morphosyntacticProperty", "lexinfo:morphosyntacticProperty", RDFResourceRolesEnum.objectProperty);
     public static translation = new ARTURIResource(Lexinfo.namespace + "translation", "lexinfo:translation", RDFResourceRolesEnum.objectProperty);
 }
@@ -284,17 +284,12 @@ export class SemanticTurkey {
     public static stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";
     public static stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";
     public static inferenceGraph = "http://semanticturkey/inference-graph";
-
-    public static standardDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdr#standardDereferenciation";
-    public static noDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdr#noDereferenciation";
-
-    public static noAggregation = "http://semanticturkey.uniroma2.it/ns/mdr#noAggregation";
 }
 
 export class Vartrans {
     public static uri = "http://www.w3.org/ns/lemon/vartrans";
     public static namespace = Vartrans.uri + "#";
-    
+
     public static ConceptualRelation = new ARTURIResource(Vartrans.namespace + "ConceptualRelation", "vartrans:ConceptualRelation", RDFResourceRolesEnum.cls);
     public static LexicalRelation = new ARTURIResource(Vartrans.namespace + "LexicalRelation", "vartrans:LexicalRelation", RDFResourceRolesEnum.cls);
     public static lexicalRel = new ARTURIResource(Vartrans.namespace + "lexicalRel", "vartrans:lexicalRel", RDFResourceRolesEnum.objectProperty);
@@ -303,4 +298,44 @@ export class Vartrans {
     public static translatableAs = new ARTURIResource(Vartrans.namespace + "translatableAs", "vartrans:translatableAs", RDFResourceRolesEnum.objectProperty);
     public static Translation = new ARTURIResource(Vartrans.namespace + "Translation", "vartrans:Translation", RDFResourceRolesEnum.cls);
     public static TranslationSet = new ARTURIResource(Vartrans.namespace + "TranslationSet", "vartrans:TranslationSet", RDFResourceRolesEnum.cls);
+}
+
+export class MdrVoc {
+
+    public static uri = "http://semanticturkey.uniroma2.it/ns/mdr";
+    public static namespace = MdrVoc.uri + "#";
+    public static prefix = "mdr";
+
+
+    public static dereferenciationSystem = new ARTURIResource(MdrVoc.namespace + "dereferenciationSystem", MdrVoc.prefix + ":dereferenciationSystem", RDFResourceRolesEnum.property);
+    public static standardDereferenciation = new ARTURIResource(MdrVoc.namespace + "standardDereferenciation", MdrVoc.prefix + ":standardDereferenciation", RDFResourceRolesEnum.property);
+    public static noDereferenciation = new ARTURIResource(MdrVoc.namespace + "", MdrVoc.prefix + ":", RDFResourceRolesEnum.property);
+    public static sparqlEndpointLimitation = new ARTURIResource(MdrVoc.namespace + "sparqlEndpointLimitation", MdrVoc.prefix + ":sparqlEndpointLimitation", RDFResourceRolesEnum.property);
+    public static noAggregation = new ARTURIResource(MdrVoc.namespace + "noAggregation", MdrVoc.prefix + ":noAggregation", RDFResourceRolesEnum.property);
+
+    public static SPARQLEndpoint = new ARTURIResource(MdrVoc.namespace + "SPARQLEndpoint", MdrVoc.prefix + ":SPARQLEndpoint", RDFResourceRolesEnum.individual);
+    public static RDF4JHTTPRepository = new ARTURIResource(MdrVoc.namespace + "RDF4JHTTPRepository", MdrVoc.prefix + ":RDF4JHTTPRepository", RDFResourceRolesEnum.individual);
+    public static GRAPHDBRepository = new ARTURIResource(MdrVoc.namespace + "GRAPHDBRepository", MdrVoc.prefix + ":GRAPHDBRepository", RDFResourceRolesEnum.individual);
+
+    public static lod = new ARTURIResource(MdrVoc.namespace + "lod", MdrVoc.prefix + ":lod", RDFResourceRolesEnum.individual);
+    public static master = new ARTURIResource(MdrVoc.namespace + "master", MdrVoc.prefix + ":master", RDFResourceRolesEnum.individual);
+}
+
+export class StMdr {
+    public static uri = "http://semanticturkey.uniroma2.it/ns/stmdr";
+    public static namespace = MdrVoc.uri + "#";
+    public static prefix = "stmdr";
+
+    public static Project = new ARTURIResource(MdrVoc.namespace + "Project", MdrVoc.prefix + ":Project", RDFResourceRolesEnum.individual);
+}
+
+export class Dcat {
+
+    public static uri = "http://www.w3.org/ns/dcat";
+    public static namespace = Dcat.uri + "#";
+    public static prefix = "dcat";
+
+    public static hasVersion = new ARTURIResource(Dcat.namespace + "hasVersion", Dcat.prefix + ":hasVersion", RDFResourceRolesEnum.property);
+    public static isVersionOf = new ARTURIResource(Dcat.namespace + "isVersionOf", Dcat.prefix + ":isVersionOf", RDFResourceRolesEnum.property);
+
 }

@@ -1,0 +1,30 @@
+<div class="vbox overflow-auto">
+    <table class="table table-borderless">
+        <colgroup>
+            <col class="narrowCol">
+            <col>
+            <col class="modifiedCol">
+            <col class="issuedCol">
+            <col class="narrowCol">
+        </colgroup>
+        <thead class="border-bottom">
+            <tr>
+                <th></th>
+                <th class="text-center">Dataset</th>
+                <th class="text-center">Issued</th>
+                <th class="text-center">Modified</th>
+            </tr>
+        </thead>
+        <tbody>
+            <mdr-tree-node *ngFor="let d of rootDatasets" [record]="d" [root]="true" [multiselection]="multiselection" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)"></mdr-tree-node>
+        </tbody>
+    </table>
+</div>
+
+<div #blockDivTree class="blockingDiv" style="display:none">
+    <div class="loadingDiv">
+        <div>
+            <p>Loading...</p><img src="./assets/images/loading.gif" />
+        </div>
+    </div>
+</div>

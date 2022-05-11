@@ -1,0 +1,28 @@
+.narrowCol {
+    width: 1%;
+}
+
+.issuedCol,
+.modifiedCol {
+    width: 130px;
+}
+
+mdr-tree-node {
+    /* In order to not brake style of table since mdr-tree-node contains tr of parent table */
+    display: contents;
+}
+
+.dataset-nature-icon {
+    display: inline-block;
+    width: 20px;
+}
+
+.dropdown-header {
+    /* color: black; */
+    font-size: 1rem;
+}
+
+a.dropdown-header:hover {
+    background-color: #e9ecef !important;
+    text-decoration: none;
+}

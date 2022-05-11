@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ARTURIResource, ResourcePosition } from '../models/ARTResources';
-import { CatalogRecord, DatasetMetadata, LexicalizationSetMetadata } from "../models/Metadata";
+import { ARTLiteral, ARTURIResource, ResourcePosition } from '../models/ARTResources';
+import { AbstractDatasetAttachment, CatalogRecord, CatalogRecord2, DatasetMetadata, Distribution, LexicalizationSetMetadata } from "../models/Metadata";
 import { Deserializer } from '../utils/Deserializer';
+import { STRequestParams } from '../utils/HttpManager';
 import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 
 @Injectable()
@@ -23,7 +24,7 @@ export class MetadataRegistryServices {
      * @return the IRI of the dcat:CatalogRecord created for it
      */
     addDataset(uriSpace: string, dataset?: ARTURIResource, title?: string, sparqlEndpoint?: ARTURIResource, dereferenceable?: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             uriSpace: uriSpace
         };
         if (dataset != null) {
@@ -48,7 +49,7 @@ export class MetadataRegistryServices {
      * @param dataset if not passed, a local IRI is created
      */
     addDatasetVersion(catalogRecord: ARTURIResource, versionInfo: string, dataset?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             catalogRecord: catalogRecord,
             versionInfo: versionInfo
         };
@@ -74,7 +75,7 @@ export class MetadataRegistryServices {
     addEmbeddedLexicalizationSet(dataset: ARTURIResource, lexicalizationModel: ARTURIResource, language: string,
         lexicalizationSet?: ARTURIResource, lexiconDataset?: ARTURIResource, references?: number, lexicalEntries?: number,
         lexicalizations?: number, percentage?: number, avgNumOfLexicalizations?: number) {
-        let params: any = {
+        let params: STRequestParams = {
             dataset: dataset,
             lexicalizationModel: lexicalizationModel,
             language: language
@@ -108,7 +109,7 @@ export class MetadataRegistryServices {
      * @param lexicalizationSet 
      */
     deleteEmbeddedLexicalizationSet(lexicalizationSet: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             lexicalizationSet: lexicalizationSet
         };
         return this.httpMgr.doPost(this.serviceName, "deleteEmbeddedLexicalizationSet", params);
@@ -119,7 +120,7 @@ export class MetadataRegistryServices {
      * @param dataset 
      */
     getEmbeddedLexicalizationSets(dataset: ARTURIResource): Observable<LexicalizationSetMetadata[]> {
-        let params: any = {
+        let params: STRequestParams = {
             dataset: dataset
         };
         return this.httpMgr.doGet(this.serviceName, "getEmbeddedLexicalizationSets", params);
@@ -131,7 +132,7 @@ export class MetadataRegistryServices {
      * @param title 
      */
     setTitle(dataset: ARTURIResource, title?: string) {
-        let params: any = {
+        let params: STRequestParams = {
             dataset: dataset,
         };
         if (title != null) {
@@ -148,7 +149,7 @@ export class MetadataRegistryServices {
      * @param value 
      */
     setDereferenciability(dataset: ARTURIResource, value?: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             dataset: dataset,
         };
         if (value != null) {
@@ -163,7 +164,7 @@ export class MetadataRegistryServices {
      * @param endpoint If null the endpoint is left unspecified
      */
     setSPARQLEndpoint(dataset: ARTURIResource, endpoint?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             dataset: dataset,
         };
         if (endpoint != null) {
@@ -178,7 +179,7 @@ export class MetadataRegistryServices {
      * @param limitation 
      */
     setSPARQLEndpointLimitation(endpoint: ARTURIResource, limitation?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             endpoint: endpoint,
         };
         if (endpoint != null) {
@@ -193,7 +194,7 @@ export class MetadataRegistryServices {
      * @param limitation 
      */
     removeSPARQLEndpointLimitation(endpoint: ARTURIResource, limitation?: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             endpoint: endpoint,
         };
         if (endpoint != null) {
@@ -207,7 +208,7 @@ export class MetadataRegistryServices {
      * @param catalogRecord 
      */
     deleteCatalogRecord(catalogRecord: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             catalogRecord: catalogRecord,
         };
         return this.httpMgr.doPost(this.serviceName, "deleteCatalogRecord", params);
@@ -218,7 +219,7 @@ export class MetadataRegistryServices {
      * @param dataset 
      */
     deleteDatasetVersion(dataset: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             dataset: dataset,
         };
         return this.httpMgr.doPost(this.serviceName, "deleteDatasetVersion", params);
@@ -228,7 +229,7 @@ export class MetadataRegistryServices {
      * Returns the catalog records
      */
     getCatalogRecords(): Observable<CatalogRecord[]> {
-        let params: any = {};
+        let params: STRequestParams = {};
         return this.httpMgr.doGet(this.serviceName, "getCatalogRecords", params).pipe(
             map(stResp => {
                 let records: CatalogRecord[] = [];
@@ -245,7 +246,7 @@ export class MetadataRegistryServices {
      * @param dataset 
      */
     getDatasetMetadata(dataset: ARTURIResource): Observable<DatasetMetadata> {
-        let params: any = {
+        let params: STRequestParams = {
             dataset: dataset
         };
         return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params).pipe(
@@ -261,7 +262,7 @@ export class MetadataRegistryServices {
      * @param dataset 
      */
     assessLexicalizationModel(dataset: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             dataset: dataset,
         };
         return this.httpMgr.doPost(this.serviceName, "assessLexicalizationModel", params);
@@ -272,7 +273,7 @@ export class MetadataRegistryServices {
      * @param iri 
      */
     findDataset(iri: ARTURIResource): Observable<ResourcePosition> {
-        let params: any = {
+        let params: STRequestParams = {
             iri: iri,
         };
         return this.httpMgr.doGet(this.serviceName, "findDataset", params).pipe(
@@ -288,7 +289,7 @@ export class MetadataRegistryServices {
      * @param iri 
      */
     discoverDataset(iri: ARTURIResource): Observable<ARTURIResource> {
-        let params: any = {
+        let params: STRequestParams = {
             iri: iri,
         };
         return this.httpMgr.doPost(this.serviceName, "discoverDataset", params).pipe(
@@ -305,12 +306,102 @@ export class MetadataRegistryServices {
      * @param coalesce whether or not merge linksets for the same pair of datasets
      */
     getEmbeddedLinksets(dataset: ARTURIResource, treshold?: number, coalesce?: boolean) {
-        let params: any = {
+        let params: STRequestParams = {
             dataset: dataset,
             treshold: treshold,
             coalesce: coalesce
         };
         return this.httpMgr.doGet(this.serviceName, "getEmbeddedLinksets", params);
+    }
+
+
+
+
+
+
+    createAbstractDataset(datasetLocalName: string, uriSpace: string, title?: ARTLiteral, description?: ARTLiteral): Observable<ARTURIResource> {
+        let params: STRequestParams = {
+            datasetLocalName: datasetLocalName,
+            uriSpace: uriSpace,
+            title: title,
+            description: description
+        };
+        return this.httpMgr.doPost(this.serviceName, "createAbstractDataset", params);
+    }
+
+    createConcreteDataset(datasetLocalName: string, uriSpace: string, title?: ARTLiteral, description?: ARTLiteral,
+        dereferenceable?: boolean, distribution?: Distribution, abstractDatasetAttachment?: AbstractDatasetAttachment): Observable<ARTURIResource> {
+        let params: STRequestParams = {
+            datasetLocalName: datasetLocalName,
+            uriSpace: uriSpace,
+            title: title,
+            description: description,
+            dereferenceable: dereferenceable,
+            distribution: new Map([
+                ["nature", distribution.nature.toNT()],
+                ["identity", distribution.identity],
+                ["sparqlEndpoint", distribution.sparqlEndpoint],
+                ["projectName", distribution.projectName]
+            ]),
+            abstractDatasetAttachment: abstractDatasetAttachment ? this.getAbstractDatasetAttachmentAsParam(abstractDatasetAttachment) : null
+        };
+        return this.httpMgr.doPost(this.serviceName, "createConcreteDataset", params);
+    }
+
+    listRootDatasets(): Observable<CatalogRecord2[]> {
+        let params: STRequestParams = {};
+        return this.httpMgr.doGet(this.serviceName, "listRootDatasets", params).pipe(
+            map(resp => {
+                let records: CatalogRecord2[] = resp.map((r: any) => CatalogRecord2.parse(r));
+                return records;
+            })
+        );
+    }
+
+    listConnectedDatasets(abstractDataset: ARTURIResource): Observable<CatalogRecord2[]> {
+        let params: STRequestParams = {
+            abstractDataset: abstractDataset,
+        };
+        return this.httpMgr.doGet(this.serviceName, "listConnectedDatasets", params).pipe(
+            map(resp => {
+                let records: CatalogRecord2[] = resp.map((r: any) => CatalogRecord2.parse(r));
+                return records;
+            })
+        );
+    }
+
+    connectToAbstractDataset(dataset: ARTURIResource, abstractDatasetAttachment: AbstractDatasetAttachment) {
+        let params: STRequestParams = {
+            dataset: dataset,
+            abstractDatasetAttachment: this.getAbstractDatasetAttachmentAsParam(abstractDatasetAttachment),
+        };
+        return this.httpMgr.doPost(this.serviceName, "connectToAbstractDataset", params);
+    }
+
+    spawnNewAbstractDataset(dataset1: ARTURIResource, abstractDatasetAttachment1: AbstractDatasetAttachment,
+        dataset2: ARTURIResource, abstractDatasetAttachment2: AbstractDatasetAttachment,
+        datasetLocalName: string, uriSpace: string, title?: ARTLiteral, description?: ARTLiteral) {
+        let params: STRequestParams = {
+            dataset1: dataset1,
+            abstractDatasetAttachment1: this.getAbstractDatasetAttachmentAsParam(abstractDatasetAttachment1),
+            dataset2: dataset2,
+            abstractDatasetAttachment2: this.getAbstractDatasetAttachmentAsParam(abstractDatasetAttachment2),
+            datasetLocalName: datasetLocalName,
+            uriSpace: uriSpace,
+            title: title,
+            description: description,
+        };
+        return this.httpMgr.doPost(this.serviceName, "connectToAbstractDataset", params);
+
+    }
+
+    private getAbstractDatasetAttachmentAsParam(abstractDatasetAttachment: AbstractDatasetAttachment): Map<string, string> {
+        return new Map([
+            ["abstractDataset", abstractDatasetAttachment.abstractDataset],
+            ["relation", abstractDatasetAttachment.relation.getURI()],
+            ["versionInfo", abstractDatasetAttachment.versionInfo],
+            ["versionNotes", abstractDatasetAttachment.versionNotes ? abstractDatasetAttachment.versionNotes.toNT() : null]
+        ]);
     }
 
 }

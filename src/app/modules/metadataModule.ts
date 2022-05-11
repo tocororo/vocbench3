@@ -6,6 +6,10 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { DatasetMetadataComponent } from "../metadata/metadataRegistry/datasetMetadataComponent";
 import { LexicalizationSetMetadataComponent } from '../metadata/metadataRegistry/lexicalizationSetMetadataComponent';
+import { MetadataRegistryTreeComponent } from "../metadata/metadataRegistry/mdrTree/mdrTreeComponent";
+import { MetadataRegistryTreeNodeComponent } from '../metadata/metadataRegistry/mdrTree/mdrTreeNodeComponent';
+import { MetadataRegistryTreePanelComponent } from '../metadata/metadataRegistry/mdrTree/mdrTreePanelComponent';
+import { NewDatasetModal } from '../metadata/metadataRegistry/mdrTree/newDatasetModal';
 import { MetadataRegistryComponent } from "../metadata/metadataRegistry/metadataRegistryComponent";
 import { NewCatalogRecordModal } from '../metadata/metadataRegistry/newCatalogRecordModal';
 import { NewDatasetVersionModal } from '../metadata/metadataRegistry/newDatasetVersionModal';
@@ -37,6 +41,9 @@ import { SharedModule } from './sharedModule';
         ImportTreeNodeComponent,
         LexicalizationSetMetadataComponent,
         MetadataRegistryComponent, 
+        MetadataRegistryTreeComponent,
+        MetadataRegistryTreeNodeComponent,
+        MetadataRegistryTreePanelComponent,
         MetadataVocabulariesComponent,
         NamespacesAndImportsComponent,
         //modals
@@ -45,6 +52,7 @@ import { SharedModule } from './sharedModule';
         ImportFromDatasetCatalogModal,
         OntologyMirrorModal,
         NewCatalogRecordModal,
+        NewDatasetModal,
         NewDatasetVersionModal,
         NewEmbeddedLexicalizationModal
     ],
@@ -56,6 +64,7 @@ import { SharedModule } from './sharedModule';
         ImportFromDatasetCatalogModal,
         OntologyMirrorModal,
         NewCatalogRecordModal,
+        NewDatasetModal,
         NewDatasetVersionModal, 
         NewEmbeddedLexicalizationModal
     ]

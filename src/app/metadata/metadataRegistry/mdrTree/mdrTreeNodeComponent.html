@@ -1,0 +1,54 @@
+<tr [ngClass]="{ 'table-primary': record['selected'] }">
+    <td class="clickable pr-0">
+        <div style="width: 16px">
+            <ng-container *ngIf="showExpandCollapseBtn">
+                <img *ngIf="!open" src="./assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode()">
+                <img *ngIf="open" src="./assets/images/icons/arrow.png" (click)="collapseNode()">
+            </ng-container>
+        </div>
+    </td>
+    <td (click)="selectNode()" class="clickable mr-2" nowrap>
+        <span [ngSwitch]="record.dataset.nature" class="dataset-nature-icon">
+            <img *ngSwitchCase="'PROJECT'" src="./assets/images/icons/vb_16x16.png" height="16px" width="16px">
+            <img *ngSwitchCase="'RDF4J_REPOSITORY'" src="./assets/images/icons/rdf4j_16x16.png" height="16px" width="16px">
+            <img *ngSwitchCase="'GRAPHDB_REPOSITORY'" src="./assets/images/icons/gdb_16x16.png" height="16px" width="16px">
+            <img *ngSwitchCase="'SPARQL_ENDPOINT'" src="./assets/images/icons/res/ontology.png" height="16px" width="16px">
+            <span *ngSwitchCase="'ABSTRACT'" class="fas fa-folder-open"></span>
+            <span *ngSwitchCase="'MIX'" class="fas fa-layer-group"></span>
+        </span>
+        <label *ngIf="record.dataset.titles.length > 0" class="ml-1">{{title.getValue()}}:</label>
+        <span class="ml-1">{{record.dataset.uriSpace}}</span>
+        <span *ngIf="record.dataset.role" class="ml-2">
+            <ng-container [ngSwitch]="record.dataset.role">
+                <span *ngSwitchCase="'MASTER'" class="badge badge-primary" title="Master">M</span>
+                <span *ngSwitchCase="'LOD'" class="badge badge-success" title="Lod">L</span>
+                <span *ngSwitchCase="'VERSION'" class="badge badge-secondary" title="Version">V</span>
+            </ng-container>
+        </span>
+    </td>
+    <td class="text-center clickable" (click)="selectNode()">{{issuedLocal}}</td>
+    <td class="text-center clickable" (click)="selectNode()">{{modifiedLocal}}</td>
+    <td>
+        <div *ngIf="multiselection" style="width: 32px;">
+            <input *ngIf="record.dataset.role == 'ROOT' && record.dataset.nature == 'ABSTRACT'" type="checkbox" [(ngModel)]="record['checked']" (ngModelChange)="onNodeChecked()">
+        </div>
+    </td>
+</tr>
+
+<!-- <tr *ngIf="dataset.abstract && open">
+    <td class="expandCollapseBtnContainer"></td>
+    <td colspan="4" class="p-0">
+        <table class="table table-borderless">
+            <colgroup>
+                <col class="narrowCol">
+                <col>
+                <col class="modifiedCol">
+                <col class="issuedCol">
+                <col class="narrowCol">
+            </colgroup>
+            <tbody>
+                <mdr-tree-node *ngFor="let d of children" [dataset]="d" [multiselection]="multiselection" (nodeSelected)="onNodeSelected($event)"></mdr-tree-node>
+            </tbody>
+        </table>
+    </td>
+</tr> -->

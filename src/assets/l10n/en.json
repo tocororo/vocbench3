@@ -2039,6 +2039,7 @@
             "SHOW_HIDE_INFERRED": "Show/hide inferred information",
             "SHOW_IN_DATA_GRAPH": "Show in data-oriented graph",
             "SPAWN_CONCEPT_FROM_XLABEL": "Spawn new concept from xLabel",
+            "TOGGLE_CUSTOM_VIEW": "Render Custom View",
             "TOGGLE_NOTIFICATIONS": "Enable/disable notifications on this resource",
             "TOGGLE_VALUE_FILTER_LANG": "Enable/disable value-filter on languages"
         },

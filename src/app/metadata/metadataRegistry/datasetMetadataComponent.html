@@ -1,4 +1,4 @@
-<div class="card card-default">
+<!-- <div class="card card-default">
     <div class="card-body">
         <table class="table table-borderless table-sm">
             <colgroup>
@@ -60,6 +60,71 @@
                         <input class="form-control" [ngModel]="dataset?.versionInfo" disabled>
                     </td>
                 </tr>
+            </tbody>
+        </table>
+    </div>
+</div> -->
+
+<div class="card card-default">
+    <div class="card-body">
+        <table class="table table-borderless table-sm">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td><label>{{'Titles'|translate}}:</label></td>
+                    <td>
+                        <lang-string-editor *ngFor="let t of dataset.titles; let i = index" [(ngModel)]="dataset.titles[i]" [disabled]="true"></lang-string-editor>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.IDENTITY'|translate}}:</label></td>
+                    <td>
+                        <input class="form-control" [ngModel]="dataset?.identity.getURI()" disabled>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.DEREFERENCIATION_SYSTEM'|translate}}:</label></td>
+                    <td>
+                        <input-editable type="select" [options]="dereferenciationValues" [value]="dereferenciationNormalized"
+                            (valueEdited)="updateDerefSystem($event)" [disabled]="!dataset">
+                        </input-editable>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>{{'MODELS.MAPLE.DATASET.SPARQL_ENDPOINT'|translate}}:</label></td>
+                    <td>
+                        <div class="hbox" style="align-items: center;">
+                            <input-editable style="flex: 1; margin-right: 4px;" [value]="dataset?.sparqlEndpointMetadata.id"
+                                (valueEdited)="updateSparqlEndpoint($event)" [disabled]="!dataset" allowEmpty="true">
+                            </input-editable>
+                            <div class="form-check ml-2">
+                                <input class="form-check-input" id="aggregationCheck" type="checkbox" [(ngModel)]="sparqlLimitations" (ngModelChange)="updateSparqlLimitations()"
+                                    [disabled]="!dataset?.sparqlEndpointMetadata.id">
+                                <label class="form-check-label" for="aggregationCheck">
+                                    {{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION'|translate}}
+                                    <span class="fas fa-info-circle ml-2" 
+                                        [title]="'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION_INFO'|translate">
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr> -->
+                <tr>
+                    <td><label>{{'MODELS.MAPLE.DATASET.URI_SPACE'|translate}}:</label></td>
+                    <td>
+                        <input class="form-control" [ngModel]="dataset?.uriSpace" disabled>
+                    </td>
+                </tr>
+                <!-- <tr *ngIf="version">
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_INFO'|translate}}:</label></td>
+                    <td>
+                        <input class="form-control" [ngModel]="dataset?.versionInfo" disabled>
+                    </td>
+                </tr> -->
             </tbody>
         </table>
     </div>

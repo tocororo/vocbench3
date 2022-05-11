@@ -1,7 +1,8 @@
 import { VBContext } from "../utils/VBContext";
+import { ARTLiteral } from './ARTResources';
 
 export class Countries {
-    
+
     static countryList = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
         "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas",
         "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia",
@@ -32,7 +33,7 @@ export class Countries {
         "United States Minor Outlying Islands", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City State",
         "Venezuela", "Viet Nam", "Virgin Islands British", "Virgin Islands U.S.", "Wallis and Futuna", "Western Sahara", "Yemen",
         "Zambia", "Zimbabwe"];
-    
+
 }
 
 export class Languages {
@@ -41,7 +42,7 @@ export class Languages {
     public static readonly NO_LANG_TAG = "--";
 
     static priorityLangs = ["en", "fr", "it", "es", "de"];
-    
+
     static sortLanguages(languages: Language[]) {
         languages.sort((l1: Language, l2: Language) => {
             if (l1.tag > l2.tag) return 1;
@@ -129,4 +130,49 @@ export class Language {
 export class LanguageConstraint {
     public constrain: boolean; //if true, constrain the selection of a language only to a given language
     public locale: boolean; //if true, allow the selection of also the locale of a given language
+}
+
+
+export class LanguageUtils {
+
+    /**
+     * returns the localized value according the following order:
+     * - the language set for interface translation
+     * - the browser language
+     * - priority languages in VB
+     * - first localized available
+     */
+    static getLocalizedLiteral(localizedList: ARTLiteral[], translationLang: string): ARTLiteral {
+        let localized: ARTLiteral;
+        localized = localizedList.find(t => t.getLang() == translationLang);
+        if (localized != null) {
+            return localized;
+        }
+
+        //if not found, try with the browser language
+        let browserLang = navigator.language || navigator['userLanguage'];
+        localized = localizedList.find(t => t.getLang() == browserLang);
+        if (localized != null) {
+            return localized;
+        }
+        //if the browser language has a country code (e.g. en-GB, it-IT), look only for the lang code
+        if (browserLang.includes("-")) {
+            browserLang = browserLang.substring(0, browserLang.indexOf("-"));
+            localized = localizedList.find(t => t.getLang() == browserLang);
+            if (localized != null) {
+                return localized;
+            }
+        }
+        
+        //if still not found, returns the first according priority langs
+        let prioritizedLang = Languages.priorityLangs.find(l => localizedList.some(t => t.getLang() == l));
+        localized = localizedList.find(t => t.getLang() == prioritizedLang);
+        if (localized != null) {
+            return localized;
+        }
+
+        //still not found, returns the first available
+        return localizedList[0];
+    }
+
 }

@@ -98,6 +98,80 @@ export class CatalogRecord {
     }
 }
 
+export class CatalogRecord2 {
+    identity: ARTURIResource;
+    dataset: DatasetMetadata2;
+    issued: Date;
+    modified?: Date;
+
+    public static parse(catalogRecordJson: any): CatalogRecord2 {
+        let record = new CatalogRecord2();
+        record.identity = new ARTURIResource(catalogRecordJson.identity);
+        record.dataset = DatasetMetadata2.parse(catalogRecordJson.dataset);
+        record.issued = new Date(catalogRecordJson.issued);
+        record.modified = catalogRecordJson.modified ? new Date(catalogRecordJson.modified) : null;
+        return record;
+    }
+}
+
+export class DatasetMetadata2 {
+
+    identity: ARTURIResource;
+    uriSpace: string;
+    otherURISpaces: string[];
+    nature: DatasetNature;
+    titles: ARTLiteral[];
+    descriptions: ARTLiteral[];
+    role: DatasetRole;
+    versionInfo: string;
+    versionNotes: string;
+
+    public static parse(datasetMetadataJson: any): DatasetMetadata2 {
+        let dataset = new DatasetMetadata2();
+        dataset.identity = new ARTURIResource(datasetMetadataJson.identity);
+        dataset.uriSpace = datasetMetadataJson.uriSpace;
+        dataset.otherURISpaces = datasetMetadataJson.otherURISpaces;
+        dataset.nature = datasetMetadataJson.nature;
+        dataset.titles = datasetMetadataJson.titles.map((t: string) => NTriplesUtil.parseLiteral(t));
+        dataset.descriptions = datasetMetadataJson.descriptions.map((d: string) => NTriplesUtil.parseLiteral(d));
+        dataset.role = datasetMetadataJson.role;
+        dataset.versionInfo = datasetMetadataJson.versionInfo;
+        dataset.versionNotes = datasetMetadataJson.versionNotes;
+        return dataset;
+    }
+}
+
+export enum DatasetNature {
+    ABSTRACT = "ABSTRACT",
+    PROJECT = "PROJECT",
+    SPARQL_ENDPOINT = "SPARQL_ENDPOINT",
+    RDF4J_REPOSITORY = "RDF4J_REPOSITORY",
+    GRAPHDB_REPOSITORY = "GRAPHDB_REPOSITORY",
+    MIX = "MIX"
+}
+
+export enum DatasetRole {
+    ROOT = "ROOT",
+    VERSION = "VERSION",
+    MASTER = "MASTER",
+    LOD = "LOD"
+}
+
+export interface Distribution {
+    nature: ARTURIResource;
+    //according the nature, the following are required
+    identity?: string;
+    sparqlEndpoint?: string;
+    projectName?: string;
+}
+
+export interface AbstractDatasetAttachment {
+    abstractDataset: string;
+    relation: ARTURIResource;
+    versionInfo?: string;
+    versionNotes?: ARTLiteral;
+}
+
 export class SparqlEndpointMetadata {
     id: string;
     limitations: string[];
