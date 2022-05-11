@@ -248,6 +248,7 @@ export class HeaderEditorModal {
 
     private openAdvancedGraphApplicationModal(header: SimpleHeader, graphApplication: AdvancedGraphApplication) {
         const modalRef: NgbModalRef = this.modalService.open(AdvancedGraphApplicationModal, new ModalOptions('lg'));
+        modalRef.componentInstance.sheetName = this.sheetName;
         modalRef.componentInstance.header = header;
         modalRef.componentInstance.graphApplication = graphApplication;
         return modalRef.result;
