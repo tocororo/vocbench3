@@ -73,13 +73,13 @@
                 <col>
             </colgroup>
             <tbody>
-                <tr>
+                <tr nowrap>
                     <td><label>{{'Titles'|translate}}:</label></td>
                     <td>
                         <lang-string-editor *ngFor="let t of dataset.titles; let i = index" [(ngModel)]="dataset.titles[i]" [disabled]="true"></lang-string-editor>
                     </td>
                 </tr>
-                <tr>
+                <tr nowrap>
                     <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.IDENTITY'|translate}}:</label></td>
                     <td>
                         <input class="form-control" [ngModel]="dataset?.identity.getURI()" disabled>
@@ -114,7 +114,7 @@
                     </td>
                 </tr> -->
                 <tr>
-                    <td><label>{{'MODELS.MAPLE.DATASET.URI_SPACE'|translate}}:</label></td>
+                    <td nowrap><label>{{'MODELS.MAPLE.DATASET.URI_SPACE'|translate}}:</label></td>
                     <td>
                         <input class="form-control" [ngModel]="dataset?.uriSpace" disabled>
                     </td>

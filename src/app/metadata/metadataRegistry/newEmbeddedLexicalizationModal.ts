@@ -12,7 +12,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
     templateUrl: "./newEmbeddedLexicalizationModal.html",
 })
 export class NewEmbeddedLexicalizationModal {
-    @Input() catalogRecordIdentity: string;
+    @Input() catalogRecordIdentity: ARTURIResource;
 
     lexicalModelList = [
         { value: RDFS.uri, label: "RDFS" },
@@ -64,7 +64,7 @@ export class NewEmbeddedLexicalizationModal {
             return;
         }
 
-        this.metadataRegistryService.addEmbeddedLexicalizationSet(new ARTURIResource(this.catalogRecordIdentity),
+        this.metadataRegistryService.addEmbeddedLexicalizationSet(this.catalogRecordIdentity,
             new ARTURIResource(this.lexicalizationModel), this.language, lexicalizationSetPar, lexiconDatasetPar,
             this.references, this.lexicalEntries, this.lexicalizations, this.percentage, this.avgNumOfLexicalizations).subscribe(
                 stReps => {

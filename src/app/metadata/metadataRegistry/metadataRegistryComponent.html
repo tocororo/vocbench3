@@ -51,41 +51,40 @@
         <div class="card-header">
             <label>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label>
         </div>
-        <div class="card-body hbox">
+        <div class="card-body vbox">
 
-            <div class="vbox">
-                <dataset-metadata [dataset]="selectedCatalogRecord2.dataset"></dataset-metadata>
+            <dataset-metadata [dataset]="selectedCatalogRecord2.dataset"></dataset-metadata>
                 
-                <!-- <div class="card card-alt vbox mt-2">
-                    <div class="card-header">
-                        <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.OTHER_VERSIONS'|translate}}:</label>
-                        <div class="btn-group btn-group-xs">
-                            <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.ADD_DATASET_VERSION'|translate" (click)="addDatasetVersion()"
-                                [disabled]="!catalogRecordDataset || !isAddDatasetAuthorized()">
-                                <span class="fas fa-plus"></span>
-                            </button>
-                            <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_DATASET_VERSION'|translate" (click)="deleteDatasetVersion()"
-                                [disabled]="!selectedDataset?.isVersion || !isRemoveDatasetAuthorized()">
-                                <span class="fas fa-minus"></span>
-                            </button>
-                        </div>
+                
+            <!-- <div class="card card-alt vbox mt-2">
+                <div class="card-header">
+                    <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.OTHER_VERSIONS'|translate}}:</label>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.ADD_DATASET_VERSION'|translate" (click)="addDatasetVersion()"
+                            [disabled]="!catalogRecordDataset || !isAddDatasetAuthorized()">
+                            <span class="fas fa-plus"></span>
+                        </button>
+                        <button class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_DATASET_VERSION'|translate" (click)="deleteDatasetVersion()"
+                            [disabled]="!selectedDataset?.isVersion || !isRemoveDatasetAuthorized()">
+                            <span class="fas fa-minus"></span>
+                        </button>
                     </div>
-                    <div class="card-body scrollableContainer">
-                        <dataset-metadata *ngFor="let v of selectedCatalogRecord?.versions" [dataset]="v" class="mb-1"
-                            (click)="selectVersion(v)" [ngClass]="{ activePanel : v == selectedDataset?.dataset }" version="true"
-                            (update)="onVersionUpdate()">
-                        </dataset-metadata>
-                    </div>
-                </div> -->
-            </div>
+                </div>
+                <div class="card-body scrollableContainer">
+                    <dataset-metadata *ngFor="let v of selectedCatalogRecord?.versions" [dataset]="v" class="mb-1"
+                        (click)="selectVersion(v)" [ngClass]="{ activePanel : v == selectedDataset?.dataset }" version="true"
+                        (update)="onVersionUpdate()">
+                    </dataset-metadata>
+                </div>
+            </div> -->
             
-            <div class="vbox ml-1">
+            <div class="vbox mt-2">
                 <div class="card card-alt vbox blockingDivHost">
                     <div class="card-header">
                         <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.EMBEDDED_LEXICALIZATION_SETS'|translate}}:</label>
                         <div class="btn-group btn-group-xs">
                             <div class="btn-group" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate" ngbDropdown>
-                                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!selectedDataset || !isAddEmbeddedLexicalizationSetAuthorized()">
+                                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!selectedCatalogRecord2 || !isAddEmbeddedLexicalizationSetAuthorized()">
                                     <span class="fas fa-plus"></span>
                                 </button>
                                 <div class="dropdown-menu float-right" ngbDropdownMenu>

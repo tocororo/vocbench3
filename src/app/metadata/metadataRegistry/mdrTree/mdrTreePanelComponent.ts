@@ -1,7 +1,11 @@
-import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ARTURIResource } from 'src/app/models/ARTResources';
 import { CatalogRecord2 } from 'src/app/models/Metadata';
 import { MetadataRegistryServices } from 'src/app/services/metadataRegistryServices';
+import { ResourceUtils } from 'src/app/utils/ResourceUtils';
+import { UIUtils } from 'src/app/utils/UIUtils';
+import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { MetadataRegistryTreeComponent } from './mdrTreeComponent';
 import { NewDatasetModal } from './newDatasetModal';
@@ -17,6 +21,7 @@ export class MetadataRegistryTreePanelComponent {
     @Output() nodeSelected = new EventEmitter<CatalogRecord2>();
     // @Output() nodeChecked = new EventEmitter<ConcreteDatasetMockup>();
     @ViewChild(MetadataRegistryTreeComponent) viewChildTree: MetadataRegistryTreeComponent;
+    @ViewChild('blockingDiv', { static: false }) private blockingDivElement: ElementRef;
 
     multiselection: boolean = false;
 
@@ -24,7 +29,7 @@ export class MetadataRegistryTreePanelComponent {
     checkedRecords: CatalogRecord2[] = [];
 
 
-    constructor(private metadataRegistryService: MetadataRegistryServices, private modalService: NgbModal) { }
+    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     // createAbstractDataset() {
     //     let datasetLocalName = "AGROVOC";
@@ -39,6 +44,27 @@ export class MetadataRegistryTreePanelComponent {
         // modalRef.componentInstance.group = group;
         modalRef.result.then(
             () => { this.refresh(); }
+        );
+    }
+
+    discoverDataset() {
+        this.basicModals.prompt({ key: "METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET" }, {
+            value: "Resource IRI", tooltip: "This IRI can be directly the IRI of the VoID description " +
+                "of the Dataset (the instance of void:Dataset) or the IRI of any resource in the Dataset that points to this VoID description"
+        }).then(
+            iri => {
+                if (ResourceUtils.testIRI(iri)) {
+                    UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+                    this.metadataRegistryService.discoverDataset(new ARTURIResource(iri)).subscribe(
+                        stResp => {
+                            UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                            this.refresh();
+                        }
+                    );
+                } else {
+                    this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: iri } });
+                }
+            }
         );
     }
 

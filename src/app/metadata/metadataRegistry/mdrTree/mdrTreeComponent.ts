@@ -32,6 +32,8 @@ export class MetadataRegistryTreeComponent {
         this.metadataRegistryService.listRootDatasets().subscribe(
             records => {
                 this.rootDatasets = records;
+                this.nodeSelected.emit(null);
+                this.nodeChecked.emit([]);
             }
         );
     }
