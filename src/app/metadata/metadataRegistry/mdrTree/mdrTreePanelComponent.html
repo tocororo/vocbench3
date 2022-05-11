@@ -14,12 +14,9 @@
                         <span class="fas fa-plus"></span>
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="createAbstractDataset()">Create abstract dataset</a>
+                        <a class="dropdown-item" (click)="createConcreteDataset()">Create concrete dataset</a>
+                        <!-- <a class="dropdown-item" (click)="createAbstractDataset()">Create abstract dataset</a> -->
                         <a class="dropdown-item" (click)="discoverDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET'|translate}}</a>
-                        <!-- <a class="dropdown-item" (click)="createConcreteDataset()">
-                            Create concrete dataset
-                        </a> -->
-
                     </div>
                 </div>
                 <button class="btn btn-light" (click)="deleteRecord()" [disabled]="!selectedRecord">
