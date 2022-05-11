@@ -75,7 +75,6 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
 
         if (this.literalValue) {
             this.stringValue = this.literalValue.getValue();
-            console.log(this.literalValue);
             if (this.literalValue.getLang() != null) { //prevent error if literal without lang
                 this.lang = Languages.getLanguageFromTag(this.literalValue.getLang());
             }

@@ -75,7 +75,8 @@ export class NewDatasetModal {
 
     
     isInputValid() {
-        return this.uriSpace != null && this.uriSpace.trim() != "";
+        return this.datasetName != null && this.datasetName.trim() != "" && 
+            this.uriSpace != null && this.uriSpace.trim() != "";
     }
 
     ok() {

@@ -5,7 +5,6 @@
             <col>
             <col class="modifiedCol">
             <col class="issuedCol">
-            <col class="narrowCol">
         </colgroup>
         <thead class="border-bottom">
             <tr>
@@ -16,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            <mdr-tree-node *ngFor="let d of rootDatasets" [record]="d" [root]="true" [multiselection]="multiselection" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)"></mdr-tree-node>
+            <mdr-tree-node *ngFor="let d of rootDatasets" [record]="d" [root]="true" (nodeSelected)="onNodeSelected($event)"></mdr-tree-node>
         </tbody>
     </table>
 </div>

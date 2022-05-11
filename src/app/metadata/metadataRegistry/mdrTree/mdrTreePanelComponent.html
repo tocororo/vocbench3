@@ -14,7 +14,9 @@
                         <span class="fas fa-plus"></span>
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="createConcreteDataset()">Create concrete dataset</a>
+                        <a class="dropdown-item" (click)="createConcreteDataset()">{{'Create concrete dataset'|translate}}</a>
+                        <a class="dropdown-item" (click)="connectToAbstractDataset()" [ngClass]="{ disabled: !selectedRecord || selectedRecord.dataset.role != 'ROOT' || selectedRecord.dataset.nature == 'ABSTRACT' }">{{'Connect to abstract dataset'|translate}}</a>
+                        <a class="dropdown-item" (click)="spawnNewAbstractDataset()">{{'Spawn new abstract dataset'|translate}}</a>
                         <!-- <a class="dropdown-item" (click)="createAbstractDataset()">Create abstract dataset</a> -->
                         <a class="dropdown-item" (click)="discoverDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET'|translate}}</a>
                     </div>
@@ -28,45 +30,22 @@
             </button>
         </div>
 
-        <div class="dropdown" ngbDropdown>
+        <!-- <div class="dropdown" ngbDropdown>
             <button class="dropdown-toggle transparentBtn ml-1" data-toggle="dropdown" ngbDropdownToggle>
                 <span class="fas fa-caret-down"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <!-- <ng-container *ngIf="selectedDataset?.concrete">
-                    <a class="dropdown-item" (click)="addToExistingDataset()">
-                        Add to an existing abstract dataset
-                    </a>
-                    <a class="dropdown-item" (click)="addNewDataset()">
-                        Add to a new abstract dataset
-                    </a>
-                    <div class="dropdown-divider"></div>
-                </ng-container> -->
-                <a *ngIf="!multiselection" class="dropdown-item" style="white-space: nowrap;" (click)="toggleMultiselection()">
-                    <span class="far fa-check-square mr-2"></span>
-                    Multiple datasets actions
+                <a class="dropdown-item" style="white-space: nowrap;" (click)="toggleMultiselection()"  [disabled]="!selectedRecord || selectedRecord.dataset.role != 'ROOT' || selectedRecord.dataset.nature != 'ABSTRACT'">
+                    Connect to abstract dataset
                 </a>
-                <ng-container *ngIf="multiselection">
-                    <a class="dropdown-header text-dark" (click)="toggleMultiselection()">
-                        <div class="d-flex align-items-center" style="white-space: nowrap;">
-                            <span class="far fa-check-square mr-2"></span>
-                            <span style="flex: 1">Multiple datasets actions</span>
-                            <span class="fas fa-check float-right ml-2"></span>
-                        </div>
-                    </a>
-                    <a class="dropdown-item" [ngClass]="{ disabled: checkedRecords.length == 0 }" (click)="mergeDistributions()">
-                        <span class="far fa-check-square" style="margin-right: 4px; margin-left: 16px;"></span>
-                        Merge distributions
-                    </a>
-                </ng-container>
             </div>
-        </div>
+        </div> -->
 
     </div>
 
     <!-- Tree -->
     <div class="card-body vbox">
-        <mdr-tree (nodeSelected)="onNodeSelected($event)" [multiselection]="multiselection" (nodeChecked)="onNodeChecked($event)"></mdr-tree>
+        <mdr-tree (nodeSelected)="onNodeSelected($event)"></mdr-tree>
     </div>
 
     <div class="card-footer">

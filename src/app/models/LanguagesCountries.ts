@@ -142,11 +142,13 @@ export class LanguageUtils {
      * - priority languages in VB
      * - first localized available
      */
-    static getLocalizedLiteral(localizedList: ARTLiteral[], translationLang: string): ARTLiteral {
+    static getLocalizedLiteral(localizedList: ARTLiteral[], translationLang?: string): ARTLiteral {
         let localized: ARTLiteral;
-        localized = localizedList.find(t => t.getLang() == translationLang);
-        if (localized != null) {
-            return localized;
+        if (translationLang != null) {
+            localized = localizedList.find(t => t.getLang() == translationLang);
+            if (localized != null) {
+                return localized;
+            }
         }
 
         //if not found, try with the browser language

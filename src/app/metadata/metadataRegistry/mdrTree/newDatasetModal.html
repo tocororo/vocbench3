@@ -12,10 +12,11 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td nowrap><label>{{'COMMONS.NAME'|translate}}:</label></td>
+                    <td nowrap><label>{{'Local name'|translate}}:</label></td>
                     <td>
-                        <input class="form-control" [(ngModel)]="datasetName">
+                        <input class="form-control" [(ngModel)]="datasetName" sanitized>
                     </td>
+                    <td>*</td>
                 </tr>
                 <tr>
                     <td nowrap><label>{{'COMMONS.TITLE'|translate}}:</label></td>

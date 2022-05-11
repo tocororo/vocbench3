@@ -338,7 +338,7 @@ export class MetadataRegistryServices {
             description: description,
             dereferenceable: dereferenceable,
             distribution: new Map([
-                ["nature", distribution.nature.toNT()],
+                ["nature", distribution.nature.getURI()],
                 ["identity", distribution.identity],
                 ["sparqlEndpoint", distribution.sparqlEndpoint],
                 ["projectName", distribution.projectName]

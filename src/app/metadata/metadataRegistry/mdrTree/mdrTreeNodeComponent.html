@@ -28,11 +28,6 @@
     </td>
     <td class="text-center clickable" (click)="selectNode()">{{issuedLocal}}</td>
     <td class="text-center clickable" (click)="selectNode()">{{modifiedLocal}}</td>
-    <td>
-        <div *ngIf="multiselection" style="width: 32px;">
-            <input *ngIf="record.dataset.role == 'ROOT' && record.dataset.nature != 'ABSTRACT'" type="checkbox" [(ngModel)]="record['checked']" (ngModelChange)="onNodeChecked()">
-        </div>
-    </td>
 </tr>
 
 <tr *ngIf="record.dataset.nature && open && children.length > 0">
@@ -44,10 +39,9 @@
                 <col>
                 <col class="modifiedCol">
                 <col class="issuedCol">
-                <col class="narrowCol">
             </colgroup>
             <tbody>
-                <mdr-tree-node *ngFor="let d of children" [dataset]="d" [multiselection]="multiselection" (nodeSelected)="onNodeSelected($event)"></mdr-tree-node>
+                <mdr-tree-node *ngFor="let d of children" [dataset]="d" (nodeSelected)="onNodeSelected($event)"></mdr-tree-node>
             </tbody>
         </table>
     </td>

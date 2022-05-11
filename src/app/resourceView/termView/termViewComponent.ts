@@ -218,13 +218,10 @@ export class TermViewComponent extends AbstractResourceView {
             if (langA != null && langB != null) {
                 return langA.localeCompare(langB);
             } else if (langA != null) {
-                console.log(a, b, "-1");
                 return -1;
             } else if (langB != null) {
-                console.log(a, b, "1");
                 return 1;
             } else {
-                console.log(a, b, "0");
                 return 0;
             }
         });

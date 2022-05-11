@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { ARTURIResource } from 'src/app/models/ARTResources';
 import { CatalogRecord2 } from 'src/app/models/Metadata';
 import { MetadataRegistryServices } from 'src/app/services/metadataRegistryServices';
@@ -26,10 +27,8 @@ export class MetadataRegistryTreePanelComponent {
     multiselection: boolean = false;
 
     selectedRecord: CatalogRecord2;
-    checkedRecords: CatalogRecord2[] = [];
 
-
-    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
+    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private modalService: NgbModal, private translate: TranslateService) { }
 
     // createAbstractDataset() {
     //     let datasetLocalName = "AGROVOC";
@@ -40,11 +39,38 @@ export class MetadataRegistryTreePanelComponent {
     // }
 
     createConcreteDataset() {
-        const modalRef: NgbModalRef = this.modalService.open(NewDatasetModal, new ModalOptions('lg'));
-        // modalRef.componentInstance.group = group;
-        modalRef.result.then(
-            () => { this.refresh(); }
+        this.modalService.open(NewDatasetModal, new ModalOptions('lg')).result.then(
+            () => { 
+                this.refresh();
+            },
+            () => {}
         );
+    }
+
+    connectToAbstractDataset() {
+        // this.metadataRegistryService.listRootDatasets().subscribe(
+        //     datasets => {
+        //         let abstractDatasets = datasets.filter(d => d.dataset.nature == DatasetNature.ABSTRACT);
+        //         let opts: SelectionOption[] = abstractDatasets.map(d => {
+        //             return {
+        //                 value: LanguageUtils.getLocalizedLiteral(d.dataset.titles).getValue(),
+        //                 description: d.dataset.identity.getURI()
+        //             };
+        //         });
+        //         this.basicModals.select({ key: "Connect to abstract dataset" }, { key: "Select the abstract dataset to connect to" }, opts).then(
+        //             (selection: SelectionOption) => {
+        //                 let abstractDataset = abstractDatasets.find(d => d.dataset.identity.getURI() == selection.description);
+        //                 this.metadataRegistryService.connectToAbstractDataset(this.selectedRecord.dataset.identity, abstractDataset.dataset.identity)
+        //             },
+        //             () => {}
+        //         )
+        //     }
+        // )
+        
+    }
+
+    spawnNewAbstractDataset() {
+
     }
 
     discoverDataset() {
@@ -71,6 +97,8 @@ export class MetadataRegistryTreePanelComponent {
     deleteRecord() {
         this.metadataRegistryService.deleteCatalogRecord(this.selectedRecord.identity).subscribe(
             () => {
+                this.selectedRecord = null;
+                this.nodeSelected.emit(null);
                 this.refresh();
             }
         );
@@ -96,7 +124,4 @@ export class MetadataRegistryTreePanelComponent {
         this.nodeSelected.emit(node);
     }
 
-    onNodeChecked(datasets: CatalogRecord2[]) {
-        this.checkedRecords = datasets;
-    }
 }

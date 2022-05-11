@@ -18,7 +18,6 @@ export class MetadataRegistryTreeComponent {
     rootDatasets: CatalogRecord2[] = [];
 
     selectedDataset: CatalogRecord2;
-    checkedDatasets: CatalogRecord2[] = [];
 
     constructor(private metadataRegistryService: MetadataRegistryServices) { }
 
@@ -32,7 +31,7 @@ export class MetadataRegistryTreeComponent {
         this.metadataRegistryService.listRootDatasets().subscribe(
             records => {
                 this.rootDatasets = records;
-                this.nodeSelected.emit(null);
+                // this.nodeSelected.emit(null);
                 this.nodeChecked.emit([]);
             }
         );
@@ -47,13 +46,5 @@ export class MetadataRegistryTreeComponent {
         this.nodeSelected.emit(node);
     }
 
-    onNodeChecked(node: CatalogRecord2) {
-        if (node['checked']) {
-            this.checkedDatasets.push(node);
-        } else {
-            this.checkedDatasets.splice(this.checkedDatasets.indexOf(node), 1);
-        }
-        this.nodeChecked.emit(this.checkedDatasets);
-    }
 
 }

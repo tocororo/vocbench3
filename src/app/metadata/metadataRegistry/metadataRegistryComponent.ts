@@ -2,17 +2,14 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin } from "rxjs";
-import { ModalOptions, TranslationUtils } from 'src/app/widget/modal/Modals';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
-import { CatalogRecord, CatalogRecord2, DatasetMetadata, LexicalizationSetMetadata } from "../../models/Metadata";
+import { CatalogRecord2, LexicalizationSetMetadata } from "../../models/Metadata";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
-import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { NewCatalogRecordModal } from "./newCatalogRecordModal";
-import { NewDatasetVersionModal } from "./newDatasetVersionModal";
 import { NewEmbeddedLexicalizationModal } from "./newEmbeddedLexicalizationModal";
 
 @Component({
@@ -76,9 +73,11 @@ export class MetadataRegistryComponent {
 
     onCatalogSelected(catalogRecord: CatalogRecord2) {
         this.selectedCatalogRecord2 = catalogRecord;
-        setTimeout(() => {
-            this.initEmbeddedLexicalizationSets();
-        });
+        if (this.selectedCatalogRecord2 != null) { //onCatalogSelected is invoked also when tree is initialized/refreshed and the selected node of the tree is nulls 
+            setTimeout(() => {
+                this.initEmbeddedLexicalizationSets();
+            });
+        }
     }
 
     /**

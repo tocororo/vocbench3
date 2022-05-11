@@ -15,9 +15,7 @@ export class MetadataRegistryTreeNodeComponent {
 
     @Input() record: CatalogRecord2;
     @Input() root: boolean;
-    @Input() multiselection: boolean;
     @Output() nodeSelected = new EventEmitter<CatalogRecord2>();
-    @Output() nodeChecked = new EventEmitter<CatalogRecord2>();
 
     @ViewChildren(MetadataRegistryTreeNodeComponent) viewChildrenNode: QueryList<MetadataRegistryTreeNodeComponent>;
 
@@ -60,10 +58,6 @@ export class MetadataRegistryTreeNodeComponent {
 
     onNodeSelected(node: CatalogRecord2) {
         this.nodeSelected.emit(node);
-    }
-
-    onNodeChecked() {
-        this.nodeChecked.emit(this.record); //checkbox is available only for concrete root datasets, the cast is safe
     }
 
 }
