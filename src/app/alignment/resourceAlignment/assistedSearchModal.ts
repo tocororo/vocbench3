@@ -163,7 +163,7 @@ export class AssistedSearchModal {
             this.profileMediationRemoteDataset();
         } else {
             //metadata availability has not been checked (the entry is not in the map) => check it
-            this.metadataRegistryService.getEmbeddedLexicalizationSets(new ARTURIResource(this.selectedDataset.identity)).subscribe(
+            this.metadataRegistryService.getEmbeddedLexicalizationSets(this.selectedDataset.identity).subscribe(
                 lexSet => {
                     this.datasetMetadataAvailabilityMap.set(this.selectedDataset, lexSet.length > 0);
                     this.profileMediationRemoteDataset();
@@ -202,7 +202,7 @@ export class AssistedSearchModal {
         if (this.targetPosition == ResourcePositionEnum.local) {
             resourcePosition = new LocalResourcePosition(this.selectedProject.getName());
         } else { //remote
-            resourcePosition = new RemoteResourcePosition(this.selectedDataset.identity);
+            resourcePosition = new RemoteResourcePosition(this.selectedDataset.identity.getURI());
         }
 
         this.mapleService.profileSingleResourceMatchProblem(this.resource, resourcePosition).subscribe(

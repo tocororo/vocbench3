@@ -1,15 +1,10 @@
 <div class="card card-default vbox blockingDivHost">
     
     <div class="card-header">
-        <label>Dataset catalog</label>
-
-        <div style="flex: 1"></div>
+        <label style="flex: 1">Dataset catalog</label>
         <div class="btn-toolbar">
             <div class="btn-group btn-group-xs">
-                <!-- <button class="btn btn-light" (click)="createConcreteDataset()">
-                    <span class="fas fa-plus"></span>
-                </button> -->
-                <div class="dropdown" ngbDropdown>
+                <div class="btn-group" ngbDropdown>
                     <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                         <span class="fas fa-plus"></span>
                     </button>
@@ -17,7 +12,6 @@
                         <a class="dropdown-item" (click)="createConcreteDataset()">{{'Create concrete dataset'|translate}}</a>
                         <a class="dropdown-item" (click)="connectToAbstractDataset()" [ngClass]="{ disabled: !selectedRecord || selectedRecord.dataset.role != 'ROOT' || selectedRecord.dataset.nature == 'ABSTRACT' }">{{'Connect to abstract dataset'|translate}}</a>
                         <a class="dropdown-item" (click)="spawnNewAbstractDataset()">{{'Spawn new abstract dataset'|translate}}</a>
-                        <!-- <a class="dropdown-item" (click)="createAbstractDataset()">Create abstract dataset</a> -->
                         <a class="dropdown-item" (click)="discoverDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET'|translate}}</a>
                     </div>
                 </div>
@@ -29,18 +23,6 @@
                 <span class="fas fa-redo"></span>
             </button>
         </div>
-
-        <!-- <div class="dropdown" ngbDropdown>
-            <button class="dropdown-toggle transparentBtn ml-1" data-toggle="dropdown" ngbDropdownToggle>
-                <span class="fas fa-caret-down"></span>
-            </button>
-            <div class="dropdown-menu" ngbDropdownMenu>
-                <a class="dropdown-item" style="white-space: nowrap;" (click)="toggleMultiselection()"  [disabled]="!selectedRecord || selectedRecord.dataset.role != 'ROOT' || selectedRecord.dataset.nature != 'ABSTRACT'">
-                    Connect to abstract dataset
-                </a>
-            </div>
-        </div> -->
-
     </div>
 
     <!-- Tree -->

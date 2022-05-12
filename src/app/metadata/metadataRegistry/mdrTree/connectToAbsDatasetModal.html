@@ -1,0 +1,51 @@
+<div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
+    <div class="modal-header" cdkDragHandle>
+        <h3 class="modal-title">{{'Connect to abstract dataset'|translate}}</h3>
+    </div>
+    <div class="modal-body">
+
+        <table class="table table-sm table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td nowrap><label>{{'Abstract Dataset'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="abstractDatasetAttached">
+                            <option *ngFor="let d of abstractDatasets" [ngValue]="d">{{d.dataset['localizedTitle']}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'Relation'|translate}}:</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="absDatasetRelation">
+                            <option *ngFor="let r of datasetRelationOpts" [ngValue]="r.id">{{r.label}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <ng-container *ngIf="absDatasetRelation == 'version'">
+                    <tr>
+                        <td nowrap><label>{{'Version info'|translate}}:</label></td>
+                        <td>
+                            <input class="form-control" [(ngModel)]="versionInfo">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap><label>{{'Version notes'|translate}}:</label></td>
+                        <td>
+                            <lang-string-editor [(ngModel)]="versionNotes"></lang-string-editor>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+    </div>
+</div>

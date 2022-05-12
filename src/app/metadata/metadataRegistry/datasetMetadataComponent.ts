@@ -3,7 +3,7 @@ import { ARTURIResource } from 'src/app/models/ARTResources';
 import { MdrVoc } from 'src/app/models/Vocabulary';
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { DatasetMetadata, DatasetMetadata2 } from "../../models/Metadata";
+import { DatasetMetadata, DatasetMetadata2, DatasetNature } from "../../models/Metadata";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
@@ -16,7 +16,6 @@ export class DatasetMetadataComponent {
     @Input() dataset: DatasetMetadata2;
 
     datasetMetadata: DatasetMetadata;
-    // @Input() version: boolean = false; //tells if the DatasetMetadata represents a version. This deteremines whether to show/hide the "Version Info"
     @Output() update = new EventEmitter();
 
     private dereferUnknown: string = "Unknown";
@@ -32,7 +31,9 @@ export class DatasetMetadataComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['dataset'] && changes['dataset'].currentValue) {
-            this.initDatasetMetadata();
+            if (this.dataset.nature != DatasetNature.ABSTRACT) {
+                this.initDatasetMetadata();
+            }
         }
     }
 
@@ -89,7 +90,7 @@ export class DatasetMetadataComponent {
                 return;
             }
         }
-        this.metadataRegistryService.setSPARQLEndpoint(new ARTURIResource(this.datasetMetadata.identity), sparqlEndpoint).subscribe(
+        this.metadataRegistryService.setSPARQLEndpoint(this.datasetMetadata.distribution, sparqlEndpoint).subscribe(
             stResp => {
                 this.initDatasetMetadata();
                 this.update.emit();
@@ -108,7 +109,7 @@ export class DatasetMetadataComponent {
         } else { //custom choice, available only if it was already the dereferenciationSystem, so it wasn't canged
             return;
         }
-        this.metadataRegistryService.setDereferenciability(new ARTURIResource(this.datasetMetadata.identity), dereferenciablePar).subscribe(
+        this.metadataRegistryService.setDereferenciability(this.datasetMetadata.identity, dereferenciablePar).subscribe(
             () => {
                 this.update.emit();
             }

@@ -41,7 +41,7 @@
                 <col class="issuedCol">
             </colgroup>
             <tbody>
-                <mdr-tree-node *ngFor="let d of children" [dataset]="d" (nodeSelected)="onNodeSelected($event)"></mdr-tree-node>
+                <mdr-tree-node *ngFor="let d of children" [record]="d" (nodeSelected)="onNodeSelected($event)"></mdr-tree-node>
             </tbody>
         </table>
     </td>

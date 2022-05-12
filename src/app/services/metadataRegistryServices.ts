@@ -391,7 +391,7 @@ export class MetadataRegistryServices {
             title: title,
             description: description,
         };
-        return this.httpMgr.doPost(this.serviceName, "connectToAbstractDataset", params);
+        return this.httpMgr.doPost(this.serviceName, "spawnNewAbstractDataset", params);
 
     }
 

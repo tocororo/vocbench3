@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ARTURIResource } from 'src/app/models/ARTResources';
 import { CatalogRecord2 } from 'src/app/models/Metadata';
@@ -7,9 +7,10 @@ import { MetadataRegistryServices } from 'src/app/services/metadataRegistryServi
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
 import { UIUtils } from 'src/app/utils/UIUtils';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
-import { ModalOptions } from 'src/app/widget/modal/Modals';
+import { ModalOptions, TextOrTranslation, TranslationUtils } from 'src/app/widget/modal/Modals';
+import { ConnectToAbsDatasetModal } from './connectToAbsDatasetModal';
 import { MetadataRegistryTreeComponent } from './mdrTreeComponent';
-import { NewDatasetModal } from './newDatasetModal';
+import { NewDatasetModal, NewDatasetModeEnum } from './newDatasetModal';
 
 @Component({
     selector: "mdr-tree-panel",
@@ -39,39 +40,41 @@ export class MetadataRegistryTreePanelComponent {
     // }
 
     createConcreteDataset() {
-        this.modalService.open(NewDatasetModal, new ModalOptions('lg')).result.then(
-            () => { 
+        this.openNewDatasetModal("Create concrete dataset", NewDatasetModeEnum.createConcrete).then(
+            () => {
                 this.refresh();
             },
-            () => {}
+            () => { }
         );
     }
 
     connectToAbstractDataset() {
-        // this.metadataRegistryService.listRootDatasets().subscribe(
-        //     datasets => {
-        //         let abstractDatasets = datasets.filter(d => d.dataset.nature == DatasetNature.ABSTRACT);
-        //         let opts: SelectionOption[] = abstractDatasets.map(d => {
-        //             return {
-        //                 value: LanguageUtils.getLocalizedLiteral(d.dataset.titles).getValue(),
-        //                 description: d.dataset.identity.getURI()
-        //             };
-        //         });
-        //         this.basicModals.select({ key: "Connect to abstract dataset" }, { key: "Select the abstract dataset to connect to" }, opts).then(
-        //             (selection: SelectionOption) => {
-        //                 let abstractDataset = abstractDatasets.find(d => d.dataset.identity.getURI() == selection.description);
-        //                 this.metadataRegistryService.connectToAbstractDataset(this.selectedRecord.dataset.identity, abstractDataset.dataset.identity)
-        //             },
-        //             () => {}
-        //         )
-        //     }
-        // )
-        
+        const modalRef: NgbModalRef = this.modalService.open(ConnectToAbsDatasetModal, new ModalOptions('lg'));
+        modalRef.componentInstance.concreteDataset = this.selectedRecord;
+        modalRef.result.then(
+            () => {
+                this.refresh();
+            },
+            () => { }
+        );
     }
 
     spawnNewAbstractDataset() {
-
+        this.openNewDatasetModal("Spawn abstract dataset", NewDatasetModeEnum.spawnAbstract).then(
+            () => {
+                this.refresh();
+            },
+            () => { }
+        );
     }
+
+    openNewDatasetModal(title: TextOrTranslation, mode: NewDatasetModeEnum) {
+        const modalRef: NgbModalRef = this.modalService.open(NewDatasetModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translate);
+        modalRef.componentInstance.mode = mode;
+        return modalRef.result;
+    }
+
 
     discoverDataset() {
         this.basicModals.prompt({ key: "METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET" }, {

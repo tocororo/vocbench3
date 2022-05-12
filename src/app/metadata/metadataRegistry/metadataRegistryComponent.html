@@ -44,10 +44,7 @@
 
     <mdr-tree-panel (nodeSelected)="onCatalogSelected($event)"></mdr-tree-panel>
 
-    <!-- <div *ngIf="selectedCatalogRecord2" class="card card-default vbox ml-2" style="flex: 2;">
-        <pre>{{selectedCatalogRecord2|json}}</pre>
-    </div> -->
-    <div *ngIf="selectedCatalogRecord2" class="card card-default vbox ml-2" style="flex: 2;">
+    <div *ngIf="selectedCatalogRecord2" class="card card-default vbox ml-2">
         <div class="card-header">
             <label>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label>
         </div>
@@ -78,7 +75,7 @@
                 </div>
             </div> -->
             
-            <div class="vbox mt-2">
+            <div *ngIf="selectedCatalogRecord2.dataset.nature != 'ABSTRACT'" class="vbox mt-2">
                 <div class="card card-alt vbox blockingDivHost">
                     <div class="card-header">
                         <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.EMBEDDED_LEXICALIZATION_SETS'|translate}}:</label>

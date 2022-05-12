@@ -1,6 +1,6 @@
 <div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
     <div class="modal-header" cdkDragHandle>
-        <h3 class="modal-title">{{'Create dataset'|translate}}</h3>
+        <h3 class="modal-title">{{title}}</h3>
     </div>
     <div class="modal-body">
         
@@ -21,7 +21,7 @@
                 <tr>
                     <td nowrap><label>{{'COMMONS.TITLE'|translate}}:</label></td>
                     <td>
-                        <lang-string-editor [(ngModel)]="title"></lang-string-editor>
+                        <lang-string-editor [(ngModel)]="datasetTitle"></lang-string-editor>
                     </td>
                 </tr>
                 <tr>
@@ -37,46 +37,49 @@
                     </td>
                     <td>*</td>
                 </tr>
-                <tr>
-                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.DEREFERENCEABLE'|translate}}:</label></td>
-                    <td>
-                        <select class="form-control" [(ngModel)]="dereferenceable">
-                            <option *ngFor="let der of dereferenceableOpts" [ngValue]="der.value">{{der.label}}</option>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td nowrap><label>{{'Nature'|translate}}:</label></td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <select class="form-control" style="flex: 1;" [(ngModel)]="distributionNature">
-                                <option *ngFor="let nature of distributionNatureOpts" [ngValue]="nature.id">{{nature.label}}</option>
+                
+                <ng-container *ngIf="mode == 'createConcrete'">
+                    <tr>
+                        <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.DEREFERENCEABLE'|translate}}:</label></td>
+                        <td>
+                            <select class="form-control" [(ngModel)]="dereferenceable">
+                                <option *ngFor="let der of dereferenceableOpts" [ngValue]="der.value">{{der.label}}</option>
                             </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap><label>{{'Nature'|translate}}:</label></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <select class="form-control" style="flex: 1;" [(ngModel)]="distributionNature">
+                                    <option *ngFor="let nature of distributionNatureOpts" [ngValue]="nature.id">{{nature.label}}</option>
+                                </select>
 
-                            <div class="d-flex align-items-center ml-3" style="flex: 1;">
-                                <ng-container *ngIf="distributionNature == 'PROJECT'; then projectNature; else repoNature"></ng-container>
-                                <ng-template #projectNature>
-                                    <label>{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
-                                    <select class="form-control ml-1" [(ngModel)]="selectedProject">
-                                        <option *ngFor="let p of projects" [ngValue]="p">{{p.getName()}}</option>
-                                    </select>
-                                </ng-template>
-                                <ng-template #repoNature>
-                                    <label>{{'MODELS.MAPLE.DATASET.SPARQL_ENDPOINT'|translate}}:</label>
-                                    <input class="form-control ml-1" [(ngModel)]="sparqlEndpoint" placeholder="http://endpoint_sparql_url">
-                                </ng-template>
+                                <div class="d-flex align-items-center ml-3" style="flex: 1;">
+                                    <ng-container *ngIf="distributionNature == 'PROJECT'; then projectNature; else repoNature"></ng-container>
+                                    <ng-template #projectNature>
+                                        <label>{{'MODELS.PROJECT.PROJECT'|translate}}:</label>
+                                        <select class="form-control ml-1" [(ngModel)]="selectedProject">
+                                            <option *ngFor="let p of projects" [ngValue]="p">{{p.getName()}}</option>
+                                        </select>
+                                    </ng-template>
+                                    <ng-template #repoNature>
+                                        <label>{{'MODELS.MAPLE.DATASET.SPARQL_ENDPOINT'|translate}}:</label>
+                                        <input class="form-control ml-1" [(ngModel)]="sparqlEndpoint" placeholder="http://endpoint_sparql_url">
+                                    </ng-template>
+                                </div>
+                                
                             </div>
-                            
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                </ng-container>
+
             </tbody>
         </table>
 
-        <div class="card mt-2">
+        <div *ngIf="mode == 'createConcrete'" class="card mt-2">
             <div class="card-header">
-                <label>{{'Attach to dataset'|translate}}</label>
+                <label>{{'Attach to abstract dataset'|translate}}</label>
                 <input type="checkbox" class="ml-2" style="vertical-align: middle" [(ngModel)]="attachToDataset">
             </div>
             <div class="card-body">
@@ -98,7 +101,7 @@
                             <td nowrap><label>{{'Relation'|translate}}:</label></td>
                             <td>
                                 <select class="form-control" [(ngModel)]="absDatasetRelation">
-                                    <option *ngFor="let r of absDatasetRelationOpts" [ngValue]="r.id">{{r.label}}</option>
+                                    <option *ngFor="let r of datasetRelationOpts" [ngValue]="r.id">{{r.label}}</option>
                                 </select>
                             </td>
                         </tr>
@@ -120,6 +123,100 @@
                 </table>
             </div>
         </div>
+
+        <ng-container *ngIf="mode == 'spawnAbstract'">
+            <div class="card mt-2">
+                <div class="card-header">
+                    <label>{{'Concrete dataset 1'|translate}}</label>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-borderless">
+                        <colgroup>
+                            <col style="width: 1%;">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td nowrap><label>{{'Dataset'|translate}}:</label></td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="concreteDataset1">
+                                        <option *ngFor="let d of concreteDatasets" [ngValue]="d">{{d.dataset['localizedTitle']}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>{{'Relation'|translate}}:</label></td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="dataset1Relation">
+                                        <option *ngFor="let r of datasetRelationOpts" [ngValue]="r.id">{{r.label}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <ng-container *ngIf="dataset1Relation == 'version'">
+                                <tr>
+                                    <td nowrap><label>{{'Version info'|translate}}:</label></td>
+                                    <td>
+                                        <input class="form-control" [(ngModel)]="dataset1VersInfo">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><label>{{'Version notes'|translate}}:</label></td>
+                                    <td>
+                                        <lang-string-editor [(ngModel)]="dataset1VersNotes"></lang-string-editor>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mt-2">
+                <div class="card-header">
+                    <label>{{'Concrete dataset 2'|translate}}</label>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-borderless">
+                        <colgroup>
+                            <col style="width: 1%;">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td nowrap><label>{{'Dataset'|translate}}:</label></td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="concreteDataset2">
+                                        <option *ngFor="let d of concreteDatasets" [ngValue]="d">{{d.dataset['localizedTitle']}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>{{'Relation'|translate}}:</label></td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="dataset2Relation">
+                                        <option *ngFor="let r of datasetRelationOpts" [ngValue]="r.id">{{r.label}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <ng-container *ngIf="dataset2Relation == 'version'">
+                                <tr>
+                                    <td nowrap><label>{{'Version info'|translate}}:</label></td>
+                                    <td>
+                                        <input class="form-control" [(ngModel)]="dataset2VersInfo">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><label>{{'Version notes'|translate}}:</label></td>
+                                    <td>
+                                        <lang-string-editor [(ngModel)]="dataset2VersNotes"></lang-string-editor>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ng-container>
         
     </div>
     <div class="modal-footer">

@@ -6,6 +6,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { DatasetMetadataComponent } from "../metadata/metadataRegistry/datasetMetadataComponent";
 import { LexicalizationSetMetadataComponent } from '../metadata/metadataRegistry/lexicalizationSetMetadataComponent';
+import { ConnectToAbsDatasetModal } from '../metadata/metadataRegistry/mdrTree/connectToAbsDatasetModal';
 import { MetadataRegistryTreeComponent } from "../metadata/metadataRegistry/mdrTree/mdrTreeComponent";
 import { MetadataRegistryTreeNodeComponent } from '../metadata/metadataRegistry/mdrTree/mdrTreeNodeComponent';
 import { MetadataRegistryTreePanelComponent } from '../metadata/metadataRegistry/mdrTree/mdrTreePanelComponent';
@@ -48,6 +49,7 @@ import { SharedModule } from './sharedModule';
         NamespacesAndImportsComponent,
         //modals
         ConflictResolverModal,
+        ConnectToAbsDatasetModal,
         ImportOntologyModal,
         ImportFromDatasetCatalogModal,
         OntologyMirrorModal,
@@ -60,6 +62,7 @@ import { SharedModule } from './sharedModule';
     providers: [],
     entryComponents: [
         ConflictResolverModal,
+        ConnectToAbsDatasetModal,
         ImportOntologyModal, 
         ImportFromDatasetCatalogModal,
         OntologyMirrorModal,

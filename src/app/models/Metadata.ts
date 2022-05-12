@@ -53,17 +53,20 @@ export class TransitiveImportUtils {
 }
 
 export class DatasetMetadata {
-    public identity: string;
-    public uriSpace: string;
-    public title: string;
-    public dereferenciationSystem: string;
-    public sparqlEndpointMetadata: SparqlEndpointMetadata;
-    public versionInfo: string;
+    identity: ARTURIResource;
+    distribution?: ARTURIResource;
+    uriSpace?: string;
+    title?: string;
+    description?: string;
+    dereferenciationSystem?: string;
+    sparqlEndpointMetadata?: SparqlEndpointMetadata;
+    versionInfo?: string;
 
     public static deserialize(datasetMetadataJson: any): DatasetMetadata {
         let sparqlEndpointMetadata: SparqlEndpointMetadata = SparqlEndpointMetadata.deserialize(datasetMetadataJson.sparqlEndpointMetadata);
         return {
-            identity: datasetMetadataJson.identity,
+            identity: new ARTURIResource(datasetMetadataJson.identity),
+            distribution: datasetMetadataJson.distribution ? new ARTURIResource(datasetMetadataJson.distribution) : null,
             uriSpace: datasetMetadataJson.uriSpace,
             title: datasetMetadataJson.title,
             dereferenciationSystem: datasetMetadataJson.dereferenciationSystem,

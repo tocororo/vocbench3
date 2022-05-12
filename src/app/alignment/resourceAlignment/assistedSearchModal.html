@@ -44,7 +44,7 @@
                 </div>
                 <div class="card-body vbox scrollableContainer" style="max-height: 150px;">
                     <div *ngFor="let d of remoteDatasets">
-                        <div class="listItem" [ngClass]="{ active : d == selectedDataset }" (click)="selectDataset(d)" [title]="d.identity">
+                        <div class="listItem" [ngClass]="{ active : d == selectedDataset }" (click)="selectDataset(d)" [title]="d.identity.getURI()">
                             <span><label *ngIf="d.title">{{d.title}}:</label> {{d.uriSpace}}</span>
                         </div>
                     </div>
