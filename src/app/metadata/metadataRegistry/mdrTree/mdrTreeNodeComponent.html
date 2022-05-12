@@ -7,7 +7,7 @@
             </ng-container>
         </div>
     </td>
-    <td (click)="selectNode()" class="clickable mr-2" nowrap>
+    <td (click)="selectNode()" class="clickable mr-2" [ngClass]="{ 'pl-4': !root }" nowrap>
         <span [ngSwitch]="record.dataset.nature" class="dataset-nature-icon">
             <img *ngSwitchCase="'PROJECT'" src="./assets/images/icons/vb_16x16.png" height="16px" width="16px">
             <img *ngSwitchCase="'RDF4J_REPOSITORY'" src="./assets/images/icons/rdf4j_16x16.png" height="16px" width="16px">
@@ -30,7 +30,11 @@
     <td class="text-center clickable" (click)="selectNode()">{{modifiedLocal}}</td>
 </tr>
 
-<tr *ngIf="record.dataset.nature && open && children.length > 0">
+<ng-container *ngIf="record.dataset.nature && open && children.length > 0">
+    <mdr-tree-node *ngFor="let d of children" [record]="d" [root]="false" (nodeSelected)="onNodeSelected($event)"></mdr-tree-node>
+</ng-container>
+
+<!-- <tr *ngIf="record.dataset.nature && open && children.length > 0">
     <td class="expandCollapseBtnContainer"></td>
     <td colspan="4" class="p-0">
         <table class="table table-borderless">
@@ -45,4 +49,4 @@
             </tbody>
         </table>
     </td>
-</tr>
+</tr> -->

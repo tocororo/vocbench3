@@ -14,7 +14,7 @@ import { Deserializer } from 'src/app/utils/Deserializer';
 export class MetadataRegistryTreeNodeComponent {
 
     @Input() record: CatalogRecord2;
-    @Input() root: boolean;
+    @Input() root: boolean = true;
     @Output() nodeSelected = new EventEmitter<CatalogRecord2>();
 
     @ViewChildren(MetadataRegistryTreeNodeComponent) viewChildrenNode: QueryList<MetadataRegistryTreeNodeComponent>;
