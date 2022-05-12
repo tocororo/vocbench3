@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 11.0.0 (12-05-2022
+# 11.0.0 (12-05-2022)
   * Added SuperUser system role: super users create projects where it is automatically set as Project Manager
   * introduced a renewed model for CFs, with a more general management of CCs vs CRs
   * Introduced CustomViews, a mechanism for defining specific views independently of the specified CFs
