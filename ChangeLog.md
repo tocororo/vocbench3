@@ -4,15 +4,15 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 11.0.0 (dd-mm-yyyy)
-  * Added SuperUser system role
-  * Allowed SuperUser to create projects where it is automatically set as Project Manager
-  * Introduced CustomView mechanism
-  * Improved management of CustomForm
-  * Renewed MetadataRegistry editor
-  * In Sheet2RDF enabled multiple sheets management and implemented support for DB connection
-  * Added completion for endpoints to use in federated SPARQL queries
-  * Added possibility to import Metadata Vocabularies data from MetadataRegistry
+# 11.0.0 (12-05-2022
+  * Added SuperUser system role: super users create projects where it is automatically set as Project Manager
+  * introduced a renewed model for CFs, with a more general management of CCs vs CRs
+  * Introduced CustomViews, a mechanism for defining specific views independently of the specified CFs
+  * introduced various special widgets (e.g. maps and charts) as part of the CVs
+  * Renewed model for the MetadataRegistry editor, more aligned to the (still drafted) DCVAT-3 specification
+  * In Sheet2RDF enabled management of multiple sheets and implemented support for DB connection
+  * Added completion for endpoints to use in "locally federated" (i.e. more repositories on the same GraphDB instance) SPARQL queries
+  * added import of general MDR-stored variables (e.g. title of the dataset) into the various metadata vocabulary editors
   * Made persistent the rendering status in data trees/lists
   * Minor bugfixes and UI issues
 
