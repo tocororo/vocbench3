@@ -27,7 +27,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 10.1.1 (28-10-2021)
   * Added localization for French, thanks to Nathalie Vedovotto for the contribution!
-  * Added localization for Spanish, thanks to Juan Antonio Pastor S nchez for the contribution!
+  * Added localization for Spanish, thanks to Juan Antonio Pastor Sanchez for the contribution!
   * Fixed a bug in Project-User settings that prevented to select an available language to assign to a user
   * Fixed a bug that prevented advanced search to be completed when executed from instance list or class tree
   * Fixed a bug that prevented the initialization of the ResourceView template in the User's template page

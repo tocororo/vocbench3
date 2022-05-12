@@ -8,7 +8,7 @@
         </div>
     </td>
     <td (click)="selectNode()" class="clickable mr-2" [ngClass]="{ 'pl-4': !root }" nowrap>
-        <span [ngSwitch]="record.dataset.nature" class="dataset-nature-icon">
+        <span [ngSwitch]="record.dataset.nature" class="dataset-nature-icon" [title]="record.dataset.nature">
             <img *ngSwitchCase="'PROJECT'" src="./assets/images/icons/vb_16x16.png" height="16px" width="16px">
             <img *ngSwitchCase="'RDF4J_REPOSITORY'" src="./assets/images/icons/rdf4j_16x16.png" height="16px" width="16px">
             <img *ngSwitchCase="'GRAPHDB_REPOSITORY'" src="./assets/images/icons/gdb_16x16.png" height="16px" width="16px">
