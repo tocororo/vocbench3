@@ -9,6 +9,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Allowed SuperUser to create projects where it is automatically set as Project Manager
   * Introduced CustomView mechanism
   * Improved management of CustomForm
+  * Renewed MetadataRegistry editor
   * In Sheet2RDF enabled multiple sheets management and implemented support for DB connection
   * Added completion for endpoints to use in federated SPARQL queries
   * Added possibility to import Metadata Vocabularies data from MetadataRegistry
@@ -26,7 +27,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 10.1.1 (28-10-2021)
   * Added localization for French, thanks to Nathalie Vedovotto for the contribution!
-  * Added localization for Spanish, thanks to Juan Antonio Pastor SÃ¡nchez for the contribution!
+  * Added localization for Spanish, thanks to Juan Antonio Pastor S nchez for the contribution!
   * Fixed a bug in Project-User settings that prevented to select an available language to assign to a user
   * Fixed a bug that prevented advanced search to be completed when executed from instance list or class tree
   * Fixed a bug that prevented the initialization of the ResourceView template in the User's template page
