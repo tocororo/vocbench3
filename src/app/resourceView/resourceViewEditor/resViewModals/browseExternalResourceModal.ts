@@ -107,7 +107,7 @@ export class BrowseExternalResourceModal {
         this.remoteProjCtx = new ProjectContext(this.project);
         let initProjectCtxFn: Observable<void>[] = [
             this.vbProp.initProjectUserBindings(this.remoteProjCtx),
-            this.vbProp.initUserProjectPreferences(this.remoteProjCtx),
+            this.vbProp.initUserProjectPreferences(this.remoteProjCtx, true),
             this.vbProp.initProjectSettings(this.remoteProjCtx)
         ];
         forkJoin(initProjectCtxFn).subscribe(

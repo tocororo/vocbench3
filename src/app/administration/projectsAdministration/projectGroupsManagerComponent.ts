@@ -430,7 +430,7 @@ export class ProjectGroupsManagerComponent {
             this.lastBrowsedProjectCtx = new ProjectContext(this.project);
             let initProjectCtxFn: Observable<void>[] = [
                 this.vbProp.initProjectUserBindings(this.lastBrowsedProjectCtx),
-                this.vbProp.initUserProjectPreferences(this.lastBrowsedProjectCtx),
+                this.vbProp.initUserProjectPreferences(this.lastBrowsedProjectCtx, true),
                 this.vbProp.initProjectSettings(this.lastBrowsedProjectCtx)
             ];
             return forkJoin(initProjectCtxFn);

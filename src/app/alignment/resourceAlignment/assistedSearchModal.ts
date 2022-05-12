@@ -172,16 +172,16 @@ export class AssistedSearchModal {
         }
     }
 
-    addRemoteDataset() {
-        const modalRef: NgbModalRef = this.modalService.open(NewCatalogRecordModal, new ModalOptions());
-        modalRef.componentInstance.title = "New Remote Dataset";
-        modalRef.result.then(
-            () => {
-                this.initRemoteDatasets();
-            },
-            () => { }
-        );
-    }
+    // addRemoteDataset() {
+    //     const modalRef: NgbModalRef = this.modalService.open(NewCatalogRecordModal, new ModalOptions());
+    //     modalRef.componentInstance.title = "New Remote Dataset";
+    //     modalRef.result.then(
+    //         () => {
+    //             this.initRemoteDatasets();
+    //         },
+    //         () => { }
+    //     );
+    // }
 
     private profileMediationRemoteDataset() {
         if (this.isDatasetMetadataAvailable()) {

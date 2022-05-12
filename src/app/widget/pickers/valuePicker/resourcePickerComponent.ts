@@ -116,7 +116,7 @@ export class ResourcePickerComponent {
                         let externalProjectCtx: ProjectContext = new ProjectContext(externalProject);
                         let initProjectCtxFn: Observable<void>[] = [
                             this.vbProp.initProjectUserBindings(externalProjectCtx),
-                            this.vbProp.initUserProjectPreferences(externalProjectCtx),
+                            this.vbProp.initUserProjectPreferences(externalProjectCtx, true),
                             this.vbProp.initProjectSettings(externalProjectCtx)
                         ];
                         forkJoin(initProjectCtxFn).subscribe(

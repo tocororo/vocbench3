@@ -100,14 +100,14 @@ export class EdoalComponent {
                         this.leftProjCtx = new ProjectContext(leftProject);
                         let initLeftProjectCtxFn: Observable<void>[] = [
                             this.vbProp.initProjectUserBindings(this.leftProjCtx),
-                            this.vbProp.initUserProjectPreferences(this.leftProjCtx),
+                            this.vbProp.initUserProjectPreferences(this.leftProjCtx, true),
                             this.vbProp.initProjectSettings(this.leftProjCtx)
                         ];
 
                         this.rightProjCtx = new ProjectContext(rightProject);
                         let initRightProjectCtxFn: Observable<void>[] = [
                             this.vbProp.initProjectUserBindings(this.rightProjCtx),
-                            this.vbProp.initUserProjectPreferences(this.rightProjCtx),
+                            this.vbProp.initUserProjectPreferences(this.rightProjCtx, true),
                             this.vbProp.initProjectSettings(this.rightProjCtx)
                         ];
 

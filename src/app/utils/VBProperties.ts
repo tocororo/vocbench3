@@ -36,8 +36,11 @@ export class VBProperties {
 
     /**
      * To call each time the user change project
+     * @param projectCtx
+     * @param externalProject true when this is invoked for the initialization of project preference for an external project
+     *  (so, for example, when browing external project resources there's no need to change the app theme since the main project is not the one initializing)
      */
-    initUserProjectPreferences(projectCtx: ProjectContext): Observable<any> {
+    initUserProjectPreferences(projectCtx: ProjectContext, externalProject?: boolean): Observable<any> {
         let getPUSettingsCore = this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, VBRequestOptions.getRequestOptions(projectCtx)).pipe(
             map(settings => {
                 let projectPreferences: ProjectPreferences = projectCtx.getProjectPreferences();
@@ -60,8 +63,10 @@ export class VBProperties {
 
                 let projectThemeId = settings.getPropertyValue(SettingsEnum.projectTheme);
                 projectPreferences.projectThemeId = projectThemeId;
-                this.eventHandler.themeChangedEvent.emit(projectPreferences.projectThemeId);
-
+                if (!externalProject) {
+                    this.eventHandler.themeChangedEvent.emit(projectPreferences.projectThemeId);
+                }
+                
                 //languages 
                 projectPreferences.editingLanguage = settings.getPropertyValue(SettingsEnum.editingLanguage);
 
