@@ -103,8 +103,12 @@ export class CustomViewsRenderer {
                 v.allowEdit = descr.updateMode != UpdateMode.none;
                 //series_id, series_label and value_label are supposed to be the same for all the data
                 v.series_id = <ARTResource>descr.bindingsList[0][CustomViewVariables.series_id];
-                v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();
-                v.value_label = descr.bindingsList[0][CustomViewVariables.value_label].getShow();
+                if (descr.bindingsList[0][CustomViewVariables.series_label] != null) {
+                    v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();
+                }
+                if (descr.bindingsList[0][CustomViewVariables.value_label] != null) {
+                    v.value_label = descr.bindingsList[0][CustomViewVariables.value_label].getShow();
+                }
                 descr.bindingsList.forEach(b => {
                     v.data.push({
                         name: <ARTResource>b[CustomViewVariables.name],
@@ -120,8 +124,12 @@ export class CustomViewsRenderer {
                 v.allowEdit = descr.updateMode != UpdateMode.none;
                 //series_collection_id, series_label and value_label are supposed to be the same for all the data
                 v.series_collection_id = <ARTResource>descr.bindingsList[0][CustomViewVariables.series_collection_id];
-                v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();
-                v.value_label = descr.bindingsList[0][CustomViewVariables.value_label].getShow();
+                if (descr.bindingsList[0][CustomViewVariables.series_label] != null) {
+                    v.series_label = descr.bindingsList[0][CustomViewVariables.series_label].getShow();
+                }
+                if (descr.bindingsList[0][CustomViewVariables.value_label] != null) {
+                    v.value_label = descr.bindingsList[0][CustomViewVariables.value_label].getShow();
+                }
                 descr.bindingsList.forEach(b => {
                     let seriesName = b[CustomViewVariables.series_name];
                     let data = {
@@ -170,8 +178,8 @@ export class CustomViewsRenderer {
             });
         }
 
-        let v = this.customViews[0]; //for the same predicate, model and category are the same for each cv, so it's ok to take just the first
-        this.category = v.category;
+        //for the same predicate, model and category are the same for each cv, so it's ok to take just the first
+        this.category = this.customViews[0].category;
     }
 
     private initActionsStatus() {

@@ -35,9 +35,6 @@ export class SeriesViewEditorComponent extends AbstractSparqlBasedViewEditor {
         { id: CustomViewVariables.name, descrTranslationKey: "Will be bound to the resource representing the name of the updating value" },
         { id: CustomViewVariables.value, descrTranslationKey: "Will be bound to the new value" },
     ];
-    updateQuerySkeleton: string = "DELETE { ... }\n" +
-        "INSERT { ... }\n" +
-        "WHERE { ... }\n";
 
     constructor(basicModals: BasicModalServices) {
         super(basicModals);

@@ -41,18 +41,35 @@ export class VectorRendererComponent extends AbstractViewRendererComponent {
                 }
             });
         });
-        this.resourcesService.getResourcesInfo(resToAnnotate).subscribe(
-            annValues => {
-                this.views.forEach(view => {
-                    view.values.forEach((v, i, self) => {
-                        let annotated = annValues.find(a => a.equals(v.resource));
+
+        //headers might be both human readable string (if label is provided in dynamic vector) or a NT-serialized propery, in this case, annotate them as well
+        this.headers.forEach(h => {
+            try {
+                let hIri = NTriplesUtil.parseURI(h);
+                resToAnnotate.push(hIri);
+            } catch {}
+        });
+
+        if (resToAnnotate.length > 0) {
+            this.resourcesService.getResourcesInfo(resToAnnotate).subscribe(
+                annValues => {
+                    this.headers.forEach((h, i, self) => {
+                        let annotated = annValues.find(a => a.toNT() == h);
                         if (annotated != null) {
-                            self[i].resource = annotated;
+                            self[i] = annotated.getShow();
                         }
                     });
-                });
-            }
-        );
+                    this.views.forEach(view => {
+                        view.values.forEach((v, i, self) => {
+                            let annotated = annValues.find(a => a.equals(v.resource));
+                            if (annotated != null) {
+                                self[i].resource = annotated;
+                            }
+                        });
+                    });
+                }
+            );
+        }
     }
 
     processInput() {

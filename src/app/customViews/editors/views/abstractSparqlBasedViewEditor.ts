@@ -37,7 +37,10 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
     abstract updateRequiredVariables: CustomViewVariables[];
     abstract updateDescrIntro: string;
     abstract updateVariablesInfo: VariableInfoStruct[];
-    abstract updateQuerySkeleton: string;
+    updateQuerySkeleton: string = "";
+    // updateQuerySkeleton: string = "DELETE { ... }\n" +
+    //     "INSERT { ... }\n" +
+    //     "WHERE { ... }\n";
 
     retrieveRequiredPlaceholders: CustomViewVariables[] = [CustomViewVariables.resource, CustomViewVariables.trigprop];
     retrievePlaceholdersInfo: VariableInfoStruct[] = [

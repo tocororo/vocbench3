@@ -485,6 +485,7 @@
         "DETAILS": "Details",
         "DONT_ASK_AGAIN": "Do not ask again",
         "DONT_SHOW_AGAIN": "Do not show again",
+        "FILE": "File",
         "FORCE_FORMAT": "Force format",
         "FORMAT": "Format",
         "GROUPS": "Groups",
@@ -1706,7 +1707,8 @@
             "IMPORT_FROM_MDR": "Import from MDR",
             "IMPORT_FROM_MDR_INFO": "Import data from MetadataRegistry",
             "MESSAGES": {
-                "IMPORT_CONFLICTS_DETECTED": "Conflicts between imported and pre-existing data have been detected. Please, choose if you want to keep the previous values or if you want to override them."
+                "IMPORT_CONFLICTS_DETECTED": "Conflicts between imported and pre-existing data have been detected. Please, choose if you want to keep the previous values or if you want to override them.",
+                "IMPORT_EMPTY_RESULT": "Import from Metadata Registry did not returned any data. Please, ensure that a record for the current dataset is available in the Metadata Registry."
             },
             "METADATA_VOCABULARY": "Metadata Vocabulary",
             "PREVIOUS_VALUE": "Previous value"

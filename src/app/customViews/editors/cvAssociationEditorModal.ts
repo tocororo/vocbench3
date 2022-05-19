@@ -39,6 +39,7 @@ export class CvAssociationEditorModal {
         //check if an association for the given predicate already exists
         if (this.existingAssociations.some(a => a.property.equals(property))) {
             this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "CUSTOM_VIEWS.MESSAGES.ALREADY_ASSOCIATED_PROPERTY" }, ModalType.warning);
+            this.selectedProperty = null;
         } else {
             this.selectedProperty = property;
         }

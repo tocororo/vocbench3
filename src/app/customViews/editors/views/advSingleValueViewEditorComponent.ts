@@ -56,10 +56,6 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
     ];
     updateQueryInfo: string;
 
-    updateQuerySkeleton: string = "DELETE { ... }\n" +
-        "INSERT { ... }\n" +
-        "WHERE { ... }\n";
-
     singleValueData: UpdateInfoEnhanced = {
         updateMode: UpdateMode.none,
     };

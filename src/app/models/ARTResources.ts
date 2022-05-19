@@ -1,3 +1,4 @@
+
 export abstract class ARTNode {
 
     protected tripleGraphs: ARTURIResource[] = []; //graphs where the triple (which the resource respresents the object) is defined
@@ -245,6 +246,10 @@ export class ARTLiteral extends ARTNode {
         this.value = value;
         this.datatype = datatype;
         this.lang = lang;
+        if (this.lang == null && this.datatype == null) {
+            //literal without lang and datatype is automatically set as xsd:string typed (same behaviour or RDF4J)
+            this.datatype = "http://www.w3.org/2001/XMLSchema#string";
+        }
     }
 
     setValue(value: string) {

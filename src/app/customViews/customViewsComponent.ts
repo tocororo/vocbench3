@@ -66,10 +66,7 @@ export class CustomViewsComponent {
     }
 
     editCustomView() {
-        this.openCustomViewEditor({ key: "CUSTOM_VIEWS.ACTIONS.EDIT_CUSTOM_VIEW" }, this.selectedCustomView.reference).then(
-            () => this.initCustomViews(),
-            () => { }
-        );
+        this.openCustomViewEditor({ key: "CUSTOM_VIEWS.ACTIONS.EDIT_CUSTOM_VIEW" }, this.selectedCustomView.reference);
     }
 
     deleteCustomView() {

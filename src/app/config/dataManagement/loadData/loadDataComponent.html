@@ -25,7 +25,7 @@
 
                 <!-- File selection available only when there is no target loader -->
                 <div class="form-group row" *ngIf="!selectedLoader.target">
-                    <label class="col-form-label col-sm-1">File:</label>
+                    <label class="col-form-label col-sm-1">{{'COMMONS.FILE'|translate}}:</label>
                     <div class="col-sm-11">
                         <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker>    
                     </div>

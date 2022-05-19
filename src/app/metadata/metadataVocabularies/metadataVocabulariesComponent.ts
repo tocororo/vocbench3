@@ -79,6 +79,12 @@ export class MetadataVocabulariesComponent {
         let pluginSpec: PluginSpecification = { factoryId: this.selectedExporter.id };
         this.datasetMetadataService.importMetadataVocabulariesFromMetadataRegistry(pluginSpec, settingsStruct.scope).subscribe(
             importedSettings => {
+                let empty = !importedSettings.properties.some(p => p.value != null);
+                if (empty) {
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "METADATA.METADATA_VOCABULARIES.MESSAGES.IMPORT_EMPTY_RESULT" }, ModalType.warning);
+                    return;
+                }
+
                 //compare pre-existing with imported data in order to detect conflicts
                 let conflicts: ImportedMetadataConflict[] = [];
                 let settingsMap = settingsStruct.settings.getPropertiesAsMap();

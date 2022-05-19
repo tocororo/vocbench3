@@ -33,11 +33,6 @@ export class PointViewEditorComponent extends AbstractSparqlBasedViewEditor {
         { id: CustomViewVariables.latitude, descrTranslationKey: "Will be bound to the new latitude" },
         { id: CustomViewVariables.longitude, descrTranslationKey: "Will be bound to the new longitude" },
     ];
-    updateQuerySkeleton: string = "DELETE { ... }\n" +
-        "INSERT { ... }\n" +
-        "WHERE { ... }\n";
-
-
 
     constructor(basicModals: BasicModalServices) {
         super(basicModals);

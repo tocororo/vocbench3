@@ -194,8 +194,7 @@ export class CvQueryUtils {
 
     private static readonly VAR_REGEX: RegExp = /\?([a-zA-Z0-9_]+)_value\b/gi;
     private static readonly OBJ_REGEX: RegExp = /\$resource\s*\$trigprop\s*([$|?][a-zA-Z0-9_]+)\s*\./gi;
-
-    public static readonly FIELD_REGEX: RegExp = /[?|$]([a-zA-Z0-9_]+)_value\b/gi;
+    private static readonly FIELD_REGEX: RegExp = /[?|$]([a-zA-Z0-9_]+)_value\b/gi;
 
     static getSelectReturnStatement(query: string): string {
         return query.substring(query.toLocaleLowerCase().indexOf("select"), query.toLocaleLowerCase().indexOf("{"));
@@ -264,6 +263,7 @@ export class CvQueryUtils {
         }
 
         let matchArray: RegExpExecArray;
+        CvQueryUtils.FIELD_REGEX.lastIndex = 0;
         while ((matchArray = CvQueryUtils.FIELD_REGEX.exec(queryFragment)) !== null) {
             fieldVars.push(matchArray[1]); //0 is the whole expression, 1 is the 1st group (any word between ? and _value)
         }
@@ -281,6 +281,7 @@ export class CvQueryUtils {
         let objVar: string;
         let select = CvQueryUtils.getSelectReturnStatement(query);
         let where = CvQueryUtils.getSelectWhereBlock(query);
+        CvQueryUtils.OBJ_REGEX.lastIndex = 0;
         let matchArray: RegExpExecArray = CvQueryUtils.OBJ_REGEX.exec(where);
         if (matchArray != null) {
             objVar = matchArray[1]; //group 1 is ?|$objVarName (including ? or $)

@@ -35,9 +35,6 @@ export class AreaViewEditorComponent extends AbstractSparqlBasedViewEditor {
         { id: CustomViewVariables.latitude, descrTranslationKey: "Will be bound to the new latitude of the updating point" },
         { id: CustomViewVariables.longitude, descrTranslationKey: "Will be bound to the new longitude of the updating point" },
     ];
-    updateQuerySkeleton: string = "DELETE { ... }\n" +
-        "INSERT { ... }\n" +
-        "WHERE { ... }\n";
 
     constructor(basicModals: BasicModalServices) {
         super(basicModals);

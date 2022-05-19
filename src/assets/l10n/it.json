@@ -485,6 +485,7 @@
         "DETAILS": "Dettagli",
         "DONT_ASK_AGAIN": "Non chiedere più",
         "DONT_SHOW_AGAIN": "Non mostrare più",
+        "FILE": "File",
         "FORCE_FORMAT": "Forza il formato",
         "FORMAT": "Formato",
         "GROUPS": "Gruppi",
@@ -1706,7 +1707,8 @@
             "IMPORT_FROM_MDR": "Importa dal MDR",
             "IMPORT_FROM_MDR_INFO": "Importa dati dal MetadataRegistry",
             "MESSAGES": {
-                "IMPORT_CONFLICTS_DETECTED": "Sono stati rilevati conflitti tra i dati importati e quelli pre-esistenti. Si prega di scegliere se tenere i valori precedenti o se sovrascriverli."
+                "IMPORT_CONFLICTS_DETECTED": "Sono stati rilevati conflitti tra i dati importati e quelli pre-esistenti. Si prega di scegliere se tenere i valori precedenti o se sovrascriverli.",
+                "IMPORT_EMPTY_RESULT": "L'import dal Metadata Registry non ha prodotto alcun dato. Assicurati che nel Metadata Registry ci sia un record per il dataset corrente."
             },
             "METADATA_VOCABULARY": "Vocabolario dei metadati",
             "PREVIOUS_VALUE": "Valore precedente"

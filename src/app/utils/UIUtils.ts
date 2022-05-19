@@ -366,6 +366,8 @@ export class UIUtils {
                 } else {
                     imgSrc = this.getDatatypeImgSrc(datatype);
                 }
+            } else { //no lang or datatype => return the unknown datatype icon
+                imgSrc = this.getDatatypeImgSrc(null);
             }
         }
         return imgSrc;

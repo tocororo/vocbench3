@@ -4,12 +4,22 @@
     </div>
     <div class="modal-body">
 
-        <div class="d-flex align-items-center mb-3">
-            <label>Name:</label>
-            <input class="form-control ml-2" [(ngModel)]="name">
-        </div>
-
-        <file-picker (fileChanged)="fileChangeEvent($event)" accept=".cfg"></file-picker>
+        <table class="table table-borderless">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td nowrap><label>{{'COMMONS.NAME'|translate}}:</label></td>
+                    <td><input class="form-control" [(ngModel)]="name"></td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'COMMONS.FILE'|translate}}:</label></td>
+                    <td><file-picker (fileChanged)="fileChangeEvent($event)" accept=".cfg"></file-picker></td>
+                </tr>
+            </tbody>
+        </table>
 
     </div>
     <div class="modal-footer">
