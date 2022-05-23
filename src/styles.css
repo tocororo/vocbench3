@@ -633,6 +633,10 @@ ngx-codemirror.disabled .CodeMirror {
     background: #eee;
 }
 
+.ngx-charts-tooltip-content.type-tooltip {
+    background: rgba(0,0,0,.5) !important;
+}
+
 .cm-s-default .cm-variable-4 {
     color: #c00
 }
