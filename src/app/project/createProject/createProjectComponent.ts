@@ -11,7 +11,7 @@ import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datas
 import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionFactory, ExtensionPointID, PluginSpecification, Scope, Settings } from "../../models/Plugins";
-import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
+import { AccessLevel, BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
 import { PreferencesUtils, ProjectCreationPreferences, SettingsEnum } from "../../models/Properties";
 import { RDFFormat } from "../../models/RDFFormat";
 import { PatternStruct } from "../../models/ResourceMetadata";
@@ -164,7 +164,14 @@ export class CreateProjectComponent {
 
     enableTrivialInference: boolean = false;
     private openAtStartup: boolean = false;
-    private globallyAccessible: boolean = false;
+    // private globallyAccessible: boolean = false;
+    universalAccessLevels: { level: AccessLevel, label: string }[] = [
+        { level: null, label: "---" },
+        { level: AccessLevel.R, label: AccessLevel.R },
+        { level: AccessLevel.RW, label: AccessLevel.RW },
+        { level: AccessLevel.EXT, label: AccessLevel.EXT }
+    ];
+    universalAccess: AccessLevel;
 
     private eventSubscriptions: Subscription[] = [];
 
@@ -221,15 +228,18 @@ export class CreateProjectComponent {
             settings => {
                 //globally accessible and open at startup
                 let projCreationSettings: ProjectCreationPreferences = new ProjectCreationPreferences();
-                PreferencesUtils.mergePreference(projCreationSettings, settings.getPropertyValue(SettingsEnum.projectCreation, new ProjectCreationPreferences()));
-                this.globallyAccessible = projCreationSettings.aclUniversalAccessDefault;
+                PreferencesUtils.mergePreference(projCreationSettings, settings.getPropertyValue(SettingsEnum.projectCreation, settings));
+                this.universalAccessLevels.forEach(l => {
+                    if (l.level == projCreationSettings.aclUniversalAccessDefault) {
+                        this.universalAccess = l.level;
+                    }
+                });
                 this.openAtStartup = projCreationSettings.openAtStartUpDefault;
             }
         );
 
         //init project list for EDOAL
         this.initProjectList();
-
 
         this.resourceTypes = [RDFResourceRolesEnum.undetermined, RDFResourceRolesEnum.annotationProperty, RDFResourceRolesEnum.cls,
             RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.dataRange,
@@ -817,7 +827,7 @@ export class CreateProjectComponent {
             supportRepoSailConfigurerSpecification, supportRepoBackendType, leftDataset, rightDataset,
             uriGeneratorSpecification, renderingEngineSpecification, metadataAssociationsPar, this.enableSHACL, shaclSettingsPar,
             this.enableTrivialInference, preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance,
-            this.openAtStartup, this.globallyAccessible, this.projectLabel).subscribe(
+            this.openAtStartup, this.universalAccess, this.projectLabel).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.PROJECT_CREATED" }).then(

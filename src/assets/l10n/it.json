@@ -1911,10 +1911,11 @@
             "LOCKABLE": "Lockabile",
             "PROJECT_ACL": "ACL progetto",
             "UNIVERSAL_ACCESS_LEVEL": "Livello d'accesso universale",
-            "UNIVERSAL_ACCESS_LEVEL_INFO": "Livello d'accesso concesso a tutti i consumer (eccetto SYSTEM)"
+            "UNIVERSAL_ACCESS_LEVEL_INFO": "Livello d'accesso concesso a tutti i consumer (eccetto SYSTEM)",
+            "UNIVERSAL_LEVEL_EXT_INFO": "Concede l'accesso ai consumatori se l'utente loggato è autorizzato ad accedere al progetto o se il progetto concede l'accesso al consumatore specifico.",
+            "UNIVERSAL_LEVEL_R_INFO": "Concede l'accesso in lettura a tutti i consumatori",
+            "UNIVERSAL_LEVEL_RW_INFO": "Concede l'accesso in lettura e scrittura a tutti i consumatori"
         },
-        "ACL_UNIVERSAL_ACCESS": "ACL impostato su accesso universale",
-        "ACL_UNIVERSAL_ACCESS_INFO": "Abilita questa opzione per rendere il contenuto del progetto accedibile da tutti gli altri progetti (questa opzioni può essere cambiata in seguito dall'editor ACL)",
         "ACTIONS": {
             "CLOSE_ALL": "Chiudi tutti i progetti",
             "EDIT_ACL": "Modifica ACL",

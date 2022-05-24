@@ -1804,8 +1804,6 @@
             "UNIVERSAL_ACCESS_LEVEL": "Universelle Zugriffsebene",
             "UNIVERSAL_ACCESS_LEVEL_INFO": "Zugriffsebene für alle Verbraucher (außer SYSTEM)"
         },
-        "ACL_UNIVERSAL_ACCESS": "ACL: Allen Projekten Zugriff auf dieses Projekt erlauben",
-        "ACL_UNIVERSAL_ACCESS_INFO": "Aktivieren Sie diese Option, um allen anderen Projekten den Zugriff auf dieses Projekt zu erlauben (die Einstellung kann jederzeit im ACL-Editor geändert werden).",
         "ACTIONS": {
             "CLOSE_ALL": "Alle Projekte schließen",
             "EDIT_ACL": "ACL bearbeiten",

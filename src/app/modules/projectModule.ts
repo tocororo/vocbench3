@@ -2,7 +2,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
 import { OpenAllProjReportModal } from '../project/openAllProjReportModal';
@@ -25,6 +25,7 @@ import { SharedModule } from './sharedModule';
         DragDropModule,
         FormsModule,
         NgbDropdownModule,
+        NgbPopoverModule,
         SharedModule,
         TranslateModule
     ],

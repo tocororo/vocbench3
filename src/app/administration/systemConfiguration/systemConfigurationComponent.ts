@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
+import { AccessLevel } from 'src/app/models/Project';
 import { PreferencesUtils, ProjectCreationPreferences, SettingsEnum } from "src/app/models/Properties";
 import { CODAServices } from "src/app/services/codaServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
@@ -65,7 +66,13 @@ export class SystemConfigurationComponent {
     safeHomeContent: SafeHtml;
 
     /* Project creation */
-    defaultAclUniversalAccess: boolean;
+    universalAccessLevels: { level: AccessLevel, label: string }[] = [
+        { level: null, label: "---" },
+        { level: AccessLevel.R, label: AccessLevel.R },
+        { level: AccessLevel.RW, label: AccessLevel.RW },
+        { level: AccessLevel.EXT, label: AccessLevel.EXT }
+    ];
+    defaultAclUniversalAccess: AccessLevel;
     defaultOpenAtStartup: boolean;
 
     /* Other */
@@ -124,7 +131,14 @@ export class SystemConfigurationComponent {
                 //proj creation settings
                 let projCreationSettings: ProjectCreationPreferences = new ProjectCreationPreferences();
                 PreferencesUtils.mergePreference(projCreationSettings, settings.getPropertyValue(SettingsEnum.projectCreation, new ProjectCreationPreferences()));
-                this.defaultAclUniversalAccess = projCreationSettings.aclUniversalAccessDefault;
+                this.defaultAclUniversalAccess = null;
+                if (projCreationSettings.aclUniversalAccessDefault != null) {
+                    this.universalAccessLevels.forEach(l => {
+                        if (projCreationSettings.aclUniversalAccessDefault == l.level) {
+                            this.defaultAclUniversalAccess = l.level;
+                        }
+                    });
+                }
                 this.defaultOpenAtStartup = projCreationSettings.openAtStartUpDefault;
             }
         );

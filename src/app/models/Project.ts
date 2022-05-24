@@ -277,7 +277,8 @@ export class LockStatus {
 
 export enum AccessLevel {
     R = "R",
-    RW = "RW"
+    RW = "RW",
+    EXT = "EXT"
 }
 
 export enum LockLevel {

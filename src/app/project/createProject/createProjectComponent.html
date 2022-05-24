@@ -288,11 +288,12 @@
             <!--Extention points configuration-->
             <div class="card card-alt mb-2">
                 <div class="card-header">
-                    <div class="expandCollapseBtnContainer">
-                        <img src="./assets/images/icons/arrow.png" (click)="extPointPanelOpen = !extPointPanelOpen"
-                            [ngClass]="{'arrow-right' : !extPointPanelOpen}">
+                    <div class="d-flex align-items-center" (click)="extPointPanelOpen = !extPointPanelOpen">
+                        <div class="expandCollapseBtnContainer clickable">
+                            <img src="./assets/images/icons/arrow.png" [ngClass]="{'arrow-right' : !extPointPanelOpen}">
+                        </div>
+                        <label class="clickable" style="flex: 1">{{'PROJECTS.OPTIONAL_SETTINGS'|translate}}</label>
                     </div>
-                    <label style="flex: 1">{{'PROJECTS.OPTIONAL_SETTINGS'|translate}}</label>
                 </div>
                 <div class="card-body" *ngIf="extPointPanelOpen">
 
@@ -424,20 +425,91 @@
                             <label>{{'PROJECTS.OTHER_OPTIONS'|translate}}</label>
                         </div>
                         <div class="card-body">
-                            <div class="form-check mt-1">
-                                <input class="form-check-input" id="openAtStartupCheck" type="checkbox" [(ngModel)]="openAtStartup">
-                                <span class="form-check-label" for="openAtStartupCheck">
-                                    {{'PROJECTS.OPEN_AT_STARTUP'|translate}}
-                                    <span class="fas fa-info-circle" [title]="'PROJECTS.OPEN_AT_STARTUP_INFO'|translate"></span>
-                                </span>
-                            </div>
-                            <div class="form-check mt-1">
-                                <input class="form-check-input" id="globallyReadableCheck" type="checkbox" [(ngModel)]="globallyAccessible">
-                                <span class="form-check-label" for="globallyReadableCheck">
-                                    {{'PROJECTS.ACL_UNIVERSAL_ACCESS'|translate}}
-                                    <span class="fas fa-info-circle" [title]="'PROJECTS.ACL_UNIVERSAL_ACCESS_INFO'|translate"></span>
-                                </span>
-                            </div>
+
+
+                            <table class="table table-sm table-borderless">
+                                <colgroup>
+                                    <col style="width: 1%;">
+                                    <col>
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <td nowrap>
+                                            <label>
+                                                {{'PROJECTS.ACL.UNIVERSAL_ACCESS_LEVEL'|translate}}
+                                                <span class="fas fa-info-circle ml-2" [ngbPopover]="popContent" triggers="mouseenter:mouseleave"></span>
+                                                <ng-template #popContent>
+                                                    <div style="width: 300px;">
+                                                        <p>{{'PROJECTS.ACL.UNIVERSAL_ACCESS_LEVEL_INFO'|translate}}</p>
+                                                        <ul>
+                                                            <li><code>R</code>: {{'PROJECTS.ACL.UNIVERSAL_LEVEL_R_INFO'|translate}}</li>
+                                                            <li><code>RW</code>: {{'PROJECTS.ACL.UNIVERSAL_LEVEL_RW_INFO'|translate}}</li>
+                                                            <li><code>EXT</code>: {{'PROJECTS.ACL.UNIVERSAL_LEVEL_EXT_INFO'|translate}}</li>
+                                                        </ul>
+                                                    </div>
+                                                </ng-template>
+                                            </label>
+                                        </td>
+                                        <td class="text-center">
+                                            <select class="form-control" [(ngModel)]="universalAccess">
+                                                <option *ngFor="let l of universalAccessLevels" [ngValue]="l.level">{{l.label}}</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td nowrap>
+                                            <label>
+                                                {{'PROJECTS.OPEN_AT_STARTUP'|translate}}
+                                                <span class="fas fa-info-circle" [title]="'PROJECTS.OPEN_AT_STARTUP_INFO'|translate"></span>
+                                            </label>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="form-check form-check-inline ml-3">
+                                                <input class="form-check-input" id="startupRadioTrue" type="radio" name="startupRadio" [(ngModel)]="openAtStartup" [value]="true">
+                                                <span class="form-check-label" for="startupRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" id="startupRadioFalse" type="radio" name="startupRadio" [(ngModel)]="openAtStartup" [value]="false">
+                                                <span class="form-check-label" for="startupRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- <table class="table table-sm table-borderless">
+                                <colgroup>
+                                    <col style="width: 1%;">
+                                    <col>
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-rigth" nowrap>
+                                            <label>{{'PROJECTS.OPEN_AT_STARTUP'|translate}}</label>
+                                            <span class="fas fa-info-circle" [title]="'PROJECTS.OPEN_AT_STARTUP_INFO'|translate"></span>
+                                        </td>
+                                        <td>
+                                            <input class="form-check-input" type="checkbox" [(ngModel)]="openAtStartup">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-rigth" nowrap>
+                                            <label>{{'PROJECTS.OPEN_AT_STARTUP'|translate}}</label>
+                                            <span class="fas fa-info-circle" [title]="'PROJECTS.OPEN_AT_STARTUP_INFO'|translate"></span>
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-check-inline ml-3">
+                                                <input class="form-check-input" id="startupRadioTrue" type="radio" name="startupRadio" [(ngModel)]="openAtStartup" [value]="true">
+                                                <span class="form-check-label" for="startupRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" id="startupRadioFalse" type="radio" name="startupRadio" [(ngModel)]="openAtStartup" [value]="false">
+                                                <span class="form-check-label" for="startupRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table> -->
                         </div>
                     </div>
 

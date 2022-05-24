@@ -20,10 +20,11 @@ export class ACLEditorModal {
     consumers: ConsumerACL[];
     lock: { availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel };
 
-    private nullAccessLevel: AccessLevel = null;
-    private accessLevels: AccessLevel[] = [AccessLevel.R, AccessLevel.RW];
-    private lockLevels: LockLevel[] = [LockLevel.R, LockLevel.W, LockLevel.NO];
-    private universalACLLevel: AccessLevel;
+    nullAccessLevel: AccessLevel = null;
+    accessLevels: AccessLevel[] = [AccessLevel.R, AccessLevel.RW];
+    extAccessLevel: AccessLevel = AccessLevel.EXT;
+    lockLevels: LockLevel[] = [LockLevel.R, LockLevel.W, LockLevel.NO];
+    universalACLLevel: AccessLevel;
 
     filterProject: string;
 
@@ -43,6 +44,14 @@ export class ACLEditorModal {
                 this.consumers = projACL.consumers;
                 this.lock = projACL.lock;
                 this.universalACLLevel = projACL.universalACLLevel;
+                //in case a universal level R or RW is set, set the same level to the specific project-consumer available level (the UI will lock the related selector)
+                if (this.universalACLLevel == AccessLevel.R || this.universalACLLevel == AccessLevel.RW) {
+                    this.consumers.forEach(c => {
+                        if (c.name != "SYSTEM") {
+                            c.availableACLLevel = this.universalACLLevel;
+                        }
+                    });
+                }
             }
         );
     }

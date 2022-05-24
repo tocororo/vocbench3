@@ -834,7 +834,7 @@ button.resViewPartitionAddBtn:disabled {
 }
 
 .clickable:hover {
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 /* Disable CSS effect applied on hover */

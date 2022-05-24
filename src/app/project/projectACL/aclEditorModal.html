@@ -30,9 +30,10 @@
                                 </td>
                                 <td>
                                     <select class="form-control form-control-sm" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel"
-                                        [disabled]="c.name != 'SYSTEM' && universalACLLevel">
+                                        [disabled]="c.name != 'SYSTEM' && universalACLLevel && universalACLLevel != 'EXT'">
                                         <option [ngValue]="nullAccessLevel">---</option>
                                         <option *ngFor="let al of accessLevels" [value]="al">{{al}}</option>
+                                        <option *ngIf="c.name != 'SYSTEM' && universalACLLevel && universalACLLevel != 'EXT'">{{extAccessLevel}}</option>
                                     </select>
                                 </td>
                             </tr>
@@ -45,19 +46,33 @@
                 <div class="row">
                     <label class="col-form-label col-sm-4 text-nowrap">
                         {{'PROJECTS.ACL.UNIVERSAL_ACCESS_LEVEL'|translate}}:
-                        <span class="fas fa-info-circle" [title]="'PROJECTS.ACL.UNIVERSAL_ACCESS_LEVEL_INFO'|translate"></span>
+                        <!-- <button class="btn btn-xs btn-light" [ngbPopover]="popContent" [autoClose]="true">
+                            <span class="fas fa-info-circle"></span>
+                        </button> -->
+                        <span class="fas fa-info-circle ml-2" [ngbPopover]="popContent" triggers="mouseenter:mouseleave"></span>
+                        <ng-template #popContent>
+                            <div style="width: 300px;">
+                                <p>{{'PROJECTS.ACL.UNIVERSAL_ACCESS_LEVEL_INFO'|translate}}</p>
+                                <ul>
+                                    <li><code>R</code>: {{'PROJECTS.ACL.UNIVERSAL_LEVEL_R_INFO'|translate}}</li>
+                                    <li><code>RW</code>: {{'PROJECTS.ACL.UNIVERSAL_LEVEL_RW_INFO'|translate}}</li>
+                                    <li><code>EXT</code>: {{'PROJECTS.ACL.UNIVERSAL_LEVEL_EXT_INFO'|translate}}</li>
+                                </ul>
+                            </div>
+                        </ng-template>
                     </label>
                     <div class="col-sm-8">
-                        <select class="form-control form-control-sm" (ngModelChange)="onUniversalAccessLevelChange($event)" [(ngModel)]="universalACLLevel">
+                        <select class="form-control" (ngModelChange)="onUniversalAccessLevelChange($event)" [(ngModel)]="universalACLLevel">
                             <option [ngValue]="nullAccessLevel">---</option>
                             <option *ngFor="let al of accessLevels" [value]="al">{{al}}</option>
+                            <option>{{extAccessLevel}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-1">
                     <label class="col-form-label col-sm-4">{{'PROJECTS.ACL.LOCKABLE'|translate}}:</label>
                     <div class="col-sm-8">
-                        <select class="form-control form-control-sm" (ngModelChange)="onLockLevelChange($event)" [(ngModel)]="lock.availableLockLevel">
+                        <select class="form-control" (ngModelChange)="onLockLevelChange($event)" [(ngModel)]="lock.availableLockLevel">
                             <option *ngFor="let ll of lockLevels" [value]="ll">{{ll}}</option>
                         </select>
                     </div>

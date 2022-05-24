@@ -2,7 +2,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { AdministrationComponent } from "../administration/administrationComponent";
 import { adminRouting } from "../administration/administrationRoutes";
@@ -35,6 +35,7 @@ import { UserModule } from './userModule';
         DragDropModule,
         FormsModule,
         NgbDropdownModule,
+        NgbPopoverModule,
         SharedModule,
         TranslateModule,
         UserModule

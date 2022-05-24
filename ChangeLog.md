@@ -5,7 +5,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 11.0.1 (dd-mm-2022)
-  *
+  * Added support for EXT project universal access level
 
 # 11.0.0 (12-05-2022)
   * Added SuperUser system role: super users create projects where it is automatically set as Project Manager

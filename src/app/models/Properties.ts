@@ -1,6 +1,6 @@
 import { ARTURIResource } from "./ARTResources";
 import { Language } from "./LanguagesCountries";
-import { Project } from "./Project";
+import { AccessLevel, Project } from "./Project";
 import { ResViewPartition } from "./ResourceView";
 import { Sheet2RdfSettings } from './Sheet2RDF';
 import { OWL, RDFS, SKOS } from "./Vocabulary";
@@ -270,7 +270,7 @@ export class SystemSettings {
 }
 
 export class ProjectCreationPreferences {
-    aclUniversalAccessDefault: boolean = false;
+    aclUniversalAccessDefault: AccessLevel = null;
     openAtStartUpDefault: boolean = false;
 }
 

@@ -1809,8 +1809,6 @@
             "UNIVERSAL_ACCESS_LEVEL": "Niveau d'accès universel",
             "UNIVERSAL_ACCESS_LEVEL_INFO": "Niveau d'accès accordé à tous les consommateurs (sauf SYSTEM)"
         },
-        "ACL_UNIVERSAL_ACCESS": "ACL positionné sur accès universel",
-        "ACL_UNIVERSAL_ACCESS_INFO": "Activer cette option pour permettre de rendre le contenu de ce projet accessible par tous les autres projets (ce choix pourra être modifié par la suite depuis l'éditeur ACL)",
         "ACTIONS": {
             "CLOSE_ALL": "Fermer tous les projets",
             "EDIT_ACL": "Éditer ACL",

@@ -347,18 +347,24 @@
                                 <td nowrap>
                                     <label>
                                         {{'ADMINISTRATION.SYSTEM.PROJ_CREATION.DEFAULT_FOR'|translate}}
-                                        "{{'PROJECTS.ACL_UNIVERSAL_ACCESS'|translate}}":
+                                        "{{'PROJECTS.ACL.UNIVERSAL_ACCESS_LEVEL'|translate}}":
                                     </label>
+                                    <span class="fas fa-info-circle ml-2" [ngbPopover]="popContent" triggers="mouseenter:mouseleave"></span>
+                                    <ng-template #popContent>
+                                        <div style="width: 350px;">
+                                            <p>{{'PROJECTS.ACL.UNIVERSAL_ACCESS_LEVEL_INFO'|translate}}</p>
+                                            <ul>
+                                                <li><code>R</code>: {{'PROJECTS.ACL.UNIVERSAL_LEVEL_R_INFO'|translate}}</li>
+                                                <li><code>RW</code>: {{'PROJECTS.ACL.UNIVERSAL_LEVEL_RW_INFO'|translate}}</li>
+                                                <li><code>EXT</code>: {{'PROJECTS.ACL.UNIVERSAL_LEVEL_EXT_INFO'|translate}}</li>
+                                            </ul>
+                                        </div>
+                                    </ng-template>
                                 </td>
                                 <td class="text-center">
-                                    <div class="form-check form-check-inline ml-3">
-                                        <input class="form-check-input" id="aclRadioTrue" type="radio" name="aclRadio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="updateProjectCreationSettings()" [value]="true">
-                                        <span class="form-check-label" for="aclRadioTrue">{{'COMMONS.BOOLEAN.TRUE'|translate}}</span>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" id="aclRadioFalse" type="radio" name="aclRadio" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="updateProjectCreationSettings()" [value]="false">
-                                        <span class="form-check-label" for="aclRadioFalse">{{'COMMONS.BOOLEAN.FALSE'|translate}}</span>
-                                    </div>
+                                    <select class="form-control" [(ngModel)]="defaultAclUniversalAccess" (ngModelChange)="updateProjectCreationSettings()">
+                                        <option *ngFor="let l of universalAccessLevels" [ngValue]="l.level">{{l.label}}</option>
+                                    </select>
                                 </td>
                             </tr>
                             <tr>

@@ -92,13 +92,14 @@ export class ProjectACLModal {
             //available
             title += "Available Access Level: Project '" + project + "'";
             if (acl.availableACLLevel == AccessLevel.RW) {
-                title += " grants Read and Write";
+                title += " grants Read and Write access to '" + consumer + "'";
             } else if (acl.availableACLLevel == AccessLevel.R) {
-                title += " grants Read";
+                title += " grants Read access to '" + consumer + "'";
+            } else if (acl.availableACLLevel == AccessLevel.EXT) {
+                title += " grants access to '" + consumer + "' only if logged user is authorized to access '" + project + "'";
             } else {
-                title += " doesn't grant any";
+                title += " doesn't grant any access to '" + consumer + "'";
             }
-            title += " access to '" + consumer + "'";
             //acquired
             if (acl.acquiredACLLevel != null) {
                 title += "\nAcquired Access Level: Project '" + project + "' is accessed by '" + consumer + "'";
