@@ -1,4 +1,4 @@
-<div style="width: 100%;">
+<div style="width: calc(100% - 250px);">
     <ngx-charts-pie-chart
         [results]="chartData"
         [legend]="false"
@@ -13,5 +13,5 @@
     </ngx-charts-pie-chart>
 </div>
 
-<series-chart-legend [chartData]="chartData" [colorScheme]="colorScheme" [activeEntries]="activeEntries" [readonly]="readonly"
+<series-chart-legend style="width: 250px;" [chartData]="chartData" [colorScheme]="colorScheme" [activeEntries]="activeEntries" [readonly]="readonly"
     (activate)="onActivate($event)" (deactivate)="onDeactivate()" (dataChanged)="onDataChanged($event)"></series-chart-legend>

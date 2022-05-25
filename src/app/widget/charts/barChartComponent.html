@@ -1,4 +1,4 @@
-<div style="width: 100%;">
+<div style="width: calc(100% - 250px);">
    <ngx-charts-bar-vertical
         [results]="chartData"
         [xAxis]="true"
@@ -19,5 +19,5 @@
     </ngx-charts-bar-vertical>
 </div>
 
-<series-chart-legend [chartData]="chartData" [colorScheme]="colorScheme" [activeEntries]="activeEntries" [readonly]="readonly"
+<series-chart-legend style="width: 250px;" [chartData]="chartData" [colorScheme]="colorScheme" [activeEntries]="activeEntries" [readonly]="readonly"
     (activate)="onActivate($event)" (deactivate)="onDeactivate()" (dataChanged)="onDataChanged($event)"></series-chart-legend>
