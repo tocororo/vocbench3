@@ -58,9 +58,8 @@
                     <thead>
                         <tr>
                             <th>{{'SHEET2RDF.HEADER_EDITOR.NODE_ID'|translate}}</th>
-                            <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_TYPE'|translate}}</th>
-                            <th>{{'SHEET2RDF.HEADER_EDITOR.CONVERTER_URI'|translate}}</th>
-                            <th>{{'COMMONS.DETAILS'|translate}}</th>
+                            <th>{{'SHEET2RDF.HEADER_EDITOR.NODE_TYPE'|translate}}</th>
+                            <th>{{'WIDGETS.CONVERTER.CONVERTER'|translate}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,21 +73,18 @@
                             </td>
                             <td [ngClass]="{ grayText : header?.ignore }">{{n.converter?.type}}</td>
                             <td [ngClass]="{ grayText : header?.ignore }" nowrap>
-                                {{n.converter?.contractUri}}
-                                <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-light" (click)="changeUriConverter(n)">
+                                <label class="mr-1">URI:</label>{{n.converter?.contractUri}}
+                                <span *ngIf="n.converter?.type == 'literal'" class="ml-2">
+                                    <span *ngIf="n.converter?.language; else dtBlock">
+                                        <label class="mr-1">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}:</label>{{n.converter.language}}
+                                    </span>
+                                    <span #dtBlock *ngIf="n.converter?.datatypeUri">
+                                        <label class="mr-1">{{'DATA.DATATYPE.DATATYPE'|translate}}:</label>{{getDatatypeShow(n.converter.datatypeUri)}}
+                                    </span>
+                                </span>
+                                <button class="btn btn-xs btn-light ml-1" (click)="changeConverter(n)">
                                     <span class="fas fa-pencil-alt"></span>
                                 </button>
-                            </td>
-                            <td [ngClass]="{ grayText : header?.ignore }" nowrap>
-                                <span *ngIf="n.converter?.language; else dtBlock">
-                                    <label style="white-space: pre">{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}: </label>{{n.converter.language}}
-                                    <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-light" (click)="changeLiteralConverter(n)">
-                                        <span class="fas fa-pencil-alt"></span>
-                                    </button>
-                                </span>
-                                <span #dtBlock *ngIf="n.converter?.datatypeUri">
-                                    <label style="white-space: pre">{{'DATA.DATATYPE.DATATYPE'|translate}}: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
-                                </span>
                             </td>
                         </tr>
                     </tbody>
@@ -157,7 +153,7 @@
             </div>
         </div>
 
-        
+
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>

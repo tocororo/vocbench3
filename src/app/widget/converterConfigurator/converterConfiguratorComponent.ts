@@ -20,18 +20,19 @@ export class ConverterConfiguratorComponent {
     @Input() datatype: ARTURIResource; //restrict/force the selection of datatype for literal converters
     @Output() update: EventEmitter<ConverterConfigStatus> = new EventEmitter();
 
-    availableConverters: ConverterContractDescription[] = [];
+    converters: ConverterContractDescription[] = []; //all converters
+    availableConverters: ConverterContractDescription[] = []; //only selectable converters (restricted according rangeType)
     selectedConverter: ConverterContractDescription;
 
-    private availableSignatures: SignatureDescription[];
-    private selectedSignature: SignatureDescription;
+    availableSignatures: SignatureDescription[];
+    selectedSignature: SignatureDescription;
     private signatureParams: SignatureParam[];
 
     private readonly languageLiteralAspect: string = "language";
     private readonly datatypeLiteralAspect: string = "datatype";
     private literalAspectOpts: string[] = ["---", this.languageLiteralAspect, this.datatypeLiteralAspect];
     private selectedLiteralAspect: string = this.literalAspectOpts[0];
-    private literalAspectChangeable: boolean = true;
+    literalAspectChangeable: boolean = true;
 
     xRoles: string[] = [XRole.concept, XRole.conceptScheme, XRole.skosCollection, XRole.xLabel, XRole.xNote];
     XROLE_SEL_ATTR: string = 'xRoleSelection';
@@ -57,28 +58,8 @@ export class ConverterConfiguratorComponent {
 
         this.codaService.listConverterContracts().subscribe(
             converters => {
-                converters.forEach(c => {
-                    // check converter capability compatibility
-                    let capability: RDFCapabilityType = c.getRDFCapability();
-                    if (this.rangeType == null) {
-                        this.availableConverters.push(c);
-                    } else if (this.rangeType == RangeType.resource) {
-                        if (capability == RDFCapabilityType.node || capability == RDFCapabilityType.uri) {
-                            this.availableConverters.push(c);
-                        }
-                    } else if (this.rangeType == RangeType.literal) {
-                        if (capability == RDFCapabilityType.node || capability == RDFCapabilityType.literal) {
-                            let datatypes = c.getDatatypes();
-                            if (this.datatype != null && datatypes.length > 0) {
-                                if (datatypes.indexOf(this.datatype.getURI()) != -1) { //datatype in the datatypes of the converter => the converter can produce the required dt
-                                    this.availableConverters.push(c);        
-                                }
-                            } else {
-                                this.availableConverters.push(c);
-                            }
-                        }
-                    }
-                });
+                this.converters = converters;
+                this.initAvailableConverters();
                 if (this.converter != null) {
                     this.restoreConverterSelection();
                 }
@@ -87,11 +68,65 @@ export class ConverterConfiguratorComponent {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['converter'] && changes['converter'].currentValue != null && !changes['converter'].isFirstChange()) {
+        if (changes['converter'] && !changes['converter'].isFirstChange()) {
             //NOT isFirstChange required since for the first initialization it needs to wait for availableConverters list initialization
             //in fact restoreConverterSelection is invoked in ngOnInit also after listConverterContracts invocation
-            this.restoreConverterSelection();
+            if (this.converter != null) {
+                this.restoreConverterSelection();
+            } else { //converter set to null => reset all
+                this.selectedConverter = null;
+                this.availableSignatures = [];
+                this.selectedSignature = null;
+                let status: ConverterConfigStatus = {
+                    converter: this.converter,
+                    converterDesc: this.selectedConverter,
+                    signatureDesc: this.selectedSignature
+                };
+                this.update.emit(status);
+            }
         }
+        if (changes['rangeType'] && !changes['rangeType'].isFirstChange()) {
+            //not the first change, otherwise all variables will be reset also when the input converter needs to be restored
+            this.initAvailableConverters();
+            //reset all and emit changes
+            this.converter = null;
+            this.selectedConverter = null;
+            this.availableSignatures = [];
+            this.selectedSignature = null;
+            let status: ConverterConfigStatus = {
+                converter: this.converter,
+                converterDesc: this.selectedConverter,
+                signatureDesc: this.selectedSignature
+            };
+            this.update.emit(status);
+        }
+    }
+
+    private initAvailableConverters() {
+        this.availableConverters = [];
+        this.converters.forEach(c => {
+            // check converter capability compatibility
+            let capability: RDFCapabilityType = c.getRDFCapability();
+            if (this.rangeType == null) {
+                this.availableConverters.push(c);
+
+            } else if (this.rangeType == RangeType.resource) {
+                if (capability == RDFCapabilityType.node || capability == RDFCapabilityType.uri) {
+                    this.availableConverters.push(c);
+                }
+            } else if (this.rangeType == RangeType.literal) {
+                if (capability == RDFCapabilityType.node || capability == RDFCapabilityType.literal) {
+                    let datatypes = c.getDatatypes();
+                    if (this.datatype != null && datatypes.length > 0) {
+                        if (datatypes.indexOf(this.datatype.getURI()) != -1) { //datatype in the datatypes of the converter => the converter can produce the required dt
+                            this.availableConverters.push(c);        
+                        }
+                    } else {
+                        this.availableConverters.push(c);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -160,6 +195,8 @@ export class ConverterConfiguratorComponent {
             return converterType == RDFCapabilityType.uri;
         } else if (signatureReturnType == "org.eclipse.rdf4j.model.Value") {
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -168,7 +205,7 @@ export class ConverterConfiguratorComponent {
      * @param converter 
      * @param emitUpdate useful to prevent to emit update during the converter selection restoring that might influence
      */
-    private selectConverter(converter: ConverterContractDescription, emitUpdate: boolean = true) {
+    selectConverter(converter: ConverterContractDescription, emitUpdate: boolean = true) {
         if (this.selectedConverter != converter) {
             this.selectedConverter = converter;
             /**
@@ -234,6 +271,7 @@ export class ConverterConfiguratorComponent {
         } else if (parameter.type == "java.util.Map<java.lang.String, org.eclipse.rdf4j.model.Value>") {
             return "Key-value Map. Each value can be the id of a node or an RDF value represented in NT serialization";
         }
+        return "";
     }
 
     /**

@@ -12,12 +12,21 @@
             <tbody>
                 <tr>
                     <td class="text-right"><label>ID:</label></td>
-                    <td><input id="toFocus" class="form-control form-control-sm" [(ngModel)]="nodeId" sanitized [disabled]="editingNode"></td>
+                    <td><input id="toFocus" class="form-control" [(ngModel)]="nodeId" sanitized [disabled]="editingNode"></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><label>Type:</label></td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="rangeType" [disabled]="rangeTypeConfig.lock" (onModelChange)="onRangeTypeChanged()">
+                            <option *ngFor="let t of rangeTypes">{{t}}</option>
+                        </select>
+                    </td>
                 </tr>
             </tbody>
         </table>
 
-        <converter-config class="mt-2" [converter]="selectedConverter" [rangeType]="constrainedRangeType" [language]="constrainedLanguage" [datatype]="constrainedDatatype" 
+        <converter-config *ngIf="rangeType" class="mt-2" 
+            [converter]="selectedConverter" [rangeType]="rangeType" [language]="constrainedLanguage" [datatype]="constrainedDatatype" 
             (update)="onConverterUpdate($event)">
         </converter-config>
 

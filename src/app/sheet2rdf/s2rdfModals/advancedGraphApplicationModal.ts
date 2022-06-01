@@ -83,7 +83,7 @@ export class AdvancedGraphApplicationModal {
     }
 
     addNode() {
-        this.openNodeEditorModal(this.header, null, null, null, null, this.newDefinedNodes).then(
+        this.openNodeEditorModal(this.header, null, null, false, null, null, this.newDefinedNodes).then(
             (node: NodeConversion) => {
                 this.newDefinedNodes.push(node);
             },
@@ -101,7 +101,7 @@ export class AdvancedGraphApplicationModal {
             this.selectedNode = null;
         } else { //node already defined in the header => check if it is used by some other graph application
             let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
-            //TODO allow to forcing the deletion a referenced node or not allow at all? 
+            //allow to forcing the deletion a referenced node or not allow at all? 
             if (referenced) { //cannot delete a node used by a graph application
                 this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM" }, ModalType.warning).then(
                     confirm => {
@@ -123,8 +123,9 @@ export class AdvancedGraphApplicationModal {
         );
     }
 
-    private changeUriConverter(node: NodeConversion) {
-        this.openNodeEditorModal(this.header, node, RangeType.resource, null, null, null).then(
+    changeConverter(node: NodeConversion) {
+        let rangeType: RangeType = node.converter ? (node.converter.type == RDFCapabilityType.uri ? RangeType.resource : RangeType.literal) : null;
+        this.openNodeEditorModal(this.header, node, rangeType, false, null, null, null).then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
             },
@@ -132,22 +133,13 @@ export class AdvancedGraphApplicationModal {
         );
     }
 
-    private changeLiteralConverter(node: NodeConversion) {
-        this.openNodeEditorModal(this.header, node, RangeType.literal, null, null, null).then(
-            (n: NodeConversion) => {
-                node.converter = n.converter;
-            },
-            () => { }
-        );
-    }
-
-    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType,
+    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, rangeType: RangeType, lockRangeType: boolean,
         constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
         const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
         modalRef.componentInstance.sheetName = this.sheetName;
         modalRef.componentInstance.header = header;
         modalRef.componentInstance.editingNode = editingNode;
-        modalRef.componentInstance.constrainedRangeType = constrainedRangeType;
+        modalRef.componentInstance.rangeTypeConfig = { type: rangeType, lock: lockRangeType };
         modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
         modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
         modalRef.componentInstance.headerNodes = headerNodes;

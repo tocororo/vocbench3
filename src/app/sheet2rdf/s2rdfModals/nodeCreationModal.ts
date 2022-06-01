@@ -19,7 +19,8 @@ export class NodeCreationModal {
     @Input() sheetName: string;
     @Input() header: SimpleHeader;
     @Input() editingNode: NodeConversion;
-    @Input() constrainedRangeType: RangeType;
+    @Input() constrainRangeType: boolean;
+    @Input() rangeTypeConfig: { type: RangeType, lock: boolean } = { type: null, lock: false };
     @Input() constrainedLanguage: string;
     @Input() constrainedDatatype: ARTURIResource;
     @Input() headerNodes: NodeConversion[]; //other nodes of the input header 
@@ -29,6 +30,9 @@ export class NodeCreationModal {
     private s2rdfModel: S2RDFModel;
 
     nodeId: string;
+
+    rangeTypes: RangeType[] = [RangeType.resource, RangeType.literal];
+    rangeType: RangeType;
 
     selectedConverter: CODAConverter;
     memoizeData: MemoizeData = new MemoizeData();
@@ -41,12 +45,19 @@ export class NodeCreationModal {
         document.getElementById("toFocus").focus();
         this.s2rdfModel = this.s2rdfCtx.sheetModelMap.get(this.sheetName);
 
+        this.rangeType = this.rangeTypeConfig.type;
+
         if (this.editingNode) {
             this.nodeId = this.editingNode.nodeId;
             this.selectedConverter = this.editingNode.converter;
             this.memoizeData = { enabled: this.editingNode.memoize, id: this.editingNode.memoizeId };
         }
+
         this.initMemoizedNodes();
+    }
+
+    onRangeTypeChanged() {
+        this.selectedConverter = null;
     }
 
     onConverterUpdate(updateStatus: ConverterConfigStatus) {

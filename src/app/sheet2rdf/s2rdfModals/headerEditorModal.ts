@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from 'src/app/models/ARTResources';
+import { RDFCapabilityType } from 'src/app/models/Coda';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { AdvancedGraphApplication, GraphApplication, NodeConversion, S2RDFModel, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
 import { RangeType } from "../../services/propertyServices";
@@ -82,7 +83,7 @@ export class HeaderEditorModal {
     }
 
     addNode() {
-        this.openNodeEditorModal(this.header, null, null, null, null, this.header.nodes).then(
+        this.openNodeEditorModal(this.header, null, null, false, null, null, this.header.nodes).then(
             (newNode: NodeConversion) => {
                 this.s2rdfService.addNodeToHeader(this.sheetName, this.header.id, newNode.nodeId, newNode.converter.type,
                     newNode.converter.contractUri, newNode.converter.datatypeUri, newNode.converter.language,
@@ -116,7 +117,7 @@ export class HeaderEditorModal {
     removeNode() {
         //check if the node is used by some graph application
         let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
-        //TODO allow to forcing the deletion a referenced node or not allow at all? 
+        //allow to forcing the deletion a referenced node or not allow at all? 
         if (referenced) { //cannot delete a node used by a graph application
             this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.DELETE_HEADER_NODE_USED_IN_GRAPH_APP_CONFIRM" }, ModalType.warning).then(
                 confirm => {
@@ -137,8 +138,9 @@ export class HeaderEditorModal {
         );
     }
 
-    changeUriConverter(node: NodeConversion) {
-        this.openNodeEditorModal(this.header, node, RangeType.resource, null, null, null).then(
+    changeConverter(node: NodeConversion) {
+        let rangeType: RangeType = node.converter ? (node.converter.type == RDFCapabilityType.uri ? RangeType.resource : RangeType.literal) : null;
+        this.openNodeEditorModal(this.header, node, rangeType, false, null, null, null).then(
             (updatedNode: NodeConversion) => {
                 this.s2rdfService.updateNodeInHeader(this.sheetName, this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri,
                     updatedNode.converter.datatypeUri, updatedNode.converter.language, updatedNode.converter.params, updatedNode.memoize, updatedNode.memoizeId).subscribe(
@@ -152,28 +154,13 @@ export class HeaderEditorModal {
         );
     }
 
-    changeLiteralConverter(node: NodeConversion) {
-        this.openNodeEditorModal(this.header, node, RangeType.literal, null, null, null).then(
-            (updatedNode: NodeConversion) => {
-                this.s2rdfService.updateNodeInHeader(this.sheetName, this.header.id, updatedNode.nodeId, updatedNode.converter.type, updatedNode.converter.contractUri,
-                    updatedNode.converter.datatypeUri, updatedNode.converter.language, updatedNode.converter.params, updatedNode.memoize, updatedNode.memoizeId).subscribe(
-                        () => {
-                            this.initHeader();
-                            this.changed = true;
-                        }
-                    );
-            },
-            () => { }
-        );
-    }
-
-    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType,
+    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, rangeType: RangeType, lockRangeType: boolean,
         constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
         const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
         modalRef.componentInstance.sheetName = this.sheetName;
         modalRef.componentInstance.header = header;
         modalRef.componentInstance.editingNode = editingNode;
-        modalRef.componentInstance.constrainedRangeType = constrainedRangeType;
+        modalRef.componentInstance.rangeTypeConfig = { type: rangeType, lock: lockRangeType };
         modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
         modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
         modalRef.componentInstance.headerNodes = headerNodes;

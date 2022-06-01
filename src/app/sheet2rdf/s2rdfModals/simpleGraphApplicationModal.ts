@@ -287,7 +287,7 @@ export class SimpleGraphApplicationModal {
         modalRef.componentInstance.sheetName = this.sheetName;
         modalRef.componentInstance.header = this.header;
         modalRef.componentInstance.editingNode = null;
-        modalRef.componentInstance.constrainedRangeType = this.selectedRangeType.type;
+        modalRef.componentInstance.rangeTypeConfig = { type: this.selectedRangeType.type, lock: this.selectedRangeType.type != null };
         modalRef.componentInstance.constrainedLanguage = lang;
         modalRef.componentInstance.constrainedDatatype = dt;
         modalRef.componentInstance.headerNodes = this.availableNodes;
