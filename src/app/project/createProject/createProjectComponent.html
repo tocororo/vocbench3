@@ -260,7 +260,7 @@
                         <ng-container *ngIf="isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1" style="white-space: nowrap">
                                 <label>{{'COMMONS.CONFIG.CONFIGURATION'|translate}}</label>
-                                <span class="fas fa-info-circle ml-2" [title]="'PROJECTS.INFERENCE_DISCOURAGED_INFO'|translate"></span>
+                                <span class="fas fa-exclamation-circle ml-2" [title]="'PROJECTS.INFERENCE_DISCOURAGED_INFO'|translate"></span>
                             </div>
                             <div class="col-sm-5">
                                 <extension-configurator #supportRepoConfigurator *ngIf="supportRepoExtensions"
@@ -425,7 +425,6 @@
                             <label>{{'PROJECTS.OTHER_OPTIONS'|translate}}</label>
                         </div>
                         <div class="card-body">
-
 
                             <table class="table table-sm table-borderless">
                                 <colgroup>

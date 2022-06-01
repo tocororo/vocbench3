@@ -41,7 +41,7 @@ export class NewEmbeddedLexicalizationModal {
         let lexicalizationSetPar: ARTURIResource;
         let lexiconDatasetPar: ARTURIResource;
 
-        if (this.lexicalizationSet != null) {
+        if (this.lexicalizationSet != null && this.lexicalizationSet.trim() != "") {
             if (ResourceUtils.testIRI(this.lexicalizationSet)) {
                 lexicalizationSetPar = new ARTURIResource(this.lexicalizationSet);
             } else {
@@ -49,7 +49,7 @@ export class NewEmbeddedLexicalizationModal {
                 return;
             }
         }
-        if (this.lexiconDataset != null) {
+        if (this.lexiconDataset != null && this.lexiconDataset.trim() != "") {
             if (ResourceUtils.testIRI(this.lexiconDataset)) {
                 lexiconDatasetPar = new ARTURIResource(this.lexiconDataset);
             } else {

@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { forkJoin } from "rxjs";
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
-import { CatalogRecord2, DatasetNature, LexicalizationSetMetadata } from "../../models/Metadata";
+import { CatalogRecord2, LexicalizationSetMetadata } from "../../models/Metadata";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
@@ -73,9 +73,9 @@ export class MetadataRegistryComponent {
 
     onCatalogSelected(catalogRecord: CatalogRecord2) {
         this.selectedCatalogRecord2 = catalogRecord;
-        if (this.selectedCatalogRecord2 != null && this.selectedCatalogRecord2.dataset.nature != DatasetNature.ABSTRACT) { //onCatalogSelected is invoked also when tree is initialized/refreshed and the selected node of the tree is nulls 
+        // if (this.selectedCatalogRecord2 != null && this.selectedCatalogRecord2.dataset.nature != DatasetNature.ABSTRACT) { //onCatalogSelected is invoked also when tree is initialized/refreshed and the selected node of the tree is nulls 
+        if (this.selectedCatalogRecord2 != null) { //onCatalogSelected is invoked also when tree is initialized/refreshed and the selected node of the tree is null
             setTimeout(() => {
-                
                 this.initEmbeddedLexicalizationSets();
             });
         }

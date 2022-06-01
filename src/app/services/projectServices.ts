@@ -443,10 +443,21 @@ export class ProjectServices {
                 };
                 let missingSailUrl = msgMatch[1];
                 let missingSail = sailMap[missingSailUrl];
-                let message = "The sail required for the " + missingSail.feature + " feature " +
+                /* 
+                in case of wrong configuration (e.g. selected native store with createRemote), a RepositoryException with the message
+                Unsupported Sail type: openrdf:NativeStore
+                is returned. In such case, missingSail will be null. Do the check here
+                */
+                if (missingSail != null) {
+                    let message = "The sail required for the " + missingSail.feature + " feature " +
                     "is reported to be missing from the triple store; please contact the administrator in order to " +
                     "have the " + missingSail.jar + " bundle deployed within the triple store connected for this project";
-                basicModals.alert({ key: "STATUS.ERROR" }, message, ModalType.error, error.name + ": " + error.message);
+                    basicModals.alert({ key: "STATUS.ERROR" }, message, ModalType.error, error.name + ": " + error.message);
+                } else {
+                    let errorMsg = error.message != null ? error.message : "Unknown response from the server";
+                    let errorDetails = error.stack;
+                    basicModals.alert({ key: "STATUS.ERROR" }, errorMsg, ModalType.error, errorDetails);
+                }
             } else {
                 let errorMsg = error.message != null ? error.message : "Unknown response from the server";
                 let errorDetails = error.stack;
