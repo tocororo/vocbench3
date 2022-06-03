@@ -106,7 +106,7 @@
                     </div>
                     <div class="card-body scrollableContainer">
                         <lexicalization-set-metadata *ngFor="let ls of lexicalizationSets" style="margin-bottom: 2px;"
-                            [lexicalizationSetMetadata]="ls" [dataset]="selectedCatalogRecord?.abstractDataset"
+                            [lexicalizationSetMetadata]="ls" [dataset]="selectedCatalogRecord2"
                             (click)="selectedLexicalizationSet = ls" [ngClass]="{ activePanel : ls == selectedLexicalizationSet }">
                         </lexicalization-set-metadata>
                     </div>

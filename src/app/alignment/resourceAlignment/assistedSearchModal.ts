@@ -2,7 +2,6 @@ import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { finalize } from 'rxjs/operators';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
-import { NewCatalogRecordModal } from "../../metadata/metadataRegistry/newCatalogRecordModal";
 import { ARTURIResource, LocalResourcePosition, RemoteResourcePosition, ResourcePosition, ResourcePositionEnum } from "../../models/ARTResources";
 import { DatasetMetadata } from "../../models/Metadata";
 import { Project } from "../../models/Project";
@@ -287,7 +286,7 @@ export class AssistedSearchModal {
 
     ok() {
         let resourcePosition: string = this.targetPosition + ":" +
-            ((this.targetPosition == ResourcePositionEnum.local) ? this.selectedProject.getName() : this.selectedDataset.identity);
+            ((this.targetPosition == ResourcePositionEnum.local) ? this.selectedProject.getName() : this.selectedDataset.identity.getURI());
 
         let langsToLexModel: Map<string, ARTURIResource> = new Map();
         this.languagesToCheck.forEach(l => {
