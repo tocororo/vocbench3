@@ -116,14 +116,7 @@ export class CreateProjectComponent {
     private selectedRemoteRepoConfig: RemoteRepositoryAccessConfig;
 
     private DEFAULT_REPO_EXTENSION_ID = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.PredefinedRepositoryConfigurer";
-
-    //well known repo extension configurations
-    private readonly IN_MEMORY: string = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JPersistentInMemorySailConfiguration";
-    private readonly NATIVE_STORE: string = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JNativeSailConfiguration";
-    private readonly GDB_FREE: string = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.GraphDBFreeConfiguration";
-    private readonly GDB_SE: string = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.GraphDBSEConfiguration";
-    private localRepoExtConfigIDs: string[] = [this.IN_MEMORY, this.NATIVE_STORE];
-    private remoteRepoExtConfigIDs: string[] = [this.GDB_FREE, this.GDB_SE];
+    private DEFAULT_REPO_CONFIG_TYPE = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JNativeSailConfiguration";
 
     //core repository containing data
     dataRepoId: string;
@@ -194,11 +187,27 @@ export class CreateProjectComponent {
 
     ngOnInit() {
         this.isAdmin = VBContext.getLoggedUser().isAdmin();
-
+        //init core repo extensions
         this.extensionService.getExtensions(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
             extensions => {
-                this.repoConfigExtensions = <ConfigurableExtensionFactory[]>extensions;
-                this.updateAvailableExtConfigs();
+                this.dataRepoExtensions = <ConfigurableExtensionFactory[]>extensions;
+                setTimeout(() => { //let the dataRepoConfigurator component to be initialized (due to *ngIf="dataRepoExtensions")
+                    this.dataRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
+                });
+            }
+        );
+
+        //init support repo extensions
+        /**
+         * this could be done also exploiting the same previous getExtension,
+         * but I preferred to repeat the request in order to avoid to clone the extensions
+         */
+        this.extensionService.getExtensions(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
+            extensions => {
+                this.supportRepoExtensions = <ConfigurableExtensionFactory[]>extensions;
+                setTimeout(() => { //let the supportRepoConfigurator component to be initialized (due to *ngIf="supportRepoExtensions")
+                    this.supportRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
+                });
             }
         );
 
@@ -531,49 +540,6 @@ export class CreateProjectComponent {
         if (this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote) {
             this.onProjectNameChange();
         }
-        this.updateAvailableExtConfigs();
-    }
-
-    /**
-     * Update the available configuration of the extension according the active repository access
-     * (e.g. createLocal -> native store + in memory; createRemote -> gdb free + gdb se)
-     */
-    private updateAvailableExtConfigs() {
-        //set to null, then wait and reinitialize the extensions so that the extension-configurator components are re-initialized as well
-        this.dataRepoExtensions = null;
-        this.supportRepoExtensions = null;
-        setTimeout(() => {
-            this.dataRepoExtensions = [];
-            this.supportRepoExtensions = [];
-            if (this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote || this.selectedRepositoryAccess == RepositoryAccessType.AccessExistingRemote) {
-                this.repoConfigExtensions.forEach(e => {
-                    let extClone = e.clone();
-                    extClone.configurations = extClone.configurations.filter(c => this.remoteRepoExtConfigIDs.includes(c.type));
-                    this.dataRepoExtensions.push(extClone);
-                });
-                this.repoConfigExtensions.forEach(e => {
-                    let extClone = e.clone();
-                    extClone.configurations = extClone.configurations.filter(c => this.remoteRepoExtConfigIDs.includes(c.type));
-                    this.supportRepoExtensions.push(extClone);
-                });
-            } else { //if (this.selectedRepositoryAccess == RepositoryAccessType.CreateLocal) {
-                this.repoConfigExtensions.forEach(e => {
-                    let extClone = e.clone();
-                    extClone.configurations = extClone.configurations.filter(c => this.localRepoExtConfigIDs.includes(c.type));
-                    this.dataRepoExtensions.push(extClone);
-                });
-                this.repoConfigExtensions.forEach(e => {
-                    let extClone = e.clone();
-                    extClone.configurations = extClone.configurations.filter(c => this.localRepoExtConfigIDs.includes(c.type));
-                    this.supportRepoExtensions.push(extClone);
-                });
-                setTimeout(() => { 
-                    //let the extension-configurator (data and support) components to be initialized (*ngIf="dataRepoExtensions" and *ngIf="supportRepoExtensions")
-                    this.dataRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.NATIVE_STORE);
-                    this.supportRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.NATIVE_STORE);
-                });
-            }
-        });
     }
 
     /**
