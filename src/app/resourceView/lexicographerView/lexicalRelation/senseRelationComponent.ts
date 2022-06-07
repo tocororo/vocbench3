@@ -34,11 +34,22 @@ export class SenseRelationComponent {
     }
 
     init() {
-        if (this.relation.source.some(s => s.id.equals(this.sense.id))) { //current sense is among the source entries
-            this.targetRef = this.relation.target;
-        } else { //current entry is not among the source entries => inverse relation
-            this.targetRef = this.relation.source;
+        /*
+        reified relations can be created with "unidirectional" flag to true or false (see LexicalRelationModal)
+        - true: the SenseRelation in input has the two related senses in the "related" list
+        - false: the SenseRelation in input has the two related senses in the source/target lists
+        */
+        //unidirectional
+        if (this.relation.related.length > 0) {
+            this.targetRef = this.relation.related.filter(r => !r.id.equals(this.sense.id));
+        } else { //not-unidirectional
+            if (this.relation.source.some(s => s.id.equals(this.sense.id))) { //current sense is among the source entries
+                this.targetRef = this.relation.target;
+            } else { //current entry is not among the source entries => inverse relation
+                this.targetRef = this.relation.source;
+            }
         }
+        
         // category must be shown only if there are multiple categories (validation) or the relation doesn't rapresents a translation
         this.showCategory = this.relation.category.length != 1 || !this.translation;
 
