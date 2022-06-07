@@ -62,17 +62,17 @@ export class DatasetMetadataComponent {
         );
     }
 
-    // updateTitle(newValue: string) {
-    //     let title: string = null;
-    //     if (newValue != null && newValue.trim() != "") {
-    //         title = newValue;
-    //     }
-    //     this.metadataRegistryService.setTitle(this.dataset.identity, title).subscribe(
-    //         stResp => {
-    //             this.update.emit();
-    //         }
-    //     );
-    // }
+    updateTitle(newValue: string) {
+        let title: string = null;
+        if (newValue != null && newValue.trim() != "") {
+            title = newValue;
+        }
+        this.metadataRegistryService.setTitle(this.dataset.identity, title).subscribe(
+            () => {
+                this.update.emit();
+            }
+        );
+    }
 
     updateSparqlEndpoint(newValue: string) {
         let sparqlEndpoint: ARTURIResource;
@@ -90,8 +90,8 @@ export class DatasetMetadataComponent {
                 return;
             }
         }
-        this.metadataRegistryService.setSPARQLEndpoint(this.datasetMetadata.distribution, sparqlEndpoint).subscribe(
-            stResp => {
+        this.metadataRegistryService.setSPARQLEndpoint(this.datasetMetadata.identity, sparqlEndpoint).subscribe(
+            () => {
                 this.initDatasetMetadata();
                 this.update.emit();
             }
@@ -132,14 +132,6 @@ export class DatasetMetadataComponent {
         }
 
     }
-
-
-
-
-
-
-
-
 
 
 

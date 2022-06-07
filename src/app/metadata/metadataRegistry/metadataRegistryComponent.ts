@@ -21,55 +21,19 @@ import { NewEmbeddedLexicalizationModal } from "./newEmbeddedLexicalizationModal
 export class MetadataRegistryComponent {
 
     @ViewChild('blockDiv', { static: false }) lexSetBlockDivElement: ElementRef;
+    // @ViewChild(MetadataRegistryTreePanelComponent) mdrTreePanel: MetadataRegistryTreePanelComponent;
 
-    // catalogRecords: CatalogRecord[]; //list of catalog (shown to the left)
-    // selectedCatalogRecord: CatalogRecord; //selected catalog. Contains the dataset metadata (which is also retrieved and stored in catalogRecordDataset var) and the other versions
     selectedCatalogRecord2: CatalogRecord2;
-    // catalogRecordDataset: DatasetMetadata; //metadata of the selected record
-    // selectedDataset: { dataset: DatasetMetadata, isVersion?: boolean }; //can be the catalogRecordDataset itself or one of its version
 
     lexicalizationSets: LexicalizationSetMetadata[] = []; //lex set of the selected dataset
     selectedLexicalizationSet: LexicalizationSetMetadata;
+    lexSetSort: SortEnum = SortEnum.lang_asc;
 
     constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private translateService: TranslateService, private modalService: NgbModal) { }
-
-    // ngOnInit() {
-    //     this.initCatalogRecords();
-    // }
 
     /**
      * Catalog records
      */
-
-    /**
-     * Initializes/refreshes the catalog records
-     * @param catalogToSelectIdentity the identity of the catalog to select (useful to restore the selection of the record after a refresh)
-     * @param versionToSelectIdentity the identity of a dataset (the main/abstract one, or a version) to select (useful to restore the selection of a version after a refresh)
-     */
-    // private initCatalogRecords() {
-    //     this.metadataRegistryService.getCatalogRecords().subscribe(
-    //         catalogs => {
-    //             this.catalogRecords = catalogs;
-    //             this.lexicalizationSets = [];
-    //             //try to restore the selection of a previous selected record (if any)
-    //             if (this.selectedCatalogRecord != null) {
-    //                 this.catalogRecords.forEach(c => {
-    //                     if (c.identity == this.selectedCatalogRecord.identity) {
-    //                         this.selectCatalogRecord(c);
-    //                     }
-    //                 });
-    //             }
-    //         }
-    //     );
-    // }
-
-    // private selectCatalogRecord(catalog: CatalogRecord) {
-    //     if (this.selectedCatalogRecord != catalog) {
-    //         this.selectedCatalogRecord = catalog;
-    //         this.lexicalizationSets = [];
-    //         this.initSelectedCatalogDataset();
-    //     }
-    // }
 
     onCatalogSelected(catalogRecord: CatalogRecord2) {
         this.selectedCatalogRecord2 = catalogRecord;
@@ -81,144 +45,92 @@ export class MetadataRegistryComponent {
         }
     }
 
-    /**
-     * Init the dataset of the selected catalog record
-     */
-    // private initSelectedCatalogDataset() {
-    //     this.metadataRegistryService.getDatasetMetadata(new ARTURIResource(this.selectedCatalogRecord.abstractDataset.identity)).subscribe(
-    //         dataset => {
-    //             this.catalogRecordDataset = dataset;
-    //             setTimeout(() => {
-    //                 //restore selection of dataset
-    //                 if (this.selectedDataset != null && this.selectedDataset.isVersion) {
-    //                     //restore a version
-    //                     let versionToRestore = this.selectedCatalogRecord.versions.find(v => v.identity == this.selectedDataset.dataset.identity);
-    //                     if (versionToRestore != null) { //could be null in case catalog records has changed, so the previous selected version was of another dataset
-    //                         this.selectVersion(versionToRestore);
-    //                     } else {
-    //                         this.selectCatalogDataset();    
-    //                     }
-    //                 } else { //restore or select the abstract/main dataset if it was not any selected dataset or if it was previously selected
-    //                     this.selectCatalogDataset();
-    //                 }
-    //             });
-    //         }
-    //     );
-    // }
-
-    // discoverDataset() {
-    //     this.basicModals.prompt({ key: "METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET" }, {
-    //         value: "Resource IRI", tooltip: "This IRI can be directly the IRI of the VoID description " +
-    //             "of the Dataset (the instance of void:Dataset) or the IRI of any resource in the Dataset that points to this VoID description"
-    //     }).then(
-    //         iri => {
-    //             if (ResourceUtils.testIRI(iri)) {
-    //                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-    //                 this.metadataRegistryService.discoverDataset(new ARTURIResource(iri)).subscribe(
-    //                     stResp => {
-    //                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-    //                         this.initCatalogRecords();
-    //                     }
-    //                 );
-    //             } else {
-    //                 this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: iri } });
-    //             }
-    //         }
-    //     );
-    // }
-
-    // addCatalogRecord() {
-    //     const modalRef: NgbModalRef = this.modalService.open(NewCatalogRecordModal, new ModalOptions());
-    //     modalRef.componentInstance.title = TranslationUtils.getTranslatedText({key: "METADATA.METADATA_REGISTRY.ACTIONS.ADD_CATALOG_RECORD"}, this.translateService);
-    //     return modalRef.result.then(
-    //         () => {
-    //             this.initCatalogRecords();
-    //         },
-    //         () => { }
-    //     );
-    // }
-
-    // deleteCatalogRecord() {
-    //     this.metadataRegistryService.deleteCatalogRecord(new ARTURIResource(this.selectedCatalogRecord.identity)).subscribe(
-    //         () => {
-    //             this.catalogRecordDataset = null;
-    //             this.initCatalogRecords();
-    //         }
-    //     );
-    // }
-
-    /**
-     * Dataset and versions
-     */
-
-    // /**
-    //  * select the main dataset of the catalog record
-    //  */
-    // selectCatalogDataset() {
-    //     if (this.selectedDataset && this.selectedDataset.dataset == this.catalogRecordDataset) return; //skip if already selected
-    //     this.selectedDataset = { dataset: this.catalogRecordDataset, isVersion: false };
-    //     this.initEmbeddedLexicalizationSets();
-    // }
-    // /**
-    //  * Select a version of the dataset
-    //  */
-    // selectVersion(v: DatasetMetadata) {
-    //     if (this.selectedDataset && this.selectedDataset.dataset == v) return; //skip if already selected
-    //     this.selectedDataset = { dataset: v, isVersion: true };
-    //     this.initEmbeddedLexicalizationSets();
-    // }
-
-    // addDatasetVersion() {
-    //     const modalRef: NgbModalRef = this.modalService.open(NewDatasetVersionModal, new ModalOptions());
-    //     modalRef.componentInstance.catalogRecordIdentity = this.selectedCatalogRecord.identity;
-    //     return modalRef.result.then(
-    //         () => {
-    //             this.initCatalogRecords();
-    //         },
-    //         () => { }
-    //     );
-    // }
-
-    // deleteDatasetVersion() {
-    //     if (this.selectedDataset.isVersion) {
-    //         this.metadataRegistryService.deleteDatasetVersion(new ARTURIResource(this.selectedDataset.dataset.identity)).subscribe(
-    //             stResp => {
-    //                 this.selectedDataset = null;
-    //                 this.initCatalogRecords();
-    //             }
-    //         );
-    //     }
-    // }
-    
     // onDatasetUpdate() {
-    //     this.initSelectedCatalogDataset();
+    //     this.mdrTreePanel.refresh();
     // }
 
-    // onVersionUpdate() {
-    //     this.initCatalogRecords();
-    // }
 
     /**
      * Lexicalization sets
      */
 
     private initEmbeddedLexicalizationSets() {
-        // UIUtils.startLoadingDiv(this.lexSetBlockDivElement.nativeElement);
-        // this.metadataRegistryService.getEmbeddedLexicalizationSets(new ARTURIResource(this.selectedDataset.dataset.identity)).subscribe(
-        //     sets => {
-        //         UIUtils.stopLoadingDiv(this.lexSetBlockDivElement.nativeElement);
-        //         this.lexicalizationSets = sets;
-        //         this.selectedLexicalizationSet = null;
-        //     }
-        // );
+        this.lexicalizationSets = null;
         UIUtils.startLoadingDiv(this.lexSetBlockDivElement.nativeElement);
         this.metadataRegistryService.getEmbeddedLexicalizationSets(this.selectedCatalogRecord2.dataset.identity).subscribe(
             sets => {
                 UIUtils.stopLoadingDiv(this.lexSetBlockDivElement.nativeElement);
                 this.lexicalizationSets = sets;
+                this.sortLexicalizationSetsImpl(this.lexSetSort);
                 this.selectedLexicalizationSet = null;
             }
         );
+    }
+
+    sortLexicalizationSets(criteria: 'language'|'lexicalizations') {
+        if (criteria == "language") {
+            if (this.lexSetSort == SortEnum.lang_asc) {
+                this.sortLexicalizationSetsImpl(SortEnum.lang_desc);
+            } else if (this.lexSetSort == SortEnum.lang_desc) {
+                this.sortLexicalizationSetsImpl(SortEnum.lang_asc);
+            } else {
+                this.sortLexicalizationSetsImpl(SortEnum.lang_asc);
+            }
+        } else {
+            if (this.lexSetSort == SortEnum.lex_asc) {
+                this.sortLexicalizationSetsImpl(SortEnum.lex_desc);
+            } else if (this.lexSetSort == SortEnum.lex_desc) {
+                this.sortLexicalizationSetsImpl(SortEnum.lex_asc);
+            } else {
+                this.sortLexicalizationSetsImpl(SortEnum.lex_asc);
+            }
+        }
+    }
+
+    sortLexicalizationSetsImpl(criteria: SortEnum) {
+        if (criteria == SortEnum.lang_asc) {
+            this.lexicalizationSets.sort((l1, l2) => {
+                return l1.language.localeCompare(l2.language);
+            });
+        } else if (criteria == SortEnum.lang_desc) {
+            this.lexicalizationSets.sort((l1, l2) => {
+                return l2.language.localeCompare(l1.language);
+            });
+        } else { //lexicalizations
+            this.lexicalizationSets.sort((l1, l2) => {
+                /*
+                - If both lex set has lexicalizations, compare them
+                - If only one of lex set has lexicalizations, set first the one which has it
+                - If none of them has lexicalizations, sort by language
+                */
+                if (l1.lexicalizations && l2.lexicalizations) {
+                    if (criteria == SortEnum.lex_asc) {
+                        return l2.lexicalizations - l1.lexicalizations;
+                    } else {
+                        return l1.lexicalizations - l2.lexicalizations;
+                    }
+                } else if (l1.lexicalizations && !l2.lexicalizations) {
+                    if (criteria == SortEnum.lex_asc) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                } else if (!l1.lexicalizations && l2.lexicalizations) {
+                    if (criteria == SortEnum.lex_asc) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                } else {
+                    if (criteria == SortEnum.lex_asc) {
+                        return l1.language.localeCompare(l2.language);
+                    } else {
+                        return l2.language.localeCompare(l1.language);
+                    }
+                }
+            });
+        }
+        this.lexSetSort = criteria;
     }
 
     assessLexicalizationModel() {
@@ -286,4 +198,11 @@ export class MetadataRegistryComponent {
     }
 
 
+}
+
+enum SortEnum {
+    lang_asc = "lang_asc",
+    lang_desc = "lang_desc",
+    lex_asc = "lex_asc",
+    lex_desc = "lex_desc",
 }

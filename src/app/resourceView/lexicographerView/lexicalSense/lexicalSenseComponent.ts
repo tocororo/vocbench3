@@ -61,7 +61,6 @@ export class LexicalSenseComponent {
         this.reifySenseAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddConceptualization, this.entry.id) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization, this.entry.id) && !this.readonly;
 
-        //TODO server side this service has a temp preauthorized, keep it updated when it will be changed
         this.addRelatedAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
         this.addTranslationAuthorized = this.sense.id && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
     }

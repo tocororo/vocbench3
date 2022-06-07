@@ -100,7 +100,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.ontolexClearLexicalEntryConstituent]: 'auth(rdf(ontolexLexicalEntry, constituents), "D").',
         [VBActionsEnum.ontolexCreateLexicalEntry]: 'auth(rdf(ontolexLexicalEntry), "C").',
         [VBActionsEnum.ontolexCreateLexicon]: 'auth(rdf(limeLexicon), "C").',
-        [VBActionsEnum.ontolexCreateLexicoSemRelation]: 'auth(rdf, "C").',
+        [VBActionsEnum.ontolexCreateLexicoSemRelation]: 'auth(rdf' + AuthorizationEvaluator.resRole + ', values), "C").',
         [VBActionsEnum.ontolexCreateTranslationSet]: 'auth(rdf(vartransTranslationSet), "C").',
         [VBActionsEnum.ontolexDeleteLexicalEntry]: 'auth(rdf(ontolexLexicalEntry), "D").',
         [VBActionsEnum.ontolexDeleteLexicalRelation]: 'auth(rdf(ontolexLexicalEntry, values), "D").',
@@ -190,7 +190,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.skosAddLexicalization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "C").',
         [VBActionsEnum.skosAddMultipleToScheme]: 'auth(rdf(concept, schemes), "C").',
         [VBActionsEnum.skosAddNote]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', notes), "C").',
-        [VBActionsEnum.skosAddToCollection]: 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (skosCollection, values)
+        [VBActionsEnum.skosAddToCollection]: 'auth(rdf(skosCollection), "U").',
         [VBActionsEnum.skosAddTopConcept]: 'auth(rdf(concept, schemes), "C").',
         [VBActionsEnum.skosCreateCollection]: 'auth(rdf(skosCollection), "C").',
         [VBActionsEnum.skosCreateSubCollection]: 'auth(rdf(skosCollection), "C").',
@@ -206,7 +206,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.skosReadSchemes]: 'auth(rdf(concept, schemes), "R").',
         [VBActionsEnum.skosRemoveBroaderConcept]: 'auth(rdf(concept, taxonomy), "D").',
         [VBActionsEnum.skosRemoveConceptFromScheme]: 'auth(rdf(concept, schemes), "D").',
-        [VBActionsEnum.skosRemoveFromCollection]: 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (skosCollection, values)
+        [VBActionsEnum.skosRemoveFromCollection]: 'auth(rdf(skosCollection), "U").',
         [VBActionsEnum.skosRemoveLexicalization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "D").',
         [VBActionsEnum.skosRemoveNote]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', notes), "D").',
         [VBActionsEnum.skosRemoveTopConcept]: 'auth(rdf(concept, schemes), "D").',

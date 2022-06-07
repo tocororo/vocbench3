@@ -135,7 +135,6 @@ export class LexicographerViewComponent {
                 this.addSubtermAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddSubterm) && !this.readonly;
                 this.addConstituentAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetLexicalEntryConstituent) && !this.readonly;
 
-                //TODO server side this service has a temp preauthorized, keep it updated when it will be changed
                 this.addRelatedAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
                 this.addTranslationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexCreateLexicoSemRelation) && !this.readonly;
             }

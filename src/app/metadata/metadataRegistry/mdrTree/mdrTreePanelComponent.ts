@@ -31,14 +31,6 @@ export class MetadataRegistryTreePanelComponent {
 
     constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private modalService: NgbModal, private translate: TranslateService) { }
 
-    // createAbstractDataset() {
-    //     let datasetLocalName = "AGROVOC";
-    //     let uriSpace = "http://aims.fao.org/aos/agrovoc/";
-    //     let title = new ARTLiteral("AGROVOC multilingual thesaurus", null, "en");
-    //     let description = new ARTLiteral("The AGROVOC thesaurus contains more than 38 000 concepts in 39 languages covering topics related to food, nutrition, agriculture, fisheries, forestry, environment and other related domains", null, "en");
-    //     this.metadataRegistryService.createAbstractDataset(datasetLocalName, uriSpace, title, description).subscribe();
-    // }
-
     createConcreteDataset() {
         this.openNewDatasetModal("Create concrete dataset", NewDatasetModeEnum.createConcrete).then(
             () => {
@@ -85,7 +77,7 @@ export class MetadataRegistryTreePanelComponent {
                 if (ResourceUtils.testIRI(iri)) {
                     UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                     this.metadataRegistryService.discoverDataset(new ARTURIResource(iri)).subscribe(
-                        stResp => {
+                        () => {
                             UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                             this.refresh();
                         }
