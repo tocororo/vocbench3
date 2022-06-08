@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { forkJoin, Observable } from 'rxjs';
 import { ARTLiteral, ARTURIResource } from 'src/app/models/ARTResources';
 import { MdrVoc } from 'src/app/models/Vocabulary';
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
@@ -86,19 +87,19 @@ export class DatasetMetadataComponent {
     //     );
     // }
 
-    changeDescription(index: number) {
-        let oldDescr = this.dataset.descriptions[index];
-        this.creationModals.newPlainLiteral({ key: "COMMONS.TITLE" }, null, false, oldDescr.getLang(), true).then(
-            newDescr => {
-                this.metadataRegistryService.setDescription(this.dataset.identity, newDescr).subscribe(
-                    () => {
-                        this.dataset.descriptions[index] = newDescr;
-                        this.update.emit();
-                    }
-                );
-            }
-        );
-    }
+    // changeDescription(index: number) {
+    //     let oldDescr = this.dataset.descriptions[index];
+    //     this.creationModals.newPlainLiteral({ key: "COMMONS.TITLE" }, null, false, oldDescr.getLang(), true).then(
+    //         newDescr => {
+    //             this.metadataRegistryService.setDescription(this.dataset.identity, newDescr).subscribe(
+    //                 () => {
+    //                     this.dataset.descriptions[index] = newDescr;
+    //                     this.update.emit();
+    //                 }
+    //             );
+    //         }
+    //     );
+    // }
     
     editTitles() {
         let localizedMap: LocalizedMap = {};
@@ -118,7 +119,20 @@ export class DatasetMetadataComponent {
                         toDelete.push(t);
                     }
                 });
-            }
+                if (toUpdate.length > 0) {
+                    let updateFn: Observable<void>[] = toUpdate.map(t => {
+                        return this.metadataRegistryService.setTitle(this.dataset.identity, t);
+                    });
+                    forkJoin(updateFn).subscribe();
+                }
+                if (toDelete.length > 0) {
+                    // let removeFn: Observable<void>[] = toDelete.map(t => {
+                    //     return this.metadataRegistryService.removeTitle(this.dataset.identity, t);
+                    // });
+                    // forkJoin(removeFn).subscribe();
+                }
+            },
+            () => {}
         );
     }
 
@@ -140,7 +154,21 @@ export class DatasetMetadataComponent {
                         toDelete.push(d);
                     }
                 });
-            }
+
+                if (toUpdate.length > 0) {
+                    let updateFn: Observable<void>[] = toUpdate.map(t => {
+                        return this.metadataRegistryService.setDescription(this.dataset.identity, t);
+                    });
+                    forkJoin(updateFn).subscribe();
+                }
+                if (toDelete.length > 0) {
+                    // let removeFn: Observable<void>[] = toDelete.map(t => {
+                    //     return this.metadataRegistryService.removeDescription(this.dataset.identity, t);
+                    // });
+                    // forkJoin(removeFn).subscribe();
+                }
+            },
+            () => {}
         );
     }
 
