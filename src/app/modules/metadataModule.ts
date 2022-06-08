@@ -12,8 +12,6 @@ import { MetadataRegistryTreeNodeComponent } from '../metadata/metadataRegistry/
 import { MetadataRegistryTreePanelComponent } from '../metadata/metadataRegistry/mdrTree/mdrTreePanelComponent';
 import { NewDatasetModal } from '../metadata/metadataRegistry/mdrTree/newDatasetModal';
 import { MetadataRegistryComponent } from "../metadata/metadataRegistry/metadataRegistryComponent";
-import { NewCatalogRecordModal } from '../metadata/metadataRegistry/newCatalogRecordModal';
-import { NewDatasetVersionModal } from '../metadata/metadataRegistry/newDatasetVersionModal';
 import { NewEmbeddedLexicalizationModal } from '../metadata/metadataRegistry/newEmbeddedLexicalizationModal';
 import { ConflictResolverModal } from '../metadata/metadataVocabularies/conflictResolverModal';
 import { MetadataVocabulariesComponent } from "../metadata/metadataVocabularies/metadataVocabulariesComponent";
@@ -53,9 +51,7 @@ import { SharedModule } from './sharedModule';
         ImportOntologyModal,
         ImportFromDatasetCatalogModal,
         OntologyMirrorModal,
-        NewCatalogRecordModal,
         NewDatasetModal,
-        NewDatasetVersionModal,
         NewEmbeddedLexicalizationModal
     ],
     exports: [],
@@ -66,9 +62,7 @@ import { SharedModule } from './sharedModule';
         ImportOntologyModal, 
         ImportFromDatasetCatalogModal,
         OntologyMirrorModal,
-        NewCatalogRecordModal,
         NewDatasetModal,
-        NewDatasetVersionModal, 
         NewEmbeddedLexicalizationModal
     ]
 })

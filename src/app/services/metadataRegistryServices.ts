@@ -15,51 +15,6 @@ export class MetadataRegistryServices {
     constructor(private httpMgr: StMetadataRegistry) { }
 
     /**
-     * Adds a abstract version of a void:Dataset together with the dcat:CatalogRecord.
-     * @param uriSpace 
-     * @param dataset if not passed, a local IRI is created
-     * @param title 
-     * @param sparqlEndpoint 
-     * @param dereferenceable if true, set to mdreg:standardDereferenciation; if false, set to mdreg:noDereferenciation
-     * @return the IRI of the dcat:CatalogRecord created for it
-     */
-    addDataset(uriSpace: string, dataset?: ARTURIResource, title?: string, sparqlEndpoint?: ARTURIResource, dereferenceable?: boolean) {
-        let params: STRequestParams = {
-            uriSpace: uriSpace
-        };
-        if (dataset != null) {
-            params.dataset = dataset;
-        }
-        if (title != null) {
-            params.title = title;
-        }
-        if (sparqlEndpoint != null) {
-            params.sparqlEndpoint = sparqlEndpoint;
-        }
-        if (dereferenceable != null) {
-            params.dereferenceable = dereferenceable;
-        }
-        return this.httpMgr.doPost(this.serviceName, "addDataset", params);
-    }
-
-    /**
-     * Adds dataset to the specified catalogRecord as a specific versionInfo.
-     * @param catalogRecord 
-     * @param versionInfo 
-     * @param dataset if not passed, a local IRI is created
-     */
-    addDatasetVersion(catalogRecord: ARTURIResource, versionInfo: string, dataset?: ARTURIResource) {
-        let params: STRequestParams = {
-            catalogRecord: catalogRecord,
-            versionInfo: versionInfo
-        };
-        if (dataset != null) {
-            params.dataset = dataset;
-        }
-        return this.httpMgr.doPost(this.serviceName, "addDatasetVersion", params);
-    }
-
-    /**
      * 
      * @param dataset 
      * @param lexicalizationModel 
