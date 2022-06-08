@@ -13,11 +13,13 @@
                 <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addManually()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_MANUALLY'|translate}}</a>
                 <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addExternalValue()">{{'RESOURCE_VIEW.ACTIONS.ADD_VALUE_FROM_ANOTHER_PROJ'|translate}}</a>
                 <a class="dropdown-item" [ngClass]="{ disabled: deleteAllDisabled }" (click)="removeAllValues()">{{'RESOURCE_VIEW.ACTIONS.DELETE_ALL_VALUES'|translate}}</a>
-                <div class="dropdown-divider"></div>
-                <a *ngIf="customView" class="dropdown-item" (click)="toggleCustomView()">
-                    {{'RESOURCE_VIEW.ACTIONS.TOGGLE_CUSTOM_VIEW'|translate}}
-                    <span *ngIf="showCustomView" class="fas fa-check"></span>
-                </a>
+                <ng-container *ngIf="customView">
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="toggleCustomView()">
+                        {{'RESOURCE_VIEW.ACTIONS.TOGGLE_CUSTOM_VIEW'|translate}}
+                        <span *ngIf="showCustomView" class="fas fa-check"></span>
+                    </a>
+                </ng-container>
             </div>
         </div>
 

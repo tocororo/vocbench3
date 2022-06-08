@@ -41,7 +41,13 @@ export class PredicateObjectsRenderer {
      */
 
     predicate: ARTURIResource;
-    objects: ARTNode[];
+    /*
+    The actual object list of the input predicateObjects.
+    Important: the view must iterate over this so that the foreign URIs resolved asyncronously in ResourceViewEditorComponent are automatically 
+    and properly displayed when the resolution is completed
+    */
+    objects: ARTNode[];        
+    objectsBackup: ARTNode[]; //a copy of the original objects list, used to backup when CV are toggled on/off
 
     showCustomView: boolean = true;
     customView: CustomViewData;
@@ -64,7 +70,8 @@ export class PredicateObjectsRenderer {
         }
         if (changes['predicateObjects']) {
             this.predicate = this.predicateObjects.getPredicate();
-            this.objects = this.predicateObjects.getObjects().slice();
+            this.objectsBackup = this.predicateObjects.getObjects().slice();
+            this.objects = this.predicateObjects.getObjects();
 
             if (this.predicate.getAdditionalProperty(ResAttribute.CUSTOM_VIEW_MODEL) != null) { //predicate has a CV
                 this.cvService.getViewData(this.resource, this.predicate).subscribe( //retrieve data
@@ -131,7 +138,7 @@ export class PredicateObjectsRenderer {
                 }
             }
         } else { //if CV disabled, restore all the objects
-            this.objects = this.predicateObjects.getObjects().slice();
+            this.objects = this.objectsBackup.slice();
         }
     }
 
