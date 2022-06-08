@@ -81,19 +81,20 @@ export class MetadataRegistryServices {
         return this.httpMgr.doGet(this.serviceName, "getEmbeddedLexicalizationSets", params);
     }
 
-    /**
-     * Sets the title of a dataset.
-     * @param dataset 
-     * @param title 
-     */
-    setTitle(dataset: ARTURIResource, title?: string) {
+    setTitle(dataset: ARTURIResource, title?: ARTLiteral) {
         let params: STRequestParams = {
             dataset: dataset,
+            title: title
         };
-        if (title != null) {
-            params.title = title;
-        }
         return this.httpMgr.doPost(this.serviceName, "setTitle", params);
+    }
+
+    setDescription(dataset: ARTURIResource, description?: ARTLiteral) {
+        let params: STRequestParams = {
+            dataset: dataset,
+            description: description
+        };
+        return this.httpMgr.doPost(this.serviceName, "setDescription", params);
     }
 
     /**

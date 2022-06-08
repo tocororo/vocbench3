@@ -1,5 +1,5 @@
 <div style="display: flex; align-items: center; position: relative">
     <lang-item [language]="lang" [showName]="false" style="position: absolute; left: 6px; cursor: pointer; z-index: 1" (click)="editLanguage()"></lang-item>
-    <input type="text" class="form-control" style="padding-left: 24px; z-index: 0;"
+    <input type="text" class="form-control" style="padding-left: 26px; z-index: 0;"
         [(ngModel)]="stringValue" (ngModelChange)="onStringValueChanged()" [disabled]="disabled">
 </div>

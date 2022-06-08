@@ -1,9 +1,12 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { ARTURIResource } from 'src/app/models/ARTResources';
+import { ARTLiteral, ARTURIResource } from 'src/app/models/ARTResources';
 import { MdrVoc } from 'src/app/models/Vocabulary';
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
+import { CreationModalServices } from 'src/app/widget/modal/creationModal/creationModalServices';
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { DatasetMetadata, DatasetMetadata2, DatasetNature } from "../../models/Metadata";
+import { LocalizedMap } from 'src/app/widget/modal/sharedModal/localizedEditorModal/localizedEditorModal';
+import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
+import { DatasetMetadata, DatasetMetadata2 } from "../../models/Metadata";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
@@ -27,14 +30,14 @@ export class DatasetMetadataComponent {
 
     sparqlLimitations: boolean;
 
-    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices) { }
+    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private creationModals: CreationModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['dataset'] && changes['dataset'].currentValue) {
-            if (this.dataset.nature != DatasetNature.ABSTRACT) {
-                this.initDatasetMetadata();
-            }
-        }
+        // if (changes['dataset'] && changes['dataset'].currentValue) {
+        //     if (this.dataset.nature != DatasetNature.ABSTRACT) {
+        //         this.initDatasetMetadata();
+        //     }
+        // }
     }
 
     private initDatasetMetadata() {
@@ -62,17 +65,110 @@ export class DatasetMetadataComponent {
         );
     }
 
-    updateTitle(newValue: string) {
-        let title: string = null;
-        if (newValue != null && newValue.trim() != "") {
-            title = newValue;
-        }
-        this.metadataRegistryService.setTitle(this.dataset.identity, title).subscribe(
-            () => {
-                this.update.emit();
+    // updateTitle(newValue: string) {
+    //     let title: string = null;
+    //     if (newValue != null && newValue.trim() != "") {
+    //         title = newValue;
+    //     }
+    //     this.metadataRegistryService.setTitle(this.dataset.identity, title).subscribe(
+    //         () => {
+    //             this.update.emit();
+    //         }
+    //     );
+    // }
+
+    // onTitleChanged(index: number, newValue: ARTLiteral) {
+    //     this.metadataRegistryService.setTitle(this.dataset.identity, newValue).subscribe(
+    //         () => {
+    //             this.dataset.titles[index] = newValue;
+    //             this.update.emit();
+    //         }
+    //     );
+    // }
+
+    changeDescription(index: number) {
+        let oldDescr = this.dataset.descriptions[index];
+        this.creationModals.newPlainLiteral({ key: "COMMONS.TITLE" }, null, false, oldDescr.getLang(), true).then(
+            newDescr => {
+                this.metadataRegistryService.setDescription(this.dataset.identity, newDescr).subscribe(
+                    () => {
+                        this.dataset.descriptions[index] = newDescr;
+                        this.update.emit();
+                    }
+                );
             }
         );
     }
+    
+    editTitles() {
+        let localizedMap: LocalizedMap = {};
+        this.dataset.titles.forEach(t => { localizedMap[t.getLang()] = t.getValue(); });
+        this.sharedModals.localizedEditor({ key: "COMMONS.TITLE" }, localizedMap).then(
+            (newLocalizedMap: LocalizedMap) => {
+                let toUpdate: ARTLiteral[] = [];
+                for (let lang in newLocalizedMap) {
+                    let old = this.dataset.titles.find(t => t.getLang() == lang);
+                    if (old == null || old.getValue() != newLocalizedMap[lang]) {
+                        toUpdate.push(new ARTLiteral(newLocalizedMap[lang], null, lang));
+                    }
+                }
+                let toDelete: ARTLiteral[] = [];
+                this.dataset.titles.forEach(t => {
+                    if (newLocalizedMap[t.getLang()] == null) {
+                        toDelete.push(t);
+                    }
+                });
+            }
+        );
+    }
+
+    editDescriptions() {
+        let localizedMap: LocalizedMap = {};
+        this.dataset.descriptions.forEach(d => { localizedMap[d.getLang()] = d.getValue(); });
+        this.sharedModals.localizedEditor({ key: "COMMONS.DESCRIPTION" }, localizedMap, true).then(
+            (newLocalizedMap: LocalizedMap) => {
+                let toUpdate: ARTLiteral[] = [];
+                for (let lang in newLocalizedMap) {
+                    let old = this.dataset.descriptions.find(d => d.getLang() == lang);
+                    if (old == null || old.getValue() != newLocalizedMap[lang]) {
+                        toUpdate.push(new ARTLiteral(newLocalizedMap[lang], null, lang));
+                    }
+                }
+                let toDelete: ARTLiteral[] = [];
+                this.dataset.descriptions.forEach(d => {
+                    if (newLocalizedMap[d.getLang()] == null) {
+                        toDelete.push(d);
+                    }
+                });
+            }
+        );
+    }
+
+    // editDescription(index: number) {
+    //     let editingDescr = this.dataset.descriptions[index];
+    //     editingDescr['backup'] = editingDescr.clone();
+    //     editingDescr['editing'] = true;
+
+    // }
+    // confirmEditDescription(index: number) {
+    //     let descr = this.dataset.descriptions[index];
+    //     this.metadataRegistryService.setDescription(this.dataset.identity, descr).subscribe(
+    //         () => {
+    //             descr['editing'] = false;
+    //             this.update.emit();
+    //         }
+    //     );
+    // }
+    // cancelEditDescription(index: number) {
+    //     let descr = this.dataset.descriptions[index];
+    //     this.dataset.descriptions[index] = descr['backup'];
+    // }
+
+    // onDescriptionChanged(index: number, newLit: ARTLiteral) {
+    //     let descr = this.dataset.descriptions[index];
+    //     descr.setLang(newLit.getLang());
+    //     descr.setValue(newLit.getValue());
+    // }
 
     updateSparqlEndpoint(newValue: string) {
         let sparqlEndpoint: ARTURIResource;

@@ -135,63 +135,71 @@
                 <col>
             </colgroup>
             <tbody>
-                <ng-container *ngIf="dataset.nature == 'ABSTRACT'; then abstractBlock; else concreteBlock"></ng-container>
-                <ng-template #abstractBlock>   
-                    <tr nowrap>
-                        <td><label>{{'COMMONS.TITLE'|translate}}:</label></td>
-                        <td>
-                            <lang-string-editor *ngFor="let t of dataset.titles; let i = index" [(ngModel)]="dataset.titles[i]" disabled></lang-string-editor>
-                            <!-- <lang-string-editor *ngFor="let t of dataset.titles; let i = index" [(ngModel)]="dataset.titles[i]" (ngModelChange)="onTitleChanged(dataset.titles[i])"></lang-string-editor> -->
-                        </td>
-                    </tr>
-                    <tr nowrap>
-                        <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.IDENTITY'|translate}}:</label></td>
-                        <td>
-                            <input class="form-control" [ngModel]="dataset?.identity.getURI()" disabled>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>{{'MODELS.MAPLE.DATASET.URI_SPACE'|translate}}:</label></td>
-                        <td>
-                            <input class="form-control" [ngModel]="dataset?.uriSpace" disabled>
-                        </td>
-                    </tr>
-                    <tr nowrap>
-                        <td><label>{{'COMMONS.DESCRIPTION'|translate}}:</label></td>
-                        <td>
-                            <input *ngIf="dataset.descriptions.length == 0" class="form-control" disabled>
-                            <!-- <lang-string-editor *ngFor="let d of dataset.descriptions; let i = index" [(ngModel)]="dataset.descriptions[i]" (ngModelChange)="onDescriptionChanged(dataset.descriptions[i])"></lang-string-editor> -->
-                            <lang-string-editor *ngFor="let d of dataset.descriptions; let i = index" [(ngModel)]="dataset.descriptions[i]" disabled></lang-string-editor>
-                        </td>
-                    </tr>
-                </ng-template>
+                <tr nowrap>
+                    <td><label>{{'COMMONS.TITLE'|translate}}:</label></td>
+                    <td>
+                        <input *ngIf="dataset.titles.length == 0" class="form-control" disabled>
+                        <div class="d-flex">
+                            <div style="flex: 1;">
+                                <lang-string-editor *ngFor="let d of dataset.titles; let i = index" [(ngModel)]="dataset.titles[i]" [disabled]="true"></lang-string-editor>
+                            </div>
+                            <button class="btn btn-light ml-2" (click)="editTitles()">
+                                <span class="fas fa-pencil-alt"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr nowrap>
+                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.IDENTITY'|translate}}:</label></td>
+                    <td>
+                        <input class="form-control" [ngModel]="dataset?.identity.getURI()" disabled>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap><label>{{'MODELS.MAPLE.DATASET.URI_SPACE'|translate}}:</label></td>
+                    <td>
+                        <input class="form-control" [ngModel]="dataset?.uriSpace" disabled>
+                    </td>
+                </tr>
+                <tr nowrap>
+                    <td><label>{{'COMMONS.DESCRIPTION'|translate}}:</label></td>
+                    <td>
+                        <input *ngIf="dataset.descriptions.length == 0" class="form-control" disabled>
+                        <!-- <div *ngFor="let d of dataset.descriptions; let i=index; let last=last" class="d-flex">
+                            <lang-string-editor [ngModel]="dataset.descriptions[i]" (ngModelChange)="onDescriptionChanged(i, $event)" style="flex: 1;" [disabled]="!dataset.descriptions[i]['editing']"></lang-string-editor>
+                            <div class="ml-2">
+                                <button *ngIf="!dataset.descriptions[i]['editing']" class="btn btn-light" (click)="editDescription(i)">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </button>
+                                <div *ngIf="dataset.descriptions[i]['editing']" class="btn-group">
+                                    <button class="btn btn-light px-0" style="width:15px;" (click)="confirmEditDescription(i)" [title]="'ACTIONS.CONFIRM'|translate">
+                                        <span class="fas fa-check" style="color: green"></span>
+                                    </button>
+                                    <button class="btn btn-light px-0" style="width:15px;" (click)="cancelEditDescription(i)" [title]="'ACTIONS.CANCEL'|translate">
+                                        <span class="fas fa-times" style="color: red"></span>
+                                    </button>
+                                </div>
+                                <button *ngIf="last" class="btn btn-xs btn-light" style="margin-left: 2px;" (click)="addValue()" [disabled]="subFields.length == max">
+                                    <span class="fas fa-plus"></span>
+                                </button>
+                                <button class="btn btn-light ml-1" (click)="deleteDescription(i)">
+                                    <span class="fas fa-trash-alt"></span>
+                                </button>
+                            </div>
+                        </div> -->
+                        <div class="d-flex">
+                            <div style="flex: 1;">
+                                <lang-string-editor *ngFor="let d of dataset.descriptions; let i = index" [(ngModel)]="dataset.descriptions[i]"  [disabled]="true"></lang-string-editor>
+                            </div>
+                            <button class="btn btn-light ml-2" (click)="editDescriptions()">
+                                <span class="fas fa-pencil-alt"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
 
+                <!-- 
                 <ng-template #concreteBlock> 
-                    <tr>
-                        <td><label>{{'COMMONS.TITLE'|translate}}:</label></td>
-                        <td>
-                            <!-- <input class="form-control" [ngModel]="datasetMetadata?.title" disabled> -->
-                            <input-editable [value]="datasetMetadata?.title" (valueEdited)="updateTitle($event)" allowEmpty="true"></input-editable>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.IDENTITY'|translate}}:</label></td>
-                        <td>
-                            <input class="form-control" [ngModel]="datasetMetadata?.identity.getURI()" disabled>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>{{'MODELS.MAPLE.DATASET.URI_SPACE'|translate}}:</label></td>
-                        <td>
-                            <input class="form-control" [ngModel]="datasetMetadata?.uriSpace" disabled>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>{{'COMMONS.DESCRIPTION'|translate}}:</label></td>
-                        <td>
-                            <input class="form-control" [ngModel]="datasetMetadata?.description" disabled>
-                        </td>
-                    </tr>
                     <tr>
                         <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.DEREFERENCIATION_SYSTEM'|translate}}:</label></td>
                         <td>
@@ -227,6 +235,7 @@
                         </td>
                     </tr>
                 </ng-template>
+                -->
 
             </tbody>
         </table>

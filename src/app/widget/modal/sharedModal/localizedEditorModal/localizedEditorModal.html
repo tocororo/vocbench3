@@ -1,14 +1,17 @@
 <div cdkDrag class="vbox" cdkDragRootElement=".modal-content" cdkDragBoundary=".modal">
     <div class="modal-header" cdkDragHandle>
-        <h3 class="modal-title">{{'PROJECTS.ACTIONS.EDIT_LABELS'|translate}}</h3>
+        <h5 class="modal-title">{{title}}</h5>
+        <button class="close" (click)="cancel()">
+            <span>&times;</span>
+        </button>
     </div>
-    <div class="modal-body vbox">
 
+    <div class="modal-body vbox">
         <div class="card">
             <div class="card-body">
                 <table class="table table-sm table-borderless">
                     <colgroup>
-                        <col style="width: 150px">
+                        <col style="width: 200px">
                         <col>
                         <col style="width: 1%">
                         <col style="width: 1%">
@@ -65,7 +68,7 @@
 
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
         <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
 </div>

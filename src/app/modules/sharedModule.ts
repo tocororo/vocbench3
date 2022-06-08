@@ -34,6 +34,7 @@ import { LanguageItemComponent } from '../widget/languageItem/languageItemCompon
 import { LeafletMapComponent } from '../widget/leafletMap/leafletMapComponent';
 import { LeafletMapModal } from '../widget/leafletMap/leafletMapModal';
 import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
+import { LocalizedEditorModal } from '../widget/modal/sharedModal/localizedEditorModal/localizedEditorModal';
 import { PartitionFilterEditor } from '../widget/partitionFilterEditor/partitionFilterEditor';
 import { PasswordInputComponent } from '../widget/passwordInput/passwordInputComponent';
 import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
@@ -91,6 +92,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         LanguageItemComponent,
         ListParamEditor,
         LiteralPickerComponent,
+        LocalizedEditorModal,
         ManchesterEditorComponent,
         MapParamEditor,
         MustacheEditorComponent,
@@ -146,6 +148,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         LangStringEditorComponent,
         LanguageItemComponent,
         LiteralPickerComponent,
+        LocalizedEditorModal,
         ManchesterEditorComponent,
         MustacheEditorComponent,
         NTripleEditorComponent,
@@ -183,7 +186,8 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ToastService,
     ],
     entryComponents: [
-        LeafletMapModal
+        LeafletMapModal,
+        LocalizedEditorModal,
     ]
 })
 export class SharedModule { }

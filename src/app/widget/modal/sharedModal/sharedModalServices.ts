@@ -23,6 +23,7 @@ import { StoreConfigurationModal } from "./configurationStoreModal/storeConfigur
 import { ConverterPickerModal } from "./converterPickerModal/converterPickerModal";
 import { DatetimePickerModal } from './datetimePickerModal/datetimePickerModal';
 import { LanguageSelectorModal } from "./languagesSelectorModal/languageSelectorModal";
+import { LocalizedEditorModal, LocalizedMap } from './localizedEditorModal/localizedEditorModal';
 import { ManchesterExprModal, ManchesterExprModalReturnData } from './manchesterExprModal/manchesterExprModal';
 import { PluginConfigModal, PluginSettingsHandler } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal } from "./remoteAccessConfigModal/remoteAccessConfigModal";
@@ -288,6 +289,14 @@ export class SharedModalServices {
         modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         modalRef.componentInstance.selectedFiles = selectedFiles;
         modalRef.componentInstance.multiselection = multiselection;
+        return modalRef.result;
+    }
+
+    localizedEditor(title: TextOrTranslation, localizedMap: LocalizedMap, allowEmpty?: boolean): Promise<LocalizedMap> {
+        const modalRef: NgbModalRef = this.modalService.open(LocalizedEditorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
+        modalRef.componentInstance.localizedMap = localizedMap;
+        modalRef.componentInstance.allowEmpty = allowEmpty;
         return modalRef.result;
     }
 

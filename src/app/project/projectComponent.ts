@@ -28,7 +28,6 @@ import { OpenAllProjReportModal } from "./openAllProjReportModal";
 import { ACLEditorModal } from "./projectACL/aclEditorModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectPropertiesModal } from "./projectPropertiesModal";
-import { ProjectLabelsEditorModal } from "./projectSettingsEditor/projectLabelsEditorModal";
 import { ProjSettingsEditorModal } from "./projectSettingsEditor/projectSettingsEditorModal";
 import { DeleteRemoteRepoModal } from "./remoteRepositories/deleteRemoteRepoModal";
 import { DeleteRepositoryReportModal } from "./remoteRepositories/deleteRepositoryReportModal";
@@ -280,8 +279,16 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     editLabels(project: Project) {
-        const modalRef: NgbModalRef = this.modalService.open(ProjectLabelsEditorModal, new ModalOptions('lg'));
-        modalRef.componentInstance.project = project;
+        this.sharedModals.localizedEditor({ key: "PROJECTS.ACTIONS.EDIT_LABELS" }, project.getLabels()).then(
+            localizedMap => {
+                this.projectService.setProjectLabels(project, localizedMap).subscribe(
+                    () => {
+                        project.setLabels(localizedMap);
+                    }
+                );
+            },
+            () => {}
+        );
     }
 
     editDescription(project: Project) {

@@ -2,30 +2,34 @@ import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
 import { Language } from "src/app/models/LanguagesCountries";
-import { Project } from "src/app/models/Project";
-import { ProjectServices } from "src/app/services/projectServices";
-import { VBContext } from "src/app/utils/VBContext";
+import { VBContext } from 'src/app/utils/VBContext';
 
 @Component({
-    selector: "project-labels-editor-modal",
-    templateUrl: "./projectLabelsEditorModal.html",
+    selector: "localized-editor-modal",
+    templateUrl: "./localizedEditorModal.html",
 })
-export class ProjectLabelsEditorModal {
-    @Input() project: Project;
+export class LocalizedEditorModal {
 
-    labels: LabelItem[];
+    @Input() title: string;
+    @Input() localizedMap: LocalizedMap;
+    @Input() allowEmpty: boolean;
 
-    pendingLabel: LabelItem;
+    labels: LocalizedItem[];
+
+    pendingLabel: LocalizedItem;
     pendingLangs: string[]; //languages for which still doesn't exist a label
 
-    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private translateService: TranslateService) { }
+    constructor(public activeModal: NgbActiveModal, private translateService: TranslateService) { }
 
     ngOnInit() {
         this.labels = [];
-        let projLabels = this.project.getLabels();
-        for (let lang in projLabels) {
-            this.labels.push({ lang: lang, label: projLabels[lang] });
+        for (let lang in this.localizedMap) {
+            let l: LocalizedItem = new LocalizedItem();
+            l.lang = lang;
+            l.label = this.localizedMap[lang];
+            this.labels.push(l);
         }
+
         this.updatePendingLangs();
     }
 
@@ -38,7 +42,7 @@ export class ProjectLabelsEditorModal {
     addLabel() {
         this.updatePendingLangs();
         let currentLang = this.translateService.currentLang;
-        let newLabel = new LabelItem();
+        let newLabel = new LocalizedItem();
         if (this.pendingLangs.includes(currentLang)) { //current i18n language not yet in labels list => use it for new label
             newLabel.lang = currentLang;
         }
@@ -61,9 +65,17 @@ export class ProjectLabelsEditorModal {
         this.pendingLabel = null;
     }
 
-    removeLabel(label: LabelItem) {
+    removeLabel(label: LocalizedItem) {
         this.labels.splice(this.labels.indexOf(label), 1);
         this.updatePendingLangs();
+    }
+
+    isOkEnabled() {
+        if (this.allowEmpty) {
+            return true;
+        } else {
+            return this.labels.length > 0;
+        }
     }
 
     ok() {
@@ -71,12 +83,7 @@ export class ProjectLabelsEditorModal {
         this.labels.forEach(l => {
             labelMap[l.lang] = l.label;
         });
-        this.projectService.setProjectLabels(this.project, labelMap).subscribe(
-            () => {
-                this.project.setLabels(labelMap);
-                this.activeModal.close();
-            }
-        );
+        this.activeModal.close(labelMap);
     }
 
     cancel() {
@@ -85,7 +92,11 @@ export class ProjectLabelsEditorModal {
 
 }
 
-class LabelItem {
+export class LocalizedMap {
+    [lang: string]: string;
+}
+
+class LocalizedItem {
     lang: string;
     label: string;
 }
