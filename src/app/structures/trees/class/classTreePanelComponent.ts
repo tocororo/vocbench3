@@ -31,6 +31,7 @@ import { ClassTreeSettingsModal } from "./classTreeSettingsModal";
 })
 export class ClassTreePanelComponent extends AbstractTreePanel {
     @Input() roots: ARTURIResource[]; //root classes
+    @Input() selectionOnInit: ARTURIResource; //specifies a resource to select after the tree init
 
     @ViewChild(ClassTreeComponent, { static: true }) viewChildTree: ClassTreeComponent;
 

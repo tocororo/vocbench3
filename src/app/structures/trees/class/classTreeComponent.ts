@@ -21,6 +21,7 @@ import { ClassTreeNodeComponent } from "./classTreeNodeComponent";
 })
 export class ClassTreeComponent extends AbstractTree {
     @Input('roots') rootClasses: ARTURIResource[];
+    @Input() selectionOnInit: ARTURIResource; //specifies a resource to select after the tree init
     @Input() filterEnabled: boolean = false;
 
     //ClassTreeNodeComponent children of this Component (useful to open tree during the search)
@@ -55,10 +56,13 @@ export class ClassTreeComponent extends AbstractTree {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.clsService.getClassesInfo(clsTreeRoots, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             roots => {
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(roots, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.roots = this.roots.concat(roots);
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                if (this.selectionOnInit != null) {
+                    this.openTreeAt(this.selectionOnInit);
+                }
             },
             err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
         );

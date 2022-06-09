@@ -45,12 +45,6 @@ export class ClassIndividualTreeComponent {
         if (changes['roots']) { //when roots changes, deselect eventals class and instance selected
             this.selectedClass = null;
             this.selectedInstance = null;
-            //when there is only one class, select it automatically
-            if (this.roots && this.roots.length == 1) {
-                setTimeout(() => { //give time to initialize child component (without this, openTreeAt in class tree generates error)
-                    this.classTreePanelChild.openTreeAt(this.roots[0]);
-                });
-            }
         }
     }
 

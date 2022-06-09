@@ -1,5 +1,5 @@
 <div class="hbox">
-    <class-tree-panel [roots]="roots" context="clsIndTree" (nodeSelected)="onTreeClassSelected($event)" [editable]="false" [projectCtx]="projectCtx">
+    <class-tree-panel [roots]="roots" [selectionOnInit]="roots?.length == 1 ? roots[0] : null" context="clsIndTree" (nodeSelected)="onTreeClassSelected($event)" [editable]="false" [projectCtx]="projectCtx">
     </class-tree-panel>
 
     <!-- Show appropriate tree/list according to the selected class -->
