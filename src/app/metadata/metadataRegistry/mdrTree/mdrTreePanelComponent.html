@@ -1,7 +1,7 @@
 <div class="card card-default vbox blockingDivHost">
     
     <div class="card-header">
-        <label style="flex: 1">Dataset catalog</label>
+        <label style="flex: 1">{{'DATA_MANAGEMENT.DATASET_CATALOG.DATASET_CATALOG'|translate}}</label>
         <div class="btn-toolbar">
             <div class="btn-group btn-group-xs">
                 <div class="btn-group" ngbDropdown>
@@ -9,9 +9,9 @@
                         <span class="fas fa-plus"></span>
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="createConcreteDataset()">{{'Create concrete dataset'|translate}}</a>
-                        <a class="dropdown-item" (click)="connectToAbstractDataset()" [ngClass]="{ disabled: !selectedRecord || selectedRecord.dataset.role != 'ROOT' || selectedRecord.dataset.nature == 'ABSTRACT' }">{{'Connect to abstract dataset'|translate}}</a>
-                        <a class="dropdown-item" (click)="spawnNewAbstractDataset()">{{'Spawn new abstract dataset'|translate}}</a>
+                        <a class="dropdown-item" (click)="createConcreteDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.CREATE_CONCRETE_DATASET'|translate}}</a>
+                        <a class="dropdown-item" (click)="connectToAbstractDataset()" [ngClass]="{ disabled: !selectedRecord || selectedRecord.dataset.role != 'ROOT' || selectedRecord.dataset.nature == 'ABSTRACT' }">{{'METADATA.METADATA_REGISTRY.ACTIONS.CONNECT_TO_ABS_DATASET'|translate}}</a>
+                        <a class="dropdown-item" (click)="spawnNewAbstractDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.SPAWN_ABSTRACT_DATASET'|translate}}</a>
                         <a class="dropdown-item" (click)="discoverDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET'|translate}}</a>
                     </div>
                 </div>
@@ -33,23 +33,23 @@
     <div class="card-footer">
         <div class="dropdown float-right" ngbDropdown placement="top-right">
             <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle>
-                Legend <span class="fas fa-caret-up fa-sm"></span>
+                {{'COMMONS.LEGEND'|translate}} <span class="fas fa-caret-up fa-sm"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <h6 class="dropdown-header">Dataset nature</h6>
+                <h6 class="dropdown-header">{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NATURE.DATASET_NATURE'|translate}}</h6>
                 <a class="dropdown-item no-hover">
                     <div class="text-nowrap">
-                        <span class="fas fa-folder-open mr-2"></span> Abstract dataset
+                        <span class="fas fa-folder-open mr-2"></span> {{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NATURE.ABSTRACT_DATASET'|translate}}
                     </div>
                 </a>
                 <a class="dropdown-item no-hover">
                     <div class="text-nowrap">
-                        <img src="./assets/images/icons/vb_16x16.png" class="mr-2" height="16px" width="16px"> VB Project
+                        <img src="./assets/images/icons/vb_16x16.png" class="mr-2" height="16px" width="16px"> {{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NATURE.VB_PROJECT'|translate}}
                     </div>
                 </a>
                 <a class="dropdown-item no-hover">
                     <div class="text-nowrap">
-                        <img src="./assets/images/icons/rdf4j_16x16.png" class="mr-2" height="16px" width="16px"> RDF4J Repository
+                        <img src="./assets/images/icons/rdf4j_16x16.png" class="mr-2" height="16px" width="16px"> {{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NATURE.RDF4J_REPO'|translate}}
                     </div>
                 </a>
                 <a class="dropdown-item no-hover">
@@ -59,11 +59,11 @@
                 </a>
                 <a class="dropdown-item no-hover">
                     <div class="text-nowrap">
-                        <img src="./assets/images/icons/res/ontology.png" class="mr-2" height="16px" width="16px"> SPARQL Endpoint
+                        <img src="./assets/images/icons/res/ontology.png" class="mr-2" height="16px" width="16px"> {{'MODELS.MAPLE.DATASET.SPARQL_ENDPOINT'|translate}}
                     </div>
                 </a>
                 <div class="dropdown-divider"></div>
-                <h6 class="dropdown-header">Dataset Role</h6>
+                <h6 class="dropdown-header">{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NATURE.DATASET_ROLE'|translate}}</h6>
                 <a class="dropdown-item no-hover">
                     <span class="badge badge-primary mr-2">M</span>Master
                 </a>

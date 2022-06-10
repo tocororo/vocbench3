@@ -325,7 +325,6 @@
                 "LEFT_ENTITY": "Left entity",
                 "MAPPING_PROP": "Mapping Property",
                 "QUICK_ACTIONS": "Quick Actions",
-                "RELATION": "Relation",
                 "RIGHT_ENTITY": "Right entity",
                 "SET_DEFAULT_FOR_RELATION": "Set the property as default for the relation",
                 "YOU_CAN_FORCE_PROP": "You can force a property"
@@ -487,6 +486,7 @@
             "LANGUAGES": "Languages",
             "NO_LANG_INFO": "No language selected implicitly means all languages"
         },
+        "LEGEND": "Legend",
         "LEVEL": "Level",
         "MANDATORY": "Mandatory",
         "MANDATORY_FIELD": "Mandatory field",
@@ -508,6 +508,7 @@
         "POSITION": "Position",
         "REASON": "Reason",
         "REIFIED": "Reified",
+        "RELATION": "Relation",
         "RENDERING": "Rendering",
         "REQUIRED": "Required",
         "ROLE": "Role",
@@ -1002,7 +1003,6 @@
         "MAPPING_PROP": "Mapping Prop",
         "MEASURE": "Measure",
         "NEW_ALIGNMENT": "New alignment",
-        "RELATION": "Relation",
         "RIGHT_ENTITY": "Right entity",
         "SYNC_ENTITIES": "Sync entities"
     },
@@ -1575,17 +1575,13 @@
     "METADATA": {
         "METADATA_REGISTRY": {
             "ACTIONS": {
-                "ADD_CATALOG_RECORD": "Add Catalog record",
-                "ADD_DATASET_VERSION": "Add Dataset Version",
                 "ADD_EMBEDDED_LEXICALIZATION_SET": "Add Embedded Lexicalization Set",
                 "ASSESS_LEXICALIZATION_MODEL": "Assess Lexicalization Model",
                 "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Delete All Embedded Lexicalization Set",
-                "DELETE_DATASET_VERSION": "Delete Dataset Version",
                 "DELETE_EMBEDDED_LEXICALIZATION_SET": "Delete Embedded Lexicalization Set",
                 "DISCOVER_DATASET": "Discover dataset"
             },
             "DATASET_METADATA": {
-                "CATALOG_RECORDS": "Catalog Records",
                 "DEREFERENCEABLE": "Dereferenceable",
                 "DEREFERENCIATION_SYSTEM": "Dereferenciation System",
                 "IDENTITY": "Identity",
@@ -1593,7 +1589,6 @@
                 "MODIFIED": "Modified",
                 "NO_AGGREGATION": "No aggregation",
                 "NO_AGGREGATION_INFO": "If checked it means that the aggregation may be supported, but its support is insufficient for the purposes of Vocbench",
-                "OTHER_VERSIONS": "Other versions",
                 "VERSION_INFO": "Version Info"
             },
             "LEXICALIZATION_SET": {
@@ -1629,7 +1624,6 @@
                 "UPDATE_ONTO_MIRROR_FROM_WEB": "Update ontology mirror from web"
             },
             "BIND_NS_AND_BASEURI": "Bind/unbind namespace and baseURI",
-            "DATASET_CATALOG": "Dataset Catalog",
             "IMPORTS": "Imports",
             "IMPORT_TREE": {
                 "FAILED_IMPORT": "Failed import",
@@ -2199,7 +2193,6 @@
             "LEGEND": {
                 "IGNORED": "Header ignored",
                 "INCOMPLETED_SUBJECT": "Incompleted Subject header",
-                "LEGEND": "Legend",
                 "NOT_CONFIGURED": "Header not configured",
                 "PARTIALLY_CONFIGURED": "Header partially configured (e.g. only node defined)",
                 "SUBJECT_HEADER": "Header used for the subject mapping",

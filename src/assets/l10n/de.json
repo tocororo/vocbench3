@@ -326,7 +326,6 @@
                 "LEFT_ENTITY": "Linke Entität",
                 "MAPPING_PROP": "Mapping-Property",
                 "QUICK_ACTIONS": "Schnelle Aktionen",
-                "RELATION": "Beziehung",
                 "RIGHT_ENTITY": "Rechte Entität",
                 "SET_DEFAULT_FOR_RELATION": "Diese Eigenschaft als Standard für die Beziehung festlegen",
                 "YOU_CAN_FORCE_PROP": "Sie können eine Eigenschaft erzwingen"
@@ -488,6 +487,7 @@
             "LANGUAGES": "Sprachen",
             "NO_LANG_INFO": "Keine ausgewählte Sprache bedeutet alle Sprachen"
         },
+        "LEGEND": "Legende",
         "LEVEL": "Ebene",
         "MANDATORY": "Verpflichtend",
         "MANDATORY_FIELD": "Pflichtfeld",
@@ -509,6 +509,7 @@
         "POSITION": "Position",
         "REASON": "Reasoning",
         "REIFIED": "Reifiziert",
+        "RELATION": "Beziehung",
         "RENDERING": "Rendern",
         "REQUIRED": "Erforderlich",
         "ROLE": "Rolle",
@@ -997,7 +998,6 @@
         "MAPPING_PROP": "Mapping-Prop.",
         "MEASURE": "Konfidenzmaß",
         "NEW_ALIGNMENT": "Neues Alignment",
-        "RELATION": "Beziehung",
         "RIGHT_ENTITY": "Rechte Entität",
         "SYNC_ENTITIES": "Entitäten synchronisieren"
     },
@@ -1570,17 +1570,13 @@
     "METADATA": {
         "METADATA_REGISTRY": {
             "ACTIONS": {
-                "ADD_CATALOG_RECORD": "Katalogeintrag hinzufügen",
-                "ADD_DATASET_VERSION": "Datensatzversion hinzufügen",
                 "ADD_EMBEDDED_LEXICALIZATION_SET": "Embedded Lexicalization Set hinzufügen",
                 "ASSESS_LEXICALIZATION_MODEL": "Lexikalisierungsmodell untersuchen",
                 "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Alle eingebetteten Lexikalisierungssätze löschen",
-                "DELETE_DATASET_VERSION": "Dataset-Version löschen",
                 "DELETE_EMBEDDED_LEXICALIZATION_SET": "Embedded Lexicalization Set löschen",
                 "DISCOVER_DATASET": "Datensatz entdecken"
             },
             "DATASET_METADATA": {
-                "CATALOG_RECORDS": "Katalogeinträge",
                 "DEREFERENCEABLE": "Dereferenzierbar",
                 "DEREFERENCIATION_SYSTEM": "Dereferenzierungssystem",
                 "IDENTITY": "Identität",
@@ -1588,7 +1584,6 @@
                 "MODIFIED": "Geändert",
                 "NO_AGGREGATION": "Keine Aggregation",
                 "NO_AGGREGATION_INFO": "Wenn diese Option aktiviert ist, bedeutet dies, dass die Aggregation möglicherweise unterstützt wird, ihre Unterstützung jedoch für die Zwecke von Vocbench nicht ausreicht.",
-                "OTHER_VERSIONS": "Andere Versionen",
                 "VERSION_INFO": "Versions-Information"
             },
             "LEXICALIZATION_SET": {
@@ -1624,7 +1619,6 @@
                 "UPDATE_ONTO_MIRROR_FROM_WEB": "Ontologie-Mirror aus dem Web aktualisieren"
             },
             "BIND_NS_AND_BASEURI": "Namensraum und baseURI binden / aufheben",
-            "DATASET_CATALOG": "Datensatzkatalog",
             "IMPORTS": "Importe",
             "IMPORT_TREE": {
                 "FAILED_IMPORT": "Import fehlgeschlagen",
@@ -2193,7 +2187,6 @@
             "LEGEND": {
                 "IGNORED": "Header ignoriert",
                 "INCOMPLETED_SUBJECT": "Unvollständiger Subject-Header",
-                "LEGEND": "Legende",
                 "NOT_CONFIGURED": "Header ist nicht konfiguriert.",
                 "PARTIALLY_CONFIGURED": "Header ist teilweise konfiguriert (z. B. nur Knoten definiert).",
                 "SUBJECT_HEADER": "Header für das Subject-Mapping",

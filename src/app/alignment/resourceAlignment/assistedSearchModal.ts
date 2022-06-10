@@ -1,7 +1,10 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
-import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { NewDatasetModeEnum } from 'src/app/metadata/metadataRegistry/mdrTree/connectToAbsDatasetModal';
+import { NewDatasetModal } from 'src/app/metadata/metadataRegistry/mdrTree/newDatasetModal';
+import { ModalOptions, ModalType, TranslationUtils } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, LocalResourcePosition, RemoteResourcePosition, ResourcePosition, ResourcePositionEnum } from "../../models/ARTResources";
 import { DatasetMetadata } from "../../models/Metadata";
 import { Project } from "../../models/Project";
@@ -58,7 +61,7 @@ export class AssistedSearchModal {
 
     constructor(public activeModal: NgbActiveModal, private alignmentService: AlignmentServices,
         private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices,
-        private basicModals: BasicModalServices, private modalService: NgbModal) {
+        private basicModals: BasicModalServices, private modalService: NgbModal, private translate: TranslateService) {
     }
 
     ngOnInit() {
@@ -171,16 +174,17 @@ export class AssistedSearchModal {
         }
     }
 
-    // addRemoteDataset() {
-    //     const modalRef: NgbModalRef = this.modalService.open(NewCatalogRecordModal, new ModalOptions());
-    //     modalRef.componentInstance.title = "New Remote Dataset";
-    //     modalRef.result.then(
-    //         () => {
-    //             this.initRemoteDatasets();
-    //         },
-    //         () => { }
-    //     );
-    // }
+    addRemoteDataset() {
+        const modalRef: NgbModalRef = this.modalService.open(NewDatasetModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText({ key: "METADATA.METADATA_REGISTRY.ACTIONS.CREATE_CONCRETE_DATASET" }, this.translate);
+        modalRef.componentInstance.mode = NewDatasetModeEnum.createConcrete;
+        return modalRef.result.then(
+            () => {
+                this.initRemoteDatasets();
+            },
+            () => { }
+        );
+    }
 
     private profileMediationRemoteDataset() {
         if (this.isDatasetMetadataAvailable()) {

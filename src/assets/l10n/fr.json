@@ -326,7 +326,6 @@
                 "LEFT_ENTITY": "Entité de gauche",
                 "MAPPING_PROP": "Propriété de mapping",
                 "QUICK_ACTIONS": "Actions rapides",
-                "RELATION": "Relation",
                 "RIGHT_ENTITY": "Entité de droite",
                 "SET_DEFAULT_FOR_RELATION": "Définit la propriété par défaut pour la relation",
                 "YOU_CAN_FORCE_PROP": "Vous pouvez forcer une propriété"
@@ -488,6 +487,7 @@
             "LANGUAGES": "Langues",
             "NO_LANG_INFO": "Aucune langue sélectionnée équivaut implicitement à toutes les langues"
         },
+        "LEGEND": "Légende",
         "LEVEL": "Niveau",
         "MANDATORY": "Obligatoire",
         "MANDATORY_FIELD": "Champs obligatoires",
@@ -509,6 +509,7 @@
         "POSITION": "Position",
         "REASON": "Motif",
         "REIFIED": "Réifié",
+        "RELATION": "Relation",
         "RENDERING": "Rendu",
         "REQUIRED": "Nécessaire",
         "ROLE": "Rôle",
@@ -1003,7 +1004,6 @@
         "MAPPING_PROP": "Relation d'alignement",
         "MEASURE": "Degré de confiance",
         "NEW_ALIGNMENT": "Nouvel alignement",
-        "RELATION": "Relation",
         "RIGHT_ENTITY": "Entité de droite",
         "SYNC_ENTITIES": "Synchroniser les entités"
     },
@@ -1575,17 +1575,13 @@
     "METADATA": {
         "METADATA_REGISTRY": {
             "ACTIONS": {
-                "ADD_CATALOG_RECORD": "Ajouter un enregistrement de catalogue",
-                "ADD_DATASET_VERSION": "Ajouter une version de jeu de données",
                 "ADD_EMBEDDED_LEXICALIZATION_SET": "Ajouter un jeu de lexicalisation intégré",
                 "ASSESS_LEXICALIZATION_MODEL": "Évaluer le modèle de lexicalisation",
                 "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Supprimer tous les jeux de lexicalisation intégrés",
-                "DELETE_DATASET_VERSION": "Supprimer la version du jeu de données",
                 "DELETE_EMBEDDED_LEXICALIZATION_SET": "Supprimer le jeu de lexicalisation intégré",
                 "DISCOVER_DATASET": "Trouver un jeu de données"
             },
             "DATASET_METADATA": {
-                "CATALOG_RECORDS": "Enregistrements de catalogue",
                 "DEREFERENCEABLE": "Déréférençable",
                 "DEREFERENCIATION_SYSTEM": "Système de déréférencement",
                 "IDENTITY": "Identité",
@@ -1593,7 +1589,6 @@
                 "MODIFIED": "Modifié",
                 "NO_AGGREGATION": "Aucune agrégation",
                 "NO_AGGREGATION_INFO": "Si cette option est cochés, cela signifie que l'agrégation pourrait être supportée, mais que son support est insuffisant pour les objectifs de VocBench",
-                "OTHER_VERSIONS": "Autres versions",
                 "VERSION_INFO": "Information de version"
             },
             "LEXICALIZATION_SET": {
@@ -1629,7 +1624,6 @@
                 "UPDATE_ONTO_MIRROR_FROM_WEB": "Mettre à jour le miroir d'ontologie depuis le web"
             },
             "BIND_NS_AND_BASEURI": "Lier/délier l'espace de nom et l'URI de base",
-            "DATASET_CATALOG": "Catalogue de jeu de donnée",
             "IMPORTS": "Imports",
             "IMPORT_TREE": {
                 "FAILED_IMPORT": "Import échoué",
@@ -2199,7 +2193,6 @@
             "LEGEND": {
                 "IGNORED": "En-tête ignoré",
                 "INCOMPLETED_SUBJECT": "En-tête de sujet incomplet",
-                "LEGEND": "Légende",
                 "NOT_CONFIGURED": "En-tête non configuré",
                 "PARTIALLY_CONFIGURED": "En-tête partiellement configuré (par ex. un seul nœud défini)",
                 "SUBJECT_HEADER": "En-tête utilisé pour la correspondance des sujets",

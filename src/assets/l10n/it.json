@@ -331,7 +331,6 @@
                 "LEFT_ENTITY": "Entità sinistra",
                 "MAPPING_PROP": "Proprietà di mapping",
                 "QUICK_ACTIONS": "Quick action",
-                "RELATION": "Relazione",
                 "RIGHT_ENTITY": "Entità destra",
                 "SET_DEFAULT_FOR_RELATION": "Imposta la proprietà come default per la relazione",
                 "YOU_CAN_FORCE_PROP": "Puoi forzare una proprietà"
@@ -498,6 +497,7 @@
             "LANGUAGES": "Lingue",
             "NO_LANG_INFO": "Nessuna lingua selezionata implica tutte le lingue"
         },
+        "LEGEND": "Legenda",
         "LEVEL": "Livello",
         "MANDATORY": "Obbligatorio",
         "MANDATORY_FIELD": "Campo obbligatorio",
@@ -520,6 +520,7 @@
         "POSITION": "Posizione",
         "REASON": "Motivo",
         "REIFIED": "Reificata",
+        "RELATION": "Relazione",
         "RENDERING": "Rendering",
         "REQUIRED": "Necessario",
         "ROLE": "Ruolo",
@@ -1088,7 +1089,6 @@
         "MAPPING_PROP": "Prop di mapping",
         "MEASURE": "Confidenza",
         "NEW_ALIGNMENT": "Nuovo allineamento",
-        "RELATION": "Relazione",
         "RIGHT_ENTITY": "Entità destra",
         "SYNC_ENTITIES": "Sincronizza entità"
     },
@@ -1671,26 +1671,34 @@
     "METADATA": {
         "METADATA_REGISTRY": {
             "ACTIONS": {
-                "ADD_CATALOG_RECORD": "Aggiungi Catalog record",
-                "ADD_DATASET_VERSION": "Aggiungi versione Dataset",
                 "ADD_EMBEDDED_LEXICALIZATION_SET": "Aggiungi Embedded Lexicalization Set",
                 "ASSESS_LEXICALIZATION_MODEL": "Scopri modello di lessicalizzazione",
+                "CONNECT_TO_ABS_DATASET": "Collega ad un dataset astratto",
+                "CREATE_CONCRETE_DATASET": "Crea dataset concreto",
                 "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Cancella tutti gli Embedded Lexicalization Set",
-                "DELETE_DATASET_VERSION": "Cancella versione Dataset",
                 "DELETE_EMBEDDED_LEXICALIZATION_SET": "Cancella Embedded Lexicalization Set",
-                "DISCOVER_DATASET": "Trova dataset"
+                "DISCOVER_DATASET": "Trova dataset",
+                "DISCOVER_DATASET_IRI_INFO": "Questo IRI può direttamente essere l'IRI del descrittore VoID del Dataset (istanza di void:Dataset) o l'IRI di una qualsiasi risorsa nel Dataset che punta a tale descrittore VoID",
+                "SPAWN_ABSTRACT_DATASET": "Genera dataset astratto"
             },
             "DATASET_METADATA": {
-                "CATALOG_RECORDS": "Catalog Records",
                 "DEREFERENCEABLE": "Dereferenziabile",
                 "DEREFERENCIATION_SYSTEM": "Sistema di dereferenziazione",
                 "IDENTITY": "Identità",
                 "ISSUED": "Pubblicato",
                 "MODIFIED": "Modificato",
+                "NATURE": {
+                    "ABSTRACT_DATASET": "Dataset astratto",
+                    "CONCRETE_DATASET": "Dataset concreto",
+                    "DATASET_NATURE": "Natura dataset",
+                    "DATASET_ROLE": "Ruolo dataset",
+                    "RDF4J_REPO": "RDF4J Repository",
+                    "VB_PROJECT": "Progetto VB"
+                },
                 "NO_AGGREGATION": "No aggregazione",
                 "NO_AGGREGATION_INFO": "Se spuntato, significa che l'aggregazione potrebbe essere supportata, ma il suo supporto è insufficiente per i propositi di Vocbench",
-                "OTHER_VERSIONS": "Altre versioni",
-                "VERSION_INFO": "Info versione"
+                "VERSION_INFO": "Info versione",
+                "VERSION_NOTES": "Note versione"
             },
             "LEXICALIZATION_SET": {
                 "AVG_OF_LEXICALIZATIONS": "Q.tà media di lessicalizzazioni",
@@ -1733,7 +1741,6 @@
                 "UPDATE_ONTO_MIRROR_FROM_WEB": "Aggiorna ontology mirror da web"
             },
             "BIND_NS_AND_BASEURI": "Vincola/svincola namespace e baseURI",
-            "DATASET_CATALOG": "Dataset Catalog",
             "IMPORTS": "Import",
             "IMPORT_TREE": {
                 "FAILED_IMPORT": "Import fallito",
@@ -2326,7 +2333,6 @@
             "LEGEND": {
                 "IGNORED": "Header ignorato",
                 "INCOMPLETED_SUBJECT": "Header soggetto incompleto",
-                "LEGEND": "Legenda",
                 "NOT_CONFIGURED": "Header non configurato",
                 "PARTIALLY_CONFIGURED": "Header parzialmente configurato (es. solo un nodo configurato)",
                 "SUBJECT_HEADER": "Header usato per il mapping del soggetto",

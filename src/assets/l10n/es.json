@@ -326,7 +326,6 @@
                 "LEFT_ENTITY": "Entidad izquierda",
                 "MAPPING_PROP": "Propiedad de mapeo",
                 "QUICK_ACTIONS": "Acciones rápidas",
-                "RELATION": "Relación",
                 "RIGHT_ENTITY": "Entidad derecha",
                 "SET_DEFAULT_FOR_RELATION": "Establecer la propiedad como predeterminada para la relación",
                 "YOU_CAN_FORCE_PROP": "Puede forzar una propiedad"
@@ -488,6 +487,7 @@
             "LANGUAGES": "Idiomas",
             "NO_LANG_INFO": "No escojer de forma implícita ningún idioma equivale a seleccionar todos los idiomas"
         },
+        "LEGEND": "Leyenda",
         "LEVEL": "Nivel",
         "MANDATORY": "Obligatorio",
         "MANDATORY_FIELD": "Campo obligatorio",
@@ -509,6 +509,7 @@
         "POSITION": "Posición",
         "REASON": "Razón",
         "REIFIED": "Reificado",
+        "RELATION": "Relación",
         "RENDERING": "Representación",
         "REQUIRED": "Requerido",
         "ROLE": "Rol",
@@ -1003,7 +1004,6 @@
         "MAPPING_PROP": "Emparejamiento de propiedades",
         "MEASURE": "Medida",
         "NEW_ALIGNMENT": "Nuevo emparejamiento",
-        "RELATION": "Relación",
         "RIGHT_ENTITY": "Entidad derecha",
         "SYNC_ENTITIES": "Sincronizar entidades"
     },
@@ -1576,17 +1576,13 @@
     "METADATA": {
         "METADATA_REGISTRY": {
             "ACTIONS": {
-                "ADD_CATALOG_RECORD": "añadir registro de catálogo",
-                "ADD_DATASET_VERSION": "añadir versión del conjunto de datos",
                 "ADD_EMBEDDED_LEXICALIZATION_SET": "añadir conjunto de Lexicalización integrado",
                 "ASSESS_LEXICALIZATION_MODEL": "Evaluar modelo de Lexicalización",
                 "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Eliminar todo el conjunto de Lexicalización integrado",
-                "DELETE_DATASET_VERSION": "Eliminar versión del conjunto de datos",
                 "DELETE_EMBEDDED_LEXICALIZATION_SET": "Eliminar conjunto de Lexicalización integrado",
                 "DISCOVER_DATASET": "Descubrir conjunto de datos"
             },
             "DATASET_METADATA": {
-                "CATALOG_RECORDS": "Registros de catálogo",
                 "DEREFERENCEABLE": "Desreferenciable",
                 "DEREFERENCIATION_SYSTEM": "Sistema de desreferenciación",
                 "IDENTITY": "Identidad",
@@ -1594,7 +1590,6 @@
                 "MODIFIED": "Modificado",
                 "NO_AGGREGATION": "Sin agregación",
                 "NO_AGGREGATION_INFO": "Si está marcado, significa que la agregación puede ser compatible, pero su soporte es insuficiente para los propósitos de Vocbench",
-                "OTHER_VERSIONS": "Otras versiones",
                 "VERSION_INFO": "Información de la versión"
             },
             "LEXICALIZATION_SET": {
@@ -1630,7 +1625,6 @@
                 "UPDATE_ONTO_MIRROR_FROM_WEB": "Actualizar espejo de ontología desde la web"
             },
             "BIND_NS_AND_BASEURI": "Vincular / desvincular el espacio de nombres y baseURI",
-            "DATASET_CATALOG": "Catálogo de conjuntos de datos",
             "IMPORTS": "Importaciones",
             "IMPORT_TREE": {
                 "FAILED_IMPORT": "Importación fallida",
@@ -2200,7 +2194,6 @@
             "LEGEND": {
                 "IGNORED": "Encabezado ignorado",
                 "INCOMPLETED_SUBJECT": "Encabezado de asunto incompleto",
-                "LEGEND": "Leyenda",
                 "NOT_CONFIGURED": "Cabecera no configurada",
                 "PARTIALLY_CONFIGURED": "Encabezado parcialmente configurado (p. Ej., Solo nodo definido)",
                 "SUBJECT_HEADER": "Encabezado utilizado para el mapeo del asunto",

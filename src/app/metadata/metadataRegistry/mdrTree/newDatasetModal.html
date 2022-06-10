@@ -48,7 +48,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td nowrap><label>{{'Nature'|translate}}:</label></td>
+                        <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NATURE.DATASET_NATURE'|translate}}:</label></td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <select class="form-control" style="flex: 1;" [(ngModel)]="distributionNature">
@@ -79,7 +79,7 @@
 
         <div *ngIf="mode == 'createConcrete'" class="card mt-2">
             <div class="card-header">
-                <label>{{'Attach to abstract dataset'|translate}}</label>
+                <label>{{'METADATA.METADATA_REGISTRY.ACTIONS.CONNECT_TO_ABS_DATASET'|translate}}</label>
                 <input type="checkbox" class="ml-2" style="vertical-align: middle" [(ngModel)]="attachToDataset">
             </div>
             <div class="card-body">
@@ -90,7 +90,7 @@
                     </colgroup>
                     <tbody>
                         <tr>
-                            <td nowrap><label>{{'Abstract Dataset'|translate}}:</label></td>
+                            <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NATURE.ABSTRACT_DATASET'|translate}}:</label></td>
                             <td>
                                 <select class="form-control" [(ngModel)]="abstractDatasetAttached">
                                     <option *ngFor="let d of abstractDatasets" [ngValue]="d">{{d.dataset['localizedTitle']}}</option>
@@ -98,7 +98,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td nowrap><label>{{'Relation'|translate}}:</label></td>
+                            <td nowrap><label>{{'COMMONS.RELATION'|translate}}:</label></td>
                             <td>
                                 <select class="form-control" [(ngModel)]="absDatasetRelation">
                                     <option *ngFor="let r of datasetRelationOpts" [ngValue]="r.id">{{r.label}}</option>
@@ -107,13 +107,13 @@
                         </tr>
                         <ng-container *ngIf="absDatasetRelation == 'version'">
                             <tr>
-                                <td nowrap><label>{{'Version info'|translate}}:</label></td>
+                                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_INFO'|translate}}:</label></td>
                                 <td>
                                     <input class="form-control" [(ngModel)]="versionInfo">
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap><label>{{'Version notes'|translate}}:</label></td>
+                                <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_NOTES'|translate}}:</label></td>
                                 <td>
                                     <lang-string-editor [(ngModel)]="versionNotes"></lang-string-editor>
                                 </td>
@@ -127,7 +127,7 @@
         <ng-container *ngIf="mode == 'spawnAbstract'">
             <div class="card mt-2">
                 <div class="card-header">
-                    <label>{{'Concrete dataset 1'|translate}}</label>
+                    <label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NATURE.CONCRETE_DATASET'|translate}} 1</label>
                 </div>
                 <div class="card-body">
                     <table class="table table-sm table-borderless">
@@ -137,7 +137,7 @@
                         </colgroup>
                         <tbody>
                             <tr>
-                                <td nowrap><label>{{'Dataset'|translate}}:</label></td>
+                                <td nowrap><label>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label></td>
                                 <td>
                                     <select class="form-control" [(ngModel)]="concreteDataset1">
                                         <option *ngFor="let d of concreteDatasets" [ngValue]="d">{{d.dataset['localizedTitle']}}</option>
@@ -145,7 +145,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap><label>{{'Relation'|translate}}:</label></td>
+                                <td nowrap><label>{{'COMMONS.RELATION'|translate}}:</label></td>
                                 <td>
                                     <select class="form-control" [(ngModel)]="dataset1Relation">
                                         <option *ngFor="let r of datasetRelationOpts" [ngValue]="r.id">{{r.label}}</option>
@@ -154,13 +154,13 @@
                             </tr>
                             <ng-container *ngIf="dataset1Relation == 'version'">
                                 <tr>
-                                    <td nowrap><label>{{'Version info'|translate}}:</label></td>
+                                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_INFO'|translate}}:</label></td>
                                     <td>
                                         <input class="form-control" [(ngModel)]="dataset1VersInfo">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td nowrap><label>{{'Version notes'|translate}}:</label></td>
+                                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_NOTES'|translate}}:</label></td>
                                     <td>
                                         <lang-string-editor [(ngModel)]="dataset1VersNotes"></lang-string-editor>
                                     </td>
@@ -173,7 +173,7 @@
 
             <div class="card mt-2">
                 <div class="card-header">
-                    <label>{{'Concrete dataset 2'|translate}}</label>
+                    <label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NATURE.CONCRETE_DATASET'|translate}} 2</label>
                 </div>
                 <div class="card-body">
                     <table class="table table-sm table-borderless">
@@ -183,7 +183,7 @@
                         </colgroup>
                         <tbody>
                             <tr>
-                                <td nowrap><label>{{'Dataset'|translate}}:</label></td>
+                                <td nowrap><label>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label></td>
                                 <td>
                                     <select class="form-control" [(ngModel)]="concreteDataset2">
                                         <option *ngFor="let d of concreteDatasets" [ngValue]="d">{{d.dataset['localizedTitle']}}</option>
@@ -191,7 +191,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap><label>{{'Relation'|translate}}:</label></td>
+                                <td nowrap><label>{{'COMMONS.RELATION'|translate}}:</label></td>
                                 <td>
                                     <select class="form-control" [(ngModel)]="dataset2Relation">
                                         <option *ngFor="let r of datasetRelationOpts" [ngValue]="r.id">{{r.label}}</option>
@@ -200,13 +200,13 @@
                             </tr>
                             <ng-container *ngIf="dataset2Relation == 'version'">
                                 <tr>
-                                    <td nowrap><label>{{'Version info'|translate}}:</label></td>
+                                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_INFO'|translate}}:</label></td>
                                     <td>
                                         <input class="form-control" [(ngModel)]="dataset2VersInfo">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td nowrap><label>{{'Version notes'|translate}}:</label></td>
+                                    <td nowrap><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_NOTES'|translate}}:</label></td>
                                     <td>
                                         <lang-string-editor [(ngModel)]="dataset2VersNotes"></lang-string-editor>
                                     </td>

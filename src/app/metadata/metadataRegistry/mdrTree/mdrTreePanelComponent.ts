@@ -32,7 +32,7 @@ export class MetadataRegistryTreePanelComponent {
     constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private modalService: NgbModal, private translate: TranslateService) { }
 
     createConcreteDataset() {
-        this.openNewDatasetModal("Create concrete dataset", NewDatasetModeEnum.createConcrete).then(
+        this.openNewDatasetModal({ key: "METADATA.METADATA_REGISTRY.ACTIONS.CREATE_CONCRETE_DATASET" }, NewDatasetModeEnum.createConcrete).then(
             () => {
                 this.refresh();
             },
@@ -52,7 +52,7 @@ export class MetadataRegistryTreePanelComponent {
     }
 
     spawnNewAbstractDataset() {
-        this.openNewDatasetModal("Spawn abstract dataset", NewDatasetModeEnum.spawnAbstract).then(
+        this.openNewDatasetModal({ key: "METADATA.METADATA_REGISTRY.ACTIONS.SPAWN_ABSTRACT_DATASET" }, NewDatasetModeEnum.spawnAbstract).then(
             () => {
                 this.refresh();
             },
@@ -69,10 +69,9 @@ export class MetadataRegistryTreePanelComponent {
 
 
     discoverDataset() {
-        this.basicModals.prompt({ key: "METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET" }, {
-            value: "Resource IRI", tooltip: "This IRI can be directly the IRI of the VoID description " +
-                "of the Dataset (the instance of void:Dataset) or the IRI of any resource in the Dataset that points to this VoID description"
-        }).then(
+        this.basicModals.prompt({ key: "METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET" }, 
+            { value: "IRI", tooltip: { key: "METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET_IRI_INFO" } }
+        ).then(
             iri => {
                 if (ResourceUtils.testIRI(iri)) {
                     UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);

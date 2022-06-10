@@ -37,7 +37,7 @@
             <div class="card-footer">
                 <div class="hbox">
                     <div class="hbox" style="align-items: center; margin-right: 4px;">
-                        <label style="margin-right: 4px;">{{'EDOAL.RELATION'|translate}}:</label>
+                        <label style="margin-right: 4px;">{{'COMMONS.RELATION'|translate}}:</label>
                         <select class="form-control" style="margin-right: 4px;" [(ngModel)]="selectedRelation" [title]="selectedRelation?.text">
                             <option *ngFor="let rel of relations" [ngValue]="rel" [title]="rel.text">{{rel.relation}}</option>
                         </select>
@@ -84,7 +84,7 @@
                             <tr>
                                 <th class="text-center">{{'EDOAL.LEFT_ENTITY'|translate}}</th>
                                 <th class="text-center">{{'EDOAL.RIGHT_ENTITY'|translate}}</th>
-                                <th class="text-center">{{'EDOAL.RELATION'|translate}}</th>
+                                <th class="text-center">{{'COMMONS.RELATION'|translate}}</th>
                                 <th class="text-center" nowrap>{{'EDOAL.MAPPING_PROP'|translate}}</th>
                                 <th class="text-center">{{'EDOAL.MEASURE'|translate}}</th>
                             </tr>
