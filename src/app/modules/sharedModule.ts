@@ -6,6 +6,7 @@ import { NgbDropdownModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ExplainableTripleComponent } from '../icv/owlConsistencyViolations/explainableTripleComponent';
+import { DatasetResourceComponent } from '../metadata/metadataRegistry/mdrTree/datasetResourceComponent';
 import { ProjectListComponent } from '../project/projectListPanel/projectListComponent';
 import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
@@ -74,6 +75,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
     ],
     declarations: [
         ConverterConfiguratorComponent,
+        DatasetResourceComponent,
         DataSizeRenderer,
         DatatypePickerComponent,
         DatetimePickerComponent,
@@ -132,6 +134,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
     exports: [
         ConverterConfiguratorComponent,
         DataSizeRenderer,
+        DatasetResourceComponent,
         DatatypePickerComponent,
         DatetimePickerComponent,
         EditableNsInput,

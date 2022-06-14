@@ -8,6 +8,7 @@ import { DatasetMetadataComponent } from "../metadata/metadataRegistry/datasetMe
 import { LexicalizationSetMetadataComponent } from '../metadata/metadataRegistry/lexicalizationSetMetadataComponent';
 import { ConnectToAbsDatasetModal } from '../metadata/metadataRegistry/mdrTree/connectToAbsDatasetModal';
 import { MetadataRegistryTreeComponent } from "../metadata/metadataRegistry/mdrTree/mdrTreeComponent";
+import { MetadataRegistryTreeModal } from '../metadata/metadataRegistry/mdrTree/mdrTreeModal';
 import { MetadataRegistryTreeNodeComponent } from '../metadata/metadataRegistry/mdrTree/mdrTreeNodeComponent';
 import { MetadataRegistryTreePanelComponent } from '../metadata/metadataRegistry/mdrTree/mdrTreePanelComponent';
 import { NewDatasetModal } from '../metadata/metadataRegistry/mdrTree/newDatasetModal';
@@ -41,6 +42,7 @@ import { SharedModule } from './sharedModule';
         LexicalizationSetMetadataComponent,
         MetadataRegistryComponent, 
         MetadataRegistryTreeComponent,
+        MetadataRegistryTreeModal,
         MetadataRegistryTreeNodeComponent,
         MetadataRegistryTreePanelComponent,
         MetadataVocabulariesComponent,
@@ -54,13 +56,16 @@ import { SharedModule } from './sharedModule';
         NewDatasetModal,
         NewEmbeddedLexicalizationModal
     ],
-    exports: [],
+    exports: [
+        MetadataRegistryTreeModal
+    ],
     providers: [],
     entryComponents: [
         ConflictResolverModal,
         ConnectToAbsDatasetModal,
         ImportOntologyModal, 
         ImportFromDatasetCatalogModal,
+        MetadataRegistryTreeModal,
         OntologyMirrorModal,
         NewDatasetModal,
         NewEmbeddedLexicalizationModal

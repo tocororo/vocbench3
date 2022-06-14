@@ -44,8 +44,7 @@
                 <div class="dropdown-menu" style="font-size: 12px; line-height: 20px;" ngbDropdownMenu>
                     <a *ngIf="isAlignValidationAuthorized()" class="dropdown-item" [routerLink]="['/AlignmentValidation']">{{'ALIGNMENT.VALIDATION.ALIGNMENT_VALIDATION'|translate}}</a>
                     <a *ngIf="isCollaborationAuthorized()" class="dropdown-item" [routerLink]="['/Collaboration']">{{'COLLABORATION.COLLABORATION_SYSTEM'|translate}}</a>
-                    <!-- <a *ngIf="isCustomFormAuthorized()" class="dropdown-item" [routerLink]="['/CustomForm']">{{'CUSTOM_FORMS.FORMS.CUSTOM_FORMS'|translate}}</a> -->
-                    <a *ngIf="isCustomFormAuthorized()" class="dropdown-item" [routerLink]="['/CustomFormView']">Custom Forms and Views</a>
+                    <a *ngIf="isCustomFormAuthorized()" class="dropdown-item" [routerLink]="['/CustomFormView']">{{'APP.NAVBAR.CUSTOM_FORMS_AND_VIEWS'|translate}}</a>
                     <a *ngIf="isCustomServicesAuthorized()" class="dropdown-item" [routerLink]="['/CustomServices']">{{'APP.NAVBAR.CUSTOM_SERVICES_AND_REPORTS'|translate}}</a>
                     <a class="dropdown-item" [routerLink]="['/Icv']">{{'ICV.ICV'|translate}}</a>
                     <a *ngIf="isResourceMetadataAuthorized()" class="dropdown-item" [routerLink]="['/ResourceMetadata']">ResourceMetadata</a>

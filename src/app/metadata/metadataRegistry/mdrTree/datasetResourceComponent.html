@@ -1,0 +1,17 @@
+<span [ngSwitch]="dataset.nature" class="dataset-nature-icon" [title]="dataset.nature">
+    <img *ngSwitchCase="'PROJECT'" src="./assets/images/icons/vb_16x16.png" height="16px" width="16px">
+    <img *ngSwitchCase="'RDF4J_REPOSITORY'" src="./assets/images/icons/rdf4j_16x16.png" height="16px" width="16px">
+    <img *ngSwitchCase="'GRAPHDB_REPOSITORY'" src="./assets/images/icons/gdb_16x16.png" height="16px" width="16px">
+    <img *ngSwitchCase="'SPARQL_ENDPOINT'" src="./assets/images/icons/res/ontology.png" height="16px" width="16px">
+    <span *ngSwitchCase="'ABSTRACT'" class="fas fa-folder-open"></span>
+    <span *ngSwitchCase="'MIX'" class="fas fa-layer-group"></span>
+</span>
+<label *ngIf="dataset.titles.length > 0" class="text-nowrap ml-1">{{title.getValue()}}:</label>
+<span class="ml-1">{{dataset.uriSpace}}</span>
+<span *ngIf="dataset.role" class="ml-2">
+    <ng-container [ngSwitch]="dataset.role">
+        <span *ngSwitchCase="'MASTER'" class="badge badge-primary" title="Master">M</span>
+        <span *ngSwitchCase="'LOD'" class="badge badge-success" title="Lod">L</span>
+        <span *ngSwitchCase="'VERSION'" class="badge badge-secondary" title="Version">V</span>
+    </ng-container>
+</span>

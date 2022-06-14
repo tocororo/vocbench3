@@ -391,6 +391,7 @@
     },
     "APP": {
         "NAVBAR": {
+            "CUSTOM_FORMS_AND_VIEWS": "Custom Forms e Views",
             "CUSTOM_SERVICES_AND_REPORTS": "Custom Service e Report",
             "DATA": "Data",
             "HISTORY": "Storico",
@@ -1679,6 +1680,7 @@
                 "DELETE_EMBEDDED_LEXICALIZATION_SET": "Cancella Embedded Lexicalization Set",
                 "DISCOVER_DATASET": "Trova dataset",
                 "DISCOVER_DATASET_IRI_INFO": "Questo IRI può direttamente essere l'IRI del descrittore VoID del Dataset (istanza di void:Dataset) o l'IRI di una qualsiasi risorsa nel Dataset che punta a tale descrittore VoID",
+                "SELECT_CONCRETE_DATASET": "Seleziona dataset concreto",
                 "SPAWN_ABSTRACT_DATASET": "Genera dataset astratto"
             },
             "DATASET_METADATA": {

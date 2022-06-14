@@ -10,7 +10,7 @@ import { MetadataRegistryServices } from 'src/app/services/metadataRegistryServi
 })
 export class MetadataRegistryTreeComponent {
 
-    @Input() multiselection: boolean;
+    @Input() context: MdrTreeContext;
     @Output() nodeSelected = new EventEmitter<CatalogRecord2>();
     @Output() nodeChecked = new EventEmitter<CatalogRecord2[]>();
     @ViewChild('blockDivTree', { static: true }) public blockDivElement: ElementRef;
@@ -46,5 +46,8 @@ export class MetadataRegistryTreeComponent {
         this.nodeSelected.emit(node);
     }
 
+}
 
+export enum MdrTreeContext {
+    assistedSearch = "assistedSearch"
 }

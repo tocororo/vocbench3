@@ -53,7 +53,7 @@ export abstract class AbstractHistValidComponent {
         this.sharedModals = sharedModals;
         this.hvModals = hvModals;
         this.eventHandler = eventHandler;
-        this.eventSubscriptions.push(this.eventHandler.operationUndoneEvent.subscribe(commit => this.onOperationUndone(commit)));
+        this.eventSubscriptions.push(this.eventHandler.operationUndoneEvent.subscribe((commit: CommitInfo) => this.onOperationUndone(commit)));
     }
 
     ngOnDestroy() {

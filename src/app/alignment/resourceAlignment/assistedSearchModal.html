@@ -6,7 +6,7 @@
                 <button class="btn btn-light" [ngClass]="{ active : targetPosition == ResourcePositionEnum.local }" (click)="changeTargetPosition(ResourcePositionEnum.local)">
                     {{'SEARCH.ASSISTED_SEARCH.LOCAL'|translate}}
                 </button>
-                <button class="btn btn-light" [ngClass]="{ active : targetPosition == ResourcePositionEnum.remote }" (click)="changeTargetPosition(ResourcePositionEnum.remote)" [disabled]="!isRemoteAuthorized()">
+                <button class="btn btn-light" [ngClass]="{ active : targetPosition == ResourcePositionEnum.remote }" (click)="changeTargetPosition(ResourcePositionEnum.remote)" [disabled]="!remoteDatasetAuthorized">
                     {{'SEARCH.ASSISTED_SEARCH.REMOTE'|translate}}
                 </button>
             </div>
@@ -33,25 +33,18 @@
             </div>
         </ng-container>
 
-        
         <ng-container *ngIf="targetPosition == ResourcePositionEnum.remote">
-            <div class="card">
-                <div class="card-header">
-                    <label style="flex: 1;">{{'SEARCH.ASSISTED_SEARCH.REMOTE_DATASETS'|translate}}</label>
-                    <button class="btn btn-light btn-xs" (click)="addRemoteDataset()" [title]="'ACTIONS.ADD'|translate">
-                        <span class="fas fa-plus"></span>
-                    </button>
+            <div class="d-flex align-items-center">
+                <label class="text-nowrap">{{'SEARCH.ASSISTED_SEARCH.REMOTE_DATASETS'|translate}}:</label>
+                <div class="form-control ml-1" style="background-color: #eee;">
+                    <dataset-resource *ngIf="selectedDataset" [dataset]="selectedDataset"></dataset-resource>
                 </div>
-                <div class="card-body vbox scrollableContainer" style="max-height: 150px;">
-                    <div *ngFor="let d of remoteDatasets">
-                        <div class="listItem" [ngClass]="{ active : d == selectedDataset }" (click)="selectDataset(d)" [title]="d.identity.getURI()">
-                            <span><label *ngIf="d.title">{{d.title}}:</label> {{d.uriSpace}}</span>
-                        </div>
-                    </div>
-                </div>
+                <button class="btn btn-light ml-1" (click)="selectRemoteDataset()">
+                    <span class="fas fa-pencil-alt"></span>
+                </button>
             </div>
 
-            <div *ngIf="selectedDataset" style="margin-top: 4px;">
+            <div *ngIf="selectedDataset" class="mt-2">
                 <div *ngIf="!isDatasetMetadataAvailable(); else mediationBlock" class="alert alert-warning">
                     {{'SEARCH.ASSISTED_SEARCH.METADATA_UNAVAILABLE_REMOTE_WARNING'|translate:translationParams}}
                 </div>

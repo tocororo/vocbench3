@@ -12,11 +12,6 @@ mdr-tree-node {
     display: contents;
 }
 
-.dataset-nature-icon {
-    display: inline-block;
-    width: 20px;
-}
-
 .dropdown-header {
     /* color: black; */
     font-size: 1rem;

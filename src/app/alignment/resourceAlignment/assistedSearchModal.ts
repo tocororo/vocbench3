@@ -2,11 +2,11 @@ import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
-import { NewDatasetModeEnum } from 'src/app/metadata/metadataRegistry/mdrTree/connectToAbsDatasetModal';
-import { NewDatasetModal } from 'src/app/metadata/metadataRegistry/mdrTree/newDatasetModal';
+import { MdrTreeContext } from 'src/app/metadata/metadataRegistry/mdrTree/mdrTreeComponent';
+import { MetadataRegistryTreeModal } from 'src/app/metadata/metadataRegistry/mdrTree/mdrTreeModal';
 import { ModalOptions, ModalType, TranslationUtils } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, LocalResourcePosition, RemoteResourcePosition, ResourcePosition, ResourcePositionEnum } from "../../models/ARTResources";
-import { DatasetMetadata } from "../../models/Metadata";
+import { CatalogRecord2, DatasetMetadata2 } from "../../models/Metadata";
 import { Project } from "../../models/Project";
 import { SearchMode } from "../../models/Properties";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
@@ -40,9 +40,8 @@ export class AssistedSearchModal {
     private selectedProject: Project;
     private projectMetadataAvailabilityMap: Map<Project, boolean> = new Map();
 
-    private remoteDatasets: DatasetMetadata[] = [];
-    private selectedDataset: DatasetMetadata;
-    private datasetMetadataAvailabilityMap: Map<DatasetMetadata, boolean> = new Map();
+    private selectedDataset: DatasetMetadata2;
+    private datasetMetadataAvailabilityMap: Map<DatasetMetadata2, boolean> = new Map();
 
     private pairedLexicalizationSets: LexicalizationSet[];
 
@@ -59,6 +58,8 @@ export class AssistedSearchModal {
 
     translationParams: { datasetUriSpace: string, projName: string };
 
+    remoteDatasetAuthorized: boolean;
+
     constructor(public activeModal: NgbActiveModal, private alignmentService: AlignmentServices,
         private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices,
         private basicModals: BasicModalServices, private modalService: NgbModal, private translate: TranslateService) {
@@ -66,18 +67,8 @@ export class AssistedSearchModal {
 
     ngOnInit() {
         this.sourceProject = VBContext.getWorkingProject();
-        this.initRemoteDatasets();
-    }
 
-    private initRemoteDatasets() {
-        if (this.isRemoteAuthorized()) {
-            this.metadataRegistryService.getCatalogRecords().subscribe(
-                catalogs => {
-                    this.remoteDatasets = [];
-                    catalogs.forEach(c => this.remoteDatasets.push(c.abstractDataset));
-                }
-            );
-        }
+        this.remoteDatasetAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryRead);
     }
 
     changeTargetPosition(position: ResourcePositionEnum) {
@@ -85,9 +76,10 @@ export class AssistedSearchModal {
         this.pairedLexicalizationSets = null;
         this.languagesToCheck = [];
         if (this.targetPosition == ResourcePositionEnum.local && this.selectedProject != null) {
+            //restore local project selection
             this.selectProject(this.selectedProject);
         } else if (this.targetPosition == ResourcePositionEnum.remote && this.selectedDataset != null) {
-            this.selectDataset(this.selectedDataset);
+            this.checkRemoteDatasetMetadataAvailability();
         }
     }
 
@@ -107,7 +99,7 @@ export class AssistedSearchModal {
      * Local Projects
      */
 
-    private selectProject(project: Project) {
+    selectProject(project: Project) {
         this.selectedProject = project;
         this.updateTranslationParams();
         if (this.projectMetadataAvailabilityMap.has(this.selectedProject)) {
@@ -149,7 +141,7 @@ export class AssistedSearchModal {
         );
     }
 
-    private isProjectMetadataAvailable() {
+    isProjectMetadataAvailable() {
         return this.projectMetadataAvailabilityMap.get(this.selectedProject);
     }
 
@@ -157,8 +149,21 @@ export class AssistedSearchModal {
      * Remote datasets
      */
 
-    private selectDataset(dataset: DatasetMetadata) {
-        this.selectedDataset = dataset;
+    selectRemoteDataset() {
+        // const modalRef: NgbModalRef = this.modalService.open(MetadataRegistryTreeModal, new ModalOptions('lg'));
+        const modalRef: NgbModalRef = this.modalService.open(MetadataRegistryTreeModal, new ModalOptions());
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText({ key: "METADATA.METADATA_REGISTRY.ACTIONS.SELECT_CONCRETE_DATASET" }, this.translate);
+        modalRef.componentInstance.context = MdrTreeContext.assistedSearch;
+        modalRef.result.then(
+            (record: CatalogRecord2) => {
+                this.selectedDataset = record.dataset;
+                this.checkRemoteDatasetMetadataAvailability();
+            },
+            () => {}
+        );
+    }
+
+    private checkRemoteDatasetMetadataAvailability() {
         this.updateTranslationParams();
         if (this.datasetMetadataAvailabilityMap.has(this.selectedDataset)) {
             //metadata availability has already been checked (the entry is in the map)
@@ -174,25 +179,13 @@ export class AssistedSearchModal {
         }
     }
 
-    addRemoteDataset() {
-        const modalRef: NgbModalRef = this.modalService.open(NewDatasetModal, new ModalOptions('lg'));
-        modalRef.componentInstance.title = TranslationUtils.getTranslatedText({ key: "METADATA.METADATA_REGISTRY.ACTIONS.CREATE_CONCRETE_DATASET" }, this.translate);
-        modalRef.componentInstance.mode = NewDatasetModeEnum.createConcrete;
-        return modalRef.result.then(
-            () => {
-                this.initRemoteDatasets();
-            },
-            () => { }
-        );
-    }
-
     private profileMediationRemoteDataset() {
         if (this.isDatasetMetadataAvailable()) {
             this.profileMediation();
         }
     }
 
-    private isDatasetMetadataAvailable() {
+    isDatasetMetadataAvailable() {
         return this.datasetMetadataAvailabilityMap.get(this.selectedDataset);
     }
 
@@ -279,13 +272,6 @@ export class AssistedSearchModal {
         modalRef.componentInstance.title = "Select search result";
         modalRef.componentInstance.resourceList = searchResult;
         return modalRef.result;
-    }
-
-    /**
-     * Remote Assisted-search requires to initialize the catalog records, so it needs that the user has the required capabilities
-     */
-    isRemoteAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryRead);
     }
 
     ok() {

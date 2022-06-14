@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from "@angular/core";
 import { TranslateService } from '@ngx-translate/core';
-import { ARTLiteral } from 'src/app/models/ARTResources';
-import { LanguageUtils } from 'src/app/models/LanguagesCountries';
 import { CatalogRecord2, DatasetNature } from 'src/app/models/Metadata';
 import { MetadataRegistryServices } from 'src/app/services/metadataRegistryServices';
 import { Deserializer } from 'src/app/utils/Deserializer';
@@ -24,7 +22,6 @@ export class MetadataRegistryTreeNodeComponent {
 
     showExpandCollapseBtn: boolean = false; //tells if the expand/collapse node button should be visible (it depends on more_attr and showDeprecated)
 
-    title: ARTLiteral;
     issuedLocal: string;
     modifiedLocal: string;
 
@@ -33,7 +30,6 @@ export class MetadataRegistryTreeNodeComponent {
     ngOnInit() {
         this.showExpandCollapseBtn = this.record.dataset.nature == DatasetNature.ABSTRACT;
 
-        this.title = LanguageUtils.getLocalizedLiteral(this.record.dataset.titles, this.translate.currentLang);
         this.issuedLocal = Deserializer.parseDateTime(this.record.issued);
         this.modifiedLocal = this.record.modified ? Deserializer.parseDateTime(this.record.modified) : null;
     }

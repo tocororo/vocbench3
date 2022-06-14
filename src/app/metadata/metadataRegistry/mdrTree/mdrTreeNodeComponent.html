@@ -8,23 +8,7 @@
         </div>
     </td>
     <td (click)="selectNode()" class="clickable mr-2" [ngClass]="{ 'pl-4': !root }" nowrap>
-        <span [ngSwitch]="record.dataset.nature" class="dataset-nature-icon" [title]="record.dataset.nature">
-            <img *ngSwitchCase="'PROJECT'" src="./assets/images/icons/vb_16x16.png" height="16px" width="16px">
-            <img *ngSwitchCase="'RDF4J_REPOSITORY'" src="./assets/images/icons/rdf4j_16x16.png" height="16px" width="16px">
-            <img *ngSwitchCase="'GRAPHDB_REPOSITORY'" src="./assets/images/icons/gdb_16x16.png" height="16px" width="16px">
-            <img *ngSwitchCase="'SPARQL_ENDPOINT'" src="./assets/images/icons/res/ontology.png" height="16px" width="16px">
-            <span *ngSwitchCase="'ABSTRACT'" class="fas fa-folder-open"></span>
-            <span *ngSwitchCase="'MIX'" class="fas fa-layer-group"></span>
-        </span>
-        <label *ngIf="record.dataset.titles.length > 0" class="ml-1">{{title.getValue()}}:</label>
-        <span class="ml-1">{{record.dataset.uriSpace}}</span>
-        <span *ngIf="record.dataset.role" class="ml-2">
-            <ng-container [ngSwitch]="record.dataset.role">
-                <span *ngSwitchCase="'MASTER'" class="badge badge-primary" title="Master">M</span>
-                <span *ngSwitchCase="'LOD'" class="badge badge-success" title="Lod">L</span>
-                <span *ngSwitchCase="'VERSION'" class="badge badge-secondary" title="Version">V</span>
-            </ng-container>
-        </span>
+        <dataset-resource [dataset]="record.dataset"></dataset-resource>
     </td>
     <td class="text-center clickable" (click)="selectNode()">{{issuedLocal}}</td>
     <td class="text-center clickable" (click)="selectNode()">{{modifiedLocal}}</td>
@@ -33,20 +17,3 @@
 <ng-container *ngIf="record.dataset.nature && open && children.length > 0">
     <mdr-tree-node *ngFor="let d of children" [record]="d" [root]="false" (nodeSelected)="onNodeSelected($event)"></mdr-tree-node>
 </ng-container>
-
-<!-- <tr *ngIf="record.dataset.nature && open && children.length > 0">
-    <td class="expandCollapseBtnContainer"></td>
-    <td colspan="4" class="p-0">
-        <table class="table table-borderless">
-            <colgroup>
-                <col class="narrowCol">
-                <col>
-                <col class="modifiedCol">
-                <col class="issuedCol">
-            </colgroup>
-            <tbody>
-                <mdr-tree-node *ngFor="let d of children" [record]="d" (nodeSelected)="onNodeSelected($event)"></mdr-tree-node>
-            </tbody>
-        </table>
-    </td>
-</tr> -->

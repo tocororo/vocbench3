@@ -391,6 +391,7 @@
     },
     "APP": {
         "NAVBAR": {
+            "CUSTOM_FORMS_AND_VIEWS": "Custom Forms and Views",
             "CUSTOM_SERVICES_AND_REPORTS": "Custom Services and Reports",
             "DATA": "Data",
             "HISTORY": "History",
@@ -1679,6 +1680,7 @@
                 "DELETE_EMBEDDED_LEXICALIZATION_SET": "Delete Embedded Lexicalization Set",
                 "DISCOVER_DATASET": "Discover dataset",
                 "DISCOVER_DATASET_IRI_INFO": "This IRI can be directly the IRI of the VoID description of the Dataset (the instance of void:Dataset) or the IRI of any resource in the Dataset that points to this VoID description",
+                "SELECT_CONCRETE_DATASET": "Select concrete dataset",
                 "SPAWN_ABSTRACT_DATASET": "Spawn abstract dataset"
             },
             "DATASET_METADATA": {

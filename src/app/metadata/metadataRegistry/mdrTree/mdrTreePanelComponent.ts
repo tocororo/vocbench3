@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ARTURIResource } from 'src/app/models/ARTResources';
@@ -9,7 +9,7 @@ import { UIUtils } from 'src/app/utils/UIUtils';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { ModalOptions, TextOrTranslation, TranslationUtils } from 'src/app/widget/modal/Modals';
 import { ConnectToAbsDatasetModal } from './connectToAbsDatasetModal';
-import { MetadataRegistryTreeComponent } from './mdrTreeComponent';
+import { MdrTreeContext, MetadataRegistryTreeComponent } from './mdrTreeComponent';
 import { NewDatasetModal, NewDatasetModeEnum } from './newDatasetModal';
 
 @Component({
@@ -19,9 +19,8 @@ import { NewDatasetModal, NewDatasetModeEnum } from './newDatasetModal';
     host: { class: "vbox" }
 })
 export class MetadataRegistryTreePanelComponent {
-
+    @Input() context: MdrTreeContext;
     @Output() nodeSelected = new EventEmitter<CatalogRecord2>();
-    // @Output() nodeChecked = new EventEmitter<ConcreteDatasetMockup>();
     @ViewChild(MetadataRegistryTreeComponent) viewChildTree: MetadataRegistryTreeComponent;
     @ViewChild('blockingDiv', { static: false }) private blockingDivElement: ElementRef;
 

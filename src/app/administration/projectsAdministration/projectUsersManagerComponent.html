@@ -34,7 +34,10 @@
                     <div class="hbox">
                         <div class="card card-alt vbox">
                             <div class="card-header">
-                                <label>{{'ADMINISTRATION.PROJECTS.PROJ_USER.ROLES.ASSIGNED_ROLES'|translate}}:</label>
+                                <label style="flex: 1;">{{'ADMINISTRATION.PROJECTS.PROJ_USER.ROLES.ASSIGNED_ROLES'|translate}}:</label>
+                                <button class="btn btn-light btn-xs" (click)="showUserRoleDescription(selectedUserRole)" [title]="'ADMINISTRATION.ROLES.ROLE_CAPABILITIES'|translate" [disabled]="!selectedUserRole">
+                                    <span class="fas fa-eye"></span>
+                                </button>
                             </div>
                             <div class="card-body vbox scrollableContainer">
                                 <ng-container *ngIf="puBinding">
@@ -55,7 +58,10 @@
                         </div>
                         <div class="card card-alt vbox">
                             <div class="card-header">
-                                <label>{{'ADMINISTRATION.PROJECTS.PROJ_USER.ROLES.AVAILABLE_ROLES'|translate}}:</label>
+                                <label style="flex: 1;">{{'ADMINISTRATION.PROJECTS.PROJ_USER.ROLES.AVAILABLE_ROLES'|translate}}:</label>
+                                <button class="btn btn-light btn-xs" (click)="showRoleDescription(selectedRole)" [title]="'ADMINISTRATION.ROLES.ROLE_CAPABILITIES'|translate" [disabled]="!selectedRole">
+                                    <span class="fas fa-eye"></span>
+                                </button>
                             </div>
                             <div class="card-body vbox scrollableContainer">
                                 <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
@@ -63,9 +69,6 @@
                                     <span style="flex: 1;">{{r.getName()}}</span>
                                     <span *ngIf="r.getLevel()=='project'" class="badge badge-secondary mr-2" style="font-size: 10px; padding: 2px 3px;"
                                         [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.ROLES.DEFINED_AT_PROJ_LEVEL'|translate">P</span>
-                                    <button class="btn btn-light btn-xs" (click)="showRoleDescription(r)" [title]="'ADMINISTRATION.ROLES.ROLE_CAPABILITIES'|translate">
-                                        <span class="fas fa-eye"></span>
-                                    </button>
                                 </div>
                             </div>
                         </div>

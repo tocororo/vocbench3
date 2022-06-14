@@ -237,7 +237,7 @@ export class ProjectUsersManagerComponent {
 
     removeRole() {
         this.adminService.removeRoleFromUser(this.project, this.selectedUser.getEmail(), this.selectedUserRole).subscribe(
-            stResp => {
+            () => {
                 this.puBinding.removeRole(this.selectedUserRole);
                 this.selectedUserRole = null;
             }
@@ -258,6 +258,14 @@ export class ProjectUsersManagerComponent {
             }
         }
         return false;
+    }
+    
+
+    showUserRoleDescription(roleName: string) {
+        let role = this.roleList.find(r => r.getName() == roleName);
+        if (role != null) {
+            this.showRoleDescription(role);
+        }
     }
 
     showRoleDescription(role: Role) {
