@@ -312,7 +312,7 @@ export class AdvancedSearchModal {
             } //other cases (empty filters) are ignored
         });
         if (incompleteIngoingLinksFilter) {
-            this.basicModals.alert({ key: "COMMONS.STATUS.WARNING" }, { key: "SEARCH.ADV_SEARCH.INCOMPLETE_FILTER_WARN", params: { filter: this.translateService.instant("SEARCH.ADV_SEARCH.INGOING_LINKS") }}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "SEARCH.ADV_SEARCH.INCOMPLETE_FILTER_WARN", params: { filter: this.translateService.instant("SEARCH.ADV_SEARCH.INGOING_LINKS") }}, ModalType.warning);
             return;
         }
         if (ingoingLinksParam.length == 0) {
@@ -338,7 +338,7 @@ export class AdvancedSearchModal {
             } //other cases (empty filters) are ignored
         });
         if (incompleteOutgoingLinksFilter) {
-            this.basicModals.alert({ key: "COMMONS.STATUS.WARNING" }, { key: "SEARCH.ADV_SEARCH.INCOMPLETE_FILTER_WARN", params: { filter: this.translateService.instant("SEARCH.ADV_SEARCH.OUTGOING_LINKS") }}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "SEARCH.ADV_SEARCH.INCOMPLETE_FILTER_WARN", params: { filter: this.translateService.instant("SEARCH.ADV_SEARCH.OUTGOING_LINKS") }}, ModalType.warning);
             return;
         }
         if (outgoingLinksParam.length == 0) {
@@ -358,7 +358,7 @@ export class AdvancedSearchModal {
             } //other cases (empty filters) are ignored
         });
         if (incompleteOutgoingSearchFilter) {
-            this.basicModals.alert({ key: "COMMONS.STATUS.WARNING" }, { key: "SEARCH.ADV_SEARCH.INCOMPLETE_FILTER_WARN", params: { filter: this.translateService.instant("SEARCH.ADV_SEARCH.OUTGOING_LINKS") }}, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "SEARCH.ADV_SEARCH.INCOMPLETE_FILTER_WARN", params: { filter: this.translateService.instant("SEARCH.ADV_SEARCH.OUTGOING_LINKS") }}, ModalType.warning);
             return;
         }
         if (outgoingSearchParam.length == 0) {

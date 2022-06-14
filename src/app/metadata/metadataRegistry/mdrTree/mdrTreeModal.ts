@@ -20,7 +20,7 @@ export class MetadataRegistryTreeModal {
 
     ok() {
         if (this.selectedRecord.dataset.nature == DatasetNature.ABSTRACT) {
-            this.basicModals.alert({ key: "COMMONS.STATUS.WARNING" }, { key: "You need to select a concrete dataset" }, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "You need to select a concrete dataset" }, ModalType.warning);
             return;
         }
         this.activeModal.close(this.selectedRecord);
