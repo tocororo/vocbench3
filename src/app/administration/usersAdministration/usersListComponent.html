@@ -1,0 +1,101 @@
+<div class="card card-default vbox">
+    <div class="card-header">
+        <label style="flex: 1;">{{'COMMONS.USERS'|translate}}:</label>
+        <div class="btn-toolbar">
+
+            <div class="filter-dropdown" ngbDropdown>
+                <button class="btn btn-light btn-xs" ngbDropdownToggle>
+                    <span class="fas fa-filter"></span>
+                </button>
+                <div ngbDropdownMenu>
+                    <div class="px-2 py-1">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">{{'MODELS.USER.GIVEN_NAME'|translate}}:</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" [(ngModel)]="givenNameFilter">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">{{'MODELS.USER.FAMILY_NAME'|translate}}:</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" [(ngModel)]="familyNameFilter">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-4 col-form-label">{{'MODELS.USER.EMAIL'|translate}}:</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" [(ngModel)]="emailFilter">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="px-2 py-1">
+                        <div class="row">
+                            <label class="col-sm-4 col-form-label">{{'STATUS.STATUS'|translate}}:</label>
+                            <div class="col-sm-8">
+                                <div class="btn-group">
+                                    <button #actBtn class="btn btn-light" [ngClass]="{active: showActive}" (click)="showActive = !showActive"
+                                        [title]="'ADMINISTRATION.ACTIONS.SHOW_HIDE_ACTIVE_USER'|translate" (mouseup)="actBtn.blur()">{{'STATUS.ACTIVE'|translate}}
+                                    </button>
+                                    <button #inactBtn class="btn btn-light" [ngClass]="{active: showInactive}" (click)="showInactive = !showInactive"
+                                        [title]="'ADMINISTRATION.ACTIONS.SHOW_HIDE_INACTIVE_USER'|translate" (mouseup)="inactBtn.blur()">{{'STATUS.INACTIVE'|translate}}
+                                    </button>
+                                    <button #newBtn class="btn btn-light" [ngClass]="{active: showNew}" (click)="showNew = !showNew"
+                                        [title]="'ADMINISTRATION.ACTIONS.SHOW_HIDE_NEW_USER'|translate" (mouseup)="newBtn.blur()">{{'STATUS.NEW'|translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="px-2 py-1">
+                        <div class="row">
+                            <label class="col-sm-4 col-form-label" for="onlineCheck">{{'STATUS.ONLINE'|translate}}:</label>
+                            <div class="col-sm-8">
+                                <input id="onlineCheck" type="checkbox" [(ngModel)]="showOnlyOnline">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group btn-group-xs" ngbDropdown>
+                <button class="btn btn-light dropdown-toggle" [title]="'ACTIONS.SORT'|translate" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-sort"></span>
+                </button>
+                <div class="dropdown-menu float-right" ngbDropdownMenu>
+                    <a *ngFor="let s of userSort" class="dropdown-item" (click)="sort(s.value)">
+                        <div class="d-flex align-items-center">
+                            <span style="flex: 1">
+                                <span [class]="'fas fa-' + s.icon"></span>
+                                {{s.translationKey | translate}}
+                            </span>
+                            <span *ngIf="selectedUserSort == s.value" class="fas fa-check"></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-light" (click)="createUser()" [title]="'ACTIONS.CREATE'|translate">
+                    <span class="fas fa-plus"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body vbox p-0">
+        <div class="scrollableContainer">
+            <ng-container *ngFor="let u of users">
+                <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
+                    <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
+                    <span *ngIf="u.isAdmin()" class="fas fa-wrench mr-2" style="color: gray;" [title]="'ADMINISTRATION.USERS.ADMINISTRATOR'|translate"></span>
+                    <span *ngIf="u.isSuperUser(true)" class="badge badge-primary mr-2" title="Super User">S</span>
+                    <span *ngIf="u.getStatus() == 'NEW'" class="fas fa-exclamation-circle inactive" [title]="'STATUS.NEW'|translate"></span>
+                    <span *ngIf="u.getStatus() == 'INACTIVE'" class="fas fa-ban inactive" [title]="'STATUS.INACTIVE'|translate"></span>
+                    <span *ngIf="u.getStatus() == 'ACTIVE'" class="fas fa-user"
+                        [ngClass]="{ online: u.isOnline(), offline: !u.isOnline()}" [title]="u.isOnline() ? 'Online' : 'Offline'">
+                    </span>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

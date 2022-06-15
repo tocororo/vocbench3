@@ -2417,6 +2417,7 @@
         "INVALID_DATA": "Invalid data",
         "INVALID_VALUE": "Invalid value",
         "NEW": "New",
+        "ONLINE": "Online",
         "OPERATION_DENIED": "Operation denied",
         "OPERATION_DONE": "Operation done",
         "REMOVED": "Removed",

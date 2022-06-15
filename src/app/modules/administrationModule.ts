@@ -24,6 +24,7 @@ import { ForcePasswordModal } from '../administration/usersAdministration/forceP
 import { UserCreateModal } from "../administration/usersAdministration/userCreateModal";
 import { UserDetailsPanelComponent } from '../administration/usersAdministration/userDetailsPanelComponent';
 import { UsersAdministrationComponent } from "../administration/usersAdministration/usersAdministrationComponent";
+import { UsersListComponent } from '../administration/usersAdministration/usersListComponent';
 import { SharedModule } from './sharedModule';
 import { UserModule } from './userModule';
 
@@ -52,6 +53,7 @@ import { UserModule } from './userModule';
         SettingsMgrConfigComponent,
         SystemConfigurationComponent,
         UsersAdministrationComponent,
+        UsersListComponent,
         UserDetailsPanelComponent,
         //modals
         CapabilityEditorModal,
