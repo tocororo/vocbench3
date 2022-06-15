@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
-import { DatasetMetadata, LexicalizationSetMetadata } from "../../models/Metadata";
+import { DatasetMetadata2, LexicalizationSetMetadata } from "../../models/Metadata";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -13,7 +13,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 })
 export class LexicalizationSetMetadataComponent {
 
-    @Input() dataset: DatasetMetadata;
+    @Input() dataset: DatasetMetadata2;
     @Input() lexicalizationSetMetadata: LexicalizationSetMetadata;
 
     // private lexicalizationSet: string;
@@ -132,7 +132,7 @@ export class LexicalizationSetMetadataComponent {
 
     private updateLexicalizationSetMetadata() {
         this.metadataRegistryService.deleteEmbeddedLexicalizationSet(new ARTURIResource(this.lexicalizationSetMetadata.identity)).subscribe(
-            stResp => {
+            () => {
                 let lexicalizationModelPar: string;
                 this.lexicalModelMap.forEach(lexModel => {
                     if (this.lexicalizationModel == lexModel.label) {
@@ -147,7 +147,7 @@ export class LexicalizationSetMetadataComponent {
                 this.metadataRegistryService.addEmbeddedLexicalizationSet(this.dataset.identity,
                     new ARTURIResource(lexicalizationModelPar), this.language, new ARTURIResource(this.lexicalizationSetMetadata.identity),
                     lexiconDatasetPar, this.references, this.lexicalEntries, this.lexicalizations, this.percentage, this.avgNumOfLexicalizations).subscribe(
-                        stResp => {
+                        () => {
                             this.lexicalizationSetMetadata.lexiconDataset = this.lexiconDataset;
                             this.lexicalizationSetMetadata.lexicalizationModel = lexicalizationModelPar;
                             this.lexicalizationSetMetadata.language = this.language;

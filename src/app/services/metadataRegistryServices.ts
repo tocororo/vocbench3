@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTLiteral, ARTURIResource, ResourcePosition } from '../models/ARTResources';
-import { AbstractDatasetAttachment, CatalogRecord, CatalogRecord2, DatasetMetadata, Distribution, LexicalizationSetMetadata } from "../models/Metadata";
+import { AbstractDatasetAttachment, CatalogRecord2, DatasetMetadata, Distribution, LexicalizationSetMetadata } from "../models/Metadata";
 import { Deserializer } from '../utils/Deserializer';
 import { STRequestParams } from '../utils/HttpManager';
 import { StMetadataRegistry } from '../utils/STMetadataRegistry';
@@ -179,22 +179,6 @@ export class MetadataRegistryServices {
             dataset: dataset,
         };
         return this.httpMgr.doPost(this.serviceName, "deleteDatasetVersion", params);
-    }
-
-    /**
-     * Returns the catalog records
-     */
-    getCatalogRecords(): Observable<CatalogRecord[]> {
-        let params: STRequestParams = {};
-        return this.httpMgr.doGet(this.serviceName, "getCatalogRecords", params).pipe(
-            map(stResp => {
-                let records: CatalogRecord[] = [];
-                for (let i = 0; i < stResp.length; i++) {
-                    records.push(CatalogRecord.deserialize(stResp[i]));
-                }
-                return records;
-            })
-        );
     }
 
     /**

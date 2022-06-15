@@ -3,11 +3,10 @@ import { forkJoin, Observable } from 'rxjs';
 import { ARTLiteral, ARTURIResource } from 'src/app/models/ARTResources';
 import { MdrVoc } from 'src/app/models/Vocabulary';
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
-import { CreationModalServices } from 'src/app/widget/modal/creationModal/creationModalServices';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { LocalizedMap } from 'src/app/widget/modal/sharedModal/localizedEditorModal/localizedEditorModal';
 import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
-import { DatasetMetadata, DatasetMetadata2 } from "../../models/Metadata";
+import { DatasetMetadata2 } from "../../models/Metadata";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
@@ -19,7 +18,7 @@ export class DatasetMetadataComponent {
 
     @Input() dataset: DatasetMetadata2;
 
-    datasetMetadata: DatasetMetadata;
+    // datasetMetadata: DatasetMetadata;
     @Output() update = new EventEmitter();
 
     private dereferUnknown: string = "Unknown";
@@ -31,76 +30,58 @@ export class DatasetMetadataComponent {
 
     sparqlLimitations: boolean;
 
-    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private creationModals: CreationModalServices, private sharedModals: SharedModalServices) { }
+    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnChanges(changes: SimpleChanges) {
-        // if (changes['dataset'] && changes['dataset'].currentValue) {
-        //     if (this.dataset.nature != DatasetNature.ABSTRACT) {
-        //         this.initDatasetMetadata();
-        //     }
-        // }
+        if (changes['dataset'] && changes['dataset'].currentValue) {
+            this.initDatasetMetadata();
+        }
     }
+
+    // private initDatasetMetadata() {
+    //     this.metadataRegistryService.getDatasetMetadata(this.dataset.identity).subscribe(
+    //         datasetMetadata => {
+    //             this.datasetMetadata = datasetMetadata;
+
+    //             // normalize dereferenciation
+    //             if (this.datasetMetadata.dereferenciationSystem == null) {
+    //                 this.dereferenciationNormalized = this.dereferUnknown;
+    //             } else if (this.datasetMetadata.dereferenciationSystem == MdrVoc.standardDereferenciation.getURI()) {
+    //                 this.dereferenciationNormalized = this.dereferYes;
+    //             } else if (this.datasetMetadata.dereferenciationSystem == MdrVoc.noDereferenciation.getURI()) {
+    //                 this.dereferenciationNormalized = this.dereferNo;
+    //             } else {
+    //                 this.dereferenciationValues.push(this.datasetMetadata.dereferenciationSystem);
+    //                 this.dereferenciationNormalized = this.datasetMetadata.dereferenciationSystem;
+    //             }
+    //             // normalize limitation
+    //             this.sparqlLimitations = false;
+    //             if (this.datasetMetadata.sparqlEndpointMetadata.limitations != null) {
+    //                 this.sparqlLimitations = this.datasetMetadata.sparqlEndpointMetadata.limitations.indexOf(MdrVoc.noAggregation.toNT()) != -1;
+    //             }
+    //         }
+    //     );
+    // }
 
     private initDatasetMetadata() {
-        this.metadataRegistryService.getDatasetMetadata(this.dataset.identity).subscribe(
-            datasetMetadata => {
-                this.datasetMetadata = datasetMetadata;
-
-                // normalize dereferenciation
-                if (this.datasetMetadata.dereferenciationSystem == null) {
-                    this.dereferenciationNormalized = this.dereferUnknown;
-                } else if (this.datasetMetadata.dereferenciationSystem == MdrVoc.standardDereferenciation.getURI()) {
-                    this.dereferenciationNormalized = this.dereferYes;
-                } else if (this.datasetMetadata.dereferenciationSystem == MdrVoc.noDereferenciation.getURI()) {
-                    this.dereferenciationNormalized = this.dereferNo;
-                } else {
-                    this.dereferenciationValues.push(this.datasetMetadata.dereferenciationSystem);
-                    this.dereferenciationNormalized = this.datasetMetadata.dereferenciationSystem;
-                }
-                // normalize limitation
-                this.sparqlLimitations = false;
-                if (this.datasetMetadata.sparqlEndpointMetadata.limitations != null) {
-                    this.sparqlLimitations = this.datasetMetadata.sparqlEndpointMetadata.limitations.indexOf(MdrVoc.noAggregation.toNT()) != -1;
-                }
-            }
-        );
+        // normalize dereferenciation
+        if (this.dataset.dereferenciationSystem == null) {
+            this.dereferenciationNormalized = this.dereferUnknown;
+        } else if (this.dataset.dereferenciationSystem == MdrVoc.standardDereferenciation.getURI()) {
+            this.dereferenciationNormalized = this.dereferYes;
+        } else if (this.dataset.dereferenciationSystem == MdrVoc.noDereferenciation.getURI()) {
+            this.dereferenciationNormalized = this.dereferNo;
+        } else {
+            this.dereferenciationValues.push(this.dataset.dereferenciationSystem);
+            this.dereferenciationNormalized = this.dataset.dereferenciationSystem;
+        }
+        // normalize limitation
+        this.sparqlLimitations = false;
+        if (this.dataset.sparqlEndpoint.limitations != null) {
+            this.sparqlLimitations = this.dataset.sparqlEndpoint.limitations.indexOf(MdrVoc.noAggregation.toNT()) != -1;
+        }
     }
 
-    // updateTitle(newValue: string) {
-    //     let title: string = null;
-    //     if (newValue != null && newValue.trim() != "") {
-    //         title = newValue;
-    //     }
-    //     this.metadataRegistryService.setTitle(this.dataset.identity, title).subscribe(
-    //         () => {
-    //             this.update.emit();
-    //         }
-    //     );
-    // }
-
-    // onTitleChanged(index: number, newValue: ARTLiteral) {
-    //     this.metadataRegistryService.setTitle(this.dataset.identity, newValue).subscribe(
-    //         () => {
-    //             this.dataset.titles[index] = newValue;
-    //             this.update.emit();
-    //         }
-    //     );
-    // }
-
-    // changeDescription(index: number) {
-    //     let oldDescr = this.dataset.descriptions[index];
-    //     this.creationModals.newPlainLiteral({ key: "COMMONS.TITLE" }, null, false, oldDescr.getLang(), true).then(
-    //         newDescr => {
-    //             this.metadataRegistryService.setDescription(this.dataset.identity, newDescr).subscribe(
-    //                 () => {
-    //                     this.dataset.descriptions[index] = newDescr;
-    //                     this.update.emit();
-    //                 }
-    //             );
-    //         }
-    //     );
-    // }
-    
     editTitles() {
         let localizedMap: LocalizedMap = {};
         this.dataset.titles.forEach(t => { localizedMap[t.getLang()] = t.getValue(); });
@@ -132,7 +113,7 @@ export class DatasetMetadataComponent {
                     // forkJoin(removeFn).subscribe();
                 }
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -168,34 +149,66 @@ export class DatasetMetadataComponent {
                     // forkJoin(removeFn).subscribe();
                 }
             },
-            () => {}
+            () => { }
         );
     }
 
-    // editDescription(index: number) {
-    //     let editingDescr = this.dataset.descriptions[index];
-    //     editingDescr['backup'] = editingDescr.clone();
-    //     editingDescr['editing'] = true;
-
-    // }
-    // confirmEditDescription(index: number) {
-    //     let descr = this.dataset.descriptions[index];
-    //     this.metadataRegistryService.setDescription(this.dataset.identity, descr).subscribe(
+    // updateSparqlEndpoint(newValue: string) {
+    //     let sparqlEndpoint: ARTURIResource;
+    //     if (newValue != null && newValue.trim() != "") {
+    //         if (ResourceUtils.testIRI(newValue)) {
+    //             sparqlEndpoint = new ARTURIResource(newValue);
+    //         } else { //invalid IRI
+    //             this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: newValue } }, ModalType.warning);
+    //             //restore old id
+    //             let backupId: string = this.datasetMetadata.sparqlEndpointMetadata.id;
+    //             this.datasetMetadata.sparqlEndpointMetadata.id = null + "new";
+    //             setTimeout(() => {
+    //                 this.datasetMetadata.sparqlEndpointMetadata.id = backupId;
+    //             });
+    //             return;
+    //         }
+    //     }
+    //     this.metadataRegistryService.setSPARQLEndpoint(this.datasetMetadata.identity, sparqlEndpoint).subscribe(
     //         () => {
-    //             descr['editing'] = false;
+    //             this.initDatasetMetadata();
     //             this.update.emit();
     //         }
     //     );
     // }
-    // cancelEditDescription(index: number) {
-    //     let descr = this.dataset.descriptions[index];
-    //     this.dataset.descriptions[index] = descr['backup'];
+
+    // updateDerefSystem(newValue: string) {
+    //     let dereferenciablePar: boolean;
+    //     if (newValue == this.dereferUnknown) {
+    //         dereferenciablePar = null;
+    //     } else if (newValue == this.dereferYes) {
+    //         dereferenciablePar = true;
+    //     } else if (newValue == this.dereferNo) {
+    //         dereferenciablePar = false;
+    //     } else { //custom choice, available only if it was already the dereferenciationSystem, so it wasn't canged
+    //         return;
+    //     }
+    //     this.metadataRegistryService.setDereferenciability(this.datasetMetadata.identity, dereferenciablePar).subscribe(
+    //         () => {
+    //             this.update.emit();
+    //         }
+    //     );
     // }
 
-    // onDescriptionChanged(index: number, newLit: ARTLiteral) {
-    //     let descr = this.dataset.descriptions[index];
-    //     descr.setLang(newLit.getLang());
-    //     descr.setValue(newLit.getValue());
+    // updateSparqlLimitations() {
+    //     if (this.sparqlLimitations) {
+    //         this.metadataRegistryService.setSPARQLEndpointLimitation(new ARTURIResource(this.datasetMetadata.sparqlEndpointMetadata.id), MdrVoc.noAggregation).subscribe(
+    //             stResp => {
+    //                 this.update.emit();
+    //             }
+    //         );
+    //     } else {
+    //         this.metadataRegistryService.removeSPARQLEndpointLimitation(new ARTURIResource(this.datasetMetadata.sparqlEndpointMetadata.id), MdrVoc.noAggregation).subscribe(
+    //             stResp => {
+    //                 this.update.emit();
+    //             }
+    //         );
+    //     }
     // }
 
     updateSparqlEndpoint(newValue: string) {
@@ -206,15 +219,15 @@ export class DatasetMetadataComponent {
             } else { //invalid IRI
                 this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: newValue } }, ModalType.warning);
                 //restore old id
-                let backupId: string = this.datasetMetadata.sparqlEndpointMetadata.id;
-                this.datasetMetadata.sparqlEndpointMetadata.id = null + "new";
+                let backupId: string = this.dataset.sparqlEndpoint.id;
+                this.dataset.sparqlEndpoint.id = null + "new";
                 setTimeout(() => {
-                    this.datasetMetadata.sparqlEndpointMetadata.id = backupId;
+                    this.dataset.sparqlEndpoint.id = backupId;
                 });
                 return;
             }
         }
-        this.metadataRegistryService.setSPARQLEndpoint(this.datasetMetadata.identity, sparqlEndpoint).subscribe(
+        this.metadataRegistryService.setSPARQLEndpoint(this.dataset.identity, sparqlEndpoint).subscribe(
             () => {
                 this.initDatasetMetadata();
                 this.update.emit();
@@ -233,8 +246,9 @@ export class DatasetMetadataComponent {
         } else { //custom choice, available only if it was already the dereferenciationSystem, so it wasn't canged
             return;
         }
-        this.metadataRegistryService.setDereferenciability(this.datasetMetadata.identity, dereferenciablePar).subscribe(
+        this.metadataRegistryService.setDereferenciability(this.dataset.identity, dereferenciablePar).subscribe(
             () => {
+                this.initDatasetMetadata();
                 this.update.emit();
             }
         );
@@ -242,19 +256,20 @@ export class DatasetMetadataComponent {
 
     updateSparqlLimitations() {
         if (this.sparqlLimitations) {
-            this.metadataRegistryService.setSPARQLEndpointLimitation(new ARTURIResource(this.datasetMetadata.sparqlEndpointMetadata.id), MdrVoc.noAggregation).subscribe(
-                stResp => {
+            this.metadataRegistryService.setSPARQLEndpointLimitation(new ARTURIResource(this.dataset.sparqlEndpoint.id), MdrVoc.noAggregation).subscribe(
+                () => {
+                    this.initDatasetMetadata();
                     this.update.emit();
                 }
             );
         } else {
-            this.metadataRegistryService.removeSPARQLEndpointLimitation(new ARTURIResource(this.datasetMetadata.sparqlEndpointMetadata.id), MdrVoc.noAggregation).subscribe(
-                stResp => {
+            this.metadataRegistryService.removeSPARQLEndpointLimitation(new ARTURIResource(this.dataset.sparqlEndpoint.id), MdrVoc.noAggregation).subscribe(
+                () => {
+                    this.initDatasetMetadata();
                     this.update.emit();
                 }
             );
         }
-
     }
 
 

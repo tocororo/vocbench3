@@ -12,7 +12,6 @@ export class MetadataRegistryTreeComponent {
 
     @Input() context: MdrTreeContext;
     @Output() nodeSelected = new EventEmitter<CatalogRecord2>();
-    @Output() nodeChecked = new EventEmitter<CatalogRecord2[]>();
     @ViewChild('blockDivTree', { static: true }) public blockDivElement: ElementRef;
 
     rootDatasets: CatalogRecord2[] = [];
@@ -32,7 +31,6 @@ export class MetadataRegistryTreeComponent {
             records => {
                 this.rootDatasets = records;
                 // this.nodeSelected.emit(null);
-                this.nodeChecked.emit([]);
             }
         );
     }
@@ -49,5 +47,6 @@ export class MetadataRegistryTreeComponent {
 }
 
 export enum MdrTreeContext {
+    //to set when mdr tree works for the assisted search (allows only the creation of concrete datasets)
     assistedSearch = "assistedSearch"
 }

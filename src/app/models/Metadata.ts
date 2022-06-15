@@ -76,31 +76,6 @@ export class DatasetMetadata {
     }
 }
 
-export class CatalogRecord {
-    public identity: string;
-    public issued: Date;
-    public modified: Date;
-    public abstractDataset: DatasetMetadata;
-    public versions: DatasetMetadata[];
-
-    public static deserialize(catalogRecordJson: any) {
-        let versions: DatasetMetadata[];
-        if (catalogRecordJson.versions) {
-            versions = [];
-            for (let i = 0; i < catalogRecordJson.versions.length; i++) {
-                versions.push(DatasetMetadata.deserialize(catalogRecordJson.versions[i]));
-            }
-        }
-        return {
-            identity: catalogRecordJson.identity,
-            issued: catalogRecordJson.issued,
-            modified: catalogRecordJson.modified,
-            abstractDataset: DatasetMetadata.deserialize(catalogRecordJson.abstractDataset),
-            versions: versions
-        };
-    }
-}
-
 export class CatalogRecord2 {
     identity: ARTURIResource;
     dataset: DatasetMetadata2;
@@ -128,6 +103,8 @@ export class DatasetMetadata2 {
     role: DatasetRole;
     versionInfo: string;
     versionNotes: string;
+    dereferenciationSystem?: string;
+    sparqlEndpoint?: SparqlEndpointMetadata;
 
     public static parse(datasetMetadataJson: any): DatasetMetadata2 {
         let dataset = new DatasetMetadata2();
@@ -140,6 +117,8 @@ export class DatasetMetadata2 {
         dataset.role = datasetMetadataJson.role;
         dataset.versionInfo = datasetMetadataJson.versionInfo;
         dataset.versionNotes = datasetMetadataJson.versionNotes;
+        dataset.sparqlEndpoint = SparqlEndpointMetadata.deserialize(datasetMetadataJson.sparqlEndpoint);
+        dataset.dereferenciationSystem = datasetMetadataJson.dereferenciationSystem;
         return dataset;
     }
 }
@@ -181,7 +160,7 @@ export class SparqlEndpointMetadata {
     public static deserialize(metadataJson: any): SparqlEndpointMetadata {
         if (metadataJson) {
             return {
-                id: NTriplesUtil.parseURI(metadataJson['@id']).getURI(),
+                id: metadataJson['@id'],
                 limitations: metadataJson.limitations
             };
         } else {
