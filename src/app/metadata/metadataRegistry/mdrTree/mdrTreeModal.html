@@ -3,7 +3,7 @@
         <h3 class="modal-title">{{title}}</h3>
     </div>
     <div class="modal-body vbox">
-        <mdr-tree-panel (nodeSelected)="selectedRecord = $event"></mdr-tree-panel>
+        <mdr-tree-panel (nodeSelected)="selectedRecord = $event" [context]="context"></mdr-tree-panel>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedRecord">Ok</button>

@@ -2193,6 +2193,9 @@
             "LOCAL": "Local",
             "MATCHED_LANG": "Matched language",
             "MATCH_MODE": "Match mode",
+            "MESSAGES": {
+                "LOCAL_TARGET_DATASET_CONFIRM": "The selected dataset is about a local project. For such purpose it is recommended to exploit this feature from the 'Local' tab. Do you want to continue anyway?"
+            },
             "METADATA_UNAVAILABLE_LOCAL_WARNING": {
                 "HERE": "here",
                 "METADATA_NOT_AVAILABLE": "VoID/LIME Metadata not available for local project '{{projName}}'. Click",

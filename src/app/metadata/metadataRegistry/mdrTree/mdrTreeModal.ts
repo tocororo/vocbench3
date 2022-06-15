@@ -1,6 +1,7 @@
-import { Component, Input } from "@angular/core";
+import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CatalogRecord2, DatasetNature } from 'src/app/models/Metadata';
+import { UIUtils } from 'src/app/utils/UIUtils';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { MdrTreeContext } from './mdrTreeComponent';
@@ -16,7 +17,11 @@ export class MetadataRegistryTreeModal {
 
     selectedRecord: CatalogRecord2;
 
-    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices) { }
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private elementRef: ElementRef) { }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
+    }
 
     ok() {
         if (this.selectedRecord.dataset.nature == DatasetNature.ABSTRACT) {

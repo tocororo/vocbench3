@@ -6,7 +6,7 @@ import { MdrTreeContext } from 'src/app/metadata/metadataRegistry/mdrTree/mdrTre
 import { MetadataRegistryTreeModal } from 'src/app/metadata/metadataRegistry/mdrTree/mdrTreeModal';
 import { ModalOptions, ModalType, TranslationUtils } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, LocalResourcePosition, RemoteResourcePosition, ResourcePosition, ResourcePositionEnum } from "../../models/ARTResources";
-import { CatalogRecord2, DatasetMetadata2 } from "../../models/Metadata";
+import { CatalogRecord2, DatasetMetadata2, DatasetNature } from "../../models/Metadata";
 import { Project } from "../../models/Project";
 import { SearchMode } from "../../models/Properties";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
@@ -150,14 +150,24 @@ export class AssistedSearchModal {
      */
 
     selectRemoteDataset() {
-        // const modalRef: NgbModalRef = this.modalService.open(MetadataRegistryTreeModal, new ModalOptions('lg'));
-        const modalRef: NgbModalRef = this.modalService.open(MetadataRegistryTreeModal, new ModalOptions());
+        const modalRef: NgbModalRef = this.modalService.open(MetadataRegistryTreeModal, new ModalOptions('lg'));
         modalRef.componentInstance.title = TranslationUtils.getTranslatedText({ key: "METADATA.METADATA_REGISTRY.ACTIONS.SELECT_CONCRETE_DATASET" }, this.translate);
         modalRef.componentInstance.context = MdrTreeContext.assistedSearch;
         modalRef.result.then(
             (record: CatalogRecord2) => {
-                this.selectedDataset = record.dataset;
-                this.checkRemoteDatasetMetadataAvailability();
+                //if the selected dataset is about a local project, suggest the user to use the "Local" tab
+                if (record.dataset.nature == DatasetNature.PROJECT) {
+                    this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "SEARCH.ASSISTED_SEARCH.MESSAGES.LOCAL_TARGET_DATASET_CONFIRM" }, ModalType.warning).then(
+                        () => {
+                            this.selectedDataset = record.dataset;
+                            this.checkRemoteDatasetMetadataAvailability();
+                        },
+                        () => {}
+                    );
+                } else {
+                    this.selectedDataset = record.dataset;
+                    this.checkRemoteDatasetMetadataAvailability();
+                }
             },
             () => {}
         );

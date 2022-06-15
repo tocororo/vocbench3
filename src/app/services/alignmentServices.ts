@@ -396,9 +396,10 @@ export class AlignmentServices {
             searchModeList: searchModeList,
         };
         let options: VBRequestOptions = new VBRequestOptions({
-            errorHandlers: [{
-                className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning'
-            }]
+            errorHandlers: [
+                { className: "it.uniroma2.art.semanticturkey.exceptions.NoSPARQLEndpointMetadataException", action: "warning" },
+                { className: "it.uniroma2.art.semanticturkey.exceptions.SearchStatusException", action: 'warning' }
+            ]
         });
         return this.httpMgr.doGet(this.serviceName, "searchResources", params, options).pipe(
             map(stResp => {

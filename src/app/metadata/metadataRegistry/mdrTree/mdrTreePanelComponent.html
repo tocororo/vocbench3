@@ -3,7 +3,7 @@
     <div class="card-header">
         <label style="flex: 1">{{'DATA_MANAGEMENT.DATASET_CATALOG.DATASET_CATALOG'|translate}}</label>
 
-        <ng-container *ngIf="context != 'assistedSearch'; then fullToolbar; assistedSearchToolbar"></ng-container>
+        <ng-container *ngIf="context != 'assistedSearch'; then fullToolbar; else assistedSearchToolbar"></ng-container>
 
         <ng-template #fullToolbar>
             <div class="btn-toolbar">

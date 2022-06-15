@@ -2193,6 +2193,9 @@
             "LOCAL": "Locale",
             "MATCHED_LANG": "Lingue matchate",
             "MATCH_MODE": "Modalità di match",
+            "MESSAGES": {
+                "LOCAL_TARGET_DATASET_CONFIRM": "Il dataset selezionato riguarda un progetto locale. A tale scopo è raccomandabile usare questa funzionalità dal tab 'Locale'. Vuoi proseguire lo stesso?"
+            },
             "METADATA_UNAVAILABLE_LOCAL_WARNING": {
                 "HERE": "qui",
                 "METADATA_NOT_AVAILABLE": "Metadati VoID/LIME non disponibili per il progetto locale '{{projName}}'. Clicca",
