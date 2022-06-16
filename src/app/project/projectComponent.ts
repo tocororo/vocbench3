@@ -20,6 +20,7 @@ import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalOptions, ModalType } from '../widget/modal/Modals';
+import { LocalizedMap } from '../widget/modal/sharedModal/localizedEditorModal/localizedEditorModal';
 import { PluginSettingsHandler } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { ToastService } from "../widget/toast/toastService";
@@ -279,11 +280,20 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     editLabels(project: Project) {
-        this.sharedModals.localizedEditor({ key: "PROJECTS.ACTIONS.EDIT_LABELS" }, project.getLabels()).then(
-            localizedMap => {
-                this.projectService.setProjectLabels(project, localizedMap).subscribe(
+        let projectLabels = project.getLabels();
+        let localizeMap: LocalizedMap = new Map();
+        for (let lang in projectLabels) {
+            localizeMap.set(lang, projectLabels[lang]);
+        }
+        this.sharedModals.localizedEditor({ key: "PROJECTS.ACTIONS.EDIT_LABELS" }, localizeMap).then(
+            (newLocalizedMap: LocalizedMap) => {
+                let newProjLabels: { [lang: string]: string } = {};
+                newLocalizedMap.forEach((label, lang) => {
+                    newProjLabels[lang] = label;
+                });
+                this.projectService.setProjectLabels(project, newProjLabels).subscribe(
                     () => {
-                        project.setLabels(localizedMap);
+                        project.setLabels(newProjLabels);
                     }
                 );
             },

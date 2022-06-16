@@ -4,7 +4,7 @@
         <div class="btn-toolbar">
 
             <div class="filter-dropdown" ngbDropdown>
-                <button class="btn btn-light btn-xs" ngbDropdownToggle>
+                <button class="btn btn-light btn-bright btn-xs" [ngClass]="{ active: isFilterApplied() }" ngbDropdownToggle>
                     <span class="fas fa-filter"></span>
                 </button>
                 <div ngbDropdownMenu>

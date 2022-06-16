@@ -98,6 +98,12 @@ export class UsersListComponent {
         );
     }
 
+    isFilterApplied(): boolean {
+        return !this.showActive || !this.showInactive || !this.showNew || 
+            this.givenNameFilter != "" || this.familyNameFilter != "" || this.emailFilter != "" || 
+            this.showOnlyOnline;
+    }
+
     /**
      * Based on filters "enabled" "disabled" "new" tells whether the user should be visible.
      */

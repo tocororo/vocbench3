@@ -14,7 +14,7 @@ export class LanguageRenderingComponent {
     renderingLanguages: LanguageItem[] = [];
     activeLangs: number = 0;
 
-    noLangItem: LanguageItem = { lang: { name: "None", tag: Languages.NO_LANG_TAG }, active: false, position: null };
+    noLangItem: LanguageItem = { lang: Languages.NO_LANG, active: false, position: null };
 
     constructor(private properties: VBProperties) { }
 
@@ -35,7 +35,7 @@ export class LanguageRenderingComponent {
             });
         } else {
             //set as selected renderingLangs only the listed by the preference
-            this.noLangItem.active = renderingLanguagesPref.includes(Languages.NO_LANG_TAG);
+            this.noLangItem.active = renderingLanguagesPref.includes(Languages.NO_LANG.tag);
             projectLanguages.forEach(pl => {
                 this.renderingLanguages.push({
                     lang: pl,

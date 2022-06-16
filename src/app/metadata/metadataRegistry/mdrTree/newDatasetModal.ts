@@ -96,13 +96,13 @@ export class NewDatasetModal {
             datasets => {
                 this.abstractDatasets = datasets.filter(d => d.dataset.nature == DatasetNature.ABSTRACT);
                 this.abstractDatasets.forEach(d => {
-                    d.dataset['localizedTitle'] = LanguageUtils.getLocalizedLiteral(d.dataset.titles, this.translate.currentLang).getValue();
+                    d.dataset['localizedTitle'] = d.dataset.titles.length > 0 ? LanguageUtils.getLocalizedLiteral(d.dataset.titles, this.translate.currentLang).getValue() : d.dataset.uriSpace;
                 });
                 this.abstractDatasetAttached = this.abstractDatasets[0];
 
                 this.concreteDatasets = datasets.filter(d => d.dataset.nature != DatasetNature.ABSTRACT);
                 this.concreteDatasets.forEach(d => {
-                    d.dataset['localizedTitle'] = LanguageUtils.getLocalizedLiteral(d.dataset.titles, this.translate.currentLang).getValue();
+                    d.dataset['localizedTitle'] = d.dataset.titles.length > 0 ? LanguageUtils.getLocalizedLiteral(d.dataset.titles, this.translate.currentLang).getValue() : d.dataset.uriSpace;
                 });
             }
         );

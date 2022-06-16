@@ -1,6 +1,6 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Language } from "../../models/LanguagesCountries";
+import { Language, Languages } from "../../models/LanguagesCountries";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
@@ -61,7 +61,7 @@ export class LanguageItemComponent {
     }
 
     private initFlagImgSrc() {
-        if (this.language.tag == "--") {
+        if (this.language.tag == Languages.NO_LANG.tag) {
             this.flagImgSrc = "./assets/images/icons/res/string.png";
         } else {
             if (this.preferences.getShowFlags()) {
@@ -70,7 +70,7 @@ export class LanguageItemComponent {
                 this.flagImgSrc = UIUtils.getFlagImgSrc(null); //null makes return unknown flag => do not show flag
             }
         }
-        this.langTagWidth = (this.language.tag.length * 6) + 2; //6px for each char + 2px of padding
+        this.langTagWidth = this.language.tag ? ((this.language.tag.length * 6) + 2) : 0; //6px for each char + 2px of padding
     }
 
 }

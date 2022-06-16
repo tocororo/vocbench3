@@ -26,7 +26,7 @@
                         </tr>
                         <tr *ngFor="let l of labels; let last=last">
                             <td>
-                                <lang-picker [ngModel]="l.lang" [config]="{ projectAware: false }" readonly></lang-picker>
+                                <lang-picker [ngModel]="l.lang" [config]="{ projectAware: false, allowNoLang: true }" readonly></lang-picker>
                             </td>
                             <td>
                                 <input class="form-control" [(ngModel)]="l.label">

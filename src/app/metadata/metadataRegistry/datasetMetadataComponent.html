@@ -1,5 +1,5 @@
-<div class="card card-default">
-    <div class="card-body">
+<div class="card card-default vbox">
+    <div class="card-body scrollableContainer">
         <table class="table table-borderless table-sm">
             <colgroup>
                 <col style="width: 1%">
@@ -12,9 +12,9 @@
                         <div class="d-flex">
                             <div style="flex: 1;">
                                 <input *ngIf="dataset.titles.length == 0" class="form-control" disabled>
-                                <lang-string-editor *ngFor="let d of dataset.titles; let i = index" [(ngModel)]="dataset.titles[i]" [disabled]="true"></lang-string-editor>
+                                <lang-string-editor *ngFor="let d of dataset.titles; let i = index; let first=first" [(ngModel)]="dataset.titles[i]" [ngClass]="{ 'mt-1': !first }" [disabled]="true"></lang-string-editor>
                             </div>
-                            <button class="btn btn-light ml-2" (click)="editTitles()">
+                            <button *ngIf="dataset.nature != 'PROJECT'" class="btn btn-light ml-2" style="align-self: center;" (click)="editTitles()">
                                 <span class="fas fa-pencil-alt"></span>
                             </button>
                         </div>
@@ -38,81 +38,55 @@
                         <div class="d-flex">
                             <div style="flex: 1;">
                                 <input *ngIf="dataset.descriptions.length == 0" class="form-control" disabled>
-                                <lang-string-editor *ngFor="let d of dataset.descriptions; let i = index" [(ngModel)]="dataset.descriptions[i]"  [disabled]="true"></lang-string-editor>
+                                <lang-string-editor *ngFor="let d of dataset.descriptions; let i = index; let first=first" [(ngModel)]="dataset.descriptions[i]" [ngClass]="{ 'mt-1': !first }" [disabled]="true"></lang-string-editor>
                             </div>
-                            <button class="btn btn-light ml-2" (click)="editDescriptions()">
+                            <button *ngIf="dataset.nature != 'PROJECT'" class="btn btn-light ml-2" style="align-self: center;" (click)="editDescriptions()">
                                 <span class="fas fa-pencil-alt"></span>
                             </button>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.DEREFERENCIATION_SYSTEM'|translate}}:</label></td>
-                    <td>
-                        <input-editable type="select" [options]="dereferenciationValues" [value]="dereferenciationNormalized"
-                            (valueEdited)="updateDerefSystem($event)">
-                        </input-editable>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label>{{'MODELS.MAPLE.DATASET.SPARQL_ENDPOINT'|translate}}:</label></td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <input-editable style="flex: 1; margin-right: 4px;" [value]="dataset?.sparqlEndpoint.id"
-                                (valueEdited)="updateSparqlEndpoint($event)" allowEmpty="true">
-                            </input-editable>
-                            <div class="form-check ml-2">
-                                <input class="form-check-input" id="aggregationCheck" type="checkbox" [(ngModel)]="sparqlLimitations" (ngModelChange)="updateSparqlLimitations()">
-                                <label class="form-check-label" for="aggregationCheck">
-                                    {{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION'|translate}}
-                                    <span class="fas fa-info-circle ml-2" 
-                                        [title]="'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION_INFO'|translate">
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- 
-                <ng-template #concreteBlock> 
+                <ng-container *ngIf="dataset.nature != 'ABSTRACT'">
                     <tr>
                         <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.DEREFERENCIATION_SYSTEM'|translate}}:</label></td>
                         <td>
-                            <input-editable type="select" [options]="dereferenciationValues" [value]="dereferenciationNormalized"
-                                (valueEdited)="updateDerefSystem($event)" [disabled]="!datasetMetadata">
-                            </input-editable>
+                            <ng-container *ngIf="dataset.nature == 'PROJECT'; then derefSystemReadonly; else derefSystemEditable"></ng-container>
+                            <ng-template #derefSystemReadonly>
+                                <input class="form-control" [ngModel]="dereferenciationNormalized" disabled>
+                            </ng-template>
+                            <ng-template #derefSystemEditable>
+                                <input-editable type="select" [options]="dereferenciationValues" [value]="dereferenciationNormalized"
+                                    (valueEdited)="updateDerefSystem($event)">
+                                </input-editable>
+                            </ng-template>
                         </td>
                     </tr>
                     <tr>
                         <td><label>{{'MODELS.MAPLE.DATASET.SPARQL_ENDPOINT'|translate}}:</label></td>
                         <td>
-                            <div class="d-flex align-items-center">
-                                <input-editable style="flex: 1; margin-right: 4px;" [value]="datasetMetadata?.sparqlEndpointMetadata.id"
-                                    (valueEdited)="updateSparqlEndpoint($event)" [disabled]="!datasetMetadata" allowEmpty="true">
-                                </input-editable>
-                                <div class="form-check ml-2">
-                                    <input class="form-check-input" id="aggregationCheck" type="checkbox" [(ngModel)]="sparqlLimitations" (ngModelChange)="updateSparqlLimitations()"
-                                        [disabled]="!datasetMetadata?.sparqlEndpointMetadata.id">
-                                    <label class="form-check-label" for="aggregationCheck">
-                                        {{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION'|translate}}
-                                        <span class="fas fa-info-circle ml-2" 
-                                            [title]="'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION_INFO'|translate">
-                                        </span>
-                                    </label>
+                            <ng-container *ngIf="dataset.nature == 'PROJECT'; then sparqlEndpointReadonly; else sparqlEndpointEditable"></ng-container>
+                            <ng-template #sparqlEndpointReadonly>
+                                <input class="form-control" [ngModel]="dataset.sparqlEndpoint.id" disabled>
+                            </ng-template>
+                            <ng-template #sparqlEndpointEditable>
+                                <div class="d-flex align-items-center">
+                                    <input-editable style="flex: 1; margin-right: 4px;" [value]="dataset.sparqlEndpoint.id"
+                                        (valueEdited)="updateSparqlEndpoint($event)" allowEmpty="true">
+                                    </input-editable>
+                                    <div class="form-check ml-2">
+                                        <input class="form-check-input" id="aggregationCheck" type="checkbox" [(ngModel)]="sparqlLimitations" (ngModelChange)="updateSparqlLimitations()">
+                                        <label class="form-check-label" for="aggregationCheck">
+                                            {{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION'|translate}}
+                                            <span class="fas fa-info-circle ml-2" 
+                                                [title]="'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION_INFO'|translate">
+                                            </span>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
+                            </ng-template>
                         </td>
                     </tr>
-                    <tr *ngIf="datasetMetadata?.versionInfo">
-                        <td><label>{{'METADATA.METADATA_REGISTRY.DATASET_METADATA.VERSION_INFO'|translate}}:</label></td>
-                        <td>
-                            <input class="form-control" [ngModel]="datasetMetadata?.versionInfo" disabled>
-                        </td>
-                    </tr>
-                </ng-template>
-                -->
-
+                </ng-container>
             </tbody>
         </table>
     </div>

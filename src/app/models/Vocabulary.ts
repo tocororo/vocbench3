@@ -309,7 +309,7 @@ export class MdrVoc {
 
     public static dereferenciationSystem = new ARTURIResource(MdrVoc.namespace + "dereferenciationSystem", MdrVoc.prefix + ":dereferenciationSystem", RDFResourceRolesEnum.property);
     public static standardDereferenciation = new ARTURIResource(MdrVoc.namespace + "standardDereferenciation", MdrVoc.prefix + ":standardDereferenciation", RDFResourceRolesEnum.property);
-    public static noDereferenciation = new ARTURIResource(MdrVoc.namespace + "", MdrVoc.prefix + ":", RDFResourceRolesEnum.property);
+    public static noDereferenciation = new ARTURIResource(MdrVoc.namespace + "noDereferenciation", MdrVoc.prefix + ":noDereferenciation", RDFResourceRolesEnum.property);
     public static sparqlEndpointLimitation = new ARTURIResource(MdrVoc.namespace + "sparqlEndpointLimitation", MdrVoc.prefix + ":sparqlEndpointLimitation", RDFResourceRolesEnum.property);
     public static noAggregation = new ARTURIResource(MdrVoc.namespace + "noAggregation", MdrVoc.prefix + ":noAggregation", RDFResourceRolesEnum.property);
 

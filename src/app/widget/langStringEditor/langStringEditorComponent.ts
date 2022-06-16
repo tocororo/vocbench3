@@ -10,7 +10,8 @@ import { SharedModalServices } from "../modal/sharedModal/sharedModalServices";
     templateUrl: "./langStringEditorComponent.html",
     providers: [{
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => LangStringEditorComponent), multi: true,
-    }]
+    }],
+    host: { class: "d-block" }
 })
 export class LangStringEditorComponent implements ControlValueAccessor, OnInit { // based on RdfResourceComponent
 
@@ -29,7 +30,8 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
 
     initLang() {
         if (this.lang == null) {
-            this.lang = Languages.getLanguageFromTag(Languages.priorityLangs[0]);
+            this.lang = Languages.NO_LANG;
+            // this.lang = Languages.getLanguageFromTag(Languages.priorityLangs[0]);
         }
     }
 

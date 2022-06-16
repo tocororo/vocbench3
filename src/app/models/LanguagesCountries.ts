@@ -39,7 +39,7 @@ export class Countries {
 export class Languages {
 
     public static readonly ALL_LANG = "*";
-    public static readonly NO_LANG_TAG = "--";
+    public static readonly NO_LANG: Language = { name: "None", tag: null };
 
     static priorityLangs = ["en", "fr", "it", "es", "de"];
 

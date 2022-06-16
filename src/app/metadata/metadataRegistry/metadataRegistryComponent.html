@@ -8,14 +8,14 @@
         </div>
         <div class="card-body vbox">
 
-            <dataset-metadata [dataset]="selectedCatalogRecord2.dataset"></dataset-metadata>
+            <dataset-metadata class="d-flex" style="max-height: 40vh;" [dataset]="selectedCatalogRecord2.dataset"></dataset-metadata>
                 
-            <!-- <div *ngIf="selectedCatalogRecord2.dataset.nature != 'ABSTRACT'" class="vbox mt-2"> -->
-            <div class="vbox mt-2">
+            <div *ngIf="selectedCatalogRecord2?.dataset.nature != 'ABSTRACT'" class="vbox mt-2">
                 <div class="card card-alt vbox blockingDivHost">
                     <div class="card-header">
                         <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.EMBEDDED_LEXICALIZATION_SETS'|translate}}:</label>
-                        <div class="btn-group btn-group-xs">
+                       
+                        <div *ngIf="selectedCatalogRecord2.dataset.nature != 'PROJECT'" class="btn-group btn-group-xs">
                             <div class="btn-group" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate" ngbDropdown>
                                 <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!selectedCatalogRecord2 || !isAddEmbeddedLexicalizationSetAuthorized()">
                                     <span class="fas fa-plus"></span>

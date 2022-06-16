@@ -156,7 +156,7 @@ export interface AbstractDatasetAttachment {
 
 export class SparqlEndpointMetadata {
     id: string;
-    limitations: string[];
+    limitations?: string[];
     public static deserialize(metadataJson: any): SparqlEndpointMetadata {
         if (metadataJson) {
             return {

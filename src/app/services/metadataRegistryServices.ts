@@ -81,7 +81,7 @@ export class MetadataRegistryServices {
         return this.httpMgr.doGet(this.serviceName, "getEmbeddedLexicalizationSets", params);
     }
 
-    setTitle(dataset: ARTURIResource, title?: ARTLiteral) {
+    setTitle(dataset: ARTURIResource, title: ARTLiteral) {
         let params: STRequestParams = {
             dataset: dataset,
             title: title
@@ -89,13 +89,30 @@ export class MetadataRegistryServices {
         return this.httpMgr.doPost(this.serviceName, "setTitle", params);
     }
 
-    setDescription(dataset: ARTURIResource, description?: ARTLiteral) {
+    deleteTitle(dataset: ARTURIResource, title?: ARTLiteral) {
+        let params: STRequestParams = {
+            dataset: dataset,
+            title: title
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteTitle", params);
+    }
+
+    setDescription(dataset: ARTURIResource, description: ARTLiteral) {
         let params: STRequestParams = {
             dataset: dataset,
             description: description
         };
         return this.httpMgr.doPost(this.serviceName, "setDescription", params);
     }
+
+    deleteDescription(dataset: ARTURIResource, description?: ARTLiteral) {
+        let params: STRequestParams = {
+            dataset: dataset,
+            description: description
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteDescription", params);
+    }
+    
 
     /**
      * Sets whether a dataset is derefereanceable or not. If value is true, then sets

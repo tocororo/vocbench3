@@ -23,13 +23,13 @@ export class LocalizedEditorModal {
 
     ngOnInit() {
         this.labels = [];
-        for (let lang in this.localizedMap) {
+        this.localizedMap.forEach((label, lang) => {
+            console.log(label, lang);
             let l: LocalizedItem = new LocalizedItem();
             l.lang = lang;
-            l.label = this.localizedMap[lang];
+            l.label = label;
             this.labels.push(l);
-        }
-
+        });
         this.updatePendingLangs();
     }
 
@@ -79,9 +79,9 @@ export class LocalizedEditorModal {
     }
 
     ok() {
-        let labelMap: { [lang: string]: string } = {};
+        let labelMap: LocalizedMap = new Map();
         this.labels.forEach(l => {
-            labelMap[l.lang] = l.label;
+            labelMap.set(l.lang, l.label);
         });
         this.activeModal.close(labelMap);
     }
@@ -92,9 +92,7 @@ export class LocalizedEditorModal {
 
 }
 
-export class LocalizedMap {
-    [lang: string]: string;
-}
+export interface LocalizedMap extends Map<string, string> {}
 
 class LocalizedItem {
     lang: string;
