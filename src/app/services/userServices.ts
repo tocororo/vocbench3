@@ -91,23 +91,6 @@ export class UserServices {
      * Lists the users that have at least a role assigned in the given project
      * @param projectName
      */
-    // listUsersBoundToProject(project: Project, rolesFilter?: string[], groupsFilter?: string[], langsFilter?: string[]): Observable<User[]> {
-    //     let params: STRequestParams = {
-    //         projectName: project.getName(),
-    //         rolesFilter: rolesFilter,
-    //         groupsFilter: groupsFilter,
-    //         langsFilter: langsFilter,
-    //     };
-    //     return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).pipe(
-    //         map(stResp => {
-    //             let users: User[] = this.parseUsersArray(stResp);
-    //             users.sort((u1: User, u2: User) => {
-    //                 return u1.getGivenName().localeCompare(u2.getGivenName());
-    //             });
-    //             return users;
-    //         })
-    //     );
-    // }
     listUsersBoundToProject(project: Project, requiredRoles?: UserFilter, requiredGroups?: UserFilter, requiredLanguages?: UserFilter): Observable<User[]> {
         let params: STRequestParams = {
             projectName: project.getName(),

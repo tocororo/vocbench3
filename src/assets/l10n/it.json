@@ -1680,6 +1680,7 @@
                 "CREATE_CONCRETE_DATASET": "Crea dataset concreto",
                 "DELETE_ALL_EMBEDDED_LEXICALIZATION_SET": "Cancella tutti gli Embedded Lexicalization Set",
                 "DELETE_EMBEDDED_LEXICALIZATION_SET": "Cancella Embedded Lexicalization Set",
+                "DISCONNECT_FROM_ABS_DATASET": "Scollega da dataset astratto",
                 "DISCOVER_DATASET": "Trova dataset",
                 "DISCOVER_DATASET_IRI_INFO": "Questo IRI può direttamente essere l'IRI del descrittore VoID del Dataset (istanza di void:Dataset) o l'IRI di una qualsiasi risorsa nel Dataset che punta a tale descrittore VoID",
                 "SELECT_CONCRETE_DATASET": "Seleziona dataset concreto",

@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ARTURIResource } from 'src/app/models/ARTResources';
-import { CatalogRecord2 } from 'src/app/models/Metadata';
+import { CatalogRecord2, DatasetRole } from 'src/app/models/Metadata';
 import { MetadataRegistryServices } from 'src/app/services/metadataRegistryServices';
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
 import { UIUtils } from 'src/app/utils/UIUtils';
@@ -10,6 +10,7 @@ import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalSe
 import { ModalOptions, TextOrTranslation, TranslationUtils } from 'src/app/widget/modal/Modals';
 import { ConnectToAbsDatasetModal } from './connectToAbsDatasetModal';
 import { MdrTreeContext, MetadataRegistryTreeComponent } from './mdrTreeComponent';
+import { MetadataRegistryTreeNodeComponent } from './mdrTreeNodeComponent';
 import { NewDatasetModal, NewDatasetModeEnum } from './newDatasetModal';
 
 @Component({
@@ -97,6 +98,61 @@ export class MetadataRegistryTreePanelComponent {
         );
     }
 
+    disconnectFromAbstractDataset() {
+        //look for the abstract dataset which is the parent of the disconnecting concrete one
+        let abstractRoot: CatalogRecord2 = this.getAbstractOfSelectedRecord();
+        let roots = this.viewChildTree.viewChildrenNode;
+        if (roots) {
+            roots.forEach(r => {
+                if (r.children.find(c => c.identity.equals(this.selectedRecord.identity))) {
+                    abstractRoot = r.record;
+                }
+            });
+        }
+        this.metadataRegistryService.disconnectFromAbstractDataset(this.selectedRecord.dataset.identity, abstractRoot.dataset.identity).subscribe(
+            () => {
+                this.refresh();
+            }
+        );
+    }
+
+    isDisconnectDisabled(): boolean {
+        if (this.selectedRecord == null) {
+            return true;
+        } else {
+            if (this.selectedRecord.dataset.role == DatasetRole.ROOT) {
+                return true;
+            } else {
+                let abstractRootNode: MetadataRegistryTreeNodeComponent;
+                let roots = this.viewChildTree.viewChildrenNode;
+                if (roots) {
+                    roots.forEach(r => {
+                        if (r.children.find(c => c.identity.equals(this.selectedRecord.identity))) {
+                            abstractRootNode = r;
+                        }
+                    });
+                    if (abstractRootNode) {
+                        return abstractRootNode.children.length < 2;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private getAbstractOfSelectedRecord(): CatalogRecord2 {
+        let abstractRoot: CatalogRecord2;
+        let roots = this.viewChildTree.viewChildrenNode;
+        if (roots) {
+            roots.forEach(r => {
+                if (r.children.find(c => c == this.selectedRecord)) {
+                    abstractRoot = r.record;
+                }
+            });
+        }
+        return abstractRoot;
+    }
+
     refresh() {
         this.viewChildTree.init();
     }
@@ -104,12 +160,6 @@ export class MetadataRegistryTreePanelComponent {
     toggleMultiselection() {
         this.multiselection = !this.multiselection;
     }
-
-    addNewDataset() { }
-
-    addToExistingDataset() { }
-
-    mergeDistributions() { }
 
     //EVENT LISTENERS
     onNodeSelected(node: CatalogRecord2) {

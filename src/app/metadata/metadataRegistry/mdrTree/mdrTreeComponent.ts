@@ -1,6 +1,7 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { CatalogRecord2 } from 'src/app/models/Metadata';
 import { MetadataRegistryServices } from 'src/app/services/metadataRegistryServices';
+import { MetadataRegistryTreeNodeComponent } from './mdrTreeNodeComponent';
 
 @Component({
     selector: "mdr-tree",
@@ -13,6 +14,7 @@ export class MetadataRegistryTreeComponent {
     @Input() context: MdrTreeContext;
     @Output() nodeSelected = new EventEmitter<CatalogRecord2>();
     @ViewChild('blockDivTree', { static: true }) public blockDivElement: ElementRef;
+    @ViewChildren(MetadataRegistryTreeNodeComponent) viewChildrenNode: QueryList<MetadataRegistryTreeNodeComponent>;
 
     rootDatasets: CatalogRecord2[] = [];
 
@@ -30,7 +32,6 @@ export class MetadataRegistryTreeComponent {
         this.metadataRegistryService.listRootDatasets().subscribe(
             records => {
                 this.rootDatasets = records;
-                // this.nodeSelected.emit(null);
             }
         );
     }

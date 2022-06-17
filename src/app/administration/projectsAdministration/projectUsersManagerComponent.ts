@@ -234,7 +234,7 @@ export class ProjectUsersManagerComponent {
     editUsersFilterGroups() {
         const modalRef: NgbModalRef = this.modalService.open(GroupSelectorModal, new ModalOptions('sm'));
         modalRef.componentInstance.title = TranslationUtils.getTranslatedText({ key: "ACTIONS.SELECT_GROUPS" }, this.translate);
-        modalRef.componentInstance.roles = this.usersFilters.groups.filters;
+        modalRef.componentInstance.groups = this.usersFilters.groups.filters;
         modalRef.componentInstance.multiselection = true;
         modalRef.result.then(
             (groups: UsersGroup[]) => {

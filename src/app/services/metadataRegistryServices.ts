@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ARTLiteral, ARTURIResource, ResourcePosition } from '../models/ARTResources';
 import { AbstractDatasetAttachment, CatalogRecord2, DatasetMetadata, Distribution, LexicalizationSetMetadata } from "../models/Metadata";
 import { Deserializer } from '../utils/Deserializer';
-import { STRequestParams } from '../utils/HttpManager';
+import { STRequestParams, VBRequestOptions } from '../utils/HttpManager';
 import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 
 @Injectable()
@@ -333,6 +333,20 @@ export class MetadataRegistryServices {
             abstractDatasetAttachment: this.getAbstractDatasetAttachmentAsParam(abstractDatasetAttachment),
         };
         return this.httpMgr.doPost(this.serviceName, "connectToAbstractDataset", params);
+    }
+
+
+    disconnectFromAbstractDataset(dataset: ARTURIResource, abstractDataset: ARTURIResource) {
+        let params: STRequestParams = {
+            dataset: dataset,
+            abstractDataset: abstractDataset,
+        };
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorHandlers: [
+                { className: "java.lang.IllegalArgumentException", action: "warning" },
+            ]
+        });
+        return this.httpMgr.doPost(this.serviceName, "disconnectFromAbstractDataset", params, options);
     }
 
     spawnNewAbstractDataset(dataset1: ARTURIResource, abstractDatasetAttachment1: AbstractDatasetAttachment,

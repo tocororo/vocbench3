@@ -14,14 +14,22 @@
                         </button>
                         <div class="dropdown-menu" ngbDropdownMenu>
                             <a class="dropdown-item" (click)="createConcreteDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.CREATE_CONCRETE_DATASET'|translate}}</a>
-                            <a class="dropdown-item" (click)="connectToAbstractDataset()" [ngClass]="{ disabled: !selectedRecord || selectedRecord.dataset.role != 'ROOT' || selectedRecord.dataset.nature == 'ABSTRACT' }">{{'METADATA.METADATA_REGISTRY.ACTIONS.CONNECT_TO_ABS_DATASET'|translate}}</a>
-                            <a class="dropdown-item" (click)="spawnNewAbstractDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.SPAWN_ABSTRACT_DATASET'|translate}}</a>
                             <a class="dropdown-item" (click)="discoverDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.DISCOVER_DATASET'|translate}}</a>
+                            <a class="dropdown-item" (click)="spawnNewAbstractDataset()">{{'METADATA.METADATA_REGISTRY.ACTIONS.SPAWN_ABSTRACT_DATASET'|translate}}</a>
                         </div>
                     </div>
                     <button class="btn btn-light" (click)="deleteRecord()" [disabled]="!selectedRecord">
                         <span class="fas fa-minus"></span>
                     </button>
+                </div>
+                <div class="btn-group" ngbDropdown>
+                    <button class="btn btn-light btn-xs dropdown-toggle" [disabled]="!selectedRecord" data-toggle="dropdown" ngbDropdownToggle>
+                        <span class="fas fa-pencil-alt"></span>
+                    </button>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="connectToAbstractDataset()" [ngClass]="{ disabled: !selectedRecord || selectedRecord.dataset.role != 'ROOT' || selectedRecord.dataset.nature == 'ABSTRACT' }">{{'METADATA.METADATA_REGISTRY.ACTIONS.CONNECT_TO_ABS_DATASET'|translate}}</a>
+                        <a class="dropdown-item" (click)="disconnectFromAbstractDataset()" [ngClass]="{ disabled: isDisconnectDisabled() }">{{'METADATA.METADATA_REGISTRY.ACTIONS.DISCONNECT_FROM_ABS_DATASET'|translate}}</a>
+                    </div>
                 </div>
                 <button class="btn btn-light btn-xs" [title]="'ACTIONS.REFRESH'|translate" (click)="refresh()">
                     <span class="fas fa-redo"></span>
