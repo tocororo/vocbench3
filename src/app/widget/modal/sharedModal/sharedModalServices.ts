@@ -91,7 +91,7 @@ export class SharedModalServices {
      * @param projectAware if true, allow selection only of languages available in the current project
      * @param projectCtx allow to customize the available languages for the contextual project
      */
-    selectLanguages(title: TextOrTranslation, languages?: string[], radio?: boolean, projectAware?: boolean, projectCtx?: ProjectContext) {
+    selectLanguages(title: TextOrTranslation, languages?: string[], radio?: boolean, projectAware?: boolean, projectCtx?: ProjectContext): Promise<string[]> {
         const modalRef: NgbModalRef = this.modalService.open(LanguageSelectorModal, new ModalOptions());
         modalRef.componentInstance.title = TranslationUtils.getTranslatedText(title, this.translateService);
         if (languages != null) modalRef.componentInstance.languages = languages;

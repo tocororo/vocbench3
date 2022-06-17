@@ -8,6 +8,7 @@ import { AdministrationComponent } from "../administration/administrationCompone
 import { adminRouting } from "../administration/administrationRoutes";
 import { GroupEditorModal } from "../administration/groupsAdministration/groupEditorModal";
 import { GroupsAdministrationComponent } from "../administration/groupsAdministration/groupsAdministrationComponent";
+import { GroupSelectorModal } from '../administration/groupsAdministration/groupSelectorModal';
 import { ProjectGroupsManagerComponent } from "../administration/projectsAdministration/projectGroupsManagerComponent";
 import { ProjectsAdministrationComponent } from "../administration/projectsAdministration/projectsAdministrationComponent";
 import { ProjectSettingsComponent } from "../administration/projectsAdministration/projectSettingsComponent";
@@ -18,6 +19,7 @@ import { CapabilityEditorModal } from "../administration/rolesAdministration/cap
 import { ImportRoleModal } from "../administration/rolesAdministration/importRoleModal";
 import { RoleDescriptionModal } from '../administration/rolesAdministration/roleDescriptionModal';
 import { RolesAdministrationComponent } from "../administration/rolesAdministration/rolesAdministrationComponent";
+import { RoleSelectorModal } from '../administration/rolesAdministration/roleSelectorModal';
 import { SettingsMgrConfigComponent } from '../administration/systemConfiguration/settingsMgrConfigComponent';
 import { SystemConfigurationComponent } from '../administration/systemConfiguration/systemConfigurationComponent';
 import { ForcePasswordModal } from '../administration/usersAdministration/forcePasswordModal';
@@ -59,8 +61,10 @@ import { UserModule } from './userModule';
         CapabilityEditorModal,
         ForcePasswordModal,
         GroupEditorModal,
+        GroupSelectorModal,
         ImportRoleModal,
         RoleDescriptionModal,
+        RoleSelectorModal,
         UserCreateModal,
         UserProjBindingModal,
     ],
@@ -70,8 +74,10 @@ import { UserModule } from './userModule';
         CapabilityEditorModal,
         ForcePasswordModal,
         GroupEditorModal,
+        GroupSelectorModal,
         ImportRoleModal,
         RoleDescriptionModal,
+        RoleSelectorModal,
         UserCreateModal,
         UserProjBindingModal,
     ]

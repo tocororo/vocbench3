@@ -1,14 +1,15 @@
-import { Component, Input, SimpleChanges } from "@angular/core";
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Component, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { NgbDropdown, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { SettingsServices } from "src/app/services/settingsServices";
-import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { ModalOptions, ModalType, TranslationUtils } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { ExtensionPointID, Scope, SettingsProp } from "../../models/Plugins";
 import { Project } from "../../models/Project";
 import { PartitionFilterPreference, ResourceViewPreference, SettingsEnum } from "../../models/Properties";
-import { ProjectUserBinding, Role, User, UsersGroup } from "../../models/User";
+import { ProjectUserBinding, Role, User, UserFilter, UsersGroup } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { UserServices } from "../../services/userServices";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
@@ -19,19 +20,34 @@ import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { GroupSelectorModal } from '../groupsAdministration/groupSelectorModal';
 import { RoleDescriptionModal } from "../rolesAdministration/roleDescriptionModal";
+import { RoleSelectorModal } from '../rolesAdministration/roleSelectorModal';
 import { UserProjBindingModal } from "./userProjBindingModal";
 
 @Component({
     selector: "project-users-manager",
     templateUrl: "./projectUsersManagerComponent.html",
+    styles: [`
+        .filter-dropdown > .dropdown-menu {
+            min-width: 450px;
+        }
+    `]
 })
 export class ProjectUsersManagerComponent {
 
     @Input() project: Project;
+    @ViewChild('filterDropdown') filterDropdown: NgbDropdown;
 
     usersBound: User[]; //list of User bound to selected project 
     selectedUser: User; //user selected in the list of bound users
+
+    usersFilters: UserFilters = {
+        languages: { filters: [], and: false },
+        groups: { filters: [] },
+        roles: { filters: [], and: false }
+    };
+    filteredUser: User[];
 
     private puBinding: ProjectUserBinding; //binding between selectedProject and selectedUser
 
@@ -54,9 +70,10 @@ export class ProjectUsersManagerComponent {
     private resViewPref: ResourceViewPreference;
     private puTemplate: PartitionFilterPreference;
 
-    constructor(private userService: UserServices, private adminService: AdministrationServices,
-        private groupsService: UsersGroupsServices, private settingsService: SettingsServices,
-        private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
+    constructor(private userService: UserServices, private adminService: AdministrationServices, private groupsService: UsersGroupsServices,
+        private settingsService: SettingsServices, private vbProp: VBProperties,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal, private translate: TranslateService
+    ) { }
 
 
     ngOnChanges(changes: SimpleChanges) {
@@ -102,6 +119,11 @@ export class ProjectUsersManagerComponent {
                     this.initAvailableLanguages();
                 }
             );
+            if (this.filterDropdown) {
+                this.filterDropdown.close();
+            }
+            this.filteredUser = null;
+            this.resetUsersFilters();
         }
     }
 
@@ -175,6 +197,93 @@ export class ProjectUsersManagerComponent {
                 },
                 () => { }
             );
+    }
+
+    /*
+    Filters
+    */
+
+    isUserVisible(user: User) {
+        return this.filteredUser == null || this.filteredUser.some(u => u.getIri().equals(user.getIri()));
+    }
+
+    editUsersFilterLanguages() {
+        this.sharedModals.selectLanguages({ key: "ACTIONS.SELECT_LANGUAGES" }, this.usersFilters.languages.filters, false).then(
+            (langs: string[]) => {
+                this.usersFilters.languages.filters = langs;
+            },
+            () => { }
+        );
+    }
+
+    editUsersFilterRoles() {
+        const modalRef: NgbModalRef = this.modalService.open(RoleSelectorModal, new ModalOptions('sm'));
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText({ key: "ACTIONS.SELECT_ROLES" }, this.translate);
+        modalRef.componentInstance.project = this.project;
+        modalRef.componentInstance.roles = this.usersFilters.roles.filters;
+        modalRef.componentInstance.multiselection = true;
+        modalRef.result.then(
+            (roles: Role[]) => {
+                this.usersFilters.roles.filters = roles;
+                this.usersFilters.roles.preview = this.usersFilters.roles.filters.map(r => r.getName()).join(", ");
+            },
+            () => { }
+        );
+    }
+
+    editUsersFilterGroups() {
+        const modalRef: NgbModalRef = this.modalService.open(GroupSelectorModal, new ModalOptions('sm'));
+        modalRef.componentInstance.title = TranslationUtils.getTranslatedText({ key: "ACTIONS.SELECT_GROUPS" }, this.translate);
+        modalRef.componentInstance.roles = this.usersFilters.groups.filters;
+        modalRef.componentInstance.multiselection = true;
+        modalRef.result.then(
+            (groups: UsersGroup[]) => {
+                this.usersFilters.groups.filters = groups;
+                this.usersFilters.groups.preview = this.usersFilters.groups.filters.map(g => g.shortName).join(", ");
+            },
+            () => { }
+        );
+    }
+
+
+    resetUsersFilters() {
+        this.usersFilters.languages.filters = [];
+        this.usersFilters.groups = {
+            filters: [],
+            preview: ""
+        };
+        this.usersFilters.roles = {
+            filters: [],
+            preview: ""
+        };
+    }
+
+    filterUsers() {
+        let roleFilter: UserFilter;
+        if (this.usersFilters.roles.filters.length > 0) {
+            roleFilter = {
+                filters: this.usersFilters.roles.filters.map(r => r.getName()),
+                and: this.usersFilters.roles.and
+            };
+        }
+        let groupFilter: UserFilter;
+        if (this.usersFilters.groups.filters.length > 0) {
+            groupFilter = {
+                filters: this.usersFilters.groups.filters.map(g => g.shortName),
+            };
+        }
+        let langsFilter: UserFilter;
+        if (this.usersFilters.languages.filters.length > 0) {
+            langsFilter = {
+                filters: this.usersFilters.languages.filters,
+                and: this.usersFilters.languages.and
+            };
+        }
+        this.userService.listUsersBoundToProject(this.project, roleFilter, groupFilter, langsFilter).subscribe(
+            filterdUsers => {
+                this.filteredUser = filterdUsers;
+            }
+        );
     }
 
     /** ==========================
@@ -259,7 +368,7 @@ export class ProjectUsersManagerComponent {
         }
         return false;
     }
-    
+
 
     showUserRoleDescription(roleName: string) {
         let role = this.roleList.find(r => r.getName() == roleName);
@@ -533,4 +642,21 @@ export class ProjectUsersManagerComponent {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement);
     }
 
+}
+
+
+interface UserFilters { 
+    languages: {
+        filters: string[],
+        and?: boolean
+    };
+    groups: {
+        filters: UsersGroup[],
+        preview?: string;
+    };
+    roles: {
+        filters: Role[],
+        and?: boolean;
+        preview?: string;
+    };
 }

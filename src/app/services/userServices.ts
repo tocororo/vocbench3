@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
 import { Project } from '../models/Project';
 import { AuthServiceMode } from '../models/Properties';
-import { User, UserFormFields } from "../models/User";
+import { User, UserFilter, UserFormFields } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
@@ -91,9 +91,29 @@ export class UserServices {
      * Lists the users that have at least a role assigned in the given project
      * @param projectName
      */
-    listUsersBoundToProject(project: Project): Observable<User[]> {
+    // listUsersBoundToProject(project: Project, rolesFilter?: string[], groupsFilter?: string[], langsFilter?: string[]): Observable<User[]> {
+    //     let params: STRequestParams = {
+    //         projectName: project.getName(),
+    //         rolesFilter: rolesFilter,
+    //         groupsFilter: groupsFilter,
+    //         langsFilter: langsFilter,
+    //     };
+    //     return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).pipe(
+    //         map(stResp => {
+    //             let users: User[] = this.parseUsersArray(stResp);
+    //             users.sort((u1: User, u2: User) => {
+    //                 return u1.getGivenName().localeCompare(u2.getGivenName());
+    //             });
+    //             return users;
+    //         })
+    //     );
+    // }
+    listUsersBoundToProject(project: Project, requiredRoles?: UserFilter, requiredGroups?: UserFilter, requiredLanguages?: UserFilter): Observable<User[]> {
         let params: STRequestParams = {
-            projectName: project.getName()
+            projectName: project.getName(),
+            requiredRoles: requiredRoles ? JSON.stringify(requiredRoles) : null,
+            requiredGroups: requiredGroups ? JSON.stringify(requiredGroups) : null,
+            requiredLanguages: requiredLanguages ? JSON.stringify(requiredLanguages) : null,
         };
         return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).pipe(
             map(stResp => {

@@ -24,7 +24,6 @@ export class LocalizedEditorModal {
     ngOnInit() {
         this.labels = [];
         this.localizedMap.forEach((label, lang) => {
-            console.log(label, lang);
             let l: LocalizedItem = new LocalizedItem();
             l.lang = lang;
             l.label = label;

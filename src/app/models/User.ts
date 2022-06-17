@@ -203,6 +203,11 @@ export class User {
     }
 }
 
+export interface UserFilter {
+    filters: string[];
+    and?: boolean;
+}
+
 export class ProjectUserBinding {
 
     private projectName: string;

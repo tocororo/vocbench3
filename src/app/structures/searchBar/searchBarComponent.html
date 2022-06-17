@@ -14,7 +14,7 @@
     <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control form-control-sm" style="flex: 1;" 
         [(ngModel)]="searchStr" (keydown.enter)="doSearch()" [placeholder]="'ACTIONS.SEARCH'|translate" [disabled]="disabled">
 
-    <div class="btn-group btn-group-xs ml-2" ngbDropdown placement="top-right">
+    <div class="btn-group btn-group-xs ml-2" ngbDropdown placement="top-right" container="body">
         <button class="btn btn-light" type="button" (click)="doSearch()" [disabled]="disabled">
             <span class="fas fa-search"></span>
         </button>

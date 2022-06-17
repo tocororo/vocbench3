@@ -98,6 +98,16 @@ export class UsersListComponent {
         );
     }
 
+    resetFilters() {
+        this.showActive = true;
+        this.showInactive = true;
+        this.showNew = true;
+        this.showOnlyOnline = false;
+        this.givenNameFilter = "";
+        this.familyNameFilter = "";
+        this.emailFilter = "";
+    }
+
     isFilterApplied(): boolean {
         return !this.showActive || !this.showInactive || !this.showNew || 
             this.givenNameFilter != "" || this.familyNameFilter != "" || this.emailFilter != "" || 

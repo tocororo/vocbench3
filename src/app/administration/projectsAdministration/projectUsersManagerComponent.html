@@ -1,8 +1,86 @@
 <div class="hbox">
+
     <div class="card card-alt vbox">
         <div class="card-header">
             <label style="flex: 1;">{{'COMMONS.USERS'|translate}}:</label>
-            <div class="btn-group btn-group-xs">
+
+            <div class="filter-dropdown mx-1" ngbDropdown #filterDropdown="ngbDropdown" [autoClose]="false">
+                <button class="btn btn-light btn-xs" (click)="filterDropdown.toggle()" ngbDropdownAnchor>
+                    <span class="fas fa-filter"></span>
+                </button>
+                <div ngbDropdownMenu>
+                    <div class="px-2 py-2">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">{{'COMMONS.ROLES'|translate}}:</label>
+                            <div class="col-sm-9 d-flex align-items-center">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" [ngModel]="usersFilters.roles.preview" readonly>
+                                    <span class="input-group-append">
+                                        <button class="btn btn-light" (click)="editUsersFilterRoles()">
+                                            <span class="fas fa-pencil-alt"></span>
+                                        </button>
+                                        <button class="btn btn-light" (click)="usersFilters.roles.filters = []; usersFilters.roles.preview = ''" [title]="'ACTIONS.RESET'|translate">
+                                            <span class="fas fa-times"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <button class="btn btn-sm btn-light ml-2 font-weight-bold" style="width: 38px;" (click)="usersFilters.roles.and = !usersFilters.roles.and">
+                                    {{usersFilters.roles.and ? 'AND' : 'OR'}}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">{{'COMMONS.GROUPS'|translate}}:</label>
+                            <div class="col-sm-9 d-flex align-items-center">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" [ngModel]="usersFilters.groups.preview" readonly>
+                                    <span class="input-group-append">
+                                        <button class="btn btn-light" (click)="editUsersFilterGroups()">
+                                            <span class="fas fa-pencil-alt"></span>
+                                        </button>
+                                        <button class="btn btn-light" (click)="usersFilters.groups.filters = []; usersFilters.groups.preview = ''" [title]="'ACTIONS.RESET'|translate">
+                                            <span class="fas fa-times"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <button class="btn btn-sm btn-light ml-2 font-weight-bold" style="width: 38px;" disabled>
+                                    OR
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3 col-form-label">{{'COMMONS.LANGUAGE.LANGUAGES'|translate}}:</label>
+                            <div class="col-sm-9 d-flex align-items-center">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" [ngModel]="usersFilters.languages.filters" readonly>
+                                    <span class="input-group-append">
+                                        <button class="btn btn-light" (click)="editUsersFilterLanguages()">
+                                            <span class="fas fa-pencil-alt"></span>
+                                        </button>
+                                        <button class="btn btn-light" (click)="usersFilters.languages.filters = []" [title]="'ACTIONS.RESET'|translate">
+                                            <span class="fas fa-times"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <button class="btn btn-sm btn-light ml-2 font-weight-bold" style="width: 38px;" (click)="usersFilters.languages.and = !usersFilters.languages.and">
+                                    {{usersFilters.languages.and ? 'AND' : 'OR'}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="px-4 py-2 text-right">
+                        <button class="btn btn-sm btn-primary" (click)="filterUsers()">
+                            {{'ACTIONS.SUBMIT'|translate}}
+                        </button>
+                        <button class="btn btn-sm btn-secondary ml-2" (click)="resetUsersFilters()">
+                            {{'ACTIONS.RESET'|translate}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group btn-group-xs mx-1">
                 <button class="btn btn-light" (click)="addUserToProject()" [disabled]="!project" [title]="'ADMINISTRATION.ACTIONS.ADD_USER_TO_PROJ'|translate">
                     <span class="fas fa-plus"></span>
                 </button>
@@ -13,10 +91,12 @@
             </div>
         </div>
         <div class="card-body vbox scrollableContainer">
-            <div *ngFor="let u of usersBound" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
-                <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
-                <span *ngIf="u.isAdmin()" class="badge badge-primary">Admin</span>
-            </div>
+            <ng-container *ngFor="let u of usersBound">
+                <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
+                    <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
+                    <span *ngIf="u.isAdmin()" class="badge badge-primary">Admin</span>
+                </div>
+            </ng-container>
         </div>
     </div>
     <div *ngIf="selectedUser" class="card card-alt vbox" style="margin-left: 5px; flex: 3;">
