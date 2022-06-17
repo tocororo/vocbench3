@@ -264,17 +264,27 @@
                         <div class="card card-alt vbox" style="margin: 0px">
                             <div class="card-header">
                                 <label style="flex: 1">{{'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.AVAILABLE_LANGUAGES'|translate}}:</label>
-                                <button class="btn btn-xs btn-light" (click)="toggleFilterProficencies()" [ngClass]="{ active: filterProficiencies }">
+                                <div class="input-group input-group-sm" style="max-width: 60px;">
+                                    <input type="text" class="form-control" [(ngModel)]="availableLangsFilter">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <span class="fas fa-filter"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-xs btn-light ml-2" (click)="filterProficiencies = !filterProficiencies" [ngClass]="{ active: filterProficiencies }">
                                     <span class="fas fa-star" [title]="'ADMINISTRATION.ACTIONS.SHOW_ONLY_PROFICIENCIES'|translate"></span>
                                 </button>
                             </div>
                             <div class="card-body vbox scrollableContainer">
-                                <div *ngFor="let l of availableLanguages" class="listItem" [ngClass]="{active: selectedLangs?.includes(l)}" (click)="selectLang(l, $event)">
-                                    <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
-                                    <span *ngIf="l.proficiency" class="fas fa-star"
-                                        [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.LANG_PROFICIENCIES_INFO'|translate">
-                                    </span>
-                                </div>
+                                <ng-container *ngFor="let l of availableLanguages">
+                                    <div *ngIf="isLangVisible(l)" class="listItem" [ngClass]="{active: selectedLangs?.includes(l)}" (click)="selectLang(l, $event)">
+                                        <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
+                                        <span *ngIf="l.proficiency" class="fas fa-star"
+                                            [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.LANG_PROFICIENCIES_INFO'|translate">
+                                        </span>
+                                    </div>
+                                </ng-container>
                             </div>
                         </div>
                     </div>

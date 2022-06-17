@@ -62,6 +62,7 @@ export class ProjectUsersManagerComponent {
     selectedLangs: Language[]; //languages selected in available lang list (availableLanguages)
     selectedUserLangs: Language[]; //selected langs in the list of the languages assigned to the selectedUser in the selectedProject
     private filterProficiencies: boolean = false;
+    availableLangsFilter: string;
 
     private groupList: UsersGroup[];
     private selectedGroup: UsersGroup;
@@ -443,20 +444,13 @@ export class ProjectUsersManagerComponent {
 
     //=========== LANGUAGES ===========
 
-    toggleFilterProficencies() {
-        this.filterProficiencies = !this.filterProficiencies;
-        this.initAvailableLanguages();
-    }
-
     private initAvailableLanguages() {
         this.availableLanguages = [];
         this.selectedLangs = [];
         this.projectLanguages.forEach(l => {
             let availableLang: Language = { name: l.name, tag: l.tag, mandatory: l.mandatory };
             availableLang['proficiency'] = this.isProficiencyLang(l.tag);
-            if (!this.filterProficiencies || availableLang['proficiency']) {
-                this.availableLanguages.push(availableLang);
-            }
+            this.availableLanguages.push(availableLang);
         });
     }
 
@@ -471,6 +465,19 @@ export class ProjectUsersManagerComponent {
             }
         });
         Languages.sortLanguages(this.puLanguages);
+    }
+
+    isLangVisible(lang: Language) {
+        if (this.filterProficiencies && !lang['proficiency']) {
+            return false;
+        }
+        if (this.availableLangsFilter == null) {
+            return true;
+        } else if (this.availableLangsFilter != "") {
+            return lang.name.toLocaleLowerCase().includes(this.availableLangsFilter.toLocaleLowerCase()) || 
+                lang.tag.toLocaleLowerCase().includes(this.availableLangsFilter.toLocaleLowerCase());
+        }
+        return true;
     }
 
     selectUserLang(lang: Language, event: MouseEvent) {
