@@ -36,7 +36,7 @@ export class MetadataRegistryComponent {
     // }
 
     profileProject() {
-        let project: Project = new Project(this.selectedCatalogRecord2.dataset.titles[0].getValue());
+        let project: Project = new Project(this.selectedCatalogRecord2.dataset.projectName);
         HttpServiceContext.setContextProject(project);
         this.mapleService.checkProjectMetadataAvailability().pipe(
             finalize(() => HttpServiceContext.removeContextProject())

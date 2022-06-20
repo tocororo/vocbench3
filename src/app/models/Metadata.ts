@@ -165,6 +165,7 @@ export class DatasetMetadata2 {
     otherURISpaces: string[];
     nature: DatasetNature;
     titles: ARTLiteral[];
+    projectName?: string;
     descriptions: ARTLiteral[];
     role: DatasetRole;
     versionInfo: string;
@@ -179,6 +180,7 @@ export class DatasetMetadata2 {
         dataset.otherURISpaces = datasetMetadataJson.otherURISpaces;
         dataset.nature = datasetMetadataJson.nature;
         dataset.titles = datasetMetadataJson.titles.map((t: string) => NTriplesUtil.parseLiteral(t));
+        dataset.projectName = datasetMetadataJson.projectName;
         dataset.descriptions = datasetMetadataJson.descriptions.map((d: string) => NTriplesUtil.parseLiteral(d));
         dataset.role = datasetMetadataJson.role;
         dataset.versionInfo = datasetMetadataJson.versionInfo;
