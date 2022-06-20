@@ -40,6 +40,9 @@ export class LexicalRelationModal {
         if (this.translation) {
             if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
                 this.categories = [Vartrans.translatableAs];
+                //the relation "translation" between entry can only be plain
+                this.relationTypes = this.relationTypes.filter(t => !t.reified);
+                this.reified = false;
             } else if (role == RDFResourceRolesEnum.ontolexLexicalSense) {
                 this.categories = [Lexinfo.translation];
             }
