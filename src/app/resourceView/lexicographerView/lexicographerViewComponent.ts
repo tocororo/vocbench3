@@ -237,7 +237,7 @@ export class LexicographerViewComponent {
     //==== Relations ====
 
     addRelated() {
-        this.lexViewModals.createRelation({ key: "DATA.ACTIONS.ADD_RELATED_LEX_ENTRY" }, this.lexEntry.id).then(
+        this.lexViewModals.createRelation({ key: "DATA.ACTIONS.ADD_RELATED_LEX_ENTRY" }, this.lexEntry.id, Vartrans.LexicalRelation).then(
             (data: LexicoRelationModalReturnData) => {
                 let addRelationFn: Observable<void>;
                 if (data.reified) {
@@ -256,7 +256,7 @@ export class LexicographerViewComponent {
     }
 
     addTranslation() {
-        this.lexViewModals.createRelation({ key: "DATA.ACTIONS.ADD_TRANSLATION" }, this.lexEntry.id, true).then(
+        this.lexViewModals.createRelation({ key: "DATA.ACTIONS.ADD_TRANSLATION" }, this.lexEntry.id, Vartrans.Translation).then(
             (data: LexicoRelationModalReturnData) => {
                 let addRelationFn: Observable<void>;
                 if (data.reified) {

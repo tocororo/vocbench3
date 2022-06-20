@@ -15,20 +15,23 @@ import { ResourcePickerConfig } from "src/app/widget/pickers/valuePicker/resourc
 export class LexicalRelationModal {
     @Input() title: string;
     @Input() sourceEntity: ARTResource; //entry or sense
-    @Input() translation: boolean; //if true this modal is used to add a translation
-
+    @Input() relationClass: ARTURIResource;
+    
     categories: ARTURIResource[];
     selectedCategory: ARTURIResource;
     targetEntity: ARTURIResource;
     undirectional: boolean = false;
     translationSet: ARTResource;
-
+    
+    
     relationTypes: { reified: boolean, translationKey: string }[] = [
         { reified: true, translationKey: "COMMONS.REIFIED" },
         { reified: false, translationKey: "COMMONS.PLAIN" }
     ];
     reified: boolean = true;
-
+    
+    translation: boolean; //if true this modal is used to add a translation
+    
     resourcePickerConfig: ResourcePickerConfig = {};
 
     constructor(private activeModal: NgbActiveModal, private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices) { }
@@ -37,10 +40,11 @@ export class LexicalRelationModal {
         let role: RDFResourceRolesEnum = this.sourceEntity.getRole();
         this.resourcePickerConfig = { roles: [role] };
 
-        if (this.translation) {
+        if (this.relationClass.equals(Vartrans.Translation)) {
+            this.translation = true;
             if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
                 this.categories = [Vartrans.translatableAs];
-                //the relation "translation" between entry can only be plain
+                //the translation between entries can only be plain
                 this.relationTypes = this.relationTypes.filter(t => !t.reified);
                 this.reified = false;
             } else if (role == RDFResourceRolesEnum.ontolexLexicalSense) {
@@ -48,6 +52,11 @@ export class LexicalRelationModal {
             }
             this.selectedCategory = this.categories[0];
         } else {
+            if (this.relationClass.equals(Vartrans.TerminologicalRelation) && role == RDFResourceRolesEnum.ontolexLexicalSense) {
+                //the terminologically relation between senses can only be reified
+                this.relationTypes = this.relationTypes.filter(t => t.reified);
+                this.reified = true;
+            }
             let lexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
             let getCategoriesFn: Observable<ARTURIResource[]>;
             if (role == RDFResourceRolesEnum.ontolexLexicalSense) {

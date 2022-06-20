@@ -823,6 +823,7 @@
             "ADD_SCHEME": "Add scheme",
             "ADD_SUBTERM": "Add subterm",
             "ADD_SUPERPROPERTY": "Add superproperty",
+            "ADD_TERMINOLOGICAL_RELATION": "Add terminological relation",
             "ADD_TO_SCHEME": "Add to scheme",
             "ADD_TRANSLATION": "Add translation",
             "ADD_TYPE": "Add type",
@@ -2074,6 +2075,7 @@
             "REFERENCE": "Reference",
             "RELATED": "Related",
             "SEMANTIC_REFERENCE": "Semantic reference",
+            "TERMINOLOGICALLY_RELATED": "Terminologically related",
             "TRANSLATION": "Translation",
             "TRANSLATION_SET": "TranslationSet",
             "UNDIRECTIONAL": "Undirectional"

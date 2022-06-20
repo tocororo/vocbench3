@@ -161,7 +161,7 @@ export class LexicalSenseComponent {
     //RELATIONS 
 
     addRelation() {
-        this.lexViewModals.createRelation({ key: 'DATA.ACTIONS.ADD_RELATED_SENSE' }, this.sense.id).then(
+        this.lexViewModals.createRelation({ key: 'DATA.ACTIONS.ADD_RELATED_SENSE' }, this.sense.id, Vartrans.SenseRelation).then(
             (data: LexicoRelationModalReturnData) => {
                 let addRelationFn: Observable<void>;
                 if (data.reified) {
@@ -179,8 +179,27 @@ export class LexicalSenseComponent {
         );
     }
 
+    addTerminologicalRelation() {
+        this.lexViewModals.createRelation({ key: 'DATA.ACTIONS.ADD_TERMINOLOGICAL_RELATION' }, this.sense.id, Vartrans.TerminologicalRelation).then(
+            (data: LexicoRelationModalReturnData) => {
+                let addRelationFn: Observable<void>;
+                if (data.reified) {
+                    addRelationFn = this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.undirectional, Vartrans.TerminologicalRelation, data.category);
+                } else {
+                    addRelationFn = this.resourceService.addValue(this.sense.id, data.category, data.target);
+                }
+                addRelationFn.subscribe(
+                    () => {
+                        this.update.emit();
+                    }
+                );
+            },
+            () => { }
+        );
+    }
+
     addTranslation() {
-        this.lexViewModals.createRelation({ key: "DATA.ACTIONS.ADD_TRANSLATION" }, this.sense.id, true).then(
+        this.lexViewModals.createRelation({ key: "DATA.ACTIONS.ADD_TRANSLATION" }, this.sense.id, Vartrans.Translation).then(
             (data: LexicoRelationModalReturnData) => {
                 let addRelationFn: Observable<void>;
                 if (data.reified) {

@@ -40,6 +40,14 @@
                 <span class="fas fa-plus"></span>
             </button>
         </div>
+        <div *ngIf="sense.terminologicallyRelated.length > 0" class="d-flex align-items-center my-3">
+            <label>{{'RESOURCE_VIEW.LEX_VIEW.TERMINOLOGICALLY_RELATED'|translate}}:</label>
+            <sense-relation *ngFor="let r of sense.terminologicallyRelated" class="ml-3" [sense]="sense" [relation]="r" (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
+            </sense-relation>
+            <button class="btn btn-xs btn-faded ml-3" (click)="addTerminologicalRelation()" [title]="'ACTIONS.ADD'|translate" [disabled]="!addRelatedAuthorized">
+                <span class="fas fa-plus"></span>
+            </button>
+        </div>
         <div *ngIf="sense.translations.length > 0" class="d-flex align-items-center my-3">
             <label>{{'RESOURCE_VIEW.LEX_VIEW.TRANSLATION'|translate}}:</label>
             <sense-relation *ngFor="let r of sense.translations" class="ml-3" [sense]="sense" [relation]="r" translation="true" (update)="onUpdate()" (dblclickObj)="resourceDblClick($event)">
@@ -70,6 +78,9 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" (click)="addRelation()" [ngClass]="{ disabled: !addRelatedAuthorized }">
                         {{'DATA.ACTIONS.ADD_RELATED_SENSE'|translate}}
+                    </a>
+                    <a class="dropdown-item" (click)="addTerminologicalRelation()" [ngClass]="{ disabled: !addRelatedAuthorized }">
+                        {{'DATA.ACTIONS.ADD_TERMINOLOGICAL_RELATION'|translate}}
                     </a>
                     <a class="dropdown-item" (click)="addTranslation()" [ngClass]="{ disabled: !addTranslationAuthorized }">
                         {{'DATA.ACTIONS.ADD_TRANSLATION'|translate}}
