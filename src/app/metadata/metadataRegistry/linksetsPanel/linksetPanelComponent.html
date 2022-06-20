@@ -1,0 +1,41 @@
+<div class="card vbox blockingDivHost">
+    <div class="card-header">
+        <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.LINKSETS.LINKSETS'|translate}}:</label>
+    </div>
+    <div class="card-body scrollableContainer">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}</th>
+                    <th>
+                        {{'METADATA.METADATA_REGISTRY.LINKSETS.ALIGNMENTS'|translate}}
+                        <button class="btn btn-xs btn-light ml-2" [ngClass]="{ active: showPercentage }" 
+                            (click)="showPercentage = !showPercentage" [title]="'METADATA.METADATA_REGISTRY.LINKSETS.SHOW_PERCENTAGE'|translate">
+                            <i class="fas fa-percent"></i>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let l of linksets">
+                    <td>{{l.getTargetDatasetShow()}}</td>
+                    <td>
+                        <ng-container *ngIf="!showPercentage">{{l.linkCount}}</ng-container>
+                        <ng-container *ngIf="showPercentage">{{l.linkPercentage}}%</ng-container>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div #blockDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="./assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>

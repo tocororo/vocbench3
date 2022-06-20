@@ -1,11 +1,11 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
-import { ARTURIResource } from "../../models/ARTResources";
-import { DatasetMetadata2, LexicalizationSetMetadata } from "../../models/Metadata";
-import { OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
-import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
-import { ResourceUtils } from "../../utils/ResourceUtils";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { ARTURIResource } from "../../../models/ARTResources";
+import { DatasetMetadata2, LexicalizationSetMetadata } from "../../../models/Metadata";
+import { OntoLex, RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
+import { MetadataRegistryServices } from "../../../services/metadataRegistryServices";
+import { ResourceUtils } from "../../../utils/ResourceUtils";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "lexicalization-set-metadata",

@@ -2,80 +2,48 @@
 
     <mdr-tree-panel (nodeSelected)="onCatalogSelected($event)"></mdr-tree-panel>
 
-    <div *ngIf="selectedCatalogRecord2" class="card card-default vbox ml-2">
+    <div *ngIf="selectedCatalogRecord2" class="card card-default vbox ml-2 blockingDivHost">
         <div class="card-header">
-            <label>{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label>
+            <label style="flex: 1;">{{'MODELS.MAPLE.DATASET.DATASET'|translate}}:</label>
+            <button *ngIf="selectedCatalogRecord2?.dataset.nature == 'PROJECT'" class="btn btn-light btn-xs" (click)="profileProject()" [title]="'ACTIONS.PROFILE_PROJECT'|translate">
+                <span class="fas fa-align-right" style="transform: rotate(90deg)"></span>
+            </button>
         </div>
         <div class="card-body vbox">
 
             <dataset-metadata class="d-flex" style="max-height: 40vh;" [dataset]="selectedCatalogRecord2.dataset"></dataset-metadata>
-                
+
             <div *ngIf="selectedCatalogRecord2?.dataset.nature != 'ABSTRACT'" class="vbox mt-2">
-                <div class="card card-alt vbox blockingDivHost">
-                    <div class="card-header">
-                        <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.EMBEDDED_LEXICALIZATION_SETS'|translate}}:</label>
-                       
-                        <div *ngIf="selectedCatalogRecord2.dataset.nature != 'PROJECT'" class="btn-group btn-group-xs">
-                            <div *ngIf="addEmbeddedLexicalizationSetAuthorized" class="btn-group" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate" ngbDropdown>
-                                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!selectedCatalogRecord2">
-                                    <span class="fas fa-plus"></span>
-                                </button>
-                                <div class="dropdown-menu float-right" ngbDropdownMenu>
-                                    <a (click)="addEmbeddedLexicalizationSet()" class="dropdown-item text-nowrap">
-                                        {{'METADATA.METADATA_REGISTRY.ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate}}
-                                    </a>
-                                    <a (click)="assessLexicalizationModel()" class="dropdown-item text-nowrap" [ngClass]="{disabled : lexicalizationSets?.length != 0}">
-                                        {{'METADATA.METADATA_REGISTRY.ACTIONS.ASSESS_LEXICALIZATION_MODEL'|translate}}
-                                    </a>
-                                </div>
-                            </div>
-                            <button *ngIf="removeEmbeddedLexicalizationSetAuthorized" class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_EMBEDDED_LEXICALIZATION_SET'|translate" 
-                                (click)="deleteEmbeddedLexicalizationSet()" [disabled]="!selectedLexicalizationSet">
-                                <span class="fas fa-minus"></span>
-                            </button>
-                            <button *ngIf="removeEmbeddedLexicalizationSetAuthorized" class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_ALL_EMBEDDED_LEXICALIZATION_SET'|translate" 
-                                (click)="deleteAllEmbeddedLexicalizationSet()" [disabled]="lexicalizationSets?.length == 0">
-                                <span class="far fa-trash-alt"></span>
-                            </button>
-                        </div>
-
-                        <div class="ml-1" ngbDropdown autoClose="outside">
-                            <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle">
-                                <span class="fas fa-caret-down"></span>
-                            </button>
-                            <div ngbDropdownMenu class="dropdown-menu" ngbDropdownMenu>
-                                <button class="dropdown-item" (click)="sortLexicalizationSets('language')">
-                                    <span *ngIf="lexSetSort != 'lang_desc'" class="fas fa-sort-alpha-down"></span>
-                                    <span *ngIf="lexSetSort == 'lang_desc'" class="fas fa-sort-alpha-up"></span>
-                                    {{'ACTIONS.SORT_BY_X'|translate}} {{'COMMONS.LANGUAGE.LANGUAGE'|translate}}
-                                    <span *ngIf="lexSetSort == 'lang_asc' || lexSetSort == 'lang_desc'" class="fas fa-check ml-1"></span>
-                                </button>
-                                <button class="dropdown-item" (click)="sortLexicalizationSets('lexicalizations')">
-                                    <span *ngIf="lexSetSort != 'lex_desc'" class="fas fa-sort-numeric-down"></span>
-                                    <span *ngIf="lexSetSort == 'lex_desc'" class="fas fa-sort-numeric-up"></span>
-                                    {{'ACTIONS.SORT_BY_X'|translate}} {{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICALIZATIONS'|translate}}
-                                    <span *ngIf="lexSetSort == 'lex_asc' || lexSetSort == 'lex_desc'" class="fas fa-check ml-1"></span>
-                                </button>
-                            </div>
-                        </div>
+                <ul class="nav nav-tabs" (click)="$event.preventDefault()">
+                    <li class="nav-item" [ngClass]="{ active : activeTab == 'lexicalizationSets' }">
+                        <a class="nav-link" (click)="activeTab = 'lexicalizationSets'">
+                            {{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.EMBEDDED_LEXICALIZATION_SETS'|translate}}
+                        </a>
+                    </li>
+                    <li class="nav-item" [ngClass]="{ active : activeTab == 'linksets' }">
+                        <a class="nav-link" (click)="activeTab = 'linksets'">
+                            Embedded Linksets
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div [hidden]="activeTab != 'lexicalizationSets'" class="vbox">
+                        <lexicalization-sets-panel [dataset]="selectedCatalogRecord2.dataset"></lexicalization-sets-panel>
                     </div>
-                    <div class="card-body scrollableContainer">
-                        <lexicalization-set-metadata *ngFor="let ls of lexicalizationSets" class="mb-2"
-                            [lexicalizationSetMetadata]="ls" [dataset]="selectedCatalogRecord2.dataset"
-                            (click)="selectedLexicalizationSet = ls" [ngClass]="{ activePanel : ls == selectedLexicalizationSet }" [readonly]="!updateEmbeddedLexicalizationSetAuthorized">
-                        </lexicalization-set-metadata>
-                    </div>
-
-                    <div #blockDiv class="blockingDiv" style="display:none">
-                        <div class="loadingDiv">
-                            <div>
-                                <p>Loading...</p><img src="./assets/images/loading.gif" />
-                            </div>
-                        </div>
+                    <div [hidden]="activeTab != 'linksets'" class="vbox">
+                        <linksets-panel [dataset]="selectedCatalogRecord2.dataset"></linksets-panel>
                     </div>
                 </div>
             </div>
+                
+        </div>
 
+        <div #blockDiv class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="./assets/images/loading.gif" />
+                </div>
+            </div>
         </div>
     </div>
 

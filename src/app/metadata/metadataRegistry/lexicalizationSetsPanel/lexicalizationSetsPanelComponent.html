@@ -1,0 +1,65 @@
+<div class="card vbox blockingDivHost">
+    <div class="card-header">
+        <label style="flex: 1;">{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.EMBEDDED_LEXICALIZATION_SETS'|translate}}:</label>
+        
+        <div *ngIf="dataset.nature != 'PROJECT'" class="btn-group btn-group-xs">
+            <div *ngIf="addEmbeddedLexicalizationSetAuthorized" class="btn-group" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate" ngbDropdown>
+                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-plus"></span>
+                </button>
+                <div class="dropdown-menu float-right" ngbDropdownMenu>
+                    <a (click)="addEmbeddedLexicalizationSet()" class="dropdown-item text-nowrap">
+                        {{'METADATA.METADATA_REGISTRY.ACTIONS.ADD_EMBEDDED_LEXICALIZATION_SET'|translate}}
+                    </a>
+                    <a (click)="assessLexicalizationModel()" class="dropdown-item text-nowrap" [ngClass]="{disabled : lexicalizationSets?.length != 0}">
+                        {{'METADATA.METADATA_REGISTRY.ACTIONS.ASSESS_LEXICALIZATION_MODEL'|translate}}
+                    </a>
+                </div>
+            </div>
+            <button *ngIf="removeEmbeddedLexicalizationSetAuthorized" class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_EMBEDDED_LEXICALIZATION_SET'|translate" 
+                (click)="deleteEmbeddedLexicalizationSet()" [disabled]="!selectedLexicalizationSet">
+                <span class="fas fa-minus"></span>
+            </button>
+            <button *ngIf="removeEmbeddedLexicalizationSetAuthorized" class="btn btn-light" [title]="'METADATA.METADATA_REGISTRY.ACTIONS.DELETE_ALL_EMBEDDED_LEXICALIZATION_SET'|translate" 
+                (click)="deleteAllEmbeddedLexicalizationSet()" [disabled]="lexicalizationSets?.length == 0">
+                <span class="far fa-trash-alt"></span>
+            </button>
+        </div>
+
+        <div class="ml-1" ngbDropdown autoClose="outside">
+            <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle">
+                <span class="fas fa-caret-down"></span>
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu" ngbDropdownMenu>
+                <button class="dropdown-item" (click)="sortLexicalizationSets('language')">
+                    <span *ngIf="lexSetSort != 'lang_desc'" class="fas fa-sort-alpha-down"></span>
+                    <span *ngIf="lexSetSort == 'lang_desc'" class="fas fa-sort-alpha-up"></span>
+                    {{'ACTIONS.SORT_BY_X'|translate}} {{'COMMONS.LANGUAGE.LANGUAGE'|translate}}
+                    <span *ngIf="lexSetSort == 'lang_asc' || lexSetSort == 'lang_desc'" class="fas fa-check ml-1"></span>
+                </button>
+                <button class="dropdown-item" (click)="sortLexicalizationSets('lexicalizations')">
+                    <span *ngIf="lexSetSort != 'lex_desc'" class="fas fa-sort-numeric-down"></span>
+                    <span *ngIf="lexSetSort == 'lex_desc'" class="fas fa-sort-numeric-up"></span>
+                    {{'ACTIONS.SORT_BY_X'|translate}} {{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICALIZATIONS'|translate}}
+                    <span *ngIf="lexSetSort == 'lex_asc' || lexSetSort == 'lex_desc'" class="fas fa-check ml-1"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body scrollableContainer">
+        <lexicalization-set-metadata *ngFor="let ls of lexicalizationSets" class="mb-2"
+            [lexicalizationSetMetadata]="ls" [dataset]="dataset"
+            (click)="selectedLexicalizationSet = ls" [ngClass]="{ activePanel : ls == selectedLexicalizationSet }"
+            [readonly]="!updateEmbeddedLexicalizationSetAuthorized || dataset.nature == 'PROJECT'">
+        </lexicalization-set-metadata>
+    </div>
+
+    <div #blockDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="./assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>

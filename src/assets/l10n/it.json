@@ -1707,13 +1707,19 @@
             },
             "LEXICALIZATION_SET": {
                 "AVG_OF_LEXICALIZATIONS": "Q.tà media di lessicalizzazioni",
-                "EMBEDDED_LEXICALIZATION_SETS": "Embedded Lexicalization Sets",
+                "EMBEDDED_LEXICALIZATION_SETS": "Lexicalization Sets embedded",
                 "LEXICALIZATIONS": "Lessicalizzazioni",
                 "LEXICALIZATION_SET": "Lexicalization Set",
                 "LEXICAL_ENTRIES": "Lexical Entries",
                 "LEXICON_DATASET": "Lexicon Dataset",
                 "PERCENTAGE": "Percentuale",
                 "REFERENCES": "Riferimenti"
+            },
+            "LINKSETS": {
+                "ALIGNMENTS": "Allineamenti",
+                "EMBEDDED_LINKSETS": "Linkset Embedded",
+                "LINKSETS": "Linkset",
+                "SHOW_PERCENTAGE": "Mostra percentuale linkset"
             }
         },
         "METADATA_VOCABULARIES": {

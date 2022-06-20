@@ -4,8 +4,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { DatasetMetadataComponent } from "../metadata/metadataRegistry/datasetMetadataComponent";
-import { LexicalizationSetMetadataComponent } from '../metadata/metadataRegistry/lexicalizationSetMetadataComponent';
+import { DatasetMetadataComponent } from '../metadata/metadataRegistry/datasetMetadataComponent';
+import { LexicalizationSetMetadataComponent } from '../metadata/metadataRegistry/lexicalizationSetsPanel/lexicalizationSetMetadataComponent';
+import { LexicalizationSetsPanelComponent } from '../metadata/metadataRegistry/lexicalizationSetsPanel/lexicalizationSetsPanelComponent';
+import { LinksetPanelComponent } from '../metadata/metadataRegistry/linksetsPanel/linksetPanelComponent';
 import { ConnectToAbsDatasetModal } from '../metadata/metadataRegistry/mdrTree/connectToAbsDatasetModal';
 import { MetadataRegistryTreeComponent } from "../metadata/metadataRegistry/mdrTree/mdrTreeComponent";
 import { MetadataRegistryTreeModal } from '../metadata/metadataRegistry/mdrTree/mdrTreeModal';
@@ -40,6 +42,8 @@ import { SharedModule } from './sharedModule';
         ImportTreeComponent, 
         ImportTreeNodeComponent,
         LexicalizationSetMetadataComponent,
+        LexicalizationSetsPanelComponent,
+        LinksetPanelComponent,
         MetadataRegistryComponent, 
         MetadataRegistryTreeComponent,
         MetadataRegistryTreeModal,

@@ -1,10 +1,76 @@
 import { NTriplesUtil } from "../utils/ResourceUtils";
 import { ARTLiteral, ARTURIResource } from "./ARTResources";
+import { Project } from './Project';
 
 export class PrefixMapping {
     public prefix: string;
     public namespace: string;
     public explicit: boolean = true;
+}
+
+export class LinksetMetadata {
+    sourceDataset: ARTURIResource;
+    targetDataset: Target;
+    registeredTargets: Target[];
+    linkCount?: number;
+    linkPercentage?: number;
+    linkPredicate?: ARTURIResource;
+
+    sourceDatasetProject?: Project; //this is not included in the linkset returned by the services, 
+    //this is added manually since it is useful when describing mapping from the Alignment tree
+
+    /**
+     * Returns in order (with fallback):
+     * - the first registeredTargets with project name
+     * - the first registeredTargets with uri space
+     * - the targetDataset 
+     */
+    getRelevantTargetDataset(): Target {
+        for (let i = 0; i < this.registeredTargets.length; i++) {
+            if (this.registeredTargets[i].projectName != null) {
+                return this.registeredTargets[i];
+            }
+        }
+        //no project name found => returns uri space of registered targets
+        for (let i = 0; i < this.registeredTargets.length; i++) {
+            if (this.registeredTargets[i].uriSpace != null) {
+                return this.registeredTargets[i];
+            }
+        }
+        return this.targetDataset;
+    }
+
+    /**
+     * If specified in the registered targets, returns the first target with the projectName, otherwise returns null.
+     */
+    getTargetProject(): Project {
+        for (let t of this.registeredTargets) {
+            if (t.projectName != null) {
+                return new Project(t.projectName);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the show of the relevant target dataset
+     */
+    getTargetDatasetShow(): string {
+        let target = this.getRelevantTargetDataset();
+        if (target.projectName != null) {
+            return target.projectName;
+        } else {
+            return target.uriSpace;
+        }
+    }
+
+}
+
+export class Target {
+    dataset: ARTURIResource;
+    projectName: string;
+    uriSpace?: string;
+    titles: ARTLiteral[];
 }
 
 export class OntologyImport {

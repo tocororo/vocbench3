@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTLiteral, ARTURIResource, ResourcePosition } from '../models/ARTResources';
-import { AbstractDatasetAttachment, CatalogRecord2, DatasetMetadata, Distribution, LexicalizationSetMetadata } from "../models/Metadata";
+import { AbstractDatasetAttachment, CatalogRecord2, DatasetMetadata, Distribution, LexicalizationSetMetadata, LinksetMetadata, Target } from "../models/Metadata";
 import { Deserializer } from '../utils/Deserializer';
 import { STRequestParams, VBRequestOptions } from '../utils/HttpManager';
+import { NTriplesUtil } from '../utils/ResourceUtils';
 import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 
 @Injectable()
@@ -112,7 +113,7 @@ export class MetadataRegistryServices {
         };
         return this.httpMgr.doPost(this.serviceName, "deleteDescription", params);
     }
-    
+
 
     /**
      * Sets whether a dataset is derefereanceable or not. If value is true, then sets
@@ -262,19 +263,50 @@ export class MetadataRegistryServices {
      * @param treshold minimum number of links (before linkset coalescing)
      * @param coalesce whether or not merge linksets for the same pair of datasets
      */
-    getEmbeddedLinksets(dataset: ARTURIResource, treshold?: number, coalesce?: boolean) {
-        let params: STRequestParams = {
+    getEmbeddedLinksets(dataset: ARTURIResource, treshold?: number, coalesce?: boolean): Observable<LinksetMetadata[]> {
+        let params: any = {
             dataset: dataset,
             treshold: treshold,
             coalesce: coalesce
         };
-        return this.httpMgr.doGet(this.serviceName, "getEmbeddedLinksets", params);
+        return this.httpMgr.doGet(this.serviceName, "getEmbeddedLinksets", params).pipe(
+            map(stResp => {
+                let linksets: LinksetMetadata[] = [];
+                for (let lsJson of stResp) {
+                    let l: LinksetMetadata = new LinksetMetadata();
+                    l.sourceDataset = NTriplesUtil.parseURI(lsJson.sourceDataset);
+                    l.targetDataset = this.parseTarget(lsJson.targetDataset);
+                    l.registeredTargets = lsJson.registeredTargets.map(rt => this.parseTarget(rt));
+                    l.linkCount = lsJson.linkCount;
+                    l.linkPredicate = lsJson.linkPredicate ? NTriplesUtil.parseURI(lsJson.linkPredicate) : null;
+                    linksets.push(l);
+                }
+                //compute percentage for each link (not contained in the response)
+                let totalLinkCount: number = 0; //count total number of linksets
+                linksets.forEach(l => {
+                    totalLinkCount += l.linkCount;
+                });
+                linksets.forEach(l => {
+                    let percentage = l.linkCount / totalLinkCount * 100;
+                    l.linkPercentage = Math.round((percentage + Number.EPSILON) * 100) / 100;
+                });
+                return linksets;
+            })
+        );
     }
 
-
-
-
-
+    private parseTarget(targetJson: any): Target {
+        let titles: ARTLiteral[] = [];
+        for (let title of targetJson.titles) {
+            titles.push(NTriplesUtil.parseLiteral(title));
+        }
+        return {
+            dataset: NTriplesUtil.parseURI(targetJson.dataset),
+            projectName: targetJson.projectName,
+            uriSpace: targetJson.uriSpace,
+            titles: titles
+        };
+    }
 
     createAbstractDataset(datasetLocalName: string, uriSpace: string, title?: ARTLiteral, description?: ARTLiteral): Observable<ARTURIResource> {
         let params: STRequestParams = {

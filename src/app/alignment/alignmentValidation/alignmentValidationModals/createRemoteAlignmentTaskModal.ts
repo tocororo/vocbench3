@@ -123,8 +123,8 @@ export class CreateRemoteAlignmentTaskModal {
         } else {
             this.profileProjectImpl(projStruct);
         }
-
     }
+    
     private profileProjectImpl(projStruct: AlignedProjectStruct) {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         HttpServiceContext.setContextProject(projStruct.project);

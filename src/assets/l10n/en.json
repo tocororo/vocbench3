@@ -1714,6 +1714,12 @@
                 "LEXICON_DATASET": "Lexicon Dataset",
                 "PERCENTAGE": "Percentage",
                 "REFERENCES": "References"
+            },
+            "LINKSETS": {
+                "ALIGNMENTS": "Alignments",
+                "EMBEDDED_LINKSETS": "Embedded linksets",
+                "LINKSETS": "Linksets",
+                "SHOW_PERCENTAGE": "Show linkset percentage"
             }
         },
         "METADATA_VOCABULARIES": {
