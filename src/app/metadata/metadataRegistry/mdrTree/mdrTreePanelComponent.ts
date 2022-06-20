@@ -4,8 +4,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { ARTURIResource } from 'src/app/models/ARTResources';
 import { CatalogRecord2, DatasetRole } from 'src/app/models/Metadata';
 import { MetadataRegistryServices } from 'src/app/services/metadataRegistryServices';
+import { AuthorizationEvaluator } from 'src/app/utils/AuthorizationEvaluator';
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
 import { UIUtils } from 'src/app/utils/UIUtils';
+import { VBActionsEnum } from 'src/app/utils/VBActions';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { ModalOptions, TextOrTranslation, TranslationUtils } from 'src/app/widget/modal/Modals';
 import { ConnectToAbsDatasetModal } from './connectToAbsDatasetModal';
@@ -29,7 +31,17 @@ export class MetadataRegistryTreePanelComponent {
 
     selectedRecord: CatalogRecord2;
 
+    mdrCreateAuthorized: boolean;
+    mdrDeleteAuthorized: boolean;
+    mdrUpdateAuthorized: boolean;
+
     constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private modalService: NgbModal, private translate: TranslateService) { }
+
+    ngOnInit() {
+        this.mdrCreateAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryCreate);
+        this.mdrDeleteAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryDelete);
+        this.mdrUpdateAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryUpdate);
+    }
 
     createConcreteDataset() {
         this.openNewDatasetModal({ key: "METADATA.METADATA_REGISTRY.ACTIONS.CREATE_CONCRETE_DATASET" }, NewDatasetModeEnum.createConcrete).then(

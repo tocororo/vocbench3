@@ -10,7 +10,7 @@
 
     <!-- Edit buttons -->
     <span class="input-group-append">
-        <button *ngIf="!editInProgress" class="btn btn-light" type="button" style="width:36px;"
+        <button *ngIf="!editInProgress && !readonly" class="btn btn-light" type="button" style="width:36px;"
             (click)="edit()" [title]="'ACTIONS.EDIT'|translate" [disabled]="disabled">
             <span class="fas fa-pencil-alt"></span>
         </button>

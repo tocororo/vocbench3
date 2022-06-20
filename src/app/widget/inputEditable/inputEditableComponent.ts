@@ -17,6 +17,7 @@ export class InputEditableComponent implements OnInit {
     @Input() step: number; //Useful only if type = "number"
     @Input() allowEmpty: boolean = false; //if true allow the value to be replaced with empty string
     @Input() disabled: boolean = false;
+    @Input() readonly: boolean = false; //if true hides the edit button
 
     @Output() valueEdited = new EventEmitter<any>();
 

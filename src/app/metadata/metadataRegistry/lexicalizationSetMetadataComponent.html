@@ -1,6 +1,5 @@
 <div class="card card-default">
     <div class="card-body">
-
         <table class="table table-sm table-borderless">
             <colgroup>
                 <col style="width: 1%;">
@@ -10,50 +9,50 @@
                 <tr>
                     <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICON_DATASET'|translate}}:</label></td>
                     <td>
-                        <input-editable [value]="lexiconDataset" (valueEdited)="updateLexiconDataset($event)"></input-editable>
+                        <input-editable [value]="lexiconDataset" (valueEdited)="updateLexiconDataset($event)" [readonly]="readonly"></input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap><label>{{'MODELS.PROJECT.LEXICALIZATION_MODEL'|translate}}:</label></td>
                     <td>
-                        <input-editable type="select" [options]="lexicalModelOpts" [value]="lexicalizationModel" (valueEdited)="updateLexicalizationModel($event)">
+                        <input-editable type="select" [options]="lexicalModelOpts" [value]="lexicalizationModel" (valueEdited)="updateLexicalizationModel($event)" [readonly]="readonly">
                         </input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap><label>{{'COMMONS.LANGUAGE.LANGUAGE'|translate}}:</label></td>
                     <td>
-                        <input-editable [value]="language" (valueEdited)="updateLanguage($event)"></input-editable>
+                        <input-editable [value]="language" (valueEdited)="updateLanguage($event)" [readonly]="readonly"></input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.REFERENCES'|translate}}:</label></td>
                     <td>
-                        <input-editable type="number" [value]="references" min="0" step="1" (valueEdited)="updateReferences($event)"></input-editable>
+                        <input-editable type="number" [value]="references" min="0" step="1" (valueEdited)="updateReferences($event)" [readonly]="readonly"></input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICAL_ENTRIES'|translate}}:</label></td>
                     <td>
-                        <input-editable type="number" [value]="lexicalEntries" min="0" step="1" (valueEdited)="updateLexicalEntries($event)"></input-editable>
+                        <input-editable type="number" [value]="lexicalEntries" min="0" step="1" (valueEdited)="updateLexicalEntries($event)" [readonly]="readonly"></input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.LEXICALIZATIONS'|translate}}:</label></td>
                     <td>
-                        <input-editable type="number" [value]="lexicalizations" min="0" step="1" (valueEdited)="updateLexicalizations($event)"></input-editable>
+                        <input-editable type="number" [value]="lexicalizations" min="0" step="1" (valueEdited)="updateLexicalizations($event)" [readonly]="readonly"></input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.PERCENTAGE'|translate}}:</label></td>
                     <td>
-                        <input-editable type="number" [value]="percentage" min="0" max="1" step="0.01" (valueEdited)="updatePercentage($event)"></input-editable>
+                        <input-editable type="number" [value]="percentage" min="0" max="1" step="0.01" (valueEdited)="updatePercentage($event)" [readonly]="readonly"></input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap><label>{{'METADATA.METADATA_REGISTRY.LEXICALIZATION_SET.AVG_OF_LEXICALIZATIONS'|translate}}:</label></td>
                     <td>
-                        <input-editable type="number" [value]="avgNumOfLexicalizations" min="0" (valueEdited)="updateAvgNumOfLexicalizations($event)"></input-editable>
+                        <input-editable type="number" [value]="avgNumOfLexicalizations" min="0" (valueEdited)="updateAvgNumOfLexicalizations($event)" [readonly]="readonly"></input-editable>
                     </td>
                 </tr>
             </tbody>

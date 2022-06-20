@@ -264,14 +264,6 @@
                         <div class="card card-alt vbox" style="margin: 0px">
                             <div class="card-header">
                                 <label style="flex: 1">{{'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.AVAILABLE_LANGUAGES'|translate}}:</label>
-                                <div class="input-group input-group-sm" style="max-width: 60px;">
-                                    <input type="text" class="form-control" [(ngModel)]="availableLangsFilter">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <span class="fas fa-filter"></span>
-                                        </span>
-                                    </div>
-                                </div>
                                 <button class="btn btn-xs btn-light ml-2" (click)="filterProficiencies = !filterProficiencies" [ngClass]="{ active: filterProficiencies }">
                                     <span class="fas fa-star" [title]="'ADMINISTRATION.ACTIONS.SHOW_ONLY_PROFICIENCIES'|translate"></span>
                                 </button>
@@ -285,6 +277,16 @@
                                         </span>
                                     </div>
                                 </ng-container>
+                            </div>
+                            <div class="card-footer">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" [(ngModel)]="availableLangsFilter">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <span class="fas fa-filter"></span>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

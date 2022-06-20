@@ -3,7 +3,9 @@ import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTLiteral, ARTURIResource } from 'src/app/models/ARTResources';
 import { MdrVoc } from 'src/app/models/Vocabulary';
+import { AuthorizationEvaluator } from 'src/app/utils/AuthorizationEvaluator';
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
+import { VBActionsEnum } from 'src/app/utils/VBActions';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { LocalizedMap } from 'src/app/widget/modal/sharedModal/localizedEditorModal/localizedEditorModal';
 import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
@@ -31,7 +33,13 @@ export class DatasetMetadataComponent {
 
     sparqlLimitations: boolean;
 
+    mdrUpdateAuthorized: boolean;
+
     constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+
+    ngOnInit() {
+        this.mdrUpdateAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryUpdate);
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['dataset'] && changes['dataset'].currentValue) {
@@ -179,63 +187,6 @@ export class DatasetMetadataComponent {
         );
     }
 
-    // updateSparqlEndpoint(newValue: string) {
-    //     let sparqlEndpoint: ARTURIResource;
-    //     if (newValue != null && newValue.trim() != "") {
-    //         if (ResourceUtils.testIRI(newValue)) {
-    //             sparqlEndpoint = new ARTURIResource(newValue);
-    //         } else { //invalid IRI
-    //             this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: newValue } }, ModalType.warning);
-    //             //restore old id
-    //             let backupId: string = this.datasetMetadata.sparqlEndpointMetadata.id;
-    //             this.datasetMetadata.sparqlEndpointMetadata.id = null + "new";
-    //             setTimeout(() => {
-    //                 this.datasetMetadata.sparqlEndpointMetadata.id = backupId;
-    //             });
-    //             return;
-    //         }
-    //     }
-    //     this.metadataRegistryService.setSPARQLEndpoint(this.datasetMetadata.identity, sparqlEndpoint).subscribe(
-    //         () => {
-    //             this.initDatasetMetadata();
-    //             this.update.emit();
-    //         }
-    //     );
-    // }
-
-    // updateDerefSystem(newValue: string) {
-    //     let dereferenciablePar: boolean;
-    //     if (newValue == this.dereferUnknown) {
-    //         dereferenciablePar = null;
-    //     } else if (newValue == this.dereferYes) {
-    //         dereferenciablePar = true;
-    //     } else if (newValue == this.dereferNo) {
-    //         dereferenciablePar = false;
-    //     } else { //custom choice, available only if it was already the dereferenciationSystem, so it wasn't canged
-    //         return;
-    //     }
-    //     this.metadataRegistryService.setDereferenciability(this.datasetMetadata.identity, dereferenciablePar).subscribe(
-    //         () => {
-    //             this.update.emit();
-    //         }
-    //     );
-    // }
-
-    // updateSparqlLimitations() {
-    //     if (this.sparqlLimitations) {
-    //         this.metadataRegistryService.setSPARQLEndpointLimitation(new ARTURIResource(this.datasetMetadata.sparqlEndpointMetadata.id), MdrVoc.noAggregation).subscribe(
-    //             stResp => {
-    //                 this.update.emit();
-    //             }
-    //         );
-    //     } else {
-    //         this.metadataRegistryService.removeSPARQLEndpointLimitation(new ARTURIResource(this.datasetMetadata.sparqlEndpointMetadata.id), MdrVoc.noAggregation).subscribe(
-    //             stResp => {
-    //                 this.update.emit();
-    //             }
-    //         );
-    //     }
-    // }
 
     updateSparqlEndpoint(newValue: string) {
         let sparqlEndpoint: ARTURIResource;

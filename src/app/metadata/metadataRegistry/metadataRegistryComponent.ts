@@ -1,6 +1,5 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { forkJoin } from "rxjs";
 import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
@@ -9,7 +8,6 @@ import { MetadataRegistryServices } from "../../services/metadataRegistryService
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { NewEmbeddedLexicalizationModal } from "./newEmbeddedLexicalizationModal";
 
 @Component({
@@ -21,7 +19,6 @@ import { NewEmbeddedLexicalizationModal } from "./newEmbeddedLexicalizationModal
 export class MetadataRegistryComponent {
 
     @ViewChild('blockDiv', { static: false }) lexSetBlockDivElement: ElementRef;
-    // @ViewChild(MetadataRegistryTreePanelComponent) mdrTreePanel: MetadataRegistryTreePanelComponent;
 
     selectedCatalogRecord2: CatalogRecord2;
 
@@ -29,7 +26,17 @@ export class MetadataRegistryComponent {
     selectedLexicalizationSet: LexicalizationSetMetadata;
     lexSetSort: SortEnum = SortEnum.lang_asc;
 
-    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private translateService: TranslateService, private modalService: NgbModal) { }
+    addEmbeddedLexicalizationSetAuthorized: boolean;
+    removeEmbeddedLexicalizationSetAuthorized: boolean;
+    updateEmbeddedLexicalizationSetAuthorized: boolean;
+
+    constructor(private metadataRegistryService: MetadataRegistryServices, private modalService: NgbModal) { }
+
+    ngOnInit() {
+        this.addEmbeddedLexicalizationSetAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryCreate);
+        this.removeEmbeddedLexicalizationSetAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryDelete);
+        this.updateEmbeddedLexicalizationSetAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryUpdate);
+    }
 
     /**
      * Catalog records
@@ -175,27 +182,6 @@ export class MetadataRegistryComponent {
         );
 
     }
-
-
-    //Authorizations
-
-    isAddDatasetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryCreate);
-    }
-    isRemoveDatasetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryDelete);
-    }
-    isEditDatasetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryUpdate);
-    }
-
-    isAddEmbeddedLexicalizationSetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryCreate);
-    }
-    isRemoveEmbeddedLexicalizationSetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryDelete);
-    }
-
 
 }
 

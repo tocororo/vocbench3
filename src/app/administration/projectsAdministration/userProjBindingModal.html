@@ -12,9 +12,21 @@
                 </div>
                 <div class="card-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
-                        <div *ngFor="let u of userList" class="listItem" [ngClass]="{active: u == selectedUser, disabled: isUserAlreadyBound(u)}"
-                            (click)="selectUser(u)">
-                            {{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span>
+                        <ng-container *ngFor="let u of userList">
+                            <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser, disabled: isUserAlreadyBound(u)}"
+                                (click)="selectUser(u)">
+                                {{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" [(ngModel)]="userFilter">
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <span class="fas fa-filter"></span>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -39,6 +51,6 @@
 
     <div class="modal-footer">
         <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedUser || selectedRoles.length == 0">Ok</button>
-        <button class="btn btn-light btn-sm" (click)="cancel()">{{'ACTIONS.CANCEL'|translate}}</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()" ngbAutofocus>{{'ACTIONS.CANCEL'|translate}}</button>
     </div>
 </div>

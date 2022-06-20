@@ -16,6 +16,8 @@ export class UserProjBindingModal {
     userList: User[] = [];
     selectedUser: User;
 
+    userFilter: string = "";
+
     roleList: Role[] = [];
     selectedRoles: Role[] = [];
     
@@ -36,7 +38,7 @@ export class UserProjBindingModal {
         );
     }
 
-    private selectUser(user: User) {
+    selectUser(user: User) {
         if (this.isUserAlreadyBound(user)) {
             return;
         }
@@ -45,6 +47,13 @@ export class UserProjBindingModal {
         } else {
             this.selectedUser = user;
         }
+    }
+
+    isUserVisible(user: User): boolean {
+        let givenNameCheck: boolean = user.getGivenName().toLocaleLowerCase().includes(this.userFilter.toLocaleLowerCase());
+        let familyNameCheck: boolean = user.getGivenName().toLocaleLowerCase().includes(this.userFilter.toLocaleLowerCase());
+        let emailCheck: boolean = user.getGivenName().toLocaleLowerCase().includes(this.userFilter.toLocaleLowerCase());
+        return givenNameCheck || familyNameCheck || emailCheck;
     }
 
     private isUserAlreadyBound(user: User): boolean {

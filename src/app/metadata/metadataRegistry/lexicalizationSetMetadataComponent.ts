@@ -15,6 +15,7 @@ export class LexicalizationSetMetadataComponent {
 
     @Input() dataset: DatasetMetadata2;
     @Input() lexicalizationSetMetadata: LexicalizationSetMetadata;
+    @Input() readonly: boolean = false;
 
     // private lexicalizationSet: string;
     lexiconDataset: string;

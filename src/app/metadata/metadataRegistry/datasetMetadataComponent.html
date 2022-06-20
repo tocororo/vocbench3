@@ -14,7 +14,7 @@
                                 <input *ngIf="dataset.titles.length == 0" class="form-control" disabled>
                                 <lang-string-editor *ngFor="let d of dataset.titles; let i = index; let first=first" [(ngModel)]="dataset.titles[i]" [ngClass]="{ 'mt-1': !first }" [disabled]="true"></lang-string-editor>
                             </div>
-                            <button *ngIf="dataset.nature != 'PROJECT'" class="btn btn-light ml-2" style="align-self: center;" (click)="editTitles()">
+                            <button *ngIf="dataset.nature != 'PROJECT' && mdrUpdateAuthorized" class="btn btn-light ml-2" style="align-self: center;" (click)="editTitles()">
                                 <span class="fas fa-pencil-alt"></span>
                             </button>
                         </div>
@@ -40,7 +40,7 @@
                                 <input *ngIf="dataset.descriptions.length == 0" class="form-control" disabled>
                                 <lang-string-editor *ngFor="let d of dataset.descriptions; let i = index; let first=first" [(ngModel)]="dataset.descriptions[i]" [ngClass]="{ 'mt-1': !first }" [disabled]="true"></lang-string-editor>
                             </div>
-                            <button *ngIf="dataset.nature != 'PROJECT'" class="btn btn-light ml-2" style="align-self: center;" (click)="editDescriptions()">
+                            <button *ngIf="dataset.nature != 'PROJECT' && mdrUpdateAuthorized" class="btn btn-light ml-2" style="align-self: center;" (click)="editDescriptions()">
                                 <span class="fas fa-pencil-alt"></span>
                             </button>
                         </div>
@@ -56,7 +56,7 @@
                             </ng-template>
                             <ng-template #derefSystemEditable>
                                 <input-editable type="select" [options]="dereferenciationValues" [value]="dereferenciationNormalized"
-                                    (valueEdited)="updateDerefSystem($event)">
+                                    (valueEdited)="updateDerefSystem($event)" [readonly]="!mdrUpdateAuthorized">
                                 </input-editable>
                             </ng-template>
                         </td>
@@ -71,10 +71,11 @@
                             <ng-template #sparqlEndpointEditable>
                                 <div class="d-flex align-items-center">
                                     <input-editable style="flex: 1; margin-right: 4px;" [value]="dataset.sparqlEndpoint.id"
-                                        (valueEdited)="updateSparqlEndpoint($event)" allowEmpty="true">
+                                        (valueEdited)="updateSparqlEndpoint($event)" allowEmpty="true" [readonly]="!mdrUpdateAuthorized">
                                     </input-editable>
                                     <div class="form-check ml-2">
-                                        <input class="form-check-input" id="aggregationCheck" type="checkbox" [(ngModel)]="sparqlLimitations" (ngModelChange)="updateSparqlLimitations()">
+                                        <input class="form-check-input" id="aggregationCheck" type="checkbox" [(ngModel)]="sparqlLimitations" (ngModelChange)="updateSparqlLimitations()"
+                                        [disabled]="!mdrUpdateAuthorized">
                                         <label class="form-check-label" for="aggregationCheck">
                                             {{'METADATA.METADATA_REGISTRY.DATASET_METADATA.NO_AGGREGATION'|translate}}
                                             <span class="fas fa-info-circle ml-2" 
