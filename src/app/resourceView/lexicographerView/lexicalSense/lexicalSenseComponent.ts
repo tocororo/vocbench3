@@ -205,7 +205,7 @@ export class LexicalSenseComponent {
                 if (data.reified) {
                     addRelationFn = this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.undirectional, Vartrans.Translation, data.category, data.tranlsationSet);
                 } else {
-                    addRelationFn = this.resourceService.addValue(this.sense.id, Vartrans.translatableAs, data.target);
+                    addRelationFn = this.resourceService.addValue(this.sense.id, Vartrans.trans, data.target);
                 }
                 addRelationFn.subscribe(
                     () => {

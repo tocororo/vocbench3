@@ -9,6 +9,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Improved filters in Users and Project-Users managers in Administration page
   * Fixed several bugs in Metadata Registry that affected multiple features in VB
   * Restored image display and foreign URIs resolution in ResourceView (erroneously disabled in v11.0.0)
+  * Fixed minor bugs in Lexicographer View
   * Minor bugfixes and improvements
 
 # 11.0.0 (12-05-2022)
