@@ -297,7 +297,6 @@ export class Vartrans {
     public static TerminologicalRelation = new ARTURIResource(Vartrans.namespace + "TerminologicalRelation", "vartrans:TerminologicalRelation", RDFResourceRolesEnum.cls);
     public static translatableAs = new ARTURIResource(Vartrans.namespace + "translatableAs", "vartrans:translatableAs", RDFResourceRolesEnum.objectProperty);
     public static Translation = new ARTURIResource(Vartrans.namespace + "Translation", "vartrans:Translation", RDFResourceRolesEnum.cls);
-    public static trans = new ARTURIResource(Vartrans.namespace + "trans", "vartrans:trans", RDFResourceRolesEnum.objectProperty);
     public static TranslationSet = new ARTURIResource(Vartrans.namespace + "TranslationSet", "vartrans:TranslationSet", RDFResourceRolesEnum.cls);
 }
 

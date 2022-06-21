@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTLiteral, ARTResource } from "src/app/models/ARTResources";
 import { LexicalEntry, Sense } from "src/app/models/LexicographerView";
-import { OntoLex, Vartrans } from "src/app/models/Vocabulary";
+import { Lexinfo, OntoLex, Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
@@ -205,7 +205,7 @@ export class LexicalSenseComponent {
                 if (data.reified) {
                     addRelationFn = this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.undirectional, Vartrans.Translation, data.category, data.tranlsationSet);
                 } else {
-                    addRelationFn = this.resourceService.addValue(this.sense.id, Vartrans.trans, data.target);
+                    addRelationFn = this.resourceService.addValue(this.sense.id, Lexinfo.translation, data.target);
                 }
                 addRelationFn.subscribe(
                     () => {
