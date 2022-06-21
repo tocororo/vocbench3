@@ -1,19 +1,19 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Observable } from "rxjs";
 import { ARTLiteral, ARTResource } from "src/app/models/ARTResources";
 import { LexicalEntry, Sense } from "src/app/models/LexicographerView";
-import { Lexinfo, OntoLex, Vartrans } from "src/app/models/Vocabulary";
+import { OntoLex, Vartrans } from "src/app/models/Vocabulary";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
+import { ResourcesServices } from "src/app/services/resourcesServices";
 import { AuthorizationEvaluator } from "src/app/utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "src/app/utils/VBActions";
 import { VBContext } from "src/app/utils/VBContext";
 import { BrowsingModalServices } from "src/app/widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "src/app/widget/modal/creationModal/creationModalServices";
 import { NewOntoLexicalizationCfModalReturnData } from "src/app/widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
+import { LexicoRelationModalReturnData } from "../lexicalRelation/lexicalRelationModal";
 import { LexViewCache } from "../LexViewChache";
 import { LexViewModalService } from "../lexViewModalService";
-import { LexicoRelationModalReturnData } from "../lexicalRelation/lexicalRelationModal";
-import { Observable } from "rxjs";
-import { ResourcesServices } from "src/app/services/resourcesServices";
 
 @Component({
     selector: "lexical-sense",
@@ -205,7 +205,7 @@ export class LexicalSenseComponent {
                 if (data.reified) {
                     addRelationFn = this.ontolexService.createLexicoSemanticRelation(this.sense.id, data.target, data.undirectional, Vartrans.Translation, data.category, data.tranlsationSet);
                 } else {
-                    addRelationFn = this.resourceService.addValue(this.sense.id, Lexinfo.translation, data.target);
+                    addRelationFn = this.resourceService.addValue(this.sense.id, Vartrans.translation, data.target);
                 }
                 addRelationFn.subscribe(
                     () => {
