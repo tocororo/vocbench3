@@ -72,6 +72,10 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     resourcePositionDetails: string; //details about the resource position
     resourcePositionLocalProj: boolean = false;
 
+    //when an external resource is not found, it is possible to specify a different position for resolving it
+    availablePosition: ResourcePosition[];
+    forcedPosition: ResourcePosition; //position forced by user (if more positions are available)
+
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
     private resViewSections: { [key: string]: ARTPredicateObjects[] } = {
@@ -129,10 +133,10 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     //hidden if the @Input() projectCtx or atTime != null, namely RV showing external resource, or showing a resource at a different time)
     timeMachineAvailable: boolean = false; //tells if the conditions for the time machine are satisfied (history enabled)
     versionList: VersionInfo[];
-    private activeVersion: VersionInfo;
+    activeVersion: VersionInfo;
 
     notificationsAvailable: boolean = false;
-    private isWatching: boolean;
+    isWatching: boolean;
 
     settingsAvailable: boolean = true;
 
@@ -170,8 +174,10 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             //if not the first change, avoid to refresh res view if resource is not changed
             if (!changes['resource'].firstChange) {
                 let prevRes: ARTResource = changes['resource'].previousValue;
-                if (prevRes.getNominalValue() == this.resource.getNominalValue()) {
+                if (prevRes.equals(this.resource)) { //res not changed
                     return;
+                } else {
+                    this.forcedPosition = null;
                 }
             }
             if (this.viewInitialized) {
@@ -222,7 +228,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         if (this.activeVersion != null) {
             HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
         }
-        let getResViewFn: Observable<any> = this.resViewService.getResourceView(res, this.showInferred);
+        let getResViewFn: Observable<any> = this.resViewService.getResourceView(res, this.showInferred, this.forcedPosition);
         if (this.atTime != null) {
             getResViewFn = this.resViewService.getResourceViewAtTime(<ARTURIResource>res, this.atTime); //cast safe since atTime is provided only if res is IRI
         }
@@ -398,6 +404,13 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             !this.resViewResponse[ResViewPartition.topconceptof]
         ) {
             this.unexistingResource = true;
+            if (this.resourcePosition instanceof LocalResourcePosition && this.resourcePosition.project != VBContext.getWorkingProject().getName() && this.resource instanceof ARTURIResource) {
+                this.metadataRegistryService.findDatasets(this.resource).subscribe(
+                    positions => {
+                        this.availablePosition = positions;
+                    }
+                );
+            }
         } else {
             this.unexistingResource = false;
         }
@@ -939,6 +952,13 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 this.buildResourceView(this.resource);
             }
         );
+    }
+
+    //resource not found - force position
+
+    forcePosition(position: ResourcePosition) {
+        this.forcedPosition = position;
+        this.buildResourceView(this.resource);
     }
 
     /**

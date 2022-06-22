@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ResourcePosition } from "../models/ARTResources";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class ResourceViewServices {
@@ -16,16 +16,12 @@ export class ResourceViewServices {
      * Returns the resource view of the given resource
      * @param resource
      */
-    getResourceView(resource: ARTResource, includeInferred?: boolean, resourcePosition?: string): Observable<any> {
-        let params: any = {
+    getResourceView(resource: ARTResource, includeInferred?: boolean, resourcePosition?: ResourcePosition): Observable<any> {
+        let params: STRequestParams = {
             resource: resource,
+            includeInferred: includeInferred,
+            resourcePosition: resourcePosition ? resourcePosition.serialize() : null,
         };
-        if (includeInferred != null) {
-            params.includeInferred = includeInferred;
-        }
-        if (resourcePosition != null) {
-            params.resourcePosition = resourcePosition;
-        }
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [
                 { className: 'java.net.UnknownHostException', action: 'skip' },

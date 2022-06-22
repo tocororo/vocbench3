@@ -6,7 +6,6 @@ import { LanguageUtils } from 'src/app/models/LanguagesCountries';
 import { AbstractDatasetAttachment, CatalogRecord2, DatasetNature } from 'src/app/models/Metadata';
 import { Dcat, MdrVoc } from 'src/app/models/Vocabulary';
 import { MetadataRegistryServices } from 'src/app/services/metadataRegistryServices';
-import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 
 @Component({
     selector: "connect-to-abs-dataset-modal",
@@ -28,8 +27,7 @@ export class ConnectToAbsDatasetModal {
     versionInfo: string;
     versionNotes: ARTLiteral;
 
-    constructor(public activeModal: NgbActiveModal, private metadataRegistryService: MetadataRegistryServices,
-        private basicModals: BasicModalServices, private translate: TranslateService) {}
+    constructor(public activeModal: NgbActiveModal, private metadataRegistryService: MetadataRegistryServices, private translate: TranslateService) {}
 
     ngOnInit() {
         this.metadataRegistryService.listRootDatasets().subscribe(

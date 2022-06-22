@@ -2064,7 +2064,8 @@
             "SPAWN_CONCEPT_FROM_XLABEL": "Crea un nuovo concetto da xLabel",
             "TOGGLE_CUSTOM_VIEW": "Visualizza Custom View",
             "TOGGLE_NOTIFICATIONS": "Abilita/disabilita notifiche su questa risorsa",
-            "TOGGLE_VALUE_FILTER_LANG": "Abilita/disabilita il filtro-valori sulle lingue"
+            "TOGGLE_VALUE_FILTER_LANG": "Abilita/disabilita il filtro-valori sulle lingue",
+            "TRY_DIFFERENT_POSITIONS": "Prova con posizioni differenti"
         },
         "CODE_EDITOR": {
             "CODE_EDITOR": "Code editor",
@@ -2156,7 +2157,7 @@
             "OTHER_LOCAL_PROJECT": "Altro progetto locale",
             "PREVIOUS_RESOURCE": "Risorsa precedente",
             "REMOTE_DATASET": "Dataset remoto",
-            "RESOURCE_NOT_EXISTING": "Questa risorsa non è disponibile nel progetto corrente",
+            "RESOURCE_NOT_EXISTING": "Questa risorsa non è disponibile nella posizione corrente",
             "RESOURCE_UNKNOWN_HOST": "Questa risorsa non è disponibile o accessibile in progetti locali nè può essere raggiungibile sul Web",
             "UNAUTHORIZED_RESOURCE": "Non hai i permessi necessari per accesere a questa risorsa",
             "UNKNOWN_POSITION": "Posizione sconosciuta"

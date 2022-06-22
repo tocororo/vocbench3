@@ -89,6 +89,21 @@
         </div>
         <div *ngIf="unexistingResource" class="alert alert-danger">
             {{'RESOURCE_VIEW.STATUS.RESOURCE_NOT_EXISTING'|translate}}
+            <ng-container *ngIf="availablePosition?.length > 1">
+                <span>({{resourcePosition.serialize()}})</span>
+                <div class="mt-3">
+                    {{'RESOURCE_VIEW.ACTIONS.TRY_DIFFERENT_POSITIONS'|translate}}
+                    <ul class="my-2">
+                        <li *ngFor="let pos of availablePosition">
+                            <a class="alert-link mr-2" href="javascript:void(0)" (click)="forcePosition(pos)">
+                                <ng-container *ngIf="pos.isLocal()">{{pos.project}}</ng-container>
+                                <ng-container *ngIf="pos.isRemote()">{{pos.datasetMetadata.getShow()}}</ng-container>
+                            </a>
+                            <span class="badge badge-light">{{pos.position}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </ng-container>
         </div>
         <div *ngIf="unknownHost" class="alert alert-danger">
             {{'RESOURCE_VIEW.STATUS.RESOURCE_UNKNOWN_HOST'|translate}}

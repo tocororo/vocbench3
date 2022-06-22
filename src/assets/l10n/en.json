@@ -2064,7 +2064,8 @@
             "SPAWN_CONCEPT_FROM_XLABEL": "Spawn new concept from xLabel",
             "TOGGLE_CUSTOM_VIEW": "Render Custom View",
             "TOGGLE_NOTIFICATIONS": "Enable/disable notifications on this resource",
-            "TOGGLE_VALUE_FILTER_LANG": "Enable/disable value-filter on languages"
+            "TOGGLE_VALUE_FILTER_LANG": "Enable/disable value-filter on languages",
+            "TRY_DIFFERENT_POSITIONS": "Try with different positions"
         },
         "CODE_EDITOR": {
             "CODE_EDITOR": "Code editor",
@@ -2157,7 +2158,7 @@
             "OTHER_LOCAL_PROJECT": "Other local Project",
             "PREVIOUS_RESOURCE": "Previous resource",
             "REMOTE_DATASET": "Remote Dataset",
-            "RESOURCE_NOT_EXISTING": "This resource is not available in the current project",
+            "RESOURCE_NOT_EXISTING": "This resource is not available in the current position",
             "RESOURCE_UNKNOWN_HOST": "This resource is not available on accessible local projects nor can be reached on the Web",
             "UNAUTHORIZED_RESOURCE": "You don't have the required permissions to access this resource",
             "UNKNOWN_POSITION": "Unknown position"

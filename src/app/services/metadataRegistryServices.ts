@@ -241,6 +241,18 @@ export class MetadataRegistryServices {
         );
     }
 
+    findDatasets(iri: ARTURIResource): Observable<ResourcePosition[]> {
+        let params: STRequestParams = {
+            iri: iri,
+        };
+        return this.httpMgr.doGet(this.serviceName, "findDatasets", params).pipe(
+            map(resp => {
+                console.log("resp", resp);
+                return resp.map((pos: any) => ResourcePosition.deserialize(pos.position));
+            })
+        );
+    }
+
     /**
      * Discover the metadata for a dataset given an IRI. If discovery is unsuccessful, an exception is thrown.
      * Returns the id of the metadataDataset found.
