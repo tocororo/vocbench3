@@ -19,7 +19,7 @@ import { NewEmbeddedLexicalizationModal } from '../newEmbeddedLexicalizationModa
 export class LexicalizationSetsPanelComponent {
 
     @Input() dataset: DatasetMetadata2;
-    @ViewChild('blockingDiv') blockingDivElement: ElementRef;
+    @ViewChild('blockDiv') blockingDivElement: ElementRef;
     
     
     lexicalizationSets: LexicalizationSetMetadata[] = []; //lex set of the selected dataset

@@ -223,7 +223,12 @@ export class MetadataRegistryServices {
         let params: STRequestParams = {
             dataset: dataset,
         };
-        return this.httpMgr.doPost(this.serviceName, "assessLexicalizationModel", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorHandlers: [
+                { className: "it.uniroma2.art.maple.orchestration.AssessmentException", action: "warning" },
+            ]
+        });
+        return this.httpMgr.doPost(this.serviceName, "assessLexicalizationModel", params, options);
     }
 
     /**
