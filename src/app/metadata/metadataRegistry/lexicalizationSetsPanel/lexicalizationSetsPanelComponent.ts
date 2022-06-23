@@ -19,13 +19,13 @@ import { NewEmbeddedLexicalizationModal } from '../newEmbeddedLexicalizationModa
 export class LexicalizationSetsPanelComponent {
 
     @Input() dataset: DatasetMetadata2;
-    @ViewChild('blockDiv') blockingDivElement: ElementRef;
-    
-    
+    @ViewChild('blockDiv', { static: true }) blockingDivElement: ElementRef;
+
+
     lexicalizationSets: LexicalizationSetMetadata[] = []; //lex set of the selected dataset
     selectedLexicalizationSet: LexicalizationSetMetadata;
     lexSetSort: SortEnum = SortEnum.lang_asc;
-    
+
     readonly: boolean;
 
     addEmbeddedLexicalizationSetAuthorized: boolean;
@@ -48,10 +48,10 @@ export class LexicalizationSetsPanelComponent {
 
     private initEmbeddedLexicalizationSets() {
         this.lexicalizationSets = null;
-        if (this.blockingDivElement) UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.metadataRegistryService.getEmbeddedLexicalizationSets(this.dataset.identity).subscribe(
             sets => {
-                if (this.blockingDivElement) UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.lexicalizationSets = sets;
                 this.sortLexicalizationSetsImpl(this.lexSetSort);
                 this.selectedLexicalizationSet = null;
