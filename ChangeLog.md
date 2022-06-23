@@ -4,11 +4,11 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 11.1.0 (dd-mm-2022)
+# 11.1.0 (23-06-2022)
   * Added support for EXT project universal access level
   * Improved filters in Users and Project-Users managers in Administration page
-  * Fixed several bugs in Metadata Registry that affected multiple features in VB
   * Restored image display and foreign URIs resolution in ResourceView (erroneously disabled in v11.0.0)
+  * Fixed several bugs in Metadata Registry that affected multiple features in VB
   * Fixed minor bugs in Lexicographer View
   * Minor bugfixes and improvements
 
