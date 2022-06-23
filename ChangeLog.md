@@ -5,7 +5,8 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 11.1.0 (23-06-2022)
-  * Added support for EXT project universal access level
+  * Added support for EXT project universal access level (if a user has access to the project, ACL table 
+    does not need to be consulted even if the user access it from another consumer)
   * Improved filters in Users and Project-Users managers in Administration page
   * Restored image display and foreign URIs resolution in ResourceView (erroneously disabled in v11.0.0)
   * Fixed several bugs in Metadata Registry that affected multiple features in VB
