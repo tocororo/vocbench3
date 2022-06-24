@@ -1,0 +1,25 @@
+<div class="card vbox">
+    <div class="card-header">
+        <label style="flex: 1;">{{'MODELS.PROJECT.PROJECTS'|translate}}:</label>
+        <button class="btn btn-xs btn-light" [ngClass]="{ active: rendering }" (click)="switchRendering()" [title]="'COMMONS.RENDERING'|translate">
+            <span class="fas fa-font"></span>
+        </button>
+    </div>
+    <div class="card-body vbox scrollableContainer">
+        <ng-container *ngFor="let p of projects">
+            <div *ngIf="isProjectVisible(p)" class="listItem" [ngClass]="{active: p == selectedProject}" (click)="selectProject(p)">
+                <span>{{p.getName(rendering)}}</span>
+            </div>
+        </ng-container>
+    </div>
+    <div class="card-footer">
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" [(ngModel)]="nameFilter">
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <span class="fas fa-filter"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

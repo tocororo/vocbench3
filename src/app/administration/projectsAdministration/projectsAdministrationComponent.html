@@ -4,14 +4,7 @@
 
         <div class="card-body hbox">
 
-            <div *ngIf="isAdminLogged" class="card vbox">
-                <div class="card-header">
-                    <label style="flex: 1;">{{'MODELS.PROJECT.PROJECTS'|translate}}:</label>
-                </div>
-                <div class="card-body vbox" style="padding: 0px;">
-                    <project-list (projectSelected)="selectProject($event)"></project-list>
-                </div>
-            </div>
+            <project-list-panel *ngIf="isAdminLogged" (projectSelected)="selectProject($event)"></project-list-panel>
 
             <div class="card vbox" style="margin-left: 5px; flex: 4;">
 

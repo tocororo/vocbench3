@@ -15,16 +15,10 @@
     <div class="modal-body vbox scrollableContainer blockingDivHost">
 
         <ng-container *ngIf="targetPosition == ResourcePositionEnum.local">
-            <div class="card">
-                <div class="card-header">
-                    <label>{{'MODELS.PROJECT.PROJECTS'|translate}}</label>
-                </div>
-                <div class="card-body vbox" style="max-height: 150px;">
-                    <project-list [consumer]="sourceProject" onlyOpen="true" (projectSelected)="selectProject($event)"></project-list>
-                </div>
-            </div>
 
-            <div *ngIf="selectedProject" style="margin-top: 4px;">
+            <project-list-panel style="max-height: 300px;" [consumer]="sourceProject" [onlyOpen]="true" (projectSelected)="selectProject($event)"></project-list-panel>
+
+            <div *ngIf="selectedProject" class="mt-2">
                 <div *ngIf="!isProjectMetadataAvailable(); else mediationBlock" class="alert alert-warning">
                     {{'SEARCH.ASSISTED_SEARCH.METADATA_UNAVAILABLE_LOCAL_WARNING.METADATA_NOT_AVAILABLE'|translate:translationParams}}
                     <a (click)="generateProjectMetadata()" style="cursor: pointer">{{'SEARCH.ASSISTED_SEARCH.METADATA_UNAVAILABLE_LOCAL_WARNING.HERE'|translate}}</a>
@@ -92,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="card" style="margin-top: 4px;">
+            <div class="card mt-2">
                 <div class="card-header">
                     <span style="flex: 1">
                         <label style="margin-right: 4px;">{{'SEARCH.SETTINGS.SEARCH_MODE'|translate}}</label>
