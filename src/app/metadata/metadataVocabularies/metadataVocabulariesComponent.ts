@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import * as FileSaver from 'file-saver';
 import { forkJoin } from 'rxjs';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ExtensionPointID, NonConfigurableExtensionFactory, PluginSpecification, Scope, Settings } from "../../models/Plugins";
@@ -190,8 +191,7 @@ export class MetadataVocabulariesComponent {
                 this.datasetMetadataService.export(expoterSpecification, this.selectedExportFormat).subscribe(
                     blob => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        let exportLink = window.URL.createObjectURL(blob);
-                        this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_METADATA" }, null, exportLink, "metadata_export." + this.selectedExportFormat.defaultFileExtension);
+                        FileSaver.saveAs(blob, "metadata_export." + this.selectedExportFormat.defaultFileExtension);
                     }
                 );
             }

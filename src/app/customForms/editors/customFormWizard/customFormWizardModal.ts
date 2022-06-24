@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import * as FileSaver from 'file-saver';
 import { PrefixMapping } from "src/app/models/Metadata";
 import { CODAConverter } from "src/app/models/Sheet2RDF";
 import { CODAServices } from "src/app/services/codaServices";
@@ -486,12 +487,7 @@ export class CustomFormWizardModal {
 
     private downloadStatusFile(fileContent: string) {
         let data = new Blob([fileContent], { type: 'text/plain' });
-        let textFile = window.URL.createObjectURL(data);
-        let fileName = "cf_wizard_status.json";
-        this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_STATUS" }, null, textFile, fileName).then(
-            done => { window.URL.revokeObjectURL(textFile); },
-            () => { }
-        );
+        FileSaver.saveAs(data, "cf_wizard_status.json");
     }
 
     loadStatus() {

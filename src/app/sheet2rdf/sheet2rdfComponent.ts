@@ -1,5 +1,6 @@
 import { Component, HostListener, QueryList, ViewChildren } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import * as FileSaver from 'file-saver';
 import { concat, Observable } from "rxjs";
 import { last } from 'rxjs/operators';
 import { S2RDFModel } from "../models/Sheet2RDF";
@@ -191,9 +192,8 @@ export class Sheet2RdfComponent {
     exportStatus() {
         this.s2rdfService.exportGlobalStatus().subscribe(
             blob => {
-                let exportLink = window.URL.createObjectURL(blob);
                 let fileName = (this.selectedInputSource == InputSource.spreadsheet ? this.spreadsheetFile.name : this.dbInfo.db_name) + " - status.json";
-                this.basicModals.downloadLink({ key: "SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS" }, null, exportLink, fileName);
+                FileSaver.saveAs(blob, fileName);
             }
         );
     }

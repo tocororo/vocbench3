@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as FileSaver from 'file-saver';
 import { Observable, of } from "rxjs";
 import { map } from 'rxjs/operators';
 import { VersionInfo } from "../models/History";
@@ -113,10 +114,7 @@ export class SkosDiffingComponent {
         this.diffingService.getTaskResult(this.selectedTask.taskId, this.selectedResultFormat).subscribe(
             report => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                // let url = window.URL.createObjectURL(report);
-                // window.open(url);
-                let exportLink = window.URL.createObjectURL(report);
-                this.basicModals.downloadLink({ key: "SKOS_DIFF.ACTIONS.EXPORT_SKOS_DIFFING_RESULT" }, null, exportLink, "result." + this.selectedResultFormat);
+                FileSaver.saveAs(report, "result." + this.selectedResultFormat);
             },
         );
     }

@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import * as FileSaver from 'file-saver';
 import { GraphModalServices } from '../graph/modal/graphModalServices';
 import { ARTBNode, ARTResource, ARTURIResource } from '../models/ARTResources';
 import { GraphResultBindings, QueryResultBinding, ResultType } from '../models/Sparql';
@@ -273,8 +274,7 @@ export class QueryResultsComponent {
         this.sparqlService.exportQueryResultAsSpreadsheet(this.queryCache, format, this.inferred).subscribe(
             blob => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "SPARQL.RESULTS.EXPORT_RESULTS" }, null, exportLink, "sparql_export." + format);
+                FileSaver.saveAs(blob, "sparql_export." + format);
             }
         );
     }
@@ -291,12 +291,7 @@ export class QueryResultsComponent {
      */
     private downloadSavedResult(fileContent: string, type: "csv" | "tsv" | "json") {
         let data = new Blob([fileContent], { type: 'text/plain' });
-        let textFile = window.URL.createObjectURL(data);
-        let fileName = "result." + type;
-        this.basicModals.downloadLink({ key: "SPARQL.RESULTS.EXPORT_RESULTS" }, null, textFile, fileName).then(
-            done => { window.URL.revokeObjectURL(textFile); },
-            () => { }
-        );
+        FileSaver.saveAs(data, "sparql_export." + type);
     }
 
 

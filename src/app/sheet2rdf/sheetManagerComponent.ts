@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostBinding, Input, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import * as FileSaver from 'file-saver';
 import { Observable, of } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { PearlValidationResult } from "../models/Coda";
@@ -256,8 +257,7 @@ export class SheetManagerComponent {
     exportStatus() {
         this.s2rdfService.exportSheetStatus(this.sheetName).subscribe(
             blob => {
-                let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS" }, null, exportLink, this.sheetName + " - status.json");
+                FileSaver.saveAs(blob, this.sheetName + " - status.json");
             }
         );
     }
@@ -312,12 +312,7 @@ export class SheetManagerComponent {
 
     exportPearl() {
         let data = new Blob([this.pearl], { type: 'text/plain' });
-        let textFile = window.URL.createObjectURL(data);
-        let fileName = "pearl_export.pr";
-        this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_PEARL" }, null, textFile, fileName).then(
-            (done: any) => { window.URL.revokeObjectURL(textFile); },
-            () => { }
-        );
+        FileSaver.saveAs(data, "pearl_export.pr");
     }
 
     insertConverter() {
@@ -405,8 +400,7 @@ export class SheetManagerComponent {
     exportTriplesAs(format: RDFFormat) {
         this.s2rdfService.exportTriples(this.sheetName, format).subscribe(
             blob => {
-                let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_TRIPLES" }, null, exportLink, "triples." + format.defaultFileExtension);
+                FileSaver.saveAs(blob, "triples." + format.defaultFileExtension);
             }
         );
     }

@@ -1,6 +1,7 @@
 import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import * as FileSaver from 'file-saver';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
@@ -641,12 +642,12 @@ export class ExportDataComponent {
      */
     private exportSuccessHandler(data: any | Blob, downloadExpected: boolean) {
         if (downloadExpected) {
-            let exportLink = window.URL.createObjectURL(data);
+
             let ext = this.selectedExportFormat.defaultFileExtension;
             if (this.selectedExportFormat.name == "XLSX") {
                 ext = "xlsx";
             }
-            this.basicModals.downloadLink({ key: "ACTIONS.EXPORT_DATA" }, null, exportLink, "export." + ext);
+            FileSaver.saveAs(data, "export." + ext);
         } else {
             this.basicModals.alert({ key: "ACTIONS.EXPORT_DATA" }, { key: "MESSAGES.EXPORT_RESULT_DEPLOYED" });
         }

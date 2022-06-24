@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
+import * as FileSaver from 'file-saver';
 import { ARTURIResource } from "../models/ARTResources";
 import { CustomForm, CustomFormLevel, FormCollection, FormCollectionMapping } from "../models/CustomForms";
 import { CustomFormsServices } from "../services/customFormsServices";
@@ -187,8 +188,7 @@ export class CustomFormConfigComponent {
     exportFormCollection() {
         this.customFormsService.exportFormCollection(this.selectedFormColl.getId()).subscribe(
             blob => {
-                let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "CUSTOM_FORMS.ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedFormColl.getId() + ".xml");
+                FileSaver.saveAs(blob, this.selectedFormColl.getId() + ".xml");
             }
         );
     }
@@ -312,8 +312,7 @@ export class CustomFormConfigComponent {
     exportCustomForm() {
         this.customFormsService.exportCustomForm(this.selectedCustomForm.getId()).subscribe(
             blob => {
-                let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "CUSTOM_FORMS.ACTIONS.EXPORT_FORM_COLLECTION" }, null, exportLink, this.selectedCustomForm.getId() + ".xml");
+                FileSaver.saveAs(blob, this.selectedCustomForm.getId() + ".xml");
             }
         );
     }
@@ -322,7 +321,7 @@ export class CustomFormConfigComponent {
         this.openImportCfModal({ key: "CUSTOM_FORMS.ACTIONS.IMPORT_CUSTOM_FORM" }, "CustomForm").then(
             (data: any) => {
                 this.customFormsService.importCustomForm(data.file, data.id).subscribe(
-                    stResp => {
+                    () => {
                         this.initCustomFormList();
                     }
                 );

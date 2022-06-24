@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import * as FileSaver from 'file-saver';
 import { ARTResource, ARTURIResource } from "src/app/models/ARTResources";
 import { ExportServices } from "src/app/services/exportServices";
 import { ShaclBatchValidationModal } from "src/app/shacl/shaclBatchValidationModal";
@@ -189,8 +190,7 @@ export class ConfigBarComponent {
     exportShaclShapes() {
         this.shaclService.exportShapes().subscribe(
             blob => {
-                let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "SHACL.EXPORT_SHACL_SHAPES" }, null, exportLink, "shapes.ttl");
+                FileSaver.saveAs(blob, "shapes.ttl");
             }
         );
     }

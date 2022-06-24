@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import * as FileSaver from 'file-saver';
 import { ConfigurableExtensionFactory, ExtensionPointID, Settings, TransformationStep } from "../models/Plugins";
 import { RDFFormat } from "../models/RDFFormat";
 import { ExportServices } from "../services/exportServices";
@@ -75,8 +76,7 @@ export class ExportResultAsRdfModal {
         this.sparqlService.exportGraphQueryResultAsRdf(this.query, this.selectedExportFormat, this.inferred, filteringPipelineParam).subscribe(
             blob => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "SPARQL.RESULTS.EXPORT_RESULTS" }, null, exportLink, "sparql_export." + this.selectedExportFormat.defaultFileExtension);
+                FileSaver.saveAs(blob, "sparql_export." + this.selectedExportFormat.defaultFileExtension);
             }
         );
 

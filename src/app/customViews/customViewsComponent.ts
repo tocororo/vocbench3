@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { TranslateService } from "@ngx-translate/core";
+import * as FileSaver from 'file-saver';
 import { CustomViewAssociation, CustomViewReference } from "src/app/models/CustomViews";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
@@ -94,8 +95,7 @@ export class CustomViewsComponent {
     exportCustomView() {
         this.customViewsService.exportCustomView(this.selectedCustomView.reference).subscribe(
             blob => {
-                let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ACTIONS.EXPORT" }, null, exportLink, this.selectedCustomView.name + ".cfg");
+                FileSaver.saveAs(blob, this.selectedCustomView.name + ".cfg");
             }
         );
     }

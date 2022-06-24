@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
+import * as FileSaver from 'file-saver';
 import { ModalOptions, ModalType, Translation } from 'src/app/widget/modal/Modals';
 import { Role } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
@@ -113,8 +114,7 @@ export class RolesAdministrationComponent {
     exportRole() {
         this.adminService.exportRole(this.selectedRole.getName()).subscribe(
             blob => {
-                let exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink({ key: "ADMINISTRATION.ACTIONS.EXPORT_ROLE" }, null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
+                FileSaver.saveAs(blob, "role_" + this.selectedRole.getName() + ".pl");
             }
         );
     }

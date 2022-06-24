@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
+import * as FileSaver from 'file-saver';
 import { PatternStruct, ResourceMetadataAssociation, ResourceMetadataUtils } from "../models/ResourceMetadata";
 import { ResourceMetadataServices } from "../services/resourceMetadataServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
@@ -132,8 +133,7 @@ export class ResourceMetadataComponent {
     exportPattern() {
         this.resourceMetadataService.exportPattern(this.selectedPattern.reference).subscribe(
             pattern => {
-                let url = window.URL.createObjectURL(pattern);
-                this.basicModals.downloadLink({ key: "RESOURCE_METADATA.ACTIONS.EXPORT_METADATA_PATTERN" }, null, url, this.selectedPattern.name + ".cfg");
+                FileSaver.saveAs(pattern, this.selectedPattern.name + ".cfg");
             }
         );
     }
