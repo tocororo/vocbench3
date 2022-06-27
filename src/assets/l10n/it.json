@@ -1417,7 +1417,7 @@
         "BASEURI_UPDATED": "Il baseURI è stato aggiornato con successo e il refactor è stato completato.",
         "BULK_DELETE_CONFIRM": "Stai per eliminare il valore da ogni risorsa che ha questa relazione predicato-valore. Sei sicuro?",
         "BULK_EDIT_CONFIRM": "Stai modificando il valore per ogni risorsa che ha questa relazione predicato-valore. Sei sicuro?",
-        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED": "Impossibile addiungere un nodo per {{resource}}. In questo grafo è possibile aggiungere solo risorse definite localmente.",
+        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RES": "Impossibile addiungere un nodo per {{resource}}. In questo grafo è possibile aggiungere solo risorse definite localmente.",
         "CANNOT_ADD_SAME_RANGE_TO_DIFFERENT_PROP_TYPES": "Non è possibile aggiungere lo stesso range a più proprietà di tipo differente",
         "CANNOT_CHANGE_ADMIN_STATUS": "Impossibile cambiare lo status di un amministratore. Revoca l'autorità di amministratore, quindi riprova",
         "CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR": "Impossibile creare il CustomForm '{{cfId}}'. la sua descrizione potrebbe contenere errori.",

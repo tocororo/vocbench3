@@ -1417,7 +1417,7 @@
         "BASEURI_UPDATED": "BaseURI has been updated successfully and refactor complete.",
         "BULK_DELETE_CONFIRM": "You are deleting the value for every resource that has this predicate-value relation. Are you sure?",
         "BULK_EDIT_CONFIRM": "You are updating the value for every resource that has this predicate-value relation. Are you sure?",
-        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED": "Cannot add a new node for {{resource}}. In this graph you can only add resources locally defined.",
+        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RES": "Cannot add a new node for {{resource}}. In this graph you can only add resources locally defined.",
         "CANNOT_ADD_SAME_RANGE_TO_DIFFERENT_PROP_TYPES": "The addition of the same range to multiple properties is not allowed on properties of different types",
         "CANNOT_CHANGE_ADMIN_STATUS": "Cannot change the status of an administrator. Please revoke the administrator authority first and retry",
         "CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR": "Impossible to create the CustomForm '{{cfId}}'. Its description may contains error.",

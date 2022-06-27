@@ -19,10 +19,19 @@ export class LinkComponent {
     linkClass: string = "link";
     arrowClass: string = "";
 
+    labelRectWidth: number;
+
     // private hover: boolean = false;
 
     ngOnInit() {
         this.initLinkStyle();
+    }
+
+    ngAfterViewInit() {
+        let padding = 1;
+        if (this.textElement != null) {
+            this.labelRectWidth = this.textElement.nativeElement.getBoundingClientRect().width + padding*2;
+        }
     }
 
     private initLinkStyle() {
@@ -86,14 +95,6 @@ export class LinkComponent {
     private getLabelTransform() {
         let labelPosition = this.getLabelPosition();
         return "translate(" + labelPosition.x + "," + labelPosition.y + ")";
-    }
-
-    private getLabelRectWidth() {
-        let padding = 1;
-        if (this.textElement != null) {
-            return this.textElement.nativeElement.getBoundingClientRect().width + padding*2;
-        }
-        return padding*2;
     }
 
     onClick(event: Event) {

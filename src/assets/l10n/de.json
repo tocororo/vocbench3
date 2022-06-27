@@ -1321,7 +1321,7 @@
         "BASEURI_UPDATED": "BaseURI wurde erfolgreich aktualisiert und das Refactoring abgeschlossen.",
         "BULK_DELETE_CONFIRM": "Sie löschen den Wert für jede Ressource, die diese Prädikat-Wert-Beziehung hat. Sind Sie sicher?",
         "BULK_EDIT_CONFIRM": "Sie aktualisieren den Wert für jede Ressource, die diese Prädikat-Wert-Beziehung hat. Sind Sie sicher?",
-        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED": "Es kann kein neuer Knoten für {{resource}} hinzugefügt werden. Zu diesem Diagramm können Sie nur lokal definierte Ressourcen hinzufügen.",
+        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RES": "Es kann kein neuer Knoten für {{resource}} hinzugefügt werden. Zu diesem Diagramm können Sie nur lokal definierte Ressourcen hinzufügen.",
         "CANNOT_ADD_SAME_RANGE_TO_DIFFERENT_PROP_TYPES": "Das Hinzufügen derselben Range zu mehreren Eigenschaften ist für Eigenschaften unterschiedlichen Typs nicht zulässig",
         "CANNOT_CHANGE_ADMIN_STATUS": "Der Status eines Administrators kann nicht geändert werden. Bitte erst die Administratorberechtigung widerrufen und dann Status ändern.",
         "CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR": "Die CustomForm '{{cfId}}' kann nicht erstellt werden. Ihre Beschreibung kann Fehler enthalten.",

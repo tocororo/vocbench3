@@ -1328,7 +1328,7 @@
         "BASEURI_UPDATED": "L'URI de base a été mis-à-jour avec succès et le remaniement a été complété.",
         "BULK_DELETE_CONFIRM": "Vous êtes sur le point de supprimer la valeur pour chaque ressource qui possède cette relation prédicat-valeur. Êtes-vous certain ?",
         "BULK_EDIT_CONFIRM": "Vous êtes sur le point de mettre à jour la valeur pour chaque ressource qui possède cette relation prédicat-valeur. Êtes-vous certain ?",
-        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED": "Impossible d'ajouter un nouveau nœud à {{resource}}. Dans ce graphe, vous pouvez uniquement ajouter des ressources définies localement.",
+        "CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RES": "Impossible d'ajouter un nouveau nœud à {{resource}}. Dans ce graphe, vous pouvez uniquement ajouter des ressources définies localement.",
         "CANNOT_ADD_SAME_RANGE_TO_DIFFERENT_PROP_TYPES": "L'ajout du même niveau à plusieurs propriétés de types différents n'est pas autorisé",
         "CANNOT_CHANGE_ADMIN_STATUS": "Impossible de modifier le statut d'un administrateur. Veuillez d'abord révoquer le rôle d'administrateur puis réessayez",
         "CANNOT_CREATE_CUSTOM_FORM_DESCRIPTION_ERROR": "Impossible de créer le formulaire personnalisé '{{cfId}}'. Sa description doit comporter des erreurs.",

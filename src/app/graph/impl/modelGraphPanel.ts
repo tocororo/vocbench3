@@ -27,7 +27,7 @@ export class ModelGraphPanel extends AbstractGraphPanel {
         super(basicModals, browsingModals);
     }
 
-    private onFilterChange(filter: GraphClassAxiomFilter) {
+    onFilterChange(filter: GraphClassAxiomFilter) {
         this.viewChildGraph.applyFilter(filter);
     }
 
@@ -35,7 +35,7 @@ export class ModelGraphPanel extends AbstractGraphPanel {
         this.browsingModals.browseClassTree({ key: "ACTIONS.ADD_NODE" }).then(
             (cls: ARTURIResource) => {
                 if (!cls.getAdditionalProperty(ResAttribute.EXPLICIT)) {
-                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RED", params: { resource: cls.getShow() } },
+                    this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_ADD_GRAPH_NODE_FOR_NOT_LOCALLY_DEFINED_RES", params: { resource: cls.getShow() } },
                         ModalType.warning);
                     return;
                 }

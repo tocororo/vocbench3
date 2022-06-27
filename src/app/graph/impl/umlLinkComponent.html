@@ -19,9 +19,3 @@
     [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePathUml()" (click)="onClick($event)">
     <title>{{link.res.toNT()}}</title>
 </svg:path>
-
-<!-- <svg:g  [attr.transform]="getLabelTransform()" style="font-size: 9px; cursor: pointer;" >
-    <svg:rect  [attr.x]="-getLabelRectWidth()/2" y="-4" [attr.width]="getLabelRectWidth()" height="8" fill="#ddd"></svg:rect>
-    <svg:text #textEl style="visibility: hidden">{{link.res.title}}</svg:text>
-    <svg:text text-anchor="middle" dominant-baseline="central">{{link.res.title}}</svg:text>
-</svg:g>  -->
