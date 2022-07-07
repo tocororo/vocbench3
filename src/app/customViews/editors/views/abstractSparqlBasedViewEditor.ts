@@ -1,4 +1,4 @@
-import { Directive, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Directive, Input, ViewChild } from '@angular/core';
 import { CustomViewVariables, CvQueryUtils, CvSparqlEditorStruct, SparqlBasedCustomViewDefinition } from 'src/app/models/CustomViews';
 import { QueryChangedEvent, QueryMode } from 'src/app/models/Sparql';
 import { YasguiComponent } from 'src/app/sparql/yasguiComponent';
@@ -49,9 +49,11 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
     ];
 
     protected basicModals: BasicModalServices;
-    constructor(basicModals: BasicModalServices) {
+    protected changeDetectorRef: ChangeDetectorRef;
+    constructor(basicModals: BasicModalServices, changeDetectorRef: ChangeDetectorRef) {
         super();
         this.basicModals = basicModals;
+        this.changeDetectorRef = changeDetectorRef;
     }
 
     ngOnInit() {
@@ -165,14 +167,12 @@ export abstract class AbstractSparqlBasedViewEditor extends AbstractCustomViewEd
      */
     protected refreshYasguiEditors() {
         if (this.retrieveYasgui && this.retrieveEditor.query != null) {
-            setTimeout(() => { //prevent ExpressionChangedAfterItHasBeenCheckedError
-                this.retrieveYasgui.forceContentUpdate();
-            });
+            this.changeDetectorRef.detectChanges(); //prevent ExpressionChangedAfterItHasBeenCheckedError
+            this.retrieveYasgui.forceContentUpdate();
         }
         if (this.updateYasgui && this.updateEditor.query != null) {
-            setTimeout(() => { //prevent ExpressionChangedAfterItHasBeenCheckedError
-                this.updateYasgui.forceContentUpdate();
-            });
+            this.changeDetectorRef.detectChanges(); //prevent ExpressionChangedAfterItHasBeenCheckedError
+            this.updateYasgui.forceContentUpdate();
         }
     }
 

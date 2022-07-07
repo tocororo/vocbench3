@@ -77,7 +77,7 @@ export class LangPickerComponent implements ControlValueAccessor {
     }
 
     ngAfterViewInit() {
-        setTimeout(() => { //timout to prevent ExpressionChangedAfterItHasBeenCheckedError in the container component
+        setTimeout(() => { //timout to prevent ExpressionChangedAfterItHasBeenCheckedError in the parent component
             //if there is some language available set the selected language in the picker
             if (this.languageList.length > 0) {
                 if (this.language == undefined) { //no language specified as @Input

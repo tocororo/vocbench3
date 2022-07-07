@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTLiteral, ARTURIResource } from 'src/app/models/ARTResources';
@@ -35,7 +35,8 @@ export class DatasetMetadataComponent {
 
     mdrUpdateAuthorized: boolean;
 
-    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
+        private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.mdrUpdateAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryUpdate);
@@ -198,9 +199,8 @@ export class DatasetMetadataComponent {
                 //restore old id
                 let backupId: string = this.dataset.sparqlEndpoint.id;
                 this.dataset.sparqlEndpoint.id = null + "new";
-                setTimeout(() => {
-                    this.dataset.sparqlEndpoint.id = backupId;
-                });
+                this.changeDetectorRef.detectChanges(); //so that the ngOnChanges of Input value in input-editable is triggered
+                this.dataset.sparqlEndpoint.id = backupId;
                 return;
             }
         }

@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ConfigurationComponents } from "../../../models/Configuration";
 import { DownloadDescription, TransitiveImportMethodAllowance, TransitiveImportUtils } from "../../../models/Metadata";
@@ -75,7 +75,7 @@ export class LoadDataComponent {
     selectedLoader = this.loaderOptions[0];
 
     constructor(private inOutService: InputOutputServices, private extensionService: ExtensionsServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.baseURI = VBContext.getWorkingProject().getBaseURI();
@@ -345,27 +345,26 @@ export class LoadDataComponent {
                             this.appendTransformer();
                         });
                         //...and force a configuration
-                        setTimeout(() => { //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
-                            /**
-                             * collect the ExtensionConfiguratorComponent for the transformators. This is necessary since
-                             * there are also the ExtensionConfiguratorComponent for loader and lifter, so I need to ensure
-                             * that the configuration is forced to the ExtensionConfiguratorComponent of the transformators
-                             */
-                            let tranformerConfigurators: ExtensionConfiguratorComponent[] = [];
-                            //consider just the first step of the stored pipeline and iterate over all the ExtensionConfiguratorComponent
-                            let firstTransformerExtId = chain[0].extensionID;
-                            let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
-                            extConfigurators.forEach(extConfComp => {
-                                extConfComp.extensions.forEach(ext => {
-                                    if (ext.id == firstTransformerExtId) {
-                                        tranformerConfigurators.push(extConfComp);
-                                    }
-                                });
+                        this.changeDetectorRef.detectChanges(); //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
+                        /**
+                         * collect the ExtensionConfiguratorComponent for the transformators. This is necessary since
+                         * there are also the ExtensionConfiguratorComponent for loader and lifter, so I need to ensure
+                         * that the configuration is forced to the ExtensionConfiguratorComponent of the transformators
+                         */
+                        let tranformerConfigurators: ExtensionConfiguratorComponent[] = [];
+                        //consider just the first step of the stored pipeline and iterate over all the ExtensionConfiguratorComponent
+                        let firstTransformerExtId = chain[0].extensionID;
+                        let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
+                        extConfigurators.forEach(extConfComp => {
+                            extConfComp.extensions.forEach(ext => {
+                                if (ext.id == firstTransformerExtId) {
+                                    tranformerConfigurators.push(extConfComp);
+                                }
                             });
-                            //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
-                            chain.forEach((extConf: { extensionID: string, configRef: string }, index: number) => {
-                                tranformerConfigurators[index].forceConfigurationByRef(extConf.extensionID, extConf.configRef);
-                            });
+                        });
+                        //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
+                        chain.forEach((extConf: { extensionID: string, configRef: string }, index: number) => {
+                            tranformerConfigurators[index].forceConfigurationByRef(extConf.extensionID, extConf.configRef);
                         });
                     } else if (configurations[i].name == "loaderSpec") {
                         let loaderSpec: { extensionID: string, configRef: string } = configurations[i].value;
@@ -393,9 +392,8 @@ export class LoadDataComponent {
                                 });
                             }
 
-                            setTimeout(() => {
-                                this.loaderConfigurator.forceConfigurationByRef(loaderSpec.extensionID, loaderSpec.configRef);
-                            });
+                            this.changeDetectorRef.detectChanges(); 
+                            this.loaderConfigurator.forceConfigurationByRef(loaderSpec.extensionID, loaderSpec.configRef);
                         } else { //loader not specified
                             //select the no-loader option in the menu (from file)
                             this.loaderOptions.forEach(opt => {

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, QueryList, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Directive, ElementRef, QueryList, ViewChild } from "@angular/core";
 import { ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { AbstractListNode } from "./abstractListNode";
@@ -21,8 +21,10 @@ export abstract class AbstractList extends AbstractStruct {
     /**
      * CONSTRUCTOR
      */
-    constructor(eventHandler: VBEventHandler) {
+    protected changeDetectorRef: ChangeDetectorRef;
+    constructor(eventHandler: VBEventHandler, changeDetectorRef: ChangeDetectorRef) {
         super(eventHandler);
+        this.changeDetectorRef = changeDetectorRef;
         this.eventSubscriptions.push(this.eventHandler.resourceCreatedUndoneEvent.subscribe(
             (node: ARTURIResource) => this.onResourceCreatedUndone(node)
         ));
@@ -60,20 +62,17 @@ export abstract class AbstractList extends AbstractStruct {
 
     openListAt(node: ARTURIResource) {
         this.ensureNodeVisibility(node);
-        setTimeout( //apply timeout in order to wait that the children node is rendered (in case the openPages has been increased)
-            () => {
-                let childrenNodeComponent = this.viewChildrenNode.toArray();
-                for (let i = 0; i < childrenNodeComponent.length; i++) {
-                    if (childrenNodeComponent[i].node.equals(node)) {
-                        childrenNodeComponent[i].ensureVisible();
-                        if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
-                            childrenNodeComponent[i].selectNode();
-                        }
-                        break;
-                    }
+        this.changeDetectorRef.detectChanges(); //wait that the children node is rendered (in case the openPages has been increased)
+        let childrenNodeComponent = this.viewChildrenNode.toArray();
+        for (let i = 0; i < childrenNodeComponent.length; i++) {
+            if (childrenNodeComponent[i].node.equals(node)) {
+                childrenNodeComponent[i].ensureVisible();
+                if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
+                    childrenNodeComponent[i].selectNode();
                 }
+                break;
             }
-        );
+        }
     }
 
     //Nodes limitation management

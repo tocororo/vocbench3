@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, QueryList, ViewChildren } from "@angular/core";
 import { map } from 'rxjs/operators';
 import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -19,8 +19,8 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
 
     constructor(private propService: PropertyServices, eventHandler: VBEventHandler, 
-        basicModals: BasicModalServices, sharedModals: SharedModalServices) {
-        super(eventHandler, basicModals, sharedModals);
+        basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, basicModals, sharedModals, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
             (data: any) => this.onChildCreated(data.superProperty, data.subProperty)));
         this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(

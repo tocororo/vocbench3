@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import { Observable } from 'rxjs';
 import { ARTNode } from "../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../models/Configuration";
@@ -27,8 +27,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
 
     description: string;
 
-    constructor(sparqlService: SparqlServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, private configurationsService: ConfigurationsServices) {
-        super(sparqlService, basicModals, sharedModals);
+    constructor(sparqlService: SparqlServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef, private configurationsService: ConfigurationsServices) {
+        super(sparqlService, basicModals, sharedModals, changeDetectorRef);
     }
 
     evaluateQueryImpl(): Observable<any> {
@@ -48,9 +48,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
                 this.storedQueryReference = relativeRef;
                 this.storedQueryName = this.storedQueryReference.substring(this.storedQueryReference.indexOf(":") + 1);
                 this.setLoadedQueryConf(data.configuration);
-                setTimeout(() => {
-                    this.savedStatus.emit(false);
-                });
+                this.changeDetectorRef.detectChanges();
+                this.savedStatus.emit(false);
             }
         );
     }
@@ -84,9 +83,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
                 this.configurationsService.getConfiguration(ConfigurationComponents.SPARQL_STORE, this.storedQueryReference).subscribe(
                     (conf: Configuration) => {
                         this.setLoadedQueryConf(conf);
-                        setTimeout(() => {
-                            this.savedStatus.emit(true);
-                        });
+                        this.changeDetectorRef.detectChanges();
+                        this.savedStatus.emit(true);
 
                     }
                 );
@@ -117,10 +115,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
         }
         this.query = query;
         this.inferred = includeInferred;
-        setTimeout(() => {
-            //in order to detect the change of @Input query in the child YasguiComponent
-            this.viewChildYasgui.forceContentUpdate();
-        });
+        this.changeDetectorRef.detectChanges(); //in order to detect the change of @Input query in the child YasguiComponent
+        this.viewChildYasgui.forceContentUpdate();
     }
 
     saveConfiguration() {

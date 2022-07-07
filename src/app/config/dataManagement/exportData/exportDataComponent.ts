@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
@@ -69,7 +69,7 @@ export class ExportDataComponent {
 
     constructor(private extensionService: ExtensionsServices, private exportService: ExportServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
-        private translateService: TranslateService) { }
+        private translateService: TranslateService, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         let baseURI: string = VBContext.getWorkingProject().getBaseURI();
@@ -254,9 +254,9 @@ export class ExportDataComponent {
     }
 
     onReformatterConfigUpdated(config: Settings) {
-        setTimeout(() => { //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
-            this.selectedReformatterConfig = config;
-        });
+        //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
+        // this.changeDetectorRef.detectChanges();
+        this.selectedReformatterConfig = config;
     }
 
     onReformatterExtensionUpdated(ext: ExtensionFactory) {
@@ -313,9 +313,9 @@ export class ExportDataComponent {
     }
 
     onDeployerConfigUpdated(config: Settings) {
-        setTimeout(() => { //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
-            this.selectedDeployerConfig = config;
-        });
+        //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
+        // this.changeDetectorRef.detectChanges();
+        this.selectedDeployerConfig = config;
     }
 
     onDeployerConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
@@ -434,33 +434,33 @@ export class ExportDataComponent {
                             });
 
                             //...and force a configuration
-                            setTimeout(() => { //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
-                                /**
-                                 * collect the ExtensionConfiguratorComponent for the transformators. This is necessary since
-                                 * there are also the ExtensionConfiguratorComponent for deployer and serializer, so I need to ensure
-                                 * that the configuration is forced to the ExtensionConfiguratorComponent of the transformators
-                                 */
-                                let tranformerConfigurators: ExtensionConfiguratorComponent[] = [];
-                                //consider just the first step of the stored pipeline and iterate over all the ExtensionConfiguratorComponent
-                                let firstTransformerExtId = chain[0][0].extensionID;
-                                let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
-                                extConfigurators.forEach(extConfComp => {
-                                    extConfComp.extensions.forEach(ext => {
-                                        if (ext.id == firstTransformerExtId) {
-                                            tranformerConfigurators.push(extConfComp);
-                                        }
-                                    });
+                            //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
+                            this.changeDetectorRef.detectChanges();
+                            /**
+                             * collect the ExtensionConfiguratorComponent for the transformators. This is necessary since
+                             * there are also the ExtensionConfiguratorComponent for deployer and serializer, so I need to ensure
+                             * that the configuration is forced to the ExtensionConfiguratorComponent of the transformators
+                             */
+                            let tranformerConfigurators: ExtensionConfiguratorComponent[] = [];
+                            //consider just the first step of the stored pipeline and iterate over all the ExtensionConfiguratorComponent
+                            let firstTransformerExtId = chain[0][0].extensionID;
+                            let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
+                            extConfigurators.forEach(extConfComp => {
+                                extConfComp.extensions.forEach(ext => {
+                                    if (ext.id == firstTransformerExtId) {
+                                        tranformerConfigurators.push(extConfComp);
+                                    }
                                 });
-                                //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
-                                chain.forEach((c: [{ extensionID: string, configRef: string }, string[]], index: number) => {
-                                    let extConfPair = c[0];
-                                    tranformerConfigurators[index].forceConfigurationByRef(extConfPair.extensionID, extConfPair.configRef);
+                            });
+                            //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
+                            chain.forEach((c: [{ extensionID: string, configRef: string }, string[]], index: number) => {
+                                let extConfPair = c[0];
+                                tranformerConfigurators[index].forceConfigurationByRef(extConfPair.extensionID, extConfPair.configRef);
 
-                                    let graphs = c[1];
-                                    //check all the graphs in the graphs parameter
-                                    this.filtersChain[index].filterGraphs.forEach((fg: GraphStruct) => {
-                                        fg.checked = graphs.indexOf(fg.graph.toNT()) != -1;
-                                    });
+                                let graphs = c[1];
+                                //check all the graphs in the graphs parameter
+                                this.filtersChain[index].filterGraphs.forEach((fg: GraphStruct) => {
+                                    fg.checked = graphs.indexOf(fg.graph.toNT()) != -1;
                                 });
                             });
                         }
@@ -488,10 +488,9 @@ export class ExportDataComponent {
                         }
                     });
                     //restore the reformatter configuration and the (stream-sourced) deployer configuration
-                    setTimeout(() => { //timeout needed in order to let the UI update after the selection of the deployment
-                        this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
-                        this.deployerConfigurator.forceConfigurationByRef(deployerSpec.extensionID, deployerSpec.configRef);
-                    });
+                    this.changeDetectorRef.detectChanges(); //let the UI update after the selection of the deployment
+                    this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
+                    this.deployerConfigurator.forceConfigurationByRef(deployerSpec.extensionID, deployerSpec.configRef);
                 } else if (deployerSpec != null) { //only deployer specified => repository-sourced deployment
                     this.deploymentOptions.forEach(opt => {
                         if (opt.source == DeploySource.repository) {
@@ -499,42 +498,22 @@ export class ExportDataComponent {
                         }
                     });
                     //restore the (repository-sourced) deployer configuration
-                    setTimeout(() => {
-                        this.deployerConfigurator.forceConfigurationByRef(deployerSpec.extensionID, deployerSpec.configRef);
-                    });
+                    this.changeDetectorRef.detectChanges();
+                    this.deployerConfigurator.forceConfigurationByRef(deployerSpec.extensionID, deployerSpec.configRef);
                 } else if (reformattingExporterSpec != null) { //only reformatter specified => no source for deployment
                     this.deploymentOptions.forEach(opt => {
                         if (opt.source == null) {
                             this.selectedDeployment = opt;
                         }
                     });
-                    setTimeout(() => { //timeout needed in order to let the UI update after the selection of the deployment
-                        this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
-                    });
+                    this.changeDetectorRef.detectChanges(); //needed in order to let the UI update after the selection of the deployment
+                    this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
                 }
 
-            }
+            },
+            () => {}
         );
     }
-
-    private restoreReformatter(reformattingExporterSpec: { extensionID: string, configRef: string }) {
-        //look among the reformatters
-        this.reformatters.forEach((reformatter: ExtensionFactory) => {
-            if (reformatter.id == reformattingExporterSpec.extensionID) {
-                //select the stream-sourced option in the menu
-                this.deploymentOptions.forEach(opt => {
-                    if (opt.source == DeploySource.stream) {
-                        this.selectedDeployment = opt;
-                    }
-                });
-            }
-        });
-
-        setTimeout(() => {
-            this.reformatterConfigurator.forceConfigurationByRef(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
-        });
-    }
-
 
     /*
      * Currently the export function allows only to export in the available formats. It doesn't provide the same

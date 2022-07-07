@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ARTNode, ARTResource } from '../../models/ARTResources';
 import { ResourceUtils } from '../../utils/ResourceUtils';
 import { BasicModalServices } from '../modal/basicModal/basicModalServices';
@@ -29,7 +29,7 @@ export class InlineEditableValue {
 
     ngClassValue: InlineEditableCssClass = {};
 
-    constructor(private basicModals: BasicModalServices) {}
+    constructor(private basicModals: BasicModalServices, private changeDetectorRef: ChangeDetectorRef) {}
 
     ngOnInit() {
         this.initValue();
@@ -93,10 +93,9 @@ export class InlineEditableValue {
             this.textareaRows = 1;
         }
         this.editInProgress = true;
-        setTimeout(() => { //wait to initialize the textarea
-            //set the cursor at the end of the content
-            (<HTMLTextAreaElement>this.textarea.nativeElement).focus();
-        });
+        this.changeDetectorRef.detectChanges(); //wait to initialize the textarea
+        //set the cursor at the end of the content
+        (<HTMLTextAreaElement>this.textarea.nativeElement).focus();
     }
 
     onKeydown(event: KeyboardEvent) {
@@ -109,9 +108,8 @@ export class InlineEditableValue {
                 let before = this.stringValue.substring(0, selectionStart);
                 let after = this.stringValue.substring(selectionEnd);
                 this.stringValue = before + "\n" + after;
-                setTimeout(() => { //wait for textarea to update its content
-                    (<HTMLTextAreaElement>this.textarea.nativeElement).selectionEnd = selectionStart + 1; //+1 since \n has been added
-                });
+                this.changeDetectorRef.detectChanges(); //wait for textarea to update its content
+                (<HTMLTextAreaElement>this.textarea.nativeElement).selectionEnd = selectionStart + 1; //+1 since \n has been added
             } else {
                 this.confirmEdit();
             }

@@ -1,4 +1,4 @@
-import { Component, HostListener, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, HostListener, QueryList, ViewChildren } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as FileSaver from 'file-saver';
 import { concat, Observable } from "rxjs";
@@ -42,7 +42,7 @@ export class Sheet2RdfComponent {
     activeSheet: SheetStruct;
 
     constructor(private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService, private exportService: ExportServices,
-        private basicModals: BasicModalServices, private modalService: NgbModal) { }
+        private basicModals: BasicModalServices, private modalService: NgbModal, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
 
@@ -204,9 +204,8 @@ export class Sheet2RdfComponent {
                 //makes all sheet reset and reload
                 let tmp = this.sheets;
                 this.sheets = null;
-                setTimeout(() => {
-                    this.sheets = tmp;
-                });
+                this.changeDetectorRef.detectChanges();
+                this.sheets = tmp;
             }
         );
     }

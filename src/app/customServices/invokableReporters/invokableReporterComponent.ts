@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Input, SimpleChanges, ViewChild } from "@angular/core";
 import { ExtensionsServices } from "src/app/services/extensionsServices";
 import { ExtensionConfiguratorComponent } from "src/app/widget/extensionConfigurator/extensionConfiguratorComponent";
 import { ModalType } from 'src/app/widget/modal/Modals';
@@ -59,7 +59,7 @@ export class InvokableReporterComponent {
     selectedDeployment = this.deploymentOptions[0];
 
     constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices,
-        private extensionService: ExtensionsServices, private basicModals: BasicModalServices) { }
+        private extensionService: ExtensionsServices, private basicModals: BasicModalServices, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['ref'] && changes['ref'].currentValue) {
@@ -151,9 +151,8 @@ export class InvokableReporterComponent {
      * =====================================*/
 
     onDeployerConfigUpdated(config: Settings) {
-        setTimeout(() => { //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
-            this.selectedDeployerConfig = config;
-        });
+        this.selectedDeployerConfig = config;
+        this.changeDetectorRef.detectChanges(); //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
     }
 
     onDeployerConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {

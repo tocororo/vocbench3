@@ -1,6 +1,6 @@
 <div class="hbox" style="align-items: center;">
 
-    <select class="form-control form-control-sm" style="flex: 1; font-family: monospace;" [(ngModel)]="selectedType" (ngModelChange)="onSelectedTypeChange()">
+    <select class="form-control" style="flex: 1; font-family: monospace;" [(ngModel)]="selectedType" (ngModelChange)="onSelectedTypeChange()">
         <option *ngFor="let t of types" style="font-family: monospace;" [ngValue]="t.type">{{t.show}}</option>
     </select>
 

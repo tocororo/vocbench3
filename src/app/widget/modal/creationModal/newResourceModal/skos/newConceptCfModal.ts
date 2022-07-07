@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
@@ -31,7 +31,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
     label: string;
     uri: string;
 
-    constructor(public activeModal: NgbActiveModal, private resourceService: ResourcesServices,
+    constructor(public activeModal: NgbActiveModal, private resourceService: ResourcesServices, private changeDetectorRef: ChangeDetectorRef,
         cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
     }
@@ -53,9 +53,8 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
     }
 
     ngAfterViewInit() {
-        setTimeout(() => {
-            this.viewInitialized = true;
-        });
+        this.viewInitialized = true;
+        this.changeDetectorRef.detectChanges();
     }
 
     onSchemesChanged(schemes: ARTURIResource[]) {

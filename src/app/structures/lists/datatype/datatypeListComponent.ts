@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, QueryList, ViewChildren } from "@angular/core";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { DatatypesServices } from "../../../services/datatypesServices";
@@ -27,8 +27,8 @@ export class DatatypeListComponent extends AbstractList {
 
     list: ARTURIResource[];
 
-    constructor(private datatypeService: DatatypesServices, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private datatypeService: DatatypesServices, eventHandler: VBEventHandler, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.datatypeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.datatypeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
         this.eventSubscriptions.push(eventHandler.datatypeDeletedUndoneEvent.subscribe((node: ARTURIResource) => this.onDeletedUndo(node)));

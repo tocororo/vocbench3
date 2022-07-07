@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { ResourceViewModeDispatcher } from "../resourceView/resourceViewModes/resourceViewModeDispatcher";
@@ -27,7 +27,7 @@ export class DataComponent {
 
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private eventHandler: VBEventHandler) {
+    constructor(private eventHandler: VBEventHandler, private changeDetectorRef: ChangeDetectorRef) {
         this.eventSubscriptions.push(this.eventHandler.resourceCreatedUndoneEvent.subscribe(
             (res: ARTURIResource) => this.onResourceCreatedUndone(res)));
         this.eventSubscriptions.push(this.eventHandler.datatypeDeletedEvent.subscribe(
@@ -61,10 +61,9 @@ export class DataComponent {
             this.resViewPanelFlex = this.maxPanelSize;
             this.treePanelFlex = 2;
         }
-        //timeout is required in order to wait the next ng2 change detection round and so the resView panel is rendered
-        setTimeout(() => {
-            this.resViewPanelChild.selectResource(node);
-        });
+        //in order to wait that the resView panel is rendered
+        this.changeDetectorRef.detectChanges();
+        this.resViewPanelChild.selectResource(node);
     }
 
     private onNodeDeleted(node: ARTResource) {

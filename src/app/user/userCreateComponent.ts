@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, forwardRef, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AuthServiceMode } from "../models/Properties";
 import { UserForm, UserFormCustomField, UserFormOptionalField } from "../models/User";
@@ -30,7 +30,7 @@ export class UserCreateComponent implements ControlValueAccessor {
     showPwd: boolean = false;
     showPwdConf: boolean = false;
 
-    constructor(private userService: UserServices, private sharedModals: SharedModalServices) { }
+    constructor(private userService: UserServices, private sharedModals: SharedModalServices, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.authServMode = VBContext.getSystemSettings().authService;

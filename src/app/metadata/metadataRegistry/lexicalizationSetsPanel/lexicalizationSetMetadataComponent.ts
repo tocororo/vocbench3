@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, SimpleChanges } from "@angular/core";
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { DatasetMetadata2, LexicalizationSetMetadata } from "../../../models/Metadata";
@@ -35,7 +35,7 @@ export class LexicalizationSetMetadataComponent {
     ];
     lexicalModelOpts = ["RDFS", "SKOS", "SKOSXL", "OntoLex"];
 
-    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices) { }
+    constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['lexicalizationSetMetadata'] && changes['lexicalizationSetMetadata'].currentValue) {
@@ -62,9 +62,8 @@ export class LexicalizationSetMetadataComponent {
                 this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_IRI", params: { iri: newValue } }, ModalType.warning);
                 //restore old value
                 this.lexiconDataset = newValue;
-                setTimeout(() => {
-                    this.lexiconDataset = this.lexicalizationSetMetadata.lexiconDataset;
-                });
+                this.changeDetectorRef.detectChanges();
+                this.lexiconDataset = this.lexicalizationSetMetadata.lexiconDataset;
             } else {
                 this.lexiconDataset = newValue;
                 this.updateLexicalizationSetMetadata();
@@ -86,9 +85,8 @@ export class LexicalizationSetMetadataComponent {
                 this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_LANG_TAG", params: { lang: this.language } }, ModalType.warning);
                 //restore old value
                 this.language = newValue;
-                setTimeout(() => {
-                    this.language = this.lexicalizationSetMetadata.language;
-                });
+                this.changeDetectorRef.detectChanges();
+                this.language = this.lexicalizationSetMetadata.language;
             } else {
                 this.language = newValue;
                 this.updateLexicalizationSetMetadata();

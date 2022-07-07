@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, QueryList, ViewChildren } from "@angular/core";
 import { OntoLexLemonServices } from "src/app/services/ontoLexLemonServices";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
@@ -24,8 +24,8 @@ export class TranslationSetListComponent extends AbstractList {
 
     list: ARTURIResource[];
 
-    constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.translationSetCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.translationSetDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
         this.eventSubscriptions.push(eventHandler.translationSetDeletedUndoneEvent.subscribe((node: ARTURIResource) => this.onDeletedUndo(node)));

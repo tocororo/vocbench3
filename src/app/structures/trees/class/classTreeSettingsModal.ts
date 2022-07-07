@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
@@ -33,7 +33,7 @@ export class ClassTreeSettingsModal {
     showInstNumb: boolean;
 
     constructor(public activeModal: NgbActiveModal, private clsService: ClassesServices, private resourceService: ResourcesServices,
-        private vbProp: VBProperties, private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) { }
+        private vbProp: VBProperties, private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
@@ -98,7 +98,8 @@ export class ClassTreeSettingsModal {
                     //temporarly reset the root class and the restore it (in order to trigger the change detection editable-input)
                     let oldRootClass = this.rootClass;
                     this.rootClass = null;
-                    setTimeout(() => { this.rootClass = oldRootClass; });
+                    this.changeDetectorRef.detectChanges();
+                    this.rootClass = oldRootClass;
                 }
             }
         );

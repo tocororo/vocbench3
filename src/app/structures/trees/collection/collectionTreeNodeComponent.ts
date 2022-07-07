@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, QueryList, ViewChildren } from "@angular/core";
 import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SkosServices } from "../../../services/skosServices";
@@ -19,8 +19,8 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
 
     constructor(private skosService: SkosServices, eventHandler: VBEventHandler, 
-        basicModals: BasicModalServices, sharedModals: SharedModalServices) {
-        super(eventHandler, basicModals, sharedModals);
+        basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, basicModals, sharedModals, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
             (deletedCollection: ARTResource) => this.onTreeNodeDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionCreatedEvent.subscribe(

@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, forwardRef, Input, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTURIResource } from '../../../models/ARTResources';
 import { DatatypesServices } from '../../../services/datatypesServices';
@@ -23,7 +23,7 @@ export class DatatypePickerComponent implements ControlValueAccessor {
     datatypeList: ARTURIResource[]; //list of datatypes that the user can pick (could be all datatypes, or a subset restricted by allowedDatatypes)
     datatype: ARTURIResource;
 
-    constructor(private datatypeService: DatatypesServices) { }
+    constructor(private datatypeService: DatatypesServices, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         if (this.size == "sm" || this.size == "md" || this.size == "lg") {
@@ -66,9 +66,8 @@ export class DatatypePickerComponent implements ControlValueAccessor {
         }
         if (this.datatype != null) { //initialize the datatype with the value in input
             this.datatype = this.datatypeList.find(dt => dt.equals(this.datatype));
-            setTimeout(() => {
-                this.propagateChange(this.datatype);
-            });
+            this.changeDetectorRef.detectChanges();
+            this.propagateChange(this.datatype);
         }
     }
 

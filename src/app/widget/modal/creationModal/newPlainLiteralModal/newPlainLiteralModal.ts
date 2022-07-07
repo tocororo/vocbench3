@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral } from "../../../../models/ARTResources";
 import { LanguageConstraint } from "../../../../models/LanguagesCountries";
@@ -20,12 +20,11 @@ export class NewPlainLiteralModal {
 
     values: ARTLiteral[] = [];
 
-    constructor(public activeModal: NgbActiveModal) { }
+    constructor(public activeModal: NgbActiveModal, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngAfterViewInit() {
-        setTimeout(() => {
-            this.viewInitialized = true;
-        });
+        this.viewInitialized = true;
+        this.changeDetectorRef.detectChanges();
     }
 
     onEnter(event: KeyboardEvent) {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { map } from 'rxjs/operators';
 import { PrefixMapping } from "src/app/models/Metadata";
@@ -39,7 +39,7 @@ export class AdvancedGraphEditor {
 
     constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
-        private elementRef: ElementRef) {
+        private elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -103,10 +103,10 @@ export class AdvancedGraphEditor {
                 } else { //not used => add it
                     let newMapping = { prefix: mapping.prefix, namespace: mapping.namespace, explicit: true };
                     this.localPrefixMappings.push(newMapping);
-                    setTimeout(() => {
-                        this.prefixNsTableElement.nativeElement.scrollTop = this.prefixNsTableElement.nativeElement.scrollHeight;
-                        this.selectMapping(newMapping);
-                    });
+                    
+                    this.changeDetectorRef.detectChanges();
+                    this.prefixNsTableElement.nativeElement.scrollTop = this.prefixNsTableElement.nativeElement.scrollHeight;
+                    this.selectMapping(newMapping);
                 }
             }
         );

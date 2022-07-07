@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Output, QueryList, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Directive, ElementRef, EventEmitter, Output, QueryList, SimpleChanges, ViewChild } from "@angular/core";
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SemanticTurkey } from "src/app/models/Vocabulary";
@@ -38,9 +38,11 @@ export abstract class AbstractTreeNode extends AbstractNode {
      * CONSTRUCTOR
      */
     protected basicModals: BasicModalServices;
-    constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
+    protected changeDetectorRef: ChangeDetectorRef;
+    constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices, private sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
         super(eventHandler);
         this.basicModals = basicModals;
+        this.changeDetectorRef = changeDetectorRef;
         this.eventSubscriptions.push(this.eventHandler.resourceCreatedUndoneEvent.subscribe(
             (node: ARTURIResource) => this.onResourceCreatedUndone(node)
         ));
@@ -135,7 +137,8 @@ export abstract class AbstractTreeNode extends AbstractNode {
     public expandPath(path: ARTURIResource[]) {
         if (path.length == 0) { //this is the last node of the path. Focus it in the tree
             this.selectNode();
-            setTimeout(() => { //give time to update the view (after selectNode the res view could make reduce the size of the tree)
+            setTimeout(() => { //give time to update the view 
+                //(after selectNode the res view could show up on the right of the tree. This would reduce the size of the tree "pushing down" the resource to focus)
                 this.treeNodeElement.nativeElement.scrollIntoView({ block: 'end', behavior: 'smooth' });
             });
         } else {
@@ -143,12 +146,8 @@ export abstract class AbstractTreeNode extends AbstractNode {
                 this.expandNode().subscribe(
                     () => {
                         //trigger a round of change detection so that the view children are rendered
-                        setTimeout(
-                            () => {
-                                this.expandChild(path);
-                            }
-                        );
-
+                        this.changeDetectorRef.detectChanges();
+                        this.expandChild(path);
                     }
                 );
             } else {
@@ -263,17 +262,15 @@ export abstract class AbstractTreeNode extends AbstractNode {
                 this.children.unshift(<ARTURIResource>child);
                 //in the addPropertyValue context, select the newly created node
                 if (this.context == TreeListContext.addPropValue) {
-                    setTimeout(() => { //gives time to update the viewChildrenNode
-                        this.selectChild(<ARTURIResource>child);
-                    });
+                    this.changeDetectorRef.detectChanges(); //gives time to update the viewChildrenNode
+                    this.selectChild(<ARTURIResource>child);
                 }
             } else {
                 this.expandNode().subscribe(
                     () => {
                         if (this.context == TreeListContext.addPropValue) {
-                            setTimeout(() => {
-                                this.selectChild(<ARTURIResource>child);
-                            });
+                            this.changeDetectorRef.detectChanges();
+                            this.selectChild(<ARTURIResource>child);
                         }
                     }
                 );

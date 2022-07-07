@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Directive, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Observable } from 'rxjs';
 import { Configuration, ConfigurationProperty } from "../models/Configuration";
 import { PrefixMapping } from "../models/Metadata";
@@ -37,10 +37,12 @@ export abstract class AbstractSparqlTabComponent {
     protected sparqlService: SparqlServices;
     protected basicModals: BasicModalServices;
     protected sharedModals: SharedModalServices;
-    constructor(sparqlService: SparqlServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+    protected changeDetectorRef: ChangeDetectorRef;
+    constructor(sparqlService: SparqlServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
         this.sparqlService = sparqlService;
         this.basicModals = basicModals;
         this.sharedModals = sharedModals;
+        this.changeDetectorRef = changeDetectorRef;
     }
 
     ngOnInit() {
@@ -161,11 +163,10 @@ export abstract class AbstractSparqlTabComponent {
         }
         this.query = query;
         this.inferred = includeInferred;
-        setTimeout(() => {
-            //in order to detect the change of @Input query in the child YasguiComponent
-            this.viewChildYasgui.forceContentUpdate();
-            this.savedStatus.emit(true);
-        });
+        //in order to detect the change of @Input query in the child YasguiComponent
+        this.changeDetectorRef.detectChanges();
+        this.viewChildYasgui.forceContentUpdate();
+        this.savedStatus.emit(true);
     }
 
 }

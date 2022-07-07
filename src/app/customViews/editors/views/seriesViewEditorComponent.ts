@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CustomViewModel, CustomViewVariables } from 'src/app/models/CustomViews';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { AbstractSparqlBasedViewEditor, VariableInfoStruct } from './abstractSparqlBasedViewEditor';
@@ -36,8 +36,8 @@ export class SeriesViewEditorComponent extends AbstractSparqlBasedViewEditor {
         { id: CustomViewVariables.value, descrTranslationKey: "Will be bound to the new value" },
     ];
 
-    constructor(basicModals: BasicModalServices) {
-        super(basicModals);
+    constructor(basicModals: BasicModalServices, changeDetectorRef: ChangeDetectorRef) {
+        super(basicModals, changeDetectorRef);
     }
 
     ngOnInit() {

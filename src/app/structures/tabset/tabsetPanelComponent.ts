@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
@@ -64,7 +64,7 @@ export class TabsetPanelComponent {
     private activeTab: RDFResourceRolesEnum;
     private allowMultiselection: boolean = true;
 
-    constructor(private modalService: NgbModal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+    constructor(private modalService: NgbModal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.ONTO_TYPE = this.getWorkingContext().getProject().getModelType();
@@ -292,28 +292,27 @@ export class TabsetPanelComponent {
             );
         }
         if (tabToActivate != null) {
-            if (this.showTab(tabToActivate)) { //if the tab is visible => oper activate the tab and select the resource in list/tree
+            if (this.showTab(tabToActivate)) { //if the tab is visible => activate the tab and select the resource in list/tree
                 this.activeTab = tabToActivate;
-                setTimeout(() => {
-                    //wait the update of the UI after the change of the tab
-                    if (tabToActivate == RDFResourceRolesEnum.property) {
-                        this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
-                    } else if (tabToActivate == RDFResourceRolesEnum.cls) {
-                        this.viewChildClsIndPanel.selectSearchedResource(<ARTURIResource>resource);
-                    } else if (tabToActivate == RDFResourceRolesEnum.concept) {
-                        this.viewChildConceptPanel.selectSearchedResource(<ARTURIResource>resource);
-                    } else if (tabToActivate == RDFResourceRolesEnum.conceptScheme) {
-                        this.viewChildSchemePanel.openAt(<ARTURIResource>resource);
-                    } else if (tabToActivate == RDFResourceRolesEnum.limeLexicon) {
-                        this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
-                    } else if (tabToActivate == RDFResourceRolesEnum.ontolexLexicalEntry) {
-                        this.viewChildLexialEntryPanel.selectAdvancedSearchedResource(<ARTURIResource>resource);
-                    } else if (tabToActivate == RDFResourceRolesEnum.skosCollection) {
-                        this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
-                    } else if (tabToActivate == RDFResourceRolesEnum.dataRange) {
-                        this.viewChildDatatypePanel.openAt(<ARTURIResource>resource);
-                    }
-                });
+                //wait the update of the UI after the change of the tab
+                this.changeDetectorRef.detectChanges();
+                if (tabToActivate == RDFResourceRolesEnum.property) {
+                    this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.cls) {
+                    this.viewChildClsIndPanel.selectSearchedResource(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.concept) {
+                    this.viewChildConceptPanel.selectSearchedResource(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.conceptScheme) {
+                    this.viewChildSchemePanel.openAt(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.limeLexicon) {
+                    this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                    this.viewChildLexialEntryPanel.selectAdvancedSearchedResource(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.skosCollection) {
+                    this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.dataRange) {
+                    this.viewChildDatatypePanel.openAt(<ARTURIResource>resource);
+                }
             } else { //if not visible, open resource in modal
                 this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.RESOURCE_NOT_FOCUSABLE_RES_VIEW_MODAL", params: { resource: resource.getShow() } }, ModalType.warning).then(
                     () => {

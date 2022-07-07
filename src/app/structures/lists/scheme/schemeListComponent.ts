@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { Project } from "../../../models/Project";
 import { SemanticTurkey } from "../../../models/Vocabulary";
@@ -27,8 +27,8 @@ export class SchemeListComponent extends AbstractList {
 
     list: SchemeListItem[];
 
-    constructor(private skosService: SkosServices, private vbProp: VBProperties, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private skosService: SkosServices, private vbProp: VBProperties, eventHandler: VBEventHandler, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.schemeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.schemeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
         this.eventSubscriptions.push(eventHandler.schemeDeletedUndoneEvent.subscribe((node: ARTURIResource) => this.onDeletedUndo(node)));

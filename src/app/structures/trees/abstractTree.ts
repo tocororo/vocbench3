@@ -1,4 +1,4 @@
-import { Directive, ElementRef, QueryList, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Directive, ElementRef, QueryList, ViewChild } from "@angular/core";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { TreeListContext, UIUtils } from "../../utils/UIUtils";
@@ -39,10 +39,12 @@ export abstract class AbstractTree extends AbstractStruct {
      */
     protected basicModals: BasicModalServices;
     protected sharedModals: SharedModalServices;
-    constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+    protected changeDetectorRef: ChangeDetectorRef;
+    constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
         super(eventHandler);
         this.basicModals = basicModals;
         this.sharedModals = sharedModals;
+        this.changeDetectorRef = changeDetectorRef;
         this.eventSubscriptions.push(this.eventHandler.resourceCreatedUndoneEvent.subscribe(
             (node: ARTURIResource) => this.onResourceCreatedUndone(node)
         ));
@@ -63,7 +65,8 @@ export abstract class AbstractTree extends AbstractStruct {
          * I cannot resolve by deleting this method since if none of the @Input parameters is provided to the treeComponent,
          * ngOnChanges() is not called, so neither init()) */
         if (this.roots == undefined) {
-            setTimeout(() => { this.init(); });
+            this.init();
+            this.changeDetectorRef.detectChanges(); //prevent ExpressionChangedAfterItHasBeenCheckedError
         }
     }
 
@@ -94,21 +97,20 @@ export abstract class AbstractTree extends AbstractStruct {
      */
     openRoot(path: ARTURIResource[]) {
         if (this.ensureRootVisibility(path[0], path)) { //if root is visible
-            setTimeout(() => { //wait the the UI is updated after the (possible) update of rootLimit
-                UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                let childrenNodeComponent = this.viewChildrenNode.toArray();
-                for (let child of childrenNodeComponent) {
-                    if (child.node.equals(path[0])) {
-                        //let the found node expand itself and the remaining path
-                        path.splice(0, 1);
-                        child.expandPath(path);
-                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                        return;
-                    }
+            this.changeDetectorRef.detectChanges(); //wait the the UI is updated after the (possible) update of rootLimit
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+            let childrenNodeComponent = this.viewChildrenNode.toArray();
+            for (let child of childrenNodeComponent) {
+                if (child.node.equals(path[0])) {
+                    //let the found node expand itself and the remaining path
+                    path.splice(0, 1);
+                    child.expandPath(path);
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                    return;
                 }
-                //if this line is reached it means that the first node of the path has not been found
-                this.onTreeNodeNotFound(path[path.length - 1]);
-            });
+            }
+            //if this line is reached it means that the first node of the path has not been found
+            this.onTreeNodeNotFound(path[path.length - 1]);
         } else {
             /* 
             if the node is not among the roots at all, it may be that the roots are still not initialized (e.g. after a scheme change following a concept search).

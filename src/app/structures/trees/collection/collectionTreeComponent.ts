@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { SearchServices } from "../../../services/searchServices";
 import { SkosServices } from "../../../services/skosServices";
@@ -25,9 +25,9 @@ export class CollectionTreeComponent extends AbstractTree {
     structRole = RDFResourceRolesEnum.skosCollection;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, 
-        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
 
-        super(eventHandler, basicModals, sharedModals);
+        super(eventHandler, basicModals, sharedModals, changeDetectorRef);
 
         this.eventSubscriptions.push(eventHandler.rootCollectionCreatedEvent.subscribe(
             (newColl: ARTURIResource) => this.onRootCollectionCreated(newColl)));

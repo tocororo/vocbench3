@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { CustomOperationDefinition, CustomOperationTypes, TypeUtils } from "../../models/CustomService";
 import { YasguiComponent } from "../../sparql/yasguiComponent";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -23,7 +23,7 @@ export class CustomOperationComponent {
 
     private editOperationAuthorized: boolean;
 
-    constructor(private customServiceModals: CustomServiceModalServices) { }
+    constructor(private customServiceModals: CustomServiceModalServices, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.editOperationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceOperationUpdate);
@@ -40,9 +40,8 @@ export class CustomOperationComponent {
 
             this.isSparql = this.operation["@type"] == CustomOperationTypes.SparqlOperation;
             if (this.isSparql) {
-                setTimeout(() => { //give time to init yasgui component
-                    this.viewChildYasgui.forceContentUpdate();
-                });
+                this.changeDetectorRef.detectChanges(); //give time to init yasgui component
+                this.viewChildYasgui.forceContentUpdate();
             }
 
         }

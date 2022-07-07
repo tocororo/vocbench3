@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LangChangeEvent, TranslateService } from "@ngx-translate/core";
@@ -182,7 +182,8 @@ export class CreateProjectComponent {
     constructor(private projectService: ProjectServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private settingsService: SettingsServices,
         private translateService: TranslateService, private router: Router,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
+        private modalService: NgbModal, private changeDetectorRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -191,9 +192,8 @@ export class CreateProjectComponent {
         this.extensionService.getExtensions(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
             extensions => {
                 this.dataRepoExtensions = <ConfigurableExtensionFactory[]>extensions;
-                setTimeout(() => { //let the dataRepoConfigurator component to be initialized (due to *ngIf="dataRepoExtensions")
-                    this.dataRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
-                });
+                this.changeDetectorRef.detectChanges(); //let the dataRepoConfigurator component to be initialized (due to *ngIf="dataRepoExtensions")
+                this.dataRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
             }
         );
 
@@ -205,9 +205,8 @@ export class CreateProjectComponent {
         this.extensionService.getExtensions(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
             extensions => {
                 this.supportRepoExtensions = <ConfigurableExtensionFactory[]>extensions;
-                setTimeout(() => { //let the supportRepoConfigurator component to be initialized (due to *ngIf="supportRepoExtensions")
-                    this.supportRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
-                });
+                this.changeDetectorRef.detectChanges(); //let the supportRepoConfigurator component to be initialized (due to *ngIf="supportRepoExtensions")
+                this.supportRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
             }
         );
 

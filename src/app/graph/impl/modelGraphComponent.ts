@@ -49,7 +49,7 @@ export class ModelGraphComponent extends AbstractGraph {
     private thingNodesMap: { thingNode: ModelNode, linkedRes: ARTNode }[] = [];
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, private graphService: GraphServices,
-        protected basicModals: BasicModalServices) {
+        protected basicModals: BasicModalServices, private changeDetectorRef: ChangeDetectorRef) {
         super(d3Service, elementRef, ref, basicModals);
     }
 
@@ -82,10 +82,8 @@ export class ModelGraphComponent extends AbstractGraph {
                 }
             );
         } else { //model graph contains already a root node, so works in "incremental" mode
-            setTimeout(() => {
-                this.incrementalExploration = true; //setTimeout prevents an ExpressionChangedAfterItHasBeenCheckedError caused by this change
-                this.expandNode(this.graph.getNodes()[0], true);
-            });
+            this.incrementalExploration = true;
+            this.expandNode(this.graph.getNodes()[0], true);
         }
     }
 

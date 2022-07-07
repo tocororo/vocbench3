@@ -112,9 +112,7 @@ export class SingleValueEditor {
 
     public refreshYasguiEditor() {
         if (this.yasguiEditor) {
-            setTimeout(() => {
-                this.yasguiEditor.forceContentUpdate();
-            });
+            this.yasguiEditor.forceContentUpdate();
         }
     }
 

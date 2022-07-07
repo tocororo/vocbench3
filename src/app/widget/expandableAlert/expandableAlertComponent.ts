@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 
 @Component({
@@ -25,11 +25,12 @@ export class ExpandableAlertComponent {
 
     collapsed: boolean = false;
 
+    constructor(private changeDetectorRef: ChangeDetectorRef) {}
+
     ngAfterViewInit() {
         //if alert exceed 100px, auto collapse it
-        setTimeout(() => {
-            this.collapsed = this.alertDiv.nativeElement.clientHeight > 100;
-        });
+        this.collapsed = this.alertDiv.nativeElement.clientHeight > 100;
+        this.changeDetectorRef.detectChanges();
     }
 
 }

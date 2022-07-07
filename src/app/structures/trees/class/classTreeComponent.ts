@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -30,8 +30,8 @@ export class ClassTreeComponent extends AbstractTree {
     structRole = RDFResourceRolesEnum.cls;
 
     constructor(private clsService: ClassesServices, private searchService: SearchServices,
-        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
-        super(eventHandler, basicModals, sharedModals);
+        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, basicModals, sharedModals, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
             (cls: ARTURIResource) => this.onTreeNodeDeleted(cls)));
     }

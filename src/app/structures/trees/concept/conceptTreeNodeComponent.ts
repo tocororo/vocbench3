@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, QueryList, ViewChildren } from "@angular/core";
 import { map } from 'rxjs/operators';
 import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { ConceptTreePreference, MultischemeMode } from "../../../models/Properties";
@@ -23,8 +23,8 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
     constructor(private skosService: SkosServices, eventHandler: VBEventHandler,
-        basicModals: BasicModalServices, sharedModals: SharedModalServices) {
-        super(eventHandler, basicModals, sharedModals);
+        basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, basicModals, sharedModals, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             (deletedConcept: ARTURIResource) => this.onTreeNodeDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(

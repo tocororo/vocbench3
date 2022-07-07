@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { CustomFormPickerModal } from 'src/app/customForms/editors/customFormPickerModal';
@@ -54,7 +54,8 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     updateTabs: UpdateTabStruct[] = [];
     activeUpdateTab: UpdateTabStruct;
 
-    constructor(private customViewService: CustomViewsServices, private basicModals: BasicModalServices, private modalService: NgbModal, private translateService: TranslateService) {
+    constructor(private customViewService: CustomViewsServices, private basicModals: BasicModalServices, private modalService: NgbModal, 
+        private translateService: TranslateService, private changeDetectorRef: ChangeDetectorRef) {
         super();
     }
 
@@ -176,9 +177,8 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
 
     onUpdateDataChanged(tab: UpdateTabStruct, data: UpdateInfoEnhanced) {
         tab.singleValueData = data;
-        setTimeout(() => {
-            this.emitChanges();
-        });
+        this.changeDetectorRef.detectChanges();
+        this.emitChanges();
     }
 
     isAnyUpdateError(): boolean {
@@ -276,10 +276,9 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
      * moreover forces the editor to refresh preventing strange UI issues with yasgui editor (left part of the textarea is covered by a gray vertical stripe)
      */
     private refreshYasguiEditors() {
-        setTimeout(() => {
-            this.yasguiEditor.forceContentUpdate();
-            this.singleValueEditors.forEach(e => e.refreshYasguiEditor());
-        });
+        this.changeDetectorRef.detectChanges(); //wait yasgui to be initialized the first time
+        this.yasguiEditor.forceContentUpdate();
+        this.singleValueEditors.forEach(e => e.refreshYasguiEditor());
     }
 
 }

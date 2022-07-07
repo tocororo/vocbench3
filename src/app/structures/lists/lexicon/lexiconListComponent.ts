@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { Project } from "../../../models/Project";
 import { SemanticTurkey } from "../../../models/Vocabulary";
@@ -29,8 +29,8 @@ export class LexiconListComponent extends AbstractList {
 
     private activeLexicon: ARTURIResource;
 
-    constructor(private ontolexService: OntoLexLemonServices, private vbProp: VBProperties, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private ontolexService: OntoLexLemonServices, private vbProp: VBProperties, eventHandler: VBEventHandler, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.lexiconCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.lexiconDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
         this.eventSubscriptions.push(eventHandler.lexiconDeletedUndoneEvent.subscribe((node: ARTURIResource) => this.onDeletedUndo(node)));

@@ -22,7 +22,7 @@
         <query-param-form [bindings]="parameterization" (update)="onVarBindingsUpdate($event)" [configurable]="false" 
             [mode]="detailsOn ? 'sparql' : 'search'"></query-param-form>
 
-        <yasgui *ngIf="detailsOn" [query]="query" [readonly]="true" [hideButtons]="true"></yasgui>
+        <yasgui *ngIf="detailsOn" class="mt-2" [query]="query" [readonly]="true" [hideButtons]="true"></yasgui>
 
 
         <div #blockingDiv class="blockingDiv" style="display:none">

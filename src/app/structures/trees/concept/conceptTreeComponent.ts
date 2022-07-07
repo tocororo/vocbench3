@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { mergeMap } from 'rxjs/operators';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
@@ -49,8 +49,8 @@ export class ConceptTreeComponent extends AbstractTree {
     private lastInitTimestamp: number;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices,
-        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
-        super(eventHandler, basicModals, sharedModals);
+        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, basicModals, sharedModals, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             (data: { concept: ARTURIResource, schemes: ARTURIResource[] }) => this.onTopConceptCreated(data.concept, data.schemes)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(

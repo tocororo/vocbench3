@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
 import { Observable, of } from 'rxjs';
@@ -64,7 +64,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private modalService: NgbModal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper,
-        private translateService: TranslateService) {
+        private translateService: TranslateService, private changeDetectorRef: ChangeDetectorRef) {
         super(cfService, resourceService, basicModals, sharedModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
@@ -202,9 +202,9 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, message, lexicons, this.rendering).then(
                         (lexicons: ARTURIResource[]) => {
                             this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), lexicons[0]); //update the active lexicon
-                            setTimeout(() => { //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset
-                                this.selectSearchedResource(resource); //then open the list on the searched resource
-                            });
+                            //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset
+                            this.changeDetectorRef.detectChanges();
+                            this.selectSearchedResource(resource); //then open the list on the searched resource
                         },
                         () => { }
                     );
@@ -220,16 +220,14 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     this.firstDigitIndex = index.charAt(0);
                     this.secondDigitIndex = index.charAt(1);
                     this.onDigitChange();
-                    setTimeout(() => {
-                        this.openAt(resource);
-                    });
+                    this.changeDetectorRef.detectChanges();
+                    this.openAt(resource);
                 }
             );
         } else { //search based
             this.viewChildList.forceList([resource]);
-            setTimeout(() => {
-                this.openAt(resource);
-            });
+            this.changeDetectorRef.detectChanges();
+            this.openAt(resource);
         }
     }
 

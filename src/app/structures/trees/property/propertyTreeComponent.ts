@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFS } from "../../../models/Vocabulary";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -30,10 +30,10 @@ export class PropertyTreeComponent extends AbstractTree {
     structRole = RDFResourceRolesEnum.property;
 
     constructor(private propertyService: PropertyServices, private searchService: SearchServices,
-        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
         
-        super(eventHandler, basicModals, sharedModals);
-
+        super(eventHandler, basicModals, sharedModals, changeDetectorRef);
+        
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(
             (node: ARTURIResource) => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(

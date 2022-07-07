@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { CustomFormPickerModal } from 'src/app/customForms/editors/customFormPickerModal';
@@ -62,7 +62,8 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
 
 
 
-    constructor(private customViewService: CustomViewsServices, private basicModals: BasicModalServices, private modalService: NgbModal, private translateService: TranslateService) {
+    constructor(private customViewService: CustomViewsServices, private basicModals: BasicModalServices, private modalService: NgbModal, private translateService: TranslateService,
+        private changeDetectorRef: ChangeDetectorRef) {
         super();
     }
 
@@ -155,10 +156,9 @@ export class AdvSingleValueViewEditorComponent extends AbstractCustomViewEditor 
     }
 
     private refreshYasguiEditors() {
-        setTimeout(() => {
-            this.retrieveYasgui.forceContentUpdate();
-            this.singleValueEditor.refreshYasguiEditor();
-        });
+        this.changeDetectorRef.detectChanges();
+        this.retrieveYasgui.forceContentUpdate();
+        this.singleValueEditor.refreshYasguiEditor();
     }
 
     emitChanges(): void {

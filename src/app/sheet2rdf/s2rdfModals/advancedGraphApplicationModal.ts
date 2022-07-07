@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
 import { forkJoin, Observable, of } from "rxjs";
@@ -47,7 +47,7 @@ export class AdvancedGraphApplicationModal {
 
     constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private s2rdfCtx: Sheet2RdfContextService,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal,
-        private translateService: TranslateService) {
+        private translateService: TranslateService, private changeDetectorRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -176,10 +176,10 @@ export class AdvancedGraphApplicationModal {
                 } else { //not used => add it
                     let newMapping = { prefix: mapping.prefix, namespace: mapping.namespace, explicit: true };
                     this.localPrefixMappings.push(newMapping);
-                    setTimeout(() => {
-                        this.prefixNsTableElement.nativeElement.scrollTop = this.prefixNsTableElement.nativeElement.scrollHeight;
-                        this.selectMapping(newMapping);
-                    });
+
+                    this.changeDetectorRef.detectChanges();
+                    this.prefixNsTableElement.nativeElement.scrollTop = this.prefixNsTableElement.nativeElement.scrollHeight;
+                    this.selectMapping(newMapping);
                 }
             }
         );

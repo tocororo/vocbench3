@@ -81,7 +81,7 @@ export class ResourceListSelectionComponent {
     private increaseRate: number = this.initialRes / 5;
     onScroll() {
         let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
-        if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
+        if (Math.abs(scrollElement.scrollHeight - scrollElement.offsetHeight - scrollElement.scrollTop) < 2) {
             //bottom reached => increase max range if there are more roots to show
             if (this.resLimit < this.resources.length) {
                 this.resLimit += this.increaseRate;

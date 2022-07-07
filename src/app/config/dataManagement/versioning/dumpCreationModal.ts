@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsServices } from "src/app/services/settingsServices";
 import { ModalType } from 'src/app/widget/modal/Modals';
@@ -44,16 +44,16 @@ export class DumpCreationModal {
     private selectedRepoBackendType: BackendTypesEnum = this.backendTypes[0];
 
     constructor(public activeModal: NgbActiveModal, private extensionService: ExtensionsServices, private settingsService: SettingsServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private changeDetectorRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
         this.extensionService.getExtensions(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
             extensions => {
                 this.repoExtensions = <ConfigurableExtensionFactory[]>extensions;
-                setTimeout(() => { //let the dataRepoConfigurator component to be initialized (due to *ngIf="dataRepoExtensions")
-                    this.repoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
-                });
+                //let the dataRepoConfigurator component to be initialized (due to *ngIf="repoExtensions")
+                this.changeDetectorRef.detectChanges();
+                this.repoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
             }
         );
 

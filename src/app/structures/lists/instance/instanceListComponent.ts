@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
@@ -40,8 +40,8 @@ export class InstanceListComponent extends AbstractList {
 
     translationParam: { count: number, safeToGoLimit: number };
 
-    constructor(private clsService: ClassesServices, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private clsService: ClassesServices, eventHandler: VBEventHandler, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: {instance: ARTResource, cls: ARTResource}) => { 
                 if (this.cls == null) return;
@@ -103,10 +103,9 @@ export class InstanceListComponent extends AbstractList {
                 this.resumePendingSearch();
             }
         } else { //class not provided, reset the instance list
-            //setTimeout prevent ExpressionChangedAfterItHasBeenCheckedError on isOpenGraphEnabled('dataOriented') in the parent panel
-            setTimeout(() => {
-                this.setInitialStatus();
-            });
+            this.setInitialStatus();
+            //prevent ExpressionChangedAfterItHasBeenCheckedError on isOpenGraphEnabled('dataOriented') in the parent panel
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -123,9 +122,8 @@ export class InstanceListComponent extends AbstractList {
                 this.openListAt(this.pendingSearchRes); //standard mode => simply open list (focus searched res)
             } else { //search mode => set the pending searched resource as only element of the list and then focus it
                 this.forceList([this.pendingSearchRes]);
-                setTimeout(() => {
-                    this.openListAt(this.pendingSearchRes);
-                });
+                this.changeDetectorRef.detectChanges();
+                this.openListAt(this.pendingSearchRes);
             }
         }
     }

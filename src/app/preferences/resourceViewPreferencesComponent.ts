@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { ResourceViewMode, ResourceViewPreference, ResourceViewType } from "../models/Properties";
 import { OntoLex, SKOS } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
@@ -10,6 +10,8 @@ import { VBProperties } from "../utils/VBProperties";
     templateUrl: "./resourceViewPreferencesComponent.html"
 })
 export class ResourceViewPreferencesComponent {
+
+    @Input() vbPrefPage: boolean; //tells if this component is used inside the generic VB preferences page (useful when handling resViewModeChangedEvent)
 
     resViewMode: ResourceViewMode;
     private resViewTabSync: boolean;
@@ -54,7 +56,7 @@ export class ResourceViewPreferencesComponent {
 
     onResViewModeChange() {
         this.vbProp.setResourceViewMode(this.resViewMode);
-        this.eventHandler.resViewModeChangedEvent.emit({ mode: this.resViewMode, fromVbPref: true });
+        this.eventHandler.resViewModeChangedEvent.emit({ mode: this.resViewMode, fromVbPref: this.vbPrefPage });
     }
 
     onResViewConceptTypeChange() {

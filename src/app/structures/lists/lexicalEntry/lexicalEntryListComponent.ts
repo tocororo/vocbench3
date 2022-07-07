@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { mergeMap } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
@@ -39,8 +39,8 @@ export class LexicalEntryListComponent extends AbstractList {
 
     translationParam: { count: number, safeToGoLimit: number };
 
-    constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, changeDetectorRef);
         
         this.eventSubscriptions.push(eventHandler.lexicalEntryCreatedEvent.subscribe(
             (data: { entry: ARTURIResource, lexicon: ARTURIResource }) => {

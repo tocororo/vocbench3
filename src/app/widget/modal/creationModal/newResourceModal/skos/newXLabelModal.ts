@@ -1,8 +1,7 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { SKOSXL } from "../../../../../models/Vocabulary";
-import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
 
 @Component({
@@ -24,13 +23,12 @@ export class NewXLabelModal {
 
     values: ARTLiteral[] = [];
 
-    constructor(public activeModal: NgbActiveModal, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) {
+    constructor(public activeModal: NgbActiveModal, private browsingModals: BrowsingModalServices, private changeDetectorRef: ChangeDetectorRef) {
     }
 
     ngAfterViewInit() {
-        setTimeout(() => {
-            this.viewInitialized = true;
-        });
+        this.viewInitialized = true;
+        this.changeDetectorRef.detectChanges();
     }
 
     onEnter(event: KeyboardEvent) {

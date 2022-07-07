@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, forwardRef, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTNode } from "../../models/ARTResources";
 import { FormField } from "../../models/CustomForms";
@@ -16,7 +16,7 @@ export class CustomFormField implements ControlValueAccessor {
 
     field: FormField;
 
-    constructor() { }
+    constructor(private changeDetectorRef: ChangeDetectorRef) { }
 
     private initLang() {
         //if an input language is provided and the field uses the coda:langString converter
@@ -44,12 +44,9 @@ export class CustomFormField implements ControlValueAccessor {
      * has coda:langString as converter
      */
     onConverterLangChange(newLang: string, formFieldConvArgumentPh: FormField) {
-        /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
-        (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
-        window.setTimeout(() => {
-            formFieldConvArgumentPh.value = newLang;
-            this.propagateChange(this.field);
-        });
+        this.changeDetectorRef.detectChanges();
+        formFieldConvArgumentPh.value = newLang;
+        this.propagateChange(this.field);
     }
 
     /**

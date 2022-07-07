@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
 import { Observable, of } from 'rxjs';
@@ -54,10 +54,10 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //for visualization searchBased
     lastSearch: string;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private browsingModals: BrowsingModalServices, private modalService: NgbModal,
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private browsingModals: BrowsingModalServices, private modalService: NgbModal, 
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper,
-        private translateService: TranslateService) {
+        private translateService: TranslateService, private changeDetectorRef: ChangeDetectorRef) {
         super(cfService, resourceService, basicModals, sharedModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
@@ -209,9 +209,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         this.basicModals.confirm({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_CONFIRM" }, ModalType.warning).then(
                             confirm => {
                                 this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), []); //update the active schemes
-                                setTimeout(() => {
-                                    this.selectResourceVisualizationModeAware(resource);
-                                });
+                                this.changeDetectorRef.detectChanges();
+                                this.selectResourceVisualizationModeAware(resource);
                             },
                             cancel => { }
                         );
@@ -227,9 +226,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                                 this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, message, schemes, this.rendering).then(
                                     (schemes: ARTURIResource[]) => {
                                         this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(schemes[0])); //update the active schemes
-                                        setTimeout(() => {
-                                            this.selectResourceVisualizationModeAware(resource);
-                                        });
+                                        this.changeDetectorRef.detectChanges();
+                                        this.selectResourceVisualizationModeAware(resource);
                                     },
                                     () => { }
                                 );
@@ -247,9 +245,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             this.openTreeAt(resource);
         } else {
             this.viewChildTree.forceList([resource]);
-            setTimeout(() => {
-                this.viewChildTree.openRoot([resource]);
-            });
+            this.changeDetectorRef.detectChanges();
+            this.viewChildTree.openRoot([resource]);
         }
     }
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Observable, Subscription } from "rxjs";
 import { finalize, map } from 'rxjs/operators';
@@ -144,7 +144,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         private versionService: VersionsServices, private resourcesService: ResourcesServices, private collaborationService: CollaborationServices,
         private metadataRegistryService: MetadataRegistryServices, private notificationsService: NotificationServices,
         private eventHandler: VBEventHandler, private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
-        private basicModals: BasicModalServices, private collabModals: CollaborationModalServices) {
+        private basicModals: BasicModalServices, private collabModals: CollaborationModalServices, private changeDetectorRef: ChangeDetectorRef) {
         super(resViewService, modalService);
         this.eventSubscriptions.push(this.eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
@@ -249,16 +249,16 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             }
         );
 
-        setTimeout(() => {
-            this.updateCollaborationStatus();
-            if (this.collaborationAvailable) {
-                this.initCollaboration();
-            }
-            this.timeActionsEnabled = !this.inModal && this.projectCtx == null && this.atTime == null;
-            this.settingsAvailable = !this.inModal; //settings available only if RV is shown in data page (not in modal)
+        
+        this.updateCollaborationStatus();
+        if (this.collaborationAvailable) {
+            this.initCollaboration();
+        }
+        this.timeActionsEnabled = !this.inModal && this.projectCtx == null && this.atTime == null;
+        this.settingsAvailable = !this.inModal; //settings available only if RV is shown in data page (not in modal)
+        this.initNotificationsAvailable();
 
-            this.initNotificationsAvailable();
-        });
+        this.changeDetectorRef.detectChanges();
     }
 
     /**

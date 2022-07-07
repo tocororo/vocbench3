@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import { Observable } from 'rxjs';
 import { ConfigurationComponents } from "../models/Configuration";
 import { SparqlServices } from "../services/sparqlServices";
@@ -13,8 +13,8 @@ import { AbstractSparqlTabComponent } from "./abstractSparqlTabComponent";
 })
 export class SparqlTabComponent extends AbstractSparqlTabComponent {
 
-    constructor(sparqlService: SparqlServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
-        super(sparqlService, basicModals, sharedModals);
+    constructor(sparqlService: SparqlServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
+        super(sparqlService, basicModals, sharedModals, changeDetectorRef);
     }
 
     evaluateQueryImpl(): Observable<any> {

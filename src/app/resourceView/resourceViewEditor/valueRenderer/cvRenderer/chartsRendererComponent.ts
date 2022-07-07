@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input } from "@angular/core";
 import { ARTNode } from "src/app/models/ARTResources";
 import { AbstractSparqlBasedView, CustomViewVariables, SeriesCollectionView, SeriesView, ViewsEnum } from "src/app/models/CustomViews";
 import { CustomViewsServices } from "src/app/services/customViewsServices";
@@ -37,7 +37,7 @@ export class ChartsRendererComponent extends AbstractSingleViewRendererComponent
 
     viewInitialized: boolean;
 
-    constructor(private cvService: CustomViewsServices) {
+    constructor(private cvService: CustomViewsServices, private changeDetectorRef: ChangeDetectorRef) {
         super();
     }
 
@@ -61,9 +61,8 @@ export class ChartsRendererComponent extends AbstractSingleViewRendererComponent
     }
 
     ngAfterViewInit() {
-        setTimeout(() => {
-            this.viewInitialized = true;
-        });
+        this.changeDetectorRef.detectChanges();
+        this.viewInitialized = true;
     }
 
     protected initActionStatus(): void {
@@ -140,9 +139,8 @@ export class ChartsRendererComponent extends AbstractSingleViewRendererComponent
     onWidgetChanged() {
         //hack to make chart initialized well into the container
         this.viewInitialized = false;
-        setTimeout(() => {
-            this.viewInitialized = true;
-        });
+        this.changeDetectorRef.detectChanges();
+        this.viewInitialized = true;
     }
 
 }

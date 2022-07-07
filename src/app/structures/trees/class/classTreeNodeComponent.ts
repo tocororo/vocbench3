@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
@@ -29,8 +29,8 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     showInstanceNumber: boolean = false;
 
     constructor(private clsService: ClassesServices, eventHandler: VBEventHandler,
-        basicModals: BasicModalServices, sharedModals: SharedModalServices) {
-        super(eventHandler, basicModals, sharedModals);
+        basicModals: BasicModalServices, sharedModals: SharedModalServices, changeDetectorRef: ChangeDetectorRef) {
+        super(eventHandler, basicModals, sharedModals, changeDetectorRef);
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             (data: any) => this.onChildCreated(data.superClass, data.subClass)));
         this.eventSubscriptions.push(eventHandler.superClassAddedEvent.subscribe(

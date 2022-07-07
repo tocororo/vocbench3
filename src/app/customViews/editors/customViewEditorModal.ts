@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { Reference } from "src/app/models/Configuration";
@@ -74,7 +74,8 @@ export class CustomViewEditorModal {
 
     customViewDef: CustomViewDefinition;
 
-    constructor(private customViewService: CustomViewsServices, private basicModals: BasicModalServices, private activeModal: NgbActiveModal, private elementRef: ElementRef) {
+    constructor(private customViewService: CustomViewsServices, private basicModals: BasicModalServices, private activeModal: NgbActiveModal,
+        private elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -169,6 +170,7 @@ export class CustomViewEditorModal {
 
     onModelChanged() {
         this.customViewDef = null; //model changed => cvDef is invalid now
+        this.changeDetectorRef.detectChanges();
         this.adaptModalSize();
     }
 
