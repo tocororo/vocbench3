@@ -16,7 +16,7 @@ import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { ActionDescription, RoleActionResolver } from "../../../utils/RoleActionResolver";
-import { UIUtils } from "../../../utils/UIUtils";
+import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionFunctionCtx, VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
@@ -225,7 +225,12 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                             schemes => {
                                 this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, message, schemes, this.rendering).then(
                                     (schemes: ARTURIResource[]) => {
-                                        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(schemes[0])); //update the active schemes
+                                        if (this.context == TreeListContext.addPropValue) {
+                                            //update active scheme only here, so outside the "add" operation everything stays unchanged 
+                                            this.workingSchemes = this.workingSchemes.slice().concat(schemes[0]); //slice so workingScheme is a new object and triggers ngOnChanges in ConceptTreeComponent
+                                        } else {
+                                            this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(schemes[0])); //update the active schemes
+                                        }
                                         this.changeDetectorRef.detectChanges();
                                         this.selectResourceVisualizationModeAware(resource);
                                     },

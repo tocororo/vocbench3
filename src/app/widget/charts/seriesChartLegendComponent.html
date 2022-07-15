@@ -1,7 +1,7 @@
 <div style="width: 250px;">
     <div class="p-2" style="background: #eee;">
         <div *ngFor="let d of chartData" class="legend-entry" (mouseover)="onActivate(d)" (mouseout)="onDeactivate()">
-            <span class="fas fa-stop mr-2" [ngStyle]="{ 'color': colorHelper.getColor(d.value) }"></span>
+            <span class="fas fa-stop mr-2" [ngStyle]="{ 'color': colorHelper.getColor(d.name) }"></span>
             <span class="legend-label ellipsable" [ngClass]="{ 'active': isLabelActive(d) }" [title]="d.name">
                 {{d.name}} 
             </span>

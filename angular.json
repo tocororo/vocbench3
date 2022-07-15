@@ -79,6 +79,13 @@
               "src/app/widget/codemirror/mustacheEditor/mustache.js",
               "src/app/widget/codemirror/manchesterEditor/manchester.js",
               "src/app/widget/codemirror/pearlEditor/pearl.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "@ctrl/ngx-codemirror",
+              "jsprolog",
+              "yasgui-yasqe",
+              "jquery",
+              "file-saver"
             ]
           },
           "configurations": {
