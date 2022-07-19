@@ -115,9 +115,9 @@ export class ConceptTreeSettingsModal {
 
     changeBaseBroaderProperty() {
         let rootBroader: ARTURIResource = SKOS.broader;
-        if (this.userGroup != null) {
-            rootBroader = new ARTURIResource(this.userGroupBaseBroaderProp);
-        }
+        // if (this.userGroup != null) {
+        //     rootBroader = new ARTURIResource(this.userGroupBaseBroaderProp);
+        // }
         this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.SELECT_PROPERTY" }, [rootBroader]).then(
             (prop: ARTURIResource) => {
                 this.baseBroaderProp = prop.getURI();
