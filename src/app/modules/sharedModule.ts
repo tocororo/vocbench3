@@ -52,6 +52,7 @@ import { ResourceListSelectionComponent } from '../widget/rdfResource/resourceLi
 import { ResizableLayoutComponent } from '../widget/resizableLayout/resizableLayoutComponent';
 import { DataSizeRenderer } from '../widget/settingsRenderer/dataSizeRenderer';
 import { NestedSettingSetRendererComponent } from '../widget/settingsRenderer/nestedSettingsRendererComponent';
+import { SettingConfigurationRendererComponent } from '../widget/settingsRenderer/settingConfigurationRendererComponent';
 import { SettingMapRendererComponent } from '../widget/settingsRenderer/settingMapRendererComponent';
 import { SettingPropRendererComponent } from '../widget/settingsRenderer/settingPropRendererComponent';
 import { SettingSetRendererComponent } from '../widget/settingsRenderer/settingSetRendererComponent';
@@ -111,6 +112,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ResourceListSelectionComponent,
         ResourcePickerComponent,
         SanitizerDirective,
+        SettingConfigurationRendererComponent,
         SettingMapRendererComponent,
         SettingPropRendererComponent,
         SettingValueRendererComponent,
@@ -167,6 +169,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ResourceListSelectionComponent,
         ResourcePickerComponent,
         SanitizerDirective,
+        // SettingConfigurationRendererComponent,
         SettingMapRendererComponent,
         SettingPropRendererComponent,
         SettingValueRendererComponent,

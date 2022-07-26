@@ -92,7 +92,7 @@ export class SearchBarComponent {
         );
     }
 
-    private customSearch() {
+    customSearch() {
         const modalRef: NgbModalRef = this.modalService.open(LoadCustomSearchModal, new ModalOptions());
         modalRef.result.then(
             customSearchRef => {

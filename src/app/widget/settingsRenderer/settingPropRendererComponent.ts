@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTNode, RDFResourceRolesEnum } from '../../models/ARTResources';
-import { Settings, SettingsProp, SettingsPropTypeConstraint } from '../../models/Plugins';
+import { PluginSpecification, Settings, SettingsProp, SettingsPropTypeConstraint } from '../../models/Plugins';
 
 @Component({
     selector: 'setting-prop-renderer',
@@ -30,12 +30,12 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         this.propagateChange(this.prop);
     }
 
-    private updateBoolean(prop: SettingsProp, value: boolean) {
+    updateBoolean(prop: SettingsProp, value: boolean) {
         prop.value = value;
         this.propagateChange(this.prop);
     }
 
-    private updateValue(prop: SettingsProp, value: ARTNode) {
+    updateValue(prop: SettingsProp, value: ARTNode) {
         if (value == null) {
             prop.value = null;
         } else {
@@ -44,7 +44,7 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         this.propagateChange(this.prop);
     }
 
-    private updatePropertiesValue(prop: SettingsProp, value: Settings) {
+    updatePropertiesValue(prop: SettingsProp, value: Settings) {
         if (value == null) {
             prop.value = null;
         } else {
@@ -53,28 +53,33 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         this.propagateChange(this.prop);
     }
 
-    private updateSetValue(prop: SettingsProp, value: any[]) {
+    updateSetValue(prop: SettingsProp, value: any[]) {
         prop.value = value;
         this.propagateChange(this.prop);
     }
 
-    private updateMapValue(prop: SettingsProp, value: any[]) {
+    updateMapValue(prop: SettingsProp, value: any[]) {
         prop.value = value;
         this.propagateChange(this.prop);
     }
 
-    private addOptionalSettingsValue(prop: SettingsProp) {
+    updateConfigurationValue(prop: SettingsProp, value: PluginSpecification) {
+        prop.value = value;
+        this.propagateChange(this.prop);
+    }
+
+    addOptionalSettingsValue(prop: SettingsProp) {
         prop.value = prop.type.schema.clone();
         this.propagateChange(this.prop);
     }
 
-    private deleteOptionalSettingsValue(prop: SettingsProp) {
+    deleteOptionalSettingsValue(prop: SettingsProp) {
         prop.value = null;
         this.propagateChange(this.prop);
     }
 
 
-    private getIRIRoleConstraints(prop: SettingsProp): RDFResourceRolesEnum[] {
+    getIRIRoleConstraints(prop: SettingsProp): RDFResourceRolesEnum[] {
         /**
          * use a cache mechanism to avoid to recreate a roles array each time getIRIRoleConstraints is called
          * (so prevent firing change detection in resource-picker)
@@ -95,7 +100,7 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         return roles;
     }
 
-    private isLanguageTaggedString(prop: SettingsProp): boolean {
+    isLanguageTaggedString(prop: SettingsProp): boolean {
         /**
          * use a cache mechanism to avoid to recreate a languageTaggedString field each time isLanguageTaggedString is called
          */

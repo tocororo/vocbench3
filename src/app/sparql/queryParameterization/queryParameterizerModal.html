@@ -42,9 +42,7 @@
                                 </select>
                             </td>
                             <td>
-                                <div *ngIf="b.bindingType?.value=='assignment'; else constraintBlock" class="input-group input-group-sm">
-                                    <value-picker [value]="b.value" (valueChanged)="updateValue(b, $event)"></value-picker>
-                                </div>
+                                <value-picker *ngIf="b.bindingType?.value=='assignment'; else constraintBlock" [value]="b.value" (valueChanged)="updateValue(b, $event)"></value-picker>
                                 <ng-template #constraintBlock>
                                     <select *ngIf="b.bindingType?.specialization=='datatype'; else roleBlock" class="form-control" [(ngModel)]="b.datatype">
                                         <option *ngFor="let d of datatypes" [ngValue]="d">{{d.getShow()}}</option>

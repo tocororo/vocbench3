@@ -55,6 +55,9 @@
             <setting-map *ngSwitchCase="'Map'" [value]="prop.value" [types]="prop.type.typeArguments" 
                 (valueChanged)="updateMapValue(prop, $event)" [disabled]="disabled"></setting-map>
 
+            <setting-configuration *ngSwitchCase="'Configuration'" [value]="prop.value" [constraints]="prop.type.constraints" [disabled]="disabled"
+                (valueChanged)="updateConfigurationValue(prop, $event)"></setting-configuration>
+
             <ng-container *ngSwitchCase="'Properties'">
                 <ng-container *ngIf="prop.required || prop.value; else collapsedNestedSettings">
                     <div class="d-flex align-items-center">

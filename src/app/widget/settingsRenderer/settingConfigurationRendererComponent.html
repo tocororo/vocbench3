@@ -1,0 +1,4 @@
+<extension-configurator *ngIf="extensions" [extensions]="extensions" [disabled]="disabled"
+    (extensionUpdated)="onExtensionChange($event)"
+    (configurationUpdated)="onExtensionConfigUpdated($event)">
+</extension-configurator>

@@ -105,7 +105,7 @@ export class Settings {
                     value = undefined;
                 }
             } else if (value instanceof Settings) {
-                value = value.getPropertiesAsMap();
+                value = value.getPropertiesAsMap(true);
             } else if (value != null && typeof value == "object") { //object => probably a map (associative array object)
                 //don't do nothing except for empty map (clear the value)
                 if (Object.keys(value).length === 0) {
