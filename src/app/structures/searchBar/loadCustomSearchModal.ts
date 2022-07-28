@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { SearchServices } from 'src/app/services/searchServices';
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { ConfigurationComponents, Reference } from "../../models/Configuration";
 import { Scope, Settings } from "../../models/Plugins";
@@ -22,7 +23,7 @@ export class LoadCustomSearchModal {
     references: Reference[];
     selectedRef: Reference;
 
-    constructor(public activeModal: NgbActiveModal, private settingsService: SettingsServices,
+    constructor(public activeModal: NgbActiveModal, private settingsService: SettingsServices, private searchService: SearchServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
@@ -36,7 +37,7 @@ export class LoadCustomSearchModal {
     }
 
     initReferences() {
-        this.settingsService.getSettings(ConfigurationComponents.CUSTOM_SEARCH_STORE, this.selectedScope).subscribe(
+        this.searchService.getCustomSearchSettings(this.selectedScope).subscribe(
             settings => {
                 this.settings = settings;
                 this.references = [];
@@ -83,7 +84,7 @@ export class LoadCustomSearchModal {
                     }
                 });
                 //store the updated settings
-                this.settingsService.storeSettings(ConfigurationComponents.CUSTOM_SEARCH_STORE, this.selectedScope, this.settings.getPropertiesAsMap()).subscribe(
+                this.searchService.storeCustomSearchSettings(this.selectedScope, this.settings.getPropertiesAsMap()).subscribe(
                     stResp => {
                         this.initReferences(); //refresh the references
                     }
@@ -93,7 +94,7 @@ export class LoadCustomSearchModal {
         );
     }
 
-    private selectReference(reference: Reference) {
+    selectReference(reference: Reference) {
         if (this.selectedRef == reference) {
             this.selectedRef = null;
         } else {
@@ -101,7 +102,7 @@ export class LoadCustomSearchModal {
         }
     }
 
-    private deleteReference(reference: Reference) {
+    deleteReference(reference: Reference) {
         //update the setting
         let updatedPropValue: string[] = [];
         this.references.forEach(ref => {
@@ -115,7 +116,7 @@ export class LoadCustomSearchModal {
             }
         });
         //store the updated settings
-        this.settingsService.storeSettings(ConfigurationComponents.CUSTOM_SEARCH_STORE, this.selectedScope, this.settings.getPropertiesAsMap()).subscribe(
+        this.searchService.storeCustomSearchSettings(this.selectedScope, this.settings.getPropertiesAsMap()).subscribe(
             stResp => {
                 this.initReferences(); //refresh the references
             }

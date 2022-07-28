@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
-import { Settings } from '../models/Plugins';
+import { Scope, Settings } from '../models/Plugins';
 import { MultischemeMode, SearchMode, StatusFilter } from "../models/Properties";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
@@ -359,6 +359,34 @@ export class SearchServices {
                 return Deserializer.createResourceArray(stResp);
             })
         );
+    }
+
+    /**
+     * 
+     * @param scope 
+     */
+    getCustomSearchSettings(scope: Scope, options?: VBRequestOptions): Observable<Settings> {
+        let params = {
+            scope: scope
+        };
+        return this.httpMgr.doGet(this.serviceName, "getCustomSearchSettings", params, options).pipe(
+            map(stResp => {
+                return Settings.parse(stResp);
+            })
+        );
+    }
+
+    /**
+     * 
+     * @param scope 
+     * @param settings 
+     */
+    storeCustomSearchSettings(scope: Scope, settings: any) {
+        let params = {
+            scope: scope,
+            settings: JSON.stringify(settings)
+        };
+        return this.httpMgr.doPost(this.serviceName, "storeCustomSearchSettings", params);
     }
 
 }

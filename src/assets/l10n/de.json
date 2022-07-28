@@ -1531,7 +1531,7 @@
         "SHACL_SHAPES_LOADED": "SHACL-Formen wurden erfolgreich geladen",
         "SHACL_VIOLATION_ERROR": "Fehler beim Validieren der SHACL-Form",
         "SKOS_DIFFING_SERVER_NOT_RESPONDING": "Der SKOS-Diffing-Server hat nicht geantwortet. Stellen Sie sicher, dass er läuft.",
-        "STORED_PARAMETERIZED_QUERY_ALREADY_ADDED": "Die parametrisierte SPARQL-Abfrage '{{ref}}' befindet sich bereits in der Liste der gespeicherten benutzerdefinierten Suchen. Sie wird nicht hinzugefügt.\n\n\n\n\n",
+        "STORED_PARAMETERIZED_QUERY_ALREADY_ADDED": "Die parametrisierte SPARQL-Abfrage '{{ref}}' befindet sich bereits in der Liste der gespeicherten benutzerdefinierten Suchen. Sie wird nicht hinzugefügt.",
         "ST_DATA_FOLDER_UPDATED": "SemanticTurkey-Datenordner wurde aktualisiert.",
         "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_CONFIRM": "Die gesuchte Instanz gehört zu einer Klasse, die derzeit nicht ausgewählt ist ({{cls}}). Möchten Sie die Klasse wechseln?",
         "SWITCH_CLASS_FOR_SEARCHED_INSTANCE_SELECT": "Die gesuchte Instanz gehört zu den folgenden Klassen. Wenn Sie die Suche abschließen möchten, bitte eine auswählen und bestätigen.",
