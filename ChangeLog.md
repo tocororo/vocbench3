@@ -6,6 +6,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 11.1.1 (dd-mm-202y)
   * Fixed performances issues by replacing usage setTimeout() with ChangeDetectorRef#detectChanges(). Thanks to Saku Seppälä for the contribution!
+  * Fixed authorization issues with CustomSearch stored at system level 
 
 # 11.1.0 (23-06-2022)
   * Added support for EXT project universal access level (if a user has access to the project, ACL table 

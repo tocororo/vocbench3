@@ -21,7 +21,6 @@
                     <div class="dropdown-menu float-right" ngbDropdownMenu>
                         <a class="dropdown-item" (click)="reload()" [title]="'CUSTOM_SERVICES.FORCE_RELOAD_INFO'|translate">
                             {{'CUSTOM_SERVICES.FORCE_RELOAD'|translate}}
-                            <span class="fas fa-redo float-right ml-2"></span>
                         </a>
                     </div>
                 </div>
@@ -29,7 +28,7 @@
         </div>
     </div>
     <div class="card-body vbox scrollableContainer">
-        <div *ngFor="let id of serviceIds" class="listItem" [ngClass]="{ active: selectedServiceId == id }" (click)="selectService(id)">
+        <div *ngFor="let id of serviceIds" class="listItem ellipsable-left" [title]="id" [ngClass]="{ active: selectedServiceId == id }" (click)="selectService(id)">
             {{id}}
         </div>
     </div>

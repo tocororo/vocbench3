@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="card-body scrollableContainer" style="min-height: 200px;">
-                <div *ngFor="let entry of dirEntries" class="listItem" [ngClass]="{ active: selectedEntry == entry }" (click)="selectEntry(entry)" (dblclick)="doubleClickEntry(entry)">
+                <div *ngFor="let entry of dirEntries" class="listItem d-flex align-items-center" [ngClass]="{ active: selectedEntry == entry }" (click)="selectEntry(entry)" (dblclick)="doubleClickEntry(entry)">
                     <div *ngIf="multiselection" style="width: 20px;">
                         <input *ngIf="entry.type == 'FILE'" type="checkbox" style="vertical-align: middle" (click)="onEntryChecked(entry)" [checked]="selectedEntries.includes(entry.fullPath)">
                     </div>
@@ -54,7 +54,7 @@
 
         <div *ngIf="multiselection" class="card mt-2">
             <div class="card-body scrollableContainer" style="min-height: 200px;">
-                <div *ngFor="let e of selectedEntries" class="listItem">
+                <div *ngFor="let e of selectedEntries" class="listItem d-flex align-items-center">
                     <span style="flex: 1;">{{e}}</span>
                     <button class="btn btn-light btn-xs" (click)="removeCheckedEntry(e)" [title]="'ACTIONS.REMOVE'|translate">
                         <span class="fas fa-minus"></span>

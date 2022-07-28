@@ -55,7 +55,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div *ngFor="let memb of obj.members" class="listItem" (click)="selectMember(memb)"
+                                <div *ngFor="let memb of obj.members" class="listItem d-flex align-items-center" (click)="selectMember(memb)"
                                     [ngClass]="{active: memb == selectedMember}">
                                     <editable-resource style="flex: 1" [resource]="memb" [rendering]="rendering"
                                         [subject]="obj" [predicate]="membersProperty" [readonly]="readonly" [partition]="partition" 

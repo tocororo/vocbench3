@@ -13,7 +13,7 @@
 
 <div class="card card-default vbox">
     <div class="card-body scrollableContainer">
-        <div *ngFor="let dr of datarange" class="listItem">
+        <div *ngFor="let dr of datarange" class="listItem d-flex align-items-center">
             <rdf-resource style="flex: 1" [resource]="dr"></rdf-resource>
             <button class="btn btn-light btn-xs" (click)="remove(dr)">
                 <span class="far fa-trash-alt" [title]="'ACTIONS.REMOVE'|translate"></span>

@@ -37,7 +37,7 @@
                         <label>{{'WIDGETS.CONVERTER.SIGNATURE'|translate}}</label>
                     </div>
                     <div class="card-body">
-                        <div *ngFor="let s of availableSignatures" class="listItem" (click)="selectSignature(s)" [ngClass]="{ active: s == selectedSignature }">
+                        <div *ngFor="let s of availableSignatures" class="listItem d-flex align-items-center" (click)="selectSignature(s)" [ngClass]="{ active: s == selectedSignature }">
                             <span>{{getSignatureShow(s)}}</span>
                             <span *ngIf="s.getRequirementLevels() != 'IGNORED'" [title]="'Feature path ' + s.getRequirementLevels().toLocaleLowerCase()" style="margin-left: 4px; font-weight: bold;">
                                 <ng-container *ngIf="s.getRequirementLevels() == 'OPTIONAL'">

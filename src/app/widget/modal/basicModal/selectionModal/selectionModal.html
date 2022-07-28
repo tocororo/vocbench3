@@ -8,7 +8,7 @@
         </div>
         <div class="card vbox">
             <div class="card-body vbox scrollableContainer">
-                <div *ngFor="let opt of options" class="listItem" [ngClass]="{ active: optionSelected == opt }" (click)="optionSelected = opt">
+                <div *ngFor="let opt of options" class="listItem d-flex align-items-center" [ngClass]="{ active: optionSelected == opt }" (click)="optionSelected = opt">
                     <span *ngIf="plainOptions; else descrBlock">{{opt}}</span>
                     <ng-template #descrBlock>
                         <span style="white-space: nowrap;">

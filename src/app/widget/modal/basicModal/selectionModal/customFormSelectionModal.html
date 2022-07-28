@@ -5,7 +5,7 @@
     <div class="modal-body">
         <div class="card card-default vbox">
             <div class="card-body vbox scrollableContainer">
-                <div *ngFor="let cf of cfList" class="listItem" [ngClass]="{ active: selectedCF == cf }" (click)="selectedCF = cf">
+                <div *ngFor="let cf of cfList" class="listItem d-flex align-items-center" [ngClass]="{ active: selectedCF == cf }" (click)="selectedCF = cf">
                     <span style="white-space: nowrap;">
                         <span style="font-size: 13px;">{{cf.getName()}}</span>
                         <span *ngIf="cf.getDescription()" class="fas fa-info-circle" style="margin-left: 4px;" [title]="cf.getDescription()"></span>

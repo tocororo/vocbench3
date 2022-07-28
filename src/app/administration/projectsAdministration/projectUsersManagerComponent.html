@@ -92,7 +92,7 @@
         </div>
         <div class="card-body vbox scrollableContainer">
             <ng-container *ngFor="let u of usersBound">
-                <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
+                <div *ngIf="isUserVisible(u)" class="listItem d-flex align-items-center" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
                     <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
                     <span *ngIf="u.isAdmin()" class="badge badge-primary">Admin</span>
                 </div>
@@ -121,8 +121,7 @@
                             </div>
                             <div class="card-body vbox scrollableContainer">
                                 <ng-container *ngIf="puBinding">
-                                    <div *ngFor="let r of puBinding.getRoles()" (click)="selectUserRole(r)"
-                                        class="listItem" [ngClass]="{active: r == selectedUserRole}">
+                                    <div *ngFor="let r of puBinding.getRoles()" (click)="selectUserRole(r)" class="listItem" [ngClass]="{active: r == selectedUserRole}">
                                         {{r}}
                                     </div>
                                 </ng-container>
@@ -144,7 +143,7 @@
                                 </button>
                             </div>
                             <div class="card-body vbox scrollableContainer">
-                                <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
+                                <div *ngFor="let r of roleList" class="listItem d-flex align-items-center" (click)="selectRole(r)"
                                     [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r)}">
                                     <span style="flex: 1;">{{r.getName()}}</span>
                                     <span *ngIf="r.getLevel()=='project'" class="badge badge-secondary mr-2" style="font-size: 10px; padding: 2px 3px;"
@@ -171,8 +170,7 @@
                             </div>
                             <div class="card-body vbox scrollableContainer">
                                 <ng-container *ngIf="puBinding">
-                                    <div *ngIf="puBinding.getGroup()" class="listItem" [ngClass]="{active: selectedUserGroup}"
-                                        (click)="selectUserGroup(puBinding.getGroup())">
+                                    <div *ngIf="puBinding.getGroup()" class="listItem" [ngClass]="{active: selectedUserGroup}" (click)="selectUserGroup(puBinding.getGroup())">
                                         {{puBinding.getGroup().shortName}}
                                     </div>
                                 </ng-container>
@@ -211,7 +209,7 @@
                             </div>
                             <div class="card-body vbox scrollableContainer">
                                 <ng-container *ngIf="puBinding">
-                                    <div *ngFor="let l of puLanguages" class="listItem" [ngClass]="{active: selectedUserLangs?.includes(l)}"
+                                    <div *ngFor="let l of puLanguages" class="listItem d-flex align-items-center" [ngClass]="{active: selectedUserLangs?.includes(l)}"
                                         (click)="selectUserLang(l, $event)">
                                         <lang-item style="flex: 1" [language]="l" showTag="true"></lang-item>
                                         <span *ngIf="l.proficiency" class="fas fa-star"
@@ -270,7 +268,7 @@
                             </div>
                             <div class="card-body vbox scrollableContainer">
                                 <ng-container *ngFor="let l of availableLanguages">
-                                    <div *ngIf="isLangVisible(l)" class="listItem" [ngClass]="{active: selectedLangs?.includes(l)}" (click)="selectLang(l, $event)">
+                                    <div *ngIf="isLangVisible(l)" class="listItem d-flex align-items-center" [ngClass]="{active: selectedLangs?.includes(l)}" (click)="selectLang(l, $event)">
                                         <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
                                         <span *ngIf="l.proficiency" class="fas fa-star"
                                             [title]="'ADMINISTRATION.PROJECTS.PROJ_USER.LANGS.LANG_PROFICIENCIES_INFO'|translate">

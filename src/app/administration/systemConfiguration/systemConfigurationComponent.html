@@ -245,7 +245,7 @@
                             <div class="alert alert-info mb-2">
                                 {{'ADMINISTRATION.SYSTEM.REGISTRATION_FORM.OPTIONAL_FIELDS_INFO'|translate}}
                             </div>
-                            <div *ngFor="let f of optionalFields" class="listItem">
+                            <div *ngFor="let f of optionalFields" class="listItem d-flex align-items-center">
                                 <button class="btn btn-sm btn-light" (click)="updateOptionalFieldVisibility(f)" [ngClass]="{ active: f.visible }" style="margin-right: 4px;">
                                     <span *ngIf="f.visible" class="fas fa-eye"></span>
                                     <span *ngIf="!f.visible" class="fas fa-eye-slash"></span>

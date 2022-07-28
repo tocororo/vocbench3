@@ -66,7 +66,7 @@
                     
                         <div class="groupPanel-body">
                             <ng-container *ngIf="pd.open">
-                                <div *ngFor="let p of pd.projects" class="listItem project-row">
+                                <div *ngFor="let p of pd.projects" class="listItem d-flex align-items-center project-row">
                                     <div *ngIf="columnOrder['name']" class="text-center ellipsable" [ngStyle]="{ order: columnOrder['name'].order, flex: columnOrder['name'].flex }">
                                         {{p.getName(true)}}
                                     </div>
@@ -114,7 +114,7 @@
                     <ng-container *ngTemplateOutlet="headersTemplate"></ng-container>
                 </div>
                 <div>
-                    <div *ngFor="let p of projectList" class="listItem project-row">
+                    <div *ngFor="let p of projectList" class="listItem d-flex align-items-center project-row">
                         <div *ngIf="columnOrder['name']" class="text-center ellipsable" [ngStyle]="{ order: columnOrder['name'].order, flex: columnOrder['name'].flex }">
                             {{p.getName(true)}}
                         </div>

@@ -77,7 +77,7 @@
                         
                             <div class="groupPanel-body">
                                 <ng-container *ngIf="pd.open">
-                                    <div *ngFor="let p of pd.projects" class="listItem project-row" [ngClass]="{ active : selectedProject == p }" (click)="selectedProject = p">
+                                    <div *ngFor="let p of pd.projects" class="listItem d-flex align-items-center project-row" [ngClass]="{ active : selectedProject == p }" (click)="selectedProject = p">
                                         <div class="text-center ellipsable" style="flex: 3">
                                             {{p.getName(true)}}
                                         </div>

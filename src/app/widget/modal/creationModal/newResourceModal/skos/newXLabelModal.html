@@ -34,7 +34,7 @@
 
         <div class="card card-default" *ngIf="values.length > 0">
             <div class="card-body vbox scrollableContainer" style="max-height: 300px;">
-                <div *ngFor="let v of values" class="listItem">
+                <div *ngFor="let v of values" class="listItem d-flex align-items-center">
                     <rdf-resource style="flex: 1;" [resource]="v"></rdf-resource>
                     <button class="btn btn-light btn-xs" (click)="removeValue(v)">
                         <span class="far fa-trash-alt" [title]="'ACTIONS.REMOVE'|translate"></span>

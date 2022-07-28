@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="scrollableContainer" style="margin-top: 6px; border: 1px solid #ccc; border-radius: 3px;">
-                        <div *ngFor="let s of schemeList" class="listItem hbox" [ngClass]="{active : s == selectedScheme}">
+                        <div *ngFor="let s of schemeList" class="listItem d-flex align-items-center" [ngClass]="{active : s == selectedScheme}">
                             <rdf-resource [resource]="s.scheme" style="flex: 1;"></rdf-resource>
                             <input type="checkbox" [(ngModel)]="s.checked">
                         </div>

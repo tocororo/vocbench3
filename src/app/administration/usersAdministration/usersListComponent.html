@@ -91,7 +91,7 @@
     <div class="card-body vbox p-0">
         <div class="scrollableContainer">
             <ng-container *ngFor="let u of users">
-                <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
+                <div *ngIf="isUserVisible(u)" class="listItem d-flex align-items-center" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
                     <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
                     <span *ngIf="u.isAdmin()" class="fas fa-wrench mr-2" style="color: gray;" [title]="'ADMINISTRATION.USERS.ADMINISTRATOR'|translate"></span>
                     <span *ngIf="u.isSuperUser(true)" class="badge badge-primary mr-2" title="Super User">S</span>

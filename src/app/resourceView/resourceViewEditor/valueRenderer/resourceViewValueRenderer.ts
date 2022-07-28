@@ -6,7 +6,7 @@ import { ResViewPartition } from "../../../models/ResourceView";
 @Component({
     selector: "resview-value-renderer",
     templateUrl: "./resourceViewValueRenderer.html",
-    host: { class: "listItem" },
+    host: { class: "listItem d-flex align-items-center" },
 })
 export class ResourceViewValueRenderer {
 

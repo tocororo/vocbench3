@@ -6,7 +6,7 @@
         </button>
     </div>
     <div class="card-body scrollableContainer" style="min-height: 100px;">
-        <div *ngFor="let v of values" class="listItem">
+        <div *ngFor="let v of values" class="listItem d-flex align-items-center">
             <span style="flex: 1">{{v.toNT()}}</span>
             <button class="btn btn-light btn-xs" (click)="deleteValue(v)">
                 <span class="far fa-trash-alt"></span>

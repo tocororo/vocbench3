@@ -1,6 +1,6 @@
 <div class="card vbox">
     <div class="card-body scrollableContainer">
-        <div *ngFor="let r of roles" class="listItem">
+        <div *ngFor="let r of roles" class="listItem d-flex align-items-center">
             <input type="checkbox" [(ngModel)]="r.checked" (ngModelChange)="onModelChange()">
             <span class="ml-2">{{r.show}}</span>
         </div>

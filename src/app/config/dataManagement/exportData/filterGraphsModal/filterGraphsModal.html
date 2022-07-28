@@ -19,7 +19,7 @@
                 </span>
             </div>
             <div class="card-body scrollableContainer">
-                <div *ngFor="let g of graphs" class="listItem" style="align-items: center">
+                <div *ngFor="let g of graphs" class="listItem d-flex align-items-center">
                     <input type="checkbox" [(ngModel)]="g.checked">
                     <span style="margin-left: 5px;">{{g.graph.getURI()}}</span>
                 </div>

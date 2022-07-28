@@ -61,7 +61,7 @@
                     
                 </div>
                 <div class="card-body vbox">
-                    <div *ngFor="let g of advGraphs" class="listItem" [ngClass]="{ active : selectedAdvGraph == g }" (click)="selectAdvGraph(g)">
+                    <div *ngFor="let g of advGraphs" class="listItem d-flex" [ngClass]="{ active : selectedAdvGraph == g }" (click)="selectAdvGraph(g)">
                         <span class="ellipsable" style="flex: 1;">{{g.pattern}}</span>
                     </div>
                 </div>

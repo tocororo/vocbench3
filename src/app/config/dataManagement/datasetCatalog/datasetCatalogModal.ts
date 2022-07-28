@@ -15,8 +15,6 @@ import { DataDumpSelectorModal } from "./dataDumpSelectorModal";
     templateUrl: "./datasetCatalogModal.html",
     styles: [`
         .searchDatasetResult { 
-            flex-direction: column;
-            align-items: initial;
             margin-bottom: 3px;
             padding: 3px 6px;
             border: 1px solid #ddd;

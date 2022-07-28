@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="card-body scrollableContainer">
-                <div *ngFor="let op of operations" class="listItem">
+                <div *ngFor="let op of operations" class="listItem d-flex align-items-center">
                     <span style="flex: 1;">{{op.getShow()}}</span>
                     <button class="btn btn-xs btn-light" (click)="removeOperationFilter(op)">
                         <span class="fas fa-minus"></span>
@@ -26,7 +26,7 @@
                 </button>
             </div>
             <div class="card-body scrollableContainer">
-                <div *ngFor="let p of performers" class="listItem">
+                <div *ngFor="let p of performers" class="listItem d-flex align-items-center">
                     <span style="flex: 1">{{p.getShow()}}<span class="grayText">&nbsp;({{p.getEmail()}})</span></span>
                     <button class="btn btn-xs btn-light" (click)="removeOperationPerformer(p)">
                         <span class="fas fa-minus"></span>

@@ -8,7 +8,7 @@
         </div>
             
         <div class="scrollableContainer mt-2" style="border: 1px solid #ddd;">
-            <div *ngFor="let s of signatureList" class="listItem my-1 p-2" style="border: 1px solid #ddd; border-radius: 4px; align-items: center; flex-direction: column;" (click)="selectSignature(s)" [ngClass]="{active: selectedSignature == s}">
+            <div *ngFor="let s of signatureList" class="listItem d-flex align-items-center my-1 p-2" style="border: 1px solid #ddd; border-radius: 4px; align-items: center; flex-direction: column;" (click)="selectSignature(s)" [ngClass]="{active: selectedSignature == s}">
                 <div *ngIf="s.getParameters().length == 0">No parameters</div>
                 <div *ngFor="let p of s.getParameters()" class="mt-1">
                     <span style="color: #101094; font-family: Courier New, Courier, monospace">{{p.type}}</span>

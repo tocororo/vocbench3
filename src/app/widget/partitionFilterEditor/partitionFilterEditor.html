@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="card-body scrollableContainer">
-                <div *ngFor="let partition of selectedRolePartitionsStruct?.partitions" class="listItem">
+                <div *ngFor="let partition of selectedRolePartitionsStruct?.partitions" class="listItem d-flex align-items-center">
                     <input type="checkbox" [(ngModel)]="partition.checked" (ngModelChange)="updatePref()">
                     <span style="flex: 1; margin-left: 4px">{{partition.labelTranslationKey|translate}}</span>
                     <span *ngIf="partition.checked" class="fas fa-eye"></span>

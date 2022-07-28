@@ -411,8 +411,8 @@ img.disabled {
     padding: 3px;
     width: 100%;
     min-height: 24px;
-    display: flex;
-    align-items: center;
+    /* display: flex;
+    align-items: center; */
 }
 
 .listItem:hover {
@@ -907,6 +907,14 @@ textarea {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap !important;
+}
+
+/* Like the previous, but the ellipsis is on the left (e.g. "...long text") */
+.ellipsable-left {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+    direction: rtl;
 }
 
 .ellipsable>label {

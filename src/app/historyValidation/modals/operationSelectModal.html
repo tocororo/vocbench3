@@ -54,7 +54,7 @@
 
         <div class="card card-default vbox">
             <div class="card-body scrollableContainer">
-                <div *ngFor="let op of operationsToAdd" class="listItem">
+                <div *ngFor="let op of operationsToAdd" class="listItem d-flex align-items-center">
                     <span style="flex: 1;">{{getOperationShow(op, true)}}</span>
                     <button class="btn btn-xs btn-light" (click)="removeOperation(op)">
                         <span class="fas fa-minus"></span>

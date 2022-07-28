@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div *ngFor="let p of propChain" class="listItem" (click)="onChainPropertySelected(p)" [ngClass]="{active: selectedChainProperty == p}">
+                    <div *ngFor="let p of propChain" class="listItem d-flex" (click)="onChainPropertySelected(p)" [ngClass]="{active: selectedChainProperty == p}">
                         <rdf-resource [resource]="p.property"></rdf-resource>
                     </div>
                 </div>

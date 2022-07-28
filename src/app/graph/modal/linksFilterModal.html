@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div *ngFor="let pred of filter.predicates" class="listItem">
+                        <div *ngFor="let pred of filter.predicates" class="listItem d-flex align-items-center">
                             <input type="checkbox" [(ngModel)]="pred.checked">
                             <div class="hbox" style="align-items: center; margin: 0 2px;">
                                 <rdf-resource [resource]="pred.res" style="flex: initial"></rdf-resource>
