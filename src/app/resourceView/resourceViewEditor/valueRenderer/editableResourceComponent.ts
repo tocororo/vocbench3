@@ -97,7 +97,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
          * Initializes the editActionScenario: this tells how to handle the "edit" action.
          * For details see the comments written to the enum definitions of the EditActionScenarioEnum.
          */
-        if (this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) {
+        if (this.resource instanceof ARTLiteral && this.resource.getLang() != null) {
             this.editActionScenario = EditActionScenarioEnum.langTaggedLiteral;
         } else if (this.resource instanceof ARTLiteral && this.resource.getDatatype() != null) {
             this.editActionScenario = EditActionScenarioEnum.typedLiteral;
@@ -329,7 +329,9 @@ export class EditableResourceComponent extends AbstractResViewResource {
     confirmEdit() {
         if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
             if (this.editLiteralInProgress) {
+                console.log("1");
                 if (this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) {
+                    console.log("2");
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, (<ARTLiteral>this.resource).getLang());
                     if (this.partition == ResViewPartition.lexicalizations) {
                         this.updateLexicalization(this.subject, this.predicate, <ARTLiteral>this.resource, newValue);
@@ -339,6 +341,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         this.updateTriple(this.subject, this.predicate, this.resource, newValue);
                     }
                 } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral) {
+                    console.log("3");
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, (<ARTLiteral>this.resource).getDatatype(), null);
                     if (!this.isTypedLiteralValid(newValue)) {
                         this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.INVALID_VALUE_FOR_DATATYPE", params: { value: newValue.getValue(), datatype: newValue.getDatatype() } },
@@ -348,6 +351,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     }
                     this.updateTriple(this.subject, this.predicate, this.resource, newValue);
                 } else if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
+                    console.log("4");
                     let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
                     if (this.partition == ResViewPartition.lexicalizations) {
