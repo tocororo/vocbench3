@@ -3,12 +3,14 @@
         <img *ngIf="import.imports.length > 0" src="./assets/images/icons/arrow.png" (click)="open = !open"
             [ngClass]="{'arrow-right': !open}">
 	</div>
+    <img src="./assets/images/icons/res/ontology.png" class="ml-1 mr-2" height="16px" width="16px">
     <div style="flex: 1;" [ngClass]="{ proposedAddTriple: import.status == 'STAGED_ADDITION', proposedRemoveTriple: import.status == 'STAGED_REMOVAL' }">
         {{import.id}}
     </div>
+
     <span *ngIf="import.status == 'LOOP'" class="fas fa-redo" style="margin-right: 6px;" [title]="'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.LOOP_IMPORTS'|translate"></span>
     
-    <div *ngIf="import.status == 'FAILED'" class="btn-group" placement="bottom-right" ngbDropdown>
+    <div *ngIf="import.status == 'FAILED'" class="btn-group" container="body" placement="bottom-right" ngbDropdown>
         <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [title]="'METADATA.NAMESPACES_AND_IMPORTS.IMPORT_TREE.FAILED_IMPORT'|translate">
             <span class="fas fa-exclamation-triangle"></span>
         </button>
