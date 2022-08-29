@@ -51,6 +51,7 @@ export class AuthorizationHelperModal {
         RDFResourceRolesEnum.ontology,
         RDFResourceRolesEnum.ontologyProperty,
         RDFResourceRolesEnum.property,
+        "resource" as RDFResourceRolesEnum, //dedicated "special" generic role (not an actual one)
         RDFResourceRolesEnum.skosCollection,
         RDFResourceRolesEnum.skosOrderedCollection,
         RDFResourceRolesEnum.xLabel,

@@ -222,7 +222,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         }
     }
 
-    private copyLocaleHandler(predicate: ARTURIResource, eventData: { value: ARTNode, locales: Language[] }) {
+    copyLocaleHandler(predicate: ARTURIResource, eventData: { value: ARTNode, locales: Language[] }) {
         let value: ARTNode = eventData.value;
         let locales: Language[] = eventData.locales;
         let labels: ARTLiteral[] = [];

@@ -3,6 +3,7 @@ import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { TranslateService } from "@ngx-translate/core";
 import { InferenceExplanationModal } from "src/app/icv/owlConsistencyViolations/inferenceExplanationModal";
 import { Triple } from "src/app/models/Shared";
+import { VBEventHandler } from 'src/app/utils/VBEventHandler';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ManchesterExprModalReturnData } from "src/app/widget/modal/sharedModal/manchesterExprModal/manchesterExprModal";
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ShowInterpretation } from "../../../models/ARTResources";
@@ -81,7 +82,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
         private manchesterService: ManchesterServices, private refactorService: RefactorServices, private skosService: SkosServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices,
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices,
-        private rvModalService: ResViewModalServices, private dtValidator: DatatypeValidator,
+        private rvModalService: ResViewModalServices, private dtValidator: DatatypeValidator, private eventHandler: VBEventHandler,
         private translateService: TranslateService, private modalService: NgbModal) {
         super();
     }
@@ -325,7 +326,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
         }
     }
 
-    private confirmEdit() {
+    confirmEdit() {
         if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
             if (this.editLiteralInProgress) {
                 if (this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) {
@@ -497,6 +498,11 @@ export class EditableResourceComponent extends AbstractResViewResource {
     private updateLexicalization(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTLiteral, newValue: ARTLiteral) {
         this.resourcesService.updateLexicalization(subject, predicate, oldValue, newValue).subscribe(
             () => {
+                this.resourcesService.getResourceDescription(this.subject).subscribe(
+                    (updatedRes: ARTResource) => {
+                        this.eventHandler.resourceLexicalizationUpdatedEvent.emit({ oldResource: this.subject, newResource: updatedRes });
+                    }
+                );
                 this.cancelEdit();
                 this.update.emit();
             }

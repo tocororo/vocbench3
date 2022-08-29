@@ -78,6 +78,7 @@ export class VBEventHandler {
     public resourceDeprecatedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceDeprecatedEvent");
     //useful to refresh the ResourceView when a resource is updated from outside the RV
     public resourceUpdatedEvent: EventEmitter<ARTResource> = new VBEventEmitter("resourceUpdatedEvent");
+    public resourceLexicalizationUpdatedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceLexicalizationUpdatedEvent");
 
     //TRANSLATION_SET EVENTS
     public translationSetCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("translationSetCreatedEvent");

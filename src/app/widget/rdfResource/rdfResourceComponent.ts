@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Subscription } from 'rxjs';
 import { Language, Languages } from "src/app/models/LanguagesCountries";
+import { VBEventHandler } from 'src/app/utils/VBEventHandler';
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceNature } from "../../models/ARTResources";
 import { XmlSchema } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
-import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
     selector: "rdf-resource",
@@ -18,6 +19,8 @@ export class RdfResourceComponent {
     @Input() rendering: boolean = true; //if true the resource should be rendered with the show, with the qname otherwise
 
     @Output() link: EventEmitter<ARTURIResource> = new EventEmitter();
+
+    private eventSubscriptions: Subscription[] = [];
 
     renderingClass: string;
     renderingLabel: string;
@@ -38,7 +41,15 @@ export class RdfResourceComponent {
     manchExpr: boolean = false;
     private manchExprStruct: { token: string, class: string }[] = [];
 
-    constructor(private resourcesService: ResourcesServices, private vbProp: VBProperties) { }
+    constructor(private resourcesService: ResourcesServices, private eventHandler: VBEventHandler) {
+        this.eventSubscriptions.push(this.eventHandler.resourceLexicalizationUpdatedEvent.subscribe(
+            (data: { oldResource: ARTResource, newResource: ARTResource }) => {
+                if (data.oldResource.equals(this.resource)) {
+                    this.resource = data.newResource;
+                    this.initRenderingLabel();
+                }
+            }));
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
@@ -46,6 +57,10 @@ export class RdfResourceComponent {
         } else if (changes['rendering']) {
             this.initRenderingLabel();
         }
+    }
+
+    ngOnDestroy() {
+        this.eventSubscriptions.forEach(s => s.unsubscribe());
     }
 
     init() {
