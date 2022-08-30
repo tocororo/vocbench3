@@ -3,7 +3,12 @@
         <img *ngIf="import.imports.length > 0" src="./assets/images/icons/arrow.png" (click)="open = !open"
             [ngClass]="{'arrow-right': !open}">
 	</div>
-    <img src="./assets/images/icons/res/ontology.png" class="ml-1 mr-2" height="16px" width="16px">
+
+    <div style="position: relative;">
+        <img src="./assets/images/icons/res/ontology.png" class="ml-1 mr-2" height="16px" width="16px">
+        <span *ngIf="import.status == 'FAILED'" style="position: absolute; font-size: 16px; left: 5px; top: 1px;" class="fas fa-times text-danger"></span>
+    </div>
+    
     <div style="flex: 1;" [ngClass]="{ proposedAddTriple: import.status == 'STAGED_ADDITION', proposedRemoveTriple: import.status == 'STAGED_REMOVAL' }">
         {{import.id}}
     </div>
