@@ -531,6 +531,7 @@
         "SCOPE": "Scope",
         "SETTINGS": "Impostazioni",
         "SOURCE": "Sorgente",
+        "TAB": "Scheda",
         "TEMPLATE": "Template",
         "TIME": "Tempo",
         "TITLE": "Titolo",
@@ -1025,7 +1026,8 @@
         },
         "SETTINGS": {
             "SHOW_DEPRECATED_RES": "Mostra le risorse deprecate negli alberi/liste",
-            "TREE_LIST_SETTINGS": "Impostazioni alberi/liste"
+            "TREE_LIST_SETTINGS": "Impostazioni alberi/liste",
+            "VISIBLE_TABS": "Schede visibili"
         }
     },
     "DATA_MANAGEMENT": {
@@ -1426,6 +1428,7 @@
         "CANNOT_EDIT_OPEN_PROJECT_CREDENTIALS": "Impossibile modificare le credenziali di repository remoti collegati ad un progetto aperto. Chiudi il progetto e riprova",
         "CANNOT_ENRICH_PROPERTY_WITH_REMOTE_RES": "Il range di {{property}} non accetta risorse. Non puoi valorizzare questa property con una risorsa remota",
         "CANNOT_EXPORT_ADV_GRAPH_APP_WITH_EXTERNAL_REF": "Impossibile salvare questa Advanced Graph Application in quanto contiene uno o più riferimenti a nodi definiti in altri header.",
+        "CANNOT_HIDE_ALL_DATA_TABS": "Non puoi nascondere tutte le schede, devi mantenerne almeno una visibile.",
         "CANNOT_IMPORT_DATASET_MISSING_ONTO_IRI": "Il dataset selezionato non espone alcun ontology IRI, perciò non può essere importato. Per favore, cambia dataset.",
         "CANNOT_INFER_PEARL_ANNOTATIONS": "Impossibile inferire annotazioni su un PEARL non valido",
         "CANNOT_PARSE_AUTH": "Impossibile parsare l'autorizzazione che si sta cercando di editare ({{auth}}). Il form non è stato ripristinato.",
@@ -2076,6 +2079,7 @@
             "REFERENCE": "Reference",
             "RELATED": "Correlati",
             "SEMANTIC_REFERENCE": "Riferimento semantico",
+            "TERMINOLOGICALLY_RELATED": "Terminologicamente correlati",
             "TRANSLATION": "Traduzione",
             "TRANSLATION_SET": "TranslationSet",
             "UNDIRECTIONAL": "Indirezionale"

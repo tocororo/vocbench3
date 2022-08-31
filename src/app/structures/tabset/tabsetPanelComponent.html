@@ -2,7 +2,7 @@
 
     <ul class="nav nav-tabs nav-tabs-xs" (click)="$event.preventDefault()">
         <ng-container *ngFor="let t of tabs">
-            <li *ngIf="showTab(t.role)" class="nav-item" [ngClass]="{ active : activeTab == t.role, disabled: !isTabAuthorized(t.role) }">
+            <li class="nav-item" [ngClass]="{ active : activeTab == t.role }">
                 <a class="nav-link" (click)="selectTab(t.role)">{{t.translationKey | translate}}</a>
             </li>
         </ng-container>
@@ -15,42 +15,42 @@
     
     <!--Tabs content-->
     <div class="tab-content">
-        <div *ngIf="showTab(RDFResourceRoleEnum.cls)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.cls}" [hidden]="activeTab != RDFResourceRoleEnum.cls">
+        <div *ngIf="isTabVisible(RDFResourceRoleEnum.cls)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.cls}" [hidden]="activeTab != RDFResourceRoleEnum.cls">
             <class-individual-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)"
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </class-individual-tree-panel>
         </div>
-        <div *ngIf="showTab(RDFResourceRoleEnum.concept)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.concept}" [hidden]="activeTab != RDFResourceRoleEnum.concept">
+        <div *ngIf="isTabVisible(RDFResourceRoleEnum.concept)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.concept}" [hidden]="activeTab != RDFResourceRoleEnum.concept">
             <concept-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)"
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </concept-tree-panel>
         </div>
-        <div *ngIf="showTab(RDFResourceRoleEnum.conceptScheme)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.conceptScheme}" [hidden]="activeTab != RDFResourceRoleEnum.conceptScheme">
+        <div *ngIf="isTabVisible(RDFResourceRoleEnum.conceptScheme)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.conceptScheme}" [hidden]="activeTab != RDFResourceRoleEnum.conceptScheme">
             <scheme-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)"
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </scheme-list-panel>
         </div>
-        <div *ngIf="showTab(RDFResourceRoleEnum.skosCollection)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.skosCollection}" [hidden]="activeTab != RDFResourceRoleEnum.skosCollection">
+        <div *ngIf="isTabVisible(RDFResourceRoleEnum.skosCollection)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.skosCollection}" [hidden]="activeTab != RDFResourceRoleEnum.skosCollection">
             <collection-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </collection-tree-panel>
         </div>
-        <div *ngIf="showTab(RDFResourceRoleEnum.property)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.property}" [hidden]="activeTab != RDFResourceRoleEnum.property">
+        <div *ngIf="isTabVisible(RDFResourceRoleEnum.property)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.property}" [hidden]="activeTab != RDFResourceRoleEnum.property">
             <property-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </property-tree-panel>
         </div>
-        <div *ngIf="showTab(RDFResourceRoleEnum.limeLexicon)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.limeLexicon}" [hidden]="activeTab != RDFResourceRoleEnum.limeLexicon">
+        <div *ngIf="isTabVisible(RDFResourceRoleEnum.limeLexicon)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.limeLexicon}" [hidden]="activeTab != RDFResourceRoleEnum.limeLexicon">
             <lexicon-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </lexicon-list-panel>
         </div>
-        <div *ngIf="showTab(RDFResourceRoleEnum.ontolexLexicalEntry)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.ontolexLexicalEntry}" [hidden]="activeTab != RDFResourceRoleEnum.ontolexLexicalEntry">
+        <div *ngIf="isTabVisible(RDFResourceRoleEnum.ontolexLexicalEntry)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.ontolexLexicalEntry}" [hidden]="activeTab != RDFResourceRoleEnum.ontolexLexicalEntry">
             <lexical-entry-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </lexical-entry-list-panel>
         </div>
-        <div *ngIf="showTab(RDFResourceRoleEnum.dataRange)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.dataRange}" [hidden]="activeTab != RDFResourceRoleEnum.dataRange">
+        <div *ngIf="isTabVisible(RDFResourceRoleEnum.dataRange)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.dataRange}" [hidden]="activeTab != RDFResourceRoleEnum.dataRange">
             <datatype-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </datatype-list-panel>

@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DataStructureUtils } from 'src/app/models/DataStructure';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { OntoLex, SKOS } from "../../models/Vocabulary";
+import { EDOAL, OntoLex, SKOS } from "../../models/Vocabulary";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { TreeListContext } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
@@ -43,89 +44,61 @@ export class TabsetPanelComponent {
 
     RDFResourceRoleEnum = RDFResourceRolesEnum; //workaround for using enum in template
 
-    private context: TreeListContext = TreeListContext.dataPanel;
+    context: TreeListContext = TreeListContext.dataPanel;
 
-    private selectedResource: ARTResource;
+    selectedResource: ARTResource;
 
-    private showTabCache: { [key: string]: boolean } = {};
-
-    private ONTO_TYPE: string;
-
-    tabs: { role: RDFResourceRolesEnum, label: string, translationKey: string }[] = [
-        { role: RDFResourceRolesEnum.cls, label: "Class", translationKey: 'DATA.CLASS.CLASS' },
-        { role: RDFResourceRolesEnum.concept, label: "Concept", translationKey: 'DATA.CONCEPT.CONCEPT' },
-        { role: RDFResourceRolesEnum.conceptScheme, label: "Scheme", translationKey: 'DATA.SCHEME.SCHEME' },
-        { role: RDFResourceRolesEnum.skosCollection, label: "Collection", translationKey: 'DATA.COLLECTION.COLLECTION' },
-        { role: RDFResourceRolesEnum.property, label: "Property", translationKey: 'DATA.PROPERTY.PROPERTY' },
-        { role: RDFResourceRolesEnum.limeLexicon, label: "Lexicon", translationKey: 'DATA.LEXICON.LEXICON' },
-        { role: RDFResourceRolesEnum.ontolexLexicalEntry, label: "Lex.Entry", translationKey: 'DATA.LEX_ENTRY.LEX_ENTRY' },
-        { role: RDFResourceRolesEnum.dataRange, label: "Datatype", translationKey: 'DATA.DATATYPE.DATATYPE' }
-    ];
-    private activeTab: RDFResourceRolesEnum;
-    private allowMultiselection: boolean = true;
+    tabs: { role: RDFResourceRolesEnum, translationKey: string }[];
+    activeTab: RDFResourceRolesEnum;
+    allowMultiselection: boolean = true;
 
     constructor(private modalService: NgbModal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
-        this.ONTO_TYPE = this.getWorkingContext().getProject().getModelType();
-        if (this.ONTO_TYPE == SKOS.uri) {
-            if (this.isConceptAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.concept;
-            } else if (this.isCollectionAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.skosCollection;
-            } else if (this.isSchemeAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.conceptScheme;
-            } else if (this.isClassAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.cls;
-            } else if (this.isPropertyAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.property;
-            } else if (this.isDataRangeAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.dataRange;
-            }
-        } else if (this.ONTO_TYPE == OntoLex.uri) {
-            if (this.isLexiconAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.limeLexicon;
-            } else if (this.isLexicalEntryAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.ontolexLexicalEntry;
-            } else if (this.isConceptAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.concept;
-            } else if (this.isCollectionAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.skosCollection;
-            } else if (this.isSchemeAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.conceptScheme;
-            } else if (this.isClassAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.cls;
-            } else if (this.isPropertyAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.property;
-            } else if (this.isDataRangeAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.dataRange;
-            }
-        } else { //OWL
-            if (this.isClassAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.cls;
-            } else if (this.isPropertyAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.property;
-            } else if (this.isDataRangeAuthorized()) {
-                this.activeTab = RDFResourceRolesEnum.dataRange;
+        this.init();
+    }
+
+    init() {
+        this.initTabs();
+
+        let model = this.getWorkingContext().getProject().getModelType();
+        let tabsPriority: RDFResourceRolesEnum[] = DataStructureUtils.panelsPriority[model];
+        // if (model == SKOS.uri) {
+        //     tabsPriority = [RDFResourceRolesEnum.concept, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.conceptScheme, 
+        //         RDFResourceRolesEnum.cls, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange];
+        // } else if (model == OntoLex.uri) {
+        //     tabsPriority = [RDFResourceRolesEnum.limeLexicon, RDFResourceRolesEnum.ontolexLexicalEntry, 
+        //         RDFResourceRolesEnum.concept, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.conceptScheme, 
+        //         RDFResourceRolesEnum.cls, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange];
+        // } else { //OWL RDFS
+        //     tabsPriority = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange];
+        // }
+        for (let t of tabsPriority) {
+            if (this.tabs.some(tab => tab.role == t)) {
+                this.activeTab = t;
+                break;
             }
         }
+        if (this.activeTab == null && this.tabs.length > 0) {
+            this.activeTab = this.tabs[0].role;
+        }
+
         if (this.readonly == false) { //if readonly is false (or not provided as @Input)
             this.readonly = VBContext.getContextVersion() != null; //if it is working on an old dump version, disable the updates
         }
         if (this.readonly || !this.editable) {
             this.allowMultiselection = false;
         }
-
     }
 
-    private onNodeSelected(node: ARTResource) {
+    onNodeSelected(node: ARTResource) {
         this.nodeSelected.emit(node);
     }
 
-    public syncResource(resource: ARTResource, allowTabChange?: boolean) {
+    syncResource(resource: ARTResource, allowTabChange?: boolean) {
         if (resource.isURIResource()) { //in the trees/lists are visible only IRI resources, so allow to sync only ARTURIResource
             let resRole: RDFResourceRolesEnum = resource.getRole();
-            if (allowTabChange && this.activeTab != resRole && this.showTab(resRole)) { //if the tab needs to be changed and the target tab is visible
+            if (allowTabChange && this.activeTab != resRole && this.isTabVisible(resRole)) { //if the tab needs to be changed and the target tab is visible
                 this.activeTab = resRole;
             }
             //sync the resource in the tree/list only if the resource has the same role of the tree/list currently active
@@ -153,110 +126,89 @@ export class TabsetPanelComponent {
         }
     }
 
-    private isProjectSKOS(): boolean {
-        return (this.ONTO_TYPE == SKOS.uri);
-    }
-
-    private isProjectOntolex(): boolean {
-        return (this.ONTO_TYPE == OntoLex.uri);
-    }
-
-    openSettings() {
-        const modalRef: NgbModalRef = this.modalService.open(TreeListSettingsModal, new ModalOptions());
-        return modalRef.result;
-    }
-
     //TAB HANDLER
 
-    showTab(tab: RDFResourceRolesEnum): boolean {
-        if (this.showTabCache[tab] == null) {
-            let show: boolean = false;
-            if (tab == RDFResourceRolesEnum.cls) { //always visible, except if explicitly hidden
-                show = this.isTabAuthorized(tab) && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
-            } else if (tab == RDFResourceRolesEnum.concept) { //visible for skos and ontolex projects, except if explicitly hidden
-                show = (
-                    this.isTabAuthorized(tab) &&
-                    (this.isProjectSKOS() || this.isProjectOntolex()) &&
-                    (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
-                );
-            } else if (tab == RDFResourceRolesEnum.conceptScheme) { //visible for skos and ontolex projects, except if explicitly hidden
-                show = (
-                    this.isTabAuthorized(tab) &&
-                    (this.isProjectSKOS() || this.isProjectOntolex()) &&
-                    (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
-                );
-            } else if (tab == RDFResourceRolesEnum.skosCollection) { //visible for skos and ontolex projects, except if explicitly hidden
-                show = (
-                    this.isTabAuthorized(tab) &&
-                    (this.isProjectSKOS() || this.isProjectOntolex()) &&
-                    (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
-                );
-            } else if (tab == RDFResourceRolesEnum.property) { //always visible, except if explicitly hidden
-                show = this.isTabAuthorized(tab) && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
-            } else if (tab == RDFResourceRolesEnum.limeLexicon) { //visible for ontolex projects, except if explicitly hidden
-                show = this.isTabAuthorized(tab) && this.isProjectOntolex() && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
-            } else if (tab == RDFResourceRolesEnum.ontolexLexicalEntry) { //visible for ontolex projects, except if explicitly hidden
-                show = this.isTabAuthorized(tab) && this.isProjectOntolex() && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
-            } else if (tab == RDFResourceRolesEnum.dataRange) { //always visible, except if explicitly hidden
-                show = this.isTabAuthorized(tab) && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
-            } else {
-                show = false;
-            }
-            this.showTabCache[tab] = show;
-        }
-        return this.showTabCache[tab];
+    private initTabs() {
+        let allTabs: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme,
+            RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.property, RDFResourceRolesEnum.limeLexicon, RDFResourceRolesEnum.ontolexLexicalEntry, RDFResourceRolesEnum.dataRange];
+        this.tabs = allTabs
+            .filter(t => {
+                /**
+                 * Determines the visibility of a panel according:
+                 * - project model
+                 * - user authorizations
+                 * - input hiddenTabs
+                 * - structurePanelFilter preference
+                 */
+                let model = this.getWorkingContext().getProject().getModelType();
+                let visible: boolean;
+                if (model == EDOAL.uri) { //in edoal project, only concept and schemes are visible
+                    visible = t == RDFResourceRolesEnum.concept || t == RDFResourceRolesEnum.conceptScheme;
+                } else {
+                    visible =
+                    this.isPanelCompliantWithCurrentModel(t, model) &&
+                    this.isTabAuthorized(t) &&
+                    (this.hiddenTabs == null || !this.hiddenTabs.includes(t)) &&
+                    !this.getWorkingContext().getProjectPreferences().structurePanelFilter.includes(t);
+                }
+                return visible;
+            })
+            .map(t => {
+                return { role: t, translationKey: DataStructureUtils.panelTranslationMap[t] };
+            });
     }
 
-    private selectTab(tabName: RDFResourceRolesEnum) {
+    selectTab(tabName: RDFResourceRolesEnum) {
         this.activeTab = tabName;
     }
 
     private isTabAuthorized(tab: RDFResourceRolesEnum): boolean {
         if (tab == RDFResourceRolesEnum.cls) {
-            return this.isClassAuthorized();
+            return AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetClassTaxonomy);
         } else if (tab == RDFResourceRolesEnum.concept) {
-            return this.isConceptAuthorized();
+            return AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetConceptTaxonomy);
         } else if (tab == RDFResourceRolesEnum.conceptScheme) {
-            return this.isSchemeAuthorized();
+            return AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetSchemes);
         } else if (tab == RDFResourceRolesEnum.skosCollection) {
-            return this.isCollectionAuthorized();
+            return AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy);
         } else if (tab == RDFResourceRolesEnum.property) {
-            return this.isPropertyAuthorized();
+            return AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy);
         } else if (tab == RDFResourceRolesEnum.limeLexicon) {
-            return this.isLexiconAuthorized();
+            return AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexGetLexicon);
         } else if (tab == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            return this.isLexicalEntryAuthorized();
+            return AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexGetLexicalEntry);
         } else if (tab == RDFResourceRolesEnum.dataRange) {
-            return this.isDataRangeAuthorized();
+            return AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesGetDatatype);
         } else {
             return false;
         }
     }
 
-    private isClassAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetClassTaxonomy);
+    isTabVisible(tab: RDFResourceRolesEnum): boolean {
+        return this.tabs.some(t => t.role == tab);
     }
-    private isConceptAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetConceptTaxonomy);
+
+    private isPanelCompliantWithCurrentModel(panel: RDFResourceRolesEnum, model: string): boolean {
+        if (panel == RDFResourceRolesEnum.cls) { //always visible
+            return true;
+        } else if (panel == RDFResourceRolesEnum.concept) { //visible for skos and ontolex
+            return model == SKOS.uri || model == OntoLex.uri;
+        } else if (panel == RDFResourceRolesEnum.conceptScheme) { //visible for skos and ontolex
+            return model == SKOS.uri || model == OntoLex.uri;
+        } else if (panel == RDFResourceRolesEnum.skosCollection) { //visible for skos and ontolex
+            return model == SKOS.uri || model == OntoLex.uri;
+        } else if (panel == RDFResourceRolesEnum.property) { //always visible
+            return true;
+        } else if (panel == RDFResourceRolesEnum.limeLexicon) { //visible for ontolex
+            return model == OntoLex.uri;
+        } else if (panel == RDFResourceRolesEnum.ontolexLexicalEntry) { //visible for ontolex
+            return model == OntoLex.uri;
+        } else if (panel == RDFResourceRolesEnum.dataRange) { //always visible
+            return true;
+        }
+        return true; //other (should never happen)
     }
-    private isSchemeAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetSchemes);
-    }
-    private isCollectionAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy);
-    }
-    private isPropertyAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy);
-    }
-    private isLexiconAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexGetLexicon);
-    }
-    private isLexicalEntryAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexGetLexicalEntry);
-    }
-    private isDataRangeAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesGetDatatype);
-    }
+
 
     //Focus the panel and select the searched resource after an advanced search
     advancedSearch(resource: ARTResource) {
@@ -292,7 +244,7 @@ export class TabsetPanelComponent {
             );
         }
         if (tabToActivate != null) {
-            if (this.showTab(tabToActivate)) { //if the tab is visible => activate the tab and select the resource in list/tree
+            if (this.isTabVisible(tabToActivate)) { //if the tab is visible => activate the tab and select the resource in list/tree
                 this.activeTab = tabToActivate;
                 //wait the update of the UI after the change of the tab
                 this.changeDetectorRef.detectChanges();
@@ -321,6 +273,17 @@ export class TabsetPanelComponent {
                 );
             }
         }
+    }
+
+    openSettings() {
+        const modalRef: NgbModalRef = this.modalService.open(TreeListSettingsModal, new ModalOptions());
+        modalRef.componentInstance.projectCtx = this.projectCtx;
+        modalRef.result.then(
+            () => {
+                this.init();
+            },
+            () => {}
+        );
     }
 
     private getWorkingContext() {

@@ -1,4 +1,4 @@
-import { ARTURIResource } from "./ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "./ARTResources";
 import { Language } from "./LanguagesCountries";
 import { AccessLevel, Project } from "./Project";
 import { ResViewPartition } from "./ResourceView";
@@ -227,6 +227,8 @@ export class ProjectPreferences {
     activeLexicon: ARTURIResource;
     showFlags: boolean = true;
     projectThemeId: number = null;
+
+    structurePanelFilter: RDFResourceRolesEnum[] = []; //list of hidden panels
 
     classTreePreferences: ClassTreePreference;
     instanceListPreferences: InstanceListPreference;

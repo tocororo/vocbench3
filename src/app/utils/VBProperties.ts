@@ -97,6 +97,11 @@ export class VBProperties {
 
                 projectPreferences.hideLiteralGraphNodes = settings.getPropertyValue(SettingsEnum.hideLiteralGraphNodes);
 
+                let structurePanelFilter: RDFResourceRolesEnum[] = settings.getPropertyValue("structurePanelFilter");
+                if (structurePanelFilter != null) {
+                    projectPreferences.structurePanelFilter = structurePanelFilter;
+                }
+
                 //cls tree preferences
                 projectPreferences.classTreePreferences = new ClassTreePreference(projectCtx.getProject());
                 let clsTreeSettings: ClassTreePreference = settings.getPropertyValue(SettingsEnum.classTree);
@@ -221,11 +226,15 @@ export class VBProperties {
         this.eventHandler.notificationStatusChangedEvent.emit();
     }
 
+    setStructurePanelFilter(structurePanelFilter: RDFResourceRolesEnum[]) {
+        VBContext.getWorkingProjectCtx().getProjectPreferences().structurePanelFilter = structurePanelFilter;
+        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, "structurePanelFilter", structurePanelFilter).subscribe();
+    }
+
     //class tree settings
     setClassTreePreferences(clsTreePref: ClassTreePreference) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences = clsTreePref;
         this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.classTree, clsTreePref).subscribe();
-
     }
 
     //instance list settings
