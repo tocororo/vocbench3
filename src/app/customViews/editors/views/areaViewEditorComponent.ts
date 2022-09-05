@@ -31,9 +31,9 @@ export class AreaViewEditorComponent extends AbstractSparqlBasedViewEditor {
         "This query can use the same variables and placeholders described in the Retrieve one. In particular:";
     updateVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.route_id, descrTranslationKey: "Will be bound to the resource representing the route/perimeter of the area" },
-        { id: CustomViewVariables.location, descrTranslationKey: "Will be bound to the resource representing the updating point" },
-        { id: CustomViewVariables.latitude, descrTranslationKey: "Will be bound to the new latitude of the updating point" },
-        { id: CustomViewVariables.longitude, descrTranslationKey: "Will be bound to the new longitude of the updating point" },
+        { id: CustomViewVariables.location, descrTranslationKey: "Will be bound to the resource representing the updating point (mandatory)" },
+        { id: CustomViewVariables.latitude, descrTranslationKey: "Will be bound to the new latitude of the updating point (mandatory)" },
+        { id: CustomViewVariables.longitude, descrTranslationKey: "Will be bound to the new longitude of the updating point (mandatory)" },
     ];
 
     constructor(basicModals: BasicModalServices, changeDetectorRef: ChangeDetectorRef) {

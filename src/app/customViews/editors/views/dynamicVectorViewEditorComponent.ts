@@ -47,7 +47,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     updateDescrIntro: string = "An update query for this kind of view must specify how to update a single value for the current field. The value will be selected/entered according the Update mode selected above.<br/>" +
         "This query can use the same variables and placeholders described in the Retrieve one. In particular:";
     updateVariablesInfo: VariableInfoStruct[] = [
-        { id: CustomViewVariables.value, descrTranslationKey: "Will be bound to the new value" },
+        { id: CustomViewVariables.value, descrTranslationKey: "Will be bound to the new value (mandatory)" },
     ];
     updateQueryInfo: string;
 

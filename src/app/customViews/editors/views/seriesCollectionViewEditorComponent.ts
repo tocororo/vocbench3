@@ -34,8 +34,8 @@ export class SeriesCollectionViewEditorComponent extends AbstractSparqlBasedView
         "This query can use the same variables and placeholders described in the Retrieve one. In particular:";
     updateVariablesInfo: VariableInfoStruct[] = [
         { id: CustomViewVariables.series_collection_id, descrTranslationKey: "Will be bound to the resource representing the series collection" },
-        { id: CustomViewVariables.name, descrTranslationKey: "Will be bound to the resource representing the name of the updating value" },
-        { id: CustomViewVariables.value, descrTranslationKey: "Will be bound to the new value" },
+        { id: CustomViewVariables.name, descrTranslationKey: "Will be bound to the resource representing the name of the updating value (mandatory)" },
+        { id: CustomViewVariables.value, descrTranslationKey: "Will be bound to the new value (mandatory)" },
     ];
 
     constructor(basicModals: BasicModalServices, changeDetectorRef: ChangeDetectorRef) {

@@ -29,9 +29,9 @@ export class PointViewEditorComponent extends AbstractSparqlBasedViewEditor {
     updateDescrIntro: string = "The update query for this kind of view must specify how to update the location coordinates. " +
         "This query can use the same variables and placeholders described in the Retrieve one. In particular:";
     updateVariablesInfo: VariableInfoStruct[] = [
-        { id: CustomViewVariables.location, descrTranslationKey: "Will be bound to the resource representing the point" },
-        { id: CustomViewVariables.latitude, descrTranslationKey: "Will be bound to the new latitude" },
-        { id: CustomViewVariables.longitude, descrTranslationKey: "Will be bound to the new longitude" },
+        { id: CustomViewVariables.location, descrTranslationKey: "Will be bound to the resource representing the point (mandatory)" },
+        { id: CustomViewVariables.latitude, descrTranslationKey: "Will be bound to the new latitude (mandatory)" },
+        { id: CustomViewVariables.longitude, descrTranslationKey: "Will be bound to the new longitude (mandatory)" },
     ];
 
     constructor(basicModals: BasicModalServices, changeDetectorRef: ChangeDetectorRef) {

@@ -324,10 +324,10 @@ export class MdrVoc {
 
 export class StMdr {
     public static uri = "http://semanticturkey.uniroma2.it/ns/stmdr";
-    public static namespace = MdrVoc.uri + "#";
+    public static namespace = StMdr.uri + "#";
     public static prefix = "stmdr";
 
-    public static Project = new ARTURIResource(MdrVoc.namespace + "Project", MdrVoc.prefix + ":Project", RDFResourceRolesEnum.individual);
+    public static Project = new ARTURIResource(StMdr.namespace + "Project", StMdr.prefix + ":Project", RDFResourceRolesEnum.individual);
 }
 
 export class Dcat {

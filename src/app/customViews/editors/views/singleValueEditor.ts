@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ARTURIResource, RDFTypesEnum } from 'src/app/models/ARTResources';
 import { UpdateMode } from 'src/app/models/CustomViews';
@@ -79,6 +79,12 @@ export class SingleValueEditor {
         );
 
         if (this.queryInfo) {
+            this.queryInfoSafe = this.sanitizer.bypassSecurityTrustHtml(this.queryInfo);
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['queryInfo'] && changes['queryInfo'].currentValue) {
             this.queryInfoSafe = this.sanitizer.bypassSecurityTrustHtml(this.queryInfo);
         }
     }
