@@ -41,7 +41,7 @@ export class ResourceUtils {
      * Tells if a list contains a given node
      */
     static containsNode(list: ARTNode[], node: ARTNode): boolean {
-        return this.indexOfNode(list, node) != -1;
+        return list && this.indexOfNode(list, node) != -1;
     }
 
     static indexOfNode(list: ARTNode[], node: ARTNode): number {

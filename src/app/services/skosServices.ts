@@ -5,7 +5,7 @@ import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum,
 import { CustomFormValue } from "../models/CustomForms";
 import { MultischemeMode } from '../models/Properties';
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ResourcesServices } from "./resourcesServices";
 
@@ -364,21 +364,13 @@ export class SkosServices {
      */
     createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource,
             customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean): Observable<ARTURIResource> {
-        let params: any = {
-            label: label
+        let params: STRequestParams = {
+            label: label,
+            newScheme: newScheme,
+            schemeCls: schemeCls,
+            checkExistingAltLabel: checkExistingAltLabel,
+            customFormValue: customFormValue
         };
-        if (newScheme != undefined) {
-            params.newScheme = newScheme;
-        }
-        if (schemeCls != undefined) {
-            params.schemeCls = schemeCls;
-        }
-        if (checkExistingAltLabel != null) {
-            params.checkExistingAltLabel = checkExistingAltLabel;
-        }
-        if (customFormValue != null) {
-            params.customFormValue = customFormValue;
-        }
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [
                 { className: 'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException', action: 'skip' },

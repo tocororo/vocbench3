@@ -62,15 +62,14 @@ export class LexiconListComponent extends AbstractList {
             lexicons => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(lexicons, this.rendering ? SortAttribute.show : SortAttribute.value);
-
-                for (let i = 0; i < lexicons.length; i++) {
-                    let activeLexicon = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeLexicon;
-                    if (activeLexicon != null && lexicons[i].equals(activeLexicon)) {
-                        this.activeLexicon = lexicons[i];
-                        break;
-                    }
-                }
                 this.list = lexicons;
+
+                let activeLexicon = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeLexicon;
+                if (activeLexicon != null) {
+                    this.activeLexicon = this.list.find(l => l.equals(activeLexicon));
+                } else if (activeLexicon == null && this.list.length == 1) { //if no lexicon is set and there is only one lexicon, automatically activate it
+                    this.toggleLexicon(this.list[0]);
+                }
 
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             }
@@ -81,6 +80,9 @@ export class LexiconListComponent extends AbstractList {
         this.list.unshift(node);
         if (this.context == TreeListContext.addPropValue) {
             this.selectNode(node);
+        }
+        if (this.context == TreeListContext.dataPanel && this.list.length == 1) {
+            this.toggleLexicon(this.list[0]);
         }
     }
 
