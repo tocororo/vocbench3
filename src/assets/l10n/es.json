@@ -1920,6 +1920,7 @@
             "BULK_DELETE_INFO": "Elimina el valor de cada recurso que tenga esta relación predicado-valor",
             "BULK_EDIT": "Edición masiva",
             "BULK_EDIT_INFO": "Actualiza el valor de cada recurso que tenga esta relación predicado-valor",
+            "CLOSE_ALL_TABS": "Cerrar todas las pestañas",
             "COPY_TO_CLIPBOARD": "Copiar al portapapeles",
             "COPY_VALUE_TO_LOCALES": "Copiar valor a otras configuraciones regionales",
             "DELETE_ALL_VALUES": "Eliminar todos los valores",
@@ -2018,7 +2019,6 @@
         },
         "STATUS": {
             "ACCESS_METHOD": "Método de acceso",
-            "CLOSE_ALL_TABS": "Cerrar todas las pestañas",
             "LOCAL_PROJECT": "Proyecto local",
             "OTHER_LOCAL_PROJECT": "Otro proyecto local",
             "PREVIOUS_RESOURCE": "Recurso anterior",

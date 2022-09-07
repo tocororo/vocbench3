@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Output } from "@angular/core";
-import { ARTResource } from "../../models/ARTResources";
+import { ResourceUtils } from 'src/app/utils/ResourceUtils';
+import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
+import { ModalType } from 'src/app/widget/modal/Modals';
+import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { AbstractResViewVisualizationMode } from "./abstractResViewVisualization";
@@ -17,7 +20,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
     tabs: Array<Tab> = [];
     private sync: boolean = false;
 
-    constructor(eventHandler: VBEventHandler) {
+    constructor(eventHandler: VBEventHandler, private basicModals: BasicModalServices) {
         super(eventHandler);
         this.eventHandler.resViewTabSyncChangedEvent.subscribe(
             (sync: boolean) => { this.sync = sync; }
@@ -112,9 +115,9 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
         //if the closed tab is active and not the only open, change the active tab
         if (t.active && this.tabs.length > 1) {
             if (tabIdx == this.tabs.length - 1) { //if the closed tab was the last one, active the previous
-                this.selectTab(this.tabs[tabIdx-1], true);
+                this.selectTab(this.tabs[tabIdx - 1], true);
             } else { //otherwise active the next
-                this.selectTab(this.tabs[tabIdx+1], true);
+                this.selectTab(this.tabs[tabIdx + 1], true);
             }
         }
         this.tabs.splice(tabIdx, 1);
@@ -143,7 +146,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
      * When changes on resource view make change the show of the resource, update the resource of the tab
      * so that the header of the tab shows the updated resource.
      */
-    private onResourceUpdate(resource: ARTResource, tab: Tab) {
+    onResourceUpdate(resource: ARTResource, tab: Tab) {
         /**
          * here I copy the attributes of the resource, instead of replacing the resource, so that I prevent
          * that the resource-view component detectes the change of the input [resource] and makes starting
@@ -160,6 +163,19 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
 
     onRefreshDataBroadcast() {
         this.closeAllTabs();
+    }
+
+    promptAddress() {
+        this.basicModals.prompt({ key: 'RESOURCE_VIEW.ACTIONS.OPEN_RES_IN_NEW_TAB' }, { value: 'IRI' }).then(
+            iri => {
+                if (ResourceUtils.testIRI(iri)) {
+                    this.addTab(new ARTURIResource(iri));
+                } else {
+                    this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_IRI", params: { iri: iri } }, ModalType.warning);
+                }
+            },
+            () => {}
+        );
     }
 
 }

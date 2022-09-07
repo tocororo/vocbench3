@@ -4,16 +4,21 @@
         <li *ngFor="let t of tabs" class="nav-item" [ngClass]="{active : t.active}">
             <a (click)="selectTab(t, 'true')" class="nav-link" style="display: flex; align-items: center;">
                 <rdf-resource [resource]="t.resource" [rendering]="t.rendering"></rdf-resource>
-                <span class="far fa-times-circle" (click)="closeTab(t)" style="cursor: pointer;"
-                    onmouseover="this.className='fas fa-times-circle';"
-                    onmouseout="this.className='far fa-times-circle';">
+                <span #closeTabBtn class="far fa-times-circle clickable" (click)="closeTab(t)"
+                    (mouseover)="closeTabBtn.classList.add('fas'); closeTabBtn.classList.remove('far')" 
+                    (mouseout)="closeTabBtn.classList.add('far'); closeTabBtn.classList.remove('fas')">
                 </span>
             </a>
         </li>
-        <!-- style top necessary to align the bottom of this tab with the others (since this is smaller) -->
-        <li *ngIf="tabs.length > 1" class="nav-item">
-            <a (click)="closeAllTabs()" class="nav-link px-2" [title]="'RESOURCE_VIEW.MISC.CLOSE_ALL_TABS'|translate"
-                onmouseover="this.style.color='#555'" onmouseout="this.style.color='#337ab7'">
+        <li class="nav-item">
+            <a (click)="promptAddress()" class="nav-link clickable px-2" [title]="'RESOURCE_VIEW.ACTIONS.OPEN_RES_IN_NEW_TAB'|translate">
+                <span class="fas fa-plus" style="line-height: 1.5; border: 1px solid transparent;"></span>
+            </a>
+        </li>
+        <li class="nav-item ml-auto">
+            <a #closeAllTabsBtn (click)="closeAllTabs()" class="nav-link clickable px-2" [title]="'RESOURCE_VIEW.ACTIONS.CLOSE_ALL_TABS'|translate"
+                (mouseover)="closeAllTabsBtn.classList.add('bg-danger'); closeAllTabsBtn.classList.add('text-white')" 
+                (mouseout)="closeAllTabsBtn.classList.remove('bg-danger'); closeAllTabsBtn.classList.remove('text-white')">
                 <span class="fas fa-times" style="line-height: 1.5; border: 1px solid transparent;"></span>
             </a>
         </li>

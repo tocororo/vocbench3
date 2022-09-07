@@ -1914,6 +1914,7 @@
             "BULK_DELETE_INFO": "Löschen Sie den Wert für jede Ressource, die diese Prädikat-Wert-Beziehung hat",
             "BULK_EDIT": "Massen-Bearbeitung",
             "BULK_EDIT_INFO": "Aktualisieren Sie den Wert für jede Ressource mit dieser Prädikat-Wert-Beziehung",
+            "CLOSE_ALL_TABS": "Alle Fenster schließen",
             "COPY_TO_CLIPBOARD": "In die Zwischenablage kopieren",
             "COPY_VALUE_TO_LOCALES": "Wert in andere Sprachumgebungen kopieren",
             "DELETE_ALL_VALUES": "Alle Werte löschen",
@@ -2011,7 +2012,6 @@
         },
         "STATUS": {
             "ACCESS_METHOD": "Zugriffsmethode",
-            "CLOSE_ALL_TABS": "Alle Fenster schließen",
             "LOCAL_PROJECT": "Lokales Projekt",
             "OTHER_LOCAL_PROJECT": "Anderes lokales Projekt",
             "PREVIOUS_RESOURCE": "Vorherige Ressource",

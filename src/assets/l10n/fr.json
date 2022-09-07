@@ -1919,6 +1919,7 @@
             "BULK_DELETE_INFO": "Supprimer la valeur pour chaque ressource qui possède cette relation prédicat-valeur",
             "BULK_EDIT": "Éditer en masse",
             "BULK_EDIT_INFO": "Mettre à jour la valeur pour chaque ressource qui possède cette relation prédicat-valeur",
+            "CLOSE_ALL_TABS": "Fermer tous les onglets",
             "COPY_TO_CLIPBOARD": "Copier vers le presse-papier",
             "COPY_VALUE_TO_LOCALES": "Copier la valeur vers d'autres locales",
             "DELETE_ALL_VALUES": "Supprimer toutes les valeurs",
@@ -2017,7 +2018,6 @@
         },
         "STATUS": {
             "ACCESS_METHOD": "Méthode d'accès",
-            "CLOSE_ALL_TABS": "Fermer tous les onglets",
             "LOCAL_PROJECT": "Projet local",
             "OTHER_LOCAL_PROJECT": "Autre projet local",
             "PREVIOUS_RESOURCE": "Ressource précédente",

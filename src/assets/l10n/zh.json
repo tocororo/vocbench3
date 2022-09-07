@@ -1919,6 +1919,7 @@
             "BULK_DELETE_INFO": "Delete the value for every resource that has this predicate-value relation",
             "BULK_EDIT": "Bulk edit",
             "BULK_EDIT_INFO": "Update the value for every resource that has this predicate-value relation",
+            "CLOSE_ALL_TABS": "Close all tabs",
             "COPY_TO_CLIPBOARD": "Copy to clipboard",
             "COPY_VALUE_TO_LOCALES": "Copy value to other locales",
             "DELETE_ALL_VALUES": "Delete all values",
@@ -2017,7 +2018,6 @@
         },
         "STATUS": {
             "ACCESS_METHOD": "Access method",
-            "CLOSE_ALL_TABS": "Close all tabs",
             "LOCAL_PROJECT": "Local Project",
             "OTHER_LOCAL_PROJECT": "Other local Project",
             "PREVIOUS_RESOURCE": "Previous resource",

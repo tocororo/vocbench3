@@ -3,11 +3,8 @@ import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { ResourceViewModeDispatcher } from "../resourceView/resourceViewModes/resourceViewModeDispatcher";
 import { TabsetPanelComponent } from "../structures/tabset/tabsetPanelComponent";
-import { ResourceUtils } from '../utils/ResourceUtils';
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { ModalType } from '../widget/modal/Modals';
 
 @Component({
     selector: "data-component",
@@ -33,7 +30,7 @@ export class DataComponent {
 
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private eventHandler: VBEventHandler, private basicModals: BasicModalServices, private changeDetectorRef: ChangeDetectorRef) {
+    constructor(private eventHandler: VBEventHandler, private changeDetectorRef: ChangeDetectorRef) {
         this.eventSubscriptions.push(this.eventHandler.resourceCreatedUndoneEvent.subscribe(
             (res: ARTURIResource) => this.onResourceCreatedUndone(res)));
         this.eventSubscriptions.push(this.eventHandler.datatypeDeletedEvent.subscribe(
@@ -83,24 +80,6 @@ export class DataComponent {
             this.resViewPanelChild.deleteResource(node);
         }
     }
-
-    /*
-    Prompt Address handler 
-    */
-
-    togglePromptAddress() {
-        this.showPromptAddress = !this.showPromptAddress;
-    }
-
-    describeAddress() {
-        if (this.address == null || this.address.trim() == "") return;
-        if (ResourceUtils.testIRI(this.address)) {
-            this.onNodeSelected(new ARTURIResource(this.address));
-        } else {
-            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_IRI", params: { iri: this.address } }, ModalType.warning);
-        }
-    }
-
 
     //Draggable slider handler
     /**

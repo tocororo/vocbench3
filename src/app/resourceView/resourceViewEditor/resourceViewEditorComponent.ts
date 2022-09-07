@@ -8,7 +8,7 @@ import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourc
 import { Issue } from "../../models/Collaboration";
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
-import { NotificationStatus, ProjectPreferences, ResourceViewProjectSettings } from "../../models/Properties";
+import { NotificationStatus, ProjectPreferences, ResourceViewMode, ResourceViewProjectSettings } from "../../models/Properties";
 import { PropertyFacet, ResViewPartition } from "../../models/ResourceView";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { CollaborationServices } from "../../services/collaborationServices";
@@ -140,6 +140,9 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     settingsAvailable: boolean = true;
 
+    resViewMode: ResourceViewMode;
+    promptedAddress: string;
+
     constructor(resViewService: ResourceViewServices, modalService: NgbModal,
         private versionService: VersionsServices, private resourcesService: ResourcesServices, private collaborationService: CollaborationServices,
         private metadataRegistryService: MetadataRegistryServices, private notificationsService: NotificationServices,
@@ -223,7 +226,6 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         this.disabled = this.unauthorizedResource;
         if (this.unauthorizedResource) return;
 
-
         this.showInferredPristine = this.showInferred;
         if (this.activeVersion != null) {
             HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
@@ -258,6 +260,8 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         if (this.collaborationAvailable) {
             this.initCollaboration();
         }
+
+        this.resViewMode = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.mode; //useful for the prompt address field
 
         this.changeDetectorRef.detectChanges();
     }
@@ -943,6 +947,14 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     }
 
     //Status bar
+
+    describeAddress() {
+        if (ResourceUtils.testIRI(this.promptedAddress)) {
+            this.buildResourceView(new ARTURIResource(this.promptedAddress));
+        } else {
+            this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_IRI", params: { iri: this.promptedAddress } }, ModalType.warning);
+        }
+    }
 
     discoverDataset() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
