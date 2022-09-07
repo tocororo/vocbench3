@@ -120,6 +120,7 @@ export class TermViewComponent extends AbstractResourceView {
                 HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;
                 this.fillPartitions();
+                this.readonly = this.readonly || !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT);
                 this.unknownHost = false;
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },

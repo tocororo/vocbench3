@@ -29,6 +29,17 @@ body {
     border: 3px solid white;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: lightgray;
+    opacity: 1; /* Firefox */
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: lightgray;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: lightgray;
+}
+
 /* Splash screen style - BEGIN */
 .app-loading {
     position: relative;
@@ -1219,11 +1230,6 @@ label {
     border-style: solid;
     border-color: rgb(221, 221, 221) rgb(221, 221, 221) transparent;
     color: #555555;
-}
-
-/* since in the nav-item of res-view tabs there are rdf-resource with icons, this is needed to prevent disalignment in nav bar */
-resource-view-tabbed .nav-item {
-    max-height: 26px;
 }
 
 /* tabs bar END */

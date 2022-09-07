@@ -6,7 +6,7 @@
             <span class="fas fa-times" style="font-size: 7px;"></span>
         </button>
     </div>
-    <div class="btn-group" style="margin-left: auto;" ngbDropdown>
+    <div class="btn-group" style="margin-left: auto;" ngbDropdown container="body">
         <button class="btn btn-xs btn-faded" (click)="addTermBox()" [title]="'ACTIONS.ADD'|translate" [disabled]="!addLabelAuthorized || emptyTerm || readonly">
             <span class="fas fa-plus" style="font-size: 9px;"></span>
         </button>

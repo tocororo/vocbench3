@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ARTResource } from "../../models/ARTResources";
 import { ResourceViewMode } from "../../models/Properties";
@@ -24,7 +24,7 @@ export class ResourceViewModeDispatcher {
 
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private eventHandler: VBEventHandler, private changeDetectorRef: ChangeDetectorRef) {
+    constructor(private eventHandler: VBEventHandler) {
         this.eventHandler.resViewModeChangedEvent.subscribe(
             (event: { mode: ResourceViewMode, fromVbPref: boolean }) => { 
                 /**
@@ -47,8 +47,10 @@ export class ResourceViewModeDispatcher {
                     }
                     this.resViewMode = newResViewMode;
                     //timeout in order to wait that the RVPanel is updated after the change of mode
-                    this.changeDetectorRef.detectChanges();
-                    this.selectResource(resToRestore);
+                    setTimeout(() => { 
+                        //set timeout mandatory in place of changeDetector.detectChanges(), otherwise it causes error since the RV child is still not available
+                        this.selectResource(resToRestore);
+                    });
                 }
             }
         );

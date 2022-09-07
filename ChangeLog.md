@@ -6,6 +6,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 11.1.1 (dd-mm-202y)
   * Added possibility to filter structure tabs in Data page
+  * In the Data page added the possibility to prompt an addess to resolve
   * Fixed performances issues by replacing usage setTimeout() with ChangeDetectorRef#detectChanges(). Thanks to Saku Seppälä for the contribution!
   * Fixed authorization issues with CustomSearch stored at system level
   * Minor bugfixes and improvements

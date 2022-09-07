@@ -1,13 +1,34 @@
-<div class="hbox">
+<div class="vbox">
 
-    <div #treePanel class="vbox" [ngStyle]="{ 'flex': treePanelFlex }">
-        <tabset-panel (nodeSelected)="onNodeSelected($event)"></tabset-panel>
+    <div class="hbox">
+        <div #treePanel class="vbox" [ngStyle]="{ 'flex': treePanelFlex }">
+            <tabset-panel (nodeSelected)="onNodeSelected($event)"></tabset-panel>
+        </div>
+
+        <ng-container *ngIf="resViewPanelFlex > 0">
+            <div class="sliderX" (mousedown)="onMousedown($event);"></div>
+            <resource-view-mode-dispatcher #resViewPanel [ngStyle]="{ 'flex': resViewPanelFlex }"
+                (empty)="onResViewEmpty()" (tabSelect)="onTabSelected($event)"></resource-view-mode-dispatcher>
+        </ng-container>
     </div>
 
-    <ng-container *ngIf="resViewPanelFlex > 0">
-        <div class="sliderX" (mousedown)="onMousedown($event);"></div>
-        <resource-view-mode-dispatcher #resViewPanel [ngStyle]="{ 'flex': resViewPanelFlex }" 
-            (empty)="onResViewEmpty()" (tabSelect)="onTabSelected($event)"></resource-view-mode-dispatcher>
-    </ng-container>
-
+    <div class="d-flex">
+        <button class="btn btn-xs btn-light border-top-0" style="border-radius: 0px 0px 8px 8px;" (click)="togglePromptAddress()">
+            <i class="fas fa-search mr-2"></i>
+            <i [class]="'fas fa-chevron-' + (showPromptAddress ? 'up' : 'down')"></i>
+        </button>
+        <div *ngIf="showPromptAddress" class="card bg-light ml-2 flex-grow-1 border-top-0" style="border-radius: 0px 0px 8px 8px;">
+            <div class="card-body">
+                <div class="input-group input-group-sm">
+                    <input #addrBtn type="text" class="form-control" [(ngModel)]="address" (keyup.enter)="describeAddress(); addrBtn.blur()" placeholder="Type any IRI to visualize in a ResourceView...">
+                    <span class="input-group-append">
+                        <button class="btn btn-light" (click)="describeAddress()" [disabled]="!address">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>

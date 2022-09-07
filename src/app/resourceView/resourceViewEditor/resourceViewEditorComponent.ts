@@ -241,6 +241,10 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 this.resViewResponse = stResp;
                 this.fillPartitions();
                 this.unknownHost = false;
+
+                this.timeActionsEnabled = !this.inModal && this.projectCtx == null && this.atTime == null && this.resource.getAdditionalProperty(ResAttribute.EXPLICIT);
+                this.settingsAvailable = !this.inModal; //settings available only if RV is shown in data page (not in modal)
+                this.initNotificationsAvailable();
             },
             (err: Error) => {
                 if (err.name.endsWith("UnknownHostException")) {
@@ -249,14 +253,11 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             }
         );
 
-        
+
         this.updateCollaborationStatus();
         if (this.collaborationAvailable) {
             this.initCollaboration();
         }
-        this.timeActionsEnabled = !this.inModal && this.projectCtx == null && this.atTime == null;
-        this.settingsAvailable = !this.inModal; //settings available only if RV is shown in data page (not in modal)
-        this.initNotificationsAvailable();
 
         this.changeDetectorRef.detectChanges();
     }
@@ -789,7 +790,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     //NOTIFICATIONS HANDLERS
     private initNotificationsAvailable() {
         //notifications available only if the ResView is about an IRI of the current project and if notifications are activated
-        this.notificationsAvailable = this.projectCtx == null && this.resource instanceof ARTURIResource &&
+        this.notificationsAvailable = this.projectCtx == null && this.resource instanceof ARTURIResource && this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) &&
             VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().notificationStatus != NotificationStatus.no_notifications;
         if (this.notificationsAvailable) { //in case notification are active => init the status of watching
             this.initNotificationsStatus();
