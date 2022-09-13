@@ -50,7 +50,7 @@ export class PreferencesUtils {
      * @param settingsProperty 
      */
     public static mergePreference(localPref: any, settingsProperty: any) {
-        Object.keys(localPref).forEach(prop => {
+        Object.keys(settingsProperty).forEach(prop => {
             if (settingsProperty[prop] != null) {
                 localPref[prop] = settingsProperty[prop];
             }

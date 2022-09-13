@@ -193,12 +193,14 @@ export class DatasetCatalogModal {
 
     ok() {
         if (this.selectedDatasetDescription.dataDumps.length == 0) {
-            let returnData: DatasetCatalogModalReturnData = {
-                connectorId: this.selectedExtension.id,
-                dataset: this.selectedDatasetDescription,
-                dataDump: null
-            };
-            this.activeModal.close(returnData);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "The selected dataset catalog has no data dump, so it cannot be used for retrieving data." }, ModalType.warning);
+            return;
+            // let returnData: DatasetCatalogModalReturnData = {
+            //     connectorId: this.selectedExtension.id,
+            //     dataset: this.selectedDatasetDescription,
+            //     dataDump: null
+            // };
+            // this.activeModal.close(returnData);
         } else if (this.selectedDatasetDescription.dataDumps.length == 1) {
             let returnData: DatasetCatalogModalReturnData = {
                 connectorId: this.selectedExtension.id,

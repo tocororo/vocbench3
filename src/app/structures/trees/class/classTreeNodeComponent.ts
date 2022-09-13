@@ -106,8 +106,8 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
              */
             c['filtered'] = (
                 this.filterEnabled &&
-                classTreePref.filter.map[this.node.getURI()] != null && 
-                classTreePref.filter.map[this.node.getURI()].indexOf(c.getURI()) != -1
+                classTreePref.filter.map[this.node.getNominalValue()] != null && 
+                classTreePref.filter.map[this.node.getNominalValue()].indexOf(c.getNominalValue()) != -1
             );
         });
     }
@@ -138,7 +138,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
                  */
                 for (let i = 0; i < this.children.length; i++) {
                     let childFiltered: boolean = classTreeFilter.map[this.node.getURI()] != null && 
-                        classTreeFilter.map[this.node.getURI()].indexOf(this.children[i].getURI()) != -1;
+                        classTreeFilter.map[this.node.getURI()].indexOf(this.children[i].getNominalValue()) != -1;
                     if ((this.showDeprecated || !this.children[i].isDeprecated()) && (!classTreeFilter.enabled || !childFiltered)) {
                         childVisible = true;
                         break;

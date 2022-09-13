@@ -32,7 +32,7 @@ export abstract class AbstractTree extends AbstractStruct {
     /**
      * ATTRIBUTES
      */
-    roots: ARTURIResource[];
+    roots: ARTResource[];
 
     /**
      * CONSTRUCTOR
@@ -141,10 +141,10 @@ export abstract class AbstractTree extends AbstractStruct {
     onTreeNodeDeleted(deletedNode: ARTResource) {
         //check if the node to delete is a root
         for (let i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == deletedNode.getNominalValue()) {
+            if (this.roots[i].equals(deletedNode)) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
-                    let stagedRes: ARTURIResource = this.roots[i].clone();
+                    let stagedRes: ARTResource = this.roots[i].clone();
                     stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
                     stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
                     stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
@@ -160,7 +160,7 @@ export abstract class AbstractTree extends AbstractStruct {
     onResourceCreatedUndone(node: ARTResource) {
         //check if the node to delete is a root
         for (let i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == node.getNominalValue()) {
+            if (this.roots[i].equals(node)) {
                 //remove it independently from validation (when enabled, the "undo" of a creation doesn't mark the node as staged-del, but simply cancels the creation, so removes it)
                 this.roots.splice(i, 1);
                 break;
@@ -191,7 +191,7 @@ export abstract class AbstractTree extends AbstractStruct {
      */
     ensureRootVisibility(resource: ARTURIResource, path: ARTURIResource[]): boolean {
         for (let i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == resource.getURI()) {
+            if (this.roots[i].equals(resource)) {
                 if (i >= this.rootLimit) {
                     //update rootLimit so that node at index i is within the range
                     let scrollStep: number = ((i - this.rootLimit) / this.increaseRate) + 1;

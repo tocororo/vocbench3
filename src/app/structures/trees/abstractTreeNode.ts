@@ -29,7 +29,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
     /**
      * ATTRIBUTES
      */
-    children: ARTURIResource[] = [];
+    children: ARTResource[] = [];
     open: boolean = false;
 
     showExpandCollapseBtn: boolean = false; //tells if the expand/collapse node button should be visible (it depends on more_attr and showDeprecated)
@@ -160,7 +160,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
         //If the deprecated nodes are hidden, check if the path pass through a deprecated node not visible
         if (!this.showDeprecated) {
             for (let i = 0; i < this.children.length; i++) {
-                if (this.children[i].getURI() == path[0].getURI() && this.children[i].isDeprecated()) {
+                if (this.children[i].equals(path[0]) && this.children[i].isDeprecated()) {
                     this.basicModals.alert({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.RESOURCE_NOT_REACHABLE_IN_TREE_DEPRECATED_IN_PATH", params: { resource: path[path.length - 1].getShow() } },
                         ModalType.warning);
                     return;
@@ -221,7 +221,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
                      * Just update the style of the child node
                      */
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
-                    let stagedRes: ARTURIResource = this.children[i].clone();
+                    let stagedRes: ARTResource = this.children[i].clone();
                     stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
                     stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
                     stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);

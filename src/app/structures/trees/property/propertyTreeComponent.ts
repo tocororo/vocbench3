@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { Observable } from 'rxjs';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFS } from "../../../models/Vocabulary";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -101,53 +102,18 @@ export class PropertyTreeComponent extends AbstractTree {
                 },
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
-        } else if (this.type == RDFResourceRolesEnum.objectProperty) {
-            this.propertyService.getTopObjectProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                props => {
-                    ResourceUtils.sortResources(props, orderAttribute);
-                    this.roots = props;
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
-            );
-        } else if (this.type == RDFResourceRolesEnum.annotationProperty) {
-            this.propertyService.getTopAnnotationProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                props => {
-                    ResourceUtils.sortResources(props, orderAttribute);
-                    this.roots = props;
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
-            );
-        } else if (this.type == RDFResourceRolesEnum.datatypeProperty) {
-            this.propertyService.getTopDatatypeProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                props => {
-                    ResourceUtils.sortResources(props, orderAttribute);
-                    this.roots = props;
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
-            );
-        } else if (this.type == RDFResourceRolesEnum.ontologyProperty) {
-            this.propertyService.getTopOntologyProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                props => {
-                    ResourceUtils.sortResources(props, orderAttribute);
-                    this.roots = props;
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
-            );
-        } else if (this.type == RDFResourceRolesEnum.property) {
-            this.propertyService.getTopProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                props => {
-                    ResourceUtils.sortResources(props, orderAttribute);
-                    this.roots = props;
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
-            );
         } else {
-            this.propertyService.getTopProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+            let initTreeFn: Observable<ARTURIResource[]> = this.propertyService.getTopProperties(VBRequestOptions.getRequestOptions(this.projectCtx));
+            if (this.type == RDFResourceRolesEnum.objectProperty) {
+                initTreeFn = this.propertyService.getTopObjectProperties(VBRequestOptions.getRequestOptions(this.projectCtx));
+            } else if (this.type == RDFResourceRolesEnum.annotationProperty) {
+                initTreeFn = this.propertyService.getTopAnnotationProperties(VBRequestOptions.getRequestOptions(this.projectCtx));
+            } else if (this.type == RDFResourceRolesEnum.datatypeProperty) {
+                initTreeFn = this.propertyService.getTopDatatypeProperties(VBRequestOptions.getRequestOptions(this.projectCtx));
+            } else if (this.type == RDFResourceRolesEnum.ontologyProperty) {
+                initTreeFn = this.propertyService.getTopOntologyProperties(VBRequestOptions.getRequestOptions(this.projectCtx));
+            }
+            initTreeFn.subscribe(
                 props => {
                     ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;

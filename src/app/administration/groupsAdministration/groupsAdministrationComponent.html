@@ -1,8 +1,8 @@
-<div class="card card-default vbox">
+<div class="card vbox">
 
     <div class="card-body hbox">
 
-        <div class="card card-default vbox">
+        <div class="card vbox">
             <div class="card-header">
                 <label style="flex: 1;">{{'COMMONS.GROUPS'|translate}}:</label>
                 <div class="btn-group btn-group-xs">
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="card card-default vbox" style="flex: 2; margin-left: 5px;">
+        <div class="card vbox" style="flex: 2; margin-left: 5px;">
             <div class="card-header">
                 <label style="flex: 1;">{{'ADMINISTRATION.GROUPS.GROUP_DESCRIPTION'|translate}}:</label>
             </div>
@@ -38,19 +38,19 @@
                         <tbody>
                             <tr>
                                 <td nowrap><label>{{'ADMINISTRATION.GROUPS.SHORT_NAME'|translate}}:</label></td>
-                                <td><input class="form-control form-control-sm" [(ngModel)]="selectedGroup.shortName" readonly></td>
+                                <td><input class="form-control" [(ngModel)]="selectedGroup.shortName" readonly></td>
                             </tr>
                             <tr>
                                 <td nowrap><label>{{'ADMINISTRATION.GROUPS.FULL_NAME'|translate}}:</label></td>
-                                <td><input class="form-control form-control-sm" [(ngModel)]="selectedGroup.fullName" readonly></td>
+                                <td><input class="form-control" [(ngModel)]="selectedGroup.fullName" readonly></td>
                             </tr>
                             <tr>
                                 <td nowrap><label>{{'COMMONS.DESCRIPTION'|translate}}:</label></td>
-                                <td><textarea class="form-control form-control-sm" style="resize: vertical" rows="3" [(ngModel)]="selectedGroup.description" readonly></textarea></td>
+                                <td><textarea class="form-control" style="resize: vertical" rows="3" [(ngModel)]="selectedGroup.description" readonly></textarea></td>
                             </tr>
                             <tr>
                                 <td nowrap><label>{{'ADMINISTRATION.GROUPS.WEB_PAGE'|translate}}:</label></td>
-                                <td><input class="form-control form-control-sm" [(ngModel)]="selectedGroup.webPage" readonly></td>
+                                <td><input class="form-control" [(ngModel)]="selectedGroup.webPage" readonly></td>
                             </tr>
                         </tbody>
                     </table>

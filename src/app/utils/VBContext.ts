@@ -152,7 +152,7 @@ export class VBContext {
 
 }
 
-export class ProjectContext { //TODO move to Project model class?
+export class ProjectContext { //move to Project model class?
     private project: Project;
     private prefixMappings: PrefixMapping[];
     private ctxVersion: VersionInfo; // version used

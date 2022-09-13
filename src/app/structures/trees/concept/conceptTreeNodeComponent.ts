@@ -75,7 +75,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     //EVENT LISTENERS
 
     private onConceptRemovedFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
-        //TODO See comment in onConceptRemovedFromScheme in conceptTreeComponent
+        //See comment in onConceptRemovedFromScheme in conceptTreeComponent
         // if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
         //     this.onConceptDeleted(concept);
         // }
