@@ -241,7 +241,6 @@ export class MetadataRegistryServices {
         };
         return this.httpMgr.doGet(this.serviceName, "findDatasets", params).pipe(
             map(resp => {
-                console.log("resp", resp);
                 return resp.map((pos: any) => ResourcePosition.deserialize(pos.position));
             })
         );

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, QueryList, ViewChild, ViewChildren } from
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
+import { finalize } from 'rxjs/operators';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
@@ -9,6 +10,7 @@ import { ConfigurableExtensionFactory, DeploySource, ExtensionConfigurationStatu
 import { DataFormat } from "../../../models/RDFFormat";
 import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
+import { STError } from "../../../utils/HttpManager";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { ExtensionConfiguratorComponent } from "../../../widget/extensionConfigurator/extensionConfiguratorComponent";
@@ -511,7 +513,7 @@ export class ExportDataComponent {
                 }
 
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -581,14 +583,23 @@ export class ExportDataComponent {
             }
         }
 
+        this.exportImpl(graphsToExport, filteringPipeline, reformattingExporterSpec, deployerSpec, this.includeInferred, outputFormat);
+    }
+
+    private exportImpl(graphsToExport: ARTURIResource[], filteringPipeline: TransformationStep[], 
+        reformattingExporterSpec: PluginSpecification, deployerSpec: PluginSpecification, 
+        includeInferred: boolean, outputFormat: string) {
+            
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), reformattingExporterSpec, deployerSpec,
-            this.includeInferred, outputFormat).subscribe(
+            this.includeInferred, outputFormat).pipe(
+                finalize(() => { UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen); })
+            ).subscribe(
                 (data: any | Blob) => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.exportSuccessHandler(data, deployerSpec == null);
                 },
-                (err: Error) => {
+                (err: STError) => {
                     if (err.name.endsWith("NullGraphNotExportedException") || err.name.endsWith("UnnamedGraphNotExportedException")) {
                         let msg = err.message;
                         msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
@@ -607,9 +618,47 @@ export class ExportDataComponent {
                         );
                     } else if (err.name.endsWith("ReformattingWrongModelException") || err.name.endsWith("ReformattingWrongModelException")) {
                         this.basicModals.alert({ key: "STATUS.WARNING" }, err.message, ModalType.warning);
+                    } else if (err.name.endsWith("OntoPortalConstraintsViolationException")) {
+                        let ontoPortalEx: OntoPortalConstraintsViolationException = err.stResp;
+                        for (let v of ontoPortalEx.violations) {
+                            let options: string[] = v.fixes.map(f => f.message);
+                            this.basicModals.select({ key: "STATUS.WARNING" }, v.message, options, ModalType.warning).then(
+                                (chosenOpt) => {
+                                    let chosenFix: Repair = v.fixes.find(f => f.message == chosenOpt);
+                                    let pluginSpec = chosenFix.transformerSpecification;
+                                    this.applyOntoPortalFix(pluginSpec, filteringPipeline);
+                                    this.exportImpl(graphsToExport, filteringPipeline, reformattingExporterSpec, deployerSpec, includeInferred, outputFormat);
+                                },
+                                () => { }
+                            );
+                        }
                     }
                 }
             );
+    }
+
+    private applyOntoPortalFix(pluginSpec: PluginSpecification, filteringPipeline: TransformationStep[]) {
+        let filterStep: TransformationStep = { 
+            filter: {
+                factoryId: pluginSpec.factoryId,
+                configuration: pluginSpec.configuration
+            }
+        };
+        filteringPipeline.push(filterStep);
+        // this.appendFilter();
+        // this.changeDetectorRef.detectChanges();
+        // let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
+
+        // /* get the just added transformer. 
+        // In order to this gets the last element in viewChildrenExtConfig which is not the one for reformatter or deployer which are also them ExtensionConfiguratorComponent
+        // */
+        // let transformerExtConfigurator: ExtensionConfiguratorComponent[] = extConfigurators.filter(c => c != this.deployerConfigurator && c != this.reformatterConfigurator);
+        // let lastTransformer = transformerExtConfigurator[extConfigurators.length - 1]; //the last one
+        // // lastConfigurator.selectExtensionAndConfiguration(pluginSpec.factoryId, pluginSpec.configuration['@type']);
+
+        // // let configuration = new Settings(pluginSpec.configuration.shortName, this.type, this.editRequired, properties, this.htmlDescription, this.htmlWarning)
+
+        // lastTransformer.forceConfiguration(pluginSpec.factoryId, pluginSpec.configuration);
     }
 
     /**
@@ -706,7 +755,26 @@ class TransformerChainElement {
         if (graphs.length > 0) {
             filterStep.graphs = graphs;
         }
-
         return filterStep;
     }
+
+}
+
+interface OntoPortalConstraintsViolationException {
+    exception: string;
+    msg: string;
+    request: string;
+    stackTrace: string;
+    type: string;
+    violations: Violation[];
+}
+
+interface Violation {
+    message: string;
+    fixes: Repair[];
+}
+
+interface Repair {
+    message: string;
+    transformerSpecification: PluginSpecification;
 }

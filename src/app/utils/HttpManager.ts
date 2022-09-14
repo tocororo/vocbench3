@@ -365,7 +365,7 @@ export class HttpManager {
      */
     private handleOkOrErrorResponse(res: any | Document) {
         if (STResponseUtils.isErrorResponse(res)) {
-            let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(res));
+            let err = new STError(STResponseUtils.getErrorResponseExceptionMessage(res), res);
             err.name = STResponseUtils.getErrorResponseExceptionName(res);
             err.stack = STResponseUtils.getErrorResponseExceptionStackTrace(res);
             throw err;
@@ -381,8 +381,8 @@ export class HttpManager {
      * @param error error catched in catch clause (is a Response in case the error is a 401 || 403 response or if the server doesn't respond)
      * @param errorAlertOpt tells wheter to show error alert. Is useful to handle the error from the component that invokes the service.
      */
-    private handleError(err: HttpErrorResponse | Error, errorHandlers: ExceptionHandlerInfo[]) {
-        let error: Error = new Error();
+    private handleError(err: HttpErrorResponse | STError, errorHandlers: ExceptionHandlerInfo[]) {
+        let error: STError = new STError();
         if (err instanceof HttpErrorResponse) { //error thrown by the angular HttpClient get() or post()
             if (err.error instanceof ErrorEvent) { //A client-side or network error occurred
                 let errorMsg = "An error occurred:" + err.error.message;
@@ -426,7 +426,7 @@ export class HttpManager {
                     }
                 }
             }
-        } else if (err instanceof Error) { //error already parsed and thrown in handleOkOrErrorResponse or arrayBufferRespHandler
+        } else if (err instanceof STError) { //error already parsed and thrown in handleOkOrErrorResponse or arrayBufferRespHandler
             error = err;
             if (HttpServiceContext.isErrorInterceptionEnabled()) {
                 let handleErrorDefault: boolean = true;
@@ -682,3 +682,13 @@ export interface ExceptionHandlerInfo {
 }
 
 export class STRequestParams { [key: string]: any }
+
+export class STError extends Error {
+    stResp: any; //error response of ST, might contain further info useful in the handler
+    constructor(msg?: string, resp?: any) {
+        super(msg);
+        //Set the prototype explicitly (see https://stackoverflow.com/a/41429145/5805661)
+        Object.setPrototypeOf(this, STError.prototype);
+        this.stResp = resp ? resp.stresponse : null;
+    }
+}
