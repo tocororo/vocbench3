@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { LangPickerComponent } from 'src/app/widget/pickers/langPicker/langPickerComponent';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { LanguageConstraint } from "../../../../../models/LanguagesCountries";
@@ -13,13 +14,13 @@ import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModa
     templateUrl: "./newResourceWithLiteralCfModal.html",
 })
 export class NewResourceWithLiteralCfModal extends AbstractCustomConstructorModal {
+    @ViewChild(LangPickerComponent, { static: false }) langPicker: LangPickerComponent;
+
     @Input() title: string;
     @Input() cls: ARTURIResource; //class that this modal is creating an instance
     @Input() clsChangeable: boolean = true;
     @Input() literalLabel: string = "Label";
     @Input() langConstraints: LanguageConstraint = { constrain: false, locale: true };
-
-    viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
     //standard form
     label: string;
@@ -37,7 +38,6 @@ export class NewResourceWithLiteralCfModal extends AbstractCustomConstructorModa
     }
 
     ngAfterViewInit() {
-        this.viewInitialized = true;
         this.changeDetectorRef.detectChanges();
     }
 

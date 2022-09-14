@@ -37,12 +37,13 @@
         </div>
     </div>
     <div class="modal-footer">
-        <div class="hbox" style="align-items: center;">
-            <div style="flex: 1; margin-right: 14px; text-align: initial;">
-                <div *ngIf="!lang && viewInitialized" class="alert alert-danger" style="padding: 7px;">
+        <div class="d-flex align-items-center">
+            <div class="mr-3" style="flex: 1;">
+                <div *ngIf="langPicker?.languageList.length == 0" class="alert alert-danger text-left">
                     You cannot create values. You have no language assigned for the current project.
                 </div>
             </div>
+            
             <div>
                 <span *ngIf="isOkWarningActive()" class="fas fa-exclamation-triangle" style="margin-right: 2px;"
                     [title]="'DATA.COMMONS.MULTIVALUE_WARN'|translate">

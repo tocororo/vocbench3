@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { LangPickerComponent } from 'src/app/widget/pickers/langPicker/langPickerComponent';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { SKOSXL } from "../../../../../models/Vocabulary";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
@@ -9,6 +10,8 @@ import { BrowsingModalServices } from "../../../browsingModal/browsingModalServi
     templateUrl: "./newXLabelModal.html",
 })
 export class NewXLabelModal {
+    @ViewChild(LangPickerComponent, { static: false }) langPicker: LangPickerComponent;
+
     @Input() title: string = 'Create new label';
     @Input() value: string;
     @Input() valueReadonly: boolean = false;
@@ -16,8 +19,6 @@ export class NewXLabelModal {
     @Input() langReadonly: boolean = false;
     @Input() clsChangeable: boolean = true;
     @Input() multivalueOpt: { enabled: boolean, allowSameLang: boolean } = { enabled: false, allowSameLang: true };
-
-    viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
     labelClass: ARTURIResource = SKOSXL.label;
 
@@ -27,7 +28,6 @@ export class NewXLabelModal {
     }
 
     ngAfterViewInit() {
-        this.viewInitialized = true;
         this.changeDetectorRef.detectChanges();
     }
 

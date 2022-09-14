@@ -46,8 +46,8 @@
     </div>
     <div class="modal-footer">
         <div class="hbox" style="align-items: center;">
-            <div style="flex: 1; margin-right: 14px; text-align: initial;">
-                <div *ngIf="!lang && viewInitialized" class="alert alert-danger" style="padding: 7px;">
+            <div class="mr-3 text-left" style="flex: 1;">
+                <div *ngIf="langPicker?.languageList.length == 0" class="alert alert-danger">
                     {{'DATA.COMMONS.NO_LANGUAGE_ASSIGNED_WARN'|translate}}
                 </div>
             </div>

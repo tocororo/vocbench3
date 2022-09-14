@@ -39,7 +39,7 @@
 
         <custom-form *ngIf="customFormId" [cfId]="customFormId" [(ngModel)]="formFields" (hideStdResField)="hideStdResField = true" class="mt-2 pt-2 border-top"></custom-form>
 
-        <div *ngIf="!lang && viewInitialized" class="alert alert-danger mt-2">
+        <div *ngIf="langPicker?.languageList.length == 0" class="alert alert-danger mt-2">
             {{'DATA.COMMONS.NO_LANGUAGE_ASSIGNED_WARN'|translate}}
         </div>
 

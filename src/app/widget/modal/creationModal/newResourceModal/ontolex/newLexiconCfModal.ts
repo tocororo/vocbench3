@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { LangPickerComponent } from 'src/app/widget/pickers/langPicker/langPickerComponent';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { Lime } from "../../../../../models/Vocabulary";
@@ -13,6 +14,8 @@ import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModa
     templateUrl: "./newLexiconCfModal.html",
 })
 export class NewLexiconCfModal extends AbstractCustomConstructorModal {
+    @ViewChild(LangPickerComponent, { static: false }) langPicker: LangPickerComponent;
+
     @Input() title: string;
     @Input() clsChangeable: boolean = false; //currently is not possible to specify the Lexicon class in the service, so disallow class change
 
@@ -21,8 +24,6 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal {
     title_lang: string;
     lang: string;
     uri: string;
-
-    viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
     constructor(public activeModal: NgbActiveModal, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, private changeDetectorRef: ChangeDetectorRef) {
@@ -35,7 +36,6 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal {
     }
 
     ngAfterViewInit() {
-        this.viewInitialized = true;
         this.changeDetectorRef.detectChanges();
     }
 

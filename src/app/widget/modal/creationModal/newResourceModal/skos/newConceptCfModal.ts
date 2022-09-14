@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { LangPickerComponent } from 'src/app/widget/pickers/langPicker/langPickerComponent';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { SKOS } from "../../../../../models/Vocabulary";
@@ -16,14 +17,14 @@ import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModa
 })
 export class NewConceptCfModal extends AbstractCustomConstructorModal {
 
+    @ViewChild(LangPickerComponent, { static: false }) langPicker: LangPickerComponent;
+
     @Input() title: string = "Modal title";
     @Input() broader: ARTURIResource;
     @Input() schemes: ARTURIResource[]; //in standard form
     @Input() cls: ARTURIResource;
     @Input() clsChangeable: boolean = true;
     @Input() lang: string; //in standard form
-
-    viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
     private broaderProp: ARTURIResource = SKOS.broader;
 
@@ -53,7 +54,6 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal {
     }
 
     ngAfterViewInit() {
-        this.viewInitialized = true;
         this.changeDetectorRef.detectChanges();
     }
 

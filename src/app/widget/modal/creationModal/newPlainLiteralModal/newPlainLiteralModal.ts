@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { LangPickerComponent } from 'src/app/widget/pickers/langPicker/langPickerComponent';
 import { ARTLiteral } from "../../../../models/ARTResources";
 import { LanguageConstraint } from "../../../../models/LanguagesCountries";
 
@@ -8,6 +9,8 @@ import { LanguageConstraint } from "../../../../models/LanguagesCountries";
     templateUrl: "./newPlainLiteralModal.html",
 })
 export class NewPlainLiteralModal {
+    @ViewChild(LangPickerComponent, { static: false }) langPicker: LangPickerComponent;
+
     @Input() title: string = 'Create new label';
     @Input() value: string;
     @Input() valueReadonly: boolean = false;
@@ -16,14 +19,11 @@ export class NewPlainLiteralModal {
     @Input() langConstraints: LanguageConstraint = { constrain: false, locale: true };
     @Input() multivalueOpt: { enabled: boolean, allowSameLang: boolean } = { enabled: false, allowSameLang: true };
 
-    viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
-
     values: ARTLiteral[] = [];
 
     constructor(public activeModal: NgbActiveModal, private changeDetectorRef: ChangeDetectorRef) { }
 
     ngAfterViewInit() {
-        this.viewInitialized = true;
         this.changeDetectorRef.detectChanges();
     }
 
