@@ -155,7 +155,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
             //check if all the fields in the retrieve have a related update tab
             this.retrieveFields.forEach(f => {
                 if (!this.updateTabs.some(t => t.field == f)) { //no tab for the current field => init tab
-                    this.updateTabs.push({ field: f, singleValueData: null });
+                    this.updateTabs.push({ field: f, singleValueData: { updateMode: UpdateMode.none } });
                 }
             });
             if (!this.updateTabs.includes(this.activeUpdateTab)) { //previous active tab doesn't exist anymore => active the first tab
@@ -164,7 +164,7 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
         } else { //no update editor initialized before
             this.updateTabs = [];
             this.retrieveFields.forEach(f => {
-                this.updateTabs.push({ field: f, singleValueData: null });
+                this.updateTabs.push({ field: f, singleValueData: { updateMode: UpdateMode.none } });
             });
             this.activeUpdateTab = this.updateTabs[0];
         }
@@ -215,6 +215,9 @@ export class DynamicVectorViewEditorComponent extends AbstractCustomViewEditor {
     }
 
     public isDataValid(): boolean {
+        //update the Update editor so that changes in Retrieve are reflected in updateTabs structures (normally update fields tabs are synced only when switching to Update tab)
+        this.initUpdateEditors();
+        this.emitChanges(); //emit changes to parent CV editor
         return this.isRetrieveOk() && this.isUpdateOk();
     }
 
