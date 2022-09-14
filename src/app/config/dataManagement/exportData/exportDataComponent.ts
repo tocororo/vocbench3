@@ -583,12 +583,11 @@ export class ExportDataComponent {
             }
         }
 
-        this.exportImpl(graphsToExport, filteringPipeline, reformattingExporterSpec, deployerSpec, this.includeInferred, outputFormat);
+        this.exportImpl(graphsToExport, filteringPipeline, reformattingExporterSpec, deployerSpec, outputFormat);
     }
 
     private exportImpl(graphsToExport: ARTURIResource[], filteringPipeline: TransformationStep[], 
-        reformattingExporterSpec: PluginSpecification, deployerSpec: PluginSpecification, 
-        includeInferred: boolean, outputFormat: string) {
+        reformattingExporterSpec: PluginSpecification, deployerSpec: PluginSpecification, outputFormat: string) {
             
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), reformattingExporterSpec, deployerSpec,
@@ -627,7 +626,7 @@ export class ExportDataComponent {
                                     let chosenFix: Repair = v.fixes.find(f => f.message == chosenOpt);
                                     let pluginSpec = chosenFix.transformerSpecification;
                                     this.applyOntoPortalFix(pluginSpec, filteringPipeline);
-                                    this.exportImpl(graphsToExport, filteringPipeline, reformattingExporterSpec, deployerSpec, includeInferred, outputFormat);
+                                    // this.exportImpl(graphsToExport, filteringPipeline, reformattingExporterSpec, deployerSpec, includeInferred, outputFormat);
                                 },
                                 () => { }
                             );
@@ -638,27 +637,32 @@ export class ExportDataComponent {
     }
 
     private applyOntoPortalFix(pluginSpec: PluginSpecification, filteringPipeline: TransformationStep[]) {
-        let filterStep: TransformationStep = { 
-            filter: {
-                factoryId: pluginSpec.factoryId,
-                configuration: pluginSpec.configuration
+        // let filterStep: TransformationStep = { 
+        //     filter: {
+        //         factoryId: pluginSpec.factoryId,
+        //         configuration: pluginSpec.configuration
+        //     }
+        // };
+        // filteringPipeline.push(filterStep);
+
+        this.appendFilter();
+        this.changeDetectorRef.detectChanges(); //wait the extention-configurator component to be initialized
+        let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
+        /* 
+        get the just added transformer. 
+        In order to this gets the last element in viewChildrenExtConfig which is not the one for reformatter or deployer which are also them ExtensionConfiguratorComponent
+        */
+        let transformerExtConfigurator: ExtensionConfiguratorComponent[] = extConfigurators.filter(c => c != this.deployerConfigurator && c != this.reformatterConfigurator);
+        let lastTransformer = transformerExtConfigurator[transformerExtConfigurator.length - 1]; //the last one
+        //select the ext and the config specified in the fix
+        lastTransformer.selectExtensionAndConfiguration(pluginSpec.factoryId, pluginSpec.configuration['@type']);
+
+        this.changeDetectorRef.detectChanges(); //wait the extention-configurator to update the selectedConfiguration in the filtersChain 
+        this.filtersChain[this.filtersChain.length-1].selectedConfiguration.properties.forEach(p => {
+            if (p.name in pluginSpec.properties) {
+                p.value = pluginSpec.properties[p.name];
             }
-        };
-        filteringPipeline.push(filterStep);
-        // this.appendFilter();
-        // this.changeDetectorRef.detectChanges();
-        // let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
-
-        // /* get the just added transformer. 
-        // In order to this gets the last element in viewChildrenExtConfig which is not the one for reformatter or deployer which are also them ExtensionConfiguratorComponent
-        // */
-        // let transformerExtConfigurator: ExtensionConfiguratorComponent[] = extConfigurators.filter(c => c != this.deployerConfigurator && c != this.reformatterConfigurator);
-        // let lastTransformer = transformerExtConfigurator[extConfigurators.length - 1]; //the last one
-        // // lastConfigurator.selectExtensionAndConfiguration(pluginSpec.factoryId, pluginSpec.configuration['@type']);
-
-        // // let configuration = new Settings(pluginSpec.configuration.shortName, this.type, this.editRequired, properties, this.htmlDescription, this.htmlWarning)
-
-        // lastTransformer.forceConfiguration(pluginSpec.factoryId, pluginSpec.configuration);
+        });
     }
 
     /**
