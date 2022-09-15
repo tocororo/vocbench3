@@ -123,7 +123,7 @@ export class ExportServices {
                 { className: 'it.uniroma2.art.semanticturkey.services.core.export.UnnamedGraphNotExportedException', action: 'skip' },
                 { className: 'it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongModelException', action: 'skip' },
                 { className: 'it.uniroma2.art.semanticturkey.extension.extpts.reformattingexporter.ReformattingWrongLexModelException', action: 'skip' },
-                { className: 'it.uniroma2.art.semanticturkey.extension.impl.deployer.ontoportal.OntoPortalConstraintsViolationException', action: 'skip' },
+                { className: 'it.uniroma2.art.semanticturkey.extension.extpts.deployer.DeploymentConstraintsViolationException', action: 'skip' },
             ]
         });
         if (deployerSpec == null) {

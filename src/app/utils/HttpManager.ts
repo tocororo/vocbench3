@@ -470,7 +470,7 @@ export class HttpManager {
             let respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
             let jsonResp = JSON.parse(respContentAsString);
             if (STResponseUtils.isErrorResponse(jsonResp)) { //is an error
-                let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(jsonResp));
+                let err = new STError(STResponseUtils.getErrorResponseExceptionMessage(jsonResp));
                 err.name = STResponseUtils.getErrorResponseExceptionName(jsonResp);
                 err.stack = STResponseUtils.getErrorResponseExceptionStackTrace(jsonResp);
                 throw err;

@@ -587,7 +587,7 @@ export class ExportDataComponent {
     }
 
     private exportImpl(graphsToExport: ARTURIResource[], filteringPipeline: TransformationStep[], 
-        reformattingExporterSpec: PluginSpecification, deployerSpec: PluginSpecification, outputFormat: string) {
+        reformattingExporterSpec: PluginSpecification, deployerSpec: PluginSpecification, outputFormat: string, force?: boolean) {
             
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), reformattingExporterSpec, deployerSpec,
@@ -603,30 +603,22 @@ export class ExportDataComponent {
                         let msg = err.message;
                         msg += ". " + this.translateService.instant("MESSAGES.FORCE_OPERATION_CONFIRM");
                         this.basicModals.confirm({ key: "STATUS.WARNING" }, msg, ModalType.warning).then(
-                            yes => {
-                                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                                this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), reformattingExporterSpec, deployerSpec,
-                                    this.includeInferred, outputFormat, true).subscribe(
-                                        (data: any | Blob) => {
-                                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                            this.exportSuccessHandler(data, deployerSpec == null);
-                                        },
-                                    );
+                            () => {
+                                this.exportImpl(graphsToExport, filteringPipeline, reformattingExporterSpec, deployerSpec, outputFormat, true);
                             },
-                            no => { }
+                            () => { }
                         );
                     } else if (err.name.endsWith("ReformattingWrongModelException") || err.name.endsWith("ReformattingWrongModelException")) {
                         this.basicModals.alert({ key: "STATUS.WARNING" }, err.message, ModalType.warning);
-                    } else if (err.name.endsWith("OntoPortalConstraintsViolationException")) {
-                        let ontoPortalEx: OntoPortalConstraintsViolationException = err.stResp;
-                        for (let v of ontoPortalEx.violations) {
+                    } else if (err.name.endsWith("DeploymentConstraintsViolationException")) {
+                        let deploymentEx: DeploymentConstraintsViolationException = err.stResp;
+                        for (let v of deploymentEx.violations) {
                             let options: string[] = v.fixes.map(f => f.message);
                             this.basicModals.select({ key: "STATUS.WARNING" }, v.message, options, ModalType.warning).then(
                                 (chosenOpt) => {
                                     let chosenFix: Repair = v.fixes.find(f => f.message == chosenOpt);
                                     let pluginSpec = chosenFix.transformerSpecification;
-                                    this.applyOntoPortalFix(pluginSpec, filteringPipeline);
-                                    // this.exportImpl(graphsToExport, filteringPipeline, reformattingExporterSpec, deployerSpec, includeInferred, outputFormat);
+                                    this.applyDeploymentFix(pluginSpec, filteringPipeline);
                                 },
                                 () => { }
                             );
@@ -636,15 +628,7 @@ export class ExportDataComponent {
             );
     }
 
-    private applyOntoPortalFix(pluginSpec: PluginSpecification, filteringPipeline: TransformationStep[]) {
-        // let filterStep: TransformationStep = { 
-        //     filter: {
-        //         factoryId: pluginSpec.factoryId,
-        //         configuration: pluginSpec.configuration
-        //     }
-        // };
-        // filteringPipeline.push(filterStep);
-
+    private applyDeploymentFix(pluginSpec: PluginSpecification, filteringPipeline: TransformationStep[]) {
         this.appendFilter();
         this.changeDetectorRef.detectChanges(); //wait the extention-configurator component to be initialized
         let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
@@ -764,7 +748,7 @@ class TransformerChainElement {
 
 }
 
-interface OntoPortalConstraintsViolationException {
+interface DeploymentConstraintsViolationException {
     exception: string;
     msg: string;
     request: string;
