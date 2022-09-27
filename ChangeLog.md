@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 11.1.1 (dd-mm-202y)
+# 11.2.0 (27-09-2022)
   * Added possibility to filter structure tabs in Data page
   * In the Data page added the possibility to prompt an addess to resolve
   * Fixed performances issues by replacing usage setTimeout() with ChangeDetectorRef#detectChanges(). Thanks to Saku Seppälä for the contribution!
