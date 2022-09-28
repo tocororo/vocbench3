@@ -1,173 +1,177 @@
-<resizable-layout orientation="V" mainFlex="7" class="blockingDivHost">
+<div class="vbox blockingDivHost">
 
-    <resizable-layout main orientation="H" mainFlex="5">
-    
-        <div main class="card card-alt vbox">
-            <div class="card-header">
-                <span style="flex: 1;">
-                    <label>{{'SHEET2RDF.SPREADSHEET.PREVIEW'|translate}}</label>
-                    <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">
-                        ({{'SHEET2RDF.SPREADSHEET.ROWS'|translate}}: {{truncatedRows}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totalRows}})
+    <resizable-layout orientation="V" mainFlex="7">
+
+        <resizable-layout main orientation="H" mainFlex="5">
+
+            <div main class="card card-alt vbox">
+                <div class="card-header">
+                    <span style="flex: 1;">
+                        <label>{{'SHEET2RDF.SPREADSHEET.PREVIEW'|translate}}</label>
+                        <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">
+                            ({{'SHEET2RDF.SPREADSHEET.ROWS'|translate}}: {{truncatedRows}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totalRows}})
+                        </span>
                     </span>
-                </span>
-                <div class="btn-toolbar" role="toolbar">
-                    <button class="btn btn-light btn-xs" [class]="s2rdfModel.subjectHeader ? s2rdfModel.subjectHeader['cssClass'] : null" (click)="editSubjectHeader()"
-                        [title]="'SHEET2RDF.SPREADSHEET.EDIT_SUBJECT_HEADER'|translate" [disabled]="!tablePreview">
-                        {{'SHEET2RDF.SPREADSHEET.SUBJECT_MAPPING'|translate}}
-                    </button>
-
-                    <button class="btn btn-light btn-xs" (click)="generatePearl()" [title]="'SHEET2RDF.ACTIONS.GENERATE_PEARL'|translate" [disabled]="!tablePreview">
-                        <span class="fas fa-play text-primary"></span>
-                    </button>
-
-                    <div class="btn-group btn-group-xs">
-                        <!-- Workaround to show input file as simple <button> -->
-                        <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" (click)="$event.target.value=null" accept=".json, text/plain" style="display:none">
-                        <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" [title]="'SHEET2RDF.ACTIONS.LOAD_MAPPING_STATUS'|translate" [disabled]="!tablePreview">
-                            <span class="fas fa-upload"></span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <button class="btn btn-light btn-xs" [class]="s2rdfModel.subjectHeader ? s2rdfModel.subjectHeader['cssClass'] : null" (click)="editSubjectHeader()"
+                            [title]="'SHEET2RDF.SPREADSHEET.EDIT_SUBJECT_HEADER'|translate" [disabled]="!tablePreview">
+                            {{'SHEET2RDF.SPREADSHEET.SUBJECT_MAPPING'|translate}}
                         </button>
-                        <button class="btn btn-light" (click)="exportStatus()" [title]="'SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS'|translate" [disabled]="!tablePreview">
-                            <span class="fas fa-download"></span>
+
+                        <button class="btn btn-light btn-xs" (click)="generatePearl()" [title]="'SHEET2RDF.ACTIONS.GENERATE_PEARL'|translate" [disabled]="!tablePreview">
+                            <span class="fas fa-play text-primary"></span>
                         </button>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body scrollableContainer" style="background: #eee;">
-                <table class="table" style="background-color: #fff;">
-                    <tbody>
-                        <tr>
-                            <td *ngFor="let h of s2rdfModel.headers" class="columnHeader">
-                                <span *ngIf="h.id==s2rdfModel.subjectHeader.id" class="badge badge-success" [title]="'MODELS.RESOURCE.SUBJECT'|translate">S</span>
-                                <span [class]="h.cssClass" style="font-weight: bold;">
-                                    {{h.nameStruct.fullName}}
-                                </span>
-                                <button class="btn btn-xs btn-light" style="padding: 0px 3px;" [title]="'ACTIONS.EDIT'|translate" (click)="editHeader(h)">
-                                    <span class="fas fa-edit"></span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr *ngFor="let row of tablePreview" [id]="'tableRow'+row.idx" [ngClass]="{ 'table-primary': row == selectedTablePreviewRow }">
-                            <td *ngFor="let c of row.cells" class="spreadsheetCell" [title]="c.value">{{c.value}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer">
-                <div class="dropdown float-right" ngbDropdown placement="top-right">
-                    <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle>
-                        {{'COMMONS.LEGEND'|translate}} <span class="fas fa-caret-up fa-sm"></span>
-                    </button>
-                    <div class="dropdown-menu" ngbDropdownMenu>
-                        <a class="dropdown-item">
-                            <div><span class="fas fa-stop unconfiguredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.NOT_CONFIGURED'|translate}}</div>
-                            <div><span class="fas fa-stop configuredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.VALID_CONFIGURATION'|translate}}</div>
-                            <div><span class="fas fa-stop partiallyConfiguredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.PARTIALLY_CONFIGURED'|translate}}</div>
-                            <div><span class="fas fa-stop ignoredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.IGNORED'|translate}}</div>
-                            <div><span class="fas fa-stop incompleteSubjectHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.INCOMPLETED_SUBJECT'|translate}}</div>
-                            <div class="hbox" style="align-items: center;">
-                                <span class="badge badge-success" style="padding: 1px 2px; width: 10px; margin: 0px 2px 0px 1px;">S</span>
-                                {{'SHEET2RDF.SPREADSHEET.LEGEND.SUBJECT_HEADER'|translate}}
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div secondary class="card card-alt vbox">
-            <div class="card-header">
-                <label style="flex: 1;">
-                    Pearl
-                </label>
-                <span *ngIf="!pearlValidation.valid" class="fas fa-exclamation-triangle" style="margin-right: 8px; color: #d00;"
-                    [title]="pearlValidation.details"></span>
-
-                <div class="btn-toolbar" role="toolbar">
-                    <button class="btn btn-light btn-xs" (click)="generateTriples().subscribe()" [title]="'SHEET2RDF.ACTIONS.GENERATE_TRIPLES'|translate" [disabled]="!pearl">
-                        <span class="fas fa-play text-success"></span>
-                    </button>
-                    <div class="btn-group btn-group-xs">
-                        <!-- Workaround to show input file as simple <button> -->
-                        <input #inputFile type="file" (change)="loadPearl(inputFile.files[0])" accept=".pr, text/plain" style="display:none">
-                        <button class="btn btn-light" style="margin-left: -1px" (click)="inputFile.click()" [title]="'ACTIONS.LOAD'|translate" [disabled]="!tablePreview">
-                            <span class="fas fa-upload"></span>
-                        </button>
-                        <button class="btn btn-light" (click)="exportPearl()" [title]="'ACTIONS.EXPORT'|translate" [disabled]="!pearl">
-                            <span class="fas fa-download"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body hbox">
-                <pearl-editor *ngIf="!hidden" [(ngModel)]="pearl" (ngModelChange)="onPearlChange()" style="flex: 1;" [disabled]="!tablePreview">
-                </pearl-editor>
-                <button class="btn btn-light btn-xs" (click)="insertConverter()" style="align-self: flex-end; margin-left: 4px;"
-                    [title]="'SHEET2RDF.ACTIONS.INSERT_CONVERTER'|translate" [disabled]="!tablePreview">
-                    <span class="fas fa-pencil-alt"></span>
-                </button>
-            </div>
-        </div>
-    
-    </resizable-layout>
-
-    <div secondary class="vbox">
-        <div class="card card-alt vbox">
-            <div class="card-header">
-                <span style="flex: 1;">
-                    <label>{{'SHEET2RDF.TRIPLES.GENERATED_TRIPLES_PREVIEW'|translate}}</label>
-                    <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totalTriples}})</span>
-                </span>
-
-                <div class="btn-toolbar" role="toolbar">
-                    <button class="btn btn-light btn-xs" (click)="addTriples().subscribe()" [title]="'SHEET2RDF.ACTIONS.ADD_TRIPLES'|translate" [disabled]="!triplesPreview">
-                        <span class="fas fa-file-signature"></span>
-                    </button>
-
-                    <div class="btn-group btn-group-xs">
-                        <div class="dropdown float-right" ngbDropdown>
-                            <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle [disabled]="!triplesPreview">
-                                {{'ACTIONS.EXPORT'|translate}}... <span class="fas fa-caret-down fa-sm"></span>
+                        <div class="btn-group btn-group-xs">
+                            <!-- Workaround to show input file as simple <button> -->
+                            <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" (click)="$event.target.value=null" accept=".json, text/plain" style="display:none">
+                            <button class="btn btn-light" style="margin-left: -1px" (click)="inputStatusFile.click()" [title]="'SHEET2RDF.ACTIONS.LOAD_MAPPING_STATUS'|translate" [disabled]="!tablePreview">
+                                <span class="fas fa-upload"></span>
                             </button>
-                            <div class="dropdown-menu" ngbDropdownMenu>
-                                <a *ngFor="let f of exportFormats" class="dropdown-item" (click)="exportTriplesAs(f)">{{f.name}}</a>
-                            </div>
+                            <button class="btn btn-light" (click)="exportStatus()" [title]="'SHEET2RDF.ACTIONS.EXPORT_MAPPING_STATUS'|translate" [disabled]="!tablePreview">
+                                <span class="fas fa-download"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body scrollableContainer" style="background: #eee;">
+                    <table class="table" style="background-color: #fff;">
+                        <tbody>
+                            <tr>
+                                <td *ngFor="let h of s2rdfModel.headers" class="columnHeader">
+                                    <span *ngIf="h.id==s2rdfModel.subjectHeader.id" class="badge badge-success" [title]="'MODELS.RESOURCE.SUBJECT'|translate">S</span>
+                                    <span [class]="h.cssClass" style="font-weight: bold;">
+                                        {{h.nameStruct.fullName}}
+                                    </span>
+                                    <button class="btn btn-xs btn-light" style="padding: 0px 3px;" [title]="'ACTIONS.EDIT'|translate" (click)="editHeader(h)">
+                                        <span class="fas fa-edit"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let row of tablePreview" [id]="'tableRow'+row.idx" [ngClass]="{ 'table-primary': row == selectedTablePreviewRow }">
+                                <td *ngFor="let c of row.cells" class="spreadsheetCell" [title]="c.value">{{c.value}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="dropdown float-right" ngbDropdown placement="top-right">
+                        <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle>
+                            {{'COMMONS.LEGEND'|translate}} <span class="fas fa-caret-up fa-sm"></span>
+                        </button>
+                        <div class="dropdown-menu" ngbDropdownMenu>
+                            <a class="dropdown-item">
+                                <div><span class="fas fa-stop unconfiguredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.NOT_CONFIGURED'|translate}}</div>
+                                <div><span class="fas fa-stop configuredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.VALID_CONFIGURATION'|translate}}</div>
+                                <div><span class="fas fa-stop partiallyConfiguredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.PARTIALLY_CONFIGURED'|translate}}</div>
+                                <div><span class="fas fa-stop ignoredHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.IGNORED'|translate}}</div>
+                                <div><span class="fas fa-stop incompleteSubjectHeader"></span> {{'SHEET2RDF.SPREADSHEET.LEGEND.INCOMPLETED_SUBJECT'|translate}}</div>
+                                <div class="hbox" style="align-items: center;">
+                                    <span class="badge badge-success" style="padding: 1px 2px; width: 10px; margin: 0px 2px 0px 1px;">S</span>
+                                    {{'SHEET2RDF.SPREADSHEET.LEGEND.SUBJECT_HEADER'|translate}}
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-body table-responsive">
-                <table class="table table-sm table-hoverable" style="flex: 1">
-                    <colgroup>
-                        <col style="width: 1%;">
-                        <col>
-                        <col>
-                        <col>
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>{{'MODELS.RESOURCE.SUBJECT'|translate}}</th>
-                            <th>{{'MODELS.RESOURCE.PREDICATE'|translate}}</th>
-                            <th>{{'MODELS.RESOURCE.OBJECT'|translate}}</th>
-                        </tr>
-                    </thead>
-                    <tbody style="overflow: auto;">
-                        <tr *ngFor="let t of triplesPreview;" (click)="selectTriplePreviewRow(t)" [ngClass]="{ 'oddTablePreviewRow' : alternateRowHelper[t.row]%2==0, 'table-primary': t == selectedTriplePreviewRow }">
-                            <td *ngIf="!t.delete" class="text-center" style="background: lightgreen !important; padding: 3px 6px;">
-                                <span class="fas fa-plus" style="color: green" [title]="'STATUS.ADDED'|translate"></span>
-                            </td>
-                            <td *ngIf="t.delete" class="text-center" style="background: lightpink !important; padding: 3px 6px;">
-                                <span class="fas fa-minus" style="color: red" [title]="'STATUS.REMOVED'|translate"></span>
-                            </td>
-                            <td>{{t.subject}}</td>
-                            <td>{{t.predicate}}</td>
-                            <td>{{t.object}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+
+            <div secondary class="card card-alt vbox">
+                <div class="card-header">
+                    <label style="flex: 1;">
+                        Pearl
+                    </label>
+                    <span *ngIf="!pearlValidation.valid" class="fas fa-exclamation-triangle" style="margin-right: 8px; color: #d00;"
+                        [title]="pearlValidation.details"></span>
+
+                    <div class="btn-toolbar" role="toolbar">
+                        <button class="btn btn-light btn-xs" (click)="generateTriples().subscribe()" [title]="'SHEET2RDF.ACTIONS.GENERATE_TRIPLES'|translate" [disabled]="!pearl">
+                            <span class="fas fa-play text-success"></span>
+                        </button>
+                        <div class="btn-group btn-group-xs">
+                            <!-- Workaround to show input file as simple <button> -->
+                            <input #inputFile type="file" (change)="loadPearl(inputFile.files[0])" accept=".pr, text/plain" style="display:none">
+                            <button class="btn btn-light" style="margin-left: -1px" (click)="inputFile.click()" [title]="'ACTIONS.LOAD'|translate" [disabled]="!tablePreview">
+                                <span class="fas fa-upload"></span>
+                            </button>
+                            <button class="btn btn-light" (click)="exportPearl()" [title]="'ACTIONS.EXPORT'|translate" [disabled]="!pearl">
+                                <span class="fas fa-download"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body hbox">
+                    <pearl-editor *ngIf="!hidden" [(ngModel)]="pearl" (ngModelChange)="onPearlChange()" style="flex: 1;" [disabled]="!tablePreview">
+                    </pearl-editor>
+                    <button class="btn btn-light btn-xs" (click)="insertConverter()" style="align-self: flex-end; margin-left: 4px;"
+                        [title]="'SHEET2RDF.ACTIONS.INSERT_CONVERTER'|translate" [disabled]="!tablePreview">
+                        <span class="fas fa-pencil-alt"></span>
+                    </button>
+                </div>
+            </div>
+
+        </resizable-layout>
+
+        <div secondary class="vbox">
+            <div class="card card-alt vbox">
+                <div class="card-header">
+                    <span style="flex: 1;">
+                        <label>{{'SHEET2RDF.TRIPLES.GENERATED_TRIPLES_PREVIEW'|translate}}</label>
+                        <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} {{'COMMONS.PAGING.PAGE_OF_TOT'|translate}} {{totalTriples}})</span>
+                    </span>
+
+                    <div class="btn-toolbar" role="toolbar">
+                        <button class="btn btn-light btn-xs" (click)="addTriples().subscribe()" [title]="'SHEET2RDF.ACTIONS.ADD_TRIPLES'|translate" [disabled]="!triplesPreview">
+                            <span class="fas fa-file-signature"></span>
+                        </button>
+
+                        <div class="btn-group btn-group-xs">
+                            <div class="dropdown float-right" ngbDropdown>
+                                <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle [disabled]="!triplesPreview">
+                                    {{'ACTIONS.EXPORT'|translate}}... <span class="fas fa-caret-down fa-sm"></span>
+                                </button>
+                                <div class="dropdown-menu" ngbDropdownMenu>
+                                    <a *ngFor="let f of exportFormats" class="dropdown-item" (click)="exportTriplesAs(f)">{{f.name}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-sm table-hoverable" style="flex: 1">
+                        <colgroup>
+                            <col style="width: 1%;">
+                            <col>
+                            <col>
+                            <col>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{{'MODELS.RESOURCE.SUBJECT'|translate}}</th>
+                                <th>{{'MODELS.RESOURCE.PREDICATE'|translate}}</th>
+                                <th>{{'MODELS.RESOURCE.OBJECT'|translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody style="overflow: auto;">
+                            <tr *ngFor="let t of triplesPreview;" (click)="selectTriplePreviewRow(t)" [ngClass]="{ 'oddTablePreviewRow' : alternateRowHelper[t.row]%2==0, 'table-primary': t == selectedTriplePreviewRow }">
+                                <td *ngIf="!t.delete" class="text-center" style="background: lightgreen !important; padding: 3px 6px;">
+                                    <span class="fas fa-plus" style="color: green" [title]="'STATUS.ADDED'|translate"></span>
+                                </td>
+                                <td *ngIf="t.delete" class="text-center" style="background: lightpink !important; padding: 3px 6px;">
+                                    <span class="fas fa-minus" style="color: red" [title]="'STATUS.REMOVED'|translate"></span>
+                                </td>
+                                <td>{{t.subject}}</td>
+                                <td>{{t.predicate}}</td>
+                                <td>{{t.object}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
+
+    </resizable-layout>
 
     <div #blockingDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">
@@ -177,5 +181,4 @@
         </div>
     </div>
 
-</resizable-layout>
-
+</div>
