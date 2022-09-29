@@ -14,6 +14,7 @@ export enum SettingsEnum {
     authService = "authService",
     classTree = "classTree",
     conceptTree = "conceptTree",
+    customTree = "customTree",
     defaultConceptType = "defaultConceptType",
     defaultLexEntryType = "defaultLexEntryType",
     editingLanguage = "editingLanguage",
@@ -39,6 +40,7 @@ export enum SettingsEnum {
     searchSettings = "searchSettings",
     sheet2rdfSettings = "sheet2rdfSettings",
     showFlags = "showFlags",
+    structurePanelFilter = "structurePanelFilter",
     timeMachineEnabled = "timeMachineEnabled",
 }
 
@@ -193,6 +195,15 @@ export class InstanceListPreference {
     safeToGoMap: SafeToGoMap = {}; //this is not a preference, but it is cached with them since it is contextual to the project 
 }
 
+export class CustomTreeSettings {
+    enabled: boolean;
+    type: string;
+    includeSubtype: boolean;
+    hierarchicalProperty: string;
+    includeSubProp: boolean;
+    inverseHierarchyDirection: boolean;
+}
+
 export enum InstanceListVisualizationMode {
     searchBased = "searchBased",
     standard = "standard"
@@ -234,6 +245,7 @@ export class ProjectPreferences {
     instanceListPreferences: InstanceListPreference;
     conceptTreePreferences: ConceptTreePreference;
     lexEntryListPreferences: LexicalEntryListPreference;
+    customTreeSettings: CustomTreeSettings;
 
     resViewPreferences: ResourceViewPreference;
 

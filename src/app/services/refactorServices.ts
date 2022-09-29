@@ -91,17 +91,20 @@ export class RefactorServices {
                 //if the project baseURI was replaced, update it
                 if (sourceBaseURI == null || sourceBaseURI == VBContext.getWorkingProject().getBaseURI()) {
                     VBContext.getWorkingProject().setBaseURI(targetBaseURI);
-                    this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(), []);
-                    /*
-                    Simulate a project change in order to force the destroy of all the detached Route,
-                    so, when going back to the Data page, every tree/list is reloaded from scratch.
-                    This prevents also the error "resource '...' does not exist in the current dataset" that occurred
-                    when the concept tree refreshed with the old active schemes. Even if the schemes are updated above, 
-                    the schemes cached in the ConceptTree component are not updated in cascade since such component is detached and 
-                    in detached views the hook ngOnChanges is not triggered (which was expected to be triggered since the @Input scheme is changed
-                    from the parent ConceptTreePanel when handling the schemeChangedEvent fired in this.vbProp.setActiveSchemes)
-                    */
-                    VBContext.setProjectChanged(true);
+                    this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(), []).subscribe(
+                        () => {
+                            /*
+                            Simulate a project change in order to force the destroy of all the detached Route,
+                            so, when going back to the Data page, every tree/list is reloaded from scratch.
+                            This prevents also the error "resource '...' does not exist in the current dataset" that occurred
+                            when the concept tree refreshed with the old active schemes. Even if the schemes are updated above, 
+                            the schemes cached in the ConceptTree component are not updated in cascade since such component is detached and 
+                            in detached views the hook ngOnChanges is not triggered (which was expected to be triggered since the @Input scheme is changed
+                            from the parent ConceptTreePanel when handling the schemeChangedEvent fired in this.vbProp.setActiveSchemes)
+                            */
+                            VBContext.setProjectChanged(true);
+                        }
+                    );
                 }
             })
         );

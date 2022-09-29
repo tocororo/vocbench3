@@ -218,7 +218,7 @@ export class ClassTreeSettingsModal {
             clsTreePrefs.filter = { map: filterMap, enabled: this.filterEnabled };
             clsTreePrefs.rootClassUri = this.rootClass.getURI();
             clsTreePrefs.showInstancesNumber = this.showInstNumb;
-            this.vbProp.setClassTreePreferences(clsTreePrefs);
+            this.vbProp.setClassTreePreferences(clsTreePrefs).subscribe();
             this.activeModal.close();
         } else { //for other changes simply dismiss the modal
             this.cancel();

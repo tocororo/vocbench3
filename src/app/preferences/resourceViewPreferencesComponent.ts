@@ -62,13 +62,13 @@ export class ResourceViewPreferencesComponent {
     onResViewConceptTypeChange() {
         let rvPrefs: ResourceViewPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences;
         rvPrefs.defaultConceptType = this.selectedRvConceptType.type;
-        this.vbProp.setResourceViewPreferences(rvPrefs);
+        this.vbProp.setResourceViewPreferences(rvPrefs).subscribe();
     }
 
     onResViewLexEntryTypeChange() {
         let rvPrefs: ResourceViewPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences;
         rvPrefs.defaultLexEntryType = this.selectedRvLexEntryType.type;
-        this.vbProp.setResourceViewPreferences(rvPrefs);
+        this.vbProp.setResourceViewPreferences(rvPrefs).subscribe();
     }
 
     onTabSyncChange() {

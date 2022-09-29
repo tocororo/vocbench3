@@ -155,7 +155,7 @@ export class SchemeListComponent extends AbstractList {
     }
 
     private updateActiveSchemesPref() {
-        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.collectCheckedSchemes());
+        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.collectCheckedSchemes()).subscribe();
     }
 
     /**

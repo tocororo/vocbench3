@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DataStructureUtils } from 'src/app/models/DataStructure';
+import { CustomTreeSettings } from 'src/app/models/Properties';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { EDOAL, OntoLex, SKOS } from "../../models/Vocabulary";
@@ -61,26 +62,24 @@ export class TabsetPanelComponent {
     init() {
         this.initTabs();
 
-        let model = this.getWorkingContext().getProject().getModelType();
-        let tabsPriority: RDFResourceRolesEnum[] = DataStructureUtils.panelsPriority[model];
-        // if (model == SKOS.uri) {
-        //     tabsPriority = [RDFResourceRolesEnum.concept, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.conceptScheme, 
-        //         RDFResourceRolesEnum.cls, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange];
-        // } else if (model == OntoLex.uri) {
-        //     tabsPriority = [RDFResourceRolesEnum.limeLexicon, RDFResourceRolesEnum.ontolexLexicalEntry, 
-        //         RDFResourceRolesEnum.concept, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.conceptScheme, 
-        //         RDFResourceRolesEnum.cls, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange];
-        // } else { //OWL RDFS
-        //     tabsPriority = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange];
-        // }
-        for (let t of tabsPriority) {
-            if (this.tabs.some(tab => tab.role == t)) {
-                this.activeTab = t;
-                break;
+        //init active tab
+        if (this.activeTab != null) {
+            if (!this.tabs.some(tab => tab.role == this.activeTab)) {
+                this.activeTab = null;
             }
         }
-        if (this.activeTab == null && this.tabs.length > 0) {
-            this.activeTab = this.tabs[0].role;
+        if (this.activeTab == null) {
+            let model = this.getWorkingContext().getProject().getModelType();
+            let tabsPriority: RDFResourceRolesEnum[] = DataStructureUtils.panelsPriority[model];
+            for (let t of tabsPriority) {
+                if (this.tabs.some(tab => tab.role == t)) {
+                    this.activeTab = t;
+                    break;
+                }
+            }
+            if (this.activeTab == null && this.tabs.length > 0) {
+                this.activeTab = this.tabs[0].role;
+            }
         }
 
         if (this.readonly == false) { //if readonly is false (or not provided as @Input)
@@ -146,16 +145,23 @@ export class TabsetPanelComponent {
                     visible = t == RDFResourceRolesEnum.concept || t == RDFResourceRolesEnum.conceptScheme;
                 } else {
                     visible =
-                    this.isPanelCompliantWithCurrentModel(t, model) &&
-                    this.isTabAuthorized(t) &&
-                    (this.hiddenTabs == null || !this.hiddenTabs.includes(t)) &&
-                    !this.getWorkingContext().getProjectPreferences().structurePanelFilter.includes(t);
+                        this.isPanelCompliantWithCurrentModel(t, model) &&
+                        this.isTabAuthorized(t) &&
+                        (this.hiddenTabs == null || !this.hiddenTabs.includes(t)) &&
+                        !this.getWorkingContext().getProjectPreferences().structurePanelFilter.includes(t);
                 }
                 return visible;
             })
             .map(t => {
                 return { role: t, translationKey: DataStructureUtils.panelTranslationMap[t] };
             });
+
+
+        //if a custom tree is configured, add the Custom tab
+        let ctSettings: CustomTreeSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().customTreeSettings;
+        if (ctSettings.enabled) {
+            this.tabs.push({ role: RDFResourceRolesEnum.undetermined, translationKey: "Custom" });
+        }
     }
 
     selectTab(tabName: RDFResourceRolesEnum) {
@@ -282,7 +288,7 @@ export class TabsetPanelComponent {
             () => {
                 this.init();
             },
-            () => {}
+            () => { }
         );
     }
 

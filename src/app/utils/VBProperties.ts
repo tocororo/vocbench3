@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID, Scope } from '../models/Plugins';
-import { AuthServiceMode, ClassTreePreference, ConceptTreePreference, InstanceListPreference, LexicalEntryListPreference, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, ResourceViewMode, ResourceViewPreference, ResourceViewProjectSettings, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
+import { AuthServiceMode, ClassTreePreference, ConceptTreePreference, CustomTreeSettings, InstanceListPreference, LexicalEntryListPreference, NotificationStatus, PartitionFilterPreference, PreferencesUtils, PrefLabelClashMode, ProjectPreferences, ProjectSettings, ResourceViewMode, ResourceViewPreference, ResourceViewProjectSettings, SearchMode, SearchSettings, SettingsEnum, SystemSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { Sheet2RdfSettings } from '../models/Sheet2RDF';
 import { AdministrationServices } from '../services/administrationServices';
@@ -66,7 +66,7 @@ export class VBProperties {
                 if (!externalProject) {
                     this.eventHandler.themeChangedEvent.emit(projectPreferences.projectThemeId);
                 }
-                
+
                 //languages 
                 projectPreferences.editingLanguage = settings.getPropertyValue(SettingsEnum.editingLanguage);
 
@@ -97,7 +97,7 @@ export class VBProperties {
 
                 projectPreferences.hideLiteralGraphNodes = settings.getPropertyValue(SettingsEnum.hideLiteralGraphNodes);
 
-                let structurePanelFilter: RDFResourceRolesEnum[] = settings.getPropertyValue("structurePanelFilter");
+                let structurePanelFilter: RDFResourceRolesEnum[] = settings.getPropertyValue(SettingsEnum.structurePanelFilter);
                 if (structurePanelFilter != null) {
                     projectPreferences.structurePanelFilter = structurePanelFilter;
                 }
@@ -130,6 +130,13 @@ export class VBProperties {
                 let lexEntrySetting: LexicalEntryListPreference = settings.getPropertyValue(SettingsEnum.lexEntryList);
                 if (lexEntrySetting != null) {
                     PreferencesUtils.mergePreference(projectPreferences.lexEntryListPreferences, lexEntrySetting);
+                }
+
+                //custom tree
+                projectPreferences.customTreeSettings = new CustomTreeSettings();
+                let cTreeSetting = settings.getPropertyValue(SettingsEnum.customTree);
+                if (cTreeSetting != null) {
+                    PreferencesUtils.mergePreference(projectPreferences.customTreeSettings, cTreeSetting);
                 }
 
                 //search settings
@@ -166,7 +173,7 @@ export class VBProperties {
         ]);
     }
 
-    setActiveSchemes(projectCtx: ProjectContext, schemes: ARTURIResource[]) {
+    setActiveSchemes(projectCtx: ProjectContext, schemes: ARTURIResource[]): Observable<void> {
         if (schemes == null) {
             projectCtx.getProjectPreferences().activeSchemes = [];
         } else {
@@ -174,14 +181,14 @@ export class VBProperties {
         }
         this.eventHandler.schemeChangedEvent.emit({ schemes: schemes, project: projectCtx.getProject() });
         let schemesPropValue: string[] = schemes.map(s => s.toNT());
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeSchemes, schemesPropValue, new VBRequestOptions({ ctxProject: projectCtx.getProject() })).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeSchemes, schemesPropValue, new VBRequestOptions({ ctxProject: projectCtx.getProject() }));
     }
 
-    setActiveLexicon(projectCtx: ProjectContext, lexicon: ARTURIResource) {
+    setActiveLexicon(projectCtx: ProjectContext, lexicon: ARTURIResource): Observable<void> {
         projectCtx.getProjectPreferences().activeLexicon = lexicon;
         this.eventHandler.lexiconChangedEvent.emit({ lexicon: lexicon, project: projectCtx.getProject() });
         let lexiconUri: string = lexicon != null ? lexicon.toNT() : null;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeLexicon, lexiconUri, new VBRequestOptions({ ctxProject: projectCtx.getProject() })).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeLexicon, lexiconUri, new VBRequestOptions({ ctxProject: projectCtx.getProject() }));
     }
 
     getShowFlags(): boolean {
@@ -191,91 +198,100 @@ export class VBProperties {
             return VBContext.getSystemSettings().showFlags;
         }
     }
-    setShowFlags(show: boolean) {
+    setShowFlags(show: boolean): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().showFlags = show;
         this.eventHandler.showFlagChangedEvent.emit(show);
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.showFlags, show).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.showFlags, show);
     }
 
-    setProjectTheme(theme: number) {
+    setProjectTheme(theme: number): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId = theme;
         this.eventHandler.themeChangedEvent.emit(theme);
         let value = (theme == 0) ? null : theme + ""; //theme 0 is the default one, so remove the preference
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.projectTheme, value).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.projectTheme, value);
     }
 
-    setRenderingLanguagesPreference(languages: string[]) {
+    setRenderingLanguagesPreference(languages: string[]): Observable<void> {
         let value: string = (languages.length == 0) ? null : languages.join(",");
-        this.settingsService.storeSetting(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, SettingsEnum.languages, value).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().renderingLanguagesPreference = languages;
+        return this.settingsService.storeSetting(ExtensionPointID.RENDERING_ENGINE_ID, Scope.PROJECT_USER, SettingsEnum.languages, value);
     }
 
-    setEditingLanguage(lang: string) {
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.editingLanguage, lang).subscribe();
+    setEditingLanguage(lang: string): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().editingLanguage = lang;
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.editingLanguage, lang);
     }
 
-    setValueFilterLanguages(filter: ValueFilterLanguages) {
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.filterValueLanguages, filter).subscribe();
+    setValueFilterLanguages(filter: ValueFilterLanguages): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang = filter;
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.filterValueLanguages, filter);
     }
 
-    setNotificationStatus(status: NotificationStatus) {
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.notificationsStatus, status).subscribe();
+    setNotificationStatus(status: NotificationStatus): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus = status;
         this.eventHandler.notificationStatusChangedEvent.emit();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.notificationsStatus, status);
     }
 
-    setStructurePanelFilter(structurePanelFilter: RDFResourceRolesEnum[]) {
+    setStructurePanelFilter(structurePanelFilter: RDFResourceRolesEnum[]): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().structurePanelFilter = structurePanelFilter;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, "structurePanelFilter", structurePanelFilter).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.structurePanelFilter, structurePanelFilter);
     }
 
     //class tree settings
-    setClassTreePreferences(clsTreePref: ClassTreePreference) {
+    setClassTreePreferences(clsTreePref: ClassTreePreference): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences = clsTreePref;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.classTree, clsTreePref).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.classTree, clsTreePref);
     }
 
     //instance list settings
-    setInstanceListPreferences(instListPref: InstanceListPreference) {
+    setInstanceListPreferences(instListPref: InstanceListPreference): Observable<void> {
         let oldInstListPref = VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences;
         if (oldInstListPref.safeToGoLimit != instListPref.safeToGoLimit) {
             instListPref.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
         }
         VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences = instListPref;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.instanceList, instListPref).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.instanceList, instListPref);
     }
 
     //concept tree settings
-    setConceptTreePreferences(concTreePrefs: ConceptTreePreference) {
+    setConceptTreePreferences(concTreePrefs: ConceptTreePreference): Observable<void> {
         let oldConcTreePrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
         if (oldConcTreePrefs.safeToGoLimit != concTreePrefs.safeToGoLimit) {
             concTreePrefs.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
         }
         VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences = concTreePrefs;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.conceptTree, concTreePrefs).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.conceptTree, concTreePrefs);
     }
 
     //lex entry list settings
-    setLexicalEntryListPreferences(lexEntryListPrefs: LexicalEntryListPreference) {
+    setLexicalEntryListPreferences(lexEntryListPrefs: LexicalEntryListPreference): Observable<void> {
         let oldLexEntryListPrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
         if (oldLexEntryListPrefs.safeToGoLimit != lexEntryListPrefs.safeToGoLimit) {
             lexEntryListPrefs.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
         }
         VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences = lexEntryListPrefs;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.lexEntryList, lexEntryListPrefs).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.lexEntryList, lexEntryListPrefs);
+    }
+
+    setCustomTreeSettings(customTreeSettings: CustomTreeSettings): Observable<void> {
+        VBContext.getWorkingProjectCtx().getProjectPreferences().customTreeSettings = customTreeSettings;
+        this.eventHandler.customTreeSettingsChangedEvent.emit();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.customTree, customTreeSettings);
     }
 
     //Res view settings
-    setResourceViewPreferences(resViewPrefs: ResourceViewPreference) {
+    setResourceViewPreferences(resViewPrefs: ResourceViewPreference): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences = resViewPrefs;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.resourceView, resViewPrefs).subscribe();
-        /* an empty resViewPartitionFilter should always be {}, anyway in order to write a null value and exploit the fallback-to-defaults mechanism, 
-        it can be set to null serverside. In such case once the setting has been stored, the preference is re-initialized to {} */
-        if (resViewPrefs.resViewPartitionFilter == null) {
-            resViewPrefs.resViewPartitionFilter = {};
-        }
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.resourceView, resViewPrefs).pipe(
+            tap(() => {
+                /* an empty resViewPartitionFilter should always be {}, anyway in order to write a null value and exploit the fallback-to-defaults mechanism, 
+                it can be set to null serverside. In such case once the setting has been stored, the preference is re-initialized to {} */
+                if (resViewPrefs.resViewPartitionFilter == null) {
+                    resViewPrefs.resViewPartitionFilter = {};
+                }
+            })
+        );
     }
 
     refreshResourceViewPartitionFilter(): Observable<void> { //refreshed the cached rv partition filter
@@ -292,13 +308,13 @@ export class VBProperties {
     }
 
     //Graph settings
-    setGraphViewPartitionFilter(pref: PartitionFilterPreference) {
+    setGraphViewPartitionFilter(pref: PartitionFilterPreference): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().graphViewPartitionFilter = pref;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.graphViewPartitionFilter, pref).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.graphViewPartitionFilter, pref);
     }
-    setHideLiteralGraphNodes(hide: boolean) {
+    setHideLiteralGraphNodes(hide: boolean): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes = hide;
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.hideLiteralGraphNodes, hide).subscribe();
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.hideLiteralGraphNodes, hide);
     }
 
     /* =============================
@@ -339,19 +355,19 @@ export class VBProperties {
         );
     }
 
-    setExperimentalFeaturesEnabled(enabled: boolean) {
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.experimentalFeaturesEnabled, enabled).subscribe();
+    setExperimentalFeaturesEnabled(enabled: boolean): Observable<void> {
         VBContext.getSystemSettings().experimentalFeaturesEnabled = enabled;
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.experimentalFeaturesEnabled, enabled);
     }
 
-    setEmailVerification(enabled: boolean) {
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.emailVerification, enabled).subscribe();
+    setEmailVerification(enabled: boolean): Observable<void> {
         VBContext.getSystemSettings().emailVerification = enabled;
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.emailVerification, enabled);
     }
 
-    setHomeContent(homeContent: string) {
-        this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.homeContent, homeContent).subscribe();
+    setHomeContent(homeContent: string): Observable<void> {
         VBContext.getSystemSettings().homeContent = homeContent;
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.SYSTEM, SettingsEnum.homeContent, homeContent);
     }
 
     isPrivacyStatementAvailable(): boolean {
@@ -497,6 +513,7 @@ export class VBProperties {
      */
     setShowDeprecated(showDeprecated: boolean) {
         Cookie.setCookie(Cookie.SHOW_DEPRECATED, showDeprecated + "");
+        this.eventHandler.showDeprecatedChangedEvent.emit(showDeprecated);
     }
     getShowDeprecated(): boolean {
         let cookieValue: string = Cookie.getCookie(Cookie.SHOW_DEPRECATED);
@@ -567,7 +584,7 @@ export class VBProperties {
         for (let i = 0; i < activeSchemes.length; i++) {
             if (activeSchemes[i].getNominalValue() == oldResource.getNominalValue()) {
                 activeSchemes[i].setURI(newResource.getNominalValue());
-                this.setActiveSchemes(VBContext.getWorkingProjectCtx(), activeSchemes);
+                this.setActiveSchemes(VBContext.getWorkingProjectCtx(), activeSchemes).subscribe();
                 break;
             }
         }

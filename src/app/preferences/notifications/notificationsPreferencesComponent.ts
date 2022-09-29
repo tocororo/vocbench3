@@ -106,7 +106,7 @@ export class NotificationsPreferencesComponent {
     //============ Notification option handler ============
 
     changeNotificationStatus() {
-        this.vbProp.setNotificationStatus(this.activeNotificationOpt.value);
+        this.vbProp.setNotificationStatus(this.activeNotificationOpt.value).subscribe();
     }
 
     //============ Notification matrix handler ============

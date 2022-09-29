@@ -49,6 +49,10 @@ import { ConceptTreeComponent } from '../structures/trees/concept/conceptTreeCom
 import { ConceptTreeNodeComponent } from '../structures/trees/concept/conceptTreeNodeComponent';
 import { ConceptTreePanelComponent } from '../structures/trees/concept/conceptTreePanelComponent';
 import { ConceptTreeSettingsModal } from '../structures/trees/concept/conceptTreeSettingsModal';
+import { CustomTreeComponent } from '../structures/trees/custom/customTreeComponent';
+import { CustomTreeNodeComponent } from '../structures/trees/custom/customTreeNodeComponent';
+import { CustomTreePanelComponent } from '../structures/trees/custom/customTreePanelComponent';
+import { CustomTreeSettingsComponent } from '../structures/trees/custom/customTreeSettingsComponent';
 import { PropertyTreeComponent } from '../structures/trees/property/propertyTreeComponent';
 import { PropertyTreeNodeComponent } from '../structures/trees/property/propertyTreeNodeComponent';
 import { PropertyTreePanelComponent } from '../structures/trees/property/propertyTreePanelComponent';
@@ -84,6 +88,10 @@ import { SharedModule } from './sharedModule';
         ConceptTreePanelComponent,
         ConceptTreeSettingsModal,
         CustomSearchModal,
+        CustomTreeComponent,
+        CustomTreeNodeComponent,
+        CustomTreePanelComponent,
+        CustomTreeSettingsComponent,
         DatatypeListComponent,
         DatatypeListNodeComponent,
         DatatypeListPanelComponent,
@@ -125,6 +133,7 @@ import { SharedModule } from './sharedModule';
         CollectionTreePanelComponent,
         ConceptTreeComponent,
         ConceptTreePanelComponent,
+        CustomTreeSettingsComponent,
         DatatypeListComponent,
         DatatypeListPanelComponent,
         InstanceListComponent,

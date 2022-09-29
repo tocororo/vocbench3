@@ -62,7 +62,7 @@ export class LanguageValueFilterComponent {
         activeLangs.forEach(l => {
             preferenceLangs.push(l.lang.tag);
         });
-        this.vbProp.setValueFilterLanguages({ languages: preferenceLangs, enabled: this.filterEnabled });
+        this.vbProp.setValueFilterLanguages({ languages: preferenceLangs, enabled: this.filterEnabled }).subscribe();
     }
     
     changeIsocodeOrder() {

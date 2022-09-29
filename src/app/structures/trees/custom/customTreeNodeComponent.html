@@ -1,0 +1,20 @@
+<div class="treeNode" #treeNodeElement>
+	<div class="expandCollapseBtnContainer">
+        <ng-container *ngIf="showExpandCollapseBtn">
+            <img *ngIf="!open" src="./assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode().subscribe()">
+            <img *ngIf="open" src="./assets/images/icons/arrow.png" (click)="collapseNode()">
+        </ng-container>
+	</div>
+    <rdf-resource #rdfRes [resource]="node" [rendering]="rendering" (click)="selectNode()" 
+        [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
+    <input *ngIf="multiselection" type="checkbox" style="margin-left: 5px;" [(ngModel)]="checked" (ngModelChange)="onNodeCheckChange()">        
+</div>
+
+<div class="subTree" *ngIf="node.getAdditionalProperty('more') == 1">
+    <ng-container *ngFor="let n of children">
+        <custom-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
+            [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" [projectCtx]="projectCtx"
+            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+        </custom-tree-node>
+    </ng-container>
+</div>

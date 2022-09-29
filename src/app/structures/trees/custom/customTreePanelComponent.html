@@ -1,0 +1,80 @@
+<div class="card card-default vbox">
+    <!-- Commands -->
+    <div class="card-header">
+        <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
+
+            <ng-container *ngFor="let action of panelActions">
+                <ng-container *ngIf="isActionVisible(action)">
+                    <!-- Simple button -->
+                    <button *ngIf="!action.subRoles" class="btn btn-light" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
+                        <img [src]="action.icon" class="panelButtonImg"/>
+                    </button>
+                    <!-- Dropdown button -->
+                    <div *ngIf="action.subRoles" class="btn-group btn-group-xs" ngbDropdown>
+                        <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [title]="action.title" [disabled]="isActionDisabled(action)">
+                            <img [src]="action.icon" class="panelButtonImg"/>
+                        </button>
+                        <div class="dropdown-menu" ngbDropdownMenu>
+                            <a class="dropdown-item" (click)="executeAction(action, action.role)">
+                                {{action.role}}
+                            </a>
+                            <a *ngFor="let role of action.subRoles" class="dropdown-item" (click)="executeAction(action, role)">
+                                {{role}}
+                            </a>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+
+        <div style="flex: 1"></div>
+
+        <div class="btn-toolbar" role="toolbar">
+            <button class="btn btn-light btn-bright btn-xs" [title]="'COMMONS.RENDERING'|translate" (click)="switchRendering()" [ngClass]="{ active: rendering }">
+                <span class="fas fa-font"></span>
+            </button>
+            <button class="btn btn-light btn-xs" [title]="'ACTIONS.REFRESH'|translate" (click)="refresh()">
+                <span class="fas fa-redo"></span>
+            </button>
+        </div>
+
+        <div class="dropdown" ngbDropdown>
+            <button class="dropdown-toggle transparentBtn ml-1" data-toggle="dropdown" ngbDropdownToggle [disabled]="!allowMultiselection && !isOpenGraphEnabled(GraphModeEnum.dataOriented)">
+                <span class="fas fa-caret-down"></span>
+            </button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <ng-container *ngIf="allowMultiselection">
+                    <a class="dropdown-item" (click)="toggleMultiselection()">
+                        <span style="flex: 1;">
+                            <span class="far fa-check-square" style="margin-right: 4px;"></span>
+                            {{'DATA.COMMONS.MULTISELECTION'|translate}}
+                        </span>
+                        <span *ngIf="multiselection" class="fas fa-check float-right"></span>
+                    </a>
+                    <a *ngIf="context=='dataPanel' && multiselection" class="dropdown-item" [ngClass]="{ disabled: checkedNodes.length == 0 }" (click)="enrichMultiSubject()">
+                        <span class="far fa-check-square" style="margin-right: 4px; margin-left: 16px;"></span>
+                        {{'DATA.COMMONS.ADD_PROP_VALUE_TO_SELECTION'|translate}}
+                    </a>
+                </ng-container>
+                <a *ngIf="isOpenGraphEnabled(GraphModeEnum.dataOriented)" class="dropdown-item" (click)="openDataGraph()">
+                    <img src="./assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
+                    {{'GRAPHS.ACTIONS.SHOW_DATA_ORIENTED_GRAPH'|translate}}
+                </a>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Tree -->
+    <div class="card-body vbox">
+        <custom-tree [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
+            [context]="context" [projectCtx]="projectCtx" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
+        </custom-tree>
+    </div>
+
+    <!-- Search -->
+    <div *ngIf="!hideSearch" class="card-footer">
+        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [role]="panelRole" [context]="context" [projectCtx]="projectCtx"></search-bar>
+    </div>
+    
+</div>

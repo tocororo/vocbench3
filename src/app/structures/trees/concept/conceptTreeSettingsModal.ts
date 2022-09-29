@@ -332,7 +332,7 @@ export class ConceptTreeSettingsModal {
             concTreePrefs.safeToGoLimit = this.safeToGoLimit;
             concTreePrefs.syncInverse = this.syncInverse;
             concTreePrefs.visualization = this.visualization;
-            this.vbProp.setConceptTreePreferences(concTreePrefs);
+            this.vbProp.setConceptTreePreferences(concTreePrefs).subscribe();
             this.activeModal.close();
         } else {
             this.cancel();

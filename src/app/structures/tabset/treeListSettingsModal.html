@@ -4,29 +4,33 @@
     </div>
     <div class="modal-body vbox">
 
-        <div *ngIf="!isEdoal" class="card card-default mb-2">
-            <div class="card-header">
-                <label>{{'DATA.SETTINGS.VISIBLE_TABS'|translate}}</label>
+        <ng-container *ngIf="!isEdoal">
+            <div class="card">
+                <div class="card-header">
+                    <label>{{'DATA.SETTINGS.VISIBLE_TABS'|translate}}</label>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hoverable table-sm table-borderless">
+                        <thead>
+                            <th class="text-center">{{'COMMONS.TAB'|translate}}</th>
+                            <th class="text-center">{{'ACTIONS.SHOW'|translate}}</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let t of tabsStruct">
+                                <td class="text-center" [ngClass]="{ grayText : !t.visible }">{{t.translationKey|translate}}</td>
+                                <td class="text-center">
+                                    <input type="checkbox" [(ngModel)]="t.visible">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="card-body">
-                <table class="table table-hoverable table-sm table-borderless">
-                    <thead>
-                        <th class="text-center">{{'COMMONS.TAB'|translate}}</th>
-                        <th class="text-center">{{'ACTIONS.SHOW'|translate}}</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let t of tabsStruct">
-                            <td class="text-center" [ngClass]="{ grayText : !t.visible }">{{t.translationKey|translate}}</td>
-                            <td class="text-center">
-                                <input type="checkbox" [(ngModel)]="t.visible">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
-        <div class="card card-default">
+            <custom-tree-settings class="mt-2" [(ngModel)]="customTreeSettings" (reset)="onSettingsReset()"></custom-tree-settings>
+        </ng-container>
+
+        <div class="card card-default mt-2">
             <div class="card-body">
                 <div class="form-check">
                     <input class="form-check-input" id="deprecatedCheck" type="checkbox" [(ngModel)]="showDeprecated">

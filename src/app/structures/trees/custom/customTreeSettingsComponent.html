@@ -1,0 +1,95 @@
+<div class="card">
+    <div class="card-header d-flex align-items-center">
+        <label>{{'DATA.SETTINGS.CUSTOM_TREE.CUSTOM_TREE'|translate}}</label>
+        <input type="checkbox" class="ml-2" [(ngModel)]="enabled" (ngModelChange)="onChanges()" [title]="'STATUS.ENABLED'|translate">
+    </div>
+    <div class="card-body">
+        <div *ngIf="context == 'administration'" class="alert alert-info mb-2">
+            From this panel you can set a default configuration of the Custom Tree for the current project.
+        </div>
+
+        <fieldset *ngIf="enabled">
+        <!-- <fieldset [disabled]="!enabled"> -->
+            <table class="table table-sm table-borderless">
+                <colgroup>
+                    <col style="width: 25%;">
+                    <col>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td nowrap>
+                            <span>
+                                {{'DATA.SETTINGS.CUSTOM_TREE.RES_TYPE'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.RES_TYPE_INFO'|translate"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <resource-picker [resource]="type" [config]="{ roles: ['cls']}" [editable]="true" [project]="project"
+                                (resourceChanged)="onTypeChanged($event)">
+                            </resource-picker>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap>
+                            <span>
+                                {{'DATA.SETTINGS.CUSTOM_TREE.INCLUDE_SUBTYPE'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.INCLUDE_SUBTYPE_INFO'|translate"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="form-check form-check-inline my-2">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="includeSubtype" (ngModelChange)="onChanges()">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap>
+                            <span>
+                                {{'DATA.SETTINGS.CUSTOM_TREE.HIERARCHICAL_PROP'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.HIERARCHICAL_PROP_INFO'|translate"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <resource-picker [resource]="property" [config]="{ roles: ['property']}" [editable]="true" [project]="project"
+                                (resourceChanged)="onPropertyChanged($event)">
+                            </resource-picker>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap>
+                            <span>
+                                {{'DATA.SETTINGS.CUSTOM_TREE.INCLUDE_SUBPROP'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.INCLUDE_SUBPROP_INFO'|translate"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="form-check form-check-inline my-2">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="includeSubProp" (ngModelChange)="onChanges()">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap>
+                            <span>
+                                {{'DATA.SETTINGS.CUSTOM_TREE.HIERARCHY_DIR'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.HIERARCHY_DIR_INFO'|translate"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <select class="form-control" [(ngModel)]="invDirection" (ngModelChange)="onChanges()">
+                                <option [ngValue]="false">{{'DATA.SETTINGS.CUSTOM_TREE.HIERARCHY_DIR_PARENT_CHILD'|translate}}</option>
+                                <option [ngValue]="true">{{'DATA.SETTINGS.CUSTOM_TREE.HIERARCHY_DIR_CHILD_PARENT'|translate}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+    <div class="card-footer">
+        <div class="float-right">
+            <button class="btn btn-light btn-sm" (click)="doReset()">{{'ACTIONS.RESET'|translate}}</button>
+            <button *ngIf="context == 'administration'" class="btn btn-info btn-sm ml-2" (click)="doSubmit()">{{'ACTIONS.SUBMIT'|translate}}</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="card card-default vbox">
+
+    <div class="card-body vbox">
+
+        <div *ngIf="unauthorized" class="alert alert-danger m-2">
+            {{'MESSAGES.UNAUTHORIZED_VIEW'|translate}}
+        </div>
+
+        <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
+            <ng-container *ngFor="let r of roots; let idx=index">
+                <custom-tree-node *ngIf="idx < rootLimit && (!r.isDeprecated() || showDeprecated && r.isDeprecated())" 
+                    [node]="r" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" [projectCtx]="projectCtx"
+                    (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+                </custom-tree-node>
+            </ng-container>
+        </div>
+
+        <div #blockDivTree class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="./assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

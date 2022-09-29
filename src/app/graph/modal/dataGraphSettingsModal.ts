@@ -23,11 +23,11 @@ export class DataGraphSettingsModal {
     }
 
     updateFilter() {
-        this.vbProp.setGraphViewPartitionFilter(this.graphFilter);
+        this.vbProp.setGraphViewPartitionFilter(this.graphFilter).subscribe();
     }
 
     onHideLiteralChange() {
-        this.vbProp.setHideLiteralGraphNodes(this.hideLiteralNodes);
+        this.vbProp.setHideLiteralGraphNodes(this.hideLiteralNodes).subscribe();
     }
 
     ok() {

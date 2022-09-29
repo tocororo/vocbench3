@@ -754,7 +754,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         //update the preference
         let valueFilterLangPref = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().filterValueLang;
         valueFilterLangPref.enabled = this.valueFilterLangEnabled;
-        this.vbProp.setValueFilterLanguages(valueFilterLangPref);
+        this.vbProp.setValueFilterLanguages(valueFilterLangPref).subscribe();
         //update the RV
         this.fillPartitions();
     }

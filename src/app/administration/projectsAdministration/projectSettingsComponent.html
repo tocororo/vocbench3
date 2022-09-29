@@ -7,7 +7,7 @@
         <li class="nav-item" [ngClass]="{ active : activeSetting == 'resView' }">
             <a class="nav-link" (click)="activeSetting = 'resView'">Resource View</a>
         </li>
-        <li *ngIf="isSkos || historyEnabled" class="nav-item" [ngClass]="{ active : activeSetting == 'other' }">
+        <li *ngIf="!isEdoal" class="nav-item" [ngClass]="{ active : activeSetting == 'other' }">
             <a class="nav-link" (click)="activeSetting = 'other'">{{'COMMONS.OTHER'|translate}}</a>
         </li>
     </ul>
@@ -66,12 +66,12 @@
             </div>
         </div>
 
-        <res-view-project-settings [hidden]="activeSetting != 'resView'"
-            [project]="project" [settings]="rvSettings">
+        <res-view-project-settings [hidden]="activeSetting != 'resView'" [project]="project" [settings]="rvSettings">
         </res-view-project-settings>
 
         <div [hidden]="activeSetting != 'other'">
-            <div *ngIf="isSkos" class="card">
+
+            <div *ngIf="isSkos" class="card mb-2">
                 <div class="card-header">
                     <label>
                         {{'ADMINISTRATION.PROJECTS.PREF_LABEL_CLASH.PREF_LABEL_CLASH_MODE'|translate}}
@@ -88,7 +88,12 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="historyEnabled" class="card mt-2">
+
+            <custom-tree-settings *ngIf="!isEdoal" class="mb-2" [(ngModel)]="customTreeSettings" [context]="'administration'" [project]="project" 
+                (submit)="onCustomTreeSettingsSubmit()" (reset)="onCustomTreeSettingsReset()">
+            </custom-tree-settings>
+
+            <div *ngIf="historyEnabled" class="card mb-2">
                 <div class="card-body">
                     <div class="form-check">
                         <input class="form-check-input" id="tmCheck" type="checkbox" [(ngModel)]="timeMachineEnabled" (ngModelChange)="onTimeMachineEnabledChanged()">

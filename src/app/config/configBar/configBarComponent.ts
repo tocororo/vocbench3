@@ -122,11 +122,11 @@ export class ConfigBarComponent {
     }
 
     copyWebApiUrl() {
-        let baseUrl = HttpManager.getServerHost() + "/" + HttpManager.serverpath + "/" + 
+        let baseUrl = HttpManager.getServerHost() + "/" + HttpManager.serverpath + "/" +
             HttpManager.groupId + "/" + HttpManager.artifactId + "/";
         navigator.clipboard.writeText(baseUrl).then(() => {
             this.toastService.show(null, { key: "APP.TOP_BAR.ABOUT_MENU.WEB_API_COPIED" });
-        }, (err) => {});
+        }, (err) => { });
     }
 
     /* ===============================
@@ -151,11 +151,14 @@ export class ConfigBarComponent {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.basicModals.alert({ key: "ACTIONS.CLEAR_DATA" }, { key: "MESSAGES.DATA_CLEARED" });
                         //reset scheme in order to prevent error when re-init the concept tree
-                        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(), []);
-                        //simulate the project change in order to force the destroy of all the Route
-                        VBContext.setProjectChanged(true);
-                        //redirect to the home in order to prevent any kind of error related to not existing resource
-                        this.route.navigate(["/Home"]);
+                        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(), []).subscribe(
+                            () => {
+                                //simulate the project change in order to force the destroy of all the Route
+                                VBContext.setProjectChanged(true);
+                                //redirect to the home in order to prevent any kind of error related to not existing resource
+                                this.route.navigate(["/Home"]);
+                            }
+                        );
                     }
                 );
             },

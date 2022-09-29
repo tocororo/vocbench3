@@ -201,10 +201,15 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     }
                     this.sharedModals.selectResource({ key: "SEARCH.SEARCH" }, message, lexicons, this.rendering).then(
                         (lexicons: ARTURIResource[]) => {
-                            this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), lexicons[0]); //update the active lexicon
-                            //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset
-                            this.changeDetectorRef.detectChanges();
-                            this.selectSearchedResource(resource); //then open the list on the searched resource
+                            //update the active lexicon
+                            this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), lexicons[0]).subscribe(
+                                () => {
+                                    //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset
+                                    this.changeDetectorRef.detectChanges();
+                                    this.selectSearchedResource(resource); //then open the list on the searched resource
+                                }
+                            );
+
                         },
                         () => { }
                     );
@@ -298,7 +303,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     onSwitchMode(mode: LexEntryVisualizationMode) {
         let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
         lexEntryListPref.visualization = mode;
-        this.vbProp.setLexicalEntryListPreferences(lexEntryListPref);
+        this.vbProp.setLexicalEntryListPreferences(lexEntryListPref).subscribe();
         this.visualizationMode = lexEntryListPref.visualization;
         this.viewChildList.init();
     }
@@ -306,7 +311,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     onChangeIndexLength(length: number) {
         let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
         lexEntryListPref.indexLength = length;
-        this.vbProp.setLexicalEntryListPreferences(lexEntryListPref);
+        this.vbProp.setLexicalEntryListPreferences(lexEntryListPref).subscribe();
         this.indexLength = lexEntryListPref.indexLength;
         this.onDigitChange();
     }

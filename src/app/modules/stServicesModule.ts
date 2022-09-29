@@ -9,6 +9,7 @@ import { CollaborationServices } from "../services/collaborationServices";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { CustomServiceServices } from '../services/customServiceServices';
+import { CustomTreesServices } from '../services/customTreesServices';
 import { CustomViewsServices } from '../services/customViewsServices';
 import { DatasetCatalogsServices } from '../services/datasetCatalogsServices';
 import { DatasetMetadataServices } from "../services/datasetMetadataServices";
@@ -70,6 +71,7 @@ import { StMetadataRegistry } from '../utils/STMetadataRegistry';
         ConfigurationsServices,
         CustomFormsServices,
         CustomServiceServices,
+        CustomTreesServices,
         CustomViewsServices,
         DatatypesServices,
         DatasetCatalogsServices,

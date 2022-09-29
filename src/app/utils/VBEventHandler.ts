@@ -115,6 +115,8 @@ export class VBEventHandler {
 
     public notificationStatusChangedEvent: EventEmitter<void> = new VBEventEmitter("notificationStatusChangedEvent");
 
+    public customTreeSettingsChangedEvent: EventEmitter<void> = new VBEventEmitter("customTreeSettingsChangedEvent");
+
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
     public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);

@@ -55,6 +55,12 @@
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </datatype-list-panel>
         </div>
+
+        <div *ngIf="isTabVisible(RDFResourceRoleEnum.undetermined)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.undetermined}" [hidden]="activeTab != RDFResourceRoleEnum.undetermined">
+            <custom-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
+                [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
+            </custom-tree-panel>
+        </div>
     </div>
     
 </div>

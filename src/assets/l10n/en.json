@@ -1025,6 +1025,21 @@
             "SCHEMES": "Schemes"
         },
         "SETTINGS": {
+            "CUSTOM_TREE": {
+                "CUSTOM_TREE": "Custom Tree",
+                "INCLUDE_SUBPROP": "Include subproperties",
+                "INCLUDE_SUBPROP_INFO": "If checked, subproperties of the given hierarchical property will be taken into account",
+                "INCLUDE_SUBTYPE": "Include subtype",
+                "INCLUDE_SUBTYPE_INFO": "Tells if resources belonging to subtype of the type specified are included in the tree",
+                "HIERARCHY_DIR": "Hierarchy direction",
+                "HIERARCHY_DIR_INFO": "Specify the direction for the evaluation of the hierarchical property",
+                "HIERARCHY_DIR_CHILD_PARENT": "From child to parent",
+                "HIERARCHY_DIR_PARENT_CHILD": "From parent to child",
+                "HIERARCHICAL_PROP": "Hierarchical property",
+                "HIERARCHICAL_PROP_INFO": "Property that determines the hierarchical link between two resources",
+                "RES_TYPE": "Resource type",
+                "RES_TYPE_INFO": "Type of the resources belonging to the tree"
+            },
             "SHOW_DEPRECATED_RES": "Show deprecated resources in tree/list",
             "TREE_LIST_SETTINGS": "Tree/List settings",
             "VISIBLE_TABS": "Visible tabs"
@@ -1454,9 +1469,11 @@
         "CODE_EDITOR_VALIDATION_IGNORED_WARN": "Warning: the current project has the Validation feature enabled. This changes will not undergo to validation.",
         "COLLABORATION_SYS_CONFIGURED_BUT_NOT_WORKING": "The Collaboration System seems to be configured but it's not working (configuration could be not valid or the server may be not reachable), so it will be disabled.",
         "CONFIGURATION_SAVED": "Configuration saved succesfully",
+        "CONFIG_PROJECT_DEFAULT_RESTORED": "Project default configuration restored",
+        "CONFIG_RESTORE_PROJECT_DEFAULT_CONFIRM": "You are going to override the configuration by restoring the project default settings. Are you sure?",
         "CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM": "You are going to override the configuration by restoring the system default settings. Are you sure?",
         "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "You are going to set this configuration as system default. Are you sure?",
-        "CONFIG_SYSTEM_DEFAULT_RESTORED": "System configuration restored",
+        "CONFIG_SYSTEM_DEFAULT_RESTORED": "System default configuration restored",
         "CONFIG_SYSTEM_DEFAULT_SET": "Configuration set as system default",
         "DATA_CLEARED": "All data cleared successfully.",
         "DATA_IMPORTED": "Data imported successfully",
@@ -2521,6 +2538,7 @@
             "UPLOAD_FILE": "Upload file"
         },
         "VALUE_PICKER": {
+            "CANNOT_PICK_FROM_NOT_ACCESSED_PROJ": "Cannot pick resources from a project not currently accessed",
             "FROM_CURRENT_PROJ": "From current project",
             "FROM_EXTERNAL_PROJ": "From external project"
         }

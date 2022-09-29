@@ -96,7 +96,7 @@ export class LanguageRenderingComponent {
         if (preferenceLangs.length == 0) {
             preferenceLangs.push(Languages.ALL_LANG);
         }
-        this.properties.setRenderingLanguagesPreference(preferenceLangs);
+        this.properties.setRenderingLanguagesPreference(preferenceLangs).subscribe();
     }
     
     changePositionOrder() {

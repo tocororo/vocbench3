@@ -28,6 +28,7 @@ import { UserDetailsPanelComponent } from '../administration/usersAdministration
 import { UsersAdministrationComponent } from "../administration/usersAdministration/usersAdministrationComponent";
 import { UsersListComponent } from '../administration/usersAdministration/usersListComponent';
 import { SharedModule } from './sharedModule';
+import { TreeAndListModule } from './treeAndListModule';
 import { UserModule } from './userModule';
 
 
@@ -41,6 +42,7 @@ import { UserModule } from './userModule';
         NgbPopoverModule,
         SharedModule,
         TranslateModule,
+        TreeAndListModule,
         UserModule
     ],
     declarations: [

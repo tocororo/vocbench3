@@ -132,7 +132,7 @@ export class LexiconListComponent extends AbstractList {
         } else {
             this.activeLexicon = lexicon;
         }
-        this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), this.activeLexicon);
+        this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), this.activeLexicon).subscribe();
     }
 
 }

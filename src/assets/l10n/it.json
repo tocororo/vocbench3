@@ -1025,6 +1025,21 @@
             "SCHEMES": "Schemi"
         },
         "SETTINGS": {
+            "CUSTOM_TREE": {
+                "CUSTOM_TREE": "Albero personalizzato",
+                "INCLUDE_SUBPROP": "Includi sotto proprietà",
+                "INCLUDE_SUBPROP_INFO": "Se spuntata, verranno considerate anche le sotto proprietà della proprietà gerarchica indicata",
+                "INCLUDE_SUBTYPE": "Includi sottotipi",
+                "INCLUDE_SUBTYPE_INFO": "Specifica se le risorse appartenenti ai sottotipi del tipo indicato sono incluse nell'albero",
+                "HIERARCHY_DIR": "Direzione della gerarchia",
+                "HIERARCHY_DIR_INFO": "Specifica la direzione della proprietà gerarchica",
+                "HIERARCHY_DIR_CHILD_PARENT": "Da figlio a padre",
+                "HIERARCHY_DIR_PARENT_CHILD": "Da padre a figlio",
+                "HIERARCHICAL_PROP": "Proprietà gerarchica",
+                "HIERARCHICAL_PROP_INFO": "Proprietà che determina il collegamento gerarchico tra due risorse",
+                "RES_TYPE": "Tipo risorsa",
+                "RES_TYPE_INFO": "Tipo delle risorse che compongono all'albero"
+            },
             "SHOW_DEPRECATED_RES": "Mostra le risorse deprecate negli alberi/liste",
             "TREE_LIST_SETTINGS": "Impostazioni alberi/liste",
             "VISIBLE_TABS": "Schede visibili"
@@ -1456,7 +1471,7 @@
         "CONFIGURATION_SAVED": "Configurazione salvata con successo",
         "CONFIG_RESTORE_SYSTEM_DEFAULT_CONFIRM": "Stai per sovrascrivere la configurazione ripristinando le impostazioni predefinite di sistema. Vuoi continuare?",
         "CONFIG_SET_SYSTEM_DEFAULT_CONFIRM": "Stai per impostare questa configurazione come default di sistema. Vuoi continuare?",
-        "CONFIG_SYSTEM_DEFAULT_RESTORED": "Configurazione di sistema ripristinata",
+        "CONFIG_SYSTEM_DEFAULT_RESTORED": "Configurazione prederinifta di sistema ripristinata",
         "CONFIG_SYSTEM_DEFAULT_SET": "Configurazione impostata come predefinita di sistema",
         "DATA_CLEARED": "Tutti i dati sono stati cancellati con successo.",
         "DATA_IMPORTED": "Dati importati con successo",

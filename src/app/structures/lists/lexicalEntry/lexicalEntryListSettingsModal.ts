@@ -43,7 +43,7 @@ export class LexicalEntryListSettingsModal {
             lexEntryListPrefs.indexLength = this.indexLength;
             lexEntryListPrefs.safeToGoLimit = this.safeToGoLimit;
             lexEntryListPrefs.visualization = this.visualization;
-            this.vbProp.setLexicalEntryListPreferences(lexEntryListPrefs);
+            this.vbProp.setLexicalEntryListPreferences(lexEntryListPrefs).subscribe();
             this.activeModal.close();
         } else {
             this.cancel();

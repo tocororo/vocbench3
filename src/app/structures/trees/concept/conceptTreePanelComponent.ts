@@ -208,7 +208,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     if (schemes.length == 0) { //searched concept doesn't belong to any scheme => ask switch to no-scheme mode
                         this.basicModals.confirm({ key: "SEARCH.SEARCH" }, { key: "MESSAGES.SWITCH_SCHEME_FOR_SEARCHED_CONCEPT_CONFIRM" }, ModalType.warning).then(
                             confirm => {
-                                this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), []); //update the active schemes
+                                //update the active schemes
+                                this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), []).subscribe();
                                 this.changeDetectorRef.detectChanges();
                                 this.selectResourceVisualizationModeAware(resource);
                             },
@@ -229,7 +230,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                                             //update active scheme only here, so outside the "add" operation everything stays unchanged 
                                             this.workingSchemes = this.workingSchemes.slice().concat(schemes[0]); //slice so workingScheme is a new object and triggers ngOnChanges in ConceptTreeComponent
                                         } else {
-                                            this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(schemes[0])); //update the active schemes
+                                            this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(schemes[0])).subscribe(); //update the active schemes
                                         }
                                         this.changeDetectorRef.detectChanges();
                                         this.selectResourceVisualizationModeAware(resource);
@@ -285,7 +286,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     onSwitchMode(mode: ConceptTreeVisualizationMode) {
         let concTreePrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
         concTreePrefs.visualization = mode;
-        this.vbProp.setConceptTreePreferences(concTreePrefs);
+        this.vbProp.setConceptTreePreferences(concTreePrefs).subscribe();
         this.viewChildTree.init();
     }
 

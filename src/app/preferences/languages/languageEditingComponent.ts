@@ -28,9 +28,9 @@ export class LanguageEditingComponent {
         this.editingLang = this.languages.find(l => l.tag == editingLangTag);
     }
 
-    private updateDefaultLang(lang: Language) {
+    updateDefaultLang(lang: Language) {
         this.editingLang = lang;
-        this.properties.setEditingLanguage(this.editingLang.tag);
+        this.properties.setEditingLanguage(this.editingLang.tag).subscribe();
     }
 
 }

@@ -37,7 +37,7 @@ export class InstanceListSettingsModal {
             let instListPrefs: InstanceListPreference = new InstanceListPreference();
             instListPrefs.visualization = this.visualization;
             instListPrefs.safeToGoLimit = this.safeToGoLimit;
-            this.vbProp.setInstanceListPreferences(instListPrefs);
+            this.vbProp.setInstanceListPreferences(instListPrefs).subscribe();
             this.activeModal.close();
         } else {
             this.activeModal.close();

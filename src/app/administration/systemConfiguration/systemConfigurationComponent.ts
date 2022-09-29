@@ -407,7 +407,7 @@ export class SystemConfigurationComponent {
     }
 
     onEmailVerificationChanged() {
-        this.vbProp.setEmailVerification(this.emailVerification);
+        this.vbProp.setEmailVerification(this.emailVerification).subscribe();
     }
 
     /* ============================
@@ -430,8 +430,11 @@ export class SystemConfigurationComponent {
         if (this.homeContent.trim() == "") {
             this.homeContent = null;
         }
-        this.vbProp.setHomeContent(this.homeContent);
-        this.homeContentPristine = this.homeContent;
+        this.vbProp.setHomeContent(this.homeContent).subscribe(
+            () => {
+                this.homeContentPristine = this.homeContent;
+            }
+        );
     }
 
     isHomeContentChanged(): boolean {
@@ -454,7 +457,7 @@ export class SystemConfigurationComponent {
      * ============================ */
 
     onExpFeatEnabledChanged() {
-        this.vbProp.setExperimentalFeaturesEnabled(this.expFeatEnabled);
+        this.vbProp.setExperimentalFeaturesEnabled(this.expFeatEnabled).subscribe();
     }
 
     onCodaProvisioningEnabledChanged() {

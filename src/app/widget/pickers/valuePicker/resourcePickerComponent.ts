@@ -17,6 +17,7 @@ import { ModalType } from '../../modal/Modals';
 })
 export class ResourcePickerComponent {
 
+    @Input() project: Project;
     @Input() resource: ARTURIResource;
 
     @Input() disabled: boolean = false;
@@ -59,7 +60,9 @@ export class ResourcePickerComponent {
     }
 
     private init() {
-        this.projectAccessed = VBContext.getWorkingProject() != null;
+        let workingProj: Project = VBContext.getWorkingProject();
+        //project accessed (enables picking through tree/list browsing) if a project is accessed and its the current in input (if any)
+        this.projectAccessed = workingProj != null && (this.project == null || workingProj.getName() == this.project.getName());
         if (this.resource) {
             if (typeof this.resource == 'string') {
                 this.resource = new ARTURIResource(this.resource);

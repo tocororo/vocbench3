@@ -28,13 +28,13 @@ export class VocbenchPreferencesComponent {
     //show flags handlers
 
     onShowFlagChange() {
-        this.properties.setShowFlags(this.showFlags);
+        this.properties.setShowFlags(this.showFlags).subscribe();
     }
 
     //theme handler
     changeTheme(theme: number) {
         this.selectedTheme = theme;
-        this.properties.setProjectTheme(this.selectedTheme);
+        this.properties.setProjectTheme(this.selectedTheme).subscribe();
     }
 
 }
