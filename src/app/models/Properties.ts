@@ -196,12 +196,12 @@ export class InstanceListPreference {
 }
 
 export class CustomTreeSettings {
-    enabled: boolean;
+    enabled?: boolean;
     type: string;
-    includeSubtype: boolean;
+    includeSubtype?: boolean;
     hierarchicalProperty: string;
-    includeSubProp: boolean;
-    inverseHierarchyDirection: boolean;
+    includeSubProp?: boolean;
+    inverseHierarchyDirection?: boolean;
 }
 
 export enum InstanceListVisualizationMode {
