@@ -4,7 +4,6 @@ import { EDOAL, SKOS } from "src/app/models/Vocabulary";
 import { SettingsServices } from "src/app/services/settingsServices";
 import { VBEventHandler } from 'src/app/utils/VBEventHandler';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
-import { ModalType } from 'src/app/widget/modal/Modals';
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
 import { CustomTreeSettings, PrefLabelClashMode, ResourceViewProjectSettings, SettingsEnum } from "../../models/Properties";
@@ -213,17 +212,7 @@ export class ProjectSettingsComponent {
     }
 
     onCustomTreeSettingsReset() {
-        this.customTreeSettings = null;
-        this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.CONFIG_RESTORE_PROJECT_DEFAULT_CONFIRM" }, ModalType.warning).then(
-            () => {
-                this.settingsService.storePUSettingProjectDefault(ExtensionPointID.ST_CORE_ID, this.project, SettingsEnum.customTree, this.customTreeSettings).subscribe(
-                    () => {
-                        this.checkAndUpdateCurrentProjectCustomTreeSettings();
-                    }
-                );
-            },
-            () => {}
-        );
+        this.customTreeSettings = { type: null, hierarchicalProperty: null };
     }
 
     /**

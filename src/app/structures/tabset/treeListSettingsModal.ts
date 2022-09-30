@@ -62,6 +62,7 @@ export class TreeListSettingsModal {
                         this.settingsService.getSettings(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, requestsOpt).subscribe(
                             settings => {
                                 this.customTreeSettings = settings.getPropertyValue(SettingsEnum.customTree);
+                                VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().customTreeSettings = settings.getPropertyValue(SettingsEnum.customTree);
                                 this.basicModals.alert({ key: "STATUS.OPERATION_DONE" }, { key: "MESSAGES.CONFIG_PROJECT_DEFAULT_RESTORED" });
                             }
                         );
