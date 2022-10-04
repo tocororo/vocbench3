@@ -94,7 +94,7 @@
             <div class="card-body">
                 <div *ngFor="let group of typesGroups; let lastGroup = last; let indexGroup = index">
                     <div class="hbox" style="align-items: center; margin: 2px 0;">
-                        <div class="hbox tile-group">
+                        <div class="d-flex tile-group">
                             <div *ngFor="let t of group; let indexType=index; let lastType = last" class="hbox" style="align-items: center; flex: initial">
                                 <span class="tile">
                                     <rdf-resource [resource]="t"></rdf-resource>
@@ -134,7 +134,7 @@
             <div class="card-body">
                 <div *ngFor="let group of schemesGroups; let lastGroup = last; let indexGroup = index">
                     <div class="hbox" style="align-items: center; margin: 2px 0;">
-                        <div class="hbox tile-group">
+                        <div class="d-flex tile-group">
                             <div *ngFor="let s of group; let indexScheme=index; let lastScheme = last" class="hbox" style="align-items: center; flex: initial">
                                 <span class="tile">
                                     <rdf-resource [resource]="s"></rdf-resource>
@@ -176,7 +176,7 @@
                     <div class="hbox" style="align-items: center; margin: 3px 0;">
                         <div class="card card-default" style="flex: 1;">
                             <div class="card-body">
-                                <div class="hbox tile-group">
+                                <div class="d-flex tile-group">
                                     <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
                                         <span class="tile">
                                             <rdf-resource [resource]="v"></rdf-resource>
@@ -238,7 +238,7 @@
                                         (resourceChanged)="updatePropOutgoingValue(group, $event)">
                                     </resource-picker>
                                 </div>
-                                <div class="hbox tile-group">
+                                <div class="d-flex tile-group">
                                     <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
                                         <span class="tile">
                                             <rdf-resource [resource]="v"></rdf-resource>

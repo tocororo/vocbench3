@@ -1038,7 +1038,11 @@
                 "HIERARCHICAL_PROP": "Hierarchical property",
                 "HIERARCHICAL_PROP_INFO": "Property that determines the hierarchical link between two resources",
                 "RES_TYPE": "Resource type",
-                "RES_TYPE_INFO": "Type of the resources belonging to the tree"
+                "RES_TYPE_INFO": "Type of the resources belonging to the tree (default rdfs:Resource)",
+                "ROOTS_CRITERIA": "Root criteria",
+                "ROOTS_CRITERIA_INFO": "Specifies the criteria for determining tree roots",
+                "ROOTS": "Roots",
+                "ROOTS_INFO": "Roots of the tree"
             },
             "SHOW_DEPRECATED_RES": "Show deprecated resources in tree/list",
             "TREE_LIST_SETTINGS": "Tree/List settings",
@@ -1524,6 +1528,7 @@
         "INCOMPLETE_BINDING_PARAMETERIZATION_DATATYPE": "Incomplete parameterization for binding '{{binding}}', please set a datatype or delete the binding",
         "INCOMPLETE_BINDING_PARAMETERIZATION_ROLE": "Incomplete parameterization for binding '{{binding}}', please set a role or delete the binding",
         "INCOMPLETE_BINDING_PARAMETERIZATION_VALUE": "Incomplete parameterization for binding '{{binding}}', please set a value or delete the binding",
+        "INCOMPLETE_CONFIGURATION": "Incomplete configuration",
         "INCOMPLETE_GRAPH_APPLICATION": "The Graph Application is not completed. Please, provide a list of nodes and a graph pattern.",
         "INCOMPLETE_METADATA_PATTERN_ASSOCIATION": "An incomplete association has been detected in the configuration of Resource Metadata. Please, fix it or disabled the Resource Metadata",
         "INCOMPLETE_PRED_OBJ_PAIR": "An incomplete additional predicate-object pair has been detected.",

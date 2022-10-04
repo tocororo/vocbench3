@@ -81,8 +81,10 @@ export class ResourcePickerComponent {
             if (typeof this.resource == 'string') {
                 this.resource = new ARTURIResource(this.resource);
             }
-            returnedRes = this.resource.clone();
-            returnedRes.setURI(this.resourceIRI); //if IRI has been manually changed
+            if (this.resourceIRI != null && this.resourceIRI.trim() != "") {
+                returnedRes = this.resource.clone();
+                returnedRes.setURI(this.resourceIRI); //if IRI has been manually changed
+            }
         } else if (this.resourceIRI != null && this.resourceIRI.trim() != "") {
             returnedRes = new ARTURIResource(this.resourceIRI);
         }

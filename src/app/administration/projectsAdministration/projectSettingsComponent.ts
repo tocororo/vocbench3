@@ -4,6 +4,7 @@ import { EDOAL, SKOS } from "src/app/models/Vocabulary";
 import { SettingsServices } from "src/app/services/settingsServices";
 import { VBEventHandler } from 'src/app/utils/VBEventHandler';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
 import { CustomTreeSettings, PrefLabelClashMode, ResourceViewProjectSettings, SettingsEnum } from "../../models/Properties";
@@ -204,11 +205,17 @@ export class ProjectSettingsComponent {
     }
 
     onCustomTreeSettingsSubmit() {
-        this.settingsService.storePUSettingProjectDefault(ExtensionPointID.ST_CORE_ID, this.project, SettingsEnum.customTree, this.customTreeSettings).subscribe(
-            () => {
-                this.checkAndUpdateCurrentProjectCustomTreeSettings();
-            }
-        );
+        if (this.customTreeSettings.enabled && this.customTreeSettings.hierarchicalProperty == null) {
+            //settings not empty but type or prop not configured
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_CONFIGURATION" }, ModalType.warning);
+            return;
+        } else {
+            this.settingsService.storePUSettingProjectDefault(ExtensionPointID.ST_CORE_ID, this.project, SettingsEnum.customTree, this.customTreeSettings).subscribe(
+                () => {
+                    this.checkAndUpdateCurrentProjectCustomTreeSettings();
+                }
+            );
+        }
     }
 
     onCustomTreeSettingsReset() {

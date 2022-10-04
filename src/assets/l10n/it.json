@@ -1038,7 +1038,11 @@
                 "HIERARCHICAL_PROP": "Proprietà gerarchica",
                 "HIERARCHICAL_PROP_INFO": "Proprietà che determina il collegamento gerarchico tra due risorse",
                 "RES_TYPE": "Tipo risorsa",
-                "RES_TYPE_INFO": "Tipo delle risorse che compongono all'albero"
+                "RES_TYPE_INFO": "Tipo delle risorse che compongono all'albero (default rdfs:Resource)",
+                "ROOTS_CRITERIA": "Criteri root",
+                "ROOTS_CRITERIA_INFO": "Specifica i criteri per determinare le root dell'albero",
+                "ROOTS": "Root",
+                "ROOTS_INFO": "Root dell'albero"
             },
             "SHOW_DEPRECATED_RES": "Mostra le risorse deprecate negli alberi/liste",
             "TREE_LIST_SETTINGS": "Impostazioni alberi/liste",
@@ -1522,6 +1526,7 @@
         "INCOMPLETE_BINDING_PARAMETERIZATION_DATATYPE": "Parametrizzazione incompleta per il binding '{{binding}}'. Indica un datatype o cancella il binding",
         "INCOMPLETE_BINDING_PARAMETERIZATION_ROLE": "Parametrizzazione incompleta per il binding '{{binding}}'. Indica un ruolo o cancella il binding",
         "INCOMPLETE_BINDING_PARAMETERIZATION_VALUE": "Parametrizzazione incompleta per il binding '{{binding}}'. Indica un valore o cancella il binding",
+        "INCOMPLETE_CONFIGURATION": "Configurazione incomplete",
         "INCOMPLETE_GRAPH_APPLICATION": "La Graph Application non è completa. Fornisci una lista di nodi e un graph pattern.",
         "INCOMPLETE_METADATA_PATTERN_ASSOCIATION": "E' stata rilevata una associazione incompleta nella configurazione del Resource Metadata. Correggere o disabilitare il Resource Metadata",
         "INCOMPLETE_PRED_OBJ_PAIR": "E' stata rilevata una coppia addizionale predicato-oggetto incompleta.",

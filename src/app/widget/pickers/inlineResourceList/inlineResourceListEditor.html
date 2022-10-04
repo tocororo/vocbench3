@@ -10,7 +10,10 @@
             <span class="fas fa-pencil-alt"></span>
         </button>
         <div class="dropdown-menu float-right" ngbDropdownMenu>
-            <a class="dropdown-item" (click)="addResource()">{{'ACTIONS.ADD'|translate}}</a>
+            <a class="dropdown-item" (click)="addResource()" [ngClass]="{ disabled : !projectAccessed}" [title]="(projectAccessed ? 'ACTIONS.SELECT_EXISTING_RESOURCE' : 'WIDGETS.VALUE_PICKER.CANNOT_PICK_FROM_NOT_ACCESSED_PROJ')|translate" style="pointer-events: all;">
+                {{'ACTIONS.ADD'|translate}}
+                <span *ngIf="!projectAccessed" class="fas fa-exclamation-triangle"></span>
+            </a>
             <a class="dropdown-item" (click)="editManually()">{{'ACTIONS.EDIT_MANUALLY'|translate}}</a>
             <ng-container *ngIf="ordered">
                 <a class="dropdown-item" [ngClass]="{disabled : !selectedRes}" (click)="addResource('before')">{{'ACTIONS.ADD_BEFORE'|translate}}</a>

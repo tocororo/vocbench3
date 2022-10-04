@@ -14,6 +14,7 @@
                 <colgroup>
                     <col style="width: 25%;">
                     <col>
+                    <col style="width: 1%;">
                 </colgroup>
                 <tbody>
                     <tr>
@@ -28,6 +29,7 @@
                                 (resourceChanged)="onTypeChanged($event)">
                             </resource-picker>
                         </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td nowrap>
@@ -41,7 +43,51 @@
                                 <input class="form-check-input" type="checkbox" [(ngModel)]="includeSubtype" (ngModelChange)="onChanges()">
                             </div>
                         </td>
+                        <td></td>
                     </tr>
+
+                    <tr>
+                        <td nowrap>
+                            <span>
+                                {{'DATA.SETTINGS.CUSTOM_TREE.ROOTS_CRITERIA'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.ROOTS_CRITERIA_INFO'|translate"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <select class="form-control" [(ngModel)]="rootCriteria" (ngModelChange)="onChanges()">
+                                <option *ngFor="let c of rootCriteriaList" [ngValue]="c.id">{{c.labelTranslationKey|translate}}</option>
+                            </select>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr *ngIf="rootCriteria == 'static'">
+                        <td nowrap>
+                            <span>
+                                {{'DATA.SETTINGS.CUSTOM_TREE.ROOTS'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.ROOTS_INFO'|translate"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <inline-resource-list-editor [resources]="roots" (changed)="onRootsChanged($event)"></inline-resource-list-editor>
+                            <!-- <div class="d-flex tile-group overflow-auto" style="max-height: 100px;">
+                                <div *ngFor="let r of roots; let index=index; let last=last" class="d-flex align-items-center">
+                                    <span class="tile">
+                                        <rdf-resource [resource]="r"></rdf-resource>
+                                        <span class="far fa-times-circle" (click)="deleteRoot(index)" 
+                                            style="cursor: pointer"
+                                            onmouseover="this.className='fas fa-times-circle';"
+                                            onmouseout="this.className='far fa-times-circle';">
+                                        </span>
+                                    </span>
+                                </div>
+                                <button class="btn btn-light btn-xs ml-2" (click)="addRoot()">
+                                    <span class="fas fa-plus"></span>
+                                </button>
+                            </div> -->
+                        </td>
+                        <td>*</td>
+                    </tr>
+
                     <tr>
                         <td nowrap>
                             <span>
@@ -54,6 +100,7 @@
                                 (resourceChanged)="onPropertyChanged($event)">
                             </resource-picker>
                         </td>
+                        <td>*</td>
                     </tr>
                     <tr>
                         <td nowrap>
@@ -67,6 +114,7 @@
                                 <input class="form-check-input" type="checkbox" [(ngModel)]="includeSubProp" (ngModelChange)="onChanges()">
                             </div>
                         </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td nowrap>
@@ -81,12 +129,14 @@
                                 <option [ngValue]="true">{{'DATA.SETTINGS.CUSTOM_TREE.HIERARCHY_DIR_CHILD_PARENT'|translate}}</option>
                             </select>
                         </td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
         </fieldset>
     </div>
     <div class="card-footer">
+        (*) {{'COMMONS.MANDATORY_FIELD'|translate}}
         <div class="float-right">
             <button class="btn btn-light btn-sm" (click)="doReset()">{{'ACTIONS.RESET'|translate}}</button>
             <button *ngIf="context == 'administration'" class="btn btn-info btn-sm ml-2" (click)="doSubmit()">{{'ACTIONS.SUBMIT'|translate}}</button>

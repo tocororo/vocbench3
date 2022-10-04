@@ -42,13 +42,7 @@ export class CustomTreeComponent extends AbstractTree {
         
         //check necessary since customTreeSettingsChangedEvent might be handled before the tabset in Data is updated (so CTree might be still present but no config available)
         if (!ctSettings.enabled) return;
-
-        let cls: ARTURIResource = new ARTURIResource(ctSettings.type);
-        let childProp: ARTURIResource = new ARTURIResource(ctSettings.hierarchicalProperty);
-        let invDirection: boolean = ctSettings.inverseHierarchyDirection;
-        let includeSubProp: boolean = ctSettings.includeSubProp;
-        let includeSubcls: boolean = ctSettings.includeSubtype;
-        this.customTreeService.getRoots(cls, childProp, invDirection, includeSubProp, includeSubcls).subscribe(
+        this.customTreeService.getRoots().subscribe(
             roots => {
                 ResourceUtils.sortResources(roots, orderAttribute);
                 this.roots = roots;

@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from 'src/app/models/ARTResources';
+import { Project } from 'src/app/models/Project';
 import { ResourcesServices } from 'src/app/services/resourcesServices';
+import { VBContext } from 'src/app/utils/VBContext';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from 'src/app/widget/modal/browsingModal/browsingModalServices';
 import { ModalType } from 'src/app/widget/modal/Modals';
@@ -11,6 +13,7 @@ import { ModalType } from 'src/app/widget/modal/Modals';
 })
 export class InlineResourceListEditor {
 
+    @Input() project: Project;
     @Input() resources: ARTURIResource[] = [];
     @Input() ordered: boolean; //specifies if order matters, if true there are edit buttons like add/move before/after
     @Input() allowDuplicates: boolean; //duplicated resources are allowed in the list (useful for example in prop chain where the same prop can be multiple times in the chain)
@@ -18,10 +21,16 @@ export class InlineResourceListEditor {
     @Output() changed: EventEmitter<ARTURIResource[]> = new EventEmitter();
     selectedRes: ARTURIResource;
 
+    projectAccessed: boolean; //useful in order to disable picker (and just fill manually the field) from outside project
+
     constructor(private resourceService: ResourcesServices, private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
-        if (this.resources && this.resources.length > 0) {
+        let workingProj: Project = VBContext.getWorkingProject();
+        //project accessed (enables picking through tree/list browsing) if a project is accessed and its the current in input (if any)
+        this.projectAccessed = workingProj != null && (this.project == null || workingProj.getName() == this.project.getName());
+
+        if (this.projectAccessed && this.resources && this.resources.length > 0) {
             this.annotateResources();
         }
     }
@@ -56,11 +65,14 @@ export class InlineResourceListEditor {
     }
 
     addResource(where?: "before" | "after") {
+        if (!this.projectAccessed) return; //needed since I enabled event on disabled "add" menu item for allowing tooltip
         let browseResFn: Promise<ARTResource>;
         if (this.role == RDFResourceRolesEnum.cls) {
             browseResFn = this.browsingModals.browseClassTree({ key: "DATA.ACTIONS.ADD_CLASS" });
-        } else { //if (this.role == RDFResourceRolesEnum.property) {
+        } else if (this.role == RDFResourceRolesEnum.property) {
             browseResFn = this.browsingModals.browsePropertyTree({ key: "DATA.ACTIONS.ADD_PROPERTY" });
+        } else {
+            browseResFn = this.browsingModals.browseClassIndividualTree({ key: "ACTIONS.SELECT_RESOURCE"});
         }
         browseResFn.then(
             (res: ARTURIResource) => {

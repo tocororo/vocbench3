@@ -83,9 +83,9 @@ export class TreeListSettingsModal {
         let filteredTabs: RDFResourceRolesEnum[] = this.tabsStruct.filter(t => !t.visible).map(t => t.tab);
         updateSettingsFn.push(this.vbProp.setStructurePanelFilter(filteredTabs));
 
-        if (this.customTreeSettings.enabled && (this.customTreeSettings.type == null || this.customTreeSettings.hierarchicalProperty == null)) {
+        if (this.customTreeSettings.enabled && this.customTreeSettings.hierarchicalProperty == null) {
             //settings not empty but type or prop not configured
-            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "INCOMPLETE CONFIGURATION FOR CUSTOM TREE" }, ModalType.warning);
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_CONFIGURATION" }, ModalType.warning);
             return;
         } else {
             updateSettingsFn.push(this.vbProp.setCustomTreeSettings(this.customTreeSettings));

@@ -18,7 +18,7 @@
                         <div class="card card-default" style="margin-top: 8px">
                             <div class="card-body hbox" style="align-items: center;">
                                 <label>{{'ADMINISTRATION.USERS.ASSIGNED_TO_PROJECTS'|translate}}:</label>
-                                <div class="hbox tile-group" style="align-items: center; margin-left: 6px; flex-wrap: nowrap; overflow: auto;">
+                                <div class="d-flex flex-grow-1 align-items-center tile-group ml-2" style="flex-wrap: nowrap; overflow: auto;">
                                     <span *ngIf="selectedUser.isAdmin(); else notAdminBlock" style="margin-left: 4px;">
                                         {{'ADMINISTRATION.USERS.ADMIN_ASSIGNED_PROJECTS_INFO'|translate}}
                                     </span>

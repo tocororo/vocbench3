@@ -179,17 +179,24 @@ export class VBProperties {
         } else {
             projectCtx.getProjectPreferences().activeSchemes = schemes;
         }
-        this.eventHandler.schemeChangedEvent.emit({ schemes: schemes, project: projectCtx.getProject() });
         let schemesPropValue: string[] = schemes.map(s => s.toNT());
-        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeSchemes, schemesPropValue, new VBRequestOptions({ ctxProject: projectCtx.getProject() }));
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeSchemes, schemesPropValue, new VBRequestOptions({ ctxProject: projectCtx.getProject() })).pipe(
+            map(() => {
+                this.eventHandler.schemeChangedEvent.emit({ schemes: schemes, project: projectCtx.getProject() });
+            })
+        );
     }
 
     setActiveLexicon(projectCtx: ProjectContext, lexicon: ARTURIResource): Observable<void> {
         projectCtx.getProjectPreferences().activeLexicon = lexicon;
-        this.eventHandler.lexiconChangedEvent.emit({ lexicon: lexicon, project: projectCtx.getProject() });
         let lexiconUri: string = lexicon != null ? lexicon.toNT() : null;
-        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeLexicon, lexiconUri, new VBRequestOptions({ ctxProject: projectCtx.getProject() }));
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.activeLexicon, lexiconUri, new VBRequestOptions({ ctxProject: projectCtx.getProject() })).pipe(
+            map(() => {
+                this.eventHandler.lexiconChangedEvent.emit({ lexicon: lexicon, project: projectCtx.getProject() });
+            })
+        );
     }
+    
 
     getShowFlags(): boolean {
         if (VBContext.getWorkingProjectCtx() != null) {
@@ -200,15 +207,21 @@ export class VBProperties {
     }
     setShowFlags(show: boolean): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().showFlags = show;
-        this.eventHandler.showFlagChangedEvent.emit(show);
-        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.showFlags, show);
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.showFlags, show).pipe(
+            map(() => {
+                this.eventHandler.showFlagChangedEvent.emit(show);
+            })
+        );
     }
 
     setProjectTheme(theme: number): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId = theme;
-        this.eventHandler.themeChangedEvent.emit(theme);
         let value = (theme == 0) ? null : theme + ""; //theme 0 is the default one, so remove the preference
-        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.projectTheme, value);
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.projectTheme, value).pipe(
+            map(() => {
+                this.eventHandler.themeChangedEvent.emit(theme);
+            })
+        );
     }
 
     setRenderingLanguagesPreference(languages: string[]): Observable<void> {
@@ -229,8 +242,11 @@ export class VBProperties {
 
     setNotificationStatus(status: NotificationStatus): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus = status;
-        this.eventHandler.notificationStatusChangedEvent.emit();
-        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.notificationsStatus, status);
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.notificationsStatus, status).pipe(
+            map(() => {
+                this.eventHandler.notificationStatusChangedEvent.emit();
+            })
+        );
     }
 
     setStructurePanelFilter(structurePanelFilter: RDFResourceRolesEnum[]): Observable<void> {
@@ -276,8 +292,11 @@ export class VBProperties {
 
     setCustomTreeSettings(customTreeSettings: CustomTreeSettings): Observable<void> {
         VBContext.getWorkingProjectCtx().getProjectPreferences().customTreeSettings = customTreeSettings;
-        this.eventHandler.customTreeSettingsChangedEvent.emit();
-        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.customTree, customTreeSettings);
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.customTree, customTreeSettings).pipe(
+            map(() => {
+                this.eventHandler.customTreeSettingsChangedEvent.emit();
+            })
+        );
     }
 
     //Res view settings
