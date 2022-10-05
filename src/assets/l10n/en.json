@@ -964,6 +964,32 @@
             },
             "USE_SEARCH_MSG": "Please use the search field to retrieve concepts"
         },
+        "CUSTOM_TREE": {
+            "CUSTOM_TREE": "Custom Tree",
+            "INCLUDE_SUBPROP": "Include subproperties",
+            "INCLUDE_SUBPROP_INFO": "If checked, subproperties of the given hierarchical property will be taken into account",
+            "INCLUDE_SUBTYPE": "Include subtype",
+            "INCLUDE_SUBTYPE_INFO": "Tells if resources belonging to subtype of the type specified are included in the tree",
+            "HIERARCHY_DIR": "Hierarchy direction",
+            "HIERARCHY_DIR_INFO": "Specify the direction for the evaluation of the hierarchical property",
+            "HIERARCHY_DIR_CHILD_PARENT": "From child to parent",
+            "HIERARCHY_DIR_PARENT_CHILD": "From parent to child",
+            "HIERARCHICAL_PROP": "Hierarchical property",
+            "HIERARCHICAL_PROP_INFO": "Property that determines the hierarchical link between two resources",
+            "MESSAGES": {
+                "INCOMPLETE_CONFIGURATION": "Incomplete configuration for Custom Tree",
+                "NO_TYPE_ALL_ROOTS_WARN": "Pay attention: not selecting the type of resource and enabling all resources (without parents) to be roots could result in an uncontrolled number of resources appearing as roots in on the tree. Do you confirm?"
+            },
+            "RES_TYPE": "Resource type",
+            "RES_TYPE_INFO": "Type of the resources belonging to the tree (default rdfs:Resource)",
+            "ROOTS_SELECTION": "Roots selection",
+            "ROOTS_SELECTION_INFO": "Specifies how tree roots are determined",
+            "ROOTS_SELECTION_OPT_ALL": "All resources of selected type",
+            "ROOTS_SELECTION_OPT_ENUMERATION": "Enumeration",
+            "ROOTS_SELECTION_OPT_W_CHILD_ONLY": "With child nodes only",
+            "ROOTS": "Roots",
+            "ROOTS_INFO": "Roots of the tree"
+        },
         "DATATYPE": {
             "DATATYPE": "Datatype",
             "DATATYPES": "Datatypes"
@@ -1025,25 +1051,6 @@
             "SCHEMES": "Schemes"
         },
         "SETTINGS": {
-            "CUSTOM_TREE": {
-                "CUSTOM_TREE": "Custom Tree",
-                "INCLUDE_SUBPROP": "Include subproperties",
-                "INCLUDE_SUBPROP_INFO": "If checked, subproperties of the given hierarchical property will be taken into account",
-                "INCLUDE_SUBTYPE": "Include subtype",
-                "INCLUDE_SUBTYPE_INFO": "Tells if resources belonging to subtype of the type specified are included in the tree",
-                "HIERARCHY_DIR": "Hierarchy direction",
-                "HIERARCHY_DIR_INFO": "Specify the direction for the evaluation of the hierarchical property",
-                "HIERARCHY_DIR_CHILD_PARENT": "From child to parent",
-                "HIERARCHY_DIR_PARENT_CHILD": "From parent to child",
-                "HIERARCHICAL_PROP": "Hierarchical property",
-                "HIERARCHICAL_PROP_INFO": "Property that determines the hierarchical link between two resources",
-                "RES_TYPE": "Resource type",
-                "RES_TYPE_INFO": "Type of the resources belonging to the tree (default rdfs:Resource)",
-                "ROOTS_CRITERIA": "Root criteria",
-                "ROOTS_CRITERIA_INFO": "Specifies the criteria for determining tree roots",
-                "ROOTS": "Roots",
-                "ROOTS_INFO": "Roots of the tree"
-            },
             "SHOW_DEPRECATED_RES": "Show deprecated resources in tree/list",
             "TREE_LIST_SETTINGS": "Tree/List settings",
             "VISIBLE_TABS": "Visible tabs"

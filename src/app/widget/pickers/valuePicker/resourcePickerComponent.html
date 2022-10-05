@@ -1,5 +1,5 @@
 <div [class]="inputGroupClass">
-    <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()" placeholder="http://example.org" [readonly]="!editable" [disabled]="disabled">
+    <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()" [placeholder]="placeholder ? placeholder : ''" [readonly]="!editable" [disabled]="disabled">
     <div class="input-group-append" ngbDropdown>
         <!-- Allowed only local -->
         <button *ngIf="config.allowLocal && !config.allowRemote" class="btn btn-light" (click)="pickLocalResource()" 

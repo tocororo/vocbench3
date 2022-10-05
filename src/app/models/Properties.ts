@@ -197,7 +197,7 @@ export class InstanceListPreference {
 
 export class CustomTreeSettings {
     enabled?: boolean;
-    rootCriteria?: CustomTreeRootCriteria;
+    rootSelection?: CustomTreeRootSelection;
     roots?: string[];
     type?: string;
     includeSubtype?: boolean;
@@ -205,10 +205,10 @@ export class CustomTreeSettings {
     includeSubProp?: boolean;
     inverseHierarchyDirection?: boolean;
 }
-export enum CustomTreeRootCriteria {
+export enum CustomTreeRootSelection {
     all = "all",
-    only_with_children = "only_with_children",
-    static = "static",
+    with_child_only = "with_child_only",
+    enumeration = "enumeration",
 }
 
 export enum InstanceListVisualizationMode {

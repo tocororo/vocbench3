@@ -1,11 +1,11 @@
 import { Component, Input } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { concat, Observable } from 'rxjs';
+import { concat, from, Observable, of } from 'rxjs';
 import { toArray } from 'rxjs/operators';
 import { RDFResourceRolesEnum } from 'src/app/models/ARTResources';
 import { DataStructureUtils } from 'src/app/models/DataStructure';
 import { ExtensionPointID, Scope } from 'src/app/models/Plugins';
-import { CustomTreeSettings, SettingsEnum } from 'src/app/models/Properties';
+import { CustomTreeRootSelection, CustomTreeSettings, SettingsEnum } from 'src/app/models/Properties';
 import { EDOAL } from 'src/app/models/Vocabulary';
 import { SettingsServices } from 'src/app/services/settingsServices';
 import { VBRequestOptions } from 'src/app/utils/HttpManager';
@@ -74,22 +74,71 @@ export class TreeListSettingsModal {
     }
 
     ok() {
-        let updateSettingsFn: Observable<any>[] = [];
+        /* Visible panels */
         //check if at least a tab is visible
         if (this.tabsStruct.every(t => !t.visible)) {
             this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_HIDE_ALL_DATA_TABS" }, ModalType.warning);
             return;
         }
+        if (this.isTabStructSettingsValid()) {
+            this.isCustomTreeSettingsValid().subscribe(
+                valid => {
+                    if (valid) {
+                        //both settings are valid => submit changes
+                        this.submitChanges();
+                    }
+                }
+            );
+        }
+    }
+
+    private isTabStructSettingsValid(): boolean {
+        //check if at least a tab is visible
+        if (this.tabsStruct.every(t => !t.visible)) {
+            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.CANNOT_HIDE_ALL_DATA_TABS" }, ModalType.warning);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private isCustomTreeSettingsValid(): Observable<boolean> {
+        if (this.customTreeSettings.enabled) {
+            //check if CTree enabled but incomplete (hierarchical prop not provided, or root selection set to enumeration but no roots provided)
+            if (
+                (this.customTreeSettings.hierarchicalProperty == null) ||
+                (this.customTreeSettings.rootSelection == CustomTreeRootSelection.enumeration && (!this.customTreeSettings.roots || this.customTreeSettings.roots.length == 0))
+            ) {
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "DATA.CUSTOM_TREE.MESSAGES.INCOMPLETE_CONFIGURATION" }, ModalType.warning);
+                return of(false);
+            }
+            //check if resource type is not provided (default to rdfs:Resource) and root selection set to all
+            if (this.customTreeSettings.type == null && this.customTreeSettings.rootSelection == CustomTreeRootSelection.all) {
+                return from(
+                    this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "DATA.CUSTOM_TREE.MESSAGES.NO_TYPE_ALL_ROOTS_WARN" }, ModalType.warning).then(
+                        () => {
+                            return true;
+                        },
+                        () => {
+                            return false;
+                        }
+                    )
+                );
+            } else {
+                return of(true);
+            }
+        } else {
+            return of(true);
+        }
+    }
+
+    private submitChanges() {
+        let updateSettingsFn: Observable<any>[] = [];
+
         let filteredTabs: RDFResourceRolesEnum[] = this.tabsStruct.filter(t => !t.visible).map(t => t.tab);
         updateSettingsFn.push(this.vbProp.setStructurePanelFilter(filteredTabs));
 
-        if (this.customTreeSettings.enabled && this.customTreeSettings.hierarchicalProperty == null) {
-            //settings not empty but type or prop not configured
-            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_CONFIGURATION" }, ModalType.warning);
-            return;
-        } else {
-            updateSettingsFn.push(this.vbProp.setCustomTreeSettings(this.customTreeSettings));
-        }
+        updateSettingsFn.push(this.vbProp.setCustomTreeSettings(this.customTreeSettings));
 
         this.vbProp.setShowDeprecated(this.showDeprecated);
 

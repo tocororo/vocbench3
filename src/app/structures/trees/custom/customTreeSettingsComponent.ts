@@ -1,13 +1,10 @@
 import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ARTNode, ARTURIResource } from 'src/app/models/ARTResources';
+import { ARTURIResource } from 'src/app/models/ARTResources';
 import { Project } from 'src/app/models/Project';
-import { CustomTreeRootCriteria, CustomTreeSettings } from 'src/app/models/Properties';
-import { RDFS } from 'src/app/models/Vocabulary';
+import { CustomTreeRootSelection, CustomTreeSettings } from 'src/app/models/Properties';
 import { ResourcesServices } from 'src/app/services/resourcesServices';
 import { VBContext } from 'src/app/utils/VBContext';
-import { BrowsingModalServices } from 'src/app/widget/modal/browsingModal/browsingModalServices';
-import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 
 @Component({
     selector: "custom-tree-settings",
@@ -26,7 +23,7 @@ export class CustomTreeSettingsComponent {
 
     enabled: boolean;
     type: ARTURIResource;
-    rootCriteria: CustomTreeRootCriteria = CustomTreeRootCriteria.all;
+    rootSelection: CustomTreeRootSelection = CustomTreeRootSelection.all;
     roots: ARTURIResource[] = [];
     includeSubtype: boolean;
     property: ARTURIResource;
@@ -34,15 +31,15 @@ export class CustomTreeSettingsComponent {
     invDirection: boolean = false; //explicitly initialized to false in order to let initialize correctly the selection in the view
         //(otherwise it would be undef and the selector, which has two options true/false, would not show any choices)
 
-    rootCriteriaList: { id: CustomTreeRootCriteria, labelTranslationKey: string }[] = [
-        { id: CustomTreeRootCriteria.all, labelTranslationKey: "All" },
-        { id: CustomTreeRootCriteria.only_with_children, labelTranslationKey: "Only with children" },
-        { id: CustomTreeRootCriteria.static, labelTranslationKey: "Static" },
+    rootSelectionList: { id: CustomTreeRootSelection, labelTranslationKey: string }[] = [
+        { id: CustomTreeRootSelection.all, labelTranslationKey: "DATA.CUSTOM_TREE.ROOTS_SELECTION_OPT_ALL" },
+        { id: CustomTreeRootSelection.with_child_only, labelTranslationKey: "DATA.CUSTOM_TREE.ROOTS_SELECTION_OPT_W_CHILD_ONLY" },
+        { id: CustomTreeRootSelection.enumeration, labelTranslationKey: "DATA.CUSTOM_TREE.ROOTS_SELECTION_OPT_ENUMERATION" },
     ];
 
     projectAccessed: boolean;
 
-    constructor(private browsingModals: BrowsingModalServices, private sharedModals: SharedModalServices, private resourceService: ResourcesServices) { }
+    constructor(private resourceService: ResourcesServices) { }
 
     ngOnInit() {
         /* if the current settings is shown in
@@ -65,33 +62,6 @@ export class CustomTreeSettingsComponent {
         this.onChanges();
     }
 
-    addRoot() {
-        if (this.projectAccessed) {
-            let rootsClasses = this.type != null ? [this.type] : [RDFS.resource];
-            this.browsingModals.browseClassIndividualTree({ key: "ACTIONS.SELECT_RESOURCE" }, rootsClasses).then(
-                root => {
-                    if (!this.roots.some(r => r.equals(root))) {
-                        this.roots.push(root);
-                        this.onChanges();
-                    }
-                },
-                () => {}
-            );
-        } else {
-            this.sharedModals.pickResource({ key: "ACTIONS.SELECT_RESOURCE" }).then(
-                (value: ARTNode) => {
-                    // binding.value = value.toNT();
-                },
-                () => { }
-            );
-        }
-    }
-
-    deleteRoot(index: number) {
-        this.roots.splice(index, 1);
-        this.onChanges();
-    }
-
     onRootsChanged(roots: ARTURIResource[]) {
         this.roots = roots;
         this.onChanges();
@@ -101,8 +71,8 @@ export class CustomTreeSettingsComponent {
         let ctSettings: CustomTreeSettings = new CustomTreeSettings();
         ctSettings.enabled = this.enabled;
         ctSettings.type = this.type ? this.type.toNT() : null;
-        ctSettings.rootCriteria = this.rootCriteria;
-        ctSettings.roots = this.rootCriteria == CustomTreeRootCriteria.static ? this.roots.map(r => r.toNT()) : null;
+        ctSettings.rootSelection = this.rootSelection;
+        ctSettings.roots = this.rootSelection == CustomTreeRootSelection.enumeration ? this.roots.map(r => r.toNT()) : null;
         ctSettings.includeSubtype = this.includeSubtype;
         ctSettings.includeSubProp = this.includeSubProp;
         ctSettings.hierarchicalProperty = this.property ? this.property.toNT() : null;
@@ -127,7 +97,7 @@ export class CustomTreeSettingsComponent {
         if (settings) {
             this.enabled = settings.enabled;
             this.type = settings.type ? new ARTURIResource(settings.type) : null;
-            this.rootCriteria = settings.rootCriteria ? settings.rootCriteria : CustomTreeRootCriteria.all;
+            this.rootSelection = settings.rootSelection ? settings.rootSelection : CustomTreeRootSelection.with_child_only;
             this.roots = settings.roots ? settings.roots.map(r => new ARTURIResource(r)) : [];
             this.includeSubtype = settings.includeSubtype;
             this.includeSubProp = settings.includeSubProp;

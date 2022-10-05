@@ -964,6 +964,32 @@
             },
             "USE_SEARCH_MSG": "Usa il campo di ricerca per recuperare concetti"
         },
+        "CUSTOM_TREE": {
+            "CUSTOM_TREE": "Albero personalizzato",
+            "INCLUDE_SUBPROP": "Includi sotto proprietà",
+            "INCLUDE_SUBPROP_INFO": "Se spuntata, verranno considerate anche le sotto proprietà della proprietà gerarchica indicata",
+            "INCLUDE_SUBTYPE": "Includi sottotipi",
+            "INCLUDE_SUBTYPE_INFO": "Specifica se le risorse appartenenti ai sottotipi del tipo indicato sono incluse nell'albero",
+            "HIERARCHY_DIR": "Direzione della gerarchia",
+            "HIERARCHY_DIR_INFO": "Specifica la direzione della proprietà gerarchica",
+            "HIERARCHY_DIR_CHILD_PARENT": "Da figlio a padre",
+            "HIERARCHY_DIR_PARENT_CHILD": "Da padre a figlio",
+            "HIERARCHICAL_PROP": "Proprietà gerarchica",
+            "HIERARCHICAL_PROP_INFO": "Proprietà che determina il collegamento gerarchico tra due risorse",
+            "MESSAGES": {
+                "INCOMPLETE_CONFIGURATION": "Configurazione dell'albero personalizzato incompleta",
+                "NO_TYPE_ALL_ROOTS_WARN": "Attenzione: non selezionando il tipo di risorse e abilitando come root tutte le risorse (senza padre) può portare ad un numero incontrollato di risorse root nell'albero. Confermi?"
+            },
+            "RES_TYPE": "Tipo risorsa",
+            "RES_TYPE_INFO": "Tipo delle risorse che compongono all'albero (default rdfs:Resource)",
+            "ROOTS_SELECTION": "Selezione root",
+            "ROOTS_SELECTION_INFO": "Specifica come selezionare le root dell'albero",
+            "ROOTS_SELECTION_OPT_ALL": "Tutte le risorse del tipo selezionato",
+            "ROOTS_SELECTION_OPT_ENUMERATION": "Enumerazione",
+            "ROOTS_SELECTION_OPT_W_CHILD_ONLY": "Solo con nodi figli",
+            "ROOTS": "Root",
+            "ROOTS_INFO": "Root dell'albero"
+        },
         "DATATYPE": {
             "DATATYPE": "Datatype",
             "DATATYPES": "Datatype"
@@ -1025,25 +1051,6 @@
             "SCHEMES": "Schemi"
         },
         "SETTINGS": {
-            "CUSTOM_TREE": {
-                "CUSTOM_TREE": "Albero personalizzato",
-                "INCLUDE_SUBPROP": "Includi sotto proprietà",
-                "INCLUDE_SUBPROP_INFO": "Se spuntata, verranno considerate anche le sotto proprietà della proprietà gerarchica indicata",
-                "INCLUDE_SUBTYPE": "Includi sottotipi",
-                "INCLUDE_SUBTYPE_INFO": "Specifica se le risorse appartenenti ai sottotipi del tipo indicato sono incluse nell'albero",
-                "HIERARCHY_DIR": "Direzione della gerarchia",
-                "HIERARCHY_DIR_INFO": "Specifica la direzione della proprietà gerarchica",
-                "HIERARCHY_DIR_CHILD_PARENT": "Da figlio a padre",
-                "HIERARCHY_DIR_PARENT_CHILD": "Da padre a figlio",
-                "HIERARCHICAL_PROP": "Proprietà gerarchica",
-                "HIERARCHICAL_PROP_INFO": "Proprietà che determina il collegamento gerarchico tra due risorse",
-                "RES_TYPE": "Tipo risorsa",
-                "RES_TYPE_INFO": "Tipo delle risorse che compongono all'albero (default rdfs:Resource)",
-                "ROOTS_CRITERIA": "Criteri root",
-                "ROOTS_CRITERIA_INFO": "Specifica i criteri per determinare le root dell'albero",
-                "ROOTS": "Root",
-                "ROOTS_INFO": "Root dell'albero"
-            },
             "SHOW_DEPRECATED_RES": "Mostra le risorse deprecate negli alberi/liste",
             "TREE_LIST_SETTINGS": "Impostazioni alberi/liste",
             "VISIBLE_TABS": "Schede visibili"

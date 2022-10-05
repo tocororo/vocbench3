@@ -19,6 +19,7 @@ export class ResourcePickerComponent {
 
     @Input() project: Project;
     @Input() resource: ARTURIResource;
+    @Input() placeholder: string;
 
     @Input() disabled: boolean = false;
     @Input() editable: boolean = false; //tells if the URI can be manually edited

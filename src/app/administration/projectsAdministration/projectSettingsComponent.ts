@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
+import { from, Observable, of } from 'rxjs';
 import { ExtensionPointID, Scope, Settings } from "src/app/models/Plugins";
 import { EDOAL, SKOS } from "src/app/models/Vocabulary";
 import { SettingsServices } from "src/app/services/settingsServices";
@@ -7,7 +8,7 @@ import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalSe
 import { ModalType } from 'src/app/widget/modal/Modals';
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
-import { CustomTreeSettings, PrefLabelClashMode, ResourceViewProjectSettings, SettingsEnum } from "../../models/Properties";
+import { CustomTreeRootSelection, CustomTreeSettings, PrefLabelClashMode, ResourceViewProjectSettings, SettingsEnum } from "../../models/Properties";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 
@@ -205,17 +206,49 @@ export class ProjectSettingsComponent {
     }
 
     onCustomTreeSettingsSubmit() {
-        if (this.customTreeSettings.enabled && this.customTreeSettings.hierarchicalProperty == null) {
-            //settings not empty but type or prop not configured
-            this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "MESSAGES.INCOMPLETE_CONFIGURATION" }, ModalType.warning);
-            return;
+        this.isCustomTreeSettingsValid().subscribe(
+            valid => {
+                this.submitCustomTreeSettings();
+            }
+        );
+    }
+
+    private isCustomTreeSettingsValid(): Observable<boolean> {
+        if (this.customTreeSettings.enabled) {
+            //check if CTree enabled but incomplete (hierarchical prop not provided, or root selection set to enumeration but no roots provided)
+            if (
+                (this.customTreeSettings.hierarchicalProperty == null) ||
+                (this.customTreeSettings.rootSelection == CustomTreeRootSelection.enumeration && (!this.customTreeSettings.roots || this.customTreeSettings.roots.length == 0))
+            ) {
+                this.basicModals.alert({ key: "STATUS.WARNING" }, { key: "DATA.CUSTOM_TREE.MESSAGES.INCOMPLETE_CONFIGURATION" }, ModalType.warning);
+                return of(false);
+            }
+            //check if resource type is not provided (default to rdfs:Resource) and root selection set to all
+            if (this.customTreeSettings.type == null && this.customTreeSettings.rootSelection == CustomTreeRootSelection.all) {
+                return from(
+                    this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "DATA.CUSTOM_TREE.MESSAGES.NO_TYPE_ALL_ROOTS_WARN" }, ModalType.warning).then(
+                        () => {
+                            return true;
+                        },
+                        () => {
+                            return false;
+                        }
+                    )
+                );
+            } else {
+                return of(true);
+            }
         } else {
-            this.settingsService.storePUSettingProjectDefault(ExtensionPointID.ST_CORE_ID, this.project, SettingsEnum.customTree, this.customTreeSettings).subscribe(
-                () => {
-                    this.checkAndUpdateCurrentProjectCustomTreeSettings();
-                }
-            );
+            return of(true);
         }
+    }
+
+    private submitCustomTreeSettings() {
+        this.settingsService.storePUSettingProjectDefault(ExtensionPointID.ST_CORE_ID, this.project, SettingsEnum.customTree, this.customTreeSettings).subscribe(
+            () => {
+                this.checkAndUpdateCurrentProjectCustomTreeSettings();
+            }
+        );
     }
 
     onCustomTreeSettingsReset() {

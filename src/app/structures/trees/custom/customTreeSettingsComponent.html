@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header d-flex align-items-center">
-        <label>{{'DATA.SETTINGS.CUSTOM_TREE.CUSTOM_TREE'|translate}}</label>
+        <label>{{'DATA.CUSTOM_TREE.CUSTOM_TREE'|translate}}</label>
         <input type="checkbox" class="ml-2" [(ngModel)]="enabled" (ngModelChange)="onChanges()" [title]="'STATUS.ENABLED'|translate">
     </div>
     <div class="card-body">
@@ -20,12 +20,12 @@
                     <tr>
                         <td nowrap>
                             <span>
-                                {{'DATA.SETTINGS.CUSTOM_TREE.RES_TYPE'|translate}}
-                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.RES_TYPE_INFO'|translate"></span>
+                                {{'DATA.CUSTOM_TREE.RES_TYPE'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.CUSTOM_TREE.RES_TYPE_INFO'|translate"></span>
                             </span>
                         </td>
                         <td>
-                            <resource-picker [resource]="type" [config]="{ roles: ['cls']}" [editable]="true" [project]="project"
+                            <resource-picker [resource]="type" [config]="{ roles: ['cls']}" [editable]="true" [project]="project" placeholder="http://www.w3.org/2000/01/rdf-schema#Resource"
                                 (resourceChanged)="onTypeChanged($event)">
                             </resource-picker>
                         </td>
@@ -34,8 +34,8 @@
                     <tr>
                         <td nowrap>
                             <span>
-                                {{'DATA.SETTINGS.CUSTOM_TREE.INCLUDE_SUBTYPE'|translate}}
-                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.INCLUDE_SUBTYPE_INFO'|translate"></span>
+                                {{'DATA.CUSTOM_TREE.INCLUDE_SUBTYPE'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.CUSTOM_TREE.INCLUDE_SUBTYPE_INFO'|translate"></span>
                             </span>
                         </td>
                         <td>
@@ -45,45 +45,29 @@
                         </td>
                         <td></td>
                     </tr>
-
                     <tr>
                         <td nowrap>
                             <span>
-                                {{'DATA.SETTINGS.CUSTOM_TREE.ROOTS_CRITERIA'|translate}}
-                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.ROOTS_CRITERIA_INFO'|translate"></span>
+                                {{'DATA.CUSTOM_TREE.ROOTS_SELECTION'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.CUSTOM_TREE.ROOTS_SELECTION_INFO'|translate"></span>
                             </span>
                         </td>
                         <td>
-                            <select class="form-control" [(ngModel)]="rootCriteria" (ngModelChange)="onChanges()">
-                                <option *ngFor="let c of rootCriteriaList" [ngValue]="c.id">{{c.labelTranslationKey|translate}}</option>
+                            <select class="form-control" [(ngModel)]="rootSelection" (ngModelChange)="onChanges()">
+                                <option *ngFor="let el of rootSelectionList" [ngValue]="el.id">{{el.labelTranslationKey|translate}}</option>
                             </select>
                         </td>
                         <td></td>
                     </tr>
-                    <tr *ngIf="rootCriteria == 'static'">
+                    <tr *ngIf="rootSelection == 'enumeration'">
                         <td nowrap>
                             <span>
-                                {{'DATA.SETTINGS.CUSTOM_TREE.ROOTS'|translate}}
-                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.ROOTS_INFO'|translate"></span>
+                                {{'DATA.CUSTOM_TREE.ROOTS'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.CUSTOM_TREE.ROOTS_INFO'|translate"></span>
                             </span>
                         </td>
                         <td>
                             <inline-resource-list-editor [resources]="roots" (changed)="onRootsChanged($event)"></inline-resource-list-editor>
-                            <!-- <div class="d-flex tile-group overflow-auto" style="max-height: 100px;">
-                                <div *ngFor="let r of roots; let index=index; let last=last" class="d-flex align-items-center">
-                                    <span class="tile">
-                                        <rdf-resource [resource]="r"></rdf-resource>
-                                        <span class="far fa-times-circle" (click)="deleteRoot(index)" 
-                                            style="cursor: pointer"
-                                            onmouseover="this.className='fas fa-times-circle';"
-                                            onmouseout="this.className='far fa-times-circle';">
-                                        </span>
-                                    </span>
-                                </div>
-                                <button class="btn btn-light btn-xs ml-2" (click)="addRoot()">
-                                    <span class="fas fa-plus"></span>
-                                </button>
-                            </div> -->
                         </td>
                         <td>*</td>
                     </tr>
@@ -91,8 +75,8 @@
                     <tr>
                         <td nowrap>
                             <span>
-                                {{'DATA.SETTINGS.CUSTOM_TREE.HIERARCHICAL_PROP'|translate}}
-                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.HIERARCHICAL_PROP_INFO'|translate"></span>
+                                {{'DATA.CUSTOM_TREE.HIERARCHICAL_PROP'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.CUSTOM_TREE.HIERARCHICAL_PROP_INFO'|translate"></span>
                             </span>
                         </td>
                         <td>
@@ -105,8 +89,8 @@
                     <tr>
                         <td nowrap>
                             <span>
-                                {{'DATA.SETTINGS.CUSTOM_TREE.INCLUDE_SUBPROP'|translate}}
-                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.INCLUDE_SUBPROP_INFO'|translate"></span>
+                                {{'DATA.CUSTOM_TREE.INCLUDE_SUBPROP'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.CUSTOM_TREE.INCLUDE_SUBPROP_INFO'|translate"></span>
                             </span>
                         </td>
                         <td>
@@ -119,14 +103,14 @@
                     <tr>
                         <td nowrap>
                             <span>
-                                {{'DATA.SETTINGS.CUSTOM_TREE.HIERARCHY_DIR'|translate}}
-                                <span class="fas fa-info-circle" [title]="'DATA.SETTINGS.CUSTOM_TREE.HIERARCHY_DIR_INFO'|translate"></span>
+                                {{'DATA.CUSTOM_TREE.HIERARCHY_DIR'|translate}}
+                                <span class="fas fa-info-circle" [title]="'DATA.CUSTOM_TREE.HIERARCHY_DIR_INFO'|translate"></span>
                             </span>
                         </td>
                         <td>
                             <select class="form-control" [(ngModel)]="invDirection" (ngModelChange)="onChanges()">
-                                <option [ngValue]="false">{{'DATA.SETTINGS.CUSTOM_TREE.HIERARCHY_DIR_PARENT_CHILD'|translate}}</option>
-                                <option [ngValue]="true">{{'DATA.SETTINGS.CUSTOM_TREE.HIERARCHY_DIR_CHILD_PARENT'|translate}}</option>
+                                <option [ngValue]="false">{{'DATA.CUSTOM_TREE.HIERARCHY_DIR_PARENT_CHILD'|translate}}</option>
+                                <option [ngValue]="true">{{'DATA.CUSTOM_TREE.HIERARCHY_DIR_CHILD_PARENT'|translate}}</option>
                             </select>
                         </td>
                         <td></td>
