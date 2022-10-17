@@ -4,7 +4,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import { ARTBNode, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ResourcesServices } from "./resourcesServices";
 
@@ -21,7 +21,7 @@ export class ClassesServices {
      * @param classList
      */
     getClassesInfo(classList: ARTURIResource[], options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {
+        let params: STRequestParams = {
             classList: classList
         };
         return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params, options).pipe(
@@ -36,7 +36,7 @@ export class ClassesServices {
      * @param superClass class of which retrieve its subClasses
      */
     getSubClasses(superClass: ARTURIResource, numInst: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        let params: any = {
+        let params: STRequestParams = {
             superClass: superClass,
             numInst: numInst
         };
@@ -62,13 +62,14 @@ export class ClassesServices {
      * Returns the (explicit) instances of the class cls.
      * @param cls
      */
-    getInstances(cls: ARTURIResource, options?: VBRequestOptions): Observable<ARTResource[]> {
-        let params: any = {
-            cls: cls
+    getInstances(cls: ARTURIResource, includeNonDirect?: boolean, options?: VBRequestOptions): Observable<ARTResource[]> {
+        let params: STRequestParams = {
+            cls: cls,
+            includeNonDirect: includeNonDirect
         };
         return this.httpMgr.doGet(this.serviceName, "getInstances", params, options).pipe(
             map(stResp => {
-                let instances = Deserializer.createResourceArray(stResp);
+                let instances = Deserializer.createResourceArray(stResp, ['nonDirect']);
                 return instances;
             })
         );
@@ -78,9 +79,10 @@ export class ClassesServices {
      * 
      * @param cls 
      */
-    getNumberOfInstances(cls: ARTURIResource, options?: VBRequestOptions): Observable<number> {
-        let params: any = {
-            cls: cls
+    getNumberOfInstances(cls: ARTURIResource, includeNonDirect?: boolean, options?: VBRequestOptions): Observable<number> {
+        let params: STRequestParams = {
+            cls: cls,
+            includeNonDirect: includeNonDirect
         };
         return this.httpMgr.doGet(this.serviceName, "getNumberOfInstances", params, options);
     }
@@ -93,7 +95,7 @@ export class ClassesServices {
      * @param customFormValue custom form that set additional info to the concept
      */
     createClass(newClass: ARTURIResource, superClass: ARTURIResource, classType?: ARTURIResource, customFormValue?: CustomFormValue) {
-        let params: any = {
+        let params: STRequestParams = {
             newClass: newClass,
             superClass: superClass
         };
@@ -126,7 +128,7 @@ export class ClassesServices {
      * @param cls 
      */
     deleteClass(cls: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             cls: cls
         };
         let options: VBRequestOptions = new VBRequestOptions({
@@ -183,7 +185,7 @@ export class ClassesServices {
      * @param cls the type of the instance. This parameter is not necessary for the request, but is needed for the event
      */
     deleteInstance(instance: ARTResource, cls: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             instance: instance
         };
         return this.httpMgr.doPost(this.serviceName, "deleteInstance", params).pipe(
@@ -201,7 +203,7 @@ export class ClassesServices {
      * @param supercls class to add as superClass
      */
     addSuperCls(cls: ARTURIResource, supercls: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             cls: cls,
             supercls: supercls,
         };
@@ -221,7 +223,7 @@ export class ClassesServices {
      * @param superClass superClass to be removed
      */
     removeSuperCls(cls: ARTURIResource, supercls: ARTURIResource) {
-        let params: any = {
+        let params: STRequestParams = {
             cls: cls,
             supercls: supercls,
         };
@@ -250,7 +252,7 @@ export class ClassesServices {
                 collNodeArray.push(collectionNode[i].toNT());
             }
         }
-        let params: any = {
+        let params: STRequestParams = {
             cls: cls,
             clsDescriptions: collNodeArray.join(","),
         };
@@ -263,7 +265,7 @@ export class ClassesServices {
      * @param collectionNode the node representing the intersectionOf expression
      */
     removeIntersectionOf(cls: ARTURIResource, collectionBNode: ARTNode) {
-        let params: any = {
+        let params: STRequestParams = {
             cls: cls,
             collectionBNode: collectionBNode,
         };
@@ -287,7 +289,7 @@ export class ClassesServices {
                 collNodeArray.push(collectionNode[i].toNT());
             }
         }
-        let params: any = {
+        let params: STRequestParams = {
             cls: cls,
             clsDescriptions: collNodeArray.join(","),
         };
@@ -300,7 +302,7 @@ export class ClassesServices {
      * @param collectionNode the node representing the unionOf expression
      */
     removeUnionOf(cls: ARTURIResource, collectionBNode: ARTBNode) {
-        let params: any = {
+        let params: STRequestParams = {
             cls: cls,
             collectionBNode: collectionBNode,
         };
@@ -313,7 +315,7 @@ export class ClassesServices {
      * @param individuals collection of individuals
      */
     addOneOf(cls: ARTURIResource, individuals: ARTURIResource[]) {
-        let params: any = {
+        let params: STRequestParams = {
             cls: cls,
             individuals: individuals,
         };
@@ -326,7 +328,7 @@ export class ClassesServices {
      * @param collectionNode the node representing the oneOf expression
      */
     removeOneOf(cls: ARTURIResource, collectionBNode: ARTBNode) {
-        let params: any = {
+        let params: STRequestParams = {
             cls: cls,
             collectionBNode: collectionBNode,
         };

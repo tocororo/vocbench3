@@ -78,14 +78,16 @@ export class InstanceListComponent extends AbstractList {
             return;
         }
 
-        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.visualization;
+        let instListPref: InstanceListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences;
+
+        this.visualizationMode = instListPref.visualization;
         if (this.cls != null) { //class provided => init list
             if (this.visualizationMode == InstanceListVisualizationMode.standard) {
                 this.checkInitializationSafe().subscribe(
                     () => {
                         if (this.safeToGo.safe) {
                             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                            this.clsService.getInstances(this.cls, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+                            this.clsService.getInstances(this.cls, instListPref.includeNonDirect, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                                 instances => {
                                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                                     //sort by show if rendering is active, uri otherwise
@@ -194,7 +196,8 @@ export class InstanceListComponent extends AbstractList {
         if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.showInstancesNumber) { //if num inst are already computed when building the tree...
             return of(this.cls.getAdditionalProperty(ResAttribute.NUM_INST));
         } else { //otherwise call a service
-            return this.clsService.getNumberOfInstances(cls, VBRequestOptions.getRequestOptions(this.projectCtx));
+            let includeNonDirect = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.includeNonDirect;
+            return this.clsService.getNumberOfInstances(cls, includeNonDirect, VBRequestOptions.getRequestOptions(this.projectCtx));
         }
     }
 

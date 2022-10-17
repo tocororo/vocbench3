@@ -193,6 +193,7 @@ export class InstanceListPreference {
     visualization: InstanceListVisualizationMode = InstanceListVisualizationMode.standard;
     safeToGoLimit: number = 1000;
     safeToGoMap: SafeToGoMap = {}; //this is not a preference, but it is cached with them since it is contextual to the project 
+    includeNonDirect: boolean;
 }
 
 export class CustomTreeSettings {

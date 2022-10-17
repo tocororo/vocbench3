@@ -995,8 +995,11 @@
             "DATATYPES": "Datatypes"
         },
         "INSTANCE": {
+            "INCLUDE_NON_DIRECT": "Include non direct instances",
             "INSTANCE": "Instance",
             "INSTANCES": "Instances",
+            "NON_DIRECT": "Non direct",
+            "NON_DIRECT_INFO": "Non direct instance of the selected class",
             "SETTINGS": {
                 "INSTANCES_LIMIT": "Instances limit",
                 "INSTANCES_LIMIT_INFO": "Sets the maximum amount of instances visible in the list. This setting prevents the initialization of a list that might cause performance issues",

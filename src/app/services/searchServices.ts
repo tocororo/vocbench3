@@ -64,7 +64,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean,
-        searchMode: SearchMode, langs?: string[], includeLocales?: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
+        searchMode: SearchMode, langs?: string[], includeLocales?: boolean, includeNonDirect?: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         let params: STRequestParams = {
             cls: cls,
             searchString: searchString,
@@ -73,7 +73,8 @@ export class SearchServices {
             useNotes: useNotes,
             searchMode: searchMode,
             langs: langs,
-            includeLocales: includeLocales
+            includeLocales: includeLocales,
+            includeNonDirect: includeNonDirect,
         };
         options = new VBRequestOptions({
             errorHandlers: [{

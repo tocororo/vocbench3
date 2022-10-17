@@ -995,8 +995,11 @@
             "DATATYPES": "Datatype"
         },
         "INSTANCE": {
+            "INCLUDE_NON_DIRECT": "Includi istanze non dirette",
             "INSTANCE": "Istanza",
             "INSTANCES": "Istanze",
+            "NON_DIRECT": "Non diretta",
+            "NON_DIRECT_INFO": "Istanza non diretta della classe selezionata",
             "SETTINGS": {
                 "INSTANCES_LIMIT": "Limite istanze",
                 "INSTANCES_LIMIT_INFO": "Imposta la quantità massima di istanze visibili nella lista. Questo setting evita che venga inizializzata una lista che potrebbe causare problemi di performance",

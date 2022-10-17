@@ -38,6 +38,8 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
     rendering: boolean = false; //override the value in AbstractPanel
 
+    includeNonDirect: boolean;
+
     visualizationMode: InstanceListVisualizationMode;
 
     //for visualization searchBased
@@ -51,7 +53,11 @@ export class InstanceListPanelComponent extends AbstractListPanel {
 
     ngOnInit() {
         super.ngOnInit();
-        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.visualization;
+
+        let instListPref: InstanceListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences;
+
+        this.includeNonDirect = instListPref.includeNonDirect;
+        this.visualizationMode = instListPref.visualization;
     }
 
     getActionContext(): VBActionFunctionCtx {
@@ -90,6 +96,8 @@ export class InstanceListPanelComponent extends AbstractListPanel {
             includeLocales = searchSettings.includeLocales;
         }
 
+        let includeNonDirect = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.includeNonDirect;
+
         let searchFn: Observable<ARTURIResource[]>;
         if (this.extendSearchToAllIndividuals()) {
             searchFn = this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.individual], searchSettings.useLocalName,
@@ -97,7 +105,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                 VBRequestOptions.getRequestOptions(this.projectCtx));
         } else { //search only in current class
             searchFn = this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName,
-                searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales,
+                searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, includeNonDirect,
                 VBRequestOptions.getRequestOptions(this.projectCtx));
         }
         UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
@@ -214,6 +222,17 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     onSwitchMode(mode: InstanceListVisualizationMode) {
         let instListPrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences;
         instListPrefs.visualization = mode;
+        this.vbProp.setInstanceListPreferences(instListPrefs).subscribe(
+            () => {
+                this.viewChildList.init();
+            }
+        );
+    }
+
+    switchIncludeNonDirect() {
+        this.includeNonDirect = !this.includeNonDirect;
+        let instListPrefs = VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences;
+        instListPrefs.includeNonDirect = this.includeNonDirect;
         this.vbProp.setInstanceListPreferences(instListPrefs).subscribe(
             () => {
                 this.viewChildList.init();
