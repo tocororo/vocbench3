@@ -2024,6 +2024,8 @@
         },
         "PROJECT_NAME": "Nome progetto",
         "PROJECT_PROPERTIES": "Proprietà progetto",
+        "READ_ONLY": "Sola lettura",
+        "READ_ONLY_INFO": "Se abilitata, questa opzione rende il progetto accessibile in sola lettura",
         "REMOTE_REPO": {
             "BATCH_MODIFY": "Modifica in blocco",
             "BATCH_MODIFY_INFO": "Modifica, tutte in blocco, le credenziali di accesso di (potenzialmente) più  repository con lo stesso URL server",

@@ -797,6 +797,14 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "setUndoEnabled", params);
     }
 
+    setReadOnly(project: Project, readOnly: boolean) {
+        let params = {
+            projectName: project.getName(),
+            readOnly: readOnly
+        };
+        return this.httpMgr.doPost(this.serviceName, "setReadOnly", params);
+    }
+
     isChangeTrackerSetUp(project: Project) {
         let params = {
             projectName: project.getName(),

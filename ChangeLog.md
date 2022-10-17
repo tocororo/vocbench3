@@ -7,6 +7,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 # 11.2.1 (dd-mm-202y)
   * Added possibility to define a Custom Tree composed of any kind of resources and based on arbitrary hierarchical property
   * Added possibility to include non direct instances of a class in the instances list
+  * Added possibility to prevent write operation on project by setting it to read only mode
 
 # 11.2.0 (27-09-2022)
   * Added possibility to filter structure tabs in Data page

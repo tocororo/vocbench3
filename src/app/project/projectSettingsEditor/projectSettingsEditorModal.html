@@ -8,14 +8,30 @@
             <div class="card-body" style="margin-bottom: -1rem;">
                 <!-- OPEN AT STARTUP -->        
                 <div class="form-group row">
-                    <label class="col-form-label col-sm-4">{{'PROJECTS.OPEN_AT_STARTUP'|translate}}:</label>
+                    <label class="col-form-label col-sm-4">
+                        {{'PROJECTS.OPEN_AT_STARTUP'|translate}}
+                        <span class="fas fa-info-circle" [title]="'PROJECTS.OPEN_AT_STARTUP_INFO'|translate"></span>
+                    </label>
                     <div class="col-sm-8 d-flex align-items-center">
                         <input type="checkbox" [(ngModel)]="openAtStartup" (ngModelChange)="onOpenAtStartupChanged()">
                     </div>
                 </div>
+                <!-- OPEN AT STARTUP -->        
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-4">
+                        {{'PROJECTS.READ_ONLY'|translate}}
+                        <span class="fas fa-info-circle" [title]="'PROJECTS.READ_ONLY_INFO'|translate"></span>
+                    </label>
+                    <div class="col-sm-8 d-flex align-items-center">
+                        <input type="checkbox" [(ngModel)]="readOnly" (ngModelChange)="onReadOnlyChanged()">
+                    </div>
+                </div>
                 <!-- BLACKLISTING -->        
                 <div *ngIf="validationEnabled" class="form-group row">
-                    <label class="col-form-label col-sm-4">{{'PROJECTS.BLACKLIST'|translate}}:</label>
+                    <label class="col-form-label col-sm-4">
+                        {{'PROJECTS.BLACKLIST'|translate}}
+                        <span class="fas fa-info-circle" [title]="'PROJECTS.BLACKLIST_INFO'|translate"></span>
+                    </label>
                     <div class="col-sm-8 d-flex align-items-center">
                         <button class="btn btn-light btn-sm" [ngClass]="{ active: blacklisting }" (click)="changeBlacklisting()">
                             <b *ngIf="blacklisting" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
@@ -26,7 +42,7 @@
                 </div>
                 <!-- SHACL VALIDATION -->        
                 <div *ngIf="shaclEnabled" class="form-group row">
-                    <label class="col-form-label col-sm-4">{{'PROJECTS.SHACL_SHAPE_VALIDATION_ON_COMMIT'|translate}}:</label>
+                    <label class="col-form-label col-sm-4">{{'PROJECTS.SHACL_SHAPE_VALIDATION_ON_COMMIT'|translate}}</label>
                     <div class="col-sm-8 d-flex align-items-center">
                         <button class="btn btn-light btn-sm" [ngClass]="{ active: shaclValidationEnabled }" (click)="changeShaclValidation()">
                             <b *ngIf="shaclValidationEnabled" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>
@@ -37,7 +53,7 @@
                 </div>
                 <!-- UNDO -->        
                 <div *ngIf="changeTrackerSetup" class="form-group row">
-                    <label class="col-form-label col-sm-4">{{'MODELS.PROJECT.UNDO'|translate}}:</label>
+                    <label class="col-form-label col-sm-4">{{'MODELS.PROJECT.UNDO'|translate}}</label>
                     <div class="col-sm-8 d-flex align-items-center">
                         <button class="btn btn-light btn-sm" [ngClass]="{ active: undoEnabled }" (click)="changeUndo()">
                             <b *ngIf="undoEnabled" class="text-success">{{'STATUS.ACTIVE'|translate}}</b>

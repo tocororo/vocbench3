@@ -2026,6 +2026,8 @@
         },
         "PROJECT_NAME": "Project name",
         "PROJECT_PROPERTIES": "Project properties",
+        "READ_ONLY": "Read only",
+        "READ_ONLY_INFO": "If enabled, only read operations are allowed",
         "REMOTE_REPO": {
             "BATCH_MODIFY": "Batch modify",
             "BATCH_MODIFY_INFO": "Modifies, all at once, the access credentials of (possibly) many repositories with the same serverURL.",

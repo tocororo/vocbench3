@@ -12,6 +12,7 @@ export class Project {
     private validationEnabled: boolean;
     private blacklistingEnabled: boolean;
     private undoEnabled: boolean;
+    private readOnly: boolean;
     private model: string;
     private lexicalizationModel: string;
     private open: boolean;
@@ -104,6 +105,14 @@ export class Project {
 
     public isUndoEnabled(): boolean {
         return this.undoEnabled;
+    }
+
+    public setReadOnly(readOnly: boolean) {
+        this.readOnly = readOnly;
+    }
+
+    public isReadOnly(): boolean {
+        return this.readOnly;
     }
 
     public setShaclEnabled(enabled: boolean) {
@@ -235,6 +244,7 @@ export class Project {
         proj.setValidationEnabled(projJson.validationEnabled);
         proj.setBlacklistingEnabled(projJson.blacklistingEnabled);
         proj.setUndoEnabled(projJson.undoEnabled);
+        proj.setReadOnly(projJson.readOnly);
         proj.setModelType(projJson.model);
         proj.setLexicalizationModelType(projJson.lexicalizationModel);
         proj.setOpen(projJson.open);

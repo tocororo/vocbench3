@@ -1,5 +1,6 @@
 import Prolog from 'jsprolog';
 import { ARTNode, ARTResource, ResAttribute } from "../models/ARTResources";
+import { Project } from '../models/Project';
 import { ResViewPartition } from "../models/ResourceView";
 import { User } from "../models/User";
 import { VBActionsEnum } from './VBActions';
@@ -10,6 +11,14 @@ export class AuthorizationEvaluator {
     private static prologEngine: any;
     private static resRole: string = "%resource_role%";
     private static authCache: { [goal: string]: boolean } = {};
+
+    /*
+    topicPattern = "[a-zA-Z]+"; //rdf, pm, ...
+    subjectPattern = "(?:[a-zA-Z_]+|%resource_role%)"; //cls, individual, _, ...
+    scopePattern = "(?:,\\s*[a-zA-Z_]+)?"; //values, _, ...
+    crudvGroup = "([CRUDV]+)";
+    */
+    private static goalRegexp = new RegExp("^auth\\(([a-zA-Z]+)\\((?:[a-zA-Z_]+|%resource_role%)(?:,\\s*[a-zA-Z_]+)?\\),\\s*\"([CRUDV]+)\"\\).$");
 
     public static actionAuthGoalMap: { [key: string]: string } = {
         [VBActionsEnum.administrationProjectManagement]: 'auth(pm(project,_), "CRUD").',
@@ -254,6 +263,18 @@ export class AuthorizationEvaluator {
      * @param langValue 
      */
     public static isGaolAuthorized(goal: string, resource?: ARTResource, langValue?: ARTNode): boolean {
+        let project: Project = VBContext.getWorkingProject();
+        if (project.isReadOnly()) {
+            let topic: string;
+            let crudv: string = "";
+            let matchArray: RegExpExecArray = this.goalRegexp.exec(goal);
+            if (matchArray != null) {
+                topic = matchArray[1];
+                crudv = matchArray[2];
+            }
+            return !(topic == "rdf" && (crudv.includes("C") || crudv.includes("U") || crudv.includes("D")));
+        }
+
         let user: User = VBContext.getLoggedUser();
         if (user == null) {
             return false;

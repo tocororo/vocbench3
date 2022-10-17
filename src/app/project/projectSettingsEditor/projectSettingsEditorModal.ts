@@ -35,6 +35,8 @@ export class ProjSettingsEditorModal {
 
     openAtStartup: boolean;
 
+    readOnly: boolean;
+
     //RENDERING ENGINE PLUGIN
     @ViewChild("rendEngConfigurator") rendEngConfigurator: ExtensionConfiguratorComponent;
     rendEngExtensions: ConfigurableExtensionFactory[]; //available extensions for rendering engine (retrieved through getExtensions)
@@ -67,6 +69,7 @@ export class ProjSettingsEditorModal {
         ).subscribe();
 
         this.openAtStartup = this.project.getOpenAtStartup();
+        this.readOnly = this.project.isReadOnly();
     }
 
     //================== BLACKLISTING ==================
@@ -158,8 +161,21 @@ export class ProjSettingsEditorModal {
     //================== OPEN AT STARTUP ==================
 
     onOpenAtStartupChanged() {
-        this.projectService.setOpenAtStartup(this.project, this.openAtStartup).subscribe();
-        this.project.setOpenAtStartup(this.openAtStartup);
+        this.projectService.setOpenAtStartup(this.project, this.openAtStartup).subscribe(
+            () => {
+                this.project.setOpenAtStartup(this.openAtStartup);
+            }
+        );
+    }
+
+    //================== READ ONLY ==================
+
+    onReadOnlyChanged() {
+        this.projectService.setReadOnly(this.project, this.readOnly).subscribe(
+            () => {
+                this.project.setReadOnly(this.readOnly);
+            }
+        );
     }
 
     //================== RENDERING ENGINE ==================
