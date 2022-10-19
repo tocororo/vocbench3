@@ -79,6 +79,9 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal {
         this.broader = null;
         this.selectedSiblingBroader = null;
         this.multipleSiblingBroaders = false;
+        if (this.isPositionSibling()) {
+            this.updateBroaderOfSibling();
+        }
     }
 
     /**

@@ -4,6 +4,9 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
+# 11.2.1 (19-10-2022)
+  * Fixed minor bug in "spawn new concept from xLabel"
+
 # 11.2.0 (27-09-2022)
   * Added possibility to filter structure tabs in Data page
   * In the Data page added the possibility to prompt an addess to resolve
