@@ -11,7 +11,7 @@
     </div>
     <div class="modal-body">
         <div class="hbox" style="align-items: center;">
-            <input ngbAutofocus type="text" class="form-control" style="flex: 1;" [(ngModel)]="inputTxt" (keydown.enter)="onEnter()">
+            <input ngbAutofocus type="text" class="form-control" style="flex: 1;" [(ngModel)]="inputTxt" (keyup.enter)="onEnter()">
         </div>
     </div>
     <div class="modal-footer">

@@ -13,12 +13,12 @@
                             <span class="input-group-text">{{prefix}}</span>
                         </span>
                         <input ngbAutofocus type="text" class="form-control" [(ngModel)]="prefixedTxt"
-                            (keydown.enter)="onEnter()" [sanitized]="inputSanitized">
+                            (keyup.enter)="onEnter()" [sanitized]="inputSanitized">
                     </ng-container>
                     
                     <ng-container *ngIf="!namespaceLocked">
                         <input ngbAutofocus type="text" class="form-control" [(ngModel)]="expandedTxt"
-                            (keydown.enter)="onEnter()" [sanitized]="inputSanitized">
+                            (keyup.enter)="onEnter()" [sanitized]="inputSanitized">
                     </ng-container>
                     
                     <div *ngIf="prefixEditable" class="input-group-append">

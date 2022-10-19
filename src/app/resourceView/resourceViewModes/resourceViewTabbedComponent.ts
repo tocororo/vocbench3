@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Output } from "@angular/core";
 import { ResourceUtils } from 'src/app/utils/ResourceUtils';
 import { BasicModalServices } from 'src/app/widget/modal/basicModal/basicModalServices';
 import { ModalType } from 'src/app/widget/modal/Modals';
@@ -20,7 +20,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
     tabs: Array<Tab> = [];
     private sync: boolean = false;
 
-    constructor(eventHandler: VBEventHandler, private basicModals: BasicModalServices) {
+    constructor(eventHandler: VBEventHandler, private basicModals: BasicModalServices, private cdRef: ChangeDetectorRef) {
         super(eventHandler);
         this.eventHandler.resViewTabSyncChangedEvent.subscribe(
             (sync: boolean) => { this.sync = sync; }
@@ -171,6 +171,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
                 if (ResourceUtils.testIRI(iri)) {
                     this.addTab(new ARTURIResource(iri));
                 } else {
+                    this.cdRef.detectChanges();
                     this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_IRI", params: { iri: iri } }, ModalType.warning);
                 }
             },

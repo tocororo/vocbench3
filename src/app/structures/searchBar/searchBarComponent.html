@@ -1,7 +1,7 @@
 <div class="hbox">
 
     <ng-container *ngIf="searchSettings.useAutocompletion">
-        <div style="flex: 1;" (keydown.enter)="doSearch()">
+        <div style="flex: 1;" (keyup.enter)="doSearch()">
             <ng-autocomplete #autocompleter [(ngModel)]="searchStr" (inputChanged)='onChangeSearch()'
                 [placeHolder]="'ACTIONS.SEARCH'|translate" minQueryLength="2" debounceTime="500"
                 [data]="completerData" [isLoading]="isCompleterLoading" [itemTemplate]="itemTemplate" [disabled]="disabled">
@@ -12,7 +12,7 @@
         </div>
     </ng-container>
     <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control form-control-sm" style="flex: 1;" 
-        [(ngModel)]="searchStr" (keydown.enter)="doSearch()" [placeholder]="'ACTIONS.SEARCH'|translate" [disabled]="disabled">
+        [(ngModel)]="searchStr" (keyup.enter)="doSearch()" [placeholder]="'ACTIONS.SEARCH'|translate" [disabled]="disabled">
 
     <div class="btn-group btn-group-xs ml-2" ngbDropdown placement="top-right" container="body">
         <button class="btn btn-light" type="button" (click)="doSearch()" [disabled]="disabled">
