@@ -17,6 +17,7 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
 
     @Input() disabled: boolean = false;
     @Input() lang: Language; //language (can be initially set)
+    @Input() allowNoLang: boolean = true;
     stringValue: string; // string value of the literal
 
     private literalValue: ARTLiteral; // the rdf:langString being edited (the model) 
@@ -31,7 +32,9 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
     initLang() {
         if (this.lang == null) {
             this.lang = Languages.NO_LANG;
-            // this.lang = Languages.getLanguageFromTag(Languages.priorityLangs[0]);
+            if (!this.allowNoLang) {
+                this.lang = Languages.getLanguageFromTag(Languages.priorityLangs[0]);
+            }
         }
     }
 

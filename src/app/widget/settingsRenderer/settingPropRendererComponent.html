@@ -39,7 +39,7 @@
 
             <ng-container *ngSwitchCase="'Literal'">
                 <ng-container *ngIf="isLanguageTaggedString(prop) else notLanguageTaggedString">
-                    <lang-string-editor [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled"></lang-string-editor>
+                    <lang-string-editor [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [allowNoLang]="false" [disabled]="disabled"></lang-string-editor>
                 </ng-container>
                 <ng-template #notLanguageTaggedString>
                     <literal-picker [literal]="prop.value" (literalChanged)="updateValue(prop, $event)" [disabled]="disabled">
