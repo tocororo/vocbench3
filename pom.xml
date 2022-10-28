@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.uniroma2.art.semanticturkey</groupId>
 	<artifactId>vocbench3</artifactId>
-	<version>11.2.2-SNAPSHOT</version>
+	<version>11.3.0</version>
 	<packaging>pom</packaging>
 	
 	<licenses>

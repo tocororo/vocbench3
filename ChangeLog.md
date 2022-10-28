@@ -4,10 +4,11 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 11.2.2 (dd-mm-202y)
+# 11.3.0 (28-10-2022)
   * Added possibility to define a Custom Tree composed of any kind of resources and based on arbitrary hierarchical property
   * Added possibility to include non direct instances of a class in the instances list
   * Added possibility to prevent write operation on project by setting it to read only mode
+  * Minor bugfixes
   
 # 11.2.1 (19-10-2022)
   * Fixed minor bug in "spawn new concept from xLabel"
