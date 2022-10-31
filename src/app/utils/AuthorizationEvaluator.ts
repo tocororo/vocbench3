@@ -264,7 +264,7 @@ export class AuthorizationEvaluator {
      */
     public static isGaolAuthorized(goal: string, resource?: ARTResource, langValue?: ARTNode): boolean {
         let project: Project = VBContext.getWorkingProject();
-        if (project.isReadOnly()) {
+        if (project && project.isReadOnly()) {
             let topic: string;
             let crudv: string = "";
             let matchArray: RegExpExecArray = this.goalRegexp.exec(goal);
