@@ -339,7 +339,7 @@ export class NTriplesUtil {
     static parseURI(nTriplesURI: string): ARTURIResource {
         if (nTriplesURI.startsWith("<") && nTriplesURI.endsWith(">")) {
             let uri: string = nTriplesURI.substring(1, nTriplesURI.length - 1);
-            uri = decodeURI(uri);
+            uri = decodeURIComponent(JSON.parse('"' + uri + '"'));
             return new ARTURIResource(uri);
         }
         else {
