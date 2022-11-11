@@ -2,7 +2,7 @@
     <div [class]="'flagIcon ' + flagCls">
         <ng-container *ngIf="flagImgSrc.indexOf('unknown') != -1; then unknownFlag; else knownFlag"></ng-container>
         <ng-template #knownFlag>
-            <img [src]="flagImgSrc" [ngClass]="{ disabled : disabled }">
+            <img [src]="flagImgSrc" (error)="onImgError()" [ngClass]="{ disabled : disabled }">
         </ng-template>
         <ng-template #unknownFlag>
             <div [class]="'flagShape bg-theme-' + themeId" [ngStyle]="{ opacity: disabled ? 0.5 : initial, width: langTagWidth + 'px' }"></div>

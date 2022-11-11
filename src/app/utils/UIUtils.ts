@@ -51,12 +51,6 @@ export class UIUtils {
         UIUtils.pendingBlockingDiv = []; //empty the blocking div list
     }
 
-
-    //languages for which exists the flag icon
-    private static availableFlagLang = ["ar", "be", "bg", "bn", "cs", "cy", "da", "de", "el", "en", "en-gb", "en-us", "es", "et", "fa", "fr", "fi", "ga", "gd",
-        "hi", "hr", "hu", "hy", "id", "is", "it", "ja", "ka", "km", "ko", "kz", "lt", "lv", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv",
-        "th", "tr", "uk", "vi", "zh"];
-
     private static classImgSrc = "./assets/images/icons/res/class.png";
     private static classImportedImgSrc = "./assets/images/icons/res/class_imported.png";
     private static classDeprecatedImgSrc = "./assets/images/icons/res/class_deprecated.png";
@@ -413,7 +407,7 @@ export class UIUtils {
     static getFlagImgSrc(langTag: string): string {
         langTag = langTag != null ? langTag.toLowerCase() : null;
         let imgSrc: string;
-        if (langTag != null && this.availableFlagLang.indexOf(langTag) != -1) {
+        if (langTag != null) {
             imgSrc = "./assets/images/flags/flag_" + langTag + ".png";
         } else {
             imgSrc = "./assets/images/flags/flag_unknown.png";
