@@ -51,8 +51,8 @@ export class UserProjBindingModal {
 
     isUserVisible(user: User): boolean {
         let givenNameCheck: boolean = user.getGivenName().toLocaleLowerCase().includes(this.userFilter.toLocaleLowerCase());
-        let familyNameCheck: boolean = user.getGivenName().toLocaleLowerCase().includes(this.userFilter.toLocaleLowerCase());
-        let emailCheck: boolean = user.getGivenName().toLocaleLowerCase().includes(this.userFilter.toLocaleLowerCase());
+        let familyNameCheck: boolean = user.getFamilyName().toLocaleLowerCase().includes(this.userFilter.toLocaleLowerCase());
+        let emailCheck: boolean = user.getEmail().toLocaleLowerCase().includes(this.userFilter.toLocaleLowerCase());
         return givenNameCheck || familyNameCheck || emailCheck;
     }
 
