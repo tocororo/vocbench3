@@ -31,7 +31,7 @@ export class UmlGraphComponent extends AbstractGraph {
     private selectedProp: NodePropRange;
     activeRemove: boolean; // serve a gestire l'abilitazione del tasto removeNode(solo se clicco sul nodo si deve abilitare)
     private nodeLimit: number = 50; //if the number of nodes exceeds this limit show warning to user.
-    private linksCache: Link[] = []; // contiene i link che verranno nascosti/mostrati in base alla variabile bool hide
+    private genericLinksCache: Link[] = []; //cache for generic links, namely those links representing non is-a (rdfs:subClassOf) relations. These links will be shown/hidden according hideArrow (Input)
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef,
         protected basicModals: BasicModalServices, private graphService: GraphServices) {
@@ -59,10 +59,8 @@ export class UmlGraphComponent extends AbstractGraph {
                     this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.TOO_MUCH_NODES_GRAPH_WARN_CONFIRM", params: { nodesCount: graph.nodes.length } },
                         ModalType.warning
                     ).then(
-                        confirm => {
-                            this.mergeGraph(graph);
-                        },
-                        cancel => { }
+                        () => { this.mergeGraph(graph); },
+                        () => { }
                     );
                 } else {
                     this.mergeGraph(graph);
@@ -84,7 +82,9 @@ export class UmlGraphComponent extends AbstractGraph {
             this.graph.addNode(n);
         });
         graph.links.forEach(l => {
-            this.graph.addLink(l);
+            if (this.graph.getNodes().some(n => n.res.equals(l.source.res)) && this.graph.getNodes().some(n => n.res.equals(l.target.res))) {
+                this.graph.addLink(l);
+            }
         });
 
         this.graph.update();
@@ -150,7 +150,7 @@ export class UmlGraphComponent extends AbstractGraph {
             this.graph.removeLink(l);
 
         });
-        this.linksCache = this.linksCache.filter(l => {
+        this.genericLinksCache = this.genericLinksCache.filter(l => {
             return !l.source.res.equals(node.res) && !l.target.res.equals(node.res);
         });
         this.graph.removeNode(node);
@@ -169,8 +169,8 @@ export class UmlGraphComponent extends AbstractGraph {
             (graphModel: GraphModelRecord[]) => {
                 let graphTemp = this.convertModelToGraphForAddNode(graphModel, res);
                 this.mergeGraph(graphTemp);
-                if (this.hideArrow) {
-                    this.linksCache.forEach(l => {
+                if (this.hideArrow) { //eventually remove generic links (added in mergeGraph)
+                    this.genericLinksCache.forEach(l => {
                         this.graph.removeLink(l);
                     });
                 }
@@ -181,12 +181,12 @@ export class UmlGraphComponent extends AbstractGraph {
     }
 
     private updateArrows() {
-        if (this.hideArrow === true) {
-            this.linksCache.forEach(l => {
+        if (this.hideArrow) { //hide generic links, so remove them from cache
+            this.genericLinksCache.forEach(l => {
                 this.graph.removeLink(l);
             });
         } else {
-            this.linksCache.forEach(l => {
+            this.genericLinksCache.forEach(l => {
                 this.graph.addLink(l);
             });
         }
@@ -245,9 +245,11 @@ export class UmlGraphComponent extends AbstractGraph {
                 }
         });
 
-        links.forEach(l => {
-            if (!l.res.equals(RDFS.subClassOf)) {
-                this.linksCache.push(l);
+        links.forEach(l => { //update the generic links by collecting links which don't represent subClassOf relation
+            if (this.graph.getNodes().some(n => n.res.equals(l.source.res)) && this.graph.getNodes().some(n => n.res.equals(l.target.res))) {
+                if (!l.res.equals(RDFS.subClassOf)) {
+                    this.genericLinksCache.push(l);
+                }
             }
         });
         return { links: links, nodes: nodes };
@@ -301,7 +303,7 @@ export class UmlGraphComponent extends AbstractGraph {
         nodesToAdd.push(newNode);
         linksToAdd.forEach(l => {
             if (!l.res.equals(RDFS.subClassOf)) {
-                this.linksCache.push(l);
+                this.genericLinksCache.push(l);
 
             }
         });
