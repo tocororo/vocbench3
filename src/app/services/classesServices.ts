@@ -69,7 +69,7 @@ export class ClassesServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getInstances", params, options).pipe(
             map(stResp => {
-                let instances = Deserializer.createResourceArray(stResp, ['nonDirect']);
+                let instances = Deserializer.createResourceArray(stResp, ['nonDirect', 'directClasses']);
                 return instances;
             })
         );

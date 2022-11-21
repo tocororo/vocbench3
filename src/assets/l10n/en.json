@@ -999,7 +999,7 @@
             "INSTANCE": "Instance",
             "INSTANCES": "Instances",
             "NON_DIRECT": "Non direct",
-            "NON_DIRECT_INFO": "Non direct instance of the selected class",
+            "NON_DIRECT_INFO": "Non direct instance. Direct types: {{classes}}",
             "SETTINGS": {
                 "INSTANCES_LIMIT": "Instances limit",
                 "INSTANCES_LIMIT_INFO": "Sets the maximum amount of instances visible in the list. This setting prevents the initialization of a list that might cause performance issues",
