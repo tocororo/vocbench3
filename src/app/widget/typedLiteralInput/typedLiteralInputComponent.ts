@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, Output, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTLiteral, ARTURIResource } from "../../models/ARTResources";
 import { ConstrainingFacets } from "../../models/Datatypes";
@@ -6,6 +6,7 @@ import { RDF, RDFS, XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
 import { DatatypeValidator } from "../../utils/DatatypeValidator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
+import { LangPickerComponent } from '../pickers/langPicker/langPickerComponent';
 
 @Component({
     selector: "typed-literal-input",
@@ -15,6 +16,8 @@ import { ResourceUtils } from "../../utils/ResourceUtils";
     }]
 })
 export class TypedLiteralInputComponent implements ControlValueAccessor {
+
+    @ViewChild(LangPickerComponent, { static: false }) langPicker: LangPickerComponent;
 
     @Input() allowedDatatypes: ARTURIResource[]; //the datatypes allowed by the component
     @Input('datatype') inputDatatype: ARTURIResource; //the selected datatype. If provided as input, force the default

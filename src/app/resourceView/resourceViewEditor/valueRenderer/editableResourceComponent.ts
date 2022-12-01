@@ -621,7 +621,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     //====== "Delete" HANDLER =====
 
-    private bulkDelete() {
+    bulkDelete() {
         this.basicModals.confirm({ key: "STATUS.WARNING" }, { key: "MESSAGES.BULK_DELETE_CONFIRM" }).then(
             () => {
                 this.resourcesService.removePredicateObject(this.predicate, this.resource).subscribe(
@@ -636,7 +636,19 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     //==============================
 
-    private onLinkClicked(linkRes: ARTURIResource) {
+    onKeydown(event: KeyboardEvent) {
+        if (event.key == "Escape") {
+            this.cancelEdit();
+        } else if (event.key == "Enter") {
+            if (event.shiftKey || event.altKey || event.ctrlKey) { 
+                //newline, don't do nothing, the new line is automatically added
+            } else {
+                this.confirmEdit();
+            }
+        }
+    }
+
+    onLinkClicked(linkRes: ARTURIResource) {
         this.link.emit(linkRes);
     }
 

@@ -57,7 +57,7 @@
 <ng-container *ngIf="editInProgress || bulkEditInProgress || editLiteralInProgress">
     <div class="input-group input-group-sm" style="flex: 1;">
         <textarea *ngIf="editLiteralInProgress; else editInProgressInput" class="form-control" style="height: initial; resize: vertical;"
-            rows="1" [(ngModel)]="resourceStringValue"></textarea>
+            rows="1" [(ngModel)]="resourceStringValue" (keydown)="onKeydown($event)"></textarea>
         <ng-template #editInProgressInput>
             <input type="text" class="form-control" [(ngModel)]="resourceStringValue">
         </ng-template>

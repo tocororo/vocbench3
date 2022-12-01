@@ -835,7 +835,6 @@
             "ADD_TO_SCHEME": {
                 "CONFIRM_MSG": "Vous êtes sur le point d'ajouter le concept '{{concept}}' et ses descendants au schéma '{{scheme}}'. Le confirmez-vous ?",
                 "SCHEMES_FILTER": "Filtre de schémas",
-                "SCHEMES_FILTER_INFO": "Parmi les descendants de '{{concept}}', seuls les concepts appartenant au moins à l'un des schémas qui suivent seront ajoutés au schéma cible.",
                 "SET_TOP_CONCEPT": "Définir comme concept de premier niveau",
                 "SET_TOP_CONCEPT_INFO": "Si sélectionné, définit le concept fourni comme concept de premier niveau du schéma cible"
             },

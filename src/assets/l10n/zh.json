@@ -834,7 +834,7 @@
             "ADD_TO_SCHEME": {
                 "CONFIRM_MSG": "You are going to add the concept '{{concept}}' and its descendants to the scheme '{{scheme}}'. Are you sure?",
                 "SCHEMES_FILTER": "Schemes filter",
-                "SCHEMES_FILTER_INFO": "Only the concepts (among the descendants of '{{concept}}') belonging to at least one of the following schemes will be added to the target scheme.",
+                "SCHEMES_FILTER_INFO": "Only the concepts (among the descendants of '{{concept}}') belonging to at least one of the following schemes will be added to the target scheme. If none scheme is selected, all descendants will be added.",
                 "SET_TOP_CONCEPT": "Set top concept",
                 "SET_TOP_CONCEPT_INFO": "If checked, set the provided concept as top concept of the target scheme"
             },

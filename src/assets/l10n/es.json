@@ -835,7 +835,6 @@
             "ADD_TO_SCHEME": {
                 "CONFIRM_MSG": "Va a añadir el concepto '{{concepto}}' y sus descendientes al esquema '{{esquema}}'. ¿Está seguro?",
                 "SCHEMES_FILTER": "Filtro de esquemas",
-                "SCHEMES_FILTER_INFO": "Solo los conceptos (entre los descendientes de '{{concept}}') que pertenezcan al menos a uno de los siguientes esquemas se añadirán al esquema de destino.",
                 "SET_TOP_CONCEPT": "Concepto de decodificador",
                 "SET_TOP_CONCEPT_INFO": "Si está marcado, establezca el concepto proporcionado como concepto superior del esquema de destino"
             },

@@ -925,7 +925,7 @@
             "ADD_TO_SCHEME": {
                 "CONFIRM_MSG": "Stai per aggiongere il concetto '{{concept}}' e i suoi discendenti allo schema '{{scheme}}'. Sei sicuro?",
                 "SCHEMES_FILTER": "Filtro schemi",
-                "SCHEMES_FILTER_INFO": "Solo i concetti (tra i discendenti di '{{concept}}') appartenenti ad almeno uno dei seguenti schemi saranno aggiunti allo schema destinazione",
+                "SCHEMES_FILTER_INFO": "Solo i concetti (tra i discendenti di '{{concept}}') appartenenti ad almeno uno dei seguenti schemi saranno aggiunti allo schema destinazione. Se nessuno schema viene selezionato, tutti i discendenti verranno aggiunti.",
                 "SET_TOP_CONCEPT": "Setta top concept",
                 "SET_TOP_CONCEPT_INFO": "Se selezionato, imposta il concetto indicato come top concept dello schema destinazione"
             },

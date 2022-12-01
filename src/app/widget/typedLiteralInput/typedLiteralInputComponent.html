@@ -44,12 +44,16 @@
                 <input type="text" class="form-control" style="margin-top: 6px;" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()" disabled>
             </div>
             <ng-template #nonBoundBlock>
-                <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'; else defaultBlock"
-                    class="hbox" style="align-items: center;">
-                    <textarea class="form-control" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
-                        [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
-                    </textarea>
-                    <lang-picker [(ngModel)]="lang" (ngModelChange)="onLangChanged()"></lang-picker>
+                <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'; else defaultBlock">
+                    <div class="hbox" style="align-items: center;">
+                        <textarea class="form-control" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
+                            [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()" [disabled]="langPicker?.languageList.length == 0">
+                        </textarea>
+                        <lang-picker [(ngModel)]="lang" (ngModelChange)="onLangChanged()"></lang-picker>
+                    </div>
+                    <div *ngIf="langPicker?.languageList.length == 0" class="alert alert-danger mt-2">
+                        {{'DATA.COMMONS.NO_LANGUAGE_ASSIGNED_WARN'|translate}}
+                    </div>
                 </div>
                 <!-- any other unknown datatype: non numeric, non bound, not rdf:langString -->
                 <ng-template #defaultBlock>

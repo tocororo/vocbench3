@@ -298,7 +298,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.browsingModals.browseSchemeList({ key: "DATA.ACTIONS.SELECT_SCHEME" }).then(
             scheme => {
                 const modalRef: NgbModalRef = this.modalService.open(AddToSchemeModal, new ModalOptions());
-                modalRef.componentInstance.title = "Add concepts to scheme";
                 modalRef.componentInstance.concept = this.selectedNode;
                 modalRef.componentInstance.scheme = scheme;
                 return modalRef.result;

@@ -11,7 +11,6 @@ import { VBContext } from "../../../utils/VBContext";
     templateUrl: "./addToSchemeModal.html",
 })
 export class AddToSchemeModal {
-    @Input() title: string;
     @Input() concept: ARTURIResource; //if provided, add only this concept and its descendants to the scheme, otherwise add all the concepts
     @Input() scheme: ARTURIResource;
 
@@ -20,7 +19,7 @@ export class AddToSchemeModal {
     setTopConcept: boolean = true;
 
     schemeList: { scheme: ARTURIResource, checked: boolean }[] =[];
-    private collapsed: boolean = true;
+    collapsed: boolean = false;
 
     translationParam: { concept: string, scheme: string };
 
@@ -30,7 +29,10 @@ export class AddToSchemeModal {
         this.skosService.getSchemesOfConcept(this.concept).subscribe(
             schemes => {
                 schemes.forEach(s => {
-                    this.schemeList.push({ scheme: s, checked: true });
+                    if (!s.equals(this.scheme)) { 
+                        //exclude target scheme from filter (it doesn't have sense to allow adding to the target scheme concepts that already belong to it)
+                        this.schemeList.push({ scheme: s, checked: false });
+                    }
                 });
             }
         );
@@ -38,18 +40,6 @@ export class AddToSchemeModal {
             concept: this.concept != null ? this.concept.getShow() : null,
             scheme: this.scheme != null ? this.scheme.getShow() : null,
         };
-    }
-
-    isOkEnabled() {
-        if (this.schemeList.length > 0) {
-            for (let i = 0; i < this.schemeList.length; i++) {
-                if (this.schemeList[i].checked) {
-                    return true;
-                }
-            }
-            return false; //no scheme checked found
-        }
-        return true;
     }
 
     ok() {

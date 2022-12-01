@@ -833,7 +833,6 @@
             "ADD_TO_SCHEME": {
                 "CONFIRM_MSG": "Sie sind dabei, den Begriff '{{concept}}' und seine Unterbegriffe zum Schema '{{scheme}}' hinzufügen. Sind Sie sicher?",
                 "SCHEMES_FILTER": "Schemafilter",
-                "SCHEMES_FILTER_INFO": "Nur diejeinigen Unterbegriffe von '{{concept}}'), die zu mindestens einem der folgenden Schemata gehören, werden dem Zielschema hinzugefügt.",
                 "SET_TOP_CONCEPT": "Top-Konzept festlegen",
                 "SET_TOP_CONCEPT_INFO": "Wenn diese Option aktiviert ist, legen Sie das aktuelle Konzept als Top-Konzept des Zielschemas fest."
             },

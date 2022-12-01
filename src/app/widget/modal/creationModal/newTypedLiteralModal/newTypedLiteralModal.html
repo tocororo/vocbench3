@@ -10,7 +10,7 @@
         </div>
         
         <div *ngIf="selectedAspectSelector == typedLiteralAspectSelector">
-            <div class="hbox" style="align-items: flex-end;">
+            <div class="hbox" style="align-items: center;">
                 <typed-literal-input [allowedDatatypes]="allowedDatatypes" [datatype]="datatype" [(ngModel)]="value"
                     (datatypeChange)="onDatatypeChange($event)" style="flex: 1;">
                 </typed-literal-input>
