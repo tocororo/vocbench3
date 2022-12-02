@@ -238,7 +238,7 @@
     <div class="card-footer d-flex align-items-center" style="min-height: 32px;">
         <div class="flex-grow-1 mr-3">
             <div *ngIf="resViewMode == 'splitted'" class="input-group input-group-sm">
-                <input #addrBtn class="form-control" [(ngModel)]="promptedAddress" (keyup.enter)="describeAddress(); addrBtn.blur()" [placeholder]="'RESOURCE_VIEW.MISC.PROMPT_IRI_TO_VIEW'|translate">
+                <input #addrBtn class="form-control" [(ngModel)]="promptedAddress" (keydown.enter)="describeAddress(); addrBtn.blur()" [placeholder]="'RESOURCE_VIEW.MISC.PROMPT_IRI_TO_VIEW'|translate">
                 <span class="input-group-append">
                     <button class="btn btn-light" (click)="describeAddress()" [disabled]="!promptedAddress">
                         <i class="fas fa-search"></i>

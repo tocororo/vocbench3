@@ -32,8 +32,9 @@ export class NewXLabelModal {
     }
 
     onEnter(event: KeyboardEvent) {
-        if (!event.shiftKey) { //when enter is not in combo with shift (which insert a newline)
+        if (!event.shiftKey && !event.altKey && !event.ctrlKey) { //when enter is not in combo with shift (which insert a newline)
             if (this.values.length == 0 && this.isInputValid()) { //only when the input value is the only one
+                event.preventDefault();
                 this.ok();
             }
         }

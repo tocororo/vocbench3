@@ -950,7 +950,8 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     describeAddress() {
         if (ResourceUtils.testIRI(this.promptedAddress)) {
-            this.buildResourceView(new ARTURIResource(this.promptedAddress));
+            this.resource = new ARTURIResource(this.promptedAddress);
+            this.buildResourceView(this.resource);
         } else {
             this.basicModals.alert({ key: "STATUS.ERROR" }, { key: "MESSAGES.INVALID_IRI", params: { iri: this.promptedAddress } }, ModalType.warning);
         }
