@@ -12,7 +12,7 @@
         <div *ngIf="selectedAspectSelector == typedLiteralAspectSelector">
             <div class="hbox" style="align-items: center;">
                 <typed-literal-input [allowedDatatypes]="allowedDatatypes" [datatype]="datatype" [(ngModel)]="value"
-                    (datatypeChange)="onDatatypeChange($event)" style="flex: 1;">
+                    (datatypeChange)="onDatatypeChange($event)" (enter)="onEnter($event)" style="flex: 1;">
                 </typed-literal-input>
                 <button *ngIf="multivalue" class="btn btn-light btn-xs" (click)="addValue()" style="margin-left: 4px; margin-bottom: 4px;" [disabled]="!isAddValueEnabled()">
                     <span class="fas fa-plus"></span>

@@ -112,6 +112,13 @@ export class NewTypedLiteralModal {
         this.notValidatableType = !this.dtValidator.isValidableType(datatype);
     }
 
+    onEnter(event: KeyboardEvent) {
+        if (!event.shiftKey && !event.altKey && !event.ctrlKey) { //when enter is not in combo with shift (which insert a newline)
+            event.preventDefault();
+            this.ok();
+        }
+    }
+
     /**
      * Determines if the Ok button is enabled.
      * Ok is enabled in case multiple values are added or if a single value is valid

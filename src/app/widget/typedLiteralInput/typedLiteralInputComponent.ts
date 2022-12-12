@@ -23,6 +23,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     @Input('datatype') inputDatatype: ARTURIResource; //the selected datatype. If provided as input, force the default
     @Output() datatypeChange: EventEmitter<ARTURIResource> = new EventEmitter();
     @Output() langChange: EventEmitter<string> = new EventEmitter();
+    @Output() enter: EventEmitter<KeyboardEvent> = new EventEmitter();
 
     datatypeList: ARTURIResource[];
     selectedDatatype: ARTURIResource;
@@ -122,6 +123,10 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         this.updateInputConfiguration();
         this.datatypeChange.emit(this.selectedDatatype);
         this.onValueChanged();
+    }
+
+    onLangStringEnter(event: KeyboardEvent) {
+        this.enter.emit(event);
     }
 
     private updateInputConfiguration() {

@@ -75,6 +75,11 @@ export class Settings {
         return value;
     }
 
+    /**
+     * Return the facets name-value as map, where the value is most of the time a string, but it can be also a nested map in turn
+     * @param includeType 
+     * @returns 
+     */
     public getPropertiesAsMap(includeType?: boolean): { [key: string]: string } {
         let map: { [key: string]: string } = {};
         if (includeType) {
@@ -95,6 +100,8 @@ export class Settings {
                         serializedValues.push(v.toNT());
                     } else if (v instanceof Settings) {
                         serializedValues.push(v.getPropertiesAsMap());
+                    } else if (v instanceof STPropertySchema) {
+                        serializedValues.push(v.getSchemaAsMap());
                     } else {
                         serializedValues.push(v);
                     }
@@ -139,8 +146,8 @@ export class Enumeration {
 
 export class STProperties {
     public name: string;
-    public displayName: any; //usually string or ARTLiteral (in DynamicSettingProp)
-    public description: any; //usually string or ARTLiteral (in DynamicSettingProp)
+    public displayName: string;
+    public description: string;
     public required: boolean;
     public type: SettingsPropType;
     public value: any;
@@ -184,9 +191,7 @@ export class STProperties {
         return v == null ||
             (typeof v == "string" && v.trim() == "") ||
             (v instanceof Settings && v.requireConfiguration()) ||
-            (v instanceof Array && (v.length == 0 ||
-                v.findIndex(SettingsProp.isNullish) != -1
-            ));
+            (v instanceof Array && (v.length == 0 || v.findIndex(SettingsProp.isNullish) != -1));
     }
 
     public clone(): STProperties {
@@ -197,36 +202,42 @@ export class STProperties {
     public static parse(stProp: any, schema?: boolean): STProperties {
         let name = stProp.name;
         let required = stProp.required;
+        let displayName = stProp.displayName;
+        let description = stProp.description;
         let enumeration = stProp.enumeration;
         let type = SettingsPropType.parse(stProp.type);
         let value: any = stProp.value;
         if (stProp.value != null && schema) { //if the property belong to a schema, its value is a list of properties
-            let props: STProperties[] = [];
+            let props: STPropertySchema[] = [];
             for (let v of stProp.value) {
-                props.push(STProperties.parse(v));
+                props.push(STPropertySchema.parse(v));
             }
             value = props;
         }
-        let displayName = stProp.displayName;
-        let description = stProp.description;
-        if (displayName instanceof Array) { //properties are DynamicSettingProp
-            let displayNames: ARTLiteral[] = displayName.map(dn => NTriplesUtil.parseLiteral(dn));
-            let descriptions: ARTLiteral[] = description.map(dn => NTriplesUtil.parseLiteral(dn));
-            return new DynamicSettingProp(name, displayNames, descriptions, required, type, enumeration, value);
-        } else {
-            return new SettingsProp(name, displayName, description, required, type, enumeration, value);
-        }
+        return new SettingsProp(name, displayName, description, required, type, enumeration, value);
     }
 }
 
-export class SettingsProp extends STProperties {
-    public displayName: string;
-    public description: string;
-}
+export class SettingsProp extends STProperties { }
 
-export class DynamicSettingProp extends STProperties {
+export class STPropertySchema {
+    public name: string;
+    public required: boolean;
     public displayName: ARTLiteral[];
     public description: ARTLiteral[];
+    public type: string;
+    public enumeration: Enumeration;
+
+    public static parse(stProp: any): STPropertySchema {
+        let s = new STPropertySchema();
+        s.name = stProp.name;
+        s.required = stProp.required;
+        s.enumeration = stProp.enumeration;
+        s.type = stProp.type;
+        s.displayName = stProp.displayName.map((el: any) => NTriplesUtil.parseLiteral(el));
+        s.description = stProp.description.map((el: any) => NTriplesUtil.parseLiteral(el));
+        return s;
+    }
 
     /**
      * Return the display name in the given language.
@@ -261,6 +272,21 @@ export class DynamicSettingProp extends STProperties {
         return d;
     }
 
+    /**
+     * Return the facets name-value as map, where the value is most of the time a string, but it can be also a nested map in turn
+     * @param includeType 
+     * @returns 
+     */
+    public getSchemaAsMap(): { [key: string]: any } {
+        return {
+            name: this.name,
+            required: this.required,
+            displayName: this.displayName.map(d => d.toNT()),
+            description: this.description.map(d => d.toNT()),
+            type: this.type,
+            enumeration: this.enumeration
+        };
+    }
 }
 
 export class SettingsPropType {

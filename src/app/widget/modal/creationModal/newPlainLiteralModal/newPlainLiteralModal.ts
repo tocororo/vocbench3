@@ -33,7 +33,6 @@ export class NewPlainLiteralModal {
                 event.preventDefault();
                 this.ok();
             }
-            
         }
     }
 
