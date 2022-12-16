@@ -81,7 +81,6 @@ export class LexViewCache {
                         return of({ cls: rangeColl[0], storeInCache: true });
                     } else {
                         //in case multiple range class are specified, ask user to select the range
-                        //TODO what if simply retrieve the instances of all the classes?
                         return from(
                             this.sharedModals.selectResource({ key: "DATA.ACTIONS.SELECT_RANGE" }, null, rangeColl).then(
                                 (selectedRange: ARTURIResource[]) => {

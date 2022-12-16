@@ -1,5 +1,6 @@
 :host {
     min-height: 16px;
+    max-width: 100%;
     /* line-height: 1; */
     display: inline-flex;
     align-items: center;

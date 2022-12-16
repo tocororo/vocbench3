@@ -218,7 +218,7 @@ export class UIUtils {
                 } else if (rdfResource.getAdditionalProperty(ResAttribute.DATA_TYPE) != null) {
                     imgSrc = this.getDatatypeImgSrc(rdfResource.getAdditionalProperty(ResAttribute.DATA_TYPE));
                 } else {
-                    if (!explicit) {
+                    if (!explicit || rdfResource.getAdditionalProperty(ResAttribute.NON_DIRECT)) {
                         imgSrc = this.individualImportedImgSrc;
                         if (deprecated) {
                             imgSrc = this.individualImportedDeprecatedImgSrc;

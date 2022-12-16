@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { Subscription } from 'rxjs';
 import { Language, Languages } from "src/app/models/LanguagesCountries";
 import { VBEventHandler } from 'src/app/utils/VBEventHandler';
@@ -19,6 +19,8 @@ export class RdfResourceComponent {
     @Input() rendering: boolean = true; //if true the resource should be rendered with the show, with the qname otherwise
 
     @Output() link: EventEmitter<ARTURIResource> = new EventEmitter();
+
+    @ViewChild('renderingEl', { static: false }) renderingEl: ElementRef;
 
     private eventSubscriptions: Subscription[] = [];
 
@@ -41,7 +43,7 @@ export class RdfResourceComponent {
     manchExpr: boolean = false;
     private manchExprStruct: { token: string, class: string }[] = [];
 
-    constructor(private resourcesService: ResourcesServices, private eventHandler: VBEventHandler) {
+    constructor(private resourcesService: ResourcesServices, private eventHandler: VBEventHandler, private cdRef: ChangeDetectorRef) {
         this.eventSubscriptions.push(this.eventHandler.resourceLexicalizationUpdatedEvent.subscribe(
             (data: { oldResource: ARTResource, newResource: ARTResource }) => {
                 if (data.oldResource.equals(this.resource)) {
@@ -76,6 +78,8 @@ export class RdfResourceComponent {
         //init isExplicit
         this.isExplicit = this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
             this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
+
+        this.cdRef.detectChanges();
     }
 
     private initRenderingLabel() {

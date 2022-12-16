@@ -1,11 +1,7 @@
 <div class="treeNode" #listNodeElement>
-    <div class="d-flex flex-grow-1" style="position: relative;">
-        <rdf-resource #rdfRes [resource]="node" [rendering]="rendering" (click)="selectNode()"
+    <div class="d-flex flex-grow-1" style="max-width: 100%;">
+        <rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()"
             [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
-        <span *ngIf="node['nonDirect']" class="badge badge-primary badge-pill" style="position: absolute; right: 3px; top: 3px; font-size: 100%;" [title]="'DATA.INSTANCE.NON_DIRECT_INFO'|translate: {classes:node.directClasses}">
-            {{'DATA.INSTANCE.NON_DIRECT'|translate}}
-            <span class="fas fa-info-circle ml-1"></span>
-        </span>
     </div>
     <input *ngIf="multiselection" type="checkbox" style="margin-left: 5px;" [(ngModel)]="checked" (ngModelChange)="onNodeCheckChange()">
 </div>

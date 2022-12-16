@@ -344,6 +344,7 @@ editable-resource {
 
 .treeNode {
     min-height: 24px;
+    max-width: 100%;
     margin: 2px 0px;
     display: flex;
     align-items: center;

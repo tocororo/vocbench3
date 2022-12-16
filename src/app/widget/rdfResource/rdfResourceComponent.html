@@ -4,7 +4,7 @@
         <lang-item [language]="language" [disabled]="!isExplicit" [showName]="false" [showTag]="false"></lang-item>
     </ng-template>
     <ng-template #iconBlock>
-        <img [src]="imgSrc" [title]="natureTooltip">    
+        <img [src]="imgSrc" [title]="natureTooltip">
     </ng-template>
 </div>
 <span [title]="resource.toNT()" [class]="'rdfResourceText' + renderingClass">
@@ -29,7 +29,12 @@
     </ng-template>
 
     <ng-template #notLinkBlock>
-        <span style="white-space: pre-wrap">{{renderingLabel}}</span>
+        <span #renderingEl style="white-space: pre-wrap; display: inline-block;">{{renderingLabel}}</span>
     </ng-template>
 </span>
 <span *ngIf="showDatatypeBadge" class="badge datatype-badge" [title]="datatype.toNT()">{{datatype.show}}</span>
+
+<!-- Direct type badge, available only if rdf-resource is in instance list -->
+<span *ngIf="resource['nonDirect'] && renderingEl" class="badge badge-warning badge-pill ml-auto ellipsable" [style]="'font-size: 100%; max-width: calc(100%-' + renderingEl.nativeElement.clientWidth + ')px'" [title]="'DATA.INSTANCE.NON_DIRECT_INFO'|translate: {classes:resource.directClasses}">
+    {{resource.directClasses}}
+</span>
