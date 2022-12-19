@@ -1,9 +1,9 @@
 <div class="card card-default vbox blockingDivHost">
     <div class="card-header">
         <rdf-resource style="flex: 1;" [resource]="resource"></rdf-resource>
-        <!-- <select class="form-control form-control-xs ml-2" style="width: initial;" [(ngModel)]="format" (ngModelChange)="onFormatChange()">
+        <select class="form-control form-control-xs ml-2" style="width: initial;" [(ngModel)]="format" (ngModelChange)="onFormatChange()">
             <option *ngFor="let f of rdfFormats" [ngValue]="f">{{f.name}}</option>
-        </select> -->
+        </select>
         <button class="btn btn-xs btn-light ml-2" (click)="initDescription()" [title]="'ACTIONS.REFRESH'|translate">
             <span class="fas fa-redo"></span>
         </button>

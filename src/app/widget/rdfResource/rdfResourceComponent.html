@@ -29,7 +29,7 @@
     </ng-template>
 
     <ng-template #notLinkBlock>
-        <span #renderingEl style="white-space: pre-wrap; display: inline-block;">{{renderingLabel}}</span>
+        <span #renderingEl class="renderingText">{{renderingLabel}}</span>
     </ng-template>
 </span>
 <span *ngIf="showDatatypeBadge" class="badge datatype-badge" [title]="datatype.toNT()">{{datatype.show}}</span>

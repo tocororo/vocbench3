@@ -1,7 +1,6 @@
 :host {
     min-height: 16px;
     max-width: 100%;
-    /* line-height: 1; */
     display: inline-flex;
     align-items: center;
     border-radius: 2px;
@@ -23,6 +22,12 @@
     padding-right: 4px;
     margin-left: 2px;
     margin-right: 6px;
+}
+
+.renderingText {
+    display: inline-block;
+    line-height: initial;
+    white-space: pre-wrap;
 }
 
 .datatype-badge {

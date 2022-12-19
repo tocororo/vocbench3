@@ -46,24 +46,32 @@ export class ResourceTripleEditorComponent {
         this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateResourceTriplesDescription);
 
         let formatNameCookie: string = Cookie.getCookie(Cookie.RES_VIEW_CODE_FORMAT) || "Turtle";
-
+        
         this.exportService.getOutputFormats().subscribe(
             formats => {
-                this.rdfFormats = formats;
-                //select Turtle as default
+                this.rdfFormats = formats.filter(f => 
+                    f.name == "JSON-LD" ||
+                    f.name == "N-Triples" ||
+                    f.name == "RDF/XML" ||
+                    f.name == "TriG" ||
+                    f.name == "TriX" ||
+                    f.name == "Turtle"
+                );
+                //init format according cookie
                 for (let f of this.rdfFormats) {
                     if (f.name == formatNameCookie) {
                         this.format = f;
                     }
                 }
                 if (this.format == null) { //in case it has not been set (e.g. if cookie-stored format was not valid)
+                    //select Turtle as default
                     this.format = this.rdfFormats.find(f => f.name == "Turtle");
                 }
                 this.initDescription();
             }
         );
 
-        //INIT format according cookie and store last format as cookie
+        
     }
 
     ngOnDestroy() {
