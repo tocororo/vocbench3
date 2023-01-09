@@ -379,6 +379,15 @@ export class CustomFormUtils {
         return null; //if this code is reached, none constraint has been violated
     }
 
+    static readonly CF_SKELETON: string = "rule it.uniroma2.art.semanticturkey.customform.form.mycf id:mycf { \n"
+        + "\tnodes = { \n"
+        + "\t \n"
+        + "\t} \n"
+        + "\tgraph = { \n"
+        + "\t \n"       
+        + "\t} \n"
+        + "}";
+
 }
 
 

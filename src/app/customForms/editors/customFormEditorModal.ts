@@ -1,9 +1,11 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from "@ngx-translate/core";
+import { PrefixMapping } from 'src/app/models/Metadata';
+import { VBContext } from 'src/app/utils/VBContext';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
-import { PearlValidationResult } from "../../models/Coda";
-import { CustomForm, CustomFormType, EditorMode } from "../../models/CustomForms";
+import { PearlValidationResult, ConverterContractDescription } from "../../models/Coda";
+import { CustomForm, CustomFormType, CustomFormUtils, EditorMode } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
@@ -70,6 +72,15 @@ export class CustomFormEditorModal {
             );
         } else {
             this.mode = EditorMode.create;
+            //init a skeleton
+            this.ref = CustomFormUtils.CF_SKELETON;
+            let mappings: PrefixMapping[] = VBContext.getPrefixMappings();
+            let prefixImports: string = "";
+            mappings.forEach(m => {
+                prefixImports += "PREFIX " + m.prefix + ": <" + m.namespace + ">\n";
+            });
+            prefixImports += "PREFIX " + ConverterContractDescription.PREFIX + ": <" + ConverterContractDescription.NAMESPACE + ">\n";
+            this.ref = prefixImports + "\n" + this.ref;
         }
 
         this.extractFromShaclAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclExtractCF);

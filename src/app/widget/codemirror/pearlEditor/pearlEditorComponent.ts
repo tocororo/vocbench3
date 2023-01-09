@@ -15,7 +15,7 @@ export class PearlEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
 
     @ViewChild('cmEditor') private cmEditorView: CodemirrorComponent;
-    
+
     private cmEditor: CodeMirror.EditorFromTextArea;
 
     code: string;
@@ -31,8 +31,10 @@ export class PearlEditorComponent implements ControlValueAccessor {
             indentWithTabs: true,
             lineWrapping: true,
             readOnly: this.disabled,
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
             viewportMargin: Infinity, //with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-                //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+            //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
             extraKeys: {
                 "Ctrl-7": () => this.commentHandler(this.cmEditor)
             },
@@ -54,7 +56,7 @@ export class PearlEditorComponent implements ControlValueAccessor {
     }
 
     /** 
-     * Cannot declare cm as CodeMirror.FromTextEditor since typings has not toggleComment definition
+     * Cannot declare cm as CodeMirror.EditorFromTextArea since typings has not toggleComment definition
      * (it is not included in codemirror.js, it is in comment.js)
      */
     private commentHandler(cm: any) {
