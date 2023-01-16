@@ -6,7 +6,6 @@ import { RDFResourceRolesEnum } from 'src/app/models/ARTResources';
 import { DataStructureUtils } from 'src/app/models/DataStructure';
 import { ExtensionPointID, Scope } from 'src/app/models/Plugins';
 import { CustomTreeRootSelection, CustomTreeSettings, SettingsEnum } from 'src/app/models/Properties';
-import { EDOAL } from 'src/app/models/Vocabulary';
 import { SettingsServices } from 'src/app/services/settingsServices';
 import { VBRequestOptions } from 'src/app/utils/HttpManager';
 import { ProjectContext, VBContext } from 'src/app/utils/VBContext';
@@ -38,14 +37,10 @@ export class TreeListSettingsModal {
 
         let structurePanelFilter = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().structurePanelFilter;
 
-        this.isEdoal = VBContext.getWorkingProject().getModelType() == EDOAL.uri;
-
-        if (!this.isEdoal) { //for simplicity, do not allow edit tab visualization in EDOAL project
-            let ctxProjModel = VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType();
-            this.tabsStruct = DataStructureUtils.modelPanelsMap[ctxProjModel].map(tab => {
-                return { tab: tab, translationKey: DataStructureUtils.panelTranslationMap[tab], visible: !structurePanelFilter.includes(tab) };
-            });
-        }
+        let ctxProjModel = VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType();
+        this.tabsStruct = DataStructureUtils.modelPanelsMap[ctxProjModel].map(tab => {
+            return { tab: tab, translationKey: DataStructureUtils.panelTranslationMap[tab], visible: !structurePanelFilter.includes(tab) };
+        });
 
         this.customTreeSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().customTreeSettings;
 
@@ -136,9 +131,9 @@ export class TreeListSettingsModal {
         let updateSettingsFn: Observable<any>[] = [];
 
         let filteredTabs: RDFResourceRolesEnum[] = this.tabsStruct.filter(t => !t.visible).map(t => t.tab);
-        updateSettingsFn.push(this.vbProp.setStructurePanelFilter(filteredTabs));
+        updateSettingsFn.push(this.vbProp.setStructurePanelFilter(this.projectCtx, filteredTabs));
 
-        updateSettingsFn.push(this.vbProp.setCustomTreeSettings(this.customTreeSettings));
+        updateSettingsFn.push(this.vbProp.setCustomTreeSettings(this.projectCtx, this.customTreeSettings));
 
         this.vbProp.setShowDeprecated(this.showDeprecated);
 

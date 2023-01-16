@@ -1,6 +1,6 @@
 <div *ngIf="contextInitialized" class="hbox">
 
-    <tabset-panel #leftTabset [projectCtx]="leftProjCtx" (nodeSelected)="onLeftResourceSelected($event)" [hiddenTabs]="leftHiddenTabs" [editable]="false">
+    <tabset-panel #leftTabset [projectCtx]="leftProjCtx" (nodeSelected)="onLeftResourceSelected($event)" [editable]="false">
     </tabset-panel>
 
     <div class="vbox" style="flex: 2; margin: 0px 8px">
@@ -167,7 +167,7 @@
 
     </div>
 
-    <tabset-panel #rightTabset [projectCtx]="rightProjCtx" (nodeSelected)="onRightResourceSelected($event)" [hiddenTabs]="rightHiddenTabs" [editable]="false">
+    <tabset-panel #rightTabset [projectCtx]="rightProjCtx" (nodeSelected)="onRightResourceSelected($event)" [editable]="false">
     </tabset-panel>
 
 </div>

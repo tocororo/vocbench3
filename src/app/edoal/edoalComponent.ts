@@ -5,7 +5,6 @@ import { finalize, map, mergeMap } from 'rxjs/operators';
 import { AlignmentRelationSymbol, Correspondence } from "../models/Alignment";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { Project } from "../models/Project";
-import { OntoLex, OWL, RDFS, SKOS } from "../models/Vocabulary";
 import { AlignmentServices } from "../services/alignmentServices";
 import { EdoalServices } from "../services/edoalServices";
 import { ProjectServices } from "../services/projectServices";
@@ -39,8 +38,6 @@ export class EdoalComponent {
     contextInitialized: boolean = false;
     private leftProjCtx: ProjectContext;
     private rightProjCtx: ProjectContext;
-    private leftHiddenTabs: RDFResourceRolesEnum[] = [];
-    private rightHiddenTabs: RDFResourceRolesEnum[] = [];
 
     /**
      * Alignments
@@ -84,13 +81,11 @@ export class EdoalComponent {
                     this.projectService.getProjectInfo(leftProjectName).pipe(
                         map(proj => {
                             leftProject = proj;
-                            this.leftHiddenTabs = this.initHiddenTabsOfProject(leftProject);
                         })
                     ),
                     this.projectService.getProjectInfo(rightProjectName).pipe(
                         map(proj => {
                             rightProject = proj;
-                            this.rightHiddenTabs = this.initHiddenTabsOfProject(rightProject);
                         })
                     )
                 ];
@@ -122,21 +117,6 @@ export class EdoalComponent {
                 );
             }
         );
-    }
-
-    private initHiddenTabsOfProject(project: Project): RDFResourceRolesEnum[] {
-        let hiddenTabs: RDFResourceRolesEnum[] = [];
-        if (project.getModelType() == RDFS.uri) {
-            hiddenTabs.push(RDFResourceRolesEnum.dataRange);
-        } else if (project.getModelType() == OWL.uri) {
-            hiddenTabs.push(RDFResourceRolesEnum.dataRange);
-        } else if (project.getModelType() == SKOS.uri) {
-            hiddenTabs.push(...[RDFResourceRolesEnum.cls, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange]);
-        } else if (project.getModelType() == OntoLex.uri) {
-            hiddenTabs.push(...[RDFResourceRolesEnum.cls, RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme,
-                RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.property, RDFResourceRolesEnum.dataRange]);
-        }
-        return hiddenTabs;
     }
 
     private listAlignments() {

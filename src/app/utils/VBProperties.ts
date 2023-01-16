@@ -249,9 +249,9 @@ export class VBProperties {
         );
     }
 
-    setStructurePanelFilter(structurePanelFilter: RDFResourceRolesEnum[]): Observable<void> {
-        VBContext.getWorkingProjectCtx().getProjectPreferences().structurePanelFilter = structurePanelFilter;
-        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.structurePanelFilter, structurePanelFilter);
+    setStructurePanelFilter(projectCtx: ProjectContext, structurePanelFilter: RDFResourceRolesEnum[]): Observable<void> {
+        projectCtx.getProjectPreferences().structurePanelFilter = structurePanelFilter;
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.structurePanelFilter, structurePanelFilter, new VBRequestOptions({ ctxProject: projectCtx.getProject() }));
     }
 
     //class tree settings
@@ -290,9 +290,9 @@ export class VBProperties {
         return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.lexEntryList, lexEntryListPrefs);
     }
 
-    setCustomTreeSettings(customTreeSettings: CustomTreeSettings): Observable<void> {
-        VBContext.getWorkingProjectCtx().getProjectPreferences().customTreeSettings = customTreeSettings;
-        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.customTree, customTreeSettings).pipe(
+    setCustomTreeSettings(projectCtx: ProjectContext, customTreeSettings: CustomTreeSettings): Observable<void> {
+        projectCtx.getProjectPreferences().customTreeSettings = customTreeSettings;
+        return this.settingsService.storeSetting(ExtensionPointID.ST_CORE_ID, Scope.PROJECT_USER, SettingsEnum.customTree, customTreeSettings, new VBRequestOptions({ ctxProject: projectCtx.getProject() })).pipe(
             map(() => {
                 this.eventHandler.customTreeSettingsChangedEvent.emit();
             })

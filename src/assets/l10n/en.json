@@ -296,7 +296,7 @@
         },
         "USERS": {
             "ADMINISTRATOR": "Administrator",
-            "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has autmoatically access to all projects",
+            "ADMIN_ASSIGNED_PROJECTS_INFO": "Administrator has automatically access to all projects",
             "ASSIGNED_TO_PROJECTS": "Assigned to projects",
             "FORCE_PASSWORD_WARNING": "This procedure will force the change of {{userShow}}'s password.<br>Note: A <i>forgot password</i> procedure already exists (available in the login form). It is recommended to let the user update its own password through that procedure. Use this procedure only if strictly necessary.",
             "SUPER_USER": "Super user",

@@ -4,7 +4,7 @@ import { DataStructureUtils } from 'src/app/models/DataStructure';
 import { CustomTreeSettings } from 'src/app/models/Properties';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { EDOAL, OntoLex, SKOS } from "../../models/Vocabulary";
+import { OntoLex, SKOS } from "../../models/Vocabulary";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { TreeListContext } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
@@ -29,7 +29,6 @@ import { TreeListSettingsModal } from "./treeListSettingsModal";
 export class TabsetPanelComponent {
 
     @Input() projectCtx: ProjectContext;
-    @Input() hiddenTabs: RDFResourceRolesEnum[];
     @Input() readonly: boolean = false;
     @Input() editable: boolean = true;
     @Output() nodeSelected = new EventEmitter<ARTResource>();
@@ -69,7 +68,7 @@ export class TabsetPanelComponent {
             }
         }
         if (this.activeTab == null) {
-            let model = this.getWorkingContext().getProject().getModelType();
+            let model = VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType();
             let tabsPriority: RDFResourceRolesEnum[] = DataStructureUtils.panelsPriority[model];
             for (let t of tabsPriority) {
                 if (this.tabs.some(tab => tab.role == t)) {
@@ -136,20 +135,14 @@ export class TabsetPanelComponent {
                  * Determines the visibility of a panel according:
                  * - project model
                  * - user authorizations
-                 * - input hiddenTabs
                  * - structurePanelFilter preference
                  */
-                let model = this.getWorkingContext().getProject().getModelType();
+                let model = VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType();
                 let visible: boolean;
-                if (model == EDOAL.uri) { //in edoal project, only concept and schemes are visible
-                    visible = t == RDFResourceRolesEnum.concept || t == RDFResourceRolesEnum.conceptScheme;
-                } else {
-                    visible =
-                        this.isPanelCompliantWithCurrentModel(t, model) &&
-                        this.isTabAuthorized(t) &&
-                        (this.hiddenTabs == null || !this.hiddenTabs.includes(t)) &&
-                        !this.getWorkingContext().getProjectPreferences().structurePanelFilter.includes(t);
-                }
+                visible =
+                    this.isPanelCompliantWithCurrentModel(t, model) &&
+                    this.isTabAuthorized(t) &&
+                    !VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().structurePanelFilter.includes(t);
                 return visible;
             })
             .map(t => {
@@ -283,21 +276,13 @@ export class TabsetPanelComponent {
 
     openSettings() {
         const modalRef: NgbModalRef = this.modalService.open(TreeListSettingsModal, new ModalOptions());
-        modalRef.componentInstance.projectCtx = this.projectCtx;
+        modalRef.componentInstance.projectCtx = VBContext.getWorkingProjectCtx(this.projectCtx);
         modalRef.result.then(
             () => {
                 this.init();
             },
             () => { }
         );
-    }
-
-    private getWorkingContext() {
-        if (this.projectCtx != null) {
-            return this.projectCtx;
-        } else {
-            return VBContext.getWorkingProjectCtx();
-        }
     }
 
 }
