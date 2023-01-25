@@ -56,8 +56,9 @@ export class UsersListComponent {
      * Users management
      * =========================== */
 
-    private initUserList() {
+    initUserList() {
         this.selectedUser = null;
+        this.userSelected.emit(this.selectedUser);
         this.userService.listUsers().subscribe(
             users => {
                 this.users = users;

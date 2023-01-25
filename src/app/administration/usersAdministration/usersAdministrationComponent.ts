@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { SettingsServices } from "src/app/services/settingsServices";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { ExtensionPointID, SettingsProp } from "../../models/Plugins";
@@ -9,6 +9,7 @@ import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { UsersListComponent } from './usersListComponent';
 
 @Component({
     selector: "users-admin-component",
@@ -16,6 +17,8 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
     host: { class: "pageComponent" },
 })
 export class UsersAdministrationComponent {
+
+    @ViewChild(UsersListComponent) userListChild: UsersListComponent;
 
     selectedUser: User;
 
@@ -40,16 +43,22 @@ export class UsersAdministrationComponent {
 
     onUserSelected(user: User) {
         this.selectedUser = user;
-        this.initTemplate();
-        //init project assigned to user user
-        if (!this.selectedUser.isAdmin()) {
-            this.userService.listProjectsBoundToUser(this.selectedUser.getIri()).subscribe(
-                projects => {
-                    this.userProjects = projects;
-                    this.userProjects.sort();
-                }
-            );
+        if (this.selectedUser != null) {
+            this.initTemplate();
+            //init project assigned to user user
+            if (!this.selectedUser.isAdmin()) {
+                this.userService.listProjectsBoundToUser(this.selectedUser.getIri()).subscribe(
+                    projects => {
+                        this.userProjects = projects;
+                        this.userProjects.sort();
+                    }
+                );
+            }
         }
+    }
+
+    onUserDeleted() {
+        this.userListChild.initUserList();
     }
 
     /** ============================
