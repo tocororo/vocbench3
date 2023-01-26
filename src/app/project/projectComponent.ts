@@ -239,14 +239,14 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     openACLModal() {
-        let projLength: number = 0;
+        let projCount: number = 0;
         if (this.visualizationMode == ProjectViewMode.list) {
-            projLength = this.projectList.length;
+            projCount = this.projectList.length;
         } else {
-            this.projectDirs.forEach(dir => { projLength += dir.projects.length; });
+            this.projectDirs.forEach(dir => { projCount += dir.projects.length; });
         }
-        if (projLength > 50) {
-            this.basicModals.confirm({ key: "PROJECTS.ACL.ACL_MATRIX" }, { key: "MESSAGES.ACL_TOO_MUCH_PROJ_CONFIRM", params: { projCount: this.projectList.length } }, ModalType.warning).then(
+        if (projCount > 50) {
+            this.basicModals.confirm({ key: "PROJECTS.ACL.ACL_MATRIX" }, { key: "MESSAGES.ACL_TOO_MUCH_PROJ_CONFIRM", params: { projCount: projCount } }, ModalType.warning).then(
                 () => { //confirmed
                     this.openACLMatrix();
                 },
