@@ -60,6 +60,15 @@ export class StandardFormFeature extends FeatureStructure {
     }
 }
 
+export class ContextFormFeature extends FeatureStructure {
+    constructor(name: string) {
+        super();
+        this.featureName = CustomForm.CTX_FORM_PREFIX + name;
+    }
+
+    static readonly subject: ContextFormFeature = new ContextFormFeature("subject");
+}
+
 /**
  * FIELDS
  */

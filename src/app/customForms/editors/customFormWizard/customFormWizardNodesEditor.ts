@@ -7,7 +7,7 @@ import { ConverterConfigStatus } from "src/app/widget/converterConfigurator/conv
 import { BasicModalServices } from "src/app/widget/modal/basicModal/basicModalServices";
 import { ModalOptions, ModalType } from "src/app/widget/modal/Modals";
 import { ConverterConfigModal } from "./converterConfigModal";
-import { SessionFeature, StandardFormFeature, WizardAdvGraphEntry, WizardField, WizardNode, WizardNodeResource, WizardNodeUserCreated } from "./CustomFormWizard";
+import { ContextFormFeature, SessionFeature, StandardFormFeature, WizardAdvGraphEntry, WizardField, WizardNode, WizardNodeResource, WizardNodeUserCreated } from "./CustomFormWizard";
 
 @Component({
     selector: "custom-form-wizard-nodes-editor",
@@ -30,6 +30,7 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
 
     sessionFeatures: SessionFeature[];
     stdFormFeatures: StandardFormFeature[];
+    ctxFormFeatures: ContextFormFeature[];
 
     nodes: WizardNode[];
 
@@ -39,6 +40,9 @@ export class CustomFormWizardNodesEditor implements ControlValueAccessor {
         this.sessionFeatures = [SessionFeature.user]; //available for both C.Range and C.Constructor
         this.stdFormFeatures = StandardFormFeature.getStdFeatures(VBContext.getWorkingProject().getModelType(),
             VBContext.getWorkingProject().getLexicalizationModelType(), this.customRange);
+        if (this.customRange) {
+            this.ctxFormFeatures = [ContextFormFeature.subject];
+        }
     }
 
     addNode() {

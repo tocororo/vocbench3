@@ -61,6 +61,9 @@
                                 <optgroup *ngIf="stdFormFeatures" label="Standard Form's features">
                                     <option *ngFor="let f of stdFormFeatures" [ngValue]="f">{{f.featureName}}</option>
                                 </optgroup>
+                                <optgroup *ngIf="ctxFormFeatures" label="Context features">
+                                    <option *ngFor="let f of ctxFormFeatures" [ngValue]="f">{{f.featureName}}</option>
+                                </optgroup>
                             </select>
                         </ng-template>
                     </td>
