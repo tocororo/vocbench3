@@ -44,7 +44,7 @@ export class InvokableReportersServices {
         };
         let options: VBRequestOptions = new VBRequestOptions({
             errorHandlers: [
-                { className: 'it.uniroma2.art.semanticturkey.services.core.InvokableReporterException', action: 'skip' },
+                { className: '*', action: 'skip' },
             ]
         });
         return this.httpMgr.downloadFile(this.serviceName, "compileAndExportReport", params, false, options);

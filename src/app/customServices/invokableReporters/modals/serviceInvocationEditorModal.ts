@@ -68,13 +68,9 @@ export class ServiceInvocationEditorModal {
                         this.selectedExtPath = this.CUSTOM_SERVICE_PATH;
                         this.initServiceList().subscribe(
                             () => {
-                                this.customServService.getCustomServiceId(invocationDef.service).subscribe(
-                                    serviceId => {
-                                        this.selectService(serviceId).subscribe(
-                                            () => {
-                                                this.restoreOperationAndParams(invocationDef);
-                                            }
-                                        );
+                                this.selectService(invocationDef.service).subscribe(
+                                    () => {
+                                        this.restoreOperationAndParams(invocationDef);
                                     }
                                 );
                             }
