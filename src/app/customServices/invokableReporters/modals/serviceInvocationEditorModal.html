@@ -48,7 +48,7 @@
                     </select>
                 </div>
                 <div class="card-body vbox scrollableContainer">
-                    <div *ngFor="let serv of pathServiceMap[selectedExtPath]" class="listItem" [ngClass]="{ active: selectedServiceId == serv.id }" (click)="selectService(serv.id).subscribe()">
+                    <div *ngFor="let serv of pathServiceMap[selectedExtPath]" class="listItem" [ngClass]="{ active: selectedServiceId == serv.id }" (click)="selectService(serv.show).subscribe()">
                         {{serv.show}}
                     </div>
                 </div>

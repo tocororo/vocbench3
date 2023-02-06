@@ -35,7 +35,7 @@ export class ServiceInvocationEditorModal {
     pathServiceMap: { [key: string]: IdShowPair[] } = {}; //cache extPath => list of service classes
 
     selectedServiceId: string; //ID of the selected service class
-    private selectedService: CustomServiceDefinition; //caches the custom service selected (contains the operations with their description, useful when a custom operation ID is selected)
+    private selectedCustomService: CustomServiceDefinition; //caches the custom service selected (contains the operations with their description, useful when a custom operation ID is selected)
     operations: IdShowPair[]; //list of operations (id + show) of the selected service class (independently if it is custom or not)
     selectedOperationId: string;
     selectedOperation: CustomOperationDefinition; //operation with the ID = selectedOperationId (retrieved via service for core-services, from selectedService for custom-services)
@@ -133,7 +133,7 @@ export class ServiceInvocationEditorModal {
      */
     initServiceList(): Observable<void> {
         this.selectedServiceId = null;
-        this.selectedService = null;
+        this.selectedCustomService = null;
         this.operations = null;
         this.selectedOperation = null;
         this.selectedOperationId = null;
@@ -141,20 +141,28 @@ export class ServiceInvocationEditorModal {
 
         if (this.pathServiceMap[this.selectedExtPath] == null) {
             //service classes are retrieved through getCustomServiceIdentifiers (for custom service) or getServiceClasses (for other paths)
-            let getServiceClassFn: Observable<string[]>;
+            let getServiceClassFn: Observable<void>;
             if (this.selectedExtPath == this.CUSTOM_SERVICE_PATH) {
-                getServiceClassFn = this.customServService.getCustomServiceIdentifiers();
+                getServiceClassFn = this.customServService.getCustomServiceIdentifiers().pipe(
+                    map(identifiers => {
+                        this.pathServiceMap[this.selectedExtPath] = identifiers.map(id => { return { id: id, show: this.getServiceClassNameFromId(id) }; });
+                    })
+                );
             } else {
-                getServiceClassFn = this.servicesService.getServiceClasses(this.selectedExtPath);
+                getServiceClassFn = this.servicesService.getServiceClasses(this.selectedExtPath).pipe(
+                    map(classes => {
+                        this.pathServiceMap[this.selectedExtPath] = classes.map(c => { return { id: c, show: c }; });
+                    })
+                );
             }
-            return getServiceClassFn.pipe(
-                map(classes => {
-                    this.pathServiceMap[this.selectedExtPath] = classes.map(c => { return { id: c, show: c.substring(c.lastIndexOf(".") + 1) }; });
-                })
-            );
+            return getServiceClassFn;
         } else {
             return of(null);
         }
+    }
+
+    private getServiceClassNameFromId(serviceId: string): string {
+        return serviceId.substring(serviceId.lastIndexOf(".") + 1);
     }
 
     /**
@@ -162,12 +170,14 @@ export class ServiceInvocationEditorModal {
      * @param serviceId 
      * @returns 
      */
-    selectService(serviceId: string): Observable<void> {
-        if (this.selectedServiceId == serviceId) {
+    selectService(serviceName: string): Observable<void> {
+        let servicesPairs: IdShowPair[] = this.pathServiceMap[this.selectedExtPath];
+        let pairToSelect: IdShowPair = servicesPairs.find(s => s.show == serviceName);
+        if (this.selectedServiceId == pairToSelect.id) {
             return of(null);
         } else {
-            this.selectedServiceId = serviceId;
-            return this.initService(serviceId);
+            this.selectedServiceId = pairToSelect.id;
+            return this.initService(pairToSelect.id);
         }
     }
 
@@ -185,16 +195,17 @@ export class ServiceInvocationEditorModal {
         if (this.selectedExtPath == this.CUSTOM_SERVICE_PATH) {
             return this.customServService.getCustomService(serviceId).pipe(
                 map((conf: CustomService) => {
-                    this.selectedService = {
+                    this.selectedCustomService = {
                         name: conf.getPropertyValue("name"),
                         description: conf.getPropertyValue("description"),
                         operations: conf.getPropertyValue("operations")
                     };
-                    this.operations = this.selectedService.operations.map(o => { return { id: o.name, show: o.name }; });
+                    this.operations = this.selectedCustomService.operations.map(o => { return { id: o.name, show: o.name }; });
                 })
             );
         } else {
-            return this.servicesService.getServiceOperations(this.selectedExtPath, serviceId).pipe(
+            let serviceClass: string = this.getServiceClassNameFromId(serviceId);
+            return this.servicesService.getServiceOperations(this.selectedExtPath, serviceClass).pipe(
                 map(operations => {
                     this.operations = operations.map(o => { return { id: o, show: o.substring(o.lastIndexOf("/") + 1) }; });
                 })
@@ -208,7 +219,7 @@ export class ServiceInvocationEditorModal {
         } else {
             this.selectedOperationId = operationId;
             if (this.selectedExtPath == this.CUSTOM_SERVICE_PATH) {
-                this.selectedOperation = this.selectedService.operations.find(o => o.name == operationId);
+                this.selectedOperation = this.selectedCustomService.operations.find(o => o.name == operationId);
                 this.initParameters();
                 return of(null);
             } else {
@@ -274,9 +285,8 @@ export class ServiceInvocationEditorModal {
             description: this.description,
             template: this.template,
             extensionPath: this.selectedExtPath,
-            service: this.selectedServiceId,
-            // operation: this.selectedOperation.name, //TODO restore this line in place of the following when the suffix Published will be removed from getServiceOperationAsCustomService response
-            operation: this.selectedOperation.name.endsWith("Published") ? this.selectedOperation.name.substring(0, this.selectedOperation.name.length - 9) : this.selectedOperation.name,
+            service: this.selectedExtPath == this.CUSTOM_SERVICE_PATH ? this.selectedCustomService.name : this.selectedServiceId,
+            operation: this.selectedOperation.name,
             arguments: argsMap,
         };
         if (this.serviceInvocation == null) { //create

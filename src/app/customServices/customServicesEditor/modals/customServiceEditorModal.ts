@@ -11,7 +11,7 @@ export class CustomServiceEditorModal {
     @Input() title: string;
     @Input() service: CustomService;
 
-    id: string;
+    private readonly ID_PATH: string = "it.uniroma2.art.semanticturkey.customservice";
     name: string;
     description: string;
 
@@ -19,15 +19,13 @@ export class CustomServiceEditorModal {
 
     ngOnInit() {
         if (this.service != null) { // edit mode
-            this.id = this.service.id;
             this.name = this.service.getPropertyValue("name");
             this.description = this.service.getPropertyValue("description");
         }
     }
 
     isDataValid(): boolean {
-        //valid if both id and name are provided
-        return this.id && this.id.trim() != "" && this.name && this.name.trim() != "";
+        return this.name && this.name.trim() != "";
     }
 
     ok() {
@@ -52,7 +50,8 @@ export class CustomServiceEditorModal {
             }
         } else { //create
             let newService: CustomServiceDefinition = { name: this.name, description: this.description };
-            this.customServService.createCustomService(this.id.trim(), newService).subscribe(
+            let id: string = this.ID_PATH + "." + this.name;
+            this.customServService.createCustomService(id, newService).subscribe(
                 () => {
                     this.activeModal.close();
                 }
