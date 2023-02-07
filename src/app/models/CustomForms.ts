@@ -76,7 +76,7 @@ export class CustomForm {
     public static USER_PROMPT_PREFIX = "userPrompt/";
     public static SESSION_PREFIX = "session/";
     public static STD_FORM_PREFIX = "stdForm/";
-    public static CTX_FORM_PREFIX = "ctxForm/";
+    public static FORM_CTX_PREFIX = "formCtx/";
 
     private id: string;
     private name: string;
