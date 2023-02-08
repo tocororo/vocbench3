@@ -70,7 +70,7 @@ export class RolesAdministrationComponent {
     }
 
     createRole() {
-        this.basicModals.prompt({ key: "ACTIONS.CREATE_ROLE" }, { value: "Role name" }, null, null, false, true).then(
+        this.basicModals.prompt({ key: "ADMINISTRATION.ACTIONS.CREATE_ROLE" }, { value: "Role name" }, null, null, false, true).then(
             (result: string) => {
                 if (this.roleExists(result)) {
                     this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.ALREADY_EXISTING_ROLE_NAME" }, ModalType.warning);
@@ -120,7 +120,7 @@ export class RolesAdministrationComponent {
     }
 
     cloneRole() {
-        this.basicModals.prompt({ key: "ACTIONS.CLONE_ROLE" }, { value: "Role name" }, null, null, false, true).then(
+        this.basicModals.prompt({ key: "ADMINISTRATION.ACTIONS.CLONE_ROLE" }, { value: "Role name" }, null, null, false, true).then(
             (newRoleName: any) => {
                 if (this.roleExists(newRoleName)) {
                     this.basicModals.alert({ key: "STATUS.INVALID_VALUE" }, { key: "MESSAGES.ALREADY_EXISTING_ROLE_NAME" }, ModalType.warning);

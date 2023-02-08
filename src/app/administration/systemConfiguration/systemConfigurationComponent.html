@@ -74,7 +74,7 @@
                                     <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_SERVER_URL_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
-                                    <label>Mail SMTP host:</label>
+                                    <label>{{'ADMINISTRATION.SYSTEM.EMAIL.MAIL_SERVER_URL'|translate}}:</label>
                                 </td>
                                 <td><input class="form-control" [(ngModel)]="emailSettings.smtp.host"></td>
                             </tr>
@@ -83,7 +83,7 @@
                                     <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_SERVER_PORT_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
-                                    <label>Mail SMTP port:</label>
+                                    <label>{{'ADMINISTRATION.SYSTEM.EMAIL.MAIL_SERVER_PORT'|translate}}:</label>
                                 </td>
                                 <td><input class="form-control" type="number" [(ngModel)]="emailSettings.smtp.port"></td>
                             </tr>
@@ -137,7 +137,7 @@
                                     <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_FROM_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
-                                    <label>Mail from address:</label>
+                                    <label>{{'ADMINISTRATION.SYSTEM.EMAIL.MAIL_FROM'|translate}}:</label>
                                 </td>
                                 <td><input class="form-control" type="email" [(ngModel)]="emailSettings.from.address"></td>
                             </tr>
@@ -146,7 +146,7 @@
                                     <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_PASSWORD_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
-                                    <label>Mail from password:</label>
+                                    <label>{{'ADMINISTRATION.SYSTEM.EMAIL.MAIL_PASSWORD'|translate}}:</label>
                                 </td>
                                 <td>
                                     <input *ngIf="!emailSettings.smtp.auth; else authBlock" class="form-control" disabled>
@@ -169,7 +169,7 @@
                                     <span class="fas fa-info-circle" [title]="'ADMINISTRATION.SYSTEM.EMAIL.MAIL_ALIAS_INFO'|translate"></span>
                                 </td>
                                 <td nowrap>
-                                    <label>Mail from alias:</label>
+                                    <label>{{'ADMINISTRATION.SYSTEM.EMAIL.MAIL_ALIAS'|translate}}:</label>
                                 </td>
                                 <td><input class="form-control" [(ngModel)]="emailSettings.from.alias"></td>
                             </tr>
