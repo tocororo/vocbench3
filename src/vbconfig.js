@@ -23,7 +23,7 @@
  *  This additional path information is considered to be the starting part of the path described above, 
  *  and is usually necessary in case Semantic Turkey is installed behind a proxy redirecting the ST URL.
  */ 
-var st_path;
+var st_path = "stdev";
 
 /**
  * Protocol - either http or https.
